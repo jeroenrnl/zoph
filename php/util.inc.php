@@ -417,4 +417,18 @@ function get_converted_image_name($name) {
     return preg_replace("/" . $extension . "$/", THUMB_EXTENSION, $name);
 }
 
+function delete_temp_annotated_files($user_id) {
+    if (!ANNOTATE_PHOTOS) {
+        return;
+    }
+
+    $tmp_dir = dir(ANNOTATE_TEMP_DIR);
+    $search_str = ANNOTATE_TEMP_PREFIX . $user_id;
+    while ($entry = $tmp_dir->read()) {
+        if (strpos(" $entry", $search_str) == 1) {
+            unlink(ANNOTATE_TEMP_DIR . "/" . $entry);
+        }
+    }
+}
+
 ?>

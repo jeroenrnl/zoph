@@ -37,11 +37,14 @@
                 session_register("user");
             }
 
-
             // Update Last Login Fields
-            $user->set("lastlogin", "now()");
-            $user->set("lastip", $_SERVER["REMOTE_ADDR"]);
-            $user->update();
+            $updated_user = new user($user->get("user_id"));
+            $updated_user->set("lastlogin", "now()");
+            $updated_user->set("lastip", $_SERVER["REMOTE_ADDR"]);
+            $updated_user->update();
+
+            // delete left over temp files
+            delete_temp_annotated_files($user->get("user_id"));
         }
         else {
             header("Location: logon.php");
@@ -49,7 +52,11 @@
 
     }
     else if ($_action == "logout") {
+        // delete left over temp files
+        delete_temp_annotated_files($user->get("user_id"));
+
         session_destroy();
+        $user = null;
         header("Location: logon.php");
     }
 

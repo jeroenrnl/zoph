@@ -96,7 +96,7 @@
 
         if ($shownewalbums) {
             $date = $u->get_lastnotify();
-            $body .= translate("I have enabled access to the following albums for you", 0) . ":\n\n";
+            $body .= translate("I have enabled access to the following albums for you:",0) . "\n\n";
 
             $albums = get_newer_albums($user_id, $date);   
 
@@ -122,7 +122,7 @@
                 $url = get_url() . "login.php";
             }
 
-            $body .= "\n" . translate("For accessing these Albums you may use this URL", 0) . ": " . $url . "\n";
+            $body .= "\n" . translate("For accessing these Albums you have to use this URL:",0) . " " . $url . "\n";
         }
 
         if ($showusername) {
@@ -131,11 +131,11 @@
                 $u->get('user_name') . "\n";
         }
 
-        $body .= "\n" . translate("Regards", 0) . ",\n";
+        $body .= "\n" . translate("Regards,",0) . "\n";
         $body .= $from_name;
 
         if (!$subject) {
-            $subject = translate("New Albums on", 0) . " " . ZOPH_TITLE;
+            $subject = translate("New Albums on") . " " . ZOPH_TITLE;
         }
 
         $message = $body;

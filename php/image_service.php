@@ -9,13 +9,21 @@
     $found = $photo->lookup($user);
 
     if ($found) {
-        $name = $photo->get("name");
-        $image_path = IMAGE_DIR . $photo->get("path") . "/";
-        if ($type) {
-            $image_path .= $type . "/" . $type . "_";
-            $name = get_converted_image_name($name);
+
+        $annotated = getvar('annotated');
+        if (ANNOTATE_PHOTOS && $annotated) {
+            $image_path = ANNOTATE_TEMP_DIR . "/" .
+                $photo->get_annotated_file_name($user);
         }
-        $image_path .= $name;
+        else {
+            $name = $photo->get("name");
+            $image_path = IMAGE_DIR . $photo->get("path") . "/";
+            if ($type) {
+                $image_path .= $type . "/" . $type . "_";
+                $name = get_converted_image_name($name);
+            }
+            $image_path .= $name;
+        }
 
         // the following thanks to Alan Shutko
         $mtime = filemtime($image_path);
@@ -29,7 +37,7 @@
               exit;
         }
 
-        $image_type = get_image_type($name);
+        $image_type = get_image_type($image_path);
         if ($image_type) {
             header("Content-Length: " . $filesize);
             header("Content-Disposition: inline; filename=" . $name);

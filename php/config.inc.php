@@ -23,13 +23,18 @@
 
     define(EMAIL_PHOTOS, 1); // enable email photo feature
  
-     // sent all emails also to this address 
-     // set to '' if not needed
-     define(BCC_ADDRESS, '');
+    // sent all emails also to this address 
+    // set to '' if not needed
+    define(BCC_ADDRESS, '');
      
      // URL used in Notification EMail
-     // set to '' if not needed
-     define(ZOPH_URL, '');
+    // set to '' if not needed
+    define(ZOPH_URL, '');
+
+    // allow annotation of photos for emailing
+    define(ANNOTATE_PHOTOS, 1);
+    define(ANNOTATE_TEMP_DIR, '/tmp');
+    define(ANNOTATE_TEMP_PREFIX, 'zoph');
 
     // web import of photos
     define(CLIENT_WEB_IMPORT, 1);
