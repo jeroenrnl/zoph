@@ -8,6 +8,9 @@ Zoph 0.4pre1
 - Fixed it's vs its grammar (bug#656444)
 - Changed "<?=" to "<?php echo" for short_open_tag = Off compatibility (bug#670542)
 - Changed logout tab in header.inc.php to show "logon" for default users (req#656448)
+- Added DB_PREFIX in config.inc.php and updated sql to use (req#656450)
+- Fixed DEFAULT_ORDERING bug in photos.php and photo_search.inc.php (bug#667484)
+- Fixed bug with date ordering failing to imply time ordering in photo_search.inc.php (pat#675164) (thanks Ian Kerr)
 - Included an udpated language package with new German, Dutch and Canadian English translations
 
 Zoph 0.3.3

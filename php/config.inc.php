@@ -81,7 +81,7 @@
     define(IMPORT_UMASK, 0);
     define(DIR_MODE, 0777);
 
-    define(DEBUG, 2);
+    define(DEBUG, 0);
 
     // default photo results ordering
     $DEFAULT_ORDER = "date";
