@@ -323,9 +323,16 @@ class photo extends zoph_table {
 
         if (BACKUP_ORIGINAL) {
             $backup_name = BACKUP_PREFIX . $name;
-            if (!copy($dir . $name, $dir . $backup_name)) {
-                echo sprintf(translate("Could not copy %s to %s."), $name, $backup_name) . "<br>\n";
-                return;
+
+            // file_exists() check from From Michael Hanke:
+            // Once a rotation had occurred, the backup file won't be
+            // overwritten by future rotations and the original file
+            // is always preserved.
+            if (!file_exists($dir . $backup_name)) {
+                if (!copy($dir . $name, $dir . $backup_name)) {
+                    echo sprintf(translate("Could not copy %s to %s."), $name, $backup_name) . "<br>\n";
+                    return;
+                }
             }
         }
 
@@ -333,6 +340,25 @@ class photo extends zoph_table {
         // in the future, use PHP's imagerotate() function,
         // but it only appears >= 4.3.0 (and is buggy at the moment)
         while (list($file, $tmp_file) = each($images)) {
+
+            /*
+              From Michael Hanke:
+              This is buggy, because non-quadratic images are truncated 
+              The function goodrotate checks if images are nonquadratic
+
+              This is not being used because, as Michael says,
+
+              "I haven't found a reasonable way to preserve the exif-data
+               stored in the original jpeg file. imagejpeg() (the gd
+               function) doesn't write it into the exported image file.
+               ... I propose to stick to 'convert' which keeps the exif
+               metadata as it is."
+
+              $imrot = @imagecreatefromjpeg($file);
+              $new_image = $this->goodrotate($imrot, $deg);
+              imagejpeg($new_image, $tmp_file, 95);
+            */
+
             $cmd =
                 'convert -rotate ' . escapeshellarg($deg) . ' ' .
                 escapeshellarg($file) . ' ' . escapeshellarg($tmp_file) .
@@ -501,6 +527,47 @@ function create_rating_graph($user) {
     }
 
     return $table;
+}
+
+/*
+ * Rotates (non-quadratic) images correctly using imagerotate().
+ * It is currently not being used because it apparently does not
+ * preserve exif info.
+ *
+ * This function provided by Michael Hanke, who found it on php.net.
+ *
+ *
+ * (c) 2002 php at laer dot nu
+ * Function to rotate an image
+ */
+function goodrotate($src_img, $degrees = 90) {
+    // angles = 0°
+    $degrees %= 360;
+    if($degrees == 0) {
+        $dst_img = $src_image;
+    } Elseif ($degrees == 180) {
+        $dst_img = imagerotate($src_img, $degrees, 0);
+    } Else {
+        $width = imagesx($src_img);
+        $height = imagesy($src_img);
+        if ($width > $height) {
+           $size = $width;
+        } Else {
+           $size = $height;
+        }
+        $dst_img = imagecreatetruecolor($size, $size);
+        imagecopy($dst_img, $src_img, 0, 0, 0, 0, $width, $height);
+        $dst_img = imagerotate($dst_img, $degrees, 0);
+        $src_img = $dst_img;
+        $dst_img = imagecreatetruecolor($height, $width);
+        if ((($degrees == 90) && ($width > $height)) || (($degrees == 270) && ($width < $height))) {
+                imagecopy($dst_img, $src_img, 0, 0, 0, 0, $size, $size);
+	}
+	if ((($degrees == 270) && ($width > $height)) || (($degrees == 90) && ($width < $height))) {
+            imagecopy($dst_img, $src_img, 0, 0, $size - $height, $size - $width, $size, $size);
+	}
+    }
+    return $dst_img;
 }
 
 ?>
