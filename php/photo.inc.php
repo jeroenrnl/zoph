@@ -688,14 +688,15 @@ echo ("<br>\noutString:<br>\n" . $out_string);
 
     function get_email_array() {
         return array(
-            "Title" => $this->get("title"),
-            "Location" => $this->location
+            translate("title") => $this->get("title"),
+            translate("location") => $this->location
                 ? $this->location->get("title") : "",
-            "View" => $this->get("view"),
-            "Date" => $this->get("date"),
-            "Time" => $this->get("time"),
-            "Photographer" => $this->photographer
-                ? $this->photographer->get_name() : ""
+            translate("view") => $this->get("view"),
+            translate("date") => $this->get("date"),
+            translate("time") => $this->get("time"),
+            translate("photographer") => $this->photographer
+                ? $this->photographer->get_name() : "",
+            translate("description") => $this->get("description")
         );
     }
 
