@@ -314,8 +314,14 @@ class zoph_table {
  * Gets the total count of records in the table for the given class.
  */
 function get_count($class) {
-    $obj = new $class;
-    $table = $obj->table_name;
+
+    if (class_exists($class)) {
+        $obj = new $class;
+        $table = $obj->table_name;
+    }
+    else {
+        $table = DB_PREFIX . $class;
+    }
 
     $sql = "select count(*) from $table";
 
