@@ -57,7 +57,7 @@
 ?>
         <tr>
           <td colspan="3">
-       <?php echo sprintf(translate("The user '%s' is currently defined as the default user and does not have permission to change it's password."), $user->get("user_name")) ?>
+       <?php echo sprintf(translate("The user '%s' is currently defined as the default user and does not have permission to change its password."), $user->get("user_name")) ?>
           </td>
         </tr>
 <?php
