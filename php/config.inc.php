@@ -89,6 +89,8 @@
 
     // allow images to be rotated
     define('ALLOW_ROTATIONS', 1);
+    define(ROTATE_CMD, 'convert');
+    //define('ROTATE_CMD', 'jpegtran');
     // set to 1 to backup the original before it is rotated
     define('BACKUP_ORIGINAL', 1);
     // copy the original to a file with this prefix

@@ -430,7 +430,7 @@ class photo extends zoph_table {
             }
         }
 
-        // make a system call to convert() to do the rotation
+        // make a system call to convert or jpegtran to do the rotation.
         // in the future, use PHP's imagerotate() function,
         // but it only appears >= 4.3.0 (and is buggy at the moment)
         while (list($file, $tmp_file) = each($images)) {
@@ -453,11 +453,19 @@ class photo extends zoph_table {
               imagejpeg($new_image, $tmp_file, 95);
             */
 
-            $cmd =
-                'convert -rotate ' . escapeshellarg($deg) . ' ' .
-                escapeshellarg($file) . ' ' . escapeshellarg($tmp_file) .
-                ' 2>&1';
-;
+            $cmd = ROTATE_CMD;
+            if (strpos(" $cmd", 'jpegtran')) {
+                $cmd .= ' -copy all -rotate ' .  escapeshellarg($deg) .
+                    ' -outfile ' .  escapeshellarg($tmp_file) . ' ' .
+                    escapeshellarg($file);
+            }
+            else if (strpos(" $cmd", 'convert')) {
+                $cmd .= ' -rotate ' . escapeshellarg($deg) . ' ' .
+                    escapeshellarg($file) . ' ' . escapeshellarg($tmp_file);
+            }
+
+            $cmd .= ' 2>&1';
+
             //echo "$cmd<br>\n";
             $output = system($cmd);
 
