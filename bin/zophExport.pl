@@ -28,7 +28,7 @@ my $db_pass = 'password';
 # set this to your image directory
 my $image_dir = '/data/images';
 
-my $version = '0.3.3';
+my $version = '0.4pre1';
 
 my $export_dir; # where to export to
 my $format;     # one of zoph, album, bins
@@ -41,6 +41,8 @@ my $show_footer = 1; # for the zoph format
 my $album_dirs  = 1;     # create dirs for albums
 my $subalbums  = 1;      # get subalbums for albums
 my $subcategories  = 1;  # get subcats for cats
+
+my $encoding = 'UTF-8';  # default encoding
 
 # what to display
 my $show_date = 1;
@@ -179,6 +181,7 @@ sub export {
             print "Reading in language file\n";
             # don't really need most strings but get them all
             while (<LANG>) {
+                $encoding = $1 if /"charset"=>"([^"]*)/;
                 next if /^#/;
                 my ($en, $trans) = split '=';
                 $lang_hash{$en} = $trans;
@@ -188,6 +191,7 @@ sub export {
         else {
             warn "Could not open language file: $language_file\n";
         }
+        print "Using $encoding encoding\n";
     }
 
     $export_dir =~ s/\/$//;
@@ -702,7 +706,7 @@ sub binsExport {
     open IMAGE_XML, ">$export_path/$name.xml"
         or die "Could not open $name.xml file\n";
 
-    print IMAGE_XML "<?xml version=\"1.0\" encoding=\"UTF-8\"?><image>\n";
+    print IMAGE_XML "<?xml version=\"1.0\" encoding=\"$encoding\"?><image>\n";
     print IMAGE_XML "   <description>\n";
 
     if ($show_description and $photo_hash->{'description'}) {
@@ -936,7 +940,7 @@ sub makeAlbumXml {
 
     if (open ALBUM_XML, ">$path/album.xml") {
         print ALBUM_XML <<"(XML)";
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="$encoding"?>
 <album>
   <description>
     <field name="longdesc">
