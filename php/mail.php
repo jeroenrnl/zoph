@@ -38,7 +38,7 @@
         if ($ea) {
             while (list($name, $value) = each($ea)) {
                 if ($name && $value) {
-                    $body .= "$name: $value\n";
+                    $body .= "$name: $value\r\n";
                 }
             }
         }
