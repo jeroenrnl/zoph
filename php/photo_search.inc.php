@@ -32,7 +32,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     if (!$dir) { $dir = $DEFAULT_DIRECTION; }
 
     $order = "ph." . $ord . " $dir";
-    if ($order == "ph.date") { $order .= ", ph.time $dir"; }
+    if ($ord == "date") { $order .= ", ph.time $dir"; }
     $order .= ", ph.photo_id $dir";
 
     while (list($key, $val) = each($vars)) {

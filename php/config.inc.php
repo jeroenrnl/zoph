@@ -81,12 +81,12 @@
     define(IMPORT_UMASK, 0);
     define(DIR_MODE, 0777);
 
-    define(DEBUG, 0);
+    define(DEBUG, 2);
 
     // default photo results ordering
-    $DEFAULT_ORDER = "description";
+    $DEFAULT_ORDER = "date";
     // default direction of ordering
-    $DEFAULT_DIRECTION = "desc";
+    $DEFAULT_DIRECTION = "asc";
 
     // the following values are defaults that can be overriden
     // by a user's preferences
