@@ -1,5 +1,5 @@
 Zoph 0.3.3 Manual
-13 Dec 2002
+20 Dec 2002
 
 This manual will describe how to start using Zoph.  It assumes you have
 successfully installed all the components and are presented the logon
@@ -625,7 +625,7 @@ following:
 9. The Exporter
 ===============
 
-Zoph is dynamic sort of application tied closely to the database.  But
+Zoph is a dynamic sort of application tied closely to the database.  But
 sometimes you want static html files of your photos to burn to a cd or
 whatnot.  Zoph includes a perl script, zophExport.pl, that lets you easily
 create static galleries.
@@ -655,8 +655,9 @@ prints out an example command to run album which you can copy and run as
 is or update with your own options.
 
 In this simple example all photos placed in the Snow category are exported.
-Within the Christmas directory zophExport.pl will have created a directory
-structure mirroring the album structure in Zoph for the selected photos.
+Within the "Winter Pics" directory zophExport.pl will have created a
+directory structure mirroring the album structure in Zoph for the selected
+photos.
 
 There are only two required arguments: the directory to export to (--dir)
 which will be created if it does not exist, and the format of the export
@@ -760,7 +761,7 @@ BINS is written by Jerome Sautret, based on SWIGS, written by Brendan McMahan,
 which was in turn based on IDS by John Moose.
 http://bins.sautret.org/
 
-BINS consists of three perl scripts, an exporter and two image/album
+BINS consists of three perl scripts: an exporter and two image/album
 description editors.  A debian package is available.  BINS requires a
 number of perl modules which you can get from CPAN if you need to.
 
