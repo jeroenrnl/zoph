@@ -32,23 +32,10 @@
     }
     else {
 
-        $subject = sprintf(translate("A Photo from %s"), ZOPH_TITLE) . ": " . $photo->get("name");
-
-        $ea = $photo->get_email_array();
-        if ($ea) {
-            while (list($name, $value) = each($ea)) {
-                if ($name && $value) {
-                    $body .= "$name: $value\r\n";
-                }
-            }
-        }
-
         if ($_action == "mail") {
 
             $mail = new htmlMimeMail(array('X-Mailer: Html Mime Mail Class'));
-            $mail->setCrlf("\r\n");
-
-            $text = $body;
+            $mail->setHeader("X-Zoph-Version", VERSION);
             $size = getvar("_size");
 
             if ($html) {
@@ -67,16 +54,16 @@
                         MID_PREFIX . "/";
                 }
 
-                $html = str_replace("\n", "<br>\n", $body);
+                $html = str_replace("\n", "<br>\n", $message);
                 $html =
                     "<center>\n" .
                     "<img src=\"" . $file .  "\"><br>\n" .
                     $html .  "</center>\n";
 
-                $mail->sethtml($html, $text, $dir);
+                $mail->sethtml($html, $message, $dir);
             }
             else {
-                $mail->settext($text);
+                $mail->settext($message);
 
                 if ($annotate) {
                     $file = ANNOTATE_TEMP_DIR . "/" .
@@ -95,6 +82,7 @@
 
             $mail->setFrom("$from_name <$from_email>");
             $mail->setSubject($subject);
+            $mail->setCrlf("\r\n");
             
             if (strlen(BCC_ADDRESS) > 0) {
                 $mail->setBCC(BCC_ADDRESS);
@@ -147,6 +135,18 @@
     }
 
     if ($found && $_action == "compose") {
+
+        $subject = sprintf(translate("A Photo from %s"), ZOPH_TITLE) . ": " . $photo->get("name");
+        $ea = $photo->get_email_array();
+
+        if ($ea) {
+            while (list($name, $value) = each($ea)) {
+                if ($name && $value) {
+                    $body .= "$name: $value\r\n";
+                }
+            }
+        }
+  
         if ($annotate) {
             $photo->annotate($request_vars, $user);
         }
@@ -163,7 +163,7 @@
 ?>
         <tr>
           <td align="right">
-<form action="<?php echo $PHP_SELF ?>" method="post">
+<form action="<?php echo $PHP_SELF ?>" method="get">
 <input type="hidden" name="_action" value="mail">
 <input type="hidden" name="photo_id" value="<?php echo $photo_id ?>">
 <input type="hidden" name="annotate" value="<?php echo $annotate ?>">
