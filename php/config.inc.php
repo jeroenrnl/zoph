@@ -84,9 +84,9 @@
     define(DEBUG, 0);
 
     // default photo results ordering
-    $DEFAULT_ORDER = "date";
+    $DEFAULT_ORDER = "description";
     // default direction of ordering
-    $DEFAULT_DIRECTION = "asc";
+    $DEFAULT_DIRECTION = "desc";
 
     // the following values are defaults that can be overriden
     // by a user's preferences

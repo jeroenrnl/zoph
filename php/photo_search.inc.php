@@ -23,17 +23,17 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         $where = "";
     }
 
-    $dir = $vars["_dir"];
-    if (!$dir) { $dir = "asc"; }
+    global $DEFAULT_ORDER;
+    $ord = $vars["_order"];
+    if (!$ord) { $ord = $DEFAULT_ORDER; }
 
-    if ($vars["_order"]) {
-        $order = "ph." . $vars["_order"] . " $dir";
-        if ($order == "ph.date") { $order .= ", ph.time $dir"; }
-        $order .= ", ph.photo_id $dir";
-    }
-    else {
-        $order = "ph.date $dir, ph.time $dir, ph.photo_id $dir";
-    }
+    global $DEFAULT_DIRECTION;
+    $dir = $vars["_dir"];
+    if (!$dir) { $dir = $DEFAULT_DIRECTION; }
+
+    $order = "ph." . $ord . " $dir";
+    if ($order == "ph.date") { $order .= ", ph.time $dir"; }
+    $order .= ", ph.photo_id $dir";
 
     while (list($key, $val) = each($vars)) {
 

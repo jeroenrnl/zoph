@@ -12,9 +12,6 @@
     if (!$_rows) { $_rows = $DEFAULT_ROWS; }
     if (!$_off)  { $_off = 0; }
 
-    if (!$_order) { $_order = $DEFAULT_ORDER; }
-    if (!$_dir)   { $_dir   = $DEFAULT_DIRECTION; }
-
     $cells = $_cols * $_rows;
     $offset = $_off;
 
