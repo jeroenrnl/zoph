@@ -192,6 +192,7 @@ require_once("header.inc.php");
         $tmp_path = null;
 
         $name = $HTTP_POST_FILES['_image_local']['name'];
+        remove_magic_quotes($name);
 
         // may need to create the destination directory
         // before doing anything else

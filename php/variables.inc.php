@@ -31,7 +31,30 @@ function getvar($var) {
             $val = $HTTP_POST_VARS[$var];
         }
     }
+
+    remove_magic_quotes($val);
     return $val;
+}
+
+/*
+ * This function removes slashes that may have been automatically
+ * inserted by PHP if one of magic_quotes_* is On.
+ *
+ * Code by gordon at kanazawa dot ac dot jp as posted on php.net.
+ * http://www.php.net/manual/en/function.get-magic-quotes-gpc.php
+ */
+function remove_magic_quotes(&$x) {
+    if (is_array($x)) {
+        while (list($key,$value) = each($x)) {
+            if ($value) remove_magic_quotes($x[$key]);
+        }
+    }else if (ini_get('magic_quotes_sybase')) {
+        $x = preg_replace("/''/", "'", $x);
+    } else if (get_magic_quotes_runtime()) {
+        $x = preg_replace("/\\\"/", '"', $x);
+    } else if (get_magic_quotes_gpc()) {
+        $x = stripslashes($x);
+    }
 }
 
 if (minimum_version('4.1.0')) {
