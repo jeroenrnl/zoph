@@ -35,6 +35,7 @@ use File::Copy;
 $| = 1;
 
 # edit these to reflect your database
+my $db_host = 'localhost';  # hostname or hostname:port
 my $db_name = 'zoph';
 my $db_user = 'zoph_rw';
 my $db_pass = 'password';
@@ -78,7 +79,7 @@ if ($#ARGV < 0) {
     exit(0);
 }
 
-my $dbh = DBI->connect("DBI:mysql:$db_name", $db_user, $db_pass);
+my $dbh = DBI->connect("DBI:mysql:$db_name:$db_host", $db_user, $db_pass);
 
 GetOptions(
     'help' => sub { printUsage(); exit(0); },
