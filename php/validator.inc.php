@@ -36,7 +36,7 @@ class validator {
 
         $result = mysql_query($query);
 
-        if(mysql_num_rows($result) == 1) {
+        if (mysql_num_rows($result) == 1) {
             $row = mysql_fetch_array($result);
 
             $user = new user($row["user_id"]);
@@ -47,6 +47,26 @@ class validator {
         }
 
         return $user;
+    }
+
+    /*
+     * Validate users using Zoph's database against the
+     * PHP_AUTH_USER and PHP_AUTH_PW variables.
+     *
+     * Contributed by Samuel Keim
+     */
+    function php_validate() {
+        $user = null;
+
+        if (empty($this->username)) {
+            $this->username = $_SERVER['PHP_AUTH_USER'];
+
+            if (empty($pword)) {
+                $this->password = $_SERVER['PHP_AUTH_PW'];
+            }
+        }
+
+        return $this->default_validate();
     }
 
     /*
@@ -64,7 +84,7 @@ class validator {
         include("Passwd.php");
         $htpass = new File_Passwd(HTPASS_FILE);
 
-        if($htpass->verifyPassword($this->username, $this->password)) {
+        if ($htpass->verifyPassword($this->username, $this->password)) {
             $query =
                 "select user_id from " . DB_PREFIX . "users where " .
                 "user_name = '" .  escape_string($this->username) . "'";
