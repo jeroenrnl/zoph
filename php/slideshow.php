@@ -26,7 +26,18 @@
     }
 
     $newoffset = $offset + 1;
-    $new_qs = str_replace("_off=$offset", "_off=$newoffset", $QUERY_STRING);
+
+    $new_qs = $QUERY_STRING;
+    if (strpos($QUERY_STRING, "_off=") > 0) {
+        $new_qs = str_replace("_off=$offset", "_off=$newoffset", $new_qs);
+    }
+    else {
+        if ($new_qs) {
+            $new_qs .= "&";
+        }
+        $new_qs .= "_off=$newoffset";
+    }
+
     $header = "";
     if (!$_pause) {
         // bug#667480: header() didn't work with IE on Mac
