@@ -212,7 +212,7 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
 
     while (list($key, $val) = each($vars)) {
         if (in_array($key, $ignore)) { continue; }
-        if ($key == $new_key) { $continue; }
+        if ($key == $new_key) { continue; }
 
         if ($qstr) { $qstr .= "&"; }
         $qstr .= "$key=" . rawurlencode($val);
