@@ -137,7 +137,7 @@ function get_popular_categories($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select cat.*, count(*) as count from " .
+            "select cat.*, count(distinct ph.photo_id) as count from " .
             DB_PREFIX . "categories as cat, " .
             DB_PREFIX . "photo_categories as pc, " .
             DB_PREFIX . "photos as ph, " .

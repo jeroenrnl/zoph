@@ -207,7 +207,7 @@ function get_popular_albums($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select al.*, count(*) as count from " .
+            "select al.*, count(distinct ph.photo_id) as count from " .
             DB_PREFIX . "albums as al, " .
             DB_PREFIX . "photos as ph, " .
             DB_PREFIX . "photo_albums as pa, " .
