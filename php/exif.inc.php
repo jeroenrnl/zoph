@@ -46,7 +46,34 @@ function process_exif($image) {
     }
 
     if (isset($exif["Flash"])) {
-        $exifdata["flash_used"] = $exif["Flash"] ? "Yes" : "No";
+        /*
+           bug#671023 from mail2061 <AT> deys <DOT> org
+
+           "The code in exif.inc.php that tests $exif["Flash"] in order
+           to determine whether or not the flash was fired is getting
+           wrong values. My FujiFilm S602 is returning '9' for 'Fired'
+           and '16' for 'Not Fired(compulsory)'. I reworked the boolean
+           test into a switch statement that handles this. However, I
+           suspect that this field can have additional values besides
+           the two I've identified."
+        */
+        //$exifdata["flash_used"] = $exif["Flash"] ? "Yes" : "No";
+        
+        // Revamped to handled more expressive flash indications
+        $fYN="No";
+
+        switch ($exif["Flash"]) {
+
+        // Flash Not Fired
+        case 16:
+        case 0: $fYN="No"; break;
+
+        // Flash Fired
+        case 9:
+        default: $fYN="Yes"; break;
+        }
+
+        $exifdata["flash_used"] = $fYN;
     }
 
     if ($exif["FocalLength"]) {
