@@ -270,6 +270,7 @@ places=
 position=
 prefs=
 random photo=
+rate=
 rating=
 remove=
 reports=
