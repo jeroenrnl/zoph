@@ -85,6 +85,11 @@
           <td><?php echo create_text_input("view", $photo->get("view"), 40, 64) ?></td>
           <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "64") ?></font></td>
         </tr>
+<?php
+    // if people are allowed to rate photos, the rating field
+    // is an average so don't edit it.  
+    if (!ALLOW_RATINGS) {
+?>
         <tr>
           <td><?php echo translate("rating") ?></td>
           <td>
@@ -92,6 +97,9 @@
           </td>
           <td><font size="-1">1 - 10</font></td>
         </tr>
+<?php
+    }
+?>
         <tr>
           <td valign="top"><?php echo translate("photographer") ?></td>
           <td colspan="2">

@@ -28,3 +28,15 @@ alter table zoph_people add column email varchar(64) null;
 alter table zoph_users add column lastnotify datetime null;
 alter table zoph_users add column lastlogin datetime null;
 alter table zoph_users add column lastip varchar(16) null;
+
+CREATE TABLE zoph_photo_ratings (
+  user_id int NOT NULL,
+  photo_id int NOT NULL,
+  rating tinyint NOT NULL,
+  PRIMARY KEY (user_id, photo_id)
+);
+
+insert into zoph_photo_ratings (user_id, photo_id, rating)
+  select '1', photo_id, rating from zoph_photos where rating is not null;
+
+alter table zoph_photos modify rating float (2,2) unsigned;

@@ -115,9 +115,8 @@ function create_integer_pulldown($name, $value, $min, $max) {
     return create_pulldown($name, $value, $integer_array);
 }
 
-function create_rating_pulldown($val = "3") {
+function create_rating_pulldown($val = "") {
     $rating_array = array(
-        "" => "",
         "1" => translate("1 - close your eyes",0),
         "2" => translate("2",0),
         "3" => translate("3",0),
@@ -128,6 +127,13 @@ function create_rating_pulldown($val = "3") {
         "8" => translate("8",0),
         "9" => translate("9",0),
         "10" => translate("10 - museum",0));
+
+    if (empty($val)) {
+        $tmp_array = array_reverse($rating_array, true);
+        $tmp_array["0"] = translate("not rated", 0);
+        $rating_array = array_reverse($tmp_array, true);
+    }
+
     return create_pulldown("rating", $val, $rating_array);
 }
 
@@ -229,7 +235,7 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
         if ($key == $new_key) { continue; }
 
         if ($qstr) { $qstr .= "&"; }
-        $qstr .= "$key=" . rawurlencode($val);
+        $qstr .= rawurlencode($key) . "=" . rawurlencode($val);
     }
 
     if ($qstr) { $qstr .= "&"; }

@@ -54,6 +54,9 @@
     define(DEFAULT_DESTINATION_PATH, 'uploads/date(Y.m.d)');
     define(SHOW_DESTINATION_PATH, 0); // show for non admin users
 
+    // let users rate photos
+    define(ALLOW_RATINGS, 1);
+
     define(MAX_CRUMBS, 100);
 
     // max days for photos taken/modified X days ago pulldown

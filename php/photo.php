@@ -107,6 +107,13 @@
         }
         $action = "display";
     }
+    else if ($_action == "rate") {
+        if (ALLOW_RATINGS) {
+            $rating = getvar("rating");
+            $photo->rate($user->get("user_id"), $rating);
+        }
+        $action = "display";
+    }
     else {
         $action = "display";
     }
@@ -243,6 +250,36 @@ require_once("header.inc.php");
 ?>
 <?php echo create_field_html($photo->get_display_array(), 2) ?>
 <?php
+        if (ALLOW_RATINGS || $photo->get("rating")) {
+?>
+        <tr>
+          <td align="right"><?php echo translate("rating") ?></td>
+          <td>
+            <table>
+              <tr>
+                <td>
+                  <?php echo $photo->get("rating") != 0 ? $photo->get("rating") . " / 10" : ""; ?>
+                </td>
+<?php
+            if (ALLOW_RATINGS) {
+?>
+                <td>
+<form action="<?php echo $PHP_SELF ?>" method="GET">
+<input type="hidden" name="_action" value="rate">
+<input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
+<input type="submit" name="_button" value="rate">
+<?php echo create_rating_pulldown($photo->get_rating($user->get("user_id"))); ?>
+</form>
+                </td>
+<?php
+            }
+?>
+              </tr>
+            </table>
+          </td>
+        </tr>
+<?php
+        }
         if ($album_links = create_link_list($photo->lookup_albums($user))) {
 ?>
         <tr>

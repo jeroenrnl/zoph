@@ -304,6 +304,100 @@ class photo extends zoph_table {
         return "<img border=\"0\" src=\"$image_href\"" . $size_string . ">";
     }
 
+    function get_rating($user_id) {
+
+        $photo_id = $this->get("photo_id");
+
+        $query =
+            "select rating from " . DB_PREFIX . "photo_ratings " .
+            "where user_id = '" . escape_string($user_id) . "'" .
+            " and photo_id = '". escape_string($this->get("photo_id")) . "'";
+
+        if (DEBUG > 1) { echo "$query<br>\n"; }
+
+        $result = mysql_query($query)
+            or die_with_mysql_error("Rating lookup failed");
+
+        $rating = null;
+        if ($row = mysql_fetch_array($result)) {
+            $rating = $row[0];
+        }
+
+        return $rating;
+    }
+
+    /*
+     * Stores the rating of a photo for a user and updates the
+     * average rating.
+     *
+     * This function from Jan Miczaika
+     */
+    function rate($user_id, $rating) {
+
+        if (!$user_id || !$rating) {
+            return null;
+        }
+
+        $photo_id = $this->get("photo_id");
+
+        $query =
+            "select * from " . DB_PREFIX . "photo_ratings " .
+            "where user_id = '" . escape_string($user_id) . "'" .
+            " and photo_id = '". escape_string($photo_id) . "'";
+
+        if (DEBUG > 1) { echo "$query<br>\n"; }
+
+        $result = mysql_query($query)
+            or die_with_mysql_error("Rating lookup failed");
+
+        //if the user has already voted, update the vote, else insert a new one
+
+        if (mysql_num_rows($result) > 0) {
+            $query =
+                "update " . DB_PREFIX . "photo_ratings " .
+                "set rating = '" . escape_string($rating) . "' " .
+                "where user_id = '" . escape_string($user_id) . "'" .
+                " and photo_id = '". escape_string($photo_id) . "'";
+        }
+        else {
+            $query =
+                "insert into " . DB_PREFIX . "photo_ratings " .
+                "(photo_id, user_id, rating) values " .
+                " ('" . escape_string($photo_id) . "', '" .
+                escape_string($user_id) . "', '" .
+                escape_string($rating) . "')";
+        }
+
+        if (DEBUG > 1) { echo "$query<br>\n"; }
+
+        $result = mysql_query($query)
+            or die_with_mysql_error("Rating input failed");
+
+        //now recalculate the average, and input it in the photo table
+
+        $query = "select avg(rating) from " . DB_PREFIX . "photo_ratings ".
+            " where photo_id = '" . escape_string($photo_id) . "'";
+
+        if (DEBUG > 1) { echo "$query<br>\n"; }
+
+        $result = mysql_query($query)
+            or die_with_mysql_error("Rating recalculation failed");
+
+        $row = mysql_fetch_array($result);
+
+        $avg = (round(100 * $row[0])) / 100.0;
+        
+        $query = "update " . DB_PREFIX . "photos set rating = $avg" .
+            " where photo_id = '" . escape_string($photo_id) . "'";
+
+        if (DEBUG > 1) { echo "$query<br>\n"; }
+
+        $result = mysql_query($query)
+            or die_with_mysql_error("Inserting new rating failed");
+
+        return $avg;
+    }
+
     function rotate($deg) {
 
         if (!ALLOW_ROTATIONS || !$this->get('name') || !$this->get('path')) {
@@ -587,8 +681,6 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             translate("view") => $this->get("view"),
             translate("date") => create_date_link($this->get("date")),
             translate("time") => $this->get("time"),
-            translate("rating") => $this->get("rating")
-                ? $this->get("rating") . " / 10" : "",
             translate("photographer") => $this->photographer
                 ? $this->photographer->get_link() : ""
         );
@@ -672,10 +764,14 @@ function create_rating_graph($user) {
         if ($row[0]) { $rating = $row[0]; }
         else { $rating = "null"; }
 
-        $ratings[] = $rating;
-        $counts[$rating] = $row[1];
+        $range = (int)floor($rating);
+        $range .= "-" . ($range + 1);
 
-        if ($row[1] > $max_count) { $max_count = $row[1]; }
+        $count = $ratings[$range] + $row[1];
+
+        if ($count > $max_count) { $max_count = $count; }
+
+        $ratings[$range] = $count;
     }
 
     if ($max_count) {
@@ -688,12 +784,19 @@ function create_rating_graph($user) {
 
     $scale = 20.0 / $max_count;
 
-    foreach ($ratings as $rating) {
-        $count = $counts[$rating];
+    while (list($range, $count) = each($ratings)) {
+
+        $pos = strpos($range, "-");
+        $min_rating = substr($range, 0, $pos);
+        $max_rating = substr($range, $pos + 1);
+
+        $qs =
+            "photos.php?rating=" . $min_rating . "&_rating-op=%3E%3D" .
+            "&rating%232=" . $max_rating . "&_rating-op%232=%3C";
 
         $table .=
             "  <tr>\n    <td align=\"right\">\n" .
-            "      <a href=\"photos.php?rating=$rating\">$rating</a></td>\n" .
+            "      <a href=\"$qs\">$range</a></td>\n" .
             "    <td>&nbsp;</td>\n    <td>\n";
 
         $ticks = ceil($scale * $count);

@@ -196,7 +196,7 @@ CREATE TABLE zoph_photos (
   photographer_id int(11) default NULL,
   location_id int(11) default NULL,
   view varchar(64) default NULL,
-  rating tinyint(4) default NULL,
+  rating float(3,2) unsigned default NULL,
   description blob,
   date varchar(10) default NULL,
   time varchar(8) default NULL,
@@ -282,6 +282,23 @@ CREATE TABLE zoph_prefs (
 
 
 INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0');
+
+--
+-- Table structure for table 'zoph_photo_ratings'
+--
+
+CREATE TABLE zoph_photo_ratings (
+  user_id int(11) NOT NULL default '0',
+  photo_id int(11) NOT NULL default '0',
+  rating tinyint(4) NOT NULL default '0',
+  PRIMARY KEY  (user_id,photo_id)
+) TYPE=MyISAM;
+
+--
+-- Dumping data for table 'zoph_photo_ratings'
+--
+
+
 
 --
 -- Table structure for table 'zoph_users'
