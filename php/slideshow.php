@@ -27,8 +27,12 @@
 
     $newoffset = $offset + 1;
     $new_qs = str_replace("_off=$offset", "_off=$newoffset", $QUERY_STRING);
+    $header = "";
     if (!$_pause) {
-        header("Refresh: $SLIDESHOW_TIME;URL=$PHP_SELF?$new_qs");
+        // bug#667480: header() didn't work with IE on Mac
+        // manually set http-equiv instead
+        //header("Refresh: $SLIDESHOW_TIME;URL=$PHP_SELF?$new_qs");
+        $header = "<meta http-equiv=\"refresh\" content=\"$SLIDESHOW_TIME;URL=$PHP_SELF?$new_qs\">\n";
     }
     else {
         $new_qs = str_replace("_pause=1", "", $new_qs);
@@ -38,6 +42,7 @@
 ?>
 <html>
 <head>
+<?php echo $header ?>
 <title>Zoph - Slideshow</title>
 </head>
 <body bgcolor="<?php echo $PAGE_BG_COLOR ?>" text="<?php echo $TEXT_COLOR ?>" link="<?php echo $LINK_COLOR ?>" vlink="<?php echo $VLINK_COLOR ?>">
