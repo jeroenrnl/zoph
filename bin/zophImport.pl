@@ -269,16 +269,17 @@ sub insertPhoto {
     my $size = -s $image;
     my ($width, $height, $imgInfo) = imgsize($image);
 
+    my $imgPath = $path;
     # if a path was not passed, try to extract one from the image
-    if (not $path) {
-        $path = $image;
-        $path =~ s|/?[^/]+$||;
+    if (not $imgPath) {
+        $imgPath = $image;
+        $imgPath =~ s|/?[^/]+$||;
     }
 
     $image = stripPath($image);
 
     #print "$image\t$path\t$width\t$height\t$size\n";
-    $insert_sth->execute($image, $path, $width, $height, $size);
+    $insert_sth->execute($image, $imgPath, $width, $height, $size);
 
     return $insert_sth->{'mysql_insertid'};
 }
