@@ -21,9 +21,11 @@ use File::Copy;
 $| = 1;
 
 # edit these to reflect your database
+my $db_host = 'localhost';  # hostname or hostname:port
 my $db_name = 'zoph';
 my $db_user = 'zoph_rw';
 my $db_pass = 'password';
+my $db_prefix = 'zoph_';
 
 # set this to your image directory
 my $image_dir = '/data/images';
@@ -85,7 +87,7 @@ if ($#ARGV < 0) {
     exit(0);
 }
 
-my $dbh = DBI->connect("DBI:mysql:$db_name", $db_user, $db_pass);
+my $dbh = DBI->connect("DBI:mysql:$db_name:$db_host", $db_user, $db_pass);
 
 GetOptions(
     'help' => sub { printUsage(); exit(0); },
@@ -268,7 +270,7 @@ sub export {
 # Generates a sql statement to look up photos.
 #
 sub generateSql {
-    my $from = "photos as ph";
+    my $from = $db_prefix . "photos as ph";
     my $where = "";
     my $field;
     foreach $field (keys %fieldHash) {
@@ -287,7 +289,7 @@ sub generateSql {
 
     #@albums = split(/\s*,\s*/, join(',', @albums)); I have albums with commas
     if (@albums) {
-        $from .= ", photo_albums as pa";
+        $from .= ", " . $db_prefix . "photo_albums as pa";
         if ($where) { $where .= " and "; }
 
         my $prev = 0;
@@ -299,7 +301,7 @@ sub generateSql {
 
     @categories = split(/\s*,\s*/, join(',', @categories));
     if (@categories) {
-        $from .= ", photo_categories as pc";
+        $from .= ", " . $db_prefix . "photo_categories as pc";
         if ($where) { $where .= " and "; }
 
         my $prev = 0;
@@ -312,7 +314,7 @@ sub generateSql {
 
     @people = split(/\s*,\s*/, join(',', @people));
     if (@people) {
-        $from .= ", photo_people as pp";
+        $from .= ", " . $db_prefix . "photo_people as pp";
         if ($where) { $where .= " and "; }
 
         my $prev = 0;
@@ -395,7 +397,7 @@ sub lookupPersonId {
 
     my ($first, $last) = split / +/, $person;
     my $query =
-        "select person_id from people where " .
+        "select person_id from " . $db_prefix . "people where " .
         "lower(first_name) = " .  $dbh->quote($first) . " and " .
         "lower(last_name) = " .  $dbh->quote($last);
 
@@ -418,7 +420,7 @@ sub lookupPlaceId {
     $place = lc($place);
 
     my $query =
-        "select place_id from places where " .
+        "select place_id from " . $db_prefix . "places where " .
         "lower(title) = " .  $dbh->quote($place);
 
     my @row_array = $dbh->selectrow_array($query);
@@ -488,8 +490,8 @@ sub getId {
     my ($value, $field, $table) = @_;
 
     my $sql =
-        "select $field" . "_id from $table where lower($field) = " .
-        $dbh->quote(lc($value));
+        "select $field" . "_id from " . $db_prefix . "$table " .
+        "where lower($field) = " .  $dbh->quote(lc($value));
 
     my $sth = $dbh->prepare($sql);
     $sth->execute() or die "Error: Could not execute sql: $sql\n";
@@ -508,9 +510,9 @@ sub getId {
 # Mostly for getting a name using an id.
 #
 sub getName {
-    my ($id, $field, $name, $table, $supress) = @_;
+    my ($id, $field, $name, $table, $suppress) = @_;
 
-    my $sql = "select $name from $table where $field = $id";
+    my $sql = "select $name from " . $db_prefix . "$table where $field = $id";
     #print "$sql\n";
 
     my $sth = $dbh->prepare($sql);
@@ -518,7 +520,7 @@ sub getName {
 
     my $val = $sth->fetchrow_array();
 
-    if (not $val and not $supress) {
+    if (not $val and not $suppress) {
         print "Error: $field not found: $id\n";
     }
 
@@ -532,7 +534,7 @@ sub getName {
 sub getRelatedIds {
     my ($id, $field, $table) = @_;
 
-    my $sql = "select $field from $table where photo_id = $id";
+    my $sql = "select $field from " . $db_prefix . "$table where photo_id = $id";
 
     my $sth = $dbh->prepare($sql);
     $sth->execute() or die "Error: Could not execute sql: $sql\n";
@@ -549,8 +551,8 @@ sub getChildrenIds {
     my ($id, $field, $table) = @_;
 
     my $sql =
-        "select $field" . "_id from $table where parent_" . $field . "_id = " .
-        $dbh->quote($id);
+        "select $field" . "_id from " . $db_prefix . "$table " .
+        "where parent_" . $field . "_id = " .  $dbh->quote($id);
 
     my $sth = $dbh->prepare($sql);
     $sth->execute() or die "Error: Could not execute sql: $sql\n";
@@ -571,8 +573,8 @@ sub getAncestorNames {
     my ($id, $field, $table) = @_;
 
     my $sql =
-        "select parent_$field" . "_id, $field from $table where $field" . "_id = " .
-        $dbh->quote($id);
+        "select parent_$field" . "_id, $field from " . $db_prefix . "$table " .
+        "where $field" . "_id = " .  $dbh->quote($id);
 
     my $sth = $dbh->prepare($sql);
     $sth->execute() or die "Error: Could not execute sql: $sql\n";

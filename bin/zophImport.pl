@@ -39,8 +39,9 @@ my $db_host = 'localhost';  # hostname or hostname:port
 my $db_name = 'zoph';
 my $db_user = 'zoph_rw';
 my $db_pass = 'password';
+my $db_prefix = 'zoph_';
 
-my $version = '0.3.3';
+my $version = '0.4pre1';
 
 my $update     = 0; # update existing photo records instead of inserting
 my $updateSize = 0; # update the size, width and height (implies -update)
@@ -122,8 +123,8 @@ if ($update and $thumbnails != 1) { $thumbnails = 0; }
 my $insert_sth = '';
 if (not $update) {
     $insert_sth = $dbh->prepare(
-        "insert into photos (name, path, width, height, size) " .
-        "values (?, ?, ?, ?, ?)");
+        "insert into " . $db_prefix . "photos " .
+        "(name, path, width, height, size) values (?, ?, ?, ?, ?)");
 }
 
 while ($_ = shift) {
@@ -295,7 +296,10 @@ sub updatePhoto {
     }
 
     if ($update ne '') {
-        $update = "update photos set $update where photo_id = $id";
+        $update =
+            "update " . $db_prefix . "photos set $update " .
+            "where photo_id = $id";
+
         #print "$update\n";
         my $updateSth = $dbh->prepare($update);
         $updateSth->execute();
@@ -424,7 +428,7 @@ sub addToAlbums {
         if (not $album_id) { next; }
 
         my $insert =
-            "insert into photo_albums (photo_id, album_id) " .
+            "insert into " . $db_prefix . "photo_albums (photo_id, album_id) " .
             "values ($id, $album_id)";
         #print "$insert\n";
 
@@ -445,8 +449,8 @@ sub addToCategories {
         if (not $cat_id) { next; }
 
         my $insert =
-            "insert into photo_categories (photo_id, category_id) " .
-            "values ($id, $cat_id)";
+            "insert into " . $db_prefix . "photo_categories " .
+            "(photo_id, category_id) values ($id, $cat_id)";
         #print "$insert\n";
 
         my $insertSth = $dbh->prepare($insert);
@@ -467,7 +471,8 @@ sub addPeople {
         if (not $person_id) { next; }
 
         my $insert =
-            "insert into photo_people (photo_id, person_id, position) " .
+            "insert into " . $db_prefix . "photo_people " .
+            "(photo_id, person_id, position) " .
             "values ($id, $person_id, $position)";
         #print "$insert\n";
 
@@ -570,7 +575,7 @@ sub lookupPhotoId {
     my $photo = lc(stripPath($img));
 
     my $query =
-        "select photo_id from photos where " .
+        "select photo_id from " . $db_prefix . "photos where " .
         "lower(name) = " .  $dbh->quote($photo);
 
     # if the path to the image is present, use it too look up the photo as well
@@ -599,7 +604,8 @@ sub lookupPhoto {
     my ($id) = @_;
 
     my $query =
-        "select name, path from photos where photo_id = " . $dbh->quote($id);
+        "select name, path from " . $db_prefix . "photos " .
+        "where photo_id = " . $dbh->quote($id);
 
     my @row_array = $dbh->selectrow_array($query);
 
@@ -621,7 +627,7 @@ sub lookupPersonId {
 
     my ($first, $last) = split / +/, $person;
     my $query =
-        "select person_id from people where " .
+        "select person_id from " . $db_prefix . "people where " .
         "lower(first_name) = " .  $dbh->quote($first) . " and " .
         "lower(last_name) = " .  $dbh->quote($last);
 
@@ -644,7 +650,7 @@ sub lookupPlaceId {
     $place = lc($place);
 
     my $query =
-        "select place_id from places where " .
+        "select place_id from " . $db_prefix . "places where " .
         "lower(title) = " .  $dbh->quote($place);
 
     my @row_array = $dbh->selectrow_array($query);
@@ -666,7 +672,7 @@ sub lookupAlbumId {
     $album = lc($album);
 
     my $query =
-        "select album_id from albums where lower(album) = " .
+        "select album_id from " . $db_prefix . "albums where lower(album) = " .
         $dbh->quote($album);
 
     my @row_array = $dbh->selectrow_array($query);
@@ -687,8 +693,8 @@ sub lookupCategoryId {
     $cat = lc($cat);
 
     my $query =
-        "select category_id from categories where lower(category) = " .
-        $dbh->quote($cat);
+        "select category_id from " . $db_prefix . "categories " .
+        "where lower(category) = " .  $dbh->quote($cat);
 
     my @row_array = $dbh->selectrow_array($query);
 
