@@ -35,6 +35,11 @@
     // directory to use to temporarily extract uploaded archives
     define(EXTRACT_DIR, '/tmp');
 
+    // destination path params for importing
+    // "date(format)" will be expanded to today's date
+    define(DEFAULT_DESTINATION_PATH, 'uploads/date(Y.m.d)');
+    define(SHOW_DESTINATION_PATH, 0); // show for non admin users
+
     define(MAX_CRUMBS, 100);
 
     // max days for photos taken/modified X days ago pulldown

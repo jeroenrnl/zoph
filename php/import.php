@@ -7,6 +7,11 @@
     $_path_a = getvar("_path_a");
     $_path_b = getvar("_path_b");
 
+    $default_path = DEFAULT_DESTINATION_PATH;
+    if (preg_match("/date(.*)/", $default_path)) {
+        $default_path = preg_replace("/date\(([^)]*)\)/e", "date(\"\\1\")", $default_path);
+    }
+
     if (!(CLIENT_WEB_IMPORT || SERVER_WEB_IMPORT) ||
         (!$user->is_admin() && !$user->get("import"))) {
 
@@ -74,11 +79,20 @@ require_once("header.inc.php");
           <td><?php echo translate("file") ?></td>
           <td colspan="2"><input name="_image_local" type="file"></td>
         </tr>
+<?php
+            if (SHOW_DESTINATION_PATH || $user->is_admin()) {
+?>
         <tr>
           <td><?php echo translate("destination path") ?></td>
-          <td colspan="2"><?php echo create_text_input("_path_a", "", 40, 256) ?></td>
+          <td colspan="2"><?php echo create_text_input("_path_a", $default_path, 40, 256) ?></td>
         </tr>
 <?php
+            }
+            else {
+?>
+        <input type="hidden" name="_path_a" value="<?php echo $default_path ?>">
+<?php
+            }
         }
         
         if (SERVER_WEB_IMPORT) {
@@ -93,11 +107,20 @@ require_once("header.inc.php");
           <td><?php echo translate("file/directory") ?></td>
           <td colspan="2"><?php echo create_text_input("_image_server", "", 40, 256) ?></td>
         </tr>
+<?php
+            if (SHOW_DESTINATION_PATH || $user->is_admin()) {
+?>
         <tr>
           <td><?php echo translate("destination path") ?></td>
-          <td colspan="2"><?php echo create_text_input("_path_b", "", 40, 256) ?></td>
+          <td colspan="2"><?php echo create_text_input("_path_b", $default_path, 40, 256) ?></td>
         </tr>
 <?php
+            }
+            else {
+?>
+        <input type="hidden" name="_path_b" value="<?php echo $default_path ?>">
+<?php
+            }
         }
 ?>
         <tr>
