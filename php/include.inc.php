@@ -3,6 +3,7 @@
 
     require_once("config.inc.php");
     require_once("util.inc.php");
+    require_once("validator.inc.php");
 
     require_once("rtplang.class.php");
 

@@ -24,22 +24,8 @@
         $uname = getvar("uname");
         $pword = getvar("pword");
 
-        $query =
-            "select user_id from users where user_name = '" .
-            escape_string($uname) . "' and " .
-            "password = password('" . escape_string($pword) . "')";
-
-        $result = mysql_query($query);
-
-        if(mysql_num_rows($result) == 1) {
-            $row = mysql_fetch_array($result);
-
-            $user = new user($row["user_id"]);
-        }
-        // couldn't log in, but is there a default user?
-        else if (DEFAULT_USER) {
-            $user = new user(DEFAULT_USER);
-        }
+        $validator = new validator($uname, $pword);
+        $user = $validator->validate();
 
         // we have a valid user
         if (!empty($user)) {
