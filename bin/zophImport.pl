@@ -105,6 +105,9 @@ GetOptions(
     'clear' => sub { %fieldHash = (); }
 ) or die "Error parsing options";
 
+# strip trailing slashes
+if ($path) { $path =~ s/\/+$//; }
+
 if ($updateSize or $updateExif) { $update = 1; }
 if ($update and $path) { $fieldHash{'path'} = $path; }
 if ($update and $thumbnails != 1) { $thumbnails = 0; }
