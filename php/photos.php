@@ -138,7 +138,7 @@
                 echo "              </tr>\n              <tr>\n";
             }
 
-            $ignore = array("_photo_id");
+            $ignore = array("_action", "_photo_id");
 ?>
                 <td width="<?php echo THUMB_SIZE ?>" align="center">
                   <?php echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($request_vars, "_off", $offset + $i, $ignore)) . "\n" ?>

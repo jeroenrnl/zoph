@@ -193,10 +193,9 @@ function create_photo_field_pulldown($var, $name = null) {
 
 /*
  * Remove any params without values and operator params without corresponding
- * fields (e.g. _album_id-op when there is no _album_id).  Also gets rid of
- * the _action and _button params.  This can be called once after a search
- * is performed.  It allows for shorter urls that are more readable and
- * easier to debug.
+ * fields (e.g. _album_id-op when there is no _album_id).  This can be called
+ * once after a search is performed.  It allows for shorter urls that are
+ * more readable and easier to debug.
  */
 function clean_request_vars($vars) {
     $clean_vars = array();
@@ -206,7 +205,9 @@ function clean_request_vars($vars) {
         if (empty($val)) { continue; }
 
         // won't need this
-        if ($key == "_action" || $key == "_button") { continue; }
+        //if ($key == "_action" || $key == "_button") { continue; }
+        // keep _action now that the pager links point back to search.php
+        if ($key == "_button") { continue; }
 
         // get rid of ops without fields
         if (strpos($key, "-op")) {
