@@ -1,7 +1,13 @@
+<?php
+    $return_qs = getvar("_qs");
+    if (empty($return_qs)) {
+        $qs = "_action=display&photo_id=" . $photo->get("photo_id");
+    }
+?>
         <tr>
           <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("photo") ?></font></th>
           <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">[
-            <a href="photo.php?_action=display&photo_id=<?php echo $photo->get("photo_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("return") ?></font></a>
+            <a href="photo.php?<?php echo $return_qs ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("return") ?></font></a>
 <?php
         if ($user->is_admin()) {
 ?>
@@ -19,6 +25,7 @@
       <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
 <form action="photo.php" method="POST">
 <input type="hidden" name="_action" value="<?php echo $action ?>">
+<input type="hidden" name="_qs" value="<?php echo $return_qs ?>">
 <?php
     if ($action == "insert") {
 ?>

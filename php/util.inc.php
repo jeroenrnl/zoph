@@ -238,8 +238,10 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
         $qstr .= rawurlencode($key) . "=" . rawurlencode($val);
     }
 
-    if ($qstr) { $qstr .= "&"; }
-    $qstr .= "$new_key=" . rawurlencode($new_val);
+    if ($new_key && $new_val) {
+        if ($qstr) { $qstr .= "&"; }
+        $qstr .= "$new_key=" . rawurlencode($new_val);
+    }
 
     return $qstr;
 }

@@ -3,7 +3,6 @@
 
     $photo_id = getvar("photo_id");
     $_off = getvar("_off");
-    $_lightbox = getvar("_lightbox");
 
     /*
     Before deciding to include the Prev and Next links, it was as
@@ -11,6 +10,14 @@
 
     $photo = new photo($photo_id);
     */
+
+    $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
+    $qs = preg_replace('/_action=\w+&?/', '', $qs);
+
+    $encoded_qs = getvar("_qs");
+    if (empty($encoded_qs)) {
+        $encoded_qs = rawurlencode($qs);
+    }
 
     if ($photo_id) { // would be passed for edit or delete
         $photo = new photo($photo_id);
@@ -28,8 +35,6 @@
             $photo = $thumbnails[0];
             $photo_id = $photo->get("photo_id");
 
-            $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
-
             if ($offset > 0) {
                 $newoffset = $offset - 1;
                 $prev_link = "<a href=\"$PHP_SELF?" . str_replace("_off=$offset", "_off=$newoffset", $qs) . "\">" . translate("Prev") . "</a>";
@@ -43,6 +48,12 @@
         else {
             $photo = new photo();
         }
+    }
+
+    if ($offset) {
+        $ignore = array("_off", "_action");
+        $up_qs = update_query_string($request_vars, null, null, $ignore);
+        $up_link = "<a href=\"photos.php?$up_qs\">" . translate("Up", 0) . "</a>";
     }
 
     // jump to edit screen if auto edit pref is set
@@ -67,10 +78,6 @@
         else if ($permissions->get("writable") == 0) {
             $_action = "display";
         }
-    }
-
-    if ($_lightbox) {
-        $photo->add_to_album($user->get("lightbox_id"));
     }
 
     if ($_action == "edit") {
@@ -98,6 +105,10 @@
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = "zoph.php"; }
         header("Location: " . add_sid($link));
+    }
+    else if ($_action == "lightbox") {
+        $photo->add_to_album($user->get("lightbox_id"));
+        $action = "display";
     }
     else if ($_action == "rotate") {
         if (ALLOW_ROTATIONS) {
@@ -173,20 +184,20 @@ require_once("header.inc.php");
 
     if ($user->is_admin() || $permissions->get("writable")) {
 ?>
-            <?php echo $bar ?> <a href="photo.php?_action=edit&photo_id=<?php echo $photo->get("photo_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a>
+            <?php echo $bar ?> <a href="photo.php?_action=edit&photo_id=<?php echo $photo->get("photo_id") ?>&_qs=<?php echo $encoded_qs ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a>
 <?php
         $bar = "|";
 
         if ($user->is_admin()) {
 ?>
-            | <a href="photo.php?_action=delete&photo_id=<?php echo $photo->get("photo_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a>
+            | <a href="photo.php?_action=delete&photo_id=<?php echo $photo->get("photo_id") ?>&_qs=<?php echo $encoded_qs ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a>
 <?php
         }
     }
 
     if ($user->get("lightbox_id")) {
 ?>
-            <?php echo $bar ?> <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_lightbox=1"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("lightbox", 0) ?></font></a>
+            <?php echo $bar ?> <a href="photo.php?_action=lightbox&<?php echo $qs ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("lightbox", 0) ?></font></a>
 <?php
         $bar = "|";
     }
@@ -219,6 +230,13 @@ require_once("header.inc.php");
               <tr>
                 <td align="left"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></td>
                 <td align="center">
+<?
+    if ($up_link) {
+?>
+            [ <?php echo $up_link ?> ]<br>
+<?php
+    }
+?>
                   <font size="-1">
                   <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
                   <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
@@ -341,7 +359,7 @@ require_once("header.inc.php");
           </td>
           <td align="right">[
             <a href="photo.php?_action=confirm&photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="photo.php?_action=display&photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("cancel") ?></a>
+            <a href="photo.php?<?php echo $encoded_qs ?>"><?php echo translate("cancel") ?></a>
           ]</td>
         </tr>
 <?php
