@@ -22,6 +22,8 @@
         $from_email = getvar("from_email");
 
         $mail = new htmlMimeMail(array('X-Mailer: Html Mime Mail Class'));
+        $mail->setCrlf("\r\n");
+
         $mail->setFrom("$from_name <$from_email>");
         $mail->setSubject($subject);
         

@@ -46,6 +46,7 @@
         if ($_action == "mail") {
 
             $mail = new htmlMimeMail(array('X-Mailer: Html Mime Mail Class'));
+            $mail->setCrlf("\r\n");
 
             $text = $body;
             $size = getvar("_size");
