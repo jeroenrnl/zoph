@@ -1,5 +1,5 @@
 <?php
-    define(VERSION, '0.3.3');
+    define(VERSION, '0.4pre1');
 
     define(DB_HOST, 'localhost');
     define(DB_NAME, 'zoph');
