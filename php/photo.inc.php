@@ -582,7 +582,8 @@ class photo extends zoph_table {
                    remove_magic_quotes($real_key);
                 }
 
-                $out_array[$real_key] = $real_key . ": " . $real_val;
+                $out_array[$real_key] = translate($real_key, 0) . ": " .
+                    $real_val;
                 $lines += ceil(strlen($out_array[$real_key]) / $maxWidthChars);
             }
         }
