@@ -44,7 +44,7 @@ class zoph_table {
         reset($vars);
         while (list($key, $val) = each($vars)) {
 
-            //if (DEBUG) { echo "$key = $val<br>\n"; }
+            if (DEBUG) { echo "$key = $val<br>\n"; }
 
             // ignore empty keys or values
             if (empty($key) || $val == "") { continue; }
@@ -139,6 +139,10 @@ class zoph_table {
             if ($name == "password") {
                 $values .= "password('" . escape_string($value) . "')";
             }
+            else if ($value == "now()") {
+                /* Lastnotify is normaly set to "now()" and should not be escaped */
+                $values .=  $value ;
+            }
             else if ($value != "null") {
                 $values .= "'" . escape_string($value) . "'";
             }
@@ -227,6 +231,9 @@ class zoph_table {
             if ($name == "password") {
                 $values .= "$name = password('" . escape_string($value) . "')";
             }
+            else if ($value == "now()" ) {
+                $values .= "$name = " . $value . "";
+            }
             else if ($value != "null") {
                 $values .= "$name = '" . escape_string($value) . "'";
             }
@@ -253,13 +260,10 @@ class zoph_table {
         foreach ($keys as $key) {
             $value = $this->fields[$key];
             if (!$value) { continue; }
-
             if ($constraints) { $constraints .= " and "; }
             $constraints .= "$key = '" . escape_string($value) . "'";
         }
-
         return $constraints;
-
     }
 
     /*
