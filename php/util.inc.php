@@ -258,9 +258,9 @@ function make_title($string) {
     return $string;
 }
 
-function create_date_link($date) {
+function create_date_link($date, $search_field = "date") {
     if ($date) {
-        return "<a href=\"calendar.php?date=$date\">$date</a>";
+        return "<a href=\"calendar.php?date=$date&search_field=$search_field\">$date</a>";
     }
 }
 
@@ -290,7 +290,7 @@ function format_timestamp($ts) {
     $da = parse_date($ts);
     $date = $da['year'] . '-' . $da['mon'] . '-' . $da['day'];
     $time = $da['hour'] . ':' . $da['min'] . ':' . $da['sec'];
-    return create_date_link($date) . ' ' . $time;
+    return create_date_link($date, "timestamp") . ' ' . $time;
 }
 
 function subtract_days($date, $days) {

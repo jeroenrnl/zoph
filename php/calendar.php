@@ -4,8 +4,9 @@
     $date = getvar("date");
     $year = getvar("year");
     $month = getvar("month");
+    $search_field = getvar("search_field");
 
-    $cal = new zoph_calendar();
+    $cal = new zoph_calendar($search_field);
 
     if ($year && $month) {
         // ok
