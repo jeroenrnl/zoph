@@ -19,9 +19,6 @@ class validator {
      * Validate a user.
      */
     function validate() {
-        // pick based on a setting in config.inc.php maybe, like:
-        $VALIDATOR = 'default_validate';
-        //$VALIDATOR = 'htpasswd_validate';
         return $this->$VALIDATOR();
     }
 

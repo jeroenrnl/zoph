@@ -10,6 +10,11 @@
     define(IMAGE_DIR, "/data/images/");
     define(WEB_IMAGE_DIR, "/images/"); // from webserver doc root
 
+    // authentication method used from auth.inc.php
+    // (this needs to be the name of a function in validator.inc.php)
+    $VALIDATOR = 'default_validate';
+    //$VALIDATOR = 'htpasswd_validate';
+
     define(ZOPH_TITLE, "Zoph");
 
     define(LANG_DIR, "lang"); // where language files are stored
