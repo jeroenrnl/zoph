@@ -15,18 +15,18 @@
 
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo ZOPH_TITLE ?></font></th>
+          <th><H1><?php echo ZOPH_TITLE ?></H1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
-          <td align="center" width="140">
+          <td class="thumbnail" id="random">
 <?php
     if (sizeof($thumbnails) == 1) {
         echo $thumbnails[0]->get_thumbnail_link();
@@ -40,9 +40,9 @@
     $category_photo_count = $category->get_total_photo_count($user);
 ?>
           </td>
-          <td align="left">
+          <td>
       <?php echo sprintf(translate("Welcome %s.  %s currently contains"), $user->person->get_link(), ZOPH_TITLE) ?>
-            <li><?php echo sprintf(translate("%s photos in %s"),  $album_photo_count, $album_count) ?> <a href="albums.php"><?php echo $album_count == 1 ? translate("album") : translate("albums") ?></a></li>
+            <ul><li><?php echo sprintf(translate("%s photos in %s"),  $album_photo_count, $album_count) ?> <a href="albums.php"><?php echo $album_count == 1 ? translate("album") : translate("albums") ?></a></li>
             <li><?php echo sprintf(translate("%s photos in %s"), $category_photo_count, $category_count) ?> <a href="categories.php"><?php echo $category_count == 1 ? translate("category") : translate("categories") ?></a></li>
 <?php
     if ($user->is_admin() || $user->get("browse_people")) {
@@ -58,17 +58,17 @@
 <?php
     }
 ?>
-          </td>
+          </ul></td>
         </tr>
         <tr>
-          <td colspan="2" align="left">
+          <td colspan="2">
 <?php
     $today = date("Y-m-d");
     $sub_days = $user->prefs->get("recent_photo_days");
 
-    echo sprintf(translate("You may search for photos %s taken %s or %s modified %s in the past %s days."), "<a href=\"photos.php?_date-op=%3E%3D&date=" . subtract_days($today, $sub_days) . "\">", "</a>", "<a href=\"photos.php?_timestamp-op=%3E%3D&timestamp=" . subtract_days($today, $sub_days) . "\">", "</a>", $sub_days);
+    echo sprintf(translate("You may search for photos %s taken %s or %s modified %s in the past %s days."), "<a href=\"photos.php?_date-op=%3E%3D&amp;date=" . subtract_days($today, $sub_days) . "\">", "</a>", "<a href=\"photos.php?_timestamp-op=%3E%3D&amp;timestamp=" . subtract_days($today, $sub_days) . "\">", "</a>", $sub_days);
 ?>
-      <?php echo sprintf(translate("Or you may use the %s search page %s to find photos using multiple criteria. You may also view a %s randomly chosen photo %s like the one above."), "<a href=\"search.php\">", "</a>", "<a href=\"photos.php?_random=1&_rating-op=%3E%3D&rating=$RANDOM_PHOTO_MIN_RATING\">","</a>"); ?>
+      <?php echo sprintf(translate("Or you may use the %s search page %s to find photos using multiple criteria. You may also view a %s randomly chosen photo %s like the one above."), "<a href=\"search.php\">", "</a>", "<a href=\"photos.php?_random=1&amp;_rating-op=%3E%3D&amp;rating=$RANDOM_PHOTO_MIN_RATING\">","</a>"); ?>
 <p>
 <?php echo sprintf(translate("These options are always available in the tabs on the upper right.  Use the %s home %s link to return here. Click on any thumbnail to see a larger version along with information about that photo."),"<a href=\"zoph.php\">","</a>"); ?>
 </p>
@@ -84,8 +84,8 @@
           </td>
         </tr>
         <tr>
-          <td colspan="2" align="center">
-            <font size="-1">Zoph <?php echo VERSION ?></font>
+          <td class="version" colspan="2">
+            Zoph <?php echo VERSION ?>
           </td>
         </tr>
       </table>
@@ -93,7 +93,6 @@
   </tr>
 </table>
 
-</div>
 
 <?php
     require_once("footer.inc.php");

@@ -22,15 +22,15 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("places") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
+          <th><h1><?php echo translate("places") ?></h1></th>
+          <td class="actionlink">
 <?php
         if ($user->is_admin()) {
 ?>
           [
-            <a href="place.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="place.php?_action=new"><?php echo translate("new") ?></a>
           ]
 <?php
         }
@@ -38,21 +38,21 @@
             echo "&nbsp;";
         }
 ?>
-          </font></td>
+          </td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
-          <td colspan="2" align="center">[
+          <td class="letter" colspan="2">[
 <?php
     for ($l = 'a'; $l < 'z'; $l++) {
         $title = $l;
         if ($l == $_l) {
-            $title = "<strong>" . strtoupper($title) . "</strong>";
+            $title = "<span class=\"selected\">" . strtoupper($title) . "</span>";
         }
 ?>
             <a href="places.php?_l=<?php echo $l ?>"><?php echo $title ?></a> |
@@ -69,7 +69,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
 <?php
     $constraints = null;
     if ($_l == "all") {
@@ -91,7 +91,7 @@
         foreach($plcs as $p) {
 ?>
         <tr>
-          <td>
+          <td class="place">
             <?php echo $p->get("city") ? $p->get("city") : "&nbsp;" ?>
           </td>
 <?php
@@ -102,11 +102,11 @@
           </td>
 <?php
         }
-?> 
+?>
           <td>
             <?php echo $p->get("title") ? "\"" . $p->get("title") . "\"" : "&nbsp;" ?>
           </td>
-          <td align="right">
+          <td class="actionlink">
             [ <a href="place.php?place_id=<?php echo $p->get("place_id") ?>"><?php echo translate("view") ?></a> | <a href="photos.php?location_id=<?php echo $p->get("place_id") ?>"><?php echo translate("photos at") ?></a> ]
           </td>
         </tr>
@@ -116,7 +116,7 @@
     else {
 ?>
         <tr>
-          <td align="center"><?php echo sprintf(translate("No places were found in a city beginning with '%s'."), $_l) ?></td>
+          <td class="center"><?php echo sprintf(translate("No places were found in a city beginning with '%s'."), $_l) ?></td>
         </tr>
 <?php
     }

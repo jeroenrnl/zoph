@@ -11,19 +11,19 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("users") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">[
-            <a href="user.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
-          ]</font></td>
+          <th><h1><?php echo translate("users") ?></h1></th>
+          <td class="actionlink">[
+            <a href="user.php?_action=new"><?php echo translate("new") ?></a>
+          ]</td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
 <?php
     $users = get_users();
 
@@ -39,22 +39,17 @@
             <?php echo $u->person->get_link() ?>
           </td>
           <td>
+            <?php echo $u->get("lastlogin"); ?>
+          </td>
+          <td class="actionlink"> [
 <?php
             if ((count(get_newer_albums($u->get("user_id"), $u->get_lastnotify())) > 0)) {
 ?>
-            <a href="notify.php?_action=notify&user_id=<?php echo $u->get("user_id") ?>&shownewalbums=1"><?php echo translate("Notify User", 0) ?></a>
+            <a href="notify.php?_action=notify&amp;user_id=<?php echo $u->get("user_id") ?>&amp;shownewalbums=1"><?php echo translate("Notify User", 0) ?></a> |
 <?php
             }
-            else {
-                echo "&nbsp;";
-            }
 ?>
-          </td>
-          <td>
-            <?php echo $u->get("lastlogin"); ?>
-          </td>
-          <td align="right">
-            [ <a href="user.php?user_id=<?php echo $u->get("user_id") ?>"><?php echo translate("view") ?></a> ]
+            <a href="user.php?user_id=<?php echo $u->get("user_id") ?>"><?php echo translate("view") ?></a> ]
           </td>
         </tr>
 <?php
@@ -66,7 +61,6 @@
   </tr>
 </table>
 
-</div>
 <?php
     require_once("footer.inc.php");
 ?>

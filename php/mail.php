@@ -83,7 +83,7 @@
             $mail->setFrom("$from_name <$from_email>");
             $mail->setSubject($subject);
             $mail->setCrlf("\r\n");
-            
+
             if (strlen(BCC_ADDRESS) > 0) {
                 $mail->setBCC(BCC_ADDRESS);
             }
@@ -111,23 +111,32 @@
 
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left">
+          <th><h1>
   <?php echo translate("email photo") ?>
-          </th>
+          </h1></th>
+  <?php if (ANNOTATE_PHOTOS) {
+?>
+          <td class="actionlink"> [
+<?php
+        }
+?>
+            <a href="define_annotated_photo.php?photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("create annotated photo", 0) ?></a> ]
+          </td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+<form action="<?php echo $PHP_SELF ?>" method="post">
+      <table class="main">
 <?php
     if ($msg) {
 ?>
         <tr>
-          <td colspan="2" align="center">
+          <td colspan="2">
             <?php echo $msg ?>
           </td>
         </tr>
@@ -146,60 +155,49 @@
                 }
             }
         }
-  
+
         if ($annotate) {
             $photo->annotate($request_vars, $user);
         }
-
-        if (ANNOTATE_PHOTOS) {
 ?>
         <tr>
-          <td align="center" colspan="2">
-            <a href="define_annotated_photo.php?photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("create annotated photo", 0) ?></a>
-          </td>
-        </tr>
-<?php
-        }
-?>
-        <tr>
-          <td align="right">
-<form action="<?php echo $PHP_SELF ?>" method="get">
+          <td class="fieldtitle">
 <input type="hidden" name="_action" value="mail">
 <input type="hidden" name="photo_id" value="<?php echo $photo_id ?>">
 <input type="hidden" name="annotate" value="<?php echo $annotate ?>">
        <?php echo translate("send as html") ?>
           </td>
-          <td>
+          <td class="field">
             <?php echo create_pulldown("html", "1", array("1" => translate("Yes",0), "0" => translate("No",0))) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("to (name)") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("to (name)") ?></td>
+          <td class="field">
             <?php echo create_text_input("to_name", $to_name, 24, 32) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("to (email)") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("to (email)") ?></td>
+          <td class="field">
             <?php echo create_text_input("to_email", $to_email, 24, 32) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("from (your name)") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("from (your name)") ?></td>
+          <td class="field">
             <?php echo create_text_input("from_name", $from_name, 24, 32) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("from (your email)") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("from (your email)") ?></td>
+          <td class="field">
             <?php echo create_text_input("from_email", $from_email, 24, 64) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("subject") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("subject") ?></td>
+          <td class="field">
             <?php echo create_text_input("subject", $subject, 48, 64) ?>
           </td>
         </tr>
@@ -207,20 +205,20 @@
         if (!$annotate) {
 ?>
         <tr>
-          <td align="right"><?php echo translate("send fullsize") ?></td>
-          <td align="left"><?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?></td>
+          <td class="fieldtitle"><?php echo translate("send fullsize") ?></td>
+          <td class="field"><?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?></td>
         </tr>
 <?php
         }
 ?>
         <tr>
-          <td colspan="2" align="center">
+          <td class="fieldtitle-centered" colspan="2">
             <?php echo translate("message:") ?><br>
             <textarea name="message" cols="70" rows="5"><?php echo $body ?></textarea>
           </td>
         </tr>
         <tr>
-          <td colspan="2" align="center">
+          <td colspan="2" class="photo">
 <?php
         if ($annotate) {
 ?>
@@ -236,15 +234,15 @@
           </td>
         </tr>
         <tr>
-          <td colspan="2" align="center">
+          <td colspan="2" class="center">
             <input type="submit" name="_button" value="<?php echo translate("email", 0); ?>">
-</form>
           </td>
         </tr>
 <?php
     }
 ?>
       </table>
+</form>
     </td>
   </tr>
 </table>

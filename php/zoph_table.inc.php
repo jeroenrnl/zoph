@@ -44,7 +44,7 @@ class zoph_table {
         reset($vars);
         while (list($key, $val) = each($vars)) {
 
-            if (DEBUG > 2) { echo "$key = $val<br>\n"; }
+            if (DEBUG > 2) { echo "<b>$key = $val</b><br>\n"; }
 
             // ignore empty keys or values
             if (empty($key) || $val == "") { continue; }

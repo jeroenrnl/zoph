@@ -27,27 +27,22 @@
     $title = "$monthName $year";
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
 
-    $styles =
-        "<style type=\"text/css\">\n" .
-        ".calendarDay { font-weight: bold }\n" .
-        "</style>\n";
-
     require_once("header.inc.php");
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left" colspan="2"><?php echo translate("calendar") ?></th>
+          <th colspan="2"><h1><?php echo translate("calendar") ?></h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
-          <td align="center">
+          <td class="calendar">
 <?php echo $cal->getMonthView($month, $year, $day) ?>
           </td>
         </tr>
@@ -55,8 +50,6 @@
     </td>
   </tr>
 </table>
-
-</div>
 
 </body>
 </html>

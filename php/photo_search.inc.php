@@ -4,7 +4,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
     $select = "distinct ph.photo_id, ph.name, ph.path, ph.width, ph.height";
 
-    if (MAX_THUMB_DESC && $user && $user->prefs->get("desc_thumbnails")) {  
+    if (MAX_THUMB_DESC && $user && $user->prefs->get("desc_thumbnails")) {
         $select .= ", ph.description";
     }
 

@@ -10,34 +10,38 @@
 
 #    print $rtplang->lang_header();
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link TYPE="text/css" REL="stylesheet" HREF="<?php echo CSS_SHEET ?>?logged_on=no">
 <title><?php echo ZOPH_TITLE . ' - ' . "logon" ?></title>
 </head>
-<body bgcolor="<?php echo $PAGE_BG_COLOR?>">
+<body>
 
-<div align="center">
-
-<table border="0" cellpadding="1" cellspacing="0" bgcolor="<?php echo $TABLE_BORDER_COLOR ?>" width="480">
+<table class="page">
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left" colspan="2"><?php echo "logon" ?></th>
+  <th colspan="2"><h1><?php echo "logon" ?><h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+
+      <form action="zoph.php" method="POST">
+      <table class="main">
         <tr>
           <td colspan="2">
-            <font size="+2"><strong><?php echo ZOPH_TITLE ?></strong></font>
+            <h2><?php echo ZOPH_TITLE ?></h2>
           </td>
         </tr>
         <tr>
           <td colspan="2">&nbsp;</td>
         </tr>
-<form action="zoph.php" method="POST">
         <tr>
           <th><?php echo "username" ?></th>
           <td><input type="text" name="uname"></td>
@@ -47,15 +51,14 @@
           <td><input type="password" name="pword"></td>
         </tr>
         <tr>
-          <td colspan="2" align="center"><input type="submit" value="<?php echo "submit"; ?>"></td>
+          <td colspan="2" class="center"><input type="submit" value="<?php echo "submit"; ?>"></td>
         </tr>
-</form>
+        <tr><td>&nbsp;</td></tr>
       </table>
+      </form>
     </td>
   </tr>
 </table>
-
-</div>
 
 </body>
 </html>

@@ -6,37 +6,50 @@
     }
 
     $user_id = getvar("user_id");
-    $album_id = getvar("album_id");
+    $album_id_new = getvar("album_id_new");
 
     $this_user = new user($user_id);
 
-    if ($_action == "add_album") {
-        $permissions = new album_permissions();
-        $permissions->set_fields($request_vars);
-        $permissions->insert();
-        $action = "update";
-    }
-    else if ($_action == "add_all") {
-        $albums = get_albums();
-        if ($albums) {
-            foreach ($albums as $alb) {
-                $permissions = new album_permissions(
-                    $user_id, $alb->get("album_id"));
-                $permissions->set_fields($request_vars);
-                $permissions->insert();
+    if ($_action == "update_albums") {
+        // Check if the "Grant access to all albums" checkbox is ticked
+        $_access_level_all_checkbox = getvar("_access_level_all_checkbox");
+
+        if($_access_level_all_checkbox) {
+            $albums = get_albums();
+            if ($albums) {
+                foreach ($albums as $alb) {
+                    $permissions = new album_permissions(
+                        $user_id, $alb->get("album_id"));
+                    $permissions->set_fields($request_vars,"","_all");
+                    $permissions->insert();
+                }
             }
         }
-        $action = "update";
-    }
-    else if ($_action == "update_album") {
-        $permissions = new album_permissions();
-        $permissions->set_fields($request_vars);
-        $permissions->update();
-        $action = "update";
-    }
-    else if ($_action == "revoke_album") {
-        $permissions = new album_permissions($user_id, $album_id);
-        $permissions->delete();
+
+        $albums = get_albums_select_array($this_user);
+        while (list($album_id, $name) = each($albums)) {
+            $remove_permission_album = $request_vars["_remove_permission_album__$album_id"];
+            // first check if album needs to be revoked
+            if ($remove_permission_album) {
+                $permissions = new album_permissions($user_id, $album_id);
+                $permissions->delete();
+            }
+        }
+        // Check if new album should be added
+        if($album_id_new) {
+            $permissions = new album_permissions();
+            $permissions->set_fields($request_vars,"","_new");
+            $permissions->insert();
+        }
+        // update ablums
+
+        $albums = get_albums_select_array($this_user);
+        while (list($album_id, $name) = each($albums)) {
+            $permissions = new album_permissions();
+            $permissions->set_fields($request_vars,"","__$album_id");
+            $permissions->update();
+        }
+
         $action = "update";
     }
     else {
@@ -47,7 +60,6 @@
 
     if ($_action == "update" &&
         $user->get("user_id") == $this_user->get("user_id")) {
-
         $user->set_fields($request_vars);
     }
 
@@ -65,93 +77,87 @@
     }
 
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
+
     require_once("header.inc.php");
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
 <?php
     if ($action == "display") {
 ?>
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("user") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
+          <th><h1><?php echo translate("user") ?></h1></th>
+          <td class="actionlink">
           [
-            <a href="user.php?_action=edit&user_id=<?php echo $this_user->get("user_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a> |
-            <a href="user.php?_action=delete&user_id=<?php echo $this_user->get("user_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a> |
-            <a href="user.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="user.php?_action=edit&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("edit") ?></a> |
+            <a href="user.php?_action=delete&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="user.php?_action=new"><?php echo translate("new") ?></a>
           ]
-          </font></td>
+          </td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
-          <th align="left" colspan="3">
-            <?php echo $this_user->get("user_name") ?>
+          <th colspan="3">
+            <h2><?php echo $this_user->get("user_name") ?></h2>
           </th>
         </tr>
 <?php echo create_field_html($this_user->get_display_array(), 3) ?>
-      </table>
-    </td>
-  </tr>
+        <tr>
+          <td colspan="3" class="center">
 <?php
+        $url = ZOPH_URL;
+        if (empty($url)) {
+            $url = get_url() . "login.php";
+        }
+
+        $this_user->lookup_person();
+        $name = $this_user->person->get_name();
+
+        $subject = translate("Your Zoph Account", 0);
+        $message =
+            translate("Hi",0) . " " . $name .  ",\n\n" .
+            translate("I have created a Zoph account for you", 0) .
+            ":\n\n" .  "$url\n" .
+            translate("user name", 0) . ": " .
+            $this_user->get("user_name") . "\n";
+
         if ($_action == "insert") {
-            $url = ZOPH_URL;
-            if (empty($url)) {
-                $url = get_url() . "login.php";
-            }
-
-            $this_user->lookup_person();
-            $name = $this_user->person->get_name();
-
-            $subject = translate("Your Zoph Account", 0);
-            $message =
-                translate("Hi",0) . " " . $name .  ",\n\n" .
-                translate("I have created a Zoph account for you", 0) .
-                ":\n\n" .  "$url\n" .
-                translate("user name", 0) . ": " .
-                $this_user->get("user_name") . "\n" .
+            $message .=
                 translate("password", 0) . ": " .
-                $this_user->get("password") . "\n\n" .
-                translate("Regards,",0) . "\n" .
-                $user->person->get_name();
-
+                $this_user->get("password") . "\n";
+        }
+        $message .=
+            "\n" . translate("Regards,",0) . "\n" .
+            $user->person->get_name();
 ?>
-  <tr>
-    <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
 <form action="notify.php" method="POST">
 <input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
 <input type="hidden" name="subject" value="<?php echo $subject ?>">
 <input type="hidden" name="message" value="<?php echo $message ?>">
-        <tr>
-          <th align="center"><?php echo translate("Notify new user by email", 0) ?></th>
-        </tr>
-        <tr>
-          <td align="center"><input type="submit" name="_button" value="Compose Email"></td>
-        </tr>
+<input class="bigbutton" type="submit" name="_button" value="<?php echo translate("Notify User", 0) ?>">
 </form>
+          </td>
+        </tr>
       </table>
     </td>
   </tr>
-<?php
-        }
-?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
-        <tr>
-          <th align="center" colspan="3"><?php echo translate("Albums") ?></th>
+      <table class="permissions">
+    <tr>
+          <th colspan="5"><h3><?php echo translate("Albums") ?></h3></th>
         </tr>
 <?php
         if ($this_user->is_admin()) {
 ?>
         <tr>
-          <td align="center" colspan="3">
+          <td colspan="5">
        <?php echo sprintf(translate("As an admin, user %s has access to all albums."), $this_user->get("user_name")) ?>
           </td>
         </tr>
@@ -160,9 +166,9 @@
         else {
 ?>
         <tr>
-          <td align="center" width="50%"><?php echo translate("name") ?></td>
-          <td align="center"><?php echo translate("access level") ?></td>
-          <td align="center"><?php echo translate("writable") ?></td>
+          <th><?php echo translate("name") ?></th>
+          <th><?php echo translate("access level") ?></th>
+          <th><?php echo translate("writable") ?></th>
         </tr>
 <?php
             $albums = get_albums_select_array($this_user);
@@ -171,9 +177,9 @@
                 $permissions = $this_user->get_album_permissions($id);
 ?>
         <tr>
-          <td align="left"><?php echo $name ?></td>
-          <td align="center"><?php echo $permissions->get("access_level") ?></td>
-          <td align="center"><?php echo $permissions->get("writable") == "1" ? translate("Yes") : translate("No") ?></td>
+          <td><?php echo $name ?></td>
+          <td><?php echo $permissions->get("access_level") ?></td>
+          <td><?php echo $permissions->get("writable") == "1" ? translate("Yes") : translate("No") ?></td>
         </tr>
 <?php
             }
@@ -181,27 +187,28 @@
     }
     else if ($action == "confirm") {
 ?>
-        <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete user") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">[
-            <a href="user.php?_action=display&user_id=<?php echo $this_user->get("user_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("cancel") ?></font></a>
-          ]</font></td>
+        <tr class="titlebar">
+          <th><h1><?php echo translate("delete user") ?></h1></th>
+          <td class="actionlink">[
+            <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("cancel") ?></a>
+          ]</td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $this_user->get("user_name")) ?>
           </td>
-          <td align="right">[
-            <a href="user.php?_action=confirm&user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="user.php?_action=display&user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("cancel") ?></a>
+          <td class="actionlink">[
+            <a href="user.php?_action=confirm&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("cancel") ?></a>
           ]</td>
         </tr>
+    </table>
 <?php
     }
     else {
@@ -209,15 +216,23 @@ require_once("edit_user.inc.php");
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
-        <tr>
-          <th align="center" colspan="5"><?php echo translate("Albums") ?></th>
+<form action="user.php">
+      <table class="permissions">
+<!--    <tr>
+        <td width="25px"></td>
+        <td></td>
+        <td width="80px"></td>
+        <td width="80px"></td>
+    </tr> !-->
+    <col class="col1"><col class="col2"><col class="col3"><col class="col4">
+    <tr>
+          <th colspan="4"><h3><?php echo translate("Albums") ?></h3></th>
         </tr>
 <?php
         if ($action != "insert" && $this_user->is_admin()) {
 ?>
         <tr>
-          <td align="center" colspan="5">
+          <td colspan="4">
        <?php echo sprintf(translate("As an admin, user %s has access to all albums."), $this_user->get("user_name")) ?>
           </td>
         </tr>
@@ -227,7 +242,7 @@ require_once("edit_user.inc.php");
             if ($action == "insert") {
 ?>
         <tr>
-          <td align="center" colspan="5">
+          <td colspan="4">
        <?php echo translate("After this user is created they can be given access to albums.") ?>
           </td>
         </tr>
@@ -236,53 +251,50 @@ require_once("edit_user.inc.php");
             else {
 ?>
         <tr>
-          <td align="left" colspan="5">
+          <td colspan="4">
        <?php echo translate("Granting access to an album will also grant access to that album's ancestors if required.  Granting access to all albums will not overwrite previously granted permissions.") ?>
           </td>
         </tr>
         <tr>
-          <td align="center"><?php echo translate("name") ?></td>
-          <td align="center"><?php echo translate("access level") ?></td>
-          <td align="center">writable</td>
-          <td align="center">&nbsp;</td>
-          <td align="center">&nbsp;</td>
+          <th colspan="2"><?php echo translate("name") ?></th>
+          <th><?php echo translate("access level") ?></th>
+          <th>writable</th>
         </tr>
         <tr>
-          <td align="left">
-<form action="user.php">
+      <td>
+      <input type="checkbox" name="_access_level_all_checkbox" value="1">
+      </td>
+          <td>
 <input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
-<input type="hidden" name="_action" value="add_all">
+<input type="hidden" name="_action" value="update_albums">
 <?php echo translate("Grant access to all existing albums:") ?>
-          </td>
-          <td align="center">
-<?php echo create_text_input("access_level", "5", 4, 2) ?>
-          </td>
-          <td align="center">
-<?php echo create_pulldown("writable", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
-          </td>
-          <td align="center" colspan="2">
-<input type="submit" value="<?php echo translate("add", 0); ?>">
-</form>
-          </td>
+                </td>
+                <td>
+<?php echo create_text_input("access_level_all", "5", 4, 2) ?>
+                </td>
+                <td>
+<?php echo create_pulldown("writable_all", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
+                </td>
         </tr>
         <tr>
-          <td align="left">
-<form action="user.php">
-<input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
-<input type="hidden" name="_action" value="add_album">
-<?php echo create_smart_pulldown("album_id", "", get_albums_select_array()) ?>
-          </td>
-          <td align="center">
-<?php echo create_text_input("access_level", "5", 4, 2) ?>
-          </td>
-          <td align="center">
-<?php echo create_pulldown("writable", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
-          </td>
-          <td align="center" colspan="2">
-<input type="submit" value="<?php echo translate("add", 0); ?>">
-</form>
-          </td>
+      <td>
+      </td>
+          <td>
+<input type="hidden" name="user_id_new" value="<?php echo $this_user->get("user_id") ?>">
+<?php echo create_smart_pulldown("album_id_new", "", get_albums_select_array()) ?>
+                </td>
+                <td>
+<?php echo create_text_input("access_level_new", "5", 4, 2) ?>
+                </td>
+                <td>
+<?php echo create_pulldown("writable_new", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
+                </td>
         </tr>
+    <tr>
+    <td colspan="4" class="permremove">
+    remove
+    </td>
+    </tr>
 <?php
             $albums = get_albums_select_array($this_user);
             while (list($id, $name) = each($albums)) {
@@ -290,44 +302,35 @@ require_once("edit_user.inc.php");
                 $permissions = $this_user->get_album_permissions($id);
 ?>
         <tr>
-          <td align="left">
+      <td>
+      <input type="checkbox" name="_remove_permission_album__<?php echo $id ?>" value="1">
+      </td>
+          <td>
 <?php echo $name ?>
           </td>
-          <td align="center">
-<form action="user.php">
-<input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
-<input type="hidden" name="_action" value="update_album">
-<input type="hidden" name="album_id" value="<?php echo $id ?>">
-<?php echo create_text_input("access_level", $permissions->get("access_level"), 4, 2) ?>
+          <td>
+<input type="hidden" name="album_id__<?php echo $id ?>" value="<?php echo $id ?>">
+<input type="hidden" name="user_id__<?php echo $id ?>" value="<?php echo $user_id ?>">
+<?php echo create_text_input("access_level__$id", $permissions->get("access_level"), 4, 2) ?>
           </td>
-          <td align="center">
-<?php echo create_pulldown("writable", $permissions->get("writable"), array("0" => translate("No",0), "1" => translate("Yes",0))) ?>
+          <td>
+<?php echo create_pulldown("writable__$id", $permissions->get("writable"), array("0" => translate("No",0), "1" => translate("Yes",0))) ?>
           </td>
-          <td align="center">
-<input type="submit" value="<?php echo translate("update", 0); ?>">
-</form>
-          </td>
-          <td align="center">
-<form action="user.php">
-<input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
-<input type="hidden" name="_action" value="revoke_album">
-<input type="hidden" name="album_id" value="<?php echo $id ?>">
-<input type="submit" value="<?php echo translate("revoke", 0); ?>">
-</form>
-          </td>
-        </tr>
+      </tr>
 <?php
             } // while
-
+?>
+    <tr>
+      <td colspan="4" class="center">
+        <input type="submit" value="submit">
+      </td>
+    </tr>
+<?php
             } // not insert
         } // not admin
     } // edit
 ?>
-      </table>
-    </td>
-  </tr>
 </table>
-
-</div>
-
+</form>
+</table>
 <?php require_once("footer.inc.php"); ?>

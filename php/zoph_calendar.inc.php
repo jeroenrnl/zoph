@@ -22,7 +22,7 @@ class zoph_calendar extends Calendar {
 
     function getCalendarLink($month, $year) {
         $script = getenv('SCRIPT_NAME');
-        return "$script?month=$month&year=$year";
+        return "$script?month=$month&amp;year=$year";
     }
 
     function getDateLink($day, $month, $year) {
@@ -45,7 +45,7 @@ class zoph_calendar extends Calendar {
 
             $qs =
                 rawurlencode("timestamp#1") . "=" . "$today&" .
-                rawurlencode("_timestamp-op#1") . "=" . rawurlencode(">=") . "&" . 
+                rawurlencode("_timestamp-op#1") . "=" . rawurlencode(">=") . "&" .
                 rawurlencode("timestamp#2") . "=" . "$tomorrow&" .
                 rawurlencode("_timestamp-op#2") . "=" . rawurlencode("<");
         }

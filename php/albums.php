@@ -22,30 +22,30 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("albums") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
+          <th><H1><?php echo translate("albums") ?></H1></th>
+          <td class="actionlink">
 <?php
     if ($user->is_admin()) {
 ?>
-            [ <a href="album.php?_action=new&parent_album_id=<?php echo $album->get("album_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a> ]
+            [ <a href="album.php?_action=new&amp;parent_album_id=<?php echo $album->get("album_id") ?>"><?php echo translate("new") ?></a> ]
 <?php
     }
     else {
         echo "&nbsp;\n";
     }
 ?>
-          </font></td>
+          </td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
-          <th align="left">
+          <th><h2>
 <?php
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
@@ -55,14 +55,14 @@
         }
     }
 ?>
-            <?php echo $title ?>
+             <?php echo $title ?></h2>
           </th>
-          <td align="right">
+          <td class="actionlink">
 <?php
     if ($user->is_admin()) {
 ?>
           [
-            <a href="album.php?_action=edit&album_id=<?php echo $album->get("album_id") ?>"><?php echo translate("edit") ?></a>
+            <a href="album.php?_action=edit&amp;album_id=<?php echo $album->get("album_id") ?>"><?php echo translate("edit") ?></a>
           ]
 <?php
     }
@@ -76,7 +76,7 @@
     if ($album->get("album_description")) {
 ?>
         <tr>
-          <td colspan="2">
+          <td class="description" colspan="2">
             <?php echo $album->get("album_description") ?>
           </td>
         </tr>
@@ -107,7 +107,7 @@
     }
 ?>
           </td>
-          <td align="right">
+          <td class="actionlink">
             [ <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a> ]
           </td>
 <?php
@@ -116,7 +116,7 @@
 ?>
           <?php echo translate("There are no photos") ?> <?php echo $fragment ?>.
           </td>
-          <td align="right">&nbsp;</td>
+          <td>&nbsp;</td>
 <?php
     }
 ?>
@@ -126,6 +126,7 @@
 ?>
         <tr>
           <td colspan="2">
+            <ul>
 <?php
         foreach($children as $a) {
 ?>
@@ -135,6 +136,7 @@
 <?php
         }
 ?>
+            </ul>
           </td>
         </tr>
 <?php
@@ -145,7 +147,6 @@
   </tr>
 </table>
 
-</div>
 <?php
     require_once("footer.inc.php");
 ?>

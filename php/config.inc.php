@@ -7,6 +7,9 @@
     define('DB_PASS', 'pass');
     define('DB_PREFIX', 'zoph_'); // prefix for tables, '' for none
 
+    // Temporary addition until CSS sheet can be chosen from config page
+    define(CSS_SHEET, 'css.php');
+
     define('USE_IMAGE_SERVICE', 0);
     define('IMAGE_DIR', "/data/images/");
     define('WEB_IMAGE_DIR', "/images/"); // from webserver doc root
@@ -22,12 +25,12 @@
     define('LANG_DIR', "lang"); // where language files are stored
 
     define('EMAIL_PHOTOS', 1); // enable email photo feature
- 
-    // sent all emails also to this address 
+
+    // sent all emails also to this address
     // set to '' if not needed
     define('BCC_ADDRESS', '');
-     
-     // URL used in Notification EMail
+
+    // URL used in Notification EMail
     // set to '' if not needed
     define('ZOPH_URL', '');
 

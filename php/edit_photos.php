@@ -41,23 +41,24 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar"
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo $title_bar ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
-          </font></td>
+          <th><h1><?php echo $title_bar ?></h1></th>
+          <td class="actionlink">
+          </td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <form action="edit_photos.php" method="POST">
+      <table class="main">
 <?php
     if ($num_thumbnails <= 0) {
 ?>
         <tr>
-          <td align="center">
+          <td class="error">
        <?php echo translate("No photos were found matching your search criteria.") ?>
           </td>
         </tr>
@@ -78,45 +79,44 @@
         $queryIgnoreArray[] = '_category__all';
 ?>
         <tr>
-          <td colspan="3" align="center">
-            <table border="0">
+          <td colspan="3">
+            <table class="content">
               <tr>
-                <td colspan="3" align="center">
-                  <form action="edit_photos.php" method="POST">
+                <td colspan="3">
                   <input type="hidden" name="_action" value="update">
-                  <table border="0" width="100%">
+                  <table class="content">
                     <tr>
-                      <td valign="top"><?php echo translate("overwrite values below", 0) ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("overwrite values below", 0) ?></td>
+                      <td class="field">
                         <?php echo create_pulldown("_overwrite", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
                       </td>
                     <tr>
-                      <td valign="top"><?php echo translate("location") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("location") ?></td>
+                      <td class="field">
             <?php echo create_smart_pulldown("__location_id__all", null, get_places_select_array()) ?>
                       </td>
                     </tr>
                     <tr>
-                      <td valign="top"><?php echo translate("photographer") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("photographer") ?></td>
+                      <td class="field">
             <?php echo create_smart_pulldown("__photographer_id__all", null, get_people_select_array()) ?>
                       </td>
                     </tr>
                     <tr>
-                      <td><?php echo translate("rating") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("rating") ?></td>
+                      <td class="field">
                         <?php echo create_rating_pulldown(null, "_rating__all") ?>
                       </td>
                     </tr>
                     <tr>
-                      <td valign="top"><?php echo translate("albums") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("albums") ?></td>
+                      <td class="field">
                         <?php echo str_replace("_album", "_album__all", $album_pulldown) ?>
                       </td>
                     </tr>
                     <tr>
-                      <td valign="top"><?php echo translate("categories") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("categories") ?></td>
+                      <td class="field">
                         <?php echo str_replace("_category", "_category__all", $category_pulldown) ?>
                       </td>
                     </tr>
@@ -212,7 +212,7 @@
             $queryIgnoreArray[] = "_action__$photo_id";
 ?>
               <tr>
-                <td>
+                <td class="editchoice">
 <?php
             if ($can_edit) {
 ?>
@@ -227,7 +227,7 @@
             }
 ?>
                 </td>
-                <td width="<?php echo THUMB_SIZE ?>" align="center">
+                <td class="thumbnail">
                   <?php echo $photo->get_thumbnail_link("photo.php?photo_id=$photo_id") . "\n" ?><br>
 <?php
                 if ($can_edit && ALLOW_ROTATIONS &&
@@ -254,22 +254,22 @@
             }
             else {
 ?>
-                  <table border="0" width="100%">
+                  <table class="content">
                     <tr>
-                      <td valign="top"><?php echo translate("location") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("location") ?></td>
+                      <td class="field">
             <?php echo create_smart_pulldown("__location_id__$photo_id", $photo->get("location_id"), get_places_select_array()) ?>
                       </td>
                     </tr>
                     <tr>
-                      <td valign="top"><?php echo translate("photographer") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("photographer") ?></td>
+                      <td class="field">
             <?php echo create_smart_pulldown("__photographer_id__$photo_id", $photo->get("photographer_id"), get_people_select_array()) ?>
                       </td>
                     </tr>
                     <tr>
-                      <td><?php echo translate("rating") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("rating") ?></td>
+                      <td class="field">
 <?php
     $rating = $photo->get('rating');
     if (ALLOW_RATINGS) {
@@ -280,8 +280,8 @@
                       </td>
                     </tr>
                     <tr>
-                      <td valign="top"><?php echo translate("albums") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("albums") ?></td>
+                      <td class="field">
 <?php
                 $albums = $photo->lookup_albums($user);
                 if ($albums) {
@@ -301,8 +301,8 @@
                       </td>
                     </tr>
                     <tr>
-                      <td valign="top"><?php echo translate("categories") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("categories") ?></td>
+                      <td class="field">
 <?php
                 $categories = $photo->lookup_categories($user);
                 if ($categories) {
@@ -322,8 +322,8 @@
                       </td>
                     </tr>
                     <tr>
-                      <td valign="top"><?php echo translate("people") ?></td>
-                      <td>
+                      <td class="fieldtitle"><?php echo translate("people") ?></td>
+                      <td class="field">
 <?php
                 $people = $photo->lookup_people();
                 $next_pos = 1;
@@ -347,11 +347,12 @@
                       </td>
                     </tr>
                     <tr>
-                      <td valign="top"><?php echo translate("title") ?></td>
-                      <td><?php echo create_text_input("__title__$photo_id", $photo->get("title"), 40, 64) ?></td>
+                      <td class="fieldtitle"><?php echo translate("title") ?></td>
+                      <td class="field"><?php echo create_text_input("__title__$photo_id", $photo->get("title"), 40, 64) ?></td>
                     </tr>
                     <tr>
-                      <td colspan="2" align="center">
+                      <td class="fieldtitle"><?php echo translate("description") ?></td>
+                      <td class="field">
                         <textarea name="__description__<?php echo $photo_id ?>" cols="50" rows="3"><?php echo $photo->get("description") ?></textarea>
                       </td>
                     </tr>
@@ -359,8 +360,8 @@
                 </td>
               </tr>
               <tr>
-                <td colspan="3" align="center">
-                  <hr width="80%">
+                <td colspan="3">
+                  <hr class="wide">
                 </td>
               </tr>
 <?php
@@ -368,29 +369,21 @@
         }
 ?>
               <tr>
-                <td colspan="3" align="center">
+                <td colspan="3" class="center">
 <?php echo create_form($request_vars, $queryIgnoreArray) ?>
                   <input type="submit" value="submit">
-                  </form>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
-        <tr>
-          <td colspan="3" align="center">
+        </table>
+                  </form>
 <?php include "pager.inc.php" ?>
 <?php
     } // if photos
 ?>
-              </tr>
-            </table>
-          </td>
-        </table>
       </tr>
-    </td>
-  </tr>
 </table>
-</div>
 
 <?php require_once("footer.inc.php"); ?>

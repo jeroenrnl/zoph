@@ -22,15 +22,15 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("categories") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
+          <th><h1><?php echo translate("categories") ?></h1></th>
+          <td class="actionlink">
 <?php
     if ($user->is_admin()) {
 ?>
             [
-            <a href="category.php?_action=new&parent_category_id=<?php echo $category->get("category_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="category.php?_action=new&parent_category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("new") ?></a>
             ]
 <?php
     }
@@ -38,16 +38,17 @@
         echo "&nbsp;\n";
     }
 ?>
-          </font></td>
+          </td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
-          <th align="left">
+          <th>
+            <h2>
 <?php
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
@@ -58,8 +59,9 @@
     }
 ?>
             <?php echo $title ?>
+            </h2>
           </th>
-          <td align="right">
+          <td class="actionlink">
 <?php
     if ($user->is_admin()) {
 ?>
@@ -78,7 +80,7 @@
     if ($category->get("category_description")) {
 ?>
         <tr>
-          <td colspan="2">
+          <td class="description" colspan="2">
             <?php echo $category->get("category_description") ?>
           </td>
         </tr>
@@ -109,7 +111,7 @@
         }
 ?>
           </td>
-          <td align="right">
+          <td class="actionlink">
             [ <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a> ]
           </td>
 <?php
@@ -118,7 +120,7 @@
 ?>
           <?php echo translate("There are no photos") ?> <?php echo $fragment ?>.
           </td>
-          <td align="right">&nbsp;</td>
+          <td>&nbsp;</td>
 <?php
     }
 ?>
@@ -128,6 +130,7 @@
 ?>
         <tr>
           <td colspan="2">
+            <ul>
 <?php
         foreach($children as $c) {
 ?>
@@ -137,6 +140,7 @@
 <?php
         }
 ?>
+            </ul>
           </td>
         </tr>
 <?php

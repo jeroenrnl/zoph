@@ -29,7 +29,7 @@
         $mtime = filemtime($image_path);
         $filesize = filesize($image_path);
         $gmt_mtime = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
-  
+
         // we assume that the client generates proper RFC 822/1123 dates
         //   (should work for all modern browsers and proxy caches)
         if ($HTTP_IF_MODIFIED_SINCE == $gmt_mtime) {
@@ -53,20 +53,20 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left">
+          <th><h1>
             <?php echo translate("error") ?>
-          </th>
+          </h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
-          <td align="center">
+          <td>
             <?php echo translate("The image you requested could not be displayed.") ?>
           </td>
         </tr>

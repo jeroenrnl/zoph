@@ -18,12 +18,12 @@ function create_field_html($fields, $cols = 2, $split = null) {
 
     $html = "";
     if ($split) {
-        $left_tag = "          <td align=\"right\" width=\"$split\">";
-        $right_tag = "          <td width=\"$split\">";
+        $left_tag = "          <td class=\"fieldtitle\" width=\"$split\">";
+        $right_tag = "          <td class=\"field\" width=\"$split\">";
     }
     else {
-        $left_tag = "          <td align=\"right\">";
-        $right_tag = "          <td>";
+        $left_tag = "          <td class=\"fieldtitle\">";
+        $right_tag = "          <td class=\"field\">";
     }
 
     while (list($key, $val) = each($fields)) {
@@ -283,7 +283,7 @@ function make_title($string) {
 
 function create_date_link($date, $search_field = "date") {
     if ($date) {
-        return "<a href=\"calendar.php?date=$date&search_field=$search_field\">$date</a>";
+        return "<a href=\"calendar.php?date=$date&amp;search_field=$search_field\">$date</a>";
     }
 }
 

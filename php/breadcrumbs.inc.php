@@ -5,9 +5,9 @@
     $_crumb = getvar("_crumb");
 
     // construct the link for clearing the crumbs (the 'x' on the right)
-    $clear_url = $REQUEST_URI;
+    $clear_url = htmlentities($REQUEST_URI);
     if (strpos($clear_url, "?") > 0) {
-        $clear_url .= "&";
+        $clear_url .= "&amp;";
     }
     else {
         $clear_url .= "?";
@@ -27,7 +27,7 @@
         (!$_action || ($_action == "display" || $_action == "search" ||
         $_action == "notify" || $_action == "compose"))) {
 
-        $user->add_crumb($title, $REQUEST_URI);
+        $user->add_crumb($title, htmlentities($REQUEST_URI));
     }
 
     if (!$user->crumbs) {
@@ -43,14 +43,14 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $BREADCRUMB_BG_COLOR?>">
+      <table class="breadcrumb">
         <tr>
-          <td><font size="-1">
+          <td>
 <?php echo $crumb_string ?>
-          </font></td>
-          <td align="right"><font size="-2">
+          </td>
+          <td class="actionlink">
           <a href="<?php echo $clear_url ?>">x</a>
-          </font></td>
+          </td>
         </tr>
       </table>
     </td>

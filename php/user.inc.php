@@ -82,7 +82,7 @@ class user extends zoph_table {
             translate("username") => $this->get("user_name"),
             translate("person") => get_link("person", $this->get("person_id")),
             translate("class") =>
-                $this->get("user_class") == 0 ? "Admin" : "User", 
+                $this->get("user_class") == 0 ? "Admin" : "User",
             translate("can browse people") => $this->get("browse_people") == 1
                 ? translate("Yes") : translate("No"),
             translate("can browse places") => $this->get("browse_places") == 1
@@ -170,7 +170,7 @@ class user extends zoph_table {
             $question = strpos($link, "?");
             if ($question > 0) {
                 $link =
-                    substr($link, 0, $question) ."?_crumb=$numCrumbs&" .
+                    substr($link, 0, $question) ."?_crumb=$numCrumbs&amp;" .
                     substr($link, $question + 1);
             }
             else {

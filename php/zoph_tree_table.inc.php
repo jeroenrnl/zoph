@@ -35,7 +35,7 @@ class zoph_tree_table extends zoph_table {
         $id = $this->get($key);
         if (!$id) { return; }
 
-        $sql = 
+        $sql =
             "select * from $this->table_name " .
             "where parent_$key = '" . escape_string($id) . "'";
 

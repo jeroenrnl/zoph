@@ -26,7 +26,7 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
 <?php
     if ($action == "display") {
 
@@ -34,15 +34,15 @@
         $photos_at = get_photos($vars, 0, 1, $ignore, $user);
 ?>
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("place") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
+          <th><h1><?php echo translate("place") ?></h1></th>
+          <td class="actionlink">
 <?php
         if ($user->is_admin()) {
 ?>
           [
-            <a href="place.php?_action=edit&place_id=<?php echo $place->get("place_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a> |
-            <a href="place.php?_action=delete&place_id=<?php echo $place->get("place_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a> |
-            <a href="place.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="place.php?_action=edit&amp;place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("edit") ?></a> |
+            <a href="place.php?_action=delete&amp;place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="place.php?_action=new"><?php echo translate("new") ?></a>
           ]
 <?php
         }
@@ -50,16 +50,16 @@
             echo "&nbsp;";
         }
 ?>
-          </font></td>
+          </td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
-          <td align="left">
+          <td>
 <?php
     if ($user->get("detailed_places")) {
 ?>
@@ -73,7 +73,7 @@
     }
 ?>
           </td>
-          <td align="right" valign="top">[
+          <td class="actionlink">[
             <a href="photos.php?location_id=<?php echo $place->get("place_id") ?>"><?php echo "$photos_at " . translate("photos at") ?></a>
           ]</td>
         </tr>
@@ -81,42 +81,38 @@
         if ($user->get("detailed_places") && $place->get("notes")) {
 ?>
         <tr>
-          <td colspan="2"><?php echo $place->get("notes") ?></th>
+          <td colspan="2"><?php echo $place->get("notes") ?></td>
         </tr>
 <?php
         }
     }
     else if ($action == "confirm") {
 ?>
-        <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete place") ?></font></th>
+        <tr class="titlebar">
+          <th><h1><?php echo translate("delete place") ?></h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $title) ?>:
           </td>
-          <td align="right">[
-            <a href="place.php?_action=confirm&place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="place.php?_action=display&place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("cancel") ?></a>
+          <td class="actionlink">[
+            <a href="place.php?_action=confirm&amp;place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="place.php?_action=display&amp;place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("cancel") ?></a>
           ]</td>
         </tr>
+      </table>
 <?php
     }
     else {
 require_once("edit_place.inc.php");
     }
 ?>
-      </table>
-    </td>
-  </tr>
 </table>
-
-</div>
 
 <?php require_once("footer.inc.php"); ?>

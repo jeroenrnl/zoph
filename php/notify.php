@@ -26,7 +26,7 @@
 
         $mail->setFrom("$from_name <$from_email>");
         $mail->setSubject($subject);
-        
+
         if (strlen(BCC_ADDRESS) > 0) {
             $mail->setBCC(BCC_ADDRESS);
         }
@@ -65,29 +65,33 @@
 
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left">
+          <th><h1>
   <?php echo translate("email") ?>
-          </th>
+         </h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+<form action="<?php echo $PHP_SELF ?>" method="POST">
+      <table class="main">
 <?php
     if ($msg) {
 ?>
         <tr>
-          <td colspan="2" align="center">
+          <td colspan="2" class="error">
             <?php echo $msg ?>
           </td>
         </tr>
 <?php
     }
-
+?>
+        <tr>
+          <td>
+<?php
     if ($_action == "notify") {
 
         $showusername = getvar("showusername");
@@ -100,10 +104,10 @@
             $date = $u->get_lastnotify();
             $body .= translate("I have enabled access to the following albums for you:",0) . "\n\n";
 
-            $albums = get_newer_albums($user_id, $date);   
+            $albums = get_newer_albums($user_id, $date);
 
             $album_list = array();
-            while (list($id, $album) = each($albums)) {                         
+            while (list($id, $album) = each($albums)) {
                 $album_path = '';
                 $ancestors = $album->get_ancestors();
                 if ($ancestors) {
@@ -145,7 +149,6 @@
 
     if ($_action != "mail") {
 ?>
-<form action="<?php echo $PHP_SELF ?>" method="POST">
 <input type="hidden" name="_action" value="mail">
 <?php
         if ($shownewalbums) {
@@ -155,52 +158,54 @@
         }
 ?>
 <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
+          </td>
+        </tr>
         <tr>
-          <td align="right"><?php echo translate("to (name)") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("to (name)") ?></td>
+          <td class="field">
             <?php echo create_text_input("to_name", $to_name, 24, 32) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("to (email)") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("to (email)") ?></td>
+          <td class="field">
             <?php echo create_text_input("to_email", $to_email, 24, 32) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("from (your name)") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("from (your name)") ?></td>
+          <td class="field">
             <?php echo create_text_input("from_name", $from_name, 24, 32) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("from (your email)") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("from (your email)") ?></td>
+          <td class="field">
             <?php echo create_text_input("from_email", $from_email, 24, 64) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("subject") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("subject") ?></td>
+          <td class="field">
             <?php echo create_text_input("subject", $subject, 48, 64) ?>
           </td>
         </tr>
         <tr>
-          <td colspan="2" align="center">
+          <td colspan="2" class="center">
             <?php echo translate("message:") ?><br>
             <textarea name="message" cols="70" rows="15"><?php echo $message ?></textarea>
           </td>
         </tr>
         <tr>
-          <td colspan="2" align="center">
+          <td colspan="2" class="center">
             <input type="submit" name="_button" value="<?php echo translate("email", 0); ?>">
-</form>
           </td>
         </tr>
 <?php
     }
 ?>
       </table>
+</form>
     </td>
   </tr>
 </table>

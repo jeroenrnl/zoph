@@ -5,7 +5,7 @@
  *
  * I've tried to match some of the normalizations/conversions done by jhead
  * (some code borrowed from exif.c).
- * 
+ *
  * Jason
  */
 function process_exif($image) {
@@ -58,7 +58,7 @@ function process_exif($image) {
            the two I've identified."
         */
         //$exifdata["flash_used"] = $exif["Flash"] ? "Yes" : "No";
-        
+
         // Revamped to handled more expressive flash indications
         $fYN="No";
 

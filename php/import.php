@@ -36,16 +36,17 @@ require_once("header.inc.php");
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("import photos") ?></font></th>
+          <th><h1><?php echo translate("import photos") ?></h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <form enctype="multipart/form-data" action="import.php" method="POST">
+      <table class="main">
 <?php
     if ($action == "display") {
 ?>
@@ -56,15 +57,16 @@ require_once("header.inc.php");
     }
     else {
 ?>
-<form enctype="multipart/form-data" action="import.php" method="POST">
+<tr><td>
 <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
 <input type="hidden" name="_action" value="<?php echo $action ?>">
+</td></tr>
 <?php
         if (CLIENT_WEB_IMPORT) {
 ?>
         <tr>
           <td colspan="3">
-            <strong><?php echo translate("Importing a Local File") ?></strong><br>
+            <h2><?php echo translate("Importing a Local File") ?></h2><br>
             <?php echo translate("To upload and import a local file, browse to the file and specify the destination path (relative to the top level image dir) in which it should be placed.") ?>
 <?
             if (UNZIP_CMD || UNTAR_CMD) {
@@ -76,49 +78,57 @@ require_once("header.inc.php");
           </td>
         </tr>
         <tr>
-          <td><?php echo translate("file") ?></td>
-          <td colspan="2"><input name="_image_local" type="file"></td>
+          <td class="fieldtitle"><?php echo translate("file") ?></td>
+          <td class="field" colspan="2"><input name="_image_local" type="file"></td>
         </tr>
 <?php
             if (SHOW_DESTINATION_PATH || $user->is_admin()) {
 ?>
         <tr>
-          <td><?php echo translate("destination path") ?></td>
-          <td colspan="2"><?php echo create_text_input("_path_a", $default_path, 40, 256) ?></td>
+          <td class="fieldtitle"><?php echo translate("destination path") ?></td>
+          <td class="field" colspan="2"><?php echo create_text_input("_path_a", $default_path, 40, 256) ?></td>
         </tr>
 <?php
             }
             else {
 ?>
-        <input type="hidden" name="_path_a" value="<?php echo $default_path ?>">
+        <tr>
+          <td>
+            <input type="hidden" name="_path_a" value="<?php echo $default_path ?>">
+          </td>
+        </tr>
 <?php
             }
         }
-        
+
         if (SERVER_WEB_IMPORT) {
 ?>
         <tr>
           <td colspan="3">
-            <strong><?php echo translate("Importing Files on the Server") ?></strong><br>
+            <h2><?php echo translate("Importing Files on the Server") ?></h2><br>
             <?php echo translate("To import images already on the server, specify the absolute path of a file name or directory.  If a directory is specified, all images within the directory will be imported.  If a destination path is given (relative to the top level image dir), the imported images will be copied there.  Otherwise, they will not be moved.") ?>
           </td>
         </tr>
         <tr>
-          <td><?php echo translate("file/directory") ?></td>
-          <td colspan="2"><?php echo create_text_input("_image_server", "", 40, 256) ?></td>
+          <td class="fieldtitle"><?php echo translate("file/directory") ?></td>
+          <td class="field" colspan="2"><?php echo create_text_input("_image_server", "", 40, 256) ?></td>
         </tr>
 <?php
             if (SHOW_DESTINATION_PATH || $user->is_admin()) {
 ?>
         <tr>
-          <td><?php echo translate("destination path") ?></td>
-          <td colspan="2"><?php echo create_text_input("_path_b", $default_path, 40, 256) ?></td>
+          <td class="fieldtitle"><?php echo translate("destination path") ?></td>
+          <td class="field" colspan="2"><?php echo create_text_input("_path_b", $default_path, 40, 256) ?></td>
         </tr>
 <?php
             }
             else {
 ?>
-        <input type="hidden" name="_path_b" value="<?php echo $default_path ?>">
+        <tr>
+          <td>
+            <input type="hidden" name="_path_b" value="<?php echo $default_path ?>">
+          </td>
+        </tr>
 <?php
             }
         }
@@ -130,78 +140,76 @@ require_once("header.inc.php");
           </td>
         </tr>
         <tr>
-          <td valign="top"><?php echo translate("album") ?></td>
-          <td colspan="2">
+          <td class="fieldtitle"><?php echo translate("album") ?></td>
+          <td class="field" colspan="2">
             <?php echo create_pulldown("_album", "", get_albums_select_array($user)) ?>
           </td>
         </tr>
         <tr>
-          <td valign="top"><?php echo translate("category") ?></td>
-          <td colspan="2">
+          <td class="fieldtitle"><?php echo translate("category") ?></td>
+          <td class="field" colspan="2">
             <?php echo create_pulldown("_category", "", get_categories_select_array($user)) ?>
           </td>
         </tr>
         <tr>
-          <td><?php echo translate("title") ?></td>
-          <td><?php echo create_text_input("title", "", 40, 64) ?></td>
-          <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "64") ?></font></td>
+          <td class="fieldtitle"><?php echo translate("title") ?></td>
+          <td class="field"><?php echo create_text_input("title", "", 40, 64) ?></td>
+          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
         </tr>
         <tr>
-          <td valign="top"><?php echo translate("location") ?></td>
-          <td colspan="2">
+          <td class="fieldtitle"><?php echo translate("location") ?></td>
+          <td class="field" colspan="2">
 <?php echo create_smart_pulldown("location_id", "", get_places_select_array()) ?>
           </td>
         </tr>
         <tr>
-          <td><?php echo translate("view") ?></td>
-          <td><?php echo create_text_input("view", "", 40, 64) ?></td>
-          <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "64") ?></font></td>
+          <td class="fieldtitle"><?php echo translate("view") ?></td>
+          <td class="field"><?php echo create_text_input("view", "", 40, 64) ?></td>
+          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
         </tr>
         <tr>
-          <td><?php echo translate("date") ?></td>
-          <td><?php echo create_text_input("date", "", 12, 10) ?></td>
-          <td><font size="-1">YYYY-MM-DD</font></td>
+          <td class="fieldtitle"><?php echo translate("date") ?></td>
+          <td class="field"><?php echo create_text_input("date", "", 12, 10) ?></td>
+          <td class="inputhint">YYYY-MM-DD</td>
         </tr>
         <tr>
-          <td><?php echo translate("rating") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("rating") ?></td>
+          <td class="field">
             <?php echo create_rating_pulldown("") ?>
           </td>
-          <td><font size="-1">1 - 10</font></td>
+          <td class="inputhint">1 - 10</td>
         </tr>
         <tr>
-          <td valign="top"><?php echo translate("photographer") ?></td>
-          <td colspan="2">
+          <td class="fieldtitle"><?php echo translate("photographer") ?></td>
+          <td class="field" colspan="2">
 <?php echo create_smart_pulldown("photographer_id", "", get_people_select_array()) ?>
           </td>
         </tr>
         <tr>
-          <td><?php echo translate("level") ?></td>
-          <td><?php echo create_text_input("level", "", 4, 2) ?></td>
-          <td><font size="-1">1 - 10</font></td>
+          <td class="fieldtitle"><?php echo translate("level") ?></td>
+          <td class="field"><?php echo create_text_input("level", "", 4, 2) ?></td>
+          <td class="inputhint">1 - 10</td>
         </tr>
         <tr>
-          <td><?php echo translate("description") ?></td>
-          <td colspan="2">
+          <td class="fieldtitle"><?php echo translate("description") ?></td>
+          <td class="field" colspan="2">
             <textarea name="description" cols="60" rows="4"></textarea>
           </td>
         </tr>
         <tr>
-          <td colspan="3" align="right">
+          <td colspan="3" class="actionlink">
             <input type="submit" value="<?php echo translate($action, 0) ?>">
           </td>
         </tr>
-</form>
 <?php
     } // end import fields
 ?>
       </table>
+</form>
     </td>
   </tr>
 </table>
-</div>
 
-<br>
 <?php
     flush();
 

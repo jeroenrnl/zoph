@@ -1,22 +1,20 @@
 <?php
 // Very important, rtp must send header and html start tags !
 print $rtplang->lang_header();
-
-// these $styles are CSS for the calendar class
 ?>
-<?php echo $styles ? $styles : "" ?>
+<link TYPE="text/css" REL="stylesheet" HREF="<?php echo CSS_SHEET ?>">
+
 <title><?php echo ZOPH_TITLE . ($title ? " - $title" : "") ?></title>
 </head>
-<body bgcolor="<?php echo $PAGE_BG_COLOR ?>" text="<?php echo $TEXT_COLOR ?>" link="<?php echo $LINK_COLOR ?>" vlink="<?php echo $VLINK_COLOR ?>">
+<body>
 
-<div align="center">
+<table class="page">
+  <tr class="menu">
+    <td class="menu">
+      <table class="menu">
+        <tr>
+          <td class="menu">&nbsp;</td>
 
-<table border="0" cellpadding="1" cellspacing="0" bgcolor="<?php echo $TABLE_BORDER_COLOR ?>"<?php echo $table_width ?>>
-  <tr>
-    <td bgcolor="<?php echo $PAGE_BG_COLOR ?>" align="right">
-      <table border="0" cellpadding="2" cellspacing="1" bgcolor="<?php echo $PAGE_BG_COLOR ?>">
-        <tr align="right">
-          <td bgcolor="<?php echo $PAGE_BG_COLOR ?>" width="100%">&nbsp;</td>
 <?php
     $tabs = array(
         translate("home", 0) => "zoph.php",
@@ -71,16 +69,14 @@ print $rtplang->lang_header();
 
     while (list($label, $page) = each($tabs)) {
         if ($page == $self) {
-            $bgcolor = $SELECTED_TAB_BG_COLOR;
-            $textcolor = $SELECTED_TAB_FONT_COLOR;
+            $class = "selectedtab";
         }
         else {
-            $bgcolor = $TAB_BG_COLOR;
-            $textcolor = $TAB_FONT_COLOR;
+             $class = "tab";
         }
 ?>
-          <td bgcolor="<?php echo $bgcolor ?>">
-            <a href="<?php echo $page ?>"><font size="-1" color="<?php echo $textcolor ?>"> <?php echo $label ?></font></a>
+          <td class="<?php echo $class ?>">
+            <a href="<?php echo $page ?>"><?php echo $label ?></a>
           </td>
 <?php
     }

@@ -24,16 +24,18 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit preferences") ?></font></th>
+          <th><h1><?php echo translate("edit preferences") ?></h1></th>
+          <td class="actionlink">[ <a href="password.php"><?php echo translate("change password") ?></a> ]</td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <form action="prefs.php" method="GET">
+      <table class="main">
 <?php
     if ($user->get("user_id") == DEFAULT_USER) {
 ?>
@@ -46,68 +48,66 @@
     }
 ?>
         <tr>
-          <td align="right">
-<form action="prefs.php" method="GET">
+          <td class="fieldtitle">
 <input type="hidden" name="_action" value="<?php echo $action ?>">
 <input type="hidden" name="user_id" value="<?php echo $user->prefs->get("user_id") ?>">
     <?php echo translate("user name") ?>
           </td>
-          <td>
+          <td class="field">
             <?php echo $user->get("user_name") ?>
-            [ <a href="password.php"><?php echo translate("change password") ?></a> ]
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("show breadcrumbs") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("show breadcrumbs") ?></td>
+          <td class="field">
 <?php echo create_pulldown("show_breadcrumbs", $user->prefs->get("show_breadcrumbs"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("number of breadcrumbs to show") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("number of breadcrumbs to show") ?></td>
+          <td class="field">
 <?php echo create_integer_pulldown("num_breadcrumbs", $user->prefs->get("num_breadcrumbs"), 1, 20) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("default number of rows on results page") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("default number of rows on results page") ?></td>
+          <td class="field">
 <?php echo create_integer_pulldown("num_rows", $user->prefs->get("num_rows"), 1, 10) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("default number of columns on results page") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("default number of columns on results page") ?></td>
+          <td class="field">
 <?php echo create_integer_pulldown("num_cols", $user->prefs->get("num_cols"), 1, 10) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("size of pager on results page") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("size of pager on results page") ?></td>
+          <td class="field">
 <?php echo create_integer_pulldown("max_pager_size", $user->prefs->get("max_pager_size"), 1, 20) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("minimum rating for random photos") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("minimum rating for random photos") ?></td>
+          <td class="field">
 <?php echo create_integer_pulldown("random_photo_min_rating", $user->prefs->get("random_photo_min_rating"), 0, 10) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("number of results to display on reports page") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("number of results to display on reports page") ?></td>
+          <td class="field">
 <?php echo create_integer_pulldown("reports_top_n", $user->prefs->get("reports_top_n"), 1, 20) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("time to display each photo in a slideshow") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("time to display each photo in a slideshow") ?></td>
+          <td class="field">
 <?php echo create_text_input("slideshow_time", $user->prefs->get("slideshow_time"), 4, 4) ?> <?php echo translate("seconds") ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("days past for recent photos links") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("days past for recent photos links") ?></td>
+          <td class="field">
 <?php echo create_text_input("recent_photo_days", $user->prefs->get("recent_photo_days"), 4, 4) ?>
           </td>
         </tr>
@@ -115,8 +115,8 @@
     if (MAX_THUMB_DESC) {
 ?>
         <tr>
-          <td align="right"><?php echo translate("show descriptions under thumbnails") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("show descriptions under thumbnails") ?></td>
+          <td class="field">
 <?php echo create_pulldown("desc_thumbnails", $user->prefs->get("desc_thumbnails"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
           </td>
         </tr>
@@ -124,19 +124,19 @@
     }
 ?>
         <tr>
-          <td align="right"><?php echo translate("display camera info") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("display camera info") ?></td>
+          <td class="field">
 <?php echo create_pulldown("camera_info", $user->prefs->get("camera_info"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
           </td>
         </tr>
         <tr>
-          <td align="right"><?php echo translate("automatically edit photos") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("automatically edit photos") ?></td>
+          <td class="field">
 <?php echo create_pulldown("auto_edit", $user->prefs->get("auto_edit"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
           </td>
         </tr>
         <tr>
-          <td align="right">
+          <td class="fieldtitle">
 <?php
     if ($user->is_admin()) {
 ?>
@@ -150,7 +150,7 @@
     }
 ?>
           </td>
-          <td>
+          <td class="field">
 <?php echo create_smart_pulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), create_select_array(get_records("color_scheme", "name"), array("name"))) ?>
           </td>
         </tr>
@@ -162,21 +162,20 @@
     }
 ?>
         <tr>
-          <td align="right"><?php echo translate("language") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("language") ?></td>
+          <td class="field">
 <?php echo create_smart_pulldown("language", $user->prefs->get("language"), $lang_select_array) ?>
           </td>
         </tr>
         <tr>
-          <td colspan="2" align="center">
+          <td colspan="2" class="center">
 <input type="submit" value="update">
           </td>
         </tr>
       </table>
+      </form>
     </td>
   </tr>
 </table>
-
-</div>
 
 <?php require_once("footer.inc.php"); ?>

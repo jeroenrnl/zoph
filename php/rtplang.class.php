@@ -214,7 +214,9 @@ Class rtplang {
       //      print "fichier indice $ind $search / $charset" ;
       
       header("Content-Type: text/html; charset=$charset");
-      $texte .= "$htmltag
+//$texte .="
+    $texte .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">
+$htmltag
 <head>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charset\">\n";
       

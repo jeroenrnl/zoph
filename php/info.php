@@ -7,19 +7,20 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("about") ?></font></th>
+          <th><h1><?php echo translate("about") ?></h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="info">
+      <col><col>
         <tr>
-          <td colspan="2" align="center">
-            <font size="+2"><strong>zoph</strong>
+          <td colspan="2">
+            <h2>zoph</h2>
           </td>
         </tr>
         <tr>
@@ -40,8 +41,8 @@
     if ($user->is_admin()) {
 ?>
         <tr>
-          <td width="50%">&nbsp;</td>
-          <td width="50%">&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
         </tr>
 <?php echo create_field_html(get_zoph_info_array()) ?>
 <?php
@@ -60,17 +61,13 @@
 <p>
 <?php echo translate("Written by Jason Geiger with thanks to the following for their contributions:", 0) ?>
 </p>
-<p>
 <?php include('credits.html'); ?>
-</p>
           </td>
         </tr>
       </table>
     </td>
   </tr>
 </table>
-
-</div>
 
 <?php
     require_once("footer.inc.php");

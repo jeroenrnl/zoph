@@ -252,11 +252,11 @@ class photo extends zoph_table {
         if (USE_IMAGE_SERVICE && !$use_file) {
             $image_href = "image_service.php?photo_id=" . $this->get("photo_id");
             if ($type) {
-                $image_href .= "&type=" . $type;
+                $image_href .= "&amp;type=" . $type;
             }
 
             if (SID) {
-                $image_href .= "&" . SID;
+                $image_href .= "&amp;" . SID;
             }
         }
         else {
@@ -322,9 +322,9 @@ class photo extends zoph_table {
         }
 
         $size_string = " width=\"$width\" height=\"$height\"";
-
-        return "<img border=\"0\" src=\"$image_href\"" . $size_string . ">";
-    }
+        $alt = $this->get("title");
+return "<img src=\"$image_href\"" . $size_string . "alt=\"$alt\"" . ">";
+}
 
     function get_rating($user_id) {
 
@@ -408,7 +408,7 @@ class photo extends zoph_table {
         $row = mysql_fetch_array($result);
 
         $avg = (round(100 * $row[0])) / 100.0;
-        
+
         $query = "update " . DB_PREFIX . "photos set rating = $avg" .
             " where photo_id = '" . escape_string($photo_id) . "'";
 
@@ -494,8 +494,13 @@ class photo extends zoph_table {
     }
 
     function rotate($deg) {
-
+/*
+        This line breaks things if dated-dirs are not used: in that case the path field is empty...
         if (!ALLOW_ROTATIONS || !$this->get('name') || !$this->get('path')) {
+            return;
+        }
+*/
+        if (!ALLOW_ROTATIONS || !$this->get('name')) {
             return;
         }
 
@@ -532,7 +537,7 @@ class photo extends zoph_table {
 
             /*
               From Michael Hanke:
-              This is buggy, because non-quadratic images are truncated 
+              This is buggy, because non-quadratic images are truncated
               The function goodrotate checks if images are nonquadratic
 
               This is not being used because, as Michael says,
@@ -618,7 +623,7 @@ class photo extends zoph_table {
         /* ********************************
          *  Read in original image.
          *  Need to do now so we know
-         *  the widhth of the text lines.
+         *  the width of the text lines.
          * ********************************/
 
         $image_path = IMAGE_DIR . $this->get("path");
@@ -741,7 +746,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
          * ******************************/
 
         $offwhite = ImageColorAllocate($noted_image, 240,240, 240);
-        ImageFill($noted_image, 0, ImageSX($orig_image) +1, $offwhite);
+        ImageFill($noted_image, 0, ImageSY($orig_image) +1, $offwhite);
         $black = ImageColorAllocate($noted_image, 0, 0, 0);
         ImageColorTransparent($noted_image, $black);
 
@@ -882,8 +887,8 @@ function create_rating_graph($user) {
     if ($max_count) {
 
     $table =
-        "<table>\n  <tr>\n    <th colspan=\"3\" align=\"center\">" .
-        translate("photo ratings") . "</th>\n  </tr>\n  <tr>\n    <th>" .
+        "<table class=\"ratings\">\n  <tr>\n    <th colspan=\"3\"><h3>" .
+        translate("photo ratings") . "</h3></th>\n  </tr>\n  <tr>\n    <th>" .
         translate("rating") . "</th>\n    <th>&nbsp</th>\n    " .
         "<th>" . translate("count") . "</th>\n  </tr>\n";
 
@@ -900,7 +905,7 @@ function create_rating_graph($user) {
             "&rating%232=" . $max_rating . "&_rating-op%232=%3C";
 
         $table .=
-            "  <tr>\n    <td align=\"right\">\n" .
+            "  <tr>\n    <td>\n" .
             "      <a href=\"$qs\">$range</a></td>\n" .
             "    <td>&nbsp;</td>\n    <td>\n";
 
@@ -917,7 +922,7 @@ function create_rating_graph($user) {
     }
     else {
         $table .=
-            "  <tr>\n    <td colspan=\"2\" align=\"center\">\n" .
+            "  <tr>\n    <td colspan=\"2\" class=\"center\">\n" .
             translate("No photo was found.") . "\n    </td>\n  </tr>\n";
     }
 

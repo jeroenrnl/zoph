@@ -38,7 +38,7 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
 <?php
     if ($action == "display") {
 
@@ -52,15 +52,15 @@
         $photos_by = get_photos($vars, 0, 1, $ignore, $user);
 ?>
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("person") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
+          <th><h1><?php echo translate("person") ?></h1></th>
+          <td class="actionlink">
 <?php
         if ($user->is_admin()) {
 ?>
           [
-            <a href="person.php?_action=edit&person_id=<?php echo $person->get("person_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a> |
-            <a href="person.php?_action=delete&person_id=<?php echo $person->get("person_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a> |
-            <a href="person.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="person.php?_action=edit&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("edit") ?></a> |
+            <a href="person.php?_action=delete&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="person.php?_action=new"><?php echo translate("new") ?></a>
           ]
 <?php
         }
@@ -68,31 +68,25 @@
             echo "&nbsp;";
         }
 ?>
-          </font></td>
+          </td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
-          <td colspan="3">
-            <table width="100%">
-              <tr>
-          <th align="left" colspan="2">
+          <th colspan="2"><h2>
             <?php echo $person->get("first_name") ?>
             <?php echo $person->get("middle_name") ?>
             <?php echo $person->get("last_name") ?>
+            </h2>
           </th>
-          <td align="right">[
+          <td class="actionlink">[
             <a href="photos.php?person_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_of " . translate("photos of") ?></a> |
             <a href="photos.php?photographer_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_by " . translate("photos by") ?></a>
           ]</td>
-        </tr>
-            </tr>
-          </table>
-        </td>
 <?php
     if ($user->get("detailed_people")) {
 ?>
@@ -101,17 +95,17 @@
         if ($person->get_email()) {
 ?>
         <tr>
-          <td align="right" valign="top"><?php echo translate("email") ?></td>
-          <td><a href="mailto:<?php echo $person->get_email() ?>"><?php echo $person->get_email() ?></a></td>
+          <td class="fieldtitle"><?php echo translate("email") ?></td>
+          <td class="field"><a href="mailto:<?php echo $person->get_email() ?>"><?php echo $person->get_email() ?></a></td>
         </tr>
 <?php
         }
         if ($person->home) {
 ?>
         <tr>
-          <td align="right" valign="top"><?php echo translate("Home") ?></td>
-          <td><?php echo $person->home->get_address() ?></td>
-          <td align="right" valign="top">[ <a href="place.php?place_id=<?php echo $person->get("home_id") ?>"><?php echo translate("view") ?></a> ]</td>
+          <td class="fieldtitle"><?php echo translate("home") ?></td>
+          <td class="field"><?php echo $person->home->get_address() ?></td>
+          <td class="actionlink">[ <a href="place.php?place_id=<?php echo $person->get("home_id") ?>"><?php echo translate("view") ?></a> ]</td>
         </tr>
 <?php
         }
@@ -119,12 +113,12 @@
         if ($person->work) {
 ?>
         <tr>
-          <td align="right" valign="top"><?php echo translate("Work") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("work") ?></td>
+          <td class="field">
              <?php echo $person->work->get("title") ? $person->work->get("title") . "<br>" : "" ?>
              <?php echo $person->work->get_address() ?>
           </td>
-          <td align="right" valign="top">[ <a href="place.php?place_id=<?php echo $person->get("work_id") ?>"><?php echo translate("view") ?></a> ]</td>
+          <td class="actionlink">[ <a href="place.php?place_id=<?php echo $person->get("work_id") ?>"><?php echo translate("view") ?></a> ]</td>
         </tr>
 <?php
         }
@@ -132,8 +126,8 @@
         if ($person->get("notes")) {
 ?>
         <tr>
-          <td align="right" valign="top">notes</td>
-          <td colspan="2"><?php echo $person->get("notes") ?></td>
+          <td class="fieldtitle">notes</td>
+          <td colspan="2" class="field"><?php echo $person->get("notes") ?></td>
         </tr>
 <?php
         }
@@ -143,35 +137,32 @@
     } // display
     else if ($action == "confirm") {
 ?>
-        <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete person") ?></font></th>
+        <tr class="titlebar">
+          <th><h1><?php echo translate("delete person") ?></h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $person->get_name()) ?>:
           </td>
-          <td align="right">[
-            <a href="person.php?_action=confirm&person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="person.php?_action=display&person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("cancel") ?></a>
+          <td class="actionlink">[
+            <a href="person.php?_action=confirm&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="person.php?_action=display&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("cancel") ?></a>
           ]</td>
         </tr>
+      </table>
 <?php
     }
     else {
 require_once("edit_person.inc.php");
     }
 ?>
-      </table>
-    </td>
-  </tr>
 </table>
 
-</div>
 
 <?php require_once("footer.inc.php"); ?>

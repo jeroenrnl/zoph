@@ -30,26 +30,26 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
 <?php
     if ($action == "confirm") {
 ?>
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete category") ?></font></th>
+          <th><h1><?php echo translate("delete category") ?></h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
           <td>
        <?php echo sprintf(translate("Confirm deletion of '%s' and its subcategories:") , $category->get("category")) ?>
           </td>
-          <td align="right">[
-            <a href="category.php?_action=confirm&category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="category.php?_action=edit&category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("cancel") ?></a>
+          <td class="actionlink">[
+            <a href="category.php?_action=confirm&amp;category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="category.php?_action=edit&amp;category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("cancel") ?></a>
           ]</td>
         </tr>
       </table>
@@ -60,29 +60,31 @@
     else {
 ?>
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("category") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">[
-            <a href="categories.php?parent_category_id=<?php echo $category->get("category_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("return") ?></font></a> |
-            <a href="category.php?_action=delete&category_id=<?php echo $category->get("category_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a>
-          ]</font></td>
+          <th><h1><?php echo translate("category") ?></h1></th>
+          <td class="actionlink">[
+            <a href="categories.php?parent_category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("return") ?></a> |
+            <a href="category.php?_action=delete&amp;category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("delete") ?></a>
+          ]</td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
 <form action="category.php">
+      <table class="main">
+<tr><td>
 <input type="hidden" name="_action" value="<?php echo $action ?>">
 <input type="hidden" name="category_id" value="<?php echo $category->get("category_id") ?>">
+</td></tr>
 <?php echo create_field_html($category->get_edit_array()) ?>
   <tr>
-    <td colspan="2" align="center">
+    <td colspan="2" class="center">
       <input type="submit" value="<?php echo translate($action, 0) ?>">
     </td>
   </tr>
-</form>
       </table>
+</form>
     </td>
   </tr>
 <?php
@@ -90,7 +92,6 @@
 ?>
 </table>
 
-</div>
 <?php
     require_once("footer.inc.php");
 ?>

@@ -1,49 +1,53 @@
 <?php
     $return_qs = getvar("_qs");
     if (empty($return_qs)) {
-        $return_qs = "_action=display&photo_id=" . $photo->get("photo_id");
+        $return_qs = "_action=display&amp;photo_id=" . $photo->get("photo_id");
     }
 ?>
-        <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("photo") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">[
-            <a href="photo.php?<?php echo $return_qs ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("return") ?></font></a>
+        <tr class="titlebar">
+          <th><h1><?php echo translate("photo") ?></h1></th>
+          <td class="actionlink">[
+            <a href="photo.php?<?php echo $return_qs ?>"><?php echo translate("return") ?></a>
 <?php
         if ($user->is_admin()) {
 ?>
-            | <a href="photo.php?_action=delete&photo_id=<?php echo $photo->get("photo_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a>
+            | <a href="photo.php?_action=delete&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a>
 <?php
         }
 ?>
-            ]</font></td>
+            ]</td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
-<form action="photo.php" method="POST">
+      <form action="photo.php" method="POST">
+      <table class="main">
+        <tr><td>
 <input type="hidden" name="_action" value="<?php echo $action ?>">
 <input type="hidden" name="_qs" value="<?php echo $return_qs ?>">
+        </td></tr>
 <?php
     if ($action == "insert") {
 ?>
         <tr>
           <td><?php echo translate("file name") ?></td>
           <td><?php echo create_text_input("name", $photo->get("name"), 40, 64) ?></td>
-          <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "64") ?></font></td>
+          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
         </tr>
 <?php
     }
     else {
 ?>
+<tr><td>
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
+</td></tr>
 <?php
     if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
         <tr>
-          <td colspan="3" align="center">
+          <td colspan="3" class="rotate">
 <?php echo translate("rotate", 0) ?>
 
 <select name="_deg">
@@ -68,23 +72,22 @@
 ?>
 
         <tr>
-          <td colspan="3" align="center">
-            <table width="100%">
+          <td colspan="3">
+            <table class="main">
               <tr>
-                <td align="left"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></td>
-                <td align="center">
-                  <font size="-1">
+                <td class="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></td>
+                <td class="photohdr">
                   <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
                   <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
                   <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
-                  </font>
                 </td>
-                <td align="right"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></td>
+                <td class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></td>
               </tr>
             </table>
+          </td>
         </tr>
         <tr>
-          <td colspan="3" align="center">
+          <td colspan="3" class="photo">
             <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
           </td>
         </tr>
@@ -92,52 +95,52 @@
     }
 ?>
         <tr>
-          <td colspan="3" align="right"><input type="submit" value="<?php echo translate($action, 0) ?>"></td>
+          <td colspan="3" class="actionlink"><input type="submit" value="<?php echo translate($action, 0) ?>"></td>
         </tr>
         <tr>
-          <td><?php echo translate("title") ?></td>
-          <td><?php echo create_text_input("title", $photo->get("title"), 40, 64) ?></td>
-          <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "64") ?></font></td>
+          <td class="fieldtitle"><?php echo translate("title") ?></td>
+          <td class="field"><?php echo create_text_input("title", $photo->get("title"), 40, 64) ?></td>
+          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
         </tr>
         <tr>
-          <td valign="top"><?php echo translate("location") ?></td>
-          <td colspan="2">
+          <td class="fieldtitle"><?php echo translate("location") ?></td>
+          <td class="field" colspan="2">
 <?php echo create_smart_pulldown("location_id", $photo->get("location_id"), get_places_select_array()) ?>
           </td>
         </tr>
         <tr>
-          <td><?php echo translate("date") ?></td>
-          <td><?php echo create_text_input("date", $photo->get("date"), 12, 10) ?></td>
-          <td><font size="-1">YYYY-MM-DD</font></td>
+          <td class="fieldtitle"><?php echo translate("date") ?></td>
+          <td class="field"><?php echo create_text_input("date", $photo->get("date"), 12, 10) ?></td>
+          <td class="inputhint">YYYY-MM-DD</td>
         </tr>
         <tr>
-          <td><?php echo translate("time") ?></td>
-          <td><?php echo create_text_input("time", $photo->get("time"), 10, 8) ?></td>
-          <td><font size="-1">HH:MM:SS</font></td>
+          <td class="fieldtitle"><?php echo translate("time") ?></td>
+          <td class="field"><?php echo create_text_input("time", $photo->get("time"), 10, 8) ?></td>
+          <td class="inputhint">HH:MM:SS</td>
         </tr>
         <tr>
-          <td><?php echo translate("view") ?></td>
-          <td><?php echo create_text_input("view", $photo->get("view"), 40, 64) ?></td>
-          <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "64") ?></font></td>
+          <td class="fieldtitle"><?php echo translate("view") ?></td>
+          <td class="field"><?php echo create_text_input("view", $photo->get("view"), 40, 64) ?></td>
+          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
         </tr>
 <?php
     // if people are allowed to rate photos, the rating field
-    // is an average so don't edit it.  
+    // is an average so don't edit it.
     if (!ALLOW_RATINGS) {
 ?>
         <tr>
-          <td><?php echo translate("rating") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("rating") ?></td>
+          <td class="field">
             <?php echo create_rating_pulldown($photo->get("rating")) ?>
           </td>
-          <td><font size="-1">1 - 10</font></td>
+          <td class="inputhint">1 - 10</td>
         </tr>
 <?php
     }
 ?>
         <tr>
-          <td valign="top"><?php echo translate("photographer") ?></td>
-          <td colspan="2">
+          <td class="fieldtitle"><?php echo translate("photographer") ?></td>
+          <td class="field" colspan="2">
 <?php echo create_smart_pulldown("photographer_id", $photo->get("photographer_id"), get_people_select_array()) ?>
           </td>
         </tr>
@@ -145,28 +148,28 @@
     if ($user->is_admin()) {
 ?>
         <tr>
-          <td><?php echo translate("level") ?></td>
-          <td><?php echo create_text_input("level", $photo->get("level"), 4, 2) ?></td>
-          <td><font size="-1">1 - 10</font></td>
+          <td class="fieldtitle"><?php echo translate("level") ?></td>
+          <td class="field"><?php echo create_text_input("level", $photo->get("level"), 4, 2) ?></td>
+          <td class="inputhint">1 - 10</td>
         </tr>
 <?php
     }
 ?>
         <tr>
-          <td><?php echo translate("description") ?></td>
-          <td colspan="2">
+          <td class="fieldtitle"><?php echo translate("description") ?></td>
+          <td class="field" colspan="2">
             <textarea name="description" cols="60" rows="4"><?php echo $photo->get("description") ?></textarea>
           </td>
         </tr>
         <tr>
-          <td colspan="3" align="center"><hr></td>
+          <td colspan="3"><hr></td>
         </tr>
 <?php
         if ($action != "insert") {
 ?>
         <tr>
-          <td valign="top"><?php echo translate("people") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("people") ?></td>
+          <td class="field">
 <?php
         $people = $photo->lookup_people();
         $next_pos  = 1;
@@ -190,18 +193,18 @@
             <?php echo translate("position") ?>:
             <?php echo create_text_input("_position", $next_pos, 2, 2) ?>
             <br>
-            <font size="-1"><?php echo translate("(left to right, front to back).") ?></font>
+            <p class="inputhint"><?php echo translate("(left to right, front to back).") ?></p>
           </td>
-          <td valign="top">
+          <td class="remove">
             <?php echo $ppl_links ? $ppl_links : "&nbsp;" ?>
           </td>
         </tr>
         <tr>
-          <td colspan="3" align="center"><hr width="90%"></td>
+          <td colspan="3"><hr class="wide"></td>
         </tr>
         <tr>
-          <td valign="top"><?php echo translate("albums") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("albums") ?></td>
+          <td class="field">
 <?php
         $albums = $photo->lookup_albums($user);
         $alb_links = "";
@@ -221,16 +224,16 @@
 ?>
             <?php echo create_pulldown("_album", "", get_albums_select_array($user)) ?>
           </td>
-          <td valign="top">
+          <td class="remove">
             <?php echo $alb_links ? $alb_links : "&nbsp;" ?>
           </td>
         </tr>
         <tr>
-          <td colspan="3" align="center"><hr width="90%"></td>
+          <td colspan="3"><hr class="wide"></td>
         </tr>
         <tr>
-          <td valign="top"><?php echo translate("categories") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("categories") ?></td>
+          <td class="field">
 <?php
         $categories = $photo->lookup_categories($user);
         $cat_links = "";
@@ -250,7 +253,7 @@
 ?>
             <?php echo create_pulldown("_category", "", get_categories_select_array($user)) ?>
           </td>
-          <td valign="top">
+          <td class="remove">
             <?php echo $cat_links ? $cat_links : "&nbsp;" ?>
           </td>
         </tr>
@@ -259,94 +262,94 @@
         if ($_show) {
 ?>
         <tr>
-          <td colspan="3" align="center"><hr></td>
+          <td colspan="3"><hr></td>
         </tr>
         <tr>
-          <td><?php echo translate("path") ?></td>
-          <td><?php echo create_text_input("path", $photo->get("path"), 40, 64) ?></td>
-          <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "64") ?></font></td>
+          <td class="fieldtitle"><?php echo translate("path") ?></td>
+          <td class="field"><?php echo create_text_input("path", $photo->get("path"), 40, 64) ?></td>
+          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
         </tr>
         <tr>
-          <td><?php echo translate("width") ?></td>
-          <td><?php echo create_text_input("width", $photo->get("width"), 6, 6) ?></td>
+          <td class="fieldtitle"><?php echo translate("width") ?></td>
+          <td class="field"><?php echo create_text_input("width", $photo->get("width"), 6, 6) ?></td>
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("height") ?></td>
-          <td><?php echo create_text_input("height", $photo->get("height"), 6, 6) ?></td>
+          <td class="fieldtitle"><?php echo translate("height") ?></td>
+          <td class="field"><?php echo create_text_input("height", $photo->get("height"), 6, 6) ?></td>
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("camera make") ?></td>
-          <td><?php echo create_text_input("camera_make", $photo->get("camera_make"), 32, 32) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("camera make") ?></td>
+          <td class="field"><?php echo create_text_input("camera_make", $photo->get("camera_make"), 32, 32) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("camera model") ?></td>
-          <td><?php echo create_text_input("camera_model", $photo->get("camera_model"), 32, 32) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("camera model") ?></td>
+          <td class="field"><?php echo create_text_input("camera_model", $photo->get("camera_model"), 32, 32) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("flash used") ?></td>
-          <td>
+          <td class="fieldtitle"><?php echo translate("flash used") ?></td>
+          <td class="field">
 <?php echo create_pulldown("flash_used", $photo->get("flash_used"), array("" => "", "Y" => translate("Yes",0), "N" => translate("No",0))) ?>
           </td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("focal length") ?></td>
-          <td><?php echo create_text_input("focal_length", $photo->get("focal_length"), 10, 64) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("focal length") ?></td>
+          <td class="field"><?php echo create_text_input("focal_length", $photo->get("focal_length"), 10, 64) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("exposure") ?></td>
-          <td><?php echo create_text_input("exposure", $photo->get("exposure"), 32, 64) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("exposure") ?></td>
+          <td class="field"><?php echo create_text_input("exposure", $photo->get("exposure"), 32, 64) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("aperture") ?></td>
-          <td><?php echo create_text_input("aperture", $photo->get("aperture"), 8, 16) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("aperture") ?></td>
+          <td class="field"><?php echo create_text_input("aperture", $photo->get("aperture"), 8, 16) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("compression") ?></td>
-          <td><?php echo create_text_input("compression", $photo->get("compression"), 32, 64) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("compression") ?></td>
+          <td class="field"><?php echo create_text_input("compression", $photo->get("compression"), 32, 64) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("iso equiv") ?></td>
-          <td><?php echo create_text_input("iso_equiv", $photo->get("iso_equiv"), 8, 8) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("iso equiv") ?></td>
+          <td class="field"><?php echo create_text_input("iso_equiv", $photo->get("iso_equiv"), 8, 8) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("metering mode") ?></td>
-          <td><?php echo create_text_input("metering_mode", $photo->get("metering_mode"), 16, 16) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("metering mode") ?></td>
+          <td class="field"><?php echo create_text_input("metering_mode", $photo->get("metering_mode"), 16, 16) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("focus distance") ?></td>
-          <td><?php echo create_text_input("focus_dist", $photo->get("focus_dist"), 16, 16) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("focus distance") ?></td>
+          <td class="field"><?php echo create_text_input("focus_dist", $photo->get("focus_dist"), 16, 16) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("ccd width") ?></td>
-          <td><?php echo create_text_input("ccd_width", $photo->get("ccd_width"), 16, 16) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("ccd width") ?></td>
+          <td class="field"><?php echo create_text_input("ccd_width", $photo->get("ccd_width"), 16, 16) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
         <tr>
-          <td><?php echo translate("comment") ?></td>
-          <td><?php echo create_text_input("comment", $photo->get("comment"), 40, 128) ?></td>
-          <td><font size="-1">&nbsp;</font></td>
+          <td class="fieldtitle"><?php echo translate("comment") ?></td>
+          <td class="field"><?php echo create_text_input("comment", $photo->get("comment"), 40, 128) ?></td>
+          <td class="inputhint">&nbsp;</td>
         </tr>
 <?php
         } // additional atts
 ?>
         <tr>
-          <td colspan="2" align="left">
+          <td colspan="2" class="showattr">
 <?php
         if (!$_show) {
 ?>
-            <a href="photo.php?_action=edit&photo_id=<?php echo $photo->get("photo_id") ?>&_show=all"><?php echo translate("show additional attributes") ?></a>
+            <a href="photo.php?_action=edit&amp;photo_id=<?php echo $photo->get("photo_id") ?>&amp;_show=all"><?php echo translate("show additional attributes") ?></a>
 <?php
         }
         else {
@@ -355,9 +358,9 @@
 <?php
         }
 ?>
-          </td>
-          <td colspan="1" align="right"><input type="submit" value="<?php echo translate($action, 0) ?>"></td>
+          <td colspan="1" class="right"><input type="submit" value="<?php echo translate($action, 0) ?>"></td>
         </tr>
+      </table>
 </form>
 <?php
         }

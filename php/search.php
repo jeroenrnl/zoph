@@ -24,62 +24,20 @@ else {
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("search") ?></font></th>
+          <th><h1><?php echo translate("search") ?></h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
-<form method="GET" action="search.php">
-<input type="hidden" name="_action" value="search">
-<?php
-/*
-        <tr>
-          <td colspan="3">
-
-<?php
-    if ($_action == "refine") {
-        echo "Refine Search\n";
-        while (list($key, $val) = each($request_vars)) {
-            if (empty($key) || empty($val))  { continue; }
-            if (strpos(" $key", "PHP") == 1) { continue; }
-
-            if ($key == "_action" || $key == "_refine" || $key == "_button") {
-                continue;
-            }
-
-            if (strrpos($key, "#") > 0) {
-                $name = $key;
-            }
-            else {
-                $name = $key . "#" . $refineNum;
-            }
-?>
-<input type="hidden" name="<?php echo $name ?>" value="<?php echo $val ?>">
-<?php
-        }
-        $refineNum++;
-    }
-    else {
-        echo "New Search\n";
-    }
-?>
-          </td>
-          <td align="right" colspan="2">
-            <input type="radio" name="_action" value="search" checked>search
-            <input type="radio" name="_action" value="refine">refine
-            <input type="hidden" name="_refine" value="<?php echo $refineNum ?>">
-            <input type="submit" name="_button" value="<?php echo translate("go", 0); ?>">
-          </td>
-        </tr>
-*/
-?>
+      <form method="GET" action="search.php">
+      <table class="main">
         <tr>
           <td>
+<input type="hidden" name="_action" value="search">
 <?php echo create_conjunction_pulldown("_date") ?>
           </td>
           <td><?php echo translate("photos taken") ?></td>
@@ -152,23 +110,6 @@ else {
 <?php echo create_rating_pulldown("") ?>
           </td>
         </tr>
-<?php
-/* so as not to conflict with X days ago selection
-        <tr>
-          <td>
-<?php echo create_conjunction_pulldown("_date") ?>
-          </td>
-          <td><?php echo translate("date") ?></td>
-          <td>
-<?php echo create_operator_pulldown("_date") ?>
-          </td>
-          <td>
-            <input type="text" name="date" size="12" maxlength="10">
-          </td>
-          <td><font size="-1">YYYY-MM-DD</font></td>
-        </tr>
-*/
-?>
         <tr>
           <td>
 <?php echo create_conjunction_pulldown("_person_id") ?>
@@ -222,16 +163,15 @@ else {
           </td>
         </tr>
         <tr>
-          <td colspan="5" align="center">
+          <td colspan="5" class="center">
             <input type="submit" name="_button" value="<?php echo translate("search", 0); ?>">
           </td>
         </tr>
-</form>
       </table>
+      </form>
     </td>
   </tr>
 </table>
-</div>
 
 <?php
 require_once("footer.inc.php");

@@ -28,28 +28,29 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("change password") ?></font></th>
+          <th><h1><?php echo translate("change password") ?></h1></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+<form action="password.php" method="POST">
+      <table class="main">
 <?php
     if ($msg) {
 ?>
         <tr>
-          <td align="center" colspan="3"><?php echo $msg ?>.</td>
+          <td class="center" colspan="3"><?php echo $msg ?>.</td>
         </tr>
 <?php
     }
 ?>
         <tr>
-          <th align="left" colspan="3">
-            <?php echo $user->get("user_name") ?>
+          <th colspan="3">
+            <h2><?php echo $user->get("user_name") ?></h2>
           </th>
         </tr>
 <?php
@@ -65,33 +66,30 @@
     else {
 ?>
         <tr>
-          <td><?php echo translate("password") ?></td>
-          <td>
-<form action="password.php" method="POST">
+          <td class="fieldtitle"><?php echo translate("password") ?></td>
+          <td class="field">
 <input type="hidden" name="_action" value="update">
 <input type="password" name="password" value="" size="16" maxlength="32">
           </td>
-          <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "32") ?></font></td>
+          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></td>
         </tr>
         <tr>
-          <td><?php echo translate("confirm password") ?></td>
-          <td><input type="password" name="confirm" value="" size="16" maxlength="32"></td>
+          <td class="fieldtitle"><?php echo translate("confirm password") ?></td>
+          <td class="field"><input type="password" name="confirm" value="" size="16" maxlength="32"></td>
           <td>&nbsp;</td>
         </tr>
         <tr>
-          <td align="center" colspan="3">
+          <td class="center" colspan="3">
 <input type="submit" value="<?php echo translate("submit", 0); ?>">
-</form>
           </td>
         </tr>
 <?php
     }
 ?>
       </table>
+</form>
     </td>
   </tr>
 </table>
-
-</div>
 
 <?php require_once("footer.inc.php"); ?>

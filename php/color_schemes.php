@@ -11,19 +11,19 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("color schemes") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">[
-            <a href="color_scheme.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
-          ]</font></td>
+          <th><h1><?php echo translate("color schemes") ?></h1></th>
+          <td class="actionlink">[
+            <a href="color_scheme.php?_action=new"><?php echo translate("new") ?></a>
+          ]</td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
 <?php
     $color_schemes = get_records("color_scheme", "name");
 
@@ -34,7 +34,7 @@
           <td>
             <?php echo $cs->get("name") ?>
           </td>
-          <td align="right">
+          <td class="actionlink">
             [ <a href="color_scheme.php?color_scheme_id=<?php echo $cs->get("color_scheme_id") ?>"><?php echo translate("view") ?></a> ]
           </td>
         </tr>
@@ -47,7 +47,6 @@
   </tr>
 </table>
 
-</div>
 <?php
     require_once("footer.inc.php");
 ?>

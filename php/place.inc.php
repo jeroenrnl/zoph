@@ -41,7 +41,7 @@ class place extends zoph_table {
 
         $html = "";
         if ($this->get("title"))    {
-            $html .= "<p><strong>" . $this->get("title") . "</strong></p>\n";
+            $html .= "<h2>" . $this->get("title") . "</h2>\n";
         }
         $html .= $this->get_address();
 

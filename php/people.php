@@ -22,15 +22,15 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
+      <table class="titlebar">
         <tr>
-          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("people") ?></font></th>
-          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
+          <th><h1><?php echo translate("people") ?></h1></th>
+          <td class="actionlink">
 <?php
         if ($user->is_admin()) {
 ?>
           [
-            <a href="person.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="person.php?_action=new"><?php echo translate("new") ?></a>
           ]
 <?php
         }
@@ -38,28 +38,28 @@
             echo "&nbsp;";
         }
 ?>
-          </font></td>
+          </td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
         <tr>
-          <td colspan="2" align="center">[
+          <td class="letter" colspan="2">[
 <?php
-    for ($l = 'a'; $l < 'z'; $l++) {
+    for ($l = 'a'; $l <= 'z' && $l != 'aa'; $l++) {
         $title = $l;
         if ($l == $_l) {
-            $title = "<strong>" . strtoupper($title) . "</strong>";
+            $title = "<span class=\"selected\">" . strtoupper($title) . "</span>";
         }
 ?>
             <a href="people.php?_l=<?php echo $l ?>"><?php echo $title ?></a> |
 <?php
     }
 ?>
-            <a href="people.php?_l=z"><?php echo $_l == "z" ? "<strong>Z</strong>" : "z" ?></a> |
+<?php //            <a href="people.php?_l=z"><?php echo $_l == "z" ? "<strong>Z</strong>" : "z" </a> | ?>
             <a href="people.php?_l=no%20last%20name"><?php echo translate("no last name") ?></a> |
             <a href="people.php?_l=all"><?php echo translate("all") ?></a>
           ]</td>
@@ -69,7 +69,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+      <table class="main">
 <?php
     $constraints = null;
     if ($_l == "all") {
@@ -91,10 +91,10 @@
         foreach($ppl as $p) {
 ?>
         <tr>
-          <td>
+          <td class="person">
             <a href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo $p->get("last_name") ? $p->get("last_name") . ", " : "" ?><?php echo $p->get("first_name") ?></a>
           </td>
-          <td align="right">
+          <td class="actionlink">
             [ <a href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("view") ?></a> | <a href="photos.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos of") ?></a> | <a href="photos.php?photographer_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos by") ?></a> ]
           </td>
         </tr>
@@ -104,7 +104,7 @@
     else {
 ?>
         <tr>
-          <td colspan="2" align="center"><?php echo sprintf(translate("No people were found with a last name beginning with '%s'."), $_l) ?></td>
+          <td colspan="2" class="center"><?php echo sprintf(translate("No people were found with a last name beginning with '%s'."), $_l) ?></td>
         </tr>
 <?php
     }
