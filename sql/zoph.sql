@@ -1,11 +1,11 @@
--- MySQL dump 8.21
+-- MySQL dump 8.22
 --
 -- Host: localhost    Database: zoph
 ---------------------------------------------------------
--- Server version	3.23.49-log
+-- Server version	3.23.54
 
 --
--- Table structure for table 'album_permissions'
+-- Table structure for table 'zoph_album_permissions'
 --
 
 CREATE TABLE zoph_album_permissions (
@@ -13,12 +13,19 @@ CREATE TABLE zoph_album_permissions (
   album_id int(11) NOT NULL default '0',
   access_level tinyint(4) NOT NULL default '0',
   writable char(1) NOT NULL default '0',
+  changedate timestamp(14) NOT NULL,
   PRIMARY KEY  (user_id,album_id),
   KEY ap_access_level (access_level)
 ) TYPE=MyISAM;
 
 --
--- Table structure for table 'albums'
+-- Dumping data for table 'zoph_album_permissions'
+--
+
+
+
+--
+-- Table structure for table 'zoph_albums'
 --
 
 CREATE TABLE zoph_albums (
@@ -30,10 +37,15 @@ CREATE TABLE zoph_albums (
   KEY album_parent_id (parent_album_id)
 ) TYPE=MyISAM;
 
+--
+-- Dumping data for table 'zoph_albums'
+--
+
+
 INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL);
 
 --
--- Table structure for table 'categories'
+-- Table structure for table 'zoph_categories'
 --
 
 CREATE TABLE zoph_categories (
@@ -45,10 +57,15 @@ CREATE TABLE zoph_categories (
   KEY cat_parent_id (parent_category_id)
 ) TYPE=MyISAM;
 
+--
+-- Dumping data for table 'zoph_categories'
+--
+
+
 INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL);
 
 --
--- Table structure for table 'color_schemes'
+-- Table structure for table 'zoph_color_schemes'
 --
 
 CREATE TABLE zoph_color_schemes (
@@ -70,6 +87,11 @@ CREATE TABLE zoph_color_schemes (
   PRIMARY KEY  (color_scheme_id)
 ) TYPE=MyISAM;
 
+--
+-- Dumping data for table 'zoph_color_schemes'
+--
+
+
 INSERT INTO zoph_color_schemes VALUES (1,'default','ffffff','000000','111111','444444','ffffff','000000','ffffff','f0f0f0','000000','ffffff','c0c0c0','000000','000000');
 INSERT INTO zoph_color_schemes VALUES (2,'blugram','909090','000000','111111','333333','eef0f0','000000','cce0e0','dde0cc','ccd0bb','000000','bbd0d0','000000','000000');
 INSERT INTO zoph_color_schemes VALUES (3,'dow','444444','000000','000055','000033','cccccc','000000','aaaaaa','2222aa','2222aa','ffffff','cccccc','000000','ffffff');
@@ -79,7 +101,7 @@ INSERT INTO zoph_color_schemes VALUES (6,'black','000000','FFFFFF','FFFFFF','FFF
 INSERT INTO zoph_color_schemes VALUES (7,'beach','646D7E','000000','000000','000000','F9EEE2','000000','9AADC7','C6DEFF','617C58','D0D0D0','8BB381','000000','646D7E');
 
 --
--- Table structure for table 'people'
+-- Table structure for table 'zoph_people'
 --
 
 CREATE TABLE zoph_people (
@@ -97,15 +119,21 @@ CREATE TABLE zoph_people (
   mother_id int(11) default NULL,
   spouse_id int(11) default NULL,
   notes varchar(255) default NULL,
+  email varchar(64) default NULL,
   PRIMARY KEY  (person_id),
   KEY person_last_name (last_name(10)),
   KEY person_first_name (first_name(10))
 ) TYPE=MyISAM;
 
-INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+--
+-- Dumping data for table 'zoph_people'
+--
+
+
+INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 --
--- Table structure for table 'photo_albums'
+-- Table structure for table 'zoph_photo_albums'
 --
 
 CREATE TABLE zoph_photo_albums (
@@ -115,7 +143,13 @@ CREATE TABLE zoph_photo_albums (
 ) TYPE=MyISAM;
 
 --
--- Table structure for table 'photo_categories'
+-- Dumping data for table 'zoph_photo_albums'
+--
+
+
+
+--
+-- Table structure for table 'zoph_photo_categories'
 --
 
 CREATE TABLE zoph_photo_categories (
@@ -125,7 +159,13 @@ CREATE TABLE zoph_photo_categories (
 ) TYPE=MyISAM;
 
 --
--- Table structure for table 'photo_people'
+-- Dumping data for table 'zoph_photo_categories'
+--
+
+
+
+--
+-- Table structure for table 'zoph_photo_people'
 --
 
 CREATE TABLE zoph_photo_people (
@@ -136,7 +176,13 @@ CREATE TABLE zoph_photo_people (
 ) TYPE=MyISAM;
 
 --
--- Table structure for table 'photos'
+-- Dumping data for table 'zoph_photo_people'
+--
+
+
+
+--
+-- Table structure for table 'zoph_photos'
 --
 
 CREATE TABLE zoph_photos (
@@ -176,7 +222,13 @@ CREATE TABLE zoph_photos (
 ) TYPE=MyISAM;
 
 --
--- Table structure for table 'places'
+-- Dumping data for table 'zoph_photos'
+--
+
+
+
+--
+-- Table structure for table 'zoph_places'
 --
 
 CREATE TABLE zoph_places (
@@ -196,7 +248,13 @@ CREATE TABLE zoph_places (
 ) TYPE=MyISAM;
 
 --
--- Table structure for table 'prefs'
+-- Dumping data for table 'zoph_places'
+--
+
+
+
+--
+-- Table structure for table 'zoph_prefs'
 --
 
 CREATE TABLE zoph_prefs (
@@ -218,10 +276,15 @@ CREATE TABLE zoph_prefs (
   PRIMARY KEY  (user_id)
 ) TYPE=MyISAM;
 
+--
+-- Dumping data for table 'zoph_prefs'
+--
+
+
 INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0');
 
 --
--- Table structure for table 'users'
+-- Table structure for table 'zoph_users'
 --
 
 CREATE TABLE zoph_users (
@@ -236,8 +299,16 @@ CREATE TABLE zoph_users (
   detailed_places char(1) NOT NULL default '0',
   import char(1) NOT NULL default '0',
   lightbox_id int(11) default NULL,
+  lastnotify datetime default NULL,
+  lastlogin datetime default NULL,
+  lastip varchar(16) default NULL,
   PRIMARY KEY  (user_id)
 ) TYPE=MyISAM;
 
-INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1',NULL);
+--
+-- Dumping data for table 'zoph_users'
+--
+
+
+INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1',NULL,NULL,NULL,NULL);
 
