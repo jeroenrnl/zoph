@@ -139,13 +139,16 @@ function get_popular_categories($user) {
         $sql =
             "select cat.*, count(*) as count from " .
             DB_PREFIX . "categories as cat, " .
+            DB_PREFIX . "photo_categories as pc, " .
+            DB_PREFIX . "photos as ph, " .
             DB_PREFIX . "photo_albums as pa, " .
-            DB_PREFIX . "album_permissions as ap, " .
-            DB_PREFIX . "photo_categories as pc " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
+            DB_PREFIX . "album_permissions as ap " .
+            "where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
             " and ap.album_id = pa.album_id" .
-            " and pa.photo_id = pc.photo_id " .
-            " and pc.category_id = cat.category_id " .
+            " and pa.photo_id = pc.photo_id" .
+            " and pc.category_id = cat.category_id" .
+            " and pc.photo_id = ph.photo_id" .
+            " and ap.access_level >= ph.level " .
             "group by cat.category_id " .
             "order by count desc, cat.category " .
             "limit 0, $TOP_N";

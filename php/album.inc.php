@@ -209,11 +209,14 @@ function get_popular_albums($user) {
         $sql =
             "select al.*, count(*) as count from " .
             DB_PREFIX . "albums as al, " .
+            DB_PREFIX . "photos as ph, " .
             DB_PREFIX . "photo_albums as pa, " .
             DB_PREFIX . "album_permissions as ap " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) .
-            "' and ap.album_id = pa.album_id" .
-            " and pa.album_id = al.album_id " .
+            "where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
+            " and ap.album_id = pa.album_id" .
+            " and pa.album_id = al.album_id" .
+            " and pa.photo_id = ph.photo_id" .
+            " and ap.access_level >= ph.level " .
             "group by al.album_id " .
             "order by count desc, al.album " .
             "limit 0, $TOP_N";

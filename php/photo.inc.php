@@ -371,13 +371,14 @@ function create_rating_graph($user) {
 
     if ($user && !$user->is_admin()) {
         $query =
-            "select ph.rating, count(*) as count from " .
+            "select ph.rating, count(distinct ph.photo_id) as count from " .
             DB_PREFIX . "photos as ph, " .
             DB_PREFIX . "photo_albums as pa, " .
             DB_PREFIX . "album_permissions as ap " .
             "where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
             " and ap.album_id = pa.album_id" .
-            " and pa.photo_id = ph.photo_id " .
+            " and pa.photo_id = ph.photo_id" .
+            " and ap.access_level >= ph.level " .
             "group by rating order by rating";
     }
     else {

@@ -232,7 +232,7 @@ function get_popular_people($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select ppl.*, count(*) as count from " .
+            "select ppl.*, count(distinct ph.photo_id) as count from " .
             DB_PREFIX . "people as ppl, " .
             DB_PREFIX . "photo_people as pp, " .
             DB_PREFIX . "photos as ph, " .
@@ -241,9 +241,9 @@ function get_popular_people($user) {
             "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = pp.photo_id" .
+            " and pp.person_id = ppl.person_id" .
             " and pp.photo_id = ph.photo_id" .
-            " and ap.access_level >= ph.level" .
-            " and pp.person_id = ppl.person_id " .
+            " and ap.access_level >= ph.level " .
             "group by ppl.person_id " .
             "order by count desc, ppl.last_name, ppl.first_name " .
             "limit 0, $TOP_N";

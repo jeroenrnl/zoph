@@ -134,16 +134,16 @@ function get_popular_places($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select plc.*, count(*) as count from " .
+            "select plc.*, count(distinct ph.photo_id) as count from " .
             DB_PREFIX . "places as plc, " .
             DB_PREFIX . "photos as ph, " .
             DB_PREFIX . "photo_albums as pa, " .
             DB_PREFIX . "album_permissions as ap " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
+            "where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = ph.photo_id" .
-            " and ap.access_level >= ph.level" .
-            " and ph.location_id = plc.place_id " .
+            " and ph.location_id = plc.place_id" .
+            " and ap.access_level >= ph.level " .
             "group by plc.place_id " .
             "order by count desc, plc.title, plc.city " .
             "limit 0, $TOP_N";
