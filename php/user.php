@@ -77,6 +77,13 @@
           <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("user") ?></font></th>
           <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
           [
+<?php
+        if (count(get_newer_albums($this_user->get("user_id"), $this_user->get_lastnotify())) > 0) {
+?>
+            <a href="notify.php?_action=notify&user_id=<?php echo $this_user->get("user_id") ?>&shownewalbums=1"><?php echo strtolower(translate("Notify", 0)) ?></a> |
+<?php
+        }
+?>
             <a href="user.php?_action=edit&user_id=<?php echo $this_user->get("user_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a> |
             <a href="user.php?_action=delete&user_id=<?php echo $this_user->get("user_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a> |
             <a href="user.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
