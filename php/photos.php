@@ -61,12 +61,12 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?= $title_bar ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo $title_bar ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
             [
-            <a href="slideshow.php?<?= update_query_string($request_vars, "_off", $offset) ?>"><?php echo translate("Slideshow") ?></a>
+            <a href="slideshow.php?<?php echo update_query_string($request_vars, "_off", $offset) ?>"><?php echo translate("Slideshow") ?></a>
             ]
           </font></td>
         </tr>
@@ -75,7 +75,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
 <?php
     if ($num_thumbnails <= 0) {
 ?>
@@ -91,25 +91,25 @@
         <tr>
           <td>
 <form action="photos.php" method="GET">
-<?= create_form($request_vars) ?>
+<?php echo create_form($request_vars) ?>
             <?php echo translate("order by", 0) ?>
- <?= create_photo_field_pulldown("_order", $_order) ?>
+ <?php echo create_photo_field_pulldown("_order", $_order) ?>
           </td>
           <td width="20" align="center">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
               <tr>
-                <td><a href="photos.php?<?= update_query_string($request_vars, "_dir", "asc") ?>"><img src="images/up<?= $_dir == "asc" ? 1 : 2 ?>.gif" border="0" width="16" height="8"></a></td>
+                <td><a href="photos.php?<?php echo update_query_string($request_vars, "_dir", "asc") ?>"><img src="images/up<?php echo $_dir == "asc" ? 1 : 2 ?>.gif" border="0" width="16" height="8"></a></td>
               </tr>
               <tr>
-                <td><a href="photos.php?<?= update_query_string($request_vars, "_dir", "desc") ?>"><img src="images/down<?= $_dir == "asc" ? 2 : 1 ?>.gif" border="0" width="16" height="8"></a></td>
+                <td><a href="photos.php?<?php echo update_query_string($request_vars, "_dir", "desc") ?>"><img src="images/down<?php echo $_dir == "asc" ? 2 : 1 ?>.gif" border="0" width="16" height="8"></a></td>
               </tr>
             </table>
           </td>
           <td align="right">
-<?= create_integer_pulldown("_rows", $_rows, 1, 10) ?>
+<?php echo create_integer_pulldown("_rows", $_rows, 1, 10) ?>
             <?php echo translate("rows") ?>
 
-<?= create_integer_pulldown("_cols", $_cols, 1, 10) ?>
+<?php echo create_integer_pulldown("_cols", $_cols, 1, 10) ?>
             <?php echo translate("cols") ?>
             <input type="submit" name="_button" value="<?php echo translate("go", 0) ?>">
 </form>
@@ -132,13 +132,13 @@
 
             $ignore = array("_photo_id");
 ?>
-                <td width="<?= THUMB_SIZE ?>" align="center">
-                  <?= $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($request_vars, "_off", $offset + $i, $ignore)) . "\n" ?>
+                <td width="<?php echo THUMB_SIZE ?>" align="center">
+                  <?php echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($request_vars, "_off", $offset + $i, $ignore)) . "\n" ?>
 <?php
             if ($desc_thumbnails && $thumbnails[$i]->get("description")) {
 ?>
                 <br>
-                <font size="-1"><?= substr($thumbnails[$i]->get("description"), 0, MAX_THUMB_DESC) ?></font>
+                <font size="-1"><?php echo substr($thumbnails[$i]->get("description"), 0, MAX_THUMB_DESC) ?></font>
 <?php
                 if (strlen($thumbnails[$i]->get("description")) > MAX_THUMB_DESC) { echo "..."; }
             }
@@ -146,7 +146,7 @@
             if ($lightbox) {
                 if (!defined($desc_thumbnails)) { echo "<br>\n"; }
 ?>
-                <a href="photos.php?<?= update_query_string($request_vars, "_photo_id", $thumbnails[$i]->get("photo_id"), $ignore) ?>"><font size="-1">x</font></a>
+                <a href="photos.php?<?php echo update_query_string($request_vars, "_photo_id", $thumbnails[$i]->get("photo_id"), $ignore) ?>"><font size="-1">x</font></a>
 <?php
             }
 
@@ -175,7 +175,7 @@
             $new_offset = max(0, $offset - $cells);
 ?>
           <td width="20%">
-            [ <a href="photos.php?<?= update_query_string($request_vars, "_off", $new_offset) ?>"><?php echo translate("Prev") ?></a> ]
+            [ <a href="photos.php?<?php echo update_query_string($request_vars, "_off", $new_offset) ?>"><?php echo translate("Prev") ?></a> ]
           </td>
 <?php
         }
@@ -200,21 +200,21 @@
 
         if ($page > 1) {
 ?>
-            <a href="photos.php?<?= update_query_string($request_vars, "_off", 0) ?>">1</a> ... 
+            <a href="photos.php?<?php echo update_query_string($request_vars, "_off", 0) ?>">1</a> ... 
 <?php
         }
 
         while ($page <= $last_page) {
             $new_offset = ($page - 1) * $cells;
 ?>
-            <a href="photos.php?<?= update_query_string($request_vars, "_off", $new_offset) ?>"><font<?= $page == $page_num ? " color=\"red\"" : "" ?>><?= $page ?></font></a>
+            <a href="photos.php?<?php echo update_query_string($request_vars, "_off", $new_offset) ?>"><font<?php echo $page == $page_num ? " color=\"red\"" : "" ?>><?php echo $page ?></font></a>
 <?php
             $page++;
         }
 
         if ($page <= $num_pages) {
 ?>
-            ... <a href="photos.php?<?= update_query_string($request_vars, "_off", ($num_pages-1) * $cells) ?>"><?= $num_pages ?></a>
+            ... <a href="photos.php?<?php echo update_query_string($request_vars, "_off", ($num_pages-1) * $cells) ?>"><?php echo $num_pages ?></a>
 <?php
         }
 ?>
@@ -229,7 +229,7 @@
             $new_offset = $offset + $cells;
 ?>
           <td align="right" width="20%">
-            [ <a href="photos.php?<?= update_query_string($request_vars, "_off", $new_offset) ?>"><?php echo translate("Next") ?></a> ]
+            [ <a href="photos.php?<?php echo update_query_string($request_vars, "_off", $new_offset) ?>"><?php echo translate("Next") ?></a> ]
           </td>
 <?php
         }

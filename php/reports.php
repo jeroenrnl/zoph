@@ -7,16 +7,16 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("reports") ?></font></th>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("reports") ?></font></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td valign="top" align="center" width="50%">
 <?php
@@ -31,9 +31,9 @@
         while (list($album, $count) = each($top_albums)) {
 ?>
               <tr>
-                <td><?= $album ?></td>
+                <td><?php echo $album ?></td>
                 <td>&nbsp;</td>
-                <td><?= $count ?></td>
+                <td><?php echo $count ?></td>
               </tr>
 <?php
         }
@@ -59,9 +59,9 @@
         while (list($category, $count) = each($top_categories)) {
 ?>
               <tr>
-                <td><?= $category ?></td>
+                <td><?php echo $category ?></td>
                 <td>&nbsp;</td>
-                <td><?= $count ?></td>
+                <td><?php echo $count ?></td>
               </tr>
 <?php
         }
@@ -89,9 +89,9 @@
         while (list($person, $count) = each($top_people)) {
 ?>
               <tr>
-                <td><?= $person ?></td>
+                <td><?php echo $person ?></td>
                 <td>&nbsp;</td>
-                <td><?= $count ?></td>
+                <td><?php echo $count ?></td>
               </tr>
 <?php
         }
@@ -117,9 +117,9 @@
         while (list($place, $count) = each($top_places)) {
 ?>
               <tr>
-                <td><?= $place ?></td>
+                <td><?php echo $place ?></td>
                 <td>&nbsp;</td>
-                <td><?= $count ?></td>
+                <td><?php echo $count ?></td>
               </tr>
 <?php
         }
@@ -135,7 +135,7 @@
         </tr>
         <tr>
           <td colspan="2" align="center">
-<?= create_rating_graph($user) ?>
+<?php echo create_rating_graph($user) ?>
           </td>
         </tr>
       </table>

@@ -7,16 +7,16 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("about") ?></font></th>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("about") ?></font></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td colspan="2" align="center">
             <font size="+2"><strong>zoph</strong>
@@ -65,7 +65,7 @@ Mark Cooper (man page).
       <td width="50%">&nbsp;</td>
       <td width="50%">&nbsp;</td>
         </tr>
-<?= create_field_html(get_zoph_info_array()) ?>
+<?php echo create_field_html(get_zoph_info_array()) ?>
 <?php
     }
 ?>

@@ -22,15 +22,15 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("places") ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("places") ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
 <?php
         if ($user->is_admin()) {
 ?>
           [
-            <a href="place.php?_action=new"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="place.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
           ]
 <?php
         }
@@ -45,7 +45,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td colspan="2" align="center">[
 <?php
@@ -55,11 +55,11 @@
             $title = "<strong>" . strtoupper($title) . "</strong>";
         }
 ?>
-            <a href="places.php?_l=<?= $l ?>"><?= $title ?></a> |
+            <a href="places.php?_l=<?php echo $l ?>"><?php echo $title ?></a> |
 <?php
     }
 ?>
-            <a href="places.php?_l=z"><?= $_l == "z" ? "<strong>Z</strong>" : "z" ?></a> |
+            <a href="places.php?_l=z"><?php echo $_l == "z" ? "<strong>Z</strong>" : "z" ?></a> |
             <a href="places.php?_l=no%20city"><?php echo translate("no city") ?></a> |
             <a href="places.php?_l=all"><?php echo translate("all") ?></a>
           ]</td>
@@ -69,7 +69,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
 <?php
     $constraints = null;
     if ($_l == "all") {
@@ -92,22 +92,22 @@
 ?>
         <tr>
           <td>
-            <?= $p->get("city") ? $p->get("city") : "&nbsp;" ?>
+            <?php echo $p->get("city") ? $p->get("city") : "&nbsp;" ?>
           </td>
 <?php
         if ($user->is_admin() || $user->get("detailed_people")) {
 ?>
           <td>
-            <?= $p->get("address") ? $p->get("address") : "&nbsp;" ?>
+            <?php echo $p->get("address") ? $p->get("address") : "&nbsp;" ?>
           </td>
 <?php
         }
 ?> 
           <td>
-            <?= $p->get("title") ? "\"" . $p->get("title") . "\"" : "&nbsp;" ?>
+            <?php echo $p->get("title") ? "\"" . $p->get("title") . "\"" : "&nbsp;" ?>
           </td>
           <td align="right">
-            [ <a href="place.php?place_id=<?= $p->get("place_id") ?>"><?php echo translate("view") ?></a> | <a href="photos.php?location_id=<?= $p->get("place_id") ?>"><?php echo translate("photos at") ?></a> ]
+            [ <a href="place.php?place_id=<?php echo $p->get("place_id") ?>"><?php echo translate("view") ?></a> | <a href="photos.php?location_id=<?php echo $p->get("place_id") ?>"><?php echo translate("photos at") ?></a> ]
           </td>
         </tr>
 <?php

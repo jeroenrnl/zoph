@@ -23,16 +23,16 @@ else {
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("search") ?></font></th>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("search") ?></font></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
 <form method="GET" action="search.php">
 <input type="hidden" name="_action" value="search">
 <?php
@@ -58,7 +58,7 @@ else {
                 $name = $key . "#" . $refineNum;
             }
 ?>
-<input type="hidden" name="<?= $name ?>" value="<?= $val ?>">
+<input type="hidden" name="<?php echo $name ?>" value="<?php echo $val ?>">
 <?php
         }
         $refineNum++;
@@ -71,7 +71,7 @@ else {
           <td align="right" colspan="2">
             <input type="radio" name="_action" value="search" checked>search
             <input type="radio" name="_action" value="refine">refine
-            <input type="hidden" name="_refine" value="<?= $refineNum ?>">
+            <input type="hidden" name="_refine" value="<?php echo $refineNum ?>">
             <input type="submit" name="_button" value="<?php echo translate("go", 0); ?>">
           </td>
         </tr>
@@ -79,87 +79,87 @@ else {
 ?>
         <tr>
           <td>
-<?= create_conjunction_pulldown("_date") ?>
+<?php echo create_conjunction_pulldown("_date") ?>
           </td>
           <td><?php echo translate("photos taken") ?></td>
           <td>
-<?= create_inequality_operator_pulldown("_date") ?>
+<?php echo create_inequality_operator_pulldown("_date") ?>
           </td>
           <td colspan="2">
-<?= create_pulldown("date", "", get_date_select_array($today, MAX_DAYS_PAST)) ?>
+<?php echo create_pulldown("date", "", get_date_select_array($today, MAX_DAYS_PAST)) ?>
 <?php echo translate("days ago") ?>
           </td>
         </tr>
         <tr>
           <td>
-<?= create_conjunction_pulldown("_timestamp") ?>
+<?php echo create_conjunction_pulldown("_timestamp") ?>
           </td>
           <td><?php echo translate("photos modified") ?></td>
           <td>
-<?= create_inequality_operator_pulldown("_timestamp") ?>
+<?php echo create_inequality_operator_pulldown("_timestamp") ?>
           </td>
           <td colspan="2">
-<?= create_pulldown("timestamp", "", get_date_select_array($today, MAX_DAYS_PAST)) ?>
+<?php echo create_pulldown("timestamp", "", get_date_select_array($today, MAX_DAYS_PAST)) ?>
 <?php echo translate("days ago") ?>
           </td>
         </tr>
         <tr>
           <td>
-<?= create_conjunction_pulldown("_album_id") ?>
+<?php echo create_conjunction_pulldown("_album_id") ?>
           </td>
           <td><?php echo translate("album") ?></td>
           <td>
-<?= create_binary_operator_pulldown("_album_id") ?>
+<?php echo create_binary_operator_pulldown("_album_id") ?>
           </td>
           <td colspan="2">
-<?= create_pulldown("album_id", "", get_albums_search_array($user)) ?>
+<?php echo create_pulldown("album_id", "", get_albums_search_array($user)) ?>
           </td>
         </tr>
         <tr>
           <td>
-<?= create_conjunction_pulldown("_category_id") ?>
+<?php echo create_conjunction_pulldown("_category_id") ?>
           </td>
           <td><?php echo translate("category") ?></td>
           <td>
-<?= create_binary_operator_pulldown("_category_id") ?>
+<?php echo create_binary_operator_pulldown("_category_id") ?>
           </td>
           <td colspan="2">
-<?= create_pulldown("category_id", "", get_categories_search_array($user)) ?>
+<?php echo create_pulldown("category_id", "", get_categories_search_array($user)) ?>
           </td>
         </tr>
         <tr>
           <td>
-<?= create_conjunction_pulldown("_location_id") ?>
+<?php echo create_conjunction_pulldown("_location_id") ?>
           </td>
           <td><?php echo translate("location") ?></td>
           <td>
-<?= create_binary_operator_pulldown("_location_id") ?>
+<?php echo create_binary_operator_pulldown("_location_id") ?>
           </td>
           <td colspan="2">
-<?= create_smart_pulldown("location_id", "", get_places_select_array($user)) ?>
+<?php echo create_smart_pulldown("location_id", "", get_places_select_array($user)) ?>
           </td>
         </tr>
         <tr>
           <td>
-<?= create_conjunction_pulldown("_rating") ?>
+<?php echo create_conjunction_pulldown("_rating") ?>
           </td>
           <td><?php echo translate("rating") ?></td>
           <td>
-<?= create_operator_pulldown("_rating", ">=") ?>
+<?php echo create_operator_pulldown("_rating", ">=") ?>
           </td>
           <td colspan="2">
-<?= create_rating_pulldown("") ?>
+<?php echo create_rating_pulldown("") ?>
           </td>
         </tr>
 <?php
 /* so as not to conflict with X days ago selection
         <tr>
           <td>
-<?= create_conjunction_pulldown("_date") ?>
+<?php echo create_conjunction_pulldown("_date") ?>
           </td>
           <td><?php echo translate("date") ?></td>
           <td>
-<?= create_operator_pulldown("_date") ?>
+<?php echo create_operator_pulldown("_date") ?>
           </td>
           <td>
             <input type="text" name="date" size="12" maxlength="10">
@@ -170,37 +170,37 @@ else {
 ?>
         <tr>
           <td>
-<?= create_conjunction_pulldown("_person_id") ?>
+<?php echo create_conjunction_pulldown("_person_id") ?>
           </td>
           <td><?php echo translate("person") ?></td>
           <td>
-<?= create_present_operator_pulldown("_person_id") ?>
+<?php echo create_present_operator_pulldown("_person_id") ?>
           </td>
           <td colspan="2">
-<?= create_smart_pulldown("person_id", "", get_people_select_array(get_photographed_people($user))) ?>
+<?php echo create_smart_pulldown("person_id", "", get_people_select_array(get_photographed_people($user))) ?>
           </td>
         </tr>
         <tr>
           <td>
-<?= create_conjunction_pulldown("_photographer_id") ?>
+<?php echo create_conjunction_pulldown("_photographer_id") ?>
           </td>
           <td><?php echo translate("photographer") ?></td>
           <td>
-<?= create_binary_operator_pulldown("_photographer_id") ?>
+<?php echo create_binary_operator_pulldown("_photographer_id") ?>
           </td>
           <td colspan="2">
-<?= create_smart_pulldown("photographer_id", "", get_people_select_array(get_photographers($user))) ?>
+<?php echo create_smart_pulldown("photographer_id", "", get_people_select_array(get_photographers($user))) ?>
           </td>
         </tr>
         <tr>
           <td>
-<?= create_conjunction_pulldown("_field1") ?>
+<?php echo create_conjunction_pulldown("_field1") ?>
           </td>
           <td>
-<?= create_photo_field_pulldown("_field1") ?>
+<?php echo create_photo_field_pulldown("_field1") ?>
           </td>
           <td>
-<?= create_operator_pulldown("_field1") ?>
+<?php echo create_operator_pulldown("_field1") ?>
           </td>
           <td colspan="2">
             <input type="text" name="field1" size="24" maxlength="64">
@@ -208,13 +208,13 @@ else {
         </tr>
         <tr>
           <td>
-<?= create_conjunction_pulldown("_field2") ?>
+<?php echo create_conjunction_pulldown("_field2") ?>
           </td>
           <td>
-<?= create_photo_field_pulldown("_field2") ?>
+<?php echo create_photo_field_pulldown("_field2") ?>
           </td>
           <td>
-<?= create_operator_pulldown("_field2") ?>
+<?php echo create_operator_pulldown("_field2") ?>
           </td>
           <td colspan="2">
             <input type="text" name="field2" size="24" maxlength="64">

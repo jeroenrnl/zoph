@@ -15,16 +15,16 @@
 
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?= ZOPH_TITLE ?></font></th>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo ZOPH_TITLE ?></font></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td align="center" width="140">
 <?php
@@ -42,19 +42,19 @@
           </td>
           <td align="left">
       <?php echo sprintf(translate("Welcome %s.  %s currently contains"), $user->person->get_link(), ZOPH_TITLE) ?>
-            <li><?php echo sprintf(translate("%s photos in %s"),  $album_photo_count, $album_count) ?> <a href="albums.php"><?= $album_count == 1 ? translate("album") : translate("albums") ?></a></li>
-            <li><?php echo sprintf(translate("%s photos in %s"), $category_photo_count, $category_count) ?> <a href="categories.php"><?= $category_count == 1 ? translate("category") : translate("categories") ?></a></li>
+            <li><?php echo sprintf(translate("%s photos in %s"),  $album_photo_count, $album_count) ?> <a href="albums.php"><?php echo $album_count == 1 ? translate("album") : translate("albums") ?></a></li>
+            <li><?php echo sprintf(translate("%s photos in %s"), $category_photo_count, $category_count) ?> <a href="categories.php"><?php echo $category_count == 1 ? translate("category") : translate("categories") ?></a></li>
 <?php
     if ($user->is_admin() || $user->get("browse_people")) {
         $person_count = get_count("person");
 ?>
-            <li><?= $person_count ?> <a href="people.php"><?= $person_count == 1 ? translate("person", 0) : translate("people", 0) ?></a></li>
+            <li><?php echo $person_count ?> <a href="people.php"><?php echo $person_count == 1 ? translate("person", 0) : translate("people", 0) ?></a></li>
 <?php
     }
     if ($user->is_admin() || $user->get("browse_places")) {
         $place_count = get_count("place");
 ?>
-            <li><?= $place_count ?> <a href="places.php"><?= $place_count == 1 ? translate("place", 0) : translate("places", 0) ?></a></li>
+            <li><?php echo $place_count ?> <a href="places.php"><?php echo $place_count == 1 ? translate("place", 0) : translate("places", 0) ?></a></li>
 <?php
     }
 ?>
@@ -85,7 +85,7 @@
         </tr>
         <tr>
           <td colspan="2" align="center">
-            <font size="-1">Zoph <?= VERSION ?></font>
+            <font size="-1">Zoph <?php echo VERSION ?></font>
           </td>
         </tr>
       </table>

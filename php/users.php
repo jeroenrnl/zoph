@@ -11,11 +11,11 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("users") ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">[
-            <a href="user.php?_action=new"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("users") ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">[
+            <a href="user.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
           ]</font></td>
         </tr>
       </table>
@@ -23,7 +23,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
 <?php
     $users = get_users();
 
@@ -33,13 +33,13 @@
 ?>
         <tr>
           <td>
-            <?= $u->get("user_name") ?>
+            <?php echo $u->get("user_name") ?>
           </td>
           <td>
-            <?= $u->person->get_name() ?>
+            <?php echo $u->person->get_name() ?>
           </td>
           <td align="right">
-            [ <a href="user.php?user_id=<?= $u->get("user_id") ?>"><?php echo translate("view") ?></a> ]
+            [ <a href="user.php?user_id=<?php echo $u->get("user_id") ?>"><?php echo translate("view") ?></a> ]
           </td>
         </tr>
 <?php

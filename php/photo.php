@@ -116,13 +116,13 @@ require_once("header.inc.php");
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
 <?php
     // no photo was found and this isn't a new record
     if ($action != "insert" && !$found) {
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("photo") ?></font></th>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("photo") ?></font></th>
           <td align="right">&nbsp;</td>
         </tr>
       </table>
@@ -130,7 +130,7 @@ require_once("header.inc.php");
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td colspan="2" align="center">
            <?php echo translate("No photo was found.") ?>
@@ -145,65 +145,65 @@ require_once("header.inc.php");
         }
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?= $title_bar ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo $title_bar ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
 <?php
     $bar = "[";
     if (EMAIL_PHOTOS) {
 ?>
-            <?= $bar ?> <a href="mail.php?_action=compose&photo_id=<?= $photo->get("photo_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("email") ?></font></a>
+            <?php echo $bar ?> <a href="mail.php?_action=compose&photo_id=<?php echo $photo->get("photo_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("email") ?></font></a>
 <?php
         $bar = "|";
     }
 
     if ($user->is_admin() || $permissions->get("writable")) {
 ?>
-            <?= $bar ?> <a href="photo.php?_action=edit&photo_id=<?= $photo->get("photo_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a>
+            <?php echo $bar ?> <a href="photo.php?_action=edit&photo_id=<?php echo $photo->get("photo_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a>
 <?php
         $bar = "|";
 
         if ($user->is_admin()) {
 ?>
-            | <a href="photo.php?_action=delete&photo_id=<?= $photo->get("photo_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a>
+            | <a href="photo.php?_action=delete&photo_id=<?php echo $photo->get("photo_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a>
 <?php
         }
     }
 
     if ($user->get("lightbox_id")) {
 ?>
-            <?= $bar ?> <a href="photo.php?photo_id=<?= $photo->get("photo_id") ?>&_lightbox=1"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("lightbox", 0) ?></font></a>
+            <?php echo $bar ?> <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_lightbox=1"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("lightbox", 0) ?></font></a>
 <?php
         $bar = "|";
     }
 ?>
-          <?= $bar == "|" ? "]" : "" ?></font></td>
+          <?php echo $bar == "|" ? "]" : "" ?></font></td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td colspan="2" align="center">
             <table width="100%">
               <tr>
-                <td align="left"><?= $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></td>
+                <td align="left"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></td>
                 <td align="center">
                   <font size="-1">
-                  <?= $photo->get_fullsize_link($photo->get("name")) ?> :
-                  <?= $photo->get("width") ?> x <?= $photo->get("height") ?>,
-            <?= $photo->get("size") ?> <?php echo translate("bytes") ?>
+                  <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
+                  <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
+            <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
                   </font>
                 </td>
-                <td align="right"><?= $next_link ? "[ $next_link ]" : "&nbsp;" ?></td>
+                <td align="right"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></td>
               </tr>
             </table>
           </td>
         </tr>
         <tr>
           <td colspan="2" align="center">
-            <?= $photo->get_fullsize_link($photo->get_midsize_img()) ?>
+            <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
           </td>
         </tr>
 <?php
@@ -212,20 +212,20 @@ require_once("header.inc.php");
         <tr>
           <td colspan="2" align="center">
             <font size="-1">
-            <?= $people_links ?>
+            <?php echo $people_links ?>
             </font>
           </td>
         </tr>
 <?php
         }
 ?>
-<?= create_field_html($photo->get_display_array(), 2) ?>
+<?php echo create_field_html($photo->get_display_array(), 2) ?>
 <?php
         if ($album_links = create_link_list($photo->lookup_albums($user))) {
 ?>
         <tr>
           <td align="right"><?php echo translate("albums") ?></td>
-          <td><?= $album_links ?></td>
+          <td><?php echo $album_links ?></td>
         </tr>
 <?php
         }
@@ -234,24 +234,24 @@ require_once("header.inc.php");
 ?>
         <tr>
           <td align="right"><?php echo translate("categories") ?></td>
-          <td><?= $category_links ?></td>
+          <td><?php echo $category_links ?></td>
         </tr>
 <?php
         }
 ?>
         <tr>
           <td align="right"><?php echo translate("last modified") ?></td>
-          <td><?= format_timestamp($photo->get("timestamp")) ?></td>
+          <td><?php echo format_timestamp($photo->get("timestamp")) ?></td>
         </tr>
-        <tr bgcolor="<?=$TITLE_BG_COLOR?>"> 
+        <tr bgcolor="<?php echo$TITLE_BG_COLOR?>"> 
           <td colspan="2">
 <?php
         if ($photo->get("description")) {
 ?>
-            <table cellspacing="0" cellpadding="4" bgcolor="<?=$TABLE_BG_COLOR?>" width="100%">
+            <table cellspacing="0" cellpadding="4" bgcolor="<?php echo$TABLE_BG_COLOR?>" width="100%">
               <tr>
                 <td>
-            <?= $photo->get("description") ?>
+            <?php echo $photo->get("description") ?>
                 </td>
               </tr>
             </table>
@@ -268,21 +268,21 @@ require_once("header.inc.php");
     else if ($action == "confirm") {
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("photo") ?></font></th>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("photo") ?></font></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $photo->get("name")) ?>
           </td>
           <td align="right">[
-            <a href="photo.php?_action=confirm&photo_id=<?= $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="photo.php?_action=display&photo_id=<?= $photo->get("photo_id") ?>"><?php echo translate("cancel") ?></a>
+            <a href="photo.php?_action=confirm&photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="photo.php?_action=display&photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("cancel") ?></a>
           ]</td>
         </tr>
 <?php

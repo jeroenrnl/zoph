@@ -30,26 +30,26 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
 <?php
     if ($action == "confirm") {
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("delete album") ?></font></th>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete album") ?></font></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s' and its subalbums:"), $album->get("album")) ?>
           </td>
           <td align="right">[
-            <a href="album.php?_action=confirm&album_id=<?= $album->get("album_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="album.php?_action=edit&album_id=<?= $album->get("album_id") ?>"><?php echo translate("cancel") ?></a>
+            <a href="album.php?_action=confirm&album_id=<?php echo $album->get("album_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="album.php?_action=edit&album_id=<?php echo $album->get("album_id") ?>"><?php echo translate("cancel") ?></a>
           ]</td>
         </tr>
       </table>
@@ -60,10 +60,10 @@
     else {
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("album") ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">[
-            <a href="albums.php"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("return") ?></font></a> |
-            <a href="album.php?_action=delete&album_id=<?= $album->get("album_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("album") ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">[
+            <a href="albums.php"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("return") ?></font></a> |
+            <a href="album.php?_action=delete&album_id=<?php echo $album->get("album_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a>
           ]</font></td>
         </tr>
       </table>
@@ -71,11 +71,11 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
 <form action="album.php">
-<input type="hidden" name="_action" value="<?= $action ?>">
-<input type="hidden" name="album_id" value="<?= $album->get("album_id") ?>">
-<?= create_field_html($album->get_edit_array()) ?>
+<input type="hidden" name="_action" value="<?php echo $action ?>">
+<input type="hidden" name="album_id" value="<?php echo $album->get("album_id") ?>">
+<?php echo create_field_html($album->get_edit_array()) ?>
   <tr>
     <td colspan="2" align="center">
       <input type="submit" value="<?php echo translate($action, 0) ?>">

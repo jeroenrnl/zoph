@@ -31,16 +31,16 @@ require_once("header.inc.php");
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("import photos") ?></font></th>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("import photos") ?></font></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
 <?php
     if ($action == "display") {
 ?>
@@ -53,7 +53,7 @@ require_once("header.inc.php");
 ?>
 <form enctype="multipart/form-data" action="import.php" method="POST">
 <input type="hidden" name="MAX_FILE_SIZE" value="10000000">
-<input type="hidden" name="_action" value="<?= $action ?>">
+<input type="hidden" name="_action" value="<?php echo $action ?>">
 <?php
         if (CLIENT_WEB_IMPORT) {
 ?>
@@ -76,7 +76,7 @@ require_once("header.inc.php");
         </tr>
         <tr>
           <td><?php echo translate("destination path") ?></td>
-          <td colspan="2"><?= create_text_input("_path_a", "", 40, 256) ?></td>
+          <td colspan="2"><?php echo create_text_input("_path_a", "", 40, 256) ?></td>
         </tr>
 <?php
         }
@@ -91,11 +91,11 @@ require_once("header.inc.php");
         </tr>
         <tr>
           <td><?php echo translate("file/directory") ?></td>
-          <td colspan="2"><?= create_text_input("_image_server", "", 40, 256) ?></td>
+          <td colspan="2"><?php echo create_text_input("_image_server", "", 40, 256) ?></td>
         </tr>
         <tr>
           <td><?php echo translate("destination path") ?></td>
-          <td colspan="2"><?= create_text_input("_path_b", "", 40, 256) ?></td>
+          <td colspan="2"><?php echo create_text_input("_path_b", "", 40, 256) ?></td>
         </tr>
 <?php
         }
@@ -109,52 +109,52 @@ require_once("header.inc.php");
         <tr>
           <td valign="top"><?php echo translate("album") ?></td>
           <td colspan="2">
-            <?= create_pulldown("_album", "", get_albums_select_array($user)) ?>
+            <?php echo create_pulldown("_album", "", get_albums_select_array($user)) ?>
           </td>
         </tr>
         <tr>
           <td valign="top"><?php echo translate("category") ?></td>
           <td colspan="2">
-            <?= create_pulldown("_category", "", get_categories_select_array($user)) ?>
+            <?php echo create_pulldown("_category", "", get_categories_select_array($user)) ?>
           </td>
         </tr>
         <tr>
           <td><?php echo translate("title") ?></td>
-          <td><?= create_text_input("title", "", 40, 64) ?></td>
+          <td><?php echo create_text_input("title", "", 40, 64) ?></td>
           <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "64") ?></font></td>
         </tr>
         <tr>
           <td valign="top"><?php echo translate("location") ?></td>
           <td colspan="2">
-<?= create_smart_pulldown("location_id", "", get_places_select_array()) ?>
+<?php echo create_smart_pulldown("location_id", "", get_places_select_array()) ?>
           </td>
         </tr>
         <tr>
           <td><?php echo translate("view") ?></td>
-          <td><?= create_text_input("view", "", 40, 64) ?></td>
+          <td><?php echo create_text_input("view", "", 40, 64) ?></td>
           <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "64") ?></font></td>
         </tr>
         <tr>
           <td><?php echo translate("date") ?></td>
-          <td><?= create_text_input("date", "", 12, 10) ?></td>
+          <td><?php echo create_text_input("date", "", 12, 10) ?></td>
           <td><font size="-1">YYYY-MM-DD</font></td>
         </tr>
         <tr>
           <td><?php echo translate("rating") ?></td>
           <td>
-            <?= create_rating_pulldown("") ?>
+            <?php echo create_rating_pulldown("") ?>
           </td>
           <td><font size="-1">1 - 10</font></td>
         </tr>
         <tr>
           <td valign="top"><?php echo translate("photographer") ?></td>
           <td colspan="2">
-<?= create_smart_pulldown("photographer_id", "", get_people_select_array()) ?>
+<?php echo create_smart_pulldown("photographer_id", "", get_people_select_array()) ?>
           </td>
         </tr>
         <tr>
           <td><?php echo translate("level") ?></td>
-          <td><?= create_text_input("level", "", 4, 2) ?></td>
+          <td><?php echo create_text_input("level", "", 4, 2) ?></td>
           <td><font size="-1">1 - 10</font></td>
         </tr>
         <tr>

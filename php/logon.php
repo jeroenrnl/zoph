@@ -12,14 +12,14 @@
 ?>
 <title><?php echo ZOPH_TITLE . ' - ' . "logon" ?></title>
 </head>
-<body bgcolor="<?=$PAGE_BG_COLOR?>">
+<body bgcolor="<?php echo$PAGE_BG_COLOR?>">
 
 <div align="center">
 
-<table border="0" cellpadding="1" cellspacing="0" bgcolor="<?= $TABLE_BORDER_COLOR ?>" width="480">
+<table border="0" cellpadding="1" cellspacing="0" bgcolor="<?php echo $TABLE_BORDER_COLOR ?>" width="480">
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
           <th align="left" colspan="2"><?php echo "logon" ?></th>
         </tr>
@@ -28,10 +28,10 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td colspan="2">
-            <font size="+2"><strong><?= ZOPH_TITLE ?></strong></font>
+            <font size="+2"><strong><?php echo ZOPH_TITLE ?></strong></font>
           </td>
         </tr>
         <tr>

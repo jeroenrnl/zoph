@@ -69,17 +69,17 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
 <?php
     if ($action == "display") {
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("user") ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("user") ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
           [
-            <a href="user.php?_action=edit&user_id=<?= $this_user->get("user_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a> |
-            <a href="user.php?_action=delete&user_id=<?= $this_user->get("user_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a> |
-            <a href="user.php?_action=new"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="user.php?_action=edit&user_id=<?php echo $this_user->get("user_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a> |
+            <a href="user.php?_action=delete&user_id=<?php echo $this_user->get("user_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a> |
+            <a href="user.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
           ]
           </font></td>
         </tr>
@@ -88,19 +88,19 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <th align="left" colspan="3">
-            <?= $this_user->get("user_name") ?>
+            <?php echo $this_user->get("user_name") ?>
           </th>
         </tr>
-<?= create_field_html($this_user->get_display_array(), 3) ?>
+<?php echo create_field_html($this_user->get_display_array(), 3) ?>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <th align="center" colspan="3"><?php echo translate("Albums") ?></th>
         </tr>
@@ -128,9 +128,9 @@
                 $permissions = $this_user->get_album_permissions($id);
 ?>
         <tr>
-          <td align="left"><?= $name ?></td>
-          <td align="center"><?= $permissions->get("access_level") ?></td>
-          <td align="center"><?= $permissions->get("writable") == "1" ? translate("Yes") : translate("No") ?></td>
+          <td align="left"><?php echo $name ?></td>
+          <td align="center"><?php echo $permissions->get("access_level") ?></td>
+          <td align="center"><?php echo $permissions->get("writable") == "1" ? translate("Yes") : translate("No") ?></td>
         </tr>
 <?php
             }
@@ -139,9 +139,9 @@
     else if ($action == "confirm") {
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("delete user") ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">[
-            <a href="user.php?_action=display&user_id=<?= $this_user->get("user_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("cancel") ?></font></a>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete user") ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">[
+            <a href="user.php?_action=display&user_id=<?php echo $this_user->get("user_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("cancel") ?></font></a>
           ]</font></td>
         </tr>
       </table>
@@ -149,14 +149,14 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $this_user->get("user_name")) ?>
           </td>
           <td align="right">[
-            <a href="user.php?_action=confirm&user_id=<?= $this_user->get("user_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="user.php?_action=display&user_id=<?= $this_user->get("user_id") ?>"><?php echo translate("cancel") ?></a>
+            <a href="user.php?_action=confirm&user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="user.php?_action=display&user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("cancel") ?></a>
           ]</td>
         </tr>
 <?php
@@ -166,7 +166,7 @@ require_once("edit_user.inc.php");
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <th align="center" colspan="5"><?php echo translate("Albums") ?></th>
         </tr>
@@ -207,15 +207,15 @@ require_once("edit_user.inc.php");
         <tr>
           <td align="left">
 <form action="user.php">
-<input type="hidden" name="user_id" value="<?= $this_user->get("user_id") ?>">
+<input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
 <input type="hidden" name="_action" value="add_all">
 <?php echo translate("Grant access to all existing albums:") ?>
           </td>
           <td align="center">
-<?= create_text_input("access_level", "5", 4, 2) ?>
+<?php echo create_text_input("access_level", "5", 4, 2) ?>
           </td>
           <td align="center">
-<?= create_pulldown("writable", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
+<?php echo create_pulldown("writable", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
           </td>
           <td align="center" colspan="2">
 <input type="submit" value="<?php echo translate("add", 0); ?>">
@@ -225,15 +225,15 @@ require_once("edit_user.inc.php");
         <tr>
           <td align="left">
 <form action="user.php">
-<input type="hidden" name="user_id" value="<?= $this_user->get("user_id") ?>">
+<input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
 <input type="hidden" name="_action" value="add_album">
-<?= create_smart_pulldown("album_id", "", get_albums_select_array()) ?>
+<?php echo create_smart_pulldown("album_id", "", get_albums_select_array()) ?>
           </td>
           <td align="center">
-<?= create_text_input("access_level", "5", 4, 2) ?>
+<?php echo create_text_input("access_level", "5", 4, 2) ?>
           </td>
           <td align="center">
-<?= create_pulldown("writable", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
+<?php echo create_pulldown("writable", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
           </td>
           <td align="center" colspan="2">
 <input type="submit" value="<?php echo translate("add", 0); ?>">
@@ -248,17 +248,17 @@ require_once("edit_user.inc.php");
 ?>
         <tr>
           <td align="left">
-<?= $name ?>
+<?php echo $name ?>
           </td>
           <td align="center">
 <form action="user.php">
-<input type="hidden" name="user_id" value="<?= $this_user->get("user_id") ?>">
+<input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
 <input type="hidden" name="_action" value="update_album">
-<input type="hidden" name="album_id" value="<?= $id ?>">
-<?= create_text_input("access_level", $permissions->get("access_level"), 4, 2) ?>
+<input type="hidden" name="album_id" value="<?php echo $id ?>">
+<?php echo create_text_input("access_level", $permissions->get("access_level"), 4, 2) ?>
           </td>
           <td align="center">
-<?= create_pulldown("writable", $permissions->get("writable"), array("0" => translate("No",0), "1" => translate("Yes",0))) ?>
+<?php echo create_pulldown("writable", $permissions->get("writable"), array("0" => translate("No",0), "1" => translate("Yes",0))) ?>
           </td>
           <td align="center">
 <input type="submit" value="<?php echo translate("update", 0); ?>">
@@ -266,9 +266,9 @@ require_once("edit_user.inc.php");
           </td>
           <td align="center">
 <form action="user.php">
-<input type="hidden" name="user_id" value="<?= $this_user->get("user_id") ?>">
+<input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
 <input type="hidden" name="_action" value="revoke_album">
-<input type="hidden" name="album_id" value="<?= $id ?>">
+<input type="hidden" name="album_id" value="<?php echo $id ?>">
 <input type="submit" value="<?php echo translate("revoke", 0); ?>">
 </form>
           </td>

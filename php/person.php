@@ -38,7 +38,7 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
 <?php
     if ($action == "display") {
 
@@ -52,15 +52,15 @@
         $photos_by = get_photos($vars, 0, 1, $ignore, $user);
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("person") ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("person") ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
 <?php
         if ($user->is_admin()) {
 ?>
           [
-            <a href="person.php?_action=edit&person_id=<?= $person->get("person_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a> |
-            <a href="person.php?_action=delete&person_id=<?= $person->get("person_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a> |
-            <a href="person.php?_action=new"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="person.php?_action=edit&person_id=<?php echo $person->get("person_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a> |
+            <a href="person.php?_action=delete&person_id=<?php echo $person->get("person_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a> |
+            <a href="person.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
           ]
 <?php
         }
@@ -75,19 +75,19 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td colspan="3">
             <table width="100%">
               <tr>
           <th align="left" colspan="2">
-            <?= $person->get("first_name") ?>
-            <?= $person->get("middle_name") ?>
-            <?= $person->get("last_name") ?>
+            <?php echo $person->get("first_name") ?>
+            <?php echo $person->get("middle_name") ?>
+            <?php echo $person->get("last_name") ?>
           </th>
           <td align="right">[
-            <a href="photos.php?person_id=<?= $person->get("person_id") ?>"><?php echo "$photos_of " . translate("photos of") ?></a> |
-            <a href="photos.php?photographer_id=<?= $person->get("person_id") ?>"><?php echo "$photos_by " . translate("photos by") ?></a>
+            <a href="photos.php?person_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_of " . translate("photos of") ?></a> |
+            <a href="photos.php?photographer_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_by " . translate("photos by") ?></a>
           ]</td>
         </tr>
             </tr>
@@ -96,14 +96,14 @@
 <?php
     if ($user->get("detailed_people")) {
 ?>
-<?= create_field_html($person->get_display_array(), 3) ?>
+<?php echo create_field_html($person->get_display_array(), 3) ?>
 <?php
         if ($person->home) {
 ?>
         <tr>
           <td align="right" valign="top"><?php echo translate("Home") ?></td>
-          <td><?= $person->home->get_address() ?></td>
-          <td align="right" valign="top">[ <a href="place.php?place_id=<?= $person->get("home_id") ?>"><?php echo translate("view") ?></a> ]</td>
+          <td><?php echo $person->home->get_address() ?></td>
+          <td align="right" valign="top">[ <a href="place.php?place_id=<?php echo $person->get("home_id") ?>"><?php echo translate("view") ?></a> ]</td>
         </tr>
 <?php
         }
@@ -113,10 +113,10 @@
         <tr>
           <td align="right" valign="top"><?php echo translate("Work") ?></td>
           <td>
-             <?= $person->work->get("title") ? $person->work->get("title") . "<br>" : "" ?>
-             <?= $person->work->get_address() ?>
+             <?php echo $person->work->get("title") ? $person->work->get("title") . "<br>" : "" ?>
+             <?php echo $person->work->get_address() ?>
           </td>
-          <td align="right" valign="top">[ <a href="place.php?place_id=<?= $person->get("work_id") ?>"><?php echo translate("view") ?></a> ]</td>
+          <td align="right" valign="top">[ <a href="place.php?place_id=<?php echo $person->get("work_id") ?>"><?php echo translate("view") ?></a> ]</td>
         </tr>
 <?php
         }
@@ -125,7 +125,7 @@
 ?>
         <tr>
           <td align="right" valign="top">notes</td>
-          <td colspan="2"><?= $person->get("notes") ?></td>
+          <td colspan="2"><?php echo $person->get("notes") ?></td>
         </tr>
 <?php
         }
@@ -136,21 +136,21 @@
     else if ($action == "confirm") {
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("delete person") ?></font></th>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete person") ?></font></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $person->get_name()) ?>:
           </td>
           <td align="right">[
-            <a href="person.php?_action=confirm&person_id=<?= $person->get("person_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="person.php?_action=display&person_id=<?= $person->get("person_id") ?>"><?php echo translate("cancel") ?></a>
+            <a href="person.php?_action=confirm&person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="person.php?_action=display&person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("cancel") ?></a>
           ]</td>
         </tr>
 <?php

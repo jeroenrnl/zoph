@@ -30,20 +30,20 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
 <?php
     if ($action == "display") {
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("color scheme") ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("color scheme") ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
 <?php
         if ($user->is_admin()) {
 ?>
           [
-            <a href="color_scheme.php?_action=edit&color_scheme_id=<?= $color_scheme->get("color_scheme_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a> |
-            <a href="color_scheme.php?_action=delete&color_scheme_id=<?= $color_scheme->get("color_scheme_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a> |
-            <a href="color_scheme.php?_action=new"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="color_scheme.php?_action=edit&color_scheme_id=<?php echo $color_scheme->get("color_scheme_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a> |
+            <a href="color_scheme.php?_action=delete&color_scheme_id=<?php echo $color_scheme->get("color_scheme_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a> |
+            <a href="color_scheme.php?_action=new"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
           ]
 <?php
         }
@@ -58,25 +58,25 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
 <?php
         $colors = $color_scheme->get_display_array();
 ?>
         <tr>
           <td align="right" width="50%"><?php echo translate("Name") ?></td>
-          <td width="50%"><?= $color_scheme->get("name") ?></td>
+          <td width="50%"><?php echo $color_scheme->get("name") ?></td>
         </tr>
 <?php
         while (list($name, $value) = each($colors)) {
             if ($name == "Name") { continue; }
 ?>
         <tr>
-          <td align="right"><?= $name ?></td>
+          <td align="right"><?php echo $name ?></td>
           <td>
             <table width="50%">
               <tr>
-                <td width="50%"><?= $value ?></td>
-                <td width="50%" bgcolor="#<?= $value ?>">&nbsp;</td>
+                <td width="50%"><?php echo $value ?></td>
+                <td width="50%" bgcolor="#<?php echo $value ?>">&nbsp;</td>
               </tr>
             </table>
           </td>
@@ -87,21 +87,21 @@
     else if ($action == "confirm") {
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("delete color scheme") ?></font></th>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete color scheme") ?></font></th>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $color_scheme->get("name")) ?>:
           </td>
           <td align="right">[
-            <a href="color_scheme.php?_action=confirm&color_scheme_id=<?= $color_scheme->get("color_scheme_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="color_scheme.php?_action=display&color_scheme_id=<?= $color_scheme->get("color_scheme_id") ?>"><?php echo translate("cancel") ?></a>
+            <a href="color_scheme.php?_action=confirm&color_scheme_id=<?php echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("delete") ?></a> |
+            <a href="color_scheme.php?_action=display&color_scheme_id=<?php echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("cancel") ?></a>
           ]</td>
         </tr>
 <?php
@@ -110,9 +110,9 @@
         $colors = $color_scheme->get_edit_array();
 ?>
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("color scheme") ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">[
-            <a href="color_schemes.php"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("return") ?></font></a>
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("color scheme") ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">[
+            <a href="color_schemes.php"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("return") ?></font></a>
           ]</font></td>
         </tr>
       </table>
@@ -120,14 +120,14 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <td align="right" width="50%">Name</td>
           <td width="50%">
 <form action="color_scheme.php">
-<input type="hidden" name="_action" value="<?= $action ?>">
-<input type="hidden" name="color_scheme_id" value="<?= $color_scheme->get("color_scheme_id") ?>">
-<?= create_text_input("name", $color_scheme->get("name"), 16, 64) ?>
+<input type="hidden" name="_action" value="<?php echo $action ?>">
+<input type="hidden" name="color_scheme_id" value="<?php echo $color_scheme->get("color_scheme_id") ?>">
+<?php echo create_text_input("name", $color_scheme->get("name"), 16, 64) ?>
           </td>
         </tr>
 <?php
@@ -136,11 +136,11 @@
             $bg = preg_replace('/.*value="([^"]+)".*\n/', '$1', $value);
 ?>
         <tr>
-          <td align="right"><?= $name ?></td>
+          <td align="right"><?php echo $name ?></td>
           <td>
             <table width="50%">
               <tr>
-                <td width="50%"><?= $value ?></td>
+                <td width="50%"><?php echo $value ?></td>
                 <td width="50%"<?php $action != "insert" ? " bgcolor=\"#$bg\"" : "" ?>>&nbsp;</td>
               </tr>
             </table>

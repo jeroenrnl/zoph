@@ -22,15 +22,15 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("categories") ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("categories") ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
 <?php
     if ($user->is_admin()) {
 ?>
             [
-            <a href="category.php?_action=new&parent_category_id=<?= $category->get("category_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
+            <a href="category.php?_action=new&parent_category_id=<?php echo $category->get("category_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a>
             ]
 <?php
     }
@@ -45,26 +45,26 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <th align="left">
 <?php
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
 ?>
-            <?= $parent->get_link() ?> &gt;
+            <?php echo $parent->get_link() ?> &gt;
 <?php
         }
     }
 ?>
-            <?= $title ?>
+            <?php echo $title ?>
           </th>
           <td align="right">
 <?php
     if ($user->is_admin()) {
 ?>
           [
-            <a href="category.php?_action=edit&category_id=<?= $category->get("category_id") ?>"><?php echo translate("edit") ?></a>
+            <a href="category.php?_action=edit&category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("edit") ?></a>
           ]
 <?php
     }
@@ -79,7 +79,7 @@
 ?>
         <tr>
           <td colspan="2">
-            <?= $category->get("category_description") ?>
+            <?php echo $category->get("category_description") ?>
           </td>
         </tr>
 <?php
@@ -110,13 +110,13 @@
 ?>
           </td>
           <td align="right">
-            [ <a href="photos.php?category_id=<?= $category->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a> ]
+            [ <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a> ]
           </td>
 <?php
     }
     else {
 ?>
-          <?php echo translate("There are no photos") ?> <?= $fragment ?>.
+          <?php echo translate("There are no photos") ?> <?php echo $fragment ?>.
           </td>
           <td align="right">&nbsp;</td>
 <?php
@@ -132,7 +132,7 @@
         foreach($children as $c) {
 ?>
             <li>
-            <a href="categories.php?parent_category_id=<?= $c->get("category_id") ?>"><?= $c->get("category") ?></a>
+            <a href="categories.php?parent_category_id=<?php echo $c->get("category_id") ?>"><?php echo $c->get("category") ?></a>
             </li>
 <?php
         }

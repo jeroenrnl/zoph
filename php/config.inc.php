@@ -4,7 +4,7 @@
     define(DB_HOST, 'localhost');
     define(DB_NAME, 'zoph');
     define(DB_USER, 'zoph_rw');
-    define(DB_PASS, 'password');
+    define(DB_PASS, 'wrdz');
 
     define(USE_IMAGE_SERVICE, 0);
     define(IMAGE_DIR, "/data/images/");
@@ -65,7 +65,7 @@
 
     // set to the id of a non admin user or to 0 to disable
     // note that this is a user_id, not a person_id
-    define(DEFAULT_USER, 0);
+    define(DEFAULT_USER, 18);
 
     // if this is non-zero the people and places pages will default to
     // "show all" instead of "a".

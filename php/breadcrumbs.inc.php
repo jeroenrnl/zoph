@@ -42,13 +42,13 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$BREADCRUMB_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$BREADCRUMB_BG_COLOR?>">
         <tr>
           <td><font size="-1">
-<?= $crumb_string ?>
+<?php echo $crumb_string ?>
           </font></td>
           <td align="right"><font size="-2">
-          <a href="<?= $clear_url ?>">x</a>
+          <a href="<?php echo $clear_url ?>">x</a>
           </font></td>
         </tr>
       </table>

@@ -40,31 +40,31 @@
 <head>
 <title>Zoph - Slideshow</title>
 </head>
-<body bgcolor="<?= $PAGE_BG_COLOR ?>" text="<?= $TEXT_COLOR ?>" link="<?= $LINK_COLOR ?>" vlink="<?= $VLINK_COLOR ?>">
+<body bgcolor="<?php echo $PAGE_BG_COLOR ?>" text="<?php echo $TEXT_COLOR ?>" link="<?php echo $LINK_COLOR ?>" vlink="<?php echo $VLINK_COLOR ?>">
 <div align="center">
 
-<table border="0" cellpadding="1" cellspacing="0" bgcolor="<?= $TABLE_BORDER_COLOR ?>"<?= $table_width ?>>
+<table border="0" cellpadding="1" cellspacing="0" bgcolor="<?php echo $TABLE_BORDER_COLOR ?>"<?php echo $table_width ?>>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?= $title ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo $title ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
           [
 <?php
     if ($_pause) {
 ?>
-            <a href="<?= $PHP_SELF . '?' . $new_qs ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("continue") ?></font></a> |
+            <a href="<?php echo $PHP_SELF . '?' . $new_qs ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("continue") ?></font></a> |
 <?php
     }
     else {
 ?>
-            <a href="<?= $PHP_SELF . '?' . $QUERY_STRING . '&' . "_pause=1" ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("pause") ?></font></a> |
+            <a href="<?php echo $PHP_SELF . '?' . $QUERY_STRING . '&' . "_pause=1" ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("pause") ?></font></a> |
 <?php
     }
 ?>
-            <a href="photos.php?<?= str_replace("_off=$offset", "_off=0", $QUERY_STRING) ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("stop") ?></font></a> |
-            <a href="photo.php?<?= $QUERY_STRING ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("open") ?></font></a>
+            <a href="photos.php?<?php echo str_replace("_off=$offset", "_off=0", $QUERY_STRING) ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("stop") ?></font></a> |
+            <a href="photo.php?<?php echo $QUERY_STRING ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("open") ?></font></a>
           ]
           </font></td>
         </tr>
@@ -73,7 +73,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
 <?php
     if ($num_thumbnails <= 0) {
 ?>
@@ -91,15 +91,15 @@
         <tr>
           <td colspan="2" align="center">
             <font size="-1">
-            <?= $photo->get_fullsize_link($photo->get("name")) ?> :
-            <?= $photo->get("width") ?> x <?= $photo->get("height") ?>,
-         <?= $photo->get("size") ?> <?php echo translate("bytes") ?>
+            <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
+            <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
+         <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
             </font>
           </td>
         </tr>
         <tr>
           <td colspan="2" align="center">
-            <?= $photo->get_fullsize_link($photo->get_midsize_img()) ?>
+            <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
           </td>
         </tr>
 <?php
@@ -108,21 +108,21 @@
         <tr>
           <td colspan="2" align="center">
             <font size="-1">
-            <?= $people_links ?>
+            <?php echo $people_links ?>
             </font>
           </td>
         </tr>
 <?php
         }
 ?>
-<?= create_field_html($photo->get_display_array(), 2) ?>
+<?php echo create_field_html($photo->get_display_array(), 2) ?>
 <?php
         if ($photo->get("description")) {
 ?>
         <tr>
           <td colspan="2" align="center">
             <hr width="80%">
-            <?= $photo->get("description") ?>
+            <?php echo $photo->get("description") ?>
           </td>
         </tr>
 <?php

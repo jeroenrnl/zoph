@@ -82,7 +82,7 @@
 
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
           <th align="left">
   <?php echo translate("email photo") ?>
@@ -93,13 +93,13 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
 <?php
     if ($msg) {
 ?>
         <tr>
           <td colspan="2" align="center">
-            <?= $msg ?>
+            <?php echo $msg ?>
           </td>
         </tr>
 <?php
@@ -109,54 +109,54 @@
 ?>
         <tr>
           <td align="right">
-<form action="<?= $PHP_SELF ?>" method="post">
+<form action="<?php echo $PHP_SELF ?>" method="post">
 <input type="hidden" name="_action" value="mail">
-<input type="hidden" name="photo_id" value="<?= $photo_id ?>">
+<input type="hidden" name="photo_id" value="<?php echo $photo_id ?>">
        <?php echo translate("send as html") ?>
           </td>
           <td>
-            <?= create_pulldown("html", "1", array("1" => translate("Yes",0), "0" => translate("No",0))) ?>
+            <?php echo create_pulldown("html", "1", array("1" => translate("Yes",0), "0" => translate("No",0))) ?>
           </td>
         </tr>
         <tr>
           <td align="right"><?php echo translate("to (name)") ?></td>
           <td>
-            <?= create_text_input("to_name", $to_name, 24, 32) ?>
+            <?php echo create_text_input("to_name", $to_name, 24, 32) ?>
           </td>
         </tr>
         <tr>
           <td align="right"><?php echo translate("to (email)") ?></td>
           <td>
-            <?= create_text_input("to_email", $to_email, 24, 32) ?>
+            <?php echo create_text_input("to_email", $to_email, 24, 32) ?>
           </td>
         </tr>
         <tr>
           <td align="right"><?php echo translate("from (your name)") ?></td>
           <td>
-            <?= create_text_input("from_name", $from_name, 24, 32) ?>
+            <?php echo create_text_input("from_name", $from_name, 24, 32) ?>
           </td>
         </tr>
         <tr>
           <td align="right"><?php echo translate("from (your email)") ?></td>
           <td>
-            <?= create_text_input("from_email", $from_email, 24, 64) ?>
+            <?php echo create_text_input("from_email", $from_email, 24, 64) ?>
           </td>
         </tr>
         <tr>
           <td align="right"><?php echo translate("subject") ?></td>
           <td>
-            <?= create_text_input("subject", $subject, 48, 64) ?>
+            <?php echo create_text_input("subject", $subject, 48, 64) ?>
           </td>
         </tr>
         <tr>
           <td colspan="2" align="center">
             <?php echo translate("message:") ?><br>
-            <textarea name="message" cols="70" rows="5"><?= $body ?></textarea>
+            <textarea name="message" cols="70" rows="5"><?php echo $body ?></textarea>
           </td>
         </tr>
         <tr>
           <td colspan="2" align="center">
-            <?= $photo->get_midsize_img() ?>
+            <?php echo $photo->get_midsize_img() ?>
           </td>
         </tr>
         <tr>

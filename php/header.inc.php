@@ -4,19 +4,19 @@ print $rtplang->lang_header();
 
 // these $styles are CSS for the calendar class
 ?>
-<?= $styles ? $styles : "" ?>
-<title><?= ZOPH_TITLE . ($title ? " - $title" : "") ?></title>
+<?php echo $styles ? $styles : "" ?>
+<title><?php echo ZOPH_TITLE . ($title ? " - $title" : "") ?></title>
 </head>
-<body bgcolor="<?= $PAGE_BG_COLOR ?>" text="<?= $TEXT_COLOR ?>" link="<?= $LINK_COLOR ?>" vlink="<?= $VLINK_COLOR ?>">
+<body bgcolor="<?php echo $PAGE_BG_COLOR ?>" text="<?php echo $TEXT_COLOR ?>" link="<?php echo $LINK_COLOR ?>" vlink="<?php echo $VLINK_COLOR ?>">
 
 <div align="center">
 
-<table border="0" cellpadding="1" cellspacing="0" bgcolor="<?= $TABLE_BORDER_COLOR ?>"<?= $table_width ?>>
+<table border="0" cellpadding="1" cellspacing="0" bgcolor="<?php echo $TABLE_BORDER_COLOR ?>"<?php echo $table_width ?>>
   <tr>
-    <td bgcolor="<?= $PAGE_BG_COLOR ?>" align="right">
-      <table border="0" cellpadding="2" cellspacing="1" bgcolor="<?= $PAGE_BG_COLOR ?>">
+    <td bgcolor="<?php echo $PAGE_BG_COLOR ?>" align="right">
+      <table border="0" cellpadding="2" cellspacing="1" bgcolor="<?php echo $PAGE_BG_COLOR ?>">
         <tr align="right">
-          <td bgcolor="<?= $PAGE_BG_COLOR ?>" width="100%">&nbsp;</td>
+          <td bgcolor="<?php echo $PAGE_BG_COLOR ?>" width="100%">&nbsp;</td>
 <?php
     $tabs = array(
         translate("home", 0) => "zoph.php",
@@ -73,8 +73,8 @@ print $rtplang->lang_header();
             $textcolor = $TAB_FONT_COLOR;
         }
 ?>
-          <td bgcolor="<?= $bgcolor ?>">
-            <a href="<?= $page ?>"><font size="-1" color="<?= $textcolor ?>"> <?= $label ?></font></a>
+          <td bgcolor="<?php echo $bgcolor ?>">
+            <a href="<?php echo $page ?>"><font size="-1" color="<?php echo $textcolor ?>"> <?php echo $label ?></font></a>
           </td>
 <?php
     }

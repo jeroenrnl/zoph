@@ -22,14 +22,14 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
         <tr>
-          <th align="left"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("albums") ?></font></th>
-          <td align="right"><font color="<?= $TITLE_FONT_COLOR ?>">
+          <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("albums") ?></font></th>
+          <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
 <?php
     if ($user->is_admin()) {
 ?>
-            [ <a href="album.php?_action=new&parent_album_id=<?= $album->get("album_id") ?>"><font color="<?= $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a> ]
+            [ <a href="album.php?_action=new&parent_album_id=<?php echo $album->get("album_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("new") ?></font></a> ]
 <?php
     }
     else {
@@ -43,26 +43,26 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?=$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
         <tr>
           <th align="left">
 <?php
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
 ?>
-            <?= $parent->get_link() ?> &gt;
+            <?php echo $parent->get_link() ?> &gt;
 <?php
         }
     }
 ?>
-            <?= $title ?>
+            <?php echo $title ?>
           </th>
           <td align="right">
 <?php
     if ($user->is_admin()) {
 ?>
           [
-            <a href="album.php?_action=edit&album_id=<?= $album->get("album_id") ?>"><?php echo translate("edit") ?></a>
+            <a href="album.php?_action=edit&album_id=<?php echo $album->get("album_id") ?>"><?php echo translate("edit") ?></a>
           ]
 <?php
     }
@@ -77,7 +77,7 @@
 ?>
         <tr>
           <td colspan="2">
-            <?= $album->get("album_description") ?>
+            <?php echo $album->get("album_description") ?>
           </td>
         </tr>
 <?php
@@ -108,13 +108,13 @@
 ?>
           </td>
           <td align="right">
-            [ <a href="photos.php?album_id=<?= $album->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a> ]
+            [ <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a> ]
           </td>
 <?php
     }
     else {
 ?>
-          <?php echo translate("There are no photos") ?> <?= $fragment ?>.
+          <?php echo translate("There are no photos") ?> <?php echo $fragment ?>.
           </td>
           <td align="right">&nbsp;</td>
 <?php
@@ -130,7 +130,7 @@
         foreach($children as $a) {
 ?>
             <li>
-            <a href="albums.php?parent_album_id=<?= $a->get("album_id") ?>"><?= $a->get("album") ?></a>
+            <a href="albums.php?parent_album_id=<?php echo $a->get("album_id") ?>"><?php echo $a->get("album") ?></a>
             </li>
 <?php
         }
