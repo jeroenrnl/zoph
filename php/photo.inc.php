@@ -65,38 +65,38 @@ class photo extends zoph_table {
             "photo_albums"));
     }
 
-    function update($vars = null) {
+    function update($vars = null, $suffix = '') {
         parent::update();
 
         if (!$vars) { return; }
 
-        if ($vars["_album"]) {
-            if ($vars["_remove"]) {
-                $this->remove_from_album($vars["_album"]);
-            }
-            else {
-                $this->add_to_album($vars["_album"]);
-            }
+        $this->update_relations($vars, $suffix);
+    }
+
+    function update_relations($vars, $suffix = '') {
+        if ($vars["_album$suffix"]) {
+            $this->add_to_album($vars["_album$suffix"]);
         }
 
-        if ($vars["_category"]) {
-            if ($vars["_remove"]) {
-                $this->remove_from_category($vars["_category"]);
-            }
-            else {
-                $this->add_to_category($vars["_category"]);
-            }
+        if ($vars["_remove_album$suffix"]) {
+            $this->remove_from_album($vars["_remove_album$suffix"]);
         }
 
-        if ($vars["_person"]) {
-            if ($vars["_remove"]) {
-                $this->remove_from_person($vars["_person"]);
-            }
-            else {
-                $this->add_to_person($vars["_person"], $vars["_position"]);
-            }
+        if ($vars["_category$suffix"]) {
+            $this->add_to_category($vars["_category$suffix"]);
         }
 
+        if ($vars["_remove_category$suffix"]) {
+            $this->remove_from_category($vars["_remove_category$suffix"]);
+        }
+
+        if ($vars["_person$suffix"]) {
+            $this->add_to_person($vars["_person$suffix"], $vars["_position$suffix"]);
+        }
+
+        if ($vars["_remove_person$suffix"]) {
+            $this->remove_from_person($vars["_remove_person$suffix"]);
+        }
     }
 
     function add_to_album($album_id) {
@@ -108,12 +108,18 @@ class photo extends zoph_table {
         execute_query($sql, 1);
     }
 
-    function remove_from_album($album_id) {
-        $sql =
-            "delete from " . DB_PREFIX . "photo_albums " .
-            "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
-            " and album_id = '" . escape_string($album_id) . "'";
-        execute_query($sql, 1);
+    function remove_from_album($album_ids) {
+        if (!is_array($album_ids)) {
+            $album_ids = array($album_ids);
+        }
+
+        foreach ($album_ids as $album_id) {
+            $sql =
+                "delete from " . DB_PREFIX . "photo_albums " .
+                "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
+                " and album_id = '" . escape_string($album_id) . "'";
+            execute_query($sql, 1);
+        }
     }
 
     function add_to_category($category_id) {
@@ -125,12 +131,18 @@ class photo extends zoph_table {
         execute_query($sql, 1);
     }
 
-    function remove_from_category($category_id) {
-        $sql =
-            "delete from " . DB_PREFIX . "photo_categories " .
-            "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
-            " and category_id = '" . escape_string($category_id) . "'";
-        execute_query($sql, 1);
+    function remove_from_category($category_ids) {
+        if (!is_array($category_ids)) {
+            $category_ids = array($category_ids);
+        }
+
+        foreach ($category_ids as $category_id) {
+            $sql =
+                "delete from " . DB_PREFIX . "photo_categories " .
+                "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
+                " and category_id = '" . escape_string($category_id) . "'";
+            execute_query($sql, 1);
+        }
     }
 
     function add_to_person($person_id, $position = "null") {
@@ -146,12 +158,18 @@ class photo extends zoph_table {
         execute_query($sql);
     }
 
-    function remove_from_person($person_id) {
-        $sql =
-            "delete from " . DB_PREFIX . "photo_people " .
-            "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
-            " and person_id = '" . escape_string($person_id) . "'";
-        execute_query($sql);
+    function remove_from_person($person_ids) {
+        if (!is_array($person_ids)) {
+            $person_ids = array($person_ids);
+        }
+
+        foreach ($person_ids as $person_id) {
+            $sql =
+                "delete from " . DB_PREFIX . "photo_people " .
+                "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
+                " and person_id = '" . escape_string($person_id) . "'";
+            execute_query($sql);
+        }
     }
 
     function lookup_albums($user = null) {

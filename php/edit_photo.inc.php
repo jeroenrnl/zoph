@@ -174,7 +174,7 @@
         if ($people) {
             foreach ($people as $person) {
                 $next_pos++;
-                $ppl_links .= "[ <a href=\"photo.php?_action=update&_remove=1&photo_id=" . $photo->get("photo_id") . "&_person=" . $person->get("person_id") . "\">remove</a> ]<br>\n";
+                $ppl_links .= "<input type=\"checkbox\" name=\"_remove_person[]\" value=\"" . $person->get("person_id") . "\">" . translate("remove") . "<br>\n";
 ?>
               <?php echo $person->get_link() ?><br>
 <?php
@@ -207,7 +207,7 @@
         $alb_links = "";
         if ($albums) {
             foreach ($albums as $album) {
-                $alb_links .= "[ <a href=\"photo.php?_action=update&_remove=1&photo_id=" . $photo->get("photo_id") . "&_album=" . $album->get("album_id") . "\">" . translate(remove) . "</a> ]<br>\n";
+                $alb_links .= "<input type=\"checkbox\" name=\"_remove_album[]\" value=\"" . $album->get("album_id") . "\">" . translate("remove") . "<br>\n";
 ?>
               <?php echo $album->get_link() ?><br>
 <?php
@@ -236,7 +236,7 @@
         $cat_links = "";
         if ($categories) {
             foreach ($categories as $category) {
-                $cat_links .= "[ <a href=\"photo.php?_action=update&_remove=1&photo_id=" . $photo->get("photo_id") . "&_category=" . $category->get("category_id") . "\">" . translate("remove") . "</a> ]<br>\n";
+                $cat_links .= "<input type=\"checkbox\" name=\"_remove_category[]\" value=\"" . $category->get("category_id") . "\">" . translate("remove") . "<br>\n";
 ?>
               <?php echo $category->get_link() ?><br>
 <?php

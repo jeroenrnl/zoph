@@ -39,18 +39,38 @@ class zoph_table {
      * Sets fields from the given array.  Can be used to set vars
      * directly from a GET or POST.
      */
-    function set_fields($vars) {
+    function set_fields($vars, $prefix = null, $suffix = null) {
 
         reset($vars);
         while (list($key, $val) = each($vars)) {
 
-            if (DEBUG) { echo "$key = $val<br>\n"; }
+            if (DEBUG > 2) { echo "$key = $val<br>\n"; }
 
             // ignore empty keys or values
             if (empty($key) || $val == "") { continue; }
 
-            // a leading uderscore signals a non-database field
-            if ($key[0] == '_') { continue; }
+            if ($prefix) {
+                if (strpos($key, $prefix) === 0) {
+                    $key = substr($key, strlen($prefix));
+                }
+                else {
+                    continue;
+                }
+            }
+            else if ($key[0] == '_') {
+                // a leading uderscore signals a non-database field
+                continue;
+            }
+
+            if ($suffix) {
+                $pos = strpos($key, $suffix);
+                if ($pos > 0) {
+                    $key = substr($key, 0, $pos);
+                }
+                else {
+                    continue;
+                }
+            }
 
             // something in ALL CAPS is probably PHP or HTML related
             if (strtoupper($key) == $key) { continue; }
