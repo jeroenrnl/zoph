@@ -98,6 +98,14 @@
 ?>
 <?php echo create_field_html($person->get_display_array(), 3) ?>
 <?php
+        if ($person->get_email()) {
+?>
+        <tr>
+          <td align="right" valign="top"><?php echo translate("email") ?></td>
+          <td><a href="mailto:<?php echo $person->get_email() ?>"><?php echo $person->get_email() ?></a></td>
+        </tr>
+<?php
+        }
         if ($person->home) {
 ?>
         <tr>

@@ -53,6 +53,11 @@
           <td><font size="-1">YYYY-MM-DD</font></td>
         </tr>
         <tr>
+          <td><?php echo translate("email") ?></td>
+          <td><?php echo create_text_input("email", $person->get("email"), 32, 64) ?></td>
+          <td><font size="-1"><?php echo sprintf(translate("%s chars max"), "64") ?></font></td>
+        </tr>
+        <tr>
           <td valign="top"><?php echo translate("home") ?></td>
           <td colspan="2">
 <?php echo create_smart_pulldown("home_id", $person->get("home_id"), get_places_select_array()) ?>

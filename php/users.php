@@ -33,10 +33,25 @@
 ?>
         <tr>
           <td>
-            <?php echo $u->get("user_name") ?>
+            <a href="user.php?user_id=<?php echo $u->get("user_id") ?>"><?php echo $u->get("user_name") ?></a>
           </td>
           <td>
-            <?php echo $u->person->get_name() ?>
+            <?php echo $u->person->get_link() ?>
+          </td>
+          <td>
+<?php
+            if ((count(get_newer_albums($u->get("user_id"), $u->get_lastnotify())) > 0)) {
+?>
+            <a href="notify.php?_action=notify&user_id=<?php echo $u->get("user_id") ?>&shownewalbums=1"><?php echo translate("Notify User", 0) ?></a>
+<?php
+            }
+            else {
+                echo "&nbsp;";
+            }
+?>
+          </td>
+          <td>
+            <?php echo $u->get("lastlogin"); ?>
           </td>
           <td align="right">
             [ <a href="user.php?user_id=<?php echo $u->get("user_id") ?>"><?php echo translate("view") ?></a> ]

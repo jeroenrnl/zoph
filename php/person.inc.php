@@ -72,6 +72,11 @@ class person extends zoph_table {
         return $name;
     }
 
+    function get_email() {
+       $email = $this->get("email");
+       return $email;
+    }
+
     function to_html() {
         return get_name();
     }

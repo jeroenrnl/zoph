@@ -98,6 +98,49 @@
       </table>
     </td>
   </tr>
+<?php
+        if ($_action == "insert") {
+            $url = ZOPH_URL;
+            if (empty($url)) {
+                $url = get_url() . "login.php";
+            }
+
+            $this_user->lookup_person();
+            $name = $this_user->person->get_name();
+
+            $subject = translate("Your Zoph Account", 0);
+            $message =
+                translate("Hi",0) . " " . $name .  ",\n\n" .
+                translate("I have created a Zoph account for you", 0) .
+                ":\n\n" .  "$url\n" .
+                translate("user name", 0) . ": " .
+                $this_user->get("user_name") . "\n" .
+                translate("password", 0) . ": " .
+                $this_user->get("password") . "\n\n" .
+                translate("Regards,",0) . "\n" .
+                $user->person->get_name();
+
+?>
+  <tr>
+    <td>
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+<form action="notify.php" method="POST">
+<input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
+<input type="hidden" name="subject" value="<?php echo $subject ?>">
+<input type="hidden" name="message" value="<?php echo $message ?>">
+        <tr>
+          <th align="center"><?php echo translate("Notify new user by email", 0) ?></th>
+        </tr>
+        <tr>
+          <td align="center"><input type="submit" name="_button" value="Compose Email"></td>
+        </tr>
+</form>
+      </table>
+    </td>
+  </tr>
+<?php
+        }
+?>
   <tr>
     <td>
       <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">

@@ -1,5 +1,19 @@
 <?php
 
+function get_url() {
+    // set to _SERVER in variables.inc.php for versions >= 4.1
+    global $HTTP_SERVER_VARS;
+
+    $script = $HTTP_SERVER_VARS['PHP_SELF'];
+
+    $url =
+        "http" . ($HTTP_SERVER_VARS['HTTPS'] == 'on' ? 's' : '') . '://' .
+        $HTTP_SERVER_VARS['SERVER_NAME'] . '/' .
+        substr($script, 1, strrpos($script, '/'));
+
+    return $url;
+}
+
 function create_field_html($fields, $cols = 2, $split = null) {
 
     $html = "";

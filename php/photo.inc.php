@@ -561,11 +561,11 @@ function goodrotate($src_img, $degrees = 90) {
         $src_img = $dst_img;
         $dst_img = imagecreatetruecolor($height, $width);
         if ((($degrees == 90) && ($width > $height)) || (($degrees == 270) && ($width < $height))) {
-                imagecopy($dst_img, $src_img, 0, 0, 0, 0, $size, $size);
-	}
-	if ((($degrees == 270) && ($width > $height)) || (($degrees == 90) && ($width < $height))) {
+            imagecopy($dst_img, $src_img, 0, 0, 0, 0, $size, $size);
+        }
+        if ((($degrees == 270) && ($width > $height)) || (($degrees == 90) && ($width < $height))) {
             imagecopy($dst_img, $src_img, 0, 0, $size - $height, $size - $width, $size, $size);
-	}
+        }
     }
     return $dst_img;
 }

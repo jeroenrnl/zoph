@@ -179,6 +179,18 @@ function get_albums($user = null) {
     return get_records_from_query("album", $sql);
 }
 
+function get_newer_albums($user_id, $date = null) {
+    $sql = "select a.* from " .
+        DB_PREFIX . "albums as a, " .
+        DB_PREFIX . "album_permissions as ap " .
+        "where ap.user_id = '" . escape_string($user_id) .
+        "' and ap.album_id = a.album_id " .
+        "and ap.changedate > '" . escape_string($date) . "' " .
+        "order by a.album_id";
+
+    return get_records_from_query("album", $sql);
+}
+
 function get_album_count($user = null) {
 
     if ($user && !$user->is_admin()) {

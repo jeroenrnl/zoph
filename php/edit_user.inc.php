@@ -17,6 +17,14 @@
 <form action="user.php" method="POST">
 <input type="hidden" name="_action" value="<?php echo $action ?>">
 <input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
+<?php
+    if ($action == "insert") {
+?>
+<input type="hidden" name="lastnotify" value="now()">
+<?php
+    }
+?>
+
 <?php echo translate("user name") ?>
           </td>
           <td><?php echo create_text_input("user_name", $this_user->get("user_name"), 16, 16) ?></td>

@@ -24,7 +24,8 @@
     // only add a crumb if a title was set and if there is either no
     // action or a safe action ("edit", "delete", etc would be unsafe)
     if ($title && count($user->crumbs) < MAX_CRUMBS &&
-        (!$_action || ($_action == "display" || $_action == "search"))) {
+        (!$_action || ($_action == "display" || $_action == "search" ||
+        $_action == "notify" || $_action == "compose"))) {
 
         $user->add_crumb($title, $REQUEST_URI);
     }

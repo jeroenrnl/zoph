@@ -15,12 +15,21 @@
     // (this needs to be the name of a function in validator.inc.php)
     $VALIDATOR = 'default_validate';
     //$VALIDATOR = 'htpasswd_validate';
+    //$VALIDATOR = 'php_validate';
 
     define(ZOPH_TITLE, "Zoph");
 
     define(LANG_DIR, "lang"); // where language files are stored
 
-    define(EMAIL_PHOTOS, 0); // enable email photo feature
+    define(EMAIL_PHOTOS, 1); // enable email photo feature
+ 
+     // sent all emails also to this address 
+     // set to '' if not needed
+     define(BCC_ADDRESS, '');
+     
+     // URL used in Notification EMail
+     // set to '' if not needed
+     define(ZOPH_URL, '');
 
     // web import of photos
     define(CLIENT_WEB_IMPORT, 1);

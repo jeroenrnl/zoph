@@ -36,6 +36,12 @@
             if (!minimum_version('4.1.0')) {
                 session_register("user");
             }
+
+
+            // Update Last Login Fields
+            $user->set("lastlogin", "now()");
+            $user->set("lastip", $_SERVER["REMOTE_ADDR"]);
+            $user->update();
         }
         else {
             header("Location: logon.php");

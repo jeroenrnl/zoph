@@ -1,6 +1,7 @@
 <?php
     require_once("include.inc.php");
-    require_once("class.html.mime.mail.inc.php");
+    require_once("htmlMimeMail.php");
+
     $title = translate("E-Mail Photo");
 
     $photo_id = getvar("photo_id");
@@ -32,11 +33,7 @@
 
         if ($_action == "mail") {
 
-            define('CRLF', "\n", TRUE);
-            define('MAIL_MIMEPART_CRLF', CRLF, TRUE);
-            //define('MAIL_MIMEPART_CRLF', "\n", TRUE);
-
-            $mail = new html_mime_mail(array('X-Mailer: Html Mime Mail Class'));
+            $mail = new htmlMimeMail(array('X-Mailer: Html Mime Mail Class'));
 
             $text = $body;
 
@@ -50,31 +47,34 @@
 
                 $dir = IMAGE_DIR . $photo->get("path") . "/" . MID_PREFIX . "/";
 
-                $mail->add_html($html, $text, $dir);
+                $mail->sethtml($html, $text, $dir);
             }
             else {
-                $mail->add_text($text);
+                $mail->settext($text);
 
-                $file = $mail->get_file($photo->get_image_href(MID_PREFIX, 1));
-                $mail->add_attachment($file, $photo->get("name"), get_image_type($photo->get("name")));
+                $file = $mail->getFile($photo->get_image_href(MID_PREFIX, 1));
+                $mail->addAttachment($file, $photo->get("name"), get_image_type($photo->get("name")));
             }
 
+            $mail->setFrom("$from_name <$from_email>");
+            $mail->setSubject($subject);
+            
+            if (strlen(BCC_ADDRESS) > 0) {
+                $mail->setBCC(BCC_ADDRESS);
+            }
 
-            if (!$mail->build_message()) {
-                $msg .= translate("Could not build message.");
-            }
-            else if (!$mail->send($to_name, $to_email, $from_name, $from_email, $subject)) {
-                $msg .= translate("Could not send mail.");
-            }
-            else {
+            if ($mail->send(array("$to_name <$to_email>"), 'smtp')) {
                 $msg = translate("Your mail has been sent.");
             }
-            //$msg .= '<br><PRE>' . htmlentities($mail->get_rfc822($to_name, $to_email, $from_name, $from_email, $subject)) . '</PRE>';
+            else {
+                $msg = translate("Could not send mail.");
+            }
         }
 
     }
 
     $from_name = $user->person->get_name();
+    $from_email = $user->person->get_email();
 
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");

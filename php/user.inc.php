@@ -39,6 +39,10 @@ class user extends zoph_table {
         return $this->get("user_class") == 0;
     }
 
+    function get_lastnotify() {
+        return $this->get("lastnotify");
+    }
+
     function get_album_permissions($album_id) {
         $ap = new album_permissions($this->get("user_id"), $album_id);
         if ($ap->lookup()) {
@@ -47,6 +51,7 @@ class user extends zoph_table {
 
         return null;
     }
+
 
     function get_permissions_for_photo($photo_id) {
 
@@ -90,7 +95,11 @@ class user extends zoph_table {
                 ? translate("Yes") : translate("No"),
             translate("can import") =>
                 $this->get("import") == 1
-                ? translate("Yes") : translate("No"));
+                ? translate("Yes") : translate("No"),
+            translate("last login") =>
+                $this->get("lastlogin"),
+            translate("last ip address") =>
+                $this->get("lastip"));
 
         if ($this->get("lightbox_id")) {
             $lightbox = new album($this->get("lightbox_id"));

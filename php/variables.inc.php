@@ -58,6 +58,8 @@ function remove_magic_quotes(&$x) {
 }
 
 if (minimum_version('4.1.0')) {
+    $HTTP_SERVER_VARS = &$_SERVER;
+
     $PHP_SELF = &$_SERVER["PHP_SELF"];
     $QUERY_STRING = &$_SERVER["QUERY_STRING"];
     $REQUEST_URI = &$_SERVER["REQUEST_URI"];
