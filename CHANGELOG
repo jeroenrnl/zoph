@@ -11,6 +11,9 @@ Zoph 0.4pre1
 - Added DB_PREFIX in config.inc.php and updated sql to use (req#656450)
 - Fixed DEFAULT_ORDERING bug in photos.php and photo_search.inc.php (bug#667484)
 - Fixed bug with date ordering failing to imply time ordering in photo_search.inc.php (pat#675164) (thanks Ian Kerr)
+- Fixed bug in which PHPSESSID failed to be passed in image links when cookies were disabled (bug#663523)
+- Fixed a bug in which update_query_string() in util.inc.php failed to overwrite new parameters (bug#678491)
+- Updated exif flash handling in exif.inc.php (bug#671023)
 - Included an udpated language package with new German, Dutch and Canadian English translations
 
 Zoph 0.3.3
