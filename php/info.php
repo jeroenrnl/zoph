@@ -34,41 +34,37 @@
 
 <?php echo sprintf(translate("Send feedback to %s.", 0), "<a href=\"mailto:zoph@nother.net\">zoph@nother.net</a>") ?>
 </p>
-<p>
-<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, "13 December 2002") ?>
-</p>
-<p>
-<?php echo translate("Written by Jason Geiger with thanks to the following for their contributions:", 0) ?>
-
-Eric Seigne (internationalization),
-David Baldwin (PHP 4.2 compatibility and fixes),
-Francisco J. Montilla (bugfixes and improvements),
-Jan Miczaika (importer),
-Donald Gover (bugfixes),
-Matthew MacIntyre (bugfixes),
-David Moulton (improvements),
-Alan Shutko (improvements),
-Christian Hoenig (improvements),
-Francesco Ciattaglia (translation),
-Haavard Leonardo Lund (translation),
-Alvaro González Crespo (translation),
-Tetsuji Kyan (bugfixes),
-Ian Kerr (bugfixes),
-Mark Cooper (man page).
-</p>
           </td>
         </tr>
 <?php
     if ($user->is_admin()) {
 ?>
         <tr>
-      <td width="50%">&nbsp;</td>
-      <td width="50%">&nbsp;</td>
+          <td width="50%">&nbsp;</td>
+          <td width="50%">&nbsp;</td>
         </tr>
 <?php echo create_field_html(get_zoph_info_array()) ?>
 <?php
     }
 ?>
+        <tr>
+          <td colspan="2">
+            <hr>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+<p>
+<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, "June 2003") ?>
+</p>
+<p>
+<?php echo translate("Written by Jason Geiger with thanks to the following for their contributions:", 0) ?>
+</p>
+<p>
+<?php include('credits.html'); ?>
+</p>
+          </td>
+        </tr>
       </table>
     </td>
   </tr>
