@@ -65,6 +65,13 @@
     // image types - jpg, gif, tif) if MIXED_THUMBNAILS is set.
     define(THUMB_EXTENSION, "jpg");
 
+    // allow images to be rotated
+    define(ALLOW_ROTATIONS, 1);
+    // set to 1 to backup the original before it is rotated
+    define(BACKUP_ORIGINAL, 1);
+    // copy the original to a file with this prefix
+    define(BACKUP_PREFIX, 'orig_');
+
     // width of the main table
     define(DEFAULT_TABLE_WIDTH, 520);
     //define(DEFAULT_TABLE_WIDTH, "100%");

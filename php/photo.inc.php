@@ -304,6 +304,68 @@ class photo extends zoph_table {
         return "<img border=\"0\" src=\"$image_href\"" . $size_string . ">";
     }
 
+    function rotate($deg) {
+
+        if (!ALLOW_ROTATIONS || !$this->get('name') || !$this->get('path')) {
+            return;
+        }
+
+        $dir = IMAGE_DIR . $this->get("path") . "/";
+        $name = $this->get('name');
+
+        $images[$dir . THUMB_PREFIX . '/' . THUMB_PREFIX . '_' . $name] =
+            $dir . THUMB_PREFIX . '/rot_' . THUMB_PREFIX . '_' . $name;
+
+        $images[$dir . MID_PREFIX . '/' . MID_PREFIX . '_' . $name] =
+            $dir . MID_PREFIX . '/rot_' . MID_PREFIX . '_' . $name;
+
+        $images[$dir . $name] = $dir . 'rot_' . $name;
+
+        if (BACKUP_ORIGINAL) {
+            $backup_name = BACKUP_PREFIX . $name;
+            if (!copy($dir . $name, $dir . $backup_name)) {
+                echo sprintf(translate("Could not copy %s to %s."), $name, $backup_name) . "<br>\n";
+                return;
+            }
+        }
+
+        // make a system call to convert() to do the rotation
+        // in the future, use PHP's imagerotate() function,
+        // but it only appears >= 4.3.0 (and is buggy at the moment)
+        while (list($file, $tmp_file) = each($images)) {
+            $cmd =
+                'convert -rotate ' . escapeshellarg($deg) . ' ' .
+                escapeshellarg($file) . ' ' . escapeshellarg($tmp_file) .
+                ' 2>&1';
+;
+            //echo "$cmd<br>\n";
+            $output = system($cmd);
+
+            if ($output) { // error
+                echo translate("An error occurred.") . " $output<br>\n";
+                continue; // or return;
+            }
+
+            if (!rename($tmp_file, $file)) {
+                echo sprintf(translate("Could not rename %s to %s."), $tmp_file, $file) . "<br>\n";
+                continue; // or return;
+            }
+
+        }
+
+        // update the size and dimensions
+        // (only if original was rotated)
+        $file = $dir . $name;
+        $size = filesize($file);
+        $dimensions = getimagesize($file);
+        $this->set('size', $size);
+        $this->set('width', $dimensions[0]);
+        $this->set('height', $dimensions[1]);
+        $this->update();
+
+        return 1;
+    }
+
     function get_display_array() {
         return array(
             translate("title") => $this->get("title"),

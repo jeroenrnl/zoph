@@ -99,6 +99,14 @@
         if (!$link) { $link = "zoph.php"; }
         header("Location: " . add_sid($link));
     }
+    else if ($_action == "rotate") {
+        if (ALLOW_ROTATIONS) {
+            $photo->lookup($user);
+            $_deg = getvar("_deg");
+            $photo->rotate($_deg);
+        }
+        $action = "display";
+    }
     else {
         $action = "display";
     }
@@ -184,6 +192,20 @@ require_once("header.inc.php");
   <tr>
     <td>
       <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
+<?php
+    if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
+?>
+        <tr>
+          <td colspan="2" align="center">
+            <?php echo translate("rotate") ?>
+            <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_action=rotate&_deg=90">90</a> |
+            <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_action=rotate&_deg=180">180</a> |
+            <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_action=rotate&_deg=270">270</a>
+          </td>
+        </tr>
+<?php
+    }
+?>
         <tr>
           <td colspan="2" align="center">
             <table width="100%">
