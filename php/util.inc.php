@@ -101,7 +101,7 @@ function create_integer_pulldown($name, $value, $min, $max) {
     return create_pulldown($name, $value, $integer_array);
 }
 
-function create_rating_pulldown($val = "3") {
+function create_rating_pulldown($val = "3", $name = "rating") {
     $rating_array = array(
         "" => "",
         "1" => translate("1 - close your eyes",0),
@@ -114,7 +114,7 @@ function create_rating_pulldown($val = "3") {
         "8" => translate("8",0),
         "9" => translate("9",0),
         "10" => translate("10 - museum",0));
-    return create_pulldown("rating", $val, $rating_array);
+    return create_pulldown($name, $val, $rating_array);
 }
 
 function create_conjunction_pulldown($var) {

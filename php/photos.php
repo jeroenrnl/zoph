@@ -67,6 +67,7 @@
           <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
             [
             <a href="slideshow.php?<?php echo update_query_string($request_vars, "_off", $offset) ?>"><?php echo translate("Slideshow") ?></a>
+            | <a href="edit_photos.php?<?php echo update_query_string($request_vars, "_off", $offset) ?>"><?php echo translate("Edit Photos") ?></a>
             ]
           </font></td>
         </tr>

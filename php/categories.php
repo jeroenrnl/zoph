@@ -95,7 +95,7 @@
         }
         else {
             if ($children) {
-                $fragment .= translate("or its children");
+                $fragment .= " " . translate("or its children");
             }
         }
 

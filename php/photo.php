@@ -197,7 +197,7 @@ require_once("header.inc.php");
 ?>
         <tr>
           <td colspan="2" align="center">
-            <?php echo translate("rotate") ?>
+            <?php echo translate("rotate", 0) ?>
             <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_action=rotate&_deg=90">90</a> |
             <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_action=rotate&_deg=180">180</a> |
             <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_action=rotate&_deg=270">270</a>
