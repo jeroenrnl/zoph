@@ -490,10 +490,14 @@ function create_link_list($records) {
  */
 function escape_string($str) {
 
+    /*
+       Now every request var should be retrieved from the
+       getvar() function, which will strip the slashes.
     if (ini_get("magic_quotes_gpc")) {
         // unstrip quotes
         $str = stripslashes($str);
     }
+    */
 
     return mysql_escape_string($str);
 
