@@ -11,7 +11,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
 <form action="place.php" method="GET">
 <input type="hidden" name="_action" value="<?php echo $action ?>">
 <input type="hidden" name="place_id" value="<?php echo $place->get("place_id") ?>">

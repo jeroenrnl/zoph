@@ -116,7 +116,7 @@ require_once("header.inc.php");
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
 <?php
     // no photo was found and this isn't a new record
     if ($action != "insert" && !$found) {
@@ -130,7 +130,7 @@ require_once("header.inc.php");
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
         <tr>
           <td colspan="2" align="center">
            <?php echo translate("No photo was found.") ?>
@@ -183,7 +183,7 @@ require_once("header.inc.php");
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
         <tr>
           <td colspan="2" align="center">
             <table width="100%">
@@ -243,12 +243,12 @@ require_once("header.inc.php");
           <td align="right"><?php echo translate("last modified") ?></td>
           <td><?php echo format_timestamp($photo->get("timestamp")) ?></td>
         </tr>
-        <tr bgcolor="<?php echo$TITLE_BG_COLOR?>"> 
+        <tr bgcolor="<?php echo $TITLE_BG_COLOR?>"> 
           <td colspan="2">
 <?php
         if ($photo->get("description")) {
 ?>
-            <table cellspacing="0" cellpadding="4" bgcolor="<?php echo$TABLE_BG_COLOR?>" width="100%">
+            <table cellspacing="0" cellpadding="4" bgcolor="<?php echo $TABLE_BG_COLOR?>" width="100%">
               <tr>
                 <td>
             <?php echo $photo->get("description") ?>
@@ -275,7 +275,7 @@ require_once("header.inc.php");
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $photo->get("name")) ?>

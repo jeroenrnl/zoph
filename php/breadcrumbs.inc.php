@@ -42,7 +42,7 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$BREADCRUMB_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $BREADCRUMB_BG_COLOR?>">
         <tr>
           <td><font size="-1">
 <?php echo $crumb_string ?>

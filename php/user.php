@@ -69,7 +69,7 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
 <?php
     if ($action == "display") {
 ?>
@@ -88,7 +88,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
         <tr>
           <th align="left" colspan="3">
             <?php echo $this_user->get("user_name") ?>
@@ -100,7 +100,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
         <tr>
           <th align="center" colspan="3"><?php echo translate("Albums") ?></th>
         </tr>
@@ -149,7 +149,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $this_user->get("user_name")) ?>
@@ -166,7 +166,7 @@ require_once("edit_user.inc.php");
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
         <tr>
           <th align="center" colspan="5"><?php echo translate("Albums") ?></th>
         </tr>

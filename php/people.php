@@ -22,7 +22,7 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
         <tr>
           <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("people") ?></font></th>
           <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
@@ -45,7 +45,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
         <tr>
           <td colspan="2" align="center">[
 <?php
@@ -69,7 +69,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
 <?php
     $constraints = null;
     if ($_l == "all") {

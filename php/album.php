@@ -30,7 +30,7 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
 <?php
     if ($action == "confirm") {
 ?>
@@ -42,7 +42,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
         <tr>
           <td>
             <?php echo sprintf(translate("Confirm deletion of '%s' and its subalbums:"), $album->get("album")) ?>
@@ -71,7 +71,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
 <form action="album.php">
 <input type="hidden" name="_action" value="<?php echo $action ?>">
 <input type="hidden" name="album_id" value="<?php echo $album->get("album_id") ?>">

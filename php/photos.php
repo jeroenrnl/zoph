@@ -61,7 +61,7 @@
 ?>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TITLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TITLE_BG_COLOR?>">
         <tr>
           <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo $title_bar ?></font></th>
           <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
@@ -75,7 +75,7 @@
   </tr>
   <tr>
     <td>
-      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+      <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
 <?php
     if ($num_thumbnails <= 0) {
 ?>
@@ -96,7 +96,7 @@
  <?php echo create_photo_field_pulldown("_order", $_order) ?>
           </td>
           <td width="20" align="center">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="<?php echo$TABLE_BG_COLOR?>">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
               <tr>
                 <td><a href="photos.php?<?php echo update_query_string($request_vars, "_dir", "asc") ?>"><img src="images/up<?php echo $_dir == "asc" ? 1 : 2 ?>.gif" border="0" width="16" height="8"></a></td>
               </tr>
