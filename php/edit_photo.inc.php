@@ -1,7 +1,7 @@
 <?php
     $return_qs = getvar("_qs");
     if (empty($return_qs)) {
-        $qs = "_action=display&photo_id=" . $photo->get("photo_id");
+        $return_qs = "_action=display&photo_id=" . $photo->get("photo_id");
     }
 ?>
         <tr>
