@@ -32,9 +32,11 @@ class category extends zoph_tree_table {
 
         if ($user && !$user->is_admin()) {
             $sql =
-                "select count(distinct pc.photo_id) " .
-                "from photo_categories as pc, photo_albums as pa," .
-                " photos as p, album_permissions as ap " .
+                "select count(distinct pc.photo_id) from " .
+                DB_PREFIX . "photo_categories as pc, " .
+                DB_PREFIX . "photo_albums as pa, " .
+                DB_PREFIX . "photos as p, " .
+                DB_PREFIX . "album_permissions as ap " .
                 "where pc.category_id = '" .  escape_string($id) . "'" .
                 " and ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
                 " and pc.photo_id = pa.photo_id" .
@@ -44,7 +46,8 @@ class category extends zoph_tree_table {
         }
         else {
             $sql =
-                "select count(photo_id) from photo_categories " .
+                "select count(photo_id) from " .
+                DB_PREFIX . "photo_categories " .
                 "where category_id = '" .  escape_string($id) . "'";
         }
 
@@ -63,9 +66,11 @@ class category extends zoph_tree_table {
 
         if ($user && !$user->is_admin()) {
             $sql =
-                "select count(distinct pc.photo_id) " .
-                "from photo_categories as pc, photo_albums as pa," .
-                " photos as p, album_permissions as ap " .
+                "select count(distinct pc.photo_id) from " .
+                DB_PREFIX . "photo_categories as pc, " .
+                DB_PREFIX . "photo_albums as pa, " .
+                DB_PREFIX . "photos as p, " .
+                DB_PREFIX . "album_permissions as ap " .
                 "where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
                 " and pc.photo_id = pa.photo_id" .
                 " and pa.album_id = ap.album_id" .
@@ -78,8 +83,9 @@ class category extends zoph_tree_table {
         }
         else {
             $sql =
-                "select count(distinct pc.photo_id) " .
-                "from photo_categories as pc";
+                "select count(distinct pc.photo_id) from " .
+                DB_PREFIX . "photo_categories as pc";
+
             if ($id_constraint) {
                 $sql .= " where $id_constraint";
             }
@@ -131,9 +137,11 @@ function get_popular_categories($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select cat.*, count(*) as count " .
-            "from categories as cat, photo_albums as pa, " .
-            "album_permissions as ap, photo_categories as pc " .
+            "select cat.*, count(*) as count from " .
+            DB_PREFIX . "categories as cat, " .
+            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "album_permissions as ap, " .
+            DB_PREFIX . "photo_categories as pc " .
             "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = pc.photo_id " .
@@ -144,8 +152,9 @@ function get_popular_categories($user) {
     }
     else {
         $sql =
-            "select cat.*, count(*) as count " .
-            "from categories as cat, photo_categories as pc " .
+            "select cat.*, count(*) as count from " .
+            DB_PREFIX . "categories as cat, " .
+            DB_PREFIX . "photo_categories as pc " .
             "where pc.category_id = cat.category_id " .
             "group by cat.category_id " .
             "order by count desc, cat.category " .

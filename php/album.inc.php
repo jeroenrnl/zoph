@@ -18,13 +18,17 @@ class album extends zoph_tree_table {
 
         if ($user && !$user->is_admin()) {
             $sql =
-                 "select a.* from albums as a, album_permissions as ap " .
+                 "select a.* from "  .
+                 DB_PREFIX . "albums as a, " .
+                 DB_PREFIX . "album_permissions as ap " .
                  "where ap.album_id = '" . escape_string($id) . "'" .
                  " and ap.user_id = '" . escape_string($user->get("user_id")) .
                  "' and ap.album_id = a.album_id";
         }
         else {
-            $sql = "select * from albums where album_id = " . $id;
+            $sql =
+                "select * from " . DB_PREFIX . "albums " .
+                "where album_id = " . $id;
         }
 
         return parent::lookup($sql);
@@ -41,8 +45,9 @@ class album extends zoph_tree_table {
 
         if ($user && !$user->is_admin()) {
             $sql =
-                 "select a.album_id, a.album, a.album_description " .
-                 "from albums as a, album_permissions as ap " .
+                 "select a.album_id, a.album, a.album_description from " .
+                 DB_PREFIX . "albums as a, " .
+                 DB_PREFIX . "album_permissions as ap " .
                  "where a.parent_album_id = '" . escape_string($id) . "'" .
                  " and ap.user_id = '" . escape_string($user->get("user_id")) .
                  "' and ap.album_id = a.album_id" .
@@ -50,9 +55,9 @@ class album extends zoph_tree_table {
         }
         else {
             $sql =
-                 "select album_id, album, album_description " .
-                 "from albums where parent_album_id = $id " .
-                 "order by album";
+                 "select album_id, album, album_description from " .
+                 DB_PREFIX . "albums " .
+                 "where parent_album_id = $id order by album";
         }
 
         $this->children = get_records_from_query("album", $sql);
@@ -68,9 +73,10 @@ class album extends zoph_tree_table {
 
         if ($user && !$user->is_admin()) {
             $sql =
-                "select count(*) " .
-                "from photo_albums as pa, photos as p, " .
-                "album_permissions as ap " .
+                "select count(*) from " .
+                DB_PREFIX . "photo_albums as pa, " .
+                DB_PREFIX . "photos as p, " .
+                DB_PREFIX . "album_permissions as ap " .
                 "where pa.album_id = $id" .
                 " and ap.user_id = '" . escape_string($user->get("user_id")) .
                 "' and ap.album_id = pa.album_id" .
@@ -79,7 +85,8 @@ class album extends zoph_tree_table {
         }
         else {
             $sql =
-                "select count(*) from photo_albums " .
+                "select count(*) from " .
+                DB_PREFIX . "photo_albums " .
                 "where album_id = '" .  escape_string($id) . "'";
         }
 
@@ -97,9 +104,10 @@ class album extends zoph_tree_table {
 
         if ($user && !$user->is_admin()) {
             $sql =
-                "select count(distinct pa.photo_id) " .
-                "from photo_albums as pa, photos as p, " .
-                "album_permissions as ap " .
+                "select count(distinct pa.photo_id) from " .
+                DB_PREFIX . "photo_albums as pa, " .
+                DB_PREFIX . "photos as p, " .
+                DB_PREFIX . "album_permissions as ap " .
                 "where ap.user_id = '" . escape_string($user->get("user_id")) .
                 "' and ap.album_id = pa.album_id " .
                 " and pa.photo_id = p.photo_id " .
@@ -111,7 +119,8 @@ class album extends zoph_tree_table {
         }
         else {
             $sql =
-                "select count(distinct pa.photo_id) from photo_albums pa";
+                "select count(distinct pa.photo_id) from " .
+                DB_PREFIX . "photo_albums pa ";
                 "where ($id_values)";
 
             if ($id_constraint) {
@@ -156,13 +165,15 @@ function get_albums($user = null) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-             "select a.* from albums as a, album_permissions as ap " .
+             "select a.* from " .
+             DB_PREFIX . "albums as a, " .
+             DB_PREFIX . "album_permissions as ap " .
              "where ap.user_id = '" . escape_string($user->get("user_id")) .
              "' and ap.album_id = a.album_id " .
              "order by a.album";
     }
     else {
-        $sql = "select * from albums order by album";
+        $sql = "select * from " . DB_PREFIX . "albums order by album";
     }
 
     return get_records_from_query("album", $sql);
@@ -172,11 +183,11 @@ function get_album_count($user = null) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select count(*) from album_permissions where user_id = '" .
-            escape_string($user->get("user_id")) . "'";
+            "select count(*) from " . DB_PREFIX . "album_permissions " .
+            "where user_id = '" . escape_string($user->get("user_id")) . "'";
     }
     else {
-        $sql = "select count(*) from albums";
+        $sql = "select count(*) from " . DB_PREFIX . "albums";
     }
 
     return get_count_from_query($sql);
@@ -196,9 +207,10 @@ function get_popular_albums($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select al.*, count(*) as count " .
-            "from albums as al, photo_albums as pa, " .
-            "album_permissions as ap " .
+            "select al.*, count(*) as count from " .
+            DB_PREFIX . "albums as al, " .
+            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "album_permissions as ap " .
             "where ap.user_id = '" . escape_string($user->get("user_id")) .
             "' and ap.album_id = pa.album_id" .
             " and pa.album_id = al.album_id " .
@@ -208,8 +220,9 @@ function get_popular_albums($user) {
     }
     else {
         $sql =
-            "select al.*, count(*) as count " .
-            "from albums as al, photo_albums as pa " .
+            "select al.*, count(*) as count from " .
+            DB_PREFIX . "albums as al, " .
+            DB_PREFIX . "photo_albums as pa " .
             "where pa.album_id = al.album_id " .
             "group by al.album_id " .
             "order by count desc, al.album " .

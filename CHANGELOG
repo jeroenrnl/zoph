@@ -1,5 +1,15 @@
 Zoph Changelog
 
+Zoph 0.4pre1
+
+- Created a validator class to allow different types of authentication
+- Added a function to validator.inc.php to allow htpasswd authentication (req#656449) (thanks Asheesh Laroia)
+- Added $host param to zophImport.pl (bug#656438)
+- Fixed it's vs its grammar (bug#656444)
+- Changed "<?=" to "<?php echo" for short_open_tag = Off compatibility (bug#670542)
+- Changed logout tab in header.inc.php to show "logon" for default users (req#656448)
+- Included an udpated language package with new German, Dutch and Canadian English translations
+
 Zoph 0.3.3
 13 Dec 2002
 

@@ -221,7 +221,7 @@ function generate_from_clause($from_array) {
     if ($from_array) {
         while (list($abbrev, $table) = each($from_array)) {
             if ($fromClause) { $fromClause .= ", "; }
-            $fromClause .= "$table as $abbrev";
+            $fromClause .= DB_PREFIX . "$table as $abbrev";
         }
     }
     return $fromClause;
@@ -231,8 +231,8 @@ function generate_from_clause($from_array) {
   The generate_excluded methods below simulate subselects since MySQL
   doesn not support them.  These are kind of ugly but the problem is
   that for "not in" or "!=" constraints on albums, categories or people,
-  a simple joing will not work (as it does in the non-negated case).
-  This is because when a photos is in multiple albums or cats, or there
+  a simple joining will not work (as it does in the non-negated case).
+  This is because when a photo is in multiple albums or cats, or there
   are multiple people in the photo, the join will match one of the
   other rows.  I hope there is a better way to do this.
 */
@@ -241,7 +241,7 @@ function generate_excluded_albums_clause($excluded_albums, $from, $where) {
 
     $album_from = $from;
     if ($album_from) { $album_from .= ", "; }
-    $album_from .= "photo_albums as pa";
+    $album_from .= DB_PREFIX . "photo_albums as pa";
 
     $album_constraints = "";
 
@@ -273,7 +273,7 @@ function generate_excluded_categories_clause($excluded_categories, $from, $where
 
     $cat_from = $from;
     if ($cat_from) { $cat_from .= ", "; }
-    $cat_from .= "photo_categories as pc";
+    $cat_from .= DB_PREFIX . "photo_categories as pc";
 
     $cat_constraints = "";
 
@@ -305,7 +305,7 @@ function generate_excluded_people_clause($excluded_people, $from, $where) {
 
     $person_from = $from;
     if ($person_from) { $person_from .= ", "; }
-    $person_from .= "photo_people as pp";
+    $person_from .= DB_PREFIX . "photo_people as pp";
 
     $person_constraints = "";
 

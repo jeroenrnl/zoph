@@ -111,9 +111,12 @@ function get_photographed_people($user = null) {
 
     if ($user && !$user->is_admin()) {
         $query =
-            "select distinct ppl.* " .
-            "from people as ppl, photos as ph, photo_people as pp, " .
-            "photo_albums as pa, album_permissions as ap " .
+            "select distinct ppl.* from " .
+            DB_PREFIX . "people as ppl, " .
+            DB_PREFIX . "photos as ph, " .
+            DB_PREFIX . "photo_people as pp, " .
+            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "album_permissions as ap " .
             "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = ph.photo_id" .
@@ -124,8 +127,9 @@ function get_photographed_people($user = null) {
     }
     else {
         $query =
-            "select distinct ppl.* " .
-            "from people as ppl, photo_people as pp " .
+            "select distinct ppl.* from " .
+            DB_PREFIX . "people as ppl, " .
+            DB_PREFIX . "photo_people as pp " .
             "where ppl.person_id = pp.person_id " .
             "order by ppl.last_name, ppl.called, ppl.first_name";
     }
@@ -137,9 +141,11 @@ function get_photographers($user = null) {
 
     if ($user && !$user->is_admin()) {
         $query =
-            "select distinct ppl.* " .
-            "from people as ppl, photos as ph, " .
-            "photo_albums as pa, album_permissions as ap " .
+            "select distinct ppl.* from " .
+            DB_PREFIX . "people as ppl, " .
+            DB_PREFIX . "photos as ph, " .
+            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "album_permissions as ap " .
             "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = ph.photo_id" .
@@ -149,8 +155,9 @@ function get_photographers($user = null) {
     }
     else {
         $query =
-            "select distinct ppl.* " .
-            "from people as ppl, photos as ph " .
+            "select distinct ppl.* from " .
+            DB_PREFIX . "people as ppl, " .
+            DB_PREFIX . "photos as ph " .
             "where ppl.person_id = ph.photographer_id " .
             "order by ppl.last_name, ppl.called, ppl.first_name";
     }
@@ -214,7 +221,7 @@ function get_person_by_name($first_name = null, $last_name = null) {
     }
     $where .= $last_name;
 
-    $query = "select person_id from people where $where";
+    $query = "select person_id from " . DB_PREFIX . "people where $where";
 
     return get_records_from_query("person", $query);
 }
@@ -225,9 +232,12 @@ function get_popular_people($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select ppl.*, count(*) as count " .
-            "from people as ppl, photo_people as pp, photos as ph, " .
-            "photo_albums as pa, album_permissions as ap " .
+            "select ppl.*, count(*) as count from " .
+            DB_PREFIX . "people as ppl, " .
+            DB_PREFIX . "photo_people as pp, " .
+            DB_PREFIX . "photos as ph, " .
+            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "album_permissions as ap " .
             "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = pp.photo_id" .
@@ -240,8 +250,9 @@ function get_popular_people($user) {
     }
     else {
         $sql =
-            "select ppl.*, count(*) as count " .
-            "from people as ppl, photo_people as pp " .
+            "select ppl.*, count(*) as count from " .
+            DB_PREFIX . "people as ppl, " .
+            DB_PREFIX . "photo_people as pp " .
             "where ppl.person_id = pp.person_id " .
             "group by ppl.person_id " .
             "order by count desc, ppl.last_name, ppl.first_name " .

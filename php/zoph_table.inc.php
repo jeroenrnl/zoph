@@ -16,7 +16,7 @@ class zoph_table {
      * of a subclass.
      */
     function zoph_table($table_name, $primary_keys) {
-        $this->table_name = $table_name;
+        $this->table_name = DB_PREFIX . $table_name;
         $this->primary_keys = $primary_keys;
         $this->fields = array();
     }
@@ -191,6 +191,7 @@ class zoph_table {
 
         if ($extra_tables) {
             foreach ($extra_tables as $table) {
+                $table = DB_PREFIX . $table;
                 $sql = "delete from $table where $constraints";
                 if (DEBUG) { echo "$sql<br>\n"; }
                 mysql_query($sql) or

@@ -52,8 +52,10 @@ class user extends zoph_table {
 
         // do ordering to grab entry with most permissions
         $sql =
-            "select ap.* " .
-            "from photo_albums as pa, album_permissions as ap, photos as ph " .
+            "select ap.* from " .
+            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "album_permissions as ap, " .
+            DB_PREFIX . "photos as ph " .
             "where ap.user_id = '" . escape_string($this->get("user_id")) . "'".
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = ph.photo_id" .
@@ -113,7 +115,7 @@ class user extends zoph_table {
         if ($this->prefs != null && $this->prefs->get("language") != null) {
             $iso = $this->prefs->get("language");
 
-            // instead of lang_exists (which requires the language name
+            // instead of lang_exists() which requires the language name
             if (file_exists(LANG_DIR . '/' . $iso)) {
                 $application_lang = "$iso";
             }

@@ -82,9 +82,11 @@ function get_photographed_places($user = null) {
 
     if ($user && !$user->is_admin()) {
         $query =
-            "select distinct plc.* " .
-            "from places as plc, photos as ph, " .
-            "photo_albums as pa, album_permissions as ap " .
+            "select distinct plc.* from " .
+            DB_PREFIX . "places as plc, " .
+            DB_PREFIX . "photos as ph, " .
+            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "album_permissions as ap " .
             "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = ph.photo_id" .
@@ -94,8 +96,9 @@ function get_photographed_places($user = null) {
     }
     else {
         $query =
-            "select distinct plc.* " .
-            "from places as plc, photos as ph " .
+            "select distinct plc.* from " .
+            DB_PREFIX . "places as plc, " .
+            DB_PREFIX . "photos as ph " .
             "where plc.place_id = ph.location_id " .
             "order by plc.city, plc.title";
     }
@@ -131,9 +134,11 @@ function get_popular_places($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select plc.*, count(*) as count " .
-            "from places as plc, photos as ph, " .
-            "photo_albums as pa, album_permissions as ap " .
+            "select plc.*, count(*) as count from " .
+            DB_PREFIX . "places as plc, " .
+            DB_PREFIX . "photos as ph, " .
+            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "album_permissions as ap " .
             "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = ph.photo_id" .
@@ -145,8 +150,9 @@ function get_popular_places($user) {
     }
     else {
         $sql =
-            "select plc.*, count(*) as count " .
-            "from places as plc, photos as ph " .
+            "select plc.*, count(*) as count from " .
+            DB_PREFIX . "places as plc, " .
+            DB_PREFIX . "photos as ph " .
             "where plc.place_id = ph.location_id " .
             "group by plc.place_id " .
             "order by count desc, plc.title, plc.city " .

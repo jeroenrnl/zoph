@@ -19,9 +19,10 @@ class photo extends zoph_table {
 
         if ($user && !$user->is_admin()) {
             $sql =
-                "select p.* " .
-                "from photos as p, photo_albums as pa, " .
-                "album_permissions as ap " .
+                "select p.* from " .
+                DB_PREFIX . "photos as p, " .
+                DB_PREFIX . "photo_albums as pa, " .
+                DB_PREFIX . "album_permissions as ap " .
                 "where p.photo_id = '" . escape_string($this->get("photo_id")) . "'" .
                 " and p.photo_id = pa.photo_id" .
                 " and pa.album_id = ap.album_id" .
@@ -31,7 +32,7 @@ class photo extends zoph_table {
         }
         else {
             $sql =
-                "select * from photos " .
+                "select * from " . DB_PREFIX . "photos " .
                 "where photo_id = '" . escape_string($this->get("photo_id")) . "'";
         }
 
@@ -100,7 +101,8 @@ class photo extends zoph_table {
 
     function add_to_album($album_id) {
         $sql =
-            "insert into photo_albums (photo_id, album_id) values ('" .
+            "insert into " . DB_PREFIX . "photo_albums " .
+            "(photo_id, album_id) values ('" .
             escape_string($this->get("photo_id")) . "', '" .
             escape_string($album_id) . "')";
         execute_query($sql, 1);
@@ -108,7 +110,7 @@ class photo extends zoph_table {
 
     function remove_from_album($album_id) {
         $sql =
-            "delete from photo_albums " .
+            "delete from " . DB_PREFIX . "photo_albums " .
             "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
             " and album_id = '" . escape_string($album_id) . "'";
         execute_query($sql, 1);
@@ -116,7 +118,8 @@ class photo extends zoph_table {
 
     function add_to_category($category_id) {
         $sql =
-            "insert into photo_categories (photo_id, category_id) values ('" .
+            "insert into " . DB_PREFIX . "photo_categories " .
+            "(photo_id, category_id) values ('" .
             escape_string($this->get("photo_id")) . "', '" .
             escape_string($category_id) . "')";
         execute_query($sql, 1);
@@ -124,7 +127,7 @@ class photo extends zoph_table {
 
     function remove_from_category($category_id) {
         $sql =
-            "delete from photo_categories " .
+            "delete from " . DB_PREFIX . "photo_categories " .
             "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
             " and category_id = '" . escape_string($category_id) . "'";
         execute_query($sql, 1);
@@ -136,7 +139,8 @@ class photo extends zoph_table {
         }
 
         $sql =
-            "insert into photo_people (photo_id, person_id, position) " .
+            "insert into " . DB_PREFIX . "photo_people " .
+            "(photo_id, person_id, position) " .
             "values ('" . escape_string($this->get("photo_id")) . "', '" .
             escape_string($person_id) . "', $position)";
         execute_query($sql);
@@ -144,7 +148,7 @@ class photo extends zoph_table {
 
     function remove_from_person($person_id) {
         $sql =
-            "delete from photo_people " .
+            "delete from " . DB_PREFIX . "photo_people " .
             "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
             " and person_id = '" . escape_string($person_id) . "'";
         execute_query($sql);
@@ -154,9 +158,10 @@ class photo extends zoph_table {
 
         if ($user && !$user->is_admin()) {
             $sql =
-                "select al.album_id, al.parent_album_id, al.album " .
-                "from photo_albums as pa, albums as al," .
-                " album_permissions as ap " .
+                "select al.album_id, al.parent_album_id, al.album from " .
+                DB_PREFIX . "photo_albums as pa, " .
+                DB_PREFIX . "albums as al, " .
+                DB_PREFIX . "album_permissions as ap " .
                 "where pa.photo_id = '" .
                 escape_string($this->get("photo_id")) . "'" .
                 " and pa.album_id = al.album_id" .
@@ -169,8 +174,9 @@ class photo extends zoph_table {
         }
         else {
             $sql =
-                "select al.album_id, al.parent_album_id, al.album " .
-                "from photo_albums as pa, albums as al " .
+                "select al.album_id, al.parent_album_id, al.album from " .
+                DB_PREFIX . "photo_albums as pa, " .
+                DB_PREFIX . "albums as al " .
                 "where pa.photo_id = '" .
                 escape_string($this->get("photo_id")) . "'" .
                 " and pa.album_id = al.album_id order by al.album";
@@ -181,8 +187,9 @@ class photo extends zoph_table {
 
     function lookup_categories($user = null) {
         $sql =
-            "select cat.category_id, cat.parent_category_id, cat.category " .
-            "from photo_categories as pc, categories as cat " .
+            "select cat.category_id, cat.parent_category_id, cat.category from " .
+            DB_PREFIX . "photo_categories as pc, " .
+            DB_PREFIX . "categories as cat " .
             "where pc.photo_id = '" . escape_string($this->get("photo_id")) . "'" .
             " and pc.category_id = cat.category_id order by cat.category";
 
@@ -192,8 +199,9 @@ class photo extends zoph_table {
     function lookup_people() {
         $sql =
             "select psn.person_id, psn.last_name, " .
-            "psn.first_name, psn.called " .
-            "from photo_people as pp, people as psn " .
+            "psn.first_name, psn.called from " .
+            DB_PREFIX . "photo_people as pp, " .
+            DB_PREFIX . "people as psn " .
             "where pp.photo_id = '" .
             escape_string($this->get("photo_id")) . "'" .
             " and pp.person_id = psn.person_id order by pp.position";
@@ -355,7 +363,7 @@ class photo extends zoph_table {
 }
 
 function get_photo_sizes_sum() {
-    $sql = "select sum(size) from photos";
+    $sql = "select sum(size) from " . DB_PREFIX . "photos";
     return get_count_from_query($sql);
 }
 
@@ -363,8 +371,10 @@ function create_rating_graph($user) {
 
     if ($user && !$user->is_admin()) {
         $query =
-            "select ph.rating, count(*) as count from photos as ph, " .
-            "photo_albums as pa, album_permissions as ap " .
+            "select ph.rating, count(*) as count from " .
+            DB_PREFIX . "photos as ph, " .
+            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "album_permissions as ap " .
             "where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = ph.photo_id " .
@@ -372,7 +382,7 @@ function create_rating_graph($user) {
     }
     else {
         $query =
-            "select rating, count(*) from photos " .
+            "select rating, count(*) from " . DB_PREFIX . "photos " .
             "group by rating order by rating";
     }
 
