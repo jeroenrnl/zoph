@@ -291,7 +291,7 @@ require_once("header.inc.php");
                 <td class="field">
 <input type="hidden" name="_action" value="rate">
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
-<input type="submit" name="_button" value="rate">
+<input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
 <?php echo create_rating_pulldown($photo->get_rating($user->get("user_id"))); ?>
                 </td>
 <?php

@@ -371,7 +371,7 @@
               <tr>
                 <td colspan="3" class="center">
 <?php echo create_form($request_vars, $queryIgnoreArray) ?>
-                  <input type="submit" value="submit">
+                  <input type="submit" value="<? echo translate("update", 0) ?>">
                 </td>
               </tr>
             </table>
