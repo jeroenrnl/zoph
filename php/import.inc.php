@@ -79,7 +79,21 @@ function process_images($images, $path, $fields) {
         $photo->set("name", $image_name);
         $photo->set("path", $path);
 
-        $img_src = imagecreatefromjpeg($image);
+        // patch from Patrick Lam
+        $image_info = getimagesize($image);
+        switch ($image_info[2]) {
+            case 1:
+                $img_src = imagecreatefromgif($image);
+                break;
+            case 2:
+                $img_src = imagecreatefromjpeg($image);
+                break;
+            case 3:
+                $img_src = imagecreatefrompng($image);
+                break;
+            default:
+                break;
+        }
 
         $width = imagesx($img_src);
         $height = imagesy($img_src);
