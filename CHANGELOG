@@ -1,0 +1,106 @@
+Zoph Changelog
+
+Zoph 0.3.3
+13 Dec 2002
+
+- Fixed a bug in zophImport.pl in which creating a thumbnail (or midsize) could fail when the original image was smaller than the thumbnail size (thanks Tetsuji Kyan)
+- Removed the +profile option to convert() in zophImport.pl since this was caused problems on some user's systems (a problem with expansion of the * ?)
+- Fixed a bug in slideshow.php which caused an error to be displayed when a slideshow was completed
+- Added a pref to allow descriptions to be displayed under thumbnails
+- Fixed a minor pager bug in photos.php
+- Updated person.inc, person.php and photo_search.php so that the person and photos pages accept "person=LastName,FirstName" in the url instead of just person_ids
+- Added a missing call to getvar("type") in image_service.php (thanks Ian Kerr)
+- Added photo counts to "photos of", "photos by" and "photo at" links in person.php and place.php
+- Added "photos of" and "photos by" links to people.php, "photos at" links to places.php
+- Split WEB_IMPORT config into CLIENT_WEB_IMPORT and SERVER_WEB_IMPORT
+- Updated import.php to handle uploads of zip and tar archives
+- Fixed a bug in import.php which caused server imports to fail when no destination path was set
+- Replaced <? with <?php so that short_open_tag need not be enabled in php.ini
+- Fixed a typo in mail.php which caused html mail to have broken images
+- Created zophExport.pl to create static html galleries of photos
+- Added a man page for zophImport.pl (thanks Mark Cooper)
+- Updated the tutorial renamed it as the manual
+- Added an updated language pack with Norwegian and Spanish translations (thanks Haavard Leonardo Lund and Alvaro González Crespo)
+
+Zoph 0.3.2
+17 Oct 2002
+
+- Fixed a bug in edit_photo.inc.php in which the "show additional attributes" link did not work if register_globals was disabled
+- Updated photos.php so that the first and last pages are always shown in the pager (thanks Christian Hoenig)
+- Added a "delete" link to the edit photo page in edit_photo.inc.php
+- Fixed a bug in photo.php where the auto edit pref was ignored when using the search page
+- Added four new color schemes
+- Fixed spelling of aperture and metering in dropdown in util.inc.php (thanks Francesco Ciattaglia)
+- Added missing translation code to categories.inc.php, albums.php, zoph.php
+- Added DEFAULT_SHOW_ALL config parameter for people.php and places.php
+- Added missing footer include from info.php and reports.php
+- Replaced calls to include_once with calls to require_once
+- Added path to field pulldown in search.php
+- Add "or die" checks to zophImport.pl after file manipulations commands
+- Replaced rename() with calls to copy() + unlink() in zophImport.pl as rename fails when moving accross filesystems
+- Altered table structure in person.php
+- Added new language pack with new Italian translation (thanks Francesco Ciattaglia)
+
+Zoph 0.3.1
+30 Sep 2002
+
+- Fixed a bug in zophImport.pl in which thumb_extension was applied even when mixed_thumbnails was set
+- Updated zophImport.pl so that a path need not be passed when doing --update --thumbnails
+- Fixed user.inc.php so that the "Offset 1 is invalid for MySQL result index" warning is not displayed when a non admin views a photo (this bug was only present in the Zoph 0.3 download for 2 or so hours on Sep 26)
+- Fixed state field size label in edit_place.inc.php
+- Updated French language module
+- Removed extra tables in zoph.sql included by accident in 0.3
+- Updated image_service.php to enable use of cached images (thanks Alan Shutko)
+- Fixed a bug in user.inc.php in which, if register_globals is disabled, revoking an album would cause all albums to be revoked for that user
+- Fixed photos.php so that an odd pager size no longer results in fractional page numbers
+- Fixed zoph.php so that the minimum random photo rating is used in the randomly chosen photo link
+- Modified get_link() in place.inc.php so that a city link can also be displayed
+- Updated album_permissions.inc.php so that revoking permissions on an album will also revoke permissions on descendant albums
+- Added a pref to bring up the edit screen whenever a photo is clicked
+- Added a pref to control whether the camera (exif) info is displayed
+- Added a lightbox feature to hold favorite photos
+
+Zoph 0.3
+25 September 2002
+
+- Update zophImport.pl to look up photos by path as well as name when updating (thanks Francisco J. Montilla)
+- Fixed spelling of "Metering Mode" in photo.inc.php (thanks Francisco J. Montilla)
+- Updated zophImport.pl to generate jpeg thumbnails for all image types if desired
+- Updated photo.inc.php and image_service.php to handle the new thumbnails
+- Fixed the urlencoding of image names/paths in photo.inc.php and util.inc.php (thanks Francisco J. Montilla)
+- Increased size of name and path fields in photos table
+- Created a timestamp field in the photos table
+- Added recent photos taken/modified links (thanks David Moulton for the idea)
+- Fixed a change password bug in password.php
+- Added a (view all) photos tab to the header
+- Created variables.inc.php for PHP 4.2.x compatibility (thanks David Baldwin)
+- Modified calendar.inc.php to handle pre 1970 dates (thanks David Baldwin)
+- Zoph is now internationalized (thanks Eric Seigne for the code and French translation)
+- Added a web based importer (initial code from Jan Miczaika)
+- Added ability to order results
+- Other minor fixes and improvements
+- Updated documentation
+
+Zoph 0.2.1
+21 June 2002
+
+- Added default, auto logged in user feature (disabled by default)
+- Fixed spelling of "aperture" in zophImport.pl (thanks Donald Gover)
+- Fixed greedy split match in zophImport.pl (thanks Donald Gover)
+- Quoted image name passed to jhead in zophImport.pl
+- Wrapped image name in urlencode() in get_image_href in photo.inc.php
+- Fixed remove photo links (thanks Matthew MacIntyre)
+- Added view all options to people and places templates
+- Added check for null in color scheme loading in prefs.inc.php
+- Fixed templates to display album and category descriptions, if present
+- Increased size of album and category description fields
+- Added focus_dist, ccd_width and comment photo fields
+- Increased size of focal_length photo field
+- Increased size of state field in places table
+- Added missing not null constraint to detailed_people field in users table
+
+Zoph 0.2
+24 April 2002
+
+- Initial public release
+- Rewrite of Zoph 0.1 (Zoph 0.1 completed on 14 Sep 2000)

@@ -1,0 +1,146 @@
+Zoph 0.3.3 Installation
+13 Dec 2002
+
+1. Requirements
+
+   The following need to be installed before Zoph will function.  For
+   details on installing these, read the REQUIREMENTS document.
+
+   - MySQL 3.23
+   - Apache
+   - PHP 4
+   - Perl 5
+   - Perl DBI, DBD::mysql, Image::Size
+   - ImageMagick
+   - Jhead (http://www.sentex.net/~mwandel/jhead/)
+
+   You may also have to install mod_php and the MySQL PHP module to get
+   MySQL, PHP and Apache to play together.
+
+2. Creating the database
+
+   2.1 Create a database and import the tables
+
+       $ mysqladmin -u root -p create zoph
+       $ mysql -u root -p zoph < sql/zoph.sql
+
+   2.2 Create users for zoph
+
+       I created two users: zoph_rw is used by the application and
+       zoph_admin is used when I work directly in mysql so I don't
+       have to use root.
+
+       $ mysql -u root -p
+       mysql> grant select, insert, update, delete on zoph.* to zoph_rw@localhost identified by 'PASSWORD';
+
+       mysql> grant all on zoph.* to zoph_admin identified by 'PASSWORD';
+
+3. Configure the PHP templates
+
+   The values to be configured are in the php/config.inc.php file.
+
+   You will have to edit the following:
+
+   - DB_HOST : your database host (localhost, for example)
+   - DB_NAME : zoph (unless you used something else above)
+   - DB_USER : zoph_rw, using the above example
+   - DB_PASS : the password you set
+
+   - USE_IMAGE_SERVICE : see the section on the image service below.
+       the default is no (0).
+   - IMAGE_DIR : where your images are stored.  this is the absolute file
+       system path.  keep the trailing slash.
+   - WEB_IMAGE_DIR : the path to the the images off you web server's doc root.
+       if you enable the image service, this is ignored.
+
+   Those are the only values you have to define.  The others you can leave
+   as is or update as you like.  Here is some further information about
+   some of the other parameters:
+
+   - ZOPH_TITLE : the title for the application.  This is what appears on the
+       home page and in the browser's title bar.  The default is Zoph.  You
+       could set it to something like "My Photo Album".
+   - EMAIL_PHOTOS : enable email: 1, disable: 0
+   - WEB_IMPORT : enable import: 1, disable: 0
+   - MAX_CRUMBS : the maximum number of breadcrumbs to allow
+   - MAX_DAYS_PAST : how many days appear in the dropdown on the search page
+       for "photos taken/modified X days ago"
+
+   The following 6 parameters should always match their equivalents in
+   zophImport.pl.  If you edit one, edit the other too.
+
+   - THUMB_SIZE : max width or height of thumbnails (default 120 pixels)
+   - MID_SIZE : max width or height of mid size images (default 480 pixels)
+   - THUMB_PREFIX : thumbnail prefix (default 'thumb')
+   - MID_PREFIX : mid size prefix (default 'mid')
+   - MIXED_THUMBNAILS : the default is 1 which enables the Zoph 0.3 to behave
+       like previous versions.  Setting this to 0 means that Zoph will
+       assume all thumbnails have the extension specified in THUMB_EXTENSION.
+       This setting should match what is in zophImporter.pl.
+       If you are installing Zoph for the first time, I recommend you set
+       this to 0 and change zophImport.pl accordingly.
+       If you are upgrading, see the UPGRADE document for more information
+       about this.
+   - THUMB_EXTENSION : the extension to use for thumbnails.  This setting is
+       ignored if MIXED_THUMBNAILS is set.
+
+4. Install the templates
+
+   4.1 Pick a location to put Zoph
+
+       Create a zoph/ directory off the doc root of your web server, or
+       create a Virtual Host with a new doc root.
+
+       $ mkdir /var/www/html/zoph
+
+   4.2 Copy the templates
+
+       $ cp -r php/* /var/www/html/zoph/
+
+5. Install the perl scripts
+
+   5.1 Check the path to perl
+
+       The perl scripts points to /usr/bin/perl.  If your perl is
+       in a different place, edit the first line of the script.
+
+   5.2 Configure the database variables
+
+       Edit bin/zophImport.pl and bin/zophExport.pl so that the following
+       variables match the values you put in config.inc.php:
+       $db_name = 'zoph';
+       $db_user = 'zoph_rw';
+       $db_pass = 'password';
+
+       In addtion, in zophExport.pl set $image_dir to you image directory.
+
+   5.3 Copy bin/zophImport.pl and bin/zophExport.pl to /usr/local/bin
+
+       Or some other directory in your PATH.
+
+   5.4 Install the man page
+
+       A man page for zophImport.pl is in the man/ directory.  Copy this
+       to somewhere in your manpath, /usr/local/man/man1 for example.
+
+6. Test it out
+
+   Try hitting http://localhost/zoph/logon.php.  You should be presented
+   with the logon screen.
+
+   If you get a 404 error...
+   + make sure the zoph/ folder and templates can be seen by the web
+     server.
+
+   If you see a bunch of code...
+   + make sure Apache is configured to handle PHP (see the REQUIREMENTS
+     file)
+
+   If you see a MySQL access denied error...
+   + make sure the DB_USER you specified in config.inc.php actually has
+     access to the database.  If your database is not on localhost, you
+     will need to grant permissions to zoph_rw@hostname for that host.
+
+7. Add some photos
+
+   See the MANUAL to get started.

@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Zoph 0.3.3 Readme</TITLE>
+<META NAME="generator" CONTENT="txt2html v1.28">
+</HEAD>
+<BODY>
+
+<strong><a href=/>nother.net</a>: <a href=/zoph>zoph</a>:  readme</strong><hr>
+<H1><A NAME="section-1.">Zoph 0.3.3 Readme</A></H1>
+13 Dec 2002
+
+<H2>Table Of Contents</H2>
+
+<UL><LI><A HREF="#section-1.1.">1. Introduction</A><LI><A HREF="#section-1.2.">2. Features (or YAWPA? - Yet Another Web Photo Album?)</A><LI><A HREF="#section-1.3.">3. Installation</A><LI><A HREF="#section-1.4.">4. Copying</A><LI><A HREF="#section-1.5.">5. Feedback</A><LI><A HREF="#section-1.6.">6. Thanks</A></UL>
+
+<H2><A NAME="section-1.1.">1. Introduction</A></H2>
+
+<P>
+   Zoph (Zoph Organizes PHotos) is a web based photo management system
+   written using PHP and backed by MySQL.  Photos are loaded to the db
+   using a perl script or a web interface.
+
+<P>
+   After I bought a digital camera I wanted some way to easily organize
+   a growing number of photos.  I've worked on Zoph off and on over the
+   last couple of years and have used it to store and cross reference
+   a few thousand of my photos.
+
+<H2><A NAME="section-1.2.">2. Features (or YAWPA? - Yet Another Web Photo Album?)</A></H2>
+
+<P>
+   Yes, there are tons of photo album projects it seems.  What makes Zoph
+   different?  Well, here are some of it's features:
+
+<UL>
+  <LI>Photos can have lots of meta data.  Each photo record can store:
+  <UL>
+    <LI>EXIF info (date, time, width, height, size,
+       camera make, camera model, flash used, focal length,
+       exposure, aperture, etc)
+    <LI>title
+    <LI>photographer
+    <LI>location
+    <LI>description
+    <LI>rating
+    <LI>people in the photo
+  </UL>
+  <LI>Each photo can appear in zero or more albums.
+  <LI>Each photo can appear in zero or more categories.
+  <LI>Albums and categories are both hierarchical.
+  <LI>Searches can be performed using all this data:
+     "Show me all photos taken by 'Joe Smith' between 2001-01-01 and
+      2001-12-31 at 'Joe and Nancy's House' in which 'Nancy Smith'
+      appears and whose rating is greater than 5".
+  <LI>Access privileges:
+  <UL>
+    <LI>each user has an account and is granted permissions on albums
+    <LI>each user can specify preferences, including a color scheme
+    <LI>an automatically logged in guest user can be defined.
+  </UL>
+  <LI>Slideshows.
+  <LI>Lightboxes.
+  <LI>"Email this photo" feature.
+  <LI>Basic reporting: most photographed people, places, etc.
+  <LI>Photos, albums, categories, people, places and users can be
+     easily administered using the web interface.
+  <LI>Import photos from the web or by using a Perl script.
+  <LI>Export photos to generate static galleries with album or BINS.
+  <LI>Internationalized.
+
+</UL>
+<H2><A NAME="section-1.3.">3. Installation</A></H2>
+
+<P>
+   Read the REQUIREMENTS, INSTALL and MANUAL docs.  If you are upgrading
+   skip to the UPGRADE document.
+
+<H2><A NAME="section-1.4.">4. Copying</A></H2>
+
+<P>
+   Zoph is free software.  It is released under a BSD style license:
+
+<P>
+   Copyright (c) 2002 Jason Geiger<BR>
+   All rights reserved.
+
+<P>
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
+
+<OL>
+  <LI>Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer. 
+  <LI>Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution. 
+  <LI>The name of the author may not be used to endorse or promote products
+      derived from this software without specific prior written permission. 
+
+</OL>
+<P>
+   THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+   OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+   IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+<H2><A NAME="section-1.5.">5. Feedback</A></H2>
+   
+<P>
+   Please send feedback to <A HREF="mailto:zoph@nother.net">zoph@nother.net</A>.  Releases can be found at
+   <A HREF="http://www.nother.net/zoph">http://www.nother.net/zoph</A>.
+
+<H2><A NAME="section-1.6.">6. Thanks</A></H2>
+
+<P>
+   Zoph makes use of the following packages, for which I thank their authors
+   for making available:
+
+<P>
+   HTML Mime Mail class by Richard Heyes<BR>
+   <A HREF="http://www.phpguru.org/mime.mail.html">http://www.phpguru.org/mime.mail.html</A>
+
+<P>
+   PHP Calendar class by David Wilkinson<BR>
+   <A HREF="http://www.cascade.org.uk/software/php/calendar/index.php">http://www.cascade.org.uk/software/php/calendar/index.php</A>
+
+<P>
+   Rycks Translation Project by Eric Seigne<BR>
+   <A HREF="http://cvs.rycks.com/cgi-bin/cvsweb/rtpclass/?cvsroot=RTP">http://cvs.rycks.com/cgi-bin/cvsweb/rtpclass/?cvsroot=RTP</A>
+
+<P>
+   For a list of individuals who have contributed fixes, improvements or
+   translations, click on the 'about' tab within Zoph.
+
+<hr>Generated on Fri Dec 13 14:52:10 PST 2002 with help from (a slightly modified) <a href="http://www.aigeek.com/txt2html/">txt2html</a> and <a href="http://www.oac.uci.edu/indiv/ehood/htmltoc.doc.html">htmltoc</a>.
+</BODY>
+</HTML>

@@ -1,0 +1,106 @@
+Zoph 0.3.3 Readme
+13 Dec 2002
+
+1. Introduction
+
+   Zoph (Zoph Organizes PHotos) is a web based photo management system
+   written using PHP and backed by MySQL.  Photos are loaded to the db
+   using a perl script or a web interface.
+
+   After I bought a digital camera I wanted some way to easily organize
+   a growing number of photos.  I've worked on Zoph off and on over the
+   last couple of years and have used it to store and cross reference
+   a few thousand of my photos.
+
+2. Features (or YAWPA? - Yet Another Web Photo Album?)
+
+   Yes, there are tons of photo album projects it seems.  What makes Zoph
+   different?  Well, here are some of it's features:
+
+   - Photos can have lots of meta data.  Each photo record can store:
+     - EXIF info (date, time, width, height, size,
+       camera make, camera model, flash used, focal length,
+       exposure, aperture, etc)
+     - title
+     - photographer
+     - location
+     - description
+     - rating
+     - people in the photo
+   - Each photo can appear in zero or more albums.
+   - Each photo can appear in zero or more categories.
+   - Albums and categories are both hierarchical.
+   - Searches can be performed using all this data:
+     "Show me all photos taken by 'Joe Smith' between 2001-01-01 and
+      2001-12-31 at 'Joe and Nancy's House' in which 'Nancy Smith'
+      appears and whose rating is greater than 5".
+   - Access privileges:
+     - each user has an account and is granted permissions on albums
+     - each user can specify preferences, including a color scheme
+     - an automatically logged in guest user can be defined.
+   - Slideshows.
+   - Lightboxes.
+   - "Email this photo" feature.
+   - Basic reporting: most photographed people, places, etc.
+   - Photos, albums, categories, people, places and users can be
+     easily administered using the web interface.
+   - Import photos from the web or by using a Perl script.
+   - Export photos to generate static galleries with album or BINS.
+   - Internationalized.
+
+3. Installation
+
+   Read the REQUIREMENTS, INSTALL and MANUAL docs.  If you are upgrading
+   skip to the UPGRADE document.
+
+4. Copying
+
+   Zoph is free software.  It is released under a BSD style license:
+
+   Copyright (c) 2002 Jason Geiger
+   All rights reserved.
+
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
+
+   1. Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer. 
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution. 
+   3. The name of the author may not be used to endorse or promote products
+      derived from this software without specific prior written permission. 
+
+   THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+   OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+   IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+5. Feedback
+   
+   Please send feedback to zoph@nother.net.  Releases can be found at
+   http://www.nother.net/zoph.
+
+6. Thanks
+
+   Zoph makes use of the following packages, for which I thank their authors
+   for making available:
+
+   HTML Mime Mail class by Richard Heyes
+   http://www.phpguru.org/mime.mail.html
+
+   PHP Calendar class by David Wilkinson
+   http://www.cascade.org.uk/software/php/calendar/index.php
+
+   Rycks Translation Project by Eric Seigne
+   http://cvs.rycks.com/cgi-bin/cvsweb/rtpclass/?cvsroot=RTP
+
+   For a list of individuals who have contributed fixes, improvements or
+   translations, click on the 'about' tab within Zoph.

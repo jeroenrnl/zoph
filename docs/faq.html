@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Zoph FAQ</TITLE>
+<META NAME="generator" CONTENT="txt2html v1.28">
+</HEAD>
+<BODY>
+
+<strong><a href=/>nother.net</a>: <a href=/zoph>zoph</a>:  faq</strong><hr>
+<H1><A NAME="section-1.">Zoph FAQ</A></H1>
+
+<H2>Table Of Contents</H2>
+
+<UL><LI>1 <A HREF="#section-1.1.">Troubleshooting</A>
+<UL><LI>1.1 <A HREF="#section-1.1.1.">After logging in I get the following error: "Fatal error: Call to undefined function: mysql_pconnect()".  What's wrong?</A><LI>1.2 <A HREF="#section-1.1.2.">I can log in but when I try to view any other page I get: "Fatal error: The script tried to execute a method or access a property of an incomplete object. Please ensure that the class definition user of the object you are trying to operate on was loaded _before_ the session was started in /var/www/zoph/auth.inc.php on line 64".</A><LI>1.3 <A HREF="#section-1.1.3.">When I try to load zoph.sql in MySQL I get the following error: "ERROR 1121 at line 81: Column 'last_name' is used with UNIQUE or INDEX but is not defined as NOT NULL".</A><LI>1.4 <A HREF="#section-1.1.4.">I'm trying to use the importer from the web but I get this error: "Fatal error: Call to undefined function: imagecreatefromjpeg()".</A><LI>1.5 <A HREF="#section-1.1.5.">The web importer works but why aren't the EXIF tags in my photos being extracted?</A><LI>1.6 <A HREF="#section-1.1.6.">I'm trying to run Zoph 0.2[.1] with PHP 4.2.x.  Why isn't it working?</A><LI>1.7 <A HREF="#section-1.1.7.">Why can't the webserver find images in which there are spaces or special characters in the path?</A><LI>1.8 <A HREF="#section-1.1.8.">I moved my photos around after I loaded them and now I see broken images.  How can I fix them?</A><LI>1.9 <A HREF="#section-1.1.9.">If I try to change my password I get locked out of Zoph!  What's going on?</A><LI>1.10 <A HREF="#section-1.1.10.">Jhead complains (non fatally) when parsing my images.  Is there a way to suppress that?</A><LI>1.11 <A HREF="#section-1.1.11.">Why does Zoph choke when it tries to load the languages (line 88 of rtplang.class.php)?</A><LI>1.12 <A HREF="#section-1.1.12.">Can I use Zoph without having to enable cookies?</A><LI>1.13 <A HREF="#section-1.1.13.">Why do I see some English phrases when I'm using a translation (e.g. "[vo] that have been categorized")?</A><LI>1.14 <A HREF="#section-1.1.14.">Why do I see a bunch of code when I try to access Zoph?</A><LI>1.15 <A HREF="#section-1.1.15.">I've managed to get Zoph running in Windows but zophImport.pl only can load one file at a time.  If I try to execute "zophImport.pl *.jpg" I get a message saying "Not a file: *.jpg".  What's going on?</A>
+</UL><LI>2 <A HREF="#section-1.2.">Customization</A>
+<UL><LI>2.1 <A HREF="#section-1.2.1.">Can I get Zoph to take up my whole browser window rather than that little rectangle?</A><LI>2.2 <A HREF="#section-1.2.2.">Can I customize the name/title used in the interface?</A><LI>2.3 <A HREF="#section-1.2.3.">I don't like your welcome screen, your instructions on the import page, or your use of English in general.</A>
+</UL><LI>3 <A HREF="#section-1.3.">Miscellaneous</A>
+<UL><LI>3.1 <A HREF="#section-1.3.1.">How do you pronounce Zoph?</A><LI>3.2 <A HREF="#section-1.3.2.">What license is Zoph released under and why?</A></UL>
+</UL>
+
+<H2><A NAME="section-1.1.">1 Troubleshooting</A></H2>
+
+<H3><A NAME="section-1.1.1.">1.1 After logging in I get the following error: "Fatal error: Call to undefined function: mysql_pconnect()".  What's wrong?</A></H3>
+
+<P>
+You may need to install the php-mysql module (rpms and debs are available).
+
+
+<H3><A NAME="section-1.1.2.">1.2 I can log in but when I try to view any other page I get: "Fatal error: The script tried to execute a method or access a property of an incomplete object. Please ensure that the class definition user of the object you are trying to operate on was loaded _before_ the session was started in /var/www/zoph/auth.inc.php on line 64".</A></H3>
+
+<P>
+This can happen when a session is automatically started at the beginning of a request.  You can fix this by disabling session.auto_start in your php.ini or by inserting a call to session_write_close() before the call to session_start() in auth.inc.php.
+
+
+<H3><A NAME="section-1.1.3.">1.3 When I try to load zoph.sql in MySQL I get the following error: "ERROR 1121 at line 81: Column 'last_name' is used with UNIQUE or INDEX but is not defined as NOT NULL".</A></H3>
+
+<P>
+The ability to have an index on a column that can be null was added in MySQL
+3.23.  If you are using an older version you may see this error.
+
+<P>
+You can either upgrade MySQL or try to get around it by removing all KEY
+lines in zoph.sql that correspond to a column not marked NOT NULL.  For
+example, the keys for first_name and last_name would have to be removed.
+
+
+<H3><A NAME="section-1.1.4.">1.4 I'm trying to use the importer from the web but I get this error: "Fatal error: Call to undefined function: imagecreatefromjpeg()".</A></H3>
+
+<P>
+To use the importer you need the GD 2 library for image creation support in
+PHP.  See the REQUIREMENTS doc for more info.
+
+
+<H3><A NAME="section-1.1.5.">1.5 The web importer works but why aren't the EXIF tags in my photos being extracted?</A></H3>
+
+<P>
+Reading the EXIF header requires at least PHP 4.2, when the read_exif_data()
+function was introduced. 
+
+
+<H3><A NAME="section-1.1.6.">1.6 I'm trying to run Zoph 0.2[.1] with PHP 4.2.x.  Why isn't it working?</A></H3>
+
+<P>
+To get Zoph to work nicely with PHP 4.2, either install Zoph 0.3 or enable
+register_globals in your php.ini file.
+
+
+<H3><A NAME="section-1.1.7.">1.7 Why can't the webserver find images in which there are spaces or special characters in the path?</A></H3>
+
+<P>
+This problem should be fixed in Zoph 0.3.  In prior versions, only the image
+name and not the entire path were properly encoded.
+
+
+<H3><A NAME="section-1.1.8.">1.8 I moved my photos around after I loaded them and now I see broken images.  How can I fix them?</A></H3>
+
+<P>
+If you move images to a different directory you'll start seeing broken
+images in Zoph unless you also update the 'path' field in the database.
+
+<P>
+If you edit a photo, at the bottom of the page you'll see a 'show additional
+attributes' link.  That will let you edit the path for a photo.
+
+<P>
+If you're moving a bunch of photos, you may want to just create a list of
+their names as you are relocating them and then change all the paths at once
+from within MySQL:
+
+<P>
+<code>mysql&gt; update photos set path = 'new_path' where name in ('photo1.jpg', 'photo2.jpg');</code>
+
+
+<H3><A NAME="section-1.1.9.">1.9 If I try to change my password I get locked out of Zoph!  What's going on?</A></H3>
+
+<P>
+This bug should be fixed in Zoph 0.3.  Previously, your password was being set
+to 'password' the string instead of whatever you wanted (stupid bug).  Before,
+in order to reset a password you would have to do so within MySQL:
+
+<P>
+<code>mysql&gt; update users set password = password('new_password') where user_id = X;</code>
+
+
+<H3><A NAME="section-1.1.10.">1.10 Jhead complains (non fatally) when parsing my images.  Is there a way to suppress that?</A></H3>
+
+<P>
+A user with a FotoCanvas 11 camera mentioned this problem and pointed out
+the -se flag to jhead (which first appeared in version 1.7):
+
+<P>
+-se  Suppress error messages relating to corrupt exif header structure.
+
+<P>
+Add this flag to the call to jhead in zophImport.pl to fix this problem.
+
+
+<H3><A NAME="section-1.1.11.">1.11 Why does Zoph choke when it tries to load the languages (line 88 of rtplang.class.php)?</A></H3>
+
+<P>
+This can happen when the line endings in the language files get messed up.  One user reported this happening when extracting the zoph package using Windows.  If this happens, make sure there are UNIX style (\n not \r\n) line endings in the files.
+
+
+<H3><A NAME="section-1.1.12.">1.12 Can I use Zoph without having to enable cookies?</A></H3>
+
+<P>
+Zoph will work without cookies but you have to enable session.use_trans_sid in your php.ini file so that url rewriting will work.  Starting with PHP 4.2.0 this parameter is disabled by default.
+
+
+<H3><A NAME="section-1.1.13.">1.13 Why do I see some English phrases when I'm using a translation (e.g. "[vo] that have been categorized")?</A></H3>
+
+<P>
+Some language files are missing a few translations.  Many, but not all, are shown in italics and preceded by [vo].  To fix this simply open the correct language file in the lang/ directory and add a transltions of the missing string (the English string should already be present in the file).  If you make an additions please send me an email (zoph@nother.net).  Check http://www.nother.net/zoph#translations for updated language packs.
+
+
+<H3><A NAME="section-1.1.14.">1.14 Why do I see a bunch of code when I try to access Zoph?</A></H3>
+
+<P>
+First, check to make sure that you have an AddType line for php files in your httpd.conf file.  This is described in the INSTALL document.
+
+<P>
+If your Apache configuration is correct, check your php.ini to make sure short_open_tag is set to On.  With short_open_tag off "&lt;?" is not recognized as a valid script tag (like "&lt;?php").  Since Zoph uses "&lt;?" in many places, this causes the templates to fail to execute.  You may have this problem if you install RedHat 8 as their default php.ini seems to have changed so that short_open_tag is disabled. Note: as of Zoph 0.3.3 short_open_tag is no longer required to be on.
+
+
+<H3><A NAME="section-1.1.15.">1.15 I've managed to get Zoph running in Windows but zophImport.pl only can load one file at a time.  If I try to execute "zophImport.pl *.jpg" I get a message saying "Not a file: *.jpg".  What's going on?</A></H3>
+
+<P>
+I believe this happens because the DOS/Windows shell does not expand wildcards and so the *.jpg is passed unchanged to the perl script.  I would recommend using another shell like bash.  This can easily be done by installing something like CygWin.
+
+
+<H2><A NAME="section-1.2.">2 Customization</A></H2>
+
+<H3><A NAME="section-1.2.1.">2.1 Can I get Zoph to take up my whole browser window rather than that little rectangle?</A></H3>
+
+<P>
+Try setting DEFAULT_TABLE_WIDTH in config.inc.php to "100%".
+
+
+<H3><A NAME="section-1.2.2.">2.2 Can I customize the name/title used in the interface?</A></H3>
+
+<P>
+Set ZOPH_TITLE in config.inc.php to whatever you want.  This is what appears on the logon page, on the home page, and in the title of every page.
+
+
+<H3><A NAME="section-1.2.3.">2.3 I don't like your welcome screen, your instructions on the import page, or your use of English in general.</A></H3>
+
+<P>
+You could edit the templates so that Zoph says just what you want.  A better alternative is perhaps to create your own custom translation.  Create a file in the lang/ directory that maps English to English and tweak whatever phrases you want.  For example:
+
+<P>
+Welcome %s.  %s currently contains=Go away %s.  %s isn't for you.
+
+
+<H2><A NAME="section-1.3.">3 Miscellaneous</A></H2>
+
+<H3><A NAME="section-1.3.1.">3.1 How do you pronounce Zoph?</A></H3>
+
+<P>
+I say Zoph like software (it's Zophtware).  But you can Zoph with an O like
+in photos or however you like.
+
+
+<H3><A NAME="section-1.3.2.">3.2 What license is Zoph released under and why?</A></H3>
+
+<P>
+Zoph is released under the modified BSD license (http://www.xfree86.org/3.3.6/COPYRIGHT2.html#5).  I initially chose this license because it was simple but GPL-compatible.  However, I have been recently thinking of moving to a copyleft license like the GNU GPL.
+
+<hr>Generated on Fri Dec 13 14:52:10 PST 2002 with help from (a slightly modified) <a href="http://www.aigeek.com/txt2html/">txt2html</a> and <a href="http://www.oac.uci.edu/indiv/ehood/htmltoc.doc.html">htmltoc</a>.
+</BODY>
+</HTML>
