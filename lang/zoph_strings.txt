@@ -101,6 +101,7 @@ This photo is not in any categories.=
 To edit your preferences or change your password, click %s here %s.=
 To import images already on the server, specify the absolute path of a file name or directory.  If a directory is specified, all images within the directory will be imported.  If a destination path is given (relative to the top level image dir), the imported images will be copied there.  Otherwise, they will not be moved.=
 To upload and import a local file, browse to the file and specify the destination path (relative to the top level image dir) in which it should be placed.=
+Up=
 Users=
 Welcome %s.  %s currently contains=
 Work=
