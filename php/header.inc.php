@@ -53,8 +53,14 @@ print $rtplang->lang_header();
     $tabs += array(
         translate("reports", 0) => "reports.php",
         translate("prefs", 0) => "prefs.php",
-        translate("about", 0) => "info.php",
-        translate("logout", 0) => "zoph.php?_action=logout");
+        translate("about", 0) => "info.php");
+
+    if ($user->get("user_id") == DEFAULT_USER) {
+        $tabs[translate("logon", 0)] = "zoph.php?_action=logout";
+    }
+    else {
+        $tabs[translate("logout", 0)] = "zoph.php?_action=logout";
+    }
 
     if (strpos($PHP_SELF, "/") === false) {
         $self = $PHP_SELF;
