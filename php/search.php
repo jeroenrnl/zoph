@@ -2,6 +2,7 @@
     require_once("include.inc.php");
 
 if ($_action == "search") {
+    $request_vars = clean_request_vars($request_vars);
     require_once("photos.php");
 }
 else {

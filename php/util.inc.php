@@ -171,6 +171,39 @@ function create_photo_field_pulldown($var, $name = null) {
         "metering_mode" => translate("metering mode",0)));
 }
 
+/*
+ * Remove any params without values and operator params without corresponding
+ * fields (e.g. _album_id-op when there is no _album_id).  Also gets rid of
+ * the _action and _button params.  This can be called once after a search
+ * is performed.  It allows for shorter urls that are more readable and
+ * easier to debug.
+ */
+function clean_request_vars($vars) {
+    $clean_vars = array();
+
+    while (list($key, $val) = each($vars)) {
+        // trim empty values
+        if (empty($val)) { continue; }
+
+        // won't need this
+        if ($key == "_action" || $key == "_button") { continue; }
+
+        // get rid of ops without fields
+        if (strpos($key, "-op")) {
+            $field = substr($key, 1, -3);
+            if (empty($vars[$field]) && empty($vars["_$field"])) { continue; }
+        }
+
+        $clean_vars[$key] = $val;
+    }
+
+    return $clean_vars;
+}
+
+/*
+ * Updates a query string, replacing (or inserting) a key.
+ * A list of keys to ignore can also be specified.
+ */
 function update_query_string($vars, $new_key, $new_val, $ignore = null) {
 
     if (!$ignore) { $ignore = array(); }
@@ -180,12 +213,15 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
     while (list($key, $val) = each($vars)) {
         if (in_array($key, $ignore)) { continue; }
         if ($key == $new_key) { $continue; }
+
         if ($qstr) { $qstr .= "&"; }
-        $qstr .= "$key=$val";
+        $qstr .= "$key=" . rawurlencode($val);
     }
 
     if ($qstr) { $qstr .= "&"; }
-    return $qstr . "$new_key=$new_val";
+    $qstr .= "$new_key=" . rawurlencode($new_val);
+
+    return $qstr;
 }
 
 function create_form($vars, $ignore = array()) {
