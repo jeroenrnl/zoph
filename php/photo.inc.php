@@ -209,6 +209,10 @@ class photo extends zoph_table {
         return get_records_from_query("person", $sql);
     }
 
+    function get_file_path() {
+        return IMAGE_DIR . $this->get("path") . "/" . $this->get("name");
+    }
+
     function get_midsize_img() {
         return $this->get_image_tag(MID_PREFIX);
     }
@@ -396,6 +400,79 @@ class photo extends zoph_table {
             or die_with_mysql_error("Inserting new rating failed");
 
         return $avg;
+    }
+
+    function get_image_resource() {
+        $file = $this->get_file_path();
+        $img_src = null;
+        $image_info = getimagesize($file);
+        switch ($image_info[2]) {
+            case 1:
+                $img_src = imagecreatefromgif($file);
+                break;
+            case 2:
+                $img_src = imagecreatefromjpeg($file);
+                break;
+            case 3:
+                $img_src = imagecreatefrompng($file);
+                break;
+            default:
+                break;
+        }
+
+        return $img_src;
+    }
+
+    function thumbnail($img_src = null) {
+        return
+            $this->create_thumbnail(THUMB_PREFIX, THUMB_SIZE, $img_src) &&
+            $this->create_thumbnail(MID_PREFIX, MID_SIZE, $img_src);
+    }
+
+    function create_thumbnail($prefix, $size, $img_src) {
+        $destroy = false;
+        if ($img_src == null) {
+            $img_src = $this->get_image_resource();
+            $destroy = true;
+        }
+
+        $image_info = getimagesize($this->get_file_path());
+        $width = $image_info[0];
+        $height = $image_info[1];
+
+        if ($width >= $height) {
+            $new_width = $size;
+            $new_height = round(($new_width / $width) * $height);
+        }
+        else {
+            $new_height = $size;
+            $new_width = round(($new_height / $height) * $width);
+        }
+
+        $img_dst = imagecreatetruecolor($new_width, $new_height);
+        imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0,
+            $new_width, $new_height, $width, $height);
+
+        $new_image = IMAGE_DIR . $this->get("path") . '/' . $prefix . '/' .
+            $prefix . '_' .  get_converted_image_name($this->get("name"));
+
+        $image_type = get_image_type($new_image);
+
+        // a little fast a loose but usually ok
+        $func = "image" . substr($image_type, strpos($image_type, '/') + 1);
+
+        $return = 1;
+        if (!$func($img_dst, $new_image)) {
+            $return = 0;
+        }
+
+        imagedestroy($img_dst);
+
+        if ($destroy) {
+            imagedestroy($img_src);
+        }
+
+        return $return;
     }
 
     function rotate($deg) {

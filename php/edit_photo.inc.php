@@ -39,6 +39,34 @@
     else {
 ?>
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
+<?php
+    if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
+?>
+        <tr>
+          <td colspan="3" align="center">
+<?php echo translate("rotate", 0) ?>
+
+<select name="_deg">
+<option></option>
+<option>90</option>
+<option>180</option>
+<option>270</option>
+</select>
+
+<br>
+<?php echo translate("recreate thumbnails", 0) ?>
+
+<input type="radio" name="_thumbnail" value="1">
+<?php echo translate("yes") ?>
+
+<input type="radio" name="_thumbnail" value="0" checked>
+<?php echo translate("no") ?>
+          </td>
+        </tr>
+<?php
+    }
+?>
+
         <tr>
           <td colspan="3" align="center">
             <table width="100%">

@@ -110,14 +110,6 @@
         $photo->add_to_album($user->get("lightbox_id"));
         $action = "display";
     }
-    else if ($_action == "rotate") {
-        if (ALLOW_ROTATIONS) {
-            $photo->lookup($user);
-            $_deg = getvar("_deg");
-            $photo->rotate($_deg);
-        }
-        $action = "display";
-    }
     else if ($_action == "rate") {
         if (ALLOW_RATINGS) {
             $rating = getvar("rating");
@@ -132,6 +124,17 @@
     if ($action != "insert") {
         $found = $photo->lookup($user);
         $title = $photo->get("name");
+
+        $_deg = getvar("_deg");
+        $_thumbnail = getvar("_thumbnail");
+        if ($_deg) {
+            if (ALLOW_ROTATIONS) {
+                $photo->rotate($_deg);
+            }
+        } // thumbnails already recreated for rotations
+        else if ($_thumbnail) {
+            $photo->thumbnail();
+        }
     }
     else {
         $title = translate("New Photo");
@@ -215,10 +218,16 @@ require_once("header.inc.php");
 ?>
         <tr>
           <td colspan="2" align="center">
-            <?php echo translate("rotate", 0) ?>
-            <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_action=rotate&_deg=90">90</a> |
-            <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_action=rotate&_deg=180">180</a> |
-            <a href="photo.php?photo_id=<?php echo $photo->get("photo_id") ?>&_action=rotate&_deg=270">270</a>
+<form action="<?php echo $PHP_SELF ?>" method="POST">
+<input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
+
+<select name="_deg">
+<option>90</option>
+<option>180</option>
+<option>270</option>
+</select>
+<input type="submit" name="_button" value="<?php echo translate("rotate", 0) ?>">
+</form>
           </td>
         </tr>
 <?php
@@ -282,7 +291,7 @@ require_once("header.inc.php");
             if (ALLOW_RATINGS) {
 ?>
                 <td>
-<form action="<?php echo $PHP_SELF ?>" method="GET">
+<form action="<?php echo $PHP_SELF ?>" method="POST">
 <input type="hidden" name="_action" value="rate">
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
 <input type="submit" name="_button" value="rate">

@@ -79,42 +79,15 @@ function process_images($images, $path, $fields) {
         $photo->set("name", $image_name);
         $photo->set("path", $path);
 
-        // patch from Patrick Lam
+        //$width = imagesx($img_src);
+        //$height = imagesy($img_src);
         $image_info = getimagesize($image);
-        switch ($image_info[2]) {
-            case 1:
-                $img_src = imagecreatefromgif($image);
-                break;
-            case 2:
-                $img_src = imagecreatefromjpeg($image);
-                break;
-            case 3:
-                $img_src = imagecreatefrompng($image);
-                break;
-            default:
-                break;
+        $width = $image_info[0];
+        $height = $image_info[1];
+
+        if (!$photo->thumbnail()) {
+            echo translate("Could not create thumbnail") . ": $image_name<br>\n";
         }
-
-        $width = imagesx($img_src);
-        $height = imagesy($img_src);
-
-        if (!create_thumbnail($img_src, $image_name, $absolute_path, $width,
-            $height, THUMB_PREFIX, THUMB_SIZE)) {
-
-            echo translate("Could not create thumbnail") . ": " . THUMB_PREFIX . "_$image_name<br>\n";
-            imagedestroy($img_src);
-            continue;
-        }
-
-        if (!create_thumbnail($img_src, $image_name, $absolute_path, $width,
-            $height, MID_PREFIX, MID_SIZE)) {
-
-            echo translate("Could not create thumbnail") . ": " . MID_PREFIX . "$_image_name<br>\n";
-            imagedestroy($img_src);
-            continue;
-        }
-
-        imagedestroy($img_src);
 
         // first try the insert
         if ($photo->insert()) {
@@ -148,40 +121,6 @@ function process_images($images, $path, $fields) {
     }
 
     return $loaded;
-}
-
-function create_thumbnail($img_src, $image_name, $absolute_path,
-    $width, $height, $prefix, $size) {
-
-    if ($width >= $height) {
-        $new_width = $size;
-        $new_height = round(($new_width / $width) * $height);
-    }
-    else {
-        $new_height = $size;
-        $new_width = round(($new_height / $height) * $width);
-    }
-
-    $img_dst = imagecreatetruecolor($new_width, $new_height);
-    imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0, $new_width, $new_height,
-        $width, $height);
-
-    $new_image = $absolute_path . '/' . $prefix . '/' .
-        $prefix . '_' .  get_converted_image_name($image_name);
-
-    $image_type = get_image_type($new_image);
-
-    // a little fast a loose but usually ok
-    $func = "image" . substr($image_type, strpos($image_type, '/') + 1);
-
-    $return = 1;
-    if (!$func($img_dst, $new_image)) {
-        $return = 0;
-    }
-
-    imagedestroy($img_dst);
-
-    return $return;
 }
 
 ?>
