@@ -50,7 +50,7 @@
         }
     }
 
-    if ($offset) {
+    if (isset($offset)) {
         $ignore = array("_off", "_action");
         $up_qs = update_query_string($request_vars, null, null, $ignore);
         $up_link = "<a href=\"photos.php?$up_qs\">" . translate("Up", 0) . "</a>";
@@ -177,33 +177,33 @@ require_once("header.inc.php");
           <th align="left"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo $title_bar ?></font></th>
           <td align="right"><font color="<?php echo $TITLE_FONT_COLOR ?>">
 <?php
-    $bar = "[";
-    if (EMAIL_PHOTOS) {
+        $bar = "[";
+        if (EMAIL_PHOTOS) {
 ?>
             <?php echo $bar ?> <a href="mail.php?_action=compose&photo_id=<?php echo $photo->get("photo_id") ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("email") ?></font></a>
 <?php
-        $bar = "|";
-    }
+            $bar = "|";
+        }
 
-    if ($user->is_admin() || $permissions->get("writable")) {
+        if ($user->is_admin() || $permissions->get("writable")) {
 ?>
             <?php echo $bar ?> <a href="photo.php?_action=edit&photo_id=<?php echo $photo->get("photo_id") ?>&_qs=<?php echo $encoded_qs ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("edit") ?></font></a>
 <?php
-        $bar = "|";
+            $bar = "|";
 
-        if ($user->is_admin()) {
+            if ($user->is_admin()) {
 ?>
             | <a href="photo.php?_action=delete&photo_id=<?php echo $photo->get("photo_id") ?>&_qs=<?php echo $encoded_qs ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("delete") ?></font></a>
 <?php
+            }
         }
-    }
 
-    if ($user->get("lightbox_id")) {
+        if ($user->get("lightbox_id")) {
 ?>
             <?php echo $bar ?> <a href="photo.php?_action=lightbox&<?php echo $qs ?>"><font color="<?php echo $TITLE_FONT_COLOR ?>"><?php echo translate("lightbox", 0) ?></font></a>
 <?php
-        $bar = "|";
-    }
+            $bar = "|";
+        }
 ?>
           <?php echo $bar == "|" ? "]" : "" ?></font></td>
         </tr>
@@ -214,7 +214,7 @@ require_once("header.inc.php");
     <td>
       <table border="0" cellpadding="4" cellspacing="0" width="100%" bgcolor="<?php echo $TABLE_BG_COLOR?>">
 <?php
-    if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
+        if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
         <tr>
           <td colspan="2" align="center">
@@ -231,7 +231,7 @@ require_once("header.inc.php");
           </td>
         </tr>
 <?php
-    }
+        }
 ?>
         <tr>
           <td colspan="2" align="center">
@@ -239,12 +239,12 @@ require_once("header.inc.php");
               <tr>
                 <td align="left"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></td>
                 <td align="center">
-<?
-    if ($up_link) {
+<?php
+        if ($up_link) {
 ?>
             [ <?php echo $up_link ?> ]<br>
 <?php
-    }
+        }
 ?>
                   <font size="-1">
                   <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
