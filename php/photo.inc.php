@@ -848,7 +848,7 @@ function create_rating_graph($user) {
 
     if ($user && !$user->is_admin()) {
         $query =
-            "select ph.rating, count(distinct ph.photo_id) as count from " .
+            "select round(ph.rating), count(distinct ph.photo_id) as count from " .
             DB_PREFIX . "photos as ph, " .
             DB_PREFIX . "photo_albums as pa, " .
             DB_PREFIX . "album_permissions as ap " .
@@ -856,12 +856,12 @@ function create_rating_graph($user) {
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = ph.photo_id" .
             " and ap.access_level >= ph.level " .
-            "group by rating order by rating";
+            "group by round(rating) order by round(rating)";
     }
     else {
         $query =
-            "select rating, count(*) from " . DB_PREFIX . "photos " .
-            "group by rating order by rating";
+            "select round(rating), count(*) from " . DB_PREFIX . "photos " .
+            "group by round(rating) order by round(rating)";
     }
 
     if (DEBUG) { echo "$query<br>\n"; }
@@ -871,50 +871,36 @@ function create_rating_graph($user) {
 
     $max_count = 0;
     while ($row = mysql_fetch_array($result)) {
-        if ($row[0]) { $rating = $row[0]; }
-        else { $rating = "null"; }
+        $max_count = max($max_count, $row[1]);	
+    	$ratings[($row[0] ? $row[0] : translate("Not rated"))]=$row[1];
+	}
 
-        $range = (int)floor($rating);
-        $range .= "-" . ($range + 1);
-
-        $count = $ratings[$range] + $row[1];
-
-        if ($count > $max_count) { $max_count = $count; }
-
-        $ratings[$range] = $count;
-    }
-
-    if ($max_count) {
-
+    if ($max_count) { 
     $table =
         "<table class=\"ratings\">\n  <tr>\n    <th colspan=\"3\"><h3>" .
         translate("photo ratings") . "</h3></th>\n  </tr>\n  <tr>\n    <th>" .
         translate("rating") . "</th>\n    <th>&nbsp</th>\n    " .
         "<th>" . translate("count") . "</th>\n  </tr>\n";
 
-    $scale = 20.0 / $max_count;
-
+    $scale = 150.0 / $max_count;
+	
     while (list($range, $count) = each($ratings)) {
-
-        $pos = strpos($range, "-");
-        $min_rating = substr($range, 0, $pos);
-        $max_rating = substr($range, $pos + 1);
-
-        $qs =
-            "photos.php?rating=" . $min_rating . "&_rating-op=%3E%3D" .
-            "&rating%232=" . $max_rating . "&_rating-op%232=%3C";
-
+        if($range>0) {
+	   $min_rating=$range-0.5;
+	   $max_rating=$range+0.5;
+           $qs =
+              "photos.php?rating=" . $min_rating . "&_rating-op=%3E%3D" .
+              "&rating%232=" . $max_rating . "&_rating-op%232=%3C";
+        } else {
+           $qs = "photos.php?rating=null";
+        }  
         $table .=
             "  <tr>\n    <td>\n" .
             "      <a href=\"$qs\">$range</a></td>\n" .
             "    <td>&nbsp;</td>\n    <td>\n";
 
-        $ticks = ceil($scale * $count);
-        while ($ticks > 0) {
-            $table .= "*";
-            $ticks--;
-        }
-        $table .= " [$count]\n    </td>\n  </tr>\n";
+	$table .= "<div class=\"ratings\" style=\"width: " . ceil($scale * $count) . "px;\">&nbsp;</div>";
+        $table .= "[$count]\n    </td>\n  </tr>\n";
     }
 
     $table .="</table>\n";

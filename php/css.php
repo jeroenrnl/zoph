@@ -13,6 +13,8 @@ if ( $_GET['logged_on']=="no" ) {
 
 ?>
 
+/* Some of the styles have been based on http://www.alistapart.com/articles/taminglists/ */
+
 /* Main CSS style, all elements inherit these settings */
 
 body	{
@@ -91,35 +93,77 @@ table.page > td, table.page > th {
 	background: <?php echo $PAGE_BG_COLOR ?>;
 	}
 
-/* The currently selected tab */
-.selectedtab {
-	background: <?php echo $SELECTED_TAB_BG_COLOR ?>;
-	color: <?php echo $SELECTED_TAB_FONT_COLOR ?>;
-	font-size: small;
+#menu ul	{
+	margin-left: 4px;
+	padding: 0;
+	display: inline;
 	}
 
-/* A not selected tab */
-.tab	{
+#menu ul li 	{
+	padding: 1px;
+	padding-top: 3px;
+	margin: -1px;
+	text-align: center;
+	list-style: none;
+	display: inline;
         background: <?php echo $TAB_BG_COLOR ?>;
         color: <?php echo $TAB_FONT_COLOR ?>;
 	font-size: small;
 	}
 
+#menu ul li.selected {
+	background: <?php echo $SELECTED_TAB_BG_COLOR ?>;
+	color: <?php echo $SELECTED_TAB_FONT_COLOR ?>;
+	}
+								
 /* since the A element does not inherit font colors from it's parents, we set it explicetly here. Also underlining is removed from links in menu, unless it is hovered */
 
-td.selectedtab > a { color: <?php echo $SELECTED_TAB_FONT_COLOR ?>; text-decoration: none; }
-td.selectedtab > a:hover { text-decoration: underline; }
-td.tab > a { color: <?php echo $TAB_FONT_COLOR ?>; text-decoration: none; }
-td.tab > a:hover { text-decoration: underline; }
+#menu ul li > a { 
+	color: <?php echo $TAB_FONT_COLOR ?>; 
+	text-decoration: none; 
+	}
+	
+#menu ul li > a:hover { text-decoration: underline; }
+#menu ul li.selected > a { color: <?php echo $SELECTED_TAB_FONT_COLOR ?>; }
 
 /* The breadcrumb line at the top of the page */
 
-.breadcrumb {
+#breadcrumb {
 	background: <?php echo $BREADCRUMB_BG_COLOR ?>;
+	border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
 	color: <?php echo $TEXT_COLOR ?>;
 	font-size: small;
-	width: 100%;
-	margin-top: 0px;
+	float: left;
+	/* This float is needed to align the breadcrumb line with the
+	   titlebar field and can be removed as soon as all the layout
+           tables have been removed */
+	}
+
+#breadcrumb ul {
+	margin: 0;
+	padding: 0;
+	float: left;
+	border: none;
+	} 
+
+#breadcrumb ul li {
+	margin-left: 1px;
+	padding-left: 2px;
+	border: none;
+	list-style: none;
+	display: inline;
+	}
+
+#breadcrumb ul li:before {
+	content: "\0020 \0020 \0020 \00BB \0020";
+	}
+	
+#breadcrumb ul li.first:before {
+	content: " ";
+	}
+
+#breadcrumb ul li.firstdots:before {
+	content: "... \00BB \0020 ";
 	}
 
 /* Main page */
@@ -128,10 +172,11 @@ td.tab > a:hover { text-decoration: underline; }
 	font-size: medium;
 	width: 100%;
 	border-spacing: 0px;
+	padding: 10px;
 	}
 
 table.main > td, table.main > th, table.info > td, table.info > th	{
-	padding: 4px
+	padding: 4px;
 	}
 
 table.info > col { width: 50%; }
@@ -148,6 +193,11 @@ table.ratings	{
 	margin-left: auto; /* To center the page */
 	margin-right: auto;
 	}
+
+div.ratings   {
+       float: left;
+       background: <?php echo $BREADCRUMB_BG_COLOR ?>;
+       }
 
 table.reports {
 	width: 100%;
@@ -171,9 +221,12 @@ td.reports {
 /* Links that appear on the right hand side of the title bar or page */
 
 .actionlink {
+	margin: 1px;
 	text-align: right;
 	vertical-align: top;
 	font-size: x-small;
+	display: block;
+	float: right;
 	}
 
 /* Text next to 'remove' tickbox */

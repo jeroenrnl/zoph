@@ -34,25 +34,17 @@
         $crumb_string = "&nbsp;";
     }
     else if (($num_crumbs = count($user->crumbs)) > $MAX_CRUMBS_TO_SHOW) {
-        $crumb_string = " ... &gt; " .  implode(" &gt; ",
+        $crumb_string = "<li class=\"firstdots\">" .  implode(" <li>",
             array_slice($user->crumbs, $num_crumbs - $MAX_CRUMBS_TO_SHOW));
     }
     else {
-        $crumb_string = implode(" &gt; ", $user->crumbs);
+        $crumb_string = "<li class=\"first\">" . implode("<li>", $user->crumbs);
     }
 ?>
   <tr>
-    <td>
-      <table class="breadcrumb">
-        <tr>
-          <td>
-<?php echo $crumb_string ?>
-          </td>
-          <td class="actionlink">
-          <a href="<?php echo $clear_url ?>">x</a>
-          </td>
-        </tr>
-      </table>
+    <td id="breadcrumb">
+    <ul><?php echo $crumb_string ?></ul>
+          <div class="actionlink"><a href="<?php echo $clear_url ?>">x</a></div>
     </td>
   </tr>
 <?php

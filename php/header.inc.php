@@ -10,11 +10,8 @@ print $rtplang->lang_header();
 
 <table class="page">
   <tr class="menu">
-    <td class="menu">
-      <table class="menu">
-        <tr>
-          <td class="menu">&nbsp;</td>
-
+    <td id="menu">
+<ul>
 <?php
     $tabs = array(
         translate("home", 0) => "zoph.php",
@@ -69,20 +66,16 @@ print $rtplang->lang_header();
 
     while (list($label, $page) = each($tabs)) {
         if ($page == $self) {
-            $class = "selectedtab";
-        }
-        else {
-             $class = "tab";
-        }
+            $class = "class=\"selected\"";
+        } else {
+	$class="";
+	}
 ?>
-          <td class="<?php echo $class ?>">
-            <a href="<?php echo $page ?>"><?php echo $label ?></a>
-          </td>
-<?php
+<li <?php echo $class ?>><a href="<?php echo $page ?>"><?php echo $label ?></a></li> 
+	  <?php
     }
 ?>
-        </tr>
-      </table>
+	</ul>
     </td>
   </tr>
 <?php
