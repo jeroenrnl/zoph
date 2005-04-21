@@ -630,11 +630,10 @@ sub lookupPersonId {
 
     $person = lc($person);
 
-    my ($first, $last) = split / +/, $person;
     my $query =
         "select person_id from " . $db_prefix . "people where " .
-        "lower(first_name) = " .  $dbh->quote($first) . " and " .
-        "lower(last_name) = " .  $dbh->quote($last);
+        "concat(lower(first_name),\" \", lower(last_name)) = " .
+        $dbh->quote($person);
 
     my @row_array = $dbh->selectrow_array($query);
 
