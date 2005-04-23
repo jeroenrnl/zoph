@@ -61,7 +61,11 @@ Zoph 0.3.3 Installation
        home page and in the browser's title bar.  The default is Zoph.  You
        could set it to something like "My Photo Album".
    - EMAIL_PHOTOS : enable email: 1, disable: 0
-   - WEB_IMPORT : enable import: 1, disable: 0
+   - CLIENT_WEB_IMPORT : Uploading of files through the web-interface using a 'browse' button: 
+       enable 1, disable: 0
+   - SERVER_WEB_IMPORT : Importing of files through the web-interface for files that are already
+       on the server: enable 1, disable: 0
+       CLIENT_WEB_IMPORT and SERVER_WEB_IMPORT may be both activated.
    - MAX_CRUMBS : the maximum number of breadcrumbs to allow
    - MAX_DAYS_PAST : how many days appear in the dropdown on the search page
        for "photos taken/modified X days ago"

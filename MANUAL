@@ -215,9 +215,14 @@ The web based importer is a new template in Zoph 0.3 that provides an
 alternative to the command line importer, zophImport.pl.  This template
 does not yet contain all the functionality of zophImport.pl.
 
-To use the importer, WEB_IMPORT must be set to 1 in config.inc.php and
-you must be logged in as either an admin or a user that has been granted
-permission to import.
+To use the importer, at least one of CLIENT_WEB_IMPORT and SERVER_WEB_IMPORT
+must be set to 1 in config.inc.php and you must be logged in as either an
+admin or a user that has been granted permission to import.
+
+Enable CLIENT_WEB_IMPORT to upload files through the web-interface using a
+'browse' button, and enable SERVER_WEB_IMPORT to import files through the
+web-interface for files that are already on the server.
+CLIENT_WEB_IMPORT and SERVER_WEB_IMPORT may be both activated.
 
 If you are going to be importing directories of photos you will probably
 need to increase the size of max_execution_time in php.ini.  The default
