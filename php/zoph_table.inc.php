@@ -10,14 +10,16 @@ class zoph_table {
     var $table_name;
     var $primary_keys;
     var $fields;
+    var $not_null; // Fields that may not be empty
 
     /*
      * This construnctor should be called from the constructor
      * of a subclass.
      */
-    function zoph_table($table_name, $primary_keys) {
+    function zoph_table($table_name, $primary_keys, $not_null) {
         $this->table_name = DB_PREFIX . $table_name;
         $this->primary_keys = $primary_keys;
+	$this->not_null = $not_null;
         $this->fields = array();
     }
 
@@ -46,8 +48,8 @@ class zoph_table {
 
             if (DEBUG > 2) { echo "<b>$key = $val</b><br>\n"; }
 
-            // ignore empty keys or values
-            if (empty($key) || $val == "") { continue; }
+            // ignore empty keys or values unless the field must be set.
+            if ((!in_array($key, $this->not_null)) && (empty($key) || $val == "")) { continue; }
 
             if ($prefix) {
                 if (strpos($key, $prefix) === 0) {
@@ -163,6 +165,9 @@ class zoph_table {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
                 $values .=  $value ;
             }
+	    else if ($value == "" && in_array($name, $this->not_null)) {
+	    	die("<p class='error'><b>$name</b> may not be empty</p>");
+	    }
             else if ($value != "null") {
                 $values .= "'" . escape_string($value) . "'";
             }
@@ -254,6 +259,9 @@ class zoph_table {
             else if ($value == "now()" ) {
                 $values .= "$name = " . $value . "";
             }
+	    else if ($value == "" && in_array($name, $this->not_null)) {
+	    	die("<p class='error'><b>$name</b> may not be empty</p>");
+	    }
             else if ($value != "null") {
                 $values .= "$name = '" . escape_string($value) . "'";
             }

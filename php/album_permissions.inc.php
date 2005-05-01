@@ -9,7 +9,7 @@
 class album_permissions extends zoph_table {
 
     function album_permissions($uid = -1, $aid = -1) {
-        parent::zoph_table("album_permissions", array("user_id", "album_id"));
+        parent::zoph_table("album_permissions", array("user_id", "album_id"), array(""));
         $this->set("user_id", $uid);
         $this->set("album_id", $aid);
     }

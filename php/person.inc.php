@@ -9,7 +9,7 @@ class person extends zoph_table {
     var $work;
 
     function person($id = 0) {
-        parent::zoph_table("people", array("person_id"));
+        parent::zoph_table("people", array("person_id"), array("first_name"));
         $this->set("person_id", $id);
     }
 

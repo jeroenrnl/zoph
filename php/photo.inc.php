@@ -9,7 +9,7 @@ class photo extends zoph_table {
     var $location;
 
     function photo($id = 0) {
-        parent::zoph_table("photos", array("photo_id"));
+        parent::zoph_table("photos", array("photo_id"), array(""));
         $this->set("photo_id",$id);
     }
 

@@ -11,7 +11,7 @@ class user extends zoph_table {
     var $lang; // holds translations
 
     function user($id = 0) {
-        parent::zoph_table("users", array("user_id"));
+        parent::zoph_table("users", array("user_id"), array("user_name"));
         $this->set("user_id", $id);
     }
 

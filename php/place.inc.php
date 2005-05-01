@@ -6,7 +6,7 @@
 class place extends zoph_table {
 
     function place($id = 0) {
-        parent::zoph_table("places", array("place_id"));
+        parent::zoph_table("places", array("place_id"), array("title"));
         $this->set("place_id", $id);
     }
 

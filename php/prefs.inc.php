@@ -9,7 +9,7 @@ class prefs extends zoph_table {
     var $color_scheme;
 
     function prefs($id = 0) {
-        parent::zoph_table("prefs", array("user_id"));
+        parent::zoph_table("prefs", array("user_id"), array(""));
         $this->set("user_id", $id);
     }
 

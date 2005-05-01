@@ -8,7 +8,7 @@ class album extends zoph_tree_table {
     var $photo_count;
 
     function album($id = 0) {
-        parent::zoph_table("albums", array("album_id"));
+        parent::zoph_table("albums", array("album_id"), array("album"));
         $this->set("album_id", $id);
     }
 
