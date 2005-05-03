@@ -190,7 +190,7 @@ class user extends zoph_table {
 
     function get_last_crumb() {
         if ($this->crumbs && count($this->crumbs) > 0) {
-            return $this->crumbs[count($this->crumbs) - 1];
+            return html_entity_decode($this->crumbs[count($this->crumbs) - 1]);
         }
     }
 
