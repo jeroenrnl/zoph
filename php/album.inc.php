@@ -36,6 +36,13 @@ class album extends zoph_tree_table {
 
     function delete() {
         parent::delete(array("photo_albums", "album_permissions"));
+        $users = get_records("user", "user_id", array("lightbox_id" => $this->get("album_id")));
+        if ($users) {
+          foreach ($users as $user) {
+            $user->set_fields(array("lightbox_id" => "null"));
+            $user->update();
+          }
+        }
     }
 
     function get_children($user = null) {
