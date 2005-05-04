@@ -203,19 +203,13 @@ require_once("header.inc.php");
         </tr>
 <?php
     } // end import fields
-?>
-      </table>
-</form>
-    </td>
-  </tr>
-</table>
-
-<?php
+    
+    
     flush();
 
     // do the import down here
     if ($_action == "import") {
-
+        echo "<tr>\n<td>\n";
         // so directories are created with correct mode
         $oldumask = umask(IMPORT_UMASK);
 
@@ -263,8 +257,14 @@ require_once("header.inc.php");
                 if ($ext == 'zip' && UNZIP_CMD) {
                     $expand = UNZIP_CMD;
                 }
+                else if ($ext == 'zip' && !UNZIP_CMD) {
+                    echo translate("UNZIP_CMD is not set.") . "<br>\n";
+                }
                 else if ($ext == 'tar' && UNTAR_CMD) {
                     $expand = UNTAR_CMD;
+                }
+                else if ($ext == 'tar' && !UNTAR_CMD) {
+                    echo translate("UNTAR_CMD is not set.") . "<br>\n";
                 }
 
                 if ($expand) {
@@ -332,6 +332,13 @@ require_once("header.inc.php");
         }
 
         umask($oldumask);
+        echo "</td>\n</tr>\n";
     }
 ?>
+      </table>
+     </form>
+    </td>
+  </tr>
+</table>
+
 <?php require_once("footer.inc.php"); ?>
