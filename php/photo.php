@@ -119,7 +119,9 @@
     }
     else if ($_action == "confirm") {
         $photo->delete();
-        $user->eat_crumb();
+        if (!$user->prefs->get("auto_edit")) {
+            $user->eat_crumb();
+        }
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = "zoph.php"; }
         header("Location: " . add_sid($link));
