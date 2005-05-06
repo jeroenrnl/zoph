@@ -427,9 +427,16 @@ sub createThumbnails {
 #
 sub addToAlbums {
     my ($id) = @_;
+    my $album_id = 0;
 
     foreach my $album (@albums) {
-        my $album_id = lookupAlbumId($album);
+        if ( index($album,"/") >= 0 ) {
+            $album_id = lookupAlbumIdFromTree($album);
+        }
+        else {
+            $album_id = lookupAlbumId($album);
+        }
+        
         if (not $album_id) { next; }
 
         my $insert =
@@ -440,7 +447,6 @@ sub addToAlbums {
         my $insertSth = $dbh->prepare($insert);
         $insertSth->execute();
     }
-
 }
 
 #
@@ -709,3 +715,43 @@ sub lookupCategoryId {
     print "Category not found: $cat\n";
 }
 
+sub lookupAlbumIdFromTree {
+    my ($alb) = @_;
+    $alb = lc($alb);
+    
+    # The album root is not 0, but a child from '0' (usually 1)
+    my $album_id = lookupAlbumChild(0);
+    
+    my @albumtree = split("/", $alb);
+    foreach my $branch (@albumtree) {
+        if (!$branch) { next; }
+        $album_id = lookupAlbumChildByName($album_id, $branch);
+    }
+    return $album_id;
+}
+
+sub lookupAlbumChildByName {
+    my ($alb_id, $alb) = @_;
+    my $query =
+       "select album_id from " . $db_prefix . "albums where parent_album_id = " . $alb_id . " and album = " . $dbh->quote($alb);
+    my @row_array = $dbh->selectrow_array($query);
+
+    if (@row_array) {
+        return $row_array[0];
+    }
+    
+    print "Album not found: $alb\n";
+}
+
+sub lookupAlbumChild {
+    # Only returns first child!
+    my ($alb_id, $alb) = @_;
+    my $query =
+       "select album_id from " . $db_prefix . "albums where parent_album_id = " . $alb_id;
+    my @row_array = $dbh->selectrow_array($query);
+
+    if (@row_array) {
+        return $row_array[0];
+    }
+    print "Album not found: $alb\n";
+}
