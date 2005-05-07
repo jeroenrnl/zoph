@@ -2,8 +2,8 @@
 
 #
 # zophImport.pl
-# Zoph 0.3.3
-# Jason Geiger, December 2002
+# Zoph 0.4-pre1
+# Jason Geiger, 2002-2005
 #
 # Inserts images into the zoph database.  Info from the exif headers is
 # inserted along with any other fields/values passed in.
@@ -454,9 +454,16 @@ sub addToAlbums {
 #
 sub addToCategories {
     my ($id) = @_;
+    my $cat_id = 0;
 
     foreach my $cat (@categories) {
-        my $cat_id = lookupCategoryId($cat);
+        if ( index($cat,"/") >= 0 ) {
+            $cat_id = lookupCategoryIdFromTree($cat);
+        }
+        else {
+            $cat_id = lookupCategoryId($cat);
+        }
+
         if (not $cat_id) { next; }
 
         my $insert =
@@ -694,27 +701,6 @@ sub lookupAlbumId {
     print "Album not found: $album\n";
 }
 
-#
-# Looks up a category_id from a category name.
-#
-sub lookupCategoryId {
-    my ($cat) = @_;
-
-    $cat = lc($cat);
-
-    my $query =
-        "select category_id from " . $db_prefix . "categories " .
-        "where lower(category) = " .  $dbh->quote($cat);
-
-    my @row_array = $dbh->selectrow_array($query);
-
-    if (@row_array) {
-        return $row_array[0];
-    }
-
-    print "Category not found: $cat\n";
-}
-
 sub lookupAlbumIdFromTree {
     my ($alb) = @_;
     $alb = lc($alb);
@@ -754,4 +740,66 @@ sub lookupAlbumChild {
         return $row_array[0];
     }
     print "Album not found: $alb\n";
+}
+
+#
+# Looks up a category_id from a category name.
+#
+sub lookupCategoryId {
+    my ($cat) = @_;
+
+    $cat = lc($cat);
+
+    my $query =
+        "select category_id from " . $db_prefix . "categories " .
+        "where lower(category) = " .  $dbh->quote($cat);
+
+    my @row_array = $dbh->selectrow_array($query);
+
+    if (@row_array) {
+        return $row_array[0];
+    }
+
+    print "Category not found: $cat\n";
+}
+
+sub lookupCategoryIdFromTree {
+    my ($cat) = @_;
+    $cat = lc($cat);
+    
+    # The category root is not 0, but a child from '0' (usually 1)
+    my $category_id = lookupCategoryChild(0);
+    
+    my @cattree = split("/", $cat);
+    foreach my $branch (@cattree) {
+        if (!$branch) { next; }
+        $category_id = lookupCategoryChildByName($category_id, $branch);
+    }
+    return $category_id;
+}
+
+sub lookupCategoryChildByName {
+    my ($cat_id, $cat) = @_;
+    my $query =
+       "select category_id from " . $db_prefix . "categories where parent_category_id = " . $cat_id . " and category = " . $dbh->quote($cat);
+    my @row_array = $dbh->selectrow_array($query);
+
+    if (@row_array) {
+        return $row_array[0];
+    }
+    
+    print "Category not found: $cat\n";
+}
+
+sub lookupCategoryChild {
+    # Only returns first child!
+    my ($cat_id, $cat) = @_;
+    my $query =
+       "select category_id from " . $db_prefix . "categories where parent_category_id = " . $cat_id;
+    my @row_array = $dbh->selectrow_array($query);
+
+    if (@row_array) {
+        return $row_array[0];
+    }
+    print "Category not found: $cat\n";
 }
