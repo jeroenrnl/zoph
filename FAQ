@@ -171,10 +171,19 @@ Zoph FAQ
    I say Zoph like software (it's Zophtware). But you can Zoph with an O
    like in photos or however you like.
 
-  3.2 What license is Zoph released under and why?
+  3.2 What license is Zoph released under?
 
-   Zoph is released under the modified BSD license
-   (http://www.xfree86.org/3.3.6/COPYRIGHT2.html#5). I initially chose
-   this license because it was simple but GPL-compatible. However, I have
-   been recently thinking of moving to a copyleft license like the GNU
-   GPL.
+   Zoph used to be licensed under the modified BSD license. As of version 0.4
+   this has been changed to the GPL license. We have done our best to make sure
+   all the code in Zoph could be changed to this license. If you feel your copyright
+   has been violated with this change, please contact us a.s.a.p.
+   Some included files have their own license because the license doen not allow us
+   to change it to GPL:
+   - rtplang.class.php
+   - mimePart.php
+   - htmlMimeMail.php
+   - smtp.php
+   - RFC822.php
+   - Any files in the contrib directory.
+   Please see those files for license information. For all other files,
+   please refer to the file COPYING.
