@@ -72,7 +72,7 @@
         <tr>
           <td colspan="2">
 <p>
-<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, "June 2003") ?>
+<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, "August 2005") ?>
 </p>
 <p>
 <?php echo translate("Written by Jason Geiger with thanks to the following for their contributions:", 0) ?>
