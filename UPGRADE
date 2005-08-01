@@ -1,3 +1,80 @@
+Zoph 0.3.3 -> 0.4 Upgrade
+1 Aug 2005
+
+If you are upgrading from an older version than 0.3.3, please run the older
+database updates first. If you have been using a 0.4-pre version, you do not
+need to update the datebase again.
+
+Updating the Database
+---------------------
+
+Execute zoph-update-0.4.sql:
+
+> mysql -u zoph_admin -p zoph < sql/zoph_update-0.4.sql
+
+The database upgrade script makes the following changes:
+- Changes the name of all the tables to zoph_<old name>. If you do not want this,
+  comment out the lines starting with "rename table". Make sure the variable
+  DB_PREFIX in config.inc.php and $db_prefix in zophImport and zophExport match
+  your choice.
+
+- Adds a few columns to zoph_album_permissions and zoph_users, to be able to
+  monitor such as changes to permissions and last login.
+
+- Adds "email" to people.
+
+- Makes modifications for the new rating system, where multiple ratings can be done
+  on a single photo and average is calculated automatically.
+
+Updating configuration
+----------------------
+A number of configuration items have been added since v0.3.3. You can use the list below
+to update your current configuration file, or simply use the one in the distribution and
+change it to your needs.
+
+Set DB_PREFIX to a prefix for each tablename, see db update for details. Suggested is
+to use 'zoph_', as this will be the default in future releases. Make sure $db_prefix in
+zophImport.pl and zophExport.pl matches this setting.
+
+Much of the style information has been removed from the HTML code and is now in a separate
+CSS file. Please set CSS_SHEET to 'css.php' to load the CSS file.
+
+You can now choose the authentication method used by zoph; set $VALIDATOR accordingly.
+Possible choices:
+- 'default_validate': use the 'old' authentication method, probably the best
+  choice for most.
+- 'htpasswd_validate': use htpasswd to validate users.
+- 'php_validate': let PHP take care of validation. See http://www.php.net/features.http-auth
+You could also write your own authentication module; make it a function in validator.inc.php
+and set $VALIDATOR to it's name.
+
+You can automatically send a copy of each e-mail sent from Zoph to a predefined address by
+setting BCC_ADDRESS to that address. Zoph includes a link to the site when notifying a user
+of (new) access rights. If Zoph is unable to determine the correct URL itself,
+please set ZOPH_URL to the correct value. 
+
+If you want to be able to annotate photo's, set ANNOTATE_PHOTOS to 1 and set ANNOTATE_TEMP_DIR
+and ANNOTATE_TEMP_PREFIX to a sensible value (suggested: '/tmp' and 'zoph').
+
+To set the destination path in the web import to some default value, define the variable
+DEFAULT_DESTINATION_PATH; suggested value: 'uploads/date(Y.m.d)'. To hide this path from
+non-admin users, also define SHOW_DESTINATION_PATH and set it to 0, if you do not want to
+hide it, set it to 1.
+
+To allow users to rate photos, set ALLOW_RATINGS to 1; otherwise to 0.
+
+Zoph can now rotate images for you. Add the following settings and adapt where needed:
+	     // allow images to be rotated
+  	     define('ALLOW_ROTATIONS', 1);
+  	     define(ROTATE_CMD, 'convert');
+  	     //define('ROTATE_CMD', 'jpegtran');
+  	     // set to 1 to backup the original before it is rotated
+  	     define('BACKUP_ORIGINAL', 1);
+  	     // copy the original to a file with this prefix
+  	     define('BACKUP_PREFIX', 'orig_');
+
+
+-----------------------------------------------------------------------------
 Zoph 0.3.2 -> 0.3.3 Upgrade
 13 Dec 2002
 
