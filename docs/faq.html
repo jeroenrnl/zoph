@@ -1,18 +1,21 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <HTML>
 <HEAD>
 <TITLE>Zoph FAQ</TITLE>
+<link type="text/css" rel="stylesheet" href="../style.css">
 <META NAME="generator" CONTENT="txt2html v1.28">
 </HEAD>
 <BODY>
-
-<strong><a href=/>nother.net</a>: <a href=/zoph>zoph</a>:  faq</strong><hr>
+<p>
+<strong><a href="../">zoph</a>:  faq</strong>
+</p>
+<hr>
 <H1><A NAME="section-1.">Zoph FAQ</A></H1>
 
 <H2>Table Of Contents</H2>
 
 <UL><LI>1 <A HREF="#section-1.1.">Troubleshooting</A>
-<UL><LI>1.1 <A HREF="#section-1.1.1.">After logging in I get the following error: "Fatal error: Call to undefined function: mysql_pconnect()".  What's wrong?</A><LI>1.2 <A HREF="#section-1.1.2.">I can log in but when I try to view any other page I get: "Fatal error: The script tried to execute a method or access a property of an incomplete object. Please ensure that the class definition user of the object you are trying to operate on was loaded _before_ the session was started in /var/www/zoph/auth.inc.php on line 64".</A><LI>1.3 <A HREF="#section-1.1.3.">When I try to load zoph.sql in MySQL I get the following error: "ERROR 1121 at line 81: Column 'last_name' is used with UNIQUE or INDEX but is not defined as NOT NULL".</A><LI>1.4 <A HREF="#section-1.1.4.">I'm trying to use the importer from the web but I get this error: "Fatal error: Call to undefined function: imagecreatefromjpeg()".</A><LI>1.5 <A HREF="#section-1.1.5.">The web importer works but why aren't the EXIF tags in my photos being extracted?</A><LI>1.6 <A HREF="#section-1.1.6.">I'm trying to run Zoph 0.2[.1] with PHP 4.2.x.  Why isn't it working?</A><LI>1.7 <A HREF="#section-1.1.7.">Why can't the webserver find images in which there are spaces or special characters in the path?</A><LI>1.8 <A HREF="#section-1.1.8.">I moved my photos around after I loaded them and now I see broken images.  How can I fix them?</A><LI>1.9 <A HREF="#section-1.1.9.">If I try to change my password I get locked out of Zoph!  What's going on?</A><LI>1.10 <A HREF="#section-1.1.10.">Jhead complains (non fatally) when parsing my images.  Is there a way to suppress that?</A><LI>1.11 <A HREF="#section-1.1.11.">Why does Zoph choke when it tries to load the languages (line 88 of rtplang.class.php)?</A><LI>1.12 <A HREF="#section-1.1.12.">Can I use Zoph without having to enable cookies?</A><LI>1.13 <A HREF="#section-1.1.13.">Why do I see some English phrases when I'm using a translation (e.g. "[vo] that have been categorized")?</A><LI>1.14 <A HREF="#section-1.1.14.">Why do I see a bunch of code when I try to access Zoph?</A><LI>1.15 <A HREF="#section-1.1.15.">I've managed to get Zoph running in Windows but zophImport.pl only can load one file at a time.  If I try to execute "zophImport.pl *.jpg" I get a message saying "Not a file: *.jpg".  What's going on?</A>
+<UL><LI>1.1 <A HREF="#section-1.1.1.">After logging in I get the following error: "Fatal error: Call to undefined function: mysql_pconnect()".  What's wrong?</A><LI>1.2 <A HREF="#section-1.1.2.">I can log in but when I try to view any other page I get: "Fatal error: The script tried to execute a method or access a property of an incomplete object. Please ensure that the class definition user of the object you are trying to operate on was loaded _before_ the session was started in /var/www/zoph/auth.inc.php on line 64".</A><LI>1.3 <A HREF="#section-1.1.3.">When I try to load zoph.sql in MySQL I get the following error: "ERROR 1121 at line 81: Column 'last_name' is used with UNIQUE or INDEX but is not defined as NOT NULL".</A><LI>1.4 <A HREF="#section-1.1.4.">I'm trying to use the importer from the web but I get this error: "Fatal error: Call to undefined function: imagecreatefromjpeg()".</A><LI>1.5 <A HREF="#section-1.1.5.">The web importer works but why aren't the EXIF tags in my photos being extracted?</A><LI>1.6 <A HREF="#section-1.1.6.">I'm trying to run Zoph 0.2[.1] with PHP 4.2.x.  Why isn't it working?</A><LI>1.7 <A HREF="#section-1.1.7.">Why can't the webserver find images in which there are spaces or special characters in the path?</A><LI>1.8 <A HREF="#section-1.1.8.">I moved my photos around after I loaded them and now I see broken images.  How can I fix them?</A><LI>1.9 <A HREF="#section-1.1.9.">If I try to change my password I get locked out of Zoph!  What's going on?</A><LI>1.10 <A HREF="#section-1.1.10.">Jhead complains (non fatally) when parsing my images.  Is there a way to suppress that?</A><LI>1.11 <A HREF="#section-1.1.11.">Why does Zoph choke when it tries to load the languages (line 88 of rtplang.class.php)?</A><LI>1.12 <A HREF="#section-1.1.12.">Can I use Zoph without having to enable cookies?</A><LI>1.13 <A HREF="#section-1.1.13.">Why do I see some English phrases when I'm using a translation (e.g. "[vo] that have been categorized")?</A><LI>1.14 <A HREF="#section-1.1.14.">Why do I see a bunch of code when I try to access Zoph?</A><LI>1.15 <A HREF="#section-1.1.15.">I've managed to get Zoph running in Windows but zophImport.pl only can load one file at a time.  If I try to execute "zophImport.pl *.jpg" I get a message saying "Not a file: *.jpg".  What's going on?</A><LI>1.16 <A HREF="#section-1.1.16.">How do I delete the description of a photo?  I delete the text and hit update but the description is not removed.</A>
 </UL><LI>2 <A HREF="#section-1.2.">Customization</A>
 <UL><LI>2.1 <A HREF="#section-1.2.1.">Can I get Zoph to take up my whole browser window rather than that little rectangle?</A><LI>2.2 <A HREF="#section-1.2.2.">Can I customize the name/title used in the interface?</A><LI>2.3 <A HREF="#section-1.2.3.">I don't like your welcome screen, your instructions on the import page, or your use of English in general.</A>
 </UL><LI>3 <A HREF="#section-1.3.">Miscellaneous</A>
@@ -140,13 +143,20 @@ Some language files are missing a few translations.  Many, but not all, are show
 First, check to make sure that you have an AddType line for php files in your httpd.conf file.  This is described in the INSTALL document.
 
 <P>
-If your Apache configuration is correct, check your php.ini to make sure short_open_tag is set to On.  With short_open_tag off "&lt;?" is not recognized as a valid script tag (like "&lt;?php").  Since Zoph uses "&lt;?" in many places, this causes the templates to fail to execute.  You may have this problem if you install RedHat 8 as their default php.ini seems to have changed so that short_open_tag is disabled. Note: as of Zoph 0.3.3 short_open_tag is no longer required to be on.
+If your Apache configuration is correct, check your php.ini to make sure short_open_tag is set to On.  With short_open_tag off "&lt;?" is not recognized as a valid script tag (like "&lt;?php").  Since Zoph uses "&lt;?" in many places, this causes the templates to fail to execute.  You may have this problem if you install RedHat 8 as their default php.ini seems to have changed so that short_open_tag is disabled.
 
 
 <H3><A NAME="section-1.1.15.">1.15 I've managed to get Zoph running in Windows but zophImport.pl only can load one file at a time.  If I try to execute "zophImport.pl *.jpg" I get a message saying "Not a file: *.jpg".  What's going on?</A></H3>
 
 <P>
 I believe this happens because the DOS/Windows shell does not expand wildcards and so the *.jpg is passed unchanged to the perl script.  I would recommend using another shell like bash.  This can easily be done by installing something like CygWin.
+
+
+<H3><A NAME="section-1.1.16.">1.16 How do I delete the description of a photo?  I delete the text and hit update but the description is not removed.</A></H3>
+
+<P>
+To delete any sort of string field (like the description) you need to replace the text with the word "null" (without the quotes).  Passing null tells Zoph to delete that field.  Do the same on the search page if you specificly want to find empty fields.
+
 
 
 <H2><A NAME="section-1.2.">2 Customization</A></H2>
@@ -184,8 +194,27 @@ in photos or however you like.
 <H3><A NAME="section-1.3.2.">3.2 What license is Zoph released under and why?</A></H3>
 
 <P>
-Zoph is released under the modified BSD license (http://www.xfree86.org/3.3.6/COPYRIGHT2.html#5).  I initially chose this license because it was simple but GPL-compatible.  However, I have been recently thinking of moving to a copyleft license like the GNU GPL.
+Zoph used to be licensed under the modified BSD license. As of version 0.4
+this has been changed to the GPL license. We have done our best to make sure
+all the code in Zoph could be changed to this license. If you feel your copyright
+has been violated with this change, please contact us a.s.a.p.
+Some included files have their own license because the license doen not allow us
+to change it to GPL:
+<UL>
+<LI>rtplang.class.php</LI>
+<LI>mimePart.php</LI>
+<LI>htmlMimeMail.php</LI>
+<LI>smtp.php</LI>
+<LI>RFC822.php</LI>
+<LI>Any files in the contrib directory.</LI>
+</UL>
+Please see those files for license information. For all other files,
+please refer to the file COPYING.
+<hr>
 
-<hr>Generated on Fri Dec 13 14:52:10 PST 2002 with help from (a slightly modified) <a href="http://www.aigeek.com/txt2html/">txt2html</a> and <a href="http://www.oac.uci.edu/indiv/ehood/htmltoc.doc.html">htmltoc</a>.
+<p class='footer'>
+<a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=69353&amp;type=2" width="125" height="37" alt="SourceForge.net Logo"></a>
+<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01!" height="31" width="88"></a>
+Generated on Sun Dec 15 16:26:38 PST 2002 with help from (a slightly modified) <a href="http://www.aigeek.com/txt2html/">txt2html</a> and <a href="http://www.oac.uci.edu/indiv/ehood/htmltoc.doc.html">htmltoc</a>.
 </BODY>
 </HTML>

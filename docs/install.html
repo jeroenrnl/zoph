@@ -1,15 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <HEAD>
-<TITLE>Zoph 0.3.3 Installation</TITLE>
+<TITLE>Zoph 0.4 Installation</TITLE>
+<link type="text/css" rel="stylesheet" href="../style.css">
 <META NAME="generator" CONTENT="txt2html v1.28">
 </HEAD>
 <BODY>
-
-<strong><a href=/>nother.net</a>: <a href=/zoph>zoph</a>:  install</strong><hr>
-<H1><A NAME="section-1.">Zoph 0.3.3 Installation</A></H1>
-13 Dec 2002
-
+<p>
+<strong><a href="../">zoph</a>:  install</strong>
+</p>
+<hr>
+<H1><A NAME="section-1.">Zoph 0.4 Installation</A></H1>
+<p>
+1 Aug 2005
+</p>
 <H2>Table Of Contents</H2>
 
 <UL><LI><A HREF="#section-1.1.">1. Requirements</A><LI><A HREF="#section-1.2.">2. Creating the database</A>
@@ -27,14 +30,13 @@
    details on installing these, read the REQUIREMENTS document.
 
 <UL>
-  <LI>MySQL 3.23
+  <LI>MySQL 3.23 or newer
   <LI>Apache
   <LI>PHP 4
   <LI>Perl 5
   <LI>Perl DBI, DBD::mysql, Image::Size
   <LI>ImageMagick
   <LI>Jhead (http://www.sentex.net/~mwandel/jhead/)
-
 </UL>
 <P>
    You may also have to install mod_php and the MySQL PHP module to get
@@ -47,80 +49,69 @@
 <P>
        <code>$ mysqladmin -u root -p create zoph<BR></code>
        <code>$ mysql -u root -p zoph &lt; sql/zoph.sql</code>
-
+</p>
 <H3><A NAME="section-1.2.2.">2.2 Create users for zoph</A></H3>
 
 <P>
-       I created two users: zoph_rw is used by the application and
-       zoph_admin is used when I work directly in mysql so I don't
+       I created two users: <tt>zoph_rw</tt> is used by the application and
+       <tt>zoph_admin</tt> is used when I work directly in mysql so I don't
        have to use root.
-
+</p>
 <P>
        <code>$ mysql -u root -p<BR></code>
        <code>mysql&gt; grant select, insert, update, delete on zoph.* to zoph_rw@localhost identified by 'PASSWORD';</code>
-
+</P>
 <P>
        <code>mysql&gt; grant all on zoph.* to zoph_admin identified by 'PASSWORD';</code>
-
+</P>
 <H2><A NAME="section-1.3.">3. Configure the PHP templates</A></H2>
 
 <P>
-   The values to be configured are in the php/config.inc.php file.
-
+   The values to be configured are in the <tt>php/config.inc.php</tt> file.
+</P>
 <P>
    You will have to edit the following:
+</P>
+<DL>
+  <DT>DB_HOST</DT><DD>your database host (<TT>localhost</TT>, for example)</DD>
+  <DT>DB_NAME</DT><DD>zoph (unless you used something else above)</DD>
+  <DT>DB_USER</DT><DD>zoph_rw, using the above example</DD>
+  <DT>DB_PASS</DT><DD>the password you set</DD>
+  <DT>DB_PREFIX</DT><DD>A prefix for the table names in the database (Recommended: <tt>zoph_</tt>)</DD>
 
-<UL>
-  <LI>DB_HOST : your database host (localhost, for example)
-  <LI>DB_NAME : zoph (unless you used something else above)
-  <LI>DB_USER : zoph_rw, using the above example
-  <LI>DB_PASS : the password you set
-
-  <LI>USE_IMAGE_SERVICE : see the section on the image service below.
-       the default is no (0).
-  <LI>IMAGE_DIR : where your images are stored.  this is the absolute file
-       system path.  keep the trailing slash.
-  <LI>WEB_IMAGE_DIR : the path to the the images off you web server's doc root.
-       if you enable the image service, this is ignored.
-
-</UL>
+  <DT>USE_IMAGE_SERVICE</DT><DD>see the section on the image service below. The default is no (0).</DD>
+  <DT>IMAGE_DIR</DT><DD>where your images are stored. This is the absolute file system path. Keep the trailing slash.</DD>
+  <DT>WEB_IMAGE_DIR</DT><DD>the path to the the images off you web server's doc root. If you enable the image service, this is ignored.</DD>
+</DL>
 <P>
    Those are the only values you have to define.  The others you can leave
    as is or update as you like.  Here is some further information about
    some of the other parameters:
+</P>
+<DT>
+  <DT>ZOPH_TITLE</DT><DD>the title for the application. This is what appears on the home page and in the browser's title bar. The default is Zoph. You could set it to something like "My Photo Album".</DD>
+  <DT>EMAIL_PHOTOS</DT><DD>enable email: 1, disable: 0</DD>
+  <DT>CLIENT_WEB_IMPORT</DT><DD>Uploading of files through the web-interface using a 'browse' button: enable 1, disable: 0</DD>
+  <DT>SERVER_WEB_IMPORT</DT><DD>Importing of files through the web-interface for files that are already on the server: enable 1, disable: 0
+<TT>CLIENT_WEB_IMPORT</TT> and <TT>SERVER_WEB_IMPORT</TT> may be both activated.</DD>
+  <DT>MAX_CRUMBS</DT><DD>the maximum number of breadcrumbs to allow</DD>
+  <DT>MAX_DAYS_PAST</DT><DD>how many days appear in the dropdown on the search page for "photos taken/modified X days ago"</DD>
+</DL>
 
-<UL>
-  <LI>ZOPH_TITLE : the title for the application.  This is what appears on the
-       home page and in the browser's title bar.  The default is Zoph.  You
-       could set it to something like "My Photo Album".
-  <LI>EMAIL_PHOTOS : enable email: 1, disable: 0
-  <LI>WEB_IMPORT : enable import: 1, disable: 0
-  <LI>MAX_CRUMBS : the maximum number of breadcrumbs to allow
-  <LI>MAX_DAYS_PAST : how many days appear in the dropdown on the search page
-       for "photos taken/modified X days ago"
-
-</UL>
 <P>
    The following 6 parameters should always match their equivalents in
    zophImport.pl.  If you edit one, edit the other too.
+</P>
+<DL>
+  <DT>THUMB_SIZE</DT><DD>max width or height of thumbnails (default 120 pixels)</DD>
+  <DT>MID_SIZE</DT><DD>max width or height of mid size images (default 480 pixels)</DD>
+  <DT>THUMB_PREFIX</DT><DD>thumbnail prefix (default 'thumb')</DD>
+  <DT>MID_PREFIX</DT><DD>mid size prefix (default 'mid')</DD>
+  <DT>MIXED_THUMBNAILS</DT><DD>the default is 1 which enables Zoph versions newer than 0.3 to behave like older versions.  Setting this to 0 means that Zoph will assume all thumbnails have the extension specified in <TT>THUMB_EXTENSION</TT>. This setting should match what is in <TT>zophImporter.pl</TT>. If you are installing Zoph for the first time, I recommend you set this to 0 and change <TT>zophImport.pl</TT> accordingly. If you are upgrading, see the <TT>UPGRADE</TT> document for more information about this.</DD>
+  <DT>THUMB_EXTENSION</T><DD>the extension to use for thumbnails.  This setting is
+       ignored if <TT>MIXED_THUMBNAILS</TT> is set.</DD>
+</DL>
 
-<UL>
-  <LI>THUMB_SIZE : max width or height of thumbnails (default 120 pixels)
-  <LI>MID_SIZE : max width or height of mid size images (default 480 pixels)
-  <LI>THUMB_PREFIX : thumbnail prefix (default 'thumb')
-  <LI>MID_PREFIX : mid size prefix (default 'mid')
-  <LI>MIXED_THUMBNAILS : the default is 1 which enables the Zoph 0.3 to behave
-       like previous versions.  Setting this to 0 means that Zoph will
-       assume all thumbnails have the extension specified in THUMB_EXTENSION.
-       This setting should match what is in zophImporter.pl.
-       If you are installing Zoph for the first time, I recommend you set
-       this to 0 and change zophImport.pl accordingly.
-       If you are upgrading, see the UPGRADE document for more information
-       about this.
-  <LI>THUMB_EXTENSION : the extension to use for thumbnails.  This setting is
-       ignored if MIXED_THUMBNAILS is set.
-
-</UL>
 <H2><A NAME="section-1.4.">4. Install the templates</A></H2>
 
 <H3><A NAME="section-1.4.1.">4.1 Pick a location to put Zoph</A></H3>
@@ -128,15 +119,15 @@
 <P>
        Create a zoph/ directory off the doc root of your web server, or
        create a Virtual Host with a new doc root.
-
+</P>
 <P>
        <code>$ mkdir /var/www/html/zoph</code>
-
+</p>
 <H3><A NAME="section-1.4.2.">4.2 Copy the templates</A></H3>
 
 <P>
        <code>$ cp -r php/* /var/www/html/zoph/</code>
-
+</p>
 <H2><A NAME="section-1.5.">5. Install the perl scripts</A></H2>
 
 <H3><A NAME="section-1.5.1.">5.1 Check the path to perl</A></H3>
@@ -144,57 +135,64 @@
 <P>
        The perl scripts points to /usr/bin/perl.  If your perl is
        in a different place, edit the first line of the script.
-
+</p>
 <H3><A NAME="section-1.5.2.">5.2 Configure the database variables</A></H3>
 
 <P>
-       Edit bin/zophImport.pl and bin/zophExport.pl so that the following
-       variables match the values you put in config.inc.php:<BR>
+       Edit <TT>bin/zophImport.pl</TT> and <TT>bin/zophExport.pl</TT> so that the following
+       variables match the values you put in <TT>config.inc.php</TT>:<BR>
+<code>
        $db_name = 'zoph';<BR>
        $db_user = 'zoph_rw';<BR>
        $db_pass = 'password';
+</code>
+</p>
+<P>
+       In addtion, in <TT>zophExport.pl</TT> set <TT>$image_dir</TT> to you image directory.
+</p>
+<H3><A NAME="section-1.5.3.">5.3 Copy <TT>bin/zophImport.pl</TT> and <TT>bin/zophExport.pl</TT> to <TT>/usr/local/bin</TT></A></H3>
 
 <P>
-       In addtion, in zophExport.pl set $image_dir to you image directory.
-
-<H3><A NAME="section-1.5.3.">5.3 Copy bin/zophImport.pl and bin/zophExport.pl to /usr/local/bin</A></H3>
-
-<P>
-       Or some other directory in your PATH.
-
+       Or some other directory in your <TT>PATH</TT>.
+</P>
 <H3><A NAME="section-1.5.4.">5.4 Install the man page</A></H3>
 
 <P>
-       A man page for zophImport.pl is in the man/ directory.  Copy this
-       to somewhere in your manpath, /usr/local/man/man1 for example.
-
+       A man page for <TT>zophImport.pl</TT> is in the <TT>man/</TT> directory.  Copy this
+       to somewhere in your manpath, <TT>/usr/local/man/man1</TT> for example.
+</p>
 <H2><A NAME="section-1.6.">6. Test it out</A></H2>
 
 <P>
    Try hitting http://localhost/zoph/logon.php.  You should be presented
    with the logon screen.
-
+</P>
 <P>
    If you get a 404 error...<BR>
    + make sure the zoph/ folder and templates can be seen by the web
      server.
-
+</P>
 <P>
    If you see a bunch of code...<BR>
-   + make sure Apache is configured to handle PHP (see the REQUIREMENTS
+   + make sure Apache is configured to handle PHP (see the <TT>REQUIREMENTS</TT>
      file)
-
+</p>
 <P>
    If you see a MySQL access denied error...<BR>
-   + make sure the DB_USER you specified in config.inc.php actually has
+   + make sure the <TT>DB_USER</TT> you specified in <TT>config.inc.php</TT> actually has
      access to the database.  If your database is not on localhost, you
-     will need to grant permissions to zoph_rw@hostname for that host.
-
+     will need to grant permissions to <tt>zoph_rw@hostname</tt> for that host.
+</p>
 <H2><A NAME="section-1.7.">7. Add some photos</A></H2>
 
 <P>
-   See the MANUAL to get started.
-
-<hr>Generated on Fri Dec 13 14:52:10 PST 2002 with help from (a slightly modified) <a href="http://www.aigeek.com/txt2html/">txt2html</a> and <a href="http://www.oac.uci.edu/indiv/ehood/htmltoc.doc.html">htmltoc</a>.
+   See the <TT>MANUAL</TT> to get started.
+</p>
+<hr>
+<p class='footer'>
+<a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=69353&amp;type=2" width="125" height="37" alt="SourceForge.net Logo"></a>
+<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01!" height="31" width="88"></a>
+Generated with help from (a slightly modified) <a href="http://www.aigeek.com/txt2html/">txt2html</a> and <a href="http://www.oac.uci.edu/indiv/ehood/htmltoc.doc.html">htmltoc</a>. Updated 1 Aug 2005 by <i>Jeroen Roos</i>
+</p>
 </BODY>
 </HTML>
