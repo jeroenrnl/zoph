@@ -150,10 +150,6 @@ table.page > td, table.page > th {
 	border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
 	color: <?php echo $TEXT_COLOR ?>;
 	font-size: small;
-	float: left;
-	/* This float is needed to align the breadcrumb line with the
-	   titlebar field and can be removed as soon as all the layout
-           tables have been removed */
 	}
 
 #breadcrumb ul {
