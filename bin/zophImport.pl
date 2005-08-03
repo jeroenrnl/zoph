@@ -2,7 +2,7 @@
 
 #
 # zophImport.pl
-# Zoph 0.4-pre1
+# Zoph 0.4-pre2
 # Jason Geiger, 2002-2005
 #
 # This file is part of Zoph.
@@ -58,7 +58,7 @@ my $db_user = 'zoph_rw';
 my $db_pass = 'pass';
 my $db_prefix = 'zoph_';
 
-my $version = '0.4pre1';
+my $version = '0.4pre2';
 
 my $update     = 0; # update existing photo records instead of inserting
 my $updateSize = 0; # update the size, width and height (implies -update)
