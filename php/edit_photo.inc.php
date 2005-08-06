@@ -111,7 +111,7 @@
     }
 ?>
         <tr>
-          <td colspan="3" class="actionlink"><input type="submit" value="<?php echo translate($action, 0) ?>"></td>
+          <td colspan="3" class="right"><input type="submit" value="<?php echo translate($action, 0) ?>"></td>
         </tr>
         <tr>
           <td class="fieldtitle"><?php echo translate("title") ?></td>
