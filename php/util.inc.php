@@ -252,12 +252,20 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
         if ($key == $new_key) { continue; }
 
         if ($qstr) { $qstr .= "&"; }
-        $qstr .= rawurlencode($key) . "=" . rawurlencode($val);
+        if (is_array($val)) {
+            $qstr .= rawurlencode_array($key, $val);
+        } else {
+            $qstr .= rawurlencode($key) . "=" . rawurlencode($val);
+        }
     }
 
     if ($new_key && isset($new_val)) {
         if ($qstr) { $qstr .= "&"; }
-        $qstr .= rawurlencode($new_key) . "=" . rawurlencode($new_val);
+        if (is_array($new_val)) {
+            $qstr .= rawurlencode_array($new_key, $new_val);
+        } else {
+            $qstr .= rawurlencode($new_key) . "=" . rawurlencode($new_val);
+        }
     }
 
     return $qstr;
@@ -455,5 +463,23 @@ function delete_temp_annotated_files($user_id) {
         }
     }
 }
-
+/* based on urlencode_array
+   By linus at flowingcreativity dot net
+   from: http://www.php.net/manual/en/function.urlencode.php
+*/
+function rawurlencode_array(
+   $var,                // the array value
+   $varName,            // variable name to be used in the query string
+   $separator = '&'    // what separating character to use in the query string
+) {
+   $toImplode = array();
+   foreach ($var as $key => $value) {
+       if (is_array($value)) {
+           $toImplode[] = rawurlencode_array($value, "{$varName}[{$key}]", $separator);
+       } else {
+           $toImplode[] = "{$varName}[{$key}]=".rawurlencode($value);
+       }
+   }
+   return implode($separator, $toImplode);
+}
 ?>

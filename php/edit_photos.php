@@ -208,6 +208,10 @@
                 continue;
             }
 
+            if ($action == "update") {
+                $request_vars["_action"]="display";
+            }
+		
             $photo->lookup($user);
 
             $queryIgnoreArray[] = "__photo_id__$photo_id";
