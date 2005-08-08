@@ -71,6 +71,7 @@ No places were found in a city beginning with '%s'.=
 No=
 Notify User=
 Notify=
+Not rated=
 Or you may use the %s search page %s to find photos using multiple criteria. You may also view a %s randomly chosen photo %s like the one above.=
 People=
 Photos (Page %s/%s)=
