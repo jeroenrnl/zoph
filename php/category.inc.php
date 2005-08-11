@@ -128,7 +128,7 @@ class category extends zoph_tree_table {
             $name = $this->get("category");
         }
         else {
-            $name = "Categories";
+            $name = translate("Categories");
         }
         return "<a href=\"categories.php?parent_category_id=" . $this->get("category_id") . "\">$name</a>";
     }
