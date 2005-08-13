@@ -59,15 +59,17 @@
     }
 
     $header = "";
-    if (!$_pause) {
-        // bug#667480: header() didn't work with IE on Mac
-        // manually set http-equiv instead
-        //header("Refresh: $SLIDESHOW_TIME;URL=$PHP_SELF?$new_qs");
-    ?>
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset;?>">
 <link TYPE="text/css" REL="stylesheet" HREF="<?php echo CSS_SHEET ?>">
 <?php
+if (!$_pause) {
+        // bug#667480: header() didn't work with IE on Mac
+        // manually set http-equiv instead
+        //header("Refresh: $SLIDESHOW_TIME;URL=$PHP_SELF?$new_qs");
         $header = "<meta http-equiv=\"refresh\" content=\"$SLIDESHOW_TIME;URL=$PHP_SELF?$new_qs\">\n";
     }
     else {
@@ -76,8 +78,6 @@
 
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
 ?>
-<html>
-<head>
 <?php echo $header ?>
 <title>Zoph - Slideshow</title>
 </head>
