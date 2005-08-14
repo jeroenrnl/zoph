@@ -70,7 +70,27 @@
 
     if (isset($offset)) {
         $ignore = array("_off", "_action");
+
+        # To fix bug #1259152:
+        # get $_off, round it down to a multiple of cols x rows.
+
+        $_cols = getvar("_cols");
+        $_rows = getvar("_rows");
+        $_off = getvar("_off");
+
+        if (!$_cols) { $_cols = $DEFAULT_COLS; }
+        if (!$_rows) { $_rows = $DEFAULT_ROWS; }
+        if (!$_off)  { $_off = 0; }
+
+        $cells = $_cols * $_rows;
+
         $up_qs = update_query_string($request_vars, null, null, $ignore);
+	
+        if ($cells) {
+            $_off = $cells * floor($_off / ($cells)); 
+            $up_qs .= "&_off=" . $_off;
+        }
+        
         $up_link = "<a href=\"photos.php?$up_qs\">" . translate("Up", 0) . "</a>";
     }
 
