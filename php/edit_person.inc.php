@@ -63,7 +63,7 @@
         </tr>
         <tr>
           <td class="fieldtitle"><?php echo translate("date of birth") ?></td>
-          <td><?php echo create_text_input("dob", $person->get("dob"), 12, 10) ?></td>
+          <td class="field"><?php echo create_text_input("dob", $person->get("dob"), 12, 10) ?></td>
           <td class="inputhint">YYYY-MM-DD</td>
         </tr>
         <tr>
