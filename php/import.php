@@ -313,6 +313,7 @@ require_once("header.inc.php");
             }
             else {
                 echo translate("File upload failed") . "<br>\n";
+		echo translate("A possible cause is the upload_max_filesize variable in php.ini") . "<br>\n";
             }
         }
         else if ($_image_server) {
