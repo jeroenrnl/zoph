@@ -9,6 +9,7 @@
 10 - museum=10 - Kunst
 5 - so so=5 - Mwah...
 A Photo from %s=Een foto van %s
+A possible cause is the upload_max_filesize variable in php.ini=Een mogelijke oorzaak is de upload_max_filesize instelling in php.ini
 About=Info
 After this user is created they can be given access to albums.=Nadat deze gebruiker is aangemaakt kan er toegang worden gegeven tot de albums.
 Albums=Albums

@@ -9,6 +9,7 @@
 10 - museum=
 5 - so so=
 A Photo from %s=
+A possible cause is the upload_max_filesize variable in php.ini=
 About=
 After this user is created they can be given access to albums.=
 Albums=

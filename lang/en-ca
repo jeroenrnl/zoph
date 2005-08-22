@@ -9,6 +9,7 @@
 10 - museum=10 - museum
 5 - so so=5 - so so
 A Photo from %s=A Photo from %s
+A possible cause is the upload_max_filesize variable in php.ini=A possible cause is the upload_max_filesize variable in php.ini
 About=About
 After this user is created they can be given access to albums.=After this user is created they can be given access to albums.
 Albums=Albums

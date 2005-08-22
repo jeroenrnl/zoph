@@ -9,6 +9,7 @@
 10 - museum=10 - museumsreif
 5 - so so=5 - so lala
 A Photo from %s=Ein Foto von %s
+A possible cause is the upload_max_filesize variable in php.ini=Ein m&ouml;gliche Ursache ist den upload_max_filesize Configuration in php.ini
 About=Über
 After this user is created they can be given access to albums.=Wenn der User definiert ist kann er Zugriffsrechte auf Alben zugewiesen bekommen.
 Albums=Alben
