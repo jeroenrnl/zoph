@@ -15,6 +15,7 @@ Zoph 0.4
 - Added a warning to check for maximum file size when uploading fails (bug#739546)
 - Added Polish translation (thanks Krzysztof Kajkowski)
 - Swedish translation was updated by Johan Linder
+- Increased DEFAULT_WIDTH to 600, for layout reasons
 
 Zoph 0.4pre2
 1 August 2005
