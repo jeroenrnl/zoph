@@ -1,5 +1,38 @@
 Zoph Changelog
 
+Zoph 0.4
+- Removed "float" in CSS breadcrumb definition, this was a workaround for a
+  very small layout issue in Firefox, but caused some ugly behaviour in Konqueror and Safari.
+- Fixed incorrect 'Next' URL after editing photos. (bug#1252455)
+- Moved edit button to right side in edit_photo.php
+- Updated Dutch, English, Canadian English and German translation
+- Zoph_strings.txt (translation skeleton file) was updated for 0.4
+- The "root category" on the categories page is now translated
+- Fixed a layout issue when pressing pause during a slideshow
+- "Up" button now takes you to the last page you were looking at, instead of the first (bug#1259152)
+- Added a warning to check for maximum file size when uploading fails (bug#739546)
+- Added Polish translation (thanks Krzysztof Kajkowski)
+- Swedish translation was updated by Johan Linder
+
+Zoph 0.4pre2
+- Changed layout to use CSS (thanks Jeroen Roos)
+- Added Traditional Chinese translation (thanks Mat Lee)
+- Fixed translation of update and submit buttons
+- Added a "Contrib" directory in which some user-contributed tools are distributed.
+- Contrib: Diff to use Postgres as database (for zoph 0.3.3) (thanks Chris Beauchamp)
+- Contrib: ZophEdit Python script to edit photo metadata in a zoph database (thanks Nils Decker)
+- Contrib: ZophClean Perl script to find and solve differences between database and files on disk.
+- Fixed a bug where only Admin users could rate photos and add photos to a lightbox album (pat#1179920) (thanks Jason Taylor)
+- Added a check to prevent album names, category names, location, people names, user names and color schemes to have empty names (bug#846417)
+- Added a fix for zophImport.pl, it failed in looking up people that have a name with multiple spaces (pat#830236) (thanks Hans Verbrugge)
+- Contrib: Added a script to add movies to Zoph (pat#1176317) (thanks Giles Morant)
+- Fixed bug: a deleted album could still be a lightbox album (bug#1193347)
+- Fixed an url-encoding bug in relation to breadcrumbs (bug#1194722)
+- Fixed a problem with deleting a photo: returning to the photos after the delete was inconsistent when auto-edit is on or off. (bug#772403)
+- Added an error message when file cannot be unzipped (#1193351)
+- Changed the licence from BSD to GPL.
+- Changed default width in config.inc.php to be slidely wider to solve a layout glitch
+
 Zoph 0.4pre1
 
 - Created a validator class to allow different types of authentication
@@ -15,6 +48,28 @@ Zoph 0.4pre1
 - Fixed a bug in which update_query_string() in util.inc.php failed to overwrite new parameters (bug#678491)
 - Updated exif flash handling in exif.inc.php (bug#671023)
 - Included an udpated language package with new German, Dutch and Canadian English translations
+- Added image rotation (req#666979)
+- Fixed a problem with double escaping (bug#656435)
+- Fixed a problem with slideshows with IE on Mac (bug#667480)
+- Fixed a bug where the last modified date and the date a photo was taken were mixed up in the calendar view (bug#667486)
+- Added a "default destination path", so the import no longer fails when the path is not specified (bug#670855)
+- Added an extra space on the categories page (bug#741736). (thanks Mark Cooper)
+- Added languages Swedish (thanks Mikael Magnusson), Afrikaans (thanks Neels Jordaan), Hebrew (thanks "Prince01"), Portugese (thanks Joaquim Azevedo), Danish (thanks Jesper Skytte) languages
+- Fixed a typo in "Swedish Chef" translation
+- Added support for PNG and GIF in the webimported (thanks Patrick Lam)
+- Added validation using PHP_AUTH_USER/PW using php_validate() (thanks Samuel Keim)
+- Upgraded mail classes
+- Added email notification
+- Added registration of last login time and IP address per user
+- Added annotated photo emails (thanks Nixon P. Childs)
+- Added ratings by multiple users
+- Improved navigation by adding up & return links
+- Fixed a problem with next button in some specific cases (bug#782519) (thanks Curtis Rawls)
+- Added bulk editting mode that can change any photo page into a "power edit" page (req#667478)
+- Fixed a problem with photo editting (bug#782600) (thanks Curtis Rawls)
+- Fixed offset bug in slideshow
+- Fixed a bug with the pager on search results page.
+- Fixed a bug where some photos where counted twice (or more) on the reports page (pat#675172) (thanks Ian Kerr)
 
 Zoph 0.3.3
 13 Dec 2002
