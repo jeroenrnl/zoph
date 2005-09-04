@@ -46,7 +46,7 @@ my $db_prefix = 'zoph_';
 # set this to your image directory
 my $image_dir = '/data/images';
 
-my $version = '0.4pre2';
+my $version = '0.4';
 
 my $export_dir; # where to export to
 my $format;     # one of zoph, album, bins
