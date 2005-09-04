@@ -1,6 +1,8 @@
 Zoph Changelog
 
 Zoph 0.4
+4 September 2005
+
 - Removed "float" in CSS breadcrumb definition, this was a workaround for a
   very small layout issue in Firefox, but caused some ugly behaviour in Konqueror and Safari.
 - Fixed incorrect 'Next' URL after editing photos. (bug#1252455)
@@ -15,6 +17,8 @@ Zoph 0.4
 - Swedish translation was updated by Johan Linder
 
 Zoph 0.4pre2
+1 August 2005
+
 - Changed layout to use CSS (thanks Jeroen Roos)
 - Added Traditional Chinese translation (thanks Mat Lee)
 - Fixed translation of update and submit buttons
@@ -34,6 +38,7 @@ Zoph 0.4pre2
 - Changed default width in config.inc.php to be slidely wider to solve a layout glitch
 
 Zoph 0.4pre1
+Never released
 
 - Created a validator class to allow different types of authentication
 - Added a function to validator.inc.php to allow htpasswd authentication (req#656449) (thanks Asheesh Laroia)
@@ -174,4 +179,7 @@ Zoph 0.2
 24 April 2002
 
 - Initial public release
-- Rewrite of Zoph 0.1 (Zoph 0.1 completed on 14 Sep 2000)
+- Rewrite of Zoph 0.1 
+
+Zoph 0.1
+completed on 14 Sep 2000, never released
