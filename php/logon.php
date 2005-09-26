@@ -40,7 +40,7 @@
     <td>
       <table class="titlebar">
         <tr>
-  <th colspan="2"><h1><?php echo "logon" ?><h1></th>
+  <th colspan="2"><h1><?php echo "logon" ?></h1></th>
         </tr>
       </table>
     </td>
