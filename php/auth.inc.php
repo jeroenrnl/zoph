@@ -36,7 +36,15 @@
     }
 
     // no user was in the session, try logging in
-    if (empty($user)) {
+    if ($_action == "logout") {
+        // delete left over temp files
+        delete_temp_annotated_files($user->get("user_id"));
+
+        session_destroy();
+        $user = null;
+        header("Location: logon.php");
+        die;
+    } else if (empty($user)) {
 
         $uname = getvar("uname");
         $pword = getvar("pword");
@@ -65,22 +73,19 @@
         }
         else {
             header("Location: logon.php");
+            die;
         }
 
     }
-    else if ($_action == "logout") {
-        // delete left over temp files
-        delete_temp_annotated_files($user->get("user_id"));
 
-        session_destroy();
-        $user = null;
-        header("Location: logon.php");
-    }
-
-    $user->prefs->load();
-    $rtplang = $user->load_language();
-
-    if (minimum_version('4.1.0')) {
-        $_SESSION['user'] = &$user;
-    }
+    if (!empty($user)) {
+        $user->prefs->load();
+        $rtplang = $user->load_language();
+    	
+        if (minimum_version('4.1.0')) {
+            $_SESSION['user'] = &$user;
+        }
+    } else {
+        $rtplang = new rtplang("lang", "en", "en", "en");
+    }	
 ?>
