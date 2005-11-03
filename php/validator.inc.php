@@ -62,7 +62,42 @@ class validator {
         else if (DEFAULT_USER) {
             $user = new user(DEFAULT_USER);
         }
+        else {
+        if (DEBUG) {echo "No valid user found... trying old_password...<br>\n";}
+      /*
+       * No valid user has been found. It could be that we've upgraded
+       * MySQL to a post-4.1 version and the password is still in the old
+       * format. Let's find out, first, we will determine if we're indeed
+       * running running a newer version than 4.1:
+       */
+        $mysqlver=mysql_get_server_info();
+        list($mysqlmaj, $mysqlmin) = split("\.", $mysqlver, 2);
+        if (($mysqlmaj == 4 && $mysqlmin >= 1) || ($mysqlmaj >= 5) ) {
+          if (DEBUG) { echo "Yep, we're running MySQL 4.1 or later<br>\n"; }
+          $query =
+            "select user_id from " . DB_PREFIX . "users where " .
+            "user_name = '" .  escape_string($this->username) . "' and " .
+            "password = old_password('" . escape_string($this->password) . "')";
+          $result = mysql_query($query);
 
+          if (mysql_num_rows($result) == 1) {
+              $row = mysql_fetch_array($result);
+              $user = new user($row["user_id"]);
+             /* Ok...we found the user, let's make sure 
+              * this won't happen again...
+              */
+              $query = 
+                 "update " . DB_PREFIX . "users " .
+                 "set password=password('" . 
+                 escape_string($this->password) . "') " .
+                 "where user_name = '" . 
+                 escape_string($this->username) . "' and " .
+                 "password = old_password('" . 
+                 escape_string($this->password) . "')";
+              $result = mysql_query($query);
+              }
+           }
+        }
         return $user;
     }
 
