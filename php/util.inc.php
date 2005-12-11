@@ -59,22 +59,25 @@ function create_field_html($fields, $cols = 2, $split = null) {
 }
 
 function create_text_input($name, $value, $size = 20, $max = 32) {
-    return "<input type=\"text\" name=\"$name\" value=\"$value\" size=\"$size\" maxlength=\"$max\">\n";
+    $id=str_replace("_", "", $name);
+    return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" maxlength=\"$max\">\n";
 }
 
 function create_pulldown($name, $value, $value_array) {
-    $html = "<select name=\"$name\">\n";
+    $id=str_replace("_", "", $name);
+    $html = "<select name=\"$name\" id=\"$id\">\n";
     while (list($val, $label) = each($value_array)) {
         if ($val == $value) { $selected = " selected"; }
         else { $selected  = ""; }
-        $html .= "  <option value=\"$val\"$selected>$label</option>\n";
+        $html .= "  <option value=\"$val\"$selected >" . ($label?$label:"&nbsp;") ."</option>\n";
     }
     $html .= "</select>\n";
     return $html;
 }
 
 function create_grouped_pulldown($name, $value, $value_array) {
-    $html = "<select name=\"$name\">\n";
+    $id=str_replace("_", "", $name);
+    $html = "<select name=\"$name\" id=\"$id\">\n";
 
     $current_label = "";
     $optgroup;
@@ -184,7 +187,7 @@ function create_inequality_operator_pulldown($var, $op = ">") {
 
 function create_photo_field_pulldown($var, $name = null) {
     return create_pulldown($var, $name, array(
-        "" => "",
+        "" => "&nbsp;",
         "date" => translate("date",0),
         "time" => translate("time",0),
         "timestamp" => translate("timestamp",0),
@@ -251,7 +254,7 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
         if (in_array($key, $ignore)) { continue; }
         if ($key == $new_key) { continue; }
 
-        if ($qstr) { $qstr .= "&"; }
+        if ($qstr) { $qstr .= "&amp;"; }
         if (is_array($val)) {
             $qstr .= rawurlencode_array($key, $val);
         } else {
@@ -260,7 +263,7 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
     }
 
     if ($new_key && isset($new_val)) {
-        if ($qstr) { $qstr .= "&"; }
+        if ($qstr) { $qstr .= "&amp;"; }
         if (is_array($new_val)) {
             $qstr .= rawurlencode_array($new_key, $new_val);
         } else {
