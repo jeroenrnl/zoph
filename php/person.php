@@ -51,11 +51,6 @@
 
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
-?>
-  <tr>
-    <td>
-      <table class="titlebar">
-<?php
     if ($action == "display") {
 
         $ignore; // don't need the thumbnails, only get 1
@@ -67,42 +62,31 @@
         $vars["photographer_id"] = $person->get("person_id");
         $photos_by = get_photos($vars, 0, 1, $ignore, $user);
 ?>
-        <tr>
-          <th><h1><?php echo translate("person") ?></h1></th>
-          <td class="actionlink">
+      <h1>
 <?php
         if ($user->is_admin()) {
 ?>
-          [
+          <span class="actionlink">
             <a href="person.php?_action=edit&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("edit") ?></a> |
             <a href="person.php?_action=delete&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="person.php?_action=new"><?php echo translate("new") ?></a>
-          ]
+          </span>
 <?php
         }
-        else {
-            echo "&nbsp;";
-        }
 ?>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <th colspan="2"><h2>
+        <?php echo translate("person") ?>
+     </h1>
+      <div class="main">
+          <h2>
             <?php echo $person->get("first_name") ?>
             <?php echo $person->get("middle_name") ?>
             <?php echo $person->get("last_name") ?>
-            </h2>
-          </th>
-          <td class="actionlink">[
+          </h2>
+          <span class="actionlink">
             <a href="photos.php?person_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_of " . translate("photos of") ?></a> |
             <a href="photos.php?photographer_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_by " . translate("photos by") ?></a>
-          ]</td>
+          </span>
+          <table id="person">
 <?php
     if ($user->get("detailed_people")) {
 ?>
@@ -120,8 +104,9 @@
 ?>
         <tr>
           <td class="fieldtitle"><?php echo translate("home") ?></td>
-          <td class="field"><?php echo $person->home->get_address() ?></td>
-          <td class="actionlink">[ <a href="place.php?place_id=<?php echo $person->get("home_id") ?>"><?php echo translate("view") ?></a> ]</td>
+          <td class="field">
+          <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("home_id") ?>"><?php echo translate("view") ?></a></span>
+          <?php echo $person->home->get_address() ?></td>
         </tr>
 <?php
         }
@@ -131,10 +116,10 @@
         <tr>
           <td class="fieldtitle"><?php echo translate("work") ?></td>
           <td class="field">
+          <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("work_id") ?>"><?php echo translate("view") ?></a></span>
              <?php echo $person->work->get("title") ? $person->work->get("title") . "<br>" : "" ?>
              <?php echo $person->work->get_address() ?>
           </td>
-          <td class="actionlink">[ <a href="place.php?place_id=<?php echo $person->get("work_id") ?>"><?php echo translate("view") ?></a> ]</td>
         </tr>
 <?php
         }
@@ -150,35 +135,28 @@
 
     } // detailed_people
 
+?>
+</table>
+<?php
+
     } // display
     else if ($action == "confirm") {
 ?>
-        <tr class="titlebar">
-          <th><h1><?php echo translate("delete person") ?></h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td>
-            <?php echo sprintf(translate("Confirm deletion of '%s'"), $person->get_name()) ?>:
-          </td>
-          <td class="actionlink">[
+          <h1>
+            <?php echo translate("delete person") ?>
+          </h1>
+      <div class="main">
+          <span class="actionlink">
             <a href="person.php?_action=confirm&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="person.php?_action=display&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("cancel") ?></a>
-          ]</td>
-        </tr>
-      </table>
+          </span>
+            <?php echo sprintf(translate("Confirm deletion of '%s'"), $person->get_name()) ?>:
 <?php
     }
     else {
 require_once("edit_person.inc.php");
     }
 ?>
-</table>
-
+</div>
 
 <?php require_once("footer.inc.php"); ?>
