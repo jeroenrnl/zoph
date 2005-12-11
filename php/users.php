@@ -26,21 +26,14 @@
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1><?php echo translate("users") ?></h1></th>
-          <td class="actionlink">[
+        <h1>
+          <span class="actionlink">
             <a href="user.php?_action=new"><?php echo translate("new") ?></a>
-          ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
+          </span>
+          <?php echo translate("users") ?>
+        </h1>
+        <div class="main">
+          <table id="users">
 <?php
     $users = get_users();
 
@@ -56,9 +49,7 @@
             <?php echo $u->person->get_link() ?>
           </td>
           <td>
-            <?php echo $u->get("lastlogin"); ?>
-          </td>
-          <td class="actionlink"> [
+          <span class="actionlink">
 <?php
             if ((count(get_newer_albums($u->get("user_id"), $u->get_lastnotify())) > 0)) {
 ?>
@@ -66,7 +57,9 @@
 <?php
             }
 ?>
-            <a href="user.php?user_id=<?php echo $u->get("user_id") ?>"><?php echo translate("view") ?></a> ]
+            <a href="user.php?user_id=<?php echo $u->get("user_id") ?>"><?php echo translate("view") ?></a>
+            </span>
+            <?php echo $u->get("lastlogin"); ?>
           </td>
         </tr>
 <?php
@@ -74,10 +67,7 @@
     }
 ?>
       </table>
-    </td>
-  </tr>
-</table>
-
+    </div>
 <?php
     require_once("footer.inc.php");
 ?>

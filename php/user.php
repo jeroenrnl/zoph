@@ -92,40 +92,25 @@
         $title = translate("New User");
     }
 
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
-
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
 <?php
     if ($action == "display") {
 ?>
-        <tr>
-          <th><h1><?php echo translate("user") ?></h1></th>
-          <td class="actionlink">
-          [
+         <h1>
+          <span class="actionlink">
             <a href="user.php?_action=edit&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("edit") ?></a> |
             <a href="user.php?_action=delete&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="user.php?_action=new"><?php echo translate("new") ?></a>
-          ]
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <th colspan="3">
-            <h2><?php echo $this_user->get("user_name") ?></h2>
-          </th>
-        </tr>
+          </span>
+          <?php echo translate("user") ?>
+        </h1>
+        <div class="main">
+          <h2><?php echo $this_user->get("user_name") ?></h2>
+          <table id="user">
 <?php echo create_field_html($this_user->get_display_array(), 3) ?>
-        <tr>
-          <td colspan="3" class="center">
+            <tr>
+              <td colspan="3" class="center">
 <?php
         $url = ZOPH_URL;
         if (empty($url)) {
@@ -161,13 +146,9 @@
           </td>
         </tr>
       </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="permissions">
+      <table id="permissions">
     <tr>
-          <th colspan="5"><h3><?php echo translate("Albums") ?></h3></th>
+      <th colspan="5"><h3><?php echo translate("Albums") ?></h3></th>
         </tr>
 <?php
         if ($this_user->is_admin()) {
@@ -177,6 +158,7 @@
        <?php echo sprintf(translate("As an admin, user %s has access to all albums."), $this_user->get("user_name")) ?>
           </td>
         </tr>
+       </table>
 <?php
         }
         else {
@@ -199,47 +181,32 @@
         </tr>
 <?php
             }
+?>
+     </table>
+<?php
         }
     }
     else if ($action == "confirm") {
 ?>
-        <tr class="titlebar">
-          <th><h1><?php echo translate("delete user") ?></h1></th>
-          <td class="actionlink">[
-            <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("cancel") ?></a>
-          ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td>
-            <?php echo sprintf(translate("Confirm deletion of '%s'"), $this_user->get("user_name")) ?>
-          </td>
-          <td class="actionlink">[
+          <h1>
+            <span class="actionlink">
+              <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("cancel") ?></a>
+            </span>
+            <?php echo translate("delete user") ?>
+          </h1>
+      <div class="main">
+          <span class="actionlink">
             <a href="user.php?_action=confirm&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>"><?php echo translate("cancel") ?></a>
-          ]</td>
-        </tr>
-    </table>
+          </span>
+          <?php echo sprintf(translate("Confirm deletion of '%s'"), $this_user->get("user_name")) ?>
 <?php
     }
     else {
 require_once("edit_user.inc.php");
 ?>
-  <tr>
-    <td>
 <form action="user.php">
-      <table class="permissions">
-<!--    <tr>
-        <td width="25px"></td>
-        <td></td>
-        <td width="80px"></td>
-        <td width="80px"></td>
-    </tr> !-->
+      <table id="permissions">
     <col class="col1"><col class="col2"><col class="col3"><col class="col4">
     <tr>
           <th colspan="4"><h3><?php echo translate("Albums") ?></h3></th>
@@ -252,6 +219,8 @@ require_once("edit_user.inc.php");
        <?php echo sprintf(translate("As an admin, user %s has access to all albums."), $this_user->get("user_name")) ?>
           </td>
         </tr>
+      </table>
+    </form>
 <?php
         }
         else {
@@ -262,6 +231,8 @@ require_once("edit_user.inc.php");
        <?php echo translate("After this user is created they can be given access to albums.") ?>
           </td>
         </tr>
+      </table>
+    </form>
 <?php
             }
             else {
@@ -341,12 +312,12 @@ require_once("edit_user.inc.php");
         <input type="submit" value="<? echo translate("update", 0) ?>">
       </td>
     </tr>
+  </table>
+</form>
 <?php
             } // not insert
         } // not admin
     } // edit
 ?>
-</table>
-</form>
-</table>
+</div>
 <?php require_once("footer.inc.php"); ?>
