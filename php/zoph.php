@@ -30,20 +30,9 @@
     $num_photos = get_photos($vars, 0, 1, $thumbnails, $user);
 ?>
 
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><H1><?php echo ZOPH_TITLE ?></H1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td class="thumbnail" id="random">
+    <h1><?php echo ZOPH_TITLE ?></h1>
+    <div class="main">
+        <div class="thumbnail" id="random">
 <?php
     if (sizeof($thumbnails) == 1) {
         echo $thumbnails[0]->get_thumbnail_link();
@@ -55,62 +44,53 @@
     $category = get_root_category();
     $category_count = get_count("category");
     $category_photo_count = $category->get_total_photo_count($user);
+    echo "\n";
 ?>
-          </td>
-          <td>
-      <?php echo sprintf(translate("Welcome %s.  %s currently contains"), $user->person->get_link(), ZOPH_TITLE) ?>
-            <ul><li><?php echo sprintf(translate("%s photos in %s"),  $album_photo_count, $album_count) ?> <a href="albums.php"><?php echo $album_count == 1 ? translate("album") : translate("albums") ?></a></li>
-            <li><?php echo sprintf(translate("%s photos in %s"), $category_photo_count, $category_count) ?> <a href="categories.php"><?php echo $category_count == 1 ? translate("category") : translate("categories") ?></a></li>
+        </div>
+        <div class="intro" id="first">
+            <?php echo sprintf(translate("Welcome %s.  %s currently contains"), $user->person->get_link(), ZOPH_TITLE);
+    echo "\n"; ?>
+            <ul class="intro">
+              <li><?php echo sprintf(translate("%s photos in %s"),  $album_photo_count, $album_count) ?> <a href="albums.php"><?php echo $album_count == 1 ? translate("album") : translate("albums") ?></a></li>
+                <li><?php echo sprintf(translate("%s photos in %s"), $category_photo_count, $category_count) ?> <a href="categories.php"><?php echo $category_count == 1 ? translate("category") : translate("categories") ?></a></li>
 <?php
     if ($user->is_admin() || $user->get("browse_people")) {
         $person_count = get_count("person");
 ?>
-            <li><?php echo $person_count ?> <a href="people.php"><?php echo $person_count == 1 ? translate("person", 0) : translate("people", 0) ?></a></li>
+                <li><?php echo $person_count ?> <a href="people.php"><?php echo $person_count == 1 ? translate("person", 0) : translate("people", 0) ?></a></li>
 <?php
     }
     if ($user->is_admin() || $user->get("browse_places")) {
         $place_count = get_count("place");
 ?>
-            <li><?php echo $place_count ?> <a href="places.php"><?php echo $place_count == 1 ? translate("place", 0) : translate("places", 0) ?></a></li>
+                <li><?php echo $place_count ?> <a href="places.php"><?php echo $place_count == 1 ? translate("place", 0) : translate("places", 0) ?></a></li>
 <?php
     }
 ?>
-          </ul></td>
-        </tr>
-        <tr>
-          <td colspan="2">
+            </ul>
+        </div>
+        <p class="intro">
 <?php
     $today = date("Y-m-d");
     $sub_days = $user->prefs->get("recent_photo_days");
 
     echo sprintf(translate("You may search for photos %s taken %s or %s modified %s in the past %s days."), "<a href=\"photos.php?_date-op=%3E%3D&amp;date=" . subtract_days($today, $sub_days) . "\">", "</a>", "<a href=\"photos.php?_timestamp-op=%3E%3D&amp;timestamp=" . subtract_days($today, $sub_days) . "\">", "</a>", $sub_days);
-?>
-      <?php echo sprintf(translate("Or you may use the %s search page %s to find photos using multiple criteria. You may also view a %s randomly chosen photo %s like the one above."), "<a href=\"search.php\">", "</a>", "<a href=\"photos.php?_random=1&amp;_rating-op=%3E%3D&amp;rating=$RANDOM_PHOTO_MIN_RATING\">","</a>"); ?>
-<p>
-<?php echo sprintf(translate("These options are always available in the tabs on the upper right.  Use the %s home %s link to return here. Click on any thumbnail to see a larger version along with information about that photo."),"<a href=\"zoph.php\">","</a>"); ?>
-</p>
-<?php
+    echo "\n";
+    echo sprintf(translate("Or you may use the %s search page %s to find photos using multiple criteria. You may also view a %s randomly chosen photo %s like the one above."), "<a href=\"search.php\">", "</a>", "<a href=\"photos.php?_random=1&amp;_rating-op=%3E%3D&amp;rating=$RANDOM_PHOTO_MIN_RATING\">","</a>");
+    echo "\n        <p class=\"intro\">\n";
+    echo sprintf(translate("These options are always available in the tabs on the upper right.  Use the %s home %s link to return here. Click on any thumbnail to see a larger version along with information about that photo."),"<a href=\"zoph.php\">","</a>"); 
+    echo "\n        </p>\n";
     if ($user->get("user_id") != DEFAULT_USER) {
 ?>
-<p>
-<?php echo sprintf(translate("To edit your preferences or change your password, click %s here %s."),"<a href=\"prefs.php\">","</a>"); ?>
-</p>
-<?php
+        <p class="intro">
+<?php echo sprintf(translate("To edit your preferences or change your password, click %s here %s."),"<a href=\"prefs.php\">","</a>");
+    echo "\n        </p>\n"; 
     }
 ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="version" colspan="2">
-            Zoph <?php echo VERSION ?>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-
-
+        <p class="version">
+            Zoph <?php echo VERSION . "\n" ?>
+        </p>
+    </div>
 <?php
     require_once("footer.inc.php");
 ?>
