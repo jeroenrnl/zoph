@@ -20,15 +20,19 @@
 print $rtplang->lang_header();
 ?>
 <link TYPE="text/css" REL="stylesheet" HREF="<?php echo CSS_SHEET ?>">
-
+<?php
+    if ($extrastyle) {
+?>
+        <style type="text/css">
+            <?php echo $extrastyle ?>
+        </style>
+<?php
+    }
+?>
 <title><?php echo ZOPH_TITLE . ($title ? " - $title" : "") ?></title>
 </head>
 <body>
-
-<table class="page">
-  <tr class="menu">
-    <td id="menu">
-<ul>
+    <ul class="menu">
 <?php
     $tabs = array(
         translate("home", 0) => "zoph.php",
@@ -87,14 +91,11 @@ print $rtplang->lang_header();
         } else {
 	$class="";
 	}
-?>
-<li <?php echo $class ?>><a href="<?php echo $page ?>"><?php echo $label ?></a></li> 
-	  <?php
+?><li <?php echo $class ?>><a href="<?php echo $page ?>"><?php echo $label ?></a></li><?php
     }
+    echo "\n";
 ?>
-	</ul>
-    </td>
-  </tr>
+    </ul>
 <?php
 require_once("breadcrumbs.inc.php");
 ?>

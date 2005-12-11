@@ -67,29 +67,12 @@
 
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1>
+          <h1>
             <?php echo translate("error") ?>
-          </h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td>
+          </h1>
+      <div class="main">
             <?php echo translate("The image you requested could not be displayed.") ?>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
+</div>
 <?php
     require_once("footer.inc.php");
 ?>
