@@ -255,7 +255,7 @@ class photo extends zoph_table {
         if (!$link) {
             $link = "photo.php?photo_id=" . $this->get("photo_id");
         }
-        return "<a href=\"$link\">" . $this->get_image_tag(THUMB_PREFIX) . "</a>";
+        return "            <a href=\"$link\">" . $this->get_image_tag(THUMB_PREFIX) . "</a>";
     }
 
     function get_fullsize_link($title) {
@@ -339,7 +339,7 @@ class photo extends zoph_table {
 
         $size_string = " width=\"$width\" height=\"$height\"";
         $alt = $this->get("title");
-return "<img src=\"$image_href\"" . $size_string . "alt=\"$alt\"" . ">";
+return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . "alt=\"$alt\"" . ">";
 }
 
     function get_rating($user_id) {
@@ -895,7 +895,7 @@ function create_rating_graph($user) {
     $table =
         "<table class=\"ratings\">\n  <tr>\n    <th colspan=\"3\"><h3>" .
         translate("photo ratings") . "</h3></th>\n  </tr>\n  <tr>\n    <th>" .
-        translate("rating") . "</th>\n    <th>&nbsp</th>\n    " .
+        translate("rating") . "</th>\n    <th>&nbsp;</th>\n    " .
         "<th>" . translate("count") . "</th>\n  </tr>\n";
 
     $scale = 150.0 / $max_count;
