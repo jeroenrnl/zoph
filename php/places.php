@@ -33,37 +33,18 @@
     }
 
     $title = translate("Places");
-    //$table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1><?php echo translate("places") ?></h1></th>
-          <td class="actionlink">
+          <h1>
 <?php
         if ($user->is_admin()) {
 ?>
-          [
-            <a href="place.php?_action=new"><?php echo translate("new") ?></a>
-          ]
+          <span class="actionlink"><a href="place.php?_action=new"><?php echo translate("new") ?></a></span>
 <?php
         }
-        else {
-            echo "&nbsp;";
-        }
 ?>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td class="letter" colspan="2">[
+<?php echo translate("places") ?></h1>
+          <div class="letter">
 <?php
     for ($l = 'a'; $l < 'z'; $l++) {
         $title = $l;
@@ -78,14 +59,9 @@
             <a href="places.php?_l=z"><?php echo $_l == "z" ? "<strong>Z</strong>" : "z" ?></a> |
             <a href="places.php?_l=no%20city"><?php echo translate("no city") ?></a> |
             <a href="places.php?_l=all"><?php echo translate("all") ?></a>
-          ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
+    </div>
+      <div class="main">
+      <table class="places">
 <?php
     $constraints = null;
     if ($_l == "all") {
@@ -106,7 +82,7 @@
     if ($plcs) {
         foreach($plcs as $p) {
 ?>
-        <tr>
+       <tr>
           <td class="place">
             <?php echo $p->get("city") ? $p->get("city") : "&nbsp;" ?>
           </td>
@@ -120,28 +96,23 @@
         }
 ?>
           <td>
+          <span class="actionlink">
+            <a href="place.php?place_id=<?php echo $p->get("place_id") ?>"><?php echo translate("view") ?></a> | <a href="photos.php?location_id=<?php echo $p->get("place_id") ?>"><?php echo translate("photos at") ?></a>
+          </span>
             <?php echo $p->get("title") ? "\"" . $p->get("title") . "\"" : "&nbsp;" ?>
-          </td>
-          <td class="actionlink">
-            [ <a href="place.php?place_id=<?php echo $p->get("place_id") ?>"><?php echo translate("view") ?></a> | <a href="photos.php?location_id=<?php echo $p->get("place_id") ?>"><?php echo translate("photos at") ?></a> ]
           </td>
         </tr>
 <?php
         }
-    }
+?>
+</table>
+<?php      }
     else {
 ?>
-        <tr>
-          <td class="center"><?php echo sprintf(translate("No places were found in a city beginning with '%s'."), $_l) ?></td>
-        </tr>
+          <div class="error"><?php echo sprintf(translate("No places were found in a city beginning with '%s'."), $_l) ?></div>
 <?php
     }
 ?>
-      </table>
-    </td>
-  </tr>
-</table>
-
 </div>
 <?php
     require_once("footer.inc.php");

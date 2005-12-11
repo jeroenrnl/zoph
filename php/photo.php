@@ -32,9 +32,9 @@
     $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
     $qs = preg_replace('/_action=\w+&?/', '', $qs);
 
-    $encoded_qs = getvar("_qs");
+    $encoded_qs = htmlentities(getvar("_qs"));
     if (empty($encoded_qs)) {
-        $encoded_qs = rawurlencode($qs);
+        $encoded_qs = htmlentities($qs);
     }
 
     if ($photo_id) { // would be passed for edit or delete
@@ -55,12 +55,12 @@
 
             if ($offset > 0) {
                 $newoffset = $offset - 1;
-                $prev_link = "<a href=\"$PHP_SELF?" . str_replace("_off=$offset", "_off=$newoffset", $qs) . "\">" . translate("Prev") . "</a>";
+                $prev_link = "<a href=\"$PHP_SELF?" . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Prev") . "</a>";
             }
 
             if ($offset + 1 < $num_photos) {
                 $newoffset = $offset + 1;
-                $next_link = "<a href=\"$PHP_SELF?" . str_replace("_off=$offset", "_off=$newoffset", $qs) . "\">" . translate("Next") . "</a>";
+                $next_link = "<a href=\"$PHP_SELF?" . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Next") . "</a>";
             }
         }
         else {
@@ -88,7 +88,7 @@
 	
         if ($cells) {
             $_off = $cells * floor($_off / ($cells)); 
-            $up_qs .= "&_off=" . $_off;
+            $up_qs .= "&amp;_off=" . $_off;
         }
         
         $up_link = "<a href=\"photos.php?$up_qs\">" . translate("Up", 0) . "</a>";
@@ -179,7 +179,7 @@
 
         $_deg = getvar("_deg");
         $_thumbnail = getvar("_thumbnail");
-        if ($_deg) {
+        if ($_deg && $_deg != 0) {
             if (ALLOW_ROTATIONS) {
                 $photo->rotate($_deg);
             }
@@ -192,31 +192,17 @@
         $title = translate("New Photo");
     }
 
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
 require_once("header.inc.php");
-?>
-  <tr>
-    <td>
-      <table class="titlebar">
-<?php
     // no photo was found and this isn't a new record
     if ($action != "insert" && !$found) {
 ?>
-        <tr>
-          <th><H1><?php echo translate("photo") ?></H1></th>
-          <td class="actionlink">nbsp;</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class=titlebar>
-        <tr>
-          <td colspan="2">
+          <h1>
+	  
+	  <?php echo translate("photo") ?>
+	  </h1>
+          <div class="main">
            <?php echo translate("No photo was found.") ?>
-          </td>
-        </tr>
+          </div>
 <?php
     }
     else if ($action == "display") {
@@ -225,11 +211,10 @@ require_once("header.inc.php");
             $title_bar .= " " . ($offset + 1) . " of $num_photos";
         }
 ?>
-        <tr class="titlebar">
-          <th><H1><?php echo $title_bar ?></H1></th>
-          <td class="actionlink">
+          <h1>
+          <span class="actionlink">
 <?php
-        $bar = "[";
+        $bar = "";
         if (EMAIL_PHOTOS) {
 ?>
             <?php echo $bar ?> <a href="mail.php?_action=compose&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("email") ?></a>
@@ -239,37 +224,33 @@ require_once("header.inc.php");
 
         if ($user->is_admin() || $permissions->get("writable")) {
 ?>
-            <?php echo $bar ?> <a href="photo.php?_action=edit&amp;photo_id=<?php echo $photo->get("photo_id") ?>&_qs=<?php echo $encoded_qs ?>"><?php echo translate("edit") ?></a>
+            <?php echo $bar ?> <a href="photo.php?_action=edit&amp;photo_id=<?php echo $photo->get("photo_id") ?>&amp;_qs=<?php echo $encoded_qs ?>"><?php echo translate("edit") ?></a>
 <?php
             $bar = "|";
 
             if ($user->is_admin()) {
 ?>
-            | <a href="photo.php?_action=delete&amp;photo_id=<?php echo $photo->get("photo_id") ?>&_qs=<?php echo $encoded_qs ?>"><?php echo translate("delete") ?></a>
+            | <a href="photo.php?_action=delete&amp;photo_id=<?php echo $photo->get("photo_id") ?>&amp;_qs=<?php echo $encoded_qs ?>"><?php echo translate("delete") ?></a>
 <?php
             }
         }
         if ($user->get("lightbox_id")) {
 ?>
-            <?php echo $bar ?> <a href="photo.php?_action=lightbox&amp;<?php echo $qs ?>"><?php echo translate("lightbox", 0) ?></a>
+            <?php echo $bar ?> <a href="photo.php?_action=lightbox&amp;<?php echo $encoded_qs ?>"><?php echo translate("lightbox", 0) ?></a>
 <?php
             $bar = "|";
         }
 ?>
-          <?php echo $bar == "|" ? "]" : "" ?></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-<form action="<?php echo $PHP_SELF ?>" method="POST">
-      <table class="main">
+        </span>
+          <?php echo $title_bar ?>
+          </h1>
+
 <?php
         if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
-        <tr>
-          <td colspan="2" class="rotate">
+        <div class="main">
+          <div id="rotate">
+        <form action="<?php echo $PHP_SELF ?>" method="POST">
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
 
 <select name="_deg">
@@ -278,20 +259,13 @@ require_once("header.inc.php");
 <option>270</option>
 </select>
 <input type="submit" name="_button" value="<?php echo translate("rotate", 0) ?>">
-          </td>
-        </tr>
-      </table>
 </form>
+      </div>
 <?php
         }
 ?>
-        <table class="main">
-        <tr>
-          <td colspan="2">
-            <table width="100%">
-              <tr>
-                <td class="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></td>
-                <td class="photohdr">
+                <div id="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
+                <div id="photohdr">
 <?php
         if ($up_link) {
 ?>
@@ -302,56 +276,39 @@ require_once("header.inc.php");
                   <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
                   <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
             <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
-                </td>
-                <td class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" class="photo">
+            </div>    
+            <div id="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
             <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
-          </td>
-        </tr>
 <?php
         if ($people_links = get_photo_person_links($photo)) {
 ?>
-        <tr>
-          <td colspan="2" class="personlink">
+          <div id="personlink">
             <?php echo $people_links ?>
-          </td>
-        </tr>
+          </div>
 <?php
         }
 ?>
+<table id="photo">
 <?php echo create_field_html($photo->get_display_array(), 2) ?>
 <?php
         if (ALLOW_RATINGS || $photo->get("rating")) {
 ?>
         <tr>
           <td class="fieldtitle"><?php echo translate("rating") ?></td>
-          <td>
+          <td class="field">
 <form action="<?php echo $PHP_SELF ?>" method="POST">
-            <table>
-              <tr>
-                <td class="field">
                   <?php echo $photo->get("rating") != 0 ? $photo->get("rating") . " / 10" : ""; ?>
-                </td>
 <?php
             if (ALLOW_RATINGS) {
 ?>
-                <td class="field">
 <input type="hidden" name="_action" value="rate">
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
 <input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
 <?php echo create_rating_pulldown($photo->get_rating($user->get("user_id"))); ?>
-                </td>
 <?php
             }
 ?>
-              </tr>
-            </table>
-</form>
+           </form>
           </td>
         </tr>
 <?php
@@ -395,25 +352,13 @@ require_once("header.inc.php");
     }
     else if ($action == "confirm") {
 ?>
-        <tr>
-          <th><h1><?php echo translate("photo") ?></h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td>
+          <h1><?php echo translate("photo") ?></h1>
+          <div class="main">
+            <span class="actionlink">
+              <a href="photo.php?_action=confirm&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a> |
+              <a href="photo.php?<?php echo $encoded_qs ?>"><?php echo translate("cancel") ?></a>
+            </span>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $photo->get("name")) ?>
-          </td>
-          <td class="actionlink">[
-            <a href="photo.php?_action=confirm&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="photo.php?<?php echo $encoded_qs ?>"><?php echo translate("cancel") ?></a>
-          ]</td>
-        </tr>
-      </table>
 
 <?php
     }
@@ -421,8 +366,5 @@ require_once("header.inc.php");
 require_once("edit_photo.inc.php");
     }
 ?>
-    </td>
-  </tr>
-</table>
-
+</div>
 <?php require_once("footer.inc.php"); ?>

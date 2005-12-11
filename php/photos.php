@@ -28,6 +28,7 @@
     if (!$_rows) { $_rows = $DEFAULT_ROWS; }
     if (!$_off)  { $_off = 0; }
 
+
     if (!$_order) { $_order = $DEFAULT_ORDER; }
     if (!$_dir)   { $_dir = $DEFAULT_DIRECTION; }
 
@@ -70,18 +71,20 @@
         $title_bar = translate("photos");
     }
 
-    if ($num_thumbnails == 0 || $_cols <= 4) {
-        $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
+    if (!($num_thumbnails == 0 || $_cols <= 4)) {
+        $width = ((THUMB_SIZE + 14) * $_cols) + 25;
+        if ($width > DEFAULT_TABLE_WIDTH) {
+            $extrastyle = "body	{ width: " . $width . "px; }\n" .
+                ".main	{ width: " . ($width - 20 - 2) .  "px; }\n" .
+                "ul.menu { width: " . ($width - 8 ) . "px; }\n" .
+                "h1	{ width: " . ($width - 8 - 2) . "px; }\n" .
+                "div.breadcrumb { width: " . ($width - 2 -4) . "px; }\n";
+        }
     }
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1><?php echo $title_bar ?></h1></th>
-          <td class="actionlink">
-            [
+    <h1>
+        <span class="actionlink">
 <?php
     $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
     if ($user->is_admin()) {
@@ -90,55 +93,41 @@
 <?php
     }
 ?>
-            <a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("Slideshow") ?></a>
-            ]
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-<form action="photos.php" method="GET">
-      <table class="main">
+            <a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a>
+        </span>
+        <?php echo $title_bar . "\n" ?>
+    </h1>
+    <div class="main">
+        <form action="photos.php" method="GET">
 <?php
     if ($num_thumbnails <= 0) {
 ?>
-        <tr>
-          <td class="center">
-       <?php echo translate("No photos were found matching your search criteria.") ?>
-          </td>
-        </tr>
+            <?php echo translate("No photos were found matching your search criteria.") . "\n" ?>
+        </form>
 <?php
     }
     else {
 ?>
-        <tr>
-          <td>
+            <div id="sortorder">
 <?php echo create_form($request_vars) ?>
-            <?php echo translate("order by", 0) ?>
- <?php echo create_photo_field_pulldown("_order", $_order) ?>
-          </td>
-          <td>
+                <?php echo translate("order by", 0) . "\n" ?>
+                <?php echo create_photo_field_pulldown("_order", $_order) ?>
+            </div>
+            <div id="updown">
                 <a href="photos.php?<?php echo update_query_string($request_vars, "_dir", "asc") ?>"><img class="up" alt="sort ascending" src="images/up<?php echo $_dir == "asc" ? 1 : 2 ?>.gif"></a>
                 <a href="photos.php?<?php echo update_query_string($request_vars, "_dir", "desc") ?>"><img class="down" alt="sort descending" src="images/down<?php echo $_dir == "asc" ? 2 : 1 ?>.gif"></a>
-          </td>
-          <td class="actionlink">
-<?php echo create_integer_pulldown("_rows", $_rows, 1, 10) ?>
-            <?php echo translate("rows") ?>
-
-<?php echo create_integer_pulldown("_cols", $_cols, 1, 10) ?>
-            <?php echo translate("cols") ?>
-            <input type="submit" name="_button" value="<?php echo translate("go", 0) ?>">
-          </td>
-        </tr>
-      </table>
-</form>
-      <table class="main">
-        <tr>
-          <td colspan="3" class="center">
-            <table class="content">
-              <tr>
+            </div>
+            <div id="rowscols">
+                <?php
+		echo create_integer_pulldown("_rows", $_rows, 1, 10);
+                echo translate("rows") . "\n";
+                echo create_integer_pulldown("_cols", $_cols, 1, 10);
+                echo translate("cols") . "\n";
+		?>
+                <input type="submit" name="_button" value="<?php echo translate("go", 0) ?>">
+	    </div>
+        </form>
+        <br>
 <?php
         if (MAX_THUMB_DESC && $user->prefs->get("desc_thumbnails")) {
             $desc_thumbnails = true;
@@ -147,12 +136,12 @@
         for ($i = 0; $i < $num; $i++) {
 
             if ($i > 0 && $i % $_cols == 0) {
-                echo "              </tr>\n              <tr>\n";
+                echo "<br>";
             }
 
             $ignore = array("_action", "_photo_id");
 ?>
-                <td class="thumbnail">
+                <div class="thumbnail">
                   <?php echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($request_vars, "_off", $offset + $i, $ignore)) . "\n" ?>
 <?php
             if ($desc_thumbnails && $thumbnails[$i]->get("description")) {
@@ -171,30 +160,24 @@
             }
 
 ?>
-                </td>
+		</div>
 <?php
         }
 
-        $diff = $cells - $num_thumbnails;
-        if ($diff > 0) {
-            for ($i = $diff % $_cols; $i > 0; $i--) {
-                echo "                <td>&nbsp;</td>\n";
-            }
-        }
+//        $diff = $cells - $num_thumbnails;
+//        if ($diff > 0) {
+//            for ($i = $diff % $_cols; $i > 0; $i--) {
+//                echo "                <td>&nbsp;</td>\n";
+//            }
+//        }
 ?>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        </table>
+	<br>
 <?php include "pager.inc.php" ?>
 <?php
     } // if photos
 ?>
-      </tr>
-      </table>
-    </td>
-  </tr>
-</table>
+	<br>
+
+      </div>
 
 <?php require_once("footer.inc.php"); ?>
