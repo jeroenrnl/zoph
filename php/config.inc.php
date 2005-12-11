@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.4');
+    define('VERSION', '0.5pre1');
 
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'zoph');
@@ -25,7 +25,7 @@
     define('DB_PREFIX', 'zoph_'); // prefix for tables, '' for none
 
     // Temporary addition until CSS sheet can be chosen from config page
-    define(CSS_SHEET, 'css.php');
+    define('CSS_SHEET', 'css.php');
 
     define('USE_IMAGE_SERVICE', 0);
     define('IMAGE_DIR', "/data/images/");
@@ -109,7 +109,7 @@
 
     // allow images to be rotated
     define('ALLOW_ROTATIONS', 1);
-    define(ROTATE_CMD, 'convert');
+    define('ROTATE_CMD', 'convert');
     //define('ROTATE_CMD', 'jpegtran');
     // set to 1 to backup the original before it is rotated
     define('BACKUP_ORIGINAL', 1);
