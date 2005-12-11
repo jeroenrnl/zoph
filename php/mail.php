@@ -125,37 +125,23 @@
     require_once("header.inc.php");
 ?>
 
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1>
-  <?php echo translate("email photo") ?>
-          </h1></th>
+          <h1>
   <?php if (ANNOTATE_PHOTOS) {
 ?>
-          <td class="actionlink"> [
+          <span class="actionlink"> 
+            <a href="define_annotated_photo.php?photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("create annotated photo", 0) ?></a> 
+          </span>
 <?php
         }
 ?>
-            <a href="define_annotated_photo.php?photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("create annotated photo", 0) ?></a> ]
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
+  <?php echo translate("email photo") ?>
+          </h1>
 <form action="<?php echo $PHP_SELF ?>" method="post">
-      <table class="main">
+      <div class="main">
 <?php
     if ($msg) {
 ?>
-        <tr>
-          <td colspan="2">
             <?php echo $msg ?>
-          </td>
-        </tr>
 <?php
     }
 
@@ -176,65 +162,31 @@
             $photo->annotate($request_vars, $user);
         }
 ?>
-        <tr>
-          <td class="fieldtitle">
 <input type="hidden" name="_action" value="mail">
 <input type="hidden" name="photo_id" value="<?php echo $photo_id ?>">
 <input type="hidden" name="annotate" value="<?php echo $annotate ?>">
-       <?php echo translate("send as html") ?>
-          </td>
-          <td class="field">
-            <?php echo create_pulldown("html", "1", array("1" => translate("Yes",0), "0" => translate("No",0))) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("to (name)") ?></td>
-          <td class="field">
-            <?php echo create_text_input("to_name", $to_name, 24, 32) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("to (email)") ?></td>
-          <td class="field">
-            <?php echo create_text_input("to_email", $to_email, 24, 32) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("from (your name)") ?></td>
-          <td class="field">
-            <?php echo create_text_input("from_name", $from_name, 24, 32) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("from (your email)") ?></td>
-          <td class="field">
-            <?php echo create_text_input("from_email", $from_email, 24, 64) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("subject") ?></td>
-          <td class="field">
-            <?php echo create_text_input("subject", $subject, 48, 64) ?>
-          </td>
-        </tr>
+       <label for="html"><?php echo translate("send as html") ?></label>
+       <?php echo create_pulldown("html", "1", array("1" => translate("Yes",0), "0" => translate("No",0))) ?><br>
+       <label for="toname"><?php echo translate("to (name)") ?></label>
+       <?php echo create_text_input("to_name", $to_name, 24, 32) ?><br>
+       <label for="toemail"><?php echo translate("to (email)") ?></label>
+       <?php echo create_text_input("to_email", $to_email, 24, 32) ?><br>
+       <label for="fromname"><?php echo translate("from (your name)") ?></label>
+       <?php echo create_text_input("from_name", $from_name, 24, 32) ?><br>
+       <label for="fromemail"><?php echo translate("from (your email)") ?></label>
+       <?php echo create_text_input("from_email", $from_email, 24, 64) ?><br>
+       <label for="subject"><?php echo translate("subject") ?></label>
+       <?php echo create_text_input("subject", $subject, 48, 64) ?><br>
 <?php
         if (!$annotate) {
 ?>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("send fullsize") ?></td>
-          <td class="field"><?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?></td>
-        </tr>
+       <label for="size"><?php echo translate("send fullsize") ?></label>
+       <?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
 <?php
         }
 ?>
-        <tr>
-          <td class="fieldtitle-centered" colspan="2">
-            <?php echo translate("message:") ?><br>
+            <label for="message"><?php echo translate("message:") ?></label><br>
             <textarea name="message" cols="70" rows="5"><?php echo $body ?></textarea>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" class="photo">
 <?php
         if ($annotate) {
 ?>
@@ -247,21 +199,12 @@
 <?php
         }
 ?>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" class="center">
             <input type="submit" name="_button" value="<?php echo translate("email", 0); ?>">
-          </td>
-        </tr>
 <?php
     }
 ?>
-      </table>
+      </div>
 </form>
-    </td>
-  </tr>
-</table>
 
 <?php
     require_once("footer.inc.php");
