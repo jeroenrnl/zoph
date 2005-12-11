@@ -17,23 +17,19 @@
  */
 ?>
 <!-- begin edit_place.inc !-->
-        <tr class="titlebar">
-          <th><h1><?php echo $_action ?> <?php echo translate("place") ?></h1></th>
-          <td class="actionlink">[
-            <a href="places.php"><?php echo translate("return") ?></a> |
-            <a href="place.php?_action=new"><?php echo translate("new") ?></a>
-          ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-<form action="place.php" method="GET">
-      <table class="main">
-        <tr>
-          <td class="fieldtitle">
-            <input type="hidden" name="_action" value="<?php echo $action ?>">
+    <h1>
+      <span class="actionlink">
+        <a href="places.php"><?php echo translate("return") ?></a> |
+        <a href="place.php?_action=new"><?php echo translate("new") ?></a>
+      </span>
+      <?php echo $_action ?> <?php echo translate("place") ?>
+    </h1>
+    <div class="main">
+      <form action="place.php" method="GET">
+        <table id="place">
+          <tr>
+            <td class="fieldtitle">
+              <input type="hidden" name="_action" value="<?php echo $action ?>">
             <input type="hidden" name="place_id" value="<?php echo $place->get("place_id") ?>">
             <?php echo translate("title") ?>
           </td>

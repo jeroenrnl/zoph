@@ -20,9 +20,8 @@
         $return_qs = "_action=display&amp;photo_id=" . $photo->get("photo_id");
     }
 ?>
-        <tr class="titlebar">
-          <th><h1><?php echo translate("photo") ?></h1></th>
-          <td class="actionlink">[
+          <h1>
+          <span class="actionlink">
             <a href="photo.php?<?php echo $return_qs ?>"><?php echo translate("return") ?></a>
 <?php
         if ($user->is_admin()) {
@@ -31,43 +30,37 @@
 <?php
         }
 ?>
-            ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
+            </span>
+          <?php echo translate("photo") ?>
+          </h1>
+      <div class="main">
       <form action="photo.php" method="POST">
-      <table class="main">
-        <tr><td>
 <input type="hidden" name="_action" value="<?php echo $action ?>">
 <input type="hidden" name="_qs" value="<?php echo $return_qs ?>">
-        </td></tr>
+
 <?php
     if ($action == "insert") {
 ?>
+      <table class="newphoto">
         <tr>
           <td><?php echo translate("file name") ?></td>
           <td><?php echo create_text_input("name", $photo->get("name"), 40, 64) ?></td>
           <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
-        </tr>
+</tr>
+</table>
 <?php
     }
     else {
 ?>
-<tr><td>
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
-</td></tr>
 <?php
     if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
-        <tr>
-          <td colspan="3" class="rotate">
+          <div class="rotate">
 <?php echo translate("rotate", 0) ?>
 
 <select name="_deg">
-<option></option>
+<option>&nbsp;</option>
 <option>90</option>
 <option>180</option>
 <option>270</option>
@@ -81,38 +74,24 @@
 
 <input type="radio" name="_thumbnail" value="0" checked>
 <?php echo translate("no") ?>
-          </td>
-        </tr>
+</div>
 <?php
     }
 ?>
 
-        <tr>
-          <td colspan="3">
-            <table class="main">
-              <tr>
-                <td class="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></td>
-                <td class="photohdr">
+                <div id="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
+                <div id="photohdr">
                   <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
                   <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
                   <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
-                </td>
-                <td class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" class="photo">
+                </div>
+                <div id="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
             <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
-          </td>
-        </tr>
 <?php
     }
 ?>
-        <tr>
-          <td colspan="3" class="right"><input type="submit" value="<?php echo translate($action, 0) ?>"></td>
-        </tr>
+          <input class="updatebutton" type="submit" value="<?php echo translate($action, 0) ?>">
+        <table id="editphoto">
         <tr>
           <td class="fieldtitle"><?php echo translate("title") ?></td>
           <td class="field"><?php echo create_text_input("title", $photo->get("title"), 40, 64) ?></td>
@@ -234,12 +213,13 @@
         }
         else {
 ?>
-              <?php echo translate("This photo is not in any albums.") ?><br>
-<?php
-        }
-?>
-            <?php echo create_pulldown("_album", "", get_albums_select_array($user)) ?>
-          </td>
+		      <?php echo translate("This photo is not in any albums.") ?><br>
+											</td>
+	<?php
+		}
+	?>
+		    <?php echo create_pulldown("_album", "", get_albums_select_array($user)) ?>
+	  </td>
           <td class="remove">
             <?php echo $alb_links ? $alb_links : "&nbsp;" ?>
           </td>

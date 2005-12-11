@@ -17,20 +17,16 @@
  */
 ?>
 <!-- begin edit_person.inc !-->
-        <tr class="titlebar">
-          <th><h1><?php echo $_action ?> <?php echo translate("person") ?></h1></th>
-          <td class="actionlink">[
+          <h1>
+          <span class="actionlink">
             <a href="people.php"><?php echo translate("return") ?></a> |
             <a href="person.php?_action=new"><?php echo translate("new") ?></a>
-          ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-<form action="person.php" method="GET">
-      <table class="main">
+          </span>
+            <?php echo $_action ?> <?php echo translate("person") ?>
+          </h1>
+      <div class="main">
+      <form action="person.php" method="GET">
+      <table id="editperson">
         <tr>
           <td class="fieldtitle">
           <input type="hidden" name="_action" value="<?php echo $action ?>">
@@ -59,7 +55,7 @@
           <td class="field">
 <?php echo create_pulldown("gender", $person->get("gender"), array("1" => translate("male",0), "2" => translate("female",0))) ?>
           </td>
-          <td>&nbsp</td>
+          <td>&nbsp;</td>
         </tr>
         <tr>
           <td class="fieldtitle"><?php echo translate("date of birth") ?></td>
