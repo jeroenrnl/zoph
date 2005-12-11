@@ -47,13 +47,14 @@
 
     $newoffset = $offset + 1;
 
-    $new_qs = $QUERY_STRING;
-    if (strpos($QUERY_STRING, "_off=") > 0) {
+    $qs = implode("&amp;", explode("&", $QUERY_STRING));
+    $new_qs = $qs;
+    if (strpos($QUERY_STRING, "_off=") !== false ) {
         $new_qs = str_replace("_off=$offset", "_off=$newoffset", $new_qs);
     }
     else {
         if ($new_qs) {
-            $new_qs .= "&";
+            $new_qs .= "&amp;";
         }
         $new_qs .= "_off=$newoffset";
     }
@@ -73,7 +74,7 @@ if (!$_pause) {
         $header = "<meta http-equiv=\"refresh\" content=\"$SLIDESHOW_TIME;URL=$PHP_SELF?$new_qs\">\n";
     }
     else {
-        $new_qs = str_replace("_pause=1", "", $new_qs);
+        $new_qs = str_replace("&amp;_pause=1", "", $new_qs);
     }
 
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
@@ -82,82 +83,58 @@ if (!$_pause) {
 <title>Zoph - Slideshow</title>
 </head>
 <body>
-
-<table class="page">
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1><?php echo $title ?></h1></th>
-          <td class="actionlink">
-          [
+  <h1>
+    <span class="actionlink">
 <?php
     if ($_pause) {
 ?>
-            <a href="<?php echo $PHP_SELF . '?' . $new_qs ?>"><?php echo translate("continue") ?></a> |
+      <a href="<?php echo $PHP_SELF . '?' . $new_qs ?>"><?php echo translate("continue") ?></a> |
 <?php
     }
     else {
 ?>
-            <a href="<?php echo $PHP_SELF . '?' . $QUERY_STRING . '&' . "_pause=1" ?>"><?php echo translate("pause") ?></a> |
+      <a href="<?php echo $PHP_SELF . '?' . $qs . '&amp;' . "_pause=1" ?>"><?php echo translate("pause") ?></a> |
 <?php
     }
 ?>
-            <a href="photos.php?<?php echo str_replace("_off=$offset", "_off=0", $QUERY_STRING) ?>"><?php echo translate("stop") ?></a> |
-            <a href="photo.php?<?php echo $QUERY_STRING ?>"><?php echo translate("open") ?></a>
-          ]
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
+      <a href="photos.php?<?php echo str_replace("_off=$offset", "_off=0", $qs) ?>"><?php echo translate("stop") ?></a> |
+      <a href="photo.php?<?php echo $qs ?>"><?php echo translate("open") ?></a>
+    </span>
+    <?php echo $title ?>
+  </h1>
+  <div class="main">
 <?php
     if ($num_thumbnails <= 0) {
-?>
-        <tr>
-          <td>
-       <?php echo translate("No photos were found for this slideshow.") ?>
-          </td>
-        </tr>
-<?php
+       echo translate("No photos were found for this slideshow.");
     }
     else {
         $photo = $thumbnails[0];
         $photo->lookup();
-?>
-        <tr>
-          <td colspan="2" class="photohdr">
-            <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
-            <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
-         <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" class="photo">
-            <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
-          </td>
-        </tr>
-<?php
+	?>
+        <div id="prev">&nbsp;</div>
+        <div id="photohdr">
+            <?php echo $photo->get_fullsize_link($photo->get("name"))?>: 
+            <?php echo $photo->get("width") ?> x <?php echo $photo->get("height")?>,
+            <?php echo $photo->get("size") ?> <?php echo translate("bytes")?>
+        </div>    
+        <div id="next">&nbsp;</div>
+        <?php echo $photo->get_fullsize_link($photo->get_midsize_img())?>
+        <?php
         if ($people_links = get_photo_person_links($photo)) {
-?>
-        <tr>
-          <td colspan="2" class="personlink">
-            <?php echo $people_links ?>
-          </td>
-        </tr>
+?>	
+            <div id="personlink"><?php echo $people_links ?></div>
 <?php
         }
 ?>
+        <br>
+     <table id="slideshow">
 <?php echo create_field_html($photo->get_display_array(), 2) ?>
 <?php
         if ($photo->get("description")) {
 ?>
         <tr>
           <td colspan="2" class="description">
-            <hr class="wide">
+            <hr>
             <?php echo $photo->get("description") ?>
           </td>
         </tr>
@@ -166,8 +143,5 @@ if (!$_pause) {
     } // if photos
 ?>
       </table>
-    </td>
-  </tr>
-</table>
-
+</div>
 <?php require_once("footer.inc.php"); ?>
