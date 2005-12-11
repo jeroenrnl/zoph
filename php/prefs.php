@@ -37,20 +37,13 @@
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1><?php echo translate("edit preferences") ?></h1></th>
-          <td class="actionlink">[ <a href="password.php"><?php echo translate("change password") ?></a> ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
+          <h1>
+            <span class="actionlink"><a href="password.php"><?php echo translate("change password") ?></a></span>
+            <?php echo translate("edit preferences") ?>
+          </h1>
+      <div class="main">
       <form action="prefs.php" method="GET">
-      <table class="main">
+        <table id="prefs">
 <?php
     if ($user->get("user_id") == DEFAULT_USER) {
 ?>
@@ -188,9 +181,7 @@
           </td>
         </tr>
       </table>
-      </form>
-    </td>
-  </tr>
-</table>
+  </form>
+</div>
 
 <?php require_once("footer.inc.php"); ?>

@@ -21,20 +21,8 @@
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1><?php echo translate("reports") ?></h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td class="reports">
+    <h1><?php echo translate("reports") ?></h1>
+      <div class="main">
 <?php
     $top_albums = get_popular_albums($user);
     if ($top_albums) {
@@ -61,8 +49,6 @@
         echo "&nbsp;\n";
     }
 ?>
-          </td>
-          <td  class="reports">
 <?php
     $top_categories = get_popular_categories($user);
     if ($top_categories) {
@@ -88,12 +74,6 @@
     else {
         echo "&nbsp;\n";
     }
-?>
-          </td>
-        </tr>
-        <tr>
-          <td class="reports">
-<?php
     $top_people = get_popular_people($user);
     if ($top_people) {
 ?>
@@ -118,10 +98,6 @@
     else {
         echo "&nbsp;\n";
     }
-?>
-          </td>
-          <td class="reports">
-<?php
     $top_places = get_popular_places($user);
     if ($top_places) {
 ?>
@@ -147,18 +123,9 @@
         echo "&nbsp;\n";
     }
 ?>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
+<br>
 <?php echo create_rating_graph($user) ?>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-
+</div>
 <?php
     require_once("footer.inc.php");
 ?>

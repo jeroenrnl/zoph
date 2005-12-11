@@ -38,19 +38,10 @@ else {
 
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1><?php echo translate("search") ?></h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
+          <h1><?php echo translate("search") ?></h1>
+      <div class="main">
       <form method="GET" action="search.php">
-      <table class="main">
+      <table id="search">
         <tr>
           <td>
 <input type="hidden" name="_action" value="search">
@@ -184,11 +175,8 @@ else {
           </td>
         </tr>
       </table>
-      </form>
-    </td>
-  </tr>
-</table>
-
+  </form>
+</div>
 <?php
 require_once("footer.inc.php");
 
