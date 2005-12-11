@@ -79,34 +79,18 @@
     require_once("header.inc.php");
 ?>
 
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1>
-  <?php echo translate("email") ?>
-         </h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
+         <h1>
+           <?php echo translate("email") ?>
+         </h1>
+      <div class="main">
 <form action="<?php echo $PHP_SELF ?>" method="POST">
-      <table class="main">
 <?php
     if ($msg) {
 ?>
-        <tr>
-          <td colspan="2" class="error">
             <?php echo $msg ?>
-          </td>
-        </tr>
 <?php
     }
 ?>
-        <tr>
-          <td>
 <?php
     if ($_action == "notify") {
 
@@ -174,58 +158,28 @@
         }
 ?>
 <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("to (name)") ?></td>
-          <td class="field">
-            <?php echo create_text_input("to_name", $to_name, 24, 32) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("to (email)") ?></td>
-          <td class="field">
-            <?php echo create_text_input("to_email", $to_email, 24, 32) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("from (your name)") ?></td>
-          <td class="field">
-            <?php echo create_text_input("from_name", $from_name, 24, 32) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("from (your email)") ?></td>
-          <td class="field">
-            <?php echo create_text_input("from_email", $from_email, 24, 64) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("subject") ?></td>
-          <td class="field">
-            <?php echo create_text_input("subject", $subject, 48, 64) ?>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" class="center">
-            <?php echo translate("message:") ?><br>
-            <textarea name="message" cols="70" rows="15"><?php echo $message ?></textarea>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" class="center">
+          <label for="to_name"><?php echo translate("to (name)") ?>:</label>
+            <?php echo create_text_input("to_name", $to_name, 24, 32) ?><br>
+          <label for="to_email"><?php echo translate("to (email)") ?>:</label>
+            <?php echo create_text_input("to_email", $to_email, 24, 32) ?><br>
+          <label for="from_name"><?php echo translate("from (your name)") ?>:</label>
+            <?php echo create_text_input("from_name", $from_name, 24, 32) ?><br>
+          <label for="from_email"><?php echo translate("from (your email)") ?>:</label>
+            <?php echo create_text_input("from_email", $from_email, 24, 64) ?><br>
+          <label for="subject"><?php echo translate("subject") ?>:</label>
+            <?php echo create_text_input("subject", $subject, 48, 64) ?><br>
+            
+	   <label for="message"><?php echo translate("message:") ?></label><br>
+            <textarea name="message" cols="70" rows="15"><?php echo $message ?></textarea><br>
+          <div class="center">
             <input type="submit" name="_button" value="<?php echo translate("email", 0); ?>">
-          </td>
-        </tr>
+	    <br>
+          </div>
 <?php
     }
 ?>
-      </table>
 </form>
-    </td>
-  </tr>
-</table>
-
+    </div>
 <?php
     require_once("footer.inc.php");
 ?>

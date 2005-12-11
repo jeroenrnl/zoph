@@ -17,24 +17,22 @@
  */
 ?>
 
-     <table class="main">
-        <tr>
 <?php
         if ($offset > 0) {
             $new_offset = max(0, $offset - $cells);
 ?>
-          <td class="prev">
+          <div id="prev">
             [ <a href="<?php echo $PHP_SELF ?>?<?php echo update_query_string($request_vars, "_off", $new_offset) ?>"><?php echo translate("Prev") ?></a> ]
-          </td>
+          </div>
 <?php
         }
         else {
-            echo "          <td class='prev'>&nbsp;</td>\n";
+            echo "          <div id=\"prev\">&nbsp;</div>\n";
         }
 
         if ($num_pages > 1) {
 ?>
-          <td class="pagelink">[
+          <div id="pagelink">[
 <?php
         $mid_page = floor($MAX_PAGER_SIZE / 2);
         $page = $page_num - $mid_page;
@@ -56,7 +54,7 @@
         while ($page <= $last_page) {
             $new_offset = ($page - 1) * $cells;
 ?>
-            <a href="<?php echo $PHP_SELF ?>?<?php echo update_query_string($request_vars, "_off", $new_offset) ?>"><span <?php echo $page == $page_num ? " class='currentpage'" : "" ?>><?php echo $page ?></span></a>
+            <a href="<?php echo $PHP_SELF ?>?<?php echo update_query_string($request_vars, "_off", $new_offset) ?>"><span <?php echo $page == $page_num ? " id='currentpage'" : "" ?>><?php echo $page ?></span></a>
 <?php
             $page++;
         }
@@ -67,24 +65,22 @@
 <?php
         }
 ?>
-          ]</td>
+          ]</div>
 <?php
         }
         else {
-            echo "          <td>&nbsp;</td>\n";
+            echo "          <div id=\"pagelink\">&nbsp;</div>\n";
         }
 
         if ($num_photos > $offset + $num) {
             $new_offset = $offset + $cells;
 ?>
-          <td class="next">
+          <div id="next">
             [ <a href="<?php echo $PHP_SELF ?>?<?php echo update_query_string($request_vars, "_off", $new_offset) ?>"><?php echo translate("Next") ?></a> ]
-          </td>
+          </div>
 <?php
         }
         else {
-            echo "          <td class='next'>&nbsp;</td>\n";
+            echo "          <div id=\"next\">&nbsp;</div>\n";
         }
 ?>
-</tr>
-</table>
