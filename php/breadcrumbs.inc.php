@@ -56,12 +56,12 @@
         $crumb_string = "<li class=\"first\">" . implode("<li>", $user->crumbs);
     }
 ?>
-  <tr>
-    <td id="breadcrumb">
-    <ul><?php echo $crumb_string ?></ul>
-          <div class="actionlink"><a href="<?php echo $clear_url ?>">x</a></div>
-    </td>
-  </tr>
+    <div class="breadcrumb">
+        <span class="actionlink"><a href="<?php echo $clear_url ?>">x</a></span>
+        <ul>
+            <?php echo $crumb_string . "\n" ?>
+        </ul>
+    </div>
 <?php
     }
 ?>
