@@ -51,19 +51,10 @@
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
 require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1><?php echo translate("import photos") ?></h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
+          <h1><?php echo translate("import photos") ?></h1>
+  <div class="main">
       <form enctype="multipart/form-data" action="import.php" method="POST">
-      <table class="main">
+      <table id="import">
 <?php
     if ($action == "display") {
 ?>
@@ -214,7 +205,7 @@ require_once("header.inc.php");
           </td>
         </tr>
         <tr>
-          <td colspan="3" class="actionlink">
+          <td colspan="3">
             <input type="submit" value="<?php echo translate($action, 0) ?>">
           </td>
         </tr>
@@ -355,8 +346,5 @@ require_once("header.inc.php");
 ?>
       </table>
      </form>
-    </td>
-  </tr>
-</table>
-
+  </div>
 <?php require_once("footer.inc.php"); ?>
