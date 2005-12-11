@@ -45,27 +45,10 @@
 
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th colspan="2"><h1><?php echo translate("calendar") ?></h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td class="calendar">
+          <h1><?php echo translate("calendar") ?></h1>
+      <div class="main">
 <?php echo $cal->getMonthView($month, $year, $day) ?>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
+      </div>
 
 </body>
 </html>
