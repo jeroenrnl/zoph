@@ -35,46 +35,16 @@
 </head>
 <body>
 
-<table class="page">
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-  <th colspan="2"><h1><?php echo "logon" ?></h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-
-      <form action="zoph.php" method="POST">
-      <table class="main">
-        <tr>
-          <td colspan="2">
-            <h2><?php echo ZOPH_TITLE ?></h2>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">&nbsp;</td>
-        </tr>
-        <tr>
-          <th><?php echo "username" ?></th>
-          <td><input type="text" name="uname"></td>
-        </tr>
-        <tr>
-          <th><?php echo "password" ?></th>
-          <td><input type="password" name="pword"></td>
-        </tr>
-        <tr>
-          <td colspan="2" class="center"><input type="submit" value="<?php echo "submit"; ?>"></td>
-        </tr>
-        <tr><td>&nbsp;</td></tr>
-      </table>
-      </form>
-    </td>
-  </tr>
-</table>
-
+    <h1><?php echo "logon" ?></h1>
+    <div class="main" id="logon">
+        <form action="zoph.php" method="POST">
+            <h2 class="logon"><?php echo ZOPH_TITLE ?></h2>
+            <label for="uname"><?php echo "username" ?></label>
+            <input type="text" name="uname" id="uname"><br>
+            <label for="pword"><?php echo "password" ?></label>
+            <input type="password" name="pword" id="pword"><br>
+            <input type="submit" value="<?php echo "submit"; ?>">
+        </form>
+    </div>
 </body>
 </html>
