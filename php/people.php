@@ -37,34 +37,16 @@
     //$table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1><?php echo translate("people") ?></h1></th>
-          <td class="actionlink">
+          <h1>
 <?php
         if ($user->is_admin()) {
 ?>
-          [
-            <a href="person.php?_action=new"><?php echo translate("new") ?></a>
-          ]
+            <span class="actionlink"><a href="person.php?_action=new"><?php echo translate("new") ?></a></span>
 <?php
         }
-        else {
-            echo "&nbsp;";
-        }
 ?>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td class="letter" colspan="2">[
+ <?php echo translate("people") ?></h1>
+          <div class="letter">
 <?php
     for ($l = 'a'; $l <= 'z' && $l != 'aa'; $l++) {
         $title = $l;
@@ -76,17 +58,10 @@
 <?php
     }
 ?>
-<?php //            <a href="people.php?_l=z"><?php echo $_l == "z" ? "<strong>Z</strong>" : "z" </a> | ?>
             <a href="people.php?_l=no%20last%20name"><?php echo translate("no last name") ?></a> |
             <a href="people.php?_l=all"><?php echo translate("all") ?></a>
-          ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
+          </div>
+      <div class="main">
 <?php
     $constraints = null;
     if ($_l == "all") {
@@ -107,29 +82,17 @@
     if ($ppl) {
         foreach($ppl as $p) {
 ?>
-        <tr>
-          <td class="person">
-            <a href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo $p->get("last_name") ? $p->get("last_name") . ", " : "" ?><?php echo $p->get("first_name") ?></a>
-          </td>
-          <td class="actionlink">
-            [ <a href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("view") ?></a> | <a href="photos.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos of") ?></a> | <a href="photos.php?photographer_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos by") ?></a> ]
-          </td>
-        </tr>
+            <span class="actionlink"><a href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("view") ?></a> | <a href="photos.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos of") ?></a> | <a href="photos.php?photographer_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos by") ?></a></span>
+            <a class="person" href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo $p->get("last_name") ? $p->get("last_name") . ", " : "" ?><?php echo $p->get("first_name") ?></a>
 <?php
         }
     }
     else {
 ?>
-        <tr>
-          <td colspan="2" class="center"><?php echo sprintf(translate("No people were found with a last name beginning with '%s'."), $_l) ?></td>
-        </tr>
+          <div class="error"><?php echo sprintf(translate("No people were found with a last name beginning with '%s'."), $_l) ?></div>
 <?php
     }
 ?>
-      </table>
-    </td>
-  </tr>
-</table>
 
 </div>
 <?php
