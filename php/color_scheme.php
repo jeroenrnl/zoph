@@ -41,52 +41,32 @@
         $title = translate("New Color Scheme");
     }
 
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
 <?php
     if ($action == "display") {
 ?>
-        <tr>
-          <th><h1><?php echo translate("color scheme") ?></h1></th>
-          <td class="actionlink">
+          <h1>
 <?php
         if ($user->is_admin()) {
 ?>
-          [
+          <span class="actionlink">
             <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("edit") ?></a> |
             <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="color_scheme.php?_action=new"><?php echo translate("new") ?></a>
-          ]
+          </span>
 <?php
         }
-        else {
-            echo "&nbsp;";
-        }
 ?>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
+            <?php echo translate("color scheme") ?>
+          </h1>
+      <div class="main">
+        <h2><?php echo $color_scheme->get("name") ?></h2>
+
 <?php
         $colors = $color_scheme->get_display_array();
 ?>
-        <tr>
-          <td>
             <table class="colors">
-                <tr>
-                    <th class="fieldtitle"><?php echo translate("Name") ?></th>
-                    <th><?php echo $color_scheme->get("name") ?></th>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
 <?php
         while (list($name, $value) = each($colors)) {
             if ($name == "Name") { continue; }
@@ -98,48 +78,31 @@
                 </tr>
 <?php
         } ?>
-              </table></td></tr>
+              </table>
 <?php    }
     else if ($action == "confirm") {
 ?>
-        <tr>
-          <th><h1><?php echo translate("delete color scheme") ?></h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td>
-            <?php echo sprintf(translate("Confirm deletion of '%s'"), $color_scheme->get("name")) ?>:
-          </td>
-          <td class="actionlink">[
+          <h1><?php echo translate("delete color scheme") ?></h1>
+      <div class="main">
+          <span class="actionlink">
             <a href="color_scheme.php?_action=confirm&amp;color_scheme_id=<?php echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="color_scheme.php?_action=display&amp;color_scheme_id=<?php echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("cancel") ?></a>
-          ]</td>
-        </tr>
+          </span>
+          <?php echo sprintf(translate("Confirm deletion of '%s'"), $color_scheme->get("name")) ?>:
+          <br>
 <?php
     }
     else {
         $colors = $color_scheme->get_edit_array();
 ?>
-        <tr>
-          <th><h1><?php echo translate("color scheme") ?></h1></th>
-          <td class="actionlink">[
-            <a href="color_schemes.php"><?php echo translate("return") ?></a>
-          ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-<form action="color_scheme.php">
-      <table class="main">
-        <tr>
-         <td>
+          <h1>
+            <span class="actionlink">
+              <a href="color_schemes.php"><?php echo translate("return") ?></a>
+            </span>
+            <?php echo translate("color scheme") ?>
+          </h1>
+      <div class="main">
+        <form action="color_scheme.php">
         <table class="colors">
         <tr>
           <td class="fieldtitle">Name</td>
@@ -163,19 +126,12 @@
 <?php
         }
 ?>
-</table></td></tr>
-        <tr>
-          <td colspan="2" class="center">
+</table>
 <input type="submit" value="<?php echo translate($action, 0) ?>">
-          </td>
-        </tr>
 <?php
     }
 ?>
-      </table>
 <?php echo ( $action == "" || $action == "display" || $action == "delete" || $action == "confirm" ) ? "" : "</form>"; ?>
-    </td>
-  </tr>
-</table>
+</div>
 
 <?php require_once("footer.inc.php"); ?>

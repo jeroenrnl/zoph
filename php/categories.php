@@ -33,38 +33,19 @@
 
     $title = $category->get("parent_category_id") ? $category->get("category") : translate("Categories");
 
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
-        <tr>
-          <th><h1><?php echo translate("categories") ?></h1></th>
-          <td class="actionlink">
+    <h1>
 <?php
     if ($user->is_admin()) {
 ?>
-            [
-            <a href="category.php?_action=new&parent_category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("new") ?></a>
-            ]
-<?php
-    }
-    else {
-        echo "&nbsp;\n";
-    }
-?>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <th>
-            <h2>
+        <span class="actionlink"><a href="category.php?_action=new&amp;parent_category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("new") ?></a></span>
+          <?php 
+	  }
+     echo "\n" . translate("categories") . "\n" ?>
+    </h1>
+    <div class="main">
+        <h2>
 <?php
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
@@ -74,37 +55,24 @@
         }
     }
 ?>
-            <?php echo $title ?>
-            </h2>
-          </th>
-          <td class="actionlink">
+            <?php echo $title . "\n" ?>
+        </h2>
 <?php
     if ($user->is_admin()) {
 ?>
-          [
-            <a href="category.php?_action=edit&category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("edit") ?></a>
-          ]
+        <span class="actionlink">
+            <a href="category.php?_action=edit&amp;category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("edit") ?></a>
+        </span>
 <?php
     }
-    else {
-        echo "&nbsp;\n";
-    }
-?>
-          </td>
-        </tr>
-<?php
     if ($category->get("category_description")) {
 ?>
-        <tr>
-          <td class="description" colspan="2">
+        <div class="description">
             <?php echo $category->get("category_description") ?>
-          </td>
-        </tr>
+        </div>
 <?php
     }
 ?>
-        <tr>
-          <td>
 <?php
     $fragment = translate("in this category");
     if ($photo_count > 0) {
@@ -119,55 +87,40 @@
 
         if ($photo_count > 1) {
             echo sprintf(translate("There are %s photos"), $photo_count);
-            echo " $fragment.";
+            echo " $fragment.\n";
         }
         else {
             echo sprintf(translate("There is %s photo"), $photo_count);
-            echo " $fragment.";
+            echo " $fragment.\n";
         }
 ?>
-          </td>
-          <td class="actionlink">
-            [ <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a> ]
-          </td>
+        <span class="actionlink">
+            <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a>
+        </span>
 <?php
     }
     else {
 ?>
           <?php echo translate("There are no photos") ?> <?php echo $fragment ?>.
-          </td>
-          <td>&nbsp;</td>
 <?php
     }
 ?>
-        </tr>
 <?php
     if ($children) {
 ?>
-        <tr>
-          <td colspan="2">
-            <ul>
+        <ul>
 <?php
         foreach($children as $c) {
 ?>
-            <li>
-            <a href="categories.php?parent_category_id=<?php echo $c->get("category_id") ?>"><?php echo $c->get("category") ?></a>
-            </li>
+            <li><a href="categories.php?parent_category_id=<?php echo $c->get("category_id") ?>"><?php echo $c->get("category") ?></a></li>
 <?php
         }
 ?>
-            </ul>
-          </td>
-        </tr>
+        </ul>
 <?php
     }
 ?>
-      </table>
-    </td>
-  </tr>
-</table>
-
-</div>
+    </div>
 <?php
     require_once("footer.inc.php");
 ?>

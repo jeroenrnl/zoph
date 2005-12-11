@@ -44,51 +44,31 @@
     $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
-  <tr>
-    <td>
-      <table class="titlebar">
+    <h1>
 <?php
     if ($action == "confirm") {
 ?>
-        <tr>
-          <th><h1><?php echo translate("delete category") ?></h1></th>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table class="main">
-        <tr>
-          <td>
-       <?php echo sprintf(translate("Confirm deletion of '%s' and its subcategories:") , $category->get("category")) ?>
-          </td>
-          <td class="actionlink">[
+          <span class="actionlink">
             <a href="category.php?_action=confirm&amp;category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="category.php?_action=edit&amp;category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("cancel") ?></a>
-          ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
+          </span>
+          <?php echo translate("delete category") ?>
+        </h1>
+	<div class="main">
+       <?php echo sprintf(translate("Confirm deletion of '%s' and its subcategories:") , $category->get("category")) ?>
 <?php
     }
     else {
 ?>
-        <tr>
-          <th><h1><?php echo translate("category") ?></h1></th>
-          <td class="actionlink">[
+          <span class="actionlink">
             <a href="categories.php?parent_category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("return") ?></a> |
             <a href="category.php?_action=delete&amp;category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("delete") ?></a>
-          ]</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
+          </span>
+          <?php echo translate("category") ?>
+        </h1>
+      <div class="main">
 <form action="category.php">
-      <table class="main">
+      <table id="category">
 <tr><td>
 <input type="hidden" name="_action" value="<?php echo $action ?>">
 <input type="hidden" name="category_id" value="<?php echo $category->get("category_id") ?>">
@@ -101,12 +81,10 @@
   </tr>
       </table>
 </form>
-    </td>
-  </tr>
 <?php
     }
 ?>
-</table>
+</div>
 
 <?php
     require_once("footer.inc.php");
