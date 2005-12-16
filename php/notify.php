@@ -170,7 +170,7 @@
             <?php echo create_text_input("subject", $subject, 48, 64) ?><br>
             
 	   <label for="message"><?php echo translate("message:") ?></label><br>
-            <textarea name="message" cols="70" rows="15"><?php echo $message ?></textarea><br>
+            <textarea name="message" class="email" cols="70" rows="15"><?php echo $message ?></textarea><br>
           <div class="center">
             <input type="submit" name="_button" value="<?php echo translate("email", 0); ?>">
 	    <br>

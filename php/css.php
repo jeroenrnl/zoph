@@ -103,6 +103,7 @@ ul	{
 /* Form properties */
 form	{
 	margin: 0 0 0 0;
+	width: 100%;
 	}
 
 /* Takes care of the border around the page */
@@ -204,7 +205,7 @@ table.info > col { width: 50%; }
 
 /* The short introduction on zoph.php */
 .intro	{
-        padding: 5px;
+	padding: 5px;
 	text-align: left;
 	}
 
@@ -242,9 +243,9 @@ table.reports {
 	
 /* This is the bar that shows the number of photos for each rating */
 div.ratings   {
-       float: left;
-       background: <?php echo $BREADCRUMB_BG_COLOR ?>;
-       }
+	float: left;
+	background: <?php echo $BREADCRUMB_BG_COLOR ?>;
+	}
 
 table.places {
 	width: 100%;
@@ -263,13 +264,9 @@ span.actionlink {
 	vertical-align: top;
 	font-size: x-small;
 	float: right;
+	font-weight: normal;
 	}
 	
-td.actionlink {
-	text-align: right;
-	font-size: x-small;
-	}
-
 .actionlink:before, div.letter:before {
 	content: "[ ";
 	}
@@ -484,11 +481,12 @@ span.inputhint	{
 
 div.editchoice	{
 	vertical-align: top;
+	clear: none;
 	font-size: small;
 	margin: 10px;
+	margin-right: -10em;
+	float: left;
 	width: 10em;
-	position: absolute;
-	top: inherit;
 	}
 
 /* Thumbnail photo */
@@ -499,19 +497,6 @@ div.thumbnail	{
 	float:left;
 	margin: 2px;
 	padding: 5px;
-	}
-
-fieldset.editphotos div.thumbnail {
-	z-index: 20;
-	display: inline;
-	float: right;
-	clear: none;	
-	}
-
-fieldset.editphotos-fields {
-	clear: none;
-	width: 100%;
-	padding-top: 10px;
 	}
 
 br	{
@@ -545,6 +530,7 @@ br	{
 .wide 	{
 	width: 90%
 	}
+
 .field, .fieldtitle, .fieldtitle-centered, label	{ 
 	font-size: medium; 
 	padding-left: 4px;
@@ -572,6 +558,7 @@ next to it, like on the Annotate photo page */
 input[type="checkbox"] + label {
 	width: 9em;
 	}
+
 fieldset  {
 	margin: 0;
 	border: none;
@@ -585,12 +572,11 @@ fieldset.editphotos  {
 	margin-bottom: 5px;
 	padding-bottom: 20px;
 	border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
-	height: inherit;
 	}
 
 fieldset.editphotos legend {
+	clear: both;
 	display: block;
-	position: relative;
 	left: 2em;
 	padding-right: 2em;
 	padding-left: 2em;
@@ -598,16 +584,42 @@ fieldset.editphotos legend {
 	border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
 	background: <?php echo $TITLE_BG_COLOR ?>;
 	}
-	
+
+fieldset.editphotos div.thumbnail {
+	vertical-align: top;
+	clear: none;
+	font-size: small;
+	margin: 0px;
+	margin-left: -10em;
+	float: right;
+	width: 10em;
+	}
+
+fieldset.editphotos-fields {
+	margin: 0;
+	clear: none;
+	width: 90%;
+	padding-top: 10px;
+	}
+
+/* These are the lists on the bulk edit page, such as the list of albums + the remove checkbox. This is a bit of a hack, needed to make opera and MSIE behave. */
+
+fieldset.checkboxlist { 
+	display: block;
+	float: left;
+	width: 60%;
+	clear: right;
+	}	
+
 input[type="button"],
 input[type="submit"],
 input[type="reset"] {
-        border: 2px outset;
+	border: 2px outset;
 	background: <?php echo $TAB_BG_COLOR ?>;
 	color: <?php echo $TAB_FONT_COLOR ?>;
-        font-weight: bold;
-        width: 100px;
-        height: 25px;
+	font-weight: bold;
+	width: 100px;
+	height: 25px;
 	margin-top: 15px;
 	margin-bottom: 15px;
 	margin-left: auto;
@@ -624,7 +636,24 @@ input[type="submit"].updatebutton {
 
 textarea {
 	margin: 2px;
+	width: 70%;
 	}	
+
+textarea.email {
+	margin-top: 0px;
+	margin-bottom: 15px;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
+	}
+	
+textarea.desc {
+	display: block;
+	float: left;
+	width: 300px;
+	}	
+
+
 input[type="checkbox"] {
 	float: left;
 	}
@@ -715,7 +744,7 @@ div#rotate input[type="submit"] {
 
 /* Styles to control alignment - not really semantically correct - should change in the future */
 .right	{ text-align: right; }
-.center { text-align: center; }
+.center	{ text-align: center; }
 
 /* Error message */
 .error	{

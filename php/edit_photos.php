@@ -240,7 +240,7 @@
                         <?php echo create_rating_pulldown($rating, "_rating__$photo_id") ?>
                     <br>
                       <label for="album__<?php echo $photo_id?>"><?php echo translate("albums") ?></label>
-                      <fieldset>
+                      <fieldset class="checkboxlist">
 <?php
                 $albums = $photo->lookup_albums($user);
                 if ($albums) {
@@ -259,7 +259,7 @@
                         <?php echo str_replace("album", "album__$photo_id", $album_pulldown) ?>
                       </fieldset>
                       <label for="category__<?php echo $photo_id?>"><?php echo translate("categories") ?></label>
-                      <fieldset>
+                      <fieldset class="checkboxlist">
 <?php
                 $categories = $photo->lookup_categories($user);
                 if ($categories) {
@@ -278,7 +278,7 @@
                         <?php echo str_replace("category", "category__$photo_id", $category_pulldown) ?>
                       </fieldset>
                       <label for="person<?php echo $photo_id ?>"><?php echo translate("people") ?></label>
-                      <fieldset>
+                      <fieldset class="checkboxlist">
 <?php
                 $people = $photo->lookup_people();
                 $next_pos = 1;
@@ -304,7 +304,8 @@
                       <?php echo create_text_input("__title__$photo_id", $photo->get("title"), 40, 64) ?>
                     <br>
                       <label for="decription<?php echo $photo_id?>"><?php echo translate("description") ?></label>
-                        <textarea name="__description__<?php echo $photo_id ?>" id="description<?php echo $photo_id?>" cols="50" rows="3"><?php echo $photo->get("description") ?></textarea>
+                        <textarea name="__description__<?php echo $photo_id ?>" id="description<?php echo $photo_id?>" class="desc" cols="50" rows="3"><?php echo $photo->get("description") ?></textarea>
+                     <br>
                   </fieldset>
                   </fieldset>
 <?php

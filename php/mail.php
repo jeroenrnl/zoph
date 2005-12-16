@@ -186,7 +186,7 @@
         }
 ?>
             <label for="message"><?php echo translate("message:") ?></label><br>
-            <textarea name="message" cols="70" rows="5"><?php echo $body ?></textarea>
+            <textarea name="message" class="email" cols="70" rows="5"><?php echo $body ?></textarea>
 <?php
         if ($annotate) {
 ?>
