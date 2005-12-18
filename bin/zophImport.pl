@@ -69,6 +69,9 @@ my $useIds     = 0; # arguments are photo_ids, not file names
 my $datedDirs  = 0; # photos should be moved to a YYYY.MM.DD directory
 my $thumbnails = 2; # create thumbails of image
 
+my $hierarchical = 0; # when set, dateddirs will be yyyy/mm/dd instead of
+                     # yyyy.mm.dd, thus creating a hierarchical structure.
+
 # the maxinum dimension of the two sizes of images to be generated
 my $midSize = 480;
 my $thumbSize = 120;
@@ -106,6 +109,7 @@ GetOptions(
     'updateExif' => \$updateExif,
     'useIds' => \$useIds,
     'datedDirs!' => \$datedDirs,
+    'hierarchical!'=> \$hierarchical,
     'thumbnails!' => \$thumbnails,
     'album|albums=s' => \@albums,
     'category|categories=s' => \@categories,
@@ -175,6 +179,7 @@ sub printUsage {
         "	--field NAME=VALUE\n" .
         "	--path\n" .
         "	--datedDirs\n" .
+        "	--hierarchical\n" .
         "	--update\n" .
         "	--updateSize (implies --update)\n" .
         "	--updateExif (implies --update)\n" .
@@ -339,7 +344,12 @@ sub updatePhoto {
 # (creating it if needed).  The date is taken from the exif hash.
 #
 sub useDatedDir {
-    my ($image) = @_; 
+    my ($image) = @_;
+    
+    my $year;
+    my $month;
+    my $day;
+    my @hierpath;
 
     my $imageName = $image;
     $imageName = stripPath($imageName);
@@ -347,16 +357,42 @@ sub useDatedDir {
     my $datePath = $exifHash{'date'};
     if ($datePath) {
         $datePath =~ s/-/./g;
+        if ($hierarchical) {
+            @hierpath = split /\./,$datePath;
+            $year = $hierpath[0];
+            $month = $hierpath[1];
+            $day = $hierpath[2];
 
-        if ($path) {
-            $datePath = $path . '/' . $datePath;
+            if ($path) {
+                $datePath = $path . '/' . $year;
+            }
+            else {
+                $datePath = $year;
+            }
+            if (not -d $datePath) {
+                mkdir($datePath, 0755) or die "Could not create year-dir:
+$!\n";
+            }
+            $datePath = $datePath . '/' . $month;
+            if (not -d $datePath) {
+                mkdir($datePath, 0755) or die "Could not create month-dir:
+$!\n";
+            }
+            $datePath = $datePath . '/' . $day;
+            if (not -d $datePath) {
+                mkdir($datePath, 0755) or die "Could not create day-dir:
+$!\n";
+            }
         }
+        else {
+            if ($path) {
+                $datePath = $path . '/' . $datePath;
+            }
 
-        if (not -d $datePath) {
-            mkdir($datePath, 0755) or die "Could not create dir: $!\n";
+            if (not -d $datePath) {
+                mkdir($datePath, 0755) or die "Could not create dir: $!\n";
+            }
         }
-
-        #print "mv $image $datePath/$imageName";
         copy("$image", "$datePath/$imageName")
             or die "Could not move file: $!\n";
         unlink("$image");
