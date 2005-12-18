@@ -25,6 +25,14 @@
 
     $color_scheme = new color_scheme($color_scheme_id);
 
+    if ($_action == "copy") {
+        $title = translate("Copy Color Scheme");
+        $color_scheme->lookup();
+        $name = "copy of " . $color_scheme->get("name");
+        $color_scheme_id = 0;
+        $_action = "new";
+        $copy=1;
+    }
     $obj = &$color_scheme;
     $redirect = "color_schemes.php";
     require_once("actions.inc.php");
@@ -36,7 +44,7 @@
     if ($action != "insert") {
         $color_scheme->lookup();
         $title = $color_scheme->get("name");
-    }
+    } 
     else {
         $title = translate("New Color Scheme");
     }
@@ -107,10 +115,17 @@
         <tr>
           <td class="fieldtitle">Name</td>
           <td>
-<input type="hidden" name="_action" value="<?php echo $action ?>">
-<input type="hidden" name="color_scheme_id" value="<?php echo $color_scheme->get("color_scheme_id") ?>">
-<?php echo create_text_input("name", $color_scheme->get("name"), 16, 64) ?>
-          </td>
+              <input type="hidden" name="_action" value="<?php echo $action ?>">
+              <input type="hidden" name="color_scheme_id" value="<?php echo $color_scheme->get("color_scheme_id") ?>">
+
+<?php
+              if ($copy) {
+                  echo create_text_input("name", "copy of " . $color_scheme->get("name"), 16, 64);
+              } else {
+                  echo create_text_input("name", $color_scheme->get("name"), 16, 64);
+              }
+?>
+           </td>
         </tr>
 
 <?php
