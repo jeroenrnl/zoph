@@ -43,6 +43,11 @@ class zoph_table {
      * Gets a field.
      */
     function get($name) {
+        if(DEBUG>10) {
+           echo "<pre><b>GET " . $name . "</b>\n";
+           var_dump($this->fields);
+           echo "\n\n</pre>";
+        }
         return $this->fields[$name];
     }
 
@@ -514,7 +519,6 @@ function create_select_array($records, $name_fields) {
  */
 function get_link($class, $id) {
     if (!$class || !$id) { return ""; }
-
     $obj = new $class($id);
     $obj->lookup();
     return $obj->get_link();
