@@ -15,105 +15,111 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
     require_once("include.inc.php");
 
     if (!$user->is_admin() && !$user->get("browse_places")) {
         header("Location: " . add_sid("zoph.php"));
     }
-
-    $_l = getvar("_l");
-
-    if (empty($_l)) {
-        if (DEFAULT_SHOW_ALL) {
-            $_l = "all";
-        }
-        else {
-            $_l = "a";
-        }
+    $parent_place_id = getvar("parent_place_id");
+    if (!$parent_place_id) {
+        $place = get_root_place();
     }
+    else {
+        $place = new place($parent_place_id);
+    }
+    $place->lookup();
+    $ancestors = $place->get_ancestors();
+    $children = $place->get_children();
 
-    $title = translate("Places");
+    $photo_count = $place->get_total_photo_count($user);
+
+    $title = $place->get("parent_place_id") ? $place->get("title") : translate("Places");
+
     require_once("header.inc.php");
 ?>
-          <h1>
+    <h1>
 <?php
-        if ($user->is_admin()) {
+    if ($user->is_admin()) {
 ?>
-          <span class="actionlink"><a href="place.php?_action=new"><?php echo translate("new") ?></a></span>
-<?php
-        }
-?>
-<?php echo translate("places") ?></h1>
-          <div class="letter">
-<?php
-    for ($l = 'a'; $l < 'z'; $l++) {
-        $title = $l;
-        if ($l == $_l) {
-            $title = "<span class=\"selected\">" . strtoupper($title) . "</span>";
-        }
-?>
-            <a href="places.php?_l=<?php echo $l ?>"><?php echo $title ?></a> |
+        <span class="actionlink"><a href="place.php?_action=new&amp;parent_place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("new") ?></a></span>
 <?php
     }
 ?>
-            <a href="places.php?_l=z"><?php echo $_l == "z" ? "<strong>Z</strong>" : "z" ?></a> |
-            <a href="places.php?_l=no%20city"><?php echo translate("no city") ?></a> |
-            <a href="places.php?_l=all"><?php echo translate("all") ?></a>
+        <?php echo translate("places") . "\n" ?>
+    </h1>
+    <div class="main">
+        <h2>
+<?php
+    if ($ancestors) {
+        while ($parent = array_pop($ancestors)) {
+?>
+            <?php echo $parent->get_link() ?> &gt;
+<?php
+        }
+    }
+?>
+             <?php echo $title . "\n" ?>
+        </h2>
+<?php
+    if ($user->is_admin()) {
+?>
+        <span class="actionlink"><a href="place.php?_action=edit&amp;place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("edit") ?></a></span>
+<?php
+    }
+    if ($place->get("place_description")) {
+?>
+        <div class="description">
+            <?php echo $place->get("place_description") ?>
+        </div>
+<?php
+    }
+?>
+<?php
+    $fragment = translate("in this place");
+    if ($photo_count > 0) {
+        if (!$place->get("parent_place_id")) { // root place
+            $fragment = translate("available");
+        }
+        else {
+            if ($children) {
+                $fragment .= " " . translate("or its children");
+            }
+        }
+
+    if ($photo_count > 1) {
+      echo sprintf(translate("There are %s photos"), $photo_count);
+      echo " $fragment.\n";
+    }
+    else {
+      echo sprintf(translate("There is %s photo"), $photo_count);
+      echo " $fragment.\n";
+    }
+?>
+        <span class="actionlink">
+            <a href="photos.php?location_id=<?php echo $place->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a>
+        </span>
+<?php
+    }
+    else {
+?>
+        <?php echo translate("There are no photos") ?> <?php echo $fragment . ".\n"; 
+    }
+    if ($children) {
+?>
+        <ul>
+<?php
+        foreach($children as $a) {
+?>
+            <li><a href="places.php?parent_place_id=<?php echo $a->get("place_id") ?>"><?php echo $a->get("title") ?></a></li>
+<?php
+        }
+?>
+        </ul>
+<?php
+    }
+?>
     </div>
-      <div class="main">
-      <table class="places">
-<?php
-    $constraints = null;
-    if ($_l == "all") {
-        // no constraint
-    }
-    else if ($_l == "no city") {
-        $constraints["city#1"] = "null";
-        $ops["city#1"] = "is";
-        $constraints["city#2"] = "''";
-    }
-    else {
-        $constraints["lower(city)"] = "$_l%";
-        $ops["lower(city)"] = "like";
-    }
-
-    $plcs = get_places($constraints, "or", $ops);
-
-    if ($plcs) {
-        foreach($plcs as $p) {
-?>
-       <tr>
-          <td class="place">
-            <?php echo $p->get("city") ? $p->get("city") : "&nbsp;" ?>
-          </td>
-<?php
-        if ($user->is_admin() || $user->get("detailed_people")) {
-?>
-          <td>
-            <?php echo $p->get("address") ? $p->get("address") : "&nbsp;" ?>
-          </td>
-<?php
-        }
-?>
-          <td>
-          <span class="actionlink">
-            <a href="place.php?place_id=<?php echo $p->get("place_id") ?>"><?php echo translate("view") ?></a> | <a href="photos.php?location_id=<?php echo $p->get("place_id") ?>"><?php echo translate("photos at") ?></a>
-          </span>
-            <?php echo $p->get("title") ? "\"" . $p->get("title") . "\"" : "&nbsp;" ?>
-          </td>
-        </tr>
-<?php
-        }
-?>
-</table>
-<?php      }
-    else {
-?>
-          <div class="error"><?php echo sprintf(translate("No places were found in a city beginning with '%s'."), $_l) ?></div>
-<?php
-    }
-?>
-</div>
 <?php
     require_once("footer.inc.php");
 ?>

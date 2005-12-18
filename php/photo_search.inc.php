@@ -134,6 +134,17 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $excluded_categories[$conj] = $val;
             }
         }
+        else if ($key == "location_id") {
+                if ($where) { $where .= " $conj "; }
+
+                if ($op == "=") {
+                    $op = "in";
+                } else {
+                    $op = "not in";
+                }
+                $where .=
+                    "ph.location_id $op (" . escape_string($val) . ")";
+            }
         else if ($key == "person_id") {
             if ($op == "=") {
                 if ($where) { $where .= " $conj "; }
@@ -194,7 +205,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         $where .= generate_excluded_people_clause(
             $excluded_people, $from_clause, $where);
     }
-
+    
     if ($where) { $where = "where $where"; }
 
     $num_photos = 0;

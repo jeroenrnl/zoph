@@ -2,7 +2,7 @@
 
 #
 # zophImport.pl
-# Zoph 0.4
+# Zoph 0.5
 # Jason Geiger, 2002-2005
 #
 # This file is part of Zoph.
@@ -58,7 +58,7 @@ my $db_user = 'zoph_rw';
 my $db_pass = 'pass';
 my $db_prefix = 'zoph_';
 
-my $version = '0.4';
+my $version = '0.5';
 
 my $update     = 0; # update existing photo records instead of inserting
 my $updateSize = 0; # update the size, width and height (implies -update)
@@ -116,7 +116,12 @@ GetOptions(
     },
     'location=s' => sub {
         my ($n, $v) = @_;
-        if ($v = lookupPlaceId($v)) { $fieldHash{'location_id'} = $v; }
+        if ( index($v,"/") >= 0 ) {
+            if ($v = lookupLocationIdFromTree($v)) { $fieldHash{'location_id'} = $v; }
+        }
+        else {
+            if ($v = lookupLocationId($v)) { $fieldHash{'location_id'} = $v; }
+        }
     },
     'path=s' => \$path,
     'field=s' => \%fieldHash,
@@ -697,6 +702,33 @@ sub lookupPlaceId {
     return 0;
 }
 
+sub lookupLocationIdFromTree {
+    my ($place) = @_;
+    $place = lc($place);
+    
+    # The place root is not 0, but a child from '0' (usually 1)
+    my $place_id = lookupLocationChild(0);
+    
+    my @placetree = split("/", $place);
+    foreach my $branch (@placetree) {
+        if (!$branch) { next; }
+        $place_id = lookupLocationChildByName($place_id, $branch);
+    }
+    return $place_id;
+}
+
+sub lookupLocationChildByName {
+    my ($place_id, $place) = @_;
+    my $query =
+       "select place_id from " . $db_prefix . "places where parent_place_id = " . $place_id . " and title = " . $dbh->quote($place);
+    my @row_array = $dbh->selectrow_array($query);
+
+    if (@row_array) {
+        return $row_array[0];
+    }
+    print "Location not found: $place\n";
+}
+
 #
 # Looks up an album_id from an album name.
 #
@@ -820,3 +852,17 @@ sub lookupCategoryChild {
     }
     print "Category not found: $cat\n";
 }
+
+sub lookupLocationChild {
+    # Only returns first child!
+    my ($place_id, $place) = @_;
+    my $query =
+       "select place_id from " . $db_prefix . "places where parent_place_id = " . $place_id;
+    my @row_array = $dbh->selectrow_array($query);
+
+    if (@row_array) {
+        return $row_array[0];
+    }
+    print "Place not found: $place\n";
+}
+

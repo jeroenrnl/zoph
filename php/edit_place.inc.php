@@ -37,6 +37,16 @@
           <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
         </tr>
         <tr>
+          <td class="fieldtitle">
+            <?php echo translate("parent location") ?>
+          </td>
+          <td class="field">
+            <?php echo create_pulldown("parent_place_id",
+                    $place->get("parent_place_id"), get_places_select_array()) ?>
+          </td>
+        </tr>
+
+        <tr>
           <td class="fieldtitle"><?php echo translate("address") ?></td>
           <td class="field"><?php echo create_text_input("address", $place->get("address"), 40, 40) ?></td>
           <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
