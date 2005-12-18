@@ -212,14 +212,12 @@
             }
         }
         else {
-?>
-		      <?php echo translate("This photo is not in any albums.") ?><br>
-											</td>
-	<?php
-		}
-	?>
-		    <?php echo create_pulldown("_album", "", get_albums_select_array($user)) ?>
-	  </td>
+            echo translate("This photo is not in any albums.");
+            echo "<br>\n";
+        }
+        echo create_pulldown("_album", "", get_albums_select_array($user)) 
+        ?>
+          </td>
           <td class="remove">
             <?php echo $alb_links ? $alb_links : "&nbsp;" ?>
           </td>
