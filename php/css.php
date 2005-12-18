@@ -676,7 +676,8 @@ table#user,
 table#slideshow, 
 table#place,
 table#photo,
-table#editperson {
+table#editperson,
+table#credits {
 	width: 100%;
 	}
 
