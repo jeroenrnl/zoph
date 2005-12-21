@@ -28,7 +28,6 @@
     if (preg_match("/date(.*)/", $default_path)) {
         $default_path = preg_replace("/date\(([^)]*)\)/e", "date(\"\\1\")", $default_path);
     }
-
     if (!(CLIENT_WEB_IMPORT || SERVER_WEB_IMPORT) ||
         (!$user->is_admin() && !$user->get("import"))) {
 
@@ -94,7 +93,13 @@ require_once("header.inc.php");
 ?>
         <tr>
           <td class="fieldtitle"><?php echo translate("destination path") ?></td>
-          <td class="field" colspan="2"><?php echo create_text_input("_path_a", $default_path, 40, 256) ?></td>
+          <td class="field" colspan="2"><?php echo create_text_input("_path_a", $default_path, 40, 256) ?>
+<?php
+           if (USE_DATED_DIRS) {
+             echo "<br>\n" . translate("Dated directory will be appended"); 
+           }
+?>
+          </td>
         </tr>
 <?php
             }
@@ -126,7 +131,13 @@ require_once("header.inc.php");
 ?>
         <tr>
           <td class="fieldtitle"><?php echo translate("destination path") ?></td>
-          <td class="field" colspan="2"><?php echo create_text_input("_path_b", $default_path, 40, 256) ?></td>
+          <td class="field" colspan="2"><?php echo create_text_input("_path_b", $default_path, 40, 256) ?>
+<?php
+          if (USE_DATED_DIRS) {
+            echo "<br>" . translate("Dated directory will be appended");
+          }
+?>
+          </td>
         </tr>
 <?php
             }
@@ -330,6 +341,10 @@ require_once("header.inc.php");
 
             if ($loaded >= 0) {
                 echo "<p>" . sprintf(translate("%s images loaded."), $loaded) . "</p>\n";
+                if ($expand && REMOVE_ARCHIVE) {
+                    echo "<p>deleting " . $file;
+                    unlink($file); 
+                }
             }
             else {
                 echo "<p>" . translate("An error occurred.") . "</p>\n";

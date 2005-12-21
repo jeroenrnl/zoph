@@ -40,28 +40,6 @@ function process_images($images, $path, $fields) {
 
     $absolute_path = IMAGE_DIR . $path;
 
-    $thumb_path = $absolute_path . '/' . THUMB_PREFIX;
-    if (file_exists($thumb_path) == false) {
-        if (mkdir($thumb_path, DIR_MODE)) {
-            echo translate("Created directory") . ": $thumb_path<br>\n";
-        }
-        else {
-            echo translate("Could not create directory") . ": $thumb_path<br>\n";
-            return -1;
-        }
-    }
-
-    $mid_path = $absolute_path . '/' . MID_PREFIX;
-    if (file_exists($mid_path) == false) {
-        if (mkdir($mid_path, DIR_MODE)) {
-            echo translate("Created directory") . ": $mid_path<br>\n";
-        }
-        else {
-            echo translate("Could not create directory") . ": $mid_path<br>\n";
-            return -1;
-        }
-    }
-
     echo "<p>" . sprintf(translate("Processing %s image(s)."), count($images)) . "</p>\n";
     $loaded = 0;
     foreach ($images as $image) {
@@ -70,12 +48,24 @@ function process_images($images, $path, $fields) {
             echo sprintf(translate("Skipping %s: File does not exist."), $image) . "<br>\n";
             continue;
         }
-
+        create_dir("$absolute_path");
+        if (minimum_version('4.2.0')) {
+            $exif_data = process_exif($image);
+            if ((USE_DATED_DIRS) && !(HIER_DATED_DIRS)) {
+              $date = str_replace("-", ".", $exif_data["date"]);
+              create_dir($absolute_path . "/" . $date);
+            } elseif ((USE_DATED_DIRS) && (HIER_DATED_DIRS)) {
+              $date = str_replace("-", "/", $exif_data["date"]);
+              create_dir_recursive($absolute_path . "/" . $date . "/");
+            }
+        }
+        create_dir("$absolute_path" . "$date" . "/" . THUMB_PREFIX);
+        create_dir("$absolute_path" . "$date" . "/" . MID_PREFIX);
         $image_dir = dirname($image);
         $image_name = basename($image);
 
-        if ($image_dir != $absolute_path) {
-            $new_image = $absolute_path . '/' . $image_name;
+        if ($image_dir != $absolute_path . $date) {
+            $new_image = $absolute_path . $date . '/' . $image_name;
             if (!copy($image, $new_image)) {
                 echo sprintf(translate("Could not copy %s to %s."), $image, $new_image) . "<br>\n";
                 continue;
@@ -93,7 +83,7 @@ function process_images($images, $path, $fields) {
 
         $photo = new photo();
         $photo->set("name", $image_name);
-        $photo->set("path", $path);
+        $photo->set("path", $path . $date);
 
         //$width = imagesx($img_src);
         //$height = imagesy($img_src);
@@ -122,7 +112,6 @@ function process_images($images, $path, $fields) {
 
             // exif functions introduced in PHP 4.2.0
             if (minimum_version('4.2.0')) {
-                $exif_data = process_exif($image);
                 $photo->set_fields($exif_data);
             }
 
@@ -139,4 +128,21 @@ function process_images($images, $path, $fields) {
     return $loaded;
 }
 
+function create_dir($directory) {
+    if (file_exists($directory) == false) {
+        if (mkdir($directory, DIR_MODE)) {
+            echo translate("Created directory") . ": $directory<br>\n";
+        }
+        else {
+            echo translate("Could not create directory") . ": $directory<br>\n";
+            return -1;
+        }
+    }
+}
+
+function create_dir_recursive($directory){
+  foreach(split('/',$directory) as $subdir) {
+    create_dir($nextdir="$nextdir$subdir/");
+  }
+}
 ?>
