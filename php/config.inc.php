@@ -69,9 +69,19 @@
     // directory to use to temporarily extract uploaded archives
     define('EXTRACT_DIR', '/tmp');
 
+    // Remove zip or tar file after successful import
+    define('REMOVE_ARCHIVE', 0);
+
     // destination path params for importing
     // "date(format)" will be expanded to today's date
     define('DEFAULT_DESTINATION_PATH', 'uploads/date(Y.m.d)');
+
+    // Use dated dirs with web import 
+    define('USE_DATED_DIRS', 0);
+    // Use hierarchical dated dirs like 2005/12/21
+    // This parameter is ignored when USE_DATED_DIRS is not set
+    define('HIER_DATED_DIRS', 0);
+
     define('SHOW_DESTINATION_PATH', 0); // show for non admin users
 
     // let users rate photos
@@ -116,7 +126,7 @@
     // copy the original to a file with this prefix
     define('BACKUP_PREFIX', 'orig_');
 
-    // width of the main table, looks best if set to 550 or higher.
+    // width of the main table
     define('DEFAULT_TABLE_WIDTH', 600);
     //define('DEFAULT_TABLE_WIDTH', "100%");
 
