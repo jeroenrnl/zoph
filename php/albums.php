@@ -77,6 +77,11 @@
 <?php
     $fragment = translate("in this album");
     if ($photo_count > 0) {
+?>
+        <span class="actionlink">
+            <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a>
+        </span>
+<?php
         if (!$album->get("parent_album_id")) { // root album
             $fragment = translate("available");
         }
@@ -86,19 +91,14 @@
             }
         }
 
-    if ($photo_count > 1) {
-      echo sprintf(translate("There are %s photos"), $photo_count);
-      echo " $fragment.\n";
-    }
-    else {
-      echo sprintf(translate("There is %s photo"), $photo_count);
-      echo " $fragment.\n";
-    }
-?>
-        <span class="actionlink">
-            <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a>
-        </span>
-<?php
+        if ($photo_count > 1) {
+          echo sprintf(translate("There are %s photos"), $photo_count);
+          echo " $fragment.\n";
+        }
+        else {
+          echo sprintf(translate("There is %s photo"), $photo_count);
+          echo " $fragment.\n";
+        }
     }
     else {
 ?>
