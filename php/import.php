@@ -277,13 +277,13 @@ require_once("header.inc.php");
                     $expand = UNZIP_CMD;
                 }
                 else if ($ext == 'zip' && !UNZIP_CMD) {
-                    echo translate("UNZIP_CMD is not set.") . "<br>\n";
+                    echo "UNZIP_CMD" . translate("is not set.") . "<br>\n";
                 }
                 else if ($ext == 'tar' && UNTAR_CMD) {
                     $expand = UNTAR_CMD;
                 }
                 else if ($ext == 'tar' && !UNTAR_CMD) {
-                    echo translate("UNTAR_CMD is not set.") . "<br>\n";
+                    echo "UNTAR_CMD" . translate("is not set.") . "<br>\n";
                 }
 
                 if ($expand) {
