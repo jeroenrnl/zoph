@@ -280,7 +280,7 @@ require_once("header.inc.php");
             <div id="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
             <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
 <?php
-        if ($people_links = get_photo_person_links($photo)) {
+        if (($user->is_admin() || $user->get("browse_people")) && $people_links = get_photo_person_links($photo)) {
 ?>
           <div id="personlink">
             <?php echo $people_links ?>
