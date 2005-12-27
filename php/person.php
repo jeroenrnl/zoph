@@ -20,7 +20,9 @@
     if (!$user->is_admin()) {
         $_action = "display";
     }
-
+    if (!$user->get("browse_people")) {
+        header("Location: " . add_sid("zoph.php"));
+    }
     $name = getvar("person");
     if ($name) {
         list($last_name, $first_name) = explode(',', $name);
@@ -77,15 +79,15 @@
         <?php echo translate("person") ?>
      </h1>
       <div class="main">
+          <span class="actionlink">
+            <a href="photos.php?person_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_of " . translate("photos of") ?></a> |
+            <a href="photos.php?photographer_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_by " . translate("photos by") ?></a>
+          </span>
           <h2>
             <?php echo $person->get("first_name") ?>
             <?php echo $person->get("middle_name") ?>
             <?php echo $person->get("last_name") ?>
           </h2>
-          <span class="actionlink">
-            <a href="photos.php?person_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_of " . translate("photos of") ?></a> |
-            <a href="photos.php?photographer_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_by " . translate("photos by") ?></a>
-          </span>
           <table id="person">
 <?php
     if ($user->get("detailed_people")) {
