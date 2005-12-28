@@ -48,6 +48,7 @@ use Getopt::Long;
 use DBI;
 use Image::Size;
 use File::Copy;
+use File::stat;
 
 $| = 1;
 
@@ -203,6 +204,10 @@ sub processImage {
 
     my @ids;
     my @imgs;
+    my $filestat;
+    my $date;
+    my $time;
+
     if ($update) {
         if ($useIds) {
             my ($min, $max) = (0, 0);
@@ -247,6 +252,15 @@ sub processImage {
 
         if ($updateExif) {
             parseExif($img);
+            if (!$exifHash{"date"}) {
+                $filestat = stat($img);
+                my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($filestat->mtime);
+                $date = sprintf("%04d.%02d.%02d",$year+1900, $mon+1, $mday);
+                $time = sprintf("%2d:%2d:%2d", $hour, $min, $sec);
+                print "\n$img: no date found in EXIF, using file date: $date, $time\n";
+                $exifHash{"date"} = $date;
+                $exifHash{"time"} = $time;
+            }
         }
 
         my $newPath = $path;
