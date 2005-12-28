@@ -258,9 +258,10 @@ class photo extends zoph_table {
         return "            <a href=\"$link\">" . $this->get_image_tag(THUMB_PREFIX) . "</a>";
     }
 
-    function get_fullsize_link($title) {
+    function get_fullsize_link($title, $FULLSIZE_NEW_WIN) {
         $image = $this->get_image_href();
-        return "<a href=\"$image\">$title</a>";
+        $newwin = ($FULLSIZE_NEW_WIN ? "target=\"_blank\"" : "");
+        return "<a href=\"$image\" $newwin>$title</a>";
     }
 
     function get_image_href($type = null, $use_file = 0) {

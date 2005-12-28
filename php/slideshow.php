@@ -113,12 +113,12 @@ if (!$_pause) {
 	?>
         <div id="prev">&nbsp;</div>
         <div id="photohdr">
-            <?php echo $photo->get_fullsize_link($photo->get("name"))?>: 
+            <?php echo $photo->get_fullsize_link($photo->get("name"),$FULLSIZE_NEW_WIN)?>: 
             <?php echo $photo->get("width") ?> x <?php echo $photo->get("height")?>,
             <?php echo $photo->get("size") ?> <?php echo translate("bytes")?>
         </div>    
         <div id="next">&nbsp;</div>
-        <?php echo $photo->get_fullsize_link($photo->get_midsize_img())?>
+        <?php echo $photo->get_fullsize_link($photo->get_midsize_img(),$FULLSIZE_NEW_WIN)?>
         <?php
         if ($people_links = get_photo_person_links($photo)) {
 ?>	

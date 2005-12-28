@@ -28,3 +28,8 @@ ALTER TABLE zoph_users CHANGE password password varchar(64);
 # Changes for hierarchical locations
 
 alter table zoph_places add parent_place_id int(11) NOT NULL after place_id
+
+# Option for opening the full size image in a new window
+
+alter table zoph_prefs add fullsize_new_win char(1);
+

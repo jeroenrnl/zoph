@@ -68,6 +68,7 @@ class prefs extends zoph_table {
         global $RANDOM_PHOTO_MIN_RATING;
         global $TOP_N;
         global $SLIDESHOW_TIME;
+        global $FULLSIZE_NEW_WIN;
 
         global $PAGE_BG_COLOR;
         global $TEXT_COLOR;
@@ -91,6 +92,7 @@ class prefs extends zoph_table {
         $RANDOM_PHOTO_MIN_RATING = $this->get("random_photo_min_rating");
         $TOP_N = $this->get("reports_top_n");
         $SLIDESHOW_TIME = $this->get("slideshow_time");
+        $FULLSIZE_NEW_WIN = $this->get("fullsize_new_win");
 
         if ($this->lookup_color_scheme($force)) {
             $cs = $this->color_scheme;

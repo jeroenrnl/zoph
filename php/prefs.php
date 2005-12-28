@@ -132,6 +132,11 @@
     }
 ?>
         <tr>
+          <td class="fieldtitle"><?php echo translate("open fullsize photo in new window") ?></td>
+          <td class="field">
+<?php echo create_pulldown("fullsize_new_win", $user->prefs->get("fullsize_new_win"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+          </td>
+        <tr>
           <td class="fieldtitle"><?php echo translate("display camera info") ?></td>
           <td class="field">
 <?php echo create_pulldown("camera_info", $user->prefs->get("camera_info"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
