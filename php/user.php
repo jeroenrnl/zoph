@@ -165,7 +165,14 @@
 ?>
         <tr>
           <th><?php echo translate("name") ?></th>
+<?php 
+   if (WATERMARKING) { 
+?>
           <th><?php echo translate("access level") ?></th>
+<?php 
+   } 
+?>
+          <th><?php echo translate("watermark level") ?></th>
           <th><?php echo translate("writable") ?></th>
         </tr>
 <?php
@@ -177,6 +184,13 @@
         <tr>
           <td><?php echo $name ?></td>
           <td><?php echo $permissions->get("access_level") ?></td>
+<?php 
+   if (WATERMARKING) { 
+?>
+          <td><?php echo $permissions->get("watermark_level") ?></td>
+<?php 
+   } 
+?>
           <td><?php echo $permissions->get("writable") == "1" ? translate("Yes") : translate("No") ?></td>
         </tr>
 <?php
@@ -239,12 +253,23 @@ require_once("edit_user.inc.php");
 ?>
         <tr>
           <td colspan="4">
-       <?php echo translate("Granting access to an album will also grant access to that album's ancestors if required.  Granting access to all albums will not overwrite previously granted permissions.") ?>
+       <?php echo translate("Granting access to an album will also grant access to that album's ancestors if required.  Granting access to all albums will not overwrite previously granted permissions.");
+       if (WATERMARKING) { 
+           echo "<br>\n" . translate("A photo will be watermarked if the photo level is higher than the watermark level.");
+       }
+       ?>
           </td>
         </tr>
         <tr>
           <th colspan="2"><?php echo translate("name") ?></th>
           <th><?php echo translate("access level") ?></th>
+<?php 
+   if (WATERMARKING) { 
+?>
+          <th><?php echo translate("watermark level") ?></th>
+<?php 
+   }
+?>
           <th>writable</th>
         </tr>
         <tr>
@@ -259,6 +284,15 @@ require_once("edit_user.inc.php");
                 <td>
 <?php echo create_text_input("access_level_all", "5", 4, 2) ?>
                 </td>
+<?php 
+   if (WATERMARKING) { 
+?>
+                <td>
+<?php echo create_text_input("watermark_level_all", "5", 4, 2) ?>
+                </td>
+<?php
+    }
+?>
                 <td>
 <?php echo create_pulldown("writable_all", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
                 </td>
@@ -273,6 +307,11 @@ require_once("edit_user.inc.php");
                 <td>
 <?php echo create_text_input("access_level_new", "5", 4, 2) ?>
                 </td>
+<?php if (WATERMARKING) { ?>
+                <td>
+<?php echo create_text_input("watermark_level_new", "5", 4, 2) ?>
+                </td>
+<?php } ?>
                 <td>
 <?php echo create_pulldown("writable_new", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
                 </td>
@@ -300,6 +339,15 @@ require_once("edit_user.inc.php");
 <input type="hidden" name="user_id__<?php echo $id ?>" value="<?php echo $user_id ?>">
 <?php echo create_text_input("access_level__$id", $permissions->get("access_level"), 4, 2) ?>
           </td>
+<?php 
+      if (WATERMARKING) { 
+?>
+          <td>
+<?php echo create_text_input("watermark_level__$id", $permissions->get("watermark_level"), 4, 2) ?>
+          </td>
+<?php
+         }
+?>
           <td>
 <?php echo create_pulldown("writable__$id", $permissions->get("writable"), array("0" => translate("No",0), "1" => translate("Yes",0))) ?>
           </td>

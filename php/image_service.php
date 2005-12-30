@@ -34,35 +34,60 @@
         else {
             $name = $photo->get("name");
             $image_path = IMAGE_DIR . $photo->get("path") . "/";
-            if ($type) {
-                $image_path .= $type . "/" . $type . "_";
-                $name = get_converted_image_name($name);
+            if (!$user->is_admin()) {
+                $permissions = $user->get_permissions_for_photo($photo_id);
+                $watermark = $permissions->get("watermark_level");
+                $photolevel=$photo->get("level");
+                if(WATERMARK && ($photolevel > $watermark)) {
+                    $watermark_file = IMAGE_DIR . WATERMARK;
+                    if (!file_exists($watermark_file)) {
+                        $watermark_file="";
+                    }
+                }
             }
-            $image_path .= $name;
-        }
 
-        // the following thanks to Alan Shutko
-        $mtime = filemtime($image_path);
-        $filesize = filesize($image_path);
-        $gmt_mtime = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
+            if (WATERMARKING && $watermark_file && !$type) {
+                $image_path .= $name;
+                $orig_image=imagecreatefromjpeg($image_path);
+                $watermark=imagecreatefromgif($watermark_file);
+                ImageCopyMerge($orig_image, $watermark, (ImageSX($orig_image)/2)-(ImageSX($watermark)/2), (ImageSY($orig_image)/2)-(ImageSY($watermark)/2), 0, 0, ImageSX($watermark), ImageSY($watermark),50);
 
-        // we assume that the client generates proper RFC 822/1123 dates
-        //   (should work for all modern browsers and proxy caches)
-        if ($HTTP_IF_MODIFIED_SINCE == $gmt_mtime) {
-              header("HTTP/1.1 304 Not Modified");
-              exit;
-        }
+                header("Content-type: image/jpeg");
+                imagejpeg($orig_image);
+                imagedestroy($orig_image);
+                imagedestroy($watermark);
+                exit;
+            } else {
+                if ($type) {
+                    $image_path .= $type . "/" . $type . "_";
+                    $name = get_converted_image_name($name);
+                }
+                $image_path .= $name;
 
-        $image_type = get_image_type($image_path);
-        if ($image_type) {
-            header("Content-Length: " . $filesize);
-            header("Content-Disposition: inline; filename=" . $name);
-            header("Last-Modified: " . $gmt_mtime);
+                // the following thanks to Alan Shutko
+                $mtime = filemtime($image_path);
+                $filesize = filesize($image_path);
+                $gmt_mtime = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
 
-            header("Content-type: $image_type");
-            readfile($image_path);
-            exit;
-        }
+                // we assume that the client generates proper RFC 822/1123 dates
+                //   (should work for all modern browsers and proxy caches)
+                if ($HTTP_IF_MODIFIED_SINCE == $gmt_mtime) {
+                      header("HTTP/1.1 304 Not Modified");
+                      exit;
+                }
+
+                $image_type = get_image_type($image_path);
+                if ($image_type) {
+                    header("Content-Length: " . $filesize);
+                    header("Content-Disposition: inline; filename=" . $name);
+                    header("Last-Modified: " . $gmt_mtime);
+
+                    header("Content-type: $image_type");
+                    readfile($image_path);
+                    exit;
+                }
+            }
+         }
     }
 
     require_once("header.inc.php");

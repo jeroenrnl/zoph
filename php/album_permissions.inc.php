@@ -45,6 +45,7 @@ class album_permissions extends zoph_table {
                 $this->get("user_id"), $album->get("parent_album_id"));
 
             $ap->set("access_level", $this->get("access_level"));
+            $ap->set("watermark_level", $this->get("watermark_level"));
             $ap->set("writable", $this->get("writable"));
 
             $ap->insert();

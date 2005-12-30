@@ -33,3 +33,6 @@ alter table zoph_places add parent_place_id int(11) NOT NULL after place_id
 
 alter table zoph_prefs add fullsize_new_win char(1);
 
+# Watermarking
+
+alter table zoph_album_permissions add watermark_level tinyint(4) after access_level default 0 not null; 

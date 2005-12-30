@@ -56,6 +56,13 @@
     define('ANNOTATE_TEMP_DIR', '/tmp');
     define('ANNOTATE_TEMP_PREFIX', 'zoph');
 
+    // Enable watermarking
+    // Image service must be enabled to make this work!
+    define('WATERMARKING', 0);
+    // Watermark must be a GIF image, transparancy is honoured!
+    // the filename is relative to the image root (IMAGE_DIR)
+    define('WATERMARK', 'watermark.gif');
+
     // web import of photos
     define('CLIENT_WEB_IMPORT', 1);
     define('SERVER_WEB_IMPORT', 0);
