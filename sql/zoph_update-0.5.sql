@@ -31,8 +31,8 @@ alter table zoph_places add parent_place_id int(11) NOT NULL after place_id
 
 # Option for opening the full size image in a new window
 
-alter table zoph_prefs add fullsize_new_win char(1);
+alter table zoph_prefs add fullsize_new_win char(1) NOT NULL default '0';
 
 # Watermarking
 
-alter table zoph_album_permissions add watermark_level tinyint(4) after access_level default 0 not null; 
+alter table zoph_album_permissions add watermark_level tinyint(4) after access_level default '0' NOT NULL; 
