@@ -27,6 +27,7 @@ CREATE TABLE zoph_album_permissions (
   user_id int(11) NOT NULL default '0',
   album_id int(11) NOT NULL default '0',
   access_level tinyint(4) NOT NULL default '0',
+  watermark_level tinyint(4) NOT NULL default '0',
   writable char(1) NOT NULL default '0',
   changedate timestamp(14) NOT NULL,
   PRIMARY KEY  (user_id,album_id),
@@ -248,6 +249,7 @@ CREATE TABLE zoph_photos (
 
 CREATE TABLE zoph_places (
   place_id int(11) NOT NULL auto_increment,
+  parent_place_id int(11) NOT NULL,
   contact_type int(11) NOT NULL default '0',
   title varchar(64) NOT NULL default '',
   address varchar(64) default NULL,
@@ -288,6 +290,7 @@ CREATE TABLE zoph_prefs (
   auto_edit char(1) NOT NULL default '0',
   camera_info char(1) NOT NULL default '1',
   desc_thumbnails char(1) NOT NULL default '0',
+  fullsize_new_win char(1) NOT NULL default '0',
   PRIMARY KEY  (user_id)
 ) TYPE=MyISAM;
 
