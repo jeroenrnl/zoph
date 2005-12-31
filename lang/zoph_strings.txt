@@ -9,7 +9,7 @@
 10 - museum=
 5 - so so=
 A Photo from %s=
-A photo will be watermarked if the photo level is higher than the watermark
+A photo will be watermarked if the photo level is higher than the watermark level.=
 A possible cause is the upload_max_filesize variable in php.ini=
 About=
 After this user is created they can be given access to albums.=
@@ -229,7 +229,6 @@ last login=
 last modified=
 last name=
 less than=
-level.=
 level=
 lightbox album=
 lightbox=
