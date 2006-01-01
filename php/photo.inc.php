@@ -523,12 +523,15 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . "alt
 
         $dir = IMAGE_DIR . $this->get("path") . "/";
         $name = $this->get('name');
+        $converted_name = get_converted_image_name($name);
 
-        $images[$dir . THUMB_PREFIX . '/' . THUMB_PREFIX . '_' . $name] =
-            $dir . THUMB_PREFIX . '/rot_' . THUMB_PREFIX . '_' . $name;
+        $images[$dir . THUMB_PREFIX . '/' . THUMB_PREFIX . '_' . 
+            $converted_name] = 
+            $dir . THUMB_PREFIX . '/rot_' . THUMB_PREFIX . '_' . 
+            $converted_name;
 
-        $images[$dir . MID_PREFIX . '/' . MID_PREFIX . '_' . $name] =
-            $dir . MID_PREFIX . '/rot_' . MID_PREFIX . '_' . $name;
+        $images[$dir . MID_PREFIX . '/' . MID_PREFIX . '_' . $converted_name] =
+            $dir . MID_PREFIX . '/rot_' . MID_PREFIX . '_' . $converted_name;
 
         $images[$dir . $name] = $dir . 'rot_' . $name;
 
