@@ -37,6 +37,12 @@
     //$VALIDATOR = 'htpasswd_validate';
     //$VALIDATOR = 'php_validate';
 
+    // Set this to 1 if you want to have your users (logon) over SSL.
+    // Make sure you set ZOPH_URL and ZOPH_SECURE_URL as well.
+    define('FORCE_SSL_LOGIN', 1);
+    define('FORCE_SSL', 1);
+    define('ZOPH_TITLE', "ZOPH DEVELOPMENT");
+
     define('ZOPH_TITLE', "Zoph");
 
     define('LANG_DIR', "lang"); // where language files are stored
@@ -47,9 +53,13 @@
     // set to '' if not needed
     define('BCC_ADDRESS', '');
 
-    // URL used in Notification EMail
-    // set to '' if not needed
+    // URL used in Notification EMail and for https logons
+    // set to '' if not needed, example:
+    // define('ZOPH_URL', 'http://myserver.com/zoph');
+    // define('ZOPH_SECURE_URL', 'https://myserver.com/zoph');
     define('ZOPH_URL', '');
+    define('ZOPH_SECURE_URL', '');
+
 
     // allow annotation of photos for emailing
     define('ANNOTATE_PHOTOS', 1);

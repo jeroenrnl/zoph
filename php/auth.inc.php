@@ -45,7 +45,9 @@
         header("Location: logon.php");
         die;
     } else if (empty($user)) {
-
+        if(FORCE_SSL_LOGIN && !FORCE_SSL) {
+            header("Location: " . ZOPH_URL . "/zoph.php");
+        }
         $uname = getvar("uname");
         $pword = getvar("pword");
 
