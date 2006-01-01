@@ -540,6 +540,18 @@ sub addToAlbums {
         
         if (not $album_id) { next; }
 
+        my $query =
+           "select * from " . $db_prefix . "photo_albums " .
+           "where photo_id = " . $dbh->quote($id) .
+           "and album_id = " . $dbh->quote($album_id);
+
+        my @row_array = $dbh->selectrow_array($query);
+
+        if (@row_array) {
+           print "photo " . $id . " is already in album " . $album . ". Not added.\n";
+           next;
+       }
+
         my $insert =
             "insert into " . $db_prefix . "photo_albums (photo_id, album_id) " .
             "values ($id, $album_id)";
@@ -567,6 +579,18 @@ sub addToCategories {
 
         if (not $cat_id) { next; }
 
+        my $query =
+           "select * from " . $db_prefix . "photo_categories " .
+           "where photo_id = " . $dbh->quote($id) .
+           "and category_id = " . $dbh->quote($cat_id);
+
+        my @row_array = $dbh->selectrow_array($query);
+
+        if (@row_array) {
+           print "photo " . $id . " is already in category " . $cat . ". Not added.\n";
+           next;
+       }
+
         my $insert =
             "insert into " . $db_prefix . "photo_categories " .
             "(photo_id, category_id) values ($id, $cat_id)";
@@ -588,6 +612,18 @@ sub addPeople {
     foreach my $person (@people) {
         my $person_id = lookupPersonId($person);
         if (not $person_id) { next; }
+
+        my $query =
+           "select * from " . $db_prefix . "photo_people " .
+           "where photo_id = " . $dbh->quote($id) .
+           "and person_id = " . $dbh->quote($person_id);
+
+        my @row_array = $dbh->selectrow_array($query);
+
+        if (@row_array) {
+           print $person . " is already in photo " . $id . ". Not added.\n";
+           next;
+       }
 
         my $insert =
             "insert into " . $db_prefix . "photo_people " .
