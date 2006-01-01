@@ -73,6 +73,10 @@ my $thumbnails = 2; # create thumbails of image
 my $hierarchical = 0; # when set, dateddirs will be yyyy/mm/dd instead of
                      # yyyy.mm.dd, thus creating a hierarchical structure.
 
+my $ignoreerror = 0; # when set, zophImport will ignore missing albums,
+                    # people, categories and locations.
+                    # this was the default behaviour until 0.4.
+
 # the maxinum dimension of the two sizes of images to be generated
 my $midSize = 480;
 my $thumbSize = 120;
@@ -125,7 +129,7 @@ GetOptions(
             if ($v = lookupLocationIdFromTree($v)) { $fieldHash{'location_id'} = $v; }
         }
         else {
-            if ($v = lookupLocationId($v)) { $fieldHash{'location_id'} = $v; }
+            if ($v = lookupPlaceId($v)) { $fieldHash{'location_id'} = $v; }
         }
     },
     'path=s' => \$path,
@@ -147,6 +151,31 @@ if ($update and $thumbnails != 1) { $thumbnails = 0; }
 @categories = split(/\s*,\s*/, join(',', @categories));
 @people = split(/\s*,\s*/, join(',', @people));
 
+if (!$ignoreerror) {
+   # Do a check of all parameters before loading the first image
+    foreach my $album (@albums) {
+        if ( index($album,"/") >= 0 ) {
+            lookupAlbumIdFromTree($album);
+        }
+        else {
+            lookupAlbumId($album);
+        }
+    }
+    
+    foreach my $cat (@categories) {
+        if ( index($cat,"/") >= 0 ) {
+            lookupCategoryIdFromTree($cat);
+        }
+        else {
+            lookupCategoryId($cat);
+        }
+    }
+    
+    foreach my $person (@people) {
+        lookupPersonId($person);
+    }
+}
+   
 my $insert_sth = '';
 if (not $update) {
     $insert_sth = $dbh->prepare(
@@ -684,6 +713,10 @@ sub lookupPhotoId {
     }
 
     print "Photo not found: $photo\n";
+
+    if (!$ignoreerror) {
+        exit;
+    }
     return 0;
 }
 
@@ -704,6 +737,9 @@ sub lookupPhoto {
     }
 
     print "Photo not found: $id\n";
+    if (!$ignoreerror) {
+        exit;
+    }
     return "";
 }
 
@@ -727,6 +763,9 @@ sub lookupPersonId {
     }
 
     print "Person not found: $person\n";
+    if (!$ignoreerror) {
+        exit;
+    }
     return 0;
 }
 
@@ -749,6 +788,9 @@ sub lookupPlaceId {
     }
 
     print "Place not found: $place\n";
+    if (!$ignoreerror) {
+        exit;
+    }
     return 0;
 }
 
@@ -777,6 +819,9 @@ sub lookupLocationChildByName {
         return $row_array[0];
     }
     print "Location not found: $place\n";
+    if (!$ignoreerror) {
+        exit;
+    }
 }
 
 #
@@ -798,6 +843,9 @@ sub lookupAlbumId {
     }
 
     print "Album not found: $album\n";
+    if (!$ignoreerror) {
+        exit;
+    }
 }
 
 sub lookupAlbumIdFromTree {
@@ -826,6 +874,9 @@ sub lookupAlbumChildByName {
     }
     
     print "Album not found: $alb\n";
+    if (!$ignoreerror) {
+        exit;
+    }
 }
 
 sub lookupAlbumChild {
@@ -839,6 +890,9 @@ sub lookupAlbumChild {
         return $row_array[0];
     }
     print "Album not found: $alb\n";
+    if (!$ignoreerror) {
+        exit;
+    }
 }
 
 #
@@ -860,6 +914,9 @@ sub lookupCategoryId {
     }
 
     print "Category not found: $cat\n";
+    if (!$ignoreerror) {
+        exit;
+    }
 }
 
 sub lookupCategoryIdFromTree {
@@ -888,6 +945,9 @@ sub lookupCategoryChildByName {
     }
     
     print "Category not found: $cat\n";
+    if (!$ignoreerror) {
+        exit;
+    }
 }
 
 sub lookupCategoryChild {
@@ -901,6 +961,9 @@ sub lookupCategoryChild {
         return $row_array[0];
     }
     print "Category not found: $cat\n";
+    if (!$ignoreerror) {
+        exit;
+    }
 }
 
 sub lookupLocationChild {
@@ -914,5 +977,8 @@ sub lookupLocationChild {
         return $row_array[0];
     }
     print "Place not found: $place\n";
+    if (!$ignoreerror) {
+        exit;
+    }
 }
 
