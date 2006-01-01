@@ -46,13 +46,14 @@ function process_exif($image) {
         $datetime = $exif["DateTimeDigitized"];
     }
 
-    if ($datetime) {
-        list($date, $time) = explode(' ', $datetime);
-        $date = str_replace(':', '-', $date);
-
-        $exifdata["date"] = $date;
-        $exifdata["time"] = $time;
+    if (!$datetime) {
+        $datetime = date ("Y-m-d H:i:s", filemtime($image));
     }
+    list($date, $time) = explode(' ', $datetime);
+    $date = str_replace(':', '-', $date);
+
+    $exifdata["date"] = $date;
+    $exifdata["time"] = $time;
 
     if ($exif["Make"]) {
         $exifdata["camera_make"] = ucwords(strtolower($exif["Make"]));

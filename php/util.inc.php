@@ -485,4 +485,13 @@ function rawurlencode_array(
    }
    return implode($separator, $toImplode);
 }
+
+function cleanup_path($path) {
+   // Cleans up a path, by removing all double slashes, "/./",
+   // leading and trailing slashes.
+   $search = array ( "/(\/+)/", "/(\/\.\/)/", "/(\/$)/", "/(^\/)/" );
+   $replace = array ( "/", "/", "", "" );
+   return preg_replace($search,$replace, $path);
+}
+
 ?>

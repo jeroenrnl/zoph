@@ -251,7 +251,7 @@ require_once("header.inc.php");
                 $path = null;
             }
 
-            $absolute_path = IMAGE_DIR . $path;
+            $absolute_path = "/" . cleanup_path(IMAGE_DIR . $path);
 
             if (file_exists($absolute_path) == false) {
                 if(mkdir($absolute_path, DIR_MODE)) {
@@ -266,7 +266,7 @@ require_once("header.inc.php");
 
         if ($name && $path) {
             $tmp_name = $HTTP_POST_FILES['_image_local']['tmp_name'];
-            $file = IMAGE_DIR . $path . '/' . $name;
+            $file = "/" . cleanup_path(IMAGE_DIR . "/" . $path . "/" . $name);
 
             if (move_uploaded_file($tmp_name, $file)) {
                 echo translate("Received file") . ": $file<br>\n";
@@ -287,7 +287,7 @@ require_once("header.inc.php");
                 }
 
                 if ($expand) {
-                    $full_path = IMAGE_DIR . $path;
+                    $full_path = "/" . cleanup_path(IMAGE_DIR . "/" . $path);
 
                     $tmp_path = EXTRACT_DIR . '/zoph' . time();
                     if (!mkdir($tmp_path, DIR_MODE)) {

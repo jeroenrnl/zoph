@@ -38,7 +38,8 @@ function get_files($dir_name) {
 
 function process_images($images, $path, $fields) {
 
-    $absolute_path = IMAGE_DIR . $path;
+    $date = "";
+    $absolute_path = "/" . cleanup_path(IMAGE_DIR . $path);
 
     echo "<p>" . sprintf(translate("Processing %s image(s)."), count($images)) . "</p>\n";
     $loaded = 0;
@@ -52,20 +53,20 @@ function process_images($images, $path, $fields) {
         if (minimum_version('4.2.0')) {
             $exif_data = process_exif($image);
             if ((USE_DATED_DIRS) && !(HIER_DATED_DIRS)) {
-              $date = str_replace("-", ".", $exif_data["date"]);
-              create_dir($absolute_path . "/" . $date);
+                $date = cleanup_path(str_replace("-", ".", $exif_data["date"]));
+                create_dir($absolute_path . "/" . $date);
             } elseif ((USE_DATED_DIRS) && (HIER_DATED_DIRS)) {
-              $date = str_replace("-", "/", $exif_data["date"]);
-              create_dir_recursive($absolute_path . "/" . $date . "/");
+                $date = cleanup_path(str_replace("-", "/", $exif_data["date"]));
+                create_dir_recursive($absolute_path . "/" .  $date . "/");
             }
         }
-        create_dir("$absolute_path" . "$date" . "/" . THUMB_PREFIX);
-        create_dir("$absolute_path" . "$date" . "/" . MID_PREFIX);
+        create_dir("$absolute_path" . "/" . "$date" . "/" . THUMB_PREFIX);
+        create_dir("$absolute_path" . "/" . "$date" . "/" . MID_PREFIX);
         $image_dir = dirname($image);
         $image_name = basename($image);
 
-        if ($image_dir != $absolute_path . $date) {
-            $new_image = $absolute_path . $date . '/' . $image_name;
+        if ($image_dir != $absolute_path . "/" . $date) {
+            $new_image = $absolute_path . "/" . $date . "/" . $image_name;
             if (!copy($image, $new_image)) {
                 echo sprintf(translate("Could not copy %s to %s."), $image, $new_image) . "<br>\n";
                 continue;
@@ -83,7 +84,7 @@ function process_images($images, $path, $fields) {
 
         $photo = new photo();
         $photo->set("name", $image_name);
-        $photo->set("path", $path . $date);
+        $photo->set("path", cleanup_path($path . "/" . $date));
 
         //$width = imagesx($img_src);
         //$height = imagesy($img_src);
