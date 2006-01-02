@@ -76,6 +76,8 @@ my $hierarchical = 0; # when set, dateddirs will be yyyy/mm/dd instead of
 my $ignoreerror = 0; # when set, zophImport will ignore missing albums,
                     # people, categories and locations.
                     # this was the default behaviour until 0.4.
+my $verbose = 0;    # zopHImport will be more verbose about what it's doing.
+my $copy = 0;       # copy files instead of move.
 
 # the maxinum dimension of the two sizes of images to be generated
 my $midSize = 480;
@@ -134,6 +136,8 @@ GetOptions(
     },
     'path=s' => \$path,
     'field=s' => \%fieldHash,
+    'copy!' => \$copy,
+    'verbose!' => \$verbose,
     'clear' => sub { %fieldHash = (); }
 ) or die "Error parsing options";
 
@@ -214,7 +218,9 @@ sub printUsage {
         "	--updateSize (implies --update)\n" .
         "	--updateExif (implies --update)\n" .
         "	--useIds\n" .
-        "	--nothumbnails\n";
+        "	--nothumbnails\n" .
+        "	--verbose\n" .
+        "	--copy\n";
 }
 
 #
@@ -306,7 +312,9 @@ sub processImage {
 
                 copy($img, "$path/" . stripPath($img)) or
                     die "Could not copy file: $!\n";
-                unlink($img);
+                if (!$copy) {
+                    unlink($img);
+                }
             }
         }
     
@@ -325,7 +333,13 @@ sub processImage {
         addPeople($id);
 
         # the fancy status indicator
-        print ".";
+        if ($verbose && !$copy) {
+            print "Image $img moved to ./$newPath/$img.\n";
+        } elsif ($verbose && $copy) {
+            print "Image $img copied to ./$newPath/$img.\n";
+        } else {
+            print ".";
+        }
     }
 
 }
@@ -438,7 +452,9 @@ $!\n";
         }
         copy("$image", "$datePath/$imageName")
             or die "Could not move file: $!\n";
-        unlink("$image");
+        if (!$copy) {
+            unlink("$image");
+        }
     }
 
     return $datePath;
