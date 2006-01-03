@@ -239,9 +239,6 @@ sub processImage {
 
     my @ids;
     my @imgs;
-    my $filestat;
-    my $date;
-    my $time;
 
     if ($update) {
         if ($useIds) {
@@ -288,13 +285,8 @@ sub processImage {
         if ($updateExif) {
             parseExif($img);
             if (!$exifHash{"date"}) {
-                $filestat = stat($img);
-                my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($filestat->mtime);
-                $date = sprintf("%04d.%02d.%02d",$year+1900, $mon+1, $mday);
-                $time = sprintf("%2d:%2d:%2d", $hour, $min, $sec);
-                print "\n$img: no date found in EXIF, using file date: $date, $time\n";
-                $exifHash{"date"} = $date;
-                $exifHash{"time"} = $time;
+                ($exifHash{"date"}, $exifHash{"time"}) = getDateFromFile($img);
+                print "\n$img: no date found in EXIF, using file date: " . $exifHash{"date"} . ", " . $exifHash{"time"} ."\n";
             }
         }
 
@@ -1034,3 +1026,15 @@ sub lookupLocationChild {
     }
 }
 
+sub getDateFromFile() {
+    my ($image) = @_;
+    my $date;
+    my $time;
+    my $filestat = stat($image);
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($filestat->mtime);
+    $date = sprintf("%04d.%02d.%02d",$year+1900, $mon+1, $mday);
+    $time = sprintf("%2d:%2d:%2d", $hour, $min, $sec);
+    return $date, $time;
+   # $exifHash{"date"} = $date;
+   # $exifHash{"time"} = $time;
+}
