@@ -32,7 +32,8 @@
     $ancestors = $place->get_ancestors();
     $children = $place->get_children();
 
-    $photo_count = $place->get_total_photo_count($user);
+    $total_photo_count = $place->get_total_photo_count($user);
+    $photo_count = $place->get_photo_count($user);
 
     $title = $place->get("parent_place_id") ? $place->get("title") : translate("Places");
 
@@ -49,6 +50,14 @@
         <?php echo translate("places") . "\n" ?>
     </h1>
     <div class="main">
+<?php
+    if ($user->is_admin()) {
+?>
+        <span class="actionlink">
+            <a href="place.php?_action=edit&amp;place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("edit") ?></a> | 
+            <a href="place.php?_action=delete&amp;place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("delete") ?></a>
+        </span>
+        
         <h2>
 <?php
     if ($ancestors) {
@@ -59,51 +68,66 @@
         }
     }
 ?>
-             <?php echo $title . "\n" ?>
         </h2>
 <?php
-    if ($user->is_admin()) {
-?>
-        <span class="actionlink"><a href="place.php?_action=edit&amp;place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("edit") ?></a></span>
-<?php
     }
-    if ($place->get("place_description")) {
-?>
-        <div class="description">
-            <?php echo $place->get("place_description") ?>
-        </div>
-<?php
-    }
-?>
-<?php
-    $fragment = translate("in this place");
-    if ($photo_count > 0) {
-        if (!$place->get("parent_place_id")) { // root place
-            $fragment = translate("available");
+    if ($user->get("detailed_places")) {
+        echo $place->to_html();
+        if ($place->get("notes")) {
+            echo $place->get("notes");
         }
-        else {
-            if ($children) {
-                $fragment .= " " . translate("or its children");
-            }
-        }
-
-    if ($photo_count > 1) {
-      echo sprintf(translate("There are %s photos"), $photo_count);
-      echo " $fragment.\n";
     }
     else {
-      echo sprintf(translate("There is %s photo"), $photo_count);
-      echo " $fragment.\n";
+        echo "<h2>" . $title . "</h2>\n";
     }
+    if ($place->get("place_description")) {
+       echo $place->get("place_description");
+    }
+?>
+    <br><br>
+<?php
+    $fragment = translate("in this place");
+    if($total_photo_count > 0) {
+        if ($total_photo_count > $photo_count && $children) {
 ?>
         <span class="actionlink">
             <a href="photos.php?location_id=<?php echo $place->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a>
         </span>
+<?php   
+            $fragment .= " " . translate("or its children");
+            if ($total_photo_count > 1) {
+                echo sprintf(translate("There are %s photos"), $total_photo_count);
+                echo " $fragment.<br>\n";
+            }
+            else {
+                echo sprintf(translate("There is %s photo"), $total_photo_count);
+                echo " $fragment.<br>\n";
+            }
+        }
+        $fragment = translate("in this place");
+        if (!$place->get("parent_place_id")) { // root place
+            $fragment = translate("available");
+        }
+        if ($photo_count > 0) {
+?>
+            <span class="actionlink">
+                <a href="photos.php?location_id=<?php echo $place->get("place_id") ?>"><?php echo translate("view photos")?></a>
+            </span>
 <?php
+
+            if ($photo_count > 1) {
+                echo sprintf(translate("There are %s photos"), $photo_count);
+                echo " $fragment.<br>\n";
+            }
+            else {
+                echo sprintf(translate("There is %s photo"), $photo_count);
+                echo " $fragment.<br>\n";
+            }
+        }
     }
     else {
 ?>
-        <?php echo translate("There are no photos") ?> <?php echo $fragment . ".\n"; 
+        <?php echo translate("There are no photos") ?> <?php echo $fragment . ".<br>\n"; 
     }
     if ($children) {
 ?>

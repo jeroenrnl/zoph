@@ -65,7 +65,7 @@ class place extends zoph_tree_table {
     }
 
     function get_link() {
-        $link = "<a href=\"place.php?place_id=" . $this->get("place_id") . "\">" . $this->get_name() . "</a>";
+        $link = "<a href=\"places.php?parent_place_id=" . $this->get("place_id") . "\">" . $this->get_name() . "</a>";
 
         // add city link if title exists (and so was used by get_name())
   //      if ($this->get("title") && $this->get("city")) {
