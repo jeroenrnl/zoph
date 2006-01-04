@@ -29,6 +29,26 @@ ALTER TABLE zoph_users CHANGE password password varchar(64);
 
 alter table zoph_places add parent_place_id int(11) NOT NULL after place_id;
 
+insert into zoph_places select NULL, parent_place_id, contact_type, title, address, address2, city, state, zip, country, notes from zoph_places where place_id = 1;
+
+update zoph_photos set location_id=last_insert_id() where location_id=1;
+
+update zoph_places set parent_place_id=1;
+
+# World may be a bad choice when you work for NASA ;-)
+update zoph_places set
+parent_place_id=0,
+contact_type=0,
+title="World",
+address=NULL,
+address2=NULL,
+city=NULL,
+state=NULL,
+zip=NULL,
+country=NULL,
+notes=NULL
+where place_id=1;
+
 # Option for opening the full size image in a new window
 
 alter table zoph_prefs add fullsize_new_win char(1) NOT NULL default '0';
