@@ -39,9 +39,8 @@
 
     // Set this to 1 if you want to have your users (logon) over SSL.
     // Make sure you set ZOPH_URL and ZOPH_SECURE_URL as well.
-    define('FORCE_SSL_LOGIN', 1);
-    define('FORCE_SSL', 1);
-    define('ZOPH_TITLE', "ZOPH DEVELOPMENT");
+    define('FORCE_SSL_LOGIN', 0);
+    define('FORCE_SSL', 0);
 
     define('ZOPH_TITLE', "Zoph");
 
