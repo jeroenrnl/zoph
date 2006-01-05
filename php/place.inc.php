@@ -209,8 +209,12 @@ function get_photographed_places($user = null) {
     return get_records_from_query("place", $query);
 }
 
-function get_places_select_array($user = null) {
-    return create_tree_select_array("place", $user, null, "", null, null);
+function get_places_select_array($user = null, $search = 0) {
+    return create_tree_select_array("place", $user, null, "", null, $search);
+}
+
+function get_places_search_array($user = null) {
+    return get_places_select_array($user, 1);
 }
 
 function get_popular_places($user) {

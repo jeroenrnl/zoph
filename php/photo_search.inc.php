@@ -67,10 +67,10 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         //echo "key = $key<br>";
         //echo "suffix = $suffix<br>";
 
-        $conj = $vars["_" . $key . "-conj" . $suffix];
+        $conj = $vars["_" . $key . $suffix . "-conj"];
         if (!$conj) { $conj = "and"; }
 
-        $op = $vars["_" . $key . "-op" . $suffix];
+        $op = $vars["_" . $key . $suffix . "-op"];
         if (!$op) { $op = "="; }
 
         if ($val == "null") {
@@ -103,35 +103,39 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         //echo "<p>key = '$key'; op = '$op', value = '$val'</p>\n";
 
         if ($key == "album_id") {
+            $pa = "pa" . substr($suffix, 1);
             if ($op == "=") {
                 if ($where) { $where .= " $conj "; }
 
-                $from["pa"] = "photo_albums";
+                $from["$pa"] = "photo_albums";
 
                 $op = "in";
                 $where .=
-                    "(pa.album_id $op (" . escape_string($val) . ")" .
-                    " and pa.photo_id = ph.photo_id)";
+                    "(${pa}.album_id $op (" . escape_string($val) . ")" .
+                    " and ${pa}.photo_id = ph.photo_id)";
             }
             else { // assume "not in"
                 // a simple join won't work for the "not in" case
-                $excluded_albums[$conj] = $val;
+                $excluded_albums["$pa"] = $val;
+                $excluded_albums["${pa}-conj"] = $conj;
             }
         }
         else if ($key == "category_id") {
+            $pc = "pc" . substr($suffix, 1);
             if ($op == "=") {
                 if ($where) { $where .= " $conj "; }
 
-                $from["pc"] = "photo_categories";
+                $from["$pc"] = "photo_categories";
 
                 $op = "in";
                 $where .=
-                    "(pc.category_id $op (" . escape_string($val) . ")" .
-                    " and pc.photo_id = ph.photo_id)";
+                    "(${pc}.category_id $op (" . escape_string($val) . ")" .
+                    " and ${pc}.photo_id = ph.photo_id)";
             }
             else { // assume "not in"
                 // a simple join won't work for the "not in" case
-                $excluded_categories[$conj] = $val;
+                $excluded_categories["$pc"] = $val;
+                $excluded_categories["${pc}-conj"] = $conj;
             }
         }
         else if ($key == "location_id") {
@@ -146,25 +150,27 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                     "ph.location_id $op (" . escape_string($val) . ")";
             }
         else if ($key == "person_id") {
+            $ppl = "ppl" . substr($suffix, 1);
             if ($op == "=") {
                 if ($where) { $where .= " $conj "; }
 
-                $from["ppl"] = "photo_people";
+                $from["$ppl"] = "photo_people";
 
                 $op = "in";
                 $where .=
-                    "(ppl.person_id $op (" . escape_string($val) . ")" .
-                    " and ppl.photo_id = ph.photo_id)";
+                    "(${ppl}.person_id $op (" . escape_string($val) . ")" .
+                    " and ${ppl}.photo_id = ph.photo_id)";
             }
             else {
                 // a simple join won't work for the "not in" case
-                $excluded_people[$conj] = $val;
+                $excluded_people["$ppl"] = $val;
+                $excluded_people["${ppl}-conj"] = $conj;
             }
         }
         else { // any other field
 
             if (strncasecmp($key, "field", 5) == 0) {
-                $key = $vars["_$key"];
+                $key = $vars["_" . $key . $suffix];
             }
 
             $key = "ph.$key";
@@ -212,6 +218,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
     // do this count separately since the select uses limit
     $query = "select count(distinct ph.photo_id) from $from_clause $where";
+        //echo $query . "\n"; //DEBUG
     $num_photos = get_count_from_query($query);
 
     if ($num_photos > 0) {
@@ -232,7 +239,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 "select $select from $from_clause $where order by $order " .
                 "limit $offset, $rows";
         }
-        //echo $query;
+        //echo $query . "\n"; //DEBUG
 
         $thumbnails = get_records_from_query("photo", $query);
 
@@ -266,26 +273,27 @@ function generate_from_clause($from_array) {
 function generate_excluded_albums_clause($excluded_albums, $from, $where) {
 
     $album_from = $from;
-    if ($album_from) { $album_from .= ", "; }
-    $album_from .= DB_PREFIX . "photo_albums as pa";
-
     $album_constraints = "";
 
-    while (list($conj, $album_ids) = each($excluded_albums)) {
+    while (list($pa, $album_ids) = each($excluded_albums)) {
+        if (strpos($pa, "-conj")) {continue;}
+        if ($album_from) { $album_from .= ", "; }
+        $album_from .= DB_PREFIX . "photo_albums as $pa";
         $photo_id_query =
-            "select distinct pa.photo_id from $album_from " .
-            "where (ph.photo_id = pa.photo_id and pa.album_id in (" .
+            "select distinct ${pa}.photo_id from $album_from " .
+            "where (ph.photo_id = ${pa}.photo_id and ${pa}.album_id in (" .
             escape_string($album_ids) . "))";
 
         if ($where) {
             $photo_id_query .= " and $where";
         }
 
+        //echo $photo_id_query . "\n"; //DEBUG
         $ids = implode(',', get_records_from_query(null, $photo_id_query));
 
         if ($ids) {
             if ($album_constraints || $where) {
-                $album_constraints .= " $conj ";
+                $album_constraints .= " " . $excluded_albums["${pa}-conj"] . " ";
             }
             $album_constraints .= "(ph.photo_id not in ($ids))";
         }
@@ -298,26 +306,27 @@ function generate_excluded_albums_clause($excluded_albums, $from, $where) {
 function generate_excluded_categories_clause($excluded_categories, $from, $where) {
 
     $cat_from = $from;
-    if ($cat_from) { $cat_from .= ", "; }
-    $cat_from .= DB_PREFIX . "photo_categories as pc";
-
     $cat_constraints = "";
 
-    while (list($conj, $cat_ids) = each($excluded_categories)) {
+    while (list($pc, $cat_ids) = each($excluded_categories)) {
+        if (strpos($pc, "-conj")) {continue;}
+        if ($cat_from) { $cat_from .= ", "; }
+        $cat_from .= DB_PREFIX . "photo_categories as $pc";
         $photo_id_query =
-            "select distinct pc.photo_id from $cat_from " .
-            "where (ph.photo_id = pc.photo_id and pc.category_id in (" .
+            "select distinct ${pc}.photo_id from $cat_from " .
+            "where (ph.photo_id = ${pc}.photo_id and ${pc}.category_id in (" .
             escape_string($cat_ids) . "))";
 
         if ($where) {
             $photo_id_query .= " and $where";
         }
 
+        //echo $photo_id_query . "\n"; //DEBUG
         $ids = implode(',', get_records_from_query(null, $photo_id_query));
 
         if ($ids) {
             if ($cat_constraints || $where) {
-                $cat_constraints .= " $conj ";
+                $cat_constraints .= " " . $excluded_categories["${pc}-conj"] . " ";
             }
             $cat_constraints .= "(ph.photo_id not in ($ids))";
         }
@@ -330,26 +339,27 @@ function generate_excluded_categories_clause($excluded_categories, $from, $where
 function generate_excluded_people_clause($excluded_people, $from, $where) {
 
     $person_from = $from;
-    if ($person_from) { $person_from .= ", "; }
-    $person_from .= DB_PREFIX . "photo_people as pp";
-
     $person_constraints = "";
 
-    while (list($conj, $person_ids) = each($excluded_people)) {
+    while (list($pp, $person_ids) = each($excluded_people)) {
+        if (strpos($pp, "-conj")) {continue;}
+        if ($person_from) { $person_from .= ", "; }
+        $person_from .= DB_PREFIX . "photo_people as $pp";
         $photo_id_query =
-            "select distinct pp.photo_id from $person_from " .
-            "where (ph.photo_id = pp.photo_id and pp.person_id in (" .
+            "select distinct ${pp}.photo_id from $person_from " .
+            "where (ph.photo_id = ${pp}.photo_id and ${pp}.person_id in (" .
             escape_string($person_ids) . "))";
 
         if ($where) {
             $photo_id_query .= " and $where";
         }
 
+        //echo $photo_id_query . "\n"; //DEBUG
         $ids = implode(',', get_records_from_query(null, $photo_id_query));
 
         if ($ids) {
             if ($person_constraints || $where) {
-                $person_constraints .= " $conj ";
+                $person_constraints .= " " . $excluded_people["${pp}-conj"] . " ";
             }
             $person_constraints .= "(ph.photo_id not in ($ids))";
         }

@@ -634,6 +634,12 @@ input[type="submit"].updatebutton {
 	display: block;
 	}
 
+input[type="submit"].increment {
+	margin: 0px;
+	width: auto;
+	height: auto;
+	}
+
 textarea {
 	margin: 2px;
 	width: 70%;
