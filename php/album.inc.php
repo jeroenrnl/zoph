@@ -30,6 +30,7 @@ class album extends zoph_tree_table {
 
     function lookup($user = null) {
         $id = $this->get("album_id");
+        if(!is_numeric($id)) { die("album_id must be numeric"); }
         if (!$id) { return; }
 
         if ($user && !$user->is_admin()) {
@@ -44,7 +45,7 @@ class album extends zoph_tree_table {
         else {
             $sql =
                 "select * from " . DB_PREFIX . "albums " .
-                "where album_id = " . $id;
+                "where album_id = " . escape_string($id);
         }
 
         return parent::lookup($sql);

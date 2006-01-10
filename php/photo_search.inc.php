@@ -17,6 +17,10 @@
  */
 function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
+    $good_ops = array ( "=", "!=", "less than", "more than", ">", ">=", "<", "<=", "like", "not like", "is in photo", "is not in photo" );
+
+    $good_conj = array ( "and", "or" );
+
     $select = "distinct ph.photo_id, ph.name, ph.path, ph.width, ph.height";
 
     if (MAX_THUMB_DESC && $user && $user->prefs->get("desc_thumbnails")) {
@@ -69,9 +73,13 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
         $conj = $vars["_" . $key . $suffix . "-conj"];
         if (!$conj) { $conj = "and"; }
+        if (!in_array($conj, $good_conj)) 
+            { die ("Illegal conjunction: " . $conj); }
 
         $op = $vars["_" . $key . $suffix . "-op"];
         if (!$op) { $op = "="; }
+        if (!in_array($op, $good_ops)) 
+            { die ("Illegal operator: " . $op); }
 
         if ($val == "null") {
             if ($op == "=") { $op = "is"; }
@@ -108,6 +116,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 if ($where) { $where .= " $conj "; }
 
                 $from["$pa"] = "photo_albums";
+                if (!is_numeric($val)) { die("$key must be numeric"); }
 
                 $op = "in";
                 $where .=
@@ -126,6 +135,8 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 if ($where) { $where .= " $conj "; }
 
                 $from["$pc"] = "photo_categories";
+                
+                if (!is_numeric($val)) { die("$key must be numeric"); }
 
                 $op = "in";
                 $where .=
@@ -140,6 +151,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         }
         else if ($key == "location_id") {
                 if ($where) { $where .= " $conj "; }
+                if(preg_match("/[a-zA-Z]+/", $val)) { die("No letters allowed in $key"); }
 
                 if ($op == "=") {
                     $op = "in";
@@ -159,6 +171,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $from["$ppl"] = "photo_people";
 
                 $op = "in";
+                if (!is_numeric($val)) { die("$key must be numeric"); }
                 $where .=
                     "(${ppl}.person_id $op (" . escape_string($val) . ")" .
                     " and ${ppl}.photo_id = ph.photo_id)";
@@ -183,18 +196,16 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $key = "lower($key)";
             }
             else if ($val != "null") {
-                // a crude way to see if the string can be treated as a number
-                $num = ($val + 1) - 1;
-                if ((string)$num != $val) {
-                    $val = "'" . $val . "'";
+                if (!is_numeric($val)) {
+                    $val = "'" . escape_string($val) . "'";
                 }
             }
 
             if ($where) { $where .= " $conj "; }
-            $where .= "$key $op $val";
+            $where .= escape_string($key) . " " . $op . " " . escape_string($val);
             
             if ($op == "!=" ) {
-                $where .= " or $key is null";
+                $where .= " or " . escape_string($key) . " is null";
             }
 
         }
