@@ -58,7 +58,7 @@
           <label for="size"><?php echo translate("send fullsize") ?></label>
           <?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
           <input type="checkbox" name="photo_title_cb">
-          <label for="phototitle"><?php echo translate("title") ?></label>
+          <label for="photo_title"><?php echo translate("title") ?></label>
 <?php echo create_text_input("photo_title", $photo->get("title"), 35, 50) ?><br>
 <?php
         $location = "";
@@ -135,7 +135,7 @@
 ?>
         
           <input type="checkbox" name="camera_make_cb">
-          <label for="cameramake"><?php echo translate("camera make") ?></label>
+          <label for="camera_make"><?php echo translate("camera make") ?></label>
           <?php echo create_text_input("camera_make", $photo->get("camera_make"), 35, 50) ?>
         <br>
 <?php
@@ -144,7 +144,7 @@
 ?>
         
           <input type="checkbox" name="camera_model_cb">
-          <label for="cameramodel"><?php echo translate("camera model") ?></label>
+          <label for="camera_model"><?php echo translate("camera model") ?></label>
           <?php echo create_text_input("camera_model", $photo->get("camera_model"), 35, 50) ?>
         <br>
 <?php
@@ -153,7 +153,7 @@
 ?>
         
           <input type="checkbox" name="flash_used_cb">
-          <label for="flashused"><?php echo translate("flash used") ?></label>
+          <label for="flash_used"><?php echo translate("flash used") ?></label>
           <?php echo create_text_input("flash_used", $photo->get("flash_used"), 35, 50) ?>
         <br>
 <?php
@@ -162,7 +162,7 @@
 ?>
         
           <input type="checkbox" name="focal_length_cb">
-          <label for="focallength"><?php echo translate("focal length") ?></label>
+          <label for="focal_length"><?php echo translate("focal length") ?></label>
           <?php echo create_text_input("focal_length", $photo->get("focal_length"), 35, 50) ?>
         <br>
 <?php
@@ -198,7 +198,7 @@
 ?>
         
           <input type="checkbox" name="iso_equiv_cb">
-          <label for="isoequiv"><?php echo translate("iso equiv") ?></label>
+          <label for="iso_equiv"><?php echo translate("iso equiv") ?></label>
           <?php echo create_text_input("iso_equiv", $photo->get("iso_equiv"), 35, 50) ?>
         <br>
 <?php
@@ -207,7 +207,7 @@
 ?>
         
           <input type="checkbox" name="metering mode_cb">
-          <label for="meteringmode"><?php echo translate("metering mode") ?></label>
+          <label for="metering_mode"><?php echo translate("metering mode") ?></label>
           <?php echo create_text_input("metering_mode", $photo->get("metering_mode"), 35, 50) ?>
         <br>
 <?php
@@ -216,7 +216,7 @@
 ?>
         
           <input type="checkbox" name="focus_dist_cb">
-          <label for="focusdist"><?php echo translate("focus distance") ?></label>
+          <label for="focus_dist"><?php echo translate("focus distance") ?></label>
           <?php echo create_text_input("focus_dist", $photo->get("focus_dist"), 35, 50) ?>
         <br>
 <?php
@@ -225,7 +225,7 @@
 ?>
         
           <input type="checkbox" name="ccd_width_cb">
-          <label for="ccdwith"><?php echo translate("ccd width") ?></label>
+          <label for="ccd_width"><?php echo translate("ccd width") ?></label>
           <?php echo create_text_input("ccd_width", $photo->get("ccd_width"), 35, 50) ?>
         <br>
 <?php

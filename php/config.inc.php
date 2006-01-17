@@ -113,6 +113,11 @@
     // to 0 to disable this feature (and override a user's pref).
     define('MAX_THUMB_DESC', 40);
 
+    // Maximum number of people that can be added to a photo at once.
+    // Each user can set his own preference through the pref screen, with
+    // The number below as max.
+    define('MAX_PEOPLE_SLOTS', 1);
+
     // support for optgroups in many browsers seems incomplete or buggy
     define('GROUPED_PULLDOWN_SIZE', 9999);
     define('MAX_PULLDOWN_SIZE', 400);

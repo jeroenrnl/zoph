@@ -59,12 +59,12 @@ function create_field_html($fields, $cols = 2, $split = null) {
 }
 
 function create_text_input($name, $value, $size = 20, $max = 32) {
-    $id=str_replace("_", "", $name);
+    $id=ereg_replace("^_+", "", $name);
     return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" maxlength=\"$max\">\n";
 }
 
 function create_pulldown($name, $value, $value_array) {
-    $id=str_replace("_", "", $name);
+    $id=ereg_replace("^_+", "", $name);
     $html = "<select name=\"$name\" id=\"$id\">\n";
     while (list($val, $label) = each($value_array)) {
         if ($val == $value) { $selected = " selected"; }
@@ -76,7 +76,7 @@ function create_pulldown($name, $value, $value_array) {
 }
 
 function create_grouped_pulldown($name, $value, $value_array) {
-    $id=str_replace("_", "", $name);
+    $id=ereg_replace("^_+", "", $name);
     $html = "<select name=\"$name\" id=\"$id\">\n";
 
     $current_label = "";

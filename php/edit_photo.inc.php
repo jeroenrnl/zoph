@@ -183,11 +183,15 @@
               <?php echo translate("No people have been added to this photo.") ?><br>
 <?php
         }
+        for ($i = 0; $i < $PEOPLE_SLOTS; $i++ ) {
 ?>
-            <?php echo create_smart_pulldown("_person", "", get_people_select_array()) ?>
+            <?php echo create_smart_pulldown("_person_" . $i, "", get_people_select_array()) ?>
             <?php echo translate("position") ?>:
-            <?php echo create_text_input("_position", $next_pos, 2, 2) ?>
+            <?php echo create_text_input("_position_" . $i, ($next_pos + $i), 2, 2) ?>
             <br>
+<?php
+        }
+?>
             <p class="inputhint"><?php echo translate("(left to right, front to back).") ?></p>
           </td>
           <td class="remove">

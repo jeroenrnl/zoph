@@ -52,6 +52,7 @@ where place_id=1;
 # Option for opening the full size image in a new window
 
 alter table zoph_prefs add fullsize_new_win char(1) NOT NULL default '0';
+alter table zoph_prefs add people_slots tinyint(3) NOT NULL default 1;
 
 # Watermarking
 alter table zoph_album_permissions add watermark_level tinyint(4) NOT NULL default '0' after access_level;

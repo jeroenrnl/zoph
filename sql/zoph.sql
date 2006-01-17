@@ -291,6 +291,7 @@ CREATE TABLE zoph_prefs (
   camera_info char(1) NOT NULL default '1',
   desc_thumbnails char(1) NOT NULL default '0',
   fullsize_new_win char(1) NOT NULL default '0',
+  people_slots tinyint(3) NOT NULL default 1,
   PRIMARY KEY  (user_id)
 ) TYPE=MyISAM;
 

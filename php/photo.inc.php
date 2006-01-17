@@ -109,7 +109,13 @@ class photo extends zoph_table {
         if ($vars["_person$suffix"]) {
             $this->add_to_person($vars["_person$suffix"], $vars["_position$suffix"]);
         }
-
+        for ($i = 0; $i < MAX_PEOPLE_SLOTS; $i++) {
+           if ($vars["_person_" . $i . $suffix]) {
+               $this->add_to_person($vars["_person_" . $i . $suffix], 
+                  $vars["_position_" . $i . $suffix]);
+           }
+        }
+	
         if ($vars["_remove_person$suffix"]) {
             $this->remove_from_person($vars["_remove_person$suffix"]);
         }
