@@ -1032,7 +1032,7 @@ sub getDateFromFile() {
     my $time;
     my $filestat = stat($image);
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($filestat->mtime);
-    $date = sprintf("%04d.%02d.%02d",$year+1900, $mon+1, $mday);
+    $date = sprintf("%04d-%02d-%02d",$year+1900, $mon+1, $mday);
     $time = sprintf("%2d:%2d:%2d", $hour, $min, $sec);
     return $date, $time;
    # $exifHash{"date"} = $date;
