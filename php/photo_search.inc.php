@@ -202,7 +202,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             }
 
             if ($where) { $where .= " $conj "; }
-            $where .= escape_string($key) . " " . $op . " " . escape_string($val);
+            $where .= escape_string($key) . " " . $op . " " . $val;
             
             if ($op == "!=" ) {
                 $where .= " or " . escape_string($key) . " is null";
