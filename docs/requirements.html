@@ -1,155 +1,107 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<HEAD>
-<TITLE>Zoph 0.3.3 Requirements</TITLE>
-<link type="text/css" rel="stylesheet" href="../style.css">
-<META NAME="generator" CONTENT="txt2html v1.28">
-</HEAD>
-<BODY>
-<p>
-<strong><a href="../">zoph</a>:  requirements</strong>
-</p>
-<H1><A NAME="section-1.">Zoph 0.3.3 Requirements</A></H1>
-<p>
-13 Dec 2002
-</p>
-<H2>Table Of Contents</H2>
-
-<UL><LI><A HREF="#section-1.1.">1. What You Need</A><LI><A HREF="#section-1.2.">2. Apache &amp; PHP</A><LI><A HREF="#section-1.3.">3. MySQL</A><LI><A HREF="#section-1.4.">4. Perl Packages</A><LI><A HREF="#section-1.5.">5. Jhead</A></UL>
-
-<P>
-This document is meant to help you install all the packages required by
-Zoph.  I've gotten everything running on Linux (Debian and Mandrake) and
-Mac OS X without too much trouble and people have reported getting Zoph
-to work under Windows as well.  You might be able to skip this if you
-know your way around your system.
-</p>
-
-<H2><A NAME="section-1.1.">1. What You Need</A></H2>
-
-<P>
-You need to have the following installed before running Zoph.<BR>
-Version numbers are what I have tested with, I expect any recent
-versions would work:
-</p>
-
-<UL>
-  <LI>MySQL 3.23
-  <LI>Apache 1.3.9
-  <LI>PHP 4.0.4
-  <LI>Perl 5.6
-  <LI>Perl DBI, DBD::mysql, Image::Size
-  <LI>ImageMagick 5.3
-  <LI>Jhead 1.2
-
-</UL>
-<P>
-You probably already have many of these.  Getting most of them is fairly
-simple.  For example, using Debian you can simply:
-</p>
-
-<P>
-<code>$ apt-get update<BR></code>
-<code>$ apt-get install perl apache php4 mysql-server php4-mysql imagemagick jhead</code>
-</p>
-
-<P>
-If you are planning on using the web based importer you may need to install
-the GD 2 library for image support in PHP (<A HREF="http://www.boutell.com/gd/">http://www.boutell.com/gd/</A>).  A
-Debian package named php4-gd2 is available.  Also, you may need to upgrade
-to PHP 4.2 if you want EXIF support.  GD is required to use the importer.
-PHP 4.2 is recommended but not required.
-</p>
-
-<P>
-Also, if you are using the web importer you may need to increase the
-max_execution_time defined in php.ini.  There is more info in the MANUAL.
-</p>
-
-<H2><A NAME="section-1.2.">2. Apache &amp; PHP</A></H2>
-
-<P>
-You may have to edit your httpd.conf file to add PHP support.  Edit
-/var/apache/conf/httpd.conf (or the equivalent) and uncomment/add
-these lines:
-</p>
-
-<P>
-LoadModule php4_module /usr/lib/apache/1.3/libphp4.so<BR>
-AddType application/x-httpd-php .php<BR>
+<html>
+    <head>
+        <title>Zoph Documentation - Requirements</title>
+        <link TYPE="text/css" REL="stylesheet" HREF="style.css">
+    </head>
+    <body>
+    <p>
+    All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
+    </p>
+				<h1 class="firstHeading">Zoph/Requirements</h1>
+		<div id="bodyContent">
+			<p>This document is meant to help you install all the packages required by Zoph. I've gotten everything running on Linux (Debian, Mandrake and Gentoo) and Mac OS X without too much trouble and people have reported getting Zoph to work under Windows as well. You might be able to skip this if you know your way around your system.</p>
+<p>You need to have the following installed before running Zoph. Version numbers are what I have tested with, I expect any recent versions would work:</p>
+<ul>
+<li>MySQL 4.1.14</li>
+<li>Apache 2.0.55</li>
+<li>PHP 4.4.0</li>
+<li>Perl 5.8.7</li>
+<li>Perl DBI, DBD::mysql, File::stat, Image::Size</li>
+<li>ImageMagick 6.2.4.2</li>
+<li>Jhead 2.4</li>
+</ul>
+<p>You probably already have many of these. Getting most of them is fairly simple. For example, using Debian you can simply:</p>
+<pre>
+$ apt-get update
+$ apt-get install perl apache php4 mysql-server php4-mysql imagemagick jhead
+</pre>
+<p>If you are planning on using the web based importer you may need to install the GD 2 library for image support in PHP (<a href="http://www.boutell.com/gd/" class='external free' title="http://www.boutell.com/gd/" rel="nofollow">http://www.boutell.com/gd/</a>). A Debian package named php4-gd2 is available. Also, you may need to upgrade to PHP 4.2 if you want EXIF support. GD is required to use the importer. PHP 4.2 is recommended but not required.</p>
+<p>Also, if you are using the web importer you may need to increase the max_execution_time defined in php.ini. There is more info in the MANUAL.</p>
+<table id="toc" class="toc" summary="Contents">
+<tr>
+<td>
+<div id="toctitle">
+<h2>Contents</h2>
+</div>
+<ul>
+<li class='toclevel-1'><a href="#Apache_.26_PHP"><span class="tocnumber">1</span> <span class="toctext">Apache &amp; PHP</span></a></li>
+<li class='toclevel-1'><a href="#MySQL"><span class="tocnumber">2</span> <span class="toctext">MySQL</span></a>
+<ul>
+<li class='toclevel-2'><a href="#MySQL_version_4.1_and_above_.28Zoph_0.4_and_earlier.29"><span class="tocnumber">2.1</span> <span class="toctext">MySQL version 4.1 and above (Zoph 0.4 and earlier)</span></a></li>
+<li class='toclevel-2'><a href="#MySQL_version_4.1_and_above_.28Zoph_0.5_and_later.29"><span class="tocnumber">2.2</span> <span class="toctext">MySQL version 4.1 and above (Zoph 0.5 and later)</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Perl_Packages"><span class="tocnumber">3</span> <span class="toctext">Perl Packages</span></a></li>
+<li class='toclevel-1'><a href="#Jhead"><span class="tocnumber">4</span> <span class="toctext">Jhead</span></a></li>
+</ul>
+</td>
+</tr>
+</table>
+<p><script type="text/javascript">
+//<![CDATA[
+ if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
+//]]>
+</script></p>
+<p><a name="Apache_.26_PHP" id="Apache_.26_PHP"></a></p>
+<h2>Apache &amp; PHP</h2>
+<p>You may have to edit your httpd.conf file to add PHP support. Edit /var/apache/conf/httpd.conf (or the equivalent) and uncomment/add these lines:</p>
+<pre>
+LoadModule php4_module /usr/lib/apache2/modules/libphp4.so
+AddType application/x-httpd-php .php
 AddType application/x-httpd-php-source .phps
-</p>
+</pre>
+<p>Save the file and restart apache:</p>
+<pre>
+$ apachectl restart
+</pre>
+<p>Put a php file in your webserver's path to test things out: $ cat /var/www/test.php &lt;? echo phpinfo(); ?&gt;</p>
+<p>Hit <a href="http://localhost/test.php" class='external free' title="http://localhost/test.php" rel="nofollow">http://localhost/test.php</a> and you should see info about your PHP version.</p>
+<p><a name="MySQL" id="MySQL"></a></p>
+<h2>MySQL</h2>
+<p>If MySQL is not up and running you'll need to start it:</p>
+<pre>
+$ /etc/init.d/mysql start
+</pre>
+<p>If you haven't set your root password, do it!</p>
+<pre>
+$ mysqladmin -u root password &lt;password&gt;
+</pre>
+<p><a name="MySQL_version_4.1_and_above_.28Zoph_0.4_and_earlier.29" id="MySQL_version_4.1_and_above_.28Zoph_0.4_and_earlier.29"></a></p>
+<h3>MySQL version 4.1 and above (Zoph 0.4 and earlier)</h3>
+<p>If you are trying to install Zoph against MySQL version newer than 4.1, you will run into problems, when trying to login. It will always say your username and password are wrong. This is caused by the fact that from version 4.1, MySQL has changed the password encoding scheme from 16 bytes to 41 bytes. The password field in Zoph is 32 bytes long, and thus the new passwordlength does not fit. If you want to use v0.4 or before with a post-4.1 MySQL version anyway, you can change the size of the password field manually by running the following query in MySQL:</p>
+<pre>
+ALTER TABLE zoph_users CHANGE password password varchar(64); 
+</pre>
+<p>After that, you will need to change the admin password again, so it will be inserted into the database using the 'new' encoding.</p>
+<pre>
+UPDATE zoph_users SET password=password("admin") WHERE user_id=1; 
+</pre>
+<p><a name="MySQL_version_4.1_and_above_.28Zoph_0.5_and_later.29" id="MySQL_version_4.1_and_above_.28Zoph_0.5_and_later.29"></a></p>
+<h3>MySQL version 4.1 and above (Zoph 0.5 and later)</h3>
+<p>Zoph 0.5 has full support for MySQL &gt; 4.1. Because Zoph 0.5 is able to transparently change passwords from the "old" password encoding to the "new" password encoding, it is recommended to first upgrade Zoph from 0.4 to 0.5 and after that, upgrade your MySQL version. If you are a new user and installing Zoph 0.5 for the first time, it does not matter which MySQL version you are running.</p>
+<p><a name="Perl_Packages" id="Perl_Packages"></a></p>
+<h2>Perl Packages</h2>
+<p>You may already have the DBI, DBD::mysql and File::stat but you probably have to install the Image::Size package. You can use CPAN to do this. (Note that the first time you run CPAN you'll have to answer some questions. You can just go with the defaults until you are asked to choose the hosts).</p>
+<pre>
+$ perl -MCPAN -e 'install Image::Size'
+</pre>
+<p>If needed, install the other Perl packages as above.</p>
+<p><a name="Jhead" id="Jhead"></a></p>
+<h2>Jhead</h2>
+<p>Jhead is a handy little program that extracts the information stored in the Exif headers that are added by most digital cameras. Exif stores date and time plus a bunch of other info about a photo. Zoph uses Jhead to parse the header so you'll need to install it. You can download it from:</p>
+<p><a href="http://www.sentex.net/~mwandel/jhead/" class='external free' title="http://www.sentex.net/~mwandel/jhead/" rel="nofollow">http://www.sentex.net/~mwandel/jhead/</a></p>
 
-<P>
-Save the file and restart apache:
-</p>
 
-<P>
-<code>$ apachectl restart</code>
-</p>
-
-<P>
-Put a php file in your webserver's path to test things out:<BR>
-<code>$ cat /var/www/test.php <BR></code>
-&lt;?  echo phpinfo(); ?&gt;
-</p>
-
-<P>
-Hit <A HREF="http://localhost/test.php">http://localhost/test.php</A> and you should see info about your PHP version.
-</p>
-
-<H2><A NAME="section-1.3.">3. MySQL</A></H2>
-
-<P>
-If MySQL is not up and running you'll need to start it:
-</p>
-
-<P>
-<code>$ /etc/init.d/mysql start</code>
-</p>
-
-<P>
-If you haven't set your root password, do it!
-</p>
-
-<P>
-<code>$ mysqladmin -u root password &lt;password&gt;</code>
-</p>
-
-<H2><A NAME="section-1.4.">4. Perl Packages</A></H2>
-
-<P>
-You may already have the DBI and DBD::mysql but you probably have to
-install the Image::Size package.  You can use CPAN to do this.  (Note
-that the first time you run CPAN you'll have to answer some questions.
-You can just go with the defaults until you are asked to choose the
-hosts).
-</p>
-
-<P>
-<code>$ perl -MCPAN -e 'install Image::Size'</code>
-</p>
-
-<P>
-If needed, install the other Perl packages as above.
-</p>
-
-<H2><A NAME="section-1.5.">5. Jhead</A></H2>
-
-<P>
-Jhead is a handy little program that extracts the information stored in
-the Exif headers that are added by most digital cameras.  Exif stores
-date and time plus a bunch of other info about a photo.  Zoph uses
-Jhead to parse the header so you'll need to install it.  You can
-download it from:
-</p>
-
-<P>
-<A HREF="http://www.sentex.net/~mwandel/jhead/">http://www.sentex.net/~mwandel/jhead/</A>
-</p>
-<hr>
-<p class='footer'>
-<a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=69353&amp;type=2" width="125" height="37" alt="SourceForge.net Logo"></a>
-<a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01!" height="31" width="88"></a>
-Generated on Fri Dec 13 14:52:10 PST 2002 with help from (a slightly modified) <a href="http://www.aigeek.com/txt2html/">txt2html</a> and <a href="http://www.oac.uci.edu/indiv/ehood/htmltoc.doc.html">htmltoc</a>.
-</BODY>
-</HTML>
+</div>
+</html>

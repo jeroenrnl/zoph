@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+    <head>
+        <title>Zoph Documentation - Upgrading</title>
+        <link TYPE="text/css" REL="stylesheet" HREF="style.css">
+    </head>
+    <body>
+    <p>
+    All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
+    </p>
+				<h1 class="firstHeading">Zoph/Upgrading</h1>
+		<div id="bodyContent">
+			<table id="toc" class="toc" summary="Contents">
+<tr>
+<td>
+<div id="toctitle">
+<h2>Contents</h2>
+</div>
+<ul>
+<li class='toclevel-1'><a href="#Zoph_0.4_-.3E_0.5_Upgrade"><span class="tocnumber">1</span> <span class="toctext">Zoph 0.4 -&gt; 0.5 Upgrade</span></a>
+<ul>
+<li class='toclevel-2'><a href="#Updating_the_Database"><span class="tocnumber">1.1</span> <span class="toctext">Updating the Database</span></a></li>
+<li class='toclevel-2'><a href="#Configuration_updates"><span class="tocnumber">1.2</span> <span class="toctext">Configuration updates</span></a>
+<ul>
+<li class='toclevel-3'><a href="#Forcing_SSL"><span class="tocnumber">1.2.1</span> <span class="toctext">Forcing SSL</span></a></li>
+<li class='toclevel-3'><a href="#Using_watermarks"><span class="tocnumber">1.2.2</span> <span class="toctext">Using watermarks</span></a></li>
+<li class='toclevel-3'><a href="#Web_import_changes"><span class="tocnumber">1.2.3</span> <span class="toctext">Web import changes</span></a></li>
+<li class='toclevel-3'><a href="#Adding_multiple_people_at_once"><span class="tocnumber">1.2.4</span> <span class="toctext">Adding multiple people at once</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Zoph_0.3.3_-.3E_0.4_Upgrade"><span class="tocnumber">2</span> <span class="toctext">Zoph 0.3.3 -&gt; 0.4 Upgrade</span></a>
+<ul>
+<li class='toclevel-2'><a href="#Updating_the_Database_2"><span class="tocnumber">2.1</span> <span class="toctext">Updating the Database</span></a></li>
+<li class='toclevel-2'><a href="#Updating_configuration"><span class="tocnumber">2.2</span> <span class="toctext">Updating configuration</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Zoph_0.3.2_-.3E_0.3.3_Upgrade"><span class="tocnumber">3</span> <span class="toctext">Zoph 0.3.2 -&gt; 0.3.3 Upgrade</span></a>
+<ul>
+<li class='toclevel-2'><a href="#Updating_the_Database_3"><span class="tocnumber">3.1</span> <span class="toctext">Updating the Database</span></a></li>
+<li class='toclevel-2'><a href="#Updating_the_Templates"><span class="tocnumber">3.2</span> <span class="toctext">Updating the Templates</span></a></li>
+<li class='toclevel-2'><a href="#A_New_Export_Script"><span class="tocnumber">3.3</span> <span class="toctext">A New Export Script</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Zoph_0.3.1_-.3E_0.3.2_Upgrade"><span class="tocnumber">4</span> <span class="toctext">Zoph 0.3.1 -&gt; 0.3.2 Upgrade</span></a>
+<ul>
+<li class='toclevel-2'><a href="#Updating_the_Database_4"><span class="tocnumber">4.1</span> <span class="toctext">Updating the Database</span></a></li>
+<li class='toclevel-2'><a href="#Updating_the_Templates_2"><span class="tocnumber">4.2</span> <span class="toctext">Updating the Templates</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Zoph_0.3_-.3E_0.3.1_Upgrade"><span class="tocnumber">5</span> <span class="toctext">Zoph 0.3 -&gt; 0.3.1 Upgrade</span></a>
+<ul>
+<li class='toclevel-2'><a href="#Updating_the_Database_5"><span class="tocnumber">5.1</span> <span class="toctext">Updating the Database</span></a></li>
+<li class='toclevel-2'><a href="#Updating_the_Templates_3"><span class="tocnumber">5.2</span> <span class="toctext">Updating the Templates</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Zoph_0.2.1_-.3E_0.3_Upgrade"><span class="tocnumber">6</span> <span class="toctext">Zoph 0.2.1 -&gt; 0.3 Upgrade</span></a>
+<ul>
+<li class='toclevel-2'><a href="#Updating_the_Templates_4"><span class="tocnumber">6.1</span> <span class="toctext">Updating the Templates</span></a></li>
+<li class='toclevel-2'><a href="#Configuration_Changes"><span class="tocnumber">6.2</span> <span class="toctext">Configuration Changes</span></a></li>
+<li class='toclevel-2'><a href="#Preferences_Changes"><span class="tocnumber">6.3</span> <span class="toctext">Preferences Changes</span></a></li>
+<li class='toclevel-2'><a href="#The_PHP_Importer"><span class="tocnumber">6.4</span> <span class="toctext">The PHP Importer</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Zoph_0.2_-.3E_0.2.1_Upgrade"><span class="tocnumber">7</span> <span class="toctext">Zoph 0.2 -&gt; 0.2.1 Upgrade</span></a>
+<ul>
+<li class='toclevel-2'><a href="#Updating_the_Database_6"><span class="tocnumber">7.1</span> <span class="toctext">Updating the Database</span></a></li>
+<li class='toclevel-2'><a href="#Updating_the_Templates_5"><span class="tocnumber">7.2</span> <span class="toctext">Updating the Templates</span></a></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</table>
+<p><script type="text/javascript">
+//<![CDATA[
+ if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
+//]]>
+</script></p>
+<p><a name="Zoph_0.4_-.3E_0.5_Upgrade" id="Zoph_0.4_-.3E_0.5_Upgrade"></a></p>
+<h2>Zoph 0.4 -&gt; 0.5 Upgrade</h2>
+<p>Copy over php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.</p>
+<p><a name="Updating_the_Database" id="Updating_the_Database"></a></p>
+<h3>Updating the Database</h3>
+<p>If you are upgrading from an older version than 0.4, please run the older database updates first.</p>
+<p>Execute zoph-update-0.5.sql:</p>
+<pre>
+&gt; mysql -u zoph_admin -p zoph &lt; sql/zoph_update-0.4.sql
+</pre>
+<p>The database upgrade script makes the following changes:</p>
+<ul>
+<li>Change the password length to 64 bytes. Needed for Mysql 4.1 compatibility.</li>
+<li>Changes to the places table for hierarchical locations:
+<ul>
+<li>add the parent_place_id column.</li>
+<li>copy the location that currently has place_id 1 to a new place_id.</li>
+<li>Update all the photos taken at that location</li>
+<li>Change place_id 1 to "World" (You may want to change that)</li>
+<li>And finally makes all the other places a child of "World".</li>
+</ul>
+</li>
+<li>Add a column to the prefs table for opening fullsize photos in a new Window</li>
+<li>Add a column to the album_permissions table for the watermarking feature</li>
+</ul>
+<p><a name="Configuration_updates" id="Configuration_updates"></a></p>
+<h3>Configuration updates</h3>
+<p>A few new configuration options have been added in Zoph 0.5.</p>
+<p><a name="Forcing_SSL" id="Forcing_SSL"></a></p>
+<h4>Forcing SSL</h4>
+<p>You can now force the usage of SSL for the web interface, either just for logging on or for the entire Zoph session. You can control the behaviour by adepting the following settings:</p>
+<pre>
+define('FORCE_SSL_LOGIN', 0);
+define('FORCE_SSL', 0);
+</pre>
+<p>You will also need to tell Zoph at what URL it can be found, because it will need to redirect users from SSL to plain and vice versa:</p>
+<pre>
+define('ZOPH_URL', '<a href="http://myserver.com/zoph'" class='external free' title="http://myserver.com/zoph'" rel="nofollow">http://myserver.com/zoph'</a>);
+define('ZOPH_SECURE_URL', '<a href="https://myserver.com/zoph'" class='external free' title="https://myserver.com/zoph'" rel="nofollow">https://myserver.com/zoph'</a>);
+</pre>
+<p>For more details see <a href="configuration.html#FORCE_SSL_LOGIN" title="Zoph/Configuration">FORCE_SSL_LOGIN</a>, <a href="configuration.html#FORCE_SSL" title="Zoph/Configuration">FORCE_SSL</a>, <a href="configuration.html#ZOPH_URL" title="Zoph/Configuration">ZOPH_URL</a> and <a href="configuration.html#ZOPH_SECURE_URL" title="Zoph/Configuration">ZOPH_SECURE_URL</a>.</p>
+<p><a name="Using_watermarks" id="Using_watermarks"></a></p>
+<h4>Using watermarks</h4>
+<p>You can now have Zoph add a watermark to the high resolution images, to prevent unauthorized use of your photos. The watermark is a partly transparant GIF image that needs to be placed in your IMAGE_DIR. To use watermarking, make the following changes to your configuration:</p>
+<pre>
+define('WATERMARKING', 1);
+define('WATERMARK', 'watermark.gif');
+</pre>
+<p>You will also need to enable the image service if you have not already done so:</p>
+<pre>
+define('USE_IMAGE_SERVICE', 1);
+</pre>
+<p>For more details see <a href="configuration.html#WATERMARKING" title="Zoph/Configuration">WATERMARKING</a>, <a href="configuration.html#WATERMARK" title="Zoph/Configuration">WATERMARK</a> and <a href="configuration.html#USE_IMAGE_SERVICE" title="Zoph/Configuration">USE_IMAGE_SERVICE</a>.</p>
+<p><a name="Web_import_changes" id="Web_import_changes"></a></p>
+<h4>Web import changes</h4>
+<p>A few changes have been made to the web importer. To delete an uploaded ZIP file after a successful import, change this line in the configuration:</p>
+<pre>
+define('REMOVE_ARCHIVE', 1);
+</pre>
+<p>To enable dated directories in the Web importer:</p>
+<pre>
+define('USE_DATED_DIRS', 1);
+define('HIER_DATED_DIRS', 0);
+</pre>
+<p>To enable hierarchical dated directories in the Web importer:</p>
+<pre>
+define('USE_DATED_DIRS', 1);
+define('HIER_DATED_DIRS', 1);
+</pre>
+<p>The default UMASK and DIR_MODE have been changed as of v0.5:</p>
+<pre>
+define('IMPORT_UMASK', 022);
+define('DIR_MODE', 0755);
+</pre>
+<p>For more detais, see <a href="configuration.html#REMOVE_ARCHIVE" title="Zoph/Configuration">REMOVE_ARCHIVE</a>, <a href="configuration.html#USE_DATED_DIRS" title="Zoph/Configuration">USE_DATED_DIRS</a>, <a href="configuration.html#HIER_DATED_DIRS" title="Zoph/Configuration">HIER_DATED_DIRS</a>, <a href="configuration.html#IMPORT_UMASK" title="Zoph/Configuration">IMPORT_UMASK</a> and <a href="configuration.html#DIR_MODE" title="Zoph/Configuration">DIR_MODE</a>.</p>
+<p><a name="Adding_multiple_people_at_once" id="Adding_multiple_people_at_once"></a></p>
+<h4>Adding multiple people at once</h4>
+<p>You can now add multiple people at once using the edit photo page or the bulk edit mode. To enable this feature, set MAX_PEOPLE_SLOTS to a reasonable maximum (recommendation: 5-10).</p>
+<pre>
+define('MAX_PEOPLE_SLOTS', 5);
+</pre>
+<p>After that, go to the preference page and set "number of people to add at once" to a number that is convenient for that user. Each user can indivually set this number, but never higher than the number defined in MAX_PEOPLE_SLOTS. Bear in mind that setting either to a (very) high number, could (severely) impact performance.</p>
+<p>For more detais, see <a href="configuration.html#MAX_PEOPLE_SLOTS" title="Zoph/Configuration">MAX_PEOPLE_SLOTS</a></p>
+<p><a name="Zoph_0.3.3_-.3E_0.4_Upgrade" id="Zoph_0.3.3_-.3E_0.4_Upgrade"></a></p>
+<h2>Zoph 0.3.3 -&gt; 0.4 Upgrade</h2>
+<p>Copy over php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.</p>
+<p><a name="Updating_the_Database_2" id="Updating_the_Database_2"></a></p>
+<h3>Updating the Database</h3>
+<p>If you are upgrading from an older version than 0.3.3, please run the older database updates first. If you have been using a 0.4-pre version, you do not need to update the database again.</p>
+<p>Execute zoph-update-0.4.sql:</p>
+<pre>
+&gt; mysql -u zoph_admin -p zoph &lt; sql/zoph_update-0.4.sql
+</pre>
+<p>The database upgrade script makes the following changes:</p>
+<ul>
+<li>Changes the name of all the tables to zoph_&lt;old name&gt;. If you do not want this, comment out the lines starting with "rename table". Make sure the variable DB_PREFIX in config.inc.php and $db_prefix in zophImport and zophExport match your choice.</li>
+<li>Adds a few columns to zoph_album_permissions and zoph_users, to be able to monitor such as changes to permissions and last login.</li>
+<li>Adds "email" to people.</li>
+<li>Makes modifications for the new rating system, where multiple ratings can be done on a single photo and average is calculated automatically.</li>
+</ul>
+<p><a name="Updating_configuration" id="Updating_configuration"></a></p>
+<h3>Updating configuration</h3>
+<p>A number of configuration items have been added since v0.3.3. You can use the list below to update your current configuration file, or simply use the one in the distribution and change it to your needs.</p>
+<p>Set DB_PREFIX to a prefix for each tablename, see db update for details. Suggested is to use 'zoph_', as this will be the default in future releases. Make sure $db_prefix in zophImport.pl and zophExport.pl matches this setting.</p>
+<p>Much of the style information has been removed from the HTML code and is now in a separate CSS file. Please set CSS_SHEET to 'css.php' to load the CSS file.</p>
+<p>You can now choose the authentication method used by zoph; set $VALIDATOR accordingly. Possible choices:</p>
+<p>'default_validate':</p>
+<pre>
+   use the 'old' authentication method, probably the best choice for most.
+</pre>
+<p>'htpasswd_validate':</p>
+<pre>
+   use htpasswd to validate users.
+</pre>
+<p>'php_validate':</p>
+<pre>
+   let PHP take care of validation. See <a href="http://www.php.net/features.http-auth" class='external free' title="http://www.php.net/features.http-auth" rel="nofollow">http://www.php.net/features.http-auth</a>
+</pre>
+<p>You could also write your own authentication module; make it a function in validator.inc.php and set $VALIDATOR to it's name.</p>
+<p>You can automatically send a copy of each e-mail sent from Zoph to a predefined address by setting BCC_ADDRESS to that address. Zoph includes a link to the site when notifying a user of (new) access rights. If Zoph is unable to determine the correct URL itself, please set ZOPH_URL to the correct value.</p>
+<p>If you want to be able to annotate photo's, set ANNOTATE_PHOTOS to 1 and set ANNOTATE_TEMP_DIR and ANNOTATE_TEMP_PREFIX to a sensible value (suggested: '/tmp' and 'zoph').</p>
+<p>To set the destination path in the web import to some default value, define the variable DEFAULT_DESTINATION_PATH; suggested value: 'uploads/date(Y.m.d)'. To hide this path from non-admin users, also define SHOW_DESTINATION_PATH and set it to 0, if you do not want to hide it, set it to 1.</p>
+<p>To allow users to rate photos, set ALLOW_RATINGS to 1; otherwise to 0.</p>
+<p>Zoph can now rotate images for you. Add the following settings and adapt where needed:</p>
+<pre>
+// allow images to be rotated
+define('ALLOW_ROTATIONS', 1);
+define(ROTATE_CMD, 'convert');
+//define('ROTATE_CMD', 'jpegtran');
+// set to 1 to backup the original before it is rotated
+define('BACKUP_ORIGINAL', 1);
+// copy the original to a file with this prefix
+define('BACKUP_PREFIX', 'orig_');
+</pre>
+<p><a name="Zoph_0.3.2_-.3E_0.3.3_Upgrade" id="Zoph_0.3.2_-.3E_0.3.3_Upgrade"></a></p>
+<h2>Zoph 0.3.2 -&gt; 0.3.3 Upgrade</h2>
+<p>If you are upgrading from a version previous to 0.3.2, please run the older database updates first.</p>
+<p><a name="Updating_the_Database_3" id="Updating_the_Database_3"></a></p>
+<h3>Updating the Database</h3>
+<p>This update adds a new column to the prefs table.</p>
+<p>Execute zoph-update-0.3.3.sql:</p>
+<pre>
+&gt; mysql -u zoph_admin -p zoph &lt; sql/zoph_update-0.3.3.sql
+</pre>
+<p><a name="Updating_the_Templates" id="Updating_the_Templates"></a></p>
+<h3>Updating the Templates</h3>
+<p>Copy over php/* to the location of your installation (back up your old config.inc.php first if you need to). Make sure to also copy the php/lang subdirectory as there are additions to the language files.</p>
+<p>There are a few new settings in config.inc.php. The old WEB_IMPORT setting was replaced with CLIENT_WEB_IMPORT and SERVER_WEB_IMPORT so that you can enable/disable one or the other if you like.</p>
+<p>This release also supports the uploading of zip and tar files. Set the UNZIP_CMD and/or UNTAR_CMD to enable this. This feature extracts the images to a temp folder before loading them. The path to this folder is set by EXTRACT_DIR.</p>
+<p>Another new feature is the addition of a pref to let photo descriptions appear under the thumbnails. The MAX_THUMB_DESC config sets the maximum number of characters to display.</p>
+<p><a name="A_New_Export_Script" id="A_New_Export_Script"></a></p>
+<h3>A New Export Script</h3>
+<p>You'll find a new perl script in this release, bin/zophExport.pl, which can be used to create static html galleries of your photos. See the manual for more info.</p>
+<p><a name="Zoph_0.3.1_-.3E_0.3.2_Upgrade" id="Zoph_0.3.1_-.3E_0.3.2_Upgrade"></a></p>
+<h2>Zoph 0.3.1 -&gt; 0.3.2 Upgrade</h2>
+<p>If you are upgrading from a version previous to 0.3.1, please run the older database updates first.</p>
+<p><a name="Updating_the_Database_4" id="Updating_the_Database_4"></a></p>
+<h3>Updating the Database</h3>
+<p>The only thing added in this update are four new color schemes. You an skip this if you don't think you will use them.</p>
+<p>Execute the statements in zoph-update-0.3.2.sql:</p>
+<pre>
+&gt; mysql -u zoph_admin -p zoph &lt; sql/zoph_update-0.3.2.sql
+</pre>
+<p><a name="Updating_the_Templates_2" id="Updating_the_Templates_2"></a></p>
+<h3>Updating the Templates</h3>
+<p>Copy over php/* to the location of your installation. Make sure to also copy the php/lang subdirectory as there are additions to the language files. Also included in this release are the htmlized docs, in the php/docs/ directory, if you want them.</p>
+<p>There are two new additions to config.inc.php: a VERSION variable and the DEFAULT_SHOW_ALL setting. The DEFAULT_SHOW_ALL setting makes all people or places shown by default when you visit the people or places pages. If you don't have hundreds of records this is probably more convenient than defaulting to 'a'. It is enabled by default.</p>
+<p>That's it for this release, but I'll mention one bug fix for a problem a few users may have noticed: if you used zophImport.pl to load images that were on a different filesystem than your images directory, everything would apparently work but the original images would not be copied. You might not have even noticed the images were missing unless you tried to view the full sized images in your browser. This release fixes this problem and makes sure other sorts of silent failure won't occur.</p>
+<p><a name="Zoph_0.3_-.3E_0.3.1_Upgrade" id="Zoph_0.3_-.3E_0.3.1_Upgrade"></a></p>
+<h2>Zoph 0.3 -&gt; 0.3.1 Upgrade</h2>
+<p>If you are upgrading from a version less than 0.3, please run the previous database updates first.</p>
+<p><a name="Updating_the_Database_5" id="Updating_the_Database_5"></a></p>
+<h3>Updating the Database</h3>
+<p>Execute the statements in zoph-update-0.3.1.sql:</p>
+<pre>
+&gt; mysql -u zoph_admin -p zoph &lt; sql/zoph_update-0.3.1.sql
+</pre>
+<p>None of the database changes should create incompatibility with version 0.3. You should update the database before updating the templates.</p>
+<p>This database update attempts to delete some table accidentally included in zoph.sql in version 0.3. If you originally installed a prior version you probably do not have these tables and the update will fail when the "drop table" statements are reached. That isn't a problem, the other statements should have successfully executed first.</p>
+<p><a name="Updating_the_Templates_3" id="Updating_the_Templates_3"></a></p>
+<h3>Updating the Templates</h3>
+<p>Copy over php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.</p>
+<p>There are no changes to config.inc.php this release so you can backup your version and then copy it over again.</p>
+<p><a name="Zoph_0.2.1_-.3E_0.3_Upgrade" id="Zoph_0.2.1_-.3E_0.3_Upgrade"></a></p>
+<h2>Zoph 0.2.1 -&gt; 0.3 Upgrade</h2>
+<p>If you are upgrading from Zoph 0.2, first update the database as described in the "Zoph 0.2 -&gt; 0.2.1 Upgrade" section below. Updating the Database</p>
+<p>Execute the statements in zoph-update-0.3.sql:</p>
+<pre>
+&gt; mysql -u zoph_admin -p zoph &lt; sql/zoph_update-0.3.sql
+</pre>
+<p>None of the database changes should create incompatibility with version 0.2.1. You should update the database before updating the templates.</p>
+<p><a name="Updating_the_Templates_4" id="Updating_the_Templates_4"></a></p>
+<h3>Updating the Templates</h3>
+<p>Copy over php/* to the location of your installation. Make sure to also copy the new php/lang and php/images subdirectories.</p>
+<p>You may want to first backup your config.inc.php so you can copy your database settings over to the new config file.</p>
+<p>Section 3 of the INSTALL file, "Configuring the PHP templates", has been updated to include information on the new config file settings.</p>
+<p>The REQUIREMENTS document has info on what is need to use the new web importer.</p>
+<p>The TUTORIAL has been updated to include information on using the web importer and viewing Zoph in other languages.</p>
+<p>The db.inc.php template isn't needed anymore (and wasn't in the last release either, but it was accidentally included in the download). You can delete it if you like if it's still in your template directory.</p>
+<p>If you are running PHP 4.2 and had to enable register_globals to get Zoph to work, with Zoph 0.3 this is no longer required. It is recommended that you disable register_globals in php.ini now. Also, to use the web importer you may need to increase the max_execution_time in php.ini to something more than the default of 30 seconds.</p>
+<p><a name="Configuration_Changes" id="Configuration_Changes"></a></p>
+<h3>Configuration Changes</h3>
+<p>In versions of Zoph prior to 0.3, thumbnails were generated as the same file type as the original image (a jpeg image would have jpeg thumbnails, a gif image gif thumbnails, etc). As it may be desirable to instead have all thumbnails be the same type (there probably is no need, for example, to create uncompressed tiff thumbnails of tiff images), Zoph 0.3 allows you to specify that all thumbnails should be of the same type.</p>
+<p>If all your images are the same type or if you don't mind having different sorts of thumbnails, you can skip this.</p>
+<p>The default settings maintain compatibility with previous versions. If you would like to switch to a single thumbnail format, do the following:</p>
+<p>In zophImport.pl</p>
+<ul>
+<li>set $mixed_thumbnails to 1</li>
+<li>set $thumb_extension to whatever you like (jpg, for example)</li>
+</ul>
+<p>In config.inc.php set MIXED_THUMBNAILS and THUMB_EXTENSION to the same values as zophImport.pl.</p>
+<p>If you make this change and have previously generated thumbnails with an extension different from THUMB_EXTENSION, you will need to regenerate the old thumbnails. A command like the following can take care of that (this one finds gifs and makes jpgs):</p>
+<pre>
+&gt; find images/ -name "thumb_*.gif" -o -name "mid_*.gif" | perl -nle '$old = $_; s/\.(\w+)$/.jpg/; $cmd = "convert $old $_"; print $cmd; system($cmd);'
+</pre>
+<p>You can then get rid of the old thumbnails.</p>
+<p><a name="Preferences_Changes" id="Preferences_Changes"></a></p>
+<h3>Preferences Changes</h3>
+<p>There are two new settings on the prefs page:</p>
+<p>"Days past for recent photos links" sets the number of days used for the recently taken/modified links on the home page.</p>
+<p>"Language" set the language to display. See the TUTORIAL for more info.</p>
+<p><a name="The_PHP_Importer" id="The_PHP_Importer"></a></p>
+<h3>The PHP Importer</h3>
+<p>This version comes with a web based importer. If you are planning to use this feature you may need to install the following:</p>
+<ul>
+<li>GD 2.0</li>
+<li>PHP 4.2</li>
+</ul>
+<p>See the first section of the REQUIREMENTS doc for more info.</p>
+<p><a name="Zoph_0.2_-.3E_0.2.1_Upgrade" id="Zoph_0.2_-.3E_0.2.1_Upgrade"></a></p>
+<h2>Zoph 0.2 -&gt; 0.2.1 Upgrade</h2>
+<p>If you already have Zoph 0.2 installed, upgrading is fairly simple.</p>
+<p><a name="Updating_the_Database_6" id="Updating_the_Database_6"></a></p>
+<h3>Updating the Database</h3>
+<p>Execute the statements in zoph-update-0.2.1.sql:</p>
+<pre>
+&gt; mysql -u zoph_admin -p zoph &lt; sql/zoph_update-0.2.1.sql
+</pre>
+<p>None of the database changes should create incompatibility with version 0.2. You should update the db before updating the templates.</p>
+<p><a name="Updating_the_Templates_5" id="Updating_the_Templates_5"></a></p>
+<h3>Updating the Templates</h3>
+<p>Simply copy over php/* to the location of your installation. You may want to first backup your config.inc.php then copy it over.</p>
+<p>If you do keep you previous config.inc.php, be aware of one addition to that file. Copy the lines defining the DEFAULT_USER from the new config.inc.php to your file.</p>
+<p>If you plan on using the new default (guest) user feature, read "Defining a Default User" in the "Creating Users" section of the tutorial.</p>
+
+
+</div>
+</html>

@@ -1,0 +1,730 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+    <head>
+        <title>Zoph Documentation - Configuration</title>
+        <link TYPE="text/css" REL="stylesheet" HREF="style.css">
+    </head>
+    <body>
+    <p>
+    All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
+    </p>
+				<h1 class="firstHeading">Zoph/Configuration</h1>
+		<div id="bodyContent">
+			<table id="toc" class="toc" summary="Contents">
+<tr>
+<td>
+<div id="toctitle">
+<h2>Contents</h2>
+</div>
+<ul>
+<li class='toclevel-1'><a href="#Interface_configuration"><span class="tocnumber">1</span> <span class="toctext">Interface configuration</span></a>
+<ul>
+<li class='toclevel-2'><a href="#ZOPH_TITLE"><span class="tocnumber">1.1</span> <span class="toctext">ZOPH_TITLE</span></a></li>
+<li class='toclevel-2'><a href="#MAX_CRUMBS"><span class="tocnumber">1.2</span> <span class="toctext">MAX_CRUMBS</span></a></li>
+<li class='toclevel-2'><a href="#MAX_DAYS_PAST"><span class="tocnumber">1.3</span> <span class="toctext">MAX_DAYS_PAST</span></a></li>
+<li class='toclevel-2'><a href="#ZOPH_URL"><span class="tocnumber">1.4</span> <span class="toctext">ZOPH_URL</span></a></li>
+<li class='toclevel-2'><a href="#ZOPH_SECURE_URL"><span class="tocnumber">1.5</span> <span class="toctext">ZOPH_SECURE_URL</span></a></li>
+<li class='toclevel-2'><a href="#MAX_PEOPLE_SLOTS"><span class="tocnumber">1.6</span> <span class="toctext">MAX_PEOPLE_SLOTS</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Authentication"><span class="tocnumber">2</span> <span class="toctext">Authentication</span></a>
+<ul>
+<li class='toclevel-2'><a href="#.24VALIDATOR"><span class="tocnumber">2.1</span> <span class="toctext">$VALIDATOR</span></a></li>
+<li class='toclevel-2'><a href="#FORCE_SSL"><span class="tocnumber">2.2</span> <span class="toctext">FORCE_SSL</span></a></li>
+<li class='toclevel-2'><a href="#FORCE_SSL_LOGIN"><span class="tocnumber">2.3</span> <span class="toctext">FORCE_SSL_LOGIN</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Resized_image_generation"><span class="tocnumber">3</span> <span class="toctext">Resized image generation</span></a>
+<ul>
+<li class='toclevel-2'><a href="#THUMB_SIZE"><span class="tocnumber">3.1</span> <span class="toctext">THUMB_SIZE</span></a></li>
+<li class='toclevel-2'><a href="#MID_SIZE"><span class="tocnumber">3.2</span> <span class="toctext">MID_SIZE</span></a></li>
+<li class='toclevel-2'><a href="#THUMB_PREFIX"><span class="tocnumber">3.3</span> <span class="toctext">THUMB_PREFIX</span></a></li>
+<li class='toclevel-2'><a href="#MID_PREFIX"><span class="tocnumber">3.4</span> <span class="toctext">MID_PREFIX</span></a></li>
+<li class='toclevel-2'><a href="#MIXED_THUMBNAILS"><span class="tocnumber">3.5</span> <span class="toctext">MIXED_THUMBNAILS</span></a></li>
+<li class='toclevel-2'><a href="#THUMB_EXTENSION"><span class="tocnumber">3.6</span> <span class="toctext">THUMB_EXTENSION</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Database_configuration"><span class="tocnumber">4</span> <span class="toctext">Database configuration</span></a>
+<ul>
+<li class='toclevel-2'><a href="#DB_HOST"><span class="tocnumber">4.1</span> <span class="toctext">DB_HOST</span></a></li>
+<li class='toclevel-2'><a href="#DB_NAME"><span class="tocnumber">4.2</span> <span class="toctext">DB_NAME</span></a></li>
+<li class='toclevel-2'><a href="#DB_USER"><span class="tocnumber">4.3</span> <span class="toctext">DB_USER</span></a></li>
+<li class='toclevel-2'><a href="#DB_PASS"><span class="tocnumber">4.4</span> <span class="toctext">DB_PASS</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Image_location"><span class="tocnumber">5</span> <span class="toctext">Image location</span></a>
+<ul>
+<li class='toclevel-2'><a href="#IMAGE_DIR"><span class="tocnumber">5.1</span> <span class="toctext">IMAGE_DIR</span></a></li>
+<li class='toclevel-2'><a href="#WEB_IMAGE_DIR"><span class="tocnumber">5.2</span> <span class="toctext">WEB_IMAGE_DIR</span></a></li>
+<li class='toclevel-2'><a href="#USE_IMAGE_SERVICE"><span class="tocnumber">5.3</span> <span class="toctext">USE_IMAGE_SERVICE</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Features"><span class="tocnumber">6</span> <span class="toctext">Features</span></a>
+<ul>
+<li class='toclevel-2'><a href="#EMAIL_PHOTOS"><span class="tocnumber">6.1</span> <span class="toctext">EMAIL_PHOTOS</span></a></li>
+<li class='toclevel-2'><a href="#CLIENT_WEB_IMPORT"><span class="tocnumber">6.2</span> <span class="toctext">CLIENT_WEB_IMPORT</span></a></li>
+<li class='toclevel-2'><a href="#SERVER_WEB_IMPORT"><span class="tocnumber">6.3</span> <span class="toctext">SERVER_WEB_IMPORT</span></a></li>
+<li class='toclevel-2'><a href="#WEB_IMPORT_.28depricated.29"><span class="tocnumber">6.4</span> <span class="toctext">WEB_IMPORT (depricated)</span></a></li>
+<li class='toclevel-2'><a href="#REMOVE_ARCHIVE"><span class="tocnumber">6.5</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
+<li class='toclevel-2'><a href="#USE_DATED_DIRS"><span class="tocnumber">6.6</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
+<li class='toclevel-2'><a href="#HIER_DATED_DIRS"><span class="tocnumber">6.7</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
+<li class='toclevel-2'><a href="#WATERMARKING"><span class="tocnumber">6.8</span> <span class="toctext">WATERMARKING</span></a></li>
+<li class='toclevel-2'><a href="#WATERMARK"><span class="tocnumber">6.9</span> <span class="toctext">WATERMARK</span></a></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</table>
+<p><script type="text/javascript">
+//<![CDATA[
+ if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
+//]]>
+</script></p>
+<p><a name="Interface_configuration" id="Interface_configuration"></a></p>
+<h2>Interface configuration</h2>
+<p><a name="ZOPH_TITLE" id="ZOPH_TITLE"></a></p>
+<h3>ZOPH_TITLE</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">ZOPH_TITLE</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> The title for the application. This is what appears on the home page and in the browser's title bar.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>Zoph</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> You could set it to something like "My Photo Album".</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('ZOPH_TITLE', 'My Photos');</tt></td>
+</tr>
+</table>
+<p><a name="MAX_CRUMBS" id="MAX_CRUMBS"></a></p>
+<h3>MAX_CRUMBS</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">MAX_CRUMBS</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> The maximum number of breadcrumbs to allow</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>100</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('MAX_CRUMBS', 100);</tt></td>
+</tr>
+</table>
+<p><a name="MAX_DAYS_PAST" id="MAX_DAYS_PAST"></a></p>
+<h3>MAX_DAYS_PAST</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">MAX_DAYS_PAST</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> How many days appear in the dropdown on the search page for "photos taken/modified X days ago"</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>30</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('MAX_DAYS_PAST', 40);</tt></td>
+</tr>
+</table>
+<p><a name="ZOPH_URL" id="ZOPH_URL"></a></p>
+<h3>ZOPH_URL</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">ZOPH_URL</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> The URL where your Zoph installation can be reached. Make sure to include http:// and no html filename. This is used for sending e-mails and SSL login.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('ZOPH_URL', '<a href="http://www.myserver.com/zoph'" class='external free' title="http://www.myserver.com/zoph'" rel="nofollow">http://www.myserver.com/zoph'</a>);</tt></td>
+</tr>
+</table>
+<p><a name="ZOPH_SECURE_URL" id="ZOPH_SECURE_URL"></a></p>
+<h3>ZOPH_SECURE_URL</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">ZOPH_SECURE_URL</th>
+<td style="width: 450px;"><b>Versions:</b> 0.5 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> The URL where your Zoph installation can be reached, when SSL or SSL Login is used. Make sure to include https:// and no html filename. This is used for SSL usage and login.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('ZOPH_SECURE_URL', '<a href="https://www.myserver.com/zoph'" class='external free' title="https://www.myserver.com/zoph'" rel="nofollow">https://www.myserver.com/zoph'</a>);</tt></td>
+</tr>
+</table>
+<p><a name="MAX_PEOPLE_SLOTS" id="MAX_PEOPLE_SLOTS"></a></p>
+<h3>MAX_PEOPLE_SLOTS</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">MAX_PEOPLE_SLOTS</th>
+<td style="width: 450px;"><b>Versions:</b> 0.5 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> How many "add people" dropdowns can a user configure. This determines what the maximum value is that the user can configure via the prefs page. If it is set to 10 and a user changes his preferences to 6, the user can add 6 people at once on an edit photo page. (provided the user has edit rights).</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>1</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any integer. <tt>1</tt> will make Zoph 0.5 behave like the older versions. Large numbers can have an impact on performance, 5-10 would be a reasonable maximum.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('MAX_PEOPLE_SLOTS', 5);</tt></td>
+</tr>
+</table>
+<p><a name="Authentication" id="Authentication"></a></p>
+<h2>Authentication</h2>
+<p><a name=".24VALIDATOR"></a></p>
+<h3>$VALIDATOR</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">$VALIDATOR</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Selects validation method. It needs to be a function in validator.inc.php.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt><tt>default_validate</tt></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>default_validate</tt>: validates agains zophs internal user database, <tt>htpasswd_validate</tt>: validates using htpasswd, <tt>php_validate</tt>: validates using PHP authentication</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>$VALIDATOR = 'default_validate';</tt></td>
+</tr>
+</table>
+<p><a name="FORCE_SSL" id="FORCE_SSL"></a></p>
+<h3>FORCE_SSL</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">FORCE_SSL</th>
+<td style="width: 450px;"><b>Versions:</b> 0.5 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Force users to use https when using Zoph. <a href="configuration.html#ZOPH_SECURE_URL" title="Zoph/Configuration">ZOPH_SECURE_URL</a> must be correctly defined when this is used.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt><tt>0</tt></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: Use http or <tt>1</tt>: use https</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('FORCE_SSL', 0);</tt></td>
+</tr>
+</table>
+<p><a name="FORCE_SSL_LOGIN" id="FORCE_SSL_LOGIN"></a></p>
+<h3>FORCE_SSL_LOGIN</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">FORCE_SSL_LOGIN</th>
+<td style="width: 450px;"><b>Versions:</b> 0.5 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Force users to use https when logging in to Zoph. After logging in, the user will be redirected to the http site. For this to work, both <a href="configuration.html#ZOPH_SECURE_URL" title="Zoph/Configuration">ZOPH_SECURE_URL</a> and <a href="configuration.html#ZOPH_URL" title="Zoph/Configuration">ZOPH_URL</a> must be correctly defined.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt><tt>0</tt></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: Use http or <tt>1</tt>: use https</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('FORCE_SSL_LOGIN', 0);</tt></td>
+</tr>
+</table>
+<p><a name="Resized_image_generation" id="Resized_image_generation"></a></p>
+<h2>Resized image generation</h2>
+<p>Zoph automatically creates thumbnails and medium sized ('mid') images during import. To influence this proces, you can edit the following parameters:</p>
+<div style="background: yellow; width: 50%; border: 1px solid black;">
+<p style="text-align: center; color: red; font-weight: bold; font-size: +1;">Important!</p>
+<p style="color: black; font-weight: normal;">The options in this section have a matching setting in <tt>ZophImport.pl</tt>. These have to be set the same.</p>
+</div>
+<p><a name="THUMB_SIZE" id="THUMB_SIZE"></a></p>
+<h3>THUMB_SIZE</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">THUMB_SIZE</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Maximum width or height of thumbnails</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>120</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Maximum width/height in pixels</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('THUMB_SIZE', 120);</tt></td>
+</tr>
+</table>
+<p><a name="MID_SIZE" id="MID_SIZE"></a></p>
+<h3>MID_SIZE</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">MID_SIZE</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Maximum width or height of 'mid' sized images</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>480</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Maximum width/height in pixels</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('THUMB_SIZE', 480);</tt></td>
+</tr>
+</table>
+<p><a name="THUMB_PREFIX" id="THUMB_PREFIX"></a></p>
+<h3>THUMB_PREFIX</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">THUMB_PREFIX</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Prefix of the filenames for the thumbnails.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>thumb</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Do not make this string empty!</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('THUMB_PREFIX', 'thumb');</tt></td>
+</tr>
+</table>
+<p><a name="MID_PREFIX" id="MID_PREFIX"></a></p>
+<h3>MID_PREFIX</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">MID_PREFIX</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Prefix of the filenames for the 'mid' sized images.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>thumb</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Do not make this string empty!</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('MID_PREFIX', 'mid');</tt></td>
+</tr>
+</table>
+<p><a name="MIXED_THUMBNAILS" id="MIXED_THUMBNAILS"></a></p>
+<h3>MIXED_THUMBNAILS</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">MIXED_THUMBNAILS</th>
+<td style="width: 450px;"><b>Versions:</b> 0.3 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Convert thumbnails to JPEGs. This setting should match what is in zophImporter.pl. If you are installing Zoph for the first time, it is recommend to set this to 0 and change zophImport.pl accordingly. If you are upgrading, see the <a href="upgrading.html#Zoph_0.2.1_-.3E_0.3_Upgrade" title="Zoph/Upgrading">Zoph/Upgrading#Zoph_0.2.1_-.3E_0.3_Upgrade</a> for more information about this.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>1</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>1</tt>: Behave like older Zoph versions. <tt>0:</tt> Zoph will assume all thumbnails have the extension specified in <a href="configuration.html#THUMB_EXTENSION" title="Zoph/Configuration">THUMB_EXTENSION</a>.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('MIXED_THUMBNAILS', '0');</tt></td>
+</tr>
+</table>
+<p><a name="THUMB_EXTENSION" id="THUMB_EXTENSION"></a></p>
+<h3>THUMB_EXTENSION</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">THUMB_EXTENSION</th>
+<td style="width: 450px;"><b>Versions:</b> 0.3 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Extension for thumbnail files</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>JPG</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> See . This setting is ignored if <a href="configuration.html#THUMB_EXTENSION" title="Zoph/Configuration">MIXED_THUMBNAILS</a> is set to <tt>1</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('THUMB_EXTENSION', 'jpg');</tt></td>
+</tr>
+</table>
+<p><a name="Database_configuration" id="Database_configuration"></a></p>
+<h2>Database configuration</h2>
+<div style="background: yellow; width: 50%; border: 1px solid black;">
+<p style="text-align: center; color: red; font-weight: bold; font-size: +1;">Important!</p>
+<p style="color: black; font-weight: normal;">The options in this section have a matching setting in <tt>ZophImport.pl</tt>. These have to be set the same.</p>
+</div>
+<p><a name="DB_HOST" id="DB_HOST"></a></p>
+<h3>DB_HOST</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DB_HOST</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Your database host</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt><tt>localhost</tt></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any hostname or IP address</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DB_HOST', 'localhost');</tt></td>
+</tr>
+</table>
+<p><a name="DB_NAME" id="DB_NAME"></a></p>
+<h3>DB_NAME</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DB_NAME</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Name of the database, as it was created during installation</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt><tt>zoph</tt></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DB_NAME', 'zoph');</tt></td>
+</tr>
+</table>
+<p><a name="DB_USER" id="DB_USER"></a></p>
+<h3>DB_USER</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DB_USER</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Name of the user that is used to connect to the MySQL database</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt><tt>zoph_rw</tt></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DB_USER', 'zoph_rw');</tt></td>
+</tr>
+</table>
+<p><a name="DB_PASS" id="DB_PASS"></a></p>
+<h3>DB_PASS</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DB_PASS</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> MySQL password for the user defined with <a href="configuration.html#DB_USER" title="Zoph/Configuration">DB_USER</a>.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>password</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DB_PASS', 'MySecretPassword');</tt></td>
+</tr>
+</table>
+<p><a name="Image_location" id="Image_location"></a></p>
+<h2>Image location</h2>
+<p><a name="IMAGE_DIR" id="IMAGE_DIR"></a></p>
+<h3>IMAGE_DIR</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">IMAGE_DIR</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Location of the images on the filesystem.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>/data/images/</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any directory on the filesystem. Make sure it ends with a <tt>/</tt>!</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('IMAGE_DIR', '/data/images/');</tt></td>
+</tr>
+</table>
+<p><a name="WEB_IMAGE_DIR" id="WEB_IMAGE_DIR"></a></p>
+<h3>WEB_IMAGE_DIR</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">WEB_IMAGE_DIR</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Location of the images relative to the webserver root.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>/data/images/</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> This directory should point to the same location as <a href="configuration.html#IMAGE_DIR" title="Zoph/Configuration">IMAGE_DIR</a>, but now seen from the webserver. Configure Apache so that this is correct. Make sure it ends with a <tt>/</tt>!</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('WEB_IMAGE_DIR', '/images/');</tt></td>
+</tr>
+</table>
+<p><a name="USE_IMAGE_SERVICE" id="USE_IMAGE_SERVICE"></a></p>
+<h3>USE_IMAGE_SERVICE</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">USE_IMAGE_SERVICE</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> This setting defines wheter photo's will be pulled directly from the filesystem by the webserver or to use <tt>image_service.php</tt>.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: Take images from filesystem or <tt>1</tt>: Use <tt>image_service.php</tt>.
+<p>The latter could be slightly lower in performance, but is highly recommended as it is more secure in combination with user access rights.</p>
+</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('IMAGE_SERVICE', '1');</tt></td>
+</tr>
+</table>
+<p><a name="Features" id="Features"></a></p>
+<h2>Features</h2>
+<p><a name="EMAIL_PHOTOS" id="EMAIL_PHOTOS"></a></p>
+<h3>EMAIL_PHOTOS</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">EMAIL_PHOTOS</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> You can enable or disable the "mail this photo" feature" using this option.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable mail, <tt>1</tt>: enable mail</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('EMAIL_PHOTOS', '1');</tt></td>
+</tr>
+</table>
+<p><a name="CLIENT_WEB_IMPORT" id="CLIENT_WEB_IMPORT"></a></p>
+<h3>CLIENT_WEB_IMPORT</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">CLIENT_WEB_IMPORT</th>
+<td style="width: 450px;"><b>Versions:</b> 0.3.3. and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Use this option to enable or disable importing via the browser using a "browse" button to upload files from the client</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>1</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing uploaded files</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define(CLIENT_WEB_IMPORT, '1');</tt></td>
+</tr>
+</table>
+<p><a name="SERVER_WEB_IMPORT" id="SERVER_WEB_IMPORT"></a></p>
+<h3>SERVER_WEB_IMPORT</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">SERVER_WEB_IMPORT</th>
+<td style="width: 450px;"><b>Versions:</b> 0.3.3. and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Use this option to enable or disable importing via the browser using a file already stored on the server</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing files stored on the server</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define(SERVER_WEB_IMPORT, '1');</tt></td>
+</tr>
+</table>
+<p><a name="WEB_IMPORT_.28depricated.29" id="WEB_IMPORT_.28depricated.29"></a></p>
+<h3>WEB_IMPORT <i>(depricated)</i></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">WEB_IMPORT <i>(depricated)</i></th>
+<td style="width: 450px;"><b>Versions:</b> 0.3.2. and before</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Use this option to enable or disable importing via the browser</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing files using the webinterface</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('WEB_IMPORT', '1');</tt></td>
+</tr>
+</table>
+<p><a name="REMOVE_ARCHIVE" id="REMOVE_ARCHIVE"></a></p>
+<h3>REMOVE_ARCHIVE</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">REMOVE_ARCHIVE</th>
+<td style="width: 450px;"><b>Versions:</b> 0.5 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Remove the .tar or .zip file after a successful import.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: leave the file, or <tt>1</tt>: remove the file</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('REMOVE_ARCHIVE, '0');</tt></td>
+</tr>
+</table>
+<p><a name="USE_DATED_DIRS" id="USE_DATED_DIRS"></a></p>
+<h3>USE_DATED_DIRS</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">USE_DATED_DIRS</th>
+<td style="width: 450px;"><b>Versions:</b> 0.5 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Put the files uploaded via the web import in dated directories, just like the <tt>--datedDirs</tt> option for zophImport.pl. For example, a photo taken on Dec 21, 2005, will be placed in a directory 2005.12.21, under your default path.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: do not use dated dirs, or <tt>1</tt>: use dated dirs.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('USE_DATED_DIRS', '0');</tt></td>
+</tr>
+</table>
+<p><a name="HIER_DATED_DIRS" id="HIER_DATED_DIRS"></a></p>
+<h3>HIER_DATED_DIRS</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">HIER_DATED_DIRS</th>
+<td style="width: 450px;"><b>Versions:</b> 0.5 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Put the files uploaded via the web import in hierarchical dated directories, just like the <tt>--hierarchical</tt> option for zophImport.pl. For example, a photo taken on Dec 21, 2005, will be placed in a directory tree 2005/12/21, under your default path.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: do not use hierarchical dated dirs, or <tt>1</tt>: use hierarchical dated dirs. This parameter will be ignored if <a href="configuration.html#USE_DATED_DIRS" title="Zoph/Configuration">USE_DATED_DIRS</a> is not set.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('HIER_DATED_DIRS', '0');</tt></td>
+</tr>
+</table>
+<p><a name="WATERMARKING" id="WATERMARKING"></a></p>
+<h3>WATERMARKING</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">WATERMARKING</th>
+<td style="width: 450px;"><b>Versions:</b> 0.5 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Turn the watermarking feature on or off.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: watermarking is disabled; <tt>1</tt>: watermarking is enabled. Watermarking only works if <a href="configuration.html#IMAGE_SERVICE" title="Zoph/Configuration">IMAGE_SERVICE</a> is enabled and <a href="configuration.html#WATERMARK" title="Zoph/Configuration">WATERMARK</a> is set to an existing GIF image.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('WATERMARKING', '1');</tt></td>
+</tr>
+</table>
+<p><a name="WATERMARK" id="WATERMARK"></a></p>
+<h3>WATERMARK</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">WATERMARK</th>
+<td style="width: 450px;"><b>Versions:</b> 0.5 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> If watermarking is used, this should be set to the name of the file that will be used as the watermark. It should be a GIF file, for best results, use contrasting colours and transparency. In the Contrib directory, 3 example files are included. The filename is relative to the <a href="configuration.html#IMAGE_DIR" title="Zoph/Configuration">IMAGE_DIR</a>.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>watermark.gif</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('WATERMARK', 'watermarks/topsecret.gif');</tt></td>
+</tr>
+</table>
+
+
+</div>
+</html>

@@ -1,0 +1,127 @@
+body	{
+	font-family: Arial, sans-serif;
+	background: #ffffdd;
+	color: #000000;
+	}
+
+h1	{
+	font-size: 30px;
+	font-weight: bold;
+	margin-bottom: 5px;
+	border-top: 1px solid #ddddff;
+	border-bottom: 1px solid #ddddff;
+	
+	}
+
+h2	{
+	font-weight: bold;
+	font-size: 25px;
+	border-bottom: 1px solid #ddddff;
+	}
+
+h3	{
+	font-size: 15px;
+	}
+
+a { color: black; }
+
+a > img {
+	border: none;
+	}
+
+tt, code, dt {
+	font-family: courier, fixed;
+	}
+
+dt	{
+	font-weight: bold;
+	}
+
+.news	{
+	border: 2px dotted #ddddff;
+	font-size: 16px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	}
+
+/* This doesn't work in MSIE... it is part of CSS 2.0, a standard that
+has existed since 1998, please get yourself a modern browser */
+
+.news > h2	{
+	font-size: 20px;
+	color: black;
+	background: #ddddff;
+	margin-top: 0;
+	margin-bottom: 0;
+	}
+
+.newsinfo	{
+	font-style: italic;
+	font-size: 14px;
+	margin-bottom: 5px;
+	}
+
+.footer, .mirrors {
+	font-size: 12px;
+	text-align: center;
+	}
+
+.footer img {
+	float: right;
+	}
+/* http://www.alistapart.com/articles/taminglists/ */
+
+#button {
+	float: right;
+	width: 11em;
+	padding: 0 1em 1em 0;
+	color: #ffffff;
+	}
+
+#button ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	}
+		
+#button li {
+	border-bottom: 1px solid #00003d;
+	margin: 0;
+	}
+
+#button li a {
+	display: block;
+	padding: 5px 5px 5px 0.5em;
+	border-left: 10px solid #eeeeee;
+	border-right: 10px solid #e0e0e0;
+	background-color: #ffffbb;
+	color: #000000;
+	text-decoration: none;
+	width: 100%;
+	}
+
+html>body #button li a {
+	width: auto;
+	}
+
+#button li a:hover {
+	border-left: 10px solid #aaaaaa;
+	border-right: 10px solid #a0a0a0;
+	background-color: #eeeebb;
+	color: #000000;
+	font-weight: bold;
+	}
+
+table.screenshots td {
+	vertical-align: top;
+	width: 160px;
+	border: 1px solid #ddddff;
+	text-align: center;
+	}	
+
+.comment	{
+	font-size: 10px;
+	}
+
+	
