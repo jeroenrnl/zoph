@@ -90,6 +90,26 @@ define('DIR_MODE', 0755);
 For more detais, see REMOVE_ARCHIVE, USE_DATED_DIRS, HIER_DATED_DIRS, 
 IMPORT_UMASK and DIR_MODE on http://en.wikibooks.org/wiki/Zoph/Configuration
 
+Adding multiple people at once
+------------------------------
+
+You can now add multiple people at once using the edit photo page or the bulk
+edit mode. To enable this feature, set MAX_PEOPLE_SLOTS to a reasonable
+maximum (recommendation: 5-10).
+
+define('MAX_PEOPLE_SLOTS', 5);
+
+After that, go to the preference page and set "number of people to add at once"
+to a number that is convenient for that user. Each user can indivually set this
+number, but never higher than the number defined in MAX_PEOPLE_SLOTS. Bear in
+mind that setting either to a (very) high number, could (severely) impact
+performance.
+
+For more detais, see MAX_PEOPLE_SLOTS on
+http://en.wikibooks.org/wiki/Zoph/Configuration
+
+-----------------------------------------------------------------------------
+
 Zoph 0.3.3 -> 0.4 Upgrade
 1 Aug 2005
 
