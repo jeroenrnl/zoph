@@ -1,3 +1,95 @@
+Zoph 0.4 -> 0.5 Upgrade
+20 Jan 2006
+
+Copy over php/* to the location of your installation. Make sure to also copy
+the php/lang subdirectory.
+
+Updating the Database
+---------------------
+
+If you are upgrading from an older version than 0.4, please run the older
+database updates first.
+
+Execute zoph-update-0.5.sql:
+
+> mysql -u zoph_admin -p zoph < sql/zoph_update-0.4.sql
+
+The database upgrade script makes the following changes:
+
+    * Change the password length to 64 bytes. Needed for Mysql 4.1 compatibility.
+    * Changes to the places table for hierarchical locations:
+          o add the parent_place_id column.
+          o copy the location that currently has place_id 1 to a new place_id.
+          o Update all the photos taken at that location
+          o Change place_id 1 to "World" (You may want to change that)
+          o And finally makes all the other places a child of "World".
+    * Add a column to the prefs table for opening fullsize photos in a new Window
+    * Add a column to the album_permissions table for the watermarking feature
+
+Configuration updates
+---------------------
+
+A few new configuration options have been added in Zoph 0.5.
+
+Forcing SSL
+-----------
+You can now force the usage of SSL for the web interface, either just for
+logging on or for the entire Zoph session. You can control the behaviour by
+adepting the following settings:
+
+define('FORCE_SSL_LOGIN', 0);
+define('FORCE_SSL', 0);
+
+You will also need to tell Zoph at what URL it can be found, because it will
+need to redirect users from SSL to plain and vice versa:
+
+define('ZOPH_URL', 'http://myserver.com/zoph');
+define('ZOPH_SECURE_URL', 'https://myserver.com/zoph');
+
+For more details see FORCE_SSL_LOGIN, FORCE_SSL, ZOPH_URL and ZOPH_SECURE_URL
+on http://en.wikibooks.org/wiki/Zoph/Configuration
+
+Watermarks
+----------
+You can now have Zoph add a watermark to the high resolution images, to prevent
+unauthorized use of your photos. The watermark is a partly transparant GIF
+image that needs to be placed in your IMAGE_DIR. To use watermarking, make the
+following changes to your configuration:
+
+define('WATERMARKING', 1);
+define('WATERMARK', 'watermark.gif');
+
+You will also need to enable the image service if you have not already done so:
+
+define('USE_IMAGE_SERVICE', 1);
+
+For more details see WATERMARKING, WATERMARK and USE_IMAGE_SERVICE on
+http://en.wikibooks.org/wiki/Zoph/Configuration
+
+Web importer
+------------
+A few changes have been made to the web importer. To delete an uploaded ZIP
+file after a successful import, change this line in the configuration:
+
+define('REMOVE_ARCHIVE', 1);
+
+To enable dated directories in the Web importer:
+
+define('USE_DATED_DIRS', 1);
+define('HIER_DATED_DIRS', 0);
+
+To enable hierarchical dated directories in the Web importer:
+
+define('USE_DATED_DIRS', 1);
+define('HIER_DATED_DIRS', 1);
+
+The default UMASK and DIR_MODE have been changed as of v0.5:
+define('IMPORT_UMASK', 022);
+define('DIR_MODE', 0755);
+
+For more detais, see REMOVE_ARCHIVE, USE_DATED_DIRS, HIER_DATED_DIRS, 
+IMPORT_UMASK and DIR_MODE on http://en.wikibooks.org/wiki/Zoph/Configuration
+
 Zoph 0.3.3 -> 0.4 Upgrade
 1 Aug 2005
 
