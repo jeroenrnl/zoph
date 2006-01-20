@@ -124,8 +124,8 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
                 $op = "in";
                 $where .=
-                    "(${pa}.album_id $op (" . escape_string($val) . ")" .
-                    " and ${pa}.photo_id = ph.photo_id)";
+                    "(${pa}.album_id $op (" . escape_string($val) . "))";
+
             }
             else { // assume "not in"
                 // a simple join won't work for the "not in" case
@@ -272,10 +272,15 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
 function generate_from_clause($from_array) {
     $fromClause = "";
+    $joinClause = "";
     if ($from_array) {
         while (list($abbrev, $table) = each($from_array)) {
-            if ($fromClause) { $fromClause .= ", "; }
-            $fromClause .= DB_PREFIX . "$table as $abbrev";
+            if ($fromClause) {
+                $fromClause .= " JOIN ";
+                $joinClause = " on ${abbrev}.photo_id = ph.photo_id";
+            }
+                
+            $fromClause .= DB_PREFIX . "$table as $abbrev" . $joinClause;
         }
     }
     return $fromClause;
