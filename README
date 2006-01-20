@@ -1,5 +1,5 @@
-Zoph 0.4 Readme
-1 Aug 2005
+Zoph 0.5 Readme
+20 Jan 2006
 
 1. Introduction
 
@@ -29,7 +29,7 @@ Zoph 0.4 Readme
      - people in the photo
    - Each photo can appear in zero or more albums.
    - Each photo can appear in zero or more categories.
-   - Albums and categories are both hierarchical.
+   - Albums, categories and locations are hierarchical.
    - Searches can be performed using all this data:
      "Show me all photos taken by 'Joe Smith' between 2001-01-01 and
       2001-12-31 at 'Joe and Nancy's House' in which 'Nancy Smith'
@@ -38,6 +38,9 @@ Zoph 0.4 Readme
      - each user has an account and is granted permissions on albums
      - each user can specify preferences, including a color scheme
      - an automatically logged in guest user can be defined.
+   - Watermarks:
+      A (visual) watermark can be added to the high quality photos to
+      prevent unauthorized use.
    - Slideshows.
    - Lightboxes.
    - "Email this photo" feature.
@@ -50,8 +53,10 @@ Zoph 0.4 Readme
 
 3. Installation
 
-   Read the REQUIREMENTS, INSTALL and MANUAL docs.  If you are upgrading
+   Read the REQUIREMENTS, INSTALL docs.  If you are upgrading
    skip to the UPGRADE document.
+
+   More documentation can be found on http://en.wikibooks.org/wiki/zoph
 
 4. Copying
 
@@ -61,7 +66,7 @@ Zoph 0.4 Readme
 5. Feedback
    
    Please send feedback to zoph@nother.net.  Releases can be found at
-   http://www.nother.net/zoph.
+   http://zoph.sourceforge.net
 
 6. Thanks
 
