@@ -1,8 +1,8 @@
-Zoph 0.3.3 Requirements
-13 Dec 2002
+Zoph 0.5 Requirements
+20-1-2006
 
 This document is meant to help you install all the packages required by
-Zoph.  I've gotten everything running on Linux (Debian and Mandrake) and
+Zoph.  I've gotten everything running on Linux (Debian, Mandrake and Gentoo) and
 Mac OS X without too much trouble and people have reported getting Zoph
 to work under Windows as well.  You might be able to skip this if you
 know your way around your system.
@@ -14,13 +14,13 @@ You need to have the following installed before running Zoph.
 Version numbers are what I have tested with, I expect any recent
 versions would work:
 
-  - MySQL 3.23
-  - Apache 1.3.9
-  - PHP 4.0.4
-  - Perl 5.6
+  - MySQL 4.1.14
+  - Apache 2.0.55
+  - PHP 4.4.0
+  - Perl 5.8.7
   - Perl DBI, DBD::mysql, Image::Size
-  - ImageMagick 5.3
-  - Jhead 1.2
+  - ImageMagick 6.2.4.2
+  - Jhead 2.4
 
 You probably already have many of these.  Getting most of them is fairly
 simple.  For example, using Debian you can simply:
@@ -68,6 +68,34 @@ $ /etc/init.d/mysql start
 If you haven't set your root password, do it!
 
 $ mysqladmin -u root password <password>
+
+MySQL version 4.1 and above (Zoph 0.4 and earlier)
+--------------------------------------------------
+
+If you are trying to install Zoph against MySQL version newer than 4.1, you
+will run into problems, when trying to login. It will always say your username
+and password are wrong. This is caused by the fact that from version 4.1,
+MySQL has changed the password encoding scheme from 16 bytes to 41 bytes. 
+The password field in Zoph is 32 bytes long, and thus the new passwordlength
+does not fit. If you want to use v0.4 or before with a post-4.1 MySQL version
+anyway, you can change the size of the password field manually by running the
+following query in MySQL:
+
+ALTER TABLE zoph_users CHANGE password password varchar(64); 
+
+After that, you will need to change the admin password again, so it will be
+inserted into the database using the 'new' encoding.
+
+UPDATE zoph_users SET password=password("admin") WHERE user_id=1; 
+
+MySQL version 4.1 and above (Zoph 0.5 and later)
+------------------------------------------------
+Zoph 0.5 has full support for MySQL > 4.1. Because Zoph 0.5 is able to
+transparently change passwords from the "old" password encoding to the "new"
+password encoding, it is recommended to first upgrade Zoph from 0.4 to 0.5
+and after that, upgrade your MySQL version. If you are a new user and installing
+Zoph 0.5 for the first time, it does not matter which MySQL version you are
+running.
 
 4. Perl Packages
 ----------------
