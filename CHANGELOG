@@ -1,5 +1,38 @@
 Zoph Changelog
 
+Zoph 0.5-pre1
+20 January 2006
+
+- Changed typos in logon.php and credits.html
+- Fixed php errors when user is not logged in (bug#1325547)
+- Added compatibility with MySQL=>4.1, and code to automatically convert passwords from MySQL pre-4.1 to 4.1 and later format.
+- Many updates to HTML and CSS, most to improve HTML semantics. (Less tables used for layout).
+- Resolved some inconsistencies in config.inc.php (some defines used quotes and some not)
+- zoph_table.inc.php now gives some more debug info when DEBUG is on.
+- Locations are now hierarchical.
+  The necessary database updates for this are done by the SQL update script; an unsopported
+  script is included in the contrib dir that will try to change your locations to a real
+  hierarchical list. Use at your own risk!
+- Dated_dirs can now be made hierarchical (instead of a directory called 2006.01.20 you will have a directory-tree 2006/01/20). Thanks to Oliver Seidel (Req#656472)
+- Immediate editting of color schemes and possibility to copy them (Req#715104)
+- Dated dirs in webimporter (Req#739557)
+- Imported tar and zip files can be removed automatically (Req#739267)
+- Change of error message in import.php to ease translation.
+- People without "browse people" rights can now no longer see people's names. (Req#749503)
+- Use the file date and time if there is no date in exif header. (Req#752404)
+- Option to open the fullsize image in a new window. (Req#1252457)
+- Watermarking for high quality images. (Req#1250028)
+- Forced SSL login, thanks to Aaron Parecki. (Patch#1253265)
+- Forced SSL usage
+- zophImport.pl: Now fails when album/location/category/person does not exist. (Can be turned off by setting $ignoreerror). Partly solves Debian bug #284539.
+- zophImport.pl: A friendly error is now displayed when a photo is added to an album/cat/person it is already in. (partly solves Debian bug #284539)
+- Changed default permissions in config.inc.php as requested in Debian bug#326649
+- zophImport.pl: Added --copy and --verbose options. Solves Debian bug#211312 and partly #218491.
+- Major improvements to the search page. Thanks to Roy Bonser. (Req#685269 and Patch#1395052).
+- Fixed some possible SQL-injection issues.
+- Adding multiple people to a photo at once, thanks to Neil McBride. (Patch#1406959)
+- Fixed Date Field set inconsistently when using files with no EXIF info. (Bug#1402492)
+
 Zoph 0.4
 4 September 2005
 
