@@ -1,14 +1,18 @@
 Zoph FAQ
 
-1 Troubleshooting
+1 Documentation
 
-  1.1 After logging in I get the following error: "Fatal error: Call to
+Up to date documentation can be found on http://en.wikibooks.org/wiki/zoph
+
+2 Troubleshooting
+
+  2.1 After logging in I get the following error: "Fatal error: Call to
   undefined function: mysql_pconnect()". What's wrong?
 
    You may need to install the php-mysql module (rpms and debs are
    available).
 
-  1.2 I can log in but when I try to view any other page I get: "Fatal error:
+  2.2 I can log in but when I try to view any other page I get: "Fatal error:
   The script tried to execute a method or access a property of an incomplete
   object. Please ensure that the class definition user of the object you are
   trying to operate on was loaded _before_ the session was started in
@@ -20,42 +24,19 @@ Zoph FAQ
    session_write_close() before the call to session_start() in
    auth.inc.php.
 
-  1.3 When I try to load zoph.sql in MySQL I get the following error: "ERROR
-  1121 at line 81: Column 'last_name' is used with UNIQUE or INDEX but is not
-  defined as NOT NULL".
-
-   The ability to have an index on a column that can be null was added in
-   MySQL 3.23. If you are using an older version you may see this error.
-
-   You can either upgrade MySQL or try to get around it by removing all
-   KEY lines in zoph.sql that correspond to a column not marked NOT NULL.
-   For example, the keys for first_name and last_name would have to be
-   removed.
-
-  1.4 I'm trying to use the importer from the web but I get this error: "Fatal
+  2.3 I'm trying to use the importer from the web but I get this error: "Fatal
   error: Call to undefined function: imagecreatefromjpeg()".
 
    To use the importer you need the GD 2 library for image creation
    support in PHP. See the REQUIREMENTS doc for more info.
 
-  1.5 The web importer works but why aren't the EXIF tags in my photos being
+  2.4 The web importer works but why aren't the EXIF tags in my photos being
   extracted?
 
    Reading the EXIF header requires at least PHP 4.2, when the
    read_exif_data() function was introduced.
 
-  1.6 I'm trying to run Zoph 0.2[.1] with PHP 4.2.x. Why isn't it working?
-
-   To get Zoph to work nicely with PHP 4.2, either install Zoph 0.3 or
-   enable register_globals in your php.ini file.
-
-  1.7 Why can't the webserver find images in which there are spaces or special
-  characters in the path?
-
-   This problem should be fixed in Zoph 0.3. In prior versions, only the
-   image name and not the entire path were properly encoded.
-
-  1.8 I moved my photos around after I loaded them and now I see broken images.
+  2.5 I moved my photos around after I loaded them and now I see broken images.
   How can I fix them?
 
    If you move images to a different directory you'll start seeing broken
@@ -73,17 +54,7 @@ Zoph FAQ
    mysql> update photos set path = 'new_path' where name in
    ('photo1.jpg', 'photo2.jpg');
 
-  1.9 If I try to change my password I get locked out of Zoph! What's going on?
-
-   This bug should be fixed in Zoph 0.3. Previously, your password was
-   being set to 'password' the string instead of whatever you wanted
-   (stupid bug). Before, in order to reset a password you would have to
-   do so within MySQL:
-
-   mysql> update users set password = password('new_password') where
-   user_id = X;
-
-  1.10 Jhead complains (non fatally) when parsing my images. Is there a way to
+  2.6 Jhead complains (non fatally) when parsing my images. Is there a way to
   suppress that?
 
    A user with a FotoCanvas 11 camera mentioned this problem and pointed
@@ -94,7 +65,7 @@ Zoph FAQ
    Add this flag to the call to jhead in zophImport.pl to fix this
    problem.
 
-  1.11 Why does Zoph choke when it tries to load the languages (line 88 of
+  2.7 Why does Zoph choke when it tries to load the languages (line 88 of
   rtplang.class.php)?
 
    This can happen when the line endings in the language files get messed
@@ -102,13 +73,13 @@ Zoph FAQ
    using Windows. If this happens, make sure there are UNIX style (\n not
    \r\n) line endings in the files.
 
-  1.12 Can I use Zoph without having to enable cookies?
+  2.8 Can I use Zoph without having to enable cookies?
 
    Zoph will work without cookies but you have to enable
    session.use_trans_sid in your php.ini file so that url rewriting will
    work. Starting with PHP 4.2.0 this parameter is disabled by default.
 
-  1.13 Why do I see some English phrases when I'm using a translation (e.g.
+  2.9 Why do I see some English phrases when I'm using a translation (e.g.
   "[vo] that have been categorized")?
 
    Some language files are missing a few translations. Many, but not all,
@@ -119,20 +90,12 @@ Zoph FAQ
    (zoph@nother.net). Check http://www.nother.net/zoph#translations for
    updated language packs.
 
-  1.14 Why do I see a bunch of code when I try to access Zoph?
+  2.10 Why do I see a bunch of code when I try to access Zoph?
 
    First, check to make sure that you have an AddType line for php files
    in your httpd.conf file. This is described in the INSTALL document.
 
-   If your Apache configuration is correct, check your php.ini to make
-   sure short_open_tag is set to On. With short_open_tag off "<?" is not
-   recognized as a valid script tag (like "<?php"). Since Zoph uses "<?"
-   in many places, this causes the templates to fail to execute. You may
-   have this problem if you install RedHat 8 as their default php.ini
-   seems to have changed so that short_open_tag is disabled. Note: as of
-   Zoph 0.3.3 short_open_tag is no longer required to be on.
-
-  1.15 I've managed to get Zoph running in Windows but zophImport.pl only can
+  2.11 I've managed to get Zoph running in Windows but zophImport.pl only can
   load one file at a time. If I try to execute "zophImport.pl *.jpg" I get a
   message saying "Not a file: *.jpg". What's going on?
 
@@ -141,20 +104,20 @@ Zoph FAQ
    would recommend using another shell like bash. This can easily be done
    by installing something like CygWin.
 
-2 Customization
+3 Customization
 
-  2.1 Can I get Zoph to take up my whole browser window rather than that little
+  3.1 Can I get Zoph to take up my whole browser window rather than that little
   rectangle?
 
    Try setting DEFAULT_TABLE_WIDTH in config.inc.php to "100%".
 
-  2.2 Can I customize the name/title used in the interface?
+  3.2 Can I customize the name/title used in the interface?
 
    Set ZOPH_TITLE in config.inc.php to whatever you want. This is what
    appears on the logon page, on the home page, and in the title of every
    page.
 
-  2.3 I don't like your welcome screen, your instructions on the import page,
+  3.3 I don't like your welcome screen, your instructions on the import page,
   or your use of English in general.
 
    You could edit the templates so that Zoph says just what you want. A
@@ -164,14 +127,14 @@ Zoph FAQ
 
    Welcome %s. %s currently contains=Go away %s. %s isn't for you.
 
-3 Miscellaneous
+4 Miscellaneous
 
-  3.1 How do you pronounce Zoph?
+  4.1 How do you pronounce Zoph?
 
    I say Zoph like software (it's Zophtware). But you can Zoph with an O
    like in photos or however you like.
 
-  3.2 What license is Zoph released under?
+  4.2 What license is Zoph released under?
 
    Zoph used to be licensed under the modified BSD license. As of version 0.4
    this has been changed to the GPL license. We have done our best to make sure
