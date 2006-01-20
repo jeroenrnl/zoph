@@ -1,12 +1,12 @@
-Zoph 0.3.3 Installation
-13 Dec 2002
+Zoph 0.5 installation
+20-1-2006
 
 1. Requirements
 
    The following need to be installed before Zoph will function.  For
    details on installing these, read the REQUIREMENTS document.
 
-   - MySQL 3.23
+   - MySQL
    - Apache
    - PHP 4
    - Perl 5
@@ -52,23 +52,6 @@ Zoph 0.3.3 Installation
        system path.  keep the trailing slash.
    - WEB_IMAGE_DIR : the path to the the images off you web server's doc root.
        if you enable the image service, this is ignored.
-
-   Those are the only values you have to define.  The others you can leave
-   as is or update as you like.  Here is some further information about
-   some of the other parameters:
-
-   - ZOPH_TITLE : the title for the application.  This is what appears on the
-       home page and in the browser's title bar.  The default is Zoph.  You
-       could set it to something like "My Photo Album".
-   - EMAIL_PHOTOS : enable email: 1, disable: 0
-   - CLIENT_WEB_IMPORT : Uploading of files through the web-interface using a 'browse' button: 
-       enable 1, disable: 0
-   - SERVER_WEB_IMPORT : Importing of files through the web-interface for files that are already
-       on the server: enable 1, disable: 0
-       CLIENT_WEB_IMPORT and SERVER_WEB_IMPORT may be both activated.
-   - MAX_CRUMBS : the maximum number of breadcrumbs to allow
-   - MAX_DAYS_PAST : how many days appear in the dropdown on the search page
-       for "photos taken/modified X days ago"
 
    The following 6 parameters should always match their equivalents in
    zophImport.pl.  If you edit one, edit the other too.
@@ -127,7 +110,7 @@ Zoph 0.3.3 Installation
        A man page for zophImport.pl is in the man/ directory.  Copy this
        to somewhere in your manpath, /usr/local/man/man1 for example.
 
-6. Test it out
+6. Test it
 
    Try hitting http://localhost/zoph/logon.php.  You should be presented
    with the logon screen.
