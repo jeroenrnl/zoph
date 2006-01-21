@@ -1,7 +1,7 @@
 Zoph Changelog
 
 Zoph 0.5-pre1
-20 January 2006
+21 January 2006
 
 - Changed typos in logon.php and credits.html
 - Fixed php errors when user is not logged in (bug#1325547)
