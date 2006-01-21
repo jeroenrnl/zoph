@@ -3,7 +3,7 @@
 #
 # zophImport.pl
 # Zoph 0.5
-# Jason Geiger, 2002-2005
+# Jason Geiger & Jeroen Roos, 2002-2006
 #
 # This file is part of Zoph.
 #
@@ -59,7 +59,7 @@ my $db_user = 'zoph_rw';
 my $db_pass = 'pass';
 my $db_prefix = 'zoph_';
 
-my $version = '0.5';
+my $version = '0.5pre1';
 
 my $update     = 0; # update existing photo records instead of inserting
 my $updateSize = 0; # update the size, width and height (implies -update)
