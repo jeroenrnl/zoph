@@ -30,9 +30,9 @@
 <?php echo translate("Zoph is free software.", 0) ?>
 </p>
 <p>
-<?php echo sprintf(translate("Releases and documentation can be found at %s.", 0), "<a href=\"http://www.nother.net/zoph/\">http://www.nother.net/zoph/</a>") ?>
+<?php echo sprintf(translate("Releases and documentation can be found at %s.", 0), "<a href=\"http://zoph.sourceforge.net/\">http://zoph.sourceforge.net/</a>") ?>
 
-<?php echo sprintf(translate("Send feedback to %s.", 0), "<a href=\"mailto:zoph@nother.net\">zoph@nother.net</a>") ?>
+<?php echo sprintf(translate("Send feedback to %s.", 0), "<a href=\"mailto:zoph@roosnet.demon.nl\">zoph@roosnet.demon.nl</a>") ?>
 </p>
 <?php
     if ($user->is_admin()) {
@@ -48,7 +48,7 @@
 <?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, "September 2005") ?>
 </p>
 <p>
-<?php echo translate("Written by Jason Geiger with thanks to the following for their contributions:", 0) ?>
+<?php echo translate("Originally written by Jason Geiger, now maintained by Jeroen Roos with thanks to the following for their contributions:", 0) ?>
 </p>
 <?php include('credits.html'); ?>
 </div>
