@@ -915,8 +915,8 @@ function create_rating_graph($user) {
 	   $min_rating=$range-0.5;
 	   $max_rating=$range+0.5;
            $qs =
-              "photos.php?rating=" . $min_rating . "&_rating-op=%3E%3D" .
-              "&rating%232=" . $max_rating . "&_rating-op%232=%3C";
+              "search.php?rating%5B0%5D=" . $min_rating . "&_rating_op%5B0%5D=%3E%3D" .
+              "&rating%5B1%5D=" . $max_rating . "&_rating_op%5B1%5D=%3C&_action=search";
         } else {
            $qs = "photos.php?rating=null";
         }  
