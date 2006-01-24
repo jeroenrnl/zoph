@@ -1,5 +1,11 @@
 Zoph Changelog
 
+Zoph 0.5-pre2
+
+24 January 2006
+- Logging on with non-admin user in Zoph-0.5pre1 does not work (Bug#1413557)
+- Rating links do not work in v0.5pre1 (Bug#1413244)
+
 Zoph 0.5-pre1
 21 January 2006
 
