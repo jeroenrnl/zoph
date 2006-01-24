@@ -32,6 +32,7 @@ Zoph 0.5-pre1
 - Fixed some possible SQL-injection issues.
 - Adding multiple people to a photo at once, thanks to Neil McBride. (Patch#1406959)
 - Fixed Date Field set inconsistently when using files with no EXIF info. (Bug#1402492)
+- Updated Canadian English, German and Dutch translations.
 
 Zoph 0.4
 4 September 2005
