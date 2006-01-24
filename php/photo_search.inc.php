@@ -27,16 +27,19 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         $select .= ", ph.description";
     }
 
-    $from["ph"] = "photos";
+    $from_clause=DB_PREFIX . "photos as ph";
 
     if ($user && !$user->is_admin()) {
-        $from["pa"] = "photo_albums";
-        $from["ap"] = "album_permissions";
+//        $from["pa"] = "photo_albums";
+//        $from["ap"] = "album_permissions";
+        $from_clause .= " JOIN " . DB_PREFIX . "photo_albums AS pa " .
+            "ON ph.photo_id = pa.photo_id " .
+            "JOIN " . DB_PREFIX . "album_permissions AS ap " .
+            "ON pa.album_id = ap.album_id ";
+
         $where =
-             "(ph.photo_id = pa.photo_id" .
-             " and pa.album_id = ap.album_id" .
-             " and ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
-             " and ap.access_level >= ph.level)";
+             " ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
+             " AND (ap.access_level >= ph.level)";
     }
     else {
         $where = "";
@@ -114,8 +117,11 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $pa = "pa" . substr($suffix, 1);
             if ($op == "=") {
                 if ($where) { $where .= " $conj "; }
-
-                $from["$pa"] = "photo_albums";
+                // If the user is not an admin, the albums table
+                // is already in the join
+                if ($user->is_admin() || $pa != "pa") {
+                    $from["$pa"] = "photo_albums";
+                }
 
                 // the regexp matches a list of numbers, separated by comma's.
                 // "1" matches, "1," not, "1,2" matches "1,333" matches
@@ -216,7 +222,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
     }
 
-    $from_clause = generate_from_clause($from);
+    $from_clause .= generate_from_clause($from);
 
     if ($excluded_albums) {
         $where .= generate_excluded_albums_clause(
@@ -275,10 +281,10 @@ function generate_from_clause($from_array) {
     $joinClause = "";
     if ($from_array) {
         while (list($abbrev, $table) = each($from_array)) {
-            if ($fromClause) {
+//            if ($fromClause) {
                 $fromClause .= " JOIN ";
                 $joinClause = " on ${abbrev}.photo_id = ph.photo_id";
-            }
+//            }
                 
             $fromClause .= DB_PREFIX . "$table as $abbrev" . $joinClause;
         }
