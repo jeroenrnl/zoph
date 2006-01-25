@@ -326,9 +326,9 @@ sub processImage {
 
         # the fancy status indicator
         if ($verbose && !$copy) {
-            print "Image $img moved to ./$newPath/$img.\n";
+            print "Image $img moved to $fieldHash{'path'}/".stripPath($img)."\n";
         } elsif ($verbose && $copy) {
-            print "Image $img copied to ./$newPath/$img.\n";
+            print "Image $img copied to $fieldHash{'path'}/".stripPath($img)."\n";
         } else {
             print ".";
         }
