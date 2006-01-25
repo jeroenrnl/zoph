@@ -12,7 +12,7 @@ database updates first.
 
 Execute zoph-update-0.5.sql:
 
-> mysql -u zoph_admin -p zoph < sql/zoph_update-0.4.sql
+> mysql -u zoph_admin -p zoph < sql/zoph_update-0.5.sql
 
 The database upgrade script makes the following changes:
 
