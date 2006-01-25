@@ -104,7 +104,7 @@ my @people;     # the people in the photograph
 
 if ($#ARGV < 0) {
     printUsage();
-    exit(0);
+    exit(1);
 }
 
 my $dbh = DBI->connect("DBI:mysql:$db_name:$db_host", $db_user, $db_pass);
@@ -759,7 +759,7 @@ sub lookupPhotoId {
     print "Photo not found: $photo\n";
 
     if (!$ignoreerror) {
-        exit;
+        exit(10);
     }
     return 0;
 }
@@ -782,7 +782,7 @@ sub lookupPhoto {
 
     print "Photo not found: $id\n";
     if (!$ignoreerror) {
-        exit;
+        exit(10);
     }
     return "";
 }
@@ -808,7 +808,7 @@ sub lookupPersonId {
 
     print "Person not found: $person\n";
     if (!$ignoreerror) {
-        exit;
+        exit(20);
     }
     return 0;
 }
@@ -833,7 +833,7 @@ sub lookupPlaceId {
 
     print "Place not found: $place\n";
     if (!$ignoreerror) {
-        exit;
+        exit(30);
     }
     return 0;
 }
@@ -864,7 +864,7 @@ sub lookupLocationChildByName {
     }
     print "Location not found: $place\n";
     if (!$ignoreerror) {
-        exit;
+        exit(30);
     }
 }
 
@@ -888,7 +888,7 @@ sub lookupAlbumId {
 
     print "Album not found: $album\n";
     if (!$ignoreerror) {
-        exit;
+        exit(40);
     }
 }
 
@@ -919,7 +919,7 @@ sub lookupAlbumChildByName {
     
     print "Album not found: $alb\n";
     if (!$ignoreerror) {
-        exit;
+        exit(40);
     }
 }
 
@@ -935,7 +935,7 @@ sub lookupAlbumChild {
     }
     print "Album not found: $alb\n";
     if (!$ignoreerror) {
-        exit;
+        exit(40);
     }
 }
 
@@ -959,7 +959,7 @@ sub lookupCategoryId {
 
     print "Category not found: $cat\n";
     if (!$ignoreerror) {
-        exit;
+        exit(50);
     }
 }
 
@@ -990,7 +990,7 @@ sub lookupCategoryChildByName {
     
     print "Category not found: $cat\n";
     if (!$ignoreerror) {
-        exit;
+        exit(50);
     }
 }
 
@@ -1006,7 +1006,7 @@ sub lookupCategoryChild {
     }
     print "Category not found: $cat\n";
     if (!$ignoreerror) {
-        exit;
+        exit(50); 
     }
 }
 
@@ -1022,7 +1022,7 @@ sub lookupLocationChild {
     }
     print "Place not found: $place\n";
     if (!$ignoreerror) {
-        exit;
+        exit(30);
     }
 }
 
