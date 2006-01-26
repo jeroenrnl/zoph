@@ -33,6 +33,7 @@
     $offset = $_off;
 
     $thumbnails;
+    $request_vars = clean_request_vars($request_vars);
     $num_photos =
         get_photos($request_vars, $offset, $cells, $thumbnails, $user);
 
