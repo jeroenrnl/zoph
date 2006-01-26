@@ -171,7 +171,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                     $add = " or ph.location_id is null";
                 }
                 $where .=
-                    "ph.location_id $op (" . escape_string($val) . ")$add";
+                    "(ph.location_id $op (" . escape_string($val) . ")$add)";
             }
         else if ($key == "person_id") {
             $ppl = "ppl" . substr($suffix, 1);
@@ -212,10 +212,12 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             }
 
             if ($where) { $where .= " $conj "; }
-            $where .= escape_string($key) . " " . $op . " " . $val;
+            $where .= "(" . escape_string($key) . " " . $op . " " . $val;
             
             if ($op == "!=" ) {
-                $where .= " or " . escape_string($key) . " is null";
+                $where .= " or " . escape_string($key) . " is null)";
+            } else {
+                $where .= ")";
             }
 
         }
