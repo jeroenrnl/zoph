@@ -33,9 +33,9 @@
     $offset = $_off;
 
     $thumbnails;
-    $request_vars = clean_request_vars($request_vars);
+    $clean_vars = clean_request_vars($request_vars);
     $num_photos =
-        get_photos($request_vars, $offset, $cells, $thumbnails, $user);
+        get_photos($clean_vars, $offset, $cells, $thumbnails, $user);
 
     $num_thumbnails = sizeof($thumbnails);
 
@@ -70,7 +70,8 @@
         // create once
         $category_pulldown = create_pulldown("_category", "", get_categories_select_array($user));
         $album_pulldown = create_pulldown("_album", "", get_albums_select_array($user));
-
+        $place_pulldown = get_places_select_array();
+	
         // used to create hidden fields for recreating the results query
         $queryIgnoreArray[] = '_action';
         $queryIgnoreArray[] = '_overwrite';
@@ -80,13 +81,14 @@
         $queryIgnoreArray[] = '_album__all';
         $queryIgnoreArray[] = '_category__all';
 ?>
+            <input type="submit" value="<? echo translate("update", 0) ?>">
             <fieldset class="editphotos">
                 <legend><?php echo translate("All photos")?></legend>
                   <input type="hidden" name="_action" value="update">
                   <label for="overwrite"><?php echo translate("overwrite values below", 0) ?></label>
                   <?php echo create_pulldown("_overwrite", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?><br>
                   <label for="location_id__all"><?php echo translate("location") ?></label>
-                  <?php echo create_smart_pulldown("__location_id__all", null, get_places_select_array()) ?><br>
+                  <?php echo create_smart_pulldown("__location_id__all", null, $place_pulldown) ?><br>
                   <label for="photographer_id__all"><?php echo translate("photographer") ?></label>
             <?php echo create_smart_pulldown("__photographer_id__all", null, get_people_select_array()) ?><br>
                   <label for="rating__all"><?php echo translate("rating") ?></label>
@@ -229,7 +231,7 @@
 ?>
                     <fieldset class="editphotos-fields">
                       <label for="location_id__<?php echo $photo_id ?>"><?php echo translate("location") ?></label>
-            <?php echo create_smart_pulldown("__location_id__$photo_id", $photo->get("location_id"), get_places_select_array()) ?><br>
+            <?php echo create_smart_pulldown("__location_id__$photo_id", $photo->get("location_id"), $place_pulldown) ?><br>
                       <label for="photographer_id__<?php echo $photo_id?>"><?php echo translate("photographer") ?></label>
             <?php echo create_smart_pulldown("__photographer_id__$photo_id", $photo->get("photographer_id"), get_people_select_array()) ?><br>
                       <label for="rating__<?php echo $photo_id?>"><?php echo translate("rating") ?></label>
