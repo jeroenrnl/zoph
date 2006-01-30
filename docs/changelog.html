@@ -17,18 +17,19 @@
 <h2>Contents</h2>
 </div>
 <ul>
-<li class='toclevel-1'><a href="#Zoph_0.5-pre2"><span class="tocnumber">1</span> <span class="toctext">Zoph 0.5-pre2</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.5-pre1"><span class="tocnumber">2</span> <span class="toctext">Zoph 0.5-pre1</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.4"><span class="tocnumber">3</span> <span class="toctext">Zoph 0.4</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.4pre2"><span class="tocnumber">4</span> <span class="toctext">Zoph 0.4pre2</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.4pre1"><span class="tocnumber">5</span> <span class="toctext">Zoph 0.4pre1</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.3.3"><span class="tocnumber">6</span> <span class="toctext">Zoph 0.3.3</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.3.2"><span class="tocnumber">7</span> <span class="toctext">Zoph 0.3.2</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.3.1"><span class="tocnumber">8</span> <span class="toctext">Zoph 0.3.1</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.3"><span class="tocnumber">9</span> <span class="toctext">Zoph 0.3</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.2.1"><span class="tocnumber">10</span> <span class="toctext">Zoph 0.2.1</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.2"><span class="tocnumber">11</span> <span class="toctext">Zoph 0.2</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.1"><span class="tocnumber">12</span> <span class="toctext">Zoph 0.1</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.5-pre3"><span class="tocnumber">1</span> <span class="toctext">Zoph 0.5-pre3</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.5-pre2"><span class="tocnumber">2</span> <span class="toctext">Zoph 0.5-pre2</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.5-pre1"><span class="tocnumber">3</span> <span class="toctext">Zoph 0.5-pre1</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.4"><span class="tocnumber">4</span> <span class="toctext">Zoph 0.4</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.4pre2"><span class="tocnumber">5</span> <span class="toctext">Zoph 0.4pre2</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.4pre1"><span class="tocnumber">6</span> <span class="toctext">Zoph 0.4pre1</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.3.3"><span class="tocnumber">7</span> <span class="toctext">Zoph 0.3.3</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.3.2"><span class="tocnumber">8</span> <span class="toctext">Zoph 0.3.2</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.3.1"><span class="tocnumber">9</span> <span class="toctext">Zoph 0.3.1</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.3"><span class="tocnumber">10</span> <span class="toctext">Zoph 0.3</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.2.1"><span class="tocnumber">11</span> <span class="toctext">Zoph 0.2.1</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.2"><span class="tocnumber">12</span> <span class="toctext">Zoph 0.2</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.1"><span class="tocnumber">13</span> <span class="toctext">Zoph 0.1</span></a></li>
 </ul>
 </td>
 </tr>
@@ -38,6 +39,21 @@
  if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
 //]]>
 </script></p>
+<p><a name="Zoph_0.5-pre3" id="Zoph_0.5-pre3"></a></p>
+<h2>Zoph 0.5-pre3</h2>
+<p>30 January 2006</p>
+<ul>
+<li>Solved a typo in upgrade documentations</li>
+<li>Solved a bug that caused an Admin user not to be able to browse people</li>
+<li>zophImport.pl: --verbose combined with --path would not correctly tell where the file was copied.</li>
+<li>zophImport.pl: now exits with a non-0 status code when something goes wrong</li>
+<li>updated man-pages for zophImport.pl and zophExport.pl (thanks to Edelhard Becker)</li>
+<li>Solved a bug that caused the bulk-edit page not to work when called from search-results (Bug#1415457)</li>
+<li>Added brackets to some queries to make the search page react better on "not in" queries.</li>
+<li>Fixed a bug that caused some changes made on the bulk-edit page to be ignored.</li>
+<li>Added an extra Update button to the bulk edit paged (Req#1416184)</li>
+<li>Made a change to the db lookup for the place dropdown that dramatically increases the performance of the bulk edit page.</li>
+</ul>
 <p><a name="Zoph_0.5-pre2" id="Zoph_0.5-pre2"></a></p>
 <h2>Zoph 0.5-pre2</h2>
 <p>24 January 2006</p>
@@ -270,6 +286,7 @@
 <p><a name="Zoph_0.1" id="Zoph_0.1"></a></p>
 <h2>Zoph 0.1</h2>
 <p>completed on 14 Sep 2000, never released</p>
+
 
 </div>
 </html>
