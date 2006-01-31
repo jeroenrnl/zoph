@@ -320,7 +320,7 @@
             }
         }
 ?>
-<?php echo create_form($request_vars, $queryIgnoreArray) ?>
+<?php echo create_form($clean_vars, $queryIgnoreArray) ?>
                   <input type="submit" value="<? echo translate("update", 0) ?>">
                   </form>
 <?php include "pager.inc.php" ?>
