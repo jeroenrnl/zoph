@@ -1,5 +1,19 @@
 Zoph Changelog
 
+Zoph 0.5-pre3
+30 January 2006
+
+- Solved a typo in upgrade documentations
+- Solved a bug that caused an Admin user not to be able to browse people
+- zophImport.pl: --verbose combined with --path would not correctly tell where the file was copied.
+- zophImport.pl: now exits with a non-0 status code when something goes wrong
+- updated man-pages for zophImport.pl and zophExport.pl (thanks to Edelhard Becker)
+- Solved a bug that caused the bulk-edit page not to work when called from search-results (Bug#1415457)
+- Added brackets to some queries to make the search page react better on "not in" queries.
+- Fixed a bug that caused some changes made on the bulk-edit page to be ignored.
+- Added an extra Update button to the bulk edit paged (Req#1416184)
+- Made a change to the db lookup for the place dropdown that dramatically increases the performance of the bulk edit page.
+
 Zoph 0.5-pre2
 
 24 January 2006
