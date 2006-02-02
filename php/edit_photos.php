@@ -180,9 +180,11 @@
             $queryIgnoreArray[] = "_remove_album__$photo_id";
             $queryIgnoreArray[] = "_category__$photo_id";
             $queryIgnoreArray[] = "_remove_category__$photo_id";
-            $queryIgnoreArray[] = "_person__$photo_id";
             $queryIgnoreArray[] = "_remove_person__$photo_id";
-            $queryIgnoreArray[] = "_position__$photo_id";
+            for ($p = 0; $p < $user->prefs->get("people_slots"); $p++ ) {
+                $queryIgnoreArray[] = "_position_" . $p . "__" . $photo_id;
+                $queryIgnoreArray[] = "_person_" . $p . "__" . $photo_id;
+            }
             $queryIgnoreArray[] = "_deg__$photo_id";
             $queryIgnoreArray[] = "_action__$photo_id";
 ?>
