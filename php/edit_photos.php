@@ -325,8 +325,16 @@
 <?php echo create_form($clean_vars, $queryIgnoreArray) ?>
                   <input type="submit" value="<? echo translate("update", 0) ?>">
                   </form>
-<?php include "pager.inc.php" ?>
+
 <?php
+    // Here we clean out $request_vars, so the pager links will not contain
+    // all the edits made on this page.
+        while (list($key, $val) = each($clean_vars)) {
+            if (in_array($key, $queryIgnoreArray)) { continue; }
+	    $pager_vars[$key] = $val;
+        }
+        $request_vars = $pager_vars;
+        include "pager.inc.php"; 
     } // if photos
 ?>
 <br>
