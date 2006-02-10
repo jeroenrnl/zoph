@@ -21,6 +21,8 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
     $good_conj = array ( "and", "or" );
 
+    $good_fields= array ( "location_id", "rating", "photographer_id", "date", "time", "timestamp", "name", "path", "title", "view", "description", "width", "height", "size", "aperture", "camera_make", "camera_model", "compression", "exposure", "flash_used", "focal_length", "iso_equiv", "metering_mode" );
+
     $select = "distinct ph.photo_id, ph.name, ph.path, ph.width, ph.height";
 
     if (MAX_THUMB_DESC && $user && $user->prefs->get("desc_thumbnails")) {
@@ -197,7 +199,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             if (strncasecmp($key, "field", 5) == 0) {
                 $key = $vars["_" . $key . $suffix];
             }
-
+            if (!in_array($key, $good_fields))
+                { die ("Illegal field: " . $key); }
+			  
             $key = "ph.$key";
 
             $val = escape_string($val);
