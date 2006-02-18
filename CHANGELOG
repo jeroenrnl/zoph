@@ -1,5 +1,15 @@
 Zoph Changelog
 
+Zoph 0.5-pre4
+18 February 2006
+
+- Solved a bug that caused an error on the bulk edit page if you would add some people to a photo and consequently
+  made another edit (Bug#1422741)
+- Fixed an issue where the pager links on the bulk edit page would cause errors after an edit has been made.
+- Additional anti-SQL injection code in the search page.
+- When updating user permissions with a high number of albums, a "URL too long" error occurred. (Bug#1434235)
+- Fixed a bug that caused some albums permissions not to be properly updated when making a change.
+
 Zoph 0.5-pre3
 30 January 2006
 
