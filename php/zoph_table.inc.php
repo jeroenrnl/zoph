@@ -87,7 +87,7 @@ class zoph_table {
 
             if ($suffix) {
                 $pos = strpos($key, $suffix);
-                if ($pos > 0) {
+                if (($pos > 0) && (preg_match("/".$suffix."$/", $key))) {
                     $key = substr($key, 0, $pos);
                 }
                 else {
