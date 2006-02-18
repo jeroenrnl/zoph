@@ -219,7 +219,7 @@
     else {
 require_once("edit_user.inc.php");
 ?>
-<form action="user.php">
+<form action="user.php" method="post">
       <table id="permissions">
     <col class="col1"><col class="col2"><col class="col3"><col class="col4">
     <tr>
