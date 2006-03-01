@@ -59,7 +59,7 @@ my $db_user = 'zoph_rw';
 my $db_pass = 'pass';
 my $db_prefix = 'zoph_';
 
-my $version = '0.5pre4';
+my $version = '0.5';
 
 my $update     = 0; # update existing photo records instead of inserting
 my $updateSize = 0; # update the size, width and height (implies -update)
