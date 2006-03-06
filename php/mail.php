@@ -50,61 +50,51 @@
 
         if ($_action == "mail") {
 
-            $mail = new htmlMimeMail(array('X-Mailer: Html Mime Mail Class'));
-            $mail->setHeader("X-Zoph-Version", VERSION);
+            $mail = new Mail_mime();
+            $hdrs = array (
+                "X-Mailer" => "Html Mime Mail Class",
+                "X-Zoph-Version" => VERSION
+            );
             $size = getvar("_size");
 
-            if ($html) {
-
-                if ($annotate) {
-                    $file = $photo->get_annotated_file_name($user);
-                    $dir = ANNOTATE_TEMP_DIR . "/";
-                }
-                else if ($size == "full") {
-                    $file = $photo->get("name");
-                    $dir = IMAGE_DIR . $photo->get("path") . "/";
-                }
-                else {
-                    $file = MID_PREFIX . "_" . $photo->get("name");
-                    $dir = IMAGE_DIR . $photo->get("path") . "/" .
-                        MID_PREFIX . "/";
-                }
-
-                $html = str_replace("\n", "<br>\n", $message);
-                $html =
-                    "<center>\n" .
-                    "<img src=\"" . $file .  "\"><br>\n" .
-                    $html .  "</center>\n";
-
-                $mail->sethtml($html, $message, $dir);
+            if ($annotate) {
+                $file = $photo->get_annotated_file_name($user);
+                $dir = ANNOTATE_TEMP_DIR . "/";
+            }
+            else if ($size == "full") {
+                $file = $photo->get("name");
+                $dir = IMAGE_DIR . $photo->get("path") . "/";
             }
             else {
-                $mail->settext($message);
-
-                if ($annotate) {
-                    $file = ANNOTATE_TEMP_DIR . "/" .
-                        $photo->get_annotated_file_name($user);
-                }
-                else if ($size == "full") {
-                    $file = $photo->get_image_href(null, 1);
-                }
-                else {
-                    $file = $photo->get_image_href(MID_PREFIX, 1);
-                }
-
-                $mail_file = $mail->getFile($file);
-                $mail->addAttachment($mail_file, $photo->get("name"), get_image_type($file));
+                $file = MID_PREFIX . "_" . $photo->get("name");
+                $dir = IMAGE_DIR . $photo->get("path") . "/" .
+                    MID_PREFIX . "/";
             }
 
+            if ($html) {
+                $html = "<center>\n"; 
+                $html .= "<img src=\"" . $file . "\"><br>\n";
+                $html .= str_replace("\n", "<br>\n", $message);
+                $html .= "</center>\n";
+
+                $mail->addHTMLImage($dir . "/" . $file, get_image_type($file), $file);
+                $mail->setHTMLBody($html);
+            } else {
+                $mail->setTXTBody($message);
+                $mail->addAttachment($dir . "/" . $file, get_image_type($file));
+            }
             $mail->setFrom("$from_name <$from_email>");
             $mail->setSubject($subject);
-            $mail->setCrlf("\r\n");
 
             if (strlen(BCC_ADDRESS) > 0) {
                 $mail->setBCC(BCC_ADDRESS);
             }
-
-            if ($mail->send(array("$to_name <$to_email>"), 'smtp')) {
+            $body = $mail->get();
+            $hdrs = $mail->headers($hdrs);
+            foreach($hdrs as $header => $content) {
+                $headers .= $header . ": " . $content . "\n";
+            }
+            if (mail($to_email,"", $body,$headers)) {
                 $msg = translate("Your mail has been sent.");
 
                 if ($annotate) {
