@@ -34,8 +34,8 @@
 // | Author: Richard Heyes <richard@phpguru.org>                           |
 // |         Tomas V.V.Cox <cox@idecnet.com> (port to PEAR)                |
 // +-----------------------------------------------------------------------+
+// mime.php,v 1.39 2005/06/13 21:24:16 cipri
 //
-// $Id: htmlMimeMail.php,v 1.3 2006/03/06 18:34:43 jeroenr Exp $
 
 require_once('PEAR.php');
 require_once('mimePart.php');
