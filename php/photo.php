@@ -32,11 +32,10 @@
     $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
     $qs = preg_replace('/_action=\w+&?/', '', $qs);
 
-    $encoded_qs = htmlentities(getvar("_qs"));
+    $encoded_qs = urlencode(htmlentities(getvar("_qs")));
     if (empty($encoded_qs)) {
-        $encoded_qs = htmlentities($qs);
+        $encoded_qs = urlencode(htmlentities($qs));
     }
-
     if ($photo_id) { // would be passed for edit or delete
         $photo = new photo($photo_id);
     }
@@ -140,6 +139,7 @@
         $action = "update";
     }
     else if ($_action == "update") {
+
         $photo->set_fields($request_vars);
         $photo->update($request_vars); // pass again for add people, cats, etc
         $action = "update";
