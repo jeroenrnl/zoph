@@ -98,7 +98,7 @@ class zoph_table {
             // something in ALL CAPS is probably PHP or HTML related
             if (strtoupper($key) == $key) { continue; }
 
-            $this->fields[$key] = $val;
+            $this->fields[$key] = stripslashes($val);
 
         }
 
