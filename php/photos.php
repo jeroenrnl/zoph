@@ -142,8 +142,13 @@
             $ignore = array("_action", "_photo_id");
 ?>
                 <div class="thumbnail">
-                  <?php echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($request_vars, "_off", $offset + $i, $ignore)) . "\n" ?>
+
 <?php
+            if (getvar("_random")) {
+                echo $thumbnails[$i]->get_thumbnail_link("photo.php?photo_id=" . $thumbnails[$i]->get("photo_id")) . "\n";
+            } else {
+                echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($request_vars, "_off", $offset + $i, $ignore)) . "\n"; 
+            }
             if ($desc_thumbnails && $thumbnails[$i]->get("description")) {
 ?>
                 <br>
@@ -160,7 +165,7 @@
             }
 
 ?>
-		</div>
+            </div>
 <?php
         }
 
@@ -171,12 +176,12 @@
 //            }
 //        }
 ?>
-	<br>
+       <br>
 <?php include "pager.inc.php" ?>
 <?php
     } // if photos
 ?>
-	<br>
+       <br>
 
       </div>
 
