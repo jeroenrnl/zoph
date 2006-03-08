@@ -345,7 +345,7 @@ class photo extends zoph_table {
         }
 
         $size_string = " width=\"$width\" height=\"$height\"";
-        $alt = $this->get("title");
+        $alt = htmlentities($this->get("title"));
 return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . "alt=\"$alt\"" . ">";
 }
 
