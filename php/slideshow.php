@@ -42,7 +42,7 @@
         }
     }
     else {
-        header("Location: " . add_sid("photos.php?" . update_query_string($request_vars, "_off", 0)));
+        header("Location: " . html_entity_decode(add_sid("photos.php?" . update_query_string($request_vars, "_off", 0))));
     }
 
     $newoffset = $offset + 1;
