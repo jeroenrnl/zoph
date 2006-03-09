@@ -109,7 +109,7 @@
     else {
 ?>
             <div id="sortorder">
-<?php echo create_form($request_vars) ?>
+<?php echo create_form($request_vars, array ("_rows", "_cols", "_order", "_button")) ?>
                 <?php echo translate("order by", 0) . "\n" ?>
                 <?php echo create_photo_field_pulldown("_order", $_order) ?>
             </div>
