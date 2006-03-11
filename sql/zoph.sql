@@ -264,6 +264,8 @@ CREATE TABLE zoph_places (
   KEY place_title (title(10))
 ) TYPE=MyISAM;
 
+INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+
 --
 -- Dumping data for table 'zoph_places'
 --
@@ -300,7 +302,7 @@ CREATE TABLE zoph_prefs (
 --
 
 
-INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0');
+INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0','0','1');
 
 --
 -- Table structure for table 'zoph_photo_ratings'
