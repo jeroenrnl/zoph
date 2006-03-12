@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.5');
+    define('VERSION', '0.5.1');
 
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'zoph');
@@ -149,7 +149,6 @@
 
     // width of the main table
     define('DEFAULT_TABLE_WIDTH', 600);
-    //define('DEFAULT_TABLE_WIDTH', "100%");
 
     // set to the id of a non admin user or to 0 to disable
     // note that this is a user_id, not a person_id
