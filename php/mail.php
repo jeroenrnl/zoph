@@ -79,12 +79,12 @@
 
                 $mail->addHTMLImage($dir . "/" . $file, get_image_type($file), $file);
                 $mail->setHTMLBody($html);
+                $mail->setTXTBody($message);
             } else {
                 $mail->setTXTBody($message);
                 $mail->addAttachment($dir . "/" . $file, get_image_type($file));
             }
             $mail->setFrom("$from_name <$from_email>");
-            $mail->setSubject($subject);
 
             if (strlen(BCC_ADDRESS) > 0) {
                 $mail->setBCC(BCC_ADDRESS);
@@ -94,7 +94,7 @@
             foreach($hdrs as $header => $content) {
                 $headers .= $header . ": " . $content . "\n";
             }
-            if (mail($to_email,"", $body,$headers)) {
+            if (mail($to_email,$subject, $body,$headers)) {
                 $msg = translate("Your mail has been sent.");
 
                 if ($annotate) {
