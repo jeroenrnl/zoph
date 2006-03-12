@@ -698,7 +698,7 @@
 <td colspan="2"><b>Default:</b> <tt>0</tt></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> <tt>0</tt>: watermarking is disabled; <tt>1</tt>: watermarking is enabled. Watermarking only works if <a href="configuration.html#IMAGE_SERVICE" title="Zoph/Configuration">IMAGE_SERVICE</a> is enabled and <a href="configuration.html#WATERMARK" title="Zoph/Configuration">WATERMARK</a> is set to an existing GIF image.</td>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: watermarking is disabled; <tt>1</tt>: watermarking is enabled. Watermarking only works if <a href="configuration.html#IMAGE_SERVICE" title="Zoph/Configuration">IMAGE_SERVICE</a> is enabled and <a href="configuration.html#WATERMARK" title="Zoph/Configuration">WATERMARK</a> is set to an existing GIF image. Please note that enabling this function uses a rather large amount of memory on the webserver. PHP by default allows a script to use a maximum of 8MB memory. You should probably increase this by changing <tt>memory_limit</tt> in php.ini. A rough estimation of how much memory it will use is 6 times the number of megapixels in your camera. For example, if you have a 5 megapixel camera, change the line in <tt>php.ini</tt> to <tt>memory_limit=30M</tt></td>
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('WATERMARKING', '1');</tt></td>
@@ -724,6 +724,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('WATERMARK', 'watermarks/topsecret.gif');</tt></td>
 </tr>
 </table>
+
 
 </div>
 </html>
