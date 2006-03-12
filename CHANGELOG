@@ -1,4 +1,20 @@
 Zoph Changelog
+Zoph 0.5.1
+12 March 2006
+
+- Updated Richard Heyes mailclass to newest version. Should partly solve Req#655957
+- Fixed: Quotes and apostrophes do not display correctly (Bug#1443235)
+- Fixed: Places are sorted by id instead of alphabetically. (Bug#1443427)
+- Fixed: Loosing context after editing (Bug#1333428)
+- Fixed: Clicking on the thumbnail of a randomly chosen photo would pick a new random photo instead of showing a larger version of the thumb (Bug#1443927)
+- Fixed: field with double quotes are truncated (Bug#1443235)
+- Fixed: photo.php: the _rows, _cols etc. fields are added to the url, instead of replaced, whenever they are changed. (did not cause any functionality issues)
+- Fixed: error at the end of a slideshow (Bug#1446200)
+- Removed extra space in create_text_input
+- Fixed installation SQL file: some missing changes needed for Zoph 0.5, (Bug#1447727)
+- Resolved duplicate subject header in mail sent from Zoph
+- Translation fixes in German translation, thanks to Ulrich Wiederhold
+- Added missing translation to Dutch and Canadian English and updated zoph_strings.txt
 
 Zoph 0.5
 1 March 2006
