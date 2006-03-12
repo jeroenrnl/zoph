@@ -218,6 +218,7 @@ import photos=
 import=
 in this album=
 in this category=
+in this place=
 insert=
 is in photo=
 is not in photo=
