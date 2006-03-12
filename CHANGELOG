@@ -15,6 +15,7 @@ Zoph 0.5.1
 - Resolved duplicate subject header in mail sent from Zoph
 - Translation fixes in German translation, thanks to Ulrich Wiederhold
 - Added missing translation to Dutch and Canadian English and updated zoph_strings.txt
+- Fixed: search page does not show results when using a translated Zoph version (Bug#1448346)
 
 Zoph 0.5
 1 March 2006
