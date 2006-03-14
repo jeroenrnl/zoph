@@ -16,9 +16,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
     require_once("config.inc.php");
+    $redirect = urlencode($HTTP_GET_VARS["redirect"]);
     if (FORCE_SSL_LOGIN || FORCE_SSL) {
         if (!array_key_exists('HTTPS', $_SERVER)) {
-            header("Location: " . ZOPH_SECURE_URL . "/logon.php");
+            header("Location: " . ZOPH_SECURE_URL . "/logon.php?redirect=" . $redirect);
         }
     }
     require_once("zoph_table.inc.php");
@@ -39,7 +40,6 @@
 <title><?php echo ZOPH_TITLE . ' - ' . "logon" ?></title>
 </head>
 <body>
-
     <h1><?php echo "logon" ?></h1>
     <div class="main" id="logon">
         <form action="zoph.php" method="POST">
@@ -48,6 +48,7 @@
             <input type="text" name="uname" id="uname"><br>
             <label for="pword"><?php echo "password" ?></label>
             <input type="password" name="pword" id="pword"><br>
+            <input type="hidden" name="redirect" value="<?php echo $redirect ?>">
             <input type="submit" value="<?php echo "submit"; ?>">
         </form>
     </div>

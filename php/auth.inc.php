@@ -50,6 +50,7 @@
         }
         $uname = getvar("uname");
         $pword = getvar("pword");
+        $redirect = getvar("redirect");
 
         $validator = new validator($uname, $pword);
         $user = $validator->validate();
@@ -72,9 +73,23 @@
 
             // delete left over temp files
             delete_temp_annotated_files($user->get("user_id"));
+
+            if ($redirect) {
+                $redirect=urldecode($redirect);
+                // The next line makes sure you are not tricked into deleting a
+                // photo by a url pointing you to the "confirm" action. Just
+                // to be extra sure, any action, except "search" is replaced by
+                // "display".
+                $redirect_clean=preg_replace("/action=(?!search).[^&]+/", "action=display", $redirect);
+                if(FORCE_SSL_LOGIN && !FORCE_SSL) {
+                    $redirect_clean = "http://" . $_SERVER['SERVER_NAME'] . "/" . $redirect_clean;
+                }
+                header("Location: " . $redirect_clean);
+            }
         }
         else {
-            header("Location: logon.php");
+            $this_page=urlencode($_SERVER['REQUEST_URI']);
+            header("Location: logon.php?redirect=" . $this_page);
             die;
         }
 
@@ -83,11 +98,11 @@
     if (!empty($user)) {
         $user->prefs->load();
         $rtplang = $user->load_language();
-    	
+            
         if (minimum_version('4.1.0')) {
             $_SESSION['user'] = &$user;
         }
     } else {
         $rtplang = new rtplang("lang", "en", "en", "en");
-    }	
+    }        
 ?>
