@@ -28,7 +28,7 @@
     $from_email = getvar("from_email");
     $subject = getvar("subject");
     $message = getvar("message");
-
+    $includeurl = getvar("includeurl");
     $annotate = getvar("annotate");
 
     if (!ANNOTATE_PHOTOS) {
@@ -70,18 +70,24 @@
                 $dir = IMAGE_DIR . $photo->get("path") . "/" .
                     MID_PREFIX . "/";
             }
+            if($includeurl) {
+                $link = "\n" . sprintf(translate("See this photo in %s"), ZOPH_TITLE) . ": " . ZOPH_URL . "/photo.php?photo_id=" . $photo_id;
+            }
 
             if ($html) {
                 $html = "<center>\n"; 
                 $html .= "<img src=\"" . $file . "\"><br>\n";
                 $html .= str_replace("\n", "<br>\n", $message);
+                if($includeurl) {
+                    $html .= "<a href=\"" . ZOPH_URL . "/photo.php?photo_id=" . $photo_id . "\">" . sprintf(translate("See this photo in %s"), ZOPH_TITLE) . "</a>";
+                }
                 $html .= "</center>\n";
 
                 $mail->addHTMLImage($dir . "/" . $file, get_image_type($file), $file);
                 $mail->setHTMLBody($html);
-                $mail->setTXTBody($message);
+                $mail->setTXTBody($message . $link);
             } else {
-                $mail->setTXTBody($message);
+                $mail->setTXTBody($message . $link);
                 $mail->addAttachment($dir . "/" . $file, get_image_type($file));
             }
             $mail->setFrom("$from_name <$from_email>");
@@ -172,6 +178,8 @@
 ?>
        <label for="size"><?php echo translate("send fullsize") ?></label>
        <?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
+       <label for="includeurl"><?php echo translate("include URL") ?></label>
+       <?php echo create_pulldown("includeurl", "1", array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?><br>
 <?php
         }
 ?>
