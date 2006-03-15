@@ -22,7 +22,7 @@
             <a href="people.php"><?php echo translate("return") ?></a> |
             <a href="person.php?_action=new"><?php echo translate("new") ?></a>
           </span>
-            <?php echo $_action ?> <?php echo translate("person") ?>
+            <?php echo translate($_action) ?> <?php echo translate("person") ?>
           </h1>
       <div class="main">
       <form action="person.php" method="GET">

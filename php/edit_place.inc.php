@@ -22,7 +22,7 @@
         <a href="places.php"><?php echo translate("return") ?></a> |
         <a href="place.php?_action=new"><?php echo translate("new") ?></a>
       </span>
-      <?php echo $_action ?> <?php echo translate("place") ?>
+      <?php echo translate($_action) ?> <?php echo translate("place") ?>
     </h1>
     <div class="main">
       <form action="place.php" method="GET">
