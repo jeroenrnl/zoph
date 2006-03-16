@@ -135,6 +135,7 @@ address=adres
 admin=beheerder
 album description=album beschrijving
 album name=album naam
+album sort order=album sorteren op
 album=album
 albums=albums
 all=alle

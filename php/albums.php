@@ -77,9 +77,13 @@
 <?php
     $fragment = translate("in this album");
     if ($photo_count > 0) {
+       $sortorder = $album->get("sortorder");
+       if ($sortorder) {
+           $sort = "&_order=" . $sortorder;
+       }
 ?>
         <span class="actionlink">
-            <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a>
+            <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
         </span>
 <?php
         if (!$album->get("parent_album_id")) { // root album

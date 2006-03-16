@@ -135,6 +135,7 @@ address=address
 admin=admin
 album description=album description
 album name=album name
+album sort order=album sort order
 album=album
 albums=albums
 all=all

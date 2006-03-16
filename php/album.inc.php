@@ -22,7 +22,6 @@
 class album extends zoph_tree_table {
 
     var $photo_count;
-
     function album($id = 0) {
         parent::zoph_table("albums", array("album_id"), array("album"));
         $this->set("album_id", $id);
@@ -164,7 +163,10 @@ class album extends zoph_tree_table {
                     $this->get("parent_album_id"), get_albums_select_array()),
             translate("album description") =>
                 create_text_input("album_description",
-                    $this->get("album_description"), 40, 128));
+                    $this->get("album_description"), 40, 128),
+            translate("album sort order") => 
+                create_photo_field_pulldown("sortorder", $this->get("sortorder"))
+        );
     }
 
     function get_link() {
