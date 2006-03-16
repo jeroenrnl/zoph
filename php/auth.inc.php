@@ -88,7 +88,7 @@
             }
         }
         else {
-            $this_page=urlencode($_SERVER['REQUEST_URI']);
+            $this_page=urlencode(preg_replace("/^\//", "", $_SERVER['REQUEST_URI']));
             header("Location: logon.php?redirect=" . $this_page);
             die;
         }
