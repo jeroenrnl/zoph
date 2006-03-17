@@ -120,7 +120,8 @@ Class rtplang {
     //Si le tableau des langues n'est pas défini c'est que c'est le 1er appel
     if((count($this->tab_translate) < 1)  && (trim($this->file_lang) != "")){
       if($fp = @fopen($this->file_lang,"r")){
-	while ($ligne = fgetcsv($fp,10000, "=")){
+        while ($ligne = fgets($fp,10000)) {
+          $ligne=explode("=", $ligne);
 	  //On ne prends pas en compte les commentaires etc.
 	  if(trim($ligne[0]) != "")
 	    if($ligne[0][0] != "#" && $ligne[0][0] != ";"){
