@@ -158,6 +158,7 @@ cancel=annuleren
 categories=categorieën
 category description=categorie beschrijving
 category name=categorienaam
+category sort order=categorie sorteren op
 category=categorie
 ccd width=ccd breedte
 change password=wachtwoord wijzigen

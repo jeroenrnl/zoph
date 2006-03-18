@@ -27,7 +27,16 @@
 
     $obj = &$category;
     $redirect = "categories.php";
-    require_once("actions.inc.php");
+
+    if($_action=="update" && getvar("sortorder")=="") {
+    // overiding the default action, to be able to clear the sortorder
+        $obj->set_fields($request_vars);
+        $obj->set("sortorder", "");
+        $obj->update();
+        $action = "display";
+    } else {
+        require_once("actions.inc.php");
+    }
 
     if ($action == "display") {
         header("Location: " . add_sid("categories.php?parent_category_id=" . $category->get("category_id")));

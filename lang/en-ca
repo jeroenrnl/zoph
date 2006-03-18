@@ -158,6 +158,7 @@ cancel=cancel
 categories=categories
 category description=category description
 category name=category name
+category sort order=category sort order
 category=category
 ccd width=ccd width
 change password=change password

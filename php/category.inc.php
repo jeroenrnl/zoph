@@ -120,7 +120,10 @@ class category extends zoph_tree_table {
                     get_categories_select_array()),
             translate("category description") =>
                 create_text_input("category_description",
-                    $this->get("category_description"), 40, 128));
+                    $this->get("category_description"), 40, 128),
+            translate("category sort order") =>
+                create_photo_field_pulldown("sortorder", $this->get("sortorder"))
+        );
     }
 
     function get_link() {

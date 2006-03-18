@@ -17,3 +17,4 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 alter table zoph_albums add column sortorder varchar(32) default null;
+alter table zoph_categories add column sortorder varchar(32) default null;

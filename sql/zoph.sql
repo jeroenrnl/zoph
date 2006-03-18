@@ -70,6 +70,7 @@ CREATE TABLE zoph_categories (
   parent_category_id int(11) NOT NULL default '0',
   category varchar(32) NOT NULL default '',
   category_description varchar(255) default NULL,
+  sortorder varchar(32) default NULL;
   PRIMARY KEY  (category_id),
   KEY cat_parent_id (parent_category_id)
 ) TYPE=MyISAM;

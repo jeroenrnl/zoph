@@ -76,6 +76,11 @@
 <?php
     $fragment = translate("in this category");
     if ($photo_count > 0) {
+       $sortorder = $category->get("sortorder");
+       if ($sortorder) {
+           $sort = "&_order=" . $sortorder;
+       }
+
         if (!$category->get("parent_category_id")) {
             $fragment = translate("that have been categorized");
         }
@@ -95,7 +100,7 @@
         }
 ?>
         <span class="actionlink">
-            <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a>
+            <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
         </span>
 <?php
     }
