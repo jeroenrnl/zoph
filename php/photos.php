@@ -86,7 +86,7 @@
     <h1>
         <span class="actionlink">
 <?php
-    $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
+    $qs = htmlentities(preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING));
     if ($user->is_admin()) {
 ?>
             <a href="edit_photos.php?<?php echo $qs ?>"><?php echo translate("edit") ?></a> |

@@ -78,7 +78,7 @@
     if ($photo_count > 0) {
        $sortorder = $category->get("sortorder");
        if ($sortorder) {
-           $sort = "&_order=" . $sortorder;
+           $sort = "&amp;_order=" . $sortorder;
        }
 
         if (!$category->get("parent_category_id")) {

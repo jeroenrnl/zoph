@@ -79,7 +79,7 @@
     if ($photo_count > 0) {
        $sortorder = $album->get("sortorder");
        if ($sortorder) {
-           $sort = "&_order=" . $sortorder;
+           $sort = "&amp;_order=" . $sortorder;
        }
 ?>
         <span class="actionlink">
