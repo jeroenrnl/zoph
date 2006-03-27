@@ -357,7 +357,7 @@ require_once("edit_user.inc.php");
 ?>
     <tr>
       <td colspan="4" class="center">
-        <input type="submit" value="<? echo translate("update", 0) ?>">
+        <input type="submit" value="<?php echo translate("update", 0) ?>">
       </td>
     </tr>
   </table>

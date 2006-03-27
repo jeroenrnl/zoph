@@ -81,7 +81,7 @@
         $queryIgnoreArray[] = '_album__all';
         $queryIgnoreArray[] = '_category__all';
 ?>
-            <input type="submit" value="<? echo translate("update", 0) ?>">
+            <input type="submit" value="<?php echo translate("update", 0) ?>">
             <fieldset class="editphotos">
                 <legend><?php echo translate("All photos")?></legend>
                   <input type="hidden" name="_action" value="update">
@@ -323,7 +323,7 @@
         }
 ?>
 <?php echo create_form($clean_vars, $queryIgnoreArray) ?>
-                  <input type="submit" value="<? echo translate("update", 0) ?>">
+                  <input type="submit" value="<?php echo translate("update", 0) ?>">
                   </form>
 
 <?php

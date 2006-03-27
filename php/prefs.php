@@ -188,7 +188,7 @@
         </tr>
         <tr>
           <td colspan="2" class="center">
-<input type="submit" value="<? echo translate("update") ?>">
+<input type="submit" value="<?php echo translate("update") ?>">
           </td>
         </tr>
       </table>
