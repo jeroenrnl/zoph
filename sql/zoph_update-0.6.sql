@@ -37,3 +37,6 @@ CREATE TABLE zoph_photo_comments (
 ) TYPE=MyISAM;
 
 ALTER TABLE zoph_users ADD column leave_comments char(1) NOT NULL DEFAULT '0' after import;
+
+ALTER TABLE zoph_photos MODIFY rating float (4,2) unsigned;
+

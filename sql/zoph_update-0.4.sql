@@ -54,4 +54,4 @@ CREATE TABLE zoph_photo_ratings (
 insert into zoph_photo_ratings (user_id, photo_id, rating)
   select '1', photo_id, rating from zoph_photos where rating is not null;
 
-alter table zoph_photos modify rating float (2,2) unsigned;
+alter table zoph_photos modify rating float (4,2) unsigned;

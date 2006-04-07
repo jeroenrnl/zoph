@@ -239,7 +239,7 @@ CREATE TABLE zoph_photos (
   photographer_id int(11) default NULL,
   location_id int(11) default NULL,
   view varchar(64) default NULL,
-  rating float(3,2) unsigned default NULL,
+  rating float(4,2) unsigned default NULL,
   description blob,
   date varchar(10) default NULL,
   time varchar(8) default NULL,
