@@ -84,7 +84,7 @@
         $cells = $_cols * $_rows;
 
         $up_qs = update_query_string($request_vars, null, null, $ignore);
-	
+        
         if ($cells) {
             $_off = $cells * floor($_off / ($cells)); 
             $up_qs .= "&amp;_off=" . $_off;
@@ -197,9 +197,9 @@ require_once("header.inc.php");
     if ($action != "insert" && !$found) {
 ?>
           <h1>
-	  
-	  <?php echo translate("photo") ?>
-	  </h1>
+          
+          <?php echo translate("photo") ?>
+          </h1>
           <div class="main">
            <?php echo translate("No photo was found.") ?>
           </div>
@@ -240,15 +240,21 @@ require_once("header.inc.php");
 <?php
             $bar = "|";
         }
+        if ((ALLOW_COMMENTS) && ($user->is_admin() || $user->get("leave_comments"))) {
+?>
+            <?php echo $bar ?> <a href="comment.php?_action=new&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("add comment") ?></a>
+<?php
+            $bar = "|";
+        }
 ?>
         </span>
           <?php echo $title_bar ?>
           </h1>
+        <div class="main">
 
 <?php
         if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
-        <div class="main">
           <div id="rotate">
         <form action="<?php echo $PHP_SELF ?>" method="POST">
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
@@ -347,7 +353,18 @@ require_once("header.inc.php");
 <?php
         if ($user->prefs->get("camera_info")) {
             echo create_field_html($photo->get_camera_display_array(), 2);
-            echo "</table>";
+            echo "</table>\n";
+        }
+        if (ALLOW_COMMENTS) {
+            $comments=$photo->get_comments();
+
+            if($comments) {
+                echo "<h2>" . translate("comments") . "</h2>\n";
+                foreach($comments as $comment) {
+                    echo $comment->to_html($user) . "\n";
+                }
+            echo "<br>&nbsp;\n";
+            }
         }
     }
     else if ($action == "confirm") {

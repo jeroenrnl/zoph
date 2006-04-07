@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.5.1');
+    define('VERSION', '0.6-CVS');
 
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'zoph');
@@ -71,6 +71,10 @@
     // Watermark must be a GIF image, transparancy is honoured!
     // the filename is relative to the image root (IMAGE_DIR)
     define('WATERMARK', 'watermark.gif');
+
+    // If set to 1, users can leave comments with photos
+    define('ALLOW_COMMENTS', 0);
+
 
     // web import of photos
     define('CLIENT_WEB_IMPORT', 1);

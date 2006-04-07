@@ -16,5 +16,24 @@
 # along with Zoph; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-alter table zoph_albums add column sortorder varchar(32) default null;
-alter table zoph_categories add column sortorder varchar(32) default null;
+ALTER TABLE zoph_albums ADD column sortorder varchar(32) DEFAULT null;
+ALTER TABLE zoph_categories ADD column sortorder varchar(32) DEFAULT null;
+
+CREATE TABLE zoph_comments (
+  comment_id int(11) NOT NULL auto_increment,
+  user_id int(11) NOT NULL default '0',
+  comment_date datetime default NULL,
+  subject varchar(255) default NULL,
+  comment blob,
+  timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  ipaddr varchar(16) default '',
+  PRIMARY KEY  (comment_id)
+) TYPE=MyISAM;
+
+CREATE TABLE zoph_photo_comments (
+  photo_id int(11) NOT NULL default '0',
+  comment_id int(11) NOT NULL default '0',
+  PRIMARY KEY  (photo_id,comment_id)
+) TYPE=MyISAM;
+
+ALTER TABLE zoph_users ADD column leave_comments char(1) NOT NULL DEFAULT '0' after import;

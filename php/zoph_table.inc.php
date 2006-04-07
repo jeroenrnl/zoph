@@ -556,7 +556,7 @@ function escape_string($str) {
         $str = stripslashes($str);
     }
     */
-
+    $str=str_replace(array("<", ">", "\"", "(", ")"), array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;"), $str);
     return mysql_escape_string($str);
 
 }

@@ -345,7 +345,7 @@ class photo extends zoph_table {
         }
 
         $size_string = " width=\"$width\" height=\"$height\"";
-        $alt = htmlentities($this->get("title"));
+        $alt = $this->get("title");
 return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . "alt=\"$alt\"" . ">";
 }
 
@@ -863,6 +863,12 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             "Level" => create_text_input("level", $this->level, 4, 2));
     }
 
+    function get_comments() {
+        $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .
+            " photo_id = " .  $this->get("photo_id");
+        $comments=get_records_from_query("comment", $sql);
+        return $comments;
+    }
 }
 
 function get_photo_sizes_sum() {

@@ -111,6 +111,9 @@ class user extends zoph_table {
             translate("can import") =>
                 $this->get("import") == 1
                 ? translate("Yes") : translate("No"),
+            translate("can leave comments") =>
+                $this->get("leave_comments") == 1
+                ? translate("Yes") : translate("No"),
             translate("last login") =>
                 $this->get("lastlogin"),
             translate("last ip address") =>

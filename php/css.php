@@ -498,11 +498,41 @@ div.thumbnail	{
 	margin: 2px;
 	padding: 5px;
 	}
+	
+div.comment	{
+	border: 1px solid <?PHP echo $TABLE_BORDER_COLOR ?>;
+	background: transparent;
+	font-size: small;
+	min-height: 5em;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+	}
+
+div.comment h3 {
+	width: 100%;
+	background: <?php echo $TITLE_BG_COLOR ?>;
+	color: <?php echo $TITLE_FONT_COLOR ?>;
+	border-bottom: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
+	text-align: left;
+	}
+
+div.commentinfo	{
+	border-bottom: 1px dashed <?PHP echo $TABLE_BORDER_COLOR ?>;
+	width: 100%;
+	font-size: x-small;
+	font-style: italic;
+	margin: 0 0 0.5em 0;
+	padding: 0;
+	}
 
 br	{
 	clear: both;
 	}
-	
+
+br.noclear {
+	clear: none;
+	}
+
 /* The random thumnail on the first page */
 #random.thumbnail	{
 	width: <?php echo THUMB_SIZE+10 ?>px;

@@ -119,6 +119,21 @@ INSERT INTO zoph_color_schemes VALUES (6,'black','000000','FFFFFF','FFFFFF','FFF
 INSERT INTO zoph_color_schemes VALUES (7,'beach','646D7E','000000','000000','000000','F9EEE2','000000','9AADC7','C6DEFF','617C58','D0D0D0','8BB381','000000','646D7E');
 
 --
+-- Table structure for table 'zoph_comments'
+--
+
+CREATE TABLE zoph_comments (
+  comment_id int(11) NOT NULL auto_increment,
+  user_id int(11) NOT NULL default '0',
+  comment_date datetime default NULL,
+  subject varchar(255) default NULL,
+  comment blob,
+  timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  ipaddr varchar(16) default '',
+  PRIMARY KEY  (comment_id)
+) TYPE=MyISAM;
+
+--
 -- Table structure for table 'zoph_people'
 --
 
@@ -179,6 +194,16 @@ CREATE TABLE zoph_photo_categories (
 --
 -- Dumping data for table 'zoph_photo_categories'
 --
+
+--
+-- Table structure for table 'zoph_photo_comments'
+--
+
+CREATE TABLE zoph_photo_comments (
+  photo_id int(11) NOT NULL default '0',
+  comment_id int(11) NOT NULL default '0',
+  PRIMARY KEY  (photo_id,comment_id)
+) TYPE=MyISAM;
 
 
 
@@ -338,6 +363,7 @@ CREATE TABLE zoph_users (
   detailed_people char(1) NOT NULL default '0',
   detailed_places char(1) NOT NULL default '0',
   import char(1) NOT NULL default '0',
+  leave_comments char(1) NOT NULL default '0',
   lightbox_id int(11) default NULL,
   lastnotify datetime default NULL,
   lastlogin datetime default NULL,
