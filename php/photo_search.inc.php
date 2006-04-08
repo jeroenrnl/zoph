@@ -112,6 +112,78 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $val = "-1";
             }
         }
+        $hiersearch=false;
+        if ($key == "album") {
+            $key = "album_id";
+            $album_name = $val;
+            $val = "-1";
+            if (strpos($album_name, "/")) { 
+               $hiersearch=true;
+            }
+            $search_string=explode("/", $album_name);
+
+            foreach($search_string as $album_name) {
+                $albums = get_album_by_name($album_name);
+                foreach($albums as $album) {
+                    $album->lookup();
+                    if(!$parent_album) {
+                        $val=$album->get("album_id");
+                        $parent_album=$album;
+                    } else if ($hiersearch){
+                        $next_album_id=$album->get("album_id");
+                        $children=$parent_album->get_children();
+                        foreach ($children as $child) {
+                            $child->lookup();
+                            if ($child->get("album_id")==$next_album_id) {
+                                $val=$album->get("album_id");
+                                $parent_album=$album;
+                                break;
+                            } else {
+                                $val=-1;
+                            }
+                        }
+                    } else {
+                         $val .= "," . $album->get("album_id");
+                    }
+                }
+            }
+        }
+        
+        if ($key == "category") {
+            $key = "category_id";
+            $cat_name = $val;
+            $val = "-1";
+            if (strpos($cat_name, "/")) { 
+               $hiersearch=true;
+            }
+            $search_string=explode("/", $cat_name);
+
+            foreach($search_string as $cat_name) {
+                $categories = get_category_by_name($cat_name);
+                foreach($categories as $category) {
+                    $category->lookup();
+                    if(!$parent_cat) {
+                        $val=$category->get("category_id");
+                        $parent_cat=$category;
+                    } else if ($hiersearch){
+                        $next_cat_id=$category->get("category_id");
+                        $children=$parent_cat->get_children();
+                        foreach ($children as $child) {
+                            $child->lookup();
+                            if ($child->get("category_id")==$next_cat_id) {
+                                $val=$category->get("category_id");
+                                $parent_cat=$category;
+                                break;
+                            } else {
+                                $val=-1;
+                            }
+                        }
+                    } else {
+                         $val .= "," . $category->get("category_id");
+                    }
+                }
+            }
+        }
 
         //echo "<p>key = '$key'; op = '$op', value = '$val'</p>\n";
 
@@ -128,7 +200,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 // the regexp matches a list of numbers, separated by comma's.
                 // "1" matches, "1," not, "1,2" matches "1,333" matches
                 // "1, a" not, etc.
-                if (!preg_match("/^([0-9]+)+(,([0-9]+))*$/", $val)) { die("$key must be numeric"); }
+                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) { die("$key must be numeric"); }
 
                 $op = "in";
                 $where .=
@@ -201,7 +273,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             }
             if (!in_array($key, $good_fields))
                 { die ("Illegal field: " . $key); }
-			  
+              
             $key = "ph.$key";
 
             $val = escape_string($val);

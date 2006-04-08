@@ -217,6 +217,19 @@ function get_newer_albums($user_id, $date = null) {
     return get_records_from_query("album", $sql);
 }
 
+function get_album_by_name($album = null) {
+    if (!$album) {
+        return "";
+    }
+    $where =
+            "lower(album) like '%" . escape_string(strtolower($album))
+ . "%'";
+
+    $query = "select album_id from " . DB_PREFIX . "albums where $where";
+
+    return get_records_from_query("album", $query);
+}
+
 function get_album_count($user = null) {
 
     if ($user && !$user->is_admin()) {
