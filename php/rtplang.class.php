@@ -78,27 +78,27 @@ Class rtplang {
     if(is_dir($this->dir)) {
       $handle=opendir($this->dir);
       while ($file = trim(readdir($handle))){
-	if($file != "." && $file != "..") {
-	  $filet = $this->dir . "/" . $file;
-	  if($fp = @fopen($filet,"r")){
-	    $finded = 0;
-	    while (($ligne = fgets($fp,10000)) && ($finded == 0)){
-	      if($ligne[0] == "#" && $ligne[1] == "{" && $ligne[2] == "@") {
-		$ligneok = "array(" . substr($ligne,2,strlen($ligne)-4) . ");";
-		eval("\$tablanginfo = $ligneok;");
-		$this->tablangs["htmltagoption"][$i] = $tablanginfo["htmltagoption"];
-		$this->tablangs["charset"][$i] = $tablanginfo["charset"];
-		$this->tablangs["name"][$i] = $tablanginfo["name"];
-		$this->tablangs["iso"][$i] = $file;
-		$finded = 1;
-		//print "fichier indice $i $file " . $tablanginfo["charset"] . "<br>\n";
-		$i++;
-		
-	      }
-	    }
-	    fclose($fp);
-	  }
-	}
+    if($file != "." && $file != "..") {
+      $filet = $this->dir . "/" . $file;
+      if($fp = @fopen($filet,"r")){
+        $finded = 0;
+        while (($ligne = fgets($fp,10000)) && ($finded == 0)){
+          if($ligne[0] == "#" && $ligne[1] == "{" && $ligne[2] == "@") {
+        $ligneok = "array(" . substr($ligne,2,strlen($ligne)-4) . ");";
+        eval("\$tablanginfo = $ligneok;");
+        $this->tablangs["htmltagoption"][$i] = $tablanginfo["htmltagoption"];
+        $this->tablangs["charset"][$i] = $tablanginfo["charset"];
+        $this->tablangs["name"][$i] = $tablanginfo["name"];
+        $this->tablangs["iso"][$i] = $file;
+        $finded = 1;
+        //print "fichier indice $i $file " . $tablanginfo["charset"] . "<br>\n";
+        $i++;
+        
+          }
+        }
+        fclose($fp);
+      }
+    }
       }
       closedir($handle);
     }
@@ -122,27 +122,27 @@ Class rtplang {
       if($fp = @fopen($this->file_lang,"r")){
         while ($ligne = fgets($fp,10000)) {
           $ligne=explode("=", $ligne);
-	  //On ne prends pas en compte les commentaires etc.
-	  if(trim($ligne[0]) != "")
-	    if($ligne[0][0] != "#" && $ligne[0][0] != ";"){
-	      if(isset($ligne[1]) && $ligne[1] != "")
-		$this->tab_translate[$ligne[0]] = $ligne[1];
-	    }
-	}
-	fclose($fp);
+      //On ne prends pas en compte les commentaires etc.
+      if(trim($ligne[0]) != "")
+        if($ligne[0][0] != "#" && $ligne[0][0] != ";"){
+          if(isset($ligne[1]) && $ligne[1] != "")
+        $this->tab_translate[$ligne[0]] = $ligne[1];
+        }
+    }
+    fclose($fp);
       }
       else
-	if($this->debug)
-	  print "File <b>- $this->file_lang -</b> is unreadable";
+    if($this->debug)
+      print "File <b>- $this->file_lang -</b> is unreadable";
     }
     $retour = $this->tab_translate[$str];
     
     if($retour == "") {
       //Si on est pas déjà en vo, on le marque
       if($this->sessioniso && $this->sourceiso != $this->sessioniso && $mark)
-	$retour = "<b>[vo]</b> <i>$str</i>";
+    $retour = "<b>[vo]</b> <i>$str</i>";
       else
-	$retour = $str;
+    $retour = $str;
     }
     return $retour;
   }
@@ -160,21 +160,21 @@ Class rtplang {
       $tab = array();
 
       if($this->sessioniso != "") {
-	$tab[$this->sessioniso] = array($this->sessioniso => "");
-	$tab[$this->sourceiso] = array($this->sourceiso => "");
+    $tab[$this->sessioniso] = array($this->sessioniso => "");
+    $tab[$this->sourceiso] = array($this->sourceiso => "");
       }
       else if($this->defaultiso != "") {
-	$tab[$this->defaultiso] = array($this->defaultiso => "");
-	$tab[$this->sourceiso] = array($this->sourceiso => "");
+    $tab[$this->defaultiso] = array($this->defaultiso => "");
+    $tab[$this->sourceiso] = array($this->sourceiso => "");
       }
       else {
-	$tab[$this->sourceiso] = array($this->sourceiso => "");
+    $tab[$this->sourceiso] = array($this->sourceiso => "");
       }
       
       for($i = 0; $i < count($this->tablangs["iso"]); $i++) {
-	$isocode = $this->tablangs["iso"][$i];
-	$lang = $this->tablangs["name"][$i];
-	$tab[$isocode] = array($isocode => $lang);
+    $isocode = $this->tablangs["iso"][$i];
+    $lang = $this->tablangs["name"][$i];
+    $tab[$isocode] = array($isocode => $lang);
       }
       return $tab;
     }
@@ -187,41 +187,44 @@ Class rtplang {
    *  @access     public
    *  @return     string
    */
-  function lang_header()
-    {
-      $search = "";
-      $ind = 0;
+    function get_encoding() {
+        $search = "";
+        $ind = 0;
 
-      if($this->sessioniso != "")
-	$search = $this->sessioniso;
-      else
-	$search = $this->defaultiso;
-
+        if($this->sessioniso != "") {
+            $search = $this->sessioniso;
+        } else {
+            $search = $this->defaultiso;
+        }
       // indice du tab ?
-      for($i = 0; $i < count($this->tablangs["iso"]) && !$ind; $i++)
-	if($this->tablangs["iso"][$i] == $search)
-	  $ind = $i;
+        for($i = 0; $i < count($this->tablangs["iso"]) && !$ind; $i++) {
+            if($this->tablangs["iso"][$i] == $search) {
+                $ind = $i;
+            }
+        }
+        
+        $htmltag = "<html";
+        if($this->tablangs["htmltagoption"][$ind] != "nothing" && $this->tablangs["htmltagoption"][$ind] != "") {
+            $htmltag .= " " . $this->tablangs["htmltagoption"][$ind];
+        }
+        $htmltag .= ">";
 
-      $htmltag = "<html";
-      if($this->tablangs["htmltagoption"][$ind] != "nothing" && $this->tablangs["htmltagoption"][$ind] != "")
-	$htmltag .= " " . $this->tablangs["htmltagoption"][$ind];
-      $htmltag .= ">";
+        if($this->tablangs["charset"][$ind] == "") {
+            return "iso-8859-1";
+        } else {
+            return $this->tablangs["charset"][$ind];
+        }
+    }
 
-      if($this->tablangs["charset"][$ind] == "")
-	$charset = "iso-8859-1";
-      else
-	$charset = $this->tablangs["charset"][$ind];
-
-      //      print "fichier indice $ind $search / $charset" ;
-      
-      header("Content-Type: text/html; charset=$charset");
-//$texte .="
-    $texte .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">
+    function lang_header() {
+        $charset=$this->get_encoding();
+        header("Content-Type: text/html; charset=$charset");
+        $texte .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">
 $htmltag
 <head>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charset\">\n";
       
-      return $texte;
+        return $texte;
     }
 
 
@@ -246,12 +249,12 @@ $htmltag
     //    print "cherche indice $pos et il y a $nb strings ...<br>\n";
     if($nb > $pos) 
       while ($row = each($this->tab_translate)) {
-	//	print "on est sur la position $i<br>\n";
-	if($i == $pos) {
-	  //	  print "trouvé " . $row[0] . ":" . $row[1] . "<br>\n";
-	  return $row;
-	}
-	$i++;
+    //  print "on est sur la position $i<br>\n";
+    if($i == $pos) {
+      //      print "trouvé " . $row[0] . ":" . $row[1] . "<br>\n";
+      return $row;
+    }
+    $i++;
       }
     else {
       //      print "<p>retourne -1 pour indice $pos</p>\n";
@@ -292,21 +295,21 @@ $htmltag
     $retour = -1;
     if(file_exists($filet)) {
       if($fp = @fopen($filet,"r")) {
-	$finded = 0;
-	while (($ligne = fgets($fp,10000)) && ($finded == 0)){
-	  if($ligne[0] == "#" && $ligne[1] == "{" && $ligne[2] == "@") {
-	    $ligneok = "array(" . substr($ligne,2,strlen($ligne)-4) . ");";
-	    eval("\$tablanginfo = $ligneok;");
-	    $langname = $tablanginfo["name"];
-	    $finded = 1;
-	  }
-	}
-	fclose($fp);
+    $finded = 0;
+    while (($ligne = fgets($fp,10000)) && ($finded == 0)){
+      if($ligne[0] == "#" && $ligne[1] == "{" && $ligne[2] == "@") {
+        $ligneok = "array(" . substr($ligne,2,strlen($ligne)-4) . ");";
+        eval("\$tablanginfo = $ligneok;");
+        $langname = $tablanginfo["name"];
+        $finded = 1;
+      }
+    }
+    fclose($fp);
       }
       if(trim(strtolower($langname)) == trim(strtolower($name)))
-	$retour = 1;
+    $retour = 1;
       else
-	$retour = 0;
+    $retour = 0;
     }
     else
       $retour = 0;
@@ -351,30 +354,30 @@ $htmltag
     }
     else {
       if($pos-$nbstringsperpage == 0) {
-	$texte = '#do not change next line please !
+    $texte = '#do not change next line please !
 #{@"htmltagoption"=>"nothing","charset"=>"iso-8859-1","name"=>"' . $langname . '","translator_0"=>"' . $translatorfname . ' ' . $translatorlname . ' ' . ' <' . $translatoremail . '>"}' . "\n";
       }
       for($i = $pos-$nbstringsperpage; $i < $pos; $i++) {
-	//	print "i est $i et tabref !" . $tabref[$i] . "!<br>";
-	if(trim(urldecode($tabref[$i])) != "")
-	  $texte .= urldecode($tabref[$i]) . "=" . $tabres[$i] . "\n";
+    //  print "i est $i et tabref !" . $tabref[$i] . "!<br>";
+    if(trim(urldecode($tabref[$i])) != "")
+      $texte .= urldecode($tabref[$i]) . "=" . $tabres[$i] . "\n";
       }
       $filet = $this->save_find_file($iso,$langname);
 
       if($pos-$nbstringsperpage == 0)
-	$openmode = "w";
+    $openmode = "w";
       else if($pos-$nbstringsperpage > 0)
-	$openmode = "a";
+    $openmode = "a";
       
       //      print "ouverture de $filet en ecriture($openmode) ... <br>\n";
       if($fp = @fopen($filet,$openmode)) {
-	$res = fputs($fp,$texte);
-	if($res)
-	  $retour = 1;
-	fclose($fp);
+    $res = fputs($fp,$texte);
+    if($res)
+      $retour = 1;
+    fclose($fp);
       }
       else
-	$retour = sprintf("ERROR: impossible to open this file (%s) for writing !",$filet);
+    $retour = sprintf("ERROR: impossible to open this file (%s) for writing !",$filet);
     }
     return $retour;
   }
@@ -405,12 +408,12 @@ $htmltag
     else {
       // Search if this file does not already exists
       for($i = 0, $isot = $iso, $finded = 0; $finded == 0 && file_exists($this->dir . "/" . $isot); $i++, $isot="$iso$i")
-	if($this->lang_exists($isot,$lang)) {
-	  $filet = "$file$i";
-	  $finded = $i;
-	}
+    if($this->lang_exists($isot,$lang)) {
+      $filet = "$file$i";
+      $finded = $i;
+    }
       if($finded == 0) {
-	for($i = 0; file_exists($filet); $i++, $filet="$file$i");
+    for($i = 0; file_exists($filet); $i++, $filet="$file$i");
       }
     }
     
@@ -437,21 +440,21 @@ $htmltag
     if($fp = @fopen($filet,"r")){
       $stop = 0;
       while (($ligne = fgets($fp,10000)) && ($stop == 0)){
-	if($ligne[0] != "#" && $ligne[0] != ";"){
-	  $stop = 1;
-	}
-	else
-	  $texte .= $ligne;
+    if($ligne[0] != "#" && $ligne[0] != ";"){
+      $stop = 1;
+    }
+    else
+      $texte .= $ligne;
       }
       fclose($fp);
     }
 
     if($fp = @fopen($filet,"r")){
       while ($ligne = fgetcsv($fp,10000, "=")){
-	if(trim($ligne[0]) != "")
-	  if($ligne[0][0] != "#" && $ligne[0][0] != ";"){
-	    $tab[$ligne[0]] = $ligne[1];
-	  }
+    if(trim($ligne[0]) != "")
+      if($ligne[0][0] != "#" && $ligne[0][0] != ";"){
+        $tab[$ligne[0]] = $ligne[1];
+      }
       }
       fclose($fp);
     }
@@ -462,7 +465,7 @@ $htmltag
     if($fp = @fopen($filet,"w")) {
       $res = fputs($fp,$texte);
       if($res)
-	$retour = 1;
+    $retour = 1;
       fclose($fp);
     }
     return $retour;
