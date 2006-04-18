@@ -121,6 +121,7 @@ if ($action == "confirm") {
     <div class="main">
     <br>
 <?php
+    $photo->lookup();
     echo $photo->get_midsize_img();
 ?>
     <br>
