@@ -47,6 +47,7 @@
     } else {
        $photo_id = getvar("photo_id");
        $photo = new photo($photo_id);
+       $photo->lookup();
     }
 
     $request_vars["photo_id"]=NULL;
@@ -121,7 +122,6 @@ if ($action == "confirm") {
     <div class="main">
     <br>
 <?php
-    $photo->lookup();
     echo $photo->get_midsize_img();
 ?>
     <br>
