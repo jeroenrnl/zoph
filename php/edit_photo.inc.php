@@ -30,8 +30,11 @@
             <a href="photo.php?<?php echo $return_qs ?>"><?php echo translate("return") ?></a>
 <?php
         if ($user->is_admin()) {
+/*            | <a href="photo.php?_action=delete&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a> */
 ?>
-            | <a href="photo.php?_action=delete&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a>
+
+            | <a href="photo.php?_action=delete&amp;photo_id=<?php echo $photo->get("photo_id") ?>&amp;_qs=<?php echo $encoded_qs ?>"><?php echo translate("delete") ?></a>
+            
 <?php
         }
 ?>

@@ -29,13 +29,12 @@
     $photo = new photo($photo_id);
     */
     $_qs=getvar("_qs");
-    if($user->prefs->get("auto_edit") && $_qs) {
-        header("Location: photo.php?" . urldecode($_qs));
+    if($user->prefs->get("auto_edit") && $_qs && $_action == "update") {
+        header("Location: photo.php?" . html_entity_decode(urldecode($_qs)));
     }
 
     $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
     $qs = preg_replace('/_action=\w+&?/', '', $qs);
-
     $encoded_qs = urlencode(htmlentities(getvar("_qs")));
     if (empty($encoded_qs)) {
         $encoded_qs = urlencode(htmlentities($qs));
@@ -161,9 +160,9 @@
     }
     else if ($_action == "confirm") {
         $photo->delete();
-        if (!$user->prefs->get("auto_edit")) {
+        //if (!$user->prefs->get("auto_edit")) {
             $user->eat_crumb();
-        }
+        //}
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = "zoph.php"; }
         header("Location: " . add_sid($link));

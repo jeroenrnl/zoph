@@ -38,9 +38,14 @@
 
     // only add a crumb if a title was set and if there is either no
     // action or a safe action ("edit", "delete", etc would be unsafe)
+    $page=array_reverse(explode("/",$PHP_SELF));
+    $page=$page[0];
+    
     if (!$skipcrumb && $title && count($user->crumbs) < MAX_CRUMBS &&
         (!$_action || ($_action == "display" || $_action == "search" ||
-        $_action == "notify" || $_action == "compose"))) {
+        $_action == "notify" || $_action == "compose" || 
+        ($user->prefs->get("auto_edit") && $_action != "update" 
+        && $page == "photo.php")))) {
 
         $user->add_crumb($title, htmlentities($REQUEST_URI));
     }
