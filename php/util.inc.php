@@ -60,7 +60,7 @@ function create_field_html($fields, $cols = 2, $split = null) {
 
 function create_text_input($name, $value, $size = 20, $max = 32) {
     $id=ereg_replace("^_+", "", $name);
-    return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"" . htmlentities($value) ."\" size=\"$size\" maxlength=\"$max\">\n";
+    return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"" . $value ."\" size=\"$size\" maxlength=\"$max\">\n";
 }
 
 function create_pulldown($name, $value, $value_array) {
