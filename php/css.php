@@ -755,6 +755,12 @@ table#photo input {
 	margin: 0;
 	}
 
+div#relation {
+	margin-left: auto;
+	margin-right: auto;
+    width: 50%;
+    }
+
 div#rotate input[type="submit"] {
 	margin-left: auto;
 	margin-right: auto;

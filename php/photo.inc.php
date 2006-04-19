@@ -869,6 +869,79 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         $comments=get_records_from_query("comment", $sql);
         return $comments;
     }
+
+    function get_related() {
+        $sql = "select photo_id_1 as photo_id from " . 
+            DB_PREFIX . "photo_relations where" .
+            " photo_id_2 = " .  $this->get("photo_id") .
+            " union select photo_id_2 as photo_id from " . 
+            DB_PREFIX . "photo_relations where" .
+            " photo_id_1 = " .  $this->get("photo_id");
+        $related=get_records_from_query("photo", $sql);
+        return $related;
+    }
+
+    function check_related($photo_id) {
+        $related=$this->get_related();
+        foreach($related as $rel_photo) {
+            if ($rel_photo->get("photo_id") == $photo_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+    function get_relation_desc($photo_id_2) {
+        $sql = "select desc_1 from " . DB_PREFIX . "photo_relations where" .
+            " photo_id_2 = " . $this->get("photo_id") . " and " .
+            " photo_id_1 = " . escape_string($photo_id_2) . 
+            " union select desc_2 from " . DB_PREFIX . "photo_relations where" .
+            " photo_id_1 = " . $this->get("photo_id") . " and " .
+            " photo_id_2 = " . escape_string($photo_id_2) . " limit 1";
+        $result=mysql_query($sql)
+            or die("Could not get description for related photo:<br><i>$sql</i>");
+        $result=mysql_fetch_row($result);
+        return $result[0];
+    }
+    
+    function create_relation($photo_id_2, $desc_1 = null, $desc_2 = null) {
+        $sql = "insert into " . DB_PREFIX . "photo_relations values (" .
+            escape_string($this->get("photo_id")) . "," .
+            escape_string($photo_id_2) . "," .
+            "\"" . escape_string($desc_1) . "\"," .
+            "\"" . escape_string($desc_2) . "\")";
+        $result=mysql_query($sql)
+            or die_with_mysql_error("Could not create relation:<br><i>$sql</i>");
+        }
+        
+    function update_relation($photo_id_2, $desc_1 = null, $desc_2 = null) {
+        $photo_id_1=escape_string($this->get("photo_id"));
+        $photo_id_2=escape_string($photo_id_2);
+        $sql = "update " . DB_PREFIX . "photo_relations set" .
+            " desc_1=\"" . escape_string($desc_1) . "\"," .
+            " desc_2=\"" . escape_string($desc_2) . "\"" .
+            " where photo_id_1=" . $photo_id_1 .
+            " and photo_id_2=" . $photo_id_2;
+        mysql_query($sql)
+            or die_with_mysql_error("Could not update relation:<br><i>$sql</i>");
+        // A relation may be the other way around...
+        $sql = "update " . DB_PREFIX . "photo_relations set" .
+            " desc_2=\"" . escape_string($desc_1) . "\"," .
+            " desc_1=\"" . escape_string($desc_2) . "\"" .
+            " where photo_id_2=" . $photo_id_1 .
+            " and photo_id_1=" . $photo_id_2;
+        mysql_query($sql)
+            or die_with_mysql_error("Could not update relation:<br><i>$sql</i>");
+        }
+    
+    function delete_relation($photo_id_2) {
+        $ids="(" . escape_string($this->get("photo_id")) . "," .
+            escape_string($photo_id_2) . ")"; 
+        $sql = "delete from " . DB_PREFIX . "photo_relations" .
+            " where photo_id_1 in " . $ids .
+            " and photo_id_2 in " . $ids;
+        $result=mysql_query($sql)
+            or die_with_mysql_error("Could not delete relation:<br><i>$sql</i>");
+    }    
 }
 
 function get_photo_sizes_sum() {

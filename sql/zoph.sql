@@ -222,7 +222,21 @@ CREATE TABLE zoph_photo_people (
 -- Dumping data for table 'zoph_photo_people'
 --
 
+--
+-- Table structure for table 'zoph_photo_relations'
+--
 
+CREATE TABLE zoph_photo_relations (
+  photo_id_1 int(11) NOT NULL default '0',
+  photo_id_2 int(11) NOT NULL default '0',
+  desc_1 varchar(128) default NULL,
+  desc_2 varchar(128) default NULL,
+  PRIMARY KEY  (photo_id_1,photo_id_2)
+) TYPE=MyISAM;
+
+--
+-- Dumping data for table 'zoph_photo_relations'
+--
 
 --
 -- Table structure for table 'zoph_photos'

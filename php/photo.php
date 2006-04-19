@@ -164,6 +164,25 @@
         if (!$link) { $link = "zoph.php"; }
         header("Location: " . add_sid($link));
     }
+    else if ($_action == "relate") {
+        if ($_SESSION["relate_id"]) {
+           $link="relation.php?_action=new&" . 
+               "photo_id_1=" . $_SESSION["relate_id"] . "&" .
+               "photo_id_2=" . $photo->get("photo_id") . "&" . 
+               "qs=" . $encoded_qs;
+           header("Location: " . add_sid($link));
+           // unset($_SESSION["relate_id"]);
+        } else {
+           $_SESSION["relate_id"]=$photo->get("photo_id");
+        }
+        $action="display";
+    }
+    else if ($_action == "unrelate") {
+        if ($_SESSION["relate_id"]) {
+           unset($_SESSION["relate_id"]);
+        }
+        $action="display";
+    }
     // 2005-04-10 --JCT
     //
     // lightbox and rate actions moved
@@ -236,7 +255,7 @@ require_once("header.inc.php");
         }
         if ($user->get("lightbox_id")) {
 ?>
-            <?php echo $bar ?> <a href="photo.php?_action=lightbox&amp;<?php echo $encoded_qs ?>"><?php echo translate("lightbox", 0) ?></a>
+            <?php echo $bar ?> <a href="photo.php?_action=lightbox&amp;<?php echo $qs ?>"><?php echo translate("lightbox", 0) ?></a>
 <?php
             $bar = "|";
         }
@@ -246,6 +265,24 @@ require_once("header.inc.php");
 <?php
             $bar = "|";
         }
+        if($user->is_admin()) {
+            if ($_SESSION["relate_id"]) {
+                if ($_SESSION["relate_id"] == $photo->get("photo_id")) {
+?>
+                    <?php echo $bar ?> <a href="photo.php?_action=unrelate&amp;<?php echo $qs ?>"><?php echo translate("undo selection for relation", 0) ?></a>
+<?php
+                } else {
+?>
+                    <?php echo $bar ?> <a href="photo.php?_action=relate&amp;<?php echo $qs ?>"><?php echo translate("relate to selected", 0) ?></a>
+<?php
+                }
+            } else {
+?>
+                <?php echo $bar ?> <a href="photo.php?_action=relate&amp;<?php echo $qs ?>"><?php echo translate("create relation", 0) ?></a>
+<?php
+            }
+        }
+        $bar = "|";
 ?>
         </span>
           <?php echo $title_bar ?>
@@ -354,6 +391,34 @@ require_once("header.inc.php");
         if ($user->prefs->get("camera_info")) {
             echo create_field_html($photo->get_camera_display_array(), 2);
             echo "</table>\n";
+        }
+
+        $related=$photo->get_related();
+
+        if ($related) {
+            $header="<h2>" . translate("related photos") . "</h2>";
+            $i=0;
+            foreach($related as $rel_photo) {
+                $rel_photo->lookup();
+                if ($user->get_permissions_for_photo($rel_photo->get("photo_id")) || $user->is_admin()) {
+                    echo $header;   // Makes sure that header is only
+                    unset($header); // displayed when there are photos
+                    echo "<div class=\"thumbnail\">";
+                    if($user->is_admin()) {
+                        echo "<span class=\"actionlink\">";
+                        echo "<a href=\"relation.php?photo_id_1=" .
+                            $photo->get("photo_id") . "&amp;" . "photo_id_2=" .
+                            $rel_photo->get("photo_id") . "\">edit</a>";
+                        echo "</span>";
+                    }
+                    echo $rel_photo->get_thumbnail_link() . "<br>";
+                    echo $photo->get_relation_desc($rel_photo->get("photo_id"));
+                    echo "</div>";
+                    $i++;
+                    if($i>=5) { echo "<br>"; $i=0; }
+               }
+          }
+          echo "<br>";
         }
         if (ALLOW_COMMENTS) {
             $comments=$photo->get_comments();
