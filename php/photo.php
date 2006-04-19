@@ -28,6 +28,10 @@
 
     $photo = new photo($photo_id);
     */
+    $_qs=getvar("_qs");
+    if($user->prefs->get("auto_edit") && $_qs) {
+        header("Location: photo.php?" . urldecode($_qs));
+    }
 
     $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
     $qs = preg_replace('/_action=\w+&?/', '', $qs);

@@ -16,6 +16,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
     $return_qs = getvar("_qs");
+
+    if ($user->prefs->get("auto_edit")) {
+       $return_qs=urlencode($qs);
+    }
+
     if (empty($return_qs)) {
         $return_qs = "_action=display&amp;photo_id=" . $photo->get("photo_id");
     }
