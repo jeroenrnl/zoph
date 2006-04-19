@@ -17,18 +17,26 @@
  */
     $return_qs = getvar("_qs");
 
-    if ($user->prefs->get("auto_edit")) {
-       $return_qs=urlencode($qs);
-    }
-
     if (empty($return_qs)) {
-        $return_qs = "_action=display&amp;photo_id=" . $photo->get("photo_id");
+       if ($user->prefs->get("auto_edit")) {
+           $return_qs=htmlentities(urldecode($qs));
+       } else {
+           $return_qs = "_action=display&amp;photo_id=" . $photo->get("photo_id");
+       }
     }
 ?>
           <h1>
           <span class="actionlink">
+<?php
+    if ($user->prefs->get("auto_edit")) {
+?>
+            <a href="photo.php?_action=display&amp;<?php echo $return_qs ?>"><?php echo translate("return") ?></a>
+<?php
+    } else {
+?>
             <a href="photo.php?<?php echo $return_qs ?>"><?php echo translate("return") ?></a>
 <?php
+    }
         if ($user->is_admin()) {
 /*            | <a href="photo.php?_action=delete&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a> */
 ?>
