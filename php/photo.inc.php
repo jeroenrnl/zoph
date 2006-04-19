@@ -346,7 +346,7 @@ class photo extends zoph_table {
 
         $size_string = " width=\"$width\" height=\"$height\"";
         $alt = $this->get("title");
-return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . "alt=\"$alt\"" . ">";
+return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " alt=\"$alt\"" . ">";
 }
 
     function get_rating($user_id) {
