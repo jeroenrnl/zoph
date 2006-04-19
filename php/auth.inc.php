@@ -75,7 +75,7 @@
             delete_temp_annotated_files($user->get("user_id"));
 
             if ($redirect) {
-                $redirect=urldecode($redirect);
+                $redirect="/" . urldecode($redirect);
                 // The next line makes sure you are not tricked into deleting a
                 // photo by a url pointing you to the "confirm" action. Just
                 // to be extra sure, any action, except "search" is replaced by
