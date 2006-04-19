@@ -431,7 +431,7 @@ div#rowscols {
 	margin-bottom: 15px;
 	}
 
-img.mid {
+img.<?php echo MID_PREFIX ?> {
 	margin-left: auto;
 	margin-right: auto;
 	clear: both;
