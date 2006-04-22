@@ -34,7 +34,6 @@
 
     $title = $album->get("parent_album_id") ? $album->get("album") : translate("Albums");
 
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
     <h1>

@@ -153,7 +153,10 @@
     define('BACKUP_PREFIX', 'orig_');
 
     // width of the main table
-    define('DEFAULT_TABLE_WIDTH', 600);
+    // May be in pixels ("px") or percent ("%").
+    // As of v0.6, the entity is required.
+    define('DEFAULT_TABLE_WIDTH', "600px");
+    // define('DEFAULT_TABLE_WIDTH', "90%");
 
     // set to the id of a non admin user or to 0 to disable
     // note that this is a user_id, not a person_id

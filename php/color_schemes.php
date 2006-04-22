@@ -23,7 +23,6 @@
     }
 
     $title = translate("Color Schemes");
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
           <h1>

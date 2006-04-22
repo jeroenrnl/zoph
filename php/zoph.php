@@ -17,7 +17,6 @@
  */
 
     require_once("include.inc.php");
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     $title = translate("Home");
     require_once("header.inc.php");
 

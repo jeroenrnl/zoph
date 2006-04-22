@@ -33,7 +33,6 @@
     }
 
     $title = translate("Annotate Photo");
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
     $photo_id = getvar("photo_id");
     $photo = new photo($photo_id);

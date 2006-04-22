@@ -41,7 +41,6 @@
     $monthName = $month_array[$month-1];
 
     $title = "$monthName $year";
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
 
     require_once("header.inc.php");
 ?>

@@ -117,7 +117,6 @@
     $from_name = $user->person->get_name();
     $from_email = $user->person->get_email();
 
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
 

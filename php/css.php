@@ -39,7 +39,7 @@ body	{
 	font-size: medium;
 	color: <?php echo $TEXT_COLOR ?>;
 	background: <?php echo $PAGE_BG_COLOR ?>;
-	width: <?php echo DEFAULT_TABLE_WIDTH ?>px;
+	width: <?php echo DEFAULT_TABLE_WIDTH ?>;
 	border: none;
 	margin-left: auto; /* To center the page */
 	margin-right: auto;
@@ -65,12 +65,12 @@ h1	{
 	color: <?php echo $TITLE_FONT_COLOR ?>;
 	border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
 	text-align: left;
-	width: <?php echo (DEFAULT_TABLE_WIDTH-8-2) ?>px;
+	width: 100%;
 	clear: left;
 	font-size: x-large;
 	font-weight: bold;
 	display: block;
-	padding: 2px 4px 2px 4px;
+	padding: 2px 16px 2px 4px;
 	margin: 0;
 	}
 
@@ -116,7 +116,7 @@ ul.menu	{
 	margin-left: 4px;
 	padding: 0;
 	display: inline;
-	width: <?php echo (DEFAULT_TABLE_WIDTH-8) ?>px;
+	width: 100%;
 	}
 
 ul.menu li 	{
@@ -157,8 +157,9 @@ div.breadcrumb {
 	float: left;
 	margin: 0;
 	padding: 2px;
+	padding-right: 18px;
 	clear: left;
-	width: <?php echo (DEFAULT_TABLE_WIDTH-2-4) ?>px;
+	width: 100%;
 	} 
 
 div.breadcrumb ul {
@@ -169,6 +170,7 @@ div.breadcrumb ul {
 div.breadcrumb li {
 	margin-left: 1px;
 	padding-left: 2px;
+	padding-right: 8px;
 	border: none;
 	list-style: none;
 	display: inline;
@@ -190,7 +192,7 @@ div.breadcrumb li.firstdots:before {
 .main, .info, .letter	{
 	background: <?php echo $TABLE_BG_COLOR ?>;
 	font-size: medium;
-	width: <?php echo (DEFAULT_TABLE_WIDTH-20-2) ?>px;
+	width: 100%;
 	border-spacing: 0px;
 	padding: 10px;
 	border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;

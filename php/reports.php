@@ -18,7 +18,6 @@
     require_once("include.inc.php");
 
     $title = translate("Reports");
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
     <h1><?php echo translate("reports") ?></h1>

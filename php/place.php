@@ -37,7 +37,6 @@
         $title = translate("New Place");
     }
 
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
 <?php

@@ -77,7 +77,6 @@ if (!$_pause) {
         $new_qs = str_replace("&amp;_pause=1", "", $new_qs);
     }
 
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
 ?>
 <?php echo $header ?>
 <title>Zoph - Slideshow</title>

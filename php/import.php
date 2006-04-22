@@ -47,7 +47,6 @@
 
     $title = translate("Import");
 
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
 require_once("header.inc.php");
 ?>
           <h1><?php echo translate("import photos") ?></h1>

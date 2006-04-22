@@ -75,7 +75,6 @@
         $to_email = $u->person->get_email();
     }
 
-    $table_width = " width=\"" . DEFAULT_TABLE_WIDTH . "\"";
     require_once("header.inc.php");
 ?>
 

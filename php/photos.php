@@ -73,12 +73,8 @@
 
     if (!($num_thumbnails == 0 || $_cols <= 4)) {
         $width = ((THUMB_SIZE + 14) * $_cols) + 25;
-        if ($width > DEFAULT_TABLE_WIDTH) {
-            $extrastyle = "body	{ width: " . $width . "px; }\n" .
-                ".main	{ width: " . ($width - 20 - 2) .  "px; }\n" .
-                "ul.menu { width: " . ($width - 8 ) . "px; }\n" .
-                "h1	{ width: " . ($width - 8 - 2) . "px; }\n" .
-                "div.breadcrumb { width: " . ($width - 2 -4) . "px; }\n";
+        if ($width > DEFAULT_TABLE_WIDTH || strpos(DEFAULT_TABLE_WIDTH, "%")) {
+            $extrastyle = "body	{ width: " . $width . "px; }\n"; 
         }
     }
     require_once("header.inc.php");
