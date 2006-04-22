@@ -27,9 +27,10 @@
     // Temporary addition until CSS sheet can be chosen from config page
     define('CSS_SHEET', 'css.php');
 
-    define('USE_IMAGE_SERVICE', 0);
+    define('USE_IMAGE_SERVICE', 1);
     define('IMAGE_DIR', "/data/images/");
-    define('WEB_IMAGE_DIR', "/images/"); // from webserver doc root
+    // Only needed when imaga service is off:
+    // define('WEB_IMAGE_DIR', "/images/"); // from webserver doc root
 
     // authentication method used from auth.inc.php
     // (this needs to be the name of a function in validator.inc.php)
