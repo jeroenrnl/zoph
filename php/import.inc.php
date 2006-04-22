@@ -59,13 +59,15 @@ function process_images($images, $path, $fields) {
                 $date = cleanup_path(str_replace("-", "/", $exif_data["date"]));
                 create_dir_recursive($absolute_path . "/" .  $date . "/");
             }
+        } else {
+            echo "PHP version too old (<4.2.0), not trying to get EXIF info";
         }
         create_dir("$absolute_path" . "/" . "$date" . "/" . THUMB_PREFIX);
         create_dir("$absolute_path" . "/" . "$date" . "/" . MID_PREFIX);
         $image_dir = dirname($image);
         $image_name = basename($image);
 
-        if ($image_dir != $absolute_path . "/" . $date) {
+        if (cleanup_path($image_dir) != cleanup_path($absolute_path . "/" . $date)) {
             $new_image = $absolute_path . "/" . $date . "/" . $image_name;
             if (!copy($image, $new_image)) {
                 echo sprintf(translate("Could not copy %s to %s."), $image, $new_image) . "<br>\n";
