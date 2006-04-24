@@ -203,11 +203,6 @@ Class rtplang {
             }
         }
         
-        $htmltag = "<html";
-        if($this->tablangs["htmltagoption"][$ind] != "nothing" && $this->tablangs["htmltagoption"][$ind] != "") {
-            $htmltag .= " " . $this->tablangs["htmltagoption"][$ind];
-        }
-        $htmltag .= ">";
 
         if($this->tablangs["charset"][$ind] == "") {
             return "iso-8859-1";
@@ -218,6 +213,11 @@ Class rtplang {
 
     function lang_header() {
         $charset=$this->get_encoding();
+        $htmltag = "<html";
+        if($this->tablangs["htmltagoption"][$ind] != "nothing" && $this->tablangs["htmltagoption"][$ind] != "") {
+            $htmltag .= " " . $this->tablangs["htmltagoption"][$ind];
+        }
+        $htmltag .= ">";
         header("Content-Type: text/html; charset=$charset");
         $texte .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">
 $htmltag
