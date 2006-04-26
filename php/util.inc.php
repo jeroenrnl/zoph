@@ -559,4 +559,14 @@ function cleanup_path($path) {
    return preg_replace($search,$replace, $path);
 }
 
+function create_actionlinks($actionlinks) {
+    $html="<span class=\"actionlink\">\n";
+    while (list($key, $val) = each($actionlinks)) {
+        $html .= $bar . "<a href=\"" . $val . "\">" . translate($key, 0) . "</a>";
+        $bar=" | ";
+    }
+    $html.="</span>\n";
+    return $html;
+}
+
 ?>
