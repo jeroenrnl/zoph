@@ -70,7 +70,7 @@ h1  {
     font-size: x-large;
     font-weight: bold;
     display: block;
-    padding: 2px 16px 2px 4px;
+    padding: 2px 10px 2px 10px;
     margin: 0;
     }
 
@@ -114,9 +114,8 @@ form    {
 ul.menu {
     background: <?php echo $PAGE_BG_COLOR ?>;
     margin-left: 4px;
-    padding: 0;
+    padding: 0 0 0 10px; 
     display: inline;
-    width: 100%;
     }
 
 ul.menu li  {
@@ -128,8 +127,16 @@ ul.menu li  {
     list-style: none;
     display: inline;
     background: <?php echo $TAB_BG_COLOR ?>;
-        color: <?php echo $TAB_FONT_COLOR ?>;
+    color: <?php echo $TAB_FONT_COLOR ?>;
     font-size: small;
+    }
+
+ul.menu li:hover {
+    position: relative;
+    background: <?php echo $BREADCRUMB_BG_COLOR ?>;
+    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    border-bottom: none;
+    padding: 2px 0 2px 0;
     }
 
 ul.menu li.selected {
@@ -156,8 +163,7 @@ div.breadcrumb {
     font-size: small;
     float: left;
     margin: 0;
-    padding: 2px;
-    padding-right: 18px;
+    padding: 2px 10px 2px 10px;
     clear: left;
     width: 100%;
     } 
@@ -189,7 +195,7 @@ div.breadcrumb li.firstdots:before {
     }
 
 /* Main page */
-.main, .info, .letter   {
+.main, .info, .letter, div#selection   {
     background: <?php echo $TABLE_BG_COLOR ?>;
     font-size: medium;
     width: 100%;
