@@ -48,10 +48,8 @@
     } elseif($_action == "insert") {
         $desc_1=getvar("desc_1");
         $desc_2=getvar("desc_2");
-        $keepselected=getvar("keepselected");
         
 	    $photo_1->create_relation($photo_id_2, $desc_1, $desc_2);
-        if (!$keepselected) { unset($_SESSION["relate_id"]); }
         $action="display";
     } elseif ($_action == "edit") {
         $action="update";
@@ -156,14 +154,6 @@
             <?php echo create_text_input("desc_1", $desc_1) ?><br>
             <label for="desc_2"><?php echo translate("Description for second photo") ?></label>
             <?php echo create_text_input("desc_2", $desc_2) ?><br>
-<?php
-            if ($action=="insert") {
-?>
-                <label for="keepselected"><?php echo translate("Keep first photo selected")?></label>
-                <?php echo create_pulldown("keepselected", 0, array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?><br>
-<?php
-            }
-?>
             <input type="submit" value="<?php echo translate($action, 0) ?>">
         </form>
     </div>
