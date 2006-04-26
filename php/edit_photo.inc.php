@@ -15,40 +15,17 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    $return_qs = getvar("_qs");
-
-    if (empty($return_qs)) {
-       if ($user->prefs->get("auto_edit")) {
-           $return_qs=htmlentities(urldecode($qs));
-       } else {
-           $return_qs = "_action=display&amp;photo_id=" . $photo->get("photo_id");
-       }
-    }
 ?>
           <h1>
-          <span class="actionlink">
 <?php
-    if ($user->prefs->get("auto_edit")) {
+          echo create_actionlinks($actionlinks);
 ?>
-            <a href="photo.php?_action=display&amp;<?php echo $return_qs ?>"><?php echo translate("return") ?></a>
-<?php
-    } else {
-?>
-            <a href="photo.php?<?php echo $return_qs ?>"><?php echo translate("return") ?></a>
-<?php
-    }
-        if ($user->is_admin()) {
-/*            | <a href="photo.php?_action=delete&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a> */
-?>
-
-            | <a href="photo.php?_action=delete&amp;photo_id=<?php echo $photo->get("photo_id") ?>&amp;_qs=<?php echo $encoded_qs ?>"><?php echo translate("delete") ?></a>
-            
-<?php
-        }
-?>
-            </span>
           <?php echo translate("photo") ?>
           </h1>
+<?php
+          require_once("selection.inc.php");
+?>
+              
       <div class="main">
       <form action="photo.php" method="POST">
 <input type="hidden" name="_action" value="<?php echo $action ?>">
@@ -56,6 +33,11 @@
 
 <?php
     if ($action == "insert") {
+        unset($actionlinks["email"]);
+        unset($actionlinks["edit"]);
+        unset($actionlinks["add comment"]);
+        unset($actionlinks["select"]);
+        unset($actionlinks["delete"]);
 ?>
       <table class="newphoto">
         <tr>

@@ -28,6 +28,7 @@
 
     $photo = new photo($photo_id);
     */
+
     $_qs=getvar("_qs");
     if($user->prefs->get("auto_edit") && $_qs && $_action == "update") {
         header("Location: photo.php?" . html_entity_decode(urldecode($_qs)));
@@ -35,10 +36,11 @@
 
     $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
     $qs = preg_replace('/_action=\w+&?/', '', $qs);
-    $encoded_qs = urlencode(htmlentities(getvar("_qs")));
+    $encoded_qs = urlencode(htmlentities($_qs));
     if (empty($encoded_qs)) {
         $encoded_qs = urlencode(htmlentities($qs));
     }
+
     if ($photo_id) { // would be passed for edit or delete
         $photo = new photo($photo_id);
     }
@@ -95,10 +97,47 @@
         
         $up_link = "<a href=\"photos.php?$up_qs\">" . translate("Up", 0) . "</a>";
     }
+    
+    $return_qs=$_qs;
+    if(empty($return_qs)) { 
+        if ($user->prefs->get("auto_edit")) {
+            $return_qs=htmlentities(urldecode($qs));
+        } else {
+            $return_qs = "_action=display&amp;photo_id=" . $photo->get("photo_id");
+        }
+    }
+
+    if (EMAIL_PHOTOS) {
+        $actionlinks["email"]="mail.php?_action=compose&amp;photo_id=" . $photo->get("photo_id");
+    }
+
+    if ($user->is_admin() || $permissions->get("writable")) {
+        $actionlinks["edit"]="photo.php?_action=edit&amp;photo_id=" . $photo->get("photo_id") . "&amp;_qs=" . $encoded_qs;
+    }
+    if ($user->get("lightbox_id")) {
+        $actionlinks["lightbox"]="photo.php?_action=lightbox&amp;" . $qs;
+    }
+    if ((ALLOW_COMMENTS) && ($user->is_admin() || $user->get("leave_comments"))) {
+        $actionlinks["add comment"]="comment.php?_action=new&amp;photo_id=" . $photo->get("photo_id");
+    }
+
+    if (!$user->prefs->get("auto_edit") && $_action=="edit" ) {
+        $actionlinks["return"]="photo.php?" .  $return_qs;
+    }
+    
+    if ($user->is_admin() && $_action!="delete") {
+        $actionlinks["select"]="photo.php?_action=select&amp;" . $qs;
+        $actionlinks["delete"]="photo.php?_action=delete&amp;photo_id=" . $photo->get("photo_id") . "&amp;_qs=" . $encoded_qs;
+    } else if ($_action=="delete") {    
+        unset($actionlinks);
+        $actionlinks["delete"]="photo.php?_action=confirm&amp;photo_id=" . $photo->get("photo_id") . "&amp;_qs=" . $encoded_qs;
+        $actionlinks["cancel"]="photo.php?" . $_qs;
+    }
 
     // jump to edit screen if auto edit pref is set
     // permission to edit checked below
     if ((!$_action || $_action == "search") && $user->prefs->get("auto_edit")) {
+        $actionlinks["return"]="photo.php?_action=display&amp;" . $return_qs;
         $_action = "edit";
     }
 
@@ -139,21 +178,34 @@
     }
 
     if ($_action == "edit") {
+        $actionlinks["return"]="photo.php?_action=display&amp;" . $return_qs;
+        unset($actionlinks["cancel"]);
+        unset($actionlinks["edit"]);
         $action = "update";
     }
     else if ($_action == "update") {
+        unset($actionlinks["cancel"]);
+        unset($actionlinks["edit"]);
 
         $photo->set_fields($request_vars);
         $photo->update($request_vars); // pass again for add people, cats, etc
         $action = "update";
     }
     else if ($_action == "new") {
+        unset($actionlinks);
+        $actionlinks["cancel"]="photos.php?" . $_qs;
         $action = "insert";
     }
     else if ($_action == "insert") {
         $photo->set_fields($request_vars);
         $photo->insert();
         $action = "update";
+        
+        unset($actionlinks["email"]);
+        unset($actionlinks["lightbox"]);
+        unset($actionlinks["add comment"]);
+        unset($actionlinks["select"]);
+        unset($actionlinks["delete"]);
     }
     else if ($_action == "delete") {
         $action = "confirm";
@@ -166,32 +218,28 @@
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = "zoph.php"; }
         header("Location: " . add_sid($link));
-    }
-    else if ($_action == "relate") {
-        if ($_SESSION["relate_id"]) {
-           $link="relation.php?_action=new&" . 
-               "photo_id_1=" . $_SESSION["relate_id"] . "&" .
-               "photo_id_2=" . $photo->get("photo_id") . "&" . 
-               "qs=" . $encoded_qs;
-           header("Location: " . add_sid($link));
-           // unset($_SESSION["relate_id"]);
-        } else {
-           $_SESSION["relate_id"]=$photo->get("photo_id");
+    } else if ($_action == "select") {
+        $sel_key=false;
+        if(is_array($_SESSION["selected_photo"])) {
+            $sel_key=array_search($photo_id, $_SESSION["selected_photo"]);
+        }
+        if($sel_key === false) {
+            $_SESSION["selected_photo"][]=$photo->get("photo_id");
         }
         $action="display";
-    }
-    else if ($_action == "unrelate") {
-        if ($_SESSION["relate_id"]) {
-           unset($_SESSION["relate_id"]);
+    } else if ($_action == "deselect") {
+        $sel_key=array_search($photo_id, $_SESSION["selected_photo"]);
+
+        if($sel_key !== false) {
+            unset($_SESSION["selected_photo"][$sel_key]);
         }
-        $action="display";
-    }
+        header("Location: photo.php?" . html_entity_decode(urldecode($_qs)));
     // 2005-04-10 --JCT
     //
     // lightbox and rate actions moved
     // to prior to $user->is_admin() check
     //
-    else {
+    } else {
         $action = "display";
     }
 
@@ -228,69 +276,23 @@ require_once("header.inc.php");
 <?php
     }
     else if ($action == "display") {
+        unset($actionlinks["cancel"]);
+        unset($actionlinks["return"]);
         $title_bar = translate("photo");
         if ($num_photos) {
             $title_bar .= " " . ($offset + 1) . " of $num_photos";
         }
 ?>
           <h1>
-          <span class="actionlink">
 <?php
-        $bar = "";
-        if (EMAIL_PHOTOS) {
+    echo create_actionlinks($actionlinks);
 ?>
-            <?php echo $bar ?> <a href="mail.php?_action=compose&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("email") ?></a>
-<?php
-            $bar = "|";
-        }
-
-        if ($user->is_admin() || $permissions->get("writable")) {
-?>
-            <?php echo $bar ?> <a href="photo.php?_action=edit&amp;photo_id=<?php echo $photo->get("photo_id") ?>&amp;_qs=<?php echo $encoded_qs ?>"><?php echo translate("edit") ?></a>
-<?php
-            $bar = "|";
-
-            if ($user->is_admin()) {
-?>
-            | <a href="photo.php?_action=delete&amp;photo_id=<?php echo $photo->get("photo_id") ?>&amp;_qs=<?php echo $encoded_qs ?>"><?php echo translate("delete") ?></a>
-<?php
-            }
-        }
-        if ($user->get("lightbox_id")) {
-?>
-            <?php echo $bar ?> <a href="photo.php?_action=lightbox&amp;<?php echo $qs ?>"><?php echo translate("lightbox", 0) ?></a>
-<?php
-            $bar = "|";
-        }
-        if ((ALLOW_COMMENTS) && ($user->is_admin() || $user->get("leave_comments"))) {
-?>
-            <?php echo $bar ?> <a href="comment.php?_action=new&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("add comment") ?></a>
-<?php
-            $bar = "|";
-        }
-        if($user->is_admin()) {
-            if ($_SESSION["relate_id"]) {
-                if ($_SESSION["relate_id"] == $photo->get("photo_id")) {
-?>
-                    <?php echo $bar ?> <a href="photo.php?_action=unrelate&amp;<?php echo $qs ?>"><?php echo translate("undo selection for relation", 0) ?></a>
-<?php
-                } else {
-?>
-                    <?php echo $bar ?> <a href="photo.php?_action=relate&amp;<?php echo $qs ?>"><?php echo translate("relate to selected", 0) ?></a>
-<?php
-                }
-            } else {
-?>
-                <?php echo $bar ?> <a href="photo.php?_action=relate&amp;<?php echo $qs ?>"><?php echo translate("create relation", 0) ?></a>
-<?php
-            }
-        }
-        $bar = "|";
-?>
-        </span>
           <?php echo $title_bar ?>
           </h1>
-        <div class="main">
+<?php
+    require_once("selection.inc.php");
+?>
+    <div class="main">
 
 <?php
         if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
@@ -439,10 +441,9 @@ require_once("header.inc.php");
 ?>
           <h1><?php echo translate("photo") ?></h1>
           <div class="main">
-            <span class="actionlink">
-              <a href="photo.php?_action=confirm&amp;photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("delete") ?></a> |
-              <a href="photo.php?<?php echo $encoded_qs ?>"><?php echo translate("cancel") ?></a>
-            </span>
+<?php
+    echo create_actionlinks($actionlinks);
+?>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $photo->get("name")) ?>
 
 <?php
