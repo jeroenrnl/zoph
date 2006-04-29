@@ -1,0 +1,19 @@
+#-----------------------------------------
+# Configuration file for Zoph
+#-----------------------------------------
+#
+# Rename this file to .zophrc and place it in your home directory.
+#
+# All settings must match the settings with the same name in config.inc.php
+#
+# edit these to reflect your database
+$db_host = 'localhost';  # hostname or hostname:port
+$db_name = 'zoph';
+$db_user = 'zoph_rw';
+$db_pass = 'pass';
+$db_prefix = 'zoph_';
+
+#
+# set this to your image directory
+#
+$image_dir = '/data/images/';

@@ -36,15 +36,12 @@ use File::Copy;
 
 $| = 1;
 
-# edit these to reflect your database
-my $db_host = 'localhost';  # hostname or hostname:port
-my $db_name = 'zoph';
-my $db_user = 'zoph_rw';
-my $db_pass = 'password';
-my $db_prefix = 'zoph_';
+die "Error: \$HOME/.zophrc not found"
+  if !-e $ENV{HOME}."/.zophrc";
 
-# set this to your image directory
-my $image_dir = '/data/images';
+require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
+my $db_prefix = $::db_prefix;
+my $image_dir = $::image_dir;
 
 my $version = '0.5.1';
 
@@ -103,7 +100,13 @@ if ($#ARGV < 0) {
     exit(0);
 }
 
-my $dbh = DBI->connect("DBI:mysql:$db_name:$db_host", $db_user, $db_pass);
+my $dbh = DBI->connect("DBI:mysql:$::db_name:$::db_host", $::db_user, $::db_pass);
+$::db_name = '';
+$::db_user = '';
+$::db_pass = '';
+$::db_host = '';
+$::db_prefix = '';
+$::image_dir = '';
 
 GetOptions(
     'help' => sub { printUsage(); exit(0); },
