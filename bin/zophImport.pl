@@ -49,17 +49,20 @@ use DBI;
 use Image::Size;
 use File::Copy;
 use File::stat;
+use Cwd 'abs_path';
 
 $| = 1;
 
 # edit these to reflect your database
-my $db_host = 'localhost';  # hostname or hostname:port
-my $db_name = 'zoph';
-my $db_user = 'zoph_rw';
-my $db_pass = 'pass';
-my $db_prefix = 'zoph_';
+die "Error: \$HOME/.zophrc not found"
+  if !-e $ENV{HOME}."/.zophrc";
 
+require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
+my $db_prefix = $::db_prefix;
+my $image_dir = $::image_dir;
+ 
 my $version = '0.5.1';
+ 
 
 my $update     = 0; # update existing photo records instead of inserting
 my $updateSize = 0; # update the size, width and height (implies -update)
@@ -107,7 +110,13 @@ if ($#ARGV < 0) {
     exit(1);
 }
 
-my $dbh = DBI->connect("DBI:mysql:$db_name:$db_host", $db_user, $db_pass);
+my $dbh = DBI->connect("DBI:mysql:$::db_name:$::db_host", $::db_user, $::db_pass);
+$::db_name = '';
+$::db_user = '';
+$::db_pass = '';
+$::db_host = '';
+$::db_prefix = '';
+$::image_dir = '';
 
 GetOptions(
     'help' => sub { printUsage(); exit(0); },
@@ -205,22 +214,22 @@ sub printUsage {
         "zophImport.pl $version\n" .
         "Usage: zophImport.pl [OPTIONS] [IMAGE ...]\n" .
         "OPTIONS:\n" .
-        "	--album ALBUM\n" .
-        "	--category CATEGORY\n" .
-        "	--photographer \"FIRST_NAME LAST_NAME\"\n" .
-        "	--people \"FIRST_NAME LAST_NAME, FIRST_NAME LAST_NAME\"\n" .
-        "	--location PLACE_TITLE\n" .
-        "	--field NAME=VALUE\n" .
-        "	--path\n" .
-        "	--datedDirs\n" .
-        "	--hierarchical\n" .
-        "	--update\n" .
-        "	--updateSize (implies --update)\n" .
-        "	--updateExif (implies --update)\n" .
-        "	--useIds\n" .
-        "	--nothumbnails\n" .
-        "	--verbose\n" .
-        "	--copy\n";
+        "   --album ALBUM\n" .
+        "   --category CATEGORY\n" .
+        "   --photographer \"FIRST_NAME LAST_NAME\"\n" .
+        "   --people \"FIRST_NAME LAST_NAME, FIRST_NAME LAST_NAME\"\n" .
+        "   --location PLACE_TITLE\n" .
+        "   --field NAME=VALUE\n" .
+        "   --path\n" .
+        "   --datedDirs\n" .
+        "   --hierarchical\n" .
+        "   --update\n" .
+        "   --updateSize (implies --update)\n" .
+        "   --updateExif (implies --update)\n" .
+        "   --useIds\n" .
+        "   --nothumbnails\n" .
+        "   --verbose\n" .
+        "   --copy\n";
 }
 
 #
@@ -289,30 +298,39 @@ sub processImage {
                 print "\n$img: no date found in EXIF, using file date: " . $exifHash{"date"} . ", " . $exifHash{"time"} ."\n";
             }
         }
-
         my $newPath = $path;
+
         if ($datedDirs) {
             $newPath = useDatedDir($img);
         }
         elsif ($path) {
             my $thisPath = $img;
             $thisPath =~ s|/?[^/]+$||;
-            if ($path ne $thisPath) {
-                if (not -d $path) {
-                    mkdir($path, 0755) or warn "Could not create dir: $!\n";
+            if (abs_path($image_dir . "/" . $path) ne abs_path($thisPath)) {
+                if (not -d "$image_dir/$path") {
+                    mkdir("$image_dir/$path", 0755) or warn "Could not create dir: $!\n";
                 }
-
-                copy($img, "$path/" . stripPath($img)) or
+                copy($img, "$image_dir/$path/" . stripPath($img)) or
                     die "Could not copy file: $!\n";
                 if (!$copy) {
                     unlink($img);
                 }
             }
-        }
+        } else {
+        my $thisPath = $img;
+            $thisPath =~ s|/?[^/]+$||;
+            if (abs_path($image_dir) ne abs_path($thisPath)) {
+                copy($img, "$image_dir/" . stripPath($img)) or
+                    die "Could not copy file: $!\n";
+                if (!$copy) {
+                    unlink($img);
+                }
+            }
+        } 
     
         if ($newPath) {
             $fieldHash{'path'} = $newPath;
-        }
+        } 
     
         if ($thumbnails) {
             createThumbnails($img, $midPrefix, $midSize, $newPath);
@@ -326,9 +344,9 @@ sub processImage {
 
         # the fancy status indicator
         if ($verbose && !$copy) {
-            print "Image $img moved to $fieldHash{'path'}/".stripPath($img)."\n";
+            print "Image $img moved to $image_dir/$fieldHash{'path'}/".stripPath($img)."\n";
         } elsif ($verbose && $copy) {
-            print "Image $img copied to $fieldHash{'path'}/".stripPath($img)."\n";
+            print "Image $img copied to $image_dir/$fieldHash{'path'}/".stripPath($img)."\n";
         } else {
             print ".";
         }
@@ -402,47 +420,33 @@ sub useDatedDir {
 
     my $imageName = $image;
     $imageName = stripPath($imageName);
+    
+    my $fullPath;
 
     my $datePath = $exifHash{'date'};
     if ($datePath) {
-        $datePath =~ s/-/./g;
-        if ($hierarchical) {
-            @hierpath = split /\./,$datePath;
-            $year = $hierpath[0];
-            $month = $hierpath[1];
-            $day = $hierpath[2];
+    if ($hierarchical) {
+            $datePath =~ s/-/\//g;
 
-            if ($path) {
-                $datePath = $path . '/' . $year;
-            }
-            else {
-                $datePath = $year;
-            }
-            if (not -d $datePath) {
-                mkdir($datePath, 0755) or die "Could not create year-dir:
-$!\n";
-            }
-            $datePath = $datePath . '/' . $month;
-            if (not -d $datePath) {
-                mkdir($datePath, 0755) or die "Could not create month-dir:
-$!\n";
-            }
-            $datePath = $datePath . '/' . $day;
-            if (not -d $datePath) {
-                mkdir($datePath, 0755) or die "Could not create day-dir:
-$!\n";
-            }
-        }
-        else {
             if ($path) {
                 $datePath = $path . '/' . $datePath;
             }
+        $fullPath = $image_dir . "/" . $datePath;
 
-            if (not -d $datePath) {
-                mkdir($datePath, 0755) or die "Could not create dir: $!\n";
+            if (not -d $fullPath) {
+                mkdirRecursive($fullPath, 0755);
             }
         }
-        copy("$image", "$datePath/$imageName")
+        else {
+            $datePath =~ s/-/./g;
+            if ($path) {
+                $datePath = $path . '/' . $datePath;
+            }
+        
+            $fullPath = $image_dir . '/' . $datePath;
+            mkdirRecursive($fullPath, 0755);
+        }
+        copy("$image", "$fullPath/$imageName")
             or die "Could not move file: $!\n";
         if (!$copy) {
             unlink("$image");
@@ -456,29 +460,28 @@ $!\n";
 # Creates a thumbnail for the given image.
 #
 sub createThumbnails {
-    my ($image, $prefix, $maxSide, $outputDir) = @_;
+    my ($image, $prefix, $maxSide, $newPath) = @_;
+
+    
+    my $outputDir = $image_dir;
 
     my $imageName = stripPath($image);
     my $newImageName = $prefix . '_' . $imageName;
-
     my $img = $image;
+    if($newPath) {
+    $outputDir="$image_dir/$newPath";
+    }
+    
     if (not -f $img) {
         $img = "$outputDir/$imageName";
     }
 
     if (not -f $img) {
-        print "Could not find $imageName to create thumbnail\n";
+        print "Could not find $img ($imageName) to create thumbnail\n";
         return;
     }
 
     my ($width, $height, $imgInfo) = imgsize($img);
-
-    if (not $outputDir) {
-        ($outputDir = $image) =~ s|/?[^/]+$||;
-        unless ($outputDir) {
-            $outputDir = ".";
-        }
-    }
 
     if (not -d "$outputDir/$prefix") {
         mkdir("$outputDir/$prefix", 0755)
@@ -1037,4 +1040,17 @@ sub getDateFromFile() {
     return $date, $time;
    # $exifHash{"date"} = $date;
    # $exifHash{"time"} = $time;
+}
+
+sub mkdirRecursive() {
+    my ($directory, $mode) = @_;
+    my $fulldir;
+    my @dirs = split("/", $directory);
+    foreach my $dir (@dirs) {
+        if(!$dir) { next; }
+        $fulldir .= "/" . $dir;
+        if(not -d $fulldir) { 
+            mkdir($fulldir, $mode) or die "Could not create directory $fulldir: $!\n";
+        }
+    }
 }
