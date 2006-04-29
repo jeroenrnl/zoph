@@ -53,7 +53,6 @@ use Cwd 'abs_path';
 
 $| = 1;
 
-# edit these to reflect your database
 die "Error: \$HOME/.zophrc not found"
   if !-e $ENV{HOME}."/.zophrc";
 
