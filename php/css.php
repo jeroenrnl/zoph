@@ -106,9 +106,20 @@ form    {
     width: 100%;
     }
 
-/* Takes care of the border around the page */
+form#quicknav   {
+    float: right;
+    clear: both;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    }
 
-    
+form#quicknav select {
+    clear: none;
+    margin: 0px;
+    width: 10em;
+    }
+
 /* Menubar */
 
 ul.menu {

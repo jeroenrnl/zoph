@@ -63,9 +63,9 @@ function create_text_input($name, $value, $size = 20, $max = 32) {
     return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"" . $value ."\" size=\"$size\" maxlength=\"$max\">\n";
 }
 
-function create_pulldown($name, $value, $value_array) {
+function create_pulldown($name, $value, $value_array, $extraopt = null) {
     $id=ereg_replace("^_+", "", $name);
-    $html = "<select name=\"$name\" id=\"$id\">\n";
+    $html = "<select name=\"$name\" id=\"$id\" $extraopt>\n";
     while (list($val, $label) = each($value_array)) {
         if ($val == $value) { $selected = " selected"; }
         else { $selected  = ""; }

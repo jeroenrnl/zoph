@@ -69,6 +69,11 @@
     }
 ?>
         </h2>
+      <form id="quicknav">
+<?php
+        echo create_pulldown("parent_place_id", 0, get_places_select_array($user), "onChange='form.submit()'");
+?>
+      </form>
 <?php
     }
     if ($user->get("detailed_places")) {
