@@ -48,13 +48,29 @@ else {
 <?php
       /* photo taken date */
 
-  $date = getvar('date'); $_date_conj = getvar('_date_conj'); $_date_op = getvar('_date_op');
-  $count = sizeof($date) - 1; if ( $date[$count] == "+" ) { $date[$count] = "";}
-  for ($i = 0; $i < $count; $i++) {
+    $date = getvar('date'); 
+    $_date_conj = getvar('_date_conj'); 
+    $_date_op = getvar('_date_op');
+  
+    $count = sizeof($date) - 1;
+    if ( $date[$count] == "+" ) {
+        $date[$count] = "";
+    }
+    for ($i = 0; $i <= $count; $i++) {
 ?>
         <tr>
           <td>
+<?php
+    if($i==$count) {
+?>
+        <input type="submit" class="increment" name="date[<?php echo $count + 1; ?>]" value="+">
+<?php
+    } else {
+?>
         &nbsp;
+<?php
+    }
+?>
           </td>
           <td>
 <?php echo create_conjunction_pulldown("_date_conj[$i]", $_date_conj[$i]) ?>
@@ -69,33 +85,32 @@ else {
           </td>
         </tr>
 <?php
-  } ?>
-        <tr>
-          <td>
-        <input type="submit" class="increment" name="date[<?php echo $count + 1; ?>]" value="+">
-          </td>
-          <td>
-<?php echo create_conjunction_pulldown("_date_conj[$count]", $_date_conj[$count]) ?>
-          </td>
-          <td><?php echo translate("photos taken") ?></td>
-          <td>
-<?php echo create_inequality_operator_pulldown("_date_op[$count]", $_date_op[$count]) ?>
-          </td>
-          <td colspan="2">
-<?php echo create_pulldown("date[$count]", $date[$count], get_date_select_array($today, MAX_DAYS_PAST)) ?>
-<?php echo translate("days ago") ?>
-          </td>
-        </tr>
-<?php
+    }
       /* photos last modified */
 
-  $timestamp = getvar('timestamp'); $_timestamp_conj = getvar('_timestamp_conj'); $_timestamp_op = getvar('_timestamp_op');
-  $count = sizeof($timestamp) - 1; if ( $timestamp[$count] == "+" ) { $timestamp[$count] = "";}
-  for ($i = 0; $i < $count; $i++) {
+    $timestamp = getvar('timestamp'); 
+    $_timestamp_conj = getvar('_timestamp_conj'); 
+    $_timestamp_op = getvar('_timestamp_op');
+  
+    $count = sizeof($timestamp) - 1; 
+    if ( $timestamp[$count] == "+" ) { 
+        $timestamp[$count] = "";
+    }
+for ($i = 0; $i <= $count; $i++) {
 ?>
         <tr>
           <td>
+<?php
+    if($i==$count) {
+?>
+        <input type="submit" class="increment" name="timestamp[<?php echo $count + 1; ?>]" value="+">
+<?php
+    } else {
+?>
         &nbsp;
+<?php
+    }
+?>
           </td>
           <td>
 <?php echo create_conjunction_pulldown("_timestamp_conj[$i]", $_timestamp_conj[$i]) ?>
@@ -110,33 +125,33 @@ else {
           </td>
         </tr>
 <?php
-  } ?>
-        <tr>
-          <td>
-        <input type="submit" class="increment" name="timestamp[<?php echo $count + 1; ?>]" value="+">
-          </td>
-          <td>
-<?php echo create_conjunction_pulldown("_timestamp_conj[$count]", $_timestamp_conj[$count]) ?>
-          </td>
-          <td><?php echo translate("photos modified") ?></td>
-          <td>
-<?php echo create_inequality_operator_pulldown("_timestamp_op[$count]", $_timestamp_op[$count]) ?>
-          </td>
-          <td colspan="2">
-<?php echo create_pulldown("timestamp[$count]", $timestamp[$count], get_date_select_array($today, MAX_DAYS_PAST)) ?>
-<?php echo translate("days ago") ?>
-          </td>
-        </tr>
-<?php
+  } 
       /* photo album */
 
-  $album_id = getvar('album_id'); $_album_id_conj = getvar('_album_id_conj'); $_album_id_op = getvar('_album_id_op');
-  $count = sizeof($album_id) - 1; if ( $album_id[$count] == "+" ) { $album_id[$count] = "";}
-  for ($i = 0; $i < $count; $i++) {
+    $album_id = getvar('album_id'); 
+    $_album_id_conj = getvar('_album_id_conj'); 
+    $_album_id_op = getvar('_album_id_op');
+    
+    $count = sizeof($album_id) - 1; 
+    if ( $album_id[$count] == "+" ) { 
+        $album_id[$count] = "";
+    }
+    
+    for ($i = 0; $i <= $count; $i++) {
 ?>
         <tr>
           <td>
+<?php
+    if($i==$count) {
+?>
+        <input type="submit" class="increment" name="album_id[<?php echo $count + 1; ?>]" value="+">
+<?php
+    } else {
+?>
         &nbsp;
+<?php
+    }
+?>
           </td>
           <td>
 <?php echo create_conjunction_pulldown("_album_id_conj[$i]", $_album_id_conj[$i]) ?>
@@ -150,32 +165,33 @@ else {
           </td>
         </tr>
 <?php
-  } ?>
-        <tr>
-          <td>
-        <input type="submit" class="increment" name="album_id[<?php echo $count + 1; ?>]" value="+">
-          </td>
-          <td>
-<?php echo create_conjunction_pulldown("_album_id_conj[$count]", $_album_id_conj[$count]) ?>
-          </td>
-          <td><?php echo translate("album") ?></td>
-          <td>
-<?php echo create_binary_operator_pulldown("_album_id_op[$count]", $_album_id_op[$count]) ?>
-          </td>
-          <td colspan="2">
-<?php echo create_pulldown("album_id[$count]", $album_id[$count], get_albums_search_array($user)) ?>
-          </td>
-        </tr>
-<?php
+  } 
       /* photo category */
 
-  $category_id = getvar('category_id'); $_category_id_conj = getvar('_category_id_conj'); $_category_id_op = getvar('_category_id_op');
-  $count = sizeof($category_id) - 1; if ( $category_id[$count] == "+" ) { $category_id[$count] = "";}
-  for ($i = 0; $i < $count; $i++) {
+    $category_id = getvar('category_id'); 
+    $_category_id_conj = getvar('_category_id_conj'); 
+    $_category_id_op = getvar('_category_id_op');
+    
+    $count = sizeof($category_id) - 1; 
+    if ( $category_id[$count] == "+" ) { 
+        $category_id[$count] = "";
+    }
+    
+    for ($i = 0; $i <= $count; $i++) {
 ?>
         <tr>
           <td>
+<?php
+    if($i==$count) {
+?>
+        <input type="submit" class="increment" name="category_id[<?php echo $count + 1; ?>]" value="+">
+<?php
+    } else {
+?>
         &nbsp;
+<?php
+    }
+?>
           </td>
           <td>
 <?php echo create_conjunction_pulldown("_category_id_conj[$i]", $_category_id_conj[$i]) ?>
@@ -189,32 +205,33 @@ else {
           </td>
         </tr>
 <?php
-  } ?>
-        <tr>
-          <td>
-        <input type="submit" class="increment" name="category_id[<?php echo $count + 1; ?>]" value="+">
-          </td>
-          <td>
-<?php echo create_conjunction_pulldown("_category_id_conj[$count]", $_category_id_conj[$count]) ?>
-          </td>
-          <td><?php echo translate("category") ?></td>
-          <td>
-<?php echo create_binary_operator_pulldown("_category_id_op[$count]", $_category_id_op[$count]) ?>
-          </td>
-          <td colspan="2">
-<?php echo create_pulldown("category_id[$count]", $category_id[$count], get_categories_search_array($user)) ?>
-          </td>
-        </tr>
-<?php
+  }
       /* photo location */
 
-  $location_id = getvar('location_id'); $_location_id_conj = getvar('_location_id_conj'); $_location_id_op = getvar('_location_id_op');
-  $count = sizeof($location_id) - 1; if ( $location_id[$count] == "+" ) { $location_id[$count] = "";}
-  for ($i = 0; $i < $count; $i++) {
+    $location_id = getvar('location_id'); 
+    $_location_id_conj = getvar('_location_id_conj'); 
+    $_location_id_op = getvar('_location_id_op');
+    
+    $count = sizeof($location_id) - 1; 
+    if ( $location_id[$count] == "+" ) { 
+        $location_id[$count] = "";
+    }
+    
+    for ($i = 0; $i <= $count; $i++) {
 ?>
         <tr>
           <td>
+<?php
+    if($i==$count) {
+?>
+        <input type="submit" class="increment" name="location_id[<?php echo $count + 1; ?>]" value="+">
+<?php
+    } else {
+?>
         &nbsp;
+<?php
+    }
+?>
           </td>
           <td>
 <?php echo create_conjunction_pulldown("_location_id_conj[$i]", $_location_id_conj[$i]) ?>
@@ -228,32 +245,33 @@ else {
           </td>
         </tr>
 <?php
-  } ?>
-        <tr>
-          <td>
-        <input type="submit" class="increment" name="location_id[<?php echo $count + 1; ?>]" value="+">
-          </td>
-          <td>
-<?php echo create_conjunction_pulldown("_location_id_conj[$count]", $_location_id_conj[$count]) ?>
-          </td>
-          <td><?php echo translate("location") ?></td>
-          <td>
-<?php echo create_binary_operator_pulldown("_location_id_op[$count]", $_location_id_op[$count]) ?>
-          </td>
-          <td colspan="2">
-<?php echo create_smart_pulldown("location_id[$count]", $location_id[$count], get_places_search_array($user)) ?>
-          </td>
-        </tr>
-<?php
+  } 
       /* photo rating */
 
-  $rating = getvar('rating'); $_rating_conj = getvar('_rating_conj'); $_rating_op = getvar('_rating_op');
-  $count = sizeof($rating) - 1; if ( $rating[$count] == "+" ) { $rating[$count] = "";}
-  for ($i = 0; $i < $count; $i++) {
+    $rating = getvar('rating'); 
+    $_rating_conj = getvar('_rating_conj'); 
+    $_rating_op = getvar('_rating_op');
+  
+    $count = sizeof($rating) - 1; 
+    if ( $rating[$count] == "+" ) { 
+        $rating[$count] = "";
+    }
+  
+    for ($i = 0; $i <= $count; $i++) {
 ?>
         <tr>
           <td>
+<?php
+    if($i==$count) {
+?>
+        <input type="submit" class="increment" name="rating[<?php echo $count + 1; ?>]" value="+">
+<?php
+    } else {
+?>
         &nbsp;
+<?php
+    }
+?>
           </td>
           <td>
 <?php echo create_conjunction_pulldown("_rating_conj[$i]", $_rating_conj[$i]) ?>
@@ -267,32 +285,33 @@ else {
           </td>
         </tr>
 <?php
-  } ?>
-        <tr>
-          <td>
-        <input type="submit" class="increment" name="rating[<?php echo $count + 1; ?>]" value="+">
-          </td>
-          <td>
-<?php echo create_conjunction_pulldown("_rating_conj[$count]", $_rating_conj[$count]) ?>
-          </td>
-          <td><?php echo translate("rating") ?></td>
-          <td>
-<?php echo create_operator_pulldown("_rating_op[$count]", $_rating_op[$count]) ?>
-          </td>
-          <td colspan="2">
-<?php echo create_rating_pulldown($rating[$count], "rating[$count]") ?>
-          </td>
-        </tr>
-<?php
+  } 
       /* photo person */
 
-  $person_id = getvar('person_id'); $_person_id_conj = getvar('_person_id_conj'); $_person_id_op = getvar('_person_id_op');
-  $count = sizeof($person_id) - 1; if ( $person_id[$count] == "+" ) { $person_id[$count] = "";}
-  for ($i = 0; $i < $count; $i++) {
+    $person_id = getvar('person_id'); 
+    $_person_id_conj = getvar('_person_id_conj'); 
+    $_person_id_op = getvar('_person_id_op');
+    
+    $count = sizeof($person_id) - 1; 
+    if ( $person_id[$count] == "+" ) { 
+        $person_id[$count] = "";
+    }
+    
+    for ($i = 0; $i <= $count; $i++) {
 ?>
         <tr>
           <td>
+<?php
+    if($i==$count) {
+?>
+        <input type="submit" class="increment" name="person_id[<?php echo $count + 1; ?>]" value="+">
+<?php
+    } else {
+?>
         &nbsp;
+<?php
+    }
+?>
           </td>
           <td>
 <?php echo create_conjunction_pulldown("_person_id_conj[$i]", $_person_id_conj[$i]) ?>
@@ -306,33 +325,33 @@ else {
           </td>
         </tr>
 <?php
-  } ?>
-        <tr>
-          <td>
-        <input type="submit" class="increment" name="person_id[<?php echo $count + 1; ?>]" value="+">
-          </td>
-          <td>
-<?php echo create_conjunction_pulldown("_person_id_conj[$count]", $_person_id_conj[$count]) ?>
-          </td>
-          <td><?php echo translate("person") ?></td>
-          <td>
-<?php echo create_present_operator_pulldown("_person_id_op[$count]", $_person_id_op[$count]) ?>
-          </td>
-          <td colspan="2">
-<?php echo create_smart_pulldown("person_id[$count]", $person_id[$count], get_people_select_array(get_photographed_people($user))) ?>
-          </td>
-        </tr>
-<?php
+  } 
       /* photographer */
 
-  $photographer_id = getvar('photographer_id'); $_photographer_id_conj = getvar('_photographer_id_conj');
-  $_photographer_id_op = getvar('_photographer_id_op');
-  $count = sizeof($photographer_id) - 1; if ( $photographer_id[$count] == "+" ) { $photographer_id[$count] = "";}
-  for ($i = 0; $i < $count; $i++) {
+    $photographer_id = getvar('photographer_id'); 
+    $_photographer_id_conj = getvar('_photographer_id_conj');
+    $_photographer_id_op = getvar('_photographer_id_op');
+    
+    $count = sizeof($photographer_id) - 1; 
+    if ( $photographer_id[$count] == "+" ) { 
+        $photographer_id[$count] = "";
+    }
+    
+    for ($i = 0; $i <= $count; $i++) {
 ?>
         <tr>
           <td>
+<?php
+    if($i==$count) {
+?>
+        <input type="submit" class="increment" name="photographer_id[<?php echo $count + 1; ?>]" value="+">
+<?php
+    } else {
+?>
         &nbsp;
+<?php
+    }
+?>
           </td>
           <td>
 <?php echo create_conjunction_pulldown("_photographer_id_conj[$i]", $_photographer_id_conj[$i]) ?>
@@ -346,32 +365,33 @@ else {
           </td>
         </tr>
 <?php
-  } ?>
-        <tr>
-          <td>
-        <input type="submit" class="increment" name="photographer_id[<?php echo $count + 1; ?>]" value="+">
-          </td>
-          <td>
-<?php echo create_conjunction_pulldown("_photographer_id_conj[$count]", $_photographer_id_conj[$count]) ?>
-          </td>
-          <td><?php echo translate("photographer") ?></td>
-          <td>
-<?php echo create_binary_operator_pulldown("_photographer_id_op[$count]", $_photographer_id_op[$count]) ?>
-          </td>
-          <td colspan="2">
-<?php echo create_smart_pulldown("photographer_id[$count]", $photographer_id[$count], get_people_select_array(get_photographers($user))) ?>
-          </td>
-        </tr>
-<?php
+    } 
       /* photo exif field data */
 
-  $field = getvar('field'); $_field = getvar('_field'); $_field_conj = getvar('_field_conj'); $_field_op = getvar('_field_op');
-  $count = sizeof($_field) - 1; if ( $_field[$count] == "+" ) { $_field[$count] = "";}
-  for ($i = 0; $i < $count; $i++) {
+    $field = getvar('field'); 
+    $_field = getvar('_field'); 
+    $_field_conj = getvar('_field_conj'); 
+    $_field_op = getvar('_field_op');
+    
+    $count = sizeof($_field) - 1; 
+    if ( $_field[$count] == "+" ) { 
+        $_field[$count] = "";
+    }
+    for ($i = 0; $i <= $count; $i++) {
 ?>
         <tr>
           <td>
+<?php
+    if($i==$count) {
+?>
+        <input type="submit" class="increment" name="_field[<?php echo $count + 1; ?>]" value="+">
+<?php
+    } else {
+?>
         &nbsp;
+<?php
+    }
+?>
           </td>
           <td>
 <?php echo create_conjunction_pulldown("_field_conj[$i]", $_field_conj[$i]) ?>
@@ -387,24 +407,8 @@ else {
           </td>
         </tr>
 <?php
-  } ?>
-        <tr>
-          <td>
-        <input type="submit" class="increment" name="_field[<?php echo $count + 1; ?>]" value="+">
-          </td>
-          <td>
-<?php echo create_conjunction_pulldown("_field_conj[$count]", $_field_conj[$count]) ?>
-          </td>
-          <td>
-<?php echo create_photo_field_pulldown("_field[$count]", $_field[$count]) ?>
-          </td>
-          <td>
-<?php echo create_operator_pulldown("_field_op[$count]", $_field_op[$count]) ?>
-          </td>
-          <td colspan="2">
-            <input type="text" name="field[<?php echo $count; ?>]" value="<?php echo $field[$count]; ?>" size="24" maxlength="64">
-          </td>
-        </tr>
+    }
+?>
       </table>
       <!-- And another search button for consistancy -->
       <span>
