@@ -234,28 +234,28 @@ function clean_request_vars($vars) {
         // keep _action now that the pager links point back to search.php
         if ($key == "_button") { continue; }
 
-	if ( is_array($val) ) { 
-	  while (list($subkey, $subval) = each($val)) {
-	    if (empty($subval)) { continue; }
+        if ( is_array($val) ) { 
+            while (list($subkey, $subval) = each($val)) {
+                if (empty($subval)) { continue; }
 
-	    //  change var_op[key] to var#key_op
-	    if (substr($key, -3) == "_op") {
-	      $newkey = substr($key, 0, -3) . '#' . $subkey . '_op';
+                //  change var_op[key] to var#key_op
+                if (substr($key, -3) == "_op") {
+                    $newkey = substr($key, 0, -3) . '#' . $subkey . '_op';
 
-	    //  change var_conj[key] to var#key_conj
-	    } elseif (substr($key, -5) == "_conj") {
-	      $newkey = substr($key, 0, -5) . '#' . $subkey . '_conj';
+                    //  change var_conj[key] to var#key_conj
+                } elseif (substr($key, -5) == "_conj") {
+                    $newkey = substr($key, 0, -5) . '#' . $subkey . '_conj';
 
-	    //  change var[key] to var#key
-	    } else {
-	      $newkey = $key . '#' . $subkey;
-	    }
-	    
-	    $interim_vars[$newkey] = $subval;
-	  }
-	} else {
-	$interim_vars[$key] = $val;
-	}
+                    //  change var[key] to var#key
+                } else {
+                    $newkey = $key . '#' . $subkey;
+                }
+        
+                $interim_vars[$newkey] = $subval;
+            }
+        } else {
+            $interim_vars[$key] = $val;
+        }
     }
 
 /*
@@ -267,37 +267,37 @@ function clean_request_vars($vars) {
 */
 
     while (list($key, $val) = each($interim_vars)) {
+        // process _var variables
+        if (substr($key, 0, 1) == "_") {
 
-      // process _var variables
-      if (substr($key, 0, 1) == "_") {
+            //process _op variables
+            if (substr($key, -3) == "_op") {
+                // replace _op with -op to be compatable with the rest of application
+                $key = substr_replace($key, '-', -3, -2);
+                // get rid of ops without fields
+                $field = substr($key, 1, -3);
+                if (empty($interim_vars[$field]) && empty($interim_vars["_$field"])) { continue; }
 
-        //process _op variables
-        if (substr($key, -3) == "_op") {
-	  // replace _op with -op to be compatable with the rest of application
-	  $key = substr_replace($key, '-', -3, -2);
-          // get rid of ops without fields
-          $field = substr($key, 1, -3);
-          if (empty($interim_vars[$field]) && empty($interim_vars["_$field"])) { continue; }
+                //process _conj variables
+            } elseif (substr($key, -5) == "_conj") {
+                // replace _conj with -conj to be compatable 
+                // with the rest of application
+                $key = substr_replace($key, '-', -5, -4);
+                // get rid of ops without fields
+                $field = substr($key, 1, -5);
+                if (empty($interim_vars[$field]) && empty($interim_vars["_$field"])) { continue; }
 
-        //process _conj variables
-        } elseif (substr($key, -5) == "_conj") {
-	  // replace _conj with -conj to be compatable with the rest of application
-	  $key = substr_replace($key, '-', -5, -4);
-          // get rid of ops without fields
-          $field = substr($key, 1, -5);
-          if (empty($interim_vars[$field]) && empty($interim_vars["_$field"])) { continue; }
+            } else {
+                $field = substr($key, 1);
+            }
 
+            //process "_field" type variables
+            if (substr($field, 0, 5) == "field" && (empty($interim_vars[$field]) || empty($interim_vars["_$field"]))) { continue; }
         } else {
-          $field = substr($key, 1);
-	}
 
-        //process "_field" type variables
-        if (substr($field, 0, 5) == "field" && (empty($interim_vars[$field]) || empty($interim_vars["_$field"]))) { continue; }
-      } else {
-
-        //process "field" type variables
-        if (substr($key, 0, 5) == "field" && empty($interim_vars["_$key"])) { continue; }
-      }
+            //process "field" type variables
+            if (substr($key, 0, 5) == "field" && empty($interim_vars["_$key"])) { continue; }
+        }
 
         $clean_vars[$key] = $val;
     }
