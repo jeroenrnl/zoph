@@ -246,6 +246,9 @@ function clean_request_vars($vars) {
                 } elseif (substr($key, -5) == "_conj") {
                     $newkey = substr($key, 0, -5) . '#' . $subkey . '_conj';
 
+                    //  change var_children[key] to var#key_children
+                } elseif (substr($key, -9) == "_children") {
+                    $newkey = substr($key, 0, -9) . '#' . $subkey . '_children';
                     //  change var[key] to var#key
                 } else {
                     $newkey = $key . '#' . $subkey;
@@ -286,7 +289,14 @@ function clean_request_vars($vars) {
                 // get rid of ops without fields
                 $field = substr($key, 1, -5);
                 if (empty($interim_vars[$field]) && empty($interim_vars["_$field"])) { continue; }
-
+                //process _children variables
+            } elseif (substr($key, -9) == "_children") {
+                // replace _children with -children to be compatable 
+                // with the rest of application
+                $key = substr_replace($key, '-', -9, -8);
+                // get rid of ops without fields
+                $field = substr($key, 1, -9);
+                if (empty($interim_vars[$field]) && empty($interim_vars["_$field"])) { continue; }
             } else {
                 $field = substr($key, 1);
             }

@@ -131,13 +131,19 @@ for ($i = 0; $i <= $count; $i++) {
     $album_id = getvar('album_id'); 
     $_album_id_conj = getvar('_album_id_conj'); 
     $_album_id_op = getvar('_album_id_op');
-    
+    $_album_id_children = getvar('_album_id_children');
+
     $count = sizeof($album_id) - 1; 
     if ( $album_id[$count] == "+" ) { 
         $album_id[$count] = "";
     }
     
     for ($i = 0; $i <= $count; $i++) {
+        if ($_album_id_children[$i]) {
+            $checked="checked";
+        } else {
+            $checked="";
+        }
 ?>
         <tr>
           <td>
@@ -162,6 +168,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php echo create_pulldown("album_id[$i]", $album_id[$i], get_albums_search_array($user)) ?>
+          <input type="checkbox" name="_album_id_children[<?php echo $i ?>]" value="no" <?php echo $checked ?>><label for="_album_id_children[<?php echo $i ?>]"><?php echo translate("no children") ?></label>
           </td>
         </tr>
 <?php
@@ -171,6 +178,7 @@ for ($i = 0; $i <= $count; $i++) {
     $category_id = getvar('category_id'); 
     $_category_id_conj = getvar('_category_id_conj'); 
     $_category_id_op = getvar('_category_id_op');
+    $_category_id_children = getvar('_category_id_children');
     
     $count = sizeof($category_id) - 1; 
     if ( $category_id[$count] == "+" ) { 
@@ -178,6 +186,11 @@ for ($i = 0; $i <= $count; $i++) {
     }
     
     for ($i = 0; $i <= $count; $i++) {
+        if ($_category_id_children[$i]) {
+            $checked="checked";
+        } else {
+            $checked="";
+        }
 ?>
         <tr>
           <td>
@@ -202,6 +215,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php echo create_pulldown("category_id[$i]", $category_id[$i], get_categories_search_array($user)) ?>
+          <input type="checkbox" name="_category_id_children[<?php echo $i ?>]" value="no" <?php echo $checked ?>><label for="_category_id_children[<?php echo $i ?>]"><?php echo translate("no children") ?></label>
           </td>
         </tr>
 <?php
@@ -211,6 +225,7 @@ for ($i = 0; $i <= $count; $i++) {
     $location_id = getvar('location_id'); 
     $_location_id_conj = getvar('_location_id_conj'); 
     $_location_id_op = getvar('_location_id_op');
+    $_location_id_children = getvar('_location_id_children');
     
     $count = sizeof($location_id) - 1; 
     if ( $location_id[$count] == "+" ) { 
@@ -218,6 +233,11 @@ for ($i = 0; $i <= $count; $i++) {
     }
     
     for ($i = 0; $i <= $count; $i++) {
+        if ($_location_id_children[$i]) {
+            $checked="checked";
+        } else {
+            $checked="";
+        }
 ?>
         <tr>
           <td>
@@ -242,6 +262,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php echo create_smart_pulldown("location_id[$i]", $location_id[$i], get_places_search_array($user)) ?>
+          <input type="checkbox" name="_location_id_children[<?php echo $i ?>]" value="no" <?php echo $checked ?>><label for="_location_id_children[<?php echo $i ?>]"><?php echo translate("no children") ?></label>
           </td>
         </tr>
 <?php

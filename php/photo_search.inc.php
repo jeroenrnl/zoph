@@ -86,6 +86,12 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         if (!in_array($op, $good_ops)) 
             { die ("Illegal operator: " . $op); }
 
+        $children=$vars["_" . $key . $suffix . "-children"];
+        if($children) {
+            $val_no_children=split(",",$val);
+            $val=$val_no_children[0];
+        }
+
         if ($val == "null") {
             if ($op == "=") { $op = "is"; }
             else if ($op = "!=") { $op = "is not"; }
@@ -196,7 +202,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 if ($user->is_admin() || $pa != "pa") {
                     $from["$pa"] = "photo_albums";
                 }
-
                 // the regexp matches a list of numbers, separated by comma's.
                 // "1" matches, "1," not, "1,2" matches "1,333" matches
                 // "1, a" not, etc.
