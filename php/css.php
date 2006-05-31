@@ -275,6 +275,23 @@ table.places td {
     padding-right: 5px;
     }
 
+table#search input[type="checkbox"] {
+    float: none;
+    }
+
+table#search input[type="checkbox"] + label {
+    float: none;
+    display: inline;
+    position: relative;
+    font-size: x-small;
+    font-weight: normal;
+    margin: 3px;
+    padding: 0;
+    top: 8px;
+    width: auto;
+    clear: none;
+    }
+
 /* Links that appear on the right hand side of the title bar or page */
 
 span.actionlink {
