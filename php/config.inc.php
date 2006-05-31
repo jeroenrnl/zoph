@@ -81,6 +81,11 @@
     define('CLIENT_WEB_IMPORT', 1);
     define('SERVER_WEB_IMPORT', 0);
 
+    // Maximum filesize to be uploaded, in bytes:
+    // Make sure you also change "upload_max_filesize" "post_max_size"
+    // and possibly "max_execution_time" and "max_input_time" in php.ini
+    define('MAX_UPLOAD', 10000000);
+        
     // commands to use to expand uploaded archives.  set to 0 to disable.
     define('UNZIP_CMD', 0);
     //define('UNZIP_CMD', 'unzip');

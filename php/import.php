@@ -64,7 +64,7 @@ require_once("header.inc.php");
     else {
 ?>
 <tr><td>
-<input type="hidden" name="MAX_FILE_SIZE" value="10000000">
+<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_UPLOAD ?>"> 
 <input type="hidden" name="_action" value="<?php echo $action ?>">
 </td></tr>
 <?php
@@ -227,6 +227,7 @@ require_once("header.inc.php");
 
     // do the import down here
     if ($_action == "import") {
+
         echo "<tr>\n<td>\n";
         // so directories are created with correct mode
         $oldumask = umask(IMPORT_UMASK);
@@ -314,7 +315,26 @@ require_once("header.inc.php");
             }
             else {
                 echo translate("File upload failed") . "<br>\n";
-		echo translate("A possible cause is the upload_max_filesize variable in php.ini") . "<br>\n";
+                switch ($HTTP_POST_FILES['_image_local']["error"]) {
+                case UPLOAD_ERR_INI_SIZE:
+                    printf(translate("The uploaded file exceeds the upload_max_filesize directive (%s) in php.ini."), ini_get("upload_max_filesize"));
+                   break;
+                case UPLOAD_ERR_FORM_SIZE:
+                    printf(translate("The uploaded file exceeds the MAX_UPLOAD setting in config.inc.php (%s)."), MAX_UPLOAD);
+                    break;
+                case UPLOAD_ERR_PARTIAL:
+                    echo translate("The uploaded file was only partially uploaded.");
+                    break;
+                case UPLOAD_ERR_NO_FILE:
+                    echo translate("No file was uploaded.");
+                    break;
+                case UPLOAD_ERR_NO_TMP_DIR:
+                    translate("Missing a temporary folder.");
+                    break;
+                default:
+                    translate("An unknown file upload error occurred.");
+                }
+
             }
         }
         else if ($_image_server) {
