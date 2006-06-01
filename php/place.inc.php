@@ -60,6 +60,11 @@ class place extends zoph_tree_table {
             $html .= "<h2>" . $this->get("title") . "</h2>\n";
         }
         $html .= $this->get_address();
+        if($this->get("url")) {
+            $html .= "<br><br>\n";
+            $html .= "<a href=\"" . $this->get("url") . "\">";
+            $html .= $this->get("urldesc") . "</a>";
+        }
 
         return $html;
     }

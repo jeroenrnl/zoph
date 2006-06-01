@@ -16,8 +16,10 @@
 # along with Zoph; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-ALTER TABLE zoph_albums ADD column sortorder varchar(32) DEFAULT null;
-ALTER TABLE zoph_categories ADD column sortorder varchar(32) DEFAULT null;
+ALTER TABLE zoph_albums ADD COLUMN sortorder varchar(32) DEFAULT null;
+ALTER TABLE zoph_categories ADD COLUMN sortorder varchar(32) DEFAULT null;
+ALTER TABLE zoph_places ADD COLUMN url varchar(1024) DEFAULT null AFTER country;
+ALTER TABLE zoph_places ADD COLUMN urldesc varchar(32) DEFAULT null AFTER url;
 
 CREATE TABLE zoph_comments (
   comment_id int(11) NOT NULL auto_increment,

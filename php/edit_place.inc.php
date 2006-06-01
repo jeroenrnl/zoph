@@ -26,63 +26,42 @@
     </h1>
     <div class="main">
       <form action="place.php" method="GET">
-        <table id="place">
-          <tr>
-            <td class="fieldtitle">
-              <input type="hidden" name="_action" value="<?php echo $action ?>">
-            <input type="hidden" name="place_id" value="<?php echo $place->get("place_id") ?>">
-            <?php echo translate("title") ?>
-          </td>
-          <td class="field"><?php echo create_text_input("title", $place->get("title"), 40, 40) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle">
-            <?php echo translate("parent location") ?>
-          </td>
-          <td class="field">
-            <?php echo create_pulldown("parent_place_id",
-                    $place->get("parent_place_id"), get_places_select_array()) ?>
-          </td>
-        </tr>
+        <input type="hidden" name="_action" value="<?php echo $action ?>">
+        <input type="hidden" name="place_id" value="<?php echo $place->get("place_id") ?>">
+        <label for="title"><?php echo translate("title") ?></label>
+        <?php echo create_text_input("title", $place->get("title"), 40, 40) ?>
+        <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
+        <label for="parent_place_id"><?php echo translate("parent location") ?></label>
+        <?php echo create_pulldown("parent_place_id",
+            $place->get("parent_place_id"), get_places_select_array()) ?><br>
 
-        <tr>
-          <td class="fieldtitle"><?php echo translate("address") ?></td>
-          <td class="field"><?php echo create_text_input("address", $place->get("address"), 40, 40) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("address continued") ?></td>
-          <td class="field"><?php echo create_text_input("address2", $place->get("address2"), 40, 40) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("city") ?></td>
-          <td class="field"><?php echo create_text_input("city", $place->get("city"), 32, 32) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("state") ?></td>
-          <td class="field"><?php echo create_text_input("state", $place->get("state"), 16, 32) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("zip") ?></td>
-          <td class="field"><?php echo create_text_input("zip", $place->get("zip"), 10, 10) ?></td>
-          <td class="inputhint"><?php echo translate("zip or zip+4") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("country") ?></td>
-          <td class="field"><?php echo create_text_input("country", $place->get("country"), 32, 32) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("notes") ?></td>
-          <td class="field" colspan="2"><textarea name="notes" cols="40" rows="4"><?php echo $place->get("notes") ?></textarea></td>
-        </tr>
-        <tr>
-          <td colspan="3"><input type="submit" value="<?php echo translate($action, 0) ?>"></td>
-        </tr>
-      </table>
+        <label for="address"><?php echo translate("address") ?></label>
+        <?php echo create_text_input("address", $place->get("address"), 40, 40) ?>
+        <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
+        <label for="address2"><?php echo translate("address continued") ?></label>
+        <?php echo create_text_input("address2", $place->get("address2"), 40, 40) ?>
+        <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
+        <label for="city"><?php echo translate("city") ?></label>
+        <?php echo create_text_input("city", $place->get("city"), 32, 32) ?>
+        <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
+        <label for="state"><?php echo translate("state") ?></label>
+        <?php echo create_text_input("state", $place->get("state"), 16, 32) ?>
+        <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
+        <label for="zip"><?php echo translate("zip") ?></label">
+        <?php echo create_text_input("zip", $place->get("zip"), 10, 10) ?>
+        <span class="inputhint"><?php echo translate("zip or zip+4") ?></span><br>
+        <label for="country"><?php echo translate("country") ?></label>
+        <?php echo create_text_input("country", $place->get("country"), 32, 32) ?>
+         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
+         <label for="url"><?php echo translate("url") ?></label>
+         <?php echo create_text_input("url", $place->get("url"), 32, 32) ?>
+         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "1024") ?></span><br>
+         <label for="urldesc"><?php echo translate("url description") ?></label>
+
+         <?php echo create_text_input("urldesc", $place->get("urldesc"), 32, 32) ?>
+         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
+         <label for="notes"><?php echo translate("notes") ?></label>
+         <textarea name="notes" cols="40" rows="4"><?php echo $place->get("notes") ?></textarea>
+         <input type="submit" value="<?php echo translate($action, 0) ?>">
 </form>
 <!-- end edit_person.inc !-->
