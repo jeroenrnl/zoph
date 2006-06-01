@@ -25,6 +25,7 @@
 <li class='toclevel-2'><a href="#ZOPH_URL"><span class="tocnumber">1.4</span> <span class="toctext">ZOPH_URL</span></a></li>
 <li class='toclevel-2'><a href="#ZOPH_SECURE_URL"><span class="tocnumber">1.5</span> <span class="toctext">ZOPH_SECURE_URL</span></a></li>
 <li class='toclevel-2'><a href="#MAX_PEOPLE_SLOTS"><span class="tocnumber">1.6</span> <span class="toctext">MAX_PEOPLE_SLOTS</span></a></li>
+<li class='toclevel-2'><a href="#DEFAULT_TABLE_WIDTH"><span class="tocnumber">1.7</span> <span class="toctext">DEFAULT_TABLE_WIDTH</span></a></li>
 </ul>
 </li>
 <li class='toclevel-1'><a href="#Authentication"><span class="tocnumber">2</span> <span class="toctext">Authentication</span></a>
@@ -59,17 +60,23 @@
 <li class='toclevel-2'><a href="#USE_IMAGE_SERVICE"><span class="tocnumber">5.3</span> <span class="toctext">USE_IMAGE_SERVICE</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Features"><span class="tocnumber">6</span> <span class="toctext">Features</span></a>
+<li class='toclevel-1'><a href="#Import_settings"><span class="tocnumber">6</span> <span class="toctext">Import settings</span></a>
 <ul>
-<li class='toclevel-2'><a href="#EMAIL_PHOTOS"><span class="tocnumber">6.1</span> <span class="toctext">EMAIL_PHOTOS</span></a></li>
-<li class='toclevel-2'><a href="#CLIENT_WEB_IMPORT"><span class="tocnumber">6.2</span> <span class="toctext">CLIENT_WEB_IMPORT</span></a></li>
-<li class='toclevel-2'><a href="#SERVER_WEB_IMPORT"><span class="tocnumber">6.3</span> <span class="toctext">SERVER_WEB_IMPORT</span></a></li>
-<li class='toclevel-2'><a href="#WEB_IMPORT_.28depricated.29"><span class="tocnumber">6.4</span> <span class="toctext">WEB_IMPORT (depricated)</span></a></li>
+<li class='toclevel-2'><a href="#CLIENT_WEB_IMPORT"><span class="tocnumber">6.1</span> <span class="toctext">CLIENT_WEB_IMPORT</span></a></li>
+<li class='toclevel-2'><a href="#SERVER_WEB_IMPORT"><span class="tocnumber">6.2</span> <span class="toctext">SERVER_WEB_IMPORT</span></a></li>
+<li class='toclevel-2'><a href="#WEB_IMPORT_.28depricated.29"><span class="tocnumber">6.3</span> <span class="toctext">WEB_IMPORT (depricated)</span></a></li>
+<li class='toclevel-2'><a href="#MAX_UPLOAD"><span class="tocnumber">6.4</span> <span class="toctext">MAX_UPLOAD</span></a></li>
 <li class='toclevel-2'><a href="#REMOVE_ARCHIVE"><span class="tocnumber">6.5</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
 <li class='toclevel-2'><a href="#USE_DATED_DIRS"><span class="tocnumber">6.6</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
 <li class='toclevel-2'><a href="#HIER_DATED_DIRS"><span class="tocnumber">6.7</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
-<li class='toclevel-2'><a href="#WATERMARKING"><span class="tocnumber">6.8</span> <span class="toctext">WATERMARKING</span></a></li>
-<li class='toclevel-2'><a href="#WATERMARK"><span class="tocnumber">6.9</span> <span class="toctext">WATERMARK</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Features"><span class="tocnumber">7</span> <span class="toctext">Features</span></a>
+<ul>
+<li class='toclevel-2'><a href="#EMAIL_PHOTOS"><span class="tocnumber">7.1</span> <span class="toctext">EMAIL_PHOTOS</span></a></li>
+<li class='toclevel-2'><a href="#WATERMARKING"><span class="tocnumber">7.2</span> <span class="toctext">WATERMARKING</span></a></li>
+<li class='toclevel-2'><a href="#WATERMARK"><span class="tocnumber">7.3</span> <span class="toctext">WATERMARK</span></a></li>
+<li class='toclevel-2'><a href="#ALLOW_COMMENTS"><span class="tocnumber">7.4</span> <span class="toctext">ALLOW_COMMENTS</span></a></li>
 </ul>
 </li>
 </ul>
@@ -201,6 +208,26 @@
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('MAX_PEOPLE_SLOTS', 5);</tt></td>
+</tr>
+</table>
+<p><a name="DEFAULT_TABLE_WIDTH" id="DEFAULT_TABLE_WIDTH"></a></p>
+<h3>DEFAULT_TABLE_WIDTH</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DEFAULT_TABLE_WIDTH</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Defines the width of the Zoph interface.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>600px</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> A number in pixels ("px") or percent ("%"), the latter is a percentage of the user's browser window width.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DEFAULT_TABLE_WIDTH, "600px");</tt></td>
 </tr>
 </table>
 <p><a name="Authentication" id="Authentication"></a></p>
@@ -531,39 +558,19 @@
 <td colspan="2"><b>Description:</b> This setting defines wheter photo's will be pulled directly from the filesystem by the webserver or to use <tt>image_service.php</tt>.</td>
 </tr>
 <tr>
-<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+<td colspan="2"><b>Default:</b> <tt>1 (0 in v0.5.1 and earlier)</tt></td>
 </tr>
 <tr>
 <td colspan="2"><b>Options:</b> <tt>0</tt>: Take images from filesystem or <tt>1</tt>: Use <tt>image_service.php</tt>.
-<p>The latter could be slightly lower in performance, but is highly recommended as it is more secure in combination with user access rights.</p>
+<p>The latter could be slightly lower in performance, but is highly recommended as it is more secure in combination with user access rights. Image service is required to be on if you wish to use watermarking or annotated photos.</p>
 </td>
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('IMAGE_SERVICE', '1');</tt></td>
 </tr>
 </table>
-<p><a name="Features" id="Features"></a></p>
-<h2>Features</h2>
-<p><a name="EMAIL_PHOTOS" id="EMAIL_PHOTOS"></a></p>
-<h3>EMAIL_PHOTOS</h3>
-<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
-<tr>
-<th style="width: 150px;">EMAIL_PHOTOS</th>
-<td style="width: 450px;"><b>Versions:</b> All versions</td>
-</tr>
-<tr>
-<td colspan="2"><b>Description:</b> You can enable or disable the "mail this photo" feature" using this option.</td>
-</tr>
-<tr>
-<td colspan="2"><b>Default:</b> <tt>0</tt></td>
-</tr>
-<tr>
-<td colspan="2"><b>Options:</b> <tt>0</tt>: disable mail, <tt>1</tt>: enable mail</td>
-</tr>
-<tr>
-<td colspan="2"><b>Example:</b> <tt>define('EMAIL_PHOTOS', '1');</tt></td>
-</tr>
-</table>
+<p><a name="Import_settings" id="Import_settings"></a></p>
+<h2>Import settings</h2>
 <p><a name="CLIENT_WEB_IMPORT" id="CLIENT_WEB_IMPORT"></a></p>
 <h3>CLIENT_WEB_IMPORT</h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -622,6 +629,27 @@
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('WEB_IMPORT', '1');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<p><a name="MAX_UPLOAD" id="MAX_UPLOAD"></a></p>
+<h3>MAX_UPLOAD</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">MAX_UPLOAD</th>
+<td style="width: 450px;"><b>Versions:</b> 0.6 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Maximum size of uploaded file in bytes. Prior to v0.6. this was hardcoded to 10000000 bytes (10MB). Make sure you also change <tt>upload_max_filesize</tt>, <tt>post_max_size</tt> and possibly <tt>max_execution_time</tt> and <tt>max_input_time</tt> in <tt>php.ini</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>10000000</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('MAX_UPLOAD, '10000000');</tt></td>
 </tr>
 </table>
 <p><a name="REMOVE_ARCHIVE" id="REMOVE_ARCHIVE"></a></p>
@@ -684,6 +712,29 @@
 <td colspan="2"><b>Example:</b> <tt>define('HIER_DATED_DIRS', '0');</tt></td>
 </tr>
 </table>
+<p><br /></p>
+<p><a name="Features" id="Features"></a></p>
+<h2>Features</h2>
+<p><a name="EMAIL_PHOTOS" id="EMAIL_PHOTOS"></a></p>
+<h3>EMAIL_PHOTOS</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">EMAIL_PHOTOS</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> You can enable or disable the "mail this photo" feature" using this option.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable mail, <tt>1</tt>: enable mail</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('EMAIL_PHOTOS', '1');</tt></td>
+</tr>
+</table>
 <p><a name="WATERMARKING" id="WATERMARKING"></a></p>
 <h3>WATERMARKING</h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -722,6 +773,26 @@
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('WATERMARK', 'watermarks/topsecret.gif');</tt></td>
+</tr>
+</table>
+<p><a name="ALLOW_COMMENTS" id="ALLOW_COMMENTS"></a></p>
+<h3>ALLOW_COMMENTS</h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">ALLOW_COMMENTS</th>
+<td style="width: 450px;"><b>Versions:</b> 0.6 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Enable comments. Before a user can actually leave comments, you should also give the user these rights through the edit user screen.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable comments <tt>1</tt>: enable comments</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('ALLOW_COMMENTS', '1');</tt></td>
 </tr>
 </table>
 

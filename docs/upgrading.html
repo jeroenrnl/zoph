@@ -17,57 +17,69 @@
 <h2>Contents</h2>
 </div>
 <ul>
-<li class='toclevel-1'><a href="#Zoph_0.5_-.3E_0.5.1_Upgrade"><span class="tocnumber">1</span> <span class="toctext">Zoph 0.5 -&gt; 0.5.1 Upgrade</span></a></li>
-<li class='toclevel-1'><a href="#Zoph_0.4_-.3E_0.5_Upgrade"><span class="tocnumber">2</span> <span class="toctext">Zoph 0.4 -&gt; 0.5 Upgrade</span></a>
+<li class='toclevel-1'><a href="#Zoph_0.5.x_-.3E_0.6_update"><span class="tocnumber">1</span> <span class="toctext">Zoph 0.5.x -&gt; 0.6 update</span></a>
 <ul>
-<li class='toclevel-2'><a href="#Updating_the_Database"><span class="tocnumber">2.1</span> <span class="toctext">Updating the Database</span></a></li>
-<li class='toclevel-2'><a href="#Configuration_updates"><span class="tocnumber">2.2</span> <span class="toctext">Configuration updates</span></a>
+<li class='toclevel-2'><a href="#Updating_the_Database"><span class="tocnumber">1.1</span> <span class="toctext">Updating the Database</span></a></li>
+<li class='toclevel-2'><a href="#Configuration_updates"><span class="tocnumber">1.2</span> <span class="toctext">Configuration updates</span></a>
 <ul>
-<li class='toclevel-3'><a href="#Forcing_SSL"><span class="tocnumber">2.2.1</span> <span class="toctext">Forcing SSL</span></a></li>
-<li class='toclevel-3'><a href="#Using_watermarks"><span class="tocnumber">2.2.2</span> <span class="toctext">Using watermarks</span></a></li>
-<li class='toclevel-3'><a href="#Web_import_changes"><span class="tocnumber">2.2.3</span> <span class="toctext">Web import changes</span></a></li>
-<li class='toclevel-3'><a href="#Adding_multiple_people_at_once"><span class="tocnumber">2.2.4</span> <span class="toctext">Adding multiple people at once</span></a></li>
+<li class='toclevel-3'><a href="#New_options"><span class="tocnumber">1.2.1</span> <span class="toctext">New options</span></a></li>
+<li class='toclevel-3'><a href="#Changed_options"><span class="tocnumber">1.2.2</span> <span class="toctext">Changed options</span></a></li>
 </ul>
 </li>
+<li class='toclevel-2'><a href="#Perl_script_changes"><span class="tocnumber">1.3</span> <span class="toctext">Perl script changes</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Zoph_0.3.3_-.3E_0.4_Upgrade"><span class="tocnumber">3</span> <span class="toctext">Zoph 0.3.3 -&gt; 0.4 Upgrade</span></a>
+<li class='toclevel-1'><a href="#Zoph_0.5_-.3E_0.5.1_Upgrade"><span class="tocnumber">2</span> <span class="toctext">Zoph 0.5 -&gt; 0.5.1 Upgrade</span></a></li>
+<li class='toclevel-1'><a href="#Zoph_0.4_-.3E_0.5_Upgrade"><span class="tocnumber">3</span> <span class="toctext">Zoph 0.4 -&gt; 0.5 Upgrade</span></a>
 <ul>
 <li class='toclevel-2'><a href="#Updating_the_Database_2"><span class="tocnumber">3.1</span> <span class="toctext">Updating the Database</span></a></li>
-<li class='toclevel-2'><a href="#Updating_configuration"><span class="tocnumber">3.2</span> <span class="toctext">Updating configuration</span></a></li>
+<li class='toclevel-2'><a href="#Configuration_updates_2"><span class="tocnumber">3.2</span> <span class="toctext">Configuration updates</span></a>
+<ul>
+<li class='toclevel-3'><a href="#Forcing_SSL"><span class="tocnumber">3.2.1</span> <span class="toctext">Forcing SSL</span></a></li>
+<li class='toclevel-3'><a href="#Using_watermarks"><span class="tocnumber">3.2.2</span> <span class="toctext">Using watermarks</span></a></li>
+<li class='toclevel-3'><a href="#Web_import_changes"><span class="tocnumber">3.2.3</span> <span class="toctext">Web import changes</span></a></li>
+<li class='toclevel-3'><a href="#Adding_multiple_people_at_once"><span class="tocnumber">3.2.4</span> <span class="toctext">Adding multiple people at once</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Zoph_0.3.2_-.3E_0.3.3_Upgrade"><span class="tocnumber">4</span> <span class="toctext">Zoph 0.3.2 -&gt; 0.3.3 Upgrade</span></a>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Zoph_0.3.3_-.3E_0.4_Upgrade"><span class="tocnumber">4</span> <span class="toctext">Zoph 0.3.3 -&gt; 0.4 Upgrade</span></a>
 <ul>
 <li class='toclevel-2'><a href="#Updating_the_Database_3"><span class="tocnumber">4.1</span> <span class="toctext">Updating the Database</span></a></li>
-<li class='toclevel-2'><a href="#Updating_the_Templates"><span class="tocnumber">4.2</span> <span class="toctext">Updating the Templates</span></a></li>
-<li class='toclevel-2'><a href="#A_New_Export_Script"><span class="tocnumber">4.3</span> <span class="toctext">A New Export Script</span></a></li>
+<li class='toclevel-2'><a href="#Updating_configuration"><span class="tocnumber">4.2</span> <span class="toctext">Updating configuration</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Zoph_0.3.1_-.3E_0.3.2_Upgrade"><span class="tocnumber">5</span> <span class="toctext">Zoph 0.3.1 -&gt; 0.3.2 Upgrade</span></a>
+<li class='toclevel-1'><a href="#Zoph_0.3.2_-.3E_0.3.3_Upgrade"><span class="tocnumber">5</span> <span class="toctext">Zoph 0.3.2 -&gt; 0.3.3 Upgrade</span></a>
 <ul>
 <li class='toclevel-2'><a href="#Updating_the_Database_4"><span class="tocnumber">5.1</span> <span class="toctext">Updating the Database</span></a></li>
-<li class='toclevel-2'><a href="#Updating_the_Templates_2"><span class="tocnumber">5.2</span> <span class="toctext">Updating the Templates</span></a></li>
+<li class='toclevel-2'><a href="#Updating_the_Templates"><span class="tocnumber">5.2</span> <span class="toctext">Updating the Templates</span></a></li>
+<li class='toclevel-2'><a href="#A_New_Export_Script"><span class="tocnumber">5.3</span> <span class="toctext">A New Export Script</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Zoph_0.3_-.3E_0.3.1_Upgrade"><span class="tocnumber">6</span> <span class="toctext">Zoph 0.3 -&gt; 0.3.1 Upgrade</span></a>
+<li class='toclevel-1'><a href="#Zoph_0.3.1_-.3E_0.3.2_Upgrade"><span class="tocnumber">6</span> <span class="toctext">Zoph 0.3.1 -&gt; 0.3.2 Upgrade</span></a>
 <ul>
 <li class='toclevel-2'><a href="#Updating_the_Database_5"><span class="tocnumber">6.1</span> <span class="toctext">Updating the Database</span></a></li>
-<li class='toclevel-2'><a href="#Updating_the_Templates_3"><span class="tocnumber">6.2</span> <span class="toctext">Updating the Templates</span></a></li>
+<li class='toclevel-2'><a href="#Updating_the_Templates_2"><span class="tocnumber">6.2</span> <span class="toctext">Updating the Templates</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Zoph_0.2.1_-.3E_0.3_Upgrade"><span class="tocnumber">7</span> <span class="toctext">Zoph 0.2.1 -&gt; 0.3 Upgrade</span></a>
+<li class='toclevel-1'><a href="#Zoph_0.3_-.3E_0.3.1_Upgrade"><span class="tocnumber">7</span> <span class="toctext">Zoph 0.3 -&gt; 0.3.1 Upgrade</span></a>
 <ul>
-<li class='toclevel-2'><a href="#Updating_the_Templates_4"><span class="tocnumber">7.1</span> <span class="toctext">Updating the Templates</span></a></li>
-<li class='toclevel-2'><a href="#Configuration_Changes"><span class="tocnumber">7.2</span> <span class="toctext">Configuration Changes</span></a></li>
-<li class='toclevel-2'><a href="#Preferences_Changes"><span class="tocnumber">7.3</span> <span class="toctext">Preferences Changes</span></a></li>
-<li class='toclevel-2'><a href="#The_PHP_Importer"><span class="tocnumber">7.4</span> <span class="toctext">The PHP Importer</span></a></li>
+<li class='toclevel-2'><a href="#Updating_the_Database_6"><span class="tocnumber">7.1</span> <span class="toctext">Updating the Database</span></a></li>
+<li class='toclevel-2'><a href="#Updating_the_Templates_3"><span class="tocnumber">7.2</span> <span class="toctext">Updating the Templates</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Zoph_0.2_-.3E_0.2.1_Upgrade"><span class="tocnumber">8</span> <span class="toctext">Zoph 0.2 -&gt; 0.2.1 Upgrade</span></a>
+<li class='toclevel-1'><a href="#Zoph_0.2.1_-.3E_0.3_Upgrade"><span class="tocnumber">8</span> <span class="toctext">Zoph 0.2.1 -&gt; 0.3 Upgrade</span></a>
 <ul>
-<li class='toclevel-2'><a href="#Updating_the_Database_6"><span class="tocnumber">8.1</span> <span class="toctext">Updating the Database</span></a></li>
-<li class='toclevel-2'><a href="#Updating_the_Templates_5"><span class="tocnumber">8.2</span> <span class="toctext">Updating the Templates</span></a></li>
+<li class='toclevel-2'><a href="#Updating_the_Templates_4"><span class="tocnumber">8.1</span> <span class="toctext">Updating the Templates</span></a></li>
+<li class='toclevel-2'><a href="#Configuration_Changes"><span class="tocnumber">8.2</span> <span class="toctext">Configuration Changes</span></a></li>
+<li class='toclevel-2'><a href="#Preferences_Changes"><span class="tocnumber">8.3</span> <span class="toctext">Preferences Changes</span></a></li>
+<li class='toclevel-2'><a href="#The_PHP_Importer"><span class="tocnumber">8.4</span> <span class="toctext">The PHP Importer</span></a></li>
+</ul>
+</li>
+<li class='toclevel-1'><a href="#Zoph_0.2_-.3E_0.2.1_Upgrade"><span class="tocnumber">9</span> <span class="toctext">Zoph 0.2 -&gt; 0.2.1 Upgrade</span></a>
+<ul>
+<li class='toclevel-2'><a href="#Updating_the_Database_7"><span class="tocnumber">9.1</span> <span class="toctext">Updating the Database</span></a></li>
+<li class='toclevel-2'><a href="#Updating_the_Templates_5"><span class="tocnumber">9.2</span> <span class="toctext">Updating the Templates</span></a></li>
 </ul>
 </li>
 </ul>
@@ -79,13 +91,77 @@
  if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
 //]]>
 </script></p>
+<p><a name="Zoph_0.5.x_-.3E_0.6_update" id="Zoph_0.5.x_-.3E_0.6_update"></a></p>
+<h2>Zoph 0.5.x -&gt; 0.6 update</h2>
+<p>Copy over php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.</p>
+<p><a name="Updating_the_Database" id="Updating_the_Database"></a></p>
+<h3>Updating the Database</h3>
+<p>If you are upgrading from an older version than 0.5, please run the older database updates first. It is not necessary to update to 0.5.1 if you are still running 0.5.</p>
+<p>Execute zoph-update-0.6.sql:</p>
+<pre>
+&gt; mysql -u zoph_admin -p zoph &lt; sql/zoph_update-0.6.sql
+</pre>
+<p>The database upgrade script makes the following changes:</p>
+<ul>
+<li>Add sortorder fields to albums and categories</li>
+<li>Add url + description fields to places</li>
+<li>Make changes needed for user comments:
+<ul>
+<li>Add table for comments</li>
+<li>Add table to link comments to a photo</li>
+<li>Add a field to a user to indicate whether or not this user can make comments</li>
+</ul>
+</li>
+<li>Add a table to create relations between photos</li>
+<li>Change the rating field length, because it couldn't hold a 10 and was truncated to 0 decimals in a previous version.</li>
+</ul>
+<p><a name="Configuration_updates" id="Configuration_updates"></a></p>
+<h3>Configuration updates</h3>
+<p>(see <a href="configuration.html" title="Zoph/Configuration">Zoph/Configuration</a> for details):</p>
+<p><a name="New_options" id="New_options"></a></p>
+<h4>New options</h4>
+<ul>
+<li><a href="configuration.html#ALLOW_COMMENTS" title="Zoph/Configuration">ALLOW_COMMENTS</a></li>
+<li><a href="configuration.html#MAX_UPLOAD" title="Zoph/Configuration">MAX_UPLOAD</a> (was hardcoded to 10MB in 0.5.1 and before)</li>
+</ul>
+<p><a name="Changed_options" id="Changed_options"></a></p>
+<h4>Changed options</h4>
+<ul>
+<li><a href="configuration.html#USE_IMAGE_SERVICE" title="Zoph/Configuration">USE_IMAGE_SERVICE</a> is now on by default</li>
+<li><a href="configuration.html#DEFAULT_TABLE_WIDTH" title="Zoph/Configuration">DEFAULT_TABLE_WIDTH</a> again has support for % (this was accidently removed in 0.5), please note that it is now required to specify the entity ("px" or "%").</li>
+</ul>
+<p><a name="Perl_script_changes" id="Perl_script_changes"></a></p>
+<h3>Perl script changes</h3>
+<p>As of v0.6, no settings need to be made in <tt>zophImport.pl</tt> and &lt;zophExport.pl, it is replaced by a settings file <tt>.zophrc</tt> in the home directory of the user that runs these scripts. An example file called <tt>zophrc.sample</tt> is included with Zoph:</p>
+<pre>
+#-----------------------------------------
+# Configuration file for Zoph
+#-----------------------------------------
+#
+# Rename this file to .zophrc and place it in your home directory.
+#
+# All settings must match the settings with the same name in config.inc.php
+#
+# edit these to reflect your database
+$db_host = 'localhost';  # hostname or hostname:port
+$db_name = 'zoph';
+$db_user = 'zoph_rw';
+$db_pass = 'pass';
+$db_prefix = 'zoph_';
+
+#
+# set this to your image directory
+#
+$image_dir = '/data/images/';
+</pre>
+<p>Note: the Debian version of Zoph was already using this configuration.</p>
 <p><a name="Zoph_0.5_-.3E_0.5.1_Upgrade" id="Zoph_0.5_-.3E_0.5.1_Upgrade"></a></p>
 <h2>Zoph 0.5 -&gt; 0.5.1 Upgrade</h2>
 <p>Copy over php/* to the location of your installation. Make sure to also copy the php/lang subdirectory. No datebase changes are needed for this release.</p>
 <p><a name="Zoph_0.4_-.3E_0.5_Upgrade" id="Zoph_0.4_-.3E_0.5_Upgrade"></a></p>
 <h2>Zoph 0.4 -&gt; 0.5 Upgrade</h2>
 <p>Copy over php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.</p>
-<p><a name="Updating_the_Database" id="Updating_the_Database"></a></p>
+<p><a name="Updating_the_Database_2" id="Updating_the_Database_2"></a></p>
 <h3>Updating the Database</h3>
 <p>If you are upgrading from an older version than 0.4, please run the older database updates first.</p>
 <p>Execute zoph-update-0.5.sql:</p>
@@ -107,7 +183,7 @@
 <li>Add a column to the prefs table for opening fullsize photos in a new Window</li>
 <li>Add a column to the album_permissions table for the watermarking feature</li>
 </ul>
-<p><a name="Configuration_updates" id="Configuration_updates"></a></p>
+<p><a name="Configuration_updates_2" id="Configuration_updates_2"></a></p>
 <h3>Configuration updates</h3>
 <p>A few new configuration options have been added in Zoph 0.5.</p>
 <p><a name="Forcing_SSL" id="Forcing_SSL"></a></p>
@@ -168,7 +244,7 @@ define('MAX_PEOPLE_SLOTS', 5);
 <p><a name="Zoph_0.3.3_-.3E_0.4_Upgrade" id="Zoph_0.3.3_-.3E_0.4_Upgrade"></a></p>
 <h2>Zoph 0.3.3 -&gt; 0.4 Upgrade</h2>
 <p>Copy over php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.</p>
-<p><a name="Updating_the_Database_2" id="Updating_the_Database_2"></a></p>
+<p><a name="Updating_the_Database_3" id="Updating_the_Database_3"></a></p>
 <h3>Updating the Database</h3>
 <p>If you are upgrading from an older version than 0.3.3, please run the older database updates first. If you have been using a 0.4-pre version, you do not need to update the database again.</p>
 <p>Execute zoph-update-0.4.sql:</p>
@@ -219,7 +295,7 @@ define('BACKUP_PREFIX', 'orig_');
 <p><a name="Zoph_0.3.2_-.3E_0.3.3_Upgrade" id="Zoph_0.3.2_-.3E_0.3.3_Upgrade"></a></p>
 <h2>Zoph 0.3.2 -&gt; 0.3.3 Upgrade</h2>
 <p>If you are upgrading from a version previous to 0.3.2, please run the older database updates first.</p>
-<p><a name="Updating_the_Database_3" id="Updating_the_Database_3"></a></p>
+<p><a name="Updating_the_Database_4" id="Updating_the_Database_4"></a></p>
 <h3>Updating the Database</h3>
 <p>This update adds a new column to the prefs table.</p>
 <p>Execute zoph-update-0.3.3.sql:</p>
@@ -238,7 +314,7 @@ define('BACKUP_PREFIX', 'orig_');
 <p><a name="Zoph_0.3.1_-.3E_0.3.2_Upgrade" id="Zoph_0.3.1_-.3E_0.3.2_Upgrade"></a></p>
 <h2>Zoph 0.3.1 -&gt; 0.3.2 Upgrade</h2>
 <p>If you are upgrading from a version previous to 0.3.1, please run the older database updates first.</p>
-<p><a name="Updating_the_Database_4" id="Updating_the_Database_4"></a></p>
+<p><a name="Updating_the_Database_5" id="Updating_the_Database_5"></a></p>
 <h3>Updating the Database</h3>
 <p>The only thing added in this update are four new color schemes. You an skip this if you don't think you will use them.</p>
 <p>Execute the statements in zoph-update-0.3.2.sql:</p>
@@ -253,7 +329,7 @@ define('BACKUP_PREFIX', 'orig_');
 <p><a name="Zoph_0.3_-.3E_0.3.1_Upgrade" id="Zoph_0.3_-.3E_0.3.1_Upgrade"></a></p>
 <h2>Zoph 0.3 -&gt; 0.3.1 Upgrade</h2>
 <p>If you are upgrading from a version less than 0.3, please run the previous database updates first.</p>
-<p><a name="Updating_the_Database_5" id="Updating_the_Database_5"></a></p>
+<p><a name="Updating_the_Database_6" id="Updating_the_Database_6"></a></p>
 <h3>Updating the Database</h3>
 <p>Execute the statements in zoph-update-0.3.1.sql:</p>
 <pre>
@@ -314,7 +390,7 @@ define('BACKUP_PREFIX', 'orig_');
 <p><a name="Zoph_0.2_-.3E_0.2.1_Upgrade" id="Zoph_0.2_-.3E_0.2.1_Upgrade"></a></p>
 <h2>Zoph 0.2 -&gt; 0.2.1 Upgrade</h2>
 <p>If you already have Zoph 0.2 installed, upgrading is fairly simple.</p>
-<p><a name="Updating_the_Database_6" id="Updating_the_Database_6"></a></p>
+<p><a name="Updating_the_Database_7" id="Updating_the_Database_7"></a></p>
 <h3>Updating the Database</h3>
 <p>Execute the statements in zoph-update-0.2.1.sql:</p>
 <pre>
