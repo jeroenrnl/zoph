@@ -299,6 +299,8 @@ CREATE TABLE zoph_places (
   state varchar(32) default NULL,
   zip varchar(10) default NULL,
   country varchar(32) default NULL,
+  url varchar(1024) DEFAULT NULL,
+  urldesc varchar(32) DEFAULT NULL,
   notes varchar(255) default NULL,
   PRIMARY KEY  (place_id),
   KEY place_city (city(10)),
