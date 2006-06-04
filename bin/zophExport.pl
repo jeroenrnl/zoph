@@ -43,7 +43,7 @@ require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
 my $db_prefix = $::db_prefix;
 my $image_dir = $::image_dir;
 
-my $version = '0.5.1';
+my $version = '0.6pre1';
 
 my $export_dir; # where to export to
 my $format;     # one of zoph, album, bins

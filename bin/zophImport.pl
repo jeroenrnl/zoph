@@ -60,7 +60,7 @@ require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
 my $db_prefix = $::db_prefix;
 my $image_dir = $::image_dir;
  
-my $version = '0.5.1';
+my $version = '0.6pre1';
  
 
 my $update     = 0; # update existing photo records instead of inserting
