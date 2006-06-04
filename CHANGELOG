@@ -1,4 +1,49 @@
 Zoph Changelog
+Zoph 0.6pre1
+
+4 June 2006
+
+New features
+- It is now possible to leave comments with photos
+- You can select a photo to do certain actions with that selection.
+- You can now create links between photos. (Req#778845 (partly), Req#828750) (for now, this is the only feature that makes use of "selections")
+- Using external links to Zoph will now go to the login page and then to the requested URL. (Req#1443574)
+- Image service is now on by default
+- Possibility to overide sort order of photos in album (Req#665237)
+- Possibility to overide sort order of photos in category (similar to Req#665237)
+- Possibility to call albums and categories by name in URL instead of id. (Req#778024)
+- Made a small change to the menu: when hovering a menu-option, the layout changes to emulate a "tab"-like display (let me know if you like this!)
+- It is now longer required to be in the image dir to import a photo. (Req#853091)
+- ZophImport.pl and zophExport.pl now use and external file to store the configuration (like the Debian version of Zoph).
+- Quick navigation through locations. (Req#1417305)
+- The search page now has a "no children" checkbox next to albums, categories and places. (Req#1416195)
+- Add URL to places, so a link to -for example- a map can be made. (Req#1466069)
+
+Bugfixes
+- Tranlation fixes in define_annotated_photo.php, edit_person.inc.php and edit_place.inc.php
+- zoph_table.inc.php: small layout fix in debug code
+- Fixed: a string would not be correctly translated if it starts with a "special character".
+- Fixed a few html encoding issues. (Bug#1467146 and some not reported bugs)
+- Button text not correct when php.ini setting is short_open_tag = Off (Bug#1459175)
+- Ratings being truncated (Bug#1466551)
+- Fixed a bug where logging in without SSL would redirect you to the wrong page.
+- Next/prev buttons lost after editting/deleteing a photo when using 'auto-edit' mode. (Bug#1467143, Bug#1463947)
+- CSS style is not applied when mid prefix is changed in config.inc.php (Bug#1466068)
+- Added missing space in photo.inc.php
+- Specifying the DEFAULT_TABLE_WIDTH as a percentage doesn't work (Bug#1446202)
+- HTML tag missing for all pages.
+- MySQL >4.1 conversion doesn't work with default user feature. (Bug#1500325)
+
+Cleanup and various
+- Updated Danish, Italian, Dutch, German and Canadian English language files
+- Cleanup of all language files (removed no longer used strings)
+- Removed zoph_update-0.4pre1.sql
+- In photo.php, the actionlinks are now built using an array. To make life a bit easier for people using the auto-edit feature, the edit page now displays more links.
+- Cleaned out the code of the search page: Removed lots of messy and redundant code and added whitespace for readability. Functionality should be unchanged.
+- Fixed code layout in util.inc.php
+- Updated HTML for the edit page of places to use semantic HTML and not tables.
+
+
 Zoph 0.5.1
 12 March 2006
 
