@@ -33,6 +33,7 @@ Bugfixes
 - Specifying the DEFAULT_TABLE_WIDTH as a percentage doesn't work (Bug#1446202)
 - HTML tag missing for all pages.
 - MySQL >4.1 conversion doesn't work with default user feature. (Bug#1500325)
+- Object syntax in comment.inc.php not compatible with PHP4.(Bug#1500582)
 
 Cleanup and various
 - Updated Danish, Italian, Dutch, German and Canadian English language files
