@@ -1,3 +1,72 @@
+Zoph 0.5.x -> 0.6 update
+4 june 2006
+
+Copy over php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.
+
+
+Updating the Database
+
+If you are upgrading from an older version than 0.5, please run the older database updates first. It is not necessary to 
+update to 0.5.1 if you are still running 0.5.
+
+Execute zoph-update-0.6.sql:
+
+> mysql -u zoph_admin -p zoph < sql/zoph_update-0.6.sql
+
+The database upgrade script makes the following changes:
+
+    * Add sortorder fields to albums and categories
+    * Add url + description fields to places
+    * Make changes needed for user comments:
+          o Add table for comments
+          o Add table to link comments to a photo
+          o Add a field to a user to indicate whether or not this user can make comments
+    * Add a table to create relations between photos
+    * Change the rating field length, because it couldn't hold a 10 and was truncated to 0 decimals in a previous version.
+
+
+Configuration updates
+(see http://en.wikibooks.org/wiki/Zoph/Configuration for details):
+
+New options
+    * ALLOW_COMMENTS
+    * MAX_UPLOAD (was hardcoded to 10MB in 0.5.1 and before)
+
+Changed options
+    * USE_IMAGE_SERVICE is now on by default
+    * DEFAULT_TABLE_WIDTH again has support for % (this was accidently removed in 0.5), please note that it is now
+      required to specify the entity ("px" or "%").
+
+
+Perl script changes
+
+As of v0.6, no settings need to be made in zophImport.pl and <zophExport.pl, it is replaced by a settings file 
+.zophrc in the home directory of the user that runs these scripts. An example file called zophrc.sample is 
+included with Zoph:
+
+#-----------------------------------------
+# Configuration file for Zoph
+#-----------------------------------------
+#
+# Rename this file to .zophrc and place it in your home directory.
+#
+# All settings must match the settings with the same name in config.inc.php
+#
+# edit these to reflect your database
+$db_host = 'localhost';  # hostname or hostname:port
+$db_name = 'zoph';
+$db_user = 'zoph_rw';
+$db_pass = 'pass';
+$db_prefix = 'zoph_';
+
+#
+# set this to your image directory
+#
+$image_dir = '/data/images/';
+#-----------------------------------------
+
+Note: the Debian version of Zoph was already using this configuration.
+
 Zoph 0.5 -> 0.5.1 Upgrade
 12 March 2006
 
