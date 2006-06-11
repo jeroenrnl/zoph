@@ -47,7 +47,7 @@
         <label for="state"><?php echo translate("state") ?></label>
         <?php echo create_text_input("state", $place->get("state"), 16, 32) ?>
         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
-        <label for="zip"><?php echo translate("zip") ?></label">
+        <label for="zip"><?php echo translate("zip") ?></label>
         <?php echo create_text_input("zip", $place->get("zip"), 10, 10) ?>
         <span class="inputhint"><?php echo translate("zip or zip+4") ?></span><br>
         <label for="country"><?php echo translate("country") ?></label>
