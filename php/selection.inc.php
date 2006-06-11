@@ -2,7 +2,7 @@
 if($_SESSION["selected_photo"]) {
 ?>
 <div id="selection">
-<?php echo count($_SESSION["selected_photo"])?> image(s) selected<br>
+<?php printf(translate("%s photo(s) selected"), count($_SESSION["selected_photo"]))?><br>
 
 <?php
 
