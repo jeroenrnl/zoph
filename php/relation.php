@@ -73,7 +73,12 @@
         $action = "display";
     }
     
-    $title=translate($action . " relationship");    
+    if($action=="display") {
+        $title=translate("relationship");
+    } else {
+        $title=translate($action . " relationship");    
+    }
+
     require_once("header.inc.php");
 
     if ($action == "confirm") {
@@ -138,10 +143,12 @@
     <br>
        <div id="relation">
           <div class="thumbnail">
-              <?php echo $photo_1->get_image_tag("thumb") ?>
+              <?php echo $photo_1->get_image_tag("thumb") ?><br>
+              <?php echo $photo_1->get("name"); ?>
           </div>
           <div class="thumbnail">
               <?php echo $photo_2->get_image_tag("thumb") ?>
+              <?php echo $photo_2->get("name"); ?>
           </div>
        </div>
     <br>
