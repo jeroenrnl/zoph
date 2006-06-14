@@ -18,7 +18,7 @@
     require_once("include.inc.php");
 
     //print_r($request_vars); //DEBUG
-if ($_action == translate("search")) {
+if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $request_vars = clean_request_vars($request_vars);
     //print_r($request_vars); //DEBUG
     require_once("photos.php");
