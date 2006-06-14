@@ -136,7 +136,7 @@ class comment extends zoph_table {
 
         if ($thumbnail) {
             $html .= "<div class=\"thumbnail\">\n";
-            $html .= $photo()->get_thumbnail_link();
+            $html .= $photo->get_thumbnail_link();
             $html .= "</div>\n";
         }
         
