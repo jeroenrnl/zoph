@@ -107,6 +107,25 @@
         }
     }
 
+    if (!$user->is_admin()) {
+        if ($_action == "new" || $_action == "insert" ||
+            $_action == "delete" || $_action == "confirm") {
+            // only an admin can do these
+            $_action = "display"; // in case redirect fails
+            header("Location: " . add_sid("zoph.php"));
+        }
+
+        $permissions = $user->get_permissions_for_photo($photo_id);
+        if (!$permissions) {
+            $photo = new photo(-1); // in case redirect fails
+            header("Location: " . add_sid("zoph.php"));
+        }
+        else if ($permissions->get("writable") == 0) {
+            $_action = "display";
+        }
+    }
+
+
     if (EMAIL_PHOTOS) {
         $actionlinks["email"]="mail.php?_action=compose&amp;photo_id=" . $photo->get("photo_id");
     }
@@ -156,25 +175,6 @@
             $photo->rate($user->get("user_id"), $rating);
         }
         $action = "display";
-    }
-
-
-    if (!$user->is_admin()) {
-        if ($_action == "new" || $_action == "insert" ||
-            $_action == "delete" || $_action == "confirm") {
-            // only an admin can do these
-            $_action = "display"; // in case redirect fails
-            header("Location: " . add_sid("zoph.php"));
-        }
-
-        $permissions = $user->get_permissions_for_photo($photo_id);
-        if (!$permissions) {
-            $photo = new photo(-1); // in case redirect fails
-            header("Location: " . add_sid("zoph.php"));
-        }
-        else if ($permissions->get("writable") == 0) {
-            $_action = "display";
-        }
     }
 
     if ($_action == "edit") {
