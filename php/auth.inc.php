@@ -38,8 +38,9 @@
     // no user was in the session, try logging in
     if ($_action == "logout") {
         // delete left over temp files
-        delete_temp_annotated_files($user->get("user_id"));
-
+        if($user) {
+            delete_temp_annotated_files($user->get("user_id"));
+        }
         session_destroy();
         $user = null;
         header("Location: logon.php");
