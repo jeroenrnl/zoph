@@ -570,13 +570,15 @@ function cleanup_path($path) {
 }
 
 function create_actionlinks($actionlinks) {
-    $html="<span class=\"actionlink\">\n";
-    while (list($key, $val) = each($actionlinks)) {
-        $html .= $bar . "<a href=\"" . $val . "\">" . translate($key, 0) . "</a>";
-        $bar=" | ";
+    if(is_array($actionlinks)) {
+        $html="<span class=\"actionlink\">\n";
+        while (list($key, $val) = each($actionlinks)) {
+            $html .= $bar . "<a href=\"" . $val . "\">" . translate($key, 0) . "</a>";
+            $bar=" | ";
+        }
+        $html.="</span>\n";
+        return $html;
     }
-    $html.="</span>\n";
-    return $html;
 }
 
 ?>
