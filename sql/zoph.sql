@@ -70,7 +70,7 @@ CREATE TABLE zoph_categories (
   parent_category_id int(11) NOT NULL default '0',
   category varchar(32) NOT NULL default '',
   category_description varchar(255) default NULL,
-  sortorder varchar(32) default NULL;
+  sortorder varchar(32) default NULL,
   PRIMARY KEY  (category_id),
   KEY cat_parent_id (parent_category_id)
 ) TYPE=MyISAM;
@@ -80,7 +80,7 @@ CREATE TABLE zoph_categories (
 --
 
 
-INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL);
+INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL,NULL);
 
 --
 -- Table structure for table 'zoph_color_schemes'
@@ -307,7 +307,7 @@ CREATE TABLE zoph_places (
   KEY place_title (title(10))
 ) TYPE=MyISAM;
 
-INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 --
 -- Dumping data for table 'zoph_places'
@@ -392,5 +392,5 @@ CREATE TABLE zoph_users (
 --
 
 
-INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1',NULL,NULL,NULL,NULL);
+INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1',NULL,NULL,NULL,NULL);
 
