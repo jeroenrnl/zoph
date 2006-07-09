@@ -31,7 +31,7 @@
 
     $_qs=getvar("_qs");
     if($user->prefs->get("auto_edit") && $_qs && $_action == "update") {
-        header("Location: photo.php?" . html_entity_decode(urldecode($_qs)));
+        header("Location: photo.php?" . $_qs);
     }
 
     $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
@@ -101,7 +101,7 @@
     $return_qs=$_qs;
     if(empty($return_qs)) { 
         if ($user->prefs->get("auto_edit")) {
-            $return_qs=htmlentities(urldecode($qs));
+            $return_qs=$qs;
         } else {
             $return_qs = "_action=display&amp;photo_id=" . $photo->get("photo_id");
         }
