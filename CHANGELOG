@@ -1,4 +1,23 @@
 Zoph Changelog
+Zoph 0.6pre2
+
+13 June 2006
+
+    * Updated translations: Dutch, English, German, Danish and Canadian English should be completely up to date now.
+    * Fixed a layout glitch in the edit screen for places
+    * Fixed missing translations in relation and selection features.
+    * Fixed some incompatibilities with PHP4
+    * Fixed an issue that caused guest users to be unable to logon.
+    * Fixed an issue with trying to logon after a session timeout
+    * Fixed an issue with search not working for translated Zoph versions
+    * Fixed some issues in the SQL installation script, thanks to Ed P. for the patch.
+    * Added partial Turkish translation, thanks to Mufit Eribol
+    * Fixed and issue with auto-edit mode where you would not return to the correct photo after making a change.
+    * Updated man pages for zophImport.pl and zophExport.pl
+    * In the userlist, changed "view" to "display" for consistancy reasons and to remove a translation problem (the word "view" is also used on the photo page, and has a different meaning there)
+
+
+
 Zoph 0.6pre1
 
 4 June 2006
