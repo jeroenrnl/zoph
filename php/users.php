@@ -56,7 +56,7 @@
 <?php
             }
 ?>
-            <a href="user.php?user_id=<?php echo $u->get("user_id") ?>"><?php echo translate("view") ?></a>
+            <a href="user.php?user_id=<?php echo $u->get("user_id") ?>"><?php echo translate("display") ?></a>
             </span>
             <?php echo $u->get("lastlogin"); ?>
           </td>
