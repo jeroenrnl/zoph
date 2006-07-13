@@ -8,7 +8,7 @@
     <p>
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
-				<h1 class="firstHeading">Zoph/Installation</h1>
+		<h1 class="firstHeading">Zoph/Installation</h1>
 		<div id="bodyContent">
 			<table id="toc" class="toc" summary="Contents">
 <tr>
@@ -17,29 +17,29 @@
 <h2>Contents</h2>
 </div>
 <ul>
-<li class='toclevel-1'><a href="#Requirements"><span class="tocnumber">1</span> <span class="toctext">Requirements</span></a></li>
-<li class='toclevel-1'><a href="#Creating_the_database"><span class="tocnumber">2</span> <span class="toctext">Creating the database</span></a>
+<li class="toclevel-1"><a href="#Requirements"><span class="tocnumber">1</span> <span class="toctext">Requirements</span></a></li>
+<li class="toclevel-1"><a href="#Creating_the_database"><span class="tocnumber">2</span> <span class="toctext">Creating the database</span></a>
 <ul>
-<li class='toclevel-2'><a href="#Create_a_database_and_import_the_tables"><span class="tocnumber">2.1</span> <span class="toctext">Create a database and import the tables</span></a></li>
-<li class='toclevel-2'><a href="#Create_users_for_zoph"><span class="tocnumber">2.2</span> <span class="toctext">Create users for zoph</span></a></li>
+<li class="toclevel-2"><a href="#Create_a_database_and_import_the_tables"><span class="tocnumber">2.1</span> <span class="toctext">Create a database and import the tables</span></a></li>
+<li class="toclevel-2"><a href="#Create_users_for_zoph"><span class="tocnumber">2.2</span> <span class="toctext">Create users for zoph</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Configure_the_PHP_templates"><span class="tocnumber">3</span> <span class="toctext">Configure the PHP templates</span></a></li>
-<li class='toclevel-1'><a href="#Install_the_templates"><span class="tocnumber">4</span> <span class="toctext">Install the templates</span></a>
+<li class="toclevel-1"><a href="#Configure_the_PHP_templates"><span class="tocnumber">3</span> <span class="toctext">Configure the PHP templates</span></a></li>
+<li class="toclevel-1"><a href="#Install_the_templates"><span class="tocnumber">4</span> <span class="toctext">Install the templates</span></a>
 <ul>
-<li class='toclevel-2'><a href="#Pick_a_location_to_put_Zoph"><span class="tocnumber">4.1</span> <span class="toctext">Pick a location to put Zoph</span></a></li>
-<li class='toclevel-2'><a href="#Copy_the_templates"><span class="tocnumber">4.2</span> <span class="toctext">Copy the templates</span></a></li>
+<li class="toclevel-2"><a href="#Pick_a_location_to_put_Zoph"><span class="tocnumber">4.1</span> <span class="toctext">Pick a location to put Zoph</span></a></li>
+<li class="toclevel-2"><a href="#Copy_the_templates"><span class="tocnumber">4.2</span> <span class="toctext">Copy the templates</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Install_the_perl_scripts"><span class="tocnumber">5</span> <span class="toctext">Install the perl scripts</span></a>
+<li class="toclevel-1"><a href="#Install_the_perl_scripts"><span class="tocnumber">5</span> <span class="toctext">Install the perl scripts</span></a>
 <ul>
-<li class='toclevel-2'><a href="#Check_the_path_to_perl"><span class="tocnumber">5.1</span> <span class="toctext">Check the path to perl</span></a></li>
-<li class='toclevel-2'><a href="#Configure_the_database_variables"><span class="tocnumber">5.2</span> <span class="toctext">Configure the database variables</span></a></li>
-<li class='toclevel-2'><a href="#Copy_bin.2FzophImport.pl_and_bin.2FzophExport.pl_to_.2Fusr.2Flocal.2Fbin"><span class="tocnumber">5.3</span> <span class="toctext">Copy bin/zophImport.pl and bin/zophExport.pl to /usr/local/bin</span></a></li>
-<li class='toclevel-2'><a href="#Install_the_man_page"><span class="tocnumber">5.4</span> <span class="toctext">Install the man page</span></a></li>
+<li class="toclevel-2"><a href="#Check_the_path_to_perl"><span class="tocnumber">5.1</span> <span class="toctext">Check the path to perl</span></a></li>
+<li class="toclevel-2"><a href="#Configure_the_database_variables"><span class="tocnumber">5.2</span> <span class="toctext">Configure the database variables</span></a></li>
+<li class="toclevel-2"><a href="#Copy_bin.2FzophImport.pl_and_bin.2FzophExport.pl_to_.2Fusr.2Flocal.2Fbin"><span class="tocnumber">5.3</span> <span class="toctext">Copy bin/zophImport.pl and bin/zophExport.pl to /usr/local/bin</span></a></li>
+<li class="toclevel-2"><a href="#Install_the_man_page"><span class="tocnumber">5.4</span> <span class="toctext">Install the man page</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Test_it"><span class="tocnumber">6</span> <span class="toctext">Test it</span></a></li>
+<li class="toclevel-1"><a href="#Test_it"><span class="tocnumber">6</span> <span class="toctext">Test it</span></a></li>
 </ul>
 </td>
 </tr>
@@ -108,7 +108,7 @@ $db_pass = 'password';
 <p>A man page for zophImport.pl is in the man/ directory. Copy this to somewhere in your manpath, /usr/local/man/man1 for example.</p>
 <p><a name="Test_it" id="Test_it"></a></p>
 <h2>Test it</h2>
-<p>Try hitting <a href="http://localhost/zoph/logon.php" class='external free' title="http://localhost/zoph/logon.php" rel="nofollow">http://localhost/zoph/logon.php</a>. You should be presented with the logon screen.</p>
+<p>Try hitting <a href="http://localhost/zoph/logon.php" class="external free" title="http://localhost/zoph/logon.php" rel="nofollow">http://localhost/zoph/logon.php</a>. You should be presented with the logon screen.</p>
 <p>If you get a 404 error...</p>
 <ul>
 <li>make sure the zoph/ folder and templates can be seen by the web server.</li>

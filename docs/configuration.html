@@ -8,7 +8,7 @@
     <p>
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
-				<h1 class="firstHeading">Zoph/Configuration</h1>
+		<h1 class="firstHeading">Zoph/Configuration</h1>
 		<div id="bodyContent">
 			<table id="toc" class="toc" summary="Contents">
 <tr>
@@ -17,66 +17,66 @@
 <h2>Contents</h2>
 </div>
 <ul>
-<li class='toclevel-1'><a href="#Interface_configuration"><span class="tocnumber">1</span> <span class="toctext">Interface configuration</span></a>
+<li class="toclevel-1"><a href="#Interface_configuration"><span class="tocnumber">1</span> <span class="toctext">Interface configuration</span></a>
 <ul>
-<li class='toclevel-2'><a href="#ZOPH_TITLE"><span class="tocnumber">1.1</span> <span class="toctext">ZOPH_TITLE</span></a></li>
-<li class='toclevel-2'><a href="#MAX_CRUMBS"><span class="tocnumber">1.2</span> <span class="toctext">MAX_CRUMBS</span></a></li>
-<li class='toclevel-2'><a href="#MAX_DAYS_PAST"><span class="tocnumber">1.3</span> <span class="toctext">MAX_DAYS_PAST</span></a></li>
-<li class='toclevel-2'><a href="#ZOPH_URL"><span class="tocnumber">1.4</span> <span class="toctext">ZOPH_URL</span></a></li>
-<li class='toclevel-2'><a href="#ZOPH_SECURE_URL"><span class="tocnumber">1.5</span> <span class="toctext">ZOPH_SECURE_URL</span></a></li>
-<li class='toclevel-2'><a href="#MAX_PEOPLE_SLOTS"><span class="tocnumber">1.6</span> <span class="toctext">MAX_PEOPLE_SLOTS</span></a></li>
-<li class='toclevel-2'><a href="#DEFAULT_TABLE_WIDTH"><span class="tocnumber">1.7</span> <span class="toctext">DEFAULT_TABLE_WIDTH</span></a></li>
+<li class="toclevel-2"><a href="#ZOPH_TITLE"><span class="tocnumber">1.1</span> <span class="toctext">ZOPH_TITLE</span></a></li>
+<li class="toclevel-2"><a href="#MAX_CRUMBS"><span class="tocnumber">1.2</span> <span class="toctext">MAX_CRUMBS</span></a></li>
+<li class="toclevel-2"><a href="#MAX_DAYS_PAST"><span class="tocnumber">1.3</span> <span class="toctext">MAX_DAYS_PAST</span></a></li>
+<li class="toclevel-2"><a href="#ZOPH_URL"><span class="tocnumber">1.4</span> <span class="toctext">ZOPH_URL</span></a></li>
+<li class="toclevel-2"><a href="#ZOPH_SECURE_URL"><span class="tocnumber">1.5</span> <span class="toctext">ZOPH_SECURE_URL</span></a></li>
+<li class="toclevel-2"><a href="#MAX_PEOPLE_SLOTS"><span class="tocnumber">1.6</span> <span class="toctext">MAX_PEOPLE_SLOTS</span></a></li>
+<li class="toclevel-2"><a href="#DEFAULT_TABLE_WIDTH"><span class="tocnumber">1.7</span> <span class="toctext">DEFAULT_TABLE_WIDTH</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Authentication"><span class="tocnumber">2</span> <span class="toctext">Authentication</span></a>
+<li class="toclevel-1"><a href="#Authentication"><span class="tocnumber">2</span> <span class="toctext">Authentication</span></a>
 <ul>
-<li class='toclevel-2'><a href="#.24VALIDATOR"><span class="tocnumber">2.1</span> <span class="toctext">$VALIDATOR</span></a></li>
-<li class='toclevel-2'><a href="#FORCE_SSL"><span class="tocnumber">2.2</span> <span class="toctext">FORCE_SSL</span></a></li>
-<li class='toclevel-2'><a href="#FORCE_SSL_LOGIN"><span class="tocnumber">2.3</span> <span class="toctext">FORCE_SSL_LOGIN</span></a></li>
+<li class="toclevel-2"><a href="#.24VALIDATOR"><span class="tocnumber">2.1</span> <span class="toctext">$VALIDATOR</span></a></li>
+<li class="toclevel-2"><a href="#FORCE_SSL"><span class="tocnumber">2.2</span> <span class="toctext">FORCE_SSL</span></a></li>
+<li class="toclevel-2"><a href="#FORCE_SSL_LOGIN"><span class="tocnumber">2.3</span> <span class="toctext">FORCE_SSL_LOGIN</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Resized_image_generation"><span class="tocnumber">3</span> <span class="toctext">Resized image generation</span></a>
+<li class="toclevel-1"><a href="#Resized_image_generation"><span class="tocnumber">3</span> <span class="toctext">Resized image generation</span></a>
 <ul>
-<li class='toclevel-2'><a href="#THUMB_SIZE"><span class="tocnumber">3.1</span> <span class="toctext">THUMB_SIZE</span></a></li>
-<li class='toclevel-2'><a href="#MID_SIZE"><span class="tocnumber">3.2</span> <span class="toctext">MID_SIZE</span></a></li>
-<li class='toclevel-2'><a href="#THUMB_PREFIX"><span class="tocnumber">3.3</span> <span class="toctext">THUMB_PREFIX</span></a></li>
-<li class='toclevel-2'><a href="#MID_PREFIX"><span class="tocnumber">3.4</span> <span class="toctext">MID_PREFIX</span></a></li>
-<li class='toclevel-2'><a href="#MIXED_THUMBNAILS"><span class="tocnumber">3.5</span> <span class="toctext">MIXED_THUMBNAILS</span></a></li>
-<li class='toclevel-2'><a href="#THUMB_EXTENSION"><span class="tocnumber">3.6</span> <span class="toctext">THUMB_EXTENSION</span></a></li>
+<li class="toclevel-2"><a href="#THUMB_SIZE"><span class="tocnumber">3.1</span> <span class="toctext">THUMB_SIZE</span></a></li>
+<li class="toclevel-2"><a href="#MID_SIZE"><span class="tocnumber">3.2</span> <span class="toctext">MID_SIZE</span></a></li>
+<li class="toclevel-2"><a href="#THUMB_PREFIX"><span class="tocnumber">3.3</span> <span class="toctext">THUMB_PREFIX</span></a></li>
+<li class="toclevel-2"><a href="#MID_PREFIX"><span class="tocnumber">3.4</span> <span class="toctext">MID_PREFIX</span></a></li>
+<li class="toclevel-2"><a href="#MIXED_THUMBNAILS"><span class="tocnumber">3.5</span> <span class="toctext">MIXED_THUMBNAILS</span></a></li>
+<li class="toclevel-2"><a href="#THUMB_EXTENSION"><span class="tocnumber">3.6</span> <span class="toctext">THUMB_EXTENSION</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Database_configuration"><span class="tocnumber">4</span> <span class="toctext">Database configuration</span></a>
+<li class="toclevel-1"><a href="#Database_configuration"><span class="tocnumber">4</span> <span class="toctext">Database configuration</span></a>
 <ul>
-<li class='toclevel-2'><a href="#DB_HOST"><span class="tocnumber">4.1</span> <span class="toctext">DB_HOST</span></a></li>
-<li class='toclevel-2'><a href="#DB_NAME"><span class="tocnumber">4.2</span> <span class="toctext">DB_NAME</span></a></li>
-<li class='toclevel-2'><a href="#DB_USER"><span class="tocnumber">4.3</span> <span class="toctext">DB_USER</span></a></li>
-<li class='toclevel-2'><a href="#DB_PASS"><span class="tocnumber">4.4</span> <span class="toctext">DB_PASS</span></a></li>
+<li class="toclevel-2"><a href="#DB_HOST"><span class="tocnumber">4.1</span> <span class="toctext">DB_HOST</span></a></li>
+<li class="toclevel-2"><a href="#DB_NAME"><span class="tocnumber">4.2</span> <span class="toctext">DB_NAME</span></a></li>
+<li class="toclevel-2"><a href="#DB_USER"><span class="tocnumber">4.3</span> <span class="toctext">DB_USER</span></a></li>
+<li class="toclevel-2"><a href="#DB_PASS"><span class="tocnumber">4.4</span> <span class="toctext">DB_PASS</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Image_location"><span class="tocnumber">5</span> <span class="toctext">Image location</span></a>
+<li class="toclevel-1"><a href="#Image_location"><span class="tocnumber">5</span> <span class="toctext">Image location</span></a>
 <ul>
-<li class='toclevel-2'><a href="#IMAGE_DIR"><span class="tocnumber">5.1</span> <span class="toctext">IMAGE_DIR</span></a></li>
-<li class='toclevel-2'><a href="#WEB_IMAGE_DIR"><span class="tocnumber">5.2</span> <span class="toctext">WEB_IMAGE_DIR</span></a></li>
-<li class='toclevel-2'><a href="#USE_IMAGE_SERVICE"><span class="tocnumber">5.3</span> <span class="toctext">USE_IMAGE_SERVICE</span></a></li>
+<li class="toclevel-2"><a href="#IMAGE_DIR"><span class="tocnumber">5.1</span> <span class="toctext">IMAGE_DIR</span></a></li>
+<li class="toclevel-2"><a href="#WEB_IMAGE_DIR"><span class="tocnumber">5.2</span> <span class="toctext">WEB_IMAGE_DIR</span></a></li>
+<li class="toclevel-2"><a href="#USE_IMAGE_SERVICE"><span class="tocnumber">5.3</span> <span class="toctext">USE_IMAGE_SERVICE</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Import_settings"><span class="tocnumber">6</span> <span class="toctext">Import settings</span></a>
+<li class="toclevel-1"><a href="#Import_settings"><span class="tocnumber">6</span> <span class="toctext">Import settings</span></a>
 <ul>
-<li class='toclevel-2'><a href="#CLIENT_WEB_IMPORT"><span class="tocnumber">6.1</span> <span class="toctext">CLIENT_WEB_IMPORT</span></a></li>
-<li class='toclevel-2'><a href="#SERVER_WEB_IMPORT"><span class="tocnumber">6.2</span> <span class="toctext">SERVER_WEB_IMPORT</span></a></li>
-<li class='toclevel-2'><a href="#WEB_IMPORT_.28depricated.29"><span class="tocnumber">6.3</span> <span class="toctext">WEB_IMPORT (depricated)</span></a></li>
-<li class='toclevel-2'><a href="#MAX_UPLOAD"><span class="tocnumber">6.4</span> <span class="toctext">MAX_UPLOAD</span></a></li>
-<li class='toclevel-2'><a href="#REMOVE_ARCHIVE"><span class="tocnumber">6.5</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
-<li class='toclevel-2'><a href="#USE_DATED_DIRS"><span class="tocnumber">6.6</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
-<li class='toclevel-2'><a href="#HIER_DATED_DIRS"><span class="tocnumber">6.7</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#CLIENT_WEB_IMPORT"><span class="tocnumber">6.1</span> <span class="toctext">CLIENT_WEB_IMPORT</span></a></li>
+<li class="toclevel-2"><a href="#SERVER_WEB_IMPORT"><span class="tocnumber">6.2</span> <span class="toctext">SERVER_WEB_IMPORT</span></a></li>
+<li class="toclevel-2"><a href="#WEB_IMPORT_.28depricated.29"><span class="tocnumber">6.3</span> <span class="toctext">WEB_IMPORT (depricated)</span></a></li>
+<li class="toclevel-2"><a href="#MAX_UPLOAD"><span class="tocnumber">6.4</span> <span class="toctext">MAX_UPLOAD</span></a></li>
+<li class="toclevel-2"><a href="#REMOVE_ARCHIVE"><span class="tocnumber">6.5</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
+<li class="toclevel-2"><a href="#USE_DATED_DIRS"><span class="tocnumber">6.6</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#HIER_DATED_DIRS"><span class="tocnumber">6.7</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
 </ul>
 </li>
-<li class='toclevel-1'><a href="#Features"><span class="tocnumber">7</span> <span class="toctext">Features</span></a>
+<li class="toclevel-1"><a href="#Features"><span class="tocnumber">7</span> <span class="toctext">Features</span></a>
 <ul>
-<li class='toclevel-2'><a href="#EMAIL_PHOTOS"><span class="tocnumber">7.1</span> <span class="toctext">EMAIL_PHOTOS</span></a></li>
-<li class='toclevel-2'><a href="#WATERMARKING"><span class="tocnumber">7.2</span> <span class="toctext">WATERMARKING</span></a></li>
-<li class='toclevel-2'><a href="#WATERMARK"><span class="tocnumber">7.3</span> <span class="toctext">WATERMARK</span></a></li>
-<li class='toclevel-2'><a href="#ALLOW_COMMENTS"><span class="tocnumber">7.4</span> <span class="toctext">ALLOW_COMMENTS</span></a></li>
+<li class="toclevel-2"><a href="#EMAIL_PHOTOS"><span class="tocnumber">7.1</span> <span class="toctext">EMAIL_PHOTOS</span></a></li>
+<li class="toclevel-2"><a href="#WATERMARKING"><span class="tocnumber">7.2</span> <span class="toctext">WATERMARKING</span></a></li>
+<li class="toclevel-2"><a href="#WATERMARK"><span class="tocnumber">7.3</span> <span class="toctext">WATERMARK</span></a></li>
+<li class="toclevel-2"><a href="#ALLOW_COMMENTS"><span class="tocnumber">7.4</span> <span class="toctext">ALLOW_COMMENTS</span></a></li>
 </ul>
 </li>
 </ul>
@@ -167,7 +167,7 @@
 <td colspan="2"><b>Options:</b></td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('ZOPH_URL', '<a href="http://www.myserver.com/zoph'" class='external free' title="http://www.myserver.com/zoph'" rel="nofollow">http://www.myserver.com/zoph'</a>);</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('ZOPH_URL', '<a href="http://www.myserver.com/zoph'" class="external free" title="http://www.myserver.com/zoph'" rel="nofollow">http://www.myserver.com/zoph'</a>);</tt></td>
 </tr>
 </table>
 <p><a name="ZOPH_SECURE_URL" id="ZOPH_SECURE_URL"></a></p>
@@ -187,7 +187,7 @@
 <td colspan="2"><b>Options:</b></td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('ZOPH_SECURE_URL', '<a href="https://www.myserver.com/zoph'" class='external free' title="https://www.myserver.com/zoph'" rel="nofollow">https://www.myserver.com/zoph'</a>);</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('ZOPH_SECURE_URL', '<a href="https://www.myserver.com/zoph'" class="external free" title="https://www.myserver.com/zoph'" rel="nofollow">https://www.myserver.com/zoph'</a>);</tt></td>
 </tr>
 </table>
 <p><a name="MAX_PEOPLE_SLOTS" id="MAX_PEOPLE_SLOTS"></a></p>
