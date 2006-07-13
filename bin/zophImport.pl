@@ -2,7 +2,7 @@
 
 #
 # zophImport.pl
-# Zoph 0.5.1
+# Zoph 0.6
 # Jason Geiger & Jeroen Roos, 2002-2006
 #
 # This file is part of Zoph.
@@ -60,7 +60,7 @@ require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
 my $db_prefix = $::db_prefix;
 my $image_dir = $::image_dir;
  
-my $version = '0.6pre1';
+my $version = '0.6pre2';
  
 
 my $update     = 0; # update existing photo records instead of inserting
