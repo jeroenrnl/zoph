@@ -282,9 +282,10 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $key = "ph.$key";
 
             $val = escape_string($val);
+            $key = escape_string($key);
             if ($op == "like" or $op == "not like") {
                 $val = "'%" . strtolower($val) . "%'";
-                $key = "lower($key)";
+                $key = "lower(" . $key . ")";
             }
             else if ($val != "null") {
                 if (!is_numeric($val)) {
@@ -293,10 +294,10 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             }
 
             if ($where) { $where .= " $conj "; }
-            $where .= "(" . escape_string($key) . " " . $op . " " . $val;
+            $where .= "(" . $key . " " . $op . " " . $val;
             
             if ($op == "!=" ) {
-                $where .= " or " . escape_string($key) . " is null)";
+                $where .= " or " . $key . " is null)";
             } else {
                 $where .= ")";
             }
