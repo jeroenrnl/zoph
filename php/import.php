@@ -251,22 +251,22 @@ require_once("header.inc.php");
                 $path = null;
             }
 
-            $absolute_path = "/" . cleanup_path(IMAGE_DIR . $path);
+            $absolute_path = cleanup_path(IMAGE_DIR . $path);
+            if (!running_on_windows()) {
+                $absolute_path = "/" . $absolute_path;
+            }
 
             if (file_exists($absolute_path) == false) {
-                if(mkdir($absolute_path, DIR_MODE)) {
-                    echo translate("Created directory") . ": $absolute_path<br>\n";
-                }
-                else {
-                    echo translate("Could not create directory") . ": $absolute_path<br>\n";
-                    $path = null;
-                }
+                create_dir_recursive($absolute_path) or $path = null;
             }
         }
 
         if ($name && $path) {
             $tmp_name = $HTTP_POST_FILES['_image_local']['tmp_name'];
-            $file = "/" . cleanup_path(IMAGE_DIR . "/" . $path . "/" . $name);
+            $file =  cleanup_path(IMAGE_DIR . "/" . $path . "/" . $name);
+            if (!running_on_windows()) {
+                $file = "/" . $file;
+            }
 
             if (move_uploaded_file($tmp_name, $file)) {
                 echo translate("Received file") . ": $file<br>\n";
@@ -287,13 +287,13 @@ require_once("header.inc.php");
                 }
 
                 if ($expand) {
-                    $full_path = "/" . cleanup_path(IMAGE_DIR . "/" . $path);
+                    $full_path = cleanup_path(IMAGE_DIR . "/" . $path);
+                    if (!running_on_windows()) {
+                        $full_path = "/" . $full_path;
+                    }
 
                     $tmp_path = EXTRACT_DIR . '/zoph' . time();
-                    if (!mkdir($tmp_path, DIR_MODE)) {
-                        echo translate("Could not create directory") . ": $tmp_path<br>\n";
-                        return;
-                    }
+                    create_dir($tmp_path) or die; 
 
                     $cmd = 'cd ' . escapeshellarg($tmp_path) . ' && ' .
                         $expand . ' ' . escapeshellarg($file) . ' 2>&1';
