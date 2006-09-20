@@ -581,4 +581,11 @@ function create_actionlinks($actionlinks) {
     }
 }
 
+function running_on_windows() {
+    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        return true;
+    } else {
+        return false;
+    }
+}
 ?>
