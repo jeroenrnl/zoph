@@ -135,6 +135,7 @@ function create_dir($directory) {
     if (file_exists($directory) == false) {
         if (mkdir($directory, DIR_MODE)) {
             echo translate("Created directory") . ": $directory<br>\n";
+            return 0;
         }
         else {
             echo translate("Could not create directory") . ": $directory<br>\n";
@@ -145,7 +146,7 @@ function create_dir($directory) {
 
 function create_dir_recursive($directory){
   foreach(split('/',$directory) as $subdir) {
-    create_dir($nextdir="$nextdir$subdir/");
+    return create_dir($nextdir="$nextdir$subdir/");
   }
 }
 ?>
