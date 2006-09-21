@@ -26,8 +26,8 @@
     $offset = $_off;
 
     $thumbnails;
-    $num_photos = get_photos($request_vars, $offset, 1, $thumbnails, $user);
-    
+    $clean_vars = clean_request_vars($request_vars);
+    $num_photos = get_photos($clean_vars, $offset, 1, $thumbnails, $user);
     $charset = $rtplang->get_encoding();
     header("Content-Type: text/html; charset=" . $charset);
 
@@ -48,6 +48,7 @@
     $newoffset = $offset + 1;
 
     $qs = implode("&amp;", explode("&", $QUERY_STRING));
+    $clean_qs=update_query_string($clean_vars, "", 0);
     $new_qs = $qs;
     if (strpos($QUERY_STRING, "_off=") !== false ) {
         $new_qs = str_replace("_off=$offset", "_off=$newoffset", $new_qs);
@@ -97,7 +98,7 @@ if (!$_pause) {
     }
 ?>
       <a href="photos.php?<?php echo str_replace("_off=$offset", "_off=0", $qs) ?>"><?php echo translate("stop") ?></a> |
-      <a href="photo.php?<?php echo $qs ?>"><?php echo translate("open") ?></a>
+      <a href="photo.php?<?php echo $clean_qs ?>"><?php echo translate("open") ?></a>
     </span>
     <?php echo $title ?>
   </h1>
