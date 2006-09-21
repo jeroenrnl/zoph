@@ -1,4 +1,17 @@
 Zoph Changelog
+
+Zoph 0.6
+21 September 2006
+
+    * Removed mailaddress of original Dutch translator on his request
+    * Fixed: Rating links on reports page not working in translated Zoph version.
+    * Updated Danish language file
+    * Fixed: issues with LIKE searches (Bug#1541763)
+    * Improved error handling in imports
+    * Fixed an issue with imports not working on Windows systems (Bug#1527333)
+    * Fixed: slideshow not working on search results (Bug#1562419)
+
+
 Zoph 0.6pre2
 
 13 June 2006
