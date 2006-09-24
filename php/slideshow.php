@@ -17,7 +17,6 @@
  */
 
     require_once("include.inc.php");
-
     $_off = getvar("_off");
     $_pause = getvar("_pause");
     $_random = getvar("_random");
@@ -32,7 +31,6 @@
     header("Content-Type: text/html; charset=" . $charset);
 
     $num_thumbnails = sizeof($thumbnails);
-
     if  ($num_thumbnails) {
         if ($_random) {
             $title = translate("random photo ") . ($offset + 1);
@@ -42,7 +40,7 @@
         }
     }
     else {
-        header("Location: " . html_entity_decode(add_sid("photos.php?" . update_query_string($request_vars, "_off", 0))));
+        header("Location: " . html_entity_decode(add_sid("photos.php?" . update_query_string($clean_vars, "_off", 0))));
     }
 
     $newoffset = $offset + 1;
