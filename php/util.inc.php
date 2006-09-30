@@ -325,15 +325,17 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
     $ignore[] = "PHPSESSID";
     $ignore[] = "_crumb";
 
-    while (list($key, $val) = each($vars)) {
-        if (in_array($key, $ignore)) { continue; }
-        if ($key == $new_key) { continue; }
+    if($vars) {
+        while (list($key, $val) = each($vars)) {
+            if (in_array($key, $ignore)) { continue; }
+            if ($key == $new_key) { continue; }
 
-        if ($qstr) { $qstr .= "&amp;"; }
-        if (is_array($val)) {
-            $qstr .= rawurlencode_array($key, $val);
-        } else {
-            $qstr .= rawurlencode($key) . "=" . rawurlencode($val);
+            if ($qstr) { $qstr .= "&amp;"; }
+            if (is_array($val)) {
+                $qstr .= rawurlencode_array($key, $val);
+            } else {
+                $qstr .= rawurlencode($key) . "=" . rawurlencode($val);
+            }
         }
     }
 
