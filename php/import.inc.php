@@ -135,18 +135,20 @@ function create_dir($directory) {
     if (file_exists($directory) == false) {
         if (mkdir($directory, DIR_MODE)) {
             echo translate("Created directory") . ": $directory<br>\n";
-            return 0;
+            return true;
         }
         else {
             echo translate("Could not create directory") . ": $directory<br>\n";
-            return -1;
+            return false;
         }
     }
+    return 0;
 }
 
 function create_dir_recursive($directory){
   foreach(split('/',$directory) as $subdir) {
-    return create_dir($nextdir="$nextdir$subdir/");
+    $result=create_dir($nextdir="$nextdir$subdir/");
   }
+  return $result;
 }
 ?>

@@ -224,7 +224,6 @@ require_once("header.inc.php");
     
     
     flush();
-
     // do the import down here
     if ($_action == "import") {
 
@@ -293,7 +292,7 @@ require_once("header.inc.php");
                     }
 
                     $tmp_path = EXTRACT_DIR . '/zoph' . time();
-                    create_dir($tmp_path) or die; 
+                    create_dir($tmp_path) or die("Failed to create dir");
 
                     $cmd = 'cd ' . escapeshellarg($tmp_path) . ' && ' .
                         $expand . ' ' . escapeshellarg($file) . ' 2>&1';
