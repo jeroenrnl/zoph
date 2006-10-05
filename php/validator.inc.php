@@ -64,7 +64,7 @@ class validator {
 
                 $user = new user($row["user_id"]);
             } else {
-                if (DEBUG) {
+                if (DEBUG>=5) {
                     echo "No valid user found... trying old_password...<br>\n";
                 }
                 /*
@@ -78,7 +78,7 @@ class validator {
                 $mysqlver=mysql_get_server_info();
                 list($mysqlmaj, $mysqlmin) = split("\.", $mysqlver, 2);
                 if (($mysqlmaj == 4 && $mysqlmin >= 1) || ($mysqlmaj >= 5) ) {
-                    if (DEBUG) { 
+                    if (DEBUG>=5) { 
                         echo "Yep, we're running MySQL 4.1 or later<br>\n"; 
                     }
                 
