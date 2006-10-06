@@ -83,7 +83,7 @@
                 // "display".
                 $redirect_clean=preg_replace("/action=(?!search).[^&]+/", "action=display", $redirect);
                 if(FORCE_SSL_LOGIN && !FORCE_SSL) {
-                    $redirect_clean = "http://" . $_SERVER['SERVER_NAME'] . "/" . $redirect_clean;
+                    $redirect_clean = "http://" . $_SERVER['SERVER_NAME'] . $redirect_clean;
                 }
                 header("Location: " . $redirect_clean);
             }
