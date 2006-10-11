@@ -40,6 +40,11 @@
     if (empty($encoded_qs)) {
         $encoded_qs = urlencode(htmlentities($qs));
     }
+    /* if page is called via a HTTP POST, the $QUERY_STRING variable is empty
+       so we need to fill $qs differently... */
+    if (empty($qs)) {
+        $qs=$_qs;
+    }
 
     if ($photo_id) { // would be passed for edit or delete
         $photo = new photo($photo_id);
@@ -184,6 +189,7 @@
         $action = "update";
     }
     else if ($_action == "update") {
+        $actionlinks["return"]="photo.php?_action=display&amp;" . $return_qs;
         unset($actionlinks["cancel"]);
         unset($actionlinks["edit"]);
 

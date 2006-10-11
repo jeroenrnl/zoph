@@ -20,14 +20,22 @@
     $_crumb = getvar("_crumb");
 
     // construct the link for clearing the crumbs (the 'x' on the right)
-    $clear_url = htmlentities($REQUEST_URI);
-    if (strpos($clear_url, "?") > 0) {
-        $clear_url .= "&amp;";
+    if($_POST) {
+        $clear_url=$PHP_SELF . "?" . $_qs;
+    } else {
+        $clear_url = htmlentities($REQUEST_URI);
     }
-    else {
-        $clear_url .= "?";
+
+    if(strpos($clear_url, "clear_crumbs") == 0) {
+        if (strpos($clear_url, "?") > 0) {
+            $clear_url .= "&amp;";
+        }
+        else {
+            $clear_url .= "?";
+        }
+
+        $clear_url .= "_clear_crumbs=1";
     }
-    $clear_url .= "_clear_crumbs=1";
 
     if ($_clear_crumbs) {
         $user->eat_crumb(0);
