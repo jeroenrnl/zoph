@@ -143,6 +143,12 @@
             <?php echo create_pulldown("camera_info", $user->prefs->get("camera_info"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
         </dd>
         <dt>
+            <?php echo translate("display all EXIF info") ?>
+        </dt>
+        <dd>
+            <?php echo create_pulldown("allexif", $user->prefs->get("allexif"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+        </dd>
+        <dt>
             <?php echo translate("automatically edit photos") ?>
         </dt>
         <dd>

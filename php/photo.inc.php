@@ -942,6 +942,38 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         $result=mysql_query($sql)
             or die_with_mysql_error("Could not delete relation:<br><i>$sql</i>");
     }    
+    
+    function exif_to_html() {
+        if (exif_imagetype($this->get_file_path())==IMAGETYPE_JPEG) {
+            $exif=read_exif_data($this->get_file_path());
+            if ($exif) {
+                $return="<dl id=\"allexif\">\n";
+
+                foreach($exif as $key => $value) {
+                    if(!is_array($value)) {
+                        $return .="    <dt>$key</dt>\n" .
+                                  "    <dd>" . preg_replace("/[^[:print:]]/", "", $value) . "</dd>\n";
+                    } else {
+                        $return .="    <dt>$key</dt>\n" .
+                                  "    <dd>\n" .
+                                  "        <dl>\n";
+                        foreach ($value as $subkey => $subval) {
+                            $return .= "            <dt>$subkey</dt>\n" .
+                                       "            <dd>" . preg_replace("/[^[:print:]]/", "", $subval) . "</dd>\n";
+                        }
+                        $return .= "         </dl>\n" .
+                                   "    </dd>\n";
+                    }
+                }
+                $return .= "</dl><br>";
+            } else {
+                $return=false;
+            }
+        } else {
+            $return=false;
+        }
+        return $return;
+    }
 }
 
 function get_photo_sizes_sum() {

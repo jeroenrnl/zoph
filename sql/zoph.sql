@@ -334,6 +334,7 @@ CREATE TABLE zoph_prefs (
   recent_photo_days smallint(6) NOT NULL default '7',
   auto_edit char(1) NOT NULL default '0',
   camera_info char(1) NOT NULL default '1',
+  allexif char(1) NOT NULL default '0',
   desc_thumbnails char(1) NOT NULL default '0',
   fullsize_new_win char(1) NOT NULL default '0',
   people_slots tinyint(3) NOT NULL default 1,

@@ -303,23 +303,24 @@ require_once("header.inc.php");
 <?php
         if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
-          <div id="rotate">
-        <form action="<?php echo $PHP_SELF ?>" method="POST">
-<input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
-
-<select name="_deg">
-<option>90</option>
-<option>180</option>
-<option>270</option>
-</select>
-<input type="submit" name="_button" value="<?php echo translate("rotate", 0) ?>">
-</form>
-      </div>
+        <div id="rotate">
+            <form action="<?php echo $PHP_SELF ?>" method="POST">
+                <p>
+                    <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
+                    <select name="_deg">
+                        <option>90</option>
+                        <option>180</option>
+                        <option>270</option>
+                    </select>
+                    <input type="submit" name="_button" value="<?php echo translate("rotate", 0) ?>">
+                </p>
+            </form>
+        </div>
 <?php
         }
 ?>
-                <div id="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
-                <div id="photohdr">
+        <div id="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
+        <div id="photohdr">
 <?php
         if ($up_link) {
 ?>
@@ -353,11 +354,13 @@ require_once("header.inc.php");
             if (ALLOW_RATINGS) {
 ?>
 <form id="ratingform" action="<?php echo $PHP_SELF ?>" method="POST">
-<input type="hidden" name="_action" value="rate">
-<input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
-<?php echo create_rating_pulldown($photo->get_rating($user->get("user_id"))); ?>
-<input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
-           </form>
+    <p>
+        <input type="hidden" name="_action" value="rate">
+        <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
+        <?php echo create_rating_pulldown($photo->get_rating($user->get("user_id"))); ?>
+        <input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
+    </p>
+</form>
         </dd>
 <?php
             }
@@ -393,7 +396,20 @@ require_once("header.inc.php");
 ?>
 </dl><br>
 <?php
-        # $photo->exif_to_html();
+        if ($user->prefs->get("allexif")) {
+            $allexif=$photo->exif_to_html();
+
+            if($allexif) {
+?>
+                <h2><?php echo translate("Full EXIF details",0)?></h2>
+                <span class="actionlink">
+                    <a href="#" onclick="document.getElementById('allexif').style.display='block'"><?php echo translate("display",0) ?></a> | 
+                    <a href="#" onclick="document.getElementById('allexif').style.display='none'"><?php echo translate("hide",0) ?></a>
+                </span>
+<?php
+                echo $allexif;
+            }
+        }
         $related=$photo->get_related();
 
         if ($related) {
@@ -432,6 +448,9 @@ require_once("header.inc.php");
             echo "<br>&nbsp;\n";
             }
         }
+?>
+        <br>
+<?php
     }
     else if ($action == "confirm") {
 ?>

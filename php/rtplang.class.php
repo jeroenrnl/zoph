@@ -139,12 +139,12 @@ Class rtplang {
     
     if($retour == "") {
       //Si on est pas déjà en vo, on le marque
-      if($this->sessioniso && $this->sourceiso != $this->sessioniso && $mark)
-    $retour = "<b>[vo]</b> <i>$str</i>";
-      else
-    $retour = $str;
-    }
-    return $retour;
+        if($this->sessioniso && $this->sourceiso != $this->sessioniso && $mark)
+            $retour = "<b>[vo]</b> <i>$str</i>";
+        else
+            $retour = $str;
+     }
+    return rtrim($retour);
   }
   
   //-------------------------------------------------

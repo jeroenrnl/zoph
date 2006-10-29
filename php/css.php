@@ -79,6 +79,7 @@ h2  {
     text-align: left;
     font-size: large;
     margin: 0;
+    margin-top: 10px;
     margin-bottom: 10px;
     }
 
@@ -623,6 +624,15 @@ dl  {
 
 dl#prefs dt {
     width: 25em;
+    }
+
+dl#allexif {
+    display: none;
+    width: 100%;
+    }
+
+dl#allexif dl {
+    width: 100%
     }
 
 label, table#credits th {
