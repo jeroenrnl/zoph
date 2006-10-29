@@ -125,21 +125,20 @@ if (!$_pause) {
         }
 ?>
         <br>
-     <table id="slideshow">
+     <dl>
 <?php echo create_field_html($photo->get_display_array(), 2) ?>
 <?php
         if ($photo->get("description")) {
 ?>
-        <tr>
-          <td colspan="2" class="description">
-            <hr>
+        <dt><?php echo translate("description") ?></dt>
+        <dd>
             <?php echo $photo->get("description") ?>
-          </td>
-        </tr>
+        </dd>
 <?php
         }
     } // if photos
 ?>
-      </table>
+      </dl>
+      <br>
 </div>
 <?php require_once("footer.inc.php"); ?>

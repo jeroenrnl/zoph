@@ -66,9 +66,7 @@
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
           <label for="confirm"><?php echo translate("confirm password") ?></label>
           <input type="password" name="confirm" id="confirm" value="" size="16" maxlength="32"><br>
-          <div class="center">
-<input type="submit" value="<?php echo translate("submit", 0); ?>">
-          </div>
+          <input type="submit" value="<?php echo translate("submit", 0); ?>">
 <?php
     }
 ?>
