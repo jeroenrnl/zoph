@@ -76,14 +76,12 @@
           </h1>
       <div class="main">
       <form action="album.php">
-<input type="hidden" name="_action" value="<?php echo $action ?>">
-<input type="hidden" name="album_id" value="<?php echo $album->get("album_id") ?>">
-<table>
-<?php echo create_field_html($album->get_edit_array()) ?>
-</table>
-      <input type="submit" value="<?php echo translate($action, 0) ?>">
+        <input type="hidden" name="_action" value="<?php echo $action ?>">
+        <input type="hidden" name="album_id" value="<?php echo $album->get("album_id") ?>">
+        <?php echo create_edit_fields($album->get_edit_array()) ?>
+        <input type="submit" value="<?php echo translate($action, 0) ?>">
 
-</form>
+      </form>
   </div>
 <?php
     }

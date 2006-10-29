@@ -716,7 +716,7 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
                    remove_magic_quotes($real_key);
                 }
 
-                $out_array[$real_key] = translate($real_key, 0) . ": " .
+            $out_array[$real_key] = translate($real_key, 0) . ": " .
                     $real_val;
                 $lines += ceil(strlen($out_array[$real_key]) / $maxWidthChars);
             }
@@ -979,12 +979,13 @@ function create_rating_graph($user) {
         $max_count = max($max_count, $row[1]);	
     	$ratings[($row[0] ? $row[0] : translate("Not rated"))]=$row[1];
 	}
-
+?>
+    <h3><?php echo translate("photo ratings") ?></h3>
+<?php
     if ($max_count) { 
     $table =
-        "<table class=\"ratings\">\n  <tr>\n    <th colspan=\"3\"><h3>" .
-        translate("photo ratings") . "</h3></th>\n  </tr>\n  <tr>\n    <th>" .
-        translate("rating") . "</th>\n    <th>&nbsp;</th>\n    " .
+        "<table class=\"ratings\">\n<tr>\n" .
+        "<th>" . translate("rating") . "</th>\n" .
         "<th>" . translate("count") . "</th>\n  </tr>\n";
 
     $scale = 150.0 / $max_count;
@@ -994,15 +995,15 @@ function create_rating_graph($user) {
 	   $min_rating=$range-0.5;
 	   $max_rating=$range+0.5;
            $qs =
-              "search.php?rating%5B0%5D=" . $min_rating . "&_rating_op%5B0%5D=%3E%3D" .
-              "&rating%5B1%5D=" . $max_rating . "&_rating_op%5B1%5D=%3C&_action=" . translate("search");
+              "search.php?rating%5B0%5D=" . $min_rating . "&amp;_rating_op%5B0%5D=%3E%3D" .
+              "&amp;rating%5B1%5D=" . $max_rating . "&amp;_rating_op%5B1%5D=%3C&amp;_action=" . translate("search");
         } else {
            $qs = "photos.php?rating=null";
         }  
         $table .=
             "  <tr>\n    <td>\n" .
             "      <a href=\"$qs\">$range</a></td>\n" .
-            "    <td>&nbsp;</td>\n    <td>\n";
+            "      <td>\n";
 
 	$table .= "<div class=\"ratings\" style=\"width: " . ceil($scale * $count) . "px;\">&nbsp;</div>";
         $table .= "[$count]\n    </td>\n  </tr>\n";
@@ -1013,8 +1014,7 @@ function create_rating_graph($user) {
     }
     else {
         $table .=
-            "  <tr>\n    <td colspan=\"2\" class=\"center\">\n" .
-            translate("No photo was found.") . "\n    </td>\n  </tr>\n";
+            translate("No photo was found.") . "\n";
     }
 
     return $table;

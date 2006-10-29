@@ -87,57 +87,49 @@
             <?php echo $person->get("middle_name") ?>
             <?php echo $person->get("last_name") ?>
           </h2>
-          <table id="person">
+    <dl>
 <?php
     if ($user->get("detailed_people")) {
 ?>
-<?php echo create_field_html($person->get_display_array(), 3) ?>
+<?php echo create_field_html($person->get_display_array()) ?>
 <?php
         if ($person->get_email()) {
 ?>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("email") ?></td>
-          <td class="field"><a href="mailto:<?php echo $person->get_email() ?>"><?php echo $person->get_email() ?></a></td>
-        </tr>
+          <dt><?php echo translate("email") ?></dt>
+          <dd><a href="mailto:<?php echo $person->get_email() ?>"><?php echo $person->get_email() ?></a></dd>
 <?php
         }
         if ($person->home) {
 ?>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("home") ?></td>
-          <td class="field">
+          <dt><?php echo translate("home") ?></dt>
+          <dd>
           <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("home_id") ?>"><?php echo translate("view") ?></a></span>
-          <?php echo $person->home->get_address() ?></td>
-        </tr>
+          <?php echo $person->home->get_address() ?></dd>
 <?php
         }
 
         if ($person->work) {
 ?>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("work") ?></td>
-          <td class="field">
+          <dt"><?php echo translate("work") ?></dt>
+          <dd>
           <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("work_id") ?>"><?php echo translate("view") ?></a></span>
              <?php echo $person->work->get("title") ? $person->work->get("title") . "<br>" : "" ?>
              <?php echo $person->work->get_address() ?>
-          </td>
-        </tr>
+          </dd>
 <?php
         }
 
         if ($person->get("notes")) {
 ?>
-        <tr>
-          <td class="fieldtitle">notes</td>
-          <td colspan="2" class="field"><?php echo $person->get("notes") ?></td>
-        </tr>
+          <dt>notes</dt>
+          <dd><?php echo $person->get("notes") ?></dd>
 <?php
         }
 
     } // detailed_people
 
 ?>
-</table>
+</dl>
 <?php
 
     } // display

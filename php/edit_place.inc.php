@@ -64,4 +64,4 @@
          <textarea name="notes" cols="40" rows="4"><?php echo $place->get("notes") ?></textarea>
          <input type="submit" value="<?php echo translate($action, 0) ?>">
 </form>
-<!-- end edit_person.inc !-->
+<!-- end edit_place.inc !-->

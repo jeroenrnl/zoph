@@ -108,9 +108,10 @@ if ($action == "confirm") {
     echo $photo->get_midsize_img();
 ?>
 <br>
-      <table>
+<dl>
 <?php echo create_field_html($comment->get_display_array($user)) ?>
-</table>
+</dl>
+<br>
   </div>
 <?php
     }

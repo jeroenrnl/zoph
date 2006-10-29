@@ -38,13 +38,13 @@
 ?>
 <br>
 <table id="zophinfo">
-<?php echo create_field_html(get_zoph_info_array()) ?>
+<?php echo create_field_html_table(get_zoph_info_array()) ?>
 <?php
     }
 ?>
 </table>
 <p>
-<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, "21 September 2006") ?>
+<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, "13 July 2006") ?>
 </p>
 <p>
 <?php echo translate("Originally written by Jason Geiger, now maintained by Jeroen Roos with thanks to the following for their contributions:", 0) ?>

@@ -342,68 +342,58 @@ require_once("header.inc.php");
 <?php
         }
 ?>
-<table id="photo">
-<?php echo create_field_html($photo->get_display_array(), 2) ?>
+<dl>
+<?php echo create_field_html($photo->get_display_array()) ?>
 <?php
         if (ALLOW_RATINGS || $photo->get("rating")) {
 ?>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("rating") ?></td>
-          <td class="field">
-<form action="<?php echo $PHP_SELF ?>" method="POST">
-                  <?php echo $photo->get("rating") != 0 ? $photo->get("rating") . " / 10" : ""; ?>
+          <dt><?php echo translate("rating") ?></dt>
+          <dd><?php echo $photo->get("rating") != 0 ? $photo->get("rating") . " / 10" : ""; ?>
 <?php
             if (ALLOW_RATINGS) {
 ?>
+<form id="ratingform" action="<?php echo $PHP_SELF ?>" method="POST">
 <input type="hidden" name="_action" value="rate">
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
-<input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
 <?php echo create_rating_pulldown($photo->get_rating($user->get("user_id"))); ?>
+<input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
+           </form>
+        </dd>
 <?php
             }
 ?>
-           </form>
-          </td>
-        </tr>
 <?php
         }
         if ($album_links = create_link_list($photo->lookup_albums($user))) {
 ?>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("albums") ?></td>
-          <td class="field"><?php echo $album_links ?></td>
-        </tr>
+<dt><?php echo translate("albums") ?></dt>
+<dd><?php echo $album_links ?></dd>
 <?php
         }
 
         if ($category_links = create_link_list($photo->lookup_categories())) {
 ?>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("categories") ?></td>
-          <td class="field"><?php echo $category_links ?></td>
-        </tr>
+          <dt><?php echo translate("categories") ?></dt>
+          <dd><?php echo $category_links ?></dd>
 <?php
         }
 ?>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("last modified") ?></td>
-          <td class="field"><?php echo format_timestamp($photo->get("timestamp")) ?></td>
-        </tr>
-        <tr>
-          <td colspan="2" class="photodesc">
+          <dt><?php echo translate("last modified") ?></dt>
+          <dd><?php echo format_timestamp($photo->get("timestamp")) ?></dd>
 <?php
         if ($photo->get("description")) {
-            echo $photo->get("description");
+        
+            echo "<div class=\"photodesc\">" . $photo->get("description") . "</div><br>\n";
         }
 ?>
-          </td>
-        </tr>
 <?php
         if ($user->prefs->get("camera_info")) {
-            echo create_field_html($photo->get_camera_display_array(), 2);
-            echo "</table>\n";
+            echo create_field_html($photo->get_camera_display_array());
         }
-
+?>
+</dl><br>
+<?php
+        # $photo->exif_to_html();
         $related=$photo->get_related();
 
         if ($related) {

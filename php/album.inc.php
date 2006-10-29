@@ -156,16 +156,24 @@ class album extends zoph_tree_table {
 
     function get_edit_array() {
         return array(
-            translate("album name") =>
-                create_text_input("album", $this->get("album")),
-            translate("parent album") =>
-                create_pulldown("parent_album_id",
-                    $this->get("parent_album_id"), get_albums_select_array()),
-            translate("album description") =>
-                create_text_input("album_description",
-                    $this->get("album_description"), 40, 128),
-            translate("album sort order") => 
-                create_photo_field_pulldown("sortorder", $this->get("sortorder"))
+            "album" => 
+                array(
+                    translate("album name"),  
+                    create_text_input("album", $this->get("album"))),
+            "parent_album_id" =>
+                array(
+                    translate("parent album"),
+                    create_pulldown("parent_album_id",
+                    $this->get("parent_album_id"), get_albums_select_array())),
+            "album_description" =>
+                array(
+                    translate("album description"),
+                    create_text_input("album_description",
+                        $this->get("album_description"), 40, 128)),
+            "sortorder" =>
+                array(
+                    translate("album sort order"),
+                    create_photo_field_pulldown("sortorder", $this->get("sortorder")))
         );
     }
 

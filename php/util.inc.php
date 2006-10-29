@@ -30,31 +30,38 @@ function get_url() {
     return $url;
 }
 
-function create_field_html($fields, $cols = 2, $split = null) {
+function create_field_html($fields) {
 
     $html = "";
-    if ($split) {
-        $left_tag = "          <td class=\"fieldtitle\" width=\"$split\">";
-        $right_tag = "          <td class=\"field\" width=\"$split\">";
-    }
-    else {
-        $left_tag = "          <td class=\"fieldtitle\">";
-        $right_tag = "          <td class=\"field\">";
-    }
-
     while (list($key, $val) = each($fields)) {
         if ($val) {
             $html .=
-            "        <tr>\n" .
-            "$left_tag$key</td>\n" .
-            "$right_tag$val</td>\n";
-            for ($i = 2; $i < $cols; $i++) {
-                $html .= "$right_tag&nbsp;</td>\n";
-            }
-            $html .= "        </tr>\n";
+            "<dt>$key</dt>\n" .
+            "<dd>$val</dd>\n";
         }
     }
+    return $html;
+}
 
+function create_field_html_table($fields) {
+
+    $html = "";
+    while (list($key, $val) = each($fields)) {
+        if ($val) {
+            $html .=
+            "<tr>\n  <th>$key</th>\n" .
+            "  <td>$val</<td>\n</tr>\n";
+        }
+    }
+    return $html;
+}
+
+function create_edit_fields($fields) {
+    $html = "";
+    while(list($key, $field) = each($fields)) {
+        $html.=
+            "<label for=\"$key\">$field[0]</label>\n$field[1]<br>";
+    }
     return $html;
 }
 

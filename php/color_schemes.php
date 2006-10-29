@@ -39,6 +39,7 @@
         foreach($color_schemes as $cs) {
 ?>
           <span class="actionlink">
+            <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php echo $cs->get("color_scheme_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php echo $cs->get("color_scheme_id") ?>"><?php echo translate("edit") ?></a> |
             <a href="color_scheme.php?_action=copy&amp;color_scheme_id=<?php echo $cs->get("color_scheme_id") ?>"><?php echo translate("copy") ?></a>
           </span> 

@@ -26,89 +26,43 @@
           </h1>
       <div class="main">
       <form action="person.php" method="GET">
-      <table id="editperson">
-        <tr>
-          <td class="fieldtitle">
           <input type="hidden" name="_action" value="<?php echo $action ?>">
           <input type="hidden" name="person_id" value="<?php echo $person->get("person_id") ?>">
-          <?php echo translate("last name") ?></td>
-          <td class="field"><?php echo create_text_input("last_name", $person->get("last_name"), 32, 32) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("first name") ?></td>
-          <td class="field"><?php echo create_text_input("first_name", $person->get("first_name"), 32, 32) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("middle name") ?></td>
-          <td class="field"><?php echo create_text_input("middle_name", $person->get("middle_name"), 32, 32) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("called") ?></td>
-          <td class="field"><?php echo create_text_input("called", $person->get("called"), 16, 16) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "16") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("gender") ?></td>
-          <td class="field">
-<?php echo create_pulldown("gender", $person->get("gender"), array("1" => translate("male",0), "2" => translate("female",0))) ?>
-          </td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("date of birth") ?></td>
-          <td class="field"><?php echo create_text_input("dob", $person->get("dob"), 12, 10) ?></td>
-          <td class="inputhint">YYYY-MM-DD</td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("date of death") ?></td>
-          <td class="field"><?php echo create_text_input("dod", $person->get("dod"), 12, 10) ?></td>
-          <td class="inputhint">YYYY-MM-DD</td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("email") ?></td>
-          <td class="field"><?php echo create_text_input("email", $person->get("email"), 32, 64) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("home") ?></td>
-          <td class="field" colspan="2">
-<?php echo create_smart_pulldown("home_id", $person->get("home_id"), get_places_select_array()) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("work") ?></td>
-          <td class="field" colspan="2">
-<?php echo create_smart_pulldown("work_id", $person->get("work_id"), get_places_select_array()) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("mother") ?></td>
-          <td class="field" colspan="2">
-<?php echo create_smart_pulldown("mother_id", $person->get("mother_id"), get_people_select_array()) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("father") ?></td>
-          <td class="field" colspan="2">
-<?php echo create_smart_pulldown("father_id", $person->get("father_id"), get_people_select_array()) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("spouse") ?></td>
-          <td class="field" colspan="2">
-<?php echo create_smart_pulldown("spouse_id", $person->get("spouse_id"), get_people_select_array()) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("notes") ?></td>
-          <td class="field" colspan="2"><textarea name="notes" cols="40" rows="4"><?php echo $person->get("notes") ?></textarea></td>
-        </tr>
-        <tr>
-          <td colspan="3"><input type="submit" value="<?php echo translate($action, 0) ?>"></td>
-        </tr>
-</table>
+          <label for="last_name"><?php echo translate("last name") ?></label>
+          <?php echo create_text_input("last_name", $person->get("last_name"), 32, 32) ?>
+          <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
+          <label for="first_name"><?php echo translate("first name") ?></label>
+          <?php echo create_text_input("first_name", $person->get("first_name"), 32, 32) ?>
+          <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
+          <label for="middle_name"><?php echo translate("middle name") ?></label>
+          <?php echo create_text_input("middle_name", $person->get("middle_name"), 32, 32) ?>
+          <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
+          <label for="called"><?php echo translate("called") ?></label>
+          <?php echo create_text_input("called", $person->get("called"), 16, 16) ?>
+          <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "16") ?></span><br>
+          <label for="gender"><?php echo translate("gender") ?></label>
+<?php echo create_pulldown("gender", $person->get("gender"), array("1" => translate("male",0), "2" => translate("female",0))) ?><br>
+          <label for="dob"><?php echo translate("date of birth") ?></label>
+          <?php echo create_text_input("dob", $person->get("dob"), 12, 10) ?>
+          <span class="inputhint">YYYY-MM-DD</span><br>
+          <label for="dod"><?php echo translate("date of death") ?></label>
+          <?php echo create_text_input("dod", $person->get("dod"), 12, 10) ?>
+          <span class="inputhint">YYYY-MM-DD</span><br>
+          <label for="email"><?php echo translate("email") ?></label>
+          <?php echo create_text_input("email", $person->get("email"), 32, 64) ?>
+          <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
+          <label for="home_id"><?php echo translate("home") ?></label>
+<?php echo create_smart_pulldown("home_id", $person->get("home_id"), get_places_select_array()) ?><br>
+          <label for="work_id"><?php echo translate("work") ?></label>
+<?php echo create_smart_pulldown("work_id", $person->get("work_id"), get_places_select_array()) ?><br>
+          <label for="mother_id"><?php echo translate("mother") ?></label>
+<?php echo create_smart_pulldown("mother_id", $person->get("mother_id"), get_people_select_array()) ?><br>
+          <label for="father_id"><?php echo translate("father") ?></label>
+<?php echo create_smart_pulldown("father_id", $person->get("father_id"), get_people_select_array()) ?><br>
+          <label for="spouse"><?php echo translate("spouse") ?></label>
+<?php echo create_smart_pulldown("spouse_id", $person->get("spouse_id"), get_people_select_array()) ?><br>
+          <label for="notes"><?php echo translate("notes") ?></label>
+          <textarea name="notes" cols="40" rows="4"><?php echo $person->get("notes") ?></textarea><br>
+          <input type="submit" value="<?php echo translate($action, 0) ?>">
 </form>
 <!-- end edit_person.inc -->

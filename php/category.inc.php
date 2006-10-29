@@ -112,17 +112,25 @@ class category extends zoph_tree_table {
 
     function get_edit_array() {
         return array(
-            translate("category name") =>
-                create_text_input("category", $this->get("category")),
-            translate("parent category") =>
-                create_pulldown("parent_category_id",
-                    $this->get("parent_category_id"),
-                    get_categories_select_array()),
-            translate("category description") =>
-                create_text_input("category_description",
-                    $this->get("category_description"), 40, 128),
-            translate("category sort order") =>
-                create_photo_field_pulldown("sortorder", $this->get("sortorder"))
+            "category" =>
+                array(
+                    translate("category name"),
+                    create_text_input("category", $this->get("category"))),
+            "parent_category_id" =>
+                array(
+                    translate("parent category"),
+                    create_pulldown("parent_category_id",
+                        $this->get("parent_category_id"),
+                        get_categories_select_array())),
+            "category_description" =>
+                array(
+                    translate("category description"),
+                    create_text_input("category_description",
+                        $this->get("category_description"), 40, 128)),
+            "sortorder" =>
+                array(
+                    translate("category sort order"),
+                    create_photo_field_pulldown("sortorder", $this->get("sortorder")))
         );
     }
 

@@ -107,10 +107,10 @@
         </h1>
         <div class="main">
           <h2><?php echo $this_user->get("user_name") ?></h2>
-          <table id="user">
-<?php echo create_field_html($this_user->get_display_array(), 3) ?>
-            <tr>
-              <td colspan="3" class="center">
+            <dl>
+                <?php echo create_field_html($this_user->get_display_array(), 3) ?>
+            </dl>
+            <br>
 <?php
         $url = ZOPH_URL;
         if (empty($url)) {
@@ -143,26 +143,18 @@
 <input type="hidden" name="message" value="<?php echo $message ?>">
 <input class="bigbutton" type="submit" name="_button" value="<?php echo translate("Notify User", 0) ?>">
 </form>
-          </td>
-        </tr>
-      </table>
-      <table id="permissions">
-    <tr>
-      <th colspan="5"><h3><?php echo translate("Albums") ?></h3></th>
-        </tr>
+<br>
+      <h3><?php echo translate("Albums") ?></h3>
 <?php
         if ($this_user->is_admin()) {
 ?>
-        <tr>
-          <td colspan="5">
        <?php echo sprintf(translate("As an admin, user %s has access to all albums."), $this_user->get("user_name")) ?>
-          </td>
-        </tr>
        </table>
 <?php
         }
         else {
 ?>
+      <table id="permissions">
         <tr>
           <th><?php echo translate("name") ?></th>
 <?php 
@@ -355,12 +347,8 @@ require_once("edit_user.inc.php");
 <?php
             } // while
 ?>
-    <tr>
-      <td colspan="4" class="center">
-        <input type="submit" value="<?php echo translate("update", 0) ?>">
-      </td>
-    </tr>
   </table>
+  <input type="submit" value="<?php echo translate("update", 0) ?>">
 </form>
 <?php
             } // not insert

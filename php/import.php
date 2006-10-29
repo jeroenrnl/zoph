@@ -49,176 +49,101 @@
 
 require_once("header.inc.php");
 ?>
-          <h1><?php echo translate("import photos") ?></h1>
-  <div class="main">
-      <form enctype="multipart/form-data" action="import.php" method="POST">
-      <table id="import">
+    <h1><?php echo translate("import photos") ?></h1>
+    <div class="main">
+        <form enctype="multipart/form-data" action="import.php" method="POST">
 <?php
-    if ($action == "display") {
+        if ($action == "display") {
 ?>
-        <tr>
-          <td><?php echo translate("Importing images...") ?></td>
-        </tr>
+            <p><?php echo translate("Importing images...") ?></p>
 <?php
-    }
-    else {
+        } else {
 ?>
-<tr><td>
-<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_UPLOAD ?>"> 
-<input type="hidden" name="_action" value="<?php echo $action ?>">
-</td></tr>
+            <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_UPLOAD ?>"> 
+            <input type="hidden" name="_action" value="<?php echo $action ?>">
 <?php
-        if (CLIENT_WEB_IMPORT) {
+            if (CLIENT_WEB_IMPORT) {
 ?>
-        <tr>
-          <td colspan="3">
-            <h2><?php echo translate("Importing a Local File") ?></h2><br>
-            <?php echo translate("To upload and import a local file, browse to the file and specify the destination path (relative to the top level image dir) in which it should be placed.") ?>
+                <h2><?php echo translate("Importing a Local File") ?></h2>
+                <p><?php echo translate("To upload and import a local file, browse to the file and specify the destination path (relative to the top level image dir) in which it should be placed.") ?></p>
 <?
-            if (UNZIP_CMD || UNTAR_CMD) {
+                if (UNZIP_CMD || UNTAR_CMD) {
 ?>
-            <?php echo translate("You can upload a single image or a zip or tar file of images.") ?>
+                    <p><?php echo translate("You can upload a single image or a zip or tar file of images.") ?></p>
 <?
+                }
+?>
+                <label for="image_local"><?php echo translate("file") ?></label>
+                <input name="_image_local" id="image_local" type="file"><br>
+<?php
+                if (SHOW_DESTINATION_PATH || $user->is_admin()) {
+?>
+                    <label for="path_a"><?php echo translate("destination path") ?></label>
+                    <?php echo create_text_input("_path_a", $default_path, 40, 256) ?>
+<?php
+                    if (USE_DATED_DIRS) {
+?>
+                        <span class="inputhint"><?php echo translate("Dated directory will be appended") ?></span><br>
+<?php
+                    }
+                } else {
+?>
+                    <input type="hidden" name="_path_a" value="<?php echo $default_path ?>">
+<?php
+                }
+            }
+            if (SERVER_WEB_IMPORT) {
+?>
+                <h2><?php echo translate("Importing Files on the Server") ?></h2>
+                <p><?php echo translate("To import images already on the server, specify the absolute path of a file name or directory.  If a directory is specified, all images within the directory will be imported.  If a destination path is given (relative to the top level image dir), the imported images will be copied there.  Otherwise, they will not be moved.") ?></p>
+                <label for="_image_server"><?php echo translate("file/directory") ?></label>
+                <?php echo create_text_input("_image_server", "", 40, 256) ?><br>
+<?php
+                if (SHOW_DESTINATION_PATH || $user->is_admin()) {
+?>
+                    <label for="path_b"><?php echo translate("destination path") ?></label>
+                    <?php echo create_text_input("_path_b", $default_path, 40, 256) ?>
+<?php
+                    if (USE_DATED_DIRS) {
+?>
+                        <span class="inputhint"><?php echo translate("Dated directory will be appended") ?></span><br>
+<?php
+                    } 
+                } else {
+?>
+                    <input type="hidden" name="_path_b" value="<?php echo $default_path ?>">
+<?php
+                }
             }
 ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("file") ?></td>
-          <td class="field" colspan="2"><input name="_image_local" type="file"></td>
-        </tr>
-<?php
-            if (SHOW_DESTINATION_PATH || $user->is_admin()) {
-?>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("destination path") ?></td>
-          <td class="field" colspan="2"><?php echo create_text_input("_path_a", $default_path, 40, 256) ?>
-<?php
-           if (USE_DATED_DIRS) {
-             echo "<br>\n" . translate("Dated directory will be appended"); 
-           }
-?>
-          </td>
-        </tr>
-<?php
-            }
-            else {
-?>
-        <tr>
-          <td>
-            <input type="hidden" name="_path_a" value="<?php echo $default_path ?>">
-          </td>
-        </tr>
-<?php
-            }
-        }
-
-        if (SERVER_WEB_IMPORT) {
-?>
-        <tr>
-          <td colspan="3">
-            <h2><?php echo translate("Importing Files on the Server") ?></h2><br>
-            <?php echo translate("To import images already on the server, specify the absolute path of a file name or directory.  If a directory is specified, all images within the directory will be imported.  If a destination path is given (relative to the top level image dir), the imported images will be copied there.  Otherwise, they will not be moved.") ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("file/directory") ?></td>
-          <td class="field" colspan="2"><?php echo create_text_input("_image_server", "", 40, 256) ?></td>
-        </tr>
-<?php
-            if (SHOW_DESTINATION_PATH || $user->is_admin()) {
-?>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("destination path") ?></td>
-          <td class="field" colspan="2"><?php echo create_text_input("_path_b", $default_path, 40, 256) ?>
-<?php
-          if (USE_DATED_DIRS) {
-            echo "<br>" . translate("Dated directory will be appended");
-          }
-?>
-          </td>
-        </tr>
-<?php
-            }
-            else {
-?>
-        <tr>
-          <td>
-            <input type="hidden" name="_path_b" value="<?php echo $default_path ?>">
-          </td>
-        </tr>
-<?php
-            }
-        }
-?>
-        <tr>
-          <td colspan="3">
             <hr>
-            <?php echo translate("Fields specified below will apply to all images imported.") ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("album") ?></td>
-          <td class="field" colspan="2">
-            <?php echo create_pulldown("_album", "", get_albums_select_array($user)) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("category") ?></td>
-          <td class="field" colspan="2">
-            <?php echo create_pulldown("_category", "", get_categories_select_array($user)) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("title") ?></td>
-          <td class="field"><?php echo create_text_input("title", "", 40, 64) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("location") ?></td>
-          <td class="field" colspan="2">
-<?php echo create_smart_pulldown("location_id", "", get_places_select_array()) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("view") ?></td>
-          <td class="field"><?php echo create_text_input("view", "", 40, 64) ?></td>
-          <td class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("date") ?></td>
-          <td class="field"><?php echo create_text_input("date", "", 12, 10) ?></td>
-          <td class="inputhint">YYYY-MM-DD</td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("rating") ?></td>
-          <td class="field">
+            <p><?php echo translate("Fields specified below will apply to all images imported.") ?></p>
+            <label for="album"><?php echo translate("album") ?></label>
+            <?php echo create_pulldown("_album", "", get_albums_select_array($user)) ?><br>
+            <label for="category"><?php echo translate("category") ?></label>
+            <?php echo create_pulldown("_category", "", get_categories_select_array($user)) ?><br>
+            <label for="title"><?php echo translate("title") ?></label>
+            <?php echo create_text_input("title", "", 40, 64) ?>
+            <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
+            <label for="location"><?php echo translate("location") ?></label>
+            <?php echo create_smart_pulldown("location_id", "", get_places_select_array()) ?><br>
+            <label for="view"><?php echo translate("view") ?></label>
+            <?php echo create_text_input("view", "", 40, 64) ?>
+            <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
+            <label for="date"><?php echo translate("date") ?></label>
+            <?php echo create_text_input("date", "", 12, 10) ?>
+            <span class="inputhint">YYYY-MM-DD</span><br>
+            <label for="rating"><?php echo translate("rating") ?></label>
             <?php echo create_rating_pulldown("") ?>
-          </td>
-          <td class="inputhint">1 - 10</td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("photographer") ?></td>
-          <td class="field" colspan="2">
-<?php echo create_smart_pulldown("photographer_id", "", get_people_select_array()) ?>
-          </td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("level") ?></td>
-          <td class="field"><?php echo create_text_input("level", "", 4, 2) ?></td>
-          <td class="inputhint">1 - 10</td>
-        </tr>
-        <tr>
-          <td class="fieldtitle"><?php echo translate("description") ?></td>
-          <td class="field" colspan="2">
-            <textarea name="description" cols="60" rows="4"></textarea>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3">
+            <span class="inputhint">1 - 10</span><br>
+            <label for="photographer"><?php echo translate("photographer") ?></label>
+            <?php echo create_smart_pulldown("photographer_id", "", get_people_select_array()) ?><br>
+            <label for="level"><?php echo translate("level") ?></label>
+            <?php echo create_text_input("level", "", 4, 2) ?>
+            <span class="inputhint">1 - 10</span><br>
+            <label for="description"><?php echo translate("description") ?></label>
+            <textarea name="description" cols="60" rows="4"></textarea><br>
             <input type="submit" value="<?php echo translate($action, 0) ?>">
-          </td>
-        </tr>
 <?php
     } // end import fields
     
@@ -227,7 +152,6 @@ require_once("header.inc.php");
     // do the import down here
     if ($_action == "import") {
 
-        echo "<tr>\n<td>\n";
         // so directories are created with correct mode
         $oldumask = umask(IMPORT_UMASK);
 
@@ -374,10 +298,9 @@ require_once("header.inc.php");
         }
 
         umask($oldumask);
-        echo "</td>\n</tr>\n";
     }
 ?>
-      </table>
      </form>
   </div>
+  <br>
 <?php require_once("footer.inc.php"); ?>

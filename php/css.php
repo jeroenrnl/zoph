@@ -120,6 +120,16 @@ form#quicknav select {
     width: 10em;
     }
 
+form#ratingform input, form#ratingform select {
+    margin: 0;
+    float: left;
+    }
+
+form#ratingform select {
+    margin-top: 4px;
+    margin-right: 5px;
+    }
+
 /* Menubar */
 
 ul.menu {
@@ -220,8 +230,6 @@ p.main, p.info {
     padding: 4px;
     }
 
-table.info > col { width: 50%; }
-
 /* The short introduction on zoph.php */
 .intro  {
     padding: 5px;
@@ -266,15 +274,6 @@ div.ratings   {
     background: <?php echo $BREADCRUMB_BG_COLOR ?>;
     }
 
-table.places {
-    width: 100%;
-    }
-
-table.places td {
-    padding-left: 5px;
-    padding-right: 5px;
-    }
-
 table#search input[type="checkbox"] {
     float: none;
     }
@@ -294,7 +293,7 @@ table#search input[type="checkbox"] + label {
 
 /* Links that appear on the right hand side of the title bar or page */
 
-span.actionlink {
+span.actionlink, div.actionlink {
     margin: 1px;
     text-align: right;
     vertical-align: top;
@@ -355,16 +354,17 @@ span.actionlink {
 
 
 
-/* Tables for the color scheme */
+/* Color scheme */
 
-table.colors {
-    margin-left: auto; /* To center the page */
-    margin-right: auto;
-    }   
+div.colordef {
+    margin-left: 1em;
+    float: left;
+    width: 10em;
+    }
 
-table.colors > td, table.colors > th    {
-    padding-left: 10px;
-    padding-right: 10px;
+div.color {
+    float: left;
+    width: 60px;
     }
 
 /* Tables for the permissions */
@@ -509,12 +509,6 @@ span.inputhint  {
     text-align: right;
     }
 
-.fieldtitle-centered    {
-    text-align: center;
-    vertical-align: top;
-    font-weight: bold;
-    }
-
 div.editchoice  {
     vertical-align: top;
     clear: none;
@@ -597,25 +591,54 @@ br.noclear {
     width: 90%
     }
 
-.field, .fieldtitle, .fieldtitle-centered, label    { 
+label, dt, dd    { 
     font-size: medium; 
     padding-left: 4px;
     padding-right: 4px;
     }
 
-.fieldtitle, label  {
+dd {
+    float: left;
+    clear: right;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    }
+
+dt {
+    clear: left;
+    float: left;
+    width: 10em;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    }
+
+dl  {
+    margin-top: 0px;
+    margin-bottom: 30px;
+    /* Workaround for Firefox bug */
+    border: 1px solid transparent;
+    }
+
+dl#prefs dt {
+    width: 25em;
+    }
+
+label, table#credits th {
     text-align: right;
     vertical-align: top;
     font-weight: bold;
-    }
-
-label   {
     margin-left: 1em;
     margin-bottom: 10px;
     width: 10em;
     display: block;
     float: left;
     clear: none;
+    }
+
+label {
+    clear: left;
     }
 
 /* This is to get the labels in a nice column, even if there's a checkbox
@@ -706,6 +729,10 @@ input[type="submit"].increment {
     height: auto;
     }
 
+input[type="submit"].bigbutton {
+    width: 200px !important;
+    }
+
 textarea {
     margin: 2px;
     width: 70%;
@@ -730,6 +757,10 @@ input[type="checkbox"] {
     float: left;
     }
 
+input[type="checkbox"].remove {
+    clear: left;
+    }
+
 div#logon input[type="text"],
 div#logon input[type="password"],
 div#passwordchange input[type="text"],
@@ -743,28 +774,12 @@ input, select {
     }
 
 table#users,
-table#credits, 
-table#user, 
-table#slideshow, 
-table#place,
-table#photo,
-table#editperson,
 table#credits {
     width: 100%;
     }
 
-table.editphotos {
-    width: 350px;
-    }
-
 table#users td, 
-table#credits td, 
-table#user td,
-table#slideshow td,
-table#place td,
-table#photo td, 
-table#editperson td,
-table.editphotos td {
+table#credits td { 
     margin: 2px;
     }
 
@@ -774,20 +789,18 @@ table#zophinfo {
     margin-right: auto;
     }
 
-table#zophinfo td.fieldtitle {
+table#zophinfo th {
     width: 80%;
     }
 
-table#zophinfo td.field {
+table#zophinfo td {
     width: 20%;
     }
     
 div#rowscols select,
 div#rowscols input,
 div#rotate select,
-div#rotate input,
-table#photo select,
-table#photo input {
+div#rotate input {
     margin: 0;
     }
 
@@ -801,9 +814,6 @@ div#rotate input[type="submit"] {
     margin-left: auto;
     margin-right: auto;
     }
-
-/* This is a temporary style to workaround this bug: http://bugzilla.mozilla.org/show_bug.cgi?id=241317 */
-.bigbutton { width: 200px !important; }
 
 /* Styles for calendar */
 
@@ -820,10 +830,6 @@ div#rotate input[type="submit"] {
 .calendarHeader { font-weight: bold; }
 
 .calendar .next, .calendar .prev { font-size: x-small; }
-
-/* Styles to control alignment - not really semantically correct - should change in the future */
-.right  { text-align: right; }
-.center { text-align: center; }
 
 /* Error message */
 .error  {

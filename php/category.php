@@ -75,20 +75,12 @@
           <?php echo translate("category") ?>
         </h1>
       <div class="main">
-<form action="category.php">
-      <table id="category">
-<tr><td>
-<input type="hidden" name="_action" value="<?php echo $action ?>">
-<input type="hidden" name="category_id" value="<?php echo $category->get("category_id") ?>">
-</td></tr>
-<?php echo create_field_html($category->get_edit_array()) ?>
-  <tr>
-    <td colspan="2" class="center">
-      <input type="submit" value="<?php echo translate($action, 0) ?>">
-    </td>
-  </tr>
-      </table>
-</form>
+        <form action="category.php">
+          <input type="hidden" name="_action" value="<?php echo $action ?>">
+          <input type="hidden" name="category_id" value="<?php echo $category->get("category_id") ?>">
+          <?php echo create_edit_fields($category->get_edit_array()) ?>
+          <input type="submit" value="<?php echo translate($action, 0) ?>">
+        </form>
 <?php
     }
 ?>

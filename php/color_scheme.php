@@ -70,23 +70,19 @@
           </h1>
       <div class="main">
         <h2><?php echo $color_scheme->get("name") ?></h2>
-
+            <dl>
 <?php
         $colors = $color_scheme->get_display_array();
 ?>
-            <table class="colors">
 <?php
         while (list($name, $value) = each($colors)) {
             if ($name == "Name") { continue; }
 ?>
-                <tr>
-                  <th class="fieldtitle"><?php echo $name ?></th>
-                  <td><?php echo $value ?></td>
-                  <td style="width: 60px; background: #<?php echo $value ?>;">&nbsp;</td>
-                </tr>
+                  <dt><?php echo $name ?></dt>
+                  <dd><div class="colordef"><?php echo $value ?></div><div class="color" style="background: #<?php echo $value ?>;">&nbsp;</div></dd>
 <?php
         } ?>
-              </table>
+              </dl>
 <?php    }
     else if ($action == "confirm") {
 ?>
@@ -94,7 +90,7 @@
       <div class="main">
           <span class="actionlink">
             <a href="color_scheme.php?_action=confirm&amp;color_scheme_id=<?php echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="color_scheme.php?_action=display&amp;color_scheme_id=<?php echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("cancel") ?></a>
+            <a href="color_schemes.php"><?php echo translate("cancel") ?></a>
           </span>
           <?php echo sprintf(translate("Confirm deletion of '%s'"), $color_scheme->get("name")) ?>:
           <br>
@@ -103,21 +99,18 @@
     else {
         $colors = $color_scheme->get_edit_array();
 ?>
-          <h1>
+        <h1>
             <span class="actionlink">
-              <a href="color_schemes.php"><?php echo translate("return") ?></a>
+                <a href="color_schemes.php"><?php echo translate("return") ?></a>
             </span>
             <?php echo translate("color scheme") ?>
-          </h1>
-      <div class="main">
-        <form action="color_scheme.php">
-        <table class="colors">
-        <tr>
-          <td class="fieldtitle">Name</td>
-          <td>
-              <input type="hidden" name="_action" value="<?php echo $action ?>">
-              <input type="hidden" name="color_scheme_id" value="<?php echo $color_scheme->get("color_scheme_id") ?>">
-
+        </h1>
+        <div class="main">
+            <form action="color_scheme.php">
+                <input type="hidden" name="_action" value="<?php echo $action ?>">
+                <input type="hidden" name="color_scheme_id" value="<?php echo $color_scheme->get("color_scheme_id") ?>">
+                <label for="name">Name</label>
+                <div class="colordef">
 <?php
               if ($copy) {
                   echo create_text_input("name", "copy of " . $color_scheme->get("name"), 16, 64);
@@ -125,28 +118,26 @@
                   echo create_text_input("name", $color_scheme->get("name"), 16, 64);
               }
 ?>
-           </td>
-        </tr>
-
+                </div>
+                <br>
 <?php
         while (list($name, $value) = each($colors)) {
             if ($name == "Name") { continue; }
             $bg = preg_replace('/.*value="([^"]+)".*\n/', '$1', $value);
+            $id = strtolower(str_replace(" ", "_", $name));
 ?>
-        <tr>
-          <td class="fieldtitle"><?php echo $name ?></td>
-                <td><?php echo $value ?></td>
-                <td style='width: 60px; <?php echo $action != "insert" ? " background: #$bg" : "" ?>' >&nbsp;</td>
-        </tr>
+          <label for="<?php echo $id ?>"><?php echo $name ?></label>
+            <div class="colordef"><?php echo $value ?></div>
+           <div class="color" style="<?php echo $action != "insert" ? " background: #$bg" : "" ?>">&nbsp;</div><br>
 <?php
         }
 ?>
-</table>
 <input type="submit" value="<?php echo translate($action, 0) ?>">
 <?php
     }
 ?>
 <?php echo ( $action == "" || $action == "display" || $action == "delete" || $action == "confirm" ) ? "" : "</form>"; ?>
+<br>
 </div>
 
 <?php require_once("footer.inc.php"); ?>
