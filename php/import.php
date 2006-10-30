@@ -95,7 +95,7 @@ require_once("header.inc.php");
             if (SERVER_WEB_IMPORT) {
 ?>
                 <h2><?php echo translate("Importing Files on the Server") ?></h2>
-                <p><?php echo translate("To import images already on the server, specify the absolute path of a file name or directory.  If a directory is specified, all images within the directory will be imported.  If a destination path is given (relative to the top level image dir), the imported images will be copied there.  Otherwise, they will not be moved.") ?></p>
+                <p><?php echo translate("To import images already on the server, specify the absolute path of a file name or directory. If a directory is specified, all images within the directory will be imported. If a destination path is given (relative to the top level image dir), the imported images will be copied there. Otherwise, they will not be moved.") ?></p>
                 <label for="_image_server"><?php echo translate("file/directory") ?></label>
                 <?php echo create_text_input("_image_server", "", 40, 256) ?><br>
 <?php

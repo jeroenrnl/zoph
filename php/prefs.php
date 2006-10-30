@@ -45,7 +45,7 @@
 <?php
     if ($user->get("user_id") == DEFAULT_USER) {
 ?>
-        <?php echo sprintf(translate("The user %s is currently defined as the default user and does not have permission to change its preferences.  The current values are shown below but any changes made will be ignored until a different default user is defined."), $user->get("user_name")); ?>
+        <?php echo sprintf(translate("The user %s is currently defined as the default user and does not have permission to change its preferences. The current values are shown below but any changes made will be ignored until a different default user is defined."), $user->get("user_name")); ?>
 <?php
     }
 ?>

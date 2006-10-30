@@ -245,7 +245,7 @@ require_once("edit_user.inc.php");
 ?>
         <tr>
           <td colspan="4">
-       <?php echo translate("Granting access to an album will also grant access to that album's ancestors if required.  Granting access to all albums will not overwrite previously granted permissions.");
+       <?php echo translate("Granting access to an album will also grant access to that album's ancestors if required. Granting access to all albums will not overwrite previously granted permissions.");
        if (WATERMARKING) { 
            echo "<br>\n" . translate("A photo will be watermarked if the photo level is higher than the watermark level.");
        }

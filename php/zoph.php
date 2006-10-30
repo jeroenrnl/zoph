@@ -47,7 +47,7 @@
 ?>
         </div>
         <div class="intro" id="first">
-            <?php echo sprintf(translate("Welcome %s.  %s currently contains"), $user->person->get_link(), ZOPH_TITLE);
+            <?php echo sprintf(translate("Welcome %s. %s currently contains"), $user->person->get_link(), ZOPH_TITLE);
     echo "\n"; ?>
             <ul class="intro">
               <li><?php echo sprintf(translate("%s photos in %s"),  $album_photo_count, $album_count) ?> <a href="albums.php"><?php echo $album_count == 1 ? translate("album") : translate("albums") ?></a></li>
@@ -77,7 +77,7 @@
     echo "\n";
     echo sprintf(translate("Or you may use the %s search page %s to find photos using multiple criteria. You may also view a %s randomly chosen photo %s like the one above."), "<a href=\"search.php\">", "</a>", "<a href=\"photos.php?_random=1&amp;_rating-op=%3E%3D&amp;rating=$RANDOM_PHOTO_MIN_RATING\">","</a>");
     echo "\n        <p class=\"intro\">\n";
-    echo sprintf(translate("These options are always available in the tabs on the upper right.  Use the %s home %s link to return here. Click on any thumbnail to see a larger version along with information about that photo."),"<a href=\"zoph.php\">","</a>"); 
+    echo sprintf(translate("These options are always available in the tabs on the upper right. Use the %s home %s link to return here. Click on any thumbnail to see a larger version along with information about that photo."),"<a href=\"zoph.php\">","</a>"); 
     echo "\n        </p>\n";
     if ($user->get("user_id") != DEFAULT_USER) {
 ?>

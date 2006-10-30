@@ -1,5 +1,5 @@
 # to create a new language file, translate these string and rename this file
-# to the two letter code for the language.  Then remove this header and
+# to the two letter code for the language. Then remove this header and
 # replace it with a header modeled after those in the other files.
 %s chars max=
 %s images loaded.=
