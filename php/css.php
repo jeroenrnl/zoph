@@ -17,8 +17,7 @@
  */
 
 header("Content-Type: text/css");
-
-if ( $_GET['logged_on']=="no" ) {
+if(isset($_GET['logged_on'])) {
     require_once("config.inc.php");
     require_once("zoph_table.inc.php");
     require_once("user.inc.php");

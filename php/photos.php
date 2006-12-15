@@ -61,7 +61,7 @@
 
         $num = min($cells, $num_thumbnails);
 
-        $name = $lightbox ? "Lightbox" : "Photos";
+        $name = isset($lightbox) ? "Lightbox" : "Photos";
 
         $title = sprintf(translate("$name (Page %s/%s)", 0), $page_num, $num_pages);
         $title_bar = sprintf(translate("photos %s to %s of %s"), ($offset + 1), ($offset + $num), $num_photos);
@@ -145,7 +145,7 @@
             } else {
                 echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($request_vars, "_off", $offset + $i, $ignore)) . "\n"; 
             }
-            if ($desc_thumbnails && $thumbnails[$i]->get("description")) {
+            if (!empty($desc_thumbnails) && $thumbnails[$i]->get("description")) {
 ?>
                 <br>
                 <div class="thumbdesc"><?php echo substr($thumbnails[$i]->get("description"), 0, MAX_THUMB_DESC) ?></div>
@@ -153,8 +153,8 @@
                 if (strlen($thumbnails[$i]->get("description")) > MAX_THUMB_DESC) { echo "..."; }
             }
 
-            if ($lightbox) {
-                if (!defined($desc_thumbnails)) { echo "<br>\n"; }
+            if (!empty($lightbox)) {
+                if (!isset($desc_thumbnails)) { echo "<br>\n"; }
 ?>
                 <div class="actionlink"><a href="photos.php?<?php echo update_query_string($request_vars, "_photo_id", $thumbnails[$i]->get("photo_id"), $ignore) ?>">x</a></div>
 <?php

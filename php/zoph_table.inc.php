@@ -48,7 +48,11 @@ class zoph_table {
            var_dump($this->fields);
            echo "\n\n</pre>";
         }
-        return $this->fields[$name];
+        if (isset($this->fields[$name])) {
+            return $this->fields[$name];
+        } else {
+            return "";
+        }
     }
 
     /*
@@ -305,11 +309,11 @@ class zoph_table {
      * Creates a constraint clause based on the given keys
      */
     function create_constraints($keys) {
-
+        $constraints="";
         foreach ($keys as $key) {
             $value = $this->fields[$key];
             if (!$value) { continue; }
-            if ($constraints) { $constraints .= " and "; }
+            if (!empty($constraints)) { $constraints .= " and "; }
             $constraints .= "$key = '" . escape_string($value) . "'";
         }
         return $constraints;
@@ -456,6 +460,8 @@ function get_records_from_query($class, $sql, $min = 0, $num = 0) {
 
     if ($num) {
         $limit = true;
+    } else {
+        $limit = false;
     }
 
     $objs = array();

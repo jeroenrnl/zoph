@@ -331,13 +331,13 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
     if (!$ignore) { $ignore = array(); }
     $ignore[] = "PHPSESSID";
     $ignore[] = "_crumb";
-
+    $qstr="";
     if($vars) {
         while (list($key, $val) = each($vars)) {
             if (in_array($key, $ignore)) { continue; }
             if ($key == $new_key) { continue; }
 
-            if ($qstr) { $qstr .= "&amp;"; }
+            if (!empty($qstr)) { $qstr .= "&amp;"; }
             if (is_array($val)) {
                 $qstr .= rawurlencode_array($key, $val);
             } else {

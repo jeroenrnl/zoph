@@ -135,9 +135,9 @@ Class rtplang {
     if($this->debug)
       print "File <b>- $this->file_lang -</b> is unreadable";
     }
-    $retour = $this->tab_translate[$str];
-    
-    if($retour == "") {
+    if (isset($this->tab_translate[$str])) {
+        $retour = $this->tab_translate[$str];
+    } else {
       //Si on est pas déjà en vo, on le marque
         if($this->sessioniso && $this->sourceiso != $this->sessioniso && $mark)
             $retour = "<b>[vo]</b> <i>$str</i>";
@@ -187,7 +187,7 @@ Class rtplang {
    *  @access     public
    *  @return     string
    */
-    function get_encoding() {
+    function get_index() {
         $search = "";
         $ind = 0;
 
@@ -202,7 +202,12 @@ Class rtplang {
                 $ind = $i;
             }
         }
-        
+
+        return $ind;
+    }
+
+    function get_encoding() {
+        $ind=$this->get_index();    
 
         if($this->tablangs["charset"][$ind] == "") {
             return "iso-8859-1";
@@ -212,6 +217,7 @@ Class rtplang {
     }
 
     function lang_header() {
+        $ind=$this->get_index();    
         $charset=$this->get_encoding();
         $htmltag = "<html";
         if($this->tablangs["htmltagoption"][$ind] != "nothing" && $this->tablangs["htmltagoption"][$ind] != "") {
@@ -219,7 +225,7 @@ Class rtplang {
         }
         $htmltag .= ">";
         header("Content-Type: text/html; charset=$charset");
-        $texte .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">
+        $texte = "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">
 $htmltag
 <head>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charset\">\n";

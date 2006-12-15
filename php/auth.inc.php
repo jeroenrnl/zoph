@@ -32,7 +32,9 @@
         or die("Unable to select database");
 
     if (minimum_version('4.1.0')) {
-        $user = $_SESSION['user'];
+        if (array_key_exists('user', $_SESSION)) {
+            $user = $_SESSION['user'];
+        }
     }
 
     // no user was in the session, try logging in

@@ -144,7 +144,6 @@ class album extends zoph_tree_table {
             $sql =
                 "select count(distinct pa.photo_id) from " .
                 DB_PREFIX . "photo_albums pa ";
-                "where ($id_values)";
 
             if ($id_constraint) {
                 $sql .= " where $id_constraint";

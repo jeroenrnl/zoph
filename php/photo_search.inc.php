@@ -48,12 +48,18 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     }
 
     global $DEFAULT_ORDER;
-    $ord = $vars["_order"];
-    if (!$ord) { $ord = $DEFAULT_ORDER; }
+    if (isset($vars["_order"])) {
+        $ord = $vars["_order"];
+    } else {
+        $ord = $DEFAULT_ORDER;
+    }
 
     global $DEFAULT_DIRECTION;
-    $dir = $vars["_dir"];
-    if (!$dir) { $dir = $DEFAULT_DIRECTION; }
+    if (isset($vars["_dir"])) {
+        $dir = $vars["_dir"];
+    } else {
+        $dir = $DEFAULT_DIRECTION;
+    }
 
     $order = "ph." . $ord . " $dir";
     if ($ord == "date") { $order .= ", ph.time $dir"; }
@@ -75,19 +81,25 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
         //echo "key = $key<br>";
         //echo "suffix = $suffix<br>";
+        $index = "_" . $key . $suffix;
 
-        $conj = $vars["_" . $key . $suffix . "-conj"];
-        if (!$conj) { $conj = "and"; }
+        if (!empty($vars[$index . "-conj"])) {
+            $conj = $vars[$index . "-conj"];
+        } else {
+            $conj = "and";
+        }
         if (!in_array($conj, $good_conj)) 
             { die ("Illegal conjunction: " . $conj); }
 
-        $op = $vars["_" . $key . $suffix . "-op"];
-        if (!$op) { $op = "="; }
+        if (!empty($vars[$index . "-op"])) {
+            $op = $vars[$index . "-op"];
+        } else {
+            $op = "=";
+        }
         if (!in_array($op, $good_ops)) 
             { die ("Illegal operator: " . $op); }
 
-        $children=$vars["_" . $key . $suffix . "-children"];
-        if($children) {
+        if (!empty($vars[$index . "-children"])) {
             $val_no_children=split(",",$val);
             $val=$val_no_children[0];
         }
@@ -305,25 +317,26 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         }
 
     }
+    if(!empty($from)) {
+        $from_clause .= generate_from_clause($from);
+    }
 
-    $from_clause .= generate_from_clause($from);
-
-    if ($excluded_albums) {
+    if (!empty($excluded_albums)) {
         $where .= generate_excluded_albums_clause(
             $excluded_albums, $from_clause, $where);
     }
 
-    if ($excluded_categories) {
+    if (!empty($excluded_categories)) {
         $where .= generate_excluded_categories_clause(
             $excluded_categories, $from_clause, $where);
     }
 
-    if ($excluded_people) {
+    if (!empty($excluded_people)) {
         $where .= generate_excluded_people_clause(
             $excluded_people, $from_clause, $where);
     }
     
-    if ($where) { $where = "where $where"; }
+    if (!empty($where)) { $where = "where $where"; }
 
     $num_photos = 0;
 
@@ -334,7 +347,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
     if ($num_photos > 0) {
 
-        if ($vars["_random"] && $num_photos > 1) {
+        if (isset($vars["_random"]) && $num_photos > 1) {
             // get one random result
             mt_srand((double) microtime() * 1000000);
             $offset = mt_rand(0, $num_photos - 1);

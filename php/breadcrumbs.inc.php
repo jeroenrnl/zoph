@@ -49,7 +49,7 @@
     $page=array_reverse(explode("/",$PHP_SELF));
     $page=$page[0];
     
-    if (!$skipcrumb && $title && count($user->crumbs) < MAX_CRUMBS &&
+    if (!isset($skipcrumb) && $title && count($user->crumbs) < MAX_CRUMBS &&
         (!$_action || ($_action == "display" || $_action == "search" ||
         $_action == "notify" || $_action == "compose" || 
         ($user->prefs->get("auto_edit") && $_action != "update" 

@@ -63,6 +63,7 @@
       <div class="main">
 <?php
     $constraints = null;
+    $ops = null;
     if ($_l == "all") {
         // no contraint
     }

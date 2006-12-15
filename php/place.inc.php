@@ -92,8 +92,6 @@ class place extends zoph_tree_table {
     }
     
     function get_photo_count($user = null) {
-        if ($this->photo_count) { return $photo_count; }
-
         $id = $this->get("place_id");
 
         if ($user && !$user->is_admin()) {
@@ -146,7 +144,6 @@ class place extends zoph_tree_table {
             $sql =
                 "select count(distinct p.photo_id) from " .
                 DB_PREFIX . "photos p ";
-                "where ($id_values)";
 
             if ($id_constraint) {
                 $sql .= " where $id_constraint";
