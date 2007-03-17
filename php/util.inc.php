@@ -309,7 +309,7 @@ function clean_request_vars($vars) {
             }
 
             //process "_field" type variables
-            if (substr($field, 0, 5) == "field" && (empty($interim_vars[$field]) || empty($interim_vars["_$field"]))) { continue; }
+            if (substr($field, 0, 5) == "field" && (empty($interim_vars[$field]) && empty($interim_vars["_$field"]))) { continue; }
         } else {
 
             //process "field" type variables
