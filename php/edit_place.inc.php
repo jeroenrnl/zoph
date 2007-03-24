@@ -54,7 +54,7 @@
         <?php echo create_text_input("country", $place->get("country"), 32, 32) ?>
          <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
          <label for="url"><?php echo translate("url") ?></label>
-         <?php echo create_text_input("url", $place->get("url"), 32, 32) ?>
+         <?php echo create_text_input("url", $place->get("url"), 32, 1024) ?>
          <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "1024") ?></span><br>
          <label for="urldesc"><?php echo translate("url description") ?></label>
 
