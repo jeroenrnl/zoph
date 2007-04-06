@@ -17,3 +17,8 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 alter table zoph_prefs add allexif char(1) default "0" after camera_info;
+alter table zoph_prefs add autocomp_albums char(1) default "1" after allexif;
+alter table zoph_prefs add autocomp_categories char(1) default "1" after autocomp_albums;
+alter table zoph_prefs add autocomp_photographer char(1) default "1" after autocomp_categories;
+alter table zoph_prefs add autocomp_people char(1) default "1" after autocomp_photographer;
+alter table zoph_prefs add autocomp_places char(1) default "1" after autocomp_albums;
