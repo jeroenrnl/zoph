@@ -60,6 +60,13 @@
     define('ZOPH_URL', '');
     define('ZOPH_SECURE_URL', '');
 
+    // If set to 0 Zoph will not use any Javascript
+    // Of course this might mean some functionality is not available
+    define('JAVASCRIPT', 1);
+
+    // Enable the autocompletion feature
+    // This needs JAVASCRIPT to be on
+    define('AUTOCOMPLETE', 1);
 
     // allow annotation of photos for emailing
     define('ANNOTATE_PHOTOS', 1);

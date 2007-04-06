@@ -167,7 +167,13 @@ for ($i = 0; $i <= $count; $i++) {
 <?php echo create_binary_operator_pulldown("_album_id_op[$i]", $_album_id_op[$i]) ?>
           </td>
           <td colspan="2">
-<?php echo create_pulldown("album_id[$i]", $album_id[$i], get_albums_search_array($user)) ?>
+<?php
+        if ($user->prefs->get("autocomp_albums") && AUTOCOMPLETE && JAVASCRIPT && ($i == $count)) { 
+            echo create_pulldown("album_id[$i]", $album_id[$i], get_albums_search_array($user), "class=\"autocomplete\"");
+        } else {
+            echo create_pulldown("album_id[$i]", $album_id[$i], get_albums_search_array($user));
+        }
+?>
           <input type="checkbox" name="_album_id_children[<?php echo $i ?>]" value="no" <?php echo $checked ?>><label for="_album_id_children[<?php echo $i ?>]"><?php echo translate("no children") ?></label>
           </td>
         </tr>
@@ -214,7 +220,13 @@ for ($i = 0; $i <= $count; $i++) {
 <?php echo create_binary_operator_pulldown("_category_id_op[$i]", $_category_id_op[$i]) ?>
           </td>
           <td colspan="2">
-<?php echo create_pulldown("category_id[$i]", $category_id[$i], get_categories_search_array($user)) ?>
+<?php
+        if ($user->prefs->get("autocomp_categories") && AUTOCOMPLETE && JAVASCRIPT && ($i == $count)) { 
+            echo create_pulldown("category_id[$i]", $category_id[$i], get_categories_search_array($user), "class=\"autocomplete\"");
+        } else {
+            echo create_pulldown("category_id[$i]", $category_id[$i], get_categories_search_array($user));
+        }
+?>
           <input type="checkbox" name="_category_id_children[<?php echo $i ?>]" value="no" <?php echo $checked ?>><label for="_category_id_children[<?php echo $i ?>]"><?php echo translate("no children") ?></label>
           </td>
         </tr>
@@ -261,7 +273,13 @@ for ($i = 0; $i <= $count; $i++) {
 <?php echo create_binary_operator_pulldown("_location_id_op[$i]", $_location_id_op[$i]) ?>
           </td>
           <td colspan="2">
-<?php echo create_smart_pulldown("location_id[$i]", $location_id[$i], get_places_search_array($user)) ?>
+<?php
+        if ($user->prefs->get("autocomp_places") && AUTOCOMPLETE && JAVASCRIPT && ($i == $count)) { 
+            echo create_smart_pulldown("location_id[$i]", $location_id[$i], get_places_search_array($user), "class=\"autocomplete\"");
+        } else {
+            echo create_smart_pulldown("location_id[$i]", $location_id[$i], get_places_search_array($user));
+        }
+?>
           <input type="checkbox" name="_location_id_children[<?php echo $i ?>]" value="no" <?php echo $checked ?>><label for="_location_id_children[<?php echo $i ?>]"><?php echo translate("no children") ?></label>
           </td>
         </tr>
@@ -342,7 +360,13 @@ for ($i = 0; $i <= $count; $i++) {
 <?php echo create_present_operator_pulldown("_person_id_op[$i]", $_person_id_op[$i]) ?>
           </td>
           <td colspan="2">
-<?php echo create_smart_pulldown("person_id[$i]", $person_id[$i], get_people_select_array(get_photographed_people($user))) ?>
+<?php
+        if ($user->prefs->get("autocomp_people") && AUTOCOMPLETE && JAVASCRIPT && ($i == $count)) { 
+            echo create_smart_pulldown("person_id[$i]", $person_id[$i], get_people_select_array(get_photographed_people($user)), "class=\"autocomplete\"");
+        } else {
+            echo create_smart_pulldown("person_id[$i]", $person_id[$i], get_people_select_array(get_photographed_people($user)));
+        }
+?>
           </td>
         </tr>
 <?php
@@ -382,7 +406,13 @@ for ($i = 0; $i <= $count; $i++) {
 <?php echo create_binary_operator_pulldown("_photographer_id_op[$i]", $_photographer_id_op[$i]) ?>
           </td>
           <td colspan="2">
-<?php echo create_smart_pulldown("photographer_id[$i]", $photographer_id[$i], get_people_select_array(get_photographers($user))) ?>
+<?php 
+        if ($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPT && ($i == $count)) { 
+            echo create_smart_pulldown("photographer_id[$i]", $photographer_id[$i], get_people_select_array(get_photographers($user)), "class=\"autocomplete\"");
+        } else {
+            echo create_smart_pulldown("photographer_id[$i]", $photographer_id[$i], get_people_select_array(get_photographers($user)));
+        }
+?>
           </td>
         </tr>
 <?php

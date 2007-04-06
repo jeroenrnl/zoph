@@ -61,6 +61,10 @@ class album extends zoph_tree_table {
         }
     }
 
+    function get_name() {
+        return $this->get("album");
+    }
+
     function get_children($user = null) {
 
         $id = $this->get("album_id");
@@ -186,6 +190,14 @@ class album extends zoph_tree_table {
 
         return "<a href=\"albums.php?parent_album_id=" .
             $this->get("album_id") . "\">$name</a>";
+    }
+
+    function xml_rootname() {
+        return "albums";
+    }
+
+    function xml_nodename() {
+        return "album";
     }
 
 }

@@ -118,6 +118,40 @@ class zoph_tree_table extends zoph_table {
         return implode(",", $id_array);
     }
 
+    function get_xml_tree($xml, $search) {
+        $rootname=$this->xml_rootname();
+        $nodename=$this->xml_nodename();
+        $idname=$this->primary_keys[0];
+
+        $newchild=$xml->createElement($nodename);
+
+        $title=$this->get_name();
+
+        $titleshort=strtolower(substr($title, 0, strlen($search)));
+        if($titleshort == strtolower($search)) {
+            $key=$this->get($idname);
+
+            $newchildkey=$xml->createElement("key");
+            $newchildkey->appendChild($xml->createTextNode($key));
+            $newchildtitle=$xml->createElement("title");
+            $newchildtitle->appendChild($xml->createTextNode($title));
+
+            $newchild->appendChild($newchildkey);
+            $newchild->appendChild($newchildtitle);
+       }
+        if($this->get_children()) {
+            $childset=$xml->createElement($rootname);
+            foreach($this->get_children() as $child) {
+                $newnode=$child->get_xml_tree($xml, $search);
+                if (isset($newnode)) {
+                    $childset->appendChild($newnode);
+                }
+            }
+            $newchild->appendChild($childset);
+
+        }
+        return $newchild;
+    }
 }
 
 function get_root($class) {

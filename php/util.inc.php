@@ -72,6 +72,7 @@ function create_text_input($name, $value, $size = 20, $max = 32) {
 
 function create_pulldown($name, $value, $value_array, $extraopt = null) {
     $id=ereg_replace("^_+", "", $name);
+
     $html = "<select name=\"$name\" id=\"$id\" $extraopt>\n";
     while (list($val, $label) = each($value_array)) {
         if ($val == $value) { $selected = " selected"; }
@@ -119,12 +120,12 @@ function create_grouped_pulldown($name, $value, $value_array) {
     return $html;
 }
 
-function create_smart_pulldown($name, $value, $value_array) {
+function create_smart_pulldown($name, $value, $value_array, $extraopt = null) {
 
     $size = sizeof($value_array);
 
     if ($size <= GROUPED_PULLDOWN_SIZE) {
-        return create_pulldown($name, $value, $value_array);
+        return create_pulldown($name, $value, $value_array, $extraopt);
     }
     else if ($size <= MAX_PULLDOWN_SIZE) {
         return create_grouped_pulldown($name, $value, $value_array);

@@ -153,11 +153,17 @@ class place extends zoph_tree_table {
         return get_count_from_query($sql);
     }
 
+    function xml_rootname() {
+        return "places";
+    }
+
+    function xml_nodename() {
+        return "place";
+    }
 }
 
 function get_places($constraints = null, $conj = "and", $ops = null,
     $order = "city, title, address") {
-
     return get_records("place", $order, $constraints, $conj, $ops);
 }
 

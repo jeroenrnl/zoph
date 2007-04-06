@@ -19,8 +19,13 @@
 
 print $rtplang->lang_header();
 ?>
-<link TYPE="text/css" REL="stylesheet" HREF="<?php echo CSS_SHEET ?>">
+<link type="text/css" rel="stylesheet" href="<?php echo CSS_SHEET ?>">
 <?php
+    if(JAVASCRIPT && AUTOCOMPLETE) {
+?>
+<script type="text/javascript" src="autocomplete.js"></script>
+<?php
+    }
     if (isset($extrastyle)) {
 ?>
         <style type="text/css">

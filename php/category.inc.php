@@ -32,6 +32,10 @@ class category extends zoph_tree_table {
         parent::delete(array("photo_categories"));
     }
 
+    function get_name() {
+        return $this->get("category");
+    }
+
     function get_children() {
         return parent::get_children(null, "category");
     }
@@ -142,6 +146,13 @@ class category extends zoph_tree_table {
             $name = translate("Categories");
         }
         return "<a href=\"categories.php?parent_category_id=" . $this->get("category_id") . "\">$name</a>";
+    }
+    function xml_rootname() {
+        return "categories";
+    }
+
+    function xml_nodename() {
+        return "category";
     }
 
 }

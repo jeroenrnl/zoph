@@ -35,7 +35,7 @@ class zoph_table {
     function zoph_table($table_name, $primary_keys, $not_null) {
         $this->table_name = DB_PREFIX . $table_name;
         $this->primary_keys = $primary_keys;
-	$this->not_null = $not_null;
+        $this->not_null = $not_null;
         $this->fields = array();
     }
 
@@ -383,6 +383,7 @@ function get_count($class) {
     return get_count_from_query($sql);
 }
 
+
 /*
  * Executes the given query and returns the result.
  */
@@ -404,7 +405,6 @@ function get_records($class, $order = null, $constraints = null,
 
     $obj = new $class;
     $sql = "select * from $obj->table_name";
-
     if ($constraints) {
         while (list($name, $value) = each($constraints)) {
             if ($constraint_string) {
@@ -439,7 +439,6 @@ function get_records($class, $order = null, $constraints = null,
     if ($order) {
         $sql .= " order by $order";
     }
-
     return get_records_from_query($class, $sql);
 }
 
@@ -544,6 +543,62 @@ function create_link_list($records) {
     }
 
     return $links;
+}
+
+function get_xml($class, $search) {
+    $search=strtolower($search);
+    if($class=="location") {
+        $class="place";
+    } else if($class=="photographer") {
+        $class="person";
+    } 
+
+    if($class=="person") {
+        $tree=false;
+    } else {
+        $tree=true;
+    }
+
+    if (class_exists($class)) {
+        $obj=new $class;
+        $rootname=$obj->xml_rootname();
+        $nodename=$obj->xml_nodename();
+        $idname=$obj->primary_keys[0];
+
+        $xml = new DOMDocument('1.0','UTF-8');
+        $rootnode=$xml->createElement($obj->xml_rootname());
+
+
+        if ($tree) {
+            $obj = get_root($class);
+            $obj->lookup();
+            $tree=$obj->get_xml_tree($xml, $search);
+            $rootnode->appendChild($tree);
+        } else {
+            if($class="person") {
+                $constraints=array("lower(first_name)" => $search . "%", "lower(last_name)"=> $search . "%", "lower(concat(first_name, \" \", last_name))" => $search . "%");
+                $conj="or";
+                $order="last_name";
+                $ops=array("lower(first_name)" => "like", "lower(last_name)" => "like", "lower(concat(first_name, \" \", last_name))" => "like");
+            }
+            $records=get_records($class, $order, $constraints, $conj, $ops);
+
+            foreach($records as $record) {
+                $newchild=$xml->createElement($nodename);
+                $key=$xml->createElement("key");
+                $title=$xml->createElement("title");
+                $key->appendChild($xml->createTextNode($record->get($idname)));
+                $title->appendChild($xml->createTextNode($record->get_name()));
+                $newchild->appendChild($key);
+                $newchild->appendChild($title);
+                $rootnode->appendChild($newchild);
+             }
+        }
+    } else {
+        die("illegal class $class");
+    }
+    $xml->appendChild($rootnode);
+    return $xml->saveXML();
 }
 
 ////////// some utility functions //////////

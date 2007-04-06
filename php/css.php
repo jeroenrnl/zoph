@@ -130,6 +130,41 @@ form#ratingform select {
     margin-right: 5px;
     }
 
+ul.autocompdropdown {
+    position: relative;
+    background: white;
+   width: 300px;
+   border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
+    max-height: 15em;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+    z-index: 5;
+    }
+
+ul.autocompdropdown ul {
+    margin: 0 0 0 1em;
+    padding-left: 0em;
+    }
+
+ul.autocompdropdown li {
+    list-style: none;
+    margin: 0;
+    padding: 0 10px 0 10px;
+}
+
+input.autocompinput {
+    background: white url('images/down2.gif');
+    background-repeat: no-repeat;
+    background-position: center right;
+
+    }
+
+ul.autocompdropdown li:hover,
+ul.autocompdropdown li#selected {
+    background: <?php echo $PAGE_BG_COLOR ?>;
+}
+
 /* Menubar */
 
 ul.menu {
@@ -621,7 +656,7 @@ dl  {
     border: 1px solid transparent;
     }
 
-dl#prefs dt {
+dl.prefs dt {
     width: 25em;
     }
 

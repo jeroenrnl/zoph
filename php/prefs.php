@@ -49,7 +49,7 @@
 <?php
     }
 ?>
-    <dl id="prefs">
+    <dl class="prefs">
         <dt>
             <input type="hidden" name="_action" value="<?php echo $action ?>">
             <input type="hidden" name="user_id" value="<?php echo $user->prefs->get("user_id") ?>">
@@ -129,6 +129,8 @@
         </dd>
 <?php
     }
+
+    if (JAVASCRIPT) {
 ?>
         <dt>
             <?php echo translate("open fullsize photo in new window") ?>
@@ -136,6 +138,9 @@
         <dd>
             <?php echo create_pulldown("fullsize_new_win", $user->prefs->get("fullsize_new_win"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
         </dd>
+<?php
+    }
+?>
         <dt>
             <?php echo translate("display camera info") ?>
         </dt>
@@ -180,10 +185,39 @@
 ?>
         <dt><?php echo translate("language") ?>
         </dt>
-          <dd>
+        <dd>
 <?php echo create_smart_pulldown("language", $user->prefs->get("language"), $lang_select_array) ?>
-          </dd>
-</dl>
+        </dd>
+    </dl>
+<?php
+    if (JAVASCRIPT && AUTOCOMPLETE) {
+?>
+    <br><h2><?php echo translate("Autocomplete")?></h2");
+    <dl class="prefs">
+        <dt><?php echo translate("albums") ?></dt>
+        <dd>
+            <?php echo create_pulldown("autocomp_albums", $user->prefs->get("autocomp_albums"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+        </dd>
+        <dt><?php echo translate("categories") ?></dt>
+        <dd>
+            <?php echo create_pulldown("autocomp_categories", $user->prefs->get("autocomp_albums"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+        </dd>
+        <dt><?php echo translate("people") ?></dt>
+        <dd>
+            <?php echo create_pulldown("autocomp_people", $user->prefs->get("autocomp_people"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+        </dd>
+        <dt><?php echo translate("places") ?></dt>
+        <dd>
+            <?php echo create_pulldown("autocomp_places", $user->prefs->get("autocomp_places"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+        </dd>
+        <dt><?php echo translate("photographer") ?></dt>
+        <dd>
+            <?php echo create_pulldown("autocomp_photographer", $user->prefs->get("autocomp_photographer"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+        </dd>
+     </dl>
+<?php
+    }
+?>
 <br>
 <input type="submit" value="<?php echo translate("update") ?>">
   </form>

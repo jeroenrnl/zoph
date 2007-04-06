@@ -68,7 +68,7 @@ class person extends zoph_table {
     }
 
     function get_children() {
-        $constraints["falther_id"] = $this->get("father_id");
+        $constraints["father_id"] = $this->get("father_id");
         $constraints["mother_id"] = $this->get("mother_id");
         return get_people($constraints, "or", "dob");
     }
@@ -119,7 +119,13 @@ class person extends zoph_table {
             translate("father") => get_link("person", $this->get("father_id")),
             translate("spouse") => get_link("person", $this->get("spouse_id")));
     }
+    function xml_rootname() {
+        return "people";
+    }
 
+    function xml_nodename() {
+        return "person";
+    }
 }
 
 function get_people($constraints = null, $conj = "and", $ops = null,
