@@ -116,6 +116,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
             $key .= "_id";
             $val = "";
+            $op = "=";
 
             $people = get_person_by_name($first_name, $last_name);
             if ($people && count($people) > 0) {
