@@ -150,6 +150,7 @@
 require_once("edit_person.inc.php");
     }
 ?>
+<br>
 </div>
 
 <?php require_once("footer.inc.php"); ?>
