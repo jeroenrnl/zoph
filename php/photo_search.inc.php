@@ -22,6 +22,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     $good_conj = array ( "and", "or" );
 
     $good_fields= array ( "location_id", "rating", "photographer_id", "date", "time", "timestamp", "name", "path", "title", "view", "description", "width", "height", "size", "aperture", "camera_make", "camera_model", "compression", "exposure", "flash_used", "focal_length", "iso_equiv", "metering_mode" );
+    $good_text= array ( "album", "category", "person", "photographer" );
 
     $select = "distinct ph.photo_id, ph.name, ph.path, ph.width, ph.height";
 
@@ -109,16 +110,31 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             else if ($op = "!=") { $op = "is not"; }
         }
 
-        if ($key == "person" || $key == "photographer") {
-            // val could be "last_name", "last_name,first_name" or ",first_name"
+        if ($key == "text") { 
+            if (strncasecmp($key, "text", 4) == 0) {
+                $key = $vars["_" . $key . $suffix];
+            }
+            if (!in_array($key, $good_text))
+                { die ("Illegal text search: " . $key); }
+              
+            $val = escape_string($val);
+            $key = escape_string($key);
+        }
 
-            list($last_name, $first_name) = explode(',', $val);
+        if ($key == "person" || $key == "photographer") {
+            $val = "%" . escape_string(strtolower($val)) . "%";
+            
+            $query = "select person_id from " . DB_PREFIX . "people where 
+                        lower(concat(first_name, \" \", last_name)) like \"$val\"";
+
+            $people = get_records_from_query("person", $query); 
+
 
             $key .= "_id";
             $val = "";
+            
             $op = "=";
 
-            $people = get_person_by_name($first_name, $last_name);
             if ($people && count($people) > 0) {
 
                 foreach ($people as $person) {
@@ -273,7 +289,10 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $from["$ppl"] = "photo_people";
 
                 $op = "in";
-                if (!is_numeric($val)) { die("$key must be numeric"); }
+                // the regexp matches a list of numbers, separated by comma's.
+                // "1" matches, "1," not, "1,2" matches "1,333" matches
+                // "1, a" not, etc.
+                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) { die("$key must be numeric"); }
                 $where .=
                     "(${ppl}.person_id $op (" . escape_string($val) . ")" .
                     " and ${ppl}.photo_id = ph.photo_id)";

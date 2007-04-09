@@ -458,6 +458,51 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
         </tr>
 <?php
+      /* Text search for albums/categories/people/photographers */
+
+    $text = getvar('text'); 
+    $_text = getvar('_text'); 
+    $_text_conj = getvar('_text_conj'); 
+    $_text_op = getvar('_text_op');
+    
+    $count = sizeof($_text) - 1; 
+    if ( $_text[$count] == "+" ) { 
+        $_text[$count] = "";
+    }
+    for ($i = 0; $i <= $count; $i++) {
+?>
+        <tr>
+          <td>
+<?php
+    if($i==$count) {
+?>
+        <input type="submit" class="increment" name="_text[<?php echo $count + 1; ?>]" value="+">
+<?php
+    } else {
+?>
+        &nbsp;
+<?php
+    }
+?>
+          </td>
+          <td>
+<?php echo create_conjunction_pulldown("_text_conj[$i]", $_text_conj[$i]) ?>
+          </td>
+          <td>
+<?php echo create_photo_text_pulldown("_text[$i]", $_text[$i]) ?>
+          </td>
+          <td>
+            <?php echo translate("like"); ?>
+          </td>
+          <td colspan=2>
+            <input type="text" name="text[<?php echo $i; ?>]" value="<?php echo $text[$i]; ?>" size="24" maxlength="64">
+          </td>
+        </tr>
+<?php
+    }
+?>
+      </table>
+<?php
     }
 ?>
       </table>

@@ -218,6 +218,14 @@ function create_photo_field_pulldown($var, $name = null) {
         "metering_mode" => translate("metering mode",0)));
 }
 
+function create_photo_text_pulldown($var, $name = null) {
+    return create_pulldown($var, $name, array(
+        "" => "&nbsp;",
+        "album" => translate("album",0),
+        "category" => translate("category",0),
+        "person" => translate("person",0),
+        "photographer" => translate("photographer",0)));
+}
 /*
  * Remove any params without values and operator params without corresponding
  * fields (e.g. _album_id-op when there is no _album_id).  This can be called
