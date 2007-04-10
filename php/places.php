@@ -139,8 +139,15 @@
         <ul>
 <?php
         foreach($children as $a) {
+            $photo_count=$a->get_photo_count($user);
+            $total_photo_count=$a->get_total_photo_count($user);
+            if($photo_count==$total_photo_count) {
+                $count=" <span class=\"photocount\">(" . $photo_count . ")</span>";
+            } else {
+                $count=" <span class=\"photocount\">(" . $photo_count ."/" . $total_photo_count . ")</span>";
+            }
 ?>
-            <li><a href="places.php?parent_place_id=<?php echo $a->get("place_id") ?>"><?php echo $a->get("title") ?></a></li>
+            <li><a href="places.php?parent_place_id=<?php echo $a->get("place_id") ?>"><?php echo $a->get("title") ?></a><?php echo $count?></li>
 <?php
         }
 ?>

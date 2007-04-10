@@ -121,6 +121,8 @@ class album extends zoph_tree_table {
     }
 
     function get_total_photo_count($user = null) {
+        // Without the lookup, parent_album_id is not available!
+        $this->lookup();
         if ($this->get("parent_album_id")) {
             $id_list = $this->get_branch_ids($user);
             $id_constraint = "pa.album_id in ($id_list)";
@@ -128,7 +130,6 @@ class album extends zoph_tree_table {
         else {
             $id_constraint = "";
         }
-
         if ($user && !$user->is_admin()) {
             $sql =
                 "select count(distinct pa.photo_id) from " .

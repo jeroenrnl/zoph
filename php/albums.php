@@ -30,7 +30,8 @@
     $ancestors = $album->get_ancestors();
     $children = $album->get_children($user);
 
-    $photo_count = $album->get_total_photo_count($user);
+    $total_photo_count = $album->get_total_photo_count($user);
+    $photo_count = $album->get_photo_count($user);
 
     $title = $album->get("parent_album_id") ? $album->get("album") : translate("Albums");
 
@@ -75,45 +76,60 @@
 ?>
 <?php
     $fragment = translate("in this album");
-    if ($photo_count > 0) {
-       $sortorder = $album->get("sortorder");
-       if ($sortorder) {
-           $sort = "&amp;_order=" . $sortorder;
-       }
+    $sortorder = $album->get("sortorder");
+    if ($sortorder) {
+        $sort = "&amp;_order=" . $sortorder;
+    }
+    if ($total_photo_count > 0) {
+        if ($total_photo_count > $photo_count && $children) {
 ?>
-        <span class="actionlink">
-            <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
-        </span>
+            <span class="actionlink">
+                <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
+            </span>
 <?php
-        if (!$album->get("parent_album_id")) { // root album
-            $fragment = translate("available");
-        }
-        else {
-            if ($children) {
-                $fragment .= " " . translate("or its children");
+            $fragment .= " " . translate("or its children");
+            if($total_photo_count>1) {
+                echo sprintf(translate("There are %s photos"), $total_photo_count);
+                echo " $fragment.<br>\n";
+            } else {
+                echo sprintf(translate("There is %s photo"), $total_photo_count);
+                echo " $fragment.<br>\n";
             }
-        }
+            $fragment = translate("in this album");
+            if (!$album->get("parent_album_id")) { // root album
+                $fragment = translate("available");
+            }
 
-        if ($photo_count > 1) {
-          echo sprintf(translate("There are %s photos"), $photo_count);
-          echo " $fragment.\n";
-        }
-        else {
-          echo sprintf(translate("There is %s photo"), $photo_count);
-          echo " $fragment.\n";
         }
     }
-    else {
+    if ($photo_count > 0) {
 ?>
-        <?php echo translate("There are no photos") ?> <?php echo $fragment . ".\n"; 
+        <span class="actionlink">
+            <a href="photos.php?album_id=<?php echo $album->get("album_id") . $sort ?>"><?php echo translate("view photos")?></a>
+        </span>
+<?php
+        if ($photo_count > 1) {
+            echo sprintf(translate("There are %s photos"), $photo_count);
+            echo " $fragment.\n";
+        } else {
+            echo sprintf(translate("There is %s photo"), $photo_count);
+            echo " $fragment.\n";
+        }
     }
     if ($children) {
 ?>
         <ul>
 <?php
         foreach($children as $a) {
+            $photo_count=$a->get_photo_count($user);
+            $total_photo_count=$a->get_total_photo_count($user);
+            if($photo_count==$total_photo_count) {
+                $count=" <span class=\"photocount\">(" . $photo_count . ")</span>";
+            } else {
+                $count=" <span class=\"photocount\">(" . $photo_count ."/" . $total_photo_count . ")</span>";
+            }
 ?>
-            <li><a href="albums.php?parent_album_id=<?php echo $a->get("album_id") ?>"><?php echo $a->get("album") ?></a></li>
+            <li><a href="albums.php?parent_album_id=<?php echo $a->get("album_id") ?>"><?php echo $a->get("album") ?></a><?php echo $count ?></li>
 <?php
         }
 ?>

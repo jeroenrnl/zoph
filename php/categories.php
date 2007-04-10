@@ -29,7 +29,8 @@
     $ancestors = $category->get_ancestors();
     $children = $category->get_children();
 
-    $photo_count = $category->get_total_photo_count($user);
+    $photo_count = $category->get_photo_count($user);
+    $total_photo_count = $category->get_total_photo_count($user);
 
     $title = $category->get("parent_category_id") ? $category->get("category") : translate("Categories");
 
@@ -73,42 +74,55 @@
 <?php
     }
 ?>
+<br>
 <?php
     $fragment = translate("in this category");
-    if ($photo_count > 0) {
-       $sortorder = $category->get("sortorder");
-       if ($sortorder) {
-           $sort = "&amp;_order=" . $sortorder;
-       }
-
-        if (!$category->get("parent_category_id")) {
-            $fragment = translate("that have been categorized");
-        }
-        else {
-            if ($children) {
-                $fragment .= " " . translate("or its children");
+    $sortorder = $category->get("sortorder");
+    if ($sortorder) {
+        $sort = "&amp;_order=" . $sortorder;
+    }
+    if ($total_photo_count > 0) {
+        if ($total_photo_count > $photo_count && $children) {
+?>
+            <span class="actionlink">
+                <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
+            </span>
+<?php
+            if (!$category->get("parent_category_id")) {
+                $fragment = translate("that have been categorized");
+            } else {
+                if ($children) {
+                    $fragment .= " " . translate("or its children");
+                }
             }
-        }
 
-        if ($photo_count > 1) {
-            echo sprintf(translate("There are %s photos"), $photo_count);
-            echo " $fragment.\n";
+            if ($total_photo_count > 1) {
+                echo sprintf(translate("There are %s photos"), $total_photo_count);
+                echo " $fragment.<br>\n";
+            } else {
+                echo sprintf(translate("There is %s photo"), $total_photo_count);
+                echo " $fragment.<br>\n";
+            }
+?>
+<?php
         }
-        else {
-            echo sprintf(translate("There is %s photo"), $photo_count);
-            echo " $fragment.\n";
-        }
+    }
+    $fragment = translate("in this category");
+    if ($photo_count > 0) {
 ?>
         <span class="actionlink">
-            <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
+            <a href="photos.php?category_id=<?php echo $category->get("category_id") . $sort ?>"><?php echo translate("view photos")?></a>
         </span>
 <?php
+        if ($photo_count > 1) {
+            echo sprintf(translate("There are %s photos"), $photo_count);
+            echo " $fragment.<br>\n";
+        } else {
+            echo sprintf(translate("There is %s photo"), $photo_count);
+            echo " $fragment.<br>\n";
+        }
     }
-    else {
-?>
-          <?php echo translate("There are no photos") ?> <?php echo $fragment ?>.
-<?php
-    }
+
 ?>
 <?php
     if ($children) {
@@ -116,8 +130,15 @@
         <ul>
 <?php
         foreach($children as $c) {
+            $photo_count=$c->get_photo_count($user);
+            $total_photo_count=$c->get_total_photo_count($user);
+            if($photo_count==$total_photo_count) {
+                $count=" <span class=\"photocount\">(" . $photo_count . ")</span>";
+            } else {
+                $count=" <span class=\"photocount\">(" . $photo_count ."/" . $total_photo_count . ")</span>";
+            }
 ?>
-            <li><a href="categories.php?parent_category_id=<?php echo $c->get("category_id") ?>"><?php echo $c->get("category") ?></a></li>
+            <li><a href="categories.php?parent_category_id=<?php echo $c->get("category_id") ?>"><?php echo $c->get("category") ?></a><?php echo $count ?></li>
 <?php
         }
 ?>

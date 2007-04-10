@@ -336,7 +336,11 @@ span.actionlink, div.actionlink {
     float: right;
     font-weight: normal;
     }
-    
+
+span.photocount {
+    font-size: x-small;
+    }
+
 .actionlink:before, div.letter:before {
     content: "[ ";
     }
