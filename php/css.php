@@ -132,9 +132,9 @@ form#ratingform select {
 
 ul.autocompdropdown {
     position: relative;
-    background: white;
-   width: 300px;
-   border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
+    background: <?php echo $PAGE_BG_COLOR ?>;
+    width: 300px;
+    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
     max-height: 15em;
     overflow: auto;
     margin: 0;
@@ -162,7 +162,7 @@ input.autocompinput {
 
 ul.autocompdropdown li:hover,
 ul.autocompdropdown li#selected {
-    background: <?php echo $PAGE_BG_COLOR ?>;
+    background: <?php echo $TAB_BG_COLOR ?>;
 }
 
 /* Menubar */
