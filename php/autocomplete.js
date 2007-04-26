@@ -36,13 +36,14 @@ function init() {
     
     for (var i=0; i<autocomplete.length; i++) {
         // Take _id from the id.
-        id = autocomplete[i].id
+        id = autocomplete[i].id;
         underscore=id.lastIndexOf("_");
         if(underscore>0) {
             id = id.substring(0,underscore);
+        } else {
+            // prevent duplicate id
+            autocomplete[i].id=id + "_id";
         }
-
-        //id = autocomplete[i].id.substring(0,autocomplete[i].id.length - 3);
         
         text=document.createElement("input");
         
@@ -276,7 +277,9 @@ function update(objid) {
     if(dropdown.style.display!="none") {
         // if the dropdown is invisible, don't bother updating it.
         var value=obj.value;
-    
+console.log("Obj:", obj.id);
+console.log("Value: ", obj.value);
+console.log("Oldtext: ", oldtext);
         if(oldtext!=value) {
             getXMLdata(obj.id, value);
             oldtext=value;
