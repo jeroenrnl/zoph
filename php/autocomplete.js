@@ -277,9 +277,6 @@ function update(objid) {
     if(dropdown.style.display!="none") {
         // if the dropdown is invisible, don't bother updating it.
         var value=obj.value;
-console.log("Obj:", obj.id);
-console.log("Value: ", obj.value);
-console.log("Oldtext: ", oldtext);
         if(oldtext!=value) {
             getXMLdata(obj.id, value);
             oldtext=value;
