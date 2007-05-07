@@ -35,7 +35,7 @@
     }
 
     $photo = new photo();
-
+        
     if ($_action == "import") {
         // actual processing is at the bottom
 
@@ -151,6 +151,12 @@ require_once("header.inc.php");
     flush();
     // do the import down here
     if ($_action == "import") {
+        $album_id = getvar("_album");
+        if($album_id) {
+            if(!$user->get_album_permissions($album_id)->get("writable")) {
+                die(translate("No write permissions to this album."));
+            }
+        }
 
         // so directories are created with correct mode
         $oldumask = umask(IMPORT_UMASK);
