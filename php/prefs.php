@@ -178,7 +178,7 @@
           </dd>
 <?php
     $lang_array = $rtplang->get_available_languages();
-    $lang_select_array['null'] = 'Browser Default';
+    $lang_select_array['null'] = translate("Browser Default");
     while (list($code, $code_to_name) = each($lang_array)) {
         $lang_select_array[$code] = $code_to_name[$code];
     }

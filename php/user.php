@@ -310,7 +310,9 @@ require_once("edit_user.inc.php");
         </tr>
     <tr>
     <td colspan="4" class="permremove">
-    remove
+<?php
+    echo translate("remove");
+?>
     </td>
     </tr>
 <?php
