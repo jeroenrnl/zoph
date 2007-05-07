@@ -159,7 +159,7 @@
 <?php
         }
         for ($i = 0; $i < $PEOPLE_SLOTS; $i++ ) {
-            if ($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPTi && i==0 ) {
+            if ($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPT && $i==0 ) {
                 echo create_smart_pulldown("_person_" . $i, "", get_people_select_array(), "class=\"autocomplete\"");
             } else {
                 echo create_smart_pulldown("_person_" . $i, "", get_people_select_array());
