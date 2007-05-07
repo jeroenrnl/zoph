@@ -29,9 +29,9 @@
 <?php echo translate("Zoph is free software.", 0) ?>
 </p>
 <p>
-<?php echo sprintf(translate("Releases and documentation can be found at %s.", 0), "<a href=\"http://zoph.sourceforge.net/\">http://zoph.sourceforge.net/</a>") ?>
+<?php echo sprintf(translate("Releases and documentation can be found at %s.", 0), "<a href=\"http://www.zoph.org/\">http://www.zoph.org/</a>") ?>
 
-<?php echo sprintf(translate("Send feedback to %s.", 0), "<a href=\"mailto:zoph@roosnet.demon.nl\">zoph@roosnet.demon.nl</a>") ?>
+<?php echo sprintf(translate("Send feedback to %s.", 0), "<img src=\"images/mailaddr.png\">") ?>
 </p>
 <?php
     if ($user->is_admin()) {
