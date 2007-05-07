@@ -167,24 +167,22 @@ require_once("header.inc.php");
         if ($name) { $path = $_path_a; }
         else if ($_image_server) { $path = $_path_b; }
 
-        if ($path) {
-            // reject these paths
-            if (strpos($path, '..') === true) {
-                echo translate("Invalid path") . ": $path<br>\n";
-                $path = null;
-            }
-
-            $absolute_path = cleanup_path(IMAGE_DIR . $path);
-            if (!running_on_windows()) {
-                $absolute_path = "/" . $absolute_path;
-            }
-
-            if (file_exists($absolute_path) == false) {
-                create_dir_recursive($absolute_path) or $path = null;
-            }
+        // reject these paths
+        if (strpos($path, '..') === true) {
+            echo translate("Invalid path") . ": $path<br>\n";
+            $path = null;
         }
 
-        if ($name && $path) {
+        $absolute_path = cleanup_path(IMAGE_DIR . $path);
+        if (!running_on_windows()) {
+            $absolute_path = "/" . $absolute_path;
+        }
+
+        if (file_exists($absolute_path) == false) {
+            create_dir_recursive($absolute_path) or die(translate("File upload failed"));
+        }
+
+        if ($name) {
             $tmp_name = $HTTP_POST_FILES['_image_local']['tmp_name'];
             $file =  cleanup_path(IMAGE_DIR . "/" . $path . "/" . $name);
             if (!running_on_windows()) {
@@ -210,11 +208,6 @@ require_once("header.inc.php");
                 }
 
                 if ($expand) {
-                    $full_path = cleanup_path(IMAGE_DIR . "/" . $path);
-                    if (!running_on_windows()) {
-                        $full_path = "/" . $full_path;
-                    }
-
                     $tmp_path = EXTRACT_DIR . '/zoph' . time();
                     create_dir($tmp_path) or die("Failed to create dir");
 
