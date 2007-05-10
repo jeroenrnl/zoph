@@ -88,6 +88,7 @@ No people were found with a last name beginning with '%s'.=
 No photo was found.=
 No photos were found for this slideshow.=
 No photos were found matching your search criteria.=
+No write permissions to this album.=
 No=
 Not rated=
 Notify User=
