@@ -49,6 +49,7 @@ CREATE TABLE zoph_albums (
   parent_album_id int(11) NOT NULL default '0',
   album varchar(32) NOT NULL default '',
   album_description varchar(255) default NULL,
+  coverphoto int(11) default NULL,
   sortorder varchar(32) default NULL,
   PRIMARY KEY  (album_id),
   KEY album_parent_id (parent_album_id)

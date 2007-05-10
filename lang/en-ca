@@ -185,6 +185,7 @@ continue=continue
 copy=copy
 count=count
 country=country
+coverphoto=coverphoto
 create annotated photo=create annotated photo
 date of birth=date of birth
 date of death=date of death

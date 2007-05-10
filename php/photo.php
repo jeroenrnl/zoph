@@ -234,12 +234,13 @@
         }
         $action="display";
     } else if ($_action == "deselect") {
+        $return=getvar("_return");
         $sel_key=array_search($photo_id, $_SESSION["selected_photo"]);
 
         if($sel_key !== false) {
             unset($_SESSION["selected_photo"][$sel_key]);
         }
-        header("Location: photo.php?" . html_entity_decode(urldecode($_qs)));
+        header("Location: " . $return . "?" . html_entity_decode(urldecode($_qs)));
     // 2005-04-10 --JCT
     //
     // lightbox and rate actions moved

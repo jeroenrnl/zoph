@@ -188,6 +188,7 @@ continue=
 copy=
 count=
 country=
+coverphoto=
 create annotated photo=
 date of birth=
 date of death=
