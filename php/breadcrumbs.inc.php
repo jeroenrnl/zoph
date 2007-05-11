@@ -52,7 +52,8 @@
     if (!isset($skipcrumb) && $title && count($user->crumbs) < MAX_CRUMBS &&
         (!$_action || ($_action == "display" || $_action == "search" ||
         $_action == "notify" || $_action == "compose" || 
-        ($user->prefs->get("auto_edit") && $_action != "update" 
+        ($user->prefs->get("auto_edit") && $_action != "update"
+        && $_action != "select" && $_action != "deselect"
         && $page == "photo.php")))) {
 
         $user->add_crumb($title, htmlentities($REQUEST_URI));
