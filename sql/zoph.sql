@@ -71,6 +71,7 @@ CREATE TABLE zoph_categories (
   parent_category_id int(11) NOT NULL default '0',
   category varchar(32) NOT NULL default '',
   category_description varchar(255) default NULL,
+  coverphoto int(11) default NULL,
   sortorder varchar(32) default NULL,
   PRIMARY KEY  (category_id),
   KEY cat_parent_id (parent_category_id)
@@ -153,6 +154,7 @@ CREATE TABLE zoph_people (
   mother_id int(11) default NULL,
   spouse_id int(11) default NULL,
   notes varchar(255) default NULL,
+  coverphoto int(11) default NULL,
   email varchar(64) default NULL,
   PRIMARY KEY  (person_id),
   KEY person_last_name (last_name(10)),
@@ -302,6 +304,7 @@ CREATE TABLE zoph_places (
   country varchar(32) default NULL,
   url varchar(1024) DEFAULT NULL,
   urldesc varchar(32) DEFAULT NULL,
+  coverphoto int(11) default NULL,
   notes varchar(255) default NULL,
   PRIMARY KEY  (place_id),
   KEY place_city (city(10)),

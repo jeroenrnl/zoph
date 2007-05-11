@@ -24,3 +24,6 @@ alter table zoph_prefs add autocomp_people char(1) default "1" after autocomp_ph
 alter table zoph_prefs add autocomp_places char(1) default "1" after autocomp_albums;
 
 alter table zoph_albums add coverphoto int(11) default NULL after album_description;    
+alter table zoph_categories add coverphoto int(11) default NULL after category_description;    
+alter table zoph_places add coverphoto int(11) default NULL after urldesc;    
+alter table zoph_people add coverphoto int(11) default NULL after notes;    

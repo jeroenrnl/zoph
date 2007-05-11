@@ -49,6 +49,11 @@
 ?>
         <?php echo translate("places") . "\n" ?>
     </h1>
+<?php
+    if ($user->is_admin()) {
+        include("selection.inc.php");
+    }
+?>
     <div class="main">
 <?php
     if ($user->is_admin()) {
@@ -75,6 +80,13 @@
 ?>
       </form>
 <?php
+    }
+    if ($place->get("coverphoto")) {
+        $coverphoto=new photo($place->get("coverphoto"));
+        $coverphoto->lookup();
+        echo "<p>";
+        echo $coverphoto->get_image_tag(THUMB_PREFIX);
+        echo "</p>";
     }
     if ($user->get("detailed_places")) {
         echo $place->to_html();

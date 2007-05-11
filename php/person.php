@@ -77,6 +77,11 @@
 ?>
         <?php echo translate("person") ?>
      </h1>
+<?php
+    if($user->is_admin()) {
+        include("selection.inc.php");
+    }
+?>
       <div class="main">
           <span class="actionlink">
             <a href="photos.php?person_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_of " . translate("photos of") ?></a> |
@@ -89,6 +94,13 @@
           </h2>
     <dl>
 <?php
+    if ($person->get("coverphoto")) {
+        $coverphoto=new photo($person->get("coverphoto"));
+        $coverphoto->lookup();
+        echo "<p>";
+        echo $coverphoto->get_image_tag(THUMB_PREFIX);
+        echo "</p>";
+    }
     if ($user->get("detailed_people")) {
 ?>
 <?php echo create_field_html($person->get_display_array()) ?>

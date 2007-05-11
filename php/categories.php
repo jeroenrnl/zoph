@@ -45,6 +45,11 @@
 	  }
      echo "\n" . translate("categories") . "\n" ?>
     </h1>
+<?php
+    if($user->is_admin()) {
+        include("selection.inc.php");
+    }
+?>
     <div class="main">
         <h2>
 <?php
@@ -65,6 +70,13 @@
             <a href="category.php?_action=edit&amp;category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("edit") ?></a>
         </span>
 <?php
+    }
+    if ($category->get("coverphoto")) {
+        $coverphoto=new photo($category->get("coverphoto"));
+        $coverphoto->lookup();
+        echo "<p>";
+        echo $coverphoto->get_image_tag(THUMB_PREFIX);
+        echo "</p>";
     }
     if ($category->get("category_description")) {
 ?>
