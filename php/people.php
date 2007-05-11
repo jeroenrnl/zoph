@@ -82,7 +82,7 @@
     if ($ppl) {
         foreach($ppl as $p) {
 ?>
-            <span class="actionlink"><a href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("view") ?></a> | <a href="photos.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos of") ?></a> | <a href="photos.php?photographer_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos by") ?></a></span>
+            <span class="actionlink"><a href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("display") ?></a> | <a href="photos.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos of") ?></a> | <a href="photos.php?photographer_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos by") ?></a></span>
             <a class="person" href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo $p->get("last_name") ? $p->get("last_name") . ", " : "" ?><?php echo $p->get("first_name") ?></a>
 <?php
         }
