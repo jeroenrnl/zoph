@@ -188,6 +188,19 @@
         <dd>
 <?php echo create_smart_pulldown("language", $user->prefs->get("language"), $lang_select_array) ?>
         </dd>
+        <dt>
+            <?php echo translate("Default view") ?>
+        </dt>
+        <dd>
+            <?php echo create_pulldown("view", $user->prefs->get("view"), array("list" => translate("List",0), "tree" => translate("Tree",0), "thumbs" => translate("Thumbnails",0)) ) ?>
+        </dd>
+        <dt>
+            <?php echo translate("Automatic coverphoto") ?>
+        </dt>
+        <dd>
+            <?php echo create_pulldown("autothumb", $user->prefs->get("autothumb"), array("oldest" => translate("Oldest photo",0), "newest" => translate("Newest photo",0), "first" => translate("Changed least recently",0), "last" => translate("Changed most recently",0), "highest" => translate("Highest ranked",0), "random" => translate("Random",0))) ?>
+
+        </dd>
     </dl>
 <?php
     if (JAVASCRIPT && AUTOCOMPLETE) {

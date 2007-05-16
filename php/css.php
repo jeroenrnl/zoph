@@ -100,6 +100,67 @@ ul  {
     margin: 0.5em 1em 1em 1em;
     }
 
+ul.thumbs {
+    clear: both;
+    list-style: none;
+    }
+
+ul.thumbs li {
+    background: <?php echo $TITLE_BG_COLOR ?>;
+    color: <?php echo $TITLE_FONT_COLOR ?>;
+    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
+    border-radius: 10px;
+    position: relative;
+    display: block;
+    text-align: center;
+    width: 160px;
+    height: 180px;
+    float:left;
+    margin: 5px;
+    padding: 5px;
+    -moz-border-radius: 10px;
+    }
+
+ul.thumbs li p {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 120px;
+    }
+
+ul.thumbs li img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ul.thumbs li div {
+    position: absolute;
+    bottom: 0px;
+    text-align: center;
+    width: 90%;
+    }
+
+ul.list {
+    clear: both;
+    list-style: none;
+    }
+
+ul.tree {
+    clear: both;
+    list-style: none;
+    }
+
+ul.tree ul {
+    list-style: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    }
+
+ul.tree ul ul {
+    display: none;
+    }
+
 /* Form properties */
 form    {
     margin: 0 0 0 0;

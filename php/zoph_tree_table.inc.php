@@ -118,6 +118,33 @@ class zoph_tree_table extends zoph_table {
         return implode(",", $id_array);
     }
 
+    function get_html_tree() {
+        $this->lookup();
+        $children=$this->get_children();
+
+        $html="<li>\n";
+        if($children) {
+            $html.="<span onclick=\"branch(this)\">+&nbsp;</span>";
+        } else {
+            $html.="<span>&nbsp;&nbsp;</span>";
+        }
+        $html.=$this->get_link();
+        if($children) {
+            $html.= "<ul>";
+        }
+        foreach($children as $child) {
+            $html .= $child->get_html_tree();
+        }
+        if($children) {
+            $html .= "</ul>";
+        }
+        $html.="</li>\n";
+        return $html;
+    }
+
+
+
+
     function get_xml_tree($xml, $search) {
         $rootname=$this->xml_rootname();
         $nodename=$this->xml_nodename();

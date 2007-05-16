@@ -69,15 +69,14 @@
     if ($user->is_admin()) {
 ?>
         <span class="actionlink"><a href="album.php?_action=edit&amp;album_id=<?php echo $album->get("album_id") ?>"><?php echo translate("edit") ?></a></span>
+        <br>
+        <p>
 <?php
     }
-    if ($album->get("coverphoto")) {
-        $coverphoto=new photo($album->get("coverphoto"));
-        $coverphoto->lookup();
-        echo "<p>";
-        echo $coverphoto->get_image_tag(THUMB_PREFIX);
-        echo "</p>";
-    }
+        echo $album->get_coverphoto();
+?>
+        </p>
+<?php
     if ($album->get("album_description")) {
 ?>
         <div class="description">
@@ -129,9 +128,11 @@
         }
     }
     if ($children) {
+        $view=$user->prefs->get("view");
 ?>
-        <ul>
+        <ul class="<?php echo $view ?>">
 <?php
+        if($view!="tree") {
         foreach($children as $a) {
             $photo_count=$a->get_photo_count($user);
             $total_photo_count=$a->get_total_photo_count($user);
@@ -141,11 +142,36 @@
                 $count=" <span class=\"photocount\">(" . $photo_count ."/" . $total_photo_count . ")</span>";
             }
 ?>
-            <li><a href="albums.php?parent_album_id=<?php echo $a->get("album_id") ?>"><?php echo $a->get("album") ?></a><?php echo $count ?></li>
+            <li>
+                <a href="albums.php?parent_album_id=<?php echo $a->get("album_id") ?>">
 <?php
+                if ($view=="thumbs") {
+?>
+                    <p>
+                        <?php echo $a->get_coverphoto($user->prefs->get("autothumb")); ?>
+                        &nbsp;
+                    </p>
+                    <div>
+<?php
+                }
+                echo $a->get("album");
+                echo $count;
+                if ($view=="thumbs") {
+?>
+                    </div>
+<?php
+                 }
+?>
+                </a>
+            </li>
+<?php
+        }
+        } else {
+            echo $album->get_html_tree();
         }
 ?>
         </ul>
+        <br>
 <?php
     }
 ?>

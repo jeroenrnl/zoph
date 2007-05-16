@@ -201,6 +201,40 @@ class album extends zoph_tree_table {
         return "album";
     }
 
+    function get_coverphoto($autothumb=null) {
+        if ($this->get("coverphoto")) {
+            $coverphoto=new photo($this->get("coverphoto"));
+        } else if ($autothumb) {
+            $order=get_autothumb_order($autothumb);
+            if ($user && !$user->is_admin()) {
+                $sql=
+                    "select distinct p.photo_id from " .
+                    DB_PREFIX . "photos as p, " .
+                    DB_PREFIX . "album_permissions as ap " .
+                    " where ap.user_id =" . 
+                    " '" . escape_string($user->get("user_id")) . "'" .
+                    " and ap.album_id = " . $this->get("album_id") .
+                    " and pa.photo_id = p.photo_id " .
+                    " and ap.access_level >= p.level " .
+                    $order;
+            } else {
+                $sql =
+                    "select distinct p.photo_id from " .
+                    DB_PREFIX . "photos as p JOIN " .
+                    DB_PREFIX . "photo_albums pa ON" .
+                    " pa.photo_id = p.photo_id" .
+                    " WHERE pa.album_id = " . $this->get("album_id") .
+                    " " . $order;
+            }
+            $coverphoto=array_shift(get_records_from_query("photo", $sql));
+        }
+
+        if ($coverphoto) {
+            $coverphoto->lookup();
+            return $coverphoto->get_image_tag(THUMB_PREFIX);
+        }
+    }
+
 }
 
 function get_root_album() {
