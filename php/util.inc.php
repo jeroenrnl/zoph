@@ -226,6 +226,24 @@ function create_photo_text_pulldown($var, $name = null) {
         "person" => translate("person",0),
         "photographer" => translate("photographer",0)));
 }
+
+function create_view_pulldown($name, $value) {
+    return create_pulldown($name, $value, array(
+        "list" => translate("List",0), 
+        "tree" => translate("Tree",0), 
+        "thumbs" => translate("Thumbnails",0)) );
+}
+
+function create_autothumb_pulldown($name, $value) {
+    return  create_pulldown($name, $value, array(
+        "oldest" => translate("Oldest photo",0), 
+        "newest" => translate("Newest photo",0), 
+        "first" => translate("Changed least recently",0), 
+        "last" => translate("Changed most recently",0), 
+        "highest" => translate("Highest ranked",0), 
+        "random" => translate("Random",0)));
+}
+
 /*
  * Remove any params without values and operator params without corresponding
  * fields (e.g. _album_id-op when there is no _album_id).  This can be called

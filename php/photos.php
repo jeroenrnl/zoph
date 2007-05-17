@@ -94,7 +94,7 @@
         <?php echo $title_bar . "\n" ?>
     </h1>
     <div class="main">
-        <form action="photos.php" method="GET">
+        <form class="viewsettings" action="photos.php" method="GET">
 <?php
     if ($num_thumbnails <= 0) {
 ?>
@@ -114,12 +114,12 @@
                 <a href="photos.php?<?php echo update_query_string($request_vars, "_dir", "desc") ?>"><img class="down" alt="sort descending" src="images/down<?php echo $_dir == "asc" ? 2 : 1 ?>.gif"></a>
             </div>
             <div id="rowscols">
-                <?php
-		echo create_integer_pulldown("_rows", $_rows, 1, 10);
+<?php
+                echo create_integer_pulldown("_rows", $_rows, 1, 10);
                 echo translate("rows") . "\n";
                 echo create_integer_pulldown("_cols", $_cols, 1, 10);
                 echo translate("cols") . "\n";
-		?>
+?>
                 <input type="submit" name="_button" value="<?php echo translate("go", 0) ?>">
 	    </div>
         </form>

@@ -19,7 +19,14 @@
     require_once("include.inc.php");
 
     $parent_album_id = getvar("parent_album_id");
-
+    $_view=getvar("_view");
+    if(empty($_view)) {
+        $_view=$user->prefs->get("view");
+    }
+    $_autothumb=getvar("_autothumb");
+    if(empty($_autothumb)) {
+        $_autothumb=$user->prefs->get("autothumb");
+    }
     if (!$parent_album_id) {
         $album = get_root_album();
     }
@@ -53,6 +60,21 @@
     }
 ?>
     <div class="main">
+        <form class="viewsettings" method="get" action="albums.php">
+        <div class="viewtype">
+            <?php echo create_form($request_vars, array ("_view", "_autothumb", "_button")) ?>
+            <?php echo translate("Album view", 0) . "\n" ?>
+            <?php echo create_view_pulldown("_view", $_view) ?>
+        </div>
+        <div class="autothumb">
+            <?php echo translate("Automatic Thumbnail", 0) . "\n" ?>
+            <?php echo create_autothumb_pulldown("_autothumb", $_autothumb) ?>
+
+            <input type="submit" name="_button" value="<?php echo translate("go", 0) ?>">
+
+        </div>
+        </form>
+        <br>
         <h2>
 <?php
     if ($ancestors) {
@@ -73,7 +95,7 @@
         <p>
 <?php
     }
-        echo $album->get_coverphoto();
+    echo $album->get_coverphoto();
 ?>
         </p>
 <?php
@@ -128,11 +150,10 @@
         }
     }
     if ($children) {
-        $view=$user->prefs->get("view");
 ?>
-        <ul class="<?php echo $view ?>">
+        <ul class="<?php echo $_view ?>">
 <?php
-        if($view!="tree") {
+        if($_view!="tree") {
         foreach($children as $a) {
             $photo_count=$a->get_photo_count($user);
             $total_photo_count=$a->get_total_photo_count($user);
@@ -145,10 +166,10 @@
             <li>
                 <a href="albums.php?parent_album_id=<?php echo $a->get("album_id") ?>">
 <?php
-                if ($view=="thumbs") {
+                if ($_view=="thumbs") {
 ?>
                     <p>
-                        <?php echo $a->get_coverphoto($user->prefs->get("autothumb")); ?>
+                        <?php echo $a->get_coverphoto($_autothumb); ?>
                         &nbsp;
                     </p>
                     <div>
@@ -156,7 +177,7 @@
                 }
                 echo $a->get("album");
                 echo $count;
-                if ($view=="thumbs") {
+                if ($_view=="thumbs") {
 ?>
                     </div>
 <?php

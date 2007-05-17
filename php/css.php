@@ -181,6 +181,9 @@ form#quicknav select {
     width: 10em;
     }
 
+form.viewsettings {
+    }
+
 form#ratingform input, form#ratingform select {
     margin: 0;
     float: left;
@@ -550,7 +553,7 @@ div#photohdr {
 /* Form on top of each photopage to determine sortorder, asc or desc and
    number of photos displayes */
 
-
+div.viewtype,
 div#sortorder {
     float: left;
     margin-bottom: 15px;
@@ -561,6 +564,7 @@ div#updown {
     margin: 5px 30px 15px 30px;
     }
 
+div.autothumb,
 div#rowscols {
     float: right;
     clear: right;
@@ -823,6 +827,12 @@ input[type="reset"] {
     margin-left: auto;
     margin-right: 15px;
     display: block;
+    }
+
+div.autothumb input[type="submit"],
+div#rowscols input[type="submit"] {
+    display: inline;
+    margin: 0px 15px 0px 15px;
     }
 
 input[type="submit"].updatebutton {
