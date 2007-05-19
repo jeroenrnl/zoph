@@ -17,8 +17,16 @@
  */
     require_once("include.inc.php");
 
-    $parent_category_id = getvar("parent_category_id");
+    $_view=getvar("_view");
+    if(empty($_view)) {
+        $_view=$user->prefs->get("view");
+    }
+    $_autothumb=getvar("_autothumb");
+    if(empty($_autothumb)) {
+        $_autothumb=$user->prefs->get("autothumb");
+    }
 
+    $parent_category_id = getvar("parent_category_id");
     if (!$parent_category_id) {
         $category = get_root_category();
     }
@@ -52,6 +60,22 @@
 ?>
     <div class="main">
         <h2>
+        <form class="viewsettings" method="get" action="categories.php">
+        <div class="viewtype">
+            <?php echo create_form($request_vars, array ("_view", "_autothumb",
+"_button")) ?>
+            <?php echo translate("Category view", 0) . "\n" ?>
+            <?php echo create_view_pulldown("_view", $_view) ?>
+        </div>
+        <div class="autothumb">
+            <?php echo translate("Automatic Thumbnail", 0) . "\n" ?>
+            <?php echo create_autothumb_pulldown("_autothumb", $_autothumb) ?>
+
+            <input type="submit" name="_button" value="<?php echo translate("go"
+, 0) ?>">
+
+        </div>
+        </form>
 <?php
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
@@ -69,16 +93,15 @@
         <span class="actionlink">
             <a href="category.php?_action=edit&amp;category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("edit") ?></a>
         </span>
+        <br>
+        <p>
 <?php
     }
-    if ($category->get("coverphoto")) {
-        $coverphoto=new photo($category->get("coverphoto"));
-        $coverphoto->lookup();
-        echo "<p>";
-        echo $coverphoto->get_image_tag(THUMB_PREFIX);
-        echo "</p>";
-    }
-    if ($category->get("category_description")) {
+    echo $category->get_coverphoto();
+?>
+        </p>
+<?php
+if ($category->get("category_description")) {
 ?>
         <div class="description">
             <?php echo $category->get("category_description") ?>
@@ -139,22 +162,50 @@
 <?php
     if ($children) {
 ?>
-        <ul>
+        <ul class="<?php echo $_view ?>">
 <?php
-        foreach($children as $c) {
-            $photo_count=$c->get_photo_count($user);
-            $total_photo_count=$c->get_total_photo_count($user);
-            if($photo_count==$total_photo_count) {
-                $count=" <span class=\"photocount\">(" . $photo_count . ")</span>";
+            if($_view!="tree") {
+                foreach($children as $c) {
+                    $photo_count=$c->get_photo_count($user);
+                    $total_photo_count=$c->get_total_photo_count($user);
+                    if($photo_count==$total_photo_count) {
+                        $count=" <span class=\"photocount\">(" . 
+                            $photo_count . ")</span>";
+                    } else {
+                        $count=" <span class=\"photocount\">(" . 
+                            $photo_count ."/" . $total_photo_count . ")</span>";
+                    }   
+?>
+                    <li>
+                        <a href="categories.php?parent_category_id=<?php echo $c->get("category_id") ?>">
+<?php
+                            if ($_view=="thumbs") {
+?>
+                                <p>
+                                    <?php echo $c->get_coverphoto($_autothumb); ?>
+                                    &nbsp;
+                                </p>
+                                <div>
+<?php
+                            }
+                            echo $c->get("category");
+                            echo $count;
+                            if ($_view=="thumbs") {
+?>
+                                </div>
+<?php
+                            }
+?>
+                        </a>
+                    </li>
+<?
+                }
             } else {
-                $count=" <span class=\"photocount\">(" . $photo_count ."/" . $total_photo_count . ")</span>";
+                echo $category->get_html_tree();
             }
 ?>
-            <li><a href="categories.php?parent_category_id=<?php echo $c->get("category_id") ?>"><?php echo $c->get("category") ?></a><?php echo $count ?></li>
-<?php
-        }
-?>
         </ul>
+        <br>
 <?php
     }
 ?>
