@@ -209,11 +209,14 @@ class album extends zoph_tree_table {
             if ($user && !$user->is_admin()) {
                 $sql=
                     "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p, " .
+                    DB_PREFIX . "photos as p JOIN " .
+                    DB_PREFIX . "photo_albums as pa" .
+                    " ON pa.photo_id = p.photo_id JOIN " .
                     DB_PREFIX . "album_permissions as ap " .
-                    " where ap.user_id =" . 
+                    " ON pa.album_id = ap.album_id" .
+                    " WHERE pa.album_id = " . $this->get("album_id") .
+                    " AND ap.user_id =" . 
                     " '" . escape_string($user->get("user_id")) . "'" .
-                    " and ap.album_id = " . $this->get("album_id") .
                     " and pa.photo_id = p.photo_id " .
                     " and ap.access_level >= p.level " .
                     $order;
