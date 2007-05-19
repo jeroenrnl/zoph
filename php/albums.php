@@ -18,7 +18,6 @@
 
     require_once("include.inc.php");
 
-    $parent_album_id = getvar("parent_album_id");
     $_view=getvar("_view");
     if(empty($_view)) {
         $_view=$user->prefs->get("view");
@@ -27,6 +26,8 @@
     if(empty($_autothumb)) {
         $_autothumb=$user->prefs->get("autothumb");
     }
+
+    $parent_album_id = getvar("parent_album_id");
     if (!$parent_album_id) {
         $album = get_root_album();
     }
@@ -154,39 +155,39 @@
         <ul class="<?php echo $_view ?>">
 <?php
         if($_view!="tree") {
-        foreach($children as $a) {
-            $photo_count=$a->get_photo_count($user);
-            $total_photo_count=$a->get_total_photo_count($user);
-            if($photo_count==$total_photo_count) {
-                $count=" <span class=\"photocount\">(" . $photo_count . ")</span>";
-            } else {
-                $count=" <span class=\"photocount\">(" . $photo_count ."/" . $total_photo_count . ")</span>";
-            }
-?>
-            <li>
-                <a href="albums.php?parent_album_id=<?php echo $a->get("album_id") ?>">
-<?php
-                if ($_view=="thumbs") {
-?>
-                    <p>
-                        <?php echo $a->get_coverphoto($_autothumb); ?>
-                        &nbsp;
-                    </p>
-                    <div>
-<?php
+            foreach($children as $a) {
+                $photo_count=$a->get_photo_count($user);
+                $total_photo_count=$a->get_total_photo_count($user);
+                if($photo_count==$total_photo_count) {
+                    $count=" <span class=\"photocount\">(" . $photo_count . ")</span>";
+                } else {
+                    $count=" <span class=\"photocount\">(" . $photo_count ."/" . $total_photo_count . ")</span>";
                 }
-                echo $a->get("album");
-                echo $count;
-                if ($_view=="thumbs") {
 ?>
-                    </div>
+                <li>
+                    <a href="albums.php?parent_album_id=<?php echo $a->get("album_id") ?>">
 <?php
-                 }
+                        if ($_view=="thumbs") {
 ?>
-                </a>
-            </li>
+                            <p>
+                                <?php echo $a->get_coverphoto($_autothumb); ?>
+                                &nbsp;
+                            </p>
+                            <div>
 <?php
-        }
+                        }   
+                        echo $a->get("album");
+                        echo $count;
+                        if ($_view=="thumbs") {
+?>
+                            </div>
+<?php
+                        }       
+?>
+                    </a>
+                </li>
+<?php
+            }
         } else {
             echo $album->get_html_tree();
         }
