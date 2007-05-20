@@ -160,6 +160,43 @@ class place extends zoph_tree_table {
     function xml_nodename() {
         return "place";
     }
+
+    function get_coverphoto($autothumb=null) {
+        if ($this->get("coverphoto")) {
+            $coverphoto=new photo($this->get("coverphoto"));
+        } else if ($autothumb) {
+            $order=get_autothumb_order($autothumb);
+            if ($user && !$user->is_admin()) {
+                $sql=
+                    "select distinct p.photo_id from " .
+                    DB_PREFIX . "photos as p JOIN " .
+                    DB_PREFIX . "photo_albums as pa" .
+                    " ON pa.photo_id = p.photo_id JOIN " .
+                    DB_PREFIX . "album_permissions as ap " .
+                    " ON pa.album_id = ap.album_id " .
+                    " WHERE p.location_id = " . $this->get("location_id") .
+                    " AND ap.user_id =" .
+                    " '" . escape_string($user->get("user_id")) . "'" .
+                    " and ap.access_level >= p.level " .
+                    $order;
+            } else {
+                $sql =
+                    "select distinct p.photo_id from " .
+                    DB_PREFIX . "photos as p" .
+                    " WHERE p.location_id = " . $this->get("place_id") .
+                    " " . $order;
+            }
+            $coverphoto=array_shift(get_records_from_query("photo", $sql));
+        }
+
+        if ($coverphoto) {
+            $coverphoto->lookup();
+            return $coverphoto->get_image_tag(THUMB_PREFIX);
+        }
+    }
+
+
+
 }
 
 function get_places($constraints = null, $conj = "and", $ops = null,

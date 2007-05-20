@@ -18,6 +18,15 @@
 
     require_once("include.inc.php");
 
+    $_view=getvar("_view");
+    if(empty($_view)) {
+        $_view=$user->prefs->get("view");
+    }
+    $_autothumb=getvar("_autothumb");
+    if(empty($_autothumb)) {
+        $_autothumb=$user->prefs->get("autothumb");
+    }
+
     if (!$user->is_admin() && !$user->get("browse_places")) {
         header("Location: " . add_sid("zoph.php"));
     }
@@ -56,6 +65,24 @@
 ?>
     <div class="main">
 <?php
+    if(JAVASCRIPT) {
+?>
+        <form class="viewsettings" method="get" action="places.php">
+<?php
+            echo create_pulldown("parent_place_id", 0, get_places_select_array($user), "onChange='form.submit()'");
+?>
+            <?php echo create_form($request_vars, array ("_view", "_autothumb",
+"_button")) ?>
+            <?php echo translate("Category view", 0) . "\n" ?>
+            <?php echo create_view_pulldown("_view", $_view, "onChange='form.submit()'") ?>
+            <?php echo translate("Automatic Thumbnail", 0) . "\n" ?>
+            <?php echo create_autothumb_pulldown("_autothumb", $_autothumb, "onChange='form.submit()'") ?>
+
+        </form>
+     <br>
+<?php
+    }
+
     if ($user->is_admin()) {
 ?>
         <span class="actionlink">
@@ -74,20 +101,13 @@
     }
 ?>
         </h2>
-      <form id="quicknav">
+        <p>
 <?php
-        echo create_pulldown("parent_place_id", 0, get_places_select_array($user), "onChange='form.submit()'");
+    }
+    echo $place->get_coverphoto();
 ?>
-      </form>
+        </p>
 <?php
-    }
-    if ($place->get("coverphoto")) {
-        $coverphoto=new photo($place->get("coverphoto"));
-        $coverphoto->lookup();
-        echo "<p>";
-        echo $coverphoto->get_image_tag(THUMB_PREFIX);
-        echo "</p>";
-    }
     if ($user->get("detailed_places")) {
         echo $place->to_html();
         if ($place->get("notes")) {
@@ -148,22 +168,49 @@
     }
     if ($children) {
 ?>
-        <ul>
+        <ul class="<?php echo $_view ?>">
 <?php
-        foreach($children as $a) {
-            $photo_count=$a->get_photo_count($user);
-            $total_photo_count=$a->get_total_photo_count($user);
-            if($photo_count==$total_photo_count) {
-                $count=" <span class=\"photocount\">(" . $photo_count . ")</span>";
-            } else {
-                $count=" <span class=\"photocount\">(" . $photo_count ."/" . $total_photo_count . ")</span>";
-            }
+        if($_view!="tree") {
+            foreach($children as $a) {
+                $photo_count=$a->get_photo_count($user);
+                $total_photo_count=$a->get_total_photo_count($user);
+                if($photo_count==$total_photo_count) {
+                    $count=" <span class=\"photocount\">(" . $photo_count . ")</span>";
+                } else {
+                    $count=" <span class=\"photocount\">(" . $photo_count ."/" . $total_photo_count . ")</span>";
+                }
 ?>
-            <li><a href="places.php?parent_place_id=<?php echo $a->get("place_id") ?>"><?php echo $a->get("title") ?></a><?php echo $count?></li>
+                <li>
+                    <a href="places.php?parent_place_id=<?php echo $a->get("place_id") ?>">
+<?php
+                    if ($_view=="thumbs") {
+?>
+                        <p>
+                            <?php echo $a->get_coverphoto($_autothumb); ?>
+                            &nbsp;
+                        </p>
+                        <div>
+<?php
+                    }
+                    echo $a->get("title");
+                    echo $count;
+                    if ($_view=="thumbs") {
+?>
+                        </div>
+<?php
+                    }
+?>
+                </a>
+            </li>
+
 <?php
         }
+    } else {
+        echo $place->get_html_tree();
+    }
 ?>
         </ul>
+        <br>
 <?php
     }
 ?>
