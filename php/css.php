@@ -167,21 +167,23 @@ form    {
     width: 100%;
     }
 
-form#quicknav   {
-    float: right;
+form.viewsettings {
     clear: both;
     width: auto;
     margin: 0;
     padding: 0;
     }
 
-form#quicknav select {
-    clear: none;
-    margin: 0px;
-    width: 10em;
+form.viewsettings select {
+    margin-right: 15px;
     }
 
-form.viewsettings {
+
+form.viewsettings select#parent_place_id {
+    float: right;
+    clear: none;
+    margin-right: 0;
+    width: 10em;
     }
 
 form#ratingform input, form#ratingform select {
@@ -553,9 +555,9 @@ div#photohdr {
 /* Form on top of each photopage to determine sortorder, asc or desc and
    number of photos displayes */
 
-div.viewtype,
 div#sortorder {
     float: left;
+    margin-right: 15px;
     margin-bottom: 15px;
     }
 
@@ -564,10 +566,8 @@ div#updown {
     margin: 5px 30px 15px 30px;
     }
 
-div.autothumb,
 div#rowscols {
     float: right;
-    clear: right;
     margin-bottom: 15px;
     }
 
@@ -829,7 +829,6 @@ input[type="reset"] {
     display: block;
     }
 
-div.autothumb input[type="submit"],
 div#rowscols input[type="submit"] {
     display: inline;
     margin: 0px 15px 0px 15px;

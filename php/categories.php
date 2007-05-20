@@ -59,23 +59,22 @@
     }
 ?>
     <div class="main">
-        <h2>
+<?php
+    if (JAVASCRIPT) {
+?>
         <form class="viewsettings" method="get" action="categories.php">
-        <div class="viewtype">
             <?php echo create_form($request_vars, array ("_view", "_autothumb",
 "_button")) ?>
             <?php echo translate("Category view", 0) . "\n" ?>
-            <?php echo create_view_pulldown("_view", $_view) ?>
-        </div>
-        <div class="autothumb">
+            <?php echo create_view_pulldown("_view", $_view,"onChange='form.submit()'") ?>
             <?php echo translate("Automatic Thumbnail", 0) . "\n" ?>
-            <?php echo create_autothumb_pulldown("_autothumb", $_autothumb) ?>
-
-            <input type="submit" name="_button" value="<?php echo translate("go"
-, 0) ?>">
-
-        </div>
+            <?php echo create_autothumb_pulldown("_autothumb", $_autothumb,"onChange='form.submit()'") ?>
         </form>
+        <br>
+<?php
+    }
+?>
+        <h2>
 <?php
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
@@ -198,7 +197,7 @@ if ($category->get("category_description")) {
 ?>
                         </a>
                     </li>
-<?
+<?php
                 }
             } else {
                 echo $category->get_html_tree();

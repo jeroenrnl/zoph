@@ -61,21 +61,20 @@
     }
 ?>
     <div class="main">
+<?php
+    if(JAVASCRIPT) {
+?>
         <form class="viewsettings" method="get" action="albums.php">
-        <div class="viewtype">
             <?php echo create_form($request_vars, array ("_view", "_autothumb", "_button")) ?>
             <?php echo translate("Album view", 0) . "\n" ?>
-            <?php echo create_view_pulldown("_view", $_view) ?>
-        </div>
-        <div class="autothumb">
+            <?php echo create_view_pulldown("_view", $_view, "onChange='form.submit()'") ?>
             <?php echo translate("Automatic Thumbnail", 0) . "\n" ?>
-            <?php echo create_autothumb_pulldown("_autothumb", $_autothumb) ?>
-
-            <input type="submit" name="_button" value="<?php echo translate("go", 0) ?>">
-
-        </div>
+            <?php echo create_autothumb_pulldown("_autothumb", $_autothumb, "onChange='form.submit()'") ?>
         </form>
         <br>
+<?php
+    }
+?>
         <h2>
 <?php
     if ($ancestors) {

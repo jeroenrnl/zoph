@@ -227,21 +227,21 @@ function create_photo_text_pulldown($var, $name = null) {
         "photographer" => translate("photographer",0)));
 }
 
-function create_view_pulldown($name, $value) {
+function create_view_pulldown($name, $value, $extraopt=null) {
     return create_pulldown($name, $value, array(
         "list" => translate("List",0), 
         "tree" => translate("Tree",0), 
-        "thumbs" => translate("Thumbnails",0)) );
+        "thumbs" => translate("Thumbnails",0)), $extraopt);
 }
 
-function create_autothumb_pulldown($name, $value) {
+function create_autothumb_pulldown($name, $value, $extraopt=null) {
     return  create_pulldown($name, $value, array(
         "oldest" => translate("Oldest photo",0), 
         "newest" => translate("Newest photo",0), 
         "first" => translate("Changed least recently",0), 
         "last" => translate("Changed most recently",0), 
         "highest" => translate("Highest ranked",0), 
-        "random" => translate("Random",0)));
+        "random" => translate("Random",0)), $extraopt);
 }
 
 /*
