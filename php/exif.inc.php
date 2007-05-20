@@ -36,14 +36,14 @@ function process_exif($image) {
         return $exifdata;
     }
 
-    if ($exif["DateTime"]) {
-        $datetime = $exif["DateTime"];
-    }
-    else if ($exif["DateTimeOriginal"]) {
+    if ($exif["DateTimeOriginal"]) {
         $datetime = $exif["DateTimeOriginal"];
     }
     else if ($exif["DateTimeDigitized"]) {
         $datetime = $exif["DateTimeDigitized"];
+    }
+    else if ($exif["DateTime"]) {
+        $datetime = $exif["DateTime"];
     }
 
     if (!$datetime) {
