@@ -305,7 +305,9 @@ function selectli(dropdownid, key, newvalue) {
     var orig_field = field.previousSibling;
     
     field.value = newvalue;
-    orig_field.value = key;
+    longkey=findselectkey(orig_field.id, key);
+
+    orig_field.value = longkey;
 
     selectedvalue[dropdown.id]=parseInt(findInArray(keyarray,key));
 
@@ -418,3 +420,27 @@ function flattentree(root, element, flattree) {
     }
     return flattree;
 }
+
+function findselectkey(selectid, key) {
+    // On the search page, the keys in the original select are not just the
+    // key of that album/category/place but a comma-separated list of
+    // a/c/p that are children of that a/c/p. This function takes just the
+    // first (thus the parent) key from that list.
+
+    select=document.getElementById(selectid);
+    for(var i=0; i<select.childNodes.length; i++) {
+        var option=select.childNodes[i];
+        if(option.value) {
+            var comma=option.value.indexOf(",");
+            if(comma>0) {
+                var shortkey=option.value.substring(0,comma);
+            } else {
+                var shortkey=option.value;
+            }
+            if(shortkey == key) {
+                return option.value;
+            }
+        }
+    }
+} 
+
