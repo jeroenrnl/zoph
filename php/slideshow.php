@@ -95,7 +95,7 @@ if (!$_pause) {
 <?php
     }
 ?>
-      <a href="photos.php?<?php echo str_replace("_off=$offset", "_off=0", $qs) ?>"><?php echo translate("stop") ?></a> |
+      <a href="photos.php?<?php echo str_replace("_off=$offset", "_off=0", $clean_qs) ?>"><?php echo translate("stop") ?></a> |
       <a href="photo.php?<?php echo $clean_qs ?>"><?php echo translate("open") ?></a>
     </span>
     <?php echo $title ?>
