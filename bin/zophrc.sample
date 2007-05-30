@@ -17,3 +17,11 @@ $db_prefix = 'zoph_';
 # set this to your image directory
 #
 $image_dir = '/data/images/';
+
+#
+# Change these to override default settings
+# (these settings do not have a matching setting in config.inc.php)
+#
+$datedDirs = 0
+$copy = 0
+$hierarchical = 0

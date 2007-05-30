@@ -52,15 +52,8 @@ use File::stat;
 use Cwd 'abs_path';
 
 $| = 1;
-
-die "Error: \$HOME/.zophrc not found"
-  if !-e $ENV{HOME}."/.zophrc";
-
-require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
-my $db_prefix = $::db_prefix;
-my $image_dir = $::image_dir;
  
-my $version = '0.6';
+my $version = '0.7';
  
 
 my $update     = 0; # update existing photo records instead of inserting
@@ -109,14 +102,6 @@ if ($#ARGV < 0) {
     exit(1);
 }
 
-my $dbh = DBI->connect("DBI:mysql:$::db_name:$::db_host", $::db_user, $::db_pass);
-$::db_name = '';
-$::db_user = '';
-$::db_pass = '';
-$::db_host = '';
-$::db_prefix = '';
-$::image_dir = '';
-
 GetOptions(
     'help' => sub { printUsage(); exit(0); },
     'update' => \$update,
@@ -148,6 +133,30 @@ GetOptions(
     'verbose!' => \$verbose,
     'clear' => sub { %fieldHash = (); }
 ) or die "Error parsing options";
+
+
+die "Error: \$HOME/.zophrc not found"
+  if !-e $ENV{HOME}."/.zophrc";
+
+require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
+my $db_prefix = $::db_prefix;
+my $image_dir = $::image_dir;
+
+$copy = $::copy;
+$datedDirs = $::datedDirs;
+$hierarchical = $::hierarchical;
+
+my $dbh = DBI->connect("DBI:mysql:$::db_name:$::db_host", $::db_user, $::db_pass);
+$::db_name = '';
+$::db_user = '';
+$::db_pass = '';
+$::db_host = '';
+$::db_prefix = '';
+$::image_dir = '';
+
+$::copy = '';
+$::datedDirs = '';
+$::hierarchical = '';
 
 # strip trailing slashes
 if ($path) { $path =~ s/\/+$//; }
