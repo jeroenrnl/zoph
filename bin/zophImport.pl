@@ -2,7 +2,7 @@
 
 #
 # zophImport.pl
-# Zoph 0.6
+# Zoph 0.7
 # Jason Geiger & Jeroen Roos, 2002-2006
 #
 # This file is part of Zoph.
@@ -49,6 +49,7 @@ use DBI;
 use Image::Size;
 use File::Copy;
 use File::stat;
+use File::Spec::Link;
 use Cwd 'abs_path';
 
 $| = 1;
@@ -73,6 +74,7 @@ my $ignoreerror = 0; # when set, zophImport will ignore missing albums,
                     # this was the default behaviour until 0.4.
 my $verbose = 0;    # zopHImport will be more verbose about what it's doing.
 my $copy = 0;       # copy files instead of move.
+my $resolveSymlinks = 0; # Resolve Symlinks to "real" files before handling them.
 
 # the maxinum dimension of the two sizes of images to be generated
 my $midSize = 480;
@@ -101,6 +103,19 @@ if ($#ARGV < 0) {
     printUsage();
     exit(1);
 }
+
+die "Error: \$HOME/.zophrc not found"
+  if !-e $ENV{HOME}."/.zophrc";
+
+require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
+my $db_prefix = $::db_prefix;
+my $image_dir = $::image_dir;
+
+$copy = $::copy;
+$datedDirs = $::datedDirs;
+$hierarchical = $::hierarchical;
+$resolveSymlinks = $::resolveSymlinks;
+$verbose = $::verbose;
 
 GetOptions(
     'help' => sub { printUsage(); exit(0); },
@@ -131,20 +146,12 @@ GetOptions(
     'field=s' => \%fieldHash,
     'copy!' => \$copy,
     'verbose!' => \$verbose,
+    'resolveSymlinks|resolvelinks!' => \$resolveSymlinks,
     'clear' => sub { %fieldHash = (); }
 ) or die "Error parsing options";
 
 
-die "Error: \$HOME/.zophrc not found"
-  if !-e $ENV{HOME}."/.zophrc";
 
-require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
-my $db_prefix = $::db_prefix;
-my $image_dir = $::image_dir;
-
-$copy = $::copy;
-$datedDirs = $::datedDirs;
-$hierarchical = $::hierarchical;
 
 my $dbh = DBI->connect("DBI:mysql:$::db_name:$::db_host", $::db_user, $::db_pass);
 $::db_name = '';
@@ -157,6 +164,8 @@ $::image_dir = '';
 $::copy = '';
 $::datedDirs = '';
 $::hierarchical = '';
+$::resolveSymlinks = '';
+$::verbose = '';
 
 # strip trailing slashes
 if ($path) { $path =~ s/\/+$//; }
@@ -237,7 +246,8 @@ sub printUsage {
         "   --useIds\n" .
         "   --nothumbnails\n" .
         "   --verbose\n" .
-        "   --copy\n";
+        "   --copy\n" .
+        "   --resolveSymlinks\n";
 }
 
 #
@@ -245,11 +255,15 @@ sub printUsage {
 #
 sub processImage {
     my ($arg) = @_;
-
+    my $symlink = '';
+    
     if (not $update and not -f $arg) {
         # file must be found if doing an insert
         print "Not a file: $arg\n";
         return;
+    } elsif (-f $arg and $resolveSymlinks) {
+        $symlink = $arg;
+        $arg = File::Spec::Link->resolve($arg);
     }
 
     %exifHash = (); # clear previous entries
@@ -320,7 +334,7 @@ sub processImage {
                 }
                 copy($img, "$image_dir/$path/" . stripPath($img)) or
                     die "Could not copy file: $!\n";
-                if (!$copy) {
+                if (!$copy and !$resolveSymlinks) {
                     unlink($img);
                 }
             }
@@ -330,7 +344,7 @@ sub processImage {
             if (abs_path($image_dir) ne abs_path($thisPath)) {
                 copy($img, "$image_dir/" . stripPath($img)) or
                     die "Could not copy file: $!\n";
-                if (!$copy) {
+                if (!$copy and !$resolveSymlinks) {
                     unlink($img);
                 }
             }
@@ -344,6 +358,11 @@ sub processImage {
             createThumbnails($img, $midPrefix, $midSize, $newPath);
             createThumbnails($img, $thumbPrefix, $thumbSize, $newPath);
         }
+        
+        if (!$copy and $resolveSymlinks) {
+            unlink($symlink);
+        }
+            
 
         updatePhoto($id, $img);
         addToAlbums($id);
@@ -351,10 +370,20 @@ sub processImage {
         addPeople($id);
 
         # the fancy status indicator
-        if ($verbose && !$copy) {
-            print "Image $img moved to $image_dir/$fieldHash{'path'}/".stripPath($img)."\n";
-        } elsif ($verbose && $copy) {
-            print "Image $img copied to $image_dir/$fieldHash{'path'}/".stripPath($img)."\n";
+        if ($verbose) {
+            if($copy) {
+                if ($resolveSymlinks and ($symlink ne $img)) {
+                    print "Symlink $symlink resolved to $img\n";
+                }
+                print "Image $img copied to $image_dir/$fieldHash{'path'}/".stripPath($img)."\n";
+            } else {
+                if ($resolveSymlinks and ($symlink ne $img)) {
+                    print "Symlink $symlink resolved to $img\n";
+                    print "Image $symlink moved to $image_dir/$fieldHash{'path'}/".stripPath($img)."\n";
+                } else {
+                    print "Image $img moved to $image_dir/$fieldHash{'path'}/".stripPath($img)."\n";
+                }
+           }
         } else {
             print ".";
         }
@@ -456,7 +485,7 @@ sub useDatedDir {
         }
         copy("$image", "$fullPath/$imageName")
             or die "Could not move file: $!\n";
-        if (!$copy) {
+        if (!$copy and !$resolveSymlinks) {
             unlink("$image");
         }
     }

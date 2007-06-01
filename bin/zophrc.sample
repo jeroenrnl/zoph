@@ -22,6 +22,8 @@ $image_dir = '/data/images/';
 # Change these to override default settings
 # (these settings do not have a matching setting in config.inc.php)
 #
-$datedDirs = 0
-$copy = 0
-$hierarchical = 0
+$datedDirs = 0;
+$copy = 0;
+$hierarchical = 0;
+$verbose = 0;
+$resolveSymlinks = 0;
