@@ -80,13 +80,13 @@
 </td>
 </tr>
 </table>
-<p><script type="text/javascript">
+<script type="text/javascript">
 //<![CDATA[
  if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
 //]]>
-</script></p>
+</script>
 <p><a name="Logging_In_For_The_First_Time" id="Logging_In_For_The_First_Time"></a></p>
-<h2>Logging In For The First Time</h2>
+<h2> <span class="mw-headline">Logging In For The First Time</span></h2>
 <p>An admin user was created when you loaded the database. You should be able to login as 'admin' using the password 'admin'. You will be presented with Zoph's home page where you will be greeted as 'Unknown Person'. There will be a blank square where a random photo would normally appear.</p>
 <p>The first thing you should do is change the admin's password:</p>
 <ol>
@@ -117,7 +117,7 @@
 <li>Login as your user.</li>
 </ol>
 <p><a name="Creating_An_Album.2C_Category_and_Place" id="Creating_An_Album.2C_Category_and_Place"></a></p>
-<h2>Creating An Album, Category and Place</h2>
+<h2> <span class="mw-headline">Creating An Album, Category and Place</span></h2>
 <p>Before importing some images we'll create an album to put them in. Note that you do not need to assign photos to an album if you don't want to.</p>
 <p>To create an album:</p>
 <ol>
@@ -137,32 +137,32 @@
 <li>Click the 'Insert' button.</li>
 </ol>
 <p><a name="The_Web_Based_Importer" id="The_Web_Based_Importer"></a></p>
-<h2>The Web Based Importer</h2>
+<h2> <span class="mw-headline">The Web Based Importer</span></h2>
 <p>The web based importer is a new template in Zoph 0.3 that provides an alternative to the command line importer, zophImport.pl. This template does not yet contain all the functionality of zophImport.pl.</p>
 <p>To use the importer, at least one of CLIENT_WEB_IMPORT and SERVER_WEB_IMPORT must be set to 1 in config.inc.php and you must be logged in as either an admin or a user that has been granted permission to import.</p>
 <p>Enable CLIENT_WEB_IMPORT to upload files through the web-interface using a 'browse' button, and enable SERVER_WEB_IMPORT to import files through the web-interface for files that are already on the server. CLIENT_WEB_IMPORT and SERVER_WEB_IMPORT may be both activated.</p>
 <p>If you are going to be importing directories of photos you will probably need to increase the size of max_execution_time in php.ini. The default is 30 seconds but you will probably need this to be a couple minutes or more, depending on how many images you import and how fast your computer is.</p>
 <p>If you are running PHP &gt;= 4.2, the importer will try to read the EXIF headers of the images you are loading. Beware that if you specify a date and an EXIF date header is found, the EXIF date will overwrite your date field.</p>
 <p><a name="Importing_Images" id="Importing_Images"></a></p>
-<h3>Importing Images</h3>
+<h3> <span class="mw-headline">Importing Images</span></h3>
 <p><a name="Importing_a_Local_File" id="Importing_a_Local_File"></a></p>
-<h4>Importing a Local File</h4>
+<h4> <span class="mw-headline">Importing a Local File</span></h4>
 <p>A local file means one on the same computer as the person using Zoph (and not, necessarily, the computer running Zoph). The image is uploading using HTTP and is copied to the destination path. The file may be an image or a zip or tar archive. The images should not be placed in any directories within an archive.</p>
 <p>To be able to upload archives you need to define the programs with which to do the extraction in config.inc.php. Example are given. Archives are extracted to a temporary directory created with the EXTRACT_DIR defined in config.inc.php. This directory should be writable by the webserver. The zip or tar files themselves are copies to the same location as the images and are not removed by Zoph.</p>
 <p><a name="Importing_Files_on_the_Server" id="Importing_Files_on_the_Server"></a></p>
-<h4>Importing Files on the Server</h4>
+<h4> <span class="mw-headline">Importing Files on the Server</span></h4>
 <p>The uploading step can be skipped for files already on the server running Zoph. This method also allows you to load a directory of images at once. Specify an absolute path in 'file/directory'.</p>
 <p>If you are loading a directory of images, the fields you specify will apply to all of them.</p>
 <p><a name="File_And_Directory_Permissions" id="File_And_Directory_Permissions"></a></p>
-<h3>File And Directory Permissions</h3>
+<h3> <span class="mw-headline">File And Directory Permissions</span></h3>
 <p>In order to copy images and create thumbnails Zoph needs write permission to the directory you are importing to. The simplest but least secure way to do this is to give the import directory 777 permissions. Alternatively, you could try creating a new group, put yourself and the webserver user in that group, and give the group write permission to the directory.</p>
 <p>Files and directories are affected by the IMPORT_UMASK in config.inc.php. The default setting is 0 which leads to files with 777 permissions. Directories are created with DIR_MODE permissions, the default is also 777.</p>
 <p>So by default everything created by the importer is open to everyone. Beware!</p>
 <p><a name="Viewing_Photos" id="Viewing_Photos"></a></p>
-<h2>Viewing Photos</h2>
+<h2> <span class="mw-headline">Viewing Photos</span></h2>
 <p>Now that there are some photos in the database, I'll go over some features of the web interface. The UI is fairly self explanatory so you probably don't really have to read this section.</p>
 <p><a name="Finding_Photos" id="Finding_Photos"></a></p>
-<h3>Finding Photos</h3>
+<h3> <span class="mw-headline">Finding Photos</span></h3>
 <p>There are numerous ways to find the photos you just entered, a few of which are:</p>
 <ol>
 <li>Browse to the album you created and click [ view photos ].</li>
@@ -172,7 +172,7 @@
 <li>Use the 'photos' tab and you can browse every photo in Zoph.</li>
 </ol>
 <p><a name="The_Results_Page" id="The_Results_Page"></a></p>
-<h3>The Results Page</h3>
+<h3> <span class="mw-headline">The Results Page</span></h3>
 <p>By default the results page will show thumbnails of up to 12 photos (you can change this from the 'prefs' page). On the prefs page you can also choose whether or not to display descriptions under the thumbnails.</p>
 <p>From this page you can:</p>
 <ol>
@@ -184,7 +184,7 @@
 <li>Change the number of rows and columns displayed.</li>
 </ol>
 <p><a name="The_Photo_Page" id="The_Photo_Page"></a></p>
-<h3>The Photo Page</h3>
+<h3> <span class="mw-headline">The Photo Page</span></h3>
 <p>Here you'll see a mid sized version of the photo plus all the information about the photo available.</p>
 <p>From this page you can:</p>
 <ol>
@@ -197,7 +197,7 @@
 </ol>
 <p>If you set the auto edit pref, you will automatically be presented with fields to edit the info about a photo whenever you click on a thumbnail. Clicking [ return ] takes you back to the regular view.</p>
 <p><a name="Slideshows" id="Slideshows"></a></p>
-<h3>Slideshows</h3>
+<h3> <span class="mw-headline">Slideshows</span></h3>
 <p>The slideshow mode (entered from the results page) will cycle through the current set of photos by refreshing the browser window. The interval between refreshes can be set on the 'prefs' page.</p>
 <p>From the slideshow page you can:</p>
 <ol>
@@ -206,12 +206,12 @@
 <li>Click on [ open ] to view the current photo on the normal photo page.</li>
 </ol>
 <p><a name="The_Search_Page" id="The_Search_Page"></a></p>
-<h3>The Search Page</h3>
+<h3> <span class="mw-headline">The Search Page</span></h3>
 <p>You can search for photos using multiple criteria on the search page. Note that when you select an album or category, all descendant albums or categories will also automatically be chosen.</p>
 <p>By default all criteria are joined by "and". You can choose "or" instead from the pulldowns in the left most column. Since you can not specify groupings of the conditions, you might not get the results you want if you try to construct complex queries using different conjunctions.</p>
 <p>Note that the album, category, location, person and photographer menus are pruned so that only those entries that actually appear in a photo that the user has access to are shown.</p>
 <p><a name="Random_Photos" id="Random_Photos"></a></p>
-<h3>Random Photos</h3>
+<h3> <span class="mw-headline">Random Photos</span></h3>
 <p>The thumbnail that appears on the 'home' page is randomly selected. I tend to like this photo to be somewhat good so I created a setting on the 'prefs' page that lets you specify the minimum rating to be used when selecting a random photo.</p>
 <p>If you want to create a never ending slideshow of random photos, you can do this by clicking the "randomly chosen photo" link on the home page. If you then click the [ Slideshow ] link on the results page a new random photo will be chosen for each slide. 5.7 Lightboxes</p>
 <p>Lightboxes give someone a place to gather and share their favorite photos. In Zoph, lightboxes are simply albums. When editing a user, an admin can declare a certain album to be the lightbox for that user. The admin must grant the user permission to view the lightbox album as well.</p>
@@ -221,10 +221,10 @@
 <p>Lightboxes are only activated for a user by specifying a lightbox album. The setup I used was to create a "Lightbox" album, under which I created separate albums for each user's lightbox (e.g. "Jason's Lightbox").</p>
 <p>To share a lightbox an admin must grant permission to that album to other users.</p>
 <p><a name="Managing_Users_.26_Restricting_Access" id="Managing_Users_.26_Restricting_Access"></a></p>
-<h2>Managing Users &amp; Restricting Access</h2>
+<h2> <span class="mw-headline">Managing Users &amp; Restricting Access</span></h2>
 <p>One of the features of Zoph is its system of access privileges. You have already created an admin class user for yourself. If you desire, you can create other users as well.</p>
 <p><a name="Users" id="Users"></a></p>
-<h3>Users</h3>
+<h3> <span class="mw-headline">Users</span></h3>
 <p>A description of some of the attributes of users follows:</p>
 <ul>
 <li>user name: the name for account (e.g. first initial + last name).</li>
@@ -241,7 +241,7 @@
 <li>lightbox: the user's lightbox album</li>
 </ul>
 <p><a name="Albums" id="Albums"></a></p>
-<h3>Albums</h3>
+<h3> <span class="mw-headline">Albums</span></h3>
 <p>For non-Admin users, permissions to view photos are granted on a per album basis. For each album you grant a user access to, you must specify:</p>
 <ol>
 <li>An access level</li>
@@ -261,30 +261,30 @@
 <p>If you want to grant a user access to all albums you can do this all at once and the access level and writable flag will apply to every album. This is handy if you want to let someone see everything but don't want them to change anything.</p>
 <p>Note that when you create new albums you will have to grant permissions to any non-Admins before they will be able to see those album.</p>
 <p><a name="Watermarking" id="Watermarking"></a></p>
-<h2>Watermarking</h2>
+<h2> <span class="mw-headline">Watermarking</span></h2>
 <p>You can let Zoph superimpose a watermark over the fullsize picture. You can use this feature if you want your users to be able to look at the high quality pictures, but not use them for publication. To use this feature, the <a href="configuration.html#IMAGE_SERVICE" title="Zoph/Configuration">IMAGE_SERVICE</a> has to be enabled. Zoph will put a watermark on each photo that has a level higher than the watermark level.</p>
 <p><a name="Scenarios" id="Scenarios"></a></p>
-<h2>Scenarios</h2>
+<h2> <span class="mw-headline">Scenarios</span></h2>
 <p><a name="Access_levels" id="Access_levels"></a></p>
-<h3>Access levels</h3>
+<h3> <span class="mw-headline">Access levels</span></h3>
 <p>Say you create an account for your parents but you don't want them to see the photos in the "New Years Party" album. Simply don't grant them permission to that album.</p>
 <p>However, say the photos in this album are mostly harmless, except for a few that you would like to keep hidden. In this case, change the level of those photos to 6 (or higher) and grant the user permission to the album with an access level of 5 (or less).</p>
 <p><a name="Watermarks" id="Watermarks"></a></p>
-<h3>Watermarks</h3>
+<h3> <span class="mw-headline">Watermarks</span></h3>
 <p>You have taken a couple of brilliant landscape images. You really want to show them to one of your regular customers, but you're affraid they will simply take your image and publish it, without paying for it. You put the photos in an album "Landscape" and set their level to 3.</p>
 <p>After that, you give your customers account access level 5 and watermark level 2. They will now be able to watch the photo, but when they look at the fullsize image, a large copyright message will be superimposed over the photo. In this way, they will be able to judge the quality of the image, but it will be unusable to use in their productions.</p>
 <p>After they have payed for the photo, you can put the image in an album that does allow them to see the photo without a watermark, change the level of the photo or change the watermark level. (keep in mind that the latter two will also influence other accounts or photos, respectively).</p>
 <p><a name="The_Image_Service" id="The_Image_Service"></a></p>
-<h3>The Image Service</h3>
+<h3> <span class="mw-headline">The Image Service</span></h3>
 <p>If you plan on having multiple users of Zoph and you are planning on hiding some pictures or albums from some users, you may want to turn on the image service in config.inc.php.</p>
 <p>The simplest and fastest setup is to have the images served by the web server. However, this requires that the images are accessible to the web server. And if this is true, they are also accessible to any user. Even if the application never links to a photo that a user should not be allowed to see, that user could still view that photo (or any photo) by simply typing its url directly into their browser. Since the image names tend to follow a well defined pattern, it would not be too hard for someone to just guess image names and see what came up.</p>
 <p>One solution to this problem is to have the application serve the images rather than the web server. This is what the image service does. If is is used, the IMAGE_DIR defined in config.inc.php should NOT be reachable by the web server. The image service will instead set the proper headers and read out the file itself.</p>
 <p>Unfortunately, this makes Zoph slower and can make handling the images more cumbersome. If you don't care about people seeing all of your images, don't bother with the image service. To use watermarking, the image service must be enabled.</p>
 <p><a name="But_Don.27t_Trust_Me" id="But_Don.27t_Trust_Me"></a></p>
-<h3>But Don't Trust Me</h3>
+<h3> <span class="mw-headline">But Don't Trust Me</span></h3>
 <p>Zoph has all these privilege mechanisms, but don't trust them too much to keep your secret photos hidden. It is beta software and hasn't been tested nearly enough for you to assume you'll be protected.</p>
 <p><a name="Defining_a_Default_User" id="Defining_a_Default_User"></a></p>
-<h3>Defining a Default User</h3>
+<h3> <span class="mw-headline">Defining a Default User</span></h3>
 <p>Starting with Zoph 0.2.1 a default user can be defined. This user is automatically logged in when a person first opens Zoph in their browser.</p>
 <p>If you use Zoph locally you may want to make yourself the default user so that you never have to bother logging in. You may also want to use this feature to create a guest account with limited permissions.</p>
 <p>To create a guest user, first create a person record to associate with the user (this could just be first name Guest, last name User). Then create a guest user, grant that user whatever permissions you want and set the user's preferences. Whichever user is defined as the default user is unable to modify their preferences while they are the default.</p>
@@ -298,19 +298,19 @@ define(DEFAULT_USER, 3);
 <p>That's it. Now when you hit /zoph/zoph.php for the first time you'll be logged in as the guest user (if you are already logged in as someone you'll first have to log out). You can also log out when you are the guest user to be able to log back in as someone else.</p>
 <p>What if a guest hits logout and wants to get back in but doesn't know the guest account info? Hitting submit on the logon page without specifying a user name or password will log you in as the default user.</p>
 <p><a name="Preferences" id="Preferences"></a></p>
-<h2>Preferences</h2>
+<h2> <span class="mw-headline">Preferences</span></h2>
 <p>A user can customize Zoph using the preferences page. Below are descriptions of a few of the prefs.</p>
 <p><a name="Breadcrumbs" id="Breadcrumbs"></a></p>
-<h3>Breadcrumbs</h3>
+<h3> <span class="mw-headline">Breadcrumbs</span></h3>
 <p>Between the tabs and the title bar you'll see a list of breadcrumbs by default. On the prefs page You can specify the number of breadcrumbs to show or you can choose to disable the breadcrumbs completely.</p>
 <p>One note about breadcrumbs: clicking on the small x to the right of the breadcrumbs will clear the list of crumbs.</p>
 <p><a name="Choosing_a_Language" id="Choosing_a_Language"></a></p>
-<h3>Choosing a Language</h3>
+<h3> <span class="mw-headline">Choosing a Language</span></h3>
 <p>The default value is 'Browser Default'. This means that Zoph will try to present itself in the language you can specify in your browser's settings. If no translations are present for any of the languages in your browser's list, English will be displayed by default.</p>
 <p>If you specify a language on the prefs page instead of 'Browser Default' your setting will override whatever you have your browser set to.</p>
 <p>If you would like to provide a translation for another language please let me know (zoph@nother.net). The language files are stored in php/lang. Creating a new translation involves creating a file in this directory with the language's two letter code. Use one of the existing (non English) language files as an example.</p>
 <p><a name="Other_Prefs" id="Other_Prefs"></a></p>
-<h3>Other Prefs</h3>
+<h3> <span class="mw-headline">Other Prefs</span></h3>
 <p>Here are descriptions of a few of the other prefs:</p>
 <ul>
 <li>days paste for recent photos links: the home page has links to view photos taken or modified in the past X days, this pref sets the number of days.</li>
@@ -319,17 +319,17 @@ define(DEFAULT_USER, 3);
 <li>color scheme: the color scheme to use. Admins can click on "color scheme" to add, edit and delete color schemes.</li>
 </ul>
 <p><a name="Backing_Up_Your_Data" id="Backing_Up_Your_Data"></a></p>
-<h2>Backing Up Your Data</h2>
+<h2> <span class="mw-headline">Backing Up Your Data</span></h2>
 <p>It's always a good idea to back up you photos. Periodically sync them to another machine or burn them to a cd. Zoph should never delete your photos, when you delete something from the ui only the database record is removed.</p>
 <p>You should also periodically export the database. After you spend hours inserting and updating photos into Zoph, take two seconds and do the following:</p>
 <pre>
 &gt; mysqldump -u zoph_admin -p zoph &gt; zoph-`date +%Y%m%d`.sql
 </pre>
 <p><a name="Integrating_Zoph" id="Integrating_Zoph"></a></p>
-<h2>Integrating Zoph</h2>
+<h2> <span class="mw-headline">Integrating Zoph</span></h2>
 <p>In this section I thought I'd mention a couple of tips if you are interested in trying to integrate Zoph with other parts of your website. This is still a work in progress.</p>
 <p><a name="Looking_Up_People" id="Looking_Up_People"></a></p>
-<h2>Looking Up People</h2>
+<h2> <span class="mw-headline">Looking Up People</span></h2>
 <p>Say you have a site that has its own person or user records and you would like to map between the two systems (you want to put a "photos of" link on the profile page of a user, for example). Though Zoph usually uses it's own person_id field, you can pass a name instead:</p>
 <p><a href="http://www.nother.net/zoph/photos.php?person=Geiger,Jason" class="external free" title="http://www.nother.net/zoph/photos.php?person=Geiger,Jason" rel="nofollow">http://www.nother.net/zoph/photos.php?person=Geiger,Jason</a></p>
 <p>will show you photos of a person. You also can use "photographer":</p>
@@ -337,19 +337,19 @@ define(DEFAULT_USER, 3);
 <p>Or instead of jumping to the photos page you can hit the person page:</p>
 <p><a href="http://www.nother.net/zoph/person.php?person=Geiger,Jason" class="external free" title="http://www.nother.net/zoph/person.php?person=Geiger,Jason" rel="nofollow">http://www.nother.net/zoph/person.php?person=Geiger,Jason</a></p>
 <p><a name="Other_Lookups" id="Other_Lookups"></a></p>
-<h2>Other Lookups</h2>
+<h2> <span class="mw-headline">Other Lookups</span></h2>
 <p>For albums, categories and locations these sorts of lookups don't exist at the moment. But they are fairly easy to incorporate if anyone is interested.</p>
 <p>Of course it is easy to generate urls for the other photo fields (that don't require joins) like title or description. Just call photos.php?field=val. Any string that does not start with an underscore is assumed to be a field to search on.</p>
 <p><a name="Incompatibilities" id="Incompatibilities"></a></p>
-<h2>Incompatibilities</h2>
+<h2> <span class="mw-headline">Incompatibilities</span></h2>
 <p>While developing Zoph I've discovered a couple of oddities which I'll mention below. Problems that have solutions are likely to appear in the FAQ.</p>
 <p><a name="Slideshows_2" id="Slideshows_2"></a></p>
-<h3>Slideshows</h3>
+<h3> <span class="mw-headline">Slideshows</span></h3>
 <p>For some reason this feature does not work with IE 5 for Mac OS X. Every other photo is shown or the same photo is shown over and over.</p>
 <p>The slideshow involves a simple refresh header so I'm not sure what the problem is. It works correctly with IE for Windows and OmniWeb for OSX.</p>
 <p>Slideshows worked fine for me using Netscape 4.7 under Linux and Windows but I have been told of one problem using Netscape under Windows where once the slideshow is finished the photo results page that you are redirected to starts refreshing itself. Browsing to another page stops the problem. This may be slightly annoying but at least it doesn't prevent the slideshow from functioning.</p>
 <p><a name="Emailing_a_Photo" id="Emailing_a_Photo"></a></p>
-<h3>Emailing a Photo</h3>
+<h3> <span class="mw-headline">Emailing a Photo</span></h3>
 <p>Some servers or clients seem to have a problem with preserving or decoding the attachments generated by the Mime class. The often seems related to how lines are terminated.</p>
 <p>I have currently set things up to terminate lines with \n (and not a \r\n). Here is the behavior I have observed:</p>
 <ul>
@@ -358,7 +358,7 @@ define(DEFAULT_USER, 3);
 </ul>
 <p>To play around with this, edit mail.php.</p>
 <p><a name="Optgroups" id="Optgroups"></a></p>
-<h3>Optgroups</h3>
+<h3> <span class="mw-headline">Optgroups</span></h3>
 <p>Most browsers still don't completely support optgroups in select tags. Mozilla and IE 5 for Windows label the pulldown according to the groups but do not display cascading menus. IE 5 Mac does attempt to display a cascading pulldown but it seems there is a problem where a cache get corrupted or something. I often see results from one pulldown being merged with another (people and places, for example). When I view the page source everything looks ok but somehow it is being displayed incorrectly.</p>
 <p>You can set GROUPED_PULLDOWN_SIZE in config.inc.php to something small to experiment yourself.</p>
 

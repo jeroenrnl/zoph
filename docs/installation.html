@@ -44,24 +44,24 @@
 </td>
 </tr>
 </table>
-<p><script type="text/javascript">
+<script type="text/javascript">
 //<![CDATA[
  if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
 //]]>
-</script></p>
+</script>
 <p><a name="Requirements" id="Requirements"></a></p>
-<h2>Requirements</h2>
+<h2> <span class="mw-headline">Requirements</span></h2>
 <p>First, make sure you meet all the requirements in the <a href="requirements.html" title="Zoph/Requirements">previous chapter</a>.</p>
 <p><a name="Creating_the_database" id="Creating_the_database"></a></p>
-<h2>Creating the database</h2>
+<h2> <span class="mw-headline">Creating the database</span></h2>
 <p><a name="Create_a_database_and_import_the_tables" id="Create_a_database_and_import_the_tables"></a></p>
-<h3>Create a database and import the tables</h3>
+<h3> <span class="mw-headline">Create a database and import the tables</span></h3>
 <pre>
 $ mysqladmin -u root -p create zoph
 $ mysql -u root -p zoph &lt; sql/zoph.sql
 </pre>
 <p><a name="Create_users_for_zoph" id="Create_users_for_zoph"></a></p>
-<h3>Create users for zoph</h3>
+<h3> <span class="mw-headline">Create users for zoph</span></h3>
 <p>I created two users: zoph_rw is used by the application and zoph_admin is used when I work directly in mysql so I don't have to use root.</p>
 <pre>
 $ mysql -u root -p
@@ -71,43 +71,43 @@ mysql&gt; grant select, insert, update, delete on zoph.* to zoph_rw@localhost id
 mysql&gt; grant all on zoph.* to zoph_admin identified by 'PASSWORD';
 </pre>
 <p><a name="Configure_the_PHP_templates" id="Configure_the_PHP_templates"></a></p>
-<h2>Configure the PHP templates</h2>
+<h2> <span class="mw-headline">Configure the PHP templates</span></h2>
 <p>Please see <a href="configuration.html" title="Zoph/Configuration">the chapter on configuration</a> for details.</p>
 <p><a name="Install_the_templates" id="Install_the_templates"></a></p>
-<h2>Install the templates</h2>
+<h2> <span class="mw-headline">Install the templates</span></h2>
 <p><a name="Pick_a_location_to_put_Zoph" id="Pick_a_location_to_put_Zoph"></a></p>
-<h3>Pick a location to put Zoph</h3>
+<h3> <span class="mw-headline">Pick a location to put Zoph</span></h3>
 <p>Create a zoph/ directory off the doc root of your web server, or create a Virtual Host with a new doc root.</p>
 <pre>
 $ mkdir /var/www/html/zoph
 </pre>
 <p><a name="Copy_the_templates" id="Copy_the_templates"></a></p>
-<h3>Copy the templates</h3>
+<h3> <span class="mw-headline">Copy the templates</span></h3>
 <pre>
 $ cp -r php/* /var/www/html/zoph/
 </pre>
 <p><a name="Install_the_perl_scripts" id="Install_the_perl_scripts"></a></p>
-<h2>Install the perl scripts</h2>
+<h2> <span class="mw-headline">Install the perl scripts</span></h2>
 <p><a name="Check_the_path_to_perl" id="Check_the_path_to_perl"></a></p>
-<h3>Check the path to perl</h3>
+<h3> <span class="mw-headline">Check the path to perl</span></h3>
 <p>The perl scripts points to /usr/bin/perl. If your perl is in a different place, edit the first line of the script.</p>
 <p><a name="Configure_the_database_variables" id="Configure_the_database_variables"></a></p>
-<h3>Configure the database variables</h3>
+<h3> <span class="mw-headline">Configure the database variables</span></h3>
 <p>Edit bin/zophImport.pl and bin/zophExport.pl so that the following variables match the values you put in config.inc.php:</p>
 <pre>
 $db_name = 'zoph';
 $db_user = 'zoph_rw';
 $db_pass = 'password';
 </pre>
-<p>In addtion, in zophExport.pl set $image_dir to you image directory.</p>
+<p>In addition, in zophExport.pl set $image_dir to you image directory.</p>
 <p><a name="Copy_bin.2FzophImport.pl_and_bin.2FzophExport.pl_to_.2Fusr.2Flocal.2Fbin" id="Copy_bin.2FzophImport.pl_and_bin.2FzophExport.pl_to_.2Fusr.2Flocal.2Fbin"></a></p>
-<h3>Copy bin/zophImport.pl and bin/zophExport.pl to /usr/local/bin</h3>
+<h3> <span class="mw-headline">Copy bin/zophImport.pl and bin/zophExport.pl to /usr/local/bin</span></h3>
 <p>Or some other directory in your PATH.</p>
 <p><a name="Install_the_man_page" id="Install_the_man_page"></a></p>
-<h3>Install the man page</h3>
+<h3> <span class="mw-headline">Install the man page</span></h3>
 <p>A man page for zophImport.pl is in the man/ directory. Copy this to somewhere in your manpath, /usr/local/man/man1 for example.</p>
 <p><a name="Test_it" id="Test_it"></a></p>
-<h2>Test it</h2>
+<h2> <span class="mw-headline">Test it</span></h2>
 <p>Try hitting <a href="http://localhost/zoph/logon.php" class="external free" title="http://localhost/zoph/logon.php" rel="nofollow">http://localhost/zoph/logon.php</a>. You should be presented with the logon screen.</p>
 <p>If you get a 404 error...</p>
 <ul>

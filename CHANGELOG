@@ -1,10 +1,78 @@
 Zoph Changelog
 
+
+Zoph 0.7pre1
+02 June 2006
+
+New Features
+
+    * Req#722617: read/display/handle more/full exif data
+    * Req#1260584: Javascript-based autocompletion for select-boxes.
+    * Req#1478748 Now possible to search albums/categories/photographers/people
+	by text instead of selecting from list.
+    * Req#1491208: In albums/categories/places each link now shows the number
+	of photos in that album and the number of photos in the album and the ones
+	below it.
+    * In albums and categories you now see the number of photos in the current
+	album, as well as the number of photos in the current album and all albums
+	below it (which was the only one shown up until now) - just like places has
+	had since the previous version of Zoph
+    * Req#1506959 (partly): Specify a coverphoto for albums, categories, people
+	and places
+    * Req#1511961: There are now 3 views for albums/categories/people/places:
+	list (the "old" view), tree and thumbnail.
+    * Automatically pick a coverphoto in thumbnail view for a/c/p/p when none
+	has been picked.
+    * Req#1709390: zophImport.pl: You can now set the defaults for dateddirs,
+	copy, hierarchical and verbose through the .zophrc file. Thanks to Peter Farr
+	for the patch.
+    * Patch#1647439: zophImport.pl can now resolve symlinks before importing.
+	Thanks to Peter Farr for the patch.
+
+Bugfixes
+
+    * Bug#1564548, Bug#1725811: Bugs with slideshows showing an error
+    * Bug#1568418: Pager links do not work in bulk edit page when no search
+	criteria are used.
+    * Bug#1571227: Webimport of ZIP files not working
+    * Bug#1571577: Cannot login with DEBUG set
+    * Bug#1571682: extra '/' in URL after logon
+    * Bug#1574205: No "return" from edit page
+    * Bug#1574206: Removing crumbs when on edit page does not correctily return
+    * in some cases the second page of a search would change ">=" or "<="
+	into "=".
+    * urls for places could not be longer than 32 chars.
+    * Fix for a bug that made search behave incorrectly when text-search for a
+	person did not return any people.
+    * Bugfix for layout problem - sometimes the main window on the people page
+	was not large enough to display all
+    * Bug#1713946 Missing localized strings
+    * Bug#1592560 Import fails when "path" field is empty
+    * Bug#1598437 Import does not check if user can write to the selected
+	album.
+    * Patch#1713924: EXIF date/time priority, patch by Antoine Delvaux.
+
+Cleanup and various
+
+    * Lots of cleanout of HTML and CSS code. Now all unnecessary tables have
+	been replaced by semantic HTML/CSS combinations.
+    * Removed duplicate spaces in translation files.
+    * Cleanout and getting rid of lots of (but not yet all) PHP warning
+	messages.
+    * Updated info page with new mailadress for Zoph
+    * Changed "view" to "display" on the people page for consistancy reasons
+	and to remove a translation problem (the word "view" is also used on the photo
+	page, and has a different meaning there)
+    * Dutch, German and French translation updated
+    * changed some SQL syntax for speedup
+
+
 Zoph 0.6
 21 September 2006
 
     * Removed mailaddress of original Dutch translator on his request
-    * Fixed: Rating links on reports page not working in translated Zoph version.
+    * Fixed: Rating links on reports page not working in translated Zoph
+version.
     * Updated Danish language file
     * Fixed: issues with LIKE searches (Bug#1541763)
     * Improved error handling in imports
@@ -16,18 +84,23 @@ Zoph 0.6pre2
 
 13 June 2006
 
-    * Updated translations: Dutch, English, German, Danish and Canadian English should be completely up to date now.
+    * Updated translations: Dutch, English, German, Danish and Canadian English
+should be completely up to date now.
     * Fixed a layout glitch in the edit screen for places
     * Fixed missing translations in relation and selection features.
     * Fixed some incompatibilities with PHP4
     * Fixed an issue that caused guest users to be unable to logon.
     * Fixed an issue with trying to logon after a session timeout
     * Fixed an issue with search not working for translated Zoph versions
-    * Fixed some issues in the SQL installation script, thanks to Ed P. for the patch.
+    * Fixed some issues in the SQL installation script, thanks to Ed P. for the
+patch.
     * Added partial Turkish translation, thanks to Mufit Eribol
-    * Fixed and issue with auto-edit mode where you would not return to the correct photo after making a change.
+    * Fixed and issue with auto-edit mode where you would not return to the
+correct photo after making a change.
     * Updated man pages for zophImport.pl and zophExport.pl
-    * In the userlist, changed "view" to "display" for consistancy reasons and to remove a translation problem (the word "view" is also used on the photo page, and has a different meaning there)
+    * In the userlist, changed "view" to "display" for consistancy reasons and
+to remove a translation problem (the word "view" is also used on the photo
+page, and has a different meaning there)
 
 
 
@@ -38,29 +111,44 @@ Zoph 0.6pre1
 New features
 - It is now possible to leave comments with photos
 - You can select a photo to do certain actions with that selection.
-- You can now create links between photos. (Req#778845 (partly), Req#828750) (for now, this is the only feature that makes use of "selections")
-- Using external links to Zoph will now go to the login page and then to the requested URL. (Req#1443574)
+- You can now create links between photos. (Req#778845 (partly), Req#828750)
+(for now, this is the only feature that makes use of "selections")
+- Using external links to Zoph will now go to the login page and then to the
+requested URL. (Req#1443574)
 - Image service is now on by default
 - Possibility to overide sort order of photos in album (Req#665237)
-- Possibility to overide sort order of photos in category (similar to Req#665237)
-- Possibility to call albums and categories by name in URL instead of id. (Req#778024)
-- Made a small change to the menu: when hovering a menu-option, the layout changes to emulate a "tab"-like display (let me know if you like this!)
-- It is now longer required to be in the image dir to import a photo. (Req#853091)
-- ZophImport.pl and zophExport.pl now use and external file to store the configuration (like the Debian version of Zoph).
+- Possibility to overide sort order of photos in category (similar to
+Req#665237)
+- Possibility to call albums and categories by name in URL instead of id.
+(Req#778024)
+- Made a small change to the menu: when hovering a menu-option, the layout
+changes to emulate a "tab"-like display (let me know if you like this!)
+- It is now longer required to be in the image dir to import a photo.
+(Req#853091)
+- ZophImport.pl and zophExport.pl now use and external file to store the
+configuration (like the Debian version of Zoph).
 - Quick navigation through locations. (Req#1417305)
-- The search page now has a "no children" checkbox next to albums, categories and places. (Req#1416195)
-- Add URL to places, so a link to -for example- a map can be made. (Req#1466069)
+- The search page now has a "no children" checkbox next to albums, categories
+and places. (Req#1416195)
+- Add URL to places, so a link to -for example- a map can be made.
+(Req#1466069)
 
 Bugfixes
-- Tranlation fixes in define_annotated_photo.php, edit_person.inc.php and edit_place.inc.php
+- Tranlation fixes in define_annotated_photo.php, edit_person.inc.php and
+edit_place.inc.php
 - zoph_table.inc.php: small layout fix in debug code
-- Fixed: a string would not be correctly translated if it starts with a "special character".
+- Fixed: a string would not be correctly translated if it starts with
+a "special character".
 - Fixed a few html encoding issues. (Bug#1467146 and some not reported bugs)
-- Button text not correct when php.ini setting is short_open_tag = Off (Bug#1459175)
+- Button text not correct when php.ini setting is short_open_tag = Off
+(Bug#1459175)
 - Ratings being truncated (Bug#1466551)
-- Fixed a bug where logging in without SSL would redirect you to the wrong page.
-- Next/prev buttons lost after editting/deleteing a photo when using 'auto-edit' mode. (Bug#1467143, Bug#1463947)
-- CSS style is not applied when mid prefix is changed in config.inc.php (Bug#1466068)
+- Fixed a bug where logging in without SSL would redirect you to the wrong
+page.
+- Next/prev buttons lost after editting/deleteing a photo when
+using 'auto-edit' mode. (Bug#1467143, Bug#1463947)
+- CSS style is not applied when mid prefix is changed in config.inc.php
+(Bug#1466068)
 - Added missing space in photo.inc.php
 - Specifying the DEFAULT_TABLE_WIDTH as a percentage doesn't work (Bug#1446202)
 - HTML tag missing for all pages.
@@ -71,8 +159,11 @@ Cleanup and various
 - Updated Danish, Italian, Dutch, German and Canadian English language files
 - Cleanup of all language files (removed no longer used strings)
 - Removed zoph_update-0.4pre1.sql
-- In photo.php, the actionlinks are now built using an array. To make life a bit easier for people using the auto-edit feature, the edit page now displays more links.
-- Cleaned out the code of the search page: Removed lots of messy and redundant code and added whitespace for readability. Functionality should be unchanged.
+- In photo.php, the actionlinks are now built using an array. To make life a
+bit easier for people using the auto-edit feature, the edit page now displays
+more links.
+- Cleaned out the code of the search page: Removed lots of messy and redundant
+code and added whitespace for readability. Functionality should be unchanged.
 - Fixed code layout in util.inc.php
 - Updated HTML for the edit page of places to use semantic HTML and not tables.
 
@@ -80,20 +171,27 @@ Cleanup and various
 Zoph 0.5.1
 12 March 2006
 
-- Updated Richard Heyes mailclass to newest version. Should partly solve Req#655957
+- Updated Richard Heyes mailclass to newest version. Should partly solve
+Req#655957
 - Fixed: Quotes and apostrophes do not display correctly (Bug#1443235)
 - Fixed: Places are sorted by id instead of alphabetically. (Bug#1443427)
 - Fixed: Loosing context after editing (Bug#1333428)
-- Fixed: Clicking on the thumbnail of a randomly chosen photo would pick a new random photo instead of showing a larger version of the thumb (Bug#1443927)
+- Fixed: Clicking on the thumbnail of a randomly chosen photo would pick a new
+random photo instead of showing a larger version of the thumb (Bug#1443927)
 - Fixed: field with double quotes are truncated (Bug#1443235)
-- Fixed: photo.php: the _rows, _cols etc. fields are added to the url, instead of replaced, whenever they are changed. (did not cause any functionality issues)
+- Fixed: photo.php: the _rows, _cols etc. fields are added to the url, instead
+of replaced, whenever they are changed. (did not cause any functionality
+issues)
 - Fixed: error at the end of a slideshow (Bug#1446200)
 - Removed extra space in create_text_input
-- Fixed installation SQL file: some missing changes needed for Zoph 0.5, (Bug#1447727)
+- Fixed installation SQL file: some missing changes needed for Zoph 0.5,
+(Bug#1447727)
 - Resolved duplicate subject header in mail sent from Zoph
 - Translation fixes in German translation, thanks to Ulrich Wiederhold
-- Added missing translation to Dutch and Canadian English and updated zoph_strings.txt
-- Fixed: search page does not show results when using a translated Zoph version (Bug#1448346)
+- Added missing translation to Dutch and Canadian English and updated
+zoph_strings.txt
+- Fixed: search page does not show results when using a translated Zoph version
+(Bug#1448346)
 
 Zoph 0.5
 1 March 2006
@@ -103,26 +201,36 @@ Zoph 0.5
 Zoph 0.5-pre4
 18 February 2006
 
-- Solved a bug that caused an error on the bulk edit page if you would add some people to a photo and consequently
+- Solved a bug that caused an error on the bulk edit page if you would add some
+people to a photo and consequently
   made another edit (Bug#1422741)
-- Fixed an issue where the pager links on the bulk edit page would cause errors after an edit has been made.
+- Fixed an issue where the pager links on the bulk edit page would cause errors
+after an edit has been made.
 - Additional anti-SQL injection code in the search page.
-- When updating user permissions with a high number of albums, a "URL too long" error occurred. (Bug#1434235)
-- Fixed a bug that caused some albums permissions not to be properly updated when making a change.
+- When updating user permissions with a high number of albums, a "URL too long"
+error occurred. (Bug#1434235)
+- Fixed a bug that caused some albums permissions not to be properly updated
+when making a change.
 
 Zoph 0.5-pre3
 30 January 2006
 
 - Solved a typo in upgrade documentations
 - Solved a bug that caused an Admin user not to be able to browse people
-- zophImport.pl: --verbose combined with --path would not correctly tell where the file was copied.
+- zophImport.pl: --verbose combined with --path would not correctly tell where
+the file was copied.
 - zophImport.pl: now exits with a non-0 status code when something goes wrong
-- updated man-pages for zophImport.pl and zophExport.pl (thanks to Edelhard Becker)
-- Solved a bug that caused the bulk-edit page not to work when called from search-results (Bug#1415457)
-- Added brackets to some queries to make the search page react better on "not in" queries.
-- Fixed a bug that caused some changes made on the bulk-edit page to be ignored.
+- updated man-pages for zophImport.pl and zophExport.pl (thanks to Edelhard
+Becker)
+- Solved a bug that caused the bulk-edit page not to work when called from
+search-results (Bug#1415457)
+- Added brackets to some queries to make the search page react better on "not
+in" queries.
+- Fixed a bug that caused some changes made on the bulk-edit page to be
+ignored.
 - Added an extra Update button to the bulk edit paged (Req#1416184)
-- Made a change to the db lookup for the place dropdown that dramatically increases the performance of the bulk edit page.
+- Made a change to the db lookup for the place dropdown that dramatically
+increases the performance of the bulk edit page.
 
 Zoph 0.5-pre2
 
@@ -135,48 +243,66 @@ Zoph 0.5-pre1
 
 - Changed typos in logon.php and credits.html
 - Fixed php errors when user is not logged in (bug#1325547)
-- Added compatibility with MySQL=>4.1, and code to automatically convert passwords from MySQL pre-4.1 to 4.1 and later format.
-- Many updates to HTML and CSS, most to improve HTML semantics. (Less tables used for layout).
-- Resolved some inconsistencies in config.inc.php (some defines used quotes and some not)
+- Added compatibility with MySQL=>4.1, and code to automatically convert
+passwords from MySQL pre-4.1 to 4.1 and later format.
+- Many updates to HTML and CSS, most to improve HTML semantics. (Less tables
+used for layout).
+- Resolved some inconsistencies in config.inc.php (some defines used quotes and
+some not)
 - zoph_table.inc.php now gives some more debug info when DEBUG is on.
 - Locations are now hierarchical.
-  The necessary database updates for this are done by the SQL update script; an unsopported
-  script is included in the contrib dir that will try to change your locations to a real
+  The necessary database updates for this are done by the SQL update script; an
+unsopported
+  script is included in the contrib dir that will try to change your locations
+to a real
   hierarchical list. Use at your own risk!
-- Dated_dirs can now be made hierarchical (instead of a directory called 2006.01.20 you will have a directory-tree 2006/01/20). Thanks to Oliver Seidel (Req#656472)
+- Dated_dirs can now be made hierarchical (instead of a directory called
+2006.01.20 you will have a directory-tree 2006/01/20). Thanks to Oliver Seidel
+(Req#656472)
 - Immediate editting of color schemes and possibility to copy them (Req#715104)
 - Dated dirs in webimporter (Req#739557)
 - Imported tar and zip files can be removed automatically (Req#739267)
 - Change of error message in import.php to ease translation.
-- People without "browse people" rights can now no longer see people's names. (Req#749503)
+- People without "browse people" rights can now no longer see people's names.
+(Req#749503)
 - Use the file date and time if there is no date in exif header. (Req#752404)
 - Option to open the fullsize image in a new window. (Req#1252457)
 - Watermarking for high quality images. (Req#1250028)
 - Forced SSL login, thanks to Aaron Parecki. (Patch#1253265)
 - Forced SSL usage
-- zophImport.pl: Now fails when album/location/category/person does not exist. (Can be turned off by setting $ignoreerror). Partly solves Debian bug #284539.
-- zophImport.pl: A friendly error is now displayed when a photo is added to an album/cat/person it is already in. (partly solves Debian bug #284539)
-- Changed default permissions in config.inc.php as requested in Debian bug#326649
-- zophImport.pl: Added --copy and --verbose options. Solves Debian bug#211312 and partly #218491.
-- Major improvements to the search page. Thanks to Roy Bonser. (Req#685269 and Patch#1395052).
+- zophImport.pl: Now fails when album/location/category/person does not exist.
+(Can be turned off by setting $ignoreerror). Partly solves Debian bug #284539.
+- zophImport.pl: A friendly error is now displayed when a photo is added to an
+album/cat/person it is already in. (partly solves Debian bug #284539)
+- Changed default permissions in config.inc.php as requested in Debian
+bug#326649
+- zophImport.pl: Added --copy and --verbose options. Solves Debian bug#211312
+and partly #218491.
+- Major improvements to the search page. Thanks to Roy Bonser. (Req#685269 and
+Patch#1395052).
 - Fixed some possible SQL-injection issues.
-- Adding multiple people to a photo at once, thanks to Neil McBride. (Patch#1406959)
-- Fixed Date Field set inconsistently when using files with no EXIF info. (Bug#1402492)
+- Adding multiple people to a photo at once, thanks to Neil McBride.
+(Patch#1406959)
+- Fixed Date Field set inconsistently when using files with no EXIF info.
+(Bug#1402492)
 - Updated Canadian English, German and Dutch translations.
 
 Zoph 0.4
 4 September 2005
 
 - Removed "float" in CSS breadcrumb definition, this was a workaround for a
-  very small layout issue in Firefox, but caused some ugly behaviour in Konqueror and Safari.
+  very small layout issue in Firefox, but caused some ugly behaviour in
+Konqueror and Safari.
 - Fixed incorrect 'Next' URL after editing photos. (bug#1252455)
 - Moved edit button to right side in edit_photo.php
 - Updated Dutch, English, Canadian English and German translation
 - Zoph_strings.txt (translation skeleton file) was updated for 0.4
 - The "root category" on the categories page is now translated
 - Fixed a layout issue when pressing pause during a slideshow
-- "Up" button now takes you to the last page you were looking at, instead of the first (bug#1259152)
-- Added a warning to check for maximum file size when uploading fails (bug#739546)
+- "Up" button now takes you to the last page you were looking at, instead of
+the first (bug#1259152)
+- Added a warning to check for maximum file size when uploading fails
+(bug#739546)
 - Added Polish translation (thanks Krzysztof Kajkowski)
 - Swedish translation was updated by Johan Linder
 - Increased DEFAULT_WIDTH to 600, for layout reasons
@@ -187,116 +313,168 @@ Zoph 0.4pre2
 - Changed layout to use CSS (thanks Jeroen Roos)
 - Added Traditional Chinese translation (thanks Mat Lee)
 - Fixed translation of update and submit buttons
-- Added a "Contrib" directory in which some user-contributed tools are distributed.
-- Contrib: Diff to use Postgres as database (for zoph 0.3.3) (thanks Chris Beauchamp)
-- Contrib: ZophEdit Python script to edit photo metadata in a zoph database (thanks Nils Decker)
-- Contrib: ZophClean Perl script to find and solve differences between database and files on disk.
-- Fixed a bug where only Admin users could rate photos and add photos to a lightbox album (pat#1179920) (thanks Jason Taylor)
-- Added a check to prevent album names, category names, location, people names, user names and color schemes to have empty names (bug#846417)
-- Added a fix for zophImport.pl, it failed in looking up people that have a name with multiple spaces (pat#830236) (thanks Hans Verbrugge)
-- Contrib: Added a script to add movies to Zoph (pat#1176317) (thanks Giles Morant)
+- Added a "Contrib" directory in which some user-contributed tools are
+distributed.
+- Contrib: Diff to use Postgres as database (for zoph 0.3.3) (thanks Chris
+Beauchamp)
+- Contrib: ZophEdit Python script to edit photo metadata in a zoph database
+(thanks Nils Decker)
+- Contrib: ZophClean Perl script to find and solve differences between database
+and files on disk.
+- Fixed a bug where only Admin users could rate photos and add photos to a
+lightbox album (pat#1179920) (thanks Jason Taylor)
+- Added a check to prevent album names, category names, location, people names,
+user names and color schemes to have empty names (bug#846417)
+- Added a fix for zophImport.pl, it failed in looking up people that have a
+name with multiple spaces (pat#830236) (thanks Hans Verbrugge)
+- Contrib: Added a script to add movies to Zoph (pat#1176317) (thanks Giles
+Morant)
 - Fixed bug: a deleted album could still be a lightbox album (bug#1193347)
 - Fixed an url-encoding bug in relation to breadcrumbs (bug#1194722)
-- Fixed a problem with deleting a photo: returning to the photos after the delete was inconsistent when auto-edit is on or off. (bug#772403)
+- Fixed a problem with deleting a photo: returning to the photos after the
+delete was inconsistent when auto-edit is on or off. (bug#772403)
 - Added an error message when file cannot be unzipped (#1193351)
 - Changed the licence from BSD to GPL.
-- Changed default width in config.inc.php to be slidely wider to solve a layout glitch
+- Changed default width in config.inc.php to be slidely wider to solve a layout
+glitch
 
 Zoph 0.4pre1
 Never released
 
 - Created a validator class to allow different types of authentication
-- Added a function to validator.inc.php to allow htpasswd authentication (req#656449) (thanks Asheesh Laroia)
+- Added a function to validator.inc.php to allow htpasswd authentication
+(req#656449) (thanks Asheesh Laroia)
 - Added $host param to zophImport.pl (bug#656438)
 - Fixed it's vs its grammar (bug#656444)
-- Changed "<?=" to "<?php echo" for short_open_tag = Off compatibility (bug#670542)
-- Changed logout tab in header.inc.php to show "logon" for default users (req#656448)
+- Changed "<?=" to "<?php echo" for short_open_tag = Off compatibility
+(bug#670542)
+- Changed logout tab in header.inc.php to show "logon" for default users
+(req#656448)
 - Added DB_PREFIX in config.inc.php and updated sql to use (req#656450)
-- Fixed DEFAULT_ORDERING bug in photos.php and photo_search.inc.php (bug#667484)
-- Fixed bug with date ordering failing to imply time ordering in photo_search.inc.php (pat#675164) (thanks Ian Kerr)
-- Fixed bug in which PHPSESSID failed to be passed in image links when cookies were disabled (bug#663523)
-- Fixed a bug in which update_query_string() in util.inc.php failed to overwrite new parameters (bug#678491)
+- Fixed DEFAULT_ORDERING bug in photos.php and photo_search.inc.php
+(bug#667484)
+- Fixed bug with date ordering failing to imply time ordering in
+photo_search.inc.php (pat#675164) (thanks Ian Kerr)
+- Fixed bug in which PHPSESSID failed to be passed in image links when cookies
+were disabled (bug#663523)
+- Fixed a bug in which update_query_string() in util.inc.php failed to
+overwrite new parameters (bug#678491)
 - Updated exif flash handling in exif.inc.php (bug#671023)
-- Included an udpated language package with new German, Dutch and Canadian English translations
+- Included an udpated language package with new German, Dutch and Canadian
+English translations
 - Added image rotation (req#666979)
 - Fixed a problem with double escaping (bug#656435)
 - Fixed a problem with slideshows with IE on Mac (bug#667480)
-- Fixed a bug where the last modified date and the date a photo was taken were mixed up in the calendar view (bug#667486)
-- Added a "default destination path", so the import no longer fails when the path is not specified (bug#670855)
-- Added an extra space on the categories page (bug#741736). (thanks Mark Cooper)
-- Added languages Swedish (thanks Mikael Magnusson), Afrikaans (thanks Neels Jordaan), Hebrew (thanks "Prince01"), Portugese (thanks Joaquim Azevedo), Danish (thanks Jesper Skytte) languages
+- Fixed a bug where the last modified date and the date a photo was taken were
+mixed up in the calendar view (bug#667486)
+- Added a "default destination path", so the import no longer fails when the
+path is not specified (bug#670855)
+- Added an extra space on the categories page (bug#741736). (thanks Mark
+Cooper)
+- Added languages Swedish (thanks Mikael Magnusson), Afrikaans (thanks Neels
+Jordaan), Hebrew (thanks "Prince01"), Portugese (thanks Joaquim Azevedo),
+Danish (thanks Jesper Skytte) languages
 - Fixed a typo in "Swedish Chef" translation
 - Added support for PNG and GIF in the webimported (thanks Patrick Lam)
-- Added validation using PHP_AUTH_USER/PW using php_validate() (thanks Samuel Keim)
+- Added validation using PHP_AUTH_USER/PW using php_validate() (thanks Samuel
+Keim)
 - Upgraded mail classes
 - Added email notification
 - Added registration of last login time and IP address per user
 - Added annotated photo emails (thanks Nixon P. Childs)
 - Added ratings by multiple users
 - Improved navigation by adding up & return links
-- Fixed a problem with next button in some specific cases (bug#782519) (thanks Curtis Rawls)
-- Added bulk editting mode that can change any photo page into a "power edit" page (req#667478)
+- Fixed a problem with next button in some specific cases (bug#782519) (thanks
+Curtis Rawls)
+- Added bulk editting mode that can change any photo page into a "power edit"
+page (req#667478)
 - Fixed a problem with photo editting (bug#782600) (thanks Curtis Rawls)
 - Fixed offset bug in slideshow
 - Fixed a bug with the pager on search results page.
-- Fixed a bug where some photos where counted twice (or more) on the reports page (pat#675172) (thanks Ian Kerr)
+- Fixed a bug where some photos where counted twice (or more) on the reports
+page (pat#675172) (thanks Ian Kerr)
 
 Zoph 0.3.3
 13 Dec 2002
 
-- Fixed a bug in zophImport.pl in which creating a thumbnail (or midsize) could fail when the original image was smaller than the thumbnail size (thanks Tetsuji Kyan)
-- Removed the +profile option to convert() in zophImport.pl since this was caused problems on some user's systems (a problem with expansion of the * ?)
-- Fixed a bug in slideshow.php which caused an error to be displayed when a slideshow was completed
+- Fixed a bug in zophImport.pl in which creating a thumbnail (or midsize) could
+fail when the original image was smaller than the thumbnail size (thanks
+Tetsuji Kyan)
+- Removed the +profile option to convert() in zophImport.pl since this was
+caused problems on some user's systems (a problem with expansion of the * ?)
+- Fixed a bug in slideshow.php which caused an error to be displayed when a
+slideshow was completed
 - Added a pref to allow descriptions to be displayed under thumbnails
 - Fixed a minor pager bug in photos.php
-- Updated person.inc, person.php and photo_search.php so that the person and photos pages accept "person=LastName,FirstName" in the url instead of just person_ids
+- Updated person.inc, person.php and photo_search.php so that the person and
+photos pages accept "person=LastName,FirstName" in the url instead of just
+person_ids
 - Added a missing call to getvar("type") in image_service.php (thanks Ian Kerr)
-- Added photo counts to "photos of", "photos by" and "photo at" links in person.php and place.php
-- Added "photos of" and "photos by" links to people.php, "photos at" links to places.php
+- Added photo counts to "photos of", "photos by" and "photo at" links in
+person.php and place.php
+- Added "photos of" and "photos by" links to people.php, "photos at" links to
+places.php
 - Split WEB_IMPORT config into CLIENT_WEB_IMPORT and SERVER_WEB_IMPORT
 - Updated import.php to handle uploads of zip and tar archives
-- Fixed a bug in import.php which caused server imports to fail when no destination path was set
+- Fixed a bug in import.php which caused server imports to fail when no
+destination path was set
 - Replaced <? with <?php so that short_open_tag need not be enabled in php.ini
 - Fixed a typo in mail.php which caused html mail to have broken images
 - Created zophExport.pl to create static html galleries of photos
 - Added a man page for zophImport.pl (thanks Mark Cooper)
 - Updated the tutorial renamed it as the manual
-- Added an updated language pack with Norwegian and Spanish translations (thanks Haavard Leonardo Lund and Alvaro González Crespo)
+- Added an updated language pack with Norwegian and Spanish translations
+(thanks Haavard Leonardo Lund and Alvaro González Crespo)
 
 Zoph 0.3.2
 17 Oct 2002
 
-- Fixed a bug in edit_photo.inc.php in which the "show additional attributes" link did not work if register_globals was disabled
-- Updated photos.php so that the first and last pages are always shown in the pager (thanks Christian Hoenig)
+- Fixed a bug in edit_photo.inc.php in which the "show additional attributes"
+link did not work if register_globals was disabled
+- Updated photos.php so that the first and last pages are always shown in the
+pager (thanks Christian Hoenig)
 - Added a "delete" link to the edit photo page in edit_photo.inc.php
-- Fixed a bug in photo.php where the auto edit pref was ignored when using the search page
+- Fixed a bug in photo.php where the auto edit pref was ignored when using the
+search page
 - Added four new color schemes
-- Fixed spelling of aperture and metering in dropdown in util.inc.php (thanks Francesco Ciattaglia)
+- Fixed spelling of aperture and metering in dropdown in util.inc.php (thanks
+Francesco Ciattaglia)
 - Added missing translation code to categories.inc.php, albums.php, zoph.php
 - Added DEFAULT_SHOW_ALL config parameter for people.php and places.php
 - Added missing footer include from info.php and reports.php
 - Replaced calls to include_once with calls to require_once
 - Added path to field pulldown in search.php
 - Add "or die" checks to zophImport.pl after file manipulations commands
-- Replaced rename() with calls to copy() + unlink() in zophImport.pl as rename fails when moving accross filesystems
+- Replaced rename() with calls to copy() + unlink() in zophImport.pl as rename
+fails when moving accross filesystems
 - Altered table structure in person.php
-- Added new language pack with new Italian translation (thanks Francesco Ciattaglia)
+- Added new language pack with new Italian translation (thanks Francesco
+Ciattaglia)
 
 Zoph 0.3.1
 30 Sep 2002
 
-- Fixed a bug in zophImport.pl in which thumb_extension was applied even when mixed_thumbnails was set
-- Updated zophImport.pl so that a path need not be passed when doing --update --thumbnails
-- Fixed user.inc.php so that the "Offset 1 is invalid for MySQL result index" warning is not displayed when a non admin views a photo (this bug was only present in the Zoph 0.3 download for 2 or so hours on Sep 26)
+- Fixed a bug in zophImport.pl in which thumb_extension was applied even when
+mixed_thumbnails was set
+- Updated zophImport.pl so that a path need not be passed when
+doing --update --thumbnails
+- Fixed user.inc.php so that the "Offset 1 is invalid for MySQL result index"
+warning is not displayed when a non admin views a photo (this bug was only
+present in the Zoph 0.3 download for 2 or so hours on Sep 26)
 - Fixed state field size label in edit_place.inc.php
 - Updated French language module
 - Removed extra tables in zoph.sql included by accident in 0.3
 - Updated image_service.php to enable use of cached images (thanks Alan Shutko)
-- Fixed a bug in user.inc.php in which, if register_globals is disabled, revoking an album would cause all albums to be revoked for that user
-- Fixed photos.php so that an odd pager size no longer results in fractional page numbers
-- Fixed zoph.php so that the minimum random photo rating is used in the randomly chosen photo link
-- Modified get_link() in place.inc.php so that a city link can also be displayed
-- Updated album_permissions.inc.php so that revoking permissions on an album will also revoke permissions on descendant albums
+- Fixed a bug in user.inc.php in which, if register_globals is disabled,
+revoking an album would cause all albums to be revoked for that user
+- Fixed photos.php so that an odd pager size no longer results in fractional
+page numbers
+- Fixed zoph.php so that the minimum random photo rating is used in the
+randomly chosen photo link
+- Modified get_link() in place.inc.php so that a city link can also be
+displayed
+- Updated album_permissions.inc.php so that revoking permissions on an album
+will also revoke permissions on descendant albums
 - Added a pref to bring up the edit screen whenever a photo is clicked
 - Added a pref to control whether the camera (exif) info is displayed
 - Added a lightbox feature to hold favorite photos
@@ -304,11 +482,15 @@ Zoph 0.3.1
 Zoph 0.3
 25 September 2002
 
-- Update zophImport.pl to look up photos by path as well as name when updating (thanks Francisco J. Montilla)
-- Fixed spelling of "Metering Mode" in photo.inc.php (thanks Francisco J. Montilla)
-- Updated zophImport.pl to generate jpeg thumbnails for all image types if desired
+- Update zophImport.pl to look up photos by path as well as name when updating
+(thanks Francisco J. Montilla)
+- Fixed spelling of "Metering Mode" in photo.inc.php (thanks Francisco J.
+Montilla)
+- Updated zophImport.pl to generate jpeg thumbnails for all image types if
+desired
 - Updated photo.inc.php and image_service.php to handle the new thumbnails
-- Fixed the urlencoding of image names/paths in photo.inc.php and util.inc.php (thanks Francisco J. Montilla)
+- Fixed the urlencoding of image names/paths in photo.inc.php and util.inc.php
+(thanks Francisco J. Montilla)
 - Increased size of name and path fields in photos table
 - Created a timestamp field in the photos table
 - Added recent photos taken/modified links (thanks David Moulton for the idea)
@@ -316,7 +498,8 @@ Zoph 0.3
 - Added a (view all) photos tab to the header
 - Created variables.inc.php for PHP 4.2.x compatibility (thanks David Baldwin)
 - Modified calendar.inc.php to handle pre 1970 dates (thanks David Baldwin)
-- Zoph is now internationalized (thanks Eric Seigne for the code and French translation)
+- Zoph is now internationalized (thanks Eric Seigne for the code and French
+translation)
 - Added a web based importer (initial code from Jan Miczaika)
 - Added ability to order results
 - Other minor fixes and improvements

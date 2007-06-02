@@ -1,5 +1,5 @@
-Zoph 0.5 installation
-21 Jan 2006
+Zoph 0.7 installation
+02 June 2007
 
 1. Requirements
 
@@ -10,7 +10,7 @@ Zoph 0.5 installation
    - Apache
    - PHP 4
    - Perl 5
-   - Perl DBI, DBD::mysql, Image::Size
+   - Perl DBI, DBD::mysql, Image::Size, File::Spec::Link
    - ImageMagick
    - Jhead (http://www.sentex.net/~mwandel/jhead/)
 
@@ -31,7 +31,8 @@ Zoph 0.5 installation
        have to use root.
 
        $ mysql -u root -p
-       mysql> grant select, insert, update, delete on zoph.* to zoph_rw@localhost identified by 'PASSWORD';
+       mysql> grant select, insert, update, delete on zoph.* to
+zoph_rw@localhost identified by 'PASSWORD';
 
        mysql> grant all on zoph.* to zoph_admin identified by 'PASSWORD';
 

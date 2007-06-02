@@ -43,15 +43,15 @@
 </td>
 </tr>
 </table>
-<p><script type="text/javascript">
+<script type="text/javascript">
 //<![CDATA[
  if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
 //]]>
-</script></p>
+</script>
 <p><a name="ZophImport.pl" id="ZophImport.pl"></a></p>
-<h2>ZophImport.pl</h2>
+<h2> <span class="mw-headline">ZophImport.pl</span></h2>
 <p><a name="Loading_Images" id="Loading_Images"></a></p>
-<h3>Loading Images</h3>
+<h3> <span class="mw-headline">Loading Images</span></h3>
 <p>This section describes the command line Perl importer. The next one talks about the web based importer.</p>
 <p>First get some images to load. Zoph was created to manage photos taken by digital cameras (which contain info in their exif headers) but you could use anything.</p>
 <p>You should have defined an IMAGE_DIR variable in config.inc.php during installation. For this example, I have the image service disabled and my IMAGE_DIR set to a photos directory in my home directory. I have created a symbolic link from zoph/photos (off the web server's doc root) to this directory:</p>
@@ -60,7 +60,7 @@
 </pre>
 <p>You can organize your photos under this directory in any way you choose. I'll provide examples of two possible systems. Read over these minimal examples before actually loading your photos.</p>
 <p><a name="Minimal_Examples" id="Minimal_Examples"></a></p>
-<h3>Minimal Examples</h3>
+<h3> <span class="mw-headline">Minimal Examples</span></h3>
 <p>Within my images directory I separate things by camera and by date. I have a Kodak DC280 so I created a dc280 directory:</p>
 <pre>
 &gt; pwd
@@ -100,7 +100,7 @@ DCP_0155.JPG mid thumb
 <p>By not specifying a path, the importer uses the path that the photos are currently in.</p>
 <p>Whatever way you import photos, make sure you run the script from within your photos directory (as specified by IMAGE_DIR). The importer needs to be able to correctly extract the relative path to the photos from here to be stored in the database.</p>
 <p><a name="Detailed_Example" id="Detailed_Example"></a></p>
-<h3>Detailed Example</h3>
+<h3> <span class="mw-headline">Detailed Example</span></h3>
 <p>It is best to set as much information about photos during import so you don't have to do it one photo at a time within Zoph. I often have a directory of images to import that were all taken at the same time which makes this easy to do.</p>
 <p>Here is what I used to load the images I took for this tutorial:</p>
 <pre>
@@ -116,7 +116,7 @@ DCP_0155.JPG mid thumb
 <p>This will set the rating and description for all the photos I just imported. To set any of the fields found in the photos table (such as rating, title, description, etc), use the --field NAME=VALUE flag.</p>
 <p>For more info and examples about the importer, see the section at the end of this document.</p>
 <p><a name="Broken_Images" id="Broken_Images"></a></p>
-<h3>Broken Images</h3>
+<h3> <span class="mw-headline">Broken Images</span></h3>
 <p>It is not uncommon to make a mistake while loading images so that when you view the ui you see a bunch of broken images. This most likely due to an invalid path. To check, edit one of the images in Zoph and click on "show additional attributes" at the bottom. Then you should be able to see the path info. It should always be the case that WEB_IMAGE_PATH (or IMAGE_PATH) + the photo's path field + the photo's name reflects the photo's location.</p>
 <p>You can use the importer to correct the paths for broken images:</p>
 <pre>
@@ -124,7 +124,7 @@ DCP_0155.JPG mid thumb
 </pre>
 <p>If you still see broken images, check the permissions on the files and directories.</p>
 <p><a name="Command_Line_Options" id="Command_Line_Options"></a></p>
-<h3>Command Line Options</h3>
+<h3> <span class="mw-headline">Command Line Options</span></h3>
 <p>Here is a list of all the fields that can be set when importing:</p>
 <ul>
 <li>--datedDirs (put photos in YYYY.MM.DD dirs)</li>
@@ -143,10 +143,11 @@ DCP_0155.JPG mid thumb
 <li>--field NAME=VALUE (use to set title, view, description, rating, level, etc)</li>
 <li>--verbose (give more information about what's going on) (&gt;v0.5)</li>
 <li>--copy (copy instead of move photos) (&gt;v0.5)</li>
+<li>--resolveSymlinks (resolve symlinks before importing) (&gt;=0.7)</li>
 </ul>
 <p>Photos can appear in multiple albums and categories, and multiple people can be in a photo. To handle this, you can either pass a comma separated list or set the flag multiple times. Actually, you can use a comma separated list for categories and people but not for albums (since I realized that I have many albums with commas in their names and have yet to build an escape mechanism).</p>
 <p><a name="EXIF_Fields" id="EXIF_Fields"></a></p>
-<h3>EXIF Fields</h3>
+<h3> <span class="mw-headline">EXIF Fields</span></h3>
 <p>The following fields will be set automatically if they can be extracted from the EXIF header. They can also be set manually, using the --field NAME=VALUE flag, if you wish. This is by no means an exhaustive list of possible EXIF headers but these are the ones that have been set by the cameras I have used or that have been reported to me. The resolution and size fields are ignored, this info being instead extracted by Image::Size in the importer.</p>
 <ul>
 <li>date</li>
@@ -165,7 +166,7 @@ DCP_0155.JPG mid thumb
 <li>comment</li>
 </ul>
 <p><a name="Further_Examples" id="Further_Examples"></a></p>
-<h3>Further Examples</h3>
+<h3> <span class="mw-headline">Further Examples</span></h3>
 <p>Below are a couple more examples.</p>
 <p>Adding a list of people to a photo (if there are many people it is often faster to do this using the importer rather than through the web ui):</p>
 <pre>
@@ -181,8 +182,20 @@ DCP_0155.JPG mid thumb
 <pre>
 &gt; zophImport.pl --update --useIds --location "Yuka's House" 1562-1571 1580-1585
 </pre>
+<p>As of version 0.7, you can influence the way zophImport.pl handles symbolic links.</p>
+<p>For example, you have the following files IMG_0001.JPG, IMG_0002.JPG, both taken 01-01-2007 and LNK_0002.JPG, which is a symlink to IMG_0002.JPG.</p>
+<p>If you would import these files with</p>
+<pre>
+zophImport.pl --datedDirs IMG_0001.JPG LNK_0002.JPG
+</pre>
+<p>You would have two files in 2007.01.01: IMG_0001.JPG and LNK_0002.JPG - both will be "normal" files. You will also have IMG_0002.JPG, still in it's old location.</p>
+<p>If you would import these files with</p>
+<pre>
+zophImport.pl --datedDirs --resolveSymlinks IMG_0001.JPG LNK_0002.JPG
+</pre>
+<p>You would have two files in 2007.01.01: IMG_0001.JPG and IMG_0002.JPG - both will be "normal" files. You will also have IMG_0002.JPG, still in it's old location.</p>
 <p><a name="Reducing_Thumbnail_Size" id="Reducing_Thumbnail_Size"></a></p>
-<h3>Reducing Thumbnail Size</h3>
+<h3> <span class="mw-headline">Reducing Thumbnail Size</span></h3>
 <p>Based on a suggestion from Alan Shutko, in version 0.3.1 of zophImport.pl I added +profile "*" to the calls to convert. (And in 0.3.3 I commented out this since for some users multiple thumbnails were being generated for an image. I did not see this problem, maybe it was a shell expansion issue. For most people it probably works so you may want to re-enable this feature.)</p>
 <p>From <a href="http://www.imagemagick.org/www/convert.html" class="external free" title="http://www.imagemagick.org/www/convert.html" rel="nofollow">http://www.imagemagick.org/www/convert.html</a>:</p>
 <p>"The '+profile "*"' removes any ICM, EXIF, IPTC, or other profiles that might be present in the input and aren't needed in the thumbnail."</p>
@@ -192,7 +205,7 @@ DCP_0155.JPG mid thumb
 &gt; find . -iname "*.jpg" -a -not -name "mid_*" -a -not -name "thumb_*" | xargs zophImport.pl --update --thumbnails
 </pre>
 <p><a name="ZophExport.pl" id="ZophExport.pl"></a></p>
-<h2>ZophExport.pl</h2>
+<h2> <span class="mw-headline">ZophExport.pl</span></h2>
 <p>Zoph is a dynamic sort of application tied closely to the database. But sometimes you want static html files of your photos to burn to a cd or whatnot. Zoph includes a perl script, zophExport.pl, that lets you easily create static galleries.</p>
 <p>There are numerous programs whose focus is to generate these sorts of static photo albums. Though I included a very simple built-in static album generator, zophExport.pl is primarily intended to be used with other scripts. Currently two such programs are supported:</p>
 <ul>
@@ -202,7 +215,7 @@ DCP_0155.JPG mid thumb
 <p>Both of these are easy to use and provided customizable interfaces.</p>
 <p>Before you run the exporter make sure you configure it to use your database settings and image directory as described in the install doc.</p>
 <p><a name="A_Quick_Example" id="A_Quick_Example"></a></p>
-<h3>A Quick Example</h3>
+<h3> <span class="mw-headline">A Quick Example</span></h3>
 <p>Here is a command that creates an export for use with the album program:</p>
 <pre>
 &gt; zophExport.pl --dir "~/Winter Pics" --format album --category Snow
@@ -211,7 +224,7 @@ DCP_0155.JPG mid thumb
 <p>In this simple example all photos placed in the Snow category are exported. Within the "Winter Pics" directory zophExport.pl will have created a directory structure mirroring the album structure in Zoph for the selected photos.</p>
 <p>There are only two required arguments: the directory to export to (--dir) which will be created if it does not exist, and the format of the export (--format) which currently must be either "zoph", "album" or "bins".</p>
 <p><a name="Selecting_Photos" id="Selecting_Photos"></a></p>
-<h3>Selecting Photos</h3>
+<h3> <span class="mw-headline">Selecting Photos</span></h3>
 <p>Fields to search by are specified in the same was as in zophImport.pl. For example, you can say</p>
 <pre>
 &gt; zophExport.pl --dir "~/My Album" --format album --album "Boston Trip" --photographer "Jason Geiger" --field rating=5
@@ -221,24 +234,24 @@ DCP_0155.JPG mid thumb
 <p>But if you have a particularly complicated query you want to run you can just pass it in directly using the --sql argument. Your query must select * from the photos table, other than that it can be anything. If you pass a sql statement any other constraint arguments are ignored. Make sure to only pass select statements, the script does no checking to make sure you aren't deleting all your data</p>
 <p>Here's a tip if you run a complicated search within Zoph and then want to export only those photos. After you get to the results page open up config.inc.php and set DEBUG to 2. Then reload the results page and you should see two sql queries at the top of the page. Copy the first (the count query) and replace "count(distinct ph.photo_id)" with "ph.*", append "order by ph.date asc, ph.time asc" and pass this to zophExport.pl using the --sql argument.</p>
 <p><a name="Choosing_What_to_Display" id="Choosing_What_to_Display"></a></p>
-<h3>Choosing What to Display</h3>
+<h3> <span class="mw-headline">Choosing What to Display</span></h3>
 <p>By default zophExport.pl will export everything about your photos except the last modified time, the rating and the albums or categories in which the photo appears.</p>
 <p>To prevent the display of a particular field, use the --noshowFIELD argument. For example: --noshowlocation or --noshowdescription. Passing --noshowexif prevents any exif info from being shown. (Note, however, that the BINS program extracts exif info on its own).</p>
 <p>The exporter can translate field labels using the same language files that Zoph uses. Pass --lang /path/to/php/lang/file to enable this option.</p>
 <p>By default the exporter creates directories to mirror the structure of the albums in which the exported photos appear. To disable this and have all the photos appear directly under the export dir use the --noalbumdirs flag.</p>
 <p><a name="A_Simple_Export" id="A_Simple_Export"></a></p>
-<h3>A Simple Export</h3>
+<h3> <span class="mw-headline">A Simple Export</span></h3>
 <p>The exporter contains the ability to generate a very simple static gallery. To use the simple exporter, pass --format zoph to zophExport.pl.</p>
 <p>There are two advantages to this format. The first is that it requires no additional software. The second is speed. The simple format is much much faster simply because it uses the thumbnails already generated by Zoph whereas album and BINS generate their own. Someone could probably alter album or BINS so that they could reuse the thumbnails.</p>
 <p>There's not really any elegant way to change the appearance of the gallery generated by this exporter. To do so you probably would want to edit zophExport.pl. It wouldn't be too difficult to add css support but I didn't. I only wanted to spend so much time reinventing the wheel.</p>
 <p><a name="Exporting_to_Album" id="Exporting_to_Album"></a></p>
-<h3>Exporting to Album</h3>
+<h3> <span class="mw-headline">Exporting to Album</span></h3>
 <p>album is written by David Ljung Madison. <a href="http://marginalhacks.com/Hacks/album/" class="external free" title="http://marginalhacks.com/Hacks/album/" rel="nofollow">http://marginalhacks.com/Hacks/album/</a></p>
 <p>album is a single perl script which requires nothing more than you already have from using Zoph (ImageMagick and Image::Size). A debian package is available.</p>
 <p>To use album, specify --format album to zophExport.pl. The exporter will create a captions.txt file in each directory that contains images.</p>
 <p>Album is themeable and a number of themes are available from the website. I'd recommend you download a different theme, or create your own, simply because the default theme displays all of the info about a photo on the thumbnails page which can be quite a bit if you include descriptions and exif data. You specify a theme by passing -theme /path/to/theme/dir to album.</p>
 <p><a name="Exporting_to_BINS" id="Exporting_to_BINS"></a></p>
-<h3>Exporting to BINS</h3>
+<h3> <span class="mw-headline">Exporting to BINS</span></h3>
 <p>BINS is written by Jerome Sautret, based on SWIGS, written by Brendan McMahan, which was in turn based on IDS by John Moose. <a href="http://bins.sautret.org/" class="external free" title="http://bins.sautret.org/" rel="nofollow">http://bins.sautret.org/</a></p>
 <p>BINS consists of three perl scripts: an exporter and two image/album description editors. A debian package is available. BINS requires a number of perl modules which you can get from CPAN if you need to.</p>
 <p>To use BINS, specify --format bins to zophExport.pl. The exporter will create an image.jpg.xml file for each photo and an album.xml file in each directory.</p>

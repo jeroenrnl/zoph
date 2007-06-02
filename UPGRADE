@@ -1,12 +1,53 @@
+Zoph 0.6 -> 0.7 update
+
+Copy php/* to the location of your installation. Make sure to also copy the
+php/lang subdirectory.
+
+Updating the Database
+
+If you are upgrading from an older version than 0.6, please run the older
+database updates first.
+
+Execute zoph-update-0.7.sql:
+
+> mysql -u zoph_admin -p zoph < sql/zoph_update-0.7.sql
+
+The database upgrade script makes the following changes: - Adds preference
+fields for "show all exif", autocomplete, view and autothumb features - Adds
+coverphoto field to albums, categories, places and people.
+
+Configuration updates
+(see http://en.wikibooks.org/wiki/Zoph/Configuration for details):
+
+New options
+    * JAVASCRIPT
+    * AUTOCOMPLETE
+
+Perl script changes
+
+As of v0.7, you can set some defaults for zophImport.pl from .zophrc. The
+example file zophrc.sample has been updated with these settings:
+
+$datedDirs = 0;
+$copy = 0;
+$hierarchical = 0;
+$verbose = 0;
+$resolveSymlinks = 0;
+
+zophImport.pl now has an option to resolve symlinks during import. For more
+details, see http://en.wikibooks.org/wiki/Zoph/Using_the_commandline_tools.
+
 Zoph 0.5.x -> 0.6 update
 4 june 2006
 
-Copy over php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.
+Copy over php/* to the location of your installation. Make sure to also copy
+the php/lang subdirectory.
 
 
 Updating the Database
 
-If you are upgrading from an older version than 0.5, please run the older database updates first. It is not necessary to 
+If you are upgrading from an older version than 0.5, please run the older
+database updates first. It is not necessary to 
 update to 0.5.1 if you are still running 0.5.
 
 Execute zoph-update-0.6.sql:
@@ -20,9 +61,11 @@ The database upgrade script makes the following changes:
     * Make changes needed for user comments:
           o Add table for comments
           o Add table to link comments to a photo
-          o Add a field to a user to indicate whether or not this user can make comments
+          o Add a field to a user to indicate whether or not this user can make
+comments
     * Add a table to create relations between photos
-    * Change the rating field length, because it couldn't hold a 10 and was truncated to 0 decimals in a previous version.
+    * Change the rating field length, because it couldn't hold a 10 and was
+truncated to 0 decimals in a previous version.
 
 
 Configuration updates
@@ -34,14 +77,17 @@ New options
 
 Changed options
     * USE_IMAGE_SERVICE is now on by default
-    * DEFAULT_TABLE_WIDTH again has support for % (this was accidently removed in 0.5), please note that it is now
+    * DEFAULT_TABLE_WIDTH again has support for % (this was accidently removed
+in 0.5), please note that it is now
       required to specify the entity ("px" or "%").
 
 
 Perl script changes
 
-As of v0.6, no settings need to be made in zophImport.pl and <zophExport.pl, it is replaced by a settings file 
-.zophrc in the home directory of the user that runs these scripts. An example file called zophrc.sample is 
+As of v0.6, no settings need to be made in zophImport.pl and <zophExport.pl, it
+is replaced by a settings file 
+.zophrc in the home directory of the user that runs these scripts. An example
+file called zophrc.sample is 
 included with Zoph:
 
 #-----------------------------------------
@@ -91,14 +137,16 @@ Execute zoph-update-0.5.sql:
 
 The database upgrade script makes the following changes:
 
-    * Change the password length to 64 bytes. Needed for Mysql 4.1 compatibility.
+    * Change the password length to 64 bytes. Needed for Mysql 4.1
+compatibility.
     * Changes to the places table for hierarchical locations:
           o add the parent_place_id column.
           o copy the location that currently has place_id 1 to a new place_id.
           o Update all the photos taken at that location
           o Change place_id 1 to "World" (You may want to change that)
           o And finally makes all the other places a child of "World".
-    * Add a column to the prefs table for opening fullsize photos in a new Window
+    * Add a column to the prefs table for opening fullsize photos in a new
+Window
     * Add a column to the album_permissions table for the watermarking feature
 
 Configuration updates
@@ -200,7 +248,8 @@ Execute zoph-update-0.4.sql:
 > mysql -u zoph_admin -p zoph < sql/zoph_update-0.4.sql
 
 The database upgrade script makes the following changes:
-- Changes the name of all the tables to zoph_<old name>. If you do not want this,
+- Changes the name of all the tables to zoph_<old name>. If you do not want
+this,
   comment out the lines starting with "rename table". Make sure the variable
   DB_PREFIX in config.inc.php and $db_prefix in zophImport and zophExport match
   your choice.
@@ -210,47 +259,63 @@ The database upgrade script makes the following changes:
 
 - Adds "email" to people.
 
-- Makes modifications for the new rating system, where multiple ratings can be done
+- Makes modifications for the new rating system, where multiple ratings can be
+done
   on a single photo and average is calculated automatically.
 
 Updating configuration
 ----------------------
-A number of configuration items have been added since v0.3.3. You can use the list below
-to update your current configuration file, or simply use the one in the distribution and
+A number of configuration items have been added since v0.3.3. You can use the
+list below
+to update your current configuration file, or simply use the one in the
+distribution and
 change it to your needs.
 
-Set DB_PREFIX to a prefix for each tablename, see db update for details. Suggested is
-to use 'zoph_', as this will be the default in future releases. Make sure $db_prefix in
+Set DB_PREFIX to a prefix for each tablename, see db update for details.
+Suggested is
+to use 'zoph_', as this will be the default in future releases. Make sure
+$db_prefix in
 zophImport.pl and zophExport.pl matches this setting.
 
-Much of the style information has been removed from the HTML code and is now in a separate
+Much of the style information has been removed from the HTML code and is now in
+a separate
 CSS file. Please set CSS_SHEET to 'css.php' to load the CSS file.
 
-You can now choose the authentication method used by zoph; set $VALIDATOR accordingly.
+You can now choose the authentication method used by zoph; set $VALIDATOR
+accordingly.
 Possible choices:
 - 'default_validate': use the 'old' authentication method, probably the best
   choice for most.
 - 'htpasswd_validate': use htpasswd to validate users.
-- 'php_validate': let PHP take care of validation. See http://www.php.net/features.http-auth
-You could also write your own authentication module; make it a function in validator.inc.php
+- 'php_validate': let PHP take care of validation. See
+http://www.php.net/features.http-auth
+You could also write your own authentication module; make it a function in
+validator.inc.php
 and set $VALIDATOR to it's name.
 
-You can automatically send a copy of each e-mail sent from Zoph to a predefined address by
-setting BCC_ADDRESS to that address. Zoph includes a link to the site when notifying a user
+You can automatically send a copy of each e-mail sent from Zoph to a predefined
+address by
+setting BCC_ADDRESS to that address. Zoph includes a link to the site when
+notifying a user
 of (new) access rights. If Zoph is unable to determine the correct URL itself,
 please set ZOPH_URL to the correct value. 
 
-If you want to be able to annotate photo's, set ANNOTATE_PHOTOS to 1 and set ANNOTATE_TEMP_DIR
+If you want to be able to annotate photo's, set ANNOTATE_PHOTOS to 1 and set
+ANNOTATE_TEMP_DIR
 and ANNOTATE_TEMP_PREFIX to a sensible value (suggested: '/tmp' and 'zoph').
 
-To set the destination path in the web import to some default value, define the variable
-DEFAULT_DESTINATION_PATH; suggested value: 'uploads/date(Y.m.d)'. To hide this path from
-non-admin users, also define SHOW_DESTINATION_PATH and set it to 0, if you do not want to
+To set the destination path in the web import to some default value, define the
+variable
+DEFAULT_DESTINATION_PATH; suggested value: 'uploads/date(Y.m.d)'. To hide this
+path from
+non-admin users, also define SHOW_DESTINATION_PATH and set it to 0, if you do
+not want to
 hide it, set it to 1.
 
 To allow users to rate photos, set ALLOW_RATINGS to 1; otherwise to 0.
 
-Zoph can now rotate images for you. Add the following settings and adapt where needed:
+Zoph can now rotate images for you. Add the following settings and adapt where
+needed:
 	     // allow images to be rotated
   	     define('ALLOW_ROTATIONS', 1);
   	     define(ROTATE_CMD, 'convert');
@@ -451,7 +516,8 @@ extension different from THUMB_EXTENSION, you will need to regenerate
 the old thumbnails.  A command like the following can take care of that
 (this one finds gifs and makes jpgs):
 
-> find images/ -name "thumb_*.gif" -o -name "mid_*.gif" | perl -nle '$old = $_; s/\.(\w+)$/.jpg/; $cmd = "convert $old $_"; print $cmd; system($cmd);'
+> find images/ -name "thumb_*.gif" -o -name "mid_*.gif" | perl -nle '$old = $_;
+s/\.(\w+)$/.jpg/; $cmd = "convert $old $_"; print $cmd; system($cmd);'
 
 You can then get rid of the old thumbnails.
 

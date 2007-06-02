@@ -1,5 +1,5 @@
 Zoph FAQ
-21 Jan 2006
+02-06-2007
 
 1 Documentation
 
@@ -88,7 +88,7 @@ Up to date documentation can be found on http://en.wikibooks.org/wiki/zoph
    correct language file in the lang/ directory and add a transltions of
    the missing string (the English string should already be present in
    the file). If you make an additions please send me an email
-   (zoph@nother.net). Check http://www.nother.net/zoph#translations for
+   (zoph@zoph.org). Check http://www.zoph.org/#translations for
    updated language packs.
 
   2.10 Why do I see a bunch of code when I try to access Zoph?
@@ -139,9 +139,11 @@ Up to date documentation can be found on http://en.wikibooks.org/wiki/zoph
 
    Zoph used to be licensed under the modified BSD license. As of version 0.4
    this has been changed to the GPL license. We have done our best to make sure
-   all the code in Zoph could be changed to this license. If you feel your copyright
+   all the code in Zoph could be changed to this license. If you feel your
+copyright
    has been violated with this change, please contact us a.s.a.p.
-   Some included files have their own license because the license doen not allow us
+   Some included files have their own license because the license doen not
+allow us
    to change it to GPL:
    - rtplang.class.php
    - mimePart.php
