@@ -371,17 +371,21 @@ sub processImage {
 
         # the fancy status indicator
         if ($verbose) {
+            my $displaypath = $image_dir . "/";
+            if($fieldHash{'path'}) {
+                $displaypath .= $fieldHash{'path'} . "/";
+            }
             if($copy) {
                 if ($resolveSymlinks and ($symlink ne $img)) {
                     print "Symlink $symlink resolved to $img\n";
                 }
-                print "Image $img copied to $image_dir/$fieldHash{'path'}/".stripPath($img)."\n";
+                print "Image $img copied to " . $displaypath . stripPath($img) . "\n";
             } else {
                 if ($resolveSymlinks and ($symlink ne $img)) {
                     print "Symlink $symlink resolved to $img\n";
-                    print "Image $symlink moved to $image_dir/$fieldHash{'path'}/".stripPath($img)."\n";
+                    print "Image $symlink moved to " . $displaypath . stripPath($img) . "\n";
                 } else {
-                    print "Image $img moved to $image_dir/$fieldHash{'path'}/".stripPath($img)."\n";
+                    print "Image $img moved to " . $displaypath . stripPath($img) . "\n";
                 }
            }
         } else {
