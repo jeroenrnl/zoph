@@ -445,6 +445,7 @@ span.photocount {
     border:  4px solid <?php echo $TITLE_BG_COLOR ?>;
     font-size: small;
     background: <?php echo $TABLE_BG_COLOR ?>;
+    clear: both;
     }
 /* The description of a photo in thumbnail view */
 .thumbdesc  {
