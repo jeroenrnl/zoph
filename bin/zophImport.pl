@@ -117,6 +117,8 @@ $hierarchical = $::hierarchical;
 $resolveSymlinks = $::resolveSymlinks;
 $verbose = $::verbose;
 
+my $dbh = DBI->connect("DBI:mysql:$::db_name:$::db_host", $::db_user, $::db_pass);
+
 GetOptions(
     'help' => sub { printUsage(); exit(0); },
     'update' => \$update,
@@ -153,7 +155,6 @@ GetOptions(
 
 
 
-my $dbh = DBI->connect("DBI:mysql:$::db_name:$::db_host", $::db_user, $::db_pass);
 $::db_name = '';
 $::db_user = '';
 $::db_pass = '';
