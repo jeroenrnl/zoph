@@ -18,6 +18,15 @@
 
     require_once("include.inc.php");
 
+    $_view=getvar("_view");
+    if(empty($_view)) {
+        $_view=$user->prefs->get("view");
+    }
+    $_autothumb=getvar("_autothumb");
+    if(empty($_autothumb)) {
+        $_autothumb=$user->prefs->get("autothumb");
+    }
+
     if (!$user->is_admin() && !$user->get("browse_people")) {
         header("Location: " . add_sid("zoph.php"));
     }
@@ -59,9 +68,25 @@
 ?>
             <a href="people.php?_l=no%20last%20name"><?php echo translate("no last name") ?></a> |
             <a href="people.php?_l=all"><?php echo translate("all") ?></a>
-          </div>
-      <div class="main">
+        </div>
+        <div class="main">
+
 <?php
+    if(JAVASCRIPT) {
+?>
+            <form class="viewsettings" method="get" action="people.php">
+                <?php echo create_form($request_vars, array ("_view", "_autothumb",
+"_button")) ?>
+                <?php echo translate("Category view", 0) . "\n" ?>
+                <?php echo create_view_pulldown("_view", $_view, "onChange='form.submit()'") ?>
+                <?php echo translate("Automatic thumbnail", 0) . "\n" ?>
+                <?php echo create_autothumb_pulldown("_autothumb", $_autothumb, "onChange='form.submit()'") ?>
+
+            </form>
+            <br>
+<?php
+    }
+
     $constraints = null;
     $ops = null;
     if ($_l == "all") {
@@ -78,12 +103,27 @@
     }
 
     $ppl = get_people($constraints, "or", $ops);
-
+?>
+        <ul class="<?php echo $_view ?>">
+<?php
     if ($ppl) {
         foreach($ppl as $p) {
-?>
+?> 
+        <li>
             <span class="actionlink"><a href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("display") ?></a> | <a href="photos.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos of") ?></a> | <a href="photos.php?photographer_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos by") ?></a></span>
+<?php
+        if ($_view=="thumbs") {
+?>
+            <p>
+                <?php echo $p->get_coverphoto($_autothumb); ?>
+                &nbsp;
+            </p>
+           <div>
+<?php
+        }
+?>
             <a class="person" href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo $p->get("last_name") ? $p->get("last_name") . ", " : "" ?><?php echo $p->get("first_name") ?></a>
+        </li>
 <?php
         }
     }
@@ -93,6 +133,8 @@
 <?php
     }
 ?>
+    </ul>
+    <br>
 
 </div>
 <?php

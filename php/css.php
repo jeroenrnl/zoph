@@ -161,6 +161,9 @@ ul.tree ul ul {
     display: none;
     }
 
+ul.thumbs a {
+    text-align: center;
+    }
 /* Form properties */
 form    {
     margin: 0 0 0 0;

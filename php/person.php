@@ -92,16 +92,14 @@
             <?php echo $person->get("middle_name") ?>
             <?php echo $person->get("last_name") ?>
           </h2>
-    <dl>
+          <p>
 <?php
-    if ($person->get("coverphoto")) {
-        $coverphoto=new photo($person->get("coverphoto"));
-        $coverphoto->lookup();
-        echo "<p>";
-        echo $coverphoto->get_image_tag(THUMB_PREFIX);
-        echo "</p>";
-    }
-    if ($user->get("detailed_people")) {
+    echo $person->get_coverphoto();
+?>
+          </p>
+          <dl>
+<?php
+if ($user->get("detailed_people")) {
 ?>
 <?php echo create_field_html($person->get_display_array()) ?>
 <?php
