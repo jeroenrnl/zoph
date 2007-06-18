@@ -68,7 +68,7 @@
             <?php echo create_form($request_vars, array ("_view", "_autothumb", "_button")) ?>
             <?php echo translate("Album view", 0) . "\n" ?>
             <?php echo create_view_pulldown("_view", $_view, "onChange='form.submit()'") ?>
-            <?php echo translate("Automatic Thumbnail", 0) . "\n" ?>
+            <?php echo translate("Automatic thumbnail", 0) . "\n" ?>
             <?php echo create_autothumb_pulldown("_autothumb", $_autothumb, "onChange='form.submit()'") ?>
         </form>
         <br>

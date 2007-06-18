@@ -67,7 +67,7 @@
 "_button")) ?>
             <?php echo translate("Category view", 0) . "\n" ?>
             <?php echo create_view_pulldown("_view", $_view,"onChange='form.submit()'") ?>
-            <?php echo translate("Automatic Thumbnail", 0) . "\n" ?>
+            <?php echo translate("Automatic thumbnail", 0) . "\n" ?>
             <?php echo create_autothumb_pulldown("_autothumb", $_autothumb,"onChange='form.submit()'") ?>
         </form>
         <br>
