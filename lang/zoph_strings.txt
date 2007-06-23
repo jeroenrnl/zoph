@@ -50,6 +50,7 @@ Could not send mail.=
 Created directory=
 Dated directory will be appended=
 Default view=
+Deleting %s=
 Description for first photo=
 Description for second photo=
 E-Mail Photo=

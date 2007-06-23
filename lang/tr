@@ -1,4 +1,4 @@
-#{@"htmltagoption"=>"nothing","charset"=>"iso-8859-9","name"=>"Turkish",translator_=>"Mufit Eribol<mufit_eribol@yahoo.com>"}
+#{@"htmltagoption"=>"nothing","charset"=>"iso-8859-9","name"=>"Turkish","translator_0"=>"Mufit Eribol"}
 #
 #
 %s chars max=Maks %s karakter
@@ -31,8 +31,7 @@ Changed least recently=Önce deðiþen
 Changed most recently=Son deðiþen
 Color Schemes=Renk Temalarý
 Comments=Yorumlar
-Confirm deletion of '%s'='%' silinmesini onayla Copy Color SchemeConfirm deletion of '%s' and its subalbums:='%s' ve onun alt albümlerinin silinmesini onayla:
-Confirm deletion of '%s' and its subcategories:='%s' ve onun alt kategorilerinin silinmesini onayla:
+Confirm deletion of '%s'='%' silinmesini onayla Copy Color SchemeConfirm deletion of '%s' and its subalbums:Confirm deletion of '%s' and its subcategories:='%s' ve onun alt kategorilerinin silinmesini onayla:
 Confirm deletion of comment '<b>%s</b>' by '<b>%s</b>'=Yorumu silmeyi onayla '<b>%s</b>' : '<b>%s</b>'
 Confirm deletion of this relationship=Bu iliþkiyi silmeyi onayla
 Could not copy %s to %s.=%s %s ye kopyalanamadý.
@@ -123,8 +122,8 @@ The user %s is currently defined as the default user and does not have permissio
 There are %s photos=%s adet resim var
 There are no photos=Resim yok
 There is %s photo=%s resim var.
-These options are always available in the tabs on the upper right. Use the %s home %s link to return here. Click on any thumbnail to see a larger version along with information about that photo.=Seçeneklere menüden ulaþýlabilir. Bu sayfaya geri dönmek için %s anasayfayý%s týklayýnýz. Resmi tüm bilgileriyle beraber daha büyük izlemek için küçük resimlere týklayabilirsiniz.
 These options are always available in the tabs on the upper right. Use the %s home %s link to return here. Click on any thumbnail to see a larger version along with information about that photo.=Bu opsiyonlar sað üst köþedeki sekmelerde daima ulaþýlabilir durumdadýr. Bu sayfaya dönmek için %s home %s linkini kullanýn. Resimle ilgili bilgilerin yanýsýra daha büyük görüntülemek için önizlemenin üstüne týklayýn.
+These options are always available in the tabs on the upper right. Use the %s home %s link to return here. Click on any thumbnail to see a larger version along with information about that photo.=Seçeneklere menüden ulaþýlabilir. Bu sayfaya geri dönmek için %s anasayfayý%s týklayýnýz. Resmi tüm bilgileriyle beraber daha büyük izlemek için küçük resimlere týklayabilirsiniz.
 This photo is not in any albums.=Bu resim herhangi bir albümde deðil.
 This photo is not in any categories.=Bu resim herhangi bir kategoride deðil.
 Thumbnails=Önizlemeler
@@ -135,7 +134,6 @@ Up=Yukarý
 User=Kullanýcý
 Users=Kullanýcýlar
 Welcome %s. %s currently contains=Hoþgeldin %s. %s veritabaný þu anda aþaðýdaki bilgilere sahiptir:
-Welcome %s. %s currently contains=Hoþgeldin %s. 
 Yes=Evet
 You can upload a single image or a zip or tar file of images.=Tek resim veya zip dosyasý gönderebilirsiniz.
 You may search for photos %s taken %s or %s modified %s in the past %s days.=%s Çekilen%s veya %s deðiþtirilen%s resimlere, son %s gün içinde olmak kaydýyla, doðrudan ulaþabilirsiniz.
@@ -154,8 +152,7 @@ address continued=adres 2. satýr
 album=albüm
 album description=albüm tanýmý
 album name=albüm adý
-album sort order=albüm sýralama düzeni byalbums=albüm
-all=hepsi
+album sort order=albüm sýralama düzeni byalbumsall=hepsi
 and=ve
 aperture=açýklýk
 automatically edit photos=resimleri otomatik düzenle

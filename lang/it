@@ -365,8 +365,7 @@ to (name)=a (nome)
 update=aggiorna
 update relationship=aggiorna la relazione
 updated=aggiornato
-url=indirizzourl description=descrizione dell'indirizzo
-user=utente
+url=indirizzourl descriptionuser=utente
 user name=nome utente
 username=username
 users=utenti
