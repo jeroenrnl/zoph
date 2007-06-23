@@ -283,7 +283,7 @@ require_once("header.inc.php");
             if ($loaded >= 0) {
                 echo "<p>" . sprintf(translate("%s images loaded."), $loaded) . "</p>\n";
                 if ($expand && REMOVE_ARCHIVE) {
-                    echo "<p>deleting " . $file;
+                    echo "<p>" . sprintf(translate("Deleting %s"),$file);
                     unlink($file); 
                 }
             }
