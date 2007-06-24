@@ -1,5 +1,24 @@
 Zoph Changelog
 
+Zoph 0.7pre2
+24 June 2007
+
+Bugfixes
+    * Bug#1738931 View selection does not work for people
+    * Capitalization error in places.php, albums.php, categories.php that 		
+	caused translations not to work
+    * Bug#1738592 Pressing enter in autocomplete field did not work
+    * Bug#1738307: In some cases zophImport.pl would try to connect to the 
+	database before the db connection was made.
+    * Fixed a layout-issue where in some cases the photo description would end
+	up on an odd place on the page.
+
+Cleanup and various
+
+    * All languages have been updated. All duplicate and unused strings have
+	been removed from the translation files. Dutch, German, Canadian English,
+	French, Norwegian and even Swedish Chef (Bork! Bork! Bork!) are completely up
+	to date now. Danish, Italian and Turkish are almost up to date.
 
 Zoph 0.7pre1
 02 June 2007
