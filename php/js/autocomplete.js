@@ -404,9 +404,12 @@ function handleKeys(event) {
             var newvalue=nowselected.lastChild.nodeValue;
             selectli(dropdown.id, key, newvalue);
         }
-        nextTab=dropdown.nextSibling;
-        while(nextTab.nodeName!="INPUT") {
-            nextTab=nextTab.nextSibling;
+        inputfields=document.getElementsByTagName("input");
+        for (var j=0; j<inputfields.length; j++) {
+            if(inputfields[j]==open.previousSibling) {
+                nextTab=inputfields[j+1];
+                break;
+            }
         }
         nextTab.focus();
         return false;  // prevents submit
