@@ -388,6 +388,8 @@ function handleKeys(event) {
         flattree[selectedvalue[dropdown.id]].id="selected";
         return false;  // prevents update
     } else if (keycode==13) {
+        var nextTab;
+
         flattree=flattentree(dropdown, "LI");
         if(flattree.length==1) {
             // If there's only one element in the list
@@ -402,6 +404,11 @@ function handleKeys(event) {
             var newvalue=nowselected.lastChild.nodeValue;
             selectli(dropdown.id, key, newvalue);
         }
+        nextTab=dropdown.nextSibling;
+        while(nextTab.nodeName!="INPUT") {
+            nextTab=nextTab.nextSibling;
+        }
+        nextTab.focus();
         return false;  // prevents submit
     }
 }
