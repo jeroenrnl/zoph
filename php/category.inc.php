@@ -169,12 +169,12 @@ class category extends zoph_tree_table {
                     DB_PREFIX . "album_permissions as ap " .
                     " ON pa.album_id = ap.album_id JOIN " .
                     DB_PREFIX . "photo_categories as pc " .
+                    " ON pc.photo_id = p.photo_id " .
                     " WHERE pc.category_id = " . $this->get("category_id") .
                     " AND ap.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " and ap.access_level >= p.level " .
                     $order;
-
             } else {
                 $sql =
                     "select distinct p.photo_id from " .
