@@ -127,7 +127,7 @@ class person extends zoph_table {
         return "person";
     }
 
-        function get_coverphoto($autothumb=null) {
+        function get_coverphoto($user,$autothumb=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
         } else if ($autothumb) {

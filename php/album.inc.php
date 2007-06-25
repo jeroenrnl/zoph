@@ -201,7 +201,7 @@ class album extends zoph_tree_table {
         return "album";
     }
 
-    function get_coverphoto($autothumb=null) {
+    function get_coverphoto($user,$autothumb=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
         } else if ($autothumb) {

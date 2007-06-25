@@ -115,7 +115,7 @@
         if ($_view=="thumbs") {
 ?>
             <p>
-                <?php echo $p->get_coverphoto($_autothumb); ?>
+                <?php echo $p->get_coverphoto($user,$_autothumb); ?>
                 &nbsp;
             </p>
            <div>

@@ -104,7 +104,7 @@
         <p>
 <?php
     }
-    echo $place->get_coverphoto();
+    echo $place->get_coverphoto($user);
 ?>
         </p>
 <?php
@@ -186,7 +186,7 @@
                     if ($_view=="thumbs") {
 ?>
                         <p>
-                            <?php echo $a->get_coverphoto($_autothumb); ?>
+                            <?php echo $a->get_coverphoto($user,$_autothumb); ?>
                             &nbsp;
                         </p>
                         <div>

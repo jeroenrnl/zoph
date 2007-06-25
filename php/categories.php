@@ -96,7 +96,7 @@
         <p>
 <?php
     }
-    echo $category->get_coverphoto();
+    echo $category->get_coverphoto($user);
 ?>
         </p>
 <?php
@@ -181,7 +181,7 @@ if ($category->get("category_description")) {
                             if ($_view=="thumbs") {
 ?>
                                 <p>
-                                    <?php echo $c->get_coverphoto($_autothumb); ?>
+                                    <?php echo $c->get_coverphoto($user,$_autothumb); ?>
                                     &nbsp;
                                 </p>
                                 <div>
