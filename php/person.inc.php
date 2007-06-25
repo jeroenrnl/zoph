@@ -136,10 +136,12 @@ class person extends zoph_table {
                 $sql=
                     "select distinct p.photo_id from " .
                     DB_PREFIX . "photos as p JOIN " .
+                    DB_PREFIX . "photo_albums as pa" .
+                    " ON pa.photo_id = p.photo_id JOIN " .
+                    DB_PREFIX . "album_permissions as ap" .
+                    " ON pa.album_id = ap.album_id JOIN " .
                     DB_PREFIX . "photo_people as pp" .
-                    " ON pp.photo_id = p.photo_id JOIN " .
-                    DB_PREFIX . "album_permissions as ap " .
-                    " ON pa.album_id = ap.album_id " .
+                    " ON pp.photo_id = p.photo_id " .
                     " WHERE pp.person_id = " . $this->get("person_id") .
                     " AND ap.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
