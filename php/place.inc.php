@@ -174,7 +174,7 @@ class place extends zoph_tree_table {
                     " ON pa.photo_id = p.photo_id JOIN " .
                     DB_PREFIX . "album_permissions as ap " .
                     " ON pa.album_id = ap.album_id " .
-                    " WHERE p.location_id = " . $this->get("location_id") .
+                    " WHERE p.location_id = " . $this->get("place_id") .
                     " AND ap.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " and ap.access_level >= p.level " .
