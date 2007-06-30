@@ -762,6 +762,7 @@ label {
 next to it, like on the Annotate photo page */
 
 input[type="checkbox"] + label {
+    clear: none;
     width: 9em;
     }
 
