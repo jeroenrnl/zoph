@@ -395,11 +395,11 @@ function handleKeys(event) {
             // If there's only one element in the list
             // we suppose one will select that on pressing enter
             flattree[0].id="selected";
-            oldvalue[open.previousSibling.id]=null;
         }
         var nowselected=document.getElementById("selected");
 
         if(nowselected) {
+            oldvalue[open.previousSibling.id]=null;
             var key=parseInt(nowselected.firstChild.innerHTML);
             var newvalue=nowselected.lastChild.nodeValue;
             selectli(dropdown.id, key, newvalue);
