@@ -156,6 +156,7 @@ Zoph stands for <strong>z</strong>oph <strong>o</strong>rganizes <strong>ph</str
 Zoph version %s, released %s.=Zoph versione %s, data rilascio %s.
 about=info
 access level=livello di accesso
+add comment=aggiungi un commento
 add/edit user=aggiungi/modifica utente
 address=indirizzo
 address continued=indirizzo (proseguimento)
@@ -365,8 +366,7 @@ to (name)=a (nome)
 update=aggiorna
 update relationship=aggiorna la relazione
 updated=aggiornato
-url=indirizzourl descriptionuser=utente
-user name=nome utente
+url=indirizzourl descriptionuseruser name=nome utente
 username=username
 users=utenti
 view=visualizza
