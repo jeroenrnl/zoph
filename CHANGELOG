@@ -1,5 +1,29 @@
 Zoph Changelog
 
+Zoph 0.7
+1 July 2007
+
+Bugfixes
+
+    * Bug#1745803: Layout problem on annotate photo page
+    * Bug#1745795: Autocompletion navigation with keyboard did not 
+	handle "enter" right
+    * Fixed a bug that caused auto thumbnail not to when user was not logged in 
+	as admin
+    * Fixed a bug where a non-admin user would get the same thumbnail for ALL 
+	categories, regardless of whether this photo would actually be in that 
+	category.
+    * Bug#1742676: Thumbnails show unexpected behaviour with insufficent 
+	rights.
+    * Bug#1742674: An autocomplete field now advances to next field 
+	when "enter" is pressed.
+
+Cleanup and various
+    * Made several (small) changes to Dutch, German, Canadian English, French,
+	Norwegian and Swedish Chef.
+    * Updated Turkish and Danish
+
+
 Zoph 0.7pre2
 24 June 2007
 
