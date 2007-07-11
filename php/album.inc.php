@@ -201,11 +201,16 @@ class album extends zoph_tree_table {
         return "album";
     }
 
-    function get_coverphoto($user,$autothumb=null) {
+    function get_coverphoto($user,$autothumb=null,$children=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
         } else if ($autothumb) {
             $order=get_autothumb_order($autothumb);
+            if($children) {
+                $album_where=" WHERE pa.album_id in (" . $this->get_branch_ids($user) .")";
+            } else {
+                $album_where=" WHERE pa.album_id =" .$this->get("album_id");
+            }
             if ($user && !$user->is_admin()) {
                 $sql=
                     "select distinct p.photo_id from " .
@@ -214,7 +219,7 @@ class album extends zoph_tree_table {
                     " ON pa.photo_id = p.photo_id JOIN " .
                     DB_PREFIX . "album_permissions as ap " .
                     " ON pa.album_id = ap.album_id" .
-                    " WHERE pa.album_id = " . $this->get("album_id") .
+                    $album_where .
                     " AND ap.user_id =" . 
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " and pa.photo_id = p.photo_id " .
@@ -226,7 +231,7 @@ class album extends zoph_tree_table {
                     DB_PREFIX . "photos as p JOIN " .
                     DB_PREFIX . "photo_albums pa ON" .
                     " pa.photo_id = p.photo_id" .
-                    " WHERE pa.album_id = " . $this->get("album_id") .
+                    $album_where .
                     " " . $order;
             }
             $coverphoto=array_shift(get_records_from_query("photo", $sql));
@@ -235,6 +240,10 @@ class album extends zoph_tree_table {
         if ($coverphoto) {
             $coverphoto->lookup();
             return $coverphoto->get_image_tag(THUMB_PREFIX);
+        } else if (!$children) {
+            // No photos found in this album... let's look again, but now 
+            // also in sub-albums...
+            return $this->get_coverphoto($user, $autothumb, true);
         }
     }
 

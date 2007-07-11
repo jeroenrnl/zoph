@@ -155,11 +155,17 @@ class category extends zoph_tree_table {
         return "category";
     }
 
-    function get_coverphoto($user,$autothumb=null) {
+    function get_coverphoto($user,$autothumb=null,$children=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
         } else if ($autothumb) {
             $order=get_autothumb_order($autothumb);
+            if($children) {
+                $cat_where=" WHERE pc.category_id in (" . $this->get_branch_ids($user) .")";
+            } else {
+                $cat_where=" WHERE pc.category_id =" .$this->get("category_id");
+            }
+
             if ($user && !$user->is_admin()) {
                 $sql=
                     "select distinct p.photo_id from " .
@@ -170,7 +176,7 @@ class category extends zoph_tree_table {
                     " ON pa.album_id = ap.album_id JOIN " .
                     DB_PREFIX . "photo_categories as pc " .
                     " ON pc.photo_id = p.photo_id " .
-                    " WHERE pc.category_id = " . $this->get("category_id") .
+                    $cat_where .
                     " AND ap.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " and ap.access_level >= p.level " .
@@ -181,8 +187,7 @@ class category extends zoph_tree_table {
                     DB_PREFIX . "photos as p JOIN " .
                     DB_PREFIX . "photo_categories as pc ON" .
                     " pc.photo_id = p.photo_id" .
-                    " WHERE pc.category_id = " . $this->get("category_id") .
-                    " " . $order;
+                    $cat_where . " " . $order;
             }
             $coverphoto=array_shift(get_records_from_query("photo", $sql));
         }
@@ -190,6 +195,11 @@ class category extends zoph_tree_table {
         if ($coverphoto) {
             $coverphoto->lookup();
             return $coverphoto->get_image_tag(THUMB_PREFIX);
+        } else if (!$children) {
+            // No photos found in this cat... let's look again, but now 
+            // also in subcat...
+            return $this->get_coverphoto($user, $autothumb, true);
+
         }
     }
 
