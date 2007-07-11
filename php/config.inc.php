@@ -98,7 +98,11 @@
     //define('UNZIP_CMD', 'unzip');
     define('UNTAR_CMD', 0);
     //define('UNTAR_CMD', 'tar xvf');
-
+    
+    // Enable downloading of a set of photos in a ZIP file.
+    // Warning: the downloaded photos are NOT watermarked.
+    define('DOWNLOAD', 0);
+        
     // directory to use to temporarily extract uploaded archives
     define('EXTRACT_DIR', '/tmp');
 
