@@ -652,10 +652,10 @@ function get_zoph_info_array() {
     $album= get_root_album();
     $category = get_root_category();
 
-    $size = ceil(get_photo_sizes_sum() / 1048576);
+    $size=get_human(get_photo_sizes_sum());
     return array(
         translate("number of photos") => get_count("photo"),
-        translate("size of photos") => "$size MB",
+        translate("size of photos") => "$size",
         translate("number of photos in an album") =>
             $album->get_total_photo_count(),
         translate("number of categorized photos") =>
