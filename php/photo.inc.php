@@ -981,6 +981,20 @@ function get_photo_sizes_sum() {
     return get_count_from_query($sql);
 }
 
+function get_filesize($photos, $human=false) {
+    $bytes=0;
+    foreach($photos as $photo) {
+//    var_dump($photo);   #->get("size");
+        $photo->lookup();
+        $bytes+=$photo->get("size");
+    }
+
+    if($human) {
+        return get_human($bytes);
+    } else {
+        return $bytes;
+    }
+}
 function create_rating_graph($user) {
 
     if ($user && !$user->is_admin()) {

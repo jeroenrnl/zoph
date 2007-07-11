@@ -89,7 +89,15 @@
 <?php
     }
 ?>
-            <a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a>
+            <a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a> 
+<?php
+        if(DOWNLOAD && ($user->get("download") || $user->is_admin())) {
+?>
+            |
+            <a href="download.php?<?php echo $qs ?>"><?php echo translate("download") ?></a>
+<?php
+        }
+?>
         </span>
         <?php echo $title_bar . "\n" ?>
     </h1>

@@ -61,6 +61,9 @@
           <label for="import"><?php echo translate("can import") ?></label>
           <?php echo create_pulldown("import", $this_user->get("import"), array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?>
           <br>
+          <label for="download"><?php echo translate("can download zipfiles") ?></label>
+          <?php echo create_pulldown("download", $this_user->get("download"), array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?>
+          <br>
           <label for="leave_comments"><?php echo translate("can leave comments") ?></label>
           <?php echo create_pulldown("leave_comments", $this_user->get("leave_comments"), array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?>
           <br>
