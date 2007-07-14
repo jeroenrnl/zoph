@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.7');
+    define('VERSION', '0.7.0.1');
 
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'zoph');
@@ -98,11 +98,7 @@
     //define('UNZIP_CMD', 'unzip');
     define('UNTAR_CMD', 0);
     //define('UNTAR_CMD', 'tar xvf');
-    
-    // Enable downloading of a set of photos in a ZIP file.
-    // Warning: the downloaded photos are NOT watermarked.
-    define('DOWNLOAD', 0);
-        
+
     // directory to use to temporarily extract uploaded archives
     define('EXTRACT_DIR', '/tmp');
 

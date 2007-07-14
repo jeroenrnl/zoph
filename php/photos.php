@@ -24,6 +24,10 @@
     $_dir = getvar("_dir");
     $_show = getvar("_show");
 
+    if(!preg_match("/^[a-zA-Z_]*$/", $_order)) {
+        die("Illegal characters in _order");
+    }
+
     if (!$_cols) { $_cols = $DEFAULT_COLS; }
     if (!$_rows) { $_rows = $DEFAULT_ROWS; }
     if (!$_off)  { $_off = 0; }
@@ -89,15 +93,7 @@
 <?php
     }
 ?>
-            <a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a> 
-<?php
-        if(DOWNLOAD && ($user->get("download") || $user->is_admin())) {
-?>
-            |
-            <a href="download.php?<?php echo $qs ?>"><?php echo translate("download") ?></a>
-<?php
-        }
-?>
+            <a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a>
         </span>
         <?php echo $title_bar . "\n" ?>
     </h1>
