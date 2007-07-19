@@ -201,6 +201,10 @@
             <?php echo create_autothumb_pulldown("autothumb", $user->prefs->get("autothumb")) ?>
 
         </dd>
+        <dt><?php echo translate("Sort order for subalbums and categories") ?></dt>
+        <dd>
+            <?php echo create_pulldown("child_sortorder", $user->prefs->get("child_sortorder"), get_sort_array()); ?>
+        </dd>
     </dl>
 <?php
     if (JAVASCRIPT && AUTOCOMPLETE) {

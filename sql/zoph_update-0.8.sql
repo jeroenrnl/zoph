@@ -21,3 +21,8 @@
 #
 
 alter table zoph_users add column download char(1) NOT NULL DEFAULT '0' after import;
+
+alter table zoph_albums add column sortname char(32) after album_description;
+alter table zoph_categories add column sortname char(32) after category_description;
+alter table zoph_prefs add column child_sortorder enum('name', 'sortname', 'oldest', 'newest', 'first', 'last', 'lowest', 'highest', 'average') default 'sortname';
+

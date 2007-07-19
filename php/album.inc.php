@@ -65,33 +65,62 @@ class album extends zoph_tree_table {
         return $this->get("album");
     }
 
-    function get_children($user = null) {
+    function get_children($user=null) {
+        if($user) {
+            $order = $user->prefs->get("child_sortorder") . ", name";
+        } else {
+            $order = "name";
+        }
 
         $id = $this->get("album_id");
         if (!$id) { return; }
-
+        
         if ($user && !$user->is_admin()) {
             $sql =
-                 "select a.album_id, a.album, a.album_description from " .
-                 DB_PREFIX . "albums as a, " .
-                 DB_PREFIX . "album_permissions as ap " .
-                 "where a.parent_album_id = '" . escape_string($id) . "'" .
-                 " and ap.user_id = '" . escape_string($user->get("user_id")) .
-                 "' and ap.album_id = a.album_id" .
-                 " order by a.album";
-        }
-        else {
+                "SELECT a.*, album as name, " .
+                "min(p.date) as first, " .
+                "max(p.date) as last, " .
+                "min(p.timestamp) as first, " .
+                "max(p.timestamp) as last, " .
+                "min(rating) as lowest, " . 
+                "max(rating) as highest, " .
+                "avg(rating) as average, " .
+                "rand() as random from " .
+                DB_PREFIX . "albums as a JOIN " .
+                DB_PREFIX . "photo_albums as pa " .
+                "ON a.album_id=pa.album_id JOIN " .
+                DB_PREFIX . "photos as p " .
+                "ON pa.photo_id=p.photo_id JOIN " .
+                DB_PREFIX . "album_permissions ap " .
+                "ON a.album_id=ap.album_id " .
+                "WHERE user_id=" . $user->get("user_id") .
+                " AND parent_album_id=" . $id .
+                " GROUP BY a.album_id " .
+                "ORDER BY " . $order;
+        } else {
             $sql =
-                 "select album_id, album, album_description from " .
-                 DB_PREFIX . "albums " .
-                 "where parent_album_id = $id order by album";
+                "SELECT a.*, album as name, " .
+                "min(p.date) as oldest, " .
+                "max(p.date) as newest, " .
+                "min(p.timestamp) as first, " .
+                "max(p.timestamp) as last, " .
+                "min(rating) as lowest, " . 
+                "max(rating) as highest, " .
+                "avg(rating) as average, " .
+                "rand() as random from " .
+                DB_PREFIX . "albums as a LEFT JOIN " .
+                DB_PREFIX . "photo_albums as pa " .
+                "ON a.album_id=pa.album_id LEFT JOIN " .
+                DB_PREFIX . "photos as p " .
+                "ON pa.photo_id=p.photo_id " .
+                "WHERE parent_album_id=" . $id .
+                " GROUP BY a.album_id " .
+                "ORDER BY " . $order;
         }
 
-        $this->children = get_records_from_query("album", $sql);
-
+        $this->children=get_records_from_query("album", $sql);
         return $this->children;
-
-    }
+    }    
 
     function get_photo_count($user = null) {
         if ($this->photo_count) { return $photo_count; }
@@ -174,6 +203,11 @@ class album extends zoph_tree_table {
                     translate("album description"),
                     create_text_input("album_description",
                         $this->get("album_description"), 40, 128)),
+            "sortname" =>
+                array(
+                    translate("sort name"),
+                    create_text_input("sortname",
+                        $this->get("sortname"))),
             "sortorder" =>
                 array(
                     translate("album sort order"),
@@ -246,7 +280,6 @@ class album extends zoph_tree_table {
             return $this->get_coverphoto($user, $autothumb, true);
         }
     }
-
 }
 
 function get_root_album() {

@@ -36,16 +36,44 @@ class category extends zoph_tree_table {
         return $this->get("category");
     }
 
-    function get_children() {
-        return parent::get_children(null, "category");
-    }
+    function get_children($user=null) {
+        if($user) {
+            $order = $user->prefs->get("child_sortorder") . ", name";
+        } else {
+            $order = "name";
+        }
+        $id = $this->get("category_id");
+        if (!$id) { return; }
+
+        $sql =
+            "SELECT c.*, category as name, " .
+            "min(p.date) as oldest, " .
+            "max(p.date) as newest, " .
+            "min(p.timestamp) as first, " .
+            "max(p.timestamp) as last, " .
+            "min(rating) as lowest, " . 
+            "max(rating) as highest, " .
+            "avg(rating) as average, " .
+            "rand() as random from " .
+            DB_PREFIX . "categories as c LEFT JOIN " .
+            DB_PREFIX . "photo_categories as pc " .
+            "ON c.category_id=pc.category_id LEFT JOIN " .
+            DB_PREFIX . "photos as p " .
+            "ON pc.photo_id=p.photo_id " .
+            "WHERE parent_category_id=" . $id .
+            " GROUP BY c.category_id " .
+            "ORDER BY " . $order;
+        $this->children=get_records_from_query("category", $sql);
+        return $this->children;
+    }    
+
+   // }
 
     function get_branch_ids($user = null) {
-        return parent::get_branch_ids("category", $user);
+        return parent::get_branch_ids("category",$user);
     }
 
     function get_photo_count($user) {
-
         if ($this->photo_count) { return $photo_count; }
 
         $id = $this->get("category_id");
@@ -131,6 +159,11 @@ class category extends zoph_tree_table {
                     translate("category description"),
                     create_text_input("category_description",
                         $this->get("category_description"), 40, 128)),
+            "sortname" =>
+                array(
+                    translate("sort name"),
+                    create_text_input("sortname",
+                        $this->get("sortname"))),
             "sortorder" =>
                 array(
                     translate("category sort order"),

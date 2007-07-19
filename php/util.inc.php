@@ -243,7 +243,20 @@ function create_autothumb_pulldown($name, $value, $extraopt=null) {
         "highest" => translate("Highest ranked",0), 
         "random" => translate("Random",0)), $extraopt);
 }
-
+function get_sort_array() {
+    return array(
+        "name" => translate("Name",0),
+        "sortname" => translate("Sort Name",0),
+        "oldest" => translate("Oldest photo",0), 
+        "newest" => translate("Newest photo",0), 
+        "first" => translate("Changed least recently",0), 
+        "last" => translate("Changed most recently",0), 
+        "lowest" => translate("Lowest ranked",0), 
+        "highest" => translate("Highest ranked",0), 
+        "average" => translate("Average ranking",0), 
+        "random" => translate("Random",0)
+    );
+}
 /*
  * Remove any params without values and operator params without corresponding
  * fields (e.g. _album_id-op when there is no _album_id).  This can be called
