@@ -70,7 +70,7 @@ class category extends zoph_tree_table {
    // }
 
     function get_branch_ids($user = null) {
-        return parent::get_branch_ids("category",$user);
+        return parent::get_branch_ids($user);
     }
 
     function get_photo_count($user) {
