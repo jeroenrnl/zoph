@@ -69,12 +69,17 @@ function process_images($images, $path, $fields) {
 
         if (cleanup_path($image_dir) != cleanup_path($absolute_path . "/" . $date)) {
             $new_image = $absolute_path . "/" . $date . "/" . $image_name;
+
             if (!copy($image, $new_image)) {
                 echo sprintf(translate("Could not copy %s to %s."), $image, $new_image) . "<br>\n";
                 continue;
-            }
+            } 
 
             echo "$image -> $new_image<br>\n";
+            if (IMPORT_MOVE) {
+                echo sprintf(translate("Deleting %s"), $image) . "<br>\n";
+                unlink($image);
+            }
 
             $image = $new_image;
         }

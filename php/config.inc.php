@@ -88,6 +88,10 @@
     define('CLIENT_WEB_IMPORT', 1);
     define('SERVER_WEB_IMPORT', 0);
 
+    // If set to 1, move images into their final location after uploading, 
+    // otherwise, the images are copied and you have the same image twice.
+    define('IMPORT_MOVE',1);
+
     // Maximum filesize to be uploaded, in bytes:
     // Make sure you also change "upload_max_filesize" "post_max_size"
     // and possibly "max_execution_time" and "max_input_time" in php.ini
