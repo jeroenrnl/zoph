@@ -108,7 +108,7 @@
 ?>
         </p>
 <?php
-    if ($user->get("detailed_places")) {
+    if ($user->get("detailed_places") || $user->is_admin()) {
         echo $place->to_html();
         if ($place->get("notes")) {
             echo $place->get("notes");
