@@ -91,6 +91,14 @@
 ?>
         <span class="actionlink">
             <a href="category.php?_action=edit&amp;category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("edit") ?></a>
+<?php
+            if($category->get("coverphoto")) {
+?>
+                |
+                <a href="category.php?_action=update&amp;category_id=<?php echo $category->get("category_id") ?>&amp;coverphoto=NULL"><?php echo translate("unset coverphoto") ?></a>
+<?php
+            }
+?>
         </span>
         <br>
         <p>

@@ -90,7 +90,16 @@
 <?php
     if ($user->is_admin()) {
 ?>
-        <span class="actionlink"><a href="album.php?_action=edit&amp;album_id=<?php echo $album->get("album_id") ?>"><?php echo translate("edit") ?></a></span>
+        <span class="actionlink"><a href="album.php?_action=edit&amp;album_id=<?php echo $album->get("album_id") ?>"><?php echo translate("edit") ?></a>
+<?php
+            if($album->get("coverphoto")) {
+?>
+                |
+                <a href="album.php?_action=update&amp;album_id=<?php echo $album->get("album_id") ?>&amp;coverphoto=NULL"><?php echo translate("unset coverphoto") ?></a>
+<?php
+            }
+?>
+        </span>
         <br>
         <p>
 <?php

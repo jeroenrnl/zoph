@@ -88,6 +88,14 @@
         <span class="actionlink">
             <a href="place.php?_action=edit&amp;place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("edit") ?></a> | 
             <a href="place.php?_action=delete&amp;place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("delete") ?></a>
+<?php
+            if($place->get("coverphoto")) {
+?>
+                |
+                <a href="place.php?_action=update&amp;place_id=<?php echo $place->get("place_id") ?>&amp;coverphoto=NULL"><?php echo translate("unset coverphoto") ?></a>
+<?php
+            }
+?>
         </span>
         
         <h2>
