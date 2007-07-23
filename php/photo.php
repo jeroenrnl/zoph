@@ -194,7 +194,7 @@
         unset($actionlinks["edit"]);
 
         $photo->set_fields($request_vars);
-        $photo->update($request_vars); // pass again for add people, cats, etc
+        $photo->update($request_vars,'',$user); // pass again for add people, cats, etc
         $action = "update";
     }
     else if ($_action == "new") {
@@ -268,7 +268,6 @@
     else {
         $title = translate("New Photo");
     }
-
 require_once("header.inc.php");
     // no photo was found and this isn't a new record
     if ($action != "insert" && !$found) {
