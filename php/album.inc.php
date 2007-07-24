@@ -67,6 +67,7 @@ class album extends zoph_tree_table {
 
     function get_children($user=null) {
         if($user) {
+            $user->lookup_prefs();
             $order = $user->prefs->get("child_sortorder") . ", name";
         } else {
             $order = "name";
