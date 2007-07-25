@@ -79,6 +79,15 @@
     // Watermark must be a GIF image, transparancy is honoured!
     // the filename is relative to the image root (IMAGE_DIR)
     define('WATERMARK', 'watermark.gif');
+    
+    // Position of the watermark: left, centre or right
+    define('WM_POSX', 'right');
+    // Position of the watermark: top, centre or bottom
+    define('WM_POSY', 'bottom');
+    // Transparency of the watermark overlay
+    // 0 = fully transparent (invisible) to 100 = no transparency
+    define('WM_TRANS', 100);
+
 
     // If set to 1, users can leave comments with photos
     define('ALLOW_COMMENTS', 0);

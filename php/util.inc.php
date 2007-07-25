@@ -707,4 +707,42 @@ function get_human($bytes) {
         return round($bytes/pow(2,10*($length)),1) . $prefixes[floor($length)] . "B";
     }
 }
+
+function watermark_image($orig, $watermark, $positionX = "center", $positionY = "center", $transparency = 50) {
+
+    $wm=imagecreatefromgif($watermark);
+    
+    $width_orig=ImageSX($orig);
+    $height_orig=ImageSY($orig);
+
+    $width_wm=ImageSX($wm);
+    $height_wm=ImageSY($wm);
+
+    switch ($positionX) {
+    case "left":
+        $destX = 5;
+        break;
+    case "right":
+        $destX = $width_orig - $width_wm - 5;
+        break;
+    default:
+        $destX = ($width_orig / 2) - ($width_wm / 2);
+        break;
+    }
+
+    switch ($positionY) {
+    case "top":
+        $destY = 5;
+        break;
+    case "bottom":
+        $destY = $height_orig - $height_wm - 5;
+        break;
+    default:
+        $destY = ($height_orig / 2) - ($height_wm / 2);
+        break;
+    }
+    ImageCopyMerge($orig, $wm, $destX, $destY, 0, 0, $width_wm, $height_wm, $transparency);
+    imagedestroy($wm);
+    return $orig;
+}
 ?>

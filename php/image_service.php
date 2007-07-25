@@ -48,14 +48,11 @@
 
             if (WATERMARKING && $watermark_file && !$type) {
                 $image_path .= $name;
-                $orig_image=imagecreatefromjpeg($image_path);
-                $watermark=imagecreatefromgif($watermark_file);
-                ImageCopyMerge($orig_image, $watermark, (ImageSX($orig_image)/2)-(ImageSX($watermark)/2), (ImageSY($orig_image)/2)-(ImageSY($watermark)/2), 0, 0, ImageSX($watermark), ImageSY($watermark),50);
-
+                $image=imagecreatefromjpeg($image_path);
+                watermark_image(&$image, $watermark_file, WM_POSX, WM_POSY, WM_TRANS);
                 header("Content-type: image/jpeg");
-                imagejpeg($orig_image);
-                imagedestroy($orig_image);
-                imagedestroy($watermark);
+                imagejpeg($image);
+                imagedestroy($image);
                 exit;
             } else {
                 if ($type) {
