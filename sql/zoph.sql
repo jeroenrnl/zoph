@@ -60,7 +60,7 @@ CREATE TABLE zoph_albums (
 --
 
 
-INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL);
+INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL, NULL);
 
 --
 -- Table structure for table 'zoph_categories'
@@ -82,7 +82,7 @@ CREATE TABLE zoph_categories (
 --
 
 
-INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL,NULL);
+INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL,NULL,NULL);
 
 --
 -- Table structure for table 'zoph_color_schemes'
@@ -166,7 +166,7 @@ CREATE TABLE zoph_people (
 --
 
 
-INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 --
 -- Table structure for table 'zoph_photo_albums'
@@ -311,7 +311,7 @@ CREATE TABLE zoph_places (
   KEY place_title (title(10))
 ) TYPE=MyISAM;
 
-INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 --
 -- Dumping data for table 'zoph_places'
@@ -339,11 +339,11 @@ CREATE TABLE zoph_prefs (
   auto_edit char(1) NOT NULL default '0',
   camera_info char(1) NOT NULL default '1',
   allexif char(1) NOT NULL default '0',
-  autocomp_albums` char(1) default '1',
-  autocomp_places` char(1) default '1',
-  autocomp_categories` char(1) default '1',
-  autocomp_photographer` char(1) default '1',
-  autocomp_people` char(1) default '1',
+  autocomp_albums char(1) default '1',
+  autocomp_places char(1) default '1',
+  autocomp_categories char(1) default '1',
+  autocomp_photographer char(1) default '1',
+  autocomp_people char(1) default '1',
   desc_thumbnails char(1) NOT NULL default '0',
   fullsize_new_win char(1) NOT NULL default '0',
   people_slots tinyint(3) NOT NULL default 1,
@@ -358,7 +358,7 @@ CREATE TABLE zoph_prefs (
 --
 
 
-INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0','0','1');
+INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0','1','1','1','1','1','0','0','1','list','highest');
 
 --
 -- Table structure for table 'zoph_photo_ratings'
