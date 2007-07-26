@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.7');
+    define('VERSION', '0.7.1');
 
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'zoph');
@@ -81,12 +81,12 @@
     define('WATERMARK', 'watermark.gif');
     
     // Position of the watermark: left, centre or right
-    define('WM_POSX', 'right');
+    define('WM_POSX', 'center');
     // Position of the watermark: top, centre or bottom
-    define('WM_POSY', 'bottom');
+    define('WM_POSY', 'center');
     // Transparency of the watermark overlay
     // 0 = fully transparent (invisible) to 100 = no transparency
-    define('WM_TRANS', 100);
+    define('WM_TRANS', 50);
 
 
     // If set to 1, users can leave comments with photos
