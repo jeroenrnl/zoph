@@ -376,6 +376,7 @@ timestamp=
 title=
 to (email)=
 to (name)=
+unset coverphoto=
 update relationship=
 update=
 updated=
