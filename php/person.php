@@ -71,6 +71,14 @@
             <a href="person.php?_action=edit&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("edit") ?></a> |
             <a href="person.php?_action=delete&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="person.php?_action=new"><?php echo translate("new") ?></a>
+<?php
+            if($person->get("coverphoto")) {
+?>
+                |
+                <a href="person.php?_action=update&amp;person_id=<?php echo $person->get("person_id") ?>&amp;coverphoto=NULL"><?php echo translate("unset coverphoto") ?></a>
+<?php
+            }
+?>
           </span>
 <?php
         }
@@ -99,7 +107,7 @@
           </p>
           <dl>
 <?php
-if ($user->get("detailed_people")) {
+if ($user->get("detailed_people") || $user->is_admin()) {
 ?>
 <?php echo create_field_html($person->get_display_array()) ?>
 <?php

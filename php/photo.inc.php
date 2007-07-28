@@ -81,17 +81,15 @@ class photo extends zoph_table {
             "photo_albums"));
     }
 
-    function update($vars = null, $suffix = '') {
+    function update($vars = null, $suffix = '', $user=null) {
         parent::update();
-
         if (!$vars) { return; }
-
-        $this->update_relations($vars, $suffix);
+        $this->update_relations($vars, $suffix, $user);
     }
 
-    function update_relations($vars, $suffix = '') {
+    function update_relations($vars, $suffix = '', $user=null) {
         if ($vars["_album$suffix"]) {
-            $this->add_to_album($vars["_album$suffix"]);
+            $this->add_to_album($vars["_album$suffix"], $user);
         }
 
         if ($vars["_remove_album$suffix"]) {
@@ -121,13 +119,27 @@ class photo extends zoph_table {
         }
     }
 
-    function add_to_album($album_id) {
-        $sql =
-            "insert into " . DB_PREFIX . "photo_albums " .
-            "(photo_id, album_id) values ('" .
+    function add_to_album($album_id, $user=null) {
+        // This is only done when either $user has write permissions to the
+        // album, when the user is admin or when $user = null, this is to
+        // retain compatibility with calls from import, which checks user
+        // permissions before calling this function and bulk edit, which is
+        // only accessible for admin users.
+       $sql =
+           "insert into " . DB_PREFIX . "photo_albums " .
+           "(photo_id, album_id) values ('" .
             escape_string($this->get("photo_id")) . "', '" .
             escape_string($album_id) . "')";
-        execute_query($sql, 1);
+        
+        if($user) {
+            $album_permissions=$user->get_album_permissions($album_id);
+
+            if($user->is_admin() || $album_permissions->get("writable")) {
+                execute_query($sql, 1);
+            }
+        } else {
+            execute_query($sql, 1);
+        }
     }
 
     function remove_from_album($album_ids) {
