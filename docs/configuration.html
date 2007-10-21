@@ -67,8 +67,9 @@
 <li class="toclevel-2"><a href="#WEB_IMPORT_.28depricated.29"><span class="tocnumber">6.3</span> <span class="toctext">WEB_IMPORT (depricated)</span></a></li>
 <li class="toclevel-2"><a href="#MAX_UPLOAD"><span class="tocnumber">6.4</span> <span class="toctext">MAX_UPLOAD</span></a></li>
 <li class="toclevel-2"><a href="#REMOVE_ARCHIVE"><span class="tocnumber">6.5</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
-<li class="toclevel-2"><a href="#USE_DATED_DIRS"><span class="tocnumber">6.6</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
-<li class="toclevel-2"><a href="#HIER_DATED_DIRS"><span class="tocnumber">6.7</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#IMPORT_MOVE"><span class="tocnumber">6.6</span> <span class="toctext">IMPORT_MOVE</span></a></li>
+<li class="toclevel-2"><a href="#USE_DATED_DIRS"><span class="tocnumber">6.7</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#HIER_DATED_DIRS"><span class="tocnumber">6.8</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1"><a href="#Features"><span class="tocnumber">7</span> <span class="toctext">Features</span></a>
@@ -77,8 +78,12 @@
 <li class="toclevel-2"><a href="#EMAIL_PHOTOS"><span class="tocnumber">7.2</span> <span class="toctext">EMAIL_PHOTOS</span></a></li>
 <li class="toclevel-2"><a href="#WATERMARKING"><span class="tocnumber">7.3</span> <span class="toctext">WATERMARKING</span></a></li>
 <li class="toclevel-2"><a href="#WATERMARK"><span class="tocnumber">7.4</span> <span class="toctext">WATERMARK</span></a></li>
-<li class="toclevel-2"><a href="#ALLOW_COMMENTS"><span class="tocnumber">7.5</span> <span class="toctext">ALLOW_COMMENTS</span></a></li>
-<li class="toclevel-2"><a href="#AUTOCOMPLETE"><span class="tocnumber">7.6</span> <span class="toctext">AUTOCOMPLETE</span></a></li>
+<li class="toclevel-2"><a href="#WM_POSX"><span class="tocnumber">7.5</span> <span class="toctext">WM_POSX</span></a></li>
+<li class="toclevel-2"><a href="#WM_POSY"><span class="tocnumber">7.6</span> <span class="toctext">WM_POSY</span></a></li>
+<li class="toclevel-2"><a href="#WM_TRANS"><span class="tocnumber">7.7</span> <span class="toctext">WM_TRANS</span></a></li>
+<li class="toclevel-2"><a href="#ALLOW_COMMENTS"><span class="tocnumber">7.8</span> <span class="toctext">ALLOW_COMMENTS</span></a></li>
+<li class="toclevel-2"><a href="#AUTOCOMPLETE"><span class="tocnumber">7.9</span> <span class="toctext">AUTOCOMPLETE</span></a></li>
+<li class="toclevel-2"><a href="#DOWNLOAD"><span class="tocnumber">7.10</span> <span class="toctext">DOWNLOAD</span></a></li>
 </ul>
 </li>
 </ul>
@@ -674,6 +679,26 @@
 <td colspan="2"><b>Example:</b> <tt>define('REMOVE_ARCHIVE, '0');</tt></td>
 </tr>
 </table>
+<p><a name="IMPORT_MOVE" id="IMPORT_MOVE"></a></p>
+<h3> <span class="mw-headline">IMPORT_MOVE</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">IMPORT_MOVE</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.1 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Move, instead of copy the image from the default import location to the final location. In this way no duplicate files will be around.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: copy the file, or <tt>1</tt>: move the file</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('IMPORT_MOVE, '0');</tt></td>
+</tr>
+</table>
 <p><a name="USE_DATED_DIRS" id="USE_DATED_DIRS"></a></p>
 <h3> <span class="mw-headline">USE_DATED_DIRS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -797,6 +822,66 @@
 <td colspan="2"><b>Example:</b> <tt>define('WATERMARK', 'watermarks/topsecret.gif');</tt></td>
 </tr>
 </table>
+<p><a name="WM_POSX" id="WM_POSX"></a></p>
+<h3> <span class="mw-headline">WM_POSX</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">WM_POSX</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.1 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Define where the <a href="configuration.html#WATERMARK" title="Zoph/Configuration">watermark</a> will be placed horizontally.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>center</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>left</tt>, <tt>center</tt> or <tt>centre</tt>, <tt>right</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('WM_POSX', 'right');</tt></td>
+</tr>
+</table>
+<p><a name="WM_POSY" id="WM_POSY"></a></p>
+<h3> <span class="mw-headline">WM_POSY</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">WM_POSY</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.1 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Define where the <a href="configuration.html#WATERMARK" title="Zoph/Configuration">watermark</a> will be placed vertically.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>center</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>top</tt>, <tt>center</tt> or <tt>centre</tt>, <tt>bottom</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('WM_POSY', 'bottom');</tt></td>
+</tr>
+</table>
+<p><a name="WM_TRANS" id="WM_TRANS"></a></p>
+<h3> <span class="mw-headline">WM_TRANS</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">WM_TRANS</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.1 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Define the transparency of a <a href="configuration.html#WATERMARK" title="Zoph/Configuration">watermark</a>.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>50</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: fully tranparent (invisible, don't use this, it's pointless and eats up a lot of resources, better turn off the <a href="configuration.html#WATERMARK" title="Zoph/Configuration">watermark</a> feature altogether) to <tt>100</tt>: no transparency.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('WM_TRANS', 25);</tt></td>
+</tr>
+</table>
 <p><a name="ALLOW_COMMENTS" id="ALLOW_COMMENTS"></a></p>
 <h3> <span class="mw-headline">ALLOW_COMMENTS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -814,7 +899,7 @@
 <td colspan="2"><b>Options:</b> <tt>0</tt>: disable comments <tt>1</tt>: enable comments</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('ALLOW_COMMENTS', '1');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('ALLOW_COMMENTS', 1);</tt></td>
 </tr>
 </table>
 <p><a name="AUTOCOMPLETE" id="AUTOCOMPLETE"></a></p>
@@ -834,14 +919,34 @@
 <td colspan="2"><b>Options:</b> <tt>0</tt>: use standard HTML select-boxes; <tt>1</tt>: Use autocompletion select-boxes. This feature needs <a href="configuration.html#JAVASCRIPT" title="Zoph/Configuration">JAVASCRIPT</a> to be enabled.</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('AUTOCOMPLETE', '1');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('AUTOCOMPLETE', 1);</tt></td>
+</tr>
+</table>
+<p><a name="DOWNLOAD" id="DOWNLOAD"></a></p>
+<h3> <span class="mw-headline">DOWNLOAD</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DOWNLOAD</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.1 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> With this feature you can use download a set of photos (Albums, Categories, Places, People or a search result) in one or more ZIP files. <b>Important</b> the photos in the ZIP file will <u>not</u> be watermarked.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable this feature; <tt>1</tt>: Enable this feature. You must also grant each non-admin user you want to give these rights permission by changing "can download zipfiles" in the user's profile.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DOWNLOAD', 1);</tt></td>
 </tr>
 </table>
 
 <!-- 
-Pre-expand include size: 17274 bytes
-Post-expand include size: 24212 bytes
-Template argument size: 10336 bytes
+Pre-expand include size: 19609 bytes
+Post-expand include size: 27574 bytes
+Template argument size: 11833 bytes
 Maximum: 2048000 bytes
 -->
 

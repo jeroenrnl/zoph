@@ -1,4 +1,15 @@
 Zoph Changelog
+Zoph 0.7.1
+21 Oct 2007
+
+Zoph 0.7.1 is a "feature release", that introduces a few new features that will be present in the next "stable" version, 0.8. It also includes the bugfixes from 0.7.0.1 and 0.7.0.2.
+
+    * It is now possible to define the position of the watermark.
+    * Req#1713938: Zoph can now be configured to move an imported image instead of copying it. This saves you from having to clean up later. Default is to move the photo.
+    * Req#1504375 You can now download a set (album, category, search result, ..) of photos in a ZIP file. The size of the ZIP file and the number of photos are configurable.
+   * Req#1500560: For albums and categories, you can now set the desired sort order through preferences. (newest/oldest photo, first/last change, lowest/highest/avg rating, name, sortname). Sortname is a new field that you can use to sort on.
+    * Req#1742672 Albums/Categories/Places now also have a thumbnail when the album itself does not have any photos, it picks a photo from one of it's subalbums/c/p
+    * Info table now displays total size of photos in the most appropriate unit (KiB, MiB, GiB) instead of always in MiB
 
 Zoph 0.7.0.2
 25 July 2007

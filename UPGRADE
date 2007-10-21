@@ -1,3 +1,34 @@
+Zoph 0.7 to 0.7.1 update
+
+You can also use these instructions to go from 0.7.0.1 or 0.7.0.2 to 0.7.1
+Zoph 0.7.1 is a feature release, that introduces a few new features that will be available in v0.8. If you upgrade to v0.7.1, you will need to run the zoph-update-0.8.sql script. When you later upgrade to 0.7.2 or 0.8, you will need to run it again, but with the changes for 0.7.1 'commented out'.
+
+Copy php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.
+
+Updating the Database
+
+If you are upgrading from an older version than 0.7, please run the older database updates first.
+
+Execute zoph-update-0.8.sql:
+
+> mysql -u zoph_admin -p zoph < sql/zoph_update-0.8.sql
+
+The database upgrade script makes the following changes:
+
+    * Add the 'sortname' column to the albums and categories tables
+    * Add preferences field to let users define the sort order
+    * Add a column to the users table that defines whether or not this user is allowed to download photos.
+
+Configuration updates
+(see http://en.wikibooks.org/wiki/Zoph/Configuration for details):
+
+New options
+    * WM_POSX
+    * WM_POSY
+    * WM_TRANS
+    * IMPORT_MOVE
+    * DOWNLOAD
+
 Zoph 0.7 or 0.7.0.1 -> 0.7.0.2 update
 25 July 2007
 Copy php/* to the location of your installation. Make sure to also copy the
