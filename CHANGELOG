@@ -1,5 +1,20 @@
 Zoph Changelog
 
+Zoph 0.7.0.2
+25 July 2007
+
+    * Bug#1756660: Admin can not see details of places
+    * Admin can not see details of people
+    * Bug#1755325: Not possible to unset a coverphoto
+    * Bug#1598437 A user can now only put photos into an album he has write permission to.
+    * Bug#1760100: SQL script for new installations doesn't work.
+    * Italian translation is now up to date
+
+
+Zoph 0.7.0.1
+14 July 2007
+    * Fix for a (non-exploitable) SQL injection error.
+
 Zoph 0.7
 1 July 2007
 

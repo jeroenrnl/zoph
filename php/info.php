@@ -44,7 +44,7 @@
 ?>
 </table>
 <p>
-<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, "1 July 2007") ?>
+<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, "25 July 2007") ?>
 </p>
 <p>
 <?php echo translate("Originally written by Jason Geiger, now maintained by Jeroen Roos with thanks to the following for their contributions:", 0) ?>
