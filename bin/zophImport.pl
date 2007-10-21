@@ -2,8 +2,8 @@
 
 #
 # zophImport.pl
-# Zoph 0.7
-# Jason Geiger & Jeroen Roos, 2002-2006
+# Zoph 0.7.1
+# Jason Geiger & Jeroen Roos, 2002-2007
 #
 # This file is part of Zoph.
 #
@@ -54,7 +54,7 @@ use Cwd 'abs_path';
 
 $| = 1;
  
-my $version = '0.7';
+my $version = '0.7.1';
  
 
 my $update     = 0; # update existing photo records instead of inserting
