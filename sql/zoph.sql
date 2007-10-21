@@ -49,6 +49,7 @@ CREATE TABLE zoph_albums (
   parent_album_id int(11) NOT NULL default '0',
   album varchar(32) NOT NULL default '',
   album_description varchar(255) default NULL,
+  sortname char(32),
   coverphoto int(11) default NULL,
   sortorder varchar(32) default NULL,
   PRIMARY KEY  (album_id),
@@ -60,7 +61,7 @@ CREATE TABLE zoph_albums (
 --
 
 
-INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL, NULL);
+INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL, NULL, NULL);
 
 --
 -- Table structure for table 'zoph_categories'
@@ -71,6 +72,7 @@ CREATE TABLE zoph_categories (
   parent_category_id int(11) NOT NULL default '0',
   category varchar(32) NOT NULL default '',
   category_description varchar(255) default NULL,
+  sortname char(32),
   coverphoto int(11) default NULL,
   sortorder varchar(32) default NULL,
   PRIMARY KEY  (category_id),
@@ -81,8 +83,7 @@ CREATE TABLE zoph_categories (
 -- Dumping data for table 'zoph_categories'
 --
 
-
-INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL,NULL,NULL);
+INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL, NULL,NULL,NULL);
 
 --
 -- Table structure for table 'zoph_color_schemes'
@@ -350,6 +351,8 @@ CREATE TABLE zoph_prefs (
   view enum('list','tree','thumbs') default 'list' NOT NULL,
   autothumb enum('oldest','newest','first','last','highest','random') 
   	default 'highest' NOT NULL,
+  child_sortorder enum('name', 'sortname', 'oldest', 'newest', 
+	'first', 'last', 'lowest', 'highest', 'average') default 'sortname',
   PRIMARY KEY  (user_id)
 ) TYPE=MyISAM;
 
@@ -358,7 +361,7 @@ CREATE TABLE zoph_prefs (
 --
 
 
-INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0','1','1','1','1','1','0','0','1','list','highest');
+INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0','1','1','1','1','1','0','0','1','list','highest','sortname');
 
 --
 -- Table structure for table 'zoph_photo_ratings'
@@ -392,6 +395,7 @@ CREATE TABLE zoph_users (
   detailed_people char(1) NOT NULL default '0',
   detailed_places char(1) NOT NULL default '0',
   import char(1) NOT NULL default '0',
+  download char(1) NOT NULL default '0',
   leave_comments char(1) NOT NULL default '0',
   lightbox_id int(11) default NULL,
   lastnotify datetime default NULL,
@@ -405,5 +409,5 @@ CREATE TABLE zoph_users (
 --
 
 
-INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1',NULL,NULL,NULL,NULL);
+INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1',NULL,NULL,NULL,NULL);
 
