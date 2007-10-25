@@ -86,6 +86,7 @@
             <br>
 <?php
     }
+/* Was this ever used??
 
     $constraints = null;
     $ops = null;
@@ -101,8 +102,9 @@
         $constraints["lower(last_name)"] = "$_l%";
         $ops["lower(last_name)"] = "like";
     }
-
     $ppl = get_people($constraints, "or", $ops);
+*/
+    $ppl = get_photographed_people($user);
 ?>
         <ul class="<?php echo $_view ?>">
 <?php
