@@ -76,6 +76,9 @@
             $photo = new photo();
         }
     }
+    if(!$user->is_admin()) {
+        $permissions = $user->get_permissions_for_photo($photo_id);
+    }
 
     if (isset($offset)) {
         $ignore = array("_off", "_action");
@@ -112,6 +115,18 @@
         }
     }
 
+   if ($_action == "lightbox") {
+        $photo->add_to_album($user->get("lightbox_id"));
+        $action = "display";
+    }
+    else if ($_action == "rate") {
+        if (ALLOW_RATINGS) {
+            $rating = getvar("rating");
+            $photo->rate($user->get("user_id"), $rating);
+        }
+        $action = "display";
+    }
+
     if (!$user->is_admin()) {
         if ($_action == "new" || $_action == "insert" ||
             $_action == "delete" || $_action == "confirm") {
@@ -120,7 +135,6 @@
             header("Location: " . add_sid("zoph.php"));
         }
 
-        $permissions = $user->get_permissions_for_photo($photo_id);
         if (!$permissions) {
             $photo = new photo(-1); // in case redirect fails
             header("Location: " . add_sid("zoph.php"));
@@ -164,24 +178,7 @@
         $actionlinks["return"]="photo.php?_action=display&amp;" . $return_qs;
         $_action = "edit";
     }
-
-    // 2005-04-10 --JCT
-    //
-    // moved from below so they are allowed
-    // prior to $user->is_admin() check
-    //
-    if ($_action == "lightbox") {
-        $photo->add_to_album($user->get("lightbox_id"));
-        $action = "display";
-    }
-    else if ($_action == "rate") {
-        if (ALLOW_RATINGS) {
-            $rating = getvar("rating");
-            $photo->rate($user->get("user_id"), $rating);
-        }
-        $action = "display";
-    }
-
+   
     if ($_action == "edit") {
         $actionlinks["return"]="photo.php?_action=display&amp;" . $return_qs;
         unset($actionlinks["cancel"]);
