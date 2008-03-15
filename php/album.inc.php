@@ -79,19 +79,19 @@ class album extends zoph_tree_table {
         if ($user && !$user->is_admin()) {
             $sql =
                 "SELECT a.*, album as name, " .
-                "min(p.date) as first, " .
-                "max(p.date) as last, " .
+                "min(p.date) as oldest, " .
+                "max(p.date) as newest, " .
                 "min(p.timestamp) as first, " .
                 "max(p.timestamp) as last, " .
                 "min(rating) as lowest, " . 
                 "max(rating) as highest, " .
                 "avg(rating) as average, " .
                 "rand() as random from " .
-                DB_PREFIX . "albums as a LEFT JOIN " .
+                DB_PREFIX . "albums as a JOIN " .
                 DB_PREFIX . "photo_albums as pa " .
                 "ON a.album_id=pa.album_id LEFT JOIN " .
                 DB_PREFIX . "photos as p " .
-                "ON pa.photo_id=p.photo_id JOIN " .
+                "ON pa.photo_id=p.photo_id LEFT JOIN " .
                 DB_PREFIX . "album_permissions ap " .
                 "ON a.album_id=ap.album_id " .
                 "WHERE user_id=" . $user->get("user_id") .
