@@ -1,4 +1,12 @@
 Zoph Changelog
+Zoph 0.7.0.3
+15 March 2008
+
+This is a bugfix release that fixes a few bugs in the 0.7 release.
+
+    * Bug#1856587: CSS fixes for MSIE rendering problems
+    * Bug#1859100: zophImport.pl moves files to wrong dir when path is specified in filename
+    * Bug#1840352: Ratings and Favourites do not always work correctly.
 
 Zoph 0.7.0.2
 25 July 2007

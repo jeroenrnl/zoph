@@ -128,7 +128,7 @@ DCP_0155.JPG mid thumb
 <p>Here is a list of all the fields that can be set when importing:</p>
 <ul>
 <li>--datedDirs (put photos in YYYY.MM.DD dirs)</li>
-<li>--hierarchical (put photos in hierarchical dated dirs (YYYY/MM/DD) (&gt;v0.5)</li>
+<li>--hierarchical (put photos in hierarchical dated dirs (YYYY/MM/DD) (&gt;v0.5) you need to also specify the --datedDirs argument, otherwise this will not work.</li>
 <li>--update (update existing photos)</li>
 <li>--updateSize (update the photo's width, height and size. implies --update.)</li>
 <li>--updateExif (reparse and load the exif headers. implied --update.)</li>
@@ -258,6 +258,14 @@ zophImport.pl --datedDirs --resolveSymlinks IMG_0001.JPG LNK_0002.JPG
 <p>BINS takes a source directory and a target directory. zophExport.pl will create the target directory based on the --dir you specify. It will also append ".tmp" to the target directory name and create another directory to which it will copy the images from Zoph and which will act as the source dir for BINS. You can remove this temp dir after BINS finishes. You can set the source and target directory to the same dir in BINS but you can only run BINS against that directory once, after that it will start creating thumbnails of the thumbnails, etc.</p>
 <p>You can create a config xml file for BINS to use. I found it useful to set the defaultSize parameter to 0 (default to small images).</p>
 
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 17/1000000
+Post-expand include size: 0/2048000 bytes
+Template argument size: 0/2048000 bytes
+#ifexist count: 0/500
+-->
 
 </div>
 </html>
