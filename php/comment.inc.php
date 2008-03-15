@@ -53,13 +53,16 @@ class comment extends zoph_table {
         $date=$this->get("comment_date");
         $changed=$this->get("timestamp");
         if($changed != $date) { $updated=$changed; }
+
+        $zophcode = new zophcode($this->get("comment"), array("b","i", "u"));
+        $comment="<div>" . $zophcode->parse() . "</div>";
     
         return array(
             translate("subject") => $this->get("subject"),
             translate("date") => $date,
             translate("user") => $this->lookup_user(),
             translate("IP address") => $user->is_admin() ? $this->get("ipaddr") : "<i>" . translate("only visible for admin users") . "</i>",
-            translate("comment") => str_replace("\n", "<br>", $this->get("comment")),
+            translate("comment") => $comment,
             translate("updated") => $changed
         );
     }
@@ -140,7 +143,8 @@ class comment extends zoph_table {
             $html .= "</div>\n";
         }
         
-        $html .= str_replace("\n", "<br class=\"noclear\">\n", $this->get("comment"));
+        $zophcode = new zophcode($this->get("comment"), array("b","i", "u"));
+        $html .= $zophcode->parse();
         $html .= "<br></div>\n";
         return $html;
     }

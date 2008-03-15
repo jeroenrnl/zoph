@@ -371,7 +371,29 @@ table.reports {
     float: left;
     padding: 10px 5px 20px 5px;
 }
+
+div.smileys {
+    border: 1px solid black;
+    clear: right;
+    }
     
+div.smileys div {
+    float: left;
+    width: 70px;
+    height: 20px;
+}
+
+div.smileys span {
+    font-size: 8pt;
+    vertical-align: middle;
+    }
+
+div.smileys img {
+    float: left;
+    margin: 2px;
+    margin-right: 4px;
+    }
+
 /* This is the bar that shows the number of photos for each rating */
 div.ratings   {
     float: left;

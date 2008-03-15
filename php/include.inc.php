@@ -41,6 +41,7 @@
 
     require_once("album.inc.php");
     require_once("category.inc.php");
+    require_once("code.inc.php");
     require_once("comment.inc.php");
 
     require_once("photo.inc.php");
