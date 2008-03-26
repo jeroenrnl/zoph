@@ -106,6 +106,6 @@
             $_SESSION['user'] = &$user;
         }
     } else {
-        $rtplang = new rtplang("lang", "en", "en", "en");
+        $rtplang = new rtplang("lang", "en", "en", DEFAULT_LANG);
     }        
 ?>

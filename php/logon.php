@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
     require_once("config.inc.php");
+    require_once("variables.inc.php");
     if(isset($HTTP_GET_VARS["redirect"])) {
         $redirect = urlencode($HTTP_GET_VARS["redirect"]);
     } else {
@@ -27,33 +28,33 @@
         }
     }
     require_once("zoph_table.inc.php");
-#    require_once("rtplang.class.php");
+    require_once("rtplang.class.php");
     require_once("user.inc.php");
 
 
     $user = new user();
-#    $rtplang = $user->load_language();
+    $rtplang = $user->load_language();
 
-#    print $rtplang->lang_header();
+    print $rtplang->lang_header();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link TYPE="text/css" REL="stylesheet" HREF="<?php echo CSS_SHEET ?>?logged_on=no">
-<title><?php echo ZOPH_TITLE . ' - ' . "logon" ?></title>
+<title><?php echo ZOPH_TITLE . ' - ' . translate("logon",0) ?></title>
 </head>
 <body>
-    <h1><?php echo "logon" ?></h1>
+    <h1><?php echo translate("logon",0) ?></h1>
     <div class="main" id="logon">
         <form action="zoph.php" method="POST">
             <h2 class="logon"><?php echo ZOPH_TITLE ?></h2>
-            <label for="uname"><?php echo "username" ?></label>
+            <label for="uname"><?php echo translate("username",0) ?></label>
             <input type="text" name="uname" id="uname"><br>
-            <label for="pword"><?php echo "password" ?></label>
+            <label for="pword"><?php echo translate("password",0) ?></label>
             <input type="password" name="pword" id="pword"><br>
             <input type="hidden" name="redirect" value="<?php echo $redirect ?>">
-            <input type="submit" value="<?php echo "submit"; ?>">
+            <input type="submit" value="<?php echo translate("submit",0); ?>">
         </form>
     </div>
 </body>

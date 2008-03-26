@@ -47,6 +47,9 @@
 
     define('LANG_DIR', "lang"); // where language files are stored
 
+    # Use this language when neither user or browser specify a language
+    define('DEFAULT_LANG', 'en');
+
     define('EMAIL_PHOTOS', 1); // enable email photo feature
 
     // sent all emails also to this address

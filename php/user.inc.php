@@ -165,9 +165,8 @@ class user extends zoph_table {
             }
         }
 
-        // default to English
         if(!isset($application_lang)) {
-          $application_lang = "en";
+          $application_lang = DEFAULT_LANG;
         }
 
         $this->lang = new rtplang("lang", "en", "en", $application_lang);
