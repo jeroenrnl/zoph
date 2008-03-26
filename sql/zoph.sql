@@ -16,7 +16,6 @@
 -- MySQL dump 8.22
 --
 -- Host: localhost    Database: zoph
----------------------------------------------------------
 -- Server version	3.23.54
 
 --
