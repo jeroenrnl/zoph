@@ -118,13 +118,17 @@ class zoph_tree_table extends zoph_table {
         return implode(",", $id_array);
     }
 
-    function get_html_tree() {
+    function get_html_tree($open=true) {
         $this->lookup();
         $children=$this->get_children();
 
         $html="<li>\n";
         if($children) {
-            $html.="<span onclick=\"branch(this)\">+&nbsp;</span>";
+          if ($open) {
+                $html.="<span onclick=\"unbranch(this)\">-&nbsp;</span>";
+           } else {
+                $html.="<span onclick=\"branch(this)\">+&nbsp;</span>";
+           }
         } else {
             $html.="<span>&nbsp;&nbsp;</span>";
         }
@@ -133,7 +137,7 @@ class zoph_tree_table extends zoph_table {
             $html.= "<ul>";
         }
         foreach($children as $child) {
-            $html .= $child->get_html_tree();
+            $html .= $child->get_html_tree(false);
         }
         if($children) {
             $html .= "</ul>";
