@@ -146,6 +146,10 @@ ul.list {
     list-style: none;
     }
 
+ul.list li.alternate {
+    background-color: <?php echo $TITLE_BG_COLOR ?>;
+    }
+
 ul.tree {
     clear: both;
     list-style: none;

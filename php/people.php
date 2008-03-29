@@ -110,8 +110,8 @@
 <?php
     if ($ppl) {
         foreach($ppl as $p) {
+            echo "<li" . (++$i%2 ? " class=\"alternate\"":"") . ">";
 ?> 
-        <li>
             <span class="actionlink"><a href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("display") ?></a> | <a href="photos.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos of") ?></a> | <a href="photos.php?photographer_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos by") ?></a></span>
 <?php
         if ($_view=="thumbs") {
