@@ -37,9 +37,11 @@
         $from_name = getvar("from_name");
         $from_email = getvar("from_email");
 
-        $mail = new htmlMimeMail(array('X-Mailer: Html Mime Mail Class'));
-        $mail->setCrlf("\r\n");
-
+        $mail = new Mail_mime();
+        $hdrs = array (
+            "X-Mailer" => "Html Mime Mail Class",
+            "X-Zoph-Version" => VERSION
+        );
         $mail->setFrom("$from_name <$from_email>");
         $mail->setSubject($subject);
 
@@ -47,12 +49,14 @@
             $mail->setBCC(BCC_ADDRESS);
         }
 
-        $mail->settext($message);
-
-        if (!$mail->send(array("$to_name <$to_email>"), 'smtp')) {
-            $msg .= translate("Could not send mail.");
+        $mail->setTXTBody($message);
+        
+        $body = $mail->get();
+        $hdrs = $mail->headers($hdrs);
+        foreach($hdrs as $header => $content) {
+            $headers .= $header . ": " . $content . "\n";
         }
-        else {
+        if (mail($to_email,"", $body,$headers)) {
             $msg = translate("Your mail has been sent.");
 
             $setlastmodified = getvar("setlastmodified");
@@ -61,6 +65,8 @@
                 $u->set("lastnotify", "now()");
                 $u->update();
             }
+        } else {
+            $msg .= translate("Could not send mail.");
         }
     }
     else {
