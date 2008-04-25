@@ -149,7 +149,7 @@ ul.list {
 ul.list li.alternate {
     background-color: <?php echo $TITLE_BG_COLOR ?>;
     }
-
+     
 ul.tree {
     clear: both;
     list-style: none;
@@ -168,6 +168,7 @@ ul.tree ul ul {
 ul.thumbs a {
     text-align: center;
     }
+
 /* Form properties */
 form    {
     margin: 0 0 0 0;
@@ -542,20 +543,28 @@ table#permissions td.permremove {
     }
 
 /* Previous and next links above a photo */
-div#prev, div#next, div#pagelink, div#photohdr  {
+div.prev, div.next, div.pagelink, div#photohdr  {
     margin-bottom: 2px;
     margin-top: 30px;
     font-size: small;
     float: left;
     }
 
-div#prev    { 
+div.prev a, div.next a, div.pagelink a {
+    text-decoration: none;
+    }
+
+div.prev a:hover, div.next a:hover, div.pagelink a:hover {
+    text-decoration: underline;
+    }
+
+div.prev    { 
     width: 20%;
     float: left; 
     text-align: left 
     }
     
-div#next    {
+div.next    {
     width: 20%;
     float: right;
     text-align: right;
@@ -564,13 +573,13 @@ div#next    {
 
 
 /* Page links */
-div#pagelink,
+div.pagelink,
 div#photohdr {
     text-align: center;
     width: 60%;
     }
     
-#currentpage    {
+.currentpage    {
     color: red;
     font-weight: bold;
     }
@@ -662,7 +671,7 @@ div.thumbnail   {
     margin: 2px;
     padding: 5px;
     }
-    
+
 div.comment {
     border: 1px solid <?PHP echo $TABLE_BORDER_COLOR ?>;
     background: transparent;

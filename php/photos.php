@@ -185,8 +185,8 @@
 //        }
 ?>
        <br>
-<?php include "pager.inc.php" ?>
 <?php
+        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $PHP_SELF, $request_vars, "_off");
     } // if photos
 ?>
        <br>
