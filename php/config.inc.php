@@ -24,8 +24,9 @@
     define('DB_PASS', 'pass');
     define('DB_PREFIX', 'zoph_'); // prefix for tables, '' for none
 
-    // Temporary addition until CSS sheet can be chosen from config page
+    // Define how Zoph looks by choosing a stylesheet and iconset.
     define('CSS_SHEET', 'css.php');
+    define('ICONSET', 'default');
 
     define('USE_IMAGE_SERVICE', 1);
     define('IMAGE_DIR', "/data/images/");

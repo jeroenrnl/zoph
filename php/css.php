@@ -149,7 +149,7 @@ ul.list {
 ul.list li.alternate {
     background-color: <?php echo $TITLE_BG_COLOR ?>;
     }
-     
+
 ul.tree {
     clear: both;
     list-style: none;
@@ -167,6 +167,33 @@ ul.tree ul ul {
 
 ul.thumbs a {
     text-align: center;
+    }
+
+ul.admin {
+    list-style: none;
+    }
+
+ul.admin li {
+    width: 110px;
+    height: 110px;
+    display: block;
+    margin: 3px;
+    float: left;
+    clear: none;
+    text-align: center;
+    }
+
+ul.admin a {
+    text-decoration: none;
+    padding: 5px;
+    width: 100px;
+    height: 100px;
+    display: block;
+    }
+
+ul.admin a:hover {
+    background: <?php echo $BREADCRUMB_BG_COLOR ?>;
+    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
     }
 
 /* Form properties */

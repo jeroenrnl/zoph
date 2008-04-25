@@ -74,7 +74,7 @@ print $rtplang->lang_header();
     }
 
     if ($user->is_admin()) {
-        $tabs[translate("users", 0)] = "users.php";
+        $tabs[translate("admin", 0)] = "admin.php";
     }
 
     $tabs += array(
