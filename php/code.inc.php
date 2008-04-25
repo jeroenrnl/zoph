@@ -150,7 +150,7 @@ class zophcode {
             } else {
                 $endtag = false;
             }
-            if ($this->allowed && in_array($tag[0], $this->allowed)) {
+            if (!$this->allowed || in_array($tag[0], $this->allowed)) {
                 // The array $allowed can be used to prevent users from using
                 // certain tags in some positions.
                 // This is used for example to limit the number of options
@@ -317,6 +317,7 @@ function get_tags_array() {
     new tag(&$tags, "u", "u");
     new tag(&$tags, "h1", "h1");
     new tag(&$tags, "h2", "h2");
+    new tag(&$tags, "h3", "h3");
     new tag(&$tags, "color", "span", "", "style=\"color: [param];\"");
     new tag(&$tags, "font", "span", "", "style=\"font-family: [param];\"");
     new tag(&$tags, "br", "br", null, null, false);
