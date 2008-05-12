@@ -130,11 +130,7 @@ class person extends zoph_table {
         function get_coverphoto($user,$autothumb=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-            if ($coverphoto->lookup($user)) {
-               $cover=TRUE; 
-            }
-        } 
-        if ($autothumb && !$cover) {
+        } else if ($autothumb) {
             $order=get_autothumb_order($autothumb);
             if ($user && !$user->is_admin()) {
                 $sql=

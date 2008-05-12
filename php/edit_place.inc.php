@@ -60,6 +60,8 @@
 
          <?php echo create_text_input("urldesc", $place->get("urldesc"), 32, 32) ?>
          <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
+         <label for="pageset"><?php echo translate("pageset") ?></label>
+         <?php echo create_smart_pulldown("pageset", $place->get("pageset"), get_pageset_select_array()) ?><br>
          <label for="notes"><?php echo translate("notes") ?></label>
          <textarea name="notes" cols="40" rows="4"><?php echo $place->get("notes") ?></textarea>
          <input type="submit" value="<?php echo translate($action, 0) ?>">

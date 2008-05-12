@@ -231,6 +231,26 @@ form#ratingform select {
     margin-right: 5px;
     }
 
+/* Form to add a page to a pageset */
+form.addpage {
+    width: auto;
+    text-align: right;
+    }
+form.addpage input[type="submit"]   {
+    display: inline;
+    margin: 15px;
+    vertical-align: middle;
+    }
+form.addpage select {
+    display: inline;
+    vertical-align: middle;
+}
+form.addpage label {
+    vertical-align: middle;
+    float: none;
+    display: inline;
+}
+
 ul.autocompdropdown {
     position: relative;
     background: <?php echo $PAGE_BG_COLOR ?>;
@@ -352,7 +372,7 @@ div.breadcrumb li.firstdots:before {
     }
 
 /* Main page */
-.main, .info, .letter, div#selection   {
+.main, .info, .letter, .page, div#selection   {
     background: <?php echo $TABLE_BG_COLOR ?>;
     font-size: medium;
     width: 100%;
@@ -403,6 +423,10 @@ table.reports {
     float: left;
     padding: 10px 5px 20px 5px;
 }
+
+table.pages, table.pagesets {
+    width: 100%;
+    }
 
 div.smileys {
     border: 1px solid black;
@@ -998,6 +1022,48 @@ div#relation {
 div#rotate input[type="submit"] {
     margin-left: auto;
     margin-right: auto;
+    }
+
+div.page-preview {
+    border: 1px solid black;
+    width: 80%;
+    max-height: 600px;
+    min-width: 600px;
+    overflow: scroll;
+    background: <?php echo $TABLE_BG_COLOR ?>;
+    font-size: medium;
+    border-spacing: 0px;
+    padding: 10px;
+    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    clear: both;
+    }
+
+div.page h1, div.page-preview h1 {
+    position: relative;
+    left: -10px;
+    margin: 0;
+    width: 100%;
+    border-left: 0px;
+    border-right: 0px;
+    background: <?php echo $TITLE_BG_COLOR ?>;
+    font-size: large;
+    text-align: center;
+
+   }
+
+div.page h2, div.page-preview h2 {
+    text-align: center;
+    border-bottom: 1px solid black;
+    }
+
+div.page h3, div.page-preview h3 {
+    text-align: left;
+    }
+
+div.page div.background {
+    margin: -10px;
+    padding: 10px;
+    width: 100%;
     }
 
 /* Styles for calendar */

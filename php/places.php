@@ -38,6 +38,7 @@
         $place = new place($parent_place_id);
     }
     $place->lookup();
+    $obj=&$place;
     $ancestors = $place->get_ancestors();
     $children = $place->get_children(null, "title");
 
@@ -62,6 +63,8 @@
     if ($user->is_admin()) {
         include("selection.inc.php");
     }
+    include("show_page.inc.php");
+    if($show_orig) {
 ?>
     <div class="main">
 <?php
@@ -224,5 +227,7 @@
 ?>
     </div>
 <?php
+    } // if show_orig
+    echo $page_html;
     require_once("footer.inc.php");
 ?>

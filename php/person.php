@@ -42,7 +42,6 @@
     $obj = &$person;
     $redirect = "people.php";
     require_once("actions.inc.php");
-
     if ($action != "insert") {
         $person->lookup();
         $title = $person->get_name();
@@ -89,6 +88,8 @@
     if($user->is_admin()) {
         include("selection.inc.php");
     }
+    include("show_page.inc.php");
+    if($show_orig) {
 ?>
       <div class="main">
           <span class="actionlink">
@@ -146,9 +147,14 @@ if ($user->get("detailed_people") || $user->is_admin()) {
 
     } // detailed_people
 
+
 ?>
-</dl>
+    </dl><br>
+    </div>
 <?php
+     } // show_orig
+     echo $page_html;
+
 
     } // display
     else if ($action == "confirm") {
@@ -162,13 +168,13 @@ if ($user->get("detailed_people") || $user->is_admin()) {
             <a href="person.php?_action=display&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("cancel") ?></a>
           </span>
             <?php echo sprintf(translate("Confirm deletion of '%s'"), $person->get_name()) ?>:
+         <br>
+       </div>
 <?php
     }
     else {
 require_once("edit_person.inc.php");
     }
 ?>
-<br>
-</div>
 
 <?php require_once("footer.inc.php"); ?>

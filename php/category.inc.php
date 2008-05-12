@@ -159,6 +159,10 @@ class category extends zoph_tree_table {
                     translate("category description"),
                     create_text_input("category_description",
                         $this->get("category_description"), 40, 128)),
+            "pageset" =>
+                array(
+                    translate("pageset"),
+                    create_smart_pulldown("pageset", $this->get("pageset"), get_pageset_select_array())),
             "sortname" =>
                 array(
                     translate("sort name"),
