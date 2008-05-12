@@ -40,3 +40,43 @@ alter table zoph_prefs add column child_sortorder
 		'first', 'last', 'lowest', 'highest', 'average') 
 	default 'sortname' after autothumb;
 
+#
+# Changes for 0.7.2
+#
+
+CREATE TABLE zoph_pageset ( 
+	pageset_id int(11) NOT NULL auto_increment, 
+	title varchar(128), 
+	show_orig enum('never', 'first', 'last', 'all') NOT NULL DEFAULT 'all',
+	orig_pos enum('top', 'bottom') NOT NULL DEFAULT 'top',
+	date datetime, 
+	user int(11) , 
+	timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
+	PRIMARY KEY  (pageset_id));
+
+CREATE TABLE zoph_pages ( 
+	page_id int(11) NOT NULL auto_increment, 
+	title varchar(128), 
+	text blob,
+	date datetime,
+	timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  
+	PRIMARY KEY  (page_id));  
+
+CREATE TABLE zoph_pages_pageset ( 
+	pageset_id int(11) NOT NULL, 
+	page_id int(11) NOT NULL, 
+	page_order int(5) unsigned );
+
+ALTER TABLE zoph_albums 
+	ADD COLUMN pageset int(11) DEFAULT NULL after coverphoto;
+
+ALTER TABLE zoph_categories
+	ADD COLUMN pageset int(11) DEFAULT NULL after coverphoto;
+
+ALTER TABLE zoph_places
+	ADD COLUMN pageset int(11) DEFAULT NULL after coverphoto;
+
+ALTER TABLE zoph_people
+	ADD COLUMN pageset int(11) DEFAULT NULL after coverphoto;
+
+
