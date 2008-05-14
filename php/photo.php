@@ -53,7 +53,6 @@
         if (!$_off)  { $_off = 0; }
         $offset = $_off;
 
-        $thumbnails;
         $num_photos = get_photos($request_vars, $offset, 1, $thumbnails, $user);
 
         $num_thumbnails = sizeof($thumbnails);
@@ -75,6 +74,9 @@
         else {
             $photo = new photo();
         }
+    }
+    if(!$user->is_admin()) {
+        $permissions = $user->get_permissions_for_photo($photo_id);
     }
 
     if (isset($offset)) {
@@ -112,6 +114,18 @@
         }
     }
 
+   if ($_action == "lightbox") {
+        $photo->add_to_album($user->get("lightbox_id"));
+        $action = "display";
+    }
+    else if ($_action == "rate") {
+        if (ALLOW_RATINGS) {
+            $rating = getvar("rating");
+            $photo->rate($user->get("user_id"), $rating);
+        }
+        $action = "display";
+    }
+
     if (!$user->is_admin()) {
         if ($_action == "new" || $_action == "insert" ||
             $_action == "delete" || $_action == "confirm") {
@@ -120,7 +134,6 @@
             header("Location: " . add_sid("zoph.php"));
         }
 
-        $permissions = $user->get_permissions_for_photo($photo_id);
         if (!$permissions) {
             $photo = new photo(-1); // in case redirect fails
             header("Location: " . add_sid("zoph.php"));
@@ -164,24 +177,7 @@
         $actionlinks["return"]="photo.php?_action=display&amp;" . $return_qs;
         $_action = "edit";
     }
-
-    // 2005-04-10 --JCT
-    //
-    // moved from below so they are allowed
-    // prior to $user->is_admin() check
-    //
-    if ($_action == "lightbox") {
-        $photo->add_to_album($user->get("lightbox_id"));
-        $action = "display";
-    }
-    else if ($_action == "rate") {
-        if (ALLOW_RATINGS) {
-            $rating = getvar("rating");
-            $photo->rate($user->get("user_id"), $rating);
-        }
-        $action = "display";
-    }
-
+   
     if ($_action == "edit") {
         $actionlinks["return"]="photo.php?_action=display&amp;" . $return_qs;
         unset($actionlinks["cancel"]);
@@ -284,9 +280,10 @@ require_once("header.inc.php");
     else if ($action == "display") {
         unset($actionlinks["cancel"]);
         unset($actionlinks["return"]);
-        $title_bar = translate("photo");
         if ($num_photos) {
-            $title_bar .= " " . ($offset + 1) . " of $num_photos";
+            $title_bar = sprintf(translate("photo %s of %s"),  ($offset + 1) , $num_photos);
+        } else {
+            $title_bar = translate("photo");
         }
 ?>
           <h1>
@@ -454,14 +451,12 @@ require_once("header.inc.php");
     }
     else if ($action == "confirm") {
 ?>
-          <h1><?php echo translate("photo") ?></h1>
+          <h1><?php echo translate("photo")?></h1>
           <div class="main">
 <?php
-    echo create_actionlinks($actionlinks);
-?>
-            <?php echo sprintf(translate("Confirm deletion of '%s'"), $photo->get("name")) ?>
-
-<?php
+        echo create_actionlinks($actionlinks);
+        echo sprintf(translate("Confirm deletion of '%s'"), $photo->get("name"));
+        echo $photo->get_midsize_img();
     }
     else {
 require_once("edit_photo.inc.php");

@@ -16,11 +16,10 @@
 function branch(obj) {
     obj.nextSibling.nextSibling.style.display="block";
     obj.innerHTML="-&nbsp;";
-    obj.onclick=unbranch;
+    obj.onclick=closebranch;
     }
 
 function unbranch(obj) {
-    obj=this;
     obj.nextSibling.nextSibling.style.display="none";
     obj.innerHTML="+&nbsp;";
     obj.onclick=openbranch;
@@ -28,4 +27,8 @@ function unbranch(obj) {
 
 function openbranch() {
     branch(this);
+    }
+
+function closebranch() {
+    unbranch(this);
     }

@@ -37,6 +37,17 @@ php/lang subdirectory.
 You can upgrade directly from 0.6 to 0.7.0.2, simply use the
 zoph-0.7.0.2.tar.gz and execute the instructions for the 0.6 to 0.7 upgrade.
 
+Zoph 0.7.0.3
+Please follow the instructions for 0.7.0.2.
+
+Zoph 0.7 or 0.7.0.1 -> 0.7.0.2 update
+25 July 2007
+Copy php/* to the location of your installation. Make sure to also copy the
+php/lang subdirectory.
+
+You can upgrade directly from 0.6 to 0.7.0.2, simply use the
+zoph-0.7.0.2.tar.gz and execute the instructions for the 0.6 to 0.7 upgrade.
+
 Zoph 0.7 -> 0.7.0.1 update
 14 July 2007
 

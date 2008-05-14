@@ -135,6 +135,7 @@ ul.thumbs li img {
 }
 
 ul.thumbs li div {
+    left: 5%;
     position: absolute;
     bottom: 0px;
     text-align: center;
@@ -167,6 +168,7 @@ ul.tree ul ul {
 
 ul.thumbs a {
     text-align: center;
+    text-decoration: none; 
     }
 
 ul.admin {
@@ -789,19 +791,19 @@ label, dt, dd    {
     font-size: medium; 
     padding-left: 4px;
     padding-right: 4px;
+    min-height: 1.3em;
     }
 
 dd {
     float: left;
-    clear: right;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    width: 55%;
+    margin: 5px;
     }
 
 dt {
     clear: left;
     float: left;
-    width: 10em;
+    width: 40%;
     font-weight: bold;
     text-align: right;
     margin-top: 5px;

@@ -15,12 +15,17 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+        if ($num_photos) {
+            $title_bar = sprintf(translate("photo %s of %s"),  ($offset + 1) , $num_photos);
+        } else {
+            $title_bar = translate("photo");
+        }
 ?>
           <h1>
 <?php
           echo create_actionlinks($actionlinks);
+          echo $title_bar;
 ?>
-          <?php echo translate("photo") ?>
           </h1>
 <?php
           require_once("selection.inc.php");

@@ -27,3 +27,6 @@ $copy = 0;
 $hierarchical = 0;
 $verbose = 0;
 $resolveSymlinks = 0;
+
+# Perl does not like it when this file ends with a "= 0"
+1;
