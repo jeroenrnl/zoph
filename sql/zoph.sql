@@ -50,6 +50,7 @@ CREATE TABLE zoph_albums (
   album_description varchar(255) default NULL,
   sortname char(32),
   coverphoto int(11) default NULL,
+  pageset int(11) DEFAULT NULL,
   sortorder varchar(32) default NULL,
   PRIMARY KEY  (album_id),
   KEY album_parent_id (parent_album_id)
@@ -60,7 +61,7 @@ CREATE TABLE zoph_albums (
 --
 
 
-INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL, NULL, NULL);
+INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL, NULL, NULL,NULL);
 
 --
 -- Table structure for table 'zoph_categories'
@@ -73,6 +74,7 @@ CREATE TABLE zoph_categories (
   category_description varchar(255) default NULL,
   sortname char(32),
   coverphoto int(11) default NULL,
+  pageset int(11) DEFAULT NULL,
   sortorder varchar(32) default NULL,
   PRIMARY KEY  (category_id),
   KEY cat_parent_id (parent_category_id)
@@ -82,7 +84,7 @@ CREATE TABLE zoph_categories (
 -- Dumping data for table 'zoph_categories'
 --
 
-INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL, NULL,NULL,NULL);
+INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL, NULL,NULL,NULL, NULL);
 
 --
 -- Table structure for table 'zoph_color_schemes'
@@ -155,6 +157,7 @@ CREATE TABLE zoph_people (
   spouse_id int(11) default NULL,
   notes varchar(255) default NULL,
   coverphoto int(11) default NULL,
+  pageset int(11) DEFAULT NULL,
   email varchar(64) default NULL,
   PRIMARY KEY  (person_id),
   KEY person_last_name (last_name(10)),
@@ -166,7 +169,7 @@ CREATE TABLE zoph_people (
 --
 
 
-INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL);
 
 --
 -- Table structure for table 'zoph_photo_albums'
@@ -305,13 +308,14 @@ CREATE TABLE zoph_places (
   url varchar(1024) DEFAULT NULL,
   urldesc varchar(32) DEFAULT NULL,
   coverphoto int(11) default NULL,
+  pageset int(11) DEFAULT NULL,
   notes varchar(255) default NULL,
   PRIMARY KEY  (place_id),
   KEY place_city (city(10)),
   KEY place_title (title(10))
 ) TYPE=MyISAM;
 
-INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 --
 -- Dumping data for table 'zoph_places'
@@ -409,4 +413,27 @@ CREATE TABLE zoph_users (
 
 
 INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1',NULL,NULL,NULL,NULL);
+
+CREATE TABLE zoph_pageset (
+  pageset_id int(11) NOT NULL auto_increment,
+  title varchar(128),
+  show_orig enum('never', 'first', 'last', 'all') NOT NULL DEFAULT 'all',
+  orig_pos enum('top', 'bottom') NOT NULL DEFAULT 'top',
+  date datetime,
+  user int(11) ,
+  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY  (pageset_id));
+
+CREATE TABLE zoph_pages (
+  page_id int(11) NOT NULL auto_increment,
+  title varchar(128),
+  text blob,
+  date datetime,
+  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY  (page_id));
+
+CREATE TABLE zoph_pages_pageset (
+  pageset_id int(11) NOT NULL,
+  page_id int(11) NOT NULL,
+  page_order int(5) unsigned );
 

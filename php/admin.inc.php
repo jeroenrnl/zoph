@@ -57,5 +57,7 @@ function get_admin_page($adminpage) {
 function get_admin_array() {
     $adminpage=array();
     new admin(&$adminpage, "users", "create or modify user accounts", "users.php", "users.png");
+    new admin(&$adminpage, "pages", "create or modify zoph pages", "pages.php", "pages.png");
+    new admin(&$adminpage, "pagesets", "create or modify pagesets", "pagesets.php", "pagesets.png");
     return $adminpage;
 }
