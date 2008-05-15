@@ -817,10 +817,6 @@ dl  {
     border: 1px solid transparent;
     }
 
-dl.prefs dt {
-    width: 25em;
-    }
-
 dl#allexif {
     display: none;
     width: 100%;
