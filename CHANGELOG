@@ -1,4 +1,20 @@
 Zoph Changelog
+
+Zoph 0.7.0.4
+26 May 2008
+
+This is a bugfix release that fixes a few bugs in the 0.7 release.
+
+    * Bug#1923507: pleasewait.gif missing
+    * Bug#1926107 SQL error because of dashed line in zoph.sql
+    * Bug#1923955: photo x of y is not correctly translated
+    * Bug#1928150: tree view shows a "+" even though the branch is already open
+    * Bug#1928671: Notify mail doesn't work
+    * Perl chokes when the .zophrc file ends with a negative assignment (" = 0"), adding "1;" to make sure it always ends "positively".
+    * Bug#1964408 Garbled layout on prefs page.
+
+Very small new feature: the photo is now shown when asking for confirmation of deletion
+
 Zoph 0.7.0.3
 15 March 2008
 
