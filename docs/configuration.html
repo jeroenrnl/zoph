@@ -26,6 +26,10 @@
 <li class="toclevel-2"><a href="#ZOPH_SECURE_URL"><span class="tocnumber">1.5</span> <span class="toctext">ZOPH_SECURE_URL</span></a></li>
 <li class="toclevel-2"><a href="#MAX_PEOPLE_SLOTS"><span class="tocnumber">1.6</span> <span class="toctext">MAX_PEOPLE_SLOTS</span></a></li>
 <li class="toclevel-2"><a href="#DEFAULT_TABLE_WIDTH"><span class="tocnumber">1.7</span> <span class="toctext">DEFAULT_TABLE_WIDTH</span></a></li>
+<li class="toclevel-2"><a href="#CSS_SHEET"><span class="tocnumber">1.8</span> <span class="toctext">CSS_SHEET</span></a></li>
+<li class="toclevel-2"><a href="#ICONSET"><span class="tocnumber">1.9</span> <span class="toctext">ICONSET</span></a></li>
+<li class="toclevel-2"><a href="#LANG_DIR"><span class="tocnumber">1.10</span> <span class="toctext">LANG_DIR</span></a></li>
+<li class="toclevel-2"><a href="#DEFAULT_LANG"><span class="tocnumber">1.11</span> <span class="toctext">DEFAULT_LANG</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1"><a href="#Authentication"><span class="tocnumber">2</span> <span class="toctext">Authentication</span></a>
@@ -234,7 +238,87 @@
 <td colspan="2"><b>Options:</b> A number in pixels ("px") or percent ("%"), the latter is a percentage of the user's browser window width.</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('DEFAULT_TABLE_WIDTH, "600px");</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('DEFAULT_TABLE_WIDTH', "600px");</tt></td>
+</tr>
+</table>
+<p><a name="CSS_SHEET" id="CSS_SHEET"></a></p>
+<h3> <span class="mw-headline">CSS_SHEET</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">CSS_SHEET</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Defines the stylesheet Zoph is using.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>css.php</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> The filename of any CSS file. May be .css or .php, but make sure you send the right header if you are using php to generate the CSS file.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('CSS_SHEET', "mycss.css");</tt></td>
+</tr>
+</table>
+<p><a name="ICONSET" id="ICONSET"></a></p>
+<h3> <span class="mw-headline">ICONSET</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">ICONSET</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.2/0.8 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Defines the iconset Zoph is using.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>default</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> The name of a directory under the images/icons directory containing icons for Zoph.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('ICONSET', "myicons");</tt></td>
+</tr>
+</table>
+<p><a name="LANG_DIR" id="LANG_DIR"></a></p>
+<h3> <span class="mw-headline">LANG_DIR</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">LANG_DIR</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Defines the directory where the translation files are stored. This is a directory under the base directory. In a new installation you usually have to copy the lang directory into the php directory</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>lang</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any directory name.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('LANG_DIR', "lang");</tt></td>
+</tr>
+</table>
+<p><a name="DEFAULT_LANG" id="DEFAULT_LANG"></a></p>
+<h3> <span class="mw-headline">DEFAULT_LANG</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DEFAULT_LANG</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.2/0.8</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Defines the default language Zoph uses. This is a last resort, after the users preferences and the browser's indication have been checked.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>en</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any language as defined in the language files in the directory defined with <a href="configuration.html#LANG_DIR" title="Zoph/Configuration">LANG_DIR</a>.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DEFAULT_LANG', "nl");</tt></td>
 </tr>
 </table>
 <p><a name="Authentication" id="Authentication"></a></p>
@@ -943,11 +1027,13 @@
 </tr>
 </table>
 
+
 <!-- 
-Pre-expand include size: 19609 bytes
-Post-expand include size: 27574 bytes
-Template argument size: 11833 bytes
-Maximum: 2048000 bytes
+NewPP limit report
+Preprocessor node count: 1342/1000000
+Post-expand include size: 31477/2048000 bytes
+Template argument size: 12858/2048000 bytes
+Expensive parser function count: 0/500
 -->
 
 </div>

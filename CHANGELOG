@@ -1,4 +1,28 @@
 Zoph Changelog
+Zoph 0.7.2
+1 June 2008
+
+Zoph 0.7.2 is a "feature release", that introduces a few new features that will be present in the next "stable" version, 0.8. It also fixes some bugs from 0.7.1. Finally, it includes the bugfixes from 0.7.0.3 and 0.7.0.4.
+
+Bugs
+    * Bug#1819755: User that cannot see all albums does not always see all the albums he *is* allowed to see.
+    * Bug#1820225: Restricted user can see the list of people.
+    * Bug#1820229: User does not see all thumbs if he has not the right to see the manually assigned thumb.
+    * Sometimes not all albums were shown and sortorder was not always correct.
+
+Features
+    * Zophcode: Possibility to add markup and smileys to comments. Smileys were taken from PHPBB. (they are under GPL)
+    * Patch#1923522 and Patch#1923525 Default language now configurable and logon screen translated. Thanks to Francisco Javier Félix for providing these patches.
+    * Req#1928328: Use an alternating colour scheme to make it easier to keep the overview on the list of people. Thanks to Francisco Javier Félix for providing this.
+    * Added Licence and some extra security to selection.inc.php (although there was no security isssue with this file, in case there will be one discovered in the future, it will be harder to exploit).
+    * Moved the functionality from pager.inc.php to util.inc.php, so it is easier to re-use.
+    * Added an admin page where administrator can manage settings. Replaced 'users' in the main menu with 'admin'.
+    * Req#1506959: Zoph Pages feature that allows customization of the first page of an album/category/person/place.
+
+Translations
+    * Spanish was updated by Francisco Javier Félix
+    * Canadian English, German and Dutch were updated
+
 Zoph 0.7.1
 21 Oct 2007
 
@@ -10,6 +34,19 @@ Zoph 0.7.1 is a "feature release", that introduces a few new features that will 
    * Req#1500560: For albums and categories, you can now set the desired sort order through preferences. (newest/oldest photo, first/last change, lowest/highest/avg rating, name, sortname). Sortname is a new field that you can use to sort on.
     * Req#1742672 Albums/Categories/Places now also have a thumbnail when the album itself does not have any photos, it picks a photo from one of it's subalbums/c/p
     * Info table now displays total size of photos in the most appropriate unit (KiB, MiB, GiB) instead of always in MiB
+
+Zoph 0.7.0.4
+26 May 2008
+
+This is a bugfix release that fixes a few bugs in the 0.7 release.
+    * Bug#1923507: pleasewait.gif missing
+    * Bug#1926107 SQL error because of dashed line in zoph.sql
+    * Bug#1923955: photo x of y is not correctly translated
+    * Bug#1928150: tree view shows a "+" even though the branch is already open
+    * Bug#1928671: Notify mail doesn't work
+    * Perl chokes when the .zophrc file ends with a negative assignment (" = 0"), adding "1;" to make sure it always ends "positively".
+    * Bug#1964408 Garbled layout on prefs page.
+Very small new feature: the photo is now shown when asking for confirmation of deletion
 
 Zoph 0.7.0.3
 15 March 2008
