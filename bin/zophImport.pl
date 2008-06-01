@@ -3,7 +3,7 @@
 #
 # zophImport.pl
 # Zoph 0.7.2
-# Jason Geiger & Jeroen Roos, 2002-2007
+# Jason Geiger & Jeroen Roos, 2002-2008
 #
 # This file is part of Zoph.
 #
