@@ -153,7 +153,8 @@ require_once("header.inc.php");
     if ($_action == "import") {
         $album_id = getvar("_album");
         if($album_id && !$user->is_admin()) {
-            if(!$user->get_album_permissions($album_id)->get("writable")) {
+            $permissions=$user->get_album_permissions($album_id);
+            if(!$permissions->get("writable")) {
                 die(translate("No write permissions to this album."));
             }
         }
