@@ -243,7 +243,11 @@ class album extends zoph_tree_table {
     function get_coverphoto($user,$autothumb=null,$children=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-        } else if ($autothumb) {
+            if($coverphoto->lookup($user)) {
+                $cover=TRUE;
+            }
+        } 
+        if ($autothumb && !$cover) {
             $order=get_autothumb_order($autothumb);
             if($children) {
                 $album_where=" WHERE pa.album_id in (" . $this->get_branch_ids($user) .")";
