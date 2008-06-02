@@ -596,7 +596,7 @@ table#permissions td.permremove {
     }
 
 /* Previous and next links above a photo */
-div.prev, div.next, div.pagelink, div#photohdr  {
+div.prev, div.next, div.pagelink, div.photohdr  {
     margin-bottom: 2px;
     margin-top: 30px;
     font-size: small;
@@ -627,7 +627,7 @@ div.next    {
 
 /* Page links */
 div.pagelink,
-div#photohdr {
+div.photohdr {
     text-align: center;
     width: 60%;
     }

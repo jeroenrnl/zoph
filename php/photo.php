@@ -316,8 +316,8 @@ require_once("header.inc.php");
 <?php
         }
 ?>
-        <div id="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
-        <div id="photohdr">
+        <div class="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
+        <div class="photohdr">
 <?php
         if ($up_link) {
 ?>
@@ -329,7 +329,7 @@ require_once("header.inc.php");
                   <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
             <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
             </div>    
-            <div id="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
+            <div class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
             <?php echo $photo->get_fullsize_link($photo->get_midsize_img(),$FULLSIZE_NEW_WIN) ?>
 <?php
         if (($user->is_admin() || $user->get("browse_people")) && $people_links = get_photo_person_links($photo)) {

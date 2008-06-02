@@ -35,6 +35,7 @@
         $album = new album($parent_album_id);
     }
     $album->lookup($user);
+    $obj=&$album;
     $ancestors = $album->get_ancestors();
     $children = $album->get_children($user);
 
@@ -53,12 +54,14 @@
 <?php
     }
 ?>
-        <?php echo translate("albums") . "\n" ?>
+        <?php echo $title . "\n" ?>
     </h1>
 <?php
     if($user->is_admin()) {
         include("selection.inc.php");
     }
+    include("show_page.inc.php");
+    if($show_orig) {
 ?>
     <div class="main">
 <?php
@@ -207,5 +210,7 @@
 ?>
     </div>
 <?php
+    } // if show_orig
+    echo $page_html;
     require_once("footer.inc.php");
 ?>

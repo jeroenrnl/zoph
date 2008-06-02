@@ -204,6 +204,10 @@ class album extends zoph_tree_table {
                     translate("album description"),
                     create_text_input("album_description",
                         $this->get("album_description"), 40, 128)),
+            "pageset" =>
+                array(
+                    translate("pageset"),
+                    create_smart_pulldown("pageset", $this->get("pageset"), get_pageset_select_array())),
             "sortname" =>
                 array(
                     translate("sort name"),

@@ -34,6 +34,7 @@
         $category = new category($parent_category_id);
     }
     $category->lookup();
+    $obj=&$category;
     $ancestors = $category->get_ancestors();
     $children = $category->get_children($user);
 
@@ -57,6 +58,8 @@
     if($user->is_admin()) {
         include("selection.inc.php");
     }
+    include("show_page.inc.php");
+    if($show_orig) {
 ?>
     <div class="main">
 <?php
@@ -218,5 +221,7 @@ if ($category->get("category_description")) {
 ?>
     </div>
 <?php
+    } // if show_orig
+    echo $page_html;
     require_once("footer.inc.php");
 ?>
