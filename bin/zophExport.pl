@@ -2,7 +2,7 @@
 
 #
 # zophExport.pl
-# v0.7.2
+# v0.7.2.1
 # Jason Geiger & Jeroen Roos - 2002-2008
 # This file is part of Zoph.
 #
@@ -44,7 +44,7 @@ require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
 my $db_prefix = $::db_prefix;
 my $image_dir = $::image_dir;
 
-my $version = '0.7.2';
+my $version = '0.7.2.1';
 
 my $export_dir; # where to export to
 my $format;     # one of zoph, album, bins
