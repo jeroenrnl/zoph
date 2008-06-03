@@ -1,4 +1,8 @@
-Zoph 0.7 to 0.7.2 update
+Zoph 0.7.2 to Zoph 0.7.2.1
+
+Copy php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.
+
+Zoph 0.7 to 0.7.2 or 0.7.2.1 update
 
 You can also use these instructions to go from 0.7.0.x to 0.7.2, for an update from 0.7.1, see 0.7.1 to 0.7.2
 Zoph 0.7.2 is a feature release, that introduces a few new features that will be available in v0.8. If you upgrade to v0.7.2, you will need to run the zoph-update-0.8.sql script. When you later upgrade to 0.7.3 or 0.8, you will need to run it again, but with the changes for 0.7.1 and 0.7.2. 'commented out'.
@@ -28,7 +32,7 @@ New options
     * ICONSET
     * DEFAULT_LANG
 
-Zoph 0.7.1 to 0.7.2 update
+Zoph 0.7.1 to 0.7.2 or 0.7.2.1 update
 
 Edit zoph-update-0.8.sql: comment out the changes for 0.7.1. Then follow the instructions for 0.7 to 0.7.2.
 

@@ -1,4 +1,12 @@
 Zoph Changelog
+3 June 2008
+
+Zoph 0.7.2.1 is a bugfix release for Zoph 0.7.2 it fixes the following issues:
+
+    * Bug#1981910: Some files in the distribution for 0.7.2 are not the latest version
+    * Bug#1820229: Some thumbs not displayed when user has no right to see them.
+    * Bug#1813293: web import is not compatible with PHP < 5
+
 Zoph 0.7.2
 1 June 2008
 
