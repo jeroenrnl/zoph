@@ -37,17 +37,17 @@ class place extends zoph_tree_table {
     function get_address() {
         $html = "";
         if ($this->get("address"))  {
-            $html .= $this->get("address") . "<br>\n";
+            $html .= $this->get("address") . "<br>";
         }
         if ($this->get("address2")) {
-            $html .= $this->get("address2") . "<br>\n";
+            $html .= $this->get("address2") . "<br>";
         }
         if ($this->get("city")) { $html .= $this->get("city"); }
         if ($this->get("city") && $this->get("state")) { $html .= ", "; }
         if ($this->get("state")) { $html .= $this->get("state"); }
         if ($this->get("zip")) { $html .= " " . $this->get("zip"); }
         if ($this->get("country")) {
-            $html .= "<br>\n" . $this->get("country") . "\n";
+            $html .= "<br>" . $this->get("country");
         }
 
         return $html;
@@ -208,9 +208,36 @@ class place extends zoph_tree_table {
         }
 
     }
+    function get_mapping_js($user,$edit=false) {
+         $js=parent::get_mapping_js($user, $edit);
+         if (!$edit) {
+            $js.=get_markers($this->get_children(), $user);
+        }
+        return $js;
+    }
+    
+    function get_quicklook($user) {
+        $html="<h2>" . $this->get_link() . "</h2>";
+        $html.="<small>" . $this->get_address() . "</small><br>";
+        $html.=$this->get_coverphoto($user, $user->prefs->get("autothumb"));
+        $count=$this->get_photo_count($user);
+        $totalcount=$this->get_total_photo_count($user);
+       
+        $html.="<br><small>" . 
+            escape_string(sprintf(translate("There are %s photos"), $count)) .
+            " " . translate("in this place") . "<br>";
+        if($count!=$totalcount) {
+            $html.=escape_string(sprintf(translate("There are %s photos"),$totalcount) . 
+            " " . translate("in this place") . " " . translate("or its children")) . "<br>";
+        }
+        $html.="</small>";
+        return $html;
+    }
 
-
-
+    function get_marker($user) {
+        $icon=ICONSET . "/geo-place.png";
+        return parent::get_marker($user, $icon);
+    }
 }
 
 function get_places($constraints = null, $conj = "and", $ops = null,
@@ -309,6 +336,37 @@ function get_popular_places($user) {
 
     return get_popular_results("place", $sql);
 
+}
+
+function create_zoom_pulldown($val = "", $name = "mapzoom") {
+    $zoom_array = array(
+        "0" => translate("0 - world", 0),
+        "1" => translate("1",0),
+        "2" => translate("2 - continent",0),
+        "3" => translate("3",0),
+        "4" => translate("4",0),
+        "5" => translate("5",0),
+        "6" => translate("6 - country",0),
+        "7" => translate("7",0),
+        "8" => translate("8",0),
+        "9" => translate("9 - city",0),
+        "10" => translate("10",0),
+        "11" => translate("11",0),
+        "12" => translate("12 - neighborhood",0),
+        "13" => translate("13",0),
+        "14" => translate("14",0),
+        "15" => translate("15",0),
+        "16" => translate("16 - street",0),
+        "17" => translate("17",0),
+        "18" => translate("18 - house",0));
+
+    return create_pulldown($name, $val, $zoom_array);
+}
+function create_maptype_pulldown($val = "", $name = "maptype") {
+    $maptype_array = array(
+        "area" => translate("area", 0),
+        "point" => translate("point",0));
+    return create_pulldown($name, $val, $maptype_array);
 }
 
 ?>

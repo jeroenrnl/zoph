@@ -72,6 +72,14 @@
     // This needs JAVASCRIPT to be on
     define('AUTOCOMPLETE', 1);
 
+    // Enable Mapping and determine hich mapping provider to use
+    // currently supported: 'google', 'yahoo', 'openstreetmap' or '' to disable
+    // This needs JAVASCRIPT to be on
+    define('MAPS', '');
+
+    // API key for Google Maps
+    define('GOOGLE_KEY', 'Get yours at http://code.google.com/apis/maps');
+    
     // allow annotation of photos for emailing
     define('ANNOTATE_PHOTOS', 1);
     define('ANNOTATE_TEMP_DIR', '/tmp');

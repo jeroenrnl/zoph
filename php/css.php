@@ -374,7 +374,7 @@ div.breadcrumb li.firstdots:before {
     }
 
 /* Main page */
-.main, .info, .letter, .page, div#selection   {
+.main, .info, .letter, .page, div.map, div#selection   {
     background: <?php echo $TABLE_BG_COLOR ?>;
     font-size: medium;
     width: 100%;
@@ -383,6 +383,27 @@ div.breadcrumb li.firstdots:before {
     border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
     clear: both;
     }
+
+div.map {
+    height: 450px;
+    }
+
+div.map small {
+    display: block;
+    /* used in infoBubble */
+    font-size: x-small;
+    }
+
+div.minimap {
+    float: right;
+    right: 10px;
+    width: 300px;
+    height: 300px;
+    }
+
+div.mapinfo {
+    float: left;
+}
 
 p.main, p.info {
     padding: 4px;
@@ -858,14 +879,14 @@ fieldset  {
     clear: right;
     }
 
-fieldset.editphotos  {
+fieldset.editphotos, fieldset.map  {
     margin-top: 10px;
     margin-bottom: 5px;
     padding-bottom: 20px;
     border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
     }
 
-fieldset.editphotos legend {
+fieldset.editphotos legend, fieldset.map legend {
     clear: both;
     display: block;
     left: 2em;

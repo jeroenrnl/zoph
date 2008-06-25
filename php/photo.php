@@ -463,4 +463,14 @@ require_once("edit_photo.inc.php");
     }
 ?>
 </div>
+<?php
+      if(JAVASCRIPT && MAPS && $_action=="display") {
+?>
+        <div id="map" class="map"></div>
+<?php
+        echo create_map_js();
+        echo get_markers($photo->get_near(100), $user);
+      }
+?>
+
 <?php require_once("footer.inc.php"); ?>

@@ -57,4 +57,13 @@ require_once("edit_place.inc.php");
     }
 ?>
 </div>
+<?php
+      if(JAVASCRIPT && MAPS) {
+?>
+        <div id="map" class="map"></div>
+<?php
+        echo create_map_js();
+        echo $place->get_mapping_js($user,true);
+      }
+?>
 <?php require_once("footer.inc.php"); ?>

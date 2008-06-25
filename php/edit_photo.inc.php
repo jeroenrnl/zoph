@@ -101,6 +101,30 @@
         }
 ?>
           <br>
+          <fieldset class="map">
+                <legend><?php echo translate("map") ?></legend>
+<?php
+        if(JAVASCRIPT && MAPS) {
+?>
+            <div class="minimap" id="map"></div>
+<?php
+        }
+?>
+            <div class="mapinfo">
+                <label for="lat"><?php echo translate("lattitude") ?></label>
+                <?php echo create_text_input("lat", $photo->get("lat"), 10, 10) ?><br>
+                <label for="lat"><?php echo translate("longitude") ?></label>
+                <?php echo create_text_input("lon", $photo->get("lon"), 10, 10) ?><br>
+                <label for="mapzoom"><?php echo translate("zoom level") ?></label>
+                <?php echo create_zoom_pulldown($photo->get("mapzoom")) ?><br>
+             </div>
+<?php
+        if(JAVASCRIPT && MAPS) {
+            echo create_map_js();
+            echo $photo->get_mapping_js($user, true);
+        }
+?>
+          </fieldset>
           <label for="date"><?php echo translate("date") ?></label>
           <?php echo create_text_input("date", $photo->get("date"), 12, 10) ?>
           <span class="inputhint">YYYY-MM-DD</span><br>

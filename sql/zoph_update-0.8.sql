@@ -79,4 +79,14 @@ ALTER TABLE zoph_places
 ALTER TABLE zoph_people
 	ADD COLUMN pageset int(11) DEFAULT NULL after coverphoto;
 
+#
+# Changes for 0.7.3
+#
+ALTER TABLE zoph_places ADD COLUMN lat float(10,6);
+ALTER TABLE zoph_places ADD COLUMN lon float(10,6);
+ALTER TABLE zoph_places ADD COLUMN mapzoom tinyint unsigned;
+ALTER TABLE zoph_places ADD COLUMN maptype enum('area', 'point');
 
+ALTER TABLE zoph_photos ADD COLUMN lat float(10,6);
+ALTER TABLE zoph_photos ADD COLUMN lon float(10,6);
+ALTER TABLE zoph_photos ADD COLUMN mapzoom tinyint unsigned;

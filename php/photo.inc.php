@@ -357,7 +357,7 @@ class photo extends zoph_table {
         }
 
         $size_string = " width=\"$width\" height=\"$height\"";
-        $alt = $this->get("title");
+        $alt = escape_string($this->get("title"));
 return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " alt=\"$alt\"" . ">";
 }
 
@@ -986,6 +986,62 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         }
         return $return;
     }
+
+    function get_quicklook($user) {
+        $title=escape_string($this->get("title"));
+        $file=$this->get("name");
+
+        if($title) {
+            $html="<h2>" . $title . "</h2><p>" . $file . "</p>";
+        } else {
+            $html="<h2>" . $file . "</h2>";
+        }    
+        $html.=$this->get_thumbnail_link() .
+          "<p><small>" . 
+          $this->get("date") . " " . $this->get("time") . "<br>" .
+          translate("by",0) . " " . $this->photographer->get_link(1) . "<br>" .
+          "</small></p>";
+        return $html;
+    }
+
+    function get_marker($user, $check_loc=true) {
+        $icon=ICONSET . "/geo-photo.png";
+        $js=parent::get_marker($user, $icon); 
+        if(!$js && $check_loc) {
+            $loc=$this->location;
+            if($loc) {
+                $js=$loc->get_marker($user); 
+            }
+        }
+        if($js) {
+            return($js);
+        } else {
+            return null;
+        }
+    }
+
+    function get_near($distance, $limit=100, $entity="km") { 
+        if($entity=="miles") {
+            $distance=$distance * 1.609344;
+        }
+        if($limit) {
+            $lim=" limit 0,". $limit;
+        }
+        $sql="select photo_id, (6371 * acos(" .
+            "cos(radians(" . $this->get("lat") . ")) * " .
+            "cos(radians(lat) ) * cos(radians(lon) - " .
+            "radians(" . $this->get("lon") . ")) +" . 
+            "sin(radians(" . $this->get("lat") . ")) * " .
+            "sin(radians(lat)))) AS distance from " .
+            DB_PREFIX . "photos " .
+            "having distance <= " . $distance . 
+            " order by distance" . $lim;
+
+        $near=get_records_from_query("photo", $sql);
+        return $near;
+    }
+
+
 }
 
 function get_photo_sizes_sum() {
@@ -1139,5 +1195,4 @@ function ImageStringWrap($image, $font, $x, $y, $text, $color, $maxwidth) {
         $y += $fontheight;
     }
 }
-
 ?>

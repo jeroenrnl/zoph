@@ -62,6 +62,17 @@
          <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
          <label for="pageset"><?php echo translate("pageset") ?></label>
          <?php echo create_smart_pulldown("pageset", $place->get("pageset"), get_pageset_select_array()) ?><br>
+         <fieldset class="map">
+            <legend><?php echo translate("map") ?></legend>
+            <label for="lat"><?php echo translate("lattitude") ?></label>
+            <?php echo create_text_input("lat", $place->get("lat"), 10, 10) ?><br>
+            <label for="lat"><?php echo translate("longitude") ?></label>
+            <?php echo create_text_input("lon", $place->get("lon"), 10, 10) ?><br>
+            <label for="mapzoom"><?php echo translate("zoom level") ?></label>
+            <?php echo create_zoom_pulldown($place->get("mapzoom")) ?><br>
+            <label for="maptype"><?php echo translate("display as") ?></label>
+            <?php echo create_maptype_pulldown($place->get("maptype")) ?><br>
+         </fieldset>
          <label for="notes"><?php echo translate("notes") ?></label>
          <textarea name="notes" cols="40" rows="4"><?php echo $place->get("notes") ?></textarea>
          <input type="submit" value="<?php echo translate($action, 0) ?>">

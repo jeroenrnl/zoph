@@ -227,6 +227,13 @@
 ?>
     </div>
 <?php
+      if(JAVASCRIPT && MAPS) {
+?>
+        <div id="map" class="map"></div>
+<?php
+        echo create_map_js();
+        echo $place->get_mapping_js($user);
+      }
     } // if show_orig
     echo $page_html;
     require_once("footer.inc.php");

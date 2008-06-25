@@ -361,6 +361,50 @@ class zoph_table {
         return $ea;
     }
 
+    function get_mapping_js($user,$edit=false) {
+        $marker=true;
+        $lat=$this->get("lat");
+        $lon=$this->get("lon");
+        $zoom=$this->get("mapzoom");
+        if(!$lat && !$lon) { $marker=false; }
+        if(!$lat) { $lat=0; }
+        if(!$lon) { $lon=0; }
+        if(!$zoom) { $zoom=2; }
+        $js="<script type='text/javascript'>\n" .
+            "  var center=new LatLonPoint(" .
+                $lat . "," .
+                $lon . ");\n" .
+            "  var zoomlevel=" . $zoom . ";\n" .
+            "  mapstraction.setCenterAndZoom(center,zoomlevel);\n";
+         if ($this->get("maptype")!="area" && $marker ) {
+            if(get_class($this)=="photo") {
+                $icon=ICONSET . "/geo-photo.png";
+            } else {
+                $icon="null";
+            }
+            $js.="  createMarker(" . $lat . "," . $lon . ",'" . $icon . "',null, null);\n";
+         }
+         if ($edit) {
+            $js.="  setUpdateHandlers();\n";
+         }
+            $js.="</script>";
+        return $js;
+    }
+
+    function get_marker($user, $icon) {
+        $lat=$this->get("lat");
+        $lon=$this->get("lon");
+        if($lat && $lon) {
+            $quicklook=$this->get_quicklook($user);
+            return "  createMarker(" . $lat . "," . $lon . ", '" . $icon .
+                    "','" .  escape_string($title) . "','" . 
+                    $quicklook . "');\n";
+        } else {
+            return null;
+        }
+    }
+
+
 }
 
 /*

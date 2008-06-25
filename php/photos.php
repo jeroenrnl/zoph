@@ -192,5 +192,13 @@
        <br>
 
       </div>
-
+<?php
+      if(JAVASCRIPT && MAPS) {
+?>
+        <div id="map" class="map"></div>
+<?php
+        echo create_map_js();
+        echo get_markers($thumbnails, $user);
+      }
+?>
 <?php require_once("footer.inc.php"); ?>

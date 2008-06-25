@@ -31,6 +31,26 @@ print $rtplang->lang_header();
 <script type="text/javascript" src="js/autocomplete.js"></script>
 <?php
         }
+        if(MAPS) {
+?>
+<script type="text/javascript" src="js/mapstraction.js"></script>
+<script type="text/javascript" src="js/maps.js"></script>
+<?php
+            switch (strtolower(MAPS)) {
+            case 'google':
+            case 'openstreetmap':
+?>
+<script src="http://maps.google.com/maps?file=api&v=2&key=<?php echo GOOGLE_KEY ?>" type="text/javascript"></script>
+<?php
+            break;
+            case 'yahoo':
+?>
+<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=Zoph"></script>
+<?php
+            break;
+            }
+        }
+
     }
     if (isset($extrastyle)) {
 ?>
