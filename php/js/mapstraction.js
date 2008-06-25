@@ -199,7 +199,7 @@ function Mapstraction(element,api,debug) {
 
   // This is so that it is easy to tell which revision of this file 
   // has been copied into other projects.
-  this.svn_revision_string = '$Revision: 1.1 $';
+  this.svn_revision_string = '$Revision: 1.2 $';
   this.addControlsArgs = {};
 	
   // if (this.currentElement) {
@@ -3207,14 +3207,16 @@ Marker.prototype.setGroupName = function(sGrpName) {
  */
 Marker.prototype.toYahoo = function() {
   var ymarker;
+  var size;
+  if(this.iconSize) {
+    size = new YSize(this.iconSize[0], this.iconSize[1]);
+  } 
+
   if(this.iconUrl) {
-    ymarker = new YMarker(this.location.toYahoo (),new YImage(this.iconUrl));
+    ymarker = new YMarker(this.location.toYahoo (),new YImage(this.iconUrl, size));
   } 
   else {
-    ymarker = new YMarker(this.location.toYahoo());
-  }
-  if(this.iconSize) {
-    ymarker.size = new YSize(this.iconSize[0], this.iconSize[1]);
+    ymarker = new YMarker(this.location.toYahoo(),null,size);
   }
   if(this.labelText) {
     ymarker.addLabel(this.labelText);
