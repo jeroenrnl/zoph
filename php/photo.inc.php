@@ -1021,24 +1021,33 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     }
 
     function get_near($distance, $limit=100, $entity="km") { 
-        if($entity=="miles") {
-            $distance=$distance * 1.609344;
-        }
-        if($limit) {
-            $lim=" limit 0,". $limit;
-        }
-        $sql="select photo_id, (6371 * acos(" .
-            "cos(radians(" . $this->get("lat") . ")) * " .
-            "cos(radians(lat) ) * cos(radians(lon) - " .
-            "radians(" . $this->get("lon") . ")) +" . 
-            "sin(radians(" . $this->get("lat") . ")) * " .
-            "sin(radians(lat)))) AS distance from " .
-            DB_PREFIX . "photos " .
-            "having distance <= " . $distance . 
-            " order by distance" . $lim;
+        $lat=$this->get("lat");
+        $lon=$this->get("lon");
 
-        $near=get_records_from_query("photo", $sql);
-        return $near;
+        if($lat && $lon) {
+            // If lat and lon are not set, don't bother trying to find
+            // near photos
+            if($entity=="miles") {
+                $distance=$distance * 1.609344;
+            }
+            if($limit) {
+                $lim=" limit 0,". $limit;
+            }
+            $sql="select photo_id, (6371 * acos(" .
+                "cos(radians(" . $lat . ")) * " .
+                "cos(radians(lat) ) * cos(radians(lon) - " .
+                "radians(" . $lon . ")) +" . 
+                "sin(radians(" . $lat . ")) * " .
+                "sin(radians(lat)))) AS distance from " .
+                DB_PREFIX . "photos " .
+                "having distance <= " . $distance . 
+                " order by distance" . $lim;
+
+            $near=get_records_from_query("photo", $sql);
+            return $near;
+        } else {
+            return null;
+        }
     }
 
 

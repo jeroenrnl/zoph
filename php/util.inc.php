@@ -810,21 +810,23 @@ function pager($current, $total, $num_pages, $page_size, $max_size, $url, $reque
 function get_markers($objects, $user) {
     $js="<script type='text/javascript'>\n";
     $markers=array();
-    foreach($objects as $object) {
-        $object->lookup();
-        $marker=$object->get_marker($user);
-        if($marker) {
-            $markers[]=$marker;
+    if($objects) {
+        foreach($objects as $object) {
+            $object->lookup();
+            $marker=$object->get_marker($user);
+            if($marker) {
+                $markers[]=$marker;
+            }
         }
+        // if multiple photos are taken in the same place, that place 
+        // is multiple times in the array, let's remove doubles:
+        $markers=array_unique($markers);
+        foreach($markers as $marker) {
+            $js.=$marker;
+        }
+        $js.="  mapstraction.autoCenterAndZoom();\n";
+        $js.="</script>";
     }
-    // if multiple photos are taken in the same place, that place is multiple
-    // times in the array, let's remove doubles:
-    $markers=array_unique($markers);
-    foreach($markers as $marker) {
-        $js.=$marker;
-    }
-    $js.="  mapstraction.autoCenterAndZoom();\n";
-    $js.="</script>";
     if(count($markers)>0) {
         // only return the javascript if anything is in there, to
         // prevent an empty <script> tag.
