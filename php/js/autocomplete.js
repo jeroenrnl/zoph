@@ -25,8 +25,8 @@ var oldtext;
 
 // The following arrays describe the root node and nodenames to look for in
 // the XML output:
-var xmlrootnode = {"location": "places", "photographer":  "people", "person": "people", "album": "albums", "category": "categories"};
-var xmlnode = {"location": "place", "photographer": "person", "person": "person", "album": "album", "category": "category"};
+var xmlrootnode = {"location": "places", "photographer":  "people", "person": "people", "album": "albums", "category": "categories", "timezone": "zones"};
+var xmlnode = {"location": "place", "photographer": "person", "person": "person", "album": "album", "category": "category", "timezone": "tz"};
 
 function init() {
     autocomplete=new Array;

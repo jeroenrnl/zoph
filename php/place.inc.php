@@ -26,6 +26,17 @@ class place extends zoph_tree_table {
         $this->set("place_id", $id);
     }
 
+    function update() {
+        $tzkey=$this->get("timezone_id");
+        if($tzkey>0) {
+            $tzarray=get_tz_select_array();
+            $tz=$tzarray[$tzkey];
+            $this->set("timezone", $tz);
+        }
+        unset($this->fields["timezone_id"]);
+        parent::update();
+    }
+
     function get_name() {
         if ($this->get("title")) { return $this->get("title"); }
 
@@ -88,7 +99,8 @@ class place extends zoph_tree_table {
             translate("state") => $this->get("state"),
             translate("zip") => $this->get("zip"),
             translate("country") => $this->get("country"),
-            translate("notes") => $this->get("notes"));
+            translate("notes") => $this->get("notes"),
+            translate("timezone") => $this->get("timezone"));
     }
     
     function get_photo_count($user = null) {
@@ -238,6 +250,31 @@ class place extends zoph_tree_table {
         $icon=ICONSET . "/geo-place.png";
         return parent::get_marker($user, $icon);
     }
+
+    function guess_tz() {
+        $lat=$this->get("lat");
+        $lon=$this->get("lon");
+        $timezone=$this->get("timezone");
+        if(!$timezone && $lat && $lon) {
+            $tz=guess_tz($lat, $lon);
+            $html="<span class='actionlink'>" .
+                "<a href=place.php?_action=update&place_id=" .
+                $this->get("place_id") . "&timezone=" . $tz .
+                ">" . $tz . "</a></span>";
+            return $html;
+        }
+        return null;
+    }
+
+    function set_tz_children($tz) {
+        $places=$this->get_children();
+        if($places) {
+            foreach ($places as $place) {
+                $place->set("timezone", $tz);
+                $place->update();
+            }
+        }
+    }
 }
 
 function get_places($constraints = null, $conj = "and", $ops = null,
@@ -245,8 +282,8 @@ function get_places($constraints = null, $conj = "and", $ops = null,
     return get_records("place", $order, $constraints, $conj, $ops);
 }
 
-function get_children() {
-
+/* function get_children() {
+// This function looks so broken, I can only assume it was never used.
     $id = $this->get("album_id");
     if (!$id) { return; }
 
@@ -261,7 +298,7 @@ function get_children() {
 
     return $this->children;
 
-}
+} */
 
 function get_root_place() {
     return new place(1);

@@ -47,6 +47,7 @@
     require_once("page.inc.php");
     require_once("pageset.inc.php");
 
+    require_once("timezone.inc.php");
     require_once("photo.inc.php");
     require_once("photo_search.inc.php");
 

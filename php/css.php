@@ -405,6 +405,31 @@ div.mapinfo {
     float: left;
 }
 
+span.showhide {
+    font-size: small;
+    text-align: right;
+    }
+
+div.timedetail {
+    display: none;
+    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    background: white;
+    width: 100%;
+    }
+
+div.timedetail dd {
+    width: 40%;
+    }
+
+div.timedetail dt {
+    width: 40%;
+    }
+
+div.timedetail h3 {
+    background: <?php echo $TITLE_BG_COLOR ?>;
+    color: <?php echo $TITLE_FONT_COLOR ?>;
+    font-size: large;
+}
 p.main, p.info {
     padding: 4px;
     }

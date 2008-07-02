@@ -79,7 +79,23 @@
 
     // API key for Google Maps
     define('GOOGLE_KEY', 'Get yours at http://code.google.com/apis/maps');
-    
+
+    // The timezone your camera is set to
+    // Leave empty if you always set your camera to local time
+    define('CAMERA_TZ','');
+    // Define how Zoph displays date and time
+    // See http://www.php.net/manual/en/function.date.php for explanation.
+    define('DATE_FORMAT', 'd-m-Y');
+    define('TIME_FORMAT', 'H:i:s T');
+
+    // if you set your camera to local time you may want to use this
+    //define('TIME_FORMAT', 'H:i:s');
+
+    // If you want to enable guessing the timezone based on the current
+    // coordinated, set this to 1, this will however mean, that Zoph sends
+    // information to the Geonames project. http://www.geonames.org/
+    define('GUESS_TZ', 0);
+ 
     // allow annotation of photos for emailing
     define('ANNOTATE_PHOTOS', 1);
     define('ANNOTATE_TEMP_DIR', '/tmp');

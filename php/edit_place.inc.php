@@ -73,6 +73,25 @@
             <label for="maptype"><?php echo translate("display as") ?></label>
             <?php echo create_maptype_pulldown($place->get("maptype")) ?><br>
          </fieldset>
+<?php
+    if(minimum_version("5.1.0")) {
+        if(GUESS_TZ) {
+            echo $place->guess_tz();
+        }
+        if($place->get("timezone")) {
+?>
+            <span class="actionlink">
+                <a href="place.php?_action=settzchildren&place_id=<?php echo $place->get("place_id") ?>"><?php printf(translate("set %s for children"), $place->get("timezone"))?></a>
+            </span>
+<?php
+        }
+?>
+
+         <label for="timezone_id"><?php echo translate("timezone") ?></label>
+         <?php echo create_smart_pulldown("timezone_id", get_tz_key($place->get("timezone")), get_tz_select_array(), "class=\"autocomplete\""); ?>
+<?php
+    }
+?>
          <label for="notes"><?php echo translate("notes") ?></label>
          <textarea name="notes" cols="40" rows="4"><?php echo $place->get("notes") ?></textarea>
          <input type="submit" value="<?php echo translate($action, 0) ?>">

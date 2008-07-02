@@ -131,6 +131,9 @@
     if ($place->get("place_description")) {
        echo $place->get("place_description");
     }
+    if ($place->get("timezone")) {
+        printf("<p><b>%s:</b> %s</p>", translate("timezone"), $place->get("timezone"));
+    }
 ?>
     <br><br>
 <?php

@@ -24,11 +24,17 @@
 
     $obj = &$place;
     $redirect = "places.php";
+    if($_action=="settzchildren") {
+        if($user->is_admin()) {
+            $place->lookup();
+            $place->set_tz_children($place->get("timezone"));
+        }
+        $action="display";
+    }
     require_once("actions.inc.php");
     if (!$user->is_admin() || $action == "display") {
         header("Location: " . add_sid("places.php?parent_place_id=" . $place->get("place_id")));
     }
-
     if ($action != "insert") {
         $place->lookup();
         $title = $place->get("title") ? $place->get("title") : $place->get("city");

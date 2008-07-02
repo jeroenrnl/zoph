@@ -131,6 +131,9 @@
           <label for="time"><?php echo translate("time") ?></label>
           <?php echo create_text_input("time", $photo->get("time"), 10, 8) ?>
           <span class="inputhint">HH:MM:SS</span><br>
+          <label for="time_corr"><?php echo translate("time correction") ?></label>
+          <?php echo create_text_input("time_corr", $photo->get("time_corr"), 10, 8) ?>
+          <span class="inputhint"><?php echo translate("in minutes") ?></span><br>
           <label for="view"><?php echo translate("view") ?></label>
           <?php echo create_text_input("view", $photo->get("view"), 40, 64) ?>
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>

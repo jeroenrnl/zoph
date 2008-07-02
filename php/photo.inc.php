@@ -821,13 +821,14 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     }
 
     function get_display_array() {
+        $datetime=$this->get_time();
         return array(
             translate("title") => $this->get("title"),
             translate("location") => $this->location
                 ? $this->location->get_link() : "",
             translate("view") => $this->get("view"),
-            translate("date") => create_date_link($this->get("date")),
-            translate("time") => $this->get("time"),
+            translate("date") => create_date_link($datetime[0]),
+            translate("time") => $this->get_time_details($datetime[1]),
             translate("photographer") => $this->photographer
                 ? $this->photographer->get_link() : ""
         );
@@ -874,6 +875,105 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             "View" => create_text_input("view", $this->view),
             "Level" => create_text_input("level", $this->level, 4, 2));
     }
+
+    function get_time($timezone=null) {
+        if(minimum_version("5.1.0")) {
+            if(valid_tz($timezone)) {
+                $place_tz=new TimeZone($timezone);
+            } else { 
+                $this->lookup_location();
+                $loc=$this->location;
+                if($loc && valid_tz($loc->get("timezone"))) {
+                    $place_tz=new TimeZone($loc->get("timezone"));
+                } 
+            }
+            if(valid_tz(CAMERA_TZ)) {
+                $camera_tz=new TimeZone(CAMERA_TZ);
+            }    
+                
+            if(!$place_tz && $camera_tz) {
+                // Camera timezone is known, place timezone is not.
+                $place_tz=$camera_tz;
+            } else if ($place_tz && !$camera_tz) {
+                // Place timezone is known, camera timezone is not.
+                $camera_tz=$place_tz;
+            }
+            
+            $camera_time=new Time(
+                $this->get("date") . " " .
+                $this->get("time"),
+                $camera_tz);
+            $place_time=new Time(
+                $this->get("date") . " " .
+                $this->get("time"),
+                $place_tz);
+            $corr=$this->get("time_corr");
+            if($corr) {
+                $place_time->modify($corr . " minutes");
+            }
+            
+            $date=$place_time->format(DATE_FORMAT);
+            $time=$place_time->format(TIME_FORMAT);
+        } else {
+            // Timezone support was introduced in PHP 5.1
+            // so we'll just return date and time as they are
+            // stored in db.
+            $date=$this->get("date");
+            $time=$this->get("time");
+        }
+        return array($date,$time);
+    }
+
+    function get_time_details($content, $open=false) {
+        $html="&nbsp;";
+        if ($open) {
+            $html.="<span onclick=\"unbranch(this)\">-&nbsp;</span>";
+        } else {
+            $html.="<span onclick=\"branch(this)\">+&nbsp;</span>";
+        }
+        $html.="<span class='showhide'>" . $content . "</span>";
+        $html.="<div class='timedetail'>\n<dl>\n";
+        $html.="<h3>" . translate("database") . "</h3>\n";
+        $html.="<dt>" . translate("date") . "</dt>\n";
+        $html.="<dd>" . $this->get("date") . "</dd>\n";
+        $html.="<dt>" . translate("time") . "</dt>\n";
+        $html.="<dd>" . $this->get("time") . "</dd>\n";
+        $html.="<dt>" . translate("timezone") . "</dt>\n";
+        if(valid_tz(CAMERA_TZ)) {
+            $html.="<dd>" . CAMERA_TZ . "</dd>\n<br>\n";
+        } else {
+            $html.="<dd><i>" . translate ("not set") . "</i></dd><br>\n";
+        }
+        $corr=$this->get("time_corr");
+        if($corr) {
+            $html.="<dt>" . translate("correction") . "</dt>\n";
+            $html.="<dd>" . $corr . " " . translate("minutes") . "</dd>\n";
+        }
+        $html.="<br>";
+        $this->lookup_location();
+        $place=$this->location;
+        if($place) {
+            $html.="<h3>" . translate("location") . "</h3>\n";
+            $html.="<dt>" . translate("location") . "</dt>\n";
+            $html.="<dd>" . $place->get("title") . "</dd>\n";
+            $html.="<dt>" . translate("timezone") . "</dt>\n";
+            $tz=$place->get("timezone");
+            $datetime=$this->get_time();
+            if($tz) {
+                $html.="<dd>" . $tz . "</dd>\n<br>\n";
+            } else {
+                $html.="<dd><i>" . translate ("not set") . "</i></dd><br>\n";
+            }
+        }
+        $html.="<h3>" .translate("calculated time") . "</h3>\n";
+        $html.="<dt>" . translate("date") . "</dt>\n";
+        $html.="<dd>" . $datetime[0] . "</dd>\n";
+        $html.="<dt>" . translate("time") . "</dt>\n";
+        $html.="<dd>" . $datetime[1] . "</dd>\n";
+        $html.="</dl>\n<br>\n</div>";
+        return $html;
+    }
+
 
     function get_comments() {
         $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .

@@ -603,6 +603,10 @@ function get_xml($class, $search) {
         $tree=true;
     }
 
+    if($class=="timezone") {
+        $tz=new TimeZone("UTC");
+        return $tz->get_xml($search);
+    }
     if (class_exists($class)) {
         $obj=new $class;
         $rootname=$obj->xml_rootname();
