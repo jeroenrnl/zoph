@@ -1120,6 +1120,10 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         }
     }
 
+    function get_mapping_js($user,$edit=false) {
+         return parent::get_mapping_js($user, ICONSET . "/geo-photo.png", $edit);
+    }
+
     function get_near($distance, $limit=100, $entity="km") { 
         $lat=$this->get("lat");
         $lon=$this->get("lon");

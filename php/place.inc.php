@@ -221,7 +221,7 @@ class place extends zoph_tree_table {
 
     }
     function get_mapping_js($user,$edit=false) {
-         $js=parent::get_mapping_js($user, $edit);
+         $js=parent::get_mapping_js($user, ICONSET . "/geo-place.png", $edit);
          if (!$edit) {
             $js.=get_markers($this->get_children(), $user);
         }
@@ -398,12 +398,6 @@ function create_zoom_pulldown($val = "", $name = "mapzoom") {
         "18" => translate("18 - house",0));
 
     return create_pulldown($name, $val, $zoom_array);
-}
-function create_maptype_pulldown($val = "", $name = "maptype") {
-    $maptype_array = array(
-        "area" => translate("area", 0),
-        "point" => translate("point",0));
-    return create_pulldown($name, $val, $maptype_array);
 }
 
 ?>

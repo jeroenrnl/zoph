@@ -70,8 +70,6 @@
             <?php echo create_text_input("lon", $place->get("lon"), 10, 10) ?><br>
             <label for="mapzoom"><?php echo translate("zoom level") ?></label>
             <?php echo create_zoom_pulldown($place->get("mapzoom")) ?><br>
-            <label for="maptype"><?php echo translate("display as") ?></label>
-            <?php echo create_maptype_pulldown($place->get("maptype")) ?><br>
          </fieldset>
 <?php
     if(minimum_version("5.1.0")) {

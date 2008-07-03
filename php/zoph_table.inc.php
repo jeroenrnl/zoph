@@ -361,7 +361,7 @@ class zoph_table {
         return $ea;
     }
 
-    function get_mapping_js($user,$edit=false) {
+    function get_mapping_js($user,$icon,$edit=false) {
         $marker=true;
         $lat=$this->get("lat");
         $lon=$this->get("lon");
@@ -376,12 +376,7 @@ class zoph_table {
                 $lon . ");\n" .
             "  var zoomlevel=" . $zoom . ";\n" .
             "  mapstraction.setCenterAndZoom(center,zoomlevel);\n";
-         if ($this->get("maptype")!="area" && $marker ) {
-            if(get_class($this)=="photo") {
-                $icon=ICONSET . "/geo-photo.png";
-            } else {
-                $icon="null";
-            }
+         if ($marker ) {
             $js.="  createMarker(" . $lat . "," . $lon . ",'" . $icon . "',null, null);\n";
          }
          if ($edit) {

@@ -85,7 +85,6 @@ ALTER TABLE zoph_people
 ALTER TABLE zoph_places ADD COLUMN lat float(10,6);
 ALTER TABLE zoph_places ADD COLUMN lon float(10,6);
 ALTER TABLE zoph_places ADD COLUMN mapzoom tinyint unsigned;
-ALTER TABLE zoph_places ADD COLUMN maptype enum('area', 'point');
 
 ALTER TABLE zoph_photos ADD COLUMN lat float(10,6);
 ALTER TABLE zoph_photos ADD COLUMN lon float(10,6);
