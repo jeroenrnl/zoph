@@ -458,6 +458,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
         </tr>
 <?php
+    }
       /* Text search for albums/categories/people/photographers */
 
     $text = getvar('text'); 
@@ -498,10 +499,6 @@ for ($i = 0; $i <= $count; $i++) {
             <input type="text" name="text[<?php echo $i; ?>]" value="<?php echo $text[$i]; ?>" size="24" maxlength="64">
           </td>
         </tr>
-<?php
-    }
-?>
-      </table>
 <?php
     }
 ?>
