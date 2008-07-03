@@ -90,3 +90,7 @@ ALTER TABLE zoph_places ADD COLUMN maptype enum('area', 'point');
 ALTER TABLE zoph_photos ADD COLUMN lat float(10,6);
 ALTER TABLE zoph_photos ADD COLUMN lon float(10,6);
 ALTER TABLE zoph_photos ADD COLUMN mapzoom tinyint unsigned;
+
+ALTER TABLE zoph_photos ADD COLUMN time_corr smallint NOT NULL default 0 after time;
+ALTER TABLE zoph_places ADD COLUMN timezone varchar(50) default NULL;
+
