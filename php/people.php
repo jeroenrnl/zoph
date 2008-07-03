@@ -41,7 +41,6 @@
             $_l = "a";
         }
     }
-
     $title = translate("People");
     require_once("header.inc.php");
 ?>
@@ -86,25 +85,14 @@
             <br>
 <?php
     }
-/* Was this ever used??
-
-    $constraints = null;
-    $ops = null;
     if ($_l == "all") {
-        // no contraint
+        $first_letter=null;
+    } else if ($_l == "no last name") {
+        $first_letter="";
+    } else {
+        $first_letter = $_l;
     }
-    else if ($_l == "no last name") {
-        $constraints["last_name#1"] = "null";
-        $ops["last_name#1"] = "is";
-        $constraints["last_name#2"] = "''";
-    }
-    else {
-        $constraints["lower(last_name)"] = "$_l%";
-        $ops["lower(last_name)"] = "like";
-    }
-    $ppl = get_people($constraints, "or", $ops);
-*/
-    $ppl = get_photographed_people($user);
+    $ppl = get_photographed_people($user, $first_letter);
 ?>
         <ul class="<?php echo $_view ?>">
 <?php

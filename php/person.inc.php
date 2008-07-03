@@ -173,8 +173,15 @@ function get_people($constraints = null, $conj = "and", $ops = null,
     return get_records("person", $order, $constraints, $conj, $ops);
 }
 
-function get_photographed_people($user = null) {
-
+function get_photographed_people($user = null, $first_letter=null) {
+    if($first_letter!==null) {
+        if($first_letter==="") {
+            $where=" and (ppl.last_name='' or ppl.last_name is null)";
+        } else {
+            $first_letter=escape_string($first_letter);
+            $where=" and ppl.last_name like lower('" . $first_letter . "%')";
+        }
+    }
     if ($user && !$user->is_admin()) {
         $query =
             "select distinct ppl.* from " .
@@ -188,16 +195,16 @@ function get_photographed_people($user = null) {
             " and pa.photo_id = ph.photo_id" .
             " and ap.access_level >= ph.level" .
             " and ph.photo_id = pp.photo_id " .
-            " and pp.person_id = ppl.person_id " .
-            "order by ppl.last_name, ppl.called, ppl.first_name";
+            " and pp.person_id = ppl.person_id " . $where .
+            " order by ppl.last_name, ppl.called, ppl.first_name";
     }
     else {
         $query =
             "select distinct ppl.* from " .
             DB_PREFIX . "people as ppl, " .
             DB_PREFIX . "photo_people as pp " .
-            "where ppl.person_id = pp.person_id " .
-            "order by ppl.last_name, ppl.called, ppl.first_name";
+            "where ppl.person_id = pp.person_id " . $where .
+            " order by ppl.last_name, ppl.called, ppl.first_name";
     }
 
     return get_records_from_query("person", $query);
