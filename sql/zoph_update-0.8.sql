@@ -93,3 +93,5 @@ ALTER TABLE zoph_photos ADD COLUMN mapzoom tinyint unsigned;
 ALTER TABLE zoph_photos ADD COLUMN time_corr smallint NOT NULL default 0 after time;
 ALTER TABLE zoph_places ADD COLUMN timezone varchar(50) default NULL;
 
+# Change description from BLOB to TEXT
+ALTER TABLE zoph_photos MODIFY COLUMN description TEXT;
