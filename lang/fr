@@ -1,4 +1,4 @@
-#{@"htmltagoption"=>"nothing","charset"=>"iso-8857-1","name"=>"Français","translator_0"=>"Éric Seigne, Stephane Gourichon, Antoine Delvaux"}
+#{@"htmltagoption"=>"nothing","charset"=>"iso-8859-1","name"=>"Français","translator_0"=>"Éric Seigne, Stephane Gourichon, Antoine Delvaux"}
 #
 #
 %s chars max=%s caractères max
@@ -251,6 +251,7 @@ go=aller
 height=hauteur
 hide=cacher
 home=accueil
+home location=domicile
 import=importer
 import photos=importer des photos
 in this album=dans cet album
