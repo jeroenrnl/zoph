@@ -120,7 +120,7 @@ if ($user->get("detailed_people") || $user->is_admin()) {
         }
         if ($person->home) {
 ?>
-          <dt><?php echo translate("home") ?></dt>
+          <dt><?php echo translate("home location") ?></dt>
           <dd>
           <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("home_id") ?>"><?php echo translate("view") ?></a></span>
           <?php echo $person->home->get_address() ?></dd>
