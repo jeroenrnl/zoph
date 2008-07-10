@@ -74,7 +74,7 @@ class zoph_table {
             if (DEBUG > 2) { echo "<b>$key</b> = $val<br>\n"; }
 
             // ignore empty keys or values unless the field must be set.
-            if ((!in_array($key, $this->not_null)) && (empty($key) || $val == "")) { continue; }
+            if ((!in_array($key, $this->not_null)) && (empty($key) )) { continue; }
 
             if ($prefix) {
                 if (strpos($key, $prefix) === 0) {
@@ -189,15 +189,12 @@ class zoph_table {
             else if ($value == "now()") {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
                 $values .=  $value ;
-            }
-	    else if ($value == "" && in_array($name, $this->not_null)) {
-	    	die("<p class='error'><b>$name</b> may not be empty</p>");
-	    }
-            else if ($value != "null") {
+            } else if ($value =="" && in_array($name, $this->not_null)) {
+	    	    die("<p class='error'><b>$name</b> may not be empty</p>");
+	        } else if ($value !== "") {
                 $values .= "'" . escape_string($value) . "'";
-            }
-            else {
-                $values .= $value;
+            } else {
+                $values .= "null";
             }
 
         }
@@ -280,18 +277,14 @@ class zoph_table {
 
             if ($name == "password") {
                 $values .= "$name = password('" . escape_string($value) . "')";
-            }
-            else if ($value == "now()" ) {
+            } else if ($value == "now()" ) {
                 $values .= "$name = " . $value . "";
-            }
-	    else if ($value == "" && in_array($name, $this->not_null)) {
-	    	die("<p class='error'><b>$name</b> may not be empty</p>");
-	    }
-            else if ($value != "null") {
+            } else if ($value == "" && in_array($name, $this->not_null)) {
+	    	    die("<p class='error'><b>$name</b> may not be empty</p>");
+	        } else if ($value !== "") {
                 $values .= "$name = '" . escape_string($value) . "'";
-            }
-            else {
-                $values .= "$name = $value";
+            } else {
+                $values .= "$name = null";
             }
         }
 
