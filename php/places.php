@@ -122,7 +122,9 @@
     if ($user->get("detailed_places") || $user->is_admin()) {
         echo $place->to_html();
         if ($place->get("notes")) {
+            echo "<p>";
             echo $place->get("notes");
+            echo "</p>";
         }
     }
     else {
