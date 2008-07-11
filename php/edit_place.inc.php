@@ -29,7 +29,7 @@
         <input type="hidden" name="_action" value="<?php echo $action ?>">
         <input type="hidden" name="place_id" value="<?php echo $place->get("place_id") ?>">
         <label for="title"><?php echo translate("title") ?></label>
-        <?php echo create_text_input("title", $place->get("title"), 40, 40) ?>
+        <?php echo create_text_input("title", $place->get("title"), 40, 64) ?>
         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
         <label for="parent_place_id"><?php echo translate("parent location") ?></label>
         <?php echo create_pulldown("parent_place_id",
