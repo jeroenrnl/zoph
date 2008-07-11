@@ -147,7 +147,7 @@ class category extends zoph_tree_table {
             "category" =>
                 array(
                     translate("category name"),
-                    create_text_input("category", $this->get("category"))),
+                    create_text_input("category", $this->get("category"),40,64)),
             "parent_category_id" =>
                 array(
                     translate("parent category"),

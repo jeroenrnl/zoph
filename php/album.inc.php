@@ -193,7 +193,7 @@ class album extends zoph_tree_table {
             "album" => 
                 array(
                     translate("album name"),  
-                    create_text_input("album", $this->get("album"))),
+                    create_text_input("album", $this->get("album"),40,64)),
             "parent_album_id" =>
                 array(
                     translate("parent album"),

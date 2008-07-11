@@ -95,3 +95,7 @@ ALTER TABLE zoph_places ADD COLUMN timezone varchar(50) default NULL;
 
 # Change description from BLOB to TEXT
 ALTER TABLE zoph_photos MODIFY COLUMN description TEXT;
+
+# Make title for albums and categories longer
+ALTER TABLE zoph_albums MODIFY COLUMN album varchar(64);
+ALTER TABLE zoph_categories MODIFY COLUMN category varchar(64);
