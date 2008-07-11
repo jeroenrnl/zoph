@@ -26,7 +26,17 @@ class place extends zoph_tree_table {
         $this->set("place_id", $id);
     }
 
+    function insert() {
+        $this->tzid_to_timezone();
+        parent::insert();
+    }
+
     function update() {
+        $this->tzid_to_timezone();
+        parent::update();
+    }
+
+    function tzid_to_timezone() {
         $tzkey=$this->get("timezone_id");
         if($tzkey>0) {
             $tzarray=get_tz_select_array();
@@ -34,7 +44,6 @@ class place extends zoph_tree_table {
             $this->set("timezone", $tz);
         }
         unset($this->fields["timezone_id"]);
-        parent::update();
     }
 
     function get_name() {
