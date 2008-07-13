@@ -46,6 +46,26 @@ class person extends zoph_table {
     }
 
     function delete() {
+        $sql="update " . DB_PREFIX . "people set father_id=null " .
+            "where father_id=" .  $this->get("person_id");
+        if (DEBUG) { echo "$sql<br>\n"; }
+        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+
+        $sql="update " . DB_PREFIX . "people set mother_id=null " . 
+            "where mother_id=" .  $this->get("person_id");
+        if (DEBUG) { echo "$sql<br>\n"; }
+        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+        
+        $sql="update " . DB_PREFIX . "people set spouse_id=null " .
+            "where spouse_id=" .  $this->get("person_id");
+        if (DEBUG) { echo "$sql<br>\n"; }
+        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+        
+        $sql="update " . DB_PREFIX . "photos set photographer_id=null where " .
+            "photographer_id=" .  $this->get("person_id");
+        if (DEBUG) { echo "$sql<br>\n"; }
+
+        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
         parent::delete(null, array("photo_people"));
     }
 
@@ -68,9 +88,9 @@ class person extends zoph_table {
     }
 
     function get_children() {
-        $constraints["father_id"] = $this->get("father_id");
-        $constraints["mother_id"] = $this->get("mother_id");
-        return get_people($constraints, "or", "dob");
+        $constraints["father_id"] = $this->get("person_id");
+        $constraints["mother_id"] = $this->get("person_id");
+        return get_people($constraints, "or");
     }
 
     function get_name() {
