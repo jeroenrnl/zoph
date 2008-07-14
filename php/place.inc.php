@@ -36,6 +36,26 @@ class place extends zoph_tree_table {
         parent::update();
     }
 
+    function delete() {
+        $sql="update " . DB_PREFIX . "photos set location_id=null where " .
+            "location_id=" .  $this->get("place_id");
+        if (DEBUG) { echo "$sql<br>\n"; }
+        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+
+        $sql="update " . DB_PREFIX . "people set home_id=null where " .
+            "home_id=" .  $this->get("place_id");
+        if (DEBUG) { echo "$sql<br>\n"; }
+        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+
+        $sql="update " . DB_PREFIX . "people set work_id=null where " .
+            "work_id=" .  $this->get("place_id");
+        if (DEBUG) { echo "$sql<br>\n"; }
+        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+        
+        parent::delete();
+    }
+
+
     function tzid_to_timezone() {
         $tzkey=$this->get("timezone_id");
         if($tzkey>0) {
