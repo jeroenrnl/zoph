@@ -37,18 +37,21 @@ class place extends zoph_tree_table {
     }
 
     function delete() {
+        $id=escape_string($this->get("place_id"));
+        if(!is_numeric($id)) {die("place_id is not numeric"); }
+
         $sql="update " . DB_PREFIX . "photos set location_id=null where " .
-            "location_id=" .  $this->get("place_id");
+            "location_id=" . $id;
         if (DEBUG) { echo "$sql<br>\n"; }
         mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
 
         $sql="update " . DB_PREFIX . "people set home_id=null where " .
-            "home_id=" .  $this->get("place_id");
+            "home_id=" .  $id;
         if (DEBUG) { echo "$sql<br>\n"; }
         mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
 
         $sql="update " . DB_PREFIX . "people set work_id=null where " .
-            "work_id=" .  $this->get("place_id");
+            "work_id=" .  $id;
         if (DEBUG) { echo "$sql<br>\n"; }
         mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
         
