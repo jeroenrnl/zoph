@@ -119,16 +119,17 @@ if ($user->get("detailed_people") || $user->is_admin()) {
         }
         if ($person->home) {
 ?>
-          <dt><?php echo translate("home") ?></dt>
+          <dt><?php echo translate("home location") ?></dt>
           <dd>
           <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("home_id") ?>"><?php echo translate("view") ?></a></span>
+          <?php echo $person->home->get("title") ? $person->home->get("title") . "<br>" : "" ?>
           <?php echo $person->home->get_address() ?></dd>
 <?php
         }
 
         if ($person->work) {
 ?>
-          <dt"><?php echo translate("work") ?></dt>
+          <dt><?php echo translate("work") ?></dt>
           <dd>
           <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("work_id") ?>"><?php echo translate("view") ?></a></span>
              <?php echo $person->work->get("title") ? $person->work->get("title") . "<br>" : "" ?>
