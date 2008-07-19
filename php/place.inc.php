@@ -161,17 +161,11 @@ class place extends zoph_tree_table {
         return "place";
     }
 
-    function get_coverphoto($user,$autothumb=null,$children=null) {
+    function get_coverphoto($user,$autothumb=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
         } else if ($autothumb) {
             $order=get_autothumb_order($autothumb);
-            if($children) {
-                $place_where=" WHERE p.location_id in (" . $this->get_branch_ids($user) .")";
-            } else {
-                $place_where=" WHERE p.location_id =" .$this->get("place_id");
-            }
-
             if ($user && !$user->is_admin()) {
                 $sql=
                     "select distinct p.photo_id from " .
@@ -180,7 +174,7 @@ class place extends zoph_tree_table {
                     " ON pa.photo_id = p.photo_id JOIN " .
                     DB_PREFIX . "album_permissions as ap " .
                     " ON pa.album_id = ap.album_id " .
-                    $place_where .
+                    " WHERE p.location_id = " . $this->get("place_id") .
                     " AND ap.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " and ap.access_level >= p.level " .
@@ -189,7 +183,8 @@ class place extends zoph_tree_table {
                 $sql =
                     "select distinct p.photo_id from " .
                     DB_PREFIX . "photos as p" .
-                    $place_where . " " . $order;
+                    " WHERE p.location_id = " . $this->get("place_id") .
+                    " " . $order;
             }
             $coverphoto=array_shift(get_records_from_query("photo", $sql));
         }
@@ -197,13 +192,20 @@ class place extends zoph_tree_table {
         if ($coverphoto) {
             $coverphoto->lookup();
             return $coverphoto->get_image_tag(THUMB_PREFIX);
-        } else if (!$children) {
-            // No photos found in this place... let's look again, but now 
-            // also in sub-places...
-            return $this->get_coverphoto($user, $autothumb, true);
         }
-
     }
+    function is_root() {
+        // At this moment the root place is always 1, but this may
+        // change in the future, so to be safe we'll make a function for
+        // this
+        $root_place=get_root_place();
+        if($this->get("place_id") == $root_place->get("place_id")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+        
 
 
 

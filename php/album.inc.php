@@ -159,16 +159,22 @@ class album extends zoph_tree_table {
     }
 
     function get_edit_array() {
+        if($this->is_root()) {
+            $parent=array (
+                translate("parent album"),
+                translate("Albums"));
+        } else {
+            $parent=array (
+                translate("parent album"),
+                create_pulldown("parent_album_id",
+                $this->get("parent_album_id"), get_albums_select_array()));
+        }
         return array(
             "album" => 
                 array(
                     translate("album name"),  
                     create_text_input("album", $this->get("album"))),
-            "parent_album_id" =>
-                array(
-                    translate("parent album"),
-                    create_pulldown("parent_album_id",
-                    $this->get("parent_album_id"), get_albums_select_array())),
+            "parent_album_id" => $parent,
             "album_description" =>
                 array(
                     translate("album description"),
@@ -201,16 +207,11 @@ class album extends zoph_tree_table {
         return "album";
     }
 
-    function get_coverphoto($user,$autothumb=null,$children=null) {
+    function get_coverphoto($user,$autothumb=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
         } else if ($autothumb) {
             $order=get_autothumb_order($autothumb);
-            if($children) {
-                $album_where=" WHERE pa.album_id in (" . $this->get_branch_ids($user) .")";
-            } else {
-                $album_where=" WHERE pa.album_id =" .$this->get("album_id");
-            }
             if ($user && !$user->is_admin()) {
                 $sql=
                     "select distinct p.photo_id from " .
@@ -219,7 +220,7 @@ class album extends zoph_tree_table {
                     " ON pa.photo_id = p.photo_id JOIN " .
                     DB_PREFIX . "album_permissions as ap " .
                     " ON pa.album_id = ap.album_id" .
-                    $album_where .
+                    " WHERE pa.album_id = " . $this->get("album_id") .
                     " AND ap.user_id =" . 
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " and pa.photo_id = p.photo_id " .
@@ -231,7 +232,7 @@ class album extends zoph_tree_table {
                     DB_PREFIX . "photos as p JOIN " .
                     DB_PREFIX . "photo_albums pa ON" .
                     " pa.photo_id = p.photo_id" .
-                    $album_where .
+                    " WHERE pa.album_id = " . $this->get("album_id") .
                     " " . $order;
             }
             $coverphoto=array_shift(get_records_from_query("photo", $sql));
@@ -240,12 +241,20 @@ class album extends zoph_tree_table {
         if ($coverphoto) {
             $coverphoto->lookup();
             return $coverphoto->get_image_tag(THUMB_PREFIX);
-        } else if (!$children) {
-            // No photos found in this album... let's look again, but now 
-            // also in sub-albums...
-            return $this->get_coverphoto($user, $autothumb, true);
         }
     }
+    function is_root() {
+        // At this moment the root album is always 1, but this may
+        // change in the future, so to be safe we'll make a function for
+        // this
+        $root_album=get_root_album();
+        if($this->get("album_id") == $root_album->get("album_id")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+        
 
 }
 

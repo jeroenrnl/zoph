@@ -115,17 +115,23 @@ class category extends zoph_tree_table {
     }
 
     function get_edit_array() {
+        if($this->is_root()) {
+            $parent=array(
+                translate("parent category"),
+                translate("Categories"));
+        } else {
+            $parent=array(
+                translate("parent category"),
+                create_pulldown("parent_category_id",
+                    $this->get("parent_category_id"),
+                    get_categories_select_array()));
+        }
         return array(
             "category" =>
                 array(
                     translate("category name"),
                     create_text_input("category", $this->get("category"))),
-            "parent_category_id" =>
-                array(
-                    translate("parent category"),
-                    create_pulldown("parent_category_id",
-                        $this->get("parent_category_id"),
-                        get_categories_select_array())),
+            "parent_category_id" => $parent,
             "category_description" =>
                 array(
                     translate("category description"),
@@ -155,17 +161,11 @@ class category extends zoph_tree_table {
         return "category";
     }
 
-    function get_coverphoto($user,$autothumb=null,$children=null) {
+    function get_coverphoto($user,$autothumb=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
         } else if ($autothumb) {
             $order=get_autothumb_order($autothumb);
-            if($children) {
-                $cat_where=" WHERE pc.category_id in (" . $this->get_branch_ids($user) .")";
-            } else {
-                $cat_where=" WHERE pc.category_id =" .$this->get("category_id");
-            }
-
             if ($user && !$user->is_admin()) {
                 $sql=
                     "select distinct p.photo_id from " .
@@ -176,7 +176,7 @@ class category extends zoph_tree_table {
                     " ON pa.album_id = ap.album_id JOIN " .
                     DB_PREFIX . "photo_categories as pc " .
                     " ON pc.photo_id = p.photo_id " .
-                    $cat_where .
+                    " WHERE pc.category_id = " . $this->get("category_id") .
                     " AND ap.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " and ap.access_level >= p.level " .
@@ -187,7 +187,8 @@ class category extends zoph_tree_table {
                     DB_PREFIX . "photos as p JOIN " .
                     DB_PREFIX . "photo_categories as pc ON" .
                     " pc.photo_id = p.photo_id" .
-                    $cat_where . " " . $order;
+                    " WHERE pc.category_id = " . $this->get("category_id") .
+                    " " . $order;
             }
             $coverphoto=array_shift(get_records_from_query("photo", $sql));
         }
@@ -195,13 +196,21 @@ class category extends zoph_tree_table {
         if ($coverphoto) {
             $coverphoto->lookup();
             return $coverphoto->get_image_tag(THUMB_PREFIX);
-        } else if (!$children) {
-            // No photos found in this cat... let's look again, but now 
-            // also in subcat...
-            return $this->get_coverphoto($user, $autothumb, true);
-
         }
     }
+    function is_root() {
+        // At this moment the root cat is always 1, but this may
+        // change in the future, so to be safe we'll make a function for
+        // this
+        $root_cat=get_root_category();
+        if($this->get("category_id") == $root_cat->get("category_id")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+        
+
 
 
 }

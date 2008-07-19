@@ -32,9 +32,17 @@
         <?php echo create_text_input("title", $place->get("title"), 40, 40) ?>
         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
         <label for="parent_place_id"><?php echo translate("parent location") ?></label>
+<?php
+        if($place->is_root()) {
+            echo translate("places");
+        } else {
+?>
         <?php echo create_pulldown("parent_place_id",
-            $place->get("parent_place_id"), get_places_select_array()) ?><br>
-
+            $place->get("parent_place_id"), get_places_select_array()) ?>
+<?php
+        }
+?>
+        <br>
         <label for="address"><?php echo translate("address") ?></label>
         <?php echo create_text_input("address", $place->get("address"), 40, 40) ?>
         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
