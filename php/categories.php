@@ -171,6 +171,16 @@ if ($category->get("category_description")) {
 ?>
 <?php
     if ($children) {
+        if($_view=="tree" && JAVASCRIPT) {
+?>
+            <span class="actionlink">
+                <a href='#' onclick='branchall()'>
+                    <?php echo translate("expand all");?></a> | 
+                <a href='#' onclick='unbranchall()'>
+                    <?php echo translate("collapse all");?></a>
+            </span><br>
+<?php
+        }
 ?>
         <ul class="<?php echo $_view ?>">
 <?php

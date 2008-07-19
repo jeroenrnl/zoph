@@ -32,3 +32,17 @@ function openbranch() {
 function closebranch() {
     unbranch(this);
     }
+
+function unbranchall() {
+    nodes=getElementsByClass('treenode');
+    for(i in nodes) {
+        unbranch(nodes[i]);
+    }
+}
+
+function branchall() {
+    nodes=getElementsByClass('treenode');
+    for(i in nodes) {
+        branch(nodes[i]);
+    }
+}

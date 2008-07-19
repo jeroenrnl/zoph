@@ -122,12 +122,12 @@ class zoph_tree_table extends zoph_table {
         $this->lookup();
         $children=$this->get_children();
 
-        $html="<li>\n";
+        $html="\n<li>";
         if($children) {
           if ($open) {
-                $html.="<span onclick=\"unbranch(this)\">-&nbsp;</span>";
+                $html.="<span class='treenode' onclick=\"unbranch(this)\">-&nbsp;</span>";
            } else {
-                $html.="<span onclick=\"branch(this)\">+&nbsp;</span>";
+                $html.="<span class='treenode' onclick=\"branch(this)\">+&nbsp;</span>";
            }
         } else {
             $html.="<span>&nbsp;&nbsp;</span>";
