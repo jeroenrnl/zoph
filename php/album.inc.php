@@ -23,6 +23,7 @@ class album extends zoph_tree_table {
 
     var $photo_count;
     function album($id = 0) {
+        if($id && !is_numeric($id)) { die("album_id must be numeric"); }
         parent::zoph_table("albums", array("album_id"), array("album"));
         $this->set("album_id", $id);
     }
@@ -95,9 +96,9 @@ class album extends zoph_tree_table {
                 DB_PREFIX . "album_permissions ap " .
                 "ON a.album_id=ap.album_id " .
                 "WHERE user_id=" . $user->get("user_id") .
-                " AND parent_album_id=" . $id .
+                " AND parent_album_id=" . escape_string($id) .
                 " GROUP BY a.album_id " .
-                "ORDER BY " . $order;
+                "ORDER BY " . escape_string($order);
         } else {
             $sql =
                 "SELECT a.*, album as name, " .
@@ -114,9 +115,9 @@ class album extends zoph_tree_table {
                 "ON a.album_id=pa.album_id LEFT JOIN " .
                 DB_PREFIX . "photos as p " .
                 "ON pa.photo_id=p.photo_id " .
-                "WHERE parent_album_id=" . $id .
+                "WHERE parent_album_id=" . escape_string($id) .
                 " GROUP BY a.album_id " .
-                "ORDER BY " . $order;
+                "ORDER BY " . escape_string($order);
         }
 
         $this->children=get_records_from_query("album", $sql);
@@ -134,7 +135,7 @@ class album extends zoph_tree_table {
                 DB_PREFIX . "photo_albums as pa, " .
                 DB_PREFIX . "photos as p, " .
                 DB_PREFIX . "album_permissions as ap " .
-                "where pa.album_id = $id" .
+                "where pa.album_id = " . escape_string($id) .
                 " and ap.user_id = '" . escape_string($user->get("user_id")) .
                 "' and ap.album_id = pa.album_id" .
                 " and pa.photo_id = p.photo_id " .
@@ -395,7 +396,7 @@ function get_popular_albums($user) {
             " and ap.access_level >= ph.level " .
             "group by al.album_id " .
             "order by count desc, al.album " .
-            "limit 0, $TOP_N";
+            "limit 0, " . escape_string($TOP_N);
     }
     else {
         $sql =
@@ -405,7 +406,7 @@ function get_popular_albums($user) {
             "where pa.album_id = al.album_id " .
             "group by al.album_id " .
             "order by count desc, al.album " .
-            "limit 0, $TOP_N";
+            "limit 0, " . escape_string($TOP_N);
     }
 
     return get_popular_results("album", $sql);

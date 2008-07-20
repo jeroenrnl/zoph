@@ -24,6 +24,7 @@ class category extends zoph_tree_table {
     var $photo_count;
 
     function category($id = 0) {
+        if($id && !is_numeric($id)) { die("category_id must be numeric"); }
         parent::zoph_table("categories", array("category_id"), array("category"));
         $this->set("category_id", $id);
     }
@@ -307,7 +308,7 @@ function get_popular_categories($user) {
             " and ap.access_level >= ph.level " .
             "group by cat.category_id " .
             "order by count desc, cat.category " .
-            "limit 0, $TOP_N";
+            "limit 0, " . escape_string($TOP_N);
     }
     else {
         $sql =
@@ -317,7 +318,7 @@ function get_popular_categories($user) {
             "where pc.category_id = cat.category_id " .
             "group by cat.category_id " .
             "order by count desc, cat.category " .
-            "limit 0, $TOP_N";
+            "limit 0, " . escape_string($TOP_N);
     }
 
     return get_popular_results("category", $sql);

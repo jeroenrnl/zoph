@@ -19,6 +19,7 @@
 
 class pageset extends zoph_table {
     function pageset($id = 0) {
+        if($id && !is_numeric($id)) { die("pageset_id must be numeric"); }
         parent::zoph_table("pageset", array("pageset_id"), array("title"));
         $this->set("pageset_id", $id);
         $this->set("date","now()");

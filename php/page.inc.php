@@ -20,6 +20,7 @@
 
 class page extends zoph_table {
     function page($id = 0) {
+         if($id && !is_numeric($id)) { die("page_id must be numeric"); }
         parent::zoph_table("pages", array("page_id"), array("title"));
         $this->set("page_id", $id);
     }

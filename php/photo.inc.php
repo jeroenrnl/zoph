@@ -25,6 +25,7 @@ class photo extends zoph_table {
     var $location;
 
     function photo($id = 0) {
+        if($id && !is_numeric($id)) { die("photo_id must be numeric"); }
         parent::zoph_table("photos", array("photo_id"), array(""));
         $this->set("photo_id",$id);
     }
@@ -1004,10 +1005,10 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     }
     function get_relation_desc($photo_id_2) {
         $sql = "select desc_1 from " . DB_PREFIX . "photo_relations where" .
-            " photo_id_2 = " . $this->get("photo_id") . " and " .
+            " photo_id_2 = " . escape_string($this->get("photo_id")) . " and " .
             " photo_id_1 = " . escape_string($photo_id_2) . 
             " union select desc_2 from " . DB_PREFIX . "photo_relations where" .
-            " photo_id_1 = " . $this->get("photo_id") . " and " .
+            " photo_id_1 = " . escape_string($this->get("photo_id")) . " and " .
             " photo_id_2 = " . escape_string($photo_id_2) . " limit 1";
         $result=mysql_query($sql)
             or die("Could not get description for related photo:<br><i>$sql</i>");

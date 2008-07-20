@@ -21,6 +21,7 @@
 class comment extends zoph_table {
 
     function comment($id = 0) {
+        if($id && !is_numeric($id)) { die("comment_id must be numeric"); }
         parent::zoph_table("comments", array("comment_id"), array("subject"));
         $this->set("comment_id", $id);
     }
@@ -43,7 +44,7 @@ class comment extends zoph_table {
         parent::delete();
         
         $sql = "delete from " . DB_PREFIX . "photo_comments where comment_id=";
-        $sql .= $this->get("comment_id");
+        $sql .= escape_string($this->get("comment_id"));
     
         mysql_query($sql) or die_with_mysql_error("Could not clean comment from photo: ", $sql);
     }
@@ -81,7 +82,7 @@ class comment extends zoph_table {
     function get_photo() {
         if(!$this->get("comment_id")) { return; }
         $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
-            " where comment_id=" . $this->get("comment_id") .
+            " where comment_id=" . escape_string($this->get("comment_id")) .
             " limit 1";
         $result=get_records_from_query("photo", $sql);
         if($result[0]) { 
@@ -95,7 +96,7 @@ class comment extends zoph_table {
     function add_comment_to_photo($photo_id) {
         if (!$photo_id) { return; }
         $sql = "insert into " . DB_PREFIX . "photo_comments values" . 
-            "(" . $photo_id . ", " . $this->get("comment_id") . ")";
+            "(" . escape_string($photo_id) . ", " . escape_string($this->get("comment_id")) . ")";
 
       
         mysql_query($sql) or die_with_mysql_error("Failed to add comment:", $sql);

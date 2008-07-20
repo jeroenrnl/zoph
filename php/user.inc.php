@@ -26,6 +26,7 @@ class user extends zoph_table {
     var $lang; // holds translations
 
     function user($id = 0) {
+        if($id && !is_numeric($id)) { die("user_id must be numeric"); }
         parent::zoph_table("users", array("user_id"), array("user_name"));
         $this->set("user_id", $id);
     }

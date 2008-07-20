@@ -25,6 +25,7 @@ class person extends zoph_table {
     var $work;
 
     function person($id = 0) {
+        if($id && !is_numeric($id)) { die("person_id must be numeric"); }
         parent::zoph_table("people", array("person_id"), array("first_name"));
         $this->set("person_id", $id);
     }
@@ -164,7 +165,8 @@ class person extends zoph_table {
                     " ON pa.album_id = ap.album_id JOIN " .
                     DB_PREFIX . "photo_people as pp" .
                     " ON pp.photo_id = p.photo_id " .
-                    " WHERE pp.person_id = " . $this->get("person_id") .
+                    " WHERE pp.person_id = " . 
+                    escape_string($this->get("person_id")) .
                     " AND ap.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " and ap.access_level >= p.level " .
@@ -175,7 +177,8 @@ class person extends zoph_table {
                     DB_PREFIX . "photos as p JOIN " .
                     DB_PREFIX . "photo_people as pp" .
                     " ON pp.photo_id = p.photo_id " .
-                    " WHERE pp.person_id = " . $this->get("person_id") .
+                    " WHERE pp.person_id = " . 
+                    escape_string($this->get("person_id")) .
                     " " . $order;
             }
             $coverphoto=array_shift(get_records_from_query("photo", $sql));
@@ -341,7 +344,7 @@ function get_popular_people($user) {
             " and ap.access_level >= ph.level " .
             "group by ppl.person_id " .
             "order by count desc, ppl.last_name, ppl.first_name " .
-            "limit 0, $TOP_N";
+            "limit 0, " . escape_string($TOP_N);
     }
     else {
         $sql =
@@ -351,7 +354,7 @@ function get_popular_people($user) {
             "where ppl.person_id = pp.person_id " .
             "group by ppl.person_id " .
             "order by count desc, ppl.last_name, ppl.first_name " .
-            "limit 0, $TOP_N";
+            "limit 0, " . escape_string($TOP_N);
     }
 
     return get_popular_results("person", $sql);

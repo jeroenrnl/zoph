@@ -25,6 +25,7 @@ class prefs extends zoph_table {
     var $color_scheme;
 
     function prefs($id = 0) {
+        if($id && !is_numeric($id)) { die("user_id must be numeric"); }
         parent::zoph_table("prefs", array("user_id"), array(""));
         $this->set("user_id", $id);
     }
@@ -86,15 +87,15 @@ class prefs extends zoph_table {
         global $SELECTED_TAB_FONT_COLOR;
 
         $SHOW_BREADCRUMBS = $this->get("show_breadcrumbs");
-        $MAX_CRUMBS_TO_SHOW = $this->get("num_breadcrumbs");
-        $DEFAULT_ROWS = $this->get("num_rows");
-        $DEFAULT_COLS = $this->get("num_cols");
-        $MAX_PAGER_SIZE = $this->get("max_pager_size");
-        $RANDOM_PHOTO_MIN_RATING = $this->get("random_photo_min_rating");
-        $TOP_N = $this->get("reports_top_n");
-        $SLIDESHOW_TIME = $this->get("slideshow_time");
+        $MAX_CRUMBS_TO_SHOW = intval($this->get("num_breadcrumbs"));
+        $DEFAULT_ROWS = intval($this->get("num_rows"));
+        $DEFAULT_COLS = intval($this->get("num_cols"));
+        $MAX_PAGER_SIZE = intval($this->get("max_pager_size"));
+        $RANDOM_PHOTO_MIN_RATING = intval($this->get("random_photo_min_rating"));
+        $TOP_N = intval($this->get("reports_top_n"));
+        $SLIDESHOW_TIME = intval($this->get("slideshow_time"));
         $FULLSIZE_NEW_WIN = $this->get("fullsize_new_win");
-        $PEOPLE_SLOTS = $this->get("people_slots");
+        $PEOPLE_SLOTS = intval($this->get("people_slots"));
         if ($PEOPLE_SLOTS > MAX_PEOPLE_SLOTS) {
             $PEOPLE_SLOTS = MAX_PEOPLE_SLOTS;
         }
