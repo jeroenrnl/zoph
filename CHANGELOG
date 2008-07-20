@@ -1,4 +1,18 @@
 Zoph Changelog
+Zoph 0.7.0.5
+20 July 2008
+
+Zoph 0.7.0.5 is a security fix that repairs several SQL injections. Although most are not exploitable or only exploitable by an admin user, I recommend upgrading to 0.7.0.5. This release also includes a number of extra 'safety nets' that will make exploiting any future SQL injections a lot harder.
+
+It also fixes a number of bugs in the 0.7 release:
+
+    * Bug#1813293: import is not compatible with PHP < 5
+    * Bug#2006151: one of the '+' buttons on the search page does not work
+    * Bug#2012300: Missing linefeed on places page.
+    * Bug#2015312: Wrong layout for 'work' field on person page.
+    * Bug#2015346: Home location does not display the title
+    * Bug#2021272: Crash when changing the parent of the root album
+
 
 Zoph 0.7.0.4
 26 May 2008
