@@ -2,7 +2,7 @@
 
 #
 # zophImport.pl
-# Zoph 0.7.2.1
+# Zoph 0.7.3
 # Jason Geiger & Jeroen Roos, 2002-2008
 #
 # This file is part of Zoph.
@@ -54,8 +54,8 @@ use Cwd 'abs_path';
 
 $| = 1;
  
-my $version = '0.7.2.1';
-
+my $version = '0.7.3';
+ 
 my $update     = 0; # update existing photo records instead of inserting
 my $updateSize = 0; # update the size, width and height (implies -update)
 my $updateExif = 0; # reparse the exif headers (implies -update)
