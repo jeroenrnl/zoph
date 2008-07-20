@@ -324,6 +324,7 @@ function get_tags_array() {
     new tag(&$tags, "background", "div", "", "class='background' style=\"background: [param];\"");
     new tag(&$tags, "photo", "a", "", "href=\"photo.php?photo_id=[param]\"");
     new tag(&$tags, "album", "a", "", "href=\"album.php?album_id=[param]\"");
+    new tag(&$tags, "person", "a", "", "href=\"people.php?person_id=[param]\"");
     new tag(&$tags, "cat", "a", "", "href=\"category.php?category_id=[param]\"");
     new tag(&$tags, "link", "a", "", "href=\"[param]\"");
     new tag(&$tags, "place", "a", "", "href=\"places.php?parent_place_id=[param]\"");
