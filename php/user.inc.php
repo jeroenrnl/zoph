@@ -26,6 +26,7 @@ class user extends zoph_table {
     var $lang; // holds translations
 
     function user($id = 0) {
+        if($id && !is_numeric($id)) { die("user_id must be numeric"); }
         parent::zoph_table("users", array("user_id"), array("user_name"));
         $this->set("user_id", $id);
     }
@@ -110,9 +111,6 @@ class user extends zoph_table {
                 ? translate("Yes") : translate("No"),
             translate("can import") =>
                 $this->get("import") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can download zipfiles") =>
-                $this->get("download") == 1
                 ? translate("Yes") : translate("No"),
             translate("can leave comments") =>
                 $this->get("leave_comments") == 1

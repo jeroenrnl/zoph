@@ -23,6 +23,7 @@ class album extends zoph_tree_table {
 
     var $photo_count;
     function album($id = 0) {
+        if($id && !is_numeric($id)) { die("album_id must be numeric"); }
         parent::zoph_table("albums", array("album_id"), array("album"));
         $this->set("album_id", $id);
     }
@@ -84,7 +85,8 @@ class album extends zoph_tree_table {
             $sql =
                  "select album_id, album, album_description from " .
                  DB_PREFIX . "albums " .
-                 "where parent_album_id = $id order by album";
+                 "where parent_album_id = " . escape_string($id) .
+                 " order by album";
         }
 
         $this->children = get_records_from_query("album", $sql);
@@ -104,7 +106,7 @@ class album extends zoph_tree_table {
                 DB_PREFIX . "photo_albums as pa, " .
                 DB_PREFIX . "photos as p, " .
                 DB_PREFIX . "album_permissions as ap " .
-                "where pa.album_id = $id" .
+                "where pa.album_id = " . escape_string($id) .
                 " and ap.user_id = '" . escape_string($user->get("user_id")) .
                 "' and ap.album_id = pa.album_id" .
                 " and pa.photo_id = p.photo_id " .

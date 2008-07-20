@@ -26,6 +26,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
     $select = "distinct ph.photo_id, ph.name, ph.path, ph.width, ph.height";
 
+    if(!is_numeric($offset)) { die("offset must be numeric"); }
+    if(!is_numeric($rows)) { die("rows must be numeric"); }
+
     if (MAX_THUMB_DESC && $user && $user->prefs->get("desc_thumbnails")) {
         $select .= ", ph.description";
     }

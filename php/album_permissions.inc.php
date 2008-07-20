@@ -25,6 +25,8 @@
 class album_permissions extends zoph_table {
 
     function album_permissions($uid = -1, $aid = -1) {
+        if($uid && !is_numeric($uid)) { die("user_id must be numeric"); }
+        if($aid && !is_numeric($aid)) { die("album_id must be numeric"); }
         parent::zoph_table("album_permissions", array("user_id", "album_id"), array(""));
         $this->set("user_id", $uid);
         $this->set("album_id", $aid);

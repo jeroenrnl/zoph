@@ -21,6 +21,7 @@
 class color_scheme extends zoph_table {
 
     function color_scheme($id = 0) {
+        if($id && !is_numeric($id)) { die("color_scheme_id must be numeric"); }
         parent::zoph_table("color_schemes", array("color_scheme_id"), array("name"));
         $this->set("color_scheme_id", $id);
     }

@@ -22,6 +22,7 @@
 class place extends zoph_tree_table {
 
     function place($id = 0) {
+        if($id && !is_numeric($id)) { die("place_id must be numeric"); }
         parent::zoph_table("places", array("place_id"), array("title"));
         $this->set("place_id", $id);
     }
