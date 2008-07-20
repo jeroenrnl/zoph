@@ -872,7 +872,7 @@ dl#allexif dl {
     width: 100%
     }
 
-label, table#credits th {
+label, table.credits th {
     text-align: right;
     vertical-align: top;
     font-weight: bold;
@@ -1027,12 +1027,12 @@ input, select {
     }
 
 table#users,
-table#credits {
+table.credits {
     width: 100%;
     }
 
 table#users td, 
-table#credits td { 
+table.credits td { 
     margin: 2px;
     }
 
