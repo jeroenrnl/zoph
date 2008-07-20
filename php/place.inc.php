@@ -277,6 +277,18 @@ class place extends zoph_tree_table {
         $html.="</small>";
         return $html;
     }
+    function is_root() {
+        // At this moment the root place is always 1, but this may
+        // change in the future, so to be safe we'll make a function for
+        // this
+        $root_place=get_root_place();
+        if($this->get("place_id") == $root_place->get("place_id")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+        
 
     function get_marker($user) {
         $icon=ICONSET . "/geo-place.png";

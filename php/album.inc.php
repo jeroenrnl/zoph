@@ -189,16 +189,22 @@ class album extends zoph_tree_table {
     }
 
     function get_edit_array() {
+        if($this->is_root()) {
+            $parent=array (
+                translate("parent album"),
+                translate("Albums"));
+        } else {
+            $parent=array (
+                translate("parent album"),
+                create_pulldown("parent_album_id",
+                $this->get("parent_album_id"), get_albums_select_array()));
+        }
         return array(
             "album" => 
                 array(
                     translate("album name"),  
                     create_text_input("album", $this->get("album"),40,64)),
-            "parent_album_id" =>
-                array(
-                    translate("parent album"),
-                    create_pulldown("parent_album_id",
-                    $this->get("parent_album_id"), get_albums_select_array())),
+            "parent_album_id" => $parent,
             "album_description" =>
                 array(
                     translate("album description"),
@@ -287,6 +293,17 @@ class album extends zoph_tree_table {
             // No photos found in this album... let's look again, but now 
             // also in sub-albums...
             return $this->get_coverphoto($user, $autothumb, true);
+        }
+    }
+    function is_root() {
+        // At this moment the root album is always 1, but this may
+        // change in the future, so to be safe we'll make a function for
+        // this
+        $root_album=get_root_album();
+        if($this->get("album_id") == $root_album->get("album_id")) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

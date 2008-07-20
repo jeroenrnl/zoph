@@ -143,17 +143,23 @@ class category extends zoph_tree_table {
     }
 
     function get_edit_array() {
+        if($this->is_root()) {
+            $parent=array(
+                translate("parent category"),
+                translate("Categories"));
+        } else {
+            $parent=array(
+                translate("parent category"),
+                create_pulldown("parent_category_id",
+                    $this->get("parent_category_id"),
+                    get_categories_select_array()));
+        }
         return array(
             "category" =>
                 array(
                     translate("category name"),
                     create_text_input("category", $this->get("category"),40,64)),
-            "parent_category_id" =>
-                array(
-                    translate("parent category"),
-                    create_pulldown("parent_category_id",
-                        $this->get("parent_category_id"),
-                        get_categories_select_array())),
+            "parent_category_id" => $parent,
             "category_description" =>
                 array(
                     translate("category description"),
@@ -243,8 +249,17 @@ class category extends zoph_tree_table {
 
         }
     }
-
-
+    function is_root() {
+        // At this moment the root cat is always 1, but this may
+        // change in the future, so to be safe we'll make a function for
+        // this
+        $root_cat=get_root_category();
+        if($this->get("category_id") == $root_cat->get("category_id")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 function get_root_category() {
