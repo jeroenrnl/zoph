@@ -1,4 +1,53 @@
 Zoph Changelog
+Zoph 0.7.3
+24 July 2008
+
+Zoph 0.7.3 is a "feature release", that introduces a few new features that will be present in the next "stable" version, 0.8. It also fixes some bugs from 0.7.1 and 0.7.2 Finally, it includes the bugfixes from 0.7.0.5. This includes the security update.
+
+Bugs
+    * Bug#1985434: a-z index for people doesn't work anymore.
+    * Bug#2006151: one of the '+' buttons on the search page does not work
+    * Bug#1987338: ZIP downloading feature does not work with PHP4
+    * Bug#2006154: Case insensitive search for description field doesn't work
+    * Bug#1985432: two different meanings for 'home'
+    * Bug#1986847: wrong charset for French translation
+    * Bug#1983556: It is not possible to unset many attributes once they have been set. Fix by Charles Brunet.
+    * Bug#2015802: SQL error when inserting a new place
+    * Bug#2012300: Missing linefeed on places page.
+    * Bug#2015312: Wrong layout for 'work' field on person page.
+    * Bug#2015346: Home location does not display the title
+    * Bug#2015340: Deleting a person does not delete all references
+    * Bug#2015348: Deleting a place does not remove all references to it
+    * Bug#2021272: Crash when changing the parent of the root album
+    * Bug#2022777: [person] tag is missing from pages feature
+    * Bug#2021272: Crash when changing the parent of the root album
+
+Features
+
+    * Req#1505552: Mapping support. You can now use maps to show the location of your photos, using the mapstraction api. There is support for Google, Yahoo and Openstreetmap maps.
+    * Req#1586463: Time zone support. You can store information about the timezone where a photo was taken and have Zoph automatically compute the correct time for you.
+    * Req#2006156: Increase length of title field for albums and categories
+    * Req#2021275 Expand all button for tree view
+
+Translations
+
+Translations for Dutch, French, German and Polish have been updated
+
+Zoph 0.7.0.5
+20 July 2008
+
+Zoph 0.7.0.5 is a security fix that repairs several SQL injections. Although most are not exploitable or only exploitable by an admin user, I recommend upgrading to 0.7.0.5. This release also includes a number of extra 'safety nets' that will make exploiting any future SQL injections a lot harder.
+
+It also fixes a number of bugs in the 0.7 release:
+    * Bug#1813293: import is not compatible with PHP < 5
+    * Bug#2006151: one of the '+' buttons on the search page does not work
+    * Bug#2012300: Missing linefeed on places page.
+    * Bug#2015312: Wrong layout for 'work' field on person page.
+    * Bug#2015346: Home location does not display the title
+    * Bug#2021272: Crash when changing the parent of the root album
+
+
+Zoph.0.7.2.1
 3 June 2008
 
 Zoph 0.7.2.1 is a bugfix release for Zoph 0.7.2 it fixes the following issues:
