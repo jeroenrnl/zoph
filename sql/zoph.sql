@@ -46,7 +46,7 @@ CREATE TABLE zoph_album_permissions (
 CREATE TABLE zoph_albums (
   album_id int(11) NOT NULL auto_increment,
   parent_album_id int(11) NOT NULL default '0',
-  album varchar(32) NOT NULL default '',
+  album varchar(64) NOT NULL default '',
   album_description varchar(255) default NULL,
   sortname char(32),
   coverphoto int(11) default NULL,
@@ -70,7 +70,7 @@ INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL, NULL, NULL,NULL);
 CREATE TABLE zoph_categories (
   category_id int(11) NOT NULL auto_increment,
   parent_category_id int(11) NOT NULL default '0',
-  category varchar(32) NOT NULL default '',
+  category varchar(64) NOT NULL default '',
   category_description varchar(255) default NULL,
   sortname char(32),
   coverphoto int(11) default NULL,
@@ -260,9 +260,10 @@ CREATE TABLE zoph_photos (
   location_id int(11) default NULL,
   view varchar(64) default NULL,
   rating float(4,2) unsigned default NULL,
-  description blob,
+  description text,
   date varchar(10) default NULL,
   time varchar(8) default NULL,
+  time_corr smallint NOT NULL default 0,
   camera_make varchar(32) default NULL,
   camera_model varchar(32) default NULL,
   flash_used char(1) default NULL,
@@ -277,6 +278,9 @@ CREATE TABLE zoph_photos (
   ccd_width varchar(16) default NULL,
   comment varchar(128) default NULL,
   timestamp timestamp(14) NOT NULL,
+  lat float(10,6),
+  lon float(10,6),
+  mapzoom tinyint unsigned,
   PRIMARY KEY  (photo_id),
   KEY photo_photog_id (photographer_id),
   KEY photo_loc_id (location_id),
@@ -310,12 +314,16 @@ CREATE TABLE zoph_places (
   coverphoto int(11) default NULL,
   pageset int(11) DEFAULT NULL,
   notes varchar(255) default NULL,
+  lat float(10,6),
+  lon float(10,6),
+  mapzoom tinyint unsigned,
+  timezone varchar(50) default NULL,
   PRIMARY KEY  (place_id),
   KEY place_city (city(10)),
   KEY place_title (title(10))
 ) TYPE=MyISAM;
 
-INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 --
 -- Dumping data for table 'zoph_places'
