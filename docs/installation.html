@@ -93,13 +93,31 @@ $ cp -r php/* /var/www/html/zoph/
 <p>The perl scripts points to /usr/bin/perl. If your perl is in a different place, edit the first line of the script.</p>
 <p><a name="Configure_the_database_variables" id="Configure_the_database_variables"></a></p>
 <h3> <span class="mw-headline">Configure the database variables</span></h3>
-<p>Edit bin/zophImport.pl and bin/zophExport.pl so that the following variables match the values you put in config.inc.php:</p>
+<p>Edit <tt>zophrc.sample</tt> (in the <tt>bin</tt> directory of the Zoph tar.gz) so that the following variables match the values you put in config.inc.php:</p>
 <pre>
+$db_host = 'localhost';
 $db_name = 'zoph';
 $db_user = 'zoph_rw';
-$db_pass = 'password';
+$db_pass = 'pass';
+$db_prefix = 'zoph_';
 </pre>
-<p>In addition, in zophExport.pl set $image_dir to you image directory.</p>
+<pre>
+$image_dir = '/data/images/';
+</pre>
+<p>And then move this file to the home directory of the user you are planning on using to import photo's. Probably your own home directory. Save it under the name <tt>.zophrc</tt>.</p>
+<p>You can also set some defaults in this file, in this way you do not need to always provide these commandline arguments:</p>
+<pre>
+$datedDirs = 0;
+$copy = 0;
+$hierarchical = 0;
+$verbose = 0;
+$resolveSymlinks = 0;
+</pre>
+<p>Make sure the file ends with</p>
+<pre>
+1;
+</pre>
+<p>Because Perl does not like it when the last assignment of the file is negative.</p>
 <p><a name="Copy_bin.2FzophImport.pl_and_bin.2FzophExport.pl_to_.2Fusr.2Flocal.2Fbin" id="Copy_bin.2FzophImport.pl_and_bin.2FzophExport.pl_to_.2Fusr.2Flocal.2Fbin"></a></p>
 <h3> <span class="mw-headline">Copy bin/zophImport.pl and bin/zophExport.pl to /usr/local/bin</span></h3>
 <p>Or some other directory in your PATH.</p>
@@ -122,6 +140,14 @@ $db_pass = 'password';
 <li>make sure the DB_USER you specified in config.inc.php actually has access to the database. If your database is not on localhost, you will need to grant permissions to zoph_rw@hostname for that host.</li>
 </ul>
 
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 21/1000000
+Post-expand include size: 0/2048000 bytes
+Template argument size: 0/2048000 bytes
+Expensive parser function count: 0/500
+-->
 
 </div>
 </html>

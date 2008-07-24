@@ -13,10 +13,14 @@
 			<p>This document is meant to help you install all the packages required by Zoph. I've gotten everything running on Linux (Debian, Mandrake and Gentoo) and Mac OS X without too much trouble and people have reported getting Zoph to work under Windows and several flavours of BSD as well. You might be able to skip this if you know your way around your system.</p>
 <p>You need to have the following installed before running Zoph. Version numbers are what I have tested with, I expect any recent versions would work:</p>
 <ul>
-<li>MySQL 5.0.40 (Any 4.x or 5.x version should work, 3.x probably works too, but is no longer supported)</li>
+<li>MySQL 5.0.54 (Any 4.x or 5.x version should work, 3.x probably works too, but is no longer supported)</li>
 <li>Apache 2.0.58</li>
-<li>PHP 5.2.2<br />
-Make sure you have the following features (extensions) installed, if your distribution does not automatically install all of them.
+<li>PHP 5.2.6</li>
+</ul>
+<p><br />
+Make sure you have the following features (extensions) installed, if your distribution does not automatically install all of them.</p>
+<ul>
+<li>
 <ul>
 <li>session</li>
 <li>mysql</li>
@@ -35,9 +39,9 @@ Make sure you have the following features (extensions) installed, if your distri
 <p>You probably already have many of these. Getting most of them is fairly simple. For example, using Debian you can simply:</p>
 <pre>
 $ apt-get update
-$ apt-get install perl apache php4 mysql-server php4-mysql imagemagick jhead
+$ apt-get install perl apache php5 mysql-server php5-mysql imagemagick jhead
 </pre>
-<p>If you are planning on using the web based importer you may need to install the GD 2 library for image support in PHP (<a href="http://www.boutell.com/gd/" class="external free" title="http://www.boutell.com/gd/" rel="nofollow">http://www.boutell.com/gd/</a>). A Debian package named php4-gd2 is available. Also, you may need to upgrade to PHP 4.2 if you want EXIF support. GD is required to use the importer. PHP 4.2 is recommended but not required. Current development is on PHP5, but PHP4 should work too.</p>
+<p>If you are planning on using the web based importer you may need to install the GD 2 library for image support in PHP (<a href="http://www.boutell.com/gd/" class="external free" title="http://www.boutell.com/gd/" rel="nofollow">http://www.boutell.com/gd/</a>). A Debian package named php5-gd2 is available. For EXIF support you need at least PHP4.2. GD is required to use the importer.</p>
 <p>Also, if you are using the web importer you may need to increase the max_execution_time defined in php.ini. There is more info on the <a href="configuration.html" title="Zoph/Configuration">Configuration</a> page.</p>
 <table id="toc" class="toc" summary="Contents">
 <tr>
@@ -46,7 +50,11 @@ $ apt-get install perl apache php4 mysql-server php4-mysql imagemagick jhead
 <h2>Contents</h2>
 </div>
 <ul>
-<li class="toclevel-1"><a href="#Apache_.26_PHP"><span class="tocnumber">1</span> <span class="toctext">Apache &amp; PHP</span></a></li>
+<li class="toclevel-1"><a href="#Apache_.26_PHP"><span class="tocnumber">1</span> <span class="toctext">Apache &amp; PHP</span></a>
+<ul>
+<li class="toclevel-2"><a href="#PHP4_support"><span class="tocnumber">1.1</span> <span class="toctext">PHP4 support</span></a></li>
+</ul>
+</li>
 <li class="toclevel-1"><a href="#MySQL"><span class="tocnumber">2</span> <span class="toctext">MySQL</span></a>
 <ul>
 <li class="toclevel-2"><a href="#MySQL_version_4.1_and_above_.28Zoph_0.4_and_earlier.29"><span class="tocnumber">2.1</span> <span class="toctext">MySQL version 4.1 and above (Zoph 0.4 and earlier)</span></a></li>
@@ -68,7 +76,7 @@ $ apt-get install perl apache php4 mysql-server php4-mysql imagemagick jhead
 <h2> <span class="mw-headline">Apache &amp; PHP</span></h2>
 <p>You may have to edit your httpd.conf file to add PHP support. Edit /var/apache/conf/httpd.conf (or the equivalent) and uncomment/add these lines:</p>
 <pre>
-LoadModule php4_module /usr/lib/apache2/modules/libphp4.so
+LoadModule php5_module /usr/lib/apache2/modules/libphp5.so
 AddType application/x-httpd-php .php
 AddType application/x-httpd-php-source .phps
 </pre>
@@ -82,6 +90,9 @@ $ cat /var/www/test.php
 &lt;? echo phpinfo(); ?&gt;
 </pre>
 <p>Hit <a href="http://localhost/test.php" class="external free" title="http://localhost/test.php" rel="nofollow">http://localhost/test.php</a> and you should see info about your PHP version.</p>
+<p><a name="PHP4_support" id="PHP4_support"></a></p>
+<h3> <span class="mw-headline">PHP4 support</span></h3>
+<p>PHP4 has been <a href="http://www.php.net/downloads.php#v4" class="external text" title="http://www.php.net/downloads.php#v4" rel="nofollow">end of life</a> since 31 December 2007. As of Zoph 0.8, PHP4 will no longer be supported by Zoph. Although most of the functionality will remain working with PHP4, after the release of Zoph 0.8, no bugs related to PHP4 compatibility will be accepted or fixed.</p>
 <p><a name="MySQL" id="MySQL"></a></p>
 <h2> <span class="mw-headline">MySQL</span></h2>
 <p>If MySQL is not up and running you'll need to start it:</p>
@@ -117,6 +128,14 @@ $ perl -MCPAN -e 'install Image::Size'
 <p>Jhead is a handy little program that extracts the information stored in the Exif headers that are added by most digital cameras. Exif stores date and time plus a bunch of other info about a photo. Zoph uses Jhead to parse the header so you'll need to install it. You can download it from:</p>
 <p><a href="http://www.sentex.net/~mwandel/jhead/" class="external free" title="http://www.sentex.net/~mwandel/jhead/" rel="nofollow">http://www.sentex.net/~mwandel/jhead/</a></p>
 
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 9/1000000
+Post-expand include size: 0/2048000 bytes
+Template argument size: 0/2048000 bytes
+Expensive parser function count: 0/500
+-->
 
 </div>
 </html>

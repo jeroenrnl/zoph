@@ -90,6 +90,20 @@
 <li class="toclevel-2"><a href="#DOWNLOAD"><span class="tocnumber">7.10</span> <span class="toctext">DOWNLOAD</span></a></li>
 </ul>
 </li>
+<li class="toclevel-1"><a href="#Mapping_Support"><span class="tocnumber">8</span> <span class="toctext">Mapping Support</span></a>
+<ul>
+<li class="toclevel-2"><a href="#MAPS"><span class="tocnumber">8.1</span> <span class="toctext">MAPS</span></a></li>
+<li class="toclevel-2"><a href="#GOOGLE_KEY"><span class="tocnumber">8.2</span> <span class="toctext">GOOGLE_KEY</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Timezone"><span class="tocnumber">9</span> <span class="toctext">Timezone</span></a>
+<ul>
+<li class="toclevel-2"><a href="#CAMERA_TZ"><span class="tocnumber">9.1</span> <span class="toctext">CAMERA_TZ</span></a></li>
+<li class="toclevel-2"><a href="#DATE_FORMAT"><span class="tocnumber">9.2</span> <span class="toctext">DATE_FORMAT</span></a></li>
+<li class="toclevel-2"><a href="#TIME_FORMAT"><span class="tocnumber">9.3</span> <span class="toctext">TIME_FORMAT</span></a></li>
+<li class="toclevel-2"><a href="#GUESS_TZ"><span class="tocnumber">9.4</span> <span class="toctext">GUESS_TZ</span></a></li>
+</ul>
+</li>
 </ul>
 </td>
 </tr>
@@ -1026,13 +1040,139 @@
 <td colspan="2"><b>Example:</b> <tt>define('DOWNLOAD', 1);</tt></td>
 </tr>
 </table>
+<p><br /></p>
+<p><a name="Mapping_Support" id="Mapping_Support"></a></p>
+<h2> <span class="mw-headline">Mapping Support</span></h2>
+<p><a name="MAPS" id="MAPS"></a></p>
+<h3> <span class="mw-headline">MAPS</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">MAPS</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.3 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> With this setting you can enable mapping support for Zoph. Mapping is provided through the use of the <a href="http://www.mapstraction.com/" class="external text" title="http://www.mapstraction.com/" rel="nofollow">Mapstraction abstraction layer</a>, which enables support for many different mapping providers. You will need to enable Javascript throught the <a href="configuration.html#JAVASCRIPT" title="Zoph/Configuration">JAVASCRIPT</a> setting.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt><i>empty</i></tt>: disable this feature; <tt>google</tt>: Use Google Maps, you need to define <a href="configuration.html#GOOGLE_KEY" title="Zoph/Configuration">GOOGLE_KEY</a> in order to be able to use Google Maps., <tt>yahoo</tt>: use Yahoo mapping or <tt>openstreetmap</tt>: use openstreetmap maps. Because the Openstreetmap project uses a part of Google's API, you will also need to define <a href="configuration.html#GOOGLE_KEY" title="Zoph/Configuration">GOOGLE_KEY</a>. It should be possible to use the other mapping providers <a href="http://www.mapstraction.com/" class="external text" title="http://www.mapstraction.com/" rel="nofollow">Mapstraction</a> supports, but they have not been tested with Zoph and are therefore not supported.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('MAPS', 'google');</tt></td>
+</tr>
+</table>
+<p><a name="GOOGLE_KEY" id="GOOGLE_KEY"></a></p>
+<h3> <span class="mw-headline">GOOGLE_KEY</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">GOOGLE_KEY</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.3 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> In order to use Googles Mapping API, you will need to request an API key with Google. You can do this at <a href="http://code.google.com/apis/maps" class="external free" title="http://code.google.com/apis/maps" rel="nofollow">http://code.google.com/apis/maps</a>, you will need to provide the URL to your Zoph installation, mapping will generate an error when the URL is wrong.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>'Get yours at <a href="http://code.google.com/apis/maps'" class="external free" title="http://code.google.com/apis/maps'" rel="nofollow">http://code.google.com/apis/maps'</a></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> An API key provided by Google. It will look something like this the one in the example, witch is an invalid key, don't bother trying to use it.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('GOOGLE_KEY', 'DDQIBBBBhW0vWZf8f0AAPt_86WXJrGGG9jpr3jOoJTHbWArKj23UyhEyLxRRtnOiOR-RSvuLRF1bguT8Nkh2jQ');</tt></td>
+</tr>
+</table>
+<p><a name="Timezone" id="Timezone"></a></p>
+<h2> <span class="mw-headline">Timezone</span></h2>
+<p>The following features are only available if your are running PHP 5.1.0 or later and are automatically disabled if you are not.</p>
+<p><a name="CAMERA_TZ" id="CAMERA_TZ"></a></p>
+<h3> <span class="mw-headline">CAMERA_TZ</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">CAMERA_TZ</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.3 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> This setting determines the timezone to which your camera is set. Leave empty if you do not want to use this feature and always set your camera to the local timezone</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any timezone from this list <a href="http://www.php.net/manual/en/timezones.php" class="external free" title="http://www.php.net/manual/en/timezones.php" rel="nofollow">http://www.php.net/manual/en/timezones.php</a></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('CAMERA_TZ', 'Europe/Amsterdam');</tt></td>
+</tr>
+</table>
+<p><a name="DATE_FORMAT" id="DATE_FORMAT"></a></p>
+<h3> <span class="mw-headline">DATE_FORMAT</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DATE_FORMAT</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.3 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Define how Zoph displays date</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>'H:i:s T'</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> See <a href="http://www.php.net/manual/en/function.date.php" class="external free" title="http://www.php.net/manual/en/function.date.php" rel="nofollow">http://www.php.net/manual/en/function.date.php</a> for explanation.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('TIME_FORMAT', 'H:i:s');</tt></td>
+</tr>
+</table>
+<p><a name="TIME_FORMAT" id="TIME_FORMAT"></a></p>
+<h3> <span class="mw-headline">TIME_FORMAT</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">TIME_FORMAT</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.3 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Define how Zoph displays time</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>'d-m-Y'</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> See <a href="http://www.php.net/manual/en/function.date.php" class="external free" title="http://www.php.net/manual/en/function.date.php" rel="nofollow">http://www.php.net/manual/en/function.date.php</a> for explanation.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DATE_FORMAT', 'Y-m-d');</tt></td>
+</tr>
+</table>
+<p><a name="GUESS_TZ" id="GUESS_TZ"></a></p>
+<h3> <span class="mw-headline">GUESS_TZ</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">GUESS_TZ</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.3 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> If you have defined the precise location of a place (using the mapping feature), Zoph can 'guess' the timezone based on this location. It uses the <a href="http://www.geonames.org" class="external text" title="http://www.geonames.org" rel="nofollow">Geonames project</a> for this. This will, however, send information to their webserver, do not enable this feature if you're not comfortable with that.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable this feature, <tt>1</tt>: enable this feature</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('GUESS_TZ', 1);</tt></td>
+</tr>
+</table>
 
 
 <!-- 
 NewPP limit report
-Preprocessor node count: 1342/1000000
-Post-expand include size: 31477/2048000 bytes
-Template argument size: 12858/2048000 bytes
+Preprocessor node count: 1514/1000000
+Post-expand include size: 36685/2048000 bytes
+Template argument size: 15540/2048000 bytes
 Expensive parser function count: 0/500
 -->
 
