@@ -312,9 +312,11 @@ class place extends zoph_tree_table {
     }
 
     function set_tz_children($tz) {
-        $places=$this->get_children();
+        $places;
+        $places=$this->get_branch_id_array($places);
         if($places) {
-            foreach ($places as $place) {
+            foreach ($places as $place_id) {
+                $place=new place($place_id);
                 $place->set("timezone", $tz);
                 $place->update();
             }
