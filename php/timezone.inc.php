@@ -69,15 +69,25 @@ function get_tz_key($tz) {
 function guess_tz($lat, $lon) {
     if(minimum_version("5.1.2") && class_exists("XMLReader")) {
         $xml=new XMLReader();
-        $xml->open("http://ws.geonames.org/timezone?lat=" . 
-            $lat . "&lng=" . $lon);
-        while($xml->read() && !$tz) {
-            if($xml->name=="timezoneId") {
-                $xml->read();
-                $tz=$xml->value;
+        @$xml->open("http://ws.geonames.org/timezone?lat=" . 
+            $lat . "&lng=" . $lon) or $failed=true;
+        
+        if (!$failed) {
+            while($xml->read() && !$tz) {
+                if($xml->name=="timezoneId") {
+                    $xml->read();
+                    $tz=$xml->value;
+                }
             }
+            return $tz;
+        } else {
+            if(DEBUG) {
+                $error=error_get_last();
+                echo "<b>Error:</b> Could not connect to Geonames site: " . 
+                    $error["message"] . "<br>\n";
+            }
+            return null;
         }
-        return $tz;
     } else {
         return null;
     }

@@ -302,10 +302,12 @@ class place extends zoph_tree_table {
         $timezone=$this->get("timezone");
         if(!$timezone && $lat && $lon) {
             $tz=guess_tz($lat, $lon);
-            $html="<span class='actionlink'>" .
-                "<a href=place.php?_action=update&place_id=" .
-                $this->get("place_id") . "&timezone=" . $tz .
-                ">" . $tz . "</a></span>";
+            if($tz) {
+                $html="<span class='actionlink'>" .
+                    "<a href=place.php?_action=update&place_id=" .
+                    $this->get("place_id") . "&timezone=" . $tz .
+                    ">" . $tz . "</a></span>";
+            }
             return $html;
         }
         return null;
