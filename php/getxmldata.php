@@ -23,5 +23,5 @@ header("Content-Type: text/xml");
 $object=getvar("object");
 $search=getvar("search");
 
-echo get_xml($object, $search);
+echo get_xml($object, $search, $user);
 ?>

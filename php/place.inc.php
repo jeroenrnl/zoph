@@ -59,6 +59,53 @@ class place extends zoph_tree_table {
         parent::delete();
     }
 
+    function get_all_children($user=null) {
+        if($user) {
+            $order = $user->prefs->get("child_sortorder") . ", name";
+        } else {
+            $order = "name";
+        }
+        $id = $this->get("place_id");
+        if (!$id) { return; }
+
+        $sql =
+            "SELECT pl.*, pl.title as name, " .
+            "min(ph.date) as oldest, " .
+            "max(ph.date) as newest, " .
+            "min(ph.timestamp) as first, " .
+            "max(ph.timestamp) as last, " .
+            "min(rating) as lowest, " . 
+            "max(rating) as highest, " .
+            "avg(rating) as average, " .
+            "rand() as random from " .
+            DB_PREFIX . "places as pl LEFT JOIN " .
+            DB_PREFIX . "photos as ph " .
+            "ON pl.place_id = ph.location_id " .
+            "WHERE pl.parent_place_id=" . escape_string($id) .
+            " GROUP BY pl.place_id " .
+            "ORDER BY " . $order; 
+
+        $this->children=get_records_from_query("place", $sql);
+        return $this->children; 
+    }    
+    
+    function get_children($user) {
+        $children=$this->get_all_children($user);
+        $places=array();
+        // If user is not admin, remove any places that do not have photos
+        if($user && !$user->is_admin()) {
+            foreach($children as $child) {
+                $count=$child->get_total_photo_count($user);
+                if($count>0) {
+                    $places[]=$child;
+                }
+            }
+            return $places;
+           
+        } else {
+            return $children;
+        } 
+    }
 
     function tzid_to_timezone() {
         $tzkey=$this->get("timezone_id");

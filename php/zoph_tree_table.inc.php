@@ -149,7 +149,7 @@ class zoph_tree_table extends zoph_table {
 
 
 
-    function get_xml_tree($xml, $search) {
+    function get_xml_tree($xml, $search, $user=null) {
         $rootname=$this->xml_rootname();
         $nodename=$this->xml_nodename();
         $idname=$this->primary_keys[0];
@@ -157,7 +157,6 @@ class zoph_tree_table extends zoph_table {
         $newchild=$xml->createElement($nodename);
 
         $title=$this->get_name();
-
         $titleshort=strtolower(substr($title, 0, strlen($search)));
         if($titleshort == strtolower($search)) {
             $key=$this->get($idname);
@@ -170,10 +169,11 @@ class zoph_tree_table extends zoph_table {
             $newchild->appendChild($newchildkey);
             $newchild->appendChild($newchildtitle);
        }
-        if($this->get_children()) {
+       $children=$this->get_children($user);
+        if($children) {
             $childset=$xml->createElement($rootname);
-            foreach($this->get_children() as $child) {
-                $newnode=$child->get_xml_tree($xml, $search);
+            foreach($children as $child) {
+                $newnode=$child->get_xml_tree($xml, $search,$user);
                 if (isset($newnode)) {
                     $childset->appendChild($newnode);
                 }
@@ -191,7 +191,6 @@ function get_root($class) {
 
 function create_tree_select_array($name, $user = null, $rec = null,
     $level = "", $select_array = null, $search = 0) {
-
     if (!$rec) {
         $rec = get_root($name);
         $rec->lookup();
@@ -215,7 +214,6 @@ function create_tree_select_array($name, $user = null, $rec = null,
                 "$level&nbsp;&nbsp;&nbsp;", $select_array, $search);
         }
     }
-
     return $select_array;
 }
 

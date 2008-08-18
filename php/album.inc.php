@@ -88,7 +88,7 @@ class album extends zoph_tree_table {
                 "max(rating) as highest, " .
                 "avg(rating) as average, " .
                 "rand() as random from " .
-                DB_PREFIX . "albums as a JOIN " .
+                DB_PREFIX . "albums as a LEFT JOIN " .
                 DB_PREFIX . "photo_albums as pa " .
                 "ON a.album_id=pa.album_id LEFT JOIN " .
                 DB_PREFIX . "photos as p " .

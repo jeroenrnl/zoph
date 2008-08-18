@@ -577,13 +577,14 @@ function create_link_list($records) {
     return $links;
 }
 
-function get_xml($class, $search) {
+function get_xml($class, $search,$user=null) {
     $search=strtolower($search);
     if($class=="location") {
         $class="place";
-    } else if($class=="photographer") {
+    } else if ($class=="photographer") {
         $class="person";
-    } 
+        $subclass="photographer";
+    }
 
     if($class=="person") {
         $tree=false;
@@ -608,17 +609,21 @@ function get_xml($class, $search) {
         if ($tree) {
             $obj = get_root($class);
             $obj->lookup();
-            $tree=$obj->get_xml_tree($xml, $search);
+            $tree=$obj->get_xml_tree($xml, $search, $user);
             $rootnode->appendChild($tree);
         } else {
-            if($class="person") {
-                $constraints=array("lower(first_name)" => $search . "%", "lower(last_name)"=> $search . "%", "lower(concat(first_name, \" \", last_name))" => $search . "%");
-                $conj="or";
-                $order="last_name";
-                $ops=array("lower(first_name)" => "like", "lower(last_name)" => "like", "lower(concat(first_name, \" \", last_name))" => "like");
-            }
-            $records=get_records($class, $order, $constraints, $conj, $ops);
-
+            if($class=="person") {
+                if($search=="") {
+                    $search=null;
+                }
+                if($subclass=="photographer") {
+                    $records=get_photographers($user,$search,true);
+                } else {
+                    $records=get_photographed_people($user,$search,true);
+                }
+            } else {
+                $records=get_records($class, $order, $constraints, $conj, $ops);
+            } 
             foreach($records as $record) {
                 $newchild=$xml->createElement($nodename);
                 $key=$xml->createElement("key");

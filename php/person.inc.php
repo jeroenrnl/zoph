@@ -198,13 +198,18 @@ function get_people($constraints = null, $conj = "and", $ops = null,
     return get_records("person", $order, $constraints, $conj, $ops);
 }
 
-function get_photographed_people($user = null, $first_letter=null) {
-    if($first_letter!==null) {
-        if($first_letter==="") {
+function get_photographed_people($user = null, $search=null, $search_first = false) {
+    if($search!==null) {
+        if($search==="") {
             $where=" and (ppl.last_name='' or ppl.last_name is null)";
         } else {
-            $first_letter=escape_string($first_letter);
-            $where=" and ppl.last_name like lower('" . $first_letter . "%')";
+            $search=escape_string($search);
+            $where=" and (ppl.last_name like lower('" . $search . "%')";
+            if ($search_first) {
+                $where.="or ppl.first_name like lower('" . $search . "%'))";
+            } else {
+                $where.=")";
+            }
         }
     }
     if ($user && !$user->is_admin()) {
@@ -235,7 +240,20 @@ function get_photographed_people($user = null, $first_letter=null) {
     return get_records_from_query("person", $query);
 }
 
-function get_photographers($user = null) {
+function get_photographers($user = null, $search = null) {
+    if($search!==null) {
+        if($search==="") {
+            $where=" and (ppl.last_name='' or ppl.last_name is null)";
+        } else {
+            $search=escape_string($search);
+            $where=" and (ppl.last_name like lower('" . $search . "%')";
+            if ($search_first) {
+                $where.="or ppl.first_name like lower('" . $search . "%'))";
+            } else {
+                $where.=")";
+            }
+        }
+    }
 
     if ($user && !$user->is_admin()) {
         $query =
@@ -248,15 +266,15 @@ function get_photographers($user = null) {
             " and ap.album_id = pa.album_id" .
             " and pa.photo_id = ph.photo_id" .
             " and ap.access_level >= ph.level" .
-            " and ph.photographer_id = ppl.person_id " .
-            "order by ppl.last_name, ppl.called, ppl.first_name";
+            " and ph.photographer_id = ppl.person_id " . $where .
+            " order by ppl.last_name, ppl.called, ppl.first_name";
     }
     else {
         $query =
             "select distinct ppl.* from " .
             DB_PREFIX . "people as ppl, " .
             DB_PREFIX . "photos as ph " .
-            "where ppl.person_id = ph.photographer_id " .
+            "where ppl.person_id = ph.photographer_id " . $where . 
             "order by ppl.last_name, ppl.called, ppl.first_name";
     }
 
