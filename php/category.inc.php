@@ -38,6 +38,18 @@ class category extends zoph_tree_table {
     }
 
     function get_all_children($user=null) {
+        $id = $this->get("category_id");
+        if (!$id) { return; }
+
+        $sql =
+            "SELECT c.*, category as name FROM " .
+            DB_PREFIX . "categories c " .
+            "WHERE parent_category_id=" . $id; 
+        $this->children=get_records_from_query("category", $sql);
+        return $this->children;
+    }    
+    
+    function get_all_children_sorted($user=null) {
         if($user) {
             $order = $user->prefs->get("child_sortorder") . ", name";
         } else {
@@ -70,20 +82,12 @@ class category extends zoph_tree_table {
     
     function get_children($user) {
         $children=$this->get_all_children($user);
-        $places=array();
-        // If user is not admin, remove any places that do not have photos
-        if($user && !$user->is_admin()) {
-            foreach($children as $child) {
-                $count=$child->get_total_photo_count($user);
-                if($count>0) {
-                    $places[]=$child;
-                }
-            }
-            return $places;
-           
-        } else {
-            return $children;
-        } 
+        return(remove_empty($children,$user));
+    }
+
+    function get_children_sorted($user) {
+        $children=$this->get_all_children_sorted($user);
+        return(remove_empty($children,$user));
     }
 
     function get_branch_ids($user = null) {
@@ -340,5 +344,6 @@ function get_popular_categories($user) {
     return get_popular_results("category", $sql);
 
 }
+
 
 ?>

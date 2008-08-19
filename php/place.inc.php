@@ -60,6 +60,24 @@ class place extends zoph_tree_table {
     }
 
     function get_all_children($user=null) {
+        $id = $this->get("place_id");
+        if (!$id) { return; }
+
+        $sql =
+            "SELECT pl.*, pl.title as name FROM " .
+            DB_PREFIX . "places as pl " .
+            "WHERE pl.parent_place_id=" . escape_string($id);
+
+        $this->children=get_records_from_query("place", $sql);
+        return $this->children; 
+    }    
+    
+    function get_children($user) {
+        $children=$this->get_all_children($user);
+        return remove_empty($children, $user);
+    }
+
+    function get_all_children_sorted($user=null) {
         if($user) {
             $order = $user->prefs->get("child_sortorder") . ", name";
         } else {
@@ -89,22 +107,9 @@ class place extends zoph_tree_table {
         return $this->children; 
     }    
     
-    function get_children($user) {
-        $children=$this->get_all_children($user);
-        $places=array();
-        // If user is not admin, remove any places that do not have photos
-        if($user && !$user->is_admin()) {
-            foreach($children as $child) {
-                $count=$child->get_total_photo_count($user);
-                if($count>0) {
-                    $places[]=$child;
-                }
-            }
-            return $places;
-           
-        } else {
-            return $children;
-        } 
+    function get_children_sorted($user) {
+        $children=$this->get_all_children_sorted($user);
+        return remove_empty($children, $user);
     }
 
     function tzid_to_timezone() {
@@ -220,13 +225,13 @@ class place extends zoph_tree_table {
         if ($user && !$user->is_admin()) {
             $sql =
                 "select count(distinct pa.photo_id) from " .
-                DB_PREFIX . "photo_albums as pa, " .
-                DB_PREFIX . "photos as p, " .
+                DB_PREFIX . "photo_albums as pa JOIN " .
+                DB_PREFIX . "photos as p " .
+                "ON pa.photo_id = p.photo_id JOIN " .
                 DB_PREFIX . "album_permissions as ap " .
+                "ON ap.album_id = pa.album_id " .
                 "where ap.user_id = '" . escape_string($user->get("user_id")) .
-                "' and ap.album_id = pa.album_id " .
-                " and pa.photo_id = p.photo_id " .
-                " and ap.access_level >= p.level";
+                "' and ap.access_level >= p.level";
 
             if ($id_constraint) {
                 $sql .= " and $id_constraint";
@@ -303,7 +308,7 @@ class place extends zoph_tree_table {
     function get_mapping_js($user,$edit=false) {
          $js=parent::get_mapping_js($user, ICONSET . "/geo-place.png", $edit);
          if (!$edit) {
-            $js.=get_markers($this->get_children(), $user);
+            $js.=get_markers($this->get_children($user), $user);
         }
         return $js;
     }
@@ -403,7 +408,7 @@ function get_root_place() {
 function get_photographed_places($user = null) {
 
     if ($user && !$user->is_admin()) {
-        $query =
+        $sql =
             "select distinct plc.* from " .
             DB_PREFIX . "places as plc, " .
             DB_PREFIX . "photos as ph, " .
@@ -417,7 +422,7 @@ function get_photographed_places($user = null) {
             "order by plc.city, plc.title";
     }
     else {
-        $query =
+        $sql =
             "select distinct plc.* from " .
             DB_PREFIX . "places as plc, " .
             DB_PREFIX . "photos as ph " .

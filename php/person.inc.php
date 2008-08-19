@@ -150,7 +150,7 @@ class person extends zoph_table {
         return "person";
     }
 
-        function get_coverphoto($user,$autothumb=null) {
+    function get_coverphoto($user,$autothumb=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
         } else if ($autothumb) {
@@ -213,23 +213,23 @@ function get_photographed_people($user = null, $search=null, $search_first = fal
         }
     }
     if ($user && !$user->is_admin()) {
-        $query =
+        $sql =
             "select distinct ppl.* from " .
-            DB_PREFIX . "people as ppl, " .
-            DB_PREFIX . "photos as ph, " .
-            DB_PREFIX . "photo_people as pp, " .
-            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "people as ppl JOIN " .
+            DB_PREFIX . "photo_people as pp " .
+            "ON pp.person_id = ppl.person_id JOIN " . 
+            DB_PREFIX . "photos as ph " .
+            "ON ph.photo_id = pp.photo_id JOIN " .
+            DB_PREFIX . "photo_albums as pa " .
+            "ON pa.photo_id = ph.photo_id JOIN " .
             DB_PREFIX . "album_permissions as ap " .
+            "ON ap.album_id = pa.album_id " .
             "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
-            " and ap.album_id = pa.album_id" .
-            " and pa.photo_id = ph.photo_id" .
-            " and ap.access_level >= ph.level" .
-            " and ph.photo_id = pp.photo_id " .
-            " and pp.person_id = ppl.person_id " . $where .
+            " and ap.access_level >= ph.level" . $where .
             " order by ppl.last_name, ppl.called, ppl.first_name";
     }
     else {
-        $query =
+        $sql =
             "select distinct ppl.* from " .
             DB_PREFIX . "people as ppl, " .
             DB_PREFIX . "photo_people as pp " .
@@ -237,7 +237,7 @@ function get_photographed_people($user = null, $search=null, $search_first = fal
             " order by ppl.last_name, ppl.called, ppl.first_name";
     }
 
-    return get_records_from_query("person", $query);
+    return get_records_from_query("person", $sql);
 }
 
 function get_photographers($user = null, $search = null) {
@@ -256,21 +256,24 @@ function get_photographers($user = null, $search = null) {
     }
 
     if ($user && !$user->is_admin()) {
-        $query =
+        $sql =
             "select distinct ppl.* from " .
-            DB_PREFIX . "people as ppl, " .
-            DB_PREFIX . "photos as ph, " .
-            DB_PREFIX . "photo_albums as pa, " .
+            DB_PREFIX . "people as ppl " .
+            "WHERE person_id in " .
+            "(SELECT photographer_id FROM " .
+            DB_PREFIX . "photos as ph JOIN " .
+            DB_PREFIX . "photo_albums as pa " .
+            "ON pa.photo_id = ph.photo_id JOIN " .
             DB_PREFIX . "album_permissions as ap " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
-            " and ap.album_id = pa.album_id" .
-            " and pa.photo_id = ph.photo_id" .
-            " and ap.access_level >= ph.level" .
-            " and ph.photographer_id = ppl.person_id " . $where .
+            "ON ap.album_id = pa.album_id " .
+            "where ap.user_id = '" . 
+            escape_string($user->get("user_id")) . "' " .
+            $where .
+            " and ap.access_level >= ph.level)" .
             " order by ppl.last_name, ppl.called, ppl.first_name";
     }
     else {
-        $query =
+        $sql =
             "select distinct ppl.* from " .
             DB_PREFIX . "people as ppl, " .
             DB_PREFIX . "photos as ph " .
@@ -278,7 +281,7 @@ function get_photographers($user = null, $search = null) {
             "order by ppl.last_name, ppl.called, ppl.first_name";
     }
 
-    return get_records_from_query("person", $query);
+    return get_records_from_query("person", $sql);
 }
 
 function get_people_select_array($people_array = null) {
@@ -337,9 +340,9 @@ function get_person_by_name($first_name = null, $last_name = null) {
     }
     $where .= $last_name;
 
-    $query = "select person_id from " . DB_PREFIX . "people where $where";
+    $sql = "select person_id from " . DB_PREFIX . "people where $where";
 
-    return get_records_from_query("person", $query);
+    return get_records_from_query("person", $sql);
 }
 
 function get_popular_people($user) {

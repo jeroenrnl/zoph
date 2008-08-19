@@ -98,7 +98,7 @@ class zoph_tree_table extends zoph_table {
         $key = $this->primary_keys[0];
         $id_array[] = $this->get($key);
 
-        $this->get_children($user);
+        $this->get_all_children($user);
         if ($this->children) {
             foreach($this->children as $c) {
                 $c->get_branch_id_array($id_array, $user);
@@ -169,7 +169,7 @@ class zoph_tree_table extends zoph_table {
             $newchild->appendChild($newchildkey);
             $newchild->appendChild($newchildtitle);
        }
-       $children=$this->get_children($user);
+       $children=$this->get_children_sorted($user);
         if($children) {
             $childset=$xml->createElement($rootname);
             foreach($children as $child) {

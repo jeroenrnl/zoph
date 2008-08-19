@@ -843,4 +843,20 @@ function create_map_js($provider=MAPS, $map="map") {
         "</script>";
     return $js;
 }
+
+function remove_empty($children, $user) {
+    $clean=array();
+    // If user is not admin, remove any children that do not have photos
+    if($user && !$user->is_admin()) {
+        foreach($children as $child) {
+            $count=$child->get_total_photo_count($user);
+            if($count>0) {
+                $clean[]=$child;
+            }
+        }
+        return $clean;
+    } else {
+        return $children;
+    } 
+}
 ?>

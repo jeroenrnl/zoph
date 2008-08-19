@@ -36,7 +36,7 @@
     $category->lookup();
     $obj=&$category;
     $ancestors = $category->get_ancestors();
-    $children = $category->get_children($user);
+    $children = $category->get_children_sorted($user);
 
     $photo_count = $category->get_photo_count($user);
     $total_photo_count = $category->get_total_photo_count($user);

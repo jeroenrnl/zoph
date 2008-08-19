@@ -67,8 +67,43 @@ class album extends zoph_tree_table {
     }
 
     function get_children($user=null) {
+        $id = $this->get("album_id");
+        if (!$id) { return; }
+        
+        if ($user && !$user->is_admin()) {
+            $sql =
+                "SELECT a.*, album as name FROM " .
+                DB_PREFIX . "albums as a LEFT JOIN " .
+                DB_PREFIX . "album_permissions ap " .
+                "ON a.album_id=ap.album_id " .
+                "WHERE user_id=" . $user->get("user_id") .
+                " AND parent_album_id=" . escape_string($id);
+        } else {
+            return $this->get_all_children();
+        }
+
+        $this->children=get_records_from_query("album", $sql);
+        return $this->children;
+    }   
+
+    function get_all_children() {
+        $id = $this->get("album_id");
+        if (!$id) { return; }
+        
+        $sql =
+            "SELECT a.*, album as name FROM " .
+            DB_PREFIX . "albums as a " .
+            "WHERE parent_album_id=" . escape_string($id); 
+        
+        $this->children=get_records_from_query("album", $sql);
+        return $this->children;
+    }
+
+    function get_children_sorted($user=null) {
         if($user) {
-            $user->lookup_prefs();
+            if(!$user->prefs) {
+                $user->lookup_prefs();
+            }
             $order = $user->prefs->get("child_sortorder") . ", name";
         } else {
             $order = "name";
