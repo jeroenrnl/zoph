@@ -157,14 +157,14 @@
       <table id="permissions">
         <tr>
           <th><?php echo translate("name") ?></th>
+          <th><?php echo translate("access level") ?></th>
 <?php 
    if (WATERMARKING) { 
 ?>
-          <th><?php echo translate("access level") ?></th>
+          <th><?php echo translate("watermark level") ?></th>
 <?php 
    } 
 ?>
-          <th><?php echo translate("watermark level") ?></th>
           <th><?php echo translate("writable") ?></th>
         </tr>
 <?php
