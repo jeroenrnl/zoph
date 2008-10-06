@@ -37,37 +37,20 @@ class category extends zoph_tree_table {
         return $this->get("category");
     }
 
-    function get_all_children($user=null) {
-        $id = $this->get("category_id");
-        if (!$id) { return; }
-
-        $sql =
-            "SELECT c.*, category as name FROM " .
-            DB_PREFIX . "categories c " .
-            "WHERE parent_category_id=" . $id; 
-        $this->children=get_records_from_query("category", $sql);
-        return $this->children;
-    }    
-    
-    function get_all_children_sorted($user=null) {
-        if($user) {
-            $order = $user->prefs->get("child_sortorder") . ", name";
-        } else {
-            $order = "name";
+    function get_children($user=null,$order=null) {
+        if($order && $order!="name") {
+            $order_fields=get_sql_for_order($order);
+            $order=" ORDER BY " . $order . ", name ";
+        } else if ($order=="name") {
+            $order=" ORDER BY name ";
         }
+
         $id = $this->get("category_id");
         if (!$id) { return; }
 
         $sql =
-            "SELECT c.*, category as name, " .
-            "min(p.date) as oldest, " .
-            "max(p.date) as newest, " .
-            "min(p.timestamp) as first, " .
-            "max(p.timestamp) as last, " .
-            "min(rating) as lowest, " . 
-            "max(rating) as highest, " .
-            "avg(rating) as average, " .
-            "rand() as random from " .
+            "SELECT c.*, category as name " .
+            $order_fields . " FROM " .
             DB_PREFIX . "categories as c LEFT JOIN " .
             DB_PREFIX . "photo_categories as pc " .
             "ON c.category_id=pc.category_id LEFT JOIN " .
@@ -75,21 +58,15 @@ class category extends zoph_tree_table {
             "ON pc.photo_id=p.photo_id " .
             "WHERE parent_category_id=" . $id .
             " GROUP BY c.category_id " .
-            "ORDER BY " . $order;
+            $order;
         $this->children=get_records_from_query("category", $sql);
-        return $this->children;
+        if($user && !$user->is_admin()) {
+            return(remove_empty($this->children,$user));
+        } else {
+            return $this->children;
+        }
     }    
     
-    function get_children($user) {
-        $children=$this->get_all_children($user);
-        return(remove_empty($children,$user));
-    }
-
-    function get_children_sorted($user) {
-        $children=$this->get_all_children_sorted($user);
-        return(remove_empty($children,$user));
-    }
-
     function get_branch_ids($user = null) {
         return parent::get_branch_ids($user);
     }

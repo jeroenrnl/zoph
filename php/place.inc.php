@@ -59,59 +59,39 @@ class place extends zoph_tree_table {
         parent::delete();
     }
 
-    function get_all_children($user=null) {
-        $id = $this->get("place_id");
-        if (!$id) { return; }
-
-        $sql =
-            "SELECT pl.*, pl.title as name FROM " .
-            DB_PREFIX . "places as pl " .
-            "WHERE pl.parent_place_id=" . escape_string($id);
-
-        $this->children=get_records_from_query("place", $sql);
-        return $this->children; 
-    }    
-    
-    function get_children($user) {
-        $children=$this->get_all_children($user);
-        return remove_empty($children, $user);
-    }
-
-    function get_all_children_sorted($user=null) {
-        if($user) {
-            $order = $user->prefs->get("child_sortorder") . ", name";
-        } else {
-            $order = "name";
+    function get_children($user=null,$order=null) {
+        if($order=="sortname") {
+            #places do not have a sortname
+            $order="name";
         }
+        if($order && $order!="name") {
+            $order_fields=get_sql_for_order($order);
+            $order=" ORDER BY " . $order . ", name ";
+        } else if ($order=="name") {
+            $order=" ORDER BY name ";
+        }
+        
         $id = $this->get("place_id");
         if (!$id) { return; }
 
         $sql =
-            "SELECT pl.*, pl.title as name, " .
-            "min(ph.date) as oldest, " .
-            "max(ph.date) as newest, " .
-            "min(ph.timestamp) as first, " .
-            "max(ph.timestamp) as last, " .
-            "min(rating) as lowest, " . 
-            "max(rating) as highest, " .
-            "avg(rating) as average, " .
-            "rand() as random from " .
+            "SELECT pl.*, pl.title as name " .
+            $order_fields . " FROM " .
             DB_PREFIX . "places as pl LEFT JOIN " .
             DB_PREFIX . "photos as ph " .
             "ON pl.place_id = ph.location_id " .
             "WHERE pl.parent_place_id=" . escape_string($id) .
             " GROUP BY pl.place_id " .
-            "ORDER BY " . $order; 
+            $order; 
 
         $this->children=get_records_from_query("place", $sql);
-        return $this->children; 
+        if($user) {
+            return remove_empty($this->children, $user);
+        } else {
+            return $this->children; 
+        }
     }    
     
-    function get_children_sorted($user) {
-        $children=$this->get_all_children_sorted($user);
-        return remove_empty($children, $user);
-    }
-
     function tzid_to_timezone() {
         $tzkey=$this->get("timezone_id");
         if($tzkey>0) {
@@ -382,24 +362,6 @@ function get_places($constraints = null, $conj = "and", $ops = null,
     $order = "city, title, address") {
     return get_records("place", $order, $constraints, $conj, $ops);
 }
-
-/* function get_children() {
-// This function looks so broken, I can only assume it was never used.
-    $id = $this->get("album_id");
-    if (!$id) { return; }
-
-   $sql =
-         "select place_id, title, address, address2, city, ".
-         "state, zip, country, notes from " .
-         DB_PREFIX . "places" .
-         "where p.parent_place_id = '" . escape_string($id) . "'" .
-         " order by p.title";
-
-    $this->children = get_records_from_query("album", $sql);
-
-    return $this->children;
-
-} */
 
 function get_root_place() {
     return new place(1);

@@ -37,7 +37,8 @@
     $album->lookup($user);
     $obj=&$album;
     $ancestors = $album->get_ancestors();
-    $children = $album->get_children_sorted($user);
+    $order = $user->prefs->get("child_sortorder");
+    $children = $album->get_children($user, $order);
     $total_photo_count = $album->get_total_photo_count($user);
     $photo_count = $album->get_photo_count($user);
 

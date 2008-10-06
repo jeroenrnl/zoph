@@ -104,8 +104,11 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             { die ("Illegal operator: " . $op); }
 
         if (!empty($vars[$index . "-children"])) {
-            $val_no_children=split(",",$val);
-            $val=$val_no_children[0];
+            $object=explode("_", $key);
+            if($object[0]="location") { $object[0] = "place"; } 
+            $obj=new $object[0]($val);
+            $val_with_children=$obj->get_branch_ids();
+            $val=$val_with_children;
         }
 
         if ($val == "null") {

@@ -121,9 +121,7 @@ function create_grouped_pulldown($name, $value, $value_array) {
 }
 
 function create_smart_pulldown($name, $value, $value_array, $extraopt = null) {
-
     $size = sizeof($value_array);
-
     if ($size <= GROUPED_PULLDOWN_SIZE) {
         return create_pulldown($name, $value, $value_array, $extraopt);
     }
@@ -858,5 +856,39 @@ function remove_empty($children, $user) {
     } else {
         return $children;
     } 
+}
+
+function get_sql_for_order($order) {
+    switch ($order) {
+    case "oldest":
+        $sql="min(ph.date) as oldest ";
+        break;
+    case "newest":
+        $sql="max(ph.date) as newest "; 
+        break;
+    case "first":
+        $sql="min(ph.timestamp) as first ";
+        break;
+    case "last":
+        $sql="max(ph.timestamp) as last ";
+        break;
+    case "lowest":
+        $sql="min(rating) as lowest "; 
+        break;
+    case "highest":
+        $sql="max(rating) as highest ";
+        break;
+    case "average":
+        $sql="avg(rating) as average ";
+        break;
+    case "random":
+        $sql="rand() as random ";
+        break;
+    }
+    if($sql) {
+        return ", " . $sql;
+    } else {
+        return null;
+    }
 }
 ?>

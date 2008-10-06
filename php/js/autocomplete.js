@@ -441,16 +441,8 @@ function findselectkey(selectid, key) {
     select=document.getElementById(selectid);
     for(var i=0; i<select.childNodes.length; i++) {
         var option=select.childNodes[i];
-        if(option.value) {
-            var comma=option.value.indexOf(",");
-            if(comma>0) {
-                var shortkey=option.value.substring(0,comma);
-            } else {
-                var shortkey=option.value;
-            }
-            if(shortkey == key) {
-                return option.value;
-            }
+        if(option.value==key) {
+            return option.value;
         }
     }
 } 

@@ -98,7 +98,7 @@ class zoph_tree_table extends zoph_table {
         $key = $this->primary_keys[0];
         $id_array[] = $this->get($key);
 
-        $this->get_all_children($user);
+        $this->get_children();
         if ($this->children) {
             foreach($this->children as $c) {
                 $c->get_branch_id_array($id_array, $user);
@@ -169,7 +169,8 @@ class zoph_tree_table extends zoph_table {
             $newchild->appendChild($newchildkey);
             $newchild->appendChild($newchildtitle);
        }
-       $children=$this->get_children_sorted($user);
+       $order = $user->prefs->get("child_sortorder");
+       $children=$this->get_children($user, $order);
         if($children) {
             $childset=$xml->createElement($rootname);
             foreach($children as $child) {
@@ -196,18 +197,18 @@ function create_tree_select_array($name, $user = null, $rec = null,
         $rec->lookup();
         $select_array[""] = "";
     }
-    if ($search) {
-        $key = $rec->get_branch_ids($user);
-    }
-    else {
-        $key = $rec->get($name . "_id");
-    }
-    /* The main descriptor field for location is not "place", but "title" */
+    $key = $rec->get($name . "_id");
     $descname=$name;
     if($descname=="place"){ $descname="title"; }
 
     $select_array[$key] = $level . $rec->get($descname);
-    $children = $rec->get_children($user, $descname);
+    if($user) {
+        $user->lookup_prefs();
+        $order = $user->prefs->get("child_sortorder");
+    } else {
+        $order="name";
+    }
+    $children = $rec->get_children($user, $order);
     if ($children) {
         foreach ($children as $child) {
             $select_array = create_tree_select_array($name, $user, $child,

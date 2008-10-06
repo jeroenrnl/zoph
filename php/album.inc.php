@@ -66,47 +66,12 @@ class album extends zoph_tree_table {
         return $this->get("album");
     }
 
-    function get_children($user=null) {
-        $id = $this->get("album_id");
-        if (!$id) { return; }
-        
-        if ($user && !$user->is_admin()) {
-            $sql =
-                "SELECT a.*, album as name FROM " .
-                DB_PREFIX . "albums as a LEFT JOIN " .
-                DB_PREFIX . "album_permissions ap " .
-                "ON a.album_id=ap.album_id " .
-                "WHERE user_id=" . $user->get("user_id") .
-                " AND parent_album_id=" . escape_string($id);
-        } else {
-            return $this->get_all_children();
-        }
-
-        $this->children=get_records_from_query("album", $sql);
-        return $this->children;
-    }   
-
-    function get_all_children() {
-        $id = $this->get("album_id");
-        if (!$id) { return; }
-        
-        $sql =
-            "SELECT a.*, album as name FROM " .
-            DB_PREFIX . "albums as a " .
-            "WHERE parent_album_id=" . escape_string($id); 
-        
-        $this->children=get_records_from_query("album", $sql);
-        return $this->children;
-    }
-
-    function get_children_sorted($user=null) {
-        if($user) {
-            if(!$user->prefs) {
-                $user->lookup_prefs();
-            }
-            $order = $user->prefs->get("child_sortorder") . ", name";
-        } else {
-            $order = "name";
+    function get_children($user=null, $order=null) {
+        if($order && $order!="name") {
+            $order_fields=get_sql_for_order($order);
+            $order=" ORDER BY " . $order . ", name ";
+        } else if ($order=="name") {
+            $order=" ORDER BY name ";
         }
 
         $id = $this->get("album_id");
@@ -114,45 +79,31 @@ class album extends zoph_tree_table {
         
         if ($user && !$user->is_admin()) {
             $sql =
-                "SELECT a.*, album as name, " .
-                "min(p.date) as oldest, " .
-                "max(p.date) as newest, " .
-                "min(p.timestamp) as first, " .
-                "max(p.timestamp) as last, " .
-                "min(rating) as lowest, " . 
-                "max(rating) as highest, " .
-                "avg(rating) as average, " .
-                "rand() as random from " .
+                "SELECT a.*, album as name " .
+                $order_fields . " FROM " .
                 DB_PREFIX . "albums as a LEFT JOIN " .
                 DB_PREFIX . "photo_albums as pa " .
                 "ON a.album_id=pa.album_id LEFT JOIN " .
-                DB_PREFIX . "photos as p " .
-                "ON pa.photo_id=p.photo_id LEFT JOIN " .
+                DB_PREFIX . "photos as ph " .
+                "ON pa.photo_id=ph.photo_id LEFT JOIN " .
                 DB_PREFIX . "album_permissions ap " .
                 "ON a.album_id=ap.album_id " .
                 "WHERE user_id=" . $user->get("user_id") .
                 " AND parent_album_id=" . escape_string($id) .
-                " GROUP BY a.album_id " .
-                "ORDER BY " . escape_string($order);
+                " GROUP BY album_id" .
+                escape_string($order);
         } else {
             $sql =
-                "SELECT a.*, album as name, " .
-                "min(p.date) as oldest, " .
-                "max(p.date) as newest, " .
-                "min(p.timestamp) as first, " .
-                "max(p.timestamp) as last, " .
-                "min(rating) as lowest, " . 
-                "max(rating) as highest, " .
-                "avg(rating) as average, " .
-                "rand() as random from " .
+                "SELECT a.*, album as name " .
+                $order_fields . " FROM " .
                 DB_PREFIX . "albums as a LEFT JOIN " .
                 DB_PREFIX . "photo_albums as pa " .
                 "ON a.album_id=pa.album_id LEFT JOIN " .
-                DB_PREFIX . "photos as p " .
-                "ON pa.photo_id=p.photo_id " .
+                DB_PREFIX . "photos as ph " .
+                "ON pa.photo_id=ph.photo_id " .
                 "WHERE parent_album_id=" . escape_string($id) .
-                " GROUP BY a.album_id " .
-                "ORDER BY " . escape_string($order);
+                " GROUP BY album_id" .
+                escape_string($order);
         }
 
         $this->children=get_records_from_query("album", $sql);

@@ -504,6 +504,10 @@ div.ratings   {
     background: <?php echo $BREADCRUMB_BG_COLOR ?>;
     }
 
+table#search td {
+    vertical-align: top;
+    }
+
 table#search input[type="checkbox"] {
     float: none;
     }
@@ -516,7 +520,7 @@ table#search input[type="checkbox"] + label {
     font-weight: normal;
     margin: 3px;
     padding: 0;
-    top: 8px;
+    top: 3px;
     width: auto;
     clear: none;
     }

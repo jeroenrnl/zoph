@@ -174,7 +174,7 @@ for ($i = 0; $i <= $count; $i++) {
             echo create_pulldown("album_id[$i]", $album_id[$i], get_albums_search_array($user));
         }
 ?>
-          <input type="checkbox" name="_album_id_children[<?php echo $i ?>]" value="no" <?php echo $checked ?>><label for="_album_id_children[<?php echo $i ?>]"><?php echo translate("no children") ?></label>
+          <br><input type="checkbox" name="_album_id_children[<?php echo $i ?>]" value="yes" <?php echo $checked ?>><label for="_album_id_children[<?php echo $i ?>]"><?php echo translate("include sub-albums") ?></label>
           </td>
         </tr>
 <?php
@@ -227,7 +227,7 @@ for ($i = 0; $i <= $count; $i++) {
             echo create_pulldown("category_id[$i]", $category_id[$i], get_categories_search_array($user));
         }
 ?>
-          <input type="checkbox" name="_category_id_children[<?php echo $i ?>]" value="no" <?php echo $checked ?>><label for="_category_id_children[<?php echo $i ?>]"><?php echo translate("no children") ?></label>
+          <br><input type="checkbox" name="_category_id_children[<?php echo $i ?>]" value="yes" <?php echo $checked ?>><label for="_category_id_children[<?php echo $i ?>]"><?php echo translate("include sub-categories") ?></label>
           </td>
         </tr>
 <?php
@@ -280,7 +280,7 @@ for ($i = 0; $i <= $count; $i++) {
             echo create_smart_pulldown("location_id[$i]", $location_id[$i], get_places_search_array($user));
         }
 ?>
-          <input type="checkbox" name="_location_id_children[<?php echo $i ?>]" value="no" <?php echo $checked ?>><label for="_location_id_children[<?php echo $i ?>]"><?php echo translate("no children") ?></label>
+          <br><input type="checkbox" name="_location_id_children[<?php echo $i ?>]" value="yes" <?php echo $checked ?>><label for="_location_id_children[<?php echo $i ?>]"><?php echo translate("include sub-places") ?></label>
           </td>
         </tr>
 <?php

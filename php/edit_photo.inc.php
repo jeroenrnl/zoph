@@ -95,9 +95,9 @@
           <label for="location"><?php echo translate("location") ?></label>
 <?php
         if ($user->prefs->get("autocomp_places") && AUTOCOMPLETE && JAVASCRIPT) {
-          echo create_smart_pulldown("location_id", $photo->get("location_id"), get_places_select_array(), "class=\"autocomplete\"");
+          echo create_smart_pulldown("location_id", $photo->get("location_id"), get_places_select_array($user), "class=\"autocomplete\"");
         } else {
-          echo create_smart_pulldown("location_id", $photo->get("location_id"), get_places_select_array());
+          echo create_smart_pulldown("location_id", $photo->get("location_id"), get_places_select_array($user));
         }
 ?>
           <br>
