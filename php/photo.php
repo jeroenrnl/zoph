@@ -63,12 +63,12 @@
 
             if ($offset > 0) {
                 $newoffset = $offset - 1;
-                $prev_link = "<a href=\"$PHP_SELF?" . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Prev") . "</a>";
+                $prev_link = "<a href=\"" . $PHP_SELF . "?_action=" . $_action . "&" . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Prev") . "</a>";
             }
 
             if ($offset + 1 < $num_photos) {
                 $newoffset = $offset + 1;
-                $next_link = "<a href=\"$PHP_SELF?" . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Next") . "</a>";
+                $next_link = "<a href=\"" . $PHP_SELF . "?_action=" . $_action . "&" . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Next") . "</a>";
             }
         }
         else {
@@ -107,11 +107,7 @@
     
     $return_qs=$_qs;
     if(empty($return_qs)) { 
-        if ($user->prefs->get("auto_edit")) {
-            $return_qs=$qs;
-        } else {
-            $return_qs = "_action=display&amp;photo_id=" . $photo->get("photo_id");
-        }
+        $return_qs=$qs;
     }
 
    if ($_action == "lightbox") {
@@ -149,7 +145,7 @@
     }
 
     if ($user->is_admin() || $permissions->get("writable")) {
-        $actionlinks["edit"]="photo.php?_action=edit&amp;photo_id=" . $photo->get("photo_id") . "&amp;_qs=" . $encoded_qs;
+        $actionlinks["edit"]="photo.php?_action=edit&" . $qs;
     }
     if ($user->get("lightbox_id")) {
         $actionlinks["lightbox"]="photo.php?_action=lightbox&amp;" . $qs;
