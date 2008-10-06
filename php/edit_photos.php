@@ -267,7 +267,7 @@
                 }
 ?>
                         <?php echo str_replace("album", "album__$photo_id", $album_pulldown) ?>
-                      </fieldset>
+                      </fieldset><br>
                       <label for="category__<?php echo $photo_id?>"><?php echo translate("categories") ?></label>
                       <fieldset class="checkboxlist">
 <?php
@@ -286,7 +286,7 @@
                 }
 ?>
                         <?php echo str_replace("category", "category__$photo_id", $category_pulldown) ?>
-                      </fieldset>
+                      </fieldset><br>
                       <label for="person_0__<?php echo $photo_id ?>"><?php echo translate("people") ?></label>
                       <fieldset class="checkboxlist">
 <?php
@@ -313,7 +313,7 @@
 <?php
                 }
 ?>
-                      </fieldset>
+                      </fieldset><br>
                       <label for="title__<?php echo $photo_id?>"><?php echo translate("title") ?></label>
                       <?php echo create_text_input("__title__$photo_id", $photo->get("title"), 40, 64) ?>
                     <br>
