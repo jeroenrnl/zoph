@@ -41,9 +41,21 @@
            <br>
           <label for="personid"><?php echo translate("person") ?></label>
           <?php echo create_smart_pulldown("person_id", $action == "insert" ? "1" : $this_user->get("person_id"), get_people_select_array()) ?><br>
+<?php 
+    if($_action=="new") { 
+?>
           <label for="password"><?php echo translate("password") ?></label>
           <input type="password" name="password" id="password" value="" size="16" maxlength="32">
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
+<?php
+    } else {
+?>
+        <span class="actionlink"><a href="password.php?userid=<?php echo $this_user->get("user_id")?>"> 
+            <?php echo translate("change password")?>
+        </a></span>
+<?php
+    }
+?>
           <label for="userclass"><?php echo translate("class") ?></label>
           <?php echo create_pulldown("user_class", $this_user->get("user_class"), array("1" => translate("User",0), "0" => translate("Admin",0)) ) ?>
           <br>

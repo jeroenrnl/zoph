@@ -17,23 +17,30 @@
  */
     require_once("include.inc.php");
 
+    $userid = getvar("userid");
     $password = getvar("password");
     $confirm = getvar("confirm");
 
+    if($user->is_admin() && $userid) {
+        $change=new user($userid);
+        $change->lookup();
+    } else {
+        $change=$user;
+    }
     if ($_action == "update" && DEFAULT_USER != $user->get("user_id")) {
 
         if ($password) {
             if ($password == $confirm) {
-                $user->set("password", $password);
-                $user->update();
-                $msg = translate("Your password has been changed");
+                $change->set("password", $password);
+                $change->update();
+                $msg = sprintf(translate("The password for %s has been changed"), $change->get("user_name"));
             }
             else {
-                $msg = translate("Your passwords did not match");
+                $msg = translate("The passwords did not match");
             }
         }
         else {
-            $msg = translate("Your password may not be null");
+            $msg = translate("The password may not be null");
         }
     }
 
@@ -51,16 +58,17 @@
 <?php
     }
 ?>
-            <h2><?php echo $user->get("user_name") ?></h2>
+            <h2><?php echo $change->get("user_name") ?></h2>
 <?php
-    if (DEFAULT_USER == $user->get("user_id")) {
+    if (!$user->is_admin() && DEFAULT_USER == $change->get("user_id")) {
 ?>
        <?php echo sprintf(translate("The user '%s' is currently defined as the default user and does not have permission to change its password."), $user->get("user_name")) ?>
 <?php
     }
     else {
 ?>
-<input type="hidden" name="_action" value="update">
+          <input type="hidden" name="_action" value="update">  
+          <input type="hidden" name="userid" id="userid" value="<?php echo $change->get("user_id")?>">
           <label for="password"><?php echo translate("password") ?></label>
           <input type="password" name="password" id="password" value="" size="16" maxlength="32">
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
