@@ -28,6 +28,7 @@
 ?>
           </h1>
 <?php
+          echo check_js($user);
           require_once("selection.inc.php");
 ?>
               
@@ -92,13 +93,9 @@
           <label for="title"><?php echo translate("title") ?></label>
           <?php echo create_text_input("title", $photo->get("title"), 40, 64) ?>
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
-          <label for="location"><?php echo translate("location") ?></label>
+          <label for="_location_id"><?php echo translate("location") ?></label>
 <?php
-        if ($user->prefs->get("autocomp_places") && AUTOCOMPLETE && JAVASCRIPT) {
-          echo create_smart_pulldown("location_id", $photo->get("location_id"), get_places_select_array($user), "class=\"autocomplete\"");
-        } else {
-          echo create_smart_pulldown("location_id", $photo->get("location_id"), get_places_select_array($user));
-        }
+            echo create_place_pulldown("location_id", $photo->get("location_id"), $user);
 ?>
           <br>
           <fieldset class="map">
@@ -148,13 +145,9 @@
 <?php
     }
 ?>
-          <label for="photographer"><?php echo translate("photographer") ?></label>
+          <label for="_photographer_id"><?php echo translate("photographer") ?></label>
 <?php 
-        if ($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPT) {
-            echo create_smart_pulldown("photographer_id", $photo->get("photographer_id"), get_people_select_array(), "class=\"autocomplete\"");
-        } else {
-            echo create_smart_pulldown("photographer_id", $photo->get("photographer_id"), get_people_select_array());
-        }
+            echo create_photographer_pulldown("photographer_id", $photo->get("photographer_id"), $user);
 ?>
         <br>
 <?php
@@ -191,11 +184,7 @@
 <?php
         }
         for ($i = 0; $i < $PEOPLE_SLOTS; $i++ ) {
-            if ($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPT && $i==0 ) {
-                echo create_smart_pulldown("_person_" . $i, "", get_people_select_array(), "class=\"autocomplete\"");
-            } else {
-                echo create_smart_pulldown("_person_" . $i, "", get_people_select_array());
-            }
+            echo create_person_pulldown("_person_$i", null, $user);
 ?>
             <?php echo translate("position") ?>:
             <?php echo create_text_input("_position_" . $i, ($next_pos + $i), 2, 2) ?>
@@ -221,11 +210,7 @@
             echo translate("This photo is not in any albums.");
             echo "<br>\n";
         }
-        if ($user->prefs->get("autocomp_albums") && AUTOCOMPLETE && JAVASCRIPT) {
-            echo create_pulldown("_album", "", get_albums_select_array($user), "class=\"autocomplete\"");
-        } else {
-            echo create_pulldown("_album", "", get_albums_select_array($user));
-        }
+        echo create_album_pulldown("_album", "", $user);
         ?>
         </fieldset>
           <label for="categories"><?php echo translate("categories") ?></label>
@@ -245,11 +230,7 @@
               <?php echo translate("This photo is not in any categories.") ?><br>
 <?php
         }
-        if ($user->prefs->get("autocomp_categories") && AUTOCOMPLETE && JAVASCRIPT) {
-            echo create_pulldown("_category", "", get_categories_select_array($user), "class=\"autocomplete\"");
-        } else {
-            echo create_pulldown("_category", "", get_categories_select_array($user));
-        }
+        echo create_cat_pulldown("_category", "", $user);
 ?>
       </fieldset>
 <?php

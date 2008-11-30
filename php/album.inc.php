@@ -79,20 +79,20 @@ class album extends zoph_tree_table {
         
         if ($user && !$user->is_admin()) {
             $sql =
-                "SELECT a.*, album as name " .
-                $order_fields . " FROM " .
-                DB_PREFIX . "albums as a LEFT JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON a.album_id=pa.album_id LEFT JOIN " .
-                DB_PREFIX . "photos as ph " .
-                "ON pa.photo_id=ph.photo_id LEFT JOIN " .
-                DB_PREFIX . "album_permissions ap " .
-                "ON a.album_id=ap.album_id " .
-                "WHERE user_id=" . $user->get("user_id") .
-                " AND parent_album_id=" . escape_string($id) .
-                " GROUP BY album_id" .
-                escape_string($order);
-        } else {
+        "SELECT a.*, album as name " .
+            $order_fields . " FROM " .
+            DB_PREFIX . "albums as a LEFT JOIN " .
+            DB_PREFIX . "photo_albums as pa " .
+            "ON a.album_id=pa.album_id LEFT JOIN " .
+            DB_PREFIX . "photos as ph " .
+            "ON pa.photo_id=ph.photo_id LEFT JOIN " .
+            DB_PREFIX . "album_permissions ap " .
+            "ON a.album_id=ap.album_id " .
+            "WHERE user_id=" . $user->get("user_id") .
+            " AND parent_album_id=" . escape_string($id) .
+            " GROUP BY album_id" .
+            escape_string($order);
+         } else {
             $sql =
                 "SELECT a.*, album as name " .
                 $order_fields . " FROM " .
@@ -175,7 +175,7 @@ class album extends zoph_tree_table {
         return get_count_from_query($sql);
     }
 
-    function get_edit_array() {
+    function get_edit_array($user) {
         if($this->is_root()) {
             $parent=array (
                 translate("parent album"),
@@ -183,8 +183,8 @@ class album extends zoph_tree_table {
         } else {
             $parent=array (
                 translate("parent album"),
-                create_pulldown("parent_album_id",
-                $this->get("parent_album_id"), get_albums_select_array()));
+                create_album_pulldown("parent_album_id",
+                $this->get("parent_album_id"), $user));
         }
         return array(
             "album" => 
@@ -399,4 +399,22 @@ function get_popular_albums($user) {
 
 }
 
+function create_album_pulldown($name, $value=null, $user=null) {
+    $id=ereg_replace("^_+", "", $name);
+    if($value) {
+        $album=new album($value);
+        $album->lookup();
+        $text=$album->get("album");
+    } 
+    
+    if($user->prefs->get("autocomp_albums") && AUTOCOMPLETE && JAVASCRIPT) {
+        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
+            " value='" . $value . "'>";
+        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
+            " value='" . $text . "' class='autocomplete'>";
+    } else {
+        $html=create_pulldown($name, $value, get_albums_search_array($user));
+    }
+    return $html;
+}
 ?>

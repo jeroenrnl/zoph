@@ -92,6 +92,23 @@ function guess_tz($lat, $lon) {
         return null;
     }
 }
+function create_timezone_pulldown($name, $value=null, $user=null) {
+    $id=ereg_replace("^_+", "", $name);
+    if($value) {
+        $text=$value;
+    }
+
+    if(AUTOCOMPLETE && JAVASCRIPT) {
+        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
+            " value='" . $value . "'>";
+        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
+            " value='" . $text . "' class='autocomplete'>";
+    } else {
+        $html=create_smart_pulldown("timezone_id", get_tz_key($place->get("timezone")), get_tz_select_array());
+    }
+    return $html;
+}
+
 
 function valid_tz($tz) {
     // Checks if $tz contains a valid timezone string

@@ -25,8 +25,34 @@ var oldtext;
 
 // The following arrays describe the root node and nodenames to look for in
 // the XML output:
-var xmlrootnode = {"location": "places", "photographer":  "people", "person": "people", "album": "albums", "category": "categories", "timezone": "zones"};
-var xmlnode = {"location": "place", "photographer": "person", "person": "person", "album": "album", "category": "category", "timezone": "tz"};
+var xmlrootnode = {
+    "location":     "places", 
+    "place":        "places", 
+    "home":         "places", 
+    "work":         "places", 
+    "photographer": "people", 
+    "person":       "people", 
+    "father":       "people", 
+    "mother":       "people", 
+    "spouse":       "people", 
+    "album":        "albums", 
+    "category":     "categories", 
+    "timezone":     "zones"
+    };
+var xmlnode = {
+    "location":     "place", 
+    "place":        "place", 
+    "home":         "place", 
+    "work":         "place", 
+    "photographer": "person", 
+    "person":       "person", 
+    "father":       "person", 
+    "mother":       "person", 
+    "spouse":       "person", 
+    "album":        "album", 
+    "category":     "category", 
+    "timezone":     "tz"
+    };
 
 function init() {
     autocomplete=new Array;
@@ -37,7 +63,7 @@ function init() {
     for (var i=0; i<autocomplete.length; i++) {
         // Take _id from the id.
         id = autocomplete[i].id;
-        underscore=id.lastIndexOf("_");
+        underscore=id.indexOf("_");
         if(underscore>0) {
             id = id.substring(0,underscore);
         } else {
@@ -45,8 +71,8 @@ function init() {
             autocomplete[i].id=id + "_id";
         }
         
-        text=document.createElement("input");
-        
+        text=autocomplete[i];
+        text.id=id; 
         text.onmousedown=show;
         text.onkeyup=change;
         text.onfocus=focus;
@@ -56,29 +82,18 @@ function init() {
     
         text.setAttribute("autocomplete", "off");
         
-        text.id=id;
         text.className="autocompinput";
-        text.style.width=autocomplete[i].offsetWidth + "px";
+        text.style.width="200px";
 
         dropdown=document.createElement("ul");
         
         dropdown.className="autocompdropdown";
         dropdown.id=id + "dropdown";
 
-        for (var j=0; j < autocomplete[i].options.length; j++) {
-            keyarray[j]=parseInt(autocomplete[i].options[j].value);
-            dataarray[j]=autocomplete[i].options[j].text;
-        }
-        selected[dropdown.id]=parseInt(autocomplete[i].value);
-        selectedvalue[dropdown.id]=findInArray(keyarray, selected[dropdown.id]);
-        text.value=trim(dataarray[selectedvalue[dropdown.id]]);
-
         dropdown.style.position="absolute";
         dropdown.style.display="none";
         
         autocomplete[i].parentNode.insertBefore(dropdown,autocomplete[i].nextSibling)
-        autocomplete[i].parentNode.insertBefore(text,autocomplete[i].nextSibling)
-        autocomplete[i].style.display="none";
     }
     setTimeout('setpos()',1);
     
@@ -152,7 +167,11 @@ function hidedropdown(obj) {
 }
 
 function getXMLdata(object, constraint) {
-    var url="getxmldata.php?object=" + object;
+    xmlobj=obj.id.split("_");
+    if(xmlobj[1]=="parent") {
+        Array.shift(xmlobj);
+    }
+    var url="getxmldata.php?object=" + xmlobj[1];
     if(constraint) {
         url+="&search=" + constraint;
     }
@@ -177,14 +196,19 @@ function useHttpResponse() {
         if(http.status == 200) {
             removeChildren(dropdown);
             text.style.backgroundImage="url('images/down2.gif')";
-            root=http.responseXML.getElementsByTagName(xmlrootnode[Busy]);
+            xmlobj=Busy.split("_");
+            if(xmlobj[1]=="parent") {
+                Array.shift(xmlobj);
+            }
+            node=xmlobj[1];
+            root=http.responseXML.getElementsByTagName(xmlrootnode[node]);
 
             // These will be rebuilt during the XML processing
             //
             dataarray=new Array;
             keyarray=new Array;
             selectedvalue[dropdown.id]=0;
-            build_tree(root[0], dropdown, xmlrootnode[Busy], xmlnode[Busy]);
+            build_tree(root[0], dropdown, xmlrootnode[node], xmlnode[node]);
             Busy=false;
         }
     } else {
@@ -254,6 +278,7 @@ function change() {
 
 function update(objid) {
     obj=document.getElementById(objid);
+
     dropdown = document.getElementById(obj.id + "dropdown");
 
     if(dropdown.style.display!="none") {
@@ -305,11 +330,8 @@ function selectli(dropdownid, key, newvalue) {
     var orig_field = field.previousSibling;
     
     field.value = newvalue;
-    longkey=findselectkey(orig_field.id, key);
 
-    orig_field.value = longkey;
-
-    selectedvalue[dropdown.id]=parseInt(findInArray(keyarray,key));
+    orig_field.value = key;
 
     hidedropdown(field);
 }
@@ -431,19 +453,3 @@ function flattentree(root, element, flattree) {
     }
     return flattree;
 }
-
-function findselectkey(selectid, key) {
-    // On the search page, the keys in the original select are not just the
-    // key of that album/category/place but a comma-separated list of
-    // a/c/p that are children of that a/c/p. This function takes just the
-    // first (thus the parent) key from that list.
-
-    select=document.getElementById(selectid);
-    for(var i=0; i<select.childNodes.length; i++) {
-        var option=select.childNodes[i];
-        if(option.value==key) {
-            return option.value;
-        }
-    }
-} 
-

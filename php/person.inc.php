@@ -382,4 +382,40 @@ function get_popular_people($user) {
 
 }
 
+function create_person_pulldown($name, $value=null, $user) {
+    $id=ereg_replace("^_+", "", $name);
+    if($value) {
+        $person=new person($value);
+        $person->lookup();
+        $text=$person->get_name();
+    }
+    if($user->prefs->get("autocomp_people") && AUTOCOMPLETE && JAVASCRIPT) {
+        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
+            " value='" . $value . "'>";
+        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
+            " value='" . $text . "' class='autocomplete'>";
+    } else {
+        $html=create_pulldown($name, $value, get_people_search_array($user));
+    }
+    return $html;
+}
+
+function create_photographer_pulldown($name, $value=null, $user) {
+    $id=ereg_replace("^_+", "", $name);
+    if($value) {
+        $person=new person($value);
+        $person->lookup();
+        $text=$person->get_name();
+    }
+    if($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPT) {
+        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
+            " value='" . $value . "'>";
+        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
+            " value='" . $text . "' class='autocomplete'>";
+    } else {
+        $html=create_pulldown($name, $value, get_photographer_search_array($user));
+    }
+    return $html;
+}
+
 ?>

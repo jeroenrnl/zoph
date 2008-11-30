@@ -217,7 +217,7 @@
         </dd>
         <dt><?php echo translate("categories") ?></dt>
         <dd>
-            <?php echo create_pulldown("autocomp_categories", $user->prefs->get("autocomp_albums"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo create_pulldown("autocomp_categories", $user->prefs->get("autocomp_categories"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
         </dd>
         <dt><?php echo translate("people") ?></dt>
         <dd>

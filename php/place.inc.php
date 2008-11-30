@@ -438,6 +438,24 @@ function get_popular_places($user) {
 
 }
 
+function create_place_pulldown($name, $value=null, $user=null) {
+    $id=ereg_replace("^_+", "", $name);
+    if($value) {
+        $place=new place($value);
+        $place->lookup();
+        $text=$place->get("title");
+    }
+    if($user->prefs->get("autocomp_places") && AUTOCOMPLETE && JAVASCRIPT) {
+        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
+            " value='" . $value . "'>";
+        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
+            " value='" . $text . "' class='autocomplete'>";
+    } else {
+        $html=create_pulldown($name, $value, get_places_search_array($user));
+    }
+    return $html;
+}
+
 function create_zoom_pulldown($val = "", $name = "mapzoom") {
     $zoom_array = array(
         "0" => translate("0 - world", 0),

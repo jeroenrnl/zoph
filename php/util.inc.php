@@ -842,6 +842,18 @@ function create_map_js($provider=MAPS, $map="map") {
     return $js;
 }
 
+function check_js($user) {
+    if (($user->prefs->get("autocomp_albums")) || 
+        ($user->prefs->get("autocomp_categories")) || 
+        ($user->prefs->get("autocomp_places")) || 
+        ($user->prefs->get("autocomp_people")) ||  
+        ($user->prefs->get("autocomp_photographer")) 
+        && AUTOCOMPLETE && JAVASCRIPT) {
+        
+        return "<noscript><div class='warning'><img class='icon' src='images/icons/" . ICONSET . "/" . "warning.png'>" . translate("You have enabled autocompletion for one or more dropdown boxes on this page, however, you do not seem to have Javascript support. You should either enable javascript or turn autocompletion off, or this page will not work as expected!") . "</div></noscript>";
+    }
+}
+
 function remove_empty($children, $user) {
     $clean=array();
     // If user is not admin, remove any children that do not have photos

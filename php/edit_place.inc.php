@@ -24,6 +24,9 @@
       </span>
       <?php echo translate($_action) ?> <?php echo translate("place") ?>
     </h1>
+<?php
+     echo check_js($user);
+?>
     <div class="main">
       <form action="place.php" method="GET">
         <input type="hidden" name="_action" value="<?php echo $action ?>">
@@ -37,8 +40,8 @@
             echo translate("places");
         } else {
 ?>
-        <?php echo create_pulldown("parent_place_id",
-            $place->get("parent_place_id"), get_places_select_array()) ?>
+        <?php echo create_place_pulldown("parent_place_id",
+            $place->get("parent_place_id"), $user) ?>
 <?php
         }
 ?>
@@ -94,7 +97,7 @@
 ?>
 
          <label for="timezone_id"><?php echo translate("timezone") ?></label>
-         <?php echo create_smart_pulldown("timezone_id", get_tz_key($place->get("timezone")), get_tz_select_array(), "class=\"autocomplete\""); ?>
+         <?php echo create_timezone_pulldown("timezone_id", $place->get("timezone"), $user); ?>
 <?php
     }
 ?>

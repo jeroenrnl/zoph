@@ -38,7 +38,11 @@ else {
 */
 ?>
           <h1><?php echo translate("search") ?></h1>
+<?php
+    echo check_js($user);
+?>
       <div class="main">
+
       <form method="GET" action="search.php">
         <!-- There is a search button here to make it the first submit in the form for submit on Enter -->
         <span>
@@ -168,11 +172,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php
-        if ($user->prefs->get("autocomp_albums") && AUTOCOMPLETE && JAVASCRIPT && ($i == $count)) { 
-            echo create_pulldown("album_id[$i]", $album_id[$i], get_albums_search_array($user), "class=\"autocomplete\"");
-        } else {
-            echo create_pulldown("album_id[$i]", $album_id[$i], get_albums_search_array($user));
-        }
+            echo create_album_pulldown("album_id[$i]", $album_id[$i], $user);
 ?>
           <br><input type="checkbox" name="_album_id_children[<?php echo $i ?>]" value="yes" <?php echo $checked ?>><label for="_album_id_children[<?php echo $i ?>]"><?php echo translate("include sub-albums") ?></label>
           </td>
@@ -221,11 +221,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php
-        if ($user->prefs->get("autocomp_categories") && AUTOCOMPLETE && JAVASCRIPT && ($i == $count)) { 
-            echo create_pulldown("category_id[$i]", $category_id[$i], get_categories_search_array($user), "class=\"autocomplete\"");
-        } else {
-            echo create_pulldown("category_id[$i]", $category_id[$i], get_categories_search_array($user));
-        }
+            echo create_cat_pulldown("category_id[$i]", $category_id[$i], $user);
 ?>
           <br><input type="checkbox" name="_category_id_children[<?php echo $i ?>]" value="yes" <?php echo $checked ?>><label for="_category_id_children[<?php echo $i ?>]"><?php echo translate("include sub-categories") ?></label>
           </td>
@@ -274,11 +270,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php
-        if ($user->prefs->get("autocomp_places") && AUTOCOMPLETE && JAVASCRIPT && ($i == $count)) { 
-            echo create_smart_pulldown("location_id[$i]", $location_id[$i], get_places_search_array($user), "class=\"autocomplete\"");
-        } else {
-            echo create_smart_pulldown("location_id[$i]", $location_id[$i], get_places_search_array($user));
-        }
+            echo create_place_pulldown("location_id[$i]", $location_id[$i], $user);
 ?>
           <br><input type="checkbox" name="_location_id_children[<?php echo $i ?>]" value="yes" <?php echo $checked ?>><label for="_location_id_children[<?php echo $i ?>]"><?php echo translate("include sub-places") ?></label>
           </td>
@@ -361,11 +353,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php
-        if ($user->prefs->get("autocomp_people") && AUTOCOMPLETE && JAVASCRIPT && ($i == $count)) { 
-            echo create_smart_pulldown("person_id[$i]", $person_id[$i], get_people_select_array(get_photographed_people($user)), "class=\"autocomplete\"");
-        } else {
-            echo create_smart_pulldown("person_id[$i]", $person_id[$i], get_people_select_array(get_photographed_people($user)));
-        }
+            echo create_person_pulldown("person_id[$i]", $person_id[$i], $user);
 ?>
           </td>
         </tr>
@@ -407,11 +395,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php 
-        if ($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPT && ($i == $count)) { 
-            echo create_smart_pulldown("photographer_id[$i]", $photographer_id[$i], get_people_select_array(get_photographers($user)), "class=\"autocomplete\"");
-        } else {
-            echo create_smart_pulldown("photographer_id[$i]", $photographer_id[$i], get_people_select_array(get_photographers($user)));
-        }
+            echo create_photographer_pulldown("photographer_id[$i]", $photographer_id[$i], $user);
 ?>
           </td>
         </tr>

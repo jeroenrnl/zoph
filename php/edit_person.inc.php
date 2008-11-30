@@ -24,6 +24,7 @@
           </span>
             <?php echo translate($_action) ?> <?php echo translate("person") ?>
           </h1>
+      <?php echo check_js($user); ?>
       <div class="main">
       <form action="person.php" method="GET">
           <input type="hidden" name="_action" value="<?php echo $action ?>">
@@ -52,15 +53,15 @@
           <?php echo create_text_input("email", $person->get("email"), 32, 64) ?>
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
           <label for="home_id"><?php echo translate("home") ?></label>
-<?php echo create_smart_pulldown("home_id", $person->get("home_id"), get_places_select_array()) ?><br>
+<?php echo create_place_pulldown("home_id", $person->get("home_id"), $user) ?><br>
           <label for="work_id"><?php echo translate("work") ?></label>
-<?php echo create_smart_pulldown("work_id", $person->get("work_id"), get_places_select_array()) ?><br>
+<?php echo create_place_pulldown("work_id", $person->get("work_id"), $user) ?><br>
           <label for="mother_id"><?php echo translate("mother") ?></label>
-<?php echo create_smart_pulldown("mother_id", $person->get("mother_id"), get_people_select_array()) ?><br>
+<?php echo create_person_pulldown("mother_id", $person->get("mother_id"), $user) ?><br>
           <label for="father_id"><?php echo translate("father") ?></label>
-<?php echo create_smart_pulldown("father_id", $person->get("father_id"), get_people_select_array()) ?><br>
+<?php echo create_person_pulldown("father_id", $person->get("father_id"), $user) ?><br>
           <label for="spouse"><?php echo translate("spouse") ?></label>
-<?php echo create_smart_pulldown("spouse_id", $person->get("spouse_id"), get_people_select_array()) ?><br>
+<?php echo create_person_pulldown("spouse_id", $person->get("spouse_id"), $user) ?><br>
           <label for="pageset"><?php echo translate("pageset") ?></label>
 <?php echo create_smart_pulldown("pageset", $person->get("pageset"), get_pageset_select_array()) ?><br>
           <label for="notes"><?php echo translate("notes") ?></label>

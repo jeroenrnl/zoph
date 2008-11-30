@@ -374,7 +374,7 @@ div.breadcrumb li.firstdots:before {
     }
 
 /* Main page */
-.main, .info, .letter, .page, div.map, div#selection   {
+.main, .info, .letter, .page, div.map, div#selection, .warning   {
     background: <?php echo $TABLE_BG_COLOR ?>;
     font-size: medium;
     width: 100%;
@@ -383,6 +383,15 @@ div.breadcrumb li.firstdots:before {
     border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
     clear: both;
     }
+
+div.warning {
+    background: #ffffcc;
+}
+
+div.warning img.icon {
+    float: left;
+    margin-right: 10px;
+}
 
 div.map {
     height: 450px;

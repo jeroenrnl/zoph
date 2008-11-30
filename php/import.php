@@ -50,6 +50,7 @@
 require_once("header.inc.php");
 ?>
     <h1><?php echo translate("import photos") ?></h1>
+    <?php echo check_js($user); ?>
     <div class="main">
         <form enctype="multipart/form-data" action="import.php" method="POST">
 <?php
@@ -119,14 +120,14 @@ require_once("header.inc.php");
             <hr>
             <p><?php echo translate("Fields specified below will apply to all images imported.") ?></p>
             <label for="album"><?php echo translate("album") ?></label>
-            <?php echo create_pulldown("_album", "", get_albums_select_array($user)) ?><br>
+            <?php echo create_album_pulldown("_album", "", $user) ?><br>
             <label for="category"><?php echo translate("category") ?></label>
-            <?php echo create_pulldown("_category", "", get_categories_select_array($user)) ?><br>
+            <?php echo create_cat_pulldown("_category", "", $user) ?><br>
             <label for="title"><?php echo translate("title") ?></label>
             <?php echo create_text_input("title", "", 40, 64) ?>
             <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
             <label for="location"><?php echo translate("location") ?></label>
-            <?php echo create_smart_pulldown("location_id", "", get_places_select_array()) ?><br>
+            <?php echo create_place_pulldown("location_id", "", $user) ?><br>
             <label for="view"><?php echo translate("view") ?></label>
             <?php echo create_text_input("view", "", 40, 64) ?>
             <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
@@ -137,7 +138,7 @@ require_once("header.inc.php");
             <?php echo create_rating_pulldown("") ?>
             <span class="inputhint">1 - 10</span><br>
             <label for="photographer"><?php echo translate("photographer") ?></label>
-            <?php echo create_smart_pulldown("photographer_id", "", get_people_select_array()) ?><br>
+            <?php echo create_photographer_pulldown("photographer_id", "", $user) ?><br>
             <label for="level"><?php echo translate("level") ?></label>
             <?php echo create_text_input("level", "", 4, 2) ?>
             <span class="inputhint">1 - 10</span><br>

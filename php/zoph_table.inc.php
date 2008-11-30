@@ -579,12 +579,15 @@ function create_link_list($records) {
 
 function get_xml($class, $search,$user=null) {
     $search=strtolower($search);
-    if($class=="location") {
+    if($class=="location" || $class=="home" || $class=="work") {
         $class="place";
     } else if ($class=="photographer") {
         $class="person";
         $subclass="photographer";
+    } else if ($class=="father" || $class=="mother" || $class=="spouse") {
+        $class="person";
     }
+
 
     if($class=="person") {
         $tree=false;

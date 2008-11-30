@@ -78,7 +78,7 @@
       <form action="album.php">
         <input type="hidden" name="_action" value="<?php echo $action ?>">
         <input type="hidden" name="album_id" value="<?php echo $album->get("album_id") ?>">
-        <?php echo create_edit_fields($album->get_edit_array()) ?>
+        <?php echo create_edit_fields($album->get_edit_array($user)) ?>
         <input type="submit" value="<?php echo translate($action, 0) ?>">
 
       </form>

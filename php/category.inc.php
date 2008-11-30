@@ -140,7 +140,7 @@ class category extends zoph_tree_table {
         return get_count_from_query($sql);
     }
 
-    function get_edit_array() {
+    function get_edit_array($user) {
         if($this->is_root()) {
             $parent=array(
                 translate("parent category"),
@@ -148,9 +148,9 @@ class category extends zoph_tree_table {
         } else {
             $parent=array(
                 translate("parent category"),
-                create_pulldown("parent_category_id",
+                create_cat_pulldown("parent_category_id",
                     $this->get("parent_category_id"),
-                    get_categories_select_array()));
+                    $user));
         }
         return array(
             "category" =>
@@ -320,6 +320,24 @@ function get_popular_categories($user) {
 
     return get_popular_results("category", $sql);
 
+}
+
+function create_cat_pulldown($name, $value=null, $user) {
+    $id=ereg_replace("^_+", "", $name);
+    if($value) {
+        $cat=new category($value);
+        $cat->lookup();
+        $text=$cat->get("category");
+    }
+    if($user->prefs->get("autocomp_categories") && AUTOCOMPLETE && JAVASCRIPT) {
+        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
+            " value='" . $value . "'>";
+        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
+            " value='" . $text . "' class='autocomplete'>";
+    } else {
+        $html=create_pulldown($name, $value, get_categories_search_array($user));
+    }
+    return $html;
 }
 
 
