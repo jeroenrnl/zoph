@@ -54,7 +54,7 @@
                 <li><?php echo sprintf(translate("%s photos in %s"), $category_photo_count, $category_count) ?> <a href="categories.php"><?php echo $category_count == 1 ? translate("category") : translate("categories") ?></a></li>
 <?php
     if ($user->is_admin() || $user->get("browse_people")) {
-        $person_count = get_count("person");
+        $person_count = get_people_count($user);
 ?>
                 <li><?php echo $person_count ?> <a href="people.php"><?php echo $person_count == 1 ? translate("person", 0) : translate("people", 0) ?></a></li>
 <?php

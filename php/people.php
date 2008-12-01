@@ -17,7 +17,6 @@
  */   
 
     require_once("include.inc.php");
-
     $_view=getvar("_view");
     if(empty($_view)) {
         $_view=$user->prefs->get("view");
@@ -92,7 +91,7 @@
     } else {
         $first_letter = $_l;
     }
-    $ppl = get_photographed_people($user, $first_letter);
+    $ppl = get_all_people($user, $first_letter);
 ?>
         <ul class="<?php echo $_view ?>">
 <?php

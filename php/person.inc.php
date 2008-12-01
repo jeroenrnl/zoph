@@ -193,9 +193,55 @@ class person extends zoph_table {
 }
 
 function get_people($constraints = null, $conj = "and", $ops = null,
-    $order = "last_name, first_name") {
-
+    $order = "last_name, first_name", $user=null) {
     return get_records("person", $order, $constraints, $conj, $ops);
+}
+
+function get_people_count($user = null, $search = null) {
+    if($user && !$user->is_admin()) {
+        $allowed=array();
+        $people=get_photographed_people($user, $search);
+        $photographers=get_photographers($user, $search);
+        foreach($people as $person) {
+            $allowed[]=$person->get("person_id");
+        }
+        foreach($photographers as $photographer) {
+            $allowed[]=$person->get("person_id");
+        }
+
+        $allowed=array_unique($allowed);
+
+        return count($allowed);
+    } else {
+        return get_count("person");
+    }
+}
+
+function get_all_people($user = null, $search = null, $search_first = false) {
+    $allowed=array();
+
+    if($user && !$user->is_admin()) {
+        $people=get_photographed_people($user, $search, $search_first);
+        $photographers=get_photographers($user, $search, $search_first);
+        foreach($people as $person) {
+            $allowed[]=$person->get("person_id");
+        }
+        foreach($photographers as $photographer) {
+            $allowed[]=$person->get("person_id");
+        }
+
+        $allowed=array_unique($allowed);
+        if(count($allowed)>0) {
+            return null;
+        }
+        $keys=implode(",", $allowed);
+        $where=" WHERE person_id IN (" .$keys . ")";
+    }
+
+    $sql="SELECT * FROM " . DB_PREFIX . "people" . $where .
+        " ORDER BY last_name, called, first_name";
+
+    return get_records_from_query("person", $sql);
 }
 
 function get_photographed_people($user = null, $search=null, $search_first = false) {
@@ -240,7 +286,7 @@ function get_photographed_people($user = null, $search=null, $search_first = fal
     return get_records_from_query("person", $sql);
 }
 
-function get_photographers($user = null, $search = null) {
+function get_photographers($user = null, $search = null, $search_first = null) {
     if($search!==null) {
         if($search==="") {
             $where=" and (ppl.last_name='' or ppl.last_name is null)";
