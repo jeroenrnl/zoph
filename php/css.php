@@ -113,8 +113,8 @@ ul.thumbs li {
     position: relative;
     display: block;
     text-align: center;
-    width: 160px;
-    height: 180px;
+    width: <?php echo THUMB_SIZE + 20 ?>px;
+    height:<?php echo THUMB_SIZE + 40 ?>px;
     float:left;
     margin: 5px;
     padding: 5px;
@@ -125,7 +125,7 @@ ul.thumbs li p {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    min-height: 120px;
+    width: <?php echo THUMB_SIZE ?>px;
     }
 
 ul.thumbs li img {
