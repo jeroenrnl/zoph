@@ -210,7 +210,7 @@
 <?php
             }
         } else {
-            echo $album->get_html_tree();
+            echo $album->get_html_tree($user);
         }
 ?>
         </ul>

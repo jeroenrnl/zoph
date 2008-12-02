@@ -118,9 +118,9 @@ class zoph_tree_table extends zoph_table {
         return implode(",", $id_array);
     }
 
-    function get_html_tree($open=true) {
+    function get_html_tree($user=null,$open=true) {
         $this->lookup();
-        $children=$this->get_children();
+        $children=$this->get_children($user);
 
         $html="\n<li>";
         if($children) {
@@ -137,7 +137,7 @@ class zoph_tree_table extends zoph_table {
             $html.= "<ul>";
         }
         foreach($children as $child) {
-            $html .= $child->get_html_tree(false);
+            $html .= $child->get_html_tree($user,false);
         }
         if($children) {
             $html .= "</ul>";

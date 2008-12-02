@@ -233,7 +233,7 @@
 <?php
         }
     } else {
-        echo $place->get_html_tree();
+        echo $place->get_html_tree($user);
     }
 ?>
         </ul>

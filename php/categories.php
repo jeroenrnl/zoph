@@ -222,7 +222,7 @@ if ($category->get("category_description")) {
 <?php
                 }
             } else {
-                echo $category->get_html_tree();
+                echo $category->get_html_tree($user);
             }
 ?>
         </ul>
