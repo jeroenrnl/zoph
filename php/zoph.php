@@ -41,7 +41,7 @@
     $album_count = get_album_count($user);
     $album_photo_count = $album->get_total_photo_count($user);
     $category = get_root_category();
-    $category_count = get_count("category");
+    $category_count = get_category_count($user);
     $category_photo_count = $category->get_total_photo_count($user);
     echo "\n";
 ?>
@@ -60,7 +60,7 @@
 <?php
     }
     if ($user->is_admin() || $user->get("browse_places")) {
-        $place_count = get_count("place");
+        $place_count = get_places_count($user);
 ?>
                 <li><?php echo $place_count ?> <a href="places.php"><?php echo $place_count == 1 ? translate("place", 0) : translate("places", 0) ?></a></li>
 <?php

@@ -392,7 +392,16 @@ function get_photographed_places($user = null) {
             "order by plc.city, plc.title";
     }
 
-    return get_records_from_query("place", $query);
+    return get_records_from_query("place", $sql);
+}
+
+function get_places_count($user) {
+    if($user && !$user->is_admin()) {
+        $places=get_photographed_places($user);
+        return count($places);
+    } else {
+        return get_count("category");
+    }
 }
 
 function get_places_select_array($user = null, $search = 0) {

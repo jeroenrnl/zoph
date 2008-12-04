@@ -231,7 +231,7 @@ function get_all_people($user = null, $search = null, $search_first = false) {
         }
 
         $allowed=array_unique($allowed);
-        if(count($allowed)>0) {
+        if(count($allowed)==0) {
             return null;
         }
         $keys=implode(",", $allowed);
