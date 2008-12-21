@@ -335,14 +335,13 @@ function get_where_for_search($conj, $search, $search_first) {
     return $where;
 }
 
-function get_people_select_array($people_array = null) {
+function get_people_select_array($people_array = null, $user = null) {
 
     $ppl[""] = "";
 
     if (!$people_array) {
-        $people_array = get_people();
+        $people_array = get_people(null,null,null,null,$user);
     }
-
     if ($people_array) {
         foreach ($people_array as $person) {
             $ppl[$person->get("person_id")] =
@@ -449,7 +448,7 @@ function create_person_pulldown($name, $value=null, $user) {
         $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
             " value='" . $text . "' class='autocomplete'>";
     } else {
-        $html=create_pulldown($name, $value, get_people_search_array($user));
+        $html=create_pulldown($name, $value, get_people_select_array(null,$user));
     }
     return $html;
 }
