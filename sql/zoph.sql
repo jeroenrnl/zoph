@@ -13,32 +13,6 @@
 # along with Zoph; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
--- MySQL dump 8.22
---
--- Host: localhost    Database: zoph
--- Server version	3.23.54
-
---
--- Table structure for table 'zoph_album_permissions'
---
-
-CREATE TABLE zoph_album_permissions (
-  user_id int(11) NOT NULL default '0',
-  album_id int(11) NOT NULL default '0',
-  access_level tinyint(4) NOT NULL default '0',
-  watermark_level tinyint(4) NOT NULL default '0',
-  writable char(1) NOT NULL default '0',
-  changedate timestamp(14) NOT NULL,
-  PRIMARY KEY  (user_id,album_id),
-  KEY ap_access_level (access_level)
-) TYPE=MyISAM;
-
---
--- Dumping data for table 'zoph_album_permissions'
---
-
-
-
 --
 -- Table structure for table 'zoph_albums'
 --
@@ -137,6 +111,29 @@ CREATE TABLE zoph_comments (
   PRIMARY KEY  (comment_id)
 ) TYPE=MyISAM;
 
+CREATE TABLE zoph_groups (
+        group_id int(11) NOT NULL auto_increment,
+        group_name varchar(32),
+        description varchar(128),
+        PRIMARY KEY  (group_id));
+
+CREATE TABLE zoph_group_permissions (
+        group_id int(11) NOT NULL default '0',
+        album_id int(11) NOT NULL default '0',
+        access_level tinyint(4) NOT NULL default '0',
+        watermark_level tinyint(4) NOT NULL default '0',
+        writable char(1) NOT NULL default '0',
+        changedate timestamp NOT NULL,
+        PRIMARY KEY  (group_id,album_id),
+        KEY ap_access_level (access_level)
+) TYPE=MyISAM;
+
+CREATE TABLE zoph_groups_users (
+        group_id int(11) NOT NULL default '0',
+        user_id int(11) NOT NULL default '0',
+        changedate timestamp NOT NULL,
+        PRIMARY KEY  (group_id,user_id)
+);
 --
 -- Table structure for table 'zoph_people'
 --
