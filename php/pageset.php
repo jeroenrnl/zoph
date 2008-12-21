@@ -97,7 +97,7 @@ if ($action == "confirm") {
     <label for="page_id">
         <?php echo translate("Add a page:") ?>
     </label>
-    <?php echo create_smart_pulldown("page_id", 0, get_pages_select_array(), "onChange='form.submit()'"); ?>
+    <?php echo create_pulldown("page_id", 0, get_pages_select_array(), "onChange='form.submit()'"); ?>
     <input type="submit" name="_button" value="<?php echo translate("add",0)?>">
 </form>
 <br>

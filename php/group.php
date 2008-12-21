@@ -246,7 +246,7 @@ require_once("edit_group.inc.php");
       				</td>
           			<td>
 							<input type="hidden" name="group_id_new" value="<?php echo $group->get("group_id") ?>">
-							<?php echo create_smart_pulldown("album_id_new", "", get_albums_select_array()) ?>
+							<?php echo create_pulldown("album_id_new", "", get_albums_select_array()) ?>
                 	</td>
                 	<td>
 							<?php echo create_text_input("access_level_new", "5", 4, 2) ?>

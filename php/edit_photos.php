@@ -92,9 +92,9 @@
                   <label for="overwrite"><?php echo translate("overwrite values below", 0) ?></label>
                   <?php echo create_pulldown("_overwrite", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?><br>
                   <label for="location_id__all"><?php echo translate("location") ?></label>
-                  <?php echo create_smart_pulldown("__location_id__all", null, $place_pulldown) ?><br>
+                  <?php echo create_pulldown("__location_id__all", null, $place_pulldown) ?><br>
                   <label for="photographer_id__all"><?php echo translate("photographer") ?></label>
-            <?php echo create_smart_pulldown("__photographer_id__all", null, get_people_select_array()) ?><br>
+            <?php echo create_pulldown("__photographer_id__all", null, get_people_select_array()) ?><br>
                   <label for="rating__all"><?php echo translate("rating") ?></label>
                   <?php echo create_rating_pulldown(null, "_rating__all") ?><br>
                   <label for="album"><?php echo translate("albums") ?></label>
@@ -237,9 +237,9 @@
 ?>
                     <fieldset class="editphotos-fields">
                       <label for="location_id__<?php echo $photo_id ?>"><?php echo translate("location") ?></label>
-            <?php echo create_smart_pulldown("__location_id__$photo_id", $photo->get("location_id"), $place_pulldown) ?><br>
+            <?php echo create_pulldown("__location_id__$photo_id", $photo->get("location_id"), $place_pulldown) ?><br>
                       <label for="photographer_id__<?php echo $photo_id?>"><?php echo translate("photographer") ?></label>
-            <?php echo create_smart_pulldown("__photographer_id__$photo_id", $photo->get("photographer_id"), get_people_select_array()) ?><br>
+            <?php echo create_pulldown("__photographer_id__$photo_id", $photo->get("photographer_id"), get_people_select_array()) ?><br>
                       <label for="rating__<?php echo $photo_id?>"><?php echo translate("rating") ?></label>
 <?php
     $rating = $photo->get('rating');
@@ -307,7 +307,7 @@
                 }
                 for ($p = 0; $p < $user->prefs->get("people_slots"); $p++ ) {
 ?>
-                       <?php echo create_smart_pulldown("_person_" . $p . "__" . $photo_id, "", get_people_select_array()) ?>
+                       <?php echo create_pulldown("_person_" . $p . "__" . $photo_id, "", get_people_select_array()) ?>
                        <?php echo translate("position") ?>:
                        <?php echo create_text_input("_position_" . $p ."__" . $photo_id, $next_pos + $p, 2, 2) ?><br>
 <?php

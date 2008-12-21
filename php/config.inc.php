@@ -180,10 +180,6 @@
     // The number below as max.
     define('MAX_PEOPLE_SLOTS', 1);
 
-    // support for optgroups in many browsers seems incomplete or buggy
-    define('GROUPED_PULLDOWN_SIZE', 9999);
-    define('MAX_PULLDOWN_SIZE', 400);
-
     define('THUMB_SIZE', 120);
     define('MID_SIZE', 480);
 

@@ -63,7 +63,7 @@
           <label for="spouse"><?php echo translate("spouse") ?></label>
 <?php echo create_person_pulldown("spouse_id", $person->get("spouse_id"), $user) ?><br>
           <label for="pageset"><?php echo translate("pageset") ?></label>
-<?php echo create_smart_pulldown("pageset", $person->get("pageset"), get_pageset_select_array()) ?><br>
+<?php echo create_pulldown("pageset", $person->get("pageset"), get_pageset_select_array()) ?><br>
           <label for="notes"><?php echo translate("notes") ?></label>
           <textarea name="notes" cols="40" rows="4"><?php echo $person->get("notes") ?></textarea><br>
           <input type="submit" value="<?php echo translate($action, 0) ?>">

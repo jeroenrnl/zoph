@@ -83,56 +83,6 @@ function create_pulldown($name, $value, $value_array, $extraopt = null) {
     return $html;
 }
 
-function create_grouped_pulldown($name, $value, $value_array) {
-    $id=ereg_replace("^_+", "", $name);
-    $html = "<select name=\"$name\" id=\"$id\">\n";
-
-    $current_label = "";
-    $optgroup;
-    while (list($val, $label) = each($value_array)) {
-        list($left, $right) = explode(', ', $label);
-
-        if (!$right && $left) {
-            $right = $left;
-            $left = "[]";
-            $label = "$left, $right";
-        }
-
-        if ($left != $current_label) {
-            $current_label = $left;
-            if ($optgroup) {
-                $html .= "  </optgroup>\n";
-            }
-            $html .= "  <optgroup label=\"$current_label\">\n";
-            $optgroup = 1;
-        }
-
-        if ($val == $value) { $selected = " selected"; }
-        else { $selected  = ""; }
-        $html .= "  <option label=\"$right\" value=\"$val\"$selected>$label</option>\n";
-    }
-
-    if ($optgroup) {
-        $html .= "  </optgroup>\n";
-    }
-
-    $html .= "</select>\n";
-    return $html;
-}
-
-function create_smart_pulldown($name, $value, $value_array, $extraopt = null) {
-    $size = sizeof($value_array);
-    if ($size <= GROUPED_PULLDOWN_SIZE) {
-        return create_pulldown($name, $value, $value_array, $extraopt);
-    }
-    else if ($size <= MAX_PULLDOWN_SIZE) {
-        return create_grouped_pulldown($name, $value, $value_array);
-    }
-    else {
-        return create_text_input($name, $value, 10, 10);
-    }
-}
-
 function create_integer_pulldown($name, $value, $min, $max) {
     for ($i = $min; $i <= $max; $i++) {
         $integer_array["$i"] = $i;

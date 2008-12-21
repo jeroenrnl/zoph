@@ -174,7 +174,7 @@
 ?>
           </dt>
           <dd>
-<?php echo create_smart_pulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), create_select_array(get_records("color_scheme", "name"), array("name"))) ?>
+<?php echo create_pulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), create_select_array(get_records("color_scheme", "name"), array("name"))) ?>
           </dd>
 <?php
     $lang_array = $rtplang->get_available_languages();
@@ -186,7 +186,7 @@
         <dt><?php echo translate("language") ?>
         </dt>
         <dd>
-<?php echo create_smart_pulldown("language", $user->prefs->get("language"), $lang_select_array) ?>
+<?php echo create_pulldown("language", $user->prefs->get("language"), $lang_select_array) ?>
         </dd>
         <dt>
             <?php echo translate("Default view") ?>

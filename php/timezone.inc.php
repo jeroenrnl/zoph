@@ -104,7 +104,7 @@ function create_timezone_pulldown($name, $value=null, $user=null) {
         $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
             " value='" . $text . "' class='autocomplete'>";
     } else {
-        $html=create_smart_pulldown("timezone_id", get_tz_key($place->get("timezone")), get_tz_select_array());
+        $html=create_pulldown("timezone_id", get_tz_key($place->get("timezone")), get_tz_select_array());
     }
     return $html;
 }

@@ -40,7 +40,7 @@
            <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "16") ?></span>
            <br>
           <label for="personid"><?php echo translate("person") ?></label>
-          <?php echo create_smart_pulldown("person_id", $action == "insert" ? "1" : $this_user->get("person_id"), get_people_select_array()) ?><br>
+          <?php echo create_pulldown("person_id", $action == "insert" ? "1" : $this_user->get("person_id"), get_people_select_array()) ?><br>
 <?php 
     if($_action=="new") { 
 ?>
@@ -84,7 +84,7 @@
     $lightbox_array = get_albums_select_array();
     $lightbox_array["null"] = "[none]";
 ?>
-<?php echo create_smart_pulldown("lightbox_id", $this_user->get("lightbox_id"), $lightbox_array) ?>
+<?php echo create_pulldown("lightbox_id", $this_user->get("lightbox_id"), $lightbox_array) ?>
         <br>
             <input type="submit" value="<?php echo translate($action, 0) ?>">
 </form>

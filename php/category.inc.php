@@ -170,7 +170,7 @@ class category extends zoph_tree_table {
             "pageset" =>
                 array(
                     translate("pageset"),
-                    create_smart_pulldown("pageset", $this->get("pageset"), get_pageset_select_array())),
+                    create_pulldown("pageset", $this->get("pageset"), get_pageset_select_array())),
             "sortname" =>
                 array(
                     translate("sort name"),
