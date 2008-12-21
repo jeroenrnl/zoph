@@ -81,14 +81,16 @@ class category extends zoph_tree_table {
                 "select count(distinct pc.photo_id) from " .
                 DB_PREFIX . "photo_categories as pc JOIN " .
                 DB_PREFIX . "photo_albums as pa " .
-                " ON pc.photo_id = pa.photo_id JOIN " .
+                "ON pc.photo_id = pa.photo_id JOIN " .
                 DB_PREFIX . "photos as p " .
-                " ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "album_permissions as ap " .
-                " ON pa.album_id = ap.album_id " .
-                "where pc.category_id = '" .  escape_string($id) . "'" .
-                " and ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
-                " and ap.access_level >= p.level";
+                "ON pa.photo_id = p.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE pc.category_id = '" .  escape_string($id) . "' " .
+                "AND gu.user_id = '" . escape_string($user->get("user_id")) . 
+                "' AND gp.access_level >= p.level";
         }
         else {
             $sql =
@@ -115,13 +117,15 @@ class category extends zoph_tree_table {
                 "select count(distinct pc.photo_id) from " .
                 DB_PREFIX . "photo_categories as pc JOIN " .
                 DB_PREFIX . "photo_albums as pa " .
-                " ON pc.photo_id = pa.photo_id JOIN " .
+                "ON pc.photo_id = pa.photo_id JOIN " .
                 DB_PREFIX . "photos as p " .
-                " ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "album_permissions as ap " .
-                " ON pa.album_id = ap.album_id" .
-                " where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
-                " and ap.access_level >= p.level";
+                "ON pa.photo_id = p.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) .
+                "' AND gp.access_level >= p.level";
 
             if ($id_constraint) {
                 $sql .= " and $id_constraint";
@@ -215,16 +219,18 @@ class category extends zoph_tree_table {
                 $sql=
                     "select distinct p.photo_id from " .
                     DB_PREFIX . "photos as p JOIN " .
-                    DB_PREFIX . "photo_albums as pa" .
-                    " ON pa.photo_id = p.photo_id JOIN " .
-                    DB_PREFIX . "album_permissions as ap " .
-                    " ON pa.album_id = ap.album_id JOIN " .
+                    DB_PREFIX . "photo_albums as pa " .
+                    "ON pa.photo_id = p.photo_id JOIN " .
+                    DB_PREFIX . "group_permissions as gp " .
+                    "ON pa.album_id = gp.album_id JOIN " .
+                    DB_PREFIX . "groups_users as gu " .
+                    "ON gp.group_id = gu.group_id JOIN " .
                     DB_PREFIX . "photo_categories as pc " .
-                    " ON pc.photo_id = p.photo_id " .
+                    "ON pc.photo_id = p.photo_id " .
                     $cat_where .
-                    " AND ap.user_id =" .
+                    " AND gu.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
-                    " and ap.access_level >= p.level " .
+                    " AND gp.access_level >= p.level " .
                     $order;
             } else {
                 $sql =
@@ -292,20 +298,23 @@ function get_popular_categories($user) {
     if ($user && !$user->is_admin()) {
         $sql =
             "select cat.*, count(distinct ph.photo_id) as count from " .
-            DB_PREFIX . "categories as cat, " .
-            DB_PREFIX . "photo_categories as pc, " .
-            DB_PREFIX . "photos as ph, " .
-            DB_PREFIX . "photo_albums as pa, " .
-            DB_PREFIX . "album_permissions as ap " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
-            " and ap.album_id = pa.album_id" .
-            " and pa.photo_id = pc.photo_id" .
-            " and pc.category_id = cat.category_id" .
-            " and pc.photo_id = ph.photo_id" .
-            " and ap.access_level >= ph.level " .
-            "group by cat.category_id " .
-            "order by count desc, cat.category " .
-            "limit 0, " . escape_string($TOP_N);
+            DB_PREFIX . "categories as cat JOIN " .
+            DB_PREFIX . "photo_categories as pc ON " .
+            "pc.category_id = cat.category_id JOIN " .
+            DB_PREFIX . "photos as ph ON " .
+            " pc.photo_id = ph.photo_id JOIN " .
+            DB_PREFIX . "photo_albums as pa ON " .
+            " pa.photo_id = pc.photo_id JOIN " .
+            DB_PREFIX . "group_permissions as gp ON " .
+            "pa.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users as gu ON " .
+            "gp.group_id = gu.group_id " .
+            "WHERE gu.user_id = '" . 
+            escape_string($user->get("user_id")) . "'" .
+            "AND gp.access_level >= ph.level " .
+            "GROUP BY cat.category_id " .
+            "ORDER BY count desc, cat.category " .
+            "LIMIT 0, " . escape_string($TOP_N);
     }
     else {
         $sql =
@@ -340,5 +349,18 @@ function create_cat_pulldown($name, $value=null, $user) {
     return $html;
 }
 
+function get_category_count($user) {
+    if($user && !$user->is_admin()) {
+        $sql =
+            "SELECT category_id, parent_category_id  FROM " .
+            DB_PREFIX . "categories as c";
+        $cats=get_records_from_query("category", $sql);
+        $cat_clean=remove_empty($cats,$user);
+        return count($cat_clean);
+    } else {
+        return get_count("category");
+    }
+}
+ 
 
 ?>

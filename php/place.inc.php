@@ -174,14 +174,16 @@ class place extends zoph_tree_table {
         if ($user && !$user->is_admin()) {
             $sql =
                 "select count(*) from " .
-                DB_PREFIX . "photo_albums as pa, " .
-                DB_PREFIX . "photos as p, " .
-                DB_PREFIX . "album_permissions as ap " .
-                "where p.location_id = $id" .
-                " and ap.user_id = '" . escape_string($user->get("user_id")) .
-                "' and ap.album_id = pa.album_id" .
-                " and pa.photo_id = p.photo_id " .
-                " and ap.access_level >= p.level";
+                DB_PREFIX . "photos as p JOIN " .
+                DB_PREFIX . "photo_albums as pa " .
+                "ON p.photo_id = pa.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE p.location_id = " . escape_string($id) .
+                " AND gu.user_id = '" . escape_string($user->get("user_id")) .
+                "' AND gp.access_level >= p.level";
 }
         else {
             $sql =
@@ -205,16 +207,18 @@ class place extends zoph_tree_table {
         if ($user && !$user->is_admin()) {
             $sql =
                 "select count(distinct pa.photo_id) from " .
-                DB_PREFIX . "photo_albums as pa JOIN " .
-                DB_PREFIX . "photos as p " .
+                DB_PREFIX . "photos as p JOIN " .
+                DB_PREFIX . "photo_albums as pa " .
                 "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "album_permissions as ap " .
-                "ON ap.album_id = pa.album_id " .
-                "where ap.user_id = '" . escape_string($user->get("user_id")) .
-                "' and ap.access_level >= p.level";
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) .
+                "' AND gp.access_level >= p.level";
 
             if ($id_constraint) {
-                $sql .= " and $id_constraint";
+                $sql .= " AND $id_constraint";
             }
         }
         else {
@@ -259,12 +263,14 @@ class place extends zoph_tree_table {
                     DB_PREFIX . "photos as p JOIN " .
                     DB_PREFIX . "photo_albums as pa" .
                     " ON pa.photo_id = p.photo_id JOIN " .
-                    DB_PREFIX . "album_permissions as ap " .
-                    " ON pa.album_id = ap.album_id " .
+                    DB_PREFIX . "group_permissions as gp " .
+                    "ON pa.album_id = gp.album_id JOIN " .
+                    DB_PREFIX . "groups_users as gu " .
+                    "ON gp.group_id = gu.group_id " .
                     $place_where .
-                    " AND ap.user_id =" .
+                    " AND gu.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
-                    " and ap.access_level >= p.level " .
+                    " and gp.access_level >= p.level " .
                     $order;
             } else {
                 $sql =
@@ -371,17 +377,20 @@ function get_photographed_places($user = null) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select distinct plc.* from " .
-            DB_PREFIX . "places as plc, " .
-            DB_PREFIX . "photos as ph, " .
-            DB_PREFIX . "photo_albums as pa, " .
-            DB_PREFIX . "album_permissions as ap " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
-            " and ap.album_id = pa.album_id" .
-            " and pa.photo_id = ph.photo_id" .
-            " and ap.access_level >= ph.level" .
-            " and ph.location_id = plc.place_id " .
-            "order by plc.city, plc.title";
+            "SELECT DISTINCT plc.* FROM " .
+            DB_PREFIX . "photos AS ph JOIN " .
+            DB_PREFIX . "places AS plc " .
+            "ON ph.location_id = plc.place_id JOIN " .
+            DB_PREFIX . "photo_albums AS pa " .
+            "ON pa.photo_id = ph.photo_id JOIN " .
+            DB_PREFIX . "group_permissions AS gp " .
+            "ON pa.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users AS gu " .
+            "ON gp.group_id = gu.group_id " .
+            "where gu.user_id = '" . 
+            escape_string($user->get("user_id")) .
+            "' AND gp.access_level >= ph.level " .
+            "ORDER BY plc.city, plc.title";
     }
     else {
         $sql =
@@ -418,19 +427,22 @@ function get_popular_places($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select plc.*, count(distinct ph.photo_id) as count from " .
-            DB_PREFIX . "places as plc, " .
-            DB_PREFIX . "photos as ph, " .
-            DB_PREFIX . "photo_albums as pa, " .
-            DB_PREFIX . "album_permissions as ap " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
-            " and ap.album_id = pa.album_id" .
-            " and pa.photo_id = ph.photo_id" .
-            " and ph.location_id = plc.place_id" .
-            " and ap.access_level >= ph.level " .
-            "group by plc.place_id " .
-            "order by count desc, plc.title, plc.city " .
-            "limit 0, $TOP_N";
+            "SELECT plc.*, count(distinct ph.photo_id) AS count FROM " .
+            DB_PREFIX . "photos as ph JOIN " .
+            DB_PREFIX . "places as plc " .
+            "ON ph.location_id = plc.place_id JOIN " .
+            DB_PREFIX . "photo_albums as pa " .
+            "ON pa.photo_id = ph.photo_id JOIN " .
+            DB_PREFIX . "group_permissions as gp " .
+            "ON pa.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users as gu " .
+            "ON gp.group_id = gu.group_id " .
+            "WHERE gu.user_id = '" . 
+            escape_string($user->get("user_id")) . 
+            "' AND gp.access_level >= ph.level " .
+            "GROUP BY plc.place_id " .
+            "ORDER BY count desc, plc.title, plc.city " .
+            "LIMIT 0, $TOP_N";
     }
     else {
         $sql =

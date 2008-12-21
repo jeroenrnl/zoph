@@ -37,15 +37,17 @@ class photo extends zoph_table {
         if ($user && !$user->is_admin()) {
             $sql =
                 "select p.* from " .
-                DB_PREFIX . "photos as p, " .
-                DB_PREFIX . "photo_albums as pa, " .
-                DB_PREFIX . "album_permissions as ap " .
-                "where p.photo_id = '" . escape_string($this->get("photo_id")) . "'" .
-                " and p.photo_id = pa.photo_id" .
-                " and pa.album_id = ap.album_id" .
-                " and ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
-                " and ap.access_level >= p.level " .
-                "limit 0, 1";
+                DB_PREFIX . "photos as p JOIN " .
+                DB_PREFIX . "photo_albums as pa " .
+                "ON p.photo_id = pa.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE p.photo_id = '" . escape_string($this->get("photo_id")) . "'" .
+                " AND gu.user_id = '" . escape_string($user->get("user_id")) . "'" .
+                " AND gp.access_level >= p.level " .
+                "LIMIT 0, 1";
         }
         else {
             $sql =
@@ -211,19 +213,21 @@ class photo extends zoph_table {
 
         if ($user && !$user->is_admin()) {
             $sql =
-                "select al.album_id, al.parent_album_id, al.album from " .
-                DB_PREFIX . "photo_albums as pa, " .
-                DB_PREFIX . "albums as al, " .
-                DB_PREFIX . "album_permissions as ap " .
-                "where pa.photo_id = '" .
+                "SELECT al.album_id, al.parent_album_id, al.album FROM " .
+                DB_PREFIX . "albums AS al JOIN " .
+                DB_PREFIX . "photo_albums AS pa " .
+                "ON al.album_id = pa.album_id JOIN " .
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE pa.photo_id = '" .
                 escape_string($this->get("photo_id")) . "'" .
-                " and pa.album_id = al.album_id" .
-                " and al.album_id = ap.album_id" .
-                " and ap.user_id = '" .
+                " AND gu.user_id = '" .
                 escape_string($user->get("user_id")) . "' " .
-                " and ap.access_level >= " .
-                escape_string($this->get("level")) . " " .
-                "order by al.album";
+                " AND gp.access_level >= " .
+                escape_string($this->get("level")) .
+                " ORDER BY al.album";
         }
         else {
             $sql =
@@ -1182,14 +1186,17 @@ function create_rating_graph($user) {
     if ($user && !$user->is_admin()) {
         $query =
             "select round(ph.rating), count(distinct ph.photo_id) as count from " .
-            DB_PREFIX . "photos as ph, " .
-            DB_PREFIX . "photo_albums as pa, " .
-            DB_PREFIX . "album_permissions as ap " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
-            " and ap.album_id = pa.album_id" .
-            " and pa.photo_id = ph.photo_id" .
-            " and ap.access_level >= ph.level " .
-            "group by round(rating) order by round(rating)";
+            DB_PREFIX . "photos as ph JOIN " .
+            DB_PREFIX . "photo_albums as pa " .
+            "ON ph.photo_id = pa.photo_id JOIN " .
+            DB_PREFIX . "group_permissions as gp " .
+            "ON pa.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users as gu " .
+            "ON gp.group_id = gu.group_id " .
+            "WHERE gu.user_id = '" . 
+            escape_string($user->get("user_id")) .
+            "' AND gp.access_level >= ph.level " .
+            "GROUP BY round(rating) ORDER BY round(rating)";
     }
     else {
         $query =

@@ -617,7 +617,7 @@ div.color {
 
 /* Tables for the permissions */
 
-table#permissions   {
+table.permissions   {
     background: <?php echo $TABLE_BG_COLOR ?>;
     width: 90%;
     margin-left: auto; /* To center the page */
@@ -626,27 +626,27 @@ table#permissions   {
     font-size: medium;
     }   
 
-table#permissions td, table#permissions th  {
+table.permissions td, table.permissions th  {
     background: <?php echo $TABLE_BG_COLOR ?>;
     font-size: medium;
     }
 
-table#permissions col {
+table.permissions col {
     text-align: center; 
     padding: 0px;
     }
 
-table#permissions > col.col1 { 
+table.permissions > col.col1 { 
     padding-left: 15px; 
     text-align: left; 
     width: 5%;
     }
     
-table#permissions > col.col2 { width: 55%; text-align: left; }
-table#permissions > col.col3 { width: 20%; text-align: center; }
-table#permissions > col.col4 { width: 20%; text-align: center;}
+table.permissions > col.col2 { width: 55%; text-align: left; }
+table.permissions > col.col3 { width: 20%; text-align: center; }
+table.permissions > col.col4 { width: 20%; text-align: center;}
 
-table#permissions td.permremove {
+table.permissions td.permremove {
     padding-top: 3px;
     padding-bottom: 0px;
     font-size: x-small;
@@ -885,6 +885,18 @@ dl#allexif dl {
     width: 100%
     }
 
+dl.groups dt {
+    margin-top: 0;
+    margin-bottom: 10px;
+    width: 20%;
+    }
+
+dl.groups dd {
+    margin-top: 2px;
+    width: 40%;
+    font-size: small;
+    }
+    
 label, table.credits th {
     text-align: right;
     vertical-align: top;

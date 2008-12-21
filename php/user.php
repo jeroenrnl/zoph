@@ -26,53 +26,9 @@
 
     $this_user = new user($user_id);
 
-    if ($_action == "update_albums") {
-        // Check if the "Grant access to all albums" checkbox is ticked
-        $_access_level_all_checkbox = getvar("_access_level_all_checkbox");
-
-        if($_access_level_all_checkbox) {
-            $albums = get_albums();
-            if ($albums) {
-                foreach ($albums as $alb) {
-                    $permissions = new album_permissions(
-                        $user_id, $alb->get("album_id"));
-                    $permissions->set_fields($request_vars,"","_all");
-                    $permissions->insert();
-                }
-            }
-        }
-
-        $albums = get_albums_select_array($this_user);
-        while (list($album_id, $name) = each($albums)) {
-            $remove_permission_album = $request_vars["_remove_permission_album__$album_id"];
-            // first check if album needs to be revoked
-            if ($remove_permission_album) {
-                $permissions = new album_permissions($user_id, $album_id);
-                $permissions->delete();
-            }
-        }
-        // Check if new album should be added
-        if($album_id_new) {
-            $permissions = new album_permissions();
-            $permissions->set_fields($request_vars,"","_new");
-            $permissions->insert();
-        }
-        // update ablums
-
-        $albums = get_albums_select_array($this_user);
-        while (list($album_id, $name) = each($albums)) {
-            $permissions = new album_permissions();
-            $permissions->set_fields($request_vars,"","__$album_id");
-            $permissions->update();
-        }
-
-        $action = "update";
-    }
-    else {
-        $obj = &$this_user;
-        $redirect = "users.php";
-        require_once("actions.inc.php");
-    }
+    $obj = &$this_user;
+    $redirect = "users.php";
+    require_once("actions.inc.php");
 
     if ($_action == "update" &&
         $user->get("user_id") == $this_user->get("user_id")) {
@@ -87,8 +43,7 @@
     if ($action != "insert") {
         $this_user->lookup();
         $title = $this_user->get("user_name");
-    }
-    else {
+    } else {
         $title = translate("New User");
     }
 
@@ -143,56 +98,8 @@
 <input type="hidden" name="message" value="<?php echo $message ?>">
 <input class="bigbutton" type="submit" name="_button" value="<?php echo translate("Notify User", 0) ?>">
 </form>
-<br>
-      <h3><?php echo translate("Albums") ?></h3>
 <?php
-        if ($this_user->is_admin()) {
-?>
-       <?php echo sprintf(translate("As an admin, user %s has access to all albums."), $this_user->get("user_name")) ?>
-       </table>
-<?php
-        }
-        else {
-?>
-      <table id="permissions">
-        <tr>
-          <th><?php echo translate("name") ?></th>
-          <th><?php echo translate("access level") ?></th>
-<?php 
-   if (WATERMARKING) { 
-?>
-          <th><?php echo translate("watermark level") ?></th>
-<?php 
-   } 
-?>
-          <th><?php echo translate("writable") ?></th>
-        </tr>
-<?php
-            $albums = get_albums_select_array($this_user);
-            while (list($id, $name) = each($albums)) {
-                if (!$id || $id == 1) { continue; }
-                $permissions = $this_user->get_album_permissions($id);
-?>
-        <tr>
-          <td><?php echo $name ?></td>
-          <td><?php echo $permissions->get("access_level") ?></td>
-<?php 
-   if (WATERMARKING) { 
-?>
-          <td><?php echo $permissions->get("watermark_level") ?></td>
-<?php 
-   } 
-?>
-          <td><?php echo $permissions->get("writable") == "1" ? translate("Yes") : translate("No") ?></td>
-        </tr>
-<?php
-            }
-?>
-     </table>
-<?php
-        }
-    }
-    else if ($action == "confirm") {
+    } else if ($action == "confirm") {
 ?>
           <h1>
             <span class="actionlink">
@@ -209,153 +116,8 @@
 <?php
     }
     else {
-require_once("edit_user.inc.php");
-?>
-<form action="user.php" method="post">
-      <table id="permissions">
-    <col class="col1"><col class="col2"><col class="col3"><col class="col4">
-    <tr>
-          <th colspan="4"><h3><?php echo translate("Albums") ?></h3></th>
-        </tr>
-<?php
-        if ($action != "insert" && $this_user->is_admin()) {
-?>
-        <tr>
-          <td colspan="4">
-       <?php echo sprintf(translate("As an admin, user %s has access to all albums."), $this_user->get("user_name")) ?>
-          </td>
-        </tr>
-      </table>
-    </form>
-<?php
-        }
-        else {
-            if ($action == "insert") {
-?>
-        <tr>
-          <td colspan="4">
-       <?php echo translate("After this user is created they can be given access to albums.") ?>
-          </td>
-        </tr>
-      </table>
-    </form>
-<?php
-            }
-            else {
-?>
-        <tr>
-          <td colspan="4">
-       <?php echo translate("Granting access to an album will also grant access to that album's ancestors if required. Granting access to all albums will not overwrite previously granted permissions.");
-       if (WATERMARKING) { 
-           echo "<br>\n" . translate("A photo will be watermarked if the photo level is higher than the watermark level.");
-       }
-       ?>
-          </td>
-        </tr>
-        <tr>
-          <th colspan="2"><?php echo translate("name") ?></th>
-          <th><?php echo translate("access level") ?></th>
-<?php 
-   if (WATERMARKING) { 
-?>
-          <th><?php echo translate("watermark level") ?></th>
-<?php 
-   }
-?>
-          <th>writable</th>
-        </tr>
-        <tr>
-      <td>
-      <input type="checkbox" name="_access_level_all_checkbox" value="1">
-      </td>
-          <td>
-<input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
-<input type="hidden" name="_action" value="update_albums">
-<?php echo translate("Grant access to all existing albums:") ?>
-                </td>
-                <td>
-<?php echo create_text_input("access_level_all", "5", 4, 2) ?>
-                </td>
-<?php 
-   if (WATERMARKING) { 
-?>
-                <td>
-<?php echo create_text_input("watermark_level_all", "5", 4, 2) ?>
-                </td>
-<?php
-    }
-?>
-                <td>
-<?php echo create_pulldown("writable_all", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
-                </td>
-        </tr>
-        <tr>
-      <td>
-      </td>
-          <td>
-<input type="hidden" name="user_id_new" value="<?php echo $this_user->get("user_id") ?>">
-<?php echo create_smart_pulldown("album_id_new", "", get_albums_select_array()) ?>
-                </td>
-                <td>
-<?php echo create_text_input("access_level_new", "5", 4, 2) ?>
-                </td>
-<?php if (WATERMARKING) { ?>
-                <td>
-<?php echo create_text_input("watermark_level_new", "5", 4, 2) ?>
-                </td>
-<?php } ?>
-                <td>
-<?php echo create_pulldown("writable_new", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
-                </td>
-        </tr>
-    <tr>
-    <td colspan="4" class="permremove">
-<?php
-    echo translate("remove");
-?>
-    </td>
-    </tr>
-<?php
-            $albums = get_albums_select_array($this_user);
-            while (list($id, $name) = each($albums)) {
-                if (!$id || $id == 1) { continue; }
-                $permissions = $this_user->get_album_permissions($id);
-?>
-        <tr>
-      <td>
-      <input type="checkbox" name="_remove_permission_album__<?php echo $id ?>" value="1">
-      </td>
-          <td>
-<?php echo $name ?>
-          </td>
-          <td>
-<input type="hidden" name="album_id__<?php echo $id ?>" value="<?php echo $id ?>">
-<input type="hidden" name="user_id__<?php echo $id ?>" value="<?php echo $user_id ?>">
-<?php echo create_text_input("access_level__$id", $permissions->get("access_level"), 4, 2) ?>
-          </td>
-<?php 
-      if (WATERMARKING) { 
-?>
-          <td>
-<?php echo create_text_input("watermark_level__$id", $permissions->get("watermark_level"), 4, 2) ?>
-          </td>
-<?php
-         }
-?>
-          <td>
-<?php echo create_pulldown("writable__$id", $permissions->get("writable"), array("0" => translate("No",0), "1" => translate("Yes",0))) ?>
-          </td>
-      </tr>
-<?php
-            } // while
-?>
-  </table>
-  <input type="submit" value="<?php echo translate("update", 0) ?>">
-</form>
-<?php
-            } // not insert
-        } // not admin
-    } // edit
+        require_once("edit_user.inc.php");
+    } 
 ?>
 </div>
 <?php require_once("footer.inc.php"); ?>

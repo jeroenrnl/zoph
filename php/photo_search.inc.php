@@ -36,16 +36,16 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     $from_clause=DB_PREFIX . "photos as ph";
 
     if ($user && !$user->is_admin()) {
-//        $from["pa"] = "photo_albums";
-//        $from["ap"] = "album_permissions";
         $from_clause .= " JOIN " . DB_PREFIX . "photo_albums AS pa " .
-            "ON ph.photo_id = pa.photo_id " .
-            "JOIN " . DB_PREFIX . "album_permissions AS ap " .
-            "ON pa.album_id = ap.album_id ";
+            "ON ph.photo_id = pa.photo_id JOIN " .
+            DB_PREFIX . "group_permissions as gp " .
+            "ON pa.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users as gu " .
+            "ON gp.group_id = gu.group_id ";
 
         $where =
-             " ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
-             " AND (ap.access_level >= ph.level)";
+             " gu.user_id = '" . escape_string($user->get("user_id")) . "'" .
+             " AND (gp.access_level >= ph.level)";
     }
     else {
         $where = "";

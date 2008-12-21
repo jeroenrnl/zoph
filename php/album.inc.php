@@ -36,11 +36,14 @@ class album extends zoph_tree_table {
         if ($user && !$user->is_admin()) {
             $sql =
                  "select a.* from "  .
-                 DB_PREFIX . "albums as a, " .
-                 DB_PREFIX . "album_permissions as ap " .
-                 "where ap.album_id = '" . escape_string($id) . "'" .
-                 " and ap.user_id = '" . escape_string($user->get("user_id")) .
-                 "' and ap.album_id = a.album_id";
+                 DB_PREFIX . "albums as a JOIN " .
+                 DB_PREFIX . "group_permissions as gp ON " .
+                 "gp.album_id = a.album_id JOIN " .
+                 DB_PREFIX . "groups_users gu ON " .
+                 "gp.group_id = gu.group_id " .
+                 "where gp.album_id = '" . escape_string($id) . "'" .
+                 " and gu.user_id = '" . 
+                 escape_string($user->get("user_id"))."'";
         }
         else {
             $sql =
@@ -52,7 +55,7 @@ class album extends zoph_tree_table {
     }
 
     function delete() {
-        parent::delete(array("photo_albums", "album_permissions"));
+        parent::delete(array("photo_albums", "group_permissions"));
         $users = get_records("user", "user_id", array("lightbox_id" => $this->get("album_id")));
         if ($users) {
           foreach ($users as $user) {
@@ -64,6 +67,11 @@ class album extends zoph_tree_table {
 
     function get_name() {
         return $this->get("album");
+    }
+
+    function get_indented_name() {
+        $indent=str_repeat("&nbsp;&nbsp;&nbsp;", count($this->get_ancestors()));
+        return $indent . $this->get_name();
     }
 
     function get_children($user=null, $order=null) {
@@ -86,9 +94,11 @@ class album extends zoph_tree_table {
             "ON a.album_id=pa.album_id LEFT JOIN " .
             DB_PREFIX . "photos as ph " .
             "ON pa.photo_id=ph.photo_id LEFT JOIN " .
-            DB_PREFIX . "album_permissions ap " .
-            "ON a.album_id=ap.album_id " .
-            "WHERE user_id=" . $user->get("user_id") .
+            DB_PREFIX . "group_permissions AS gp " .
+            "ON a.album_id=gp.album_id JOIN " .
+            DB_PREFIX . "groups_users AS gu ON " .
+            "gp.group_id = gu.group_id " .
+            "WHERE gu.user_id=" . escape_string($user->get("user_id")) .
             " AND parent_album_id=" . escape_string($id) .
             " GROUP BY album_id" .
             escape_string($order);
@@ -118,14 +128,16 @@ class album extends zoph_tree_table {
         if ($user && !$user->is_admin()) {
             $sql =
                 "select count(*) from " .
-                DB_PREFIX . "photo_albums as pa, " .
-                DB_PREFIX . "photos as p, " .
-                DB_PREFIX . "album_permissions as ap " .
-                "where pa.album_id = " . escape_string($id) .
-                " and ap.user_id = '" . escape_string($user->get("user_id")) .
-                "' and ap.album_id = pa.album_id" .
-                " and pa.photo_id = p.photo_id " .
-                " and ap.access_level >= p.level";
+                DB_PREFIX . "photo_albums AS pa JOIN " .
+                DB_PREFIX . "photos AS p ON " .
+                "pa.photo_id = p.photo_id JOIN " .
+                DB_PREFIX . "group_permissions AS gp ON " .
+                "gp.album_id = pa.album_id JOIN " .
+                DB_PREFIX . "groups_users AS gu ON " .
+                "gp.group_id = gu.group_id " .
+                "WHERE pa.album_id = " . escape_string($id) .
+                " and gu.user_id = '" . escape_string($user->get("user_id")) .
+                "' and gp.access_level >= p.level";
         }
         else {
             $sql =
@@ -150,13 +162,15 @@ class album extends zoph_tree_table {
         if ($user && !$user->is_admin()) {
             $sql =
                 "select count(distinct pa.photo_id) from " .
-                DB_PREFIX . "photo_albums as pa, " .
-                DB_PREFIX . "photos as p, " .
-                DB_PREFIX . "album_permissions as ap " .
-                "where ap.user_id = '" . escape_string($user->get("user_id")) .
-                "' and ap.album_id = pa.album_id " .
-                " and pa.photo_id = p.photo_id " .
-                " and ap.access_level >= p.level";
+                DB_PREFIX . "photo_albums as pa JOIN " .
+                DB_PREFIX . "photos as p ON " .
+                "pa.photo_id = p.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp ON " .
+                "pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users AS gu ON " .
+                "gp.group_id = gu.group_id " .
+                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) .
+                "' and gp.access_level >= p.level";
 
             if ($id_constraint) {
                 $sql .= " and $id_constraint";
@@ -253,13 +267,15 @@ class album extends zoph_tree_table {
                     DB_PREFIX . "photos as p JOIN " .
                     DB_PREFIX . "photo_albums as pa" .
                     " ON pa.photo_id = p.photo_id JOIN " .
-                    DB_PREFIX . "album_permissions as ap " .
-                    " ON pa.album_id = ap.album_id" .
+                    DB_PREFIX . "group_permissions as gp ON " .
+                    "pa.album_id = gp.album_id JOIN " .
+                    DB_PREFIX . "groups_users AS gu ON " .
+                    "gp.group_id = gu.group_id " .
                     $album_where .
-                    " AND ap.user_id =" . 
+                    " AND gu.user_id =" . 
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " and pa.photo_id = p.photo_id " .
-                    " and ap.access_level >= p.level " .
+                    " and gp.access_level >= p.level " .
                     $order;
             } else {
                 $sql =
@@ -304,10 +320,11 @@ function get_albums($user = null) {
     if ($user && !$user->is_admin()) {
         $sql =
              "select a.* from " .
-             DB_PREFIX . "albums as a, " .
-             DB_PREFIX . "album_permissions as ap " .
-             "where ap.user_id = '" . escape_string($user->get("user_id")) .
-             "' and ap.album_id = a.album_id " .
+             DB_PREFIX . "albums as a JOIN " .
+             DB_PREFIX . "group_permissions AS gp " .
+             "ON gp.album_id = a.album_id JOIN " .
+             DB_PREFIX . "groups_users as gu " .
+             "where gu.user_id = '" . escape_string($user->get("user_id")) .
              "order by a.album";
     }
     else {
@@ -319,12 +336,13 @@ function get_albums($user = null) {
 
 function get_newer_albums($user_id, $date = null) {
     $sql = "select a.* from " .
-        DB_PREFIX . "albums as a, " .
-        DB_PREFIX . "album_permissions as ap " .
-        "where ap.user_id = '" . escape_string($user_id) .
-        "' and ap.album_id = a.album_id " .
-        "and ap.changedate > '" . escape_string($date) . "' " .
-        "order by a.album_id";
+        DB_PREFIX . "albums as a JOIN " .
+        DB_PREFIX . "group_permissions as gp " .
+        "ON a.album_id = gp.album_id JOIN " .
+        DB_PREFIX . "groups_users as gu " .
+        "WHERE gu.user_id = '" . escape_string($user_id) .
+        "' AND gp.changedate > '" . escape_string($date) . "' " .
+        "ORDER BY a.album_id";
 
     return get_records_from_query("album", $sql);
 }
@@ -346,8 +364,11 @@ function get_album_count($user = null) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select count(*) from " . DB_PREFIX . "album_permissions " .
-            "where user_id = '" . escape_string($user->get("user_id")) . "'";
+            "SELECT COUNT(DISTINCT album_id) FROM " . 
+            DB_PREFIX . "group_permissions AS gp JOIN " .
+            DB_PREFIX . "groups_users AS gu ON " .
+            "gp.group_id = gu.group_id " .
+            "where gu.user_id = '" . escape_string($user->get("user_id")) . "'";
     }
     else {
         $sql = "select count(*) from " . DB_PREFIX . "albums";
@@ -370,19 +391,21 @@ function get_popular_albums($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select al.*, count(distinct ph.photo_id) as count from " .
-            DB_PREFIX . "albums as al, " .
-            DB_PREFIX . "photos as ph, " .
-            DB_PREFIX . "photo_albums as pa, " .
-            DB_PREFIX . "album_permissions as ap " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) . "'" .
-            " and ap.album_id = pa.album_id" .
-            " and pa.album_id = al.album_id" .
-            " and pa.photo_id = ph.photo_id" .
-            " and ap.access_level >= ph.level " .
-            "group by al.album_id " .
-            "order by count desc, al.album " .
-            "limit 0, " . escape_string($TOP_N);
+            "SELECT al.*, count(distinct ph.photo_id) AS count FROM " .
+            DB_PREFIX . "albums AS al JOIN " .
+            DB_PREFIX . "photo_albums AS pa ON " .
+            " al.album_id = pa.album_id JOIN " .
+            DB_PREFIX . "photos AS ph ON " .
+            "pa.photo_id = ph.photo_id JOIN " .
+            DB_PREFIX . "group_permissions AS gp ON " .
+            "pa.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users AS gu ON " .
+            "gp.group_id = gu.group_id " .
+            "WHERE gu.user_id = '" . escape_string($user->get("user_id")). "'" .
+            " AND gp.access_level >= ph.level " .
+            "GROUP BY al.album_id " .
+            "ORDER BY count desc, al.album " .
+            "LIMIT 0, " . escape_string($TOP_N);
     }
     else {
         $sql =

@@ -8,7 +8,8 @@ http://creativecommons.org/licenses/by-sa/2.5/
 
 64x64/mimetypes/document.png	pages.png
 64x64/mimetypes/contents2.png	pagesets.png
-64x64/apps/system-users.png	users.png
+64x64/apps/system-users.png	groups.png
+64x64/apps/userconfig.png	users.png
 64x64/actions/messagebox_warning.png warning.png
 22x22/devices/camera.png	geo-photo.png
 22x22/apps/web-browser.png	geo-place.png

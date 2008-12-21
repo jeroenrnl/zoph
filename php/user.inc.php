@@ -59,10 +59,42 @@ class user extends zoph_table {
         return $this->get("lastnotify");
     }
 
+    function get_link() {
+        return "<a href='user.php?user_id=" . $this->get("user_id") . "'>" .
+            $this->get("user_name") . "</a>";
+    }
+
+    function get_groups() {
+        $sql="SELECT group_id FROM " .
+            DB_PREFIX . "groups_users " .
+            "WHERE user_id=" . escape_string($this->get("user_id"));
+
+        return get_records_from_query("group", $sql);
+    }
+
+
+
     function get_album_permissions($album_id) {
-        $ap = new album_permissions($this->get("user_id"), $album_id);
-        if ($ap->lookup()) {
-            return $ap;
+        if(!is_numeric($album_id)) { die("album_id must be numeric"); }
+        if(!$album_id) { return; }
+
+        $groups=$this->get_groups();
+        foreach($groups as $group) {
+            $group_id_array[]=$group->get("group_id");
+        }
+        if($group_id_array) {
+            $group_ids=explode(",", $group_id_array);
+            $sql = "SELECT * FROM " .
+                DB_PREFIX . "group_permissions WHERE " .
+                "album_id=".escape_string($album_id) . " AND " .
+                "group_id IN (" . escape_string($group_ids) . ") " .
+                "ORDER BY access_level DESC, writable DESC, " . 
+                "watermark_level DESC " .
+                "LIMIT 0, 1";
+            $aps=get_records_from_query("group_permissions", $sql);
+            if ($aps && sizeof($aps) >= 1) {
+                return $aps[0];
+            }
         }
 
         return null;
@@ -73,21 +105,24 @@ class user extends zoph_table {
 
         // do ordering to grab entry with most permissions
         $sql =
-            "select ap.* from " .
-            DB_PREFIX . "photo_albums as pa, " .
-            DB_PREFIX . "album_permissions as ap, " .
-            DB_PREFIX . "photos as ph " .
-            "where ap.user_id = '" . escape_string($this->get("user_id")) . "'".
-            " and ap.album_id = pa.album_id" .
-            " and pa.photo_id = ph.photo_id" .
-            " and ph.photo_id = '" . escape_string($photo_id) . "'" .
-            " and ap.access_level >= ph.level " .
-            "order by ap.access_level desc, writable desc " .
-            "limit 0, 1";
+            "select gp.* from " .
+            DB_PREFIX . "photos AS ph JOIN " .
+            DB_PREFIX . "photo_albums AS pa ON " .
+            "ph.photo_id = pa.photo_id JOIN " .
+            DB_PREFIX . "group_permissions as gp ON " .
+            "pa.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users as gu ON " .
+            "gp.group_id = gu.group_id " .
+            "WHERE gu.user_id = '" . escape_string($this->get("user_id")) . "'".
+            " AND ph.photo_id = '" . escape_string($photo_id) . "'" .
+            " AND gp.access_level >= ph.level " .
+            "ORDER BY gp.access_level DESC, writable DESC, " .
+            "watermark_level DESC " .
+            "LIMIT 0, 1";
 
-        $aps = get_records_from_query("album_permissions", $sql);
-        if ($aps && sizeof($aps) >= 1) {
-            return $aps[0];
+        $gps = get_records_from_query("group_permissions", $sql);
+        if ($gps && sizeof($gps) >= 1) {
+            return $gps[0];
         }
 
         return null;

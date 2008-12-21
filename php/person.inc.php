@@ -158,18 +158,20 @@ class person extends zoph_table {
             if ($user && !$user->is_admin()) {
                 $sql=
                     "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p JOIN " .
-                    DB_PREFIX . "photo_albums as pa" .
-                    " ON pa.photo_id = p.photo_id JOIN " .
-                    DB_PREFIX . "album_permissions as ap" .
-                    " ON pa.album_id = ap.album_id JOIN " .
-                    DB_PREFIX . "photo_people as pp" .
-                    " ON pp.photo_id = p.photo_id " .
-                    " WHERE pp.person_id = " . 
+                    DB_PREFIX . "photos AS p JOIN " .
+                    DB_PREFIX . "photo_albums AS pa " .
+                    "ON pa.photo_id = p.photo_id JOIN " .
+                    DB_PREFIX . "group_permissions AS gp " .
+                    "ON pa.album_id = gp.album_id JOIN " .
+                    DB_PREFIX . "groups_users AS gu " .
+                    "ON gp.group_id = gu.group_id JOIN " .
+                    DB_PREFIX . "photo_people AS pp " .
+                    "ON pp.photo_id = p.photo_id " .
+                    "WHERE pp.person_id = " . 
                     escape_string($this->get("person_id")) .
-                    " AND ap.user_id =" .
+                    " AND gu.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
-                    " and ap.access_level >= p.level " .
+                    " AND gp.access_level >= p.level " .
                     $order;
             } else {
                 $sql =
@@ -236,43 +238,36 @@ function get_all_people($user = null, $search = null, $search_first = false) {
         }
         $keys=implode(",", $allowed);
         $where=" WHERE person_id IN (" .$keys . ")";
+    } else if ($search!==null) {
+        $where=get_where_for_search(" WHERE ", $search, $search_first);
     }
 
-    $sql="SELECT * FROM " . DB_PREFIX . "people" . $where .
+    $sql="SELECT * FROM " . DB_PREFIX . "people AS ppl " . $where .
         " ORDER BY last_name, called, first_name";
 
     return get_records_from_query("person", $sql);
 }
 
 function get_photographed_people($user = null, $search=null, $search_first = false) {
-    if($search!==null) {
-        if($search==="") {
-            $where=" and (ppl.last_name='' or ppl.last_name is null)";
-        } else {
-            $search=escape_string($search);
-            $where=" and (ppl.last_name like lower('" . $search . "%')";
-            if ($search_first) {
-                $where.="or ppl.first_name like lower('" . $search . "%'))";
-            } else {
-                $where.=")";
-            }
-        }
-    }
+    $where=get_where_for_search(" and ", $search, $search_first);
     if ($user && !$user->is_admin()) {
         $sql =
             "select distinct ppl.* from " .
-            DB_PREFIX . "people as ppl JOIN " .
-            DB_PREFIX . "photo_people as pp " .
-            "ON pp.person_id = ppl.person_id JOIN " . 
-            DB_PREFIX . "photos as ph " .
+            DB_PREFIX . "people AS ppl JOIN " .
+            DB_PREFIX . "photo_people AS pp " .
+            "ON ppl.person_id = pp.person_id JOIN " . 
+            DB_PREFIX . "photos AS ph " .
             "ON ph.photo_id = pp.photo_id JOIN " .
-            DB_PREFIX . "photo_albums as pa " .
+            DB_PREFIX . "photo_albums AS pa " .
             "ON pa.photo_id = ph.photo_id JOIN " .
-            DB_PREFIX . "album_permissions as ap " .
-            "ON ap.album_id = pa.album_id " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
-            " and ap.access_level >= ph.level" . $where .
-            " order by ppl.last_name, ppl.called, ppl.first_name";
+            DB_PREFIX . "group_permissions as gp " .
+            "ON pa.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users as gu " .
+            "ON gp.group_id = gu.group_id " .
+            "WHERE gu.user_id = '" . 
+            escape_string($user->get("user_id")) . "' " .
+            " AND gp.access_level >= ph.level" . $where .
+            " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
     }
     else {
         $sql =
@@ -287,20 +282,7 @@ function get_photographed_people($user = null, $search=null, $search_first = fal
 }
 
 function get_photographers($user = null, $search = null, $search_first = null) {
-    if($search!==null) {
-        if($search==="") {
-            $where=" and (ppl.last_name='' or ppl.last_name is null)";
-        } else {
-            $search=escape_string($search);
-            $where=" and (ppl.last_name like lower('" . $search . "%')";
-            if ($search_first) {
-                $where.="or ppl.first_name like lower('" . $search . "%'))";
-            } else {
-                $where.=")";
-            }
-        }
-    }
-
+    $where=get_where_for_search(" and ", $search, $search_first);
     if ($user && !$user->is_admin()) {
         $sql =
             "select distinct ppl.* from " .
@@ -310,13 +292,15 @@ function get_photographers($user = null, $search = null, $search_first = null) {
             DB_PREFIX . "photos as ph JOIN " .
             DB_PREFIX . "photo_albums as pa " .
             "ON pa.photo_id = ph.photo_id JOIN " .
-            DB_PREFIX . "album_permissions as ap " .
-            "ON ap.album_id = pa.album_id " .
-            "where ap.user_id = '" . 
+            DB_PREFIX . "group_permissions AS gp " .
+            "ON pa.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users as gu " .
+            "ON gp.group_id = gu.group_id " .
+            "WHERE gu.user_id = '" . 
             escape_string($user->get("user_id")) . "' " .
             $where .
-            " and ap.access_level >= ph.level)" .
-            " order by ppl.last_name, ppl.called, ppl.first_name";
+            " AND gp.access_level >= ph.level)" .
+            " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
     }
     else {
         $sql =
@@ -328,6 +312,23 @@ function get_photographers($user = null, $search = null, $search_first = null) {
     }
 
     return get_records_from_query("person", $sql);
+}
+
+function get_where_for_search($conj, $search, $search_first) {
+    if($search!==null) {
+        if($search==="") {
+            $where=$conj . " (ppl.last_name='' or ppl.last_name is null)";
+        } else {
+            $search=escape_string($search);
+            $where=$conj . " (ppl.last_name like lower('" . $search . "%')";
+            if ($search_first) {
+                $where.="or ppl.first_name like lower('" . $search . "%'))";
+            } else {
+                $where.=")";
+            }
+        }
+    }
+    return $where;
 }
 
 function get_people_select_array($people_array = null) {
@@ -397,21 +398,24 @@ function get_popular_people($user) {
 
     if ($user && !$user->is_admin()) {
         $sql =
-            "select ppl.*, count(distinct ph.photo_id) as count from " .
-            DB_PREFIX . "people as ppl, " .
-            DB_PREFIX . "photo_people as pp, " .
-            DB_PREFIX . "photos as ph, " .
-            DB_PREFIX . "photo_albums as pa, " .
-            DB_PREFIX . "album_permissions as ap " .
-            "where ap.user_id = '" . escape_string($user->get("user_id")) . "' " .
-            " and ap.album_id = pa.album_id" .
-            " and pa.photo_id = pp.photo_id" .
-            " and pp.person_id = ppl.person_id" .
-            " and pp.photo_id = ph.photo_id" .
-            " and ap.access_level >= ph.level " .
-            "group by ppl.person_id " .
-            "order by count desc, ppl.last_name, ppl.first_name " .
-            "limit 0, " . escape_string($TOP_N);
+            "SELECT ppl.*, COUNT(DISTINCT ph.photo_id) AS count FROM " .
+            DB_PREFIX . "people as ppl JOIN " .
+            DB_PREFIX . "photo_people as pp " .
+            "ON pp.person_id = ppl.person_id JOIN " .
+            DB_PREFIX . "photos as ph " .
+            "ON pp.photo_id = ph.photo_id JOIN " .
+            DB_PREFIX . "photo_albums as pa " .
+            "ON pa.photo_id = pp.photo_id JOIN " .
+            DB_PREFIX . "group_permissions as gp " .
+            "ON pa.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users as gu " .
+            "ON gp.group_id = gu.group_id " .
+            "WHERE gu.user_id = '" . 
+            escape_string($user->get("user_id")) . "' " .
+            " AND gp.access_level >= ph.level " .
+            "GROUP BY ppl.person_id " .
+            "ORDER BY count DESC, ppl.last_name, ppl.first_name " .
+            "LIMIT 0, " . escape_string($TOP_N);
     }
     else {
         $sql =

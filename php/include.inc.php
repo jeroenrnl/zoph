@@ -32,10 +32,11 @@
     require_once("place.inc.php");
     require_once("person.inc.php");
 
-    require_once("album_permissions.inc.php");
+    require_once("group_permissions.inc.php");
     require_once("color_scheme.inc.php");
     require_once("prefs.inc.php");
     require_once("user.inc.php");
+    require_once("group.inc.php");
 
     require_once("auth.inc.php");
 
