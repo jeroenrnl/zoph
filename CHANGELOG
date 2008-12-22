@@ -1,4 +1,46 @@
 Zoph Changelog
+Zoph 0.7.4
+
+22 December 2008
+
+Zoph 0.7.4 is a "feature release", that introduces a few new features that will be present in the next "stable" version, 0.8. This release fixes a number of bugs from the earlier 0.7.x releases and specifically deals with some performance issues.
+
+Bugs
+    * Bug#2044965: Assign timezone to all children only assigns timezone to direct children.
+    * Bug#2044967: Better error handling for guess timezone functionality
+    * Bug#1820234: Zoph shows places, categories and people for restricted users.
+    * Bug#2059210: Overal bad performance: long loading times, autocomplete boxes taking forever, etc. This fix gives a giant improvement on zoph performance.
+          o Simplified several SQL queries
+          o Changed SQL queries so unused rows are now longer requested from the db
+          o Changed SQL queries so records are no longer sorted when it is not needed
+          o Changed autocomplete code so it was no longer necessary to load both autocomplete and legacy dropdowns (major improvement on loading the seachpage!)
+    * Bug#2125858: table headers on user page swapped
+    * Bug#2097894: Layout failure in bulk edit page when using MSIE
+    * Bug#1706366: People slots feature is incompatible with autocomplete Also adds autocomplete support to several pages that did not have it before (only bulk edit page does not have autocomplete support yet)
+    * Bug#2274989: When changing user, password is overwritten.
+    * Bug#2275005: Photographers not in people list. People list not showing all people for admin users.
+    * Bug#2373633: Counter on zoph.php wrong for non-admin users
+    * Bug#2373609: Tree view shows all albums/categories/places
+    * Bug#2315870: Layout glitch when using non-standard size thumbnails.
+    * Bug#2438062: Zoph does not pick a different coverphoto for people if the assigned one is not visible for the user.
+
+Features
+
+    * Req#2097906: Add "next" and "prev" links to edit photo page, when not using auto-edit feature
+    * Req#1467095: Group access rights
+
+Translation
+
+    * Fixed some errors in Dutch translation (mostly extra spaces)
+
+Various
+
+    * Removed 'smart_pulldown' code that was not used in most of the cases anyway, especially since autocomplete was added.
+    * Created a script to automatically migrate from user-rights to group-rights. To be used with 0.7.3 to 0.7.4 or 0.7 to 0.8 migrations.
+
+
+
+
 Zoph 0.7.3
 24 July 2008
 

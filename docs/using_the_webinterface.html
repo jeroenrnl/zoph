@@ -42,10 +42,11 @@
 <li class="toclevel-2"><a href="#Random_Photos"><span class="tocnumber">4.6</span> <span class="toctext">Random Photos</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Managing_Users_.26_Restricting_Access"><span class="tocnumber">5</span> <span class="toctext">Managing Users &amp; Restricting Access</span></a>
+<li class="toclevel-1"><a href="#Managing_Users.2C_Groups_.26_Restricting_Access"><span class="tocnumber">5</span> <span class="toctext">Managing Users, Groups &amp; Restricting Access</span></a>
 <ul>
 <li class="toclevel-2"><a href="#Users"><span class="tocnumber">5.1</span> <span class="toctext">Users</span></a></li>
-<li class="toclevel-2"><a href="#Albums"><span class="tocnumber">5.2</span> <span class="toctext">Albums</span></a></li>
+<li class="toclevel-2"><a href="#Groups"><span class="tocnumber">5.2</span> <span class="toctext">Groups</span></a></li>
+<li class="toclevel-2"><a href="#Albums"><span class="tocnumber">5.3</span> <span class="toctext">Albums</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1"><a href="#Comments"><span class="tocnumber">6</span> <span class="toctext">Comments</span></a></li>
@@ -74,7 +75,6 @@
 <ul>
 <li class="toclevel-2"><a href="#Slideshows_2"><span class="tocnumber">14.1</span> <span class="toctext">Slideshows</span></a></li>
 <li class="toclevel-2"><a href="#Emailing_a_Photo"><span class="tocnumber">14.2</span> <span class="toctext">Emailing a Photo</span></a></li>
-<li class="toclevel-2"><a href="#Optgroups"><span class="tocnumber">14.3</span> <span class="toctext">Optgroups</span></a></li>
 </ul>
 </li>
 </ul>
@@ -221,8 +221,8 @@
 <p>Lightboxes allow users to gather photos of interest to them without requiring the ability to edit a photo to place it in an album.</p>
 <p>Lightboxes are only activated for a user by specifying a lightbox album. The setup I used was to create a "Lightbox" album, under which I created separate albums for each user's lightbox (e.g. "Jason's Lightbox").</p>
 <p>To share a lightbox an admin must grant permission to that album to other users.</p>
-<p><a name="Managing_Users_.26_Restricting_Access" id="Managing_Users_.26_Restricting_Access"></a></p>
-<h2> <span class="mw-headline">Managing Users &amp; Restricting Access</span></h2>
+<p><a name="Managing_Users.2C_Groups_.26_Restricting_Access" id="Managing_Users.2C_Groups_.26_Restricting_Access"></a></p>
+<h2> <span class="mw-headline">Managing Users, Groups &amp; Restricting Access</span></h2>
 <p>One of the features of Zoph is its system of access privileges. You have already created an admin class user for yourself. If you desire, you can create other users as well.</p>
 <p><a name="Users" id="Users"></a></p>
 <h3> <span class="mw-headline">Users</span></h3>
@@ -241,9 +241,12 @@
 <li>import: if "Yes" the user can import photos</li>
 <li>lightbox: the user's lightbox album</li>
 </ul>
+<p><a name="Groups" id="Groups"></a></p>
+<h3> <span class="mw-headline">Groups</span></h3>
+<p>In order to give users access to photos, you must create one or more groups, you can then give accessrights to albums to those groups, you could for example create a group 'family', a group 'colleagues' and a group 'friends'. A user can be member of multiple groups and Zoph will combine the accessrights for all the groups.</p>
 <p><a name="Albums" id="Albums"></a></p>
 <h3> <span class="mw-headline">Albums</span></h3>
-<p>For non-Admin users, permissions to view photos are granted on a per album basis. For each album you grant a user access to, you must specify:</p>
+<p>For non-Admin users, permissions to view photos are granted on a per album basis. For each album you grant a group access to, you must specify:</p>
 <ol>
 <li>An access level</li>
 <li>A Watermark level (if you have enabled watermarking in <tt>config.inc.php</tt>: see <a href="configuration.html#WATERMARKING" title="Zoph/Configuration">WATERMARKING</a>)</li>
@@ -251,21 +254,21 @@
 </ol>
 <p>Zoph determines whether a user has access to a photo checking two things:</p>
 <ol>
-<li>Is this photo in an album that the user has access to?</li>
-<li>If so, is the user's access level for that album greater than or equal to the level of the photo?</li>
+<li>Is this photo in an album that at least one of the groups the user is member of has access to?</li>
+<li>If so, is the group's access level for that album greater than or equal to the level of the photo?</li>
 </ol>
 <p>If both of these conditions are met, the user has access to the photo.</p>
-<p>If a photo appears in more than one album, a user needs only to have permission on one of them to see the photo. If the user has access to multiple albums in which a photo is found, the least restrictive (highest access level) permission is used.</p>
+<p>If a photo appears in more than one album, a user needs only to have permission on one of them to see the photo. If the user has access to multiple albums in which a photo is found, or the user has multiple groups that give access to the photo, the least restrictive (highest access level) permission is used.</p>
 <p>The level of a photo (and therefore of access levels) can range from 0 to 10. The default access level is 5.</p>
 <p>Zoph is designed so that these privileges should work transparently. It should appear to any user that they have access to all photos. There should be no reference to any album or photo (including photo counts) to which a user does not have access.</p>
-<p>If an album is marked writable, that user may edit (but not delete) the photos that they have access to in that album.</p>
-<p>If you want to grant a user access to all albums you can do this all at once and the access level and writable flag will apply to every album. This is handy if you want to let someone see everything but don't want them to change anything.</p>
+<p>If an album is marked writable, members of the group may edit (but not delete) the photos that they have access to in that album.</p>
+<p>If you want to grant a group access to all albums you can do this all at once and the access level and writable flag will apply to every album. This is handy if you want to let someone see everything but don't want them to change anything.</p>
 <p>Note that when you create new albums you will have to grant permissions to any non-Admins before they will be able to see those album.</p>
 <p><a name="Comments" id="Comments"></a></p>
 <h2> <span class="mw-headline">Comments</span></h2>
 <p>As of v0.6 users can leave comments, if <a href="configuration.html#ALLOW_COMMENTS" title="Zoph/Configuration">ALLOW_COMMENTS</a> is turned on.</p>
 <p>As of v0.7.2 / v0.8 users can use (limited) markup in the comments, as well as smileys.</p>
-<p>The following markup is supported: [u]underline[/u], [i]italics[/i] and [b]bold[/b], the various possible smileys are displayed with the comment input form: <a href="/wiki/Image:ZophComment.png" class="image" title="Image:ZophComment.png"><img alt="Image:ZophComment.png" src="http://upload.wikimedia.org/wikibooks/en/1/1f/ZophComment.png" width="580" height="310" border="0" /></a></p>
+<p>The following markup is supported: [u]underline[/u], [i]italics[/i] and [b]bold[/b], the various possible smileys are displayed with the comment input form: <a href="/wiki/File:ZophComment.png" class="image" title="Image:ZophComment.png"><img alt="Image:ZophComment.png" src="http://upload.wikimedia.org/wikibooks/en/1/1f/ZophComment.png" width="580" height="310" border="0" /></a></p>
 <p><a name="Watermarking" id="Watermarking"></a></p>
 <h2> <span class="mw-headline">Watermarking</span></h2>
 <p>You can let Zoph superimpose a watermark over the fullsize picture. You can use this feature if you want your users to be able to look at the high quality pictures, but not use them for publication. To use this feature, the <a href="configuration.html#IMAGE_SERVICE" title="Zoph/Configuration">IMAGE_SERVICE</a> has to be enabled. Zoph will put a watermark on each photo that has a level higher than the watermark level.</p>
@@ -337,11 +340,11 @@ define(DEFAULT_USER, 3);
 <p><a name="Looking_Up_People" id="Looking_Up_People"></a></p>
 <h2> <span class="mw-headline">Looking Up People</span></h2>
 <p>Say you have a site that has its own person or user records and you would like to map between the two systems (you want to put a "photos of" link on the profile page of a user, for example). Though Zoph usually uses it's own person_id field, you can pass a name instead:</p>
-<p><a href="http://www.nother.net/zoph/photos.php?person=Geiger,Jason" class="external free" title="http://www.nother.net/zoph/photos.php?person=Geiger,Jason" rel="nofollow">http://www.nother.net/zoph/photos.php?person=Geiger,Jason</a></p>
+<p><a href="http://www.zoph.org/demo/photos.php?person=Jason%20Geiger" class="external free" title="http://www.zoph.org/demo/photos.php?person=Jason%20Geiger" rel="nofollow">http://www.zoph.org/demo/photos.php?person=Jason%20Geiger</a></p>
 <p>will show you photos of a person. You also can use "photographer":</p>
-<p><a href="http://www.nother.net/zoph/photos.php?photographer=Geiger,Jason" class="external free" title="http://www.nother.net/zoph/photos.php?photographer=Geiger,Jason" rel="nofollow">http://www.nother.net/zoph/photos.php?photographer=Geiger,Jason</a></p>
+<p><a href="http://www.zoph.org/demo/photos.php?photographer=Jason%20Geiger" class="external free" title="http://www.zoph.org/demo/photos.php?photographer=Jason%20Geiger" rel="nofollow">http://www.zoph.org/demo/photos.php?photographer=Jason%20Geiger</a></p>
 <p>Or instead of jumping to the photos page you can hit the person page:</p>
-<p><a href="http://www.nother.net/zoph/person.php?person=Geiger,Jason" class="external free" title="http://www.nother.net/zoph/person.php?person=Geiger,Jason" rel="nofollow">http://www.nother.net/zoph/person.php?person=Geiger,Jason</a></p>
+<p><a href="http://www.zoph.org/demo/person.php?person=Jason%20Geiger" class="external free" title="http://www.zoph.org/demo/person.php?person=Jason%20Geiger" rel="nofollow">http://www.zoph.org/demo/person.php?person=Jason%20Geiger</a></p>
 <p><a name="Other_Lookups" id="Other_Lookups"></a></p>
 <h2> <span class="mw-headline">Other Lookups</span></h2>
 <p>For albums, categories and locations these sorts of lookups don't exist at the moment. But they are fairly easy to incorporate if anyone is interested.</p>
@@ -363,10 +366,6 @@ define(DEFAULT_USER, 3);
 <li>Didn't Work: InterMail + Eudora</li>
 </ul>
 <p>To play around with this, edit mail.php.</p>
-<p><a name="Optgroups" id="Optgroups"></a></p>
-<h3> <span class="mw-headline">Optgroups</span></h3>
-<p>Most browsers still don't completely support optgroups in select tags. Mozilla and IE 5 for Windows label the pulldown according to the groups but do not display cascading menus. IE 5 Mac does attempt to display a cascading pulldown but it seems there is a problem where a cache get corrupted or something. I often see results from one pulldown being merged with another (people and places, for example). When I view the page source everything looks ok but somehow it is being displayed incorrectly.</p>
-<p>You can set GROUPED_PULLDOWN_SIZE in config.inc.php to something small to experiment yourself.</p>
 
 
 <!-- 
