@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.7.3');
+    define('VERSION', '0.7.4');
 
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'zoph');
