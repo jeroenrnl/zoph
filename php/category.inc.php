@@ -54,8 +54,8 @@ class category extends zoph_tree_table {
             DB_PREFIX . "categories as c LEFT JOIN " .
             DB_PREFIX . "photo_categories as pc " .
             "ON c.category_id=pc.category_id LEFT JOIN " .
-            DB_PREFIX . "photos as p " .
-            "ON pc.photo_id=p.photo_id " .
+            DB_PREFIX . "photos as ph " .
+            "ON pc.photo_id=ph.photo_id " .
             "WHERE parent_category_id=" . $id .
             " GROUP BY c.category_id " .
             $order;
