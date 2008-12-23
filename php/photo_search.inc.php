@@ -126,7 +126,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $val = escape_string($val);
             $key = escape_string($key);
         }
-
         if ($key == "person" || $key == "photographer") {
             $val = "%" . escape_string(strtolower($val)) . "%";
             
@@ -308,8 +307,30 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $excluded_people["$ppl"] = $val;
                 $excluded_people["${ppl}-conj"] = $conj;
             }
-        }
-        else { // any other field
+        } else if($key == "userrating") {
+            if ($where) { $where .= " AND "; }
+            $ratinguser_id=$vars["_userrating_user"];
+            
+            if(!($ratinguser_id && $user->is_admin())) {
+                $ratinguser_id=$user->get("user_id");
+            }
+            
+            if($val != "null") {
+                $from["pr"]="photo_ratings";
+                $where.=" pr.user_id=" . escape_string($ratinguser_id) .
+                    " AND pr.rating=" . escape_string($val);
+            } else {
+                $no_rate_sql="SELECT DISTINCT(photo_id) FROM " .
+                    DB_PREFIX . "photo_ratings AS pr " .
+                    "WHERE pr.user_id=" . escape_string($ratinguser_id);
+                    
+                $ids = implode(',', get_records_from_query(null, $no_rate_sql));
+
+                if ($ids) {
+                    $where .= "(ph.photo_id not in ($ids))";
+                }
+            }
+        } else { // any other field
 
             if (strncasecmp($key, "field", 5) == 0) {
                 $key = $vars["_" . $key . $suffix];

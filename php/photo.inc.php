@@ -1185,7 +1185,8 @@ function create_rating_graph($user) {
 
     if ($user && !$user->is_admin()) {
         $query =
-            "select round(ph.rating), count(distinct ph.photo_id) as count from " .
+            "select round(ph.rating), " . 
+            "count(distinct ph.photo_id) as count from " .
             DB_PREFIX . "photos as ph JOIN " .
             DB_PREFIX . "photo_albums as pa " .
             "ON ph.photo_id = pa.photo_id JOIN " .
@@ -1197,8 +1198,7 @@ function create_rating_graph($user) {
             escape_string($user->get("user_id")) .
             "' AND gp.access_level >= ph.level " .
             "GROUP BY round(rating) ORDER BY round(rating)";
-    }
-    else {
+    } else {
         $query =
             "select round(rating), count(*) from " . DB_PREFIX . "photos " .
             "group by round(rating) order by round(rating)";
@@ -1209,50 +1209,34 @@ function create_rating_graph($user) {
     $result = mysql_query($query)
         or die_with_mysql_error("Rating grouping failed");
 
-    $max_count = 0;
     while ($row = mysql_fetch_array($result)) {
-        $max_count = max($max_count, $row[1]);	
     	$ratings[($row[0] ? $row[0] : translate("Not rated"))]=$row[1];
 	}
-?>
-    <h3><?php echo translate("photo ratings") ?></h3>
-<?php
-    if ($max_count) { 
-    $table =
-        "<table class=\"ratings\">\n<tr>\n" .
-        "<th>" . translate("rating") . "</th>\n" .
-        "<th>" . translate("count") . "</th>\n  </tr>\n";
-
-    $scale = 150.0 / $max_count;
-	
+    $html="<h3>" . translate("photo ratings") . "</h3>";
+    $legend=array(translate("rating"), translate("count"));
     while (list($range, $count) = each($ratings)) {
         if($range>0) {
-	   $min_rating=$range-0.5;
-	   $max_rating=$range+0.5;
-           $qs =
-              "search.php?rating%5B0%5D=" . $min_rating . "&amp;_rating_op%5B0%5D=%3E%3D" .
-              "&amp;rating%5B1%5D=" . $max_rating . "&amp;_rating_op%5B1%5D=%3C&amp;_action=" . translate("search");
+            $min_rating=$range-0.5;
+	        $max_rating=$range+0.5;
+            $link =
+              "search.php?rating%5B0%5D=" . $min_rating . 
+              "&amp;_rating_op%5B0%5D=%3E%3D" .
+              "&amp;rating%5B1%5D=" . $max_rating . 
+              "&amp;_rating_op%5B1%5D=%3C&amp;_action=" . translate("search");
         } else {
-           $qs = "photos.php?rating=null";
+            $link = "photos.php?rating=null";
         }  
-        $table .=
-            "  <tr>\n    <td>\n" .
-            "      <a href=\"$qs\">$range</a></td>\n" .
-            "      <td>\n";
-
-	$table .= "<div class=\"ratings\" style=\"width: " . ceil($scale * $count) . "px;\">&nbsp;</div>";
-        $table .= "[$count]\n    </td>\n  </tr>\n";
+        $row=array($range, $link, $count);
+        $value_array[]=$row;
     }
 
-    $table .="</table>\n";
-
-    }
-    else {
-        $table .=
-            translate("No photo was found.") . "\n";
+    if($value_array) {
+        $html.=create_bar_graph($legend, $value_array, 150);
+    } else {
+        $html.=translate("No photo was found.") . "\n";
     }
 
-    return $table;
+    return $html;
 }
 
 /*

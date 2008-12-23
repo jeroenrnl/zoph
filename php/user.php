@@ -97,8 +97,9 @@
 <input type="hidden" name="subject" value="<?php echo $subject ?>">
 <input type="hidden" name="message" value="<?php echo $message ?>">
 <input class="bigbutton" type="submit" name="_button" value="<?php echo translate("Notify User", 0) ?>">
-</form>
+</form><br>
 <?php
+        echo $this_user->get_rating_graph();
     } else if ($action == "confirm") {
 ?>
           <h1>

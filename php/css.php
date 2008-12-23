@@ -510,6 +510,7 @@ div.smileys img {
 /* This is the bar that shows the number of photos for each rating */
 div.ratings   {
     float: left;
+    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
     background: <?php echo $BREADCRUMB_BG_COLOR ?>;
     }
 

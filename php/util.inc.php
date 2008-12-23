@@ -853,4 +853,46 @@ function get_sql_for_order($order) {
         return null;
     }
 }
+
+function create_bar_graph($legend, $value_array, $scale) {
+    # $value_array is an array that contains an array for each line 
+    # of the graph. Each of those arrays contains 3 values: 
+    # value: The value we're graphing, 
+    # link:  Where should it link to. (may be null)
+    # count: Count of that value;
+
+    foreach($value_array as $row) {
+        $counts[]=$row[2];
+    }
+    $max=max($counts);
+    $pixels=$scale/$max;
+
+    $html="<table class='ratings'>\n";
+    $html.="  <tr>\n";
+    $html.="    <th>" . $legend[0] ."</th>\n";
+    $html.="    <th>" . $legend[1] ."</th>\n";
+    $html.="  <tr>\n";
+
+    foreach($value_array as $row) {
+        $html.="  <tr>\n";
+        $html.="    <td>\n";
+        if($row[1]) {
+            $html.="   <a href='" . $row[1] . "'>";
+        }
+        $html.=$row[0];
+        if($row[1]) {
+            $html.="</a>\n";
+        }
+        $html.="    </td>\n";
+        $html.="    <td>\n";
+        $html.="      <div class='ratings' style='width: " . 
+            ceil($row[2]*$pixels) . "px'>";
+        $html.="&nbsp;</div>&nbsp;";
+        $html.=$row[2];
+        $html.="    </td>\n";
+        $html.="  </tr>\n";
+    }
+    $html.="</table>";
+    return $html;
+}
 ?>
