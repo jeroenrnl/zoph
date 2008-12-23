@@ -106,6 +106,7 @@
 ?>
         <h1>
             <span class="actionlink">
+                <a href="groups.php"><?php echo translate("return") ?></a> | 
                 <a href="group.php?_action=edit&amp;group_id=<?php echo $group->get("group_id") ?>"><?php echo translate("edit") ?></a> |
             <a href="group.php?_action=delete&amp;group_id=<?php echo $group->get("group_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="group.php?_action=new"><?php echo translate("new") ?></a>
