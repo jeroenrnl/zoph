@@ -127,6 +127,15 @@ CREATE TABLE zoph_groups_users (
 	PRIMARY KEY  (group_id,user_id)
 );
 
+#
+# Changes for 0.7.5
+#
+ALTER TABLE zoph_photo_ratings DROP PRIMARY KEY;
+ALTER TABLE zoph_photo_ratings ADD rating_id int(11) auto_increment 
+	NOT NULL PRIMARY KEY FIRST; 
+CREATE INDEX user_photo ON zoph_photo_ratings (user_id,photo_id);
+ALTER TABLE zoph_photo_ratings ADD COLUMN ipaddress varchar(16);  
+ALTER TABLE zoph_photo_ratings ADD COLUMN timestamp timestamp;
 
 
 

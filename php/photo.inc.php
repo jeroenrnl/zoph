@@ -417,16 +417,18 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
         if (mysql_num_rows($result) > 0) {
             $query =
                 "update " . DB_PREFIX . "photo_ratings " .
-                "set rating = '" . escape_string($rating) . "' " .
+                "set rating = '" . escape_string($rating) . "', " .
+                " ipaddress = '" . escape_string($_SERVER["REMOTE_ADDR"])."' " .
                 "where user_id = '" . escape_string($user_id) . "'" .
                 " and photo_id = '". escape_string($photo_id) . "'";
         }
         else {
             $query =
                 "insert into " . DB_PREFIX . "photo_ratings " .
-                "(photo_id, user_id, rating) values " .
+                "(photo_id, user_id, ipaddress, rating) values " .
                 " ('" . escape_string($photo_id) . "', '" .
                 escape_string($user_id) . "', '" .
+                escape_string($_SERVER["REMOTE_ADDR"])."', '" .
                 escape_string($rating) . "')";
         }
 
@@ -436,7 +438,11 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
             or die_with_mysql_error("Rating input failed");
 
         //now recalculate the average, and input it in the photo table
+        $this->recalculate_rating();
+    }
 
+    function recalculate_rating() {
+        $photo_id = $this->get("photo_id");
         $query = "select avg(rating) from " . DB_PREFIX . "photo_ratings ".
             " where photo_id = '" . escape_string($photo_id) . "'";
 
@@ -458,6 +464,17 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
             or die_with_mysql_error("Inserting new rating failed");
 
         return $avg;
+    }
+
+    function delete_rating($rating_id) {
+        if(!is_numeric($rating_id)) { 
+            die("<b>rating_id</b> must be numeric!"); 
+        }
+        $sql = "DELETE FROM " . DB_PREFIX . "photo_ratings WHERE " .
+            "rating_id = " . escape_string($rating_id);
+        mysql_query($sql);
+        $this->recalculate_rating();
+        return;
     }
 
     function get_image_resource() {
@@ -979,7 +996,44 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         return $html;
     }
 
+    function get_rating_details($content, $open=false) {
+        $sql="SELECT rating_id, user_id, rating, ipaddress, timestamp FROM " .
+            DB_PREFIX . "photo_ratings WHERE photo_id=" .
+            escape_string($this->get("photo_id"));
 
+        $result=mysql_query($sql);
+        
+        $html="&nbsp;";
+        if ($open) {
+            $html.="<span onclick=\"unbranch(this)\">-&nbsp;</span>";
+        } else {
+            $html.="<span onclick=\"branch(this)\">+&nbsp;</span>";
+        }
+        $html.="<span class='showhide'>" . $content . "</span>";
+        $html.="<div class='ratingdetail'>\n";
+        $html.="<table class='ratingdetail'>\n<tr>\n";
+        $html.="<th>" . translate("user") . "</th>";
+        $html.="<th>" . translate("rating") . "</th>";
+        $html.="<th>" . translate("IP address") . "</th>";
+        $html.="<th>" . translate("date") . "</th></tr>";
+
+        while($row=mysql_fetch_row($result)) {
+            $html.="<tr>\n";
+            $this_user=new user($row[1]);
+            $this_user->lookup();
+            $html.="<td>" . $this_user->get_link() . "</td>\n" .
+                "<td>" . $row[2] . "</td>\n" .
+                "<td>" . $row[3] . "</td>\n" .
+                "<td>" . $row[4] . "</td>\n" .
+                "<td><span class='actionlink'>" .
+                "<a href='photo.php?_action=delrate&_rating_id=" . 
+                $row[0] . "'>" . 
+                translate("delete") . "</a></span></td>" .
+                "</tr>\n";
+        }
+        $html.="</table>\n</div>";
+        return $html;
+    }
     function get_comments() {
         $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .
             " photo_id = " .  $this->get("photo_id");
@@ -1185,7 +1239,7 @@ function create_rating_graph($user) {
 
     if ($user && !$user->is_admin()) {
         $query =
-            "select round(ph.rating), " . 
+            "select floor(ph.rating+0.5), " . 
             "count(distinct ph.photo_id) as count from " .
             DB_PREFIX . "photos as ph JOIN " .
             DB_PREFIX . "photo_albums as pa " .
@@ -1197,11 +1251,11 @@ function create_rating_graph($user) {
             "WHERE gu.user_id = '" . 
             escape_string($user->get("user_id")) .
             "' AND gp.access_level >= ph.level " .
-            "GROUP BY round(rating) ORDER BY round(rating)";
+            "GROUP BY floor(rating+0.5) ORDER BY floor(rating+0.5)";
     } else {
         $query =
-            "select round(rating), count(*) from " . DB_PREFIX . "photos " .
-            "group by round(rating) order by round(rating)";
+            "select floor(rating+0.5), count(*) from " . DB_PREFIX . "photos " .
+            "group by floor(rating+0.5) order by floor(rating+0.5)";
     }
 
     if (DEBUG) { echo "$query<br>\n"; }
@@ -1213,7 +1267,7 @@ function create_rating_graph($user) {
     	$ratings[($row[0] ? $row[0] : translate("Not rated"))]=$row[1];
 	}
     $html="<h3>" . translate("photo ratings") . "</h3>";
-    $legend=array(translate("rating"), translate("count"));
+    $legend=array(translate("rating"),translate("count"));
     while (list($range, $count) = each($ratings)) {
         if($range>0) {
             $min_rating=$range-0.5;
@@ -1300,4 +1354,5 @@ function ImageStringWrap($image, $font, $x, $y, $text, $color, $maxwidth) {
         $y += $fontheight;
     }
 }
+
 ?>

@@ -419,7 +419,7 @@ span.showhide {
     text-align: right;
     }
 
-div.timedetail {
+div.timedetail, div.ratingdetail {
     display: none;
     border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
     background: white;
@@ -439,6 +439,23 @@ div.timedetail h3 {
     color: <?php echo $TITLE_FONT_COLOR ?>;
     font-size: large;
 }
+
+table.ratingdetail {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.ratingdetail td, table.ratingdetail th {
+    text-align: left;
+    font-size: small;
+    padding: 2px;
+}
+
+table.ratingdetail th {
+    background: <?php echo $TITLE_BG_COLOR ?>;
+    color: <?php echo $TITLE_FONT_COLOR ?>;
+}
+
 p.main, p.info {
     padding: 4px;
     }

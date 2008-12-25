@@ -118,9 +118,19 @@
         if (ALLOW_RATINGS) {
             $rating = getvar("rating");
             $photo->rate($user->get("user_id"), $rating);
+            $link = strip_href($user->get_last_crumb());
+            if (!$link) { $link = "zoph.php"; }
+            header("Location: " . add_sid($link));
         }
         $action = "display";
+    } else if ($_action == "delrate" && $user->is_admin()) {
+        $rating_id=getvar("_rating_id");
+        $photo->delete_rating($rating_id);
+        $link = strip_href($user->get_last_crumb());
+        if (!$link) { $link = "zoph.php"; }
+        header("Location: " . add_sid($link));
     }
+
 
     if (!$user->is_admin()) {
         if ($_action == "new" || $_action == "insert" ||
@@ -340,19 +350,26 @@ require_once("header.inc.php");
 <?php echo create_field_html($photo->get_display_array()) ?>
 <?php
         if (ALLOW_RATINGS || $photo->get("rating")) {
+            $rating=$photo->get("rating") != 0 ? $photo->get("rating") . 
+            " / 10" : "";
 ?>
           <dt><?php echo translate("rating") ?></dt>
-          <dd><?php echo $photo->get("rating") != 0 ? $photo->get("rating") . " / 10" : ""; ?>
+          <dd>
 <?php
+                if($rating) {
+                    if($user->is_admin()) {
+                        echo $photo->get_rating_details($rating, false);
+                    } else {
+                        echo $rating;
+                    }
+                }
             if (ALLOW_RATINGS) {
 ?>
 <form id="ratingform" action="<?php echo $PHP_SELF ?>" method="POST">
-    <p>
         <input type="hidden" name="_action" value="rate">
         <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
         <?php echo create_rating_pulldown($photo->get_rating($user->get("user_id"))); ?>
         <input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
-    </p>
 </form>
         </dd>
 <?php
