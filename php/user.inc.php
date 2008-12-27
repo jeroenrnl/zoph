@@ -153,6 +153,9 @@ class user extends zoph_table {
             translate("can leave comments") =>
                 $this->get("leave_comments") == 1
                 ? translate("Yes") : translate("No"),
+            translate("can rate photos") =>
+                $this->get("allow_rating") == 1
+                ? translate("Yes") : translate("No"),
             translate("last login") =>
                 $this->get("lastlogin"),
             translate("last ip address") =>

@@ -79,6 +79,9 @@
           <label for="leave_comments"><?php echo translate("can leave comments") ?></label>
           <?php echo create_pulldown("leave_comments", $this_user->get("leave_comments"), array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?>
           <br>
+          <label for="allow_rating"><?php echo translate("can rate photos") ?></label>
+          <?php echo create_pulldown("allow_rating", $this_user->get("allow_rating"), array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?>
+          <br>
           <label for="lightboxid"><?php echo translate("lightbox album") ?></label>
 <?php
     $lightbox_array = get_albums_select_array();

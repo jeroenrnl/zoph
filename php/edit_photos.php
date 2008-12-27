@@ -143,7 +143,7 @@
 
                 if ($rating != null) {
                     if (ALLOW_RATINGS) { // multiple ratings
-                        $photo->rate($user->get('user_id'), $rating);
+                        $photo->rate($user, $rating);
                     }
                     else { // single rating
                         $photo->set('rating', $rating);

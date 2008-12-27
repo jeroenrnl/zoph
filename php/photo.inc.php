@@ -394,10 +394,14 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
      *
      * This function from Jan Miczaika
      */
-    function rate($user_id, $rating) {
+    function rate($user, $rating) {
 
-        if (!$user_id || !$rating) {
+        if (!$user || !$rating) {
             return null;
+        }
+        $user_id=$user->get("user_id");
+        if(!($user->is_admin() || $user->get("allow_rating"))) {
+            return;
         }
 
         $photo_id = $this->get("photo_id");

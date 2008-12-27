@@ -137,5 +137,5 @@ CREATE INDEX user_photo ON zoph_photo_ratings (user_id,photo_id);
 ALTER TABLE zoph_photo_ratings ADD COLUMN ipaddress varchar(16);  
 ALTER TABLE zoph_photo_ratings ADD COLUMN timestamp timestamp;
 
-
+ALTER TABLE zoph_users ADD COLUMN allow_rating CHAR(1) NOT NULL DEFAULT 1 AFTER leave_comments;
 

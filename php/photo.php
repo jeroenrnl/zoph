@@ -115,9 +115,9 @@
         $action = "display";
     }
     else if ($_action == "rate") {
-        if (ALLOW_RATINGS) {
+        if (ALLOW_RATINGS && ($user->is_admin() || $user->get("allow_rating"))) {
             $rating = getvar("rating");
-            $photo->rate($user->get("user_id"), $rating);
+            $photo->rate($user, $rating);
             $link = strip_href($user->get_last_crumb());
             if (!$link) { $link = "zoph.php"; }
             header("Location: " . add_sid($link));
@@ -349,7 +349,7 @@ require_once("header.inc.php");
 <dl>
 <?php echo create_field_html($photo->get_display_array()) ?>
 <?php
-        if (ALLOW_RATINGS || $photo->get("rating")) {
+        if ((ALLOW_RATINGS  && ($user->is_admin() || $user->get("allow_rating"))) || $photo->get("rating")) {
             $rating=$photo->get("rating") != 0 ? $photo->get("rating") . 
             " / 10" : "";
 ?>
@@ -363,7 +363,7 @@ require_once("header.inc.php");
                         echo $rating;
                     }
                 }
-            if (ALLOW_RATINGS) {
+            if (ALLOW_RATINGS && ($user->is_admin() || $user->get("allow_rating"))) {
 ?>
 <form id="ratingform" action="<?php echo $PHP_SELF ?>" method="POST">
         <input type="hidden" name="_action" value="rate">
