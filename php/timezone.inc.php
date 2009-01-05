@@ -47,11 +47,18 @@ if(minimum_version("5.1.0")) {
 
     class Time extends DateTime {
         function __construct($datetime, $tz=null) {
-            if(valid_tz($tz)) {
-                parent::__construct($datetime,$tz);
-            } else {
-                parent::__construct($datetime);
-            }
+            try {
+                if(valid_tz($tz)) {
+                    parent::__construct($datetime,$tz);
+                } else {
+                    parent::__construct($datetime);
+                }
+           } catch (Exception $e){
+                echo "<b>Invalid time</b><br>";
+                if(DEBUG) {
+                    echo "<pre>" . $e->getMessage() . "</pre><br>";
+                }
+           }
         }
     }
 }
