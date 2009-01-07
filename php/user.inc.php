@@ -156,6 +156,9 @@ class user extends zoph_table {
             translate("can rate photos") =>
                 $this->get("allow_rating") == 1
                 ? translate("Yes") : translate("No"),
+            translate("can rate the same photo multiple times") =>
+                $this->get("allow_multirating") == 1
+                ? translate("Yes") : translate("No"),
             translate("last login") =>
                 $this->get("lastlogin"),
             translate("last ip address") =>

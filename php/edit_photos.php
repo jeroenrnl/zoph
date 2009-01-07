@@ -244,7 +244,7 @@
 <?php
     $rating = $photo->get('rating');
     if (ALLOW_RATINGS) {
-        $rating = $photo->get_rating($user->get('user_id'));
+        $rating = $photo->get_rating($user);
     }
 ?>
                         <?php echo create_rating_pulldown($rating, "_rating__$photo_id") ?>

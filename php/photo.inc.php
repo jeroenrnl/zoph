@@ -366,14 +366,23 @@ class photo extends zoph_table {
 return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " alt=\"$alt\"" . ">";
 }
 
-    function get_rating($user_id) {
+    function get_rating($user) {
 
         $photo_id = $this->get("photo_id");
+        $user_id=$user->get("user_id");
+
+        if ($user->get("allow_multirating")) {
+            // This user is allowed to rate the same photoe  multiple 
+            // times, however we will allow only one from the same IP
+            $where = " and ipaddress = '" . 
+                escape_string($_SERVER["REMOTE_ADDR"])."' ";
+        }
 
         $query =
             "select rating from " . DB_PREFIX . "photo_ratings " .
             "where user_id = '" . escape_string($user_id) . "'" .
-            " and photo_id = '". escape_string($this->get("photo_id")) . "'";
+            " and photo_id = '". escape_string($this->get("photo_id")) . "'" .
+            $where;
 
         if (DEBUG > 1) { echo "$query<br>\n"; }
 
@@ -406,10 +415,18 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
 
         $photo_id = $this->get("photo_id");
 
+        if ($user->get("allow_multirating")) {
+            // This user is allowed to rate the same photoe  multiple 
+            // times, however we will allow only one from the same IP
+            $where = " and ipaddress = '" . 
+                escape_string($_SERVER["REMOTE_ADDR"])."' ";
+        }
+
         $query =
             "select * from " . DB_PREFIX . "photo_ratings " .
             "where user_id = '" . escape_string($user_id) . "'" .
-            " and photo_id = '". escape_string($photo_id) . "'";
+            " and photo_id = '". escape_string($photo_id) . "'" .
+            $where;
 
         if (DEBUG > 1) { echo "$query<br>\n"; }
 
@@ -424,7 +441,13 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
                 "set rating = '" . escape_string($rating) . "', " .
                 " ipaddress = '" . escape_string($_SERVER["REMOTE_ADDR"])."' " .
                 "where user_id = '" . escape_string($user_id) . "'" .
-                " and photo_id = '". escape_string($photo_id) . "'";
+                " and photo_id = '". escape_string($photo_id) . "'" .
+                $where . " LIMIT 1";
+                // The limit makes sure only 1 vote is updated, this is 
+                // needed if you ever change the allow_multirating to
+                // 'no' and there already have been multiple votes
+                // by this user. It will, however, simply update the first
+                // vote it encounters...
         }
         else {
             $query =
@@ -461,7 +484,6 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
 
         $query = "update " . DB_PREFIX . "photos set rating = $avg" .
             " where photo_id = '" . escape_string($photo_id) . "'";
-
         if (DEBUG > 1) { echo "$query<br>\n"; }
 
         $result = mysql_query($query)
@@ -1030,8 +1052,9 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 "<td>" . $row[3] . "</td>\n" .
                 "<td>" . $row[4] . "</td>\n" .
                 "<td><span class='actionlink'>" .
-                "<a href='photo.php?_action=delrate&_rating_id=" . 
-                $row[0] . "'>" . 
+                "<a href='photo.php?_action=delrate" .
+                "&photo_id=" . $this->get("photo_id") .
+                "&_rating_id=" .  $row[0] . "'>" . 
                 translate("delete") . "</a></span></td>" .
                 "</tr>\n";
         }

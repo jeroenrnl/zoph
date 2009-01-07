@@ -53,8 +53,8 @@
         (!$_action || ($_action == "display" || $_action == "search" ||
         $_action == "notify" || $_action == "compose" || 
         ($user->prefs->get("auto_edit") && $_action != "update"
-        && $_action != "select" && $_action != "deselect"
-        && $page == "photo.php")))) {
+        && $_action != "select" && $_action != "deselect" 
+        && $_action != "delrate" && $page == "photo.php")))) {
 
         $user->add_crumb($title, htmlentities($REQUEST_URI));
     }

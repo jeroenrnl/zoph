@@ -138,4 +138,5 @@ ALTER TABLE zoph_photo_ratings ADD COLUMN ipaddress varchar(16);
 ALTER TABLE zoph_photo_ratings ADD COLUMN timestamp timestamp;
 
 ALTER TABLE zoph_users ADD COLUMN allow_rating CHAR(1) NOT NULL DEFAULT 1 AFTER leave_comments;
+ALTER TABLE zoph_users ADD COLUMN allow_multirating CHAR(1) NOT NULL DEFAULT 0 AFTER allow_rating;
 
