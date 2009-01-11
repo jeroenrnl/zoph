@@ -51,23 +51,19 @@ class person extends zoph_table {
         if (!is_numeric($id)) { die("person_id is not numeric"); }
         $sql="update " . DB_PREFIX . "people set father_id=null " .
             "where father_id=" .  $id;
-        if (DEBUG) { echo "$sql<br>\n"; }
-        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+        query($sql, "Could not remove references:");
 
         $sql="update " . DB_PREFIX . "people set mother_id=null " . 
             "where mother_id=" .  $id;
-        if (DEBUG) { echo "$sql<br>\n"; }
-        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+        query($sql, "Could not remove references:");
         
         $sql="update " . DB_PREFIX . "people set spouse_id=null " .
             "where spouse_id=" .  $id;
-        if (DEBUG) { echo "$sql<br>\n"; }
-        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+        query($sql, "Could not remove references:");
         
         $sql="update " . DB_PREFIX . "photos set photographer_id=null where " .
             "photographer_id=" .  $id;
-        if (DEBUG) { echo "$sql<br>\n"; }
-        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+        query($sql, "Could not remove references:");
         
         parent::delete(null, array("photo_people"));
     }

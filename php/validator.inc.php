@@ -57,10 +57,10 @@ class validator {
                 "user_name = '" .  escape_string($this->username) . "' and " .
                 "password = password('" . escape_string($this->password) . "')";
 
-            $result = mysql_query($query);
+            $result = query($query);
 
-            if (mysql_num_rows($result) == 1) {
-                $row = mysql_fetch_array($result);
+            if (num_rows($result) == 1) {
+                $row = fetch_array($result);
 
                 $user = new user($row["user_id"]);
             } else {
@@ -75,23 +75,17 @@ class validator {
                  * running running a newer version than 4.1:
                  */
             
-                $mysqlver=mysql_get_server_info();
-                list($mysqlmaj, $mysqlmin) = split("\.", $mysqlver, 2);
-                if (($mysqlmaj == 4 && $mysqlmin >= 1) || ($mysqlmaj >= 5) ) {
-                    if (DEBUG>=5) { 
-                        echo "Yep, we're running MySQL 4.1 or later<br>\n"; 
-                    }
-                
+                if(db_server=="mysql" && db_min_version("4.1")) { 
                     $query =
                         "select user_id from " . DB_PREFIX . "users where " .
                         "user_name = '" .  escape_string($this->username) . 
                         "' and " .  "password = old_password('" . 
                         escape_string($this->password) . "')";
                     
-                    $result = mysql_query($query);
+                    $result = query($query);
 
-                    if (mysql_num_rows($result) == 1) {
-                        $row = mysql_fetch_array($result);
+                    if (num_rows($result) == 1) {
+                        $row = fetch_array($result);
                         $user = new user($row["user_id"]);
                         /* Ok...we found the user, let's make sure 
                          * this won't happen again...
@@ -106,12 +100,12 @@ class validator {
                             "password = old_password('" . 
                             escape_string($this->password) . "')";
                         
-                        $result = mysql_query($query);
+                        $result = query($query);
                     }
                 }
             }
         }
-            return $user;
+        return $user;
     }
 
     /*
@@ -154,9 +148,9 @@ class validator {
                 "select user_id from " . DB_PREFIX . "users where " .
                 "user_name = '" .  escape_string($this->username) . "'";
 
-            $result = mysql_query($query);
+            $result = query($query);
 
-            if (mysql_num_rows($result) == 0) {
+            if (num_rows($result) == 0) {
                 // make a new user
                 $tmpUser = new user();
                 $tmpUser->set('user_name', $this->username);
@@ -201,8 +195,8 @@ class validator {
                 // And return a new user of that row number
                 $user = new user($tmpUser->get('user_id'));
             }
-            else if ((mysql_num_rows($result) == 1)) {
-                $row = mysql_fetch_array($result);
+            else if ((num_rows($result) == 1)) {
+                $row = fetch_array($result);
                 $user = new user($row["user_id"]);
             }
         }

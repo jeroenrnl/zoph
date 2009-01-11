@@ -138,10 +138,10 @@ class photo extends zoph_table {
             $album_permissions=$user->get_album_permissions($album_id);
 
             if($user->is_admin() || $album_permissions->get("writable")) {
-                execute_query($sql, 1);
+                query($sql);
             }
         } else {
-            execute_query($sql, 1);
+            query($sql);
         }
     }
 
@@ -155,7 +155,7 @@ class photo extends zoph_table {
                 "delete from " . DB_PREFIX . "photo_albums " .
                 "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
                 " and album_id = '" . escape_string($album_id) . "'";
-            execute_query($sql, 1);
+            query($sql);
         }
     }
 
@@ -165,7 +165,7 @@ class photo extends zoph_table {
             "(photo_id, category_id) values ('" .
             escape_string($this->get("photo_id")) . "', '" .
             escape_string($category_id) . "')";
-        execute_query($sql, 1);
+        query($sql);
     }
 
     function remove_from_category($category_ids) {
@@ -178,7 +178,7 @@ class photo extends zoph_table {
                 "delete from " . DB_PREFIX . "photo_categories " .
                 "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
                 " and category_id = '" . escape_string($category_id) . "'";
-            execute_query($sql, 1);
+            query($sql);
         }
     }
 
@@ -192,7 +192,7 @@ class photo extends zoph_table {
             "(photo_id, person_id, position) " .
             "values ('" . escape_string($this->get("photo_id")) . "', '" .
             escape_string($person_id) . "', $position)";
-        execute_query($sql);
+        query($sql, "Failed to add person");
     }
 
     function remove_from_person($person_ids) {
@@ -205,7 +205,7 @@ class photo extends zoph_table {
                 "delete from " . DB_PREFIX . "photo_people " .
                 "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
                 " and person_id = '" . escape_string($person_id) . "'";
-            execute_query($sql);
+            query($sql);
         }
     }
 
@@ -384,13 +384,10 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
             " and photo_id = '". escape_string($this->get("photo_id")) . "'" .
             $where;
 
-        if (DEBUG > 1) { echo "$query<br>\n"; }
-
-        $result = mysql_query($query)
-            or die_with_mysql_error("Rating lookup failed");
+        $result = query($query, "Rating lookup failed");
 
         $rating = null;
-        if ($row = mysql_fetch_array($result)) {
+        if ($row = fetch_array($result)) {
             $rating = $row[0];
         }
 
@@ -428,14 +425,11 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
             " and photo_id = '". escape_string($photo_id) . "'" .
             $where;
 
-        if (DEBUG > 1) { echo "$query<br>\n"; }
-
-        $result = mysql_query($query)
-            or die_with_mysql_error("Rating lookup failed");
+        $result = query($query, "Rating lookup failed");
 
         //if the user has already voted, update the vote, else insert a new one
 
-        if (mysql_num_rows($result) > 0) {
+        if (num_rows($result) > 0) {
             $query =
                 "update " . DB_PREFIX . "photo_ratings " .
                 "set rating = '" . escape_string($rating) . "', " .
@@ -459,10 +453,7 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
                 escape_string($rating) . "')";
         }
 
-        if (DEBUG > 1) { echo "$query<br>\n"; }
-
-        $result = mysql_query($query)
-            or die_with_mysql_error("Rating input failed");
+        $result = query($query, "Rating input failed");
 
         //now recalculate the average, and input it in the photo table
         $this->recalculate_rating();
@@ -473,21 +464,17 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
         $query = "select avg(rating) from " . DB_PREFIX . "photo_ratings ".
             " where photo_id = '" . escape_string($photo_id) . "'";
 
-        if (DEBUG > 1) { echo "$query<br>\n"; }
 
-        $result = mysql_query($query)
-            or die_with_mysql_error("Rating recalculation failed");
+        $result = query($query, "Rating recalculation failed");
 
-        $row = mysql_fetch_array($result);
+        $row = fetch_array($result);
 
         $avg = (round(100 * $row[0])) / 100.0;
 
         $query = "update " . DB_PREFIX . "photos set rating = $avg" .
             " where photo_id = '" . escape_string($photo_id) . "'";
-        if (DEBUG > 1) { echo "$query<br>\n"; }
 
-        $result = mysql_query($query)
-            or die_with_mysql_error("Inserting new rating failed");
+        $result = query($query, "Inserting average rating failed");
 
         return $avg;
     }
@@ -498,7 +485,7 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
         }
         $sql = "DELETE FROM " . DB_PREFIX . "photo_ratings WHERE " .
             "rating_id = " . escape_string($rating_id);
-        mysql_query($sql);
+        query($sql);
         $this->recalculate_rating();
         return;
     }
@@ -1027,7 +1014,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             DB_PREFIX . "photo_ratings WHERE photo_id=" .
             escape_string($this->get("photo_id"));
 
-        $result=mysql_query($sql);
+        $result=query($sql);
         
         $html="&nbsp;";
         if ($open) {
@@ -1043,7 +1030,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         $html.="<th>" . translate("IP address") . "</th>";
         $html.="<th>" . translate("date") . "</th></tr>";
 
-        while($row=mysql_fetch_row($result)) {
+        while($row=fetch_row($result)) {
             $html.="<tr>\n";
             $this_user=new user($row[1]);
             $this_user->lookup();
@@ -1095,9 +1082,8 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             " union select desc_2 from " . DB_PREFIX . "photo_relations where" .
             " photo_id_1 = " . escape_string($this->get("photo_id")) . " and " .
             " photo_id_2 = " . escape_string($photo_id_2) . " limit 1";
-        $result=mysql_query($sql)
-            or die("Could not get description for related photo:<br><i>$sql</i>");
-        $result=mysql_fetch_row($result);
+        $result=query($sql, "Could not get description for related photo:");
+        $result=fetch_row($result);
         return $result[0];
     }
     
@@ -1107,8 +1093,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             escape_string($photo_id_2) . "," .
             "\"" . escape_string($desc_1) . "\"," .
             "\"" . escape_string($desc_2) . "\")";
-        $result=mysql_query($sql)
-            or die_with_mysql_error("Could not create relation:<br><i>$sql</i>");
+        $result=query($sql, "Could not create relation");
         }
         
     function update_relation($photo_id_2, $desc_1 = null, $desc_2 = null) {
@@ -1119,17 +1104,15 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             " desc_2=\"" . escape_string($desc_2) . "\"" .
             " where photo_id_1=" . $photo_id_1 .
             " and photo_id_2=" . $photo_id_2;
-        mysql_query($sql)
-            or die_with_mysql_error("Could not update relation:<br><i>$sql</i>");
+        query($sql, "Could not update relation:");
         // A relation may be the other way around...
         $sql = "update " . DB_PREFIX . "photo_relations set" .
             " desc_2=\"" . escape_string($desc_1) . "\"," .
             " desc_1=\"" . escape_string($desc_2) . "\"" .
             " where photo_id_2=" . $photo_id_1 .
             " and photo_id_1=" . $photo_id_2;
-        mysql_query($sql)
-            or die_with_mysql_error("Could not update relation:<br><i>$sql</i>");
-        }
+        query($sql, "Could not update relation:");
+    }
     
     function delete_relation($photo_id_2) {
         $ids="(" . escape_string($this->get("photo_id")) . "," .
@@ -1137,8 +1120,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         $sql = "delete from " . DB_PREFIX . "photo_relations" .
             " where photo_id_1 in " . $ids .
             " and photo_id_2 in " . $ids;
-        $result=mysql_query($sql)
-            or die_with_mysql_error("Could not delete relation:<br><i>$sql</i>");
+        $result=query($sql, "Could not delete relation:");
     }    
     
     function exif_to_html() {
@@ -1285,12 +1267,9 @@ function create_rating_graph($user) {
             "group by floor(rating+0.5) order by floor(rating+0.5)";
     }
 
-    if (DEBUG) { echo "$query<br>\n"; }
+    $result = query($query, "Rating grouping failed");
 
-    $result = mysql_query($query)
-        or die_with_mysql_error("Rating grouping failed");
-
-    while ($row = mysql_fetch_array($result)) {
+    while ($row = fetch_array($result)) {
     	$ratings[($row[0] ? $row[0] : translate("Not rated"))]=$row[1];
 	}
     $html="<h3>" . translate("photo ratings") . "</h3>";

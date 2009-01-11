@@ -46,7 +46,7 @@ class comment extends zoph_table {
         $sql = "delete from " . DB_PREFIX . "photo_comments where comment_id=";
         $sql .= escape_string($this->get("comment_id"));
     
-        mysql_query($sql) or die_with_mysql_error("Could not clean comment from photo: ", $sql);
+        query($sql, "Could not clean comment from photo");
     }
     
     
@@ -99,7 +99,7 @@ class comment extends zoph_table {
             "(" . escape_string($photo_id) . ", " . escape_string($this->get("comment_id")) . ")";
 
       
-        mysql_query($sql) or die_with_mysql_error("Failed to add comment:", $sql);
+        query($sql, "Failed to add comment:");
     }
  
     function is_owner($user) {

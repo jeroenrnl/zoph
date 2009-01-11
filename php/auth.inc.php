@@ -26,11 +26,6 @@
 
     $_action = getvar("_action");
 
-    mysql_pconnect(DB_HOST, DB_USER, DB_PASS)
-        or die("Unable to connect to MySQL");
-    mysql_select_db(DB_NAME)
-        or die("Unable to select database");
-
     if (minimum_version('4.1.0')) {
         if (array_key_exists('user', $_SESSION)) {
             $user = $_SESSION['user'];

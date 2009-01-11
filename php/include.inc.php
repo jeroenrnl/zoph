@@ -38,6 +38,7 @@
     require_once("user.inc.php");
     require_once("group.inc.php");
 
+    require_once("database.inc.php");
     require_once("auth.inc.php");
 
     require_once("album.inc.php");

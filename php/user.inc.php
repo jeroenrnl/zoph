@@ -263,13 +263,12 @@ class user extends zoph_table {
             "WHERE user_id=" . escape_string($this->get("user_id")) .
             " GROUP BY ROUND(rating) ORDER BY ROUND(rating) ";
 
-        $result = mysql_query($sql)
-                or die_with_mysql_error("Rating grouping failed");
+        $result = query($sql, "Rating grouping failed");
 
         $legend=array(translate("rating"), translate("count"));
 
 
-        while($row = mysql_fetch_row($result)) {
+        while($row = fetch_row($result)) {
             $link="search.php?_action=" . translate("search") . 
                 "&userrating=$row[0]" .
                 "&_userrating_user=" . escape_string($this->get("user_id"));

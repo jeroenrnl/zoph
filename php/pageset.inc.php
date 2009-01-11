@@ -38,7 +38,7 @@ class pageset extends zoph_table {
         $sql = "delete from " . DB_PREFIX . "pages_pageset where pageset_id=";
         $sql .= $this->get("pageiset_id");
     
-        mysql_query($sql) or die_with_mysql_error("Could not remove page from pageset: ", $sql);
+        query($sql, "Could not remove page from pageset: ");
     }
     
     
@@ -65,7 +65,7 @@ class pageset extends zoph_table {
             " where pageset_id = " . $this->get("pageset_id") .
             " order by page_order";
         if($pagenum) {
-            $sql.=" limit " . mysql_escape_string($pagenum) . ",1";
+            $sql.=" limit " . escape_string($pagenum) . ",1";
         }
         $pages=get_records_from_query("page", $sql);
         return $pages;
@@ -82,10 +82,9 @@ class pageset extends zoph_table {
         if (!$page->get_order($this->get("pageset_id"))) {
             $sql = "insert into " . DB_PREFIX . "pages_pageset " . 
                 "values(" . $this ->get("pageset_id") . ", " .
-                mysql_escape_string($page_id) . ", " .
+                escape_string($page_id) . ", " .
                 ($this->get_maxorder() + 1) . ")";
-            mysql_query($sql) 
-                or die_with_mysql_error("Could not add page to pageset", $sql);
+            query($sql, "Could not add page to pageset");
         } else {
             // The page already exists in this pageset.
             // at this moment a page cannot be more than once in a pagest
@@ -97,9 +96,8 @@ class pageset extends zoph_table {
     function remove_page($page_id) {
         $sql = "delete from " . DB_PREFIX . "pages_pageset " . 
             "where pageset_id=" . $this ->get("pageset_id") . " and " .
-            "page_id=" . mysql_escape_string($page_id);
-        mysql_query($sql) 
-            or die_with_mysql_error("Could not remove page from pageset", $sql);
+            "page_id=" . escape_string($page_id);
+        query($sql, "Could not remove page from pageset");
     }
 
     function moveup($page_id) {
@@ -109,10 +107,10 @@ class pageset extends zoph_table {
             $prevorder=$this->get_prevorder($order);
             $sql="update zoph_pages_pageset set page_order=" . $order .
                 " where page_order=" . $prevorder;
-            mysql_query($sql) or die_with_mysql_error("Could not change order", $sql);
+            query($sql, "Could not change order");
             $sql="update zoph_pages_pageset set page_order=" . $prevorder .
                 " where page_id=" . $page_id;
-            mysql_query($sql) or die_with_mysql_error("Could not change order", $sql);
+            query($sql, "Could not change order");
         }
     }
     function movedown($page_id) {
@@ -123,10 +121,10 @@ class pageset extends zoph_table {
             $nextorder=$this->get_nextorder($order);
             $sql="update zoph_pages_pageset set page_order=" . $order .
                 " where page_order=" . $nextorder;
-            mysql_query($sql) or die_with_mysql_error("Could not change order", $sql);
+            query($sql, "Could not change order");
             $sql="update zoph_pages_pageset set page_order=" . $nextorder .
                 " where page_id=" . $page_id;
-            mysql_query($sql) or die_with_mysql_error("Could not change order", $sql);
+            query($sql, "Could not change order");
 
         }
     }
@@ -134,8 +132,8 @@ class pageset extends zoph_table {
     function get_maxorder() {
         $sql = "select max(page_order) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id=" . $this->get("pageset_id");
-        $result=mysql_query($sql) or die_with_mysql_error("Could not get max order");
-        return intval(mysql_result($result, 0, 0));
+        $result=query($sql, "Could not get max order");
+        return intval(result($result, 0, 0));
     }
     
     function get_nextorder($order) {
@@ -146,16 +144,16 @@ class pageset extends zoph_table {
         $sql = "select min(page_order) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id=" . $this->get("pageset_id") .
             " and page_order>" . $order;
-        $result=mysql_query($sql) or die_with_mysql_error("Could not get max order");
-        return intval(mysql_result($result, 0, 0));
+        $result=query($sql, "Could not get max order");
+        return intval(result($result, 0, 0));
     }
 
     function get_prevorder($order) {
         $sql = "select max(page_order) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id=" . $this->get("pageset_id") .
             " and page_order<" . $order;
-        $result=mysql_query($sql) or die_with_mysql_error("Could not get max order");
-        return intval(mysql_result($result, 0, 0));
+        $result=query($sql, "Could not get max order");
+        return intval(result($result, 0, 0));
     }
 
 

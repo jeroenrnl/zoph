@@ -389,7 +389,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
     // do this count separately since the select uses limit
     $query = "select count(distinct ph.photo_id) from $from_clause $where";
-        //echo $query . "\n"; //DEBUG
     $num_photos = get_count_from_query($query);
 
     if ($num_photos > 0) {
@@ -410,7 +409,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 "select $select from $from_clause $where order by $order " .
                 "limit $offset, $rows";
         }
-        //echo $query . "\n"; //DEBUG
 
         $thumbnails = get_records_from_query("photo", $query);
 
@@ -464,7 +462,6 @@ function generate_excluded_albums_clause($excluded_albums, $from, $where) {
             $photo_id_query .= " and $where";
         }
 
-        //echo $photo_id_query . "\n"; //DEBUG
         $ids = implode(',', get_records_from_query(null, $photo_id_query));
 
         if ($ids) {
@@ -497,7 +494,6 @@ function generate_excluded_categories_clause($excluded_categories, $from, $where
             $photo_id_query .= " and $where";
         }
 
-        //echo $photo_id_query . "\n"; //DEBUG
         $ids = implode(',', get_records_from_query(null, $photo_id_query));
 
         if ($ids) {
@@ -530,7 +526,6 @@ function generate_excluded_people_clause($excluded_people, $from, $where) {
             $photo_id_query .= " and $where";
         }
 
-        //echo $photo_id_query . "\n"; //DEBUG
         $ids = implode(',', get_records_from_query(null, $photo_id_query));
 
         if ($ids) {

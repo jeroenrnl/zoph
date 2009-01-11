@@ -59,8 +59,6 @@ class zoph_tree_table extends zoph_table {
             $sql .= " order by $order";
         }
 
-        if (DEBUG) { echo "$sql<br>\n"; }
-
         $this->children = get_records_from_query(get_class($this), $sql);
         return $this->children;
 

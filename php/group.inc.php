@@ -84,9 +84,7 @@ class group extends zoph_table {
             "VALUES (" . escape_string($this->get("group_id")) . "," .
             escape_string($member_id) . ", null)";
  
-        if (DEBUG) { echo "$sql<br>\n"; }
-
-        mysql_query($sql) or die_with_mysql_error("Insert failed:", $sql);
+        query($sql, "Failed to add member:");
     }
 
     function remove_members($user_ids) {
@@ -99,7 +97,7 @@ class group extends zoph_table {
                 "DELETE FROM " . DB_PREFIX . "groups_users " .
                 "WHERE group_id = '" . escape_string($this->get("group_id")) . "'" .
                 " and user_id = '" . escape_string($user_id) . "'";
-            execute_query($sql, 1);
+            query($sql);
         }
     }
 

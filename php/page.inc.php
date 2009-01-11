@@ -44,7 +44,7 @@ class page extends zoph_table {
         $sql = "delete from " . DB_PREFIX . "pages_pageset where page_id=";
         $sql .= $this->get("page_id");
     
-        mysql_query($sql) or die_with_mysql_error("Could not remove page from pageset: ", $sql);
+        query($sql, "Could not remove page from pageset: ");
     }
     
     
@@ -88,9 +88,9 @@ class page extends zoph_table {
         $sql = "select page_order from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id=" . $pageset_id . " and " .
             " page_id=" . $this->get("page_id") . " limit 1";
-        $result=mysql_query($sql) or die_with_mysql_error("Could not get current order", $sql);
-        if(mysql_num_rows($result)) {
-            return intval(mysql_result($result, 0, 0));
+        $result=query($sql, "Could not get current order");
+        if(num_rows($result)) {
+            return intval(result($result, 0, 0));
         } else {
             return false;
         }

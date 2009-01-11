@@ -43,18 +43,15 @@ class place extends zoph_tree_table {
 
         $sql="update " . DB_PREFIX . "photos set location_id=null where " .
             "location_id=" . $id;
-        if (DEBUG) { echo "$sql<br>\n"; }
-        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+        query($sql, "Could not remove references:");
 
         $sql="update " . DB_PREFIX . "people set home_id=null where " .
             "home_id=" .  $id;
-        if (DEBUG) { echo "$sql<br>\n"; }
-        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+        query($sql, "Could not remove references:", $sql);
 
         $sql="update " . DB_PREFIX . "people set work_id=null where " .
             "work_id=" .  $id;
-        if (DEBUG) { echo "$sql<br>\n"; }
-        mysql_query($sql) or die_with_mysql_error("Could not remove references:", $sql);
+        query($sql, "Could not remove references:");
         
         parent::delete();
     }
