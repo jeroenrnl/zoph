@@ -48,7 +48,7 @@ if(minimum_version("5.1.0")) {
     class Time extends DateTime {
         function __construct($datetime, $tz=null) {
             try {
-                if(valid_tz($tz)) {
+                if(valid_tz($tz->getName())) {
                     parent::__construct($datetime,$tz);
                 } else {
                     parent::__construct($datetime);

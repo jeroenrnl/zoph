@@ -938,10 +938,8 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 $this->get("date") . " " .
                 $this->get("time"),
                 $camera_tz);
-            $place_time=new Time(
-                $this->get("date") . " " .
-                $this->get("time"),
-                $place_tz);
+            $place_time=$camera_time;
+            $place_time->setTimezone($place_tz);
             $corr=$this->get("time_corr");
             if($corr) {
                 $place_time->modify($corr . " minutes");
