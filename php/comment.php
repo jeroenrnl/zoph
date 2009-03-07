@@ -50,8 +50,7 @@
        $photo->lookup();
     }
 
-    $request_vars["photo_id"]=NULL;
-
+    unset($request_vars["photo_id"]);
 
     $redirect = "comment.php";
     if ($_action == "insert") {
