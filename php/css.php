@@ -828,6 +828,10 @@ div.commentinfo {
     padding: 0;
     }
 
+span.searchinfo {
+    font-size: x-small;
+    }
+
 br  {
     clear: both;
     }

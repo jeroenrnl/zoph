@@ -140,3 +140,14 @@ ALTER TABLE zoph_photo_ratings ADD COLUMN timestamp timestamp;
 ALTER TABLE zoph_users ADD COLUMN allow_rating CHAR(1) NOT NULL DEFAULT 1 AFTER leave_comments;
 ALTER TABLE zoph_users ADD COLUMN allow_multirating CHAR(1) NOT NULL DEFAULT 0 AFTER allow_rating;
 
+CREATE TABLE zoph_saved_search (
+	search_id int(11) NOT NULL auto_increment,
+    	name varchar(64) NOT NULL default '',
+      	owner int(11) default NULL,
+        public tinyint(1) default '0',
+	search varchar(2000) default NULL,
+	timestamp timestamp NOT NULL default CURRENT_TIMESTAMP 
+		on update CURRENT_TIMESTAMP,
+	PRIMARY KEY  (`search_id`)
+);
+

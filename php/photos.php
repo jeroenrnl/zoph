@@ -86,7 +86,18 @@
     <h1>
         <span class="actionlink">
 <?php
-    $qs = htmlentities(preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING));
+    $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
+    $qs_no_action=preg_replace('/_action=\w+&?/', '', $qs);
+
+    $qs=htmlentities($qs);
+    $qs_no_action=htmlentities($qs_no_action);
+
+    if($_action=translate("search")) {
+?>
+
+        <a href="search.php?<?php echo $qs_no_action ?>_action=new"><?php echo translate("save search") ?></a> |
+<?php
+    }
     if ($user->is_admin()) {
 ?>
             <a href="edit_photos.php?<?php echo $qs ?>"><?php echo translate("edit") ?></a> |

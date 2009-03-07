@@ -16,18 +16,98 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
     require_once("include.inc.php");
+    if ($_action=="insert") {
+        $search=new search();
+        $search->set("owner", $user->get("user_id"));
+    } else if ($_action == "update" || 
+               $_action == "confirm" || 
+               $_action == "delete" ) {
+        $search_id=getvar("search_id");
+        $search=new search($search_id);
+        $search->lookup($user);
+        if (!($search->get("owner") == $user->get("user_id") || 
+            $user->is_admin())) {
+            header("Location: " . add_sid("zoph.php"));
+            die("You are not allowed to do that!");
+        }
+    }
+    
+    if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
+        $request_vars = clean_request_vars($request_vars);
+        require_once("photos.php");
+    } else if ($_action=="new" || $_action=="edit") {
+        if($_action=="new") {
+            $action="insert";
+            unset($request_vars["_action"]);
+            $request_vars = clean_request_vars($request_vars);
 
-    //print_r($request_vars); //DEBUG
-if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
-    $request_vars = clean_request_vars($request_vars);
-    //print_r($request_vars); //DEBUG
-    require_once("photos.php");
-}
-else {
+            foreach($request_vars as $key => $val) {
+                $key=preg_replace("/\#([0-9]+)/", "[$1]", $key);
+                if($url) {
+                    $url.="&";
+                }   
+                $url.=$key. "=" . $val;
+            }
+            $search=new search; 
+            $search->set("search", $url);
+            $search->set("owner", $user->get("user_id"));
+        } else if ($_action=="edit") {
+            $action="update";
+            $search_id=getvar("search_id");
+            $search=new search($search_id);
+            $search->lookup($user);
+            $url=$search->get("search");
+        }   
+        require_once("header.inc.php");
+?>
+    <h1><?php echo translate("Save search")?></h1>
+    <div class="main">
+    <form>
+        <input type="hidden" name="search_id" value="<?php echo $search->get("search_id") ?>">
 
-    $today = date("Y-m-d");
+        <?php echo create_edit_fields($search->get_edit_array($user)) ?>
+        <input type="hidden" name="search" value="<?php echo $url ?>">
+        <input type="hidden" name="_action" value="<?php echo $action?>">
+        <input type="submit" name="_button" value="<?php echo translate($action)?>">
+    </form>
+    <div>
+<?php
+        require_once("footer.inc.php");
+        end;
+    
+    
+    } else if ($_action=="update" || 
+               $_action=="confirm" || 
+               $_action=="insert") {
+        $redirect = "search.php";
+        $obj = &$search;
+        require_once("actions.inc.php");
+        header("Location: " . add_sid($redirect));
+    } else if ($_action=="delete") {
+        $search_id=getvar("search_id");
+        $search=new search($search_id);
+        $search->lookup($user);
+        $url="search.php?search_id=" . $search->get("search_id") . 
+            "&_action=confirm";
+        require_once("header.inc.php");
+?>
+    <h1><?php echo translate("Delete saved search")?></h1>
+    <div class="main">
+        <span class="actionlink">
+            <a href='<?php echo $url ?>'><?php echo translate("confirm") ?></a>
+            | <a href='search.php'><?php echo translate("cancel") ?></a>
+        </span>
+        <?php printf(translate("Confirm deletion of saved search '%s'"), $search->get("name")) ?>
+        <br>
+     </div>
+<?php
+        require_once("footer.inc.php");
+        end;
+    } else {
 
-    require_once("header.inc.php");
+        $today = date("Y-m-d");
+
+        require_once("header.inc.php");
 
 /*
   Each search item is stored in a set of arrays. The increment button increases the size of the array.
@@ -492,6 +572,10 @@ for ($i = 0; $i <= $count; $i++) {
           <input type="submit" name="_action" value="<?php echo translate("search", 0); ?>">
       </span>
   </form>
+<?php
+    echo get_list_of_saved_searches($user)
+?>
+
 </div>
 <?php
 require_once("footer.inc.php");
