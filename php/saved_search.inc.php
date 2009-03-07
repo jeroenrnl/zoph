@@ -1,7 +1,7 @@
 <?php
 
 /*
- * A photo album class corresponding to the album table.
+ * Object for storing & retrieving searches
  *
  * This file is part of Zoph.
  *
