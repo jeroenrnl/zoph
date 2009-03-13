@@ -282,6 +282,12 @@ class user extends zoph_table {
                 create_bar_graph($legend, $value_array, 150);
         }
     }
+    function get_comments() {
+        $sql = "select comment_id from " . DB_PREFIX . "comments where" .
+            " user_id = " .  $this->get("user_id") . " order by comment_date";
+        $comments=get_records_from_query("comment", $sql);
+        return $comments;
+    }
 }
 
 function get_users($order = "user_name") {

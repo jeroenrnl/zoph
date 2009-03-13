@@ -100,6 +100,10 @@
 </form><br>
 <?php
         echo $this_user->get_rating_graph();
+?>
+<h3><?php echo translate("comments by this user") ?></h3>
+<?php
+        echo format_comments($user,$this_user->get_comments());
     } else if ($action == "confirm") {
 ?>
           <h1>

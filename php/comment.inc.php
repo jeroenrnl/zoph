@@ -154,4 +154,12 @@ class comment extends zoph_table {
 function get_all_comments() {
    return get_records_from_query("comment", "select comment_id from " . DB_PREFIX . "comments");
    }
+
+function format_comments($user, $comments) {
+    foreach ($comments as $comment) {
+        $comment->lookup();
+        $html.=$comment->to_html($user, true);
+    }
+    return $html;
+}
 ?>
