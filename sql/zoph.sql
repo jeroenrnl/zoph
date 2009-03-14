@@ -376,16 +376,32 @@ INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0','1','1'
 --
 
 CREATE TABLE zoph_photo_ratings (
+  rating_id int(11) auto_increment NOT NULL,
   user_id int(11) NOT NULL default '0',
   photo_id int(11) NOT NULL default '0',
   rating tinyint(4) NOT NULL default '0',
-  PRIMARY KEY  (user_id,photo_id)
+  ipaddress varchar(16),
+  timestamp timestamp,
+  PRIMARY KEY  (rating_id)
 ) TYPE=MyISAM;
+
+CREATE INDEX user_photo ON zoph_photo_ratings (user_id,photo_id);
+
 
 --
 -- Dumping data for table 'zoph_photo_ratings'
 --
 
+CREATE TABLE zoph_saved_search (
+        search_id int(11) NOT NULL auto_increment,
+        name varchar(64) NOT NULL default '',
+        owner int(11) default NULL,
+        public tinyint(1) default '0',
+        search varchar(2000) default NULL,
+        timestamp timestamp NOT NULL default CURRENT_TIMESTAMP
+                on update CURRENT_TIMESTAMP,
+        PRIMARY KEY  (`search_id`)
+);
 
 
 --
@@ -405,6 +421,8 @@ CREATE TABLE zoph_users (
   import char(1) NOT NULL default '0',
   download char(1) NOT NULL default '0',
   leave_comments char(1) NOT NULL default '0',
+  allow_rating char(1) NOT NULL DEFAULT '1',
+  allow_multirating char(1) NOT NULL DEFAULT '0',
   lightbox_id int(11) default NULL,
   lastnotify datetime default NULL,
   lastlogin datetime default NULL,
@@ -417,7 +435,7 @@ CREATE TABLE zoph_users (
 --
 
 
-INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1',NULL,NULL,NULL,NULL);
+INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1', '0', NULL,NULL,NULL,NULL);
 
 CREATE TABLE zoph_pageset (
   pageset_id int(11) NOT NULL auto_increment,
