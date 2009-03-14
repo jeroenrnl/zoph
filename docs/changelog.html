@@ -8,7 +8,7 @@
     <p>
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
-		<h1 class="firstHeading">Zoph/Changelog</h1>
+		<h1 id="firstHeading" class="firstHeading">Zoph/Changelog</h1>
 		<div id="bodyContent">
 			<table id="toc" class="toc" summary="Contents">
 <tr>
@@ -17,79 +17,86 @@
 <h2>Contents</h2>
 </div>
 <ul>
-<li class="toclevel-1"><a href="#Zoph_0.7.4"><span class="tocnumber">1</span> <span class="toctext">Zoph 0.7.4</span></a>
+<li class="toclevel-1"><a href="#Zoph_0.7.5"><span class="tocnumber">1</span> <span class="toctext">Zoph 0.7.5</span></a>
 <ul>
 <li class="toclevel-2"><a href="#Bugs"><span class="tocnumber">1.1</span> <span class="toctext">Bugs</span></a></li>
 <li class="toclevel-2"><a href="#Features"><span class="tocnumber">1.2</span> <span class="toctext">Features</span></a></li>
-<li class="toclevel-2"><a href="#Translation"><span class="tocnumber">1.3</span> <span class="toctext">Translation</span></a></li>
-<li class="toclevel-2"><a href="#Various"><span class="tocnumber">1.4</span> <span class="toctext">Various</span></a></li>
+<li class="toclevel-2"><a href="#Known_issues"><span class="tocnumber">1.3</span> <span class="toctext">Known issues</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Zoph_0.7.3"><span class="tocnumber">2</span> <span class="toctext">Zoph 0.7.3</span></a>
+<li class="toclevel-1"><a href="#Zoph_0.7.4"><span class="tocnumber">2</span> <span class="toctext">Zoph 0.7.4</span></a>
 <ul>
 <li class="toclevel-2"><a href="#Bugs_2"><span class="tocnumber">2.1</span> <span class="toctext">Bugs</span></a></li>
 <li class="toclevel-2"><a href="#Features_2"><span class="tocnumber">2.2</span> <span class="toctext">Features</span></a></li>
-<li class="toclevel-2"><a href="#Translations"><span class="tocnumber">2.3</span> <span class="toctext">Translations</span></a></li>
+<li class="toclevel-2"><a href="#Translation"><span class="tocnumber">2.3</span> <span class="toctext">Translation</span></a></li>
+<li class="toclevel-2"><a href="#Various"><span class="tocnumber">2.4</span> <span class="toctext">Various</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Zoph_0.7.0.5"><span class="tocnumber">3</span> <span class="toctext">Zoph 0.7.0.5</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.7.2.1"><span class="tocnumber">4</span> <span class="toctext">Zoph 0.7.2.1</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.7.2"><span class="tocnumber">5</span> <span class="toctext">Zoph 0.7.2</span></a>
+<li class="toclevel-1"><a href="#Zoph_0.7.3"><span class="tocnumber">3</span> <span class="toctext">Zoph 0.7.3</span></a>
 <ul>
-<li class="toclevel-2"><a href="#Bugs_3"><span class="tocnumber">5.1</span> <span class="toctext">Bugs</span></a></li>
-<li class="toclevel-2"><a href="#Features_3"><span class="tocnumber">5.2</span> <span class="toctext">Features</span></a></li>
-<li class="toclevel-2"><a href="#Translations_2"><span class="tocnumber">5.3</span> <span class="toctext">Translations</span></a></li>
+<li class="toclevel-2"><a href="#Bugs_3"><span class="tocnumber">3.1</span> <span class="toctext">Bugs</span></a></li>
+<li class="toclevel-2"><a href="#Features_3"><span class="tocnumber">3.2</span> <span class="toctext">Features</span></a></li>
+<li class="toclevel-2"><a href="#Translations"><span class="tocnumber">3.3</span> <span class="toctext">Translations</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Zoph_0.7.0.4"><span class="tocnumber">6</span> <span class="toctext">Zoph 0.7.0.4</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.7.0.3"><span class="tocnumber">7</span> <span class="toctext">Zoph 0.7.0.3</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.7.1"><span class="tocnumber">8</span> <span class="toctext">Zoph 0.7.1</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.7.0.2"><span class="tocnumber">9</span> <span class="toctext">Zoph 0.7.0.2</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.7.0.1"><span class="tocnumber">10</span> <span class="toctext">Zoph 0.7.0.1</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.7"><span class="tocnumber">11</span> <span class="toctext">Zoph 0.7</span></a>
+<li class="toclevel-1"><a href="#Zoph_0.7.0.5"><span class="tocnumber">4</span> <span class="toctext">Zoph 0.7.0.5</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.7.2.1"><span class="tocnumber">5</span> <span class="toctext">Zoph 0.7.2.1</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.7.2"><span class="tocnumber">6</span> <span class="toctext">Zoph 0.7.2</span></a>
 <ul>
-<li class="toclevel-2"><a href="#Bugfixes"><span class="tocnumber">11.1</span> <span class="toctext">Bugfixes</span></a></li>
-<li class="toclevel-2"><a href="#Cleanup_and_various"><span class="tocnumber">11.2</span> <span class="toctext">Cleanup and various</span></a></li>
+<li class="toclevel-2"><a href="#Bugs_4"><span class="tocnumber">6.1</span> <span class="toctext">Bugs</span></a></li>
+<li class="toclevel-2"><a href="#Features_4"><span class="tocnumber">6.2</span> <span class="toctext">Features</span></a></li>
+<li class="toclevel-2"><a href="#Translations_2"><span class="tocnumber">6.3</span> <span class="toctext">Translations</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Zoph_0.7pre2"><span class="tocnumber">12</span> <span class="toctext">Zoph 0.7pre2</span></a>
+<li class="toclevel-1"><a href="#Zoph_0.7.0.4"><span class="tocnumber">7</span> <span class="toctext">Zoph 0.7.0.4</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.7.0.3"><span class="tocnumber">8</span> <span class="toctext">Zoph 0.7.0.3</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.7.1"><span class="tocnumber">9</span> <span class="toctext">Zoph 0.7.1</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.7.0.2"><span class="tocnumber">10</span> <span class="toctext">Zoph 0.7.0.2</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.7.0.1"><span class="tocnumber">11</span> <span class="toctext">Zoph 0.7.0.1</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.7"><span class="tocnumber">12</span> <span class="toctext">Zoph 0.7</span></a>
 <ul>
-<li class="toclevel-2"><a href="#Bugfixes_2"><span class="tocnumber">12.1</span> <span class="toctext">Bugfixes</span></a></li>
-<li class="toclevel-2"><a href="#Cleanup_and_various_2"><span class="tocnumber">12.2</span> <span class="toctext">Cleanup and various</span></a></li>
+<li class="toclevel-2"><a href="#Bugfixes"><span class="tocnumber">12.1</span> <span class="toctext">Bugfixes</span></a></li>
+<li class="toclevel-2"><a href="#Cleanup_and_various"><span class="tocnumber">12.2</span> <span class="toctext">Cleanup and various</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Zoph_0.7pre1"><span class="tocnumber">13</span> <span class="toctext">Zoph 0.7pre1</span></a>
+<li class="toclevel-1"><a href="#Zoph_0.7pre2"><span class="tocnumber">13</span> <span class="toctext">Zoph 0.7pre2</span></a>
 <ul>
-<li class="toclevel-2"><a href="#New_Features"><span class="tocnumber">13.1</span> <span class="toctext">New Features</span></a></li>
-<li class="toclevel-2"><a href="#Bugfixes_3"><span class="tocnumber">13.2</span> <span class="toctext">Bugfixes</span></a></li>
-<li class="toclevel-2"><a href="#Cleanup_and_various_3"><span class="tocnumber">13.3</span> <span class="toctext">Cleanup and various</span></a></li>
+<li class="toclevel-2"><a href="#Bugfixes_2"><span class="tocnumber">13.1</span> <span class="toctext">Bugfixes</span></a></li>
+<li class="toclevel-2"><a href="#Cleanup_and_various_2"><span class="tocnumber">13.2</span> <span class="toctext">Cleanup and various</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Zoph_0.6"><span class="tocnumber">14</span> <span class="toctext">Zoph 0.6</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.6pre2"><span class="tocnumber">15</span> <span class="toctext">Zoph 0.6pre2</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.6pre1"><span class="tocnumber">16</span> <span class="toctext">Zoph 0.6pre1</span></a>
+<li class="toclevel-1"><a href="#Zoph_0.7pre1"><span class="tocnumber">14</span> <span class="toctext">Zoph 0.7pre1</span></a>
 <ul>
-<li class="toclevel-2"><a href="#New_features_2"><span class="tocnumber">16.1</span> <span class="toctext">New features</span></a></li>
-<li class="toclevel-2"><a href="#Bugfixes_4"><span class="tocnumber">16.2</span> <span class="toctext">Bugfixes</span></a></li>
-<li class="toclevel-2"><a href="#Cleanup_and_various_4"><span class="tocnumber">16.3</span> <span class="toctext">Cleanup and various</span></a></li>
+<li class="toclevel-2"><a href="#New_Features"><span class="tocnumber">14.1</span> <span class="toctext">New Features</span></a></li>
+<li class="toclevel-2"><a href="#Bugfixes_3"><span class="tocnumber">14.2</span> <span class="toctext">Bugfixes</span></a></li>
+<li class="toclevel-2"><a href="#Cleanup_and_various_3"><span class="tocnumber">14.3</span> <span class="toctext">Cleanup and various</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Zoph_0.5.1"><span class="tocnumber">17</span> <span class="toctext">Zoph 0.5.1</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.5"><span class="tocnumber">18</span> <span class="toctext">Zoph 0.5</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.5_pre4"><span class="tocnumber">19</span> <span class="toctext">Zoph 0.5 pre4</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.5-pre3"><span class="tocnumber">20</span> <span class="toctext">Zoph 0.5-pre3</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.5-pre2"><span class="tocnumber">21</span> <span class="toctext">Zoph 0.5-pre2</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.5-pre1"><span class="tocnumber">22</span> <span class="toctext">Zoph 0.5-pre1</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.4"><span class="tocnumber">23</span> <span class="toctext">Zoph 0.4</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.4pre2"><span class="tocnumber">24</span> <span class="toctext">Zoph 0.4pre2</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.4pre1"><span class="tocnumber">25</span> <span class="toctext">Zoph 0.4pre1</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.3.3"><span class="tocnumber">26</span> <span class="toctext">Zoph 0.3.3</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.3.2"><span class="tocnumber">27</span> <span class="toctext">Zoph 0.3.2</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.3.1"><span class="tocnumber">28</span> <span class="toctext">Zoph 0.3.1</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.3"><span class="tocnumber">29</span> <span class="toctext">Zoph 0.3</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.2.1"><span class="tocnumber">30</span> <span class="toctext">Zoph 0.2.1</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.2"><span class="tocnumber">31</span> <span class="toctext">Zoph 0.2</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_0.1"><span class="tocnumber">32</span> <span class="toctext">Zoph 0.1</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.6"><span class="tocnumber">15</span> <span class="toctext">Zoph 0.6</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.6pre2"><span class="tocnumber">16</span> <span class="toctext">Zoph 0.6pre2</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.6pre1"><span class="tocnumber">17</span> <span class="toctext">Zoph 0.6pre1</span></a>
+<ul>
+<li class="toclevel-2"><a href="#New_features_2"><span class="tocnumber">17.1</span> <span class="toctext">New features</span></a></li>
+<li class="toclevel-2"><a href="#Bugfixes_4"><span class="tocnumber">17.2</span> <span class="toctext">Bugfixes</span></a></li>
+<li class="toclevel-2"><a href="#Cleanup_and_various_4"><span class="tocnumber">17.3</span> <span class="toctext">Cleanup and various</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1"><a href="#Zoph_0.5.1"><span class="tocnumber">18</span> <span class="toctext">Zoph 0.5.1</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.5"><span class="tocnumber">19</span> <span class="toctext">Zoph 0.5</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.5_pre4"><span class="tocnumber">20</span> <span class="toctext">Zoph 0.5 pre4</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.5-pre3"><span class="tocnumber">21</span> <span class="toctext">Zoph 0.5-pre3</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.5-pre2"><span class="tocnumber">22</span> <span class="toctext">Zoph 0.5-pre2</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.5-pre1"><span class="tocnumber">23</span> <span class="toctext">Zoph 0.5-pre1</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.4"><span class="tocnumber">24</span> <span class="toctext">Zoph 0.4</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.4pre2"><span class="tocnumber">25</span> <span class="toctext">Zoph 0.4pre2</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.4pre1"><span class="tocnumber">26</span> <span class="toctext">Zoph 0.4pre1</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.3.3"><span class="tocnumber">27</span> <span class="toctext">Zoph 0.3.3</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.3.2"><span class="tocnumber">28</span> <span class="toctext">Zoph 0.3.2</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.3.1"><span class="tocnumber">29</span> <span class="toctext">Zoph 0.3.1</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.3"><span class="tocnumber">30</span> <span class="toctext">Zoph 0.3</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.2.1"><span class="tocnumber">31</span> <span class="toctext">Zoph 0.2.1</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.2"><span class="tocnumber">32</span> <span class="toctext">Zoph 0.2</span></a></li>
+<li class="toclevel-1"><a href="#Zoph_0.1"><span class="tocnumber">33</span> <span class="toctext">Zoph 0.1</span></a></li>
 </ul>
 </td>
 </tr>
@@ -99,11 +106,44 @@
  if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
 //]]>
 </script>
+<p><a name="Zoph_0.7.5" id="Zoph_0.7.5"></a></p>
+<h2> <span class="mw-headline">Zoph 0.7.5</span></h2>
+<p>14 March 2009</p>
+<p>Zoph 0.7.5 is the last "feature release" before v0.8. This version introduces a few new features that will be present in the next "stable" version, 0.8. This release fixes a number of bugs from the earlier 0.7.x releases.</p>
+<p><a name="Bugs" id="Bugs"></a></p>
+<h3> <span class="mw-headline">Bugs</span></h3>
+<ul>
+<li>Bug#2465009, wrong counters for rating</li>
+<li>Fixed a bug where a translated version of Zoph would not make a breadcrumb for search results.</li>
+<li>Fixed: Timezone calculations are using local timezone instead of configured CAMERA_TZ.</li>
+<li>Bug#2671365 Can not leave comments</li>
+<li>Fixed a bug in zophImport.pl where --update could in some cases move a photo to a wrong location.</li>
+</ul>
+<p><a name="Features" id="Features"></a></p>
+<h3> <span class="mw-headline">Features</span></h3>
+<ul>
+<li>Added a feature where an admin user can check out the ratings a certain user has given, adds a graph similar to the one on the reports page to the user's page.</li>
+<li>Admins can now see who has rated what per photo</li>
+<li>Admins can delete ratings</li>
+<li>IP address and date/time are now stored when rating</li>
+<li>An admin can control wheter a user can rate photos or not.</li>
+<li>Req#2126915: Allow a user to rate the same photo multiple times, but only once per IP addres, you can use this for the DEFAULT_USER or a user account that is shared among multiple people.</li>
+<li>Improved error handling on erronous time or date. (timezone calculations)</li>
+<li>Move all MySQL calls into database.inc.php, making adjusting to other db's easier, partly resolves Req#2464455</li>
+<li>Req#1480136: Save search results</li>
+<li>A list of all comments by a user is now shown in user profile.</li>
+</ul>
+<p><a name="Known_issues" id="Known_issues"></a></p>
+<h3> <span class="mw-headline">Known issues</span></h3>
+<ul>
+<li>The translations have not yet been updated</li>
+<li>Not all documentation is up to date</li>
+</ul>
 <p><a name="Zoph_0.7.4" id="Zoph_0.7.4"></a></p>
 <h2> <span class="mw-headline">Zoph 0.7.4</span></h2>
 <p>22 December 2008</p>
 <p>Zoph 0.7.4 is a "feature release", that introduces a few new features that will be present in the next "stable" version, 0.8. This release fixes a number of bugs from the earlier 0.7.x releases and specifically deals with some performance issues.</p>
-<p><a name="Bugs" id="Bugs"></a></p>
+<p><a name="Bugs_2" id="Bugs_2"></a></p>
 <h3> <span class="mw-headline">Bugs</span></h3>
 <ul>
 <li>Bug#2044965: Assign timezone to all children only assigns timezone to direct children.</li>
@@ -127,7 +167,7 @@
 <li>Bug#2315870: Layout glitch when using non-standard size thumbnails.</li>
 <li>Bug#2438062: Zoph does not pick a different coverphoto for people if the assigned one is not visible for the user.</li>
 </ul>
-<p><a name="Features" id="Features"></a></p>
+<p><a name="Features_2" id="Features_2"></a></p>
 <h3> <span class="mw-headline">Features</span></h3>
 <ul>
 <li>Req#2097906: Add "next" and "prev" links to edit photo page, when not using auto-edit feature</li>
@@ -149,7 +189,7 @@
 <h2> <span class="mw-headline">Zoph 0.7.3</span></h2>
 <p>24 July 2008</p>
 <p>Zoph 0.7.3 is a "feature release", that introduces a few new features that will be present in the next "stable" version, 0.8. It also fixes some bugs from 0.7.1 and 0.7.2 Finally, it includes the bugfixes from 0.7.0.5. This includes the security update.</p>
-<p><a name="Bugs_2" id="Bugs_2"></a></p>
+<p><a name="Bugs_3" id="Bugs_3"></a></p>
 <h3> <span class="mw-headline">Bugs</span></h3>
 <ul>
 <li>Bug#1985434: a-z index for people doesn't work anymore.</li>
@@ -169,7 +209,7 @@
 <li>Bug#2022777: [person] tag is missing from pages feature</li>
 <li>Bug#2021272: Crash when changing the parent of the root album</li>
 </ul>
-<p><a name="Features_2" id="Features_2"></a></p>
+<p><a name="Features_3" id="Features_3"></a></p>
 <h3> <span class="mw-headline">Features</span></h3>
 <ul>
 <li>Req#1505552: Mapping support. You can now use maps to show the location of your photos, using the mapstraction api. There is support for Google, Yahoo and Openstreetmap maps.</li>
@@ -206,7 +246,7 @@
 <h2> <span class="mw-headline">Zoph 0.7.2</span></h2>
 <p>1 June 2008</p>
 <p>Zoph 0.7.2 is a "feature release", that introduces a few new features that will be present in the next "stable" version, 0.8. It also fixes some bugs from 0.7.1. Finally, it includes the bugfixes from 0.7.0.3 and 0.7.0.4.</p>
-<p><a name="Bugs_3" id="Bugs_3"></a></p>
+<p><a name="Bugs_4" id="Bugs_4"></a></p>
 <h3> <span class="mw-headline">Bugs</span></h3>
 <ul>
 <li>Bug#1819755: User that cannot see all albums does not always see all the albums he *is* allowed to see.</li>
@@ -214,7 +254,7 @@
 <li>Bug#1820229: User does not see all thumbs if he has not the right to see the manually assigned thumb.</li>
 <li>Sometimes not all albums were shown and sortorder was not always correct.</li>
 </ul>
-<p><a name="Features_3" id="Features_3"></a></p>
+<p><a name="Features_4" id="Features_4"></a></p>
 <h3> <span class="mw-headline">Features</span></h3>
 <ul>
 <li>Zophcode: Possibility to add markup and smileys to comments. Smileys were taken from PHPBB. (they are under GPL)</li>
@@ -735,7 +775,7 @@
 
 <!-- 
 NewPP limit report
-Preprocessor node count: 53/1000000
+Preprocessor node count: 57/1000000
 Post-expand include size: 0/2048000 bytes
 Template argument size: 0/2048000 bytes
 Expensive parser function count: 0/500
