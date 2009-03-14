@@ -333,7 +333,7 @@ sub processImage {
                     mkdir("$image_dir/$path", 0755) or warn "Could not create dir: $!\n";
                 }
                 copy($img, "$image_dir/$path/" . stripPath($img)) or
-                    die "Could not copy file: $!\n";
+                    die "Could not copy $img: $!\n";
                 if (!$copy and !$resolveSymlinks) {
                     unlink($img);
                 }
@@ -341,12 +341,16 @@ sub processImage {
         } else {
         my $thisPath = $img;
             $thisPath =~ s|/?[^/]+$||;
-            if (abs_path($image_dir) ne abs_path($thisPath)) {
-                copy($img, "$image_dir/" . stripPath($img)) or
-                    die "Could not copy file: $!\n";
-                if (!$copy and !$resolveSymlinks) {
-                    unlink($img);
+        if(!$update) {
+                if (abs_path($image_dir) ne abs_path($thisPath)) {
+                    copy($img, "$image_dir/" . stripPath($img)) or
+                        die "Could not copy file $img: $!\n";
+                    if (!$copy and !$resolveSymlinks) {
+                        unlink($img);
+                    }
                 }
+        } else {
+            $newPath=$thisPath;
             }
         } 
     
