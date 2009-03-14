@@ -1,6 +1,6 @@
-Zoph 0.7 to 0.7.4
+Zoph 0.7 to 0.7.5
 
-You can also use these instructions to go from 0.7.0.x to 0.7.4, for an update from 0.7.1, 0.7.2, 0.7.2.1 or 0.7.3 see 0.7.x to 0.7.x
+You can also use these instructions to go from 0.7.0.x to 0.7.5, for an update from 0.7.1, 0.7.2, 0.7.2.1, 0.7.3 or 0.7.4 see 0.7.x to 0.7.x
 
 Copy php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.
 
@@ -25,19 +25,30 @@ The database upgrade script makes the following changes:
     * Change the description column in the photos table from BLOB to TEXT, to improve search-capabilities (0.7.3)
     * Change the title field for albums and categories from 32 to 64 characters (0.7.3)
     * Add new tables for usergroups (0.7.4)
+    * Modify the zoph_ratings table to allow multiple votes by the same user, store IP address and date/time (0.7.5)
+    * Add an index on users to the zoph_ratings table (0.7.5)
+    * Modify the zoph_users table to control whether a user is allowed to use the voting system and whether a user is allowed to vote multiple times on the same photo (0.7.5)
+    * Create a table to store saved searches (0.7.5)
 
 Configuration updates
 
-(see CONFIGURATION for details):
+(see http://en.wikibooks.org/wiki/Zoph/Configuration for details):
 
 New options
 
-    * MAPS
-    * GOOGLE_KEY
-    * CAMERA_TZ
-    * DATE_FORMAT
-    * TIME_FORMAT
-    * GUESS_TZ
+    * MAPS (0.7.3)
+    * GOOGLE_KEY (0.7.3)
+    * CAMERA_TZ (0.7.3)
+    * DATE_FORMAT (0.7.3)
+    * TIME_FORMAT (0.7.3)
+    * GUESS_TZ (0.7.3)
+    * ICONSET (0.7.2)
+    * DEFAULT_LANG (0.7.2)
+    * WM_POSX (0.7.1)
+    * WM_POSY (0.7.1)
+    * WM_TRANS (0.7.1)
+    * IMPORT_MOVE (0.7.1)
+    * DOWNLOAD (0.7.1)
 
 Group access rights
 
@@ -55,37 +66,11 @@ Zoph 0.7.x to 0.7.x update
 
 If you are upgrading from a feature release to another feature release, you need to edit zoph-update-0.8.sql. You should comment out the changes that have already been applied to your system. For example, if you are upgrading from 0.7.1 to 0.7.4, you will need to prepend the changes for 0.7.1 with a #, since you have already applied those changes when you updated to 0.7.1. After that, you can follow the instructions for 0.7 to 0.7.x.
 
-Zoph 0.7 or 0.7.0.1 -> 0.7.0.2 update
-25 July 2007
-Copy php/* to the location of your installation. Make sure to also copy the
-php/lang subdirectory.
+Zoph 0.7 to Zoph 0.7.0.x
 
-You can upgrade directly from 0.6 to 0.7.0.2, simply use the
-zoph-0.7.0.2.tar.gz and execute the instructions for the 0.6 to 0.7 upgrade.
+Copy php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.
 
-Zoph 0.7.0.3
-Please follow the instructions for 0.7.0.2.
-
-Zoph 0.7 or 0.7.0.1 -> 0.7.0.2 update
-25 July 2007
-Copy php/* to the location of your installation. Make sure to also copy the
-php/lang subdirectory.
-
-You can upgrade directly from 0.6 to 0.7.0.2, simply use the
-zoph-0.7.0.2.tar.gz and execute the instructions for the 0.6 to 0.7 upgrade.
-
-Zoph 0.7 -> 0.7.0.1 update
-14 July 2007
-
-Copy php/* to the location of your installation. Make sure to also copy the
-php/lang subdirectory.
-or install the patch:
-cd to the location of your Zoph 0.7 installation and execute
- patch < zoph-0.7.0.1.patch
-
-You can upgrade directly from 0.6 to 0.7.0.1, simply use the
-zoph-0.7.0.1.tar.gz and execute the instructions for the 0.6 to 0.7 upgrade.
-
+You can upgrade directly from 0.6 to 0.7.0.x, simply use the zoph-0.7.0.x.tar.gz and execute the instructions for the 0.6 to 0.7 upgrade.
 Zoph 0.6 -> 0.7 update
 1 July 2007
 

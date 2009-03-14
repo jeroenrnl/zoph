@@ -1,4 +1,37 @@
 Zoph Changelog
+
+Zoph 0.7.5
+14 March 2009
+
+Zoph 0.7.5 is the last "feature release" before v0.8. This version introduces a few new features that will be present in the next "stable" version, 0.8. This release fixes a number of bugs from the earlier 0.7.x releases.
+
+Bugs
+
+    * Bug#2465009, wrong counters for rating
+    * Fixed a bug where a translated version of Zoph would not make a breadcrumb for search results.
+    * Fixed: Timezone calculations are using local timezone instead of configured CAMERA_TZ.
+    * Bug#2671365 Can not leave comments
+    * Fixed a bug in zophImport.pl where --update could in some cases move a photo to a wrong location.
+
+Features
+
+    * Added a feature where an admin user can check out the ratings a certain user has given, adds a graph similar to the one on the reports page to the user's page.
+    * Admins can now see who has rated what per photo
+    * Admins can delete ratings
+    * IP address and date/time are now stored when rating
+    * An admin can control wheter a user can rate photos or not.
+    * Req#2126915: Allow a user to rate the same photo multiple times, but only once per IP addres, you can use this for the DEFAULT_USER or a user account that is shared among multiple people.
+    * Improved error handling on erronous time or date. (timezone calculations)
+    * Move all MySQL calls into database.inc.php, making adjusting to other db's easier, partly resolves Req#2464455
+    * Req#1480136: Save search results
+    * A list of all comments by a user is now shown in user profile.
+
+Known issues
+
+    * The translations have not yet been updated
+    * Not all documentation is up to date
+
+
 Zoph 0.7.4
 
 22 December 2008
