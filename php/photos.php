@@ -23,7 +23,7 @@
     $_order = getvar("_order");
     $_dir = getvar("_dir");
     $_show = getvar("_show");
-
+    $vars=clean_request_vars($request_vars);
     if(!preg_match("/^[a-zA-Z_]*$/", $_order)) {
         die("Illegal characters in _order");
     }
@@ -55,7 +55,7 @@
 
     $thumbnails;
     $num_photos =
-        get_photos($request_vars, $offset, $cells, $thumbnails, $user);
+        get_photos($vars, $offset, $cells, $thumbnails, $user);
 
     $num_thumbnails = sizeof($thumbnails);
 
@@ -128,13 +128,13 @@
     else {
 ?>
             <div id="sortorder">
-<?php echo create_form($request_vars, array ("_rows", "_cols", "_order", "_button")) ?>
+<?php echo create_form($vars, array ("_rows", "_cols", "_order", "_button")) ?>
                 <?php echo translate("order by", 0) . "\n" ?>
                 <?php echo create_photo_field_pulldown("_order", $_order) ?>
             </div>
             <div id="updown">
-                <a href="photos.php?<?php echo update_query_string($request_vars, "_dir", "asc") ?>"><img class="up" alt="sort ascending" src="images/up<?php echo $_dir == "asc" ? 1 : 2 ?>.gif"></a>
-                <a href="photos.php?<?php echo update_query_string($request_vars, "_dir", "desc") ?>"><img class="down" alt="sort descending" src="images/down<?php echo $_dir == "asc" ? 2 : 1 ?>.gif"></a>
+                <a href="photos.php?<?php echo update_query_string($vars, "_dir", "asc") ?>"><img class="up" alt="sort ascending" src="images/up<?php echo $_dir == "asc" ? 1 : 2 ?>.gif"></a>
+                <a href="photos.php?<?php echo update_query_string($vars, "_dir", "desc") ?>"><img class="down" alt="sort descending" src="images/down<?php echo $_dir == "asc" ? 2 : 1 ?>.gif"></a>
             </div>
             <div id="rowscols">
 <?php
@@ -166,7 +166,7 @@
             if (getvar("_random")) {
                 echo $thumbnails[$i]->get_thumbnail_link("photo.php?photo_id=" . $thumbnails[$i]->get("photo_id")) . "\n";
             } else {
-                echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($request_vars, "_off", $offset + $i, $ignore)) . "\n"; 
+                echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n"; 
             }
             if (!empty($desc_thumbnails) && $thumbnails[$i]->get("description")) {
 ?>
@@ -179,7 +179,7 @@
             if (!empty($lightbox)) {
                 if (!isset($desc_thumbnails)) { echo "<br>\n"; }
 ?>
-                <div class="actionlink"><a href="photos.php?<?php echo update_query_string($request_vars, "_photo_id", $thumbnails[$i]->get("photo_id"), $ignore) ?>">x</a></div>
+                <div class="actionlink"><a href="photos.php?<?php echo update_query_string($vars, "_photo_id", $thumbnails[$i]->get("photo_id"), $ignore) ?>">x</a></div>
 <?php
             }
 
@@ -197,7 +197,7 @@
 ?>
        <br>
 <?php
-        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $PHP_SELF, $request_vars, "_off");
+        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $PHP_SELF, $vars, "_off");
     } // if photos
 ?>
        <br>

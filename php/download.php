@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
     require_once("include.inc.php");
+    $vars=clean_request_vars($request_vars);
 
     $_action=getvar("_action");
     if(!DOWNLOAD || (!$user->get("download") && !$user->is_admin())) {
@@ -76,7 +77,7 @@
         $photos;
 
         $total_photo_count =
-            get_photos($request_vars, $offset, $maxfiles, $photos, $user);
+            get_photos($vars, $offset, $maxfiles, $photos, $user);
 
         $num_photos = sizeof($photos);
         if  ($num_photos) {
@@ -124,7 +125,7 @@
     } else {
         # Give me a call if you have more than 999999999 photos!
         $total_photo_count =
-            get_photos($request_vars, 0, 999999999, $photos, $user);
+            get_photos($vars, 0, 999999999, $photos, $user);
         $num_photos=sizeof($photos);
         if ($num_photos<= 0) {
 ?>
@@ -137,7 +138,7 @@
                     <?php printf(translate("You have requested the download of %s photos, with a total size of  %s."), $num_photos, get_filesize($photos, true)); ?>
                 </p>
                 <p>
-                    <?php echo create_form($request_vars, array("_off", "_action")) ?>
+                    <?php echo create_form($vars, array("_off", "_action")) ?>
                     <input type="hidden" name="_action" value="getfile">
                     <label for="filename">
                         <?php echo translate("Filename") ?>
