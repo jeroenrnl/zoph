@@ -83,7 +83,7 @@ class user extends zoph_table {
             $group_id_array[]=$group->get("group_id");
         }
         if($group_id_array) {
-            $group_ids=explode(",", $group_id_array);
+            $group_ids=implode(",", $group_id_array);
             $sql = "SELECT * FROM " .
                 DB_PREFIX . "group_permissions WHERE " .
                 "album_id=".escape_string($album_id) . " AND " .
