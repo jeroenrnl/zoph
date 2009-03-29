@@ -598,10 +598,14 @@ function get_xml($class, $search,$user=null) {
                 if($search=="") {
                     $search=null;
                 }
-                if($subclass=="photographer") {
-                    $records=get_photographers($user,$search,true);
+                if($user->is_admin()) {
+                   $records=get_all_people($user,$search, true);
                 } else {
-                    $records=get_photographed_people($user,$search,true);
+                    if($subclass=="photographer") {
+                        $records=get_photographers($user,$search,true);
+                    } else {
+                        $records=get_photographed_people($user,$search,true);
+                    }
                 }
             } else {
                 $records=get_records($class, $order, $constraints, $conj, $ops);
