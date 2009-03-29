@@ -30,10 +30,14 @@ class search extends zoph_table {
 
     function lookup($user) {
         
-        $sql="SELECT * FROM " . DB_PREFIX . "saved_search WHERE" .
-            "(owner=" . escape_string($user->get("user_id")) . " OR " .
-            "public=TRUE) " .
-            "AND search_id=" . escape_string($this->get("search_id"));
+        if(!$user->is_admin()) {
+            $where= "(owner=" . escape_string($user->get("user_id")) . 
+            " OR " . "public=TRUE) AND "; 
+        }
+        
+        $sql="SELECT * FROM " . DB_PREFIX . "saved_search WHERE " .
+            $where .
+            "search_id=" . escape_string($this->get("search_id"));
             
         return parent::lookup($sql);
     }

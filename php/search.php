@@ -68,7 +68,7 @@
         <?php echo create_edit_fields($search->get_edit_array($user)) ?>
         <input type="hidden" name="search" value="<?php echo $url ?>">
         <input type="hidden" name="_action" value="<?php echo $action?>">
-        <input type="submit" name="_button" value="<?php echo translate($action)?>">
+        <input type="submit" name="_button" value="<?php echo translate($action,0)?>">
     </form>
     <div>
 <?php
@@ -94,7 +94,7 @@
     <h1><?php echo translate("Delete saved search")?></h1>
     <div class="main">
         <span class="actionlink">
-            <a href='<?php echo $url ?>'><?php echo translate("confirm") ?></a>
+            <a href='<?php echo $url ?>'><?php echo translate("delete") ?></a>
             | <a href='search.php'><?php echo translate("cancel") ?></a>
         </span>
         <?php printf(translate("Confirm deletion of saved search '%s'"), $search->get("name")) ?>
