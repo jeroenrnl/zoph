@@ -60,15 +60,18 @@
         if  ($num_thumbnails) {
             $photo = $thumbnails[0];
             $photo_id = $photo->get("photo_id");
+            if(isset($_action) && !$_action=="" ) {
+                $act="_action=" . $_action . "&";
+            }
 
             if ($offset > 0) {
                 $newoffset = $offset - 1;
-                $prev_link = "<a href=\"" . $PHP_SELF . "?_action=" . $_action . "&" . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Prev") . "</a>";
+                $prev_link = "<a href=\"" . $PHP_SELF . "?" . $act . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Prev") . "</a>";
             }
 
             if ($offset + 1 < $num_photos) {
                 $newoffset = $offset + 1;
-                $next_link = "<a href=\"" . $PHP_SELF . "?_action=" . $_action . "&" . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Next") . "</a>";
+                $next_link = "<a href=\"" . $PHP_SELF . "?" . $act . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Next") . "</a>";
             }
         }
         else {
