@@ -932,6 +932,10 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             } else if ($place_tz && !$camera_tz) {
                 // Place timezone is known, camera timezone is not.
                 $camera_tz=$place_tz;
+            } else if (!$place_tz && !$camera_tz) {
+                // Neither are set
+                $camera_tz=new TimeZone(date_default_timezone_get());
+                $place_tz=$camera_tz;
             }
             
             $camera_time=new Time(
