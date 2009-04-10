@@ -462,7 +462,7 @@ function create_photographer_pulldown($name, $value=null, $user) {
         $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
             " value='" . $text . "' class='autocomplete'>";
     } else {
-        $html=create_pulldown($name, $value, get_photographer_search_array($user));
+        $html=create_pulldown($name, $value, get_people_select_array(null, $user));
     }
     return $html;
 }
