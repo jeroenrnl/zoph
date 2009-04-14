@@ -250,6 +250,7 @@ color scheme=
 color schemes=
 cols=
 comment=
+comments by this user=
 comments=
 compression=
 confirm password=

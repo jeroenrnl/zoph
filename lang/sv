@@ -90,7 +90,6 @@ These options are always available in the tabs on the upper right. Use the %s ho
 This photo is not in any albums.=Fotografiet finns inte i något album.
 This photo is not in any categories.=Fotografiet finns inte i någon kategori.
 To edit your preferences or change your password, click %s here %s.=För att ändra dina inställningar eller byta lösenord, klicka %s här %s.
-To import images already on the server, specify the absolute path of a file name or directory. If a directory is specified, all images within the directory will be imported. If a destination path is given (relative to the top level image dir), the imported images will be copied there. Otherwise, they will not be moved.=
 To upload and import a local file, browse to the file and specify the destination path (relative to the top level image dir) in which it should be placed.=För att ladda upp och importera en lokal fil, bläddra till filen och ange en målsökväg (relativt bildkatalogen på toppnivå) som den ska placeras i. 
 Up=Upp
 Users=Användare
