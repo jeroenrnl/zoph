@@ -336,7 +336,7 @@ function get_people_select_array($people_array = null, $user = null) {
     $ppl[""] = "";
 
     if (!$people_array) {
-        $people_array = get_people(null,null,null,null,$user);
+        $people_array = get_people(null,null,null,"last_name, first_name",$user);
     }
     if ($people_array) {
         foreach ($people_array as $person) {
