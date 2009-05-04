@@ -243,8 +243,14 @@ function build_tree(xmltree, parent, branchname, nodename) {
                 }
                 span.appendChild(document.createTextNode(key));
                 span.style.display="none";
-            
-                li.appendChild(document.createTextNode(name));
+                if (name=="&nbsp;") {
+                    // You cannot use &nbsp; in a textnode
+                    // However, to minimize cross site scripting attacks
+                    // I don't want to use innerHTML for all elements
+                    li.innerHTML=("&nbsp;");
+                } else {
+                    li.appendChild(document.createTextNode(name));
+                }
                 parent.appendChild(li);
             }
             parent=build_tree(children[i], parent, branchname, nodename);

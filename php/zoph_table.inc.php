@@ -586,7 +586,14 @@ function get_xml($class, $search,$user=null) {
 
         $xml = new DOMDocument('1.0','UTF-8');
         $rootnode=$xml->createElement($obj->xml_rootname());
-
+        $newchild=$xml->createElement($obj->xml_nodename());
+        $key=$xml->createElement("key");
+        $title=$xml->createElement("title");
+        $key->appendChild($xml->createTextNode("null"));
+        $title->appendChild($xml->createTextNode("&nbsp;"));
+        $newchild->appendChild($key);
+        $newchild->appendChild($title);
+        $rootnode->appendChild($newchild);
 
         if ($tree) {
             $obj = get_root($class);
@@ -610,6 +617,7 @@ function get_xml($class, $search,$user=null) {
             } else {
                 $records=get_records($class, $order, $constraints, $conj, $ops);
             } 
+           
             foreach($records as $record) {
                 $newchild=$xml->createElement($nodename);
                 $key=$xml->createElement("key");
