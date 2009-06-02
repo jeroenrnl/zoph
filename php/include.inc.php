@@ -49,7 +49,9 @@
     require_once("page.inc.php");
     require_once("pageset.inc.php");
 
-    require_once("timezone.inc.php");
+    if(minimum_version("5.1.0")) {
+        require_once("timezone.inc.php");
+    }
     require_once("photo.inc.php");
     require_once("saved_search.inc.php");
     require_once("photo_search.inc.php");

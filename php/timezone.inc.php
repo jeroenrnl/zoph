@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-if(minimum_version("5.1.0")) {
     class TimeZone extends DateTimeZone {
         function get_xml($search) {
             $xml = new DOMDocument('1.0','UTF-8');
@@ -61,7 +60,6 @@ if(minimum_version("5.1.0")) {
            }
         }
     }
-}
 
 function get_tz_select_array() {
     $zones=DateTimeZone::listIdentifiers();

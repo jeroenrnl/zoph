@@ -335,7 +335,7 @@ class place extends zoph_tree_table {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         $timezone=$this->get("timezone");
-        if(!$timezone && $lat && $lon) {
+        if((!$timezone && $lat && $lon) && minimum_version("5.1.0")) {
             $tz=guess_tz($lat, $lon);
             if($tz) {
                 $html="<span class='actionlink'>" .
