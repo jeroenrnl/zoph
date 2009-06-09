@@ -260,10 +260,17 @@ class zoph_table {
         }
 
         while (list($name, $value) = each($this->fields)) {
-
             if ($this->is_key($name, $keys)) { continue; }
 
             if ($values) { $values .= ", "; }
+            
+            if (substr($name,0,7)=="parent_") {
+                $children=array();
+                $this->get_branch_id_array($children);
+                if(in_array($value, $children)) {
+                    die("You cannot set the parent to a child of the current selection!");
+                } 
+            }
 
             if ($name == "password") {
                 $values .= "$name = password('" . escape_string($value) . "')";
