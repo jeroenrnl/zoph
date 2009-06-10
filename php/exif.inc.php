@@ -96,15 +96,19 @@ function process_exif($image) {
 
     if ($exif["FocalLength"]) {
         list($a, $b) = explode('/', $exif["FocalLength"]);
-        $exifdata["focal_length"] = sprintf("%.1fmm", $a / $b);
+        if($b>0) {
+            $exifdata["focal_length"] = sprintf("%.1fmm", $a / $b);
+        }
     }
 
     if ($exif["ExposureTime"]) {
         list($a, $b) = explode('/', $exif["ExposureTime"]);
-        $val = $a / $b;
-        $exifdata["exposure"] = sprintf("%.3f s", $val);
-        if ($val <= 0.5) {
-            $exifdata["exposure"] .= sprintf("  (1/%d)", (int)(0.5 + 1 / $val));
+        if($b>0) {
+            $val = $a / $b;
+            $exifdata["exposure"] = sprintf("%.3f s", $val);
+            if ($val <= 0.5) {
+                $exifdata["exposure"] .= sprintf("  (1/%d)", (int)(0.5 + 1 / $val));
+            }
         }
     }
 
@@ -125,15 +129,21 @@ function process_exif($image) {
 
     if ($exif["FNumber"]) {
         list($a, $b) = explode('/', $exif["FNumber"]);
-        $exifdata["aperture"] = sprintf("f/%.1f", $a / $b);
+        if($b>0) {
+            $exifdata["aperture"] = sprintf("f/%.1f", $a / $b);
+        } 
     }
     else if ($exif["ApertureValue"]) {
         list($a, $b) = explode('/', $exif["ApertureValue"]);
-        $exifdata["aperture"] = sprintf("f/%.1f", $a / $b * log(2) * 0.5);
+        if($b>0) {
+            $exifdata["aperture"] = sprintf("f/%.1f", $a / $b * log(2) * 0.5);
+        }
     }
     else if ($exif["MaxApertureValue"]) {
         list($a, $b) = explode('/', $exif["MaxApertureValue"]);
-        $exifdata["aperture"] = sprintf("f/%.1f", $a / $b * log(2) * 0.5);
+        if($b>0) {
+            $exifdata["aperture"] = sprintf("f/%.1f", $a / $b * log(2) * 0.5);
+        }
     }
 
     if ($exif["FocusDistance"]) {
@@ -174,17 +184,19 @@ function process_exif($image) {
 
     if ($exif["CompressedBitsPerPixel"]) {
         list($a, $b) = explode('/', $exif["CompressedBitsPerPixel"]);
-        $val = round($a / $b);
-        switch ($val) {
-        case 1:
-            $exifdata["compression"] = "jpeg quality: basic";
-            break;
-        case 2:
-            $exifdata["compression"] = "jpeg quality: normal";
-            break;
-        case 4:
-            $exifdata["compression"] = "jpeg quality: fine";
-            break;
+        if($b>0) {
+            $val = round($a / $b);
+            switch ($val) {
+            case 1:
+                $exifdata["compression"] = "jpeg quality: basic";
+                break;
+            case 2:
+                $exifdata["compression"] = "jpeg quality: normal";
+                break;
+            case 4:
+                $exifdata["compression"] = "jpeg quality: fine";
+                break;
+            }
         }
     }
 
