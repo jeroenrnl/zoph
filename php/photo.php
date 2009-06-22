@@ -484,8 +484,10 @@ require_once("edit_photo.inc.php");
 ?>
         <div id="map" class="map"></div>
 <?php
+        $array=$photo->get_near(100);
+        $array[]=$photo;
         echo create_map_js();
-        echo get_markers($photo->get_near(100), $user);
+        echo get_markers($array, $user);
       }
 ?>
 
