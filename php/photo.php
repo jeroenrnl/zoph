@@ -480,7 +480,7 @@ require_once("edit_photo.inc.php");
 ?>
 </div>
 <?php
-      if(JAVASCRIPT && MAPS && $_action=="display") {
+      if(JAVASCRIPT && MAPS && ($_action=="display" || $_action==="")) {
 ?>
         <div id="map" class="map"></div>
 <?php
