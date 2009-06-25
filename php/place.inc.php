@@ -311,7 +311,10 @@ class place extends zoph_tree_table {
             " " . translate("in this place") . " " . translate("or its children")) . "<br>";
         }
         $html.="</small>";
-        return $html;
+        // This really is a little quick and dirty, but solving it
+        // in another place will mess up too much to do so shortly
+        // before the v0.8 release.
+        return str_replace("'", "&apos;", $html);
     }
     function is_root() {
         // At this moment the root place is always 1, but this may
