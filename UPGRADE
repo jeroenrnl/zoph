@@ -1,4 +1,4 @@
-Zoph 0.7 to 0.7.5
+Zoph 0.7 to 0.8pre1
 
 You can also use these instructions to go from 0.7.0.x to 0.7.5, for an update from 0.7.1, 0.7.2, 0.7.2.1, 0.7.3 or 0.7.4 see 0.7.x to 0.7.x
 
@@ -65,6 +65,8 @@ After this, you can remove the zoph_album_permissions table in Zoph, as it is no
 Zoph 0.7.x to 0.7.x update
 
 If you are upgrading from a feature release to another feature release, you need to edit zoph-update-0.8.sql. You should comment out the changes that have already been applied to your system. For example, if you are upgrading from 0.7.1 to 0.7.4, you will need to prepend the changes for 0.7.1 with a #, since you have already applied those changes when you updated to 0.7.1. After that, you can follow the instructions for 0.7 to 0.7.x.
+
+If you are upgrading from 0.7.5 to 0.8pre1, you don't need to run any database scripts, there are no database changes in this upgrade.
 
 Zoph 0.7 to Zoph 0.7.0.x
 

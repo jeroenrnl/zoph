@@ -1,5 +1,35 @@
 Zoph Changelog
 
+Zoph 0.8pre1
+27 June 2009
+
+Zoph 0.8pre1 is a prerelease (release candidate) for Zoph 0.8. It fixes a number of bugs from 0.7.5. 
+
+Bugs
+* Fix for a bug that would give an error (or not execute without an error, depending on the situation) when an album is added to a photo. Bug found and fixed by Pekka Kutinlati.
+* Bug#2687577: Download link does not work in some cases
+* Bug#2720782: edit does not work after using back and forward buttons
+* Bug#2720807: Layout glitch on slideshow
+* Fixed two small issues in saved searches
+* Bug#2718812: Cannot assign someone as a father/mother/spouse when person does not yet appear on a photo.
+* Bug#2724768: Error in timezone code
+* Bug#2750454: Fatal error: Call to undefined function get_photographer_search_array() in person.inc.php
+* Bug#2775190: Dropdown menu with people is not sorted by name.
+* Bug#2718814: Not possible to unset a relationship between persons.
+* Fixed a bug where the average rating would become 0 when the last rating for that photo was removed
+* Bug#2794052: Syntax error in timezone.inc.php when using PHP4
+* Bug#2803133: Making a category/album or place it's own parent causes out of memory error.
+* Bug#2804335: Division by zero error when importing JPG with zeroes in some of the EXIF fields.
+* Fix for a bug where the map on the photo page did not show the location of the photo if it is set on the location and not on the photo itself.
+* Fix for a bug where the map on the photo page did not show if the user is not using the 'auto-edit' feature.
+* Fix for a bug that caused a javascript error when title or address of a place contained quotes.
+
+
+Translations
+* German, Canadian English, Danish, Dutch, Italian and Swedish Chef have been updated.
+* Added Finnish translation by Pekka Kutinlati.
+* Removed some empty translations from outdated translations
+
 Zoph 0.7.5
 14 March 2009
 
