@@ -8,7 +8,7 @@
     <p>
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
-		<h1 class="firstHeading">Zoph/Using the Webinterface</h1>
+<h1 id="firstHeading" class="firstHeading">Zoph/Using the Webinterface</h1>
 		<div id="bodyContent">
 			<p>This manual will describe how to start using Zoph. It assumes you have successfully installed all the components and are presented the logon screen when you visit <a href="http://localhost/zoph/logon.php" class="external free" title="http://localhost/zoph/logon.php" rel="nofollow">http://localhost/zoph/logon.php</a>.</p>
 <p>Prior to version 0.3.3 this document was referred to as the tutorial.</p>
@@ -81,11 +81,7 @@
 </td>
 </tr>
 </table>
-<script type="text/javascript">
-//<![CDATA[
- if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
-//]]>
-</script>
+
 <p><a name="Logging_In_For_The_First_Time" id="Logging_In_For_The_First_Time"></a></p>
 <h2> <span class="mw-headline">Logging In For The First Time</span></h2>
 <p>An admin user was created when you loaded the database. You should be able to login as 'admin' using the password 'admin'. You will be presented with Zoph's home page where you will be greeted as 'Unknown Person'. There will be a blank square where a random photo would normally appear.</p>
@@ -148,7 +144,7 @@
 <h3> <span class="mw-headline">Importing Images</span></h3>
 <p><a name="Importing_a_Local_File" id="Importing_a_Local_File"></a></p>
 <h4> <span class="mw-headline">Importing a Local File</span></h4>
-<p>A local file means one on the same computer as the person using Zoph (and not, necessarily, the computer running Zoph). The image is uploading using HTTP and is copied to the destination path. The file may be an image or a zip or tar archive. The images should not be placed in any directories within an archive.</p>
+<p>A local file means one on the same computer as the person using Zoph (and not, necessarily, the computer running Zoph). The image is uploaded using HTTP and is copied to the destination path. The file may be an image or a zip or tar archive. The images should not be placed in any directories within an archive.</p>
 <p>To be able to upload archives you need to define the programs with which to do the extraction in config.inc.php. Example are given. Archives are extracted to a temporary directory created with the EXTRACT_DIR defined in config.inc.php. This directory should be writable by the webserver. The zip or tar files themselves are copies to the same location as the images and are not removed by Zoph.</p>
 <p><a name="Importing_Files_on_the_Server" id="Importing_Files_on_the_Server"></a></p>
 <h4> <span class="mw-headline">Importing Files on the Server</span></h4>
@@ -268,7 +264,7 @@
 <h2> <span class="mw-headline">Comments</span></h2>
 <p>As of v0.6 users can leave comments, if <a href="configuration.html#ALLOW_COMMENTS" title="Zoph/Configuration">ALLOW_COMMENTS</a> is turned on.</p>
 <p>As of v0.7.2 / v0.8 users can use (limited) markup in the comments, as well as smileys.</p>
-<p>The following markup is supported: [u]underline[/u], [i]italics[/i] and [b]bold[/b], the various possible smileys are displayed with the comment input form: <a href="/wiki/File:ZophComment.png" class="image" title="Image:ZophComment.png"><img alt="Image:ZophComment.png" src="http://upload.wikimedia.org/wikibooks/en/1/1f/ZophComment.png" width="580" height="310" border="0" /></a></p>
+<p>The following markup is supported: [u]underline[/u], [i]italics[/i] and [b]bold[/b], the various possible smileys are displayed with the comment input form: <a href="/wiki/File:ZophComment.png" class="image" title="Image:ZophComment.png"><img alt="Image:ZophComment.png" src="http://upload.wikimedia.org/wikibooks/en/1/1f/ZophComment.png" width="580" height="310" /></a></p>
 <p><a name="Watermarking" id="Watermarking"></a></p>
 <h2> <span class="mw-headline">Watermarking</span></h2>
 <p>You can let Zoph superimpose a watermark over the fullsize picture. You can use this feature if you want your users to be able to look at the high quality pictures, but not use them for publication. To use this feature, the <a href="configuration.html#IMAGE_SERVICE" title="Zoph/Configuration">IMAGE_SERVICE</a> has to be enabled. Zoph will put a watermark on each photo that has a level higher than the watermark level.</p>
@@ -368,13 +364,8 @@ define(DEFAULT_USER, 3);
 <p>To play around with this, edit mail.php.</p>
 
 
-<!-- 
-NewPP limit report
-Preprocessor node count: 100/1000000
-Post-expand include size: 0/2048000 bytes
-Template argument size: 0/2048000 bytes
-Expensive parser function count: 0/500
--->
+
+
 
 </div>
 </html>

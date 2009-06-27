@@ -8,7 +8,7 @@
     <p>
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
-		<h1 class="firstHeading">Zoph/Requirements</h1>
+<h1 id="firstHeading" class="firstHeading">Zoph/Requirements</h1>
 		<div id="bodyContent">
 			<p>This document is meant to help you install all the packages required by Zoph. I've gotten everything running on Linux (Debian, Mandrake and Gentoo) and Mac OS X without too much trouble and people have reported getting Zoph to work under Windows and several flavours of BSD as well. You might be able to skip this if you know your way around your system.</p>
 <p>You need to have the following installed before running Zoph. Version numbers are what I have tested with, I expect any recent versions would work:</p>
@@ -27,7 +27,8 @@ Make sure you have the following features (extensions) installed, if your distri
 <li>pcre</li>
 <li>gd</li>
 <li>exif</li>
-<li>xml (Zoph 0.7, for the autocomplete feature).</li>
+<li>xml (Zoph &gt;0.7, for the autocomplete feature).</li>
+<li>pear (if you want to use the e-mail features)</li>
 </ul>
 </li>
 <li>Perl 5.8.8</li>
@@ -67,11 +68,7 @@ $ apt-get install perl apache php5 mysql-server php5-mysql imagemagick jhead
 </td>
 </tr>
 </table>
-<script type="text/javascript">
-//<![CDATA[
- if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
-//]]>
-</script>
+
 <p><a name="Apache_.26_PHP" id="Apache_.26_PHP"></a></p>
 <h2> <span class="mw-headline">Apache &amp; PHP</span></h2>
 <p>You may have to edit your httpd.conf file to add PHP support. Edit /var/apache/conf/httpd.conf (or the equivalent) and uncomment/add these lines:</p>
@@ -129,13 +126,8 @@ $ perl -MCPAN -e 'install Image::Size'
 <p><a href="http://www.sentex.net/~mwandel/jhead/" class="external free" title="http://www.sentex.net/~mwandel/jhead/" rel="nofollow">http://www.sentex.net/~mwandel/jhead/</a></p>
 
 
-<!-- 
-NewPP limit report
-Preprocessor node count: 9/1000000
-Post-expand include size: 0/2048000 bytes
-Template argument size: 0/2048000 bytes
-Expensive parser function count: 0/500
--->
+
+
 
 </div>
 </html>

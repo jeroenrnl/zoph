@@ -8,7 +8,7 @@
     <p>
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
-		<h1 class="firstHeading">Zoph/Configuration</h1>
+<h1 id="firstHeading" class="firstHeading">Zoph/Configuration</h1>
 		<div id="bodyContent">
 			<table id="toc" class="toc" summary="Contents">
 <tr>
@@ -69,11 +69,13 @@
 <li class="toclevel-2"><a href="#CLIENT_WEB_IMPORT"><span class="tocnumber">6.1</span> <span class="toctext">CLIENT_WEB_IMPORT</span></a></li>
 <li class="toclevel-2"><a href="#SERVER_WEB_IMPORT"><span class="tocnumber">6.2</span> <span class="toctext">SERVER_WEB_IMPORT</span></a></li>
 <li class="toclevel-2"><a href="#WEB_IMPORT_.28depricated.29"><span class="tocnumber">6.3</span> <span class="toctext">WEB_IMPORT (depricated)</span></a></li>
-<li class="toclevel-2"><a href="#MAX_UPLOAD"><span class="tocnumber">6.4</span> <span class="toctext">MAX_UPLOAD</span></a></li>
-<li class="toclevel-2"><a href="#REMOVE_ARCHIVE"><span class="tocnumber">6.5</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
-<li class="toclevel-2"><a href="#IMPORT_MOVE"><span class="tocnumber">6.6</span> <span class="toctext">IMPORT_MOVE</span></a></li>
-<li class="toclevel-2"><a href="#USE_DATED_DIRS"><span class="tocnumber">6.7</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
-<li class="toclevel-2"><a href="#HIER_DATED_DIRS"><span class="tocnumber">6.8</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#DEFAULT_DESTINATION_PATH"><span class="tocnumber">6.4</span> <span class="toctext">DEFAULT_DESTINATION_PATH</span></a></li>
+<li class="toclevel-2"><a href="#SHOW_DESTINATION_PATH"><span class="tocnumber">6.5</span> <span class="toctext">SHOW_DESTINATION_PATH</span></a></li>
+<li class="toclevel-2"><a href="#MAX_UPLOAD"><span class="tocnumber">6.6</span> <span class="toctext">MAX_UPLOAD</span></a></li>
+<li class="toclevel-2"><a href="#REMOVE_ARCHIVE"><span class="tocnumber">6.7</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
+<li class="toclevel-2"><a href="#IMPORT_MOVE"><span class="tocnumber">6.8</span> <span class="toctext">IMPORT_MOVE</span></a></li>
+<li class="toclevel-2"><a href="#USE_DATED_DIRS"><span class="tocnumber">6.9</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#HIER_DATED_DIRS"><span class="tocnumber">6.10</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1"><a href="#Features"><span class="tocnumber">7</span> <span class="toctext">Features</span></a>
@@ -108,11 +110,7 @@
 </td>
 </tr>
 </table>
-<script type="text/javascript">
-//<![CDATA[
- if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } 
-//]]>
-</script>
+
 <p><a name="Interface_configuration" id="Interface_configuration"></a></p>
 <h2> <span class="mw-headline">Interface configuration</span></h2>
 <p><a name="ZOPH_TITLE" id="ZOPH_TITLE"></a></p>
@@ -135,6 +133,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('ZOPH_TITLE', 'My Photos');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="MAX_CRUMBS" id="MAX_CRUMBS"></a></p>
 <h3> <span class="mw-headline">MAX_CRUMBS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -155,6 +154,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('MAX_CRUMBS', 100);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="MAX_DAYS_PAST" id="MAX_DAYS_PAST"></a></p>
 <h3> <span class="mw-headline">MAX_DAYS_PAST</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -175,6 +175,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('MAX_DAYS_PAST', 40);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="ZOPH_URL" id="ZOPH_URL"></a></p>
 <h3> <span class="mw-headline">ZOPH_URL</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -195,6 +196,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('ZOPH_URL', '<a href="http://www.myserver.com/zoph'" class="external free" title="http://www.myserver.com/zoph'" rel="nofollow">http://www.myserver.com/zoph'</a>);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="ZOPH_SECURE_URL" id="ZOPH_SECURE_URL"></a></p>
 <h3> <span class="mw-headline">ZOPH_SECURE_URL</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -215,6 +217,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('ZOPH_SECURE_URL', '<a href="https://www.myserver.com/zoph'" class="external free" title="https://www.myserver.com/zoph'" rel="nofollow">https://www.myserver.com/zoph'</a>);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="MAX_PEOPLE_SLOTS" id="MAX_PEOPLE_SLOTS"></a></p>
 <h3> <span class="mw-headline">MAX_PEOPLE_SLOTS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -235,6 +238,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('MAX_PEOPLE_SLOTS', 5);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="DEFAULT_TABLE_WIDTH" id="DEFAULT_TABLE_WIDTH"></a></p>
 <h3> <span class="mw-headline">DEFAULT_TABLE_WIDTH</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -255,6 +259,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('DEFAULT_TABLE_WIDTH', "600px");</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="CSS_SHEET" id="CSS_SHEET"></a></p>
 <h3> <span class="mw-headline">CSS_SHEET</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -275,6 +280,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('CSS_SHEET', "mycss.css");</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="ICONSET" id="ICONSET"></a></p>
 <h3> <span class="mw-headline">ICONSET</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -295,6 +301,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('ICONSET', "myicons");</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="LANG_DIR" id="LANG_DIR"></a></p>
 <h3> <span class="mw-headline">LANG_DIR</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -315,6 +322,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('LANG_DIR', "lang");</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="DEFAULT_LANG" id="DEFAULT_LANG"></a></p>
 <h3> <span class="mw-headline">DEFAULT_LANG</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -335,9 +343,10 @@
 <td colspan="2"><b>Example:</b> <tt>define('DEFAULT_LANG', "nl");</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="Authentication" id="Authentication"></a></p>
 <h2> <span class="mw-headline">Authentication</span></h2>
-<p><a name=".24VALIDATOR"></a></p>
+<p><a name=".24VALIDATOR" id=".24VALIDATOR"></a></p>
 <h3> <span class="mw-headline">$VALIDATOR</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
@@ -357,6 +366,7 @@
 <td colspan="2"><b>Example:</b> <tt>$VALIDATOR = 'default_validate';</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="FORCE_SSL" id="FORCE_SSL"></a></p>
 <h3> <span class="mw-headline">FORCE_SSL</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -377,6 +387,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('FORCE_SSL', 0);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="FORCE_SSL_LOGIN" id="FORCE_SSL_LOGIN"></a></p>
 <h3> <span class="mw-headline">FORCE_SSL_LOGIN</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -397,6 +408,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('FORCE_SSL_LOGIN', 0);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="Resized_image_generation" id="Resized_image_generation"></a></p>
 <h2> <span class="mw-headline">Resized image generation</span></h2>
 <p>Zoph automatically creates thumbnails and medium sized ('mid') images during import. To influence this proces, you can edit the following parameters:</p>
@@ -426,6 +438,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('THUMB_SIZE', 120);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="MID_SIZE" id="MID_SIZE"></a></p>
 <h3> <span class="mw-headline">MID_SIZE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -446,6 +459,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('THUMB_SIZE', 480);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="THUMB_PREFIX" id="THUMB_PREFIX"></a></p>
 <h3> <span class="mw-headline">THUMB_PREFIX</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -466,6 +480,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('THUMB_PREFIX', 'thumb');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="MID_PREFIX" id="MID_PREFIX"></a></p>
 <h3> <span class="mw-headline">MID_PREFIX</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -486,6 +501,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('MID_PREFIX', 'mid');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="MIXED_THUMBNAILS" id="MIXED_THUMBNAILS"></a></p>
 <h3> <span class="mw-headline">MIXED_THUMBNAILS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -506,6 +522,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('MIXED_THUMBNAILS', '0');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="THUMB_EXTENSION" id="THUMB_EXTENSION"></a></p>
 <h3> <span class="mw-headline">THUMB_EXTENSION</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -526,6 +543,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('THUMB_EXTENSION', 'jpg');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="Database_configuration" id="Database_configuration"></a></p>
 <h2> <span class="mw-headline">Database configuration</span></h2>
 <div style="width:50%; background:#FFFF66; color:black; border:1px solid black; margin:auto; font-weight:normal;">
@@ -554,6 +572,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('DB_HOST', 'localhost');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="DB_NAME" id="DB_NAME"></a></p>
 <h3> <span class="mw-headline">DB_NAME</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -574,6 +593,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('DB_NAME', 'zoph');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="DB_USER" id="DB_USER"></a></p>
 <h3> <span class="mw-headline">DB_USER</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -594,6 +614,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('DB_USER', 'zoph_rw');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="DB_PASS" id="DB_PASS"></a></p>
 <h3> <span class="mw-headline">DB_PASS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -614,6 +635,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('DB_PASS', 'MySecretPassword');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="Image_location" id="Image_location"></a></p>
 <h2> <span class="mw-headline">Image location</span></h2>
 <p><a name="IMAGE_DIR" id="IMAGE_DIR"></a></p>
@@ -636,6 +658,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('IMAGE_DIR', '/data/images/');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="WEB_IMAGE_DIR" id="WEB_IMAGE_DIR"></a></p>
 <h3> <span class="mw-headline">WEB_IMAGE_DIR</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -656,6 +679,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('WEB_IMAGE_DIR', '/images/');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="USE_IMAGE_SERVICE" id="USE_IMAGE_SERVICE"></a></p>
 <h3> <span class="mw-headline">USE_IMAGE_SERVICE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -678,6 +702,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('IMAGE_SERVICE', '1');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="Import_settings" id="Import_settings"></a></p>
 <h2> <span class="mw-headline">Import settings</span></h2>
 <p><a name="CLIENT_WEB_IMPORT" id="CLIENT_WEB_IMPORT"></a></p>
@@ -700,6 +725,7 @@
 <td colspan="2"><b>Example:</b> <tt>define(CLIENT_WEB_IMPORT, '1');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="SERVER_WEB_IMPORT" id="SERVER_WEB_IMPORT"></a></p>
 <h3> <span class="mw-headline">SERVER_WEB_IMPORT</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -717,9 +743,10 @@
 <td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing files stored on the server</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define(SERVER_WEB_IMPORT, '1');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('SERVER_WEB_IMPORT', '1');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="WEB_IMPORT_.28depricated.29" id="WEB_IMPORT_.28depricated.29"></a></p>
 <h3> <span class="mw-headline">WEB_IMPORT <i>(depricated)</i></span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -741,6 +768,50 @@
 </tr>
 </table>
 <p><br /></p>
+<p><a name="DEFAULT_DESTINATION_PATH" id="DEFAULT_DESTINATION_PATH"></a></p>
+<h3> <span class="mw-headline">DEFAULT_DESTINATION_PATH</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DEFAULT_DESTINATION_PATH</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Sets the default path to which photos are imported when using the webinterface, the path is relative to <a href="configuration.html#IMAGE_DIR" title="Zoph/Configuration">IMAGE_DIR</a>. You can have Zoph automatically add today's date to the path by using <tt>date(<i>format</i>)</tt>, where format is a format string like <a href="http://php.net/manual/en/function.date.php" class="external text" title="http://php.net/manual/en/function.date.php" rel="nofollow">PHP's date() function</a>, without quotes. Please note that this is the date the import is being done, not the the date the photo was taken, use <a href="configuration.html#USE_DATED_DIRS" title="Zoph/Configuration">USE_DATED_DIRS</a> if you want that.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>uploads/date(Y.m.d)</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DEFAULT_DESTINATION_PATH', 'date(Y-M)');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<p><a name="SHOW_DESTINATION_PATH" id="SHOW_DESTINATION_PATH"></a></p>
+<h3> <span class="mw-headline">SHOW_DESTINATION_PATH</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">SHOW_DESTINATION_PATH</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> This determines whether or not the value configured by <a href="configuration.html#DEFAULT_DESTINATION_PATH" title="Zoph/Configuration">DEFAULT_DESTINATION_PATH</a> is visible/editable by a user. Please note that this is a <i>usability</i> feature and not a <i>security</i> feature, a user who has import rights can easily edit the value when changing the HTML file, then again, you shouldn't give untrustable users import rights.
+<p>This option is ignored for admin users, there it is always shown</p>
+</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: do not show, or <tt>1</tt>: show the destination path field</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('SHOW_DESTINATION_PATH', '1');</tt></td>
+</tr>
+</table>
+<p><br /></p>
 <p><a name="MAX_UPLOAD" id="MAX_UPLOAD"></a></p>
 <h3> <span class="mw-headline">MAX_UPLOAD</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -758,9 +829,10 @@
 <td colspan="2"><b>Options:</b></td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('MAX_UPLOAD, '10000000');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('MAX_UPLOAD', '10000000');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="REMOVE_ARCHIVE" id="REMOVE_ARCHIVE"></a></p>
 <h3> <span class="mw-headline">REMOVE_ARCHIVE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -778,9 +850,10 @@
 <td colspan="2"><b>Options:</b> <tt>0</tt>: leave the file, or <tt>1</tt>: remove the file</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('REMOVE_ARCHIVE, '0');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('REMOVE_ARCHIVE', '0');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="IMPORT_MOVE" id="IMPORT_MOVE"></a></p>
 <h3> <span class="mw-headline">IMPORT_MOVE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -798,9 +871,10 @@
 <td colspan="2"><b>Options:</b> <tt>0</tt>: copy the file, or <tt>1</tt>: move the file</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('IMPORT_MOVE, '0');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('IMPORT_MOVE', '0');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="USE_DATED_DIRS" id="USE_DATED_DIRS"></a></p>
 <h3> <span class="mw-headline">USE_DATED_DIRS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -821,6 +895,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('USE_DATED_DIRS', '0');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="HIER_DATED_DIRS" id="HIER_DATED_DIRS"></a></p>
 <h3> <span class="mw-headline">HIER_DATED_DIRS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -864,6 +939,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('JAVASCRIPT', '1');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="EMAIL_PHOTOS" id="EMAIL_PHOTOS"></a></p>
 <h3> <span class="mw-headline">EMAIL_PHOTOS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -872,7 +948,7 @@
 <td style="width: 450px;"><b>Versions:</b> All versions</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> You can enable or disable the "mail this photo" feature" using this option.</td>
+<td colspan="2"><b>Description:</b> You can enable or disable the "mail this photo" feature" using this option. Since Zoph needs to convert the photo into Base64 encoding for mail, it requires quite a large amount of memory if you try to send <i>full size</i> images and you may need to adjust <tt>memory_limit</tt> in php.ini, you should give it at least about 4 times the size of your largest image.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Default:</b> <tt>0</tt></td>
@@ -884,6 +960,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('EMAIL_PHOTOS', '1');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="WATERMARKING" id="WATERMARKING"></a></p>
 <h3> <span class="mw-headline">WATERMARKING</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -904,6 +981,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('WATERMARKING', '1');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="WATERMARK" id="WATERMARK"></a></p>
 <h3> <span class="mw-headline">WATERMARK</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -924,6 +1002,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('WATERMARK', 'watermarks/topsecret.gif');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="WM_POSX" id="WM_POSX"></a></p>
 <h3> <span class="mw-headline">WM_POSX</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -944,6 +1023,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('WM_POSX', 'right');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="WM_POSY" id="WM_POSY"></a></p>
 <h3> <span class="mw-headline">WM_POSY</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -964,6 +1044,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('WM_POSY', 'bottom');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="WM_TRANS" id="WM_TRANS"></a></p>
 <h3> <span class="mw-headline">WM_TRANS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -984,6 +1065,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('WM_TRANS', 25);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="ALLOW_COMMENTS" id="ALLOW_COMMENTS"></a></p>
 <h3> <span class="mw-headline">ALLOW_COMMENTS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -1004,6 +1086,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('ALLOW_COMMENTS', 1);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="AUTOCOMPLETE" id="AUTOCOMPLETE"></a></p>
 <h3> <span class="mw-headline">AUTOCOMPLETE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -1024,6 +1107,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('AUTOCOMPLETE', 1);</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="DOWNLOAD" id="DOWNLOAD"></a></p>
 <h3> <span class="mw-headline">DOWNLOAD</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -1067,6 +1151,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('MAPS', 'google');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="GOOGLE_KEY" id="GOOGLE_KEY"></a></p>
 <h3> <span class="mw-headline">GOOGLE_KEY</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -1087,6 +1172,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('GOOGLE_KEY', 'DDQIBBBBhW0vWZf8f0AAPt_86WXJrGGG9jpr3jOoJTHbWArKj23UyhEyLxRRtnOiOR-RSvuLRF1bguT8Nkh2jQ');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="Timezone" id="Timezone"></a></p>
 <h2> <span class="mw-headline">Timezone</span></h2>
 <p>The following features are only available if your are running PHP 5.1.0 or later and are automatically disabled if you are not.</p>
@@ -1110,6 +1196,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('CAMERA_TZ', 'Europe/Amsterdam');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="DATE_FORMAT" id="DATE_FORMAT"></a></p>
 <h3> <span class="mw-headline">DATE_FORMAT</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -1130,6 +1217,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('TIME_FORMAT', 'H:i:s');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="TIME_FORMAT" id="TIME_FORMAT"></a></p>
 <h3> <span class="mw-headline">TIME_FORMAT</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -1150,6 +1238,7 @@
 <td colspan="2"><b>Example:</b> <tt>define('DATE_FORMAT', 'Y-m-d');</tt></td>
 </tr>
 </table>
+<p><br /></p>
 <p><a name="GUESS_TZ" id="GUESS_TZ"></a></p>
 <h3> <span class="mw-headline">GUESS_TZ</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -1172,13 +1261,8 @@
 </table>
 
 
-<!-- 
-NewPP limit report
-Preprocessor node count: 1514/1000000
-Post-expand include size: 36713/2048000 bytes
-Template argument size: 15540/2048000 bytes
-Expensive parser function count: 0/500
--->
+
+
 
 </div>
 </html>
