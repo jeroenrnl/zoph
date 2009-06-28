@@ -13,36 +13,36 @@
 // along with Zoph; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-function branch(obj) {
+function expand(obj) {
     obj.nextSibling.nextSibling.style.display="block";
     obj.innerHTML="-&nbsp;";
-    obj.onclick=closebranch;
+    obj.onclick=closeexpand;
     }
 
-function unbranch(obj) {
+function collapse(obj) {
     obj.nextSibling.nextSibling.style.display="none";
     obj.innerHTML="+&nbsp;";
-    obj.onclick=openbranch;
+    obj.onclick=openexpand;
     }
 
-function openbranch() {
-    branch(this);
+function openexpand() {
+    expand(this);
     }
 
-function closebranch() {
-    unbranch(this);
+function closeexpand() {
+    collapse(this);
     }
 
-function unbranchall() {
+function collapseall() {
     nodes=getElementsByClass('treenode');
     for(i in nodes) {
-        unbranch(nodes[i]);
+        collapse(nodes[i]);
     }
 }
 
-function branchall() {
+function expandall() {
     nodes=getElementsByClass('treenode');
     for(i in nodes) {
-        branch(nodes[i]);
+        expand(nodes[i]);
     }
 }

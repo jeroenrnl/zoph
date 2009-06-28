@@ -123,9 +123,9 @@ class zoph_tree_table extends zoph_table {
         $html="\n<li>";
         if($children) {
           if ($open) {
-                $html.="<span class='treenode' onclick=\"unbranch(this)\">-&nbsp;</span>";
+                $html.="<span class='treenode' onclick=\"collapse(this)\">-&nbsp;</span>";
            } else {
-                $html.="<span class='treenode' onclick=\"branch(this)\">+&nbsp;</span>";
+                $html.="<span class='treenode' onclick=\"expand(this)\">+&nbsp;</span>";
            }
         } else {
             $html.="<span>&nbsp;&nbsp;</span>";

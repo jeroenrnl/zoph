@@ -969,9 +969,9 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     function get_time_details($content, $open=false) {
         $html="&nbsp;";
         if ($open) {
-            $html.="<span onclick=\"unbranch(this)\">-&nbsp;</span>";
+            $html.="<span onclick=\"collapse(this)\">-&nbsp;</span>";
         } else {
-            $html.="<span onclick=\"branch(this)\">+&nbsp;</span>";
+            $html.="<span onclick=\"expand(this)\">+&nbsp;</span>";
         }
         $html.="<span class='showhide'>" . $content . "</span>";
         $html.="<div class='timedetail'>\n<dl>\n";
@@ -1025,9 +1025,9 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         
         $html="&nbsp;";
         if ($open) {
-            $html.="<span onclick=\"unbranch(this)\">-&nbsp;</span>";
+            $html.="<span onclick=\"collapse(this)\">-&nbsp;</span>";
         } else {
-            $html.="<span onclick=\"branch(this)\">+&nbsp;</span>";
+            $html.="<span onclick=\"expand(this)\">+&nbsp;</span>";
         }
         $html.="<span class='showhide'>" . $content . "</span>";
         $html.="<div class='ratingdetail'>\n";

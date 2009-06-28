@@ -175,9 +175,9 @@ if ($category->get("category_description")) {
         if($_view=="tree" && JAVASCRIPT) {
 ?>
             <span class="actionlink">
-                <a href='#' onclick='branchall()'>
+                <a href='#' onclick='expandall()'>
                     <?php echo translate("expand all");?></a> | 
-                <a href='#' onclick='unbranchall()'>
+                <a href='#' onclick='collapseall()'>
                     <?php echo translate("collapse all");?></a>
             </span><br>
 <?php
