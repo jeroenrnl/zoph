@@ -860,7 +860,8 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     }
 
     function get_display_array() {
-        $datetime=$this->get_time();
+        $datetime=$this->get_time(null, "Y-m-d");
+
         return array(
             translate("title") => $this->get("title"),
             translate("location") => $this->location
@@ -915,7 +916,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             "Level" => create_text_input("level", $this->level, 4, 2));
     }
 
-    function get_time($timezone=null) {
+    function get_time($timezone=null, $date_format=DATE_FORMAT, $time_format=TIME_FORMAT) { 
         if(minimum_version("5.1.0")) {
             if(valid_tz($timezone)) {
                 $place_tz=new TimeZone($timezone);
@@ -953,8 +954,8 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 $place_time->modify($corr . " minutes");
             }
             
-            $date=$place_time->format(DATE_FORMAT);
-            $time=$place_time->format(TIME_FORMAT);
+            $date=$place_time->format($date_format);
+            $time=$place_time->format($time_format);
         } else {
             // Timezone support was introduced in PHP 5.1
             // so we'll just return date and time as they are
