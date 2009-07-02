@@ -118,7 +118,7 @@
     }
     else {
 ?>
-          <div class="error"><?php echo sprintf(translate("No people were found with a last name beginning with '%s'."), $_l) ?></div>
+          <div class="error"><?php echo sprintf(translate("No people were found with a last name beginning with '%s'."), htmlentities($_l)) ?></div>
 <?php
     }
 ?>
