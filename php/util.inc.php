@@ -393,7 +393,7 @@ function create_form($vars, $ignore = array()) {
     $form = "";
     while (list($key, $val) = each($vars)) {
         if (in_array($key, $ignore)) { continue; }
-        $form .= "<input type=\"hidden\" name=\"$key\" value=\"$val\">\n";
+        $form .= "<input type=\"hidden\" name=\"$key\" value=\"" . escape_string($val) . "\">\n";
     }
 
     return $form;
@@ -650,48 +650,4 @@ function get_autothumb_order($autothumb) {
     return $order;
 }
 
-function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
-    if(class_exists(ZipArchive)) {
-        $zip=new ZipArchive();
-        $tempfile="/tmp/zoph_" . $user->get("user_id") . "_" . $filename ."_" . $filenum . ".zip";
-        @unlink($tempfile);
-        if ($zip->open($tempfile, ZIPARCHIVE::CREATE)!==TRUE) {
-            die("cannot open $tempfile\n");
-        }
-        $count=sizeof($photos);
-        foreach($photos as $key => $photo) {
-            if($data=@file_get_contents($photo->get_file_path())) {
-                $size=strlen($data);
-                $zipsize=$zipsize+$size;
-                if($zipsize>=$maxsize) {
-                    break;
-                }
-                $currentfile=$key;
-                $zip->addFromString($photo->get("name"),$data);
-            
-            } else {
-                echo sprintf(translate("Could not read %s."), $photo->get_file_path()) . "<br>\n";
-            }
-        }
-        $zip->close() or die ("Zipfile creation failed");
-        return $currentfile;
-    } else {
-        echo translate("You need to have ZIP support in PHP to download zip files");
-        return FALSE;
-    }
-}
-
-function get_human($bytes) {
-    // transforms a size in bytes into a human readable format using 
-    // Ki Mi Gi, etc. prefixes
-    // Give me a call if your database grows bigger than 1024 Yobbibytes. :-)
-    if($bytes==0) {
-        // prevents div by 0
-        return "0B";
-    } else {
-        $prefixes=array("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi");
-        $length=floor(log($bytes,2)/10);
-        return round($bytes/pow(2,10*($length)),1) . $prefixes[floor($length)] . "B";
-    }
-}
 ?>
