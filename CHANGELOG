@@ -1,4 +1,16 @@
 Zoph Changelog
+Zoph 0.8pre2
+
+8 July 2009
+
+This is the second pre-release for 0.8, it fixes the bugs discovered since v0.8pre1, including the security bug.
+
+Bugs
+
+    * Bug#2813464: Date link on photo page links to the wrong year
+    * Bug#2813467: '+' links to expand date/time, ratings and tree view do not work anymore after a Googlemaps update
+    * Fix for a cross site scripting bug that was reported by "y3nh4ck3r".
+    * Fix for a bug that caused manually entered dates with webimport not to be used
 
 Zoph 0.8pre1
 27 June 2009
