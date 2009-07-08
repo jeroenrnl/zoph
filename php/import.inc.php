@@ -37,7 +37,6 @@ function get_files($dir_name) {
 }
 
 function process_images($images, $path, $fields) {
-
     $date = "";
     $absolute_path = "/" . cleanup_path(IMAGE_DIR . $path);
 
@@ -52,6 +51,14 @@ function process_images($images, $path, $fields) {
         create_dir("$absolute_path");
         if (minimum_version('4.2.0')) {
             $exif_data = process_exif($image);
+            if($fields["date"]) {
+                $date_array=explode("-", $fields["date"]);
+                if(preg_match("/^[0-9]{4}\-[01][0-9]\-[0-3][0-9]$/", $fields["date"]) && checkdate(intval($date_array[2]), intval($date_array[1]), intval($date_array[0]))) {
+                    $exif_data["date"]=$fields["date"];
+                } else {
+                    printf("Date %s is invalid, ignoring" . "<br>", htmlentities($fields["date"]));
+                }
+            }
             if ((USE_DATED_DIRS) && !(HIER_DATED_DIRS)) {
                 $date = cleanup_path(str_replace("-", ".", $exif_data["date"]));
                 create_dir($absolute_path . "/" . $date);
