@@ -208,7 +208,7 @@ function get_people_count($user = null, $search = null) {
             $allowed[]=$person->get("person_id");
         }
         foreach($photographers as $photographer) {
-            $allowed[]=$person->get("person_id");
+            $allowed[]=$photographer->get("person_id");
         }
 
         $allowed=array_unique($allowed);
@@ -229,7 +229,7 @@ function get_all_people($user = null, $search = null, $search_first = false) {
             $allowed[]=$person->get("person_id");
         }
         foreach($photographers as $photographer) {
-            $allowed[]=$person->get("person_id");
+            $allowed[]=$photographer->get("person_id");
         }
 
         $allowed=array_unique($allowed);
