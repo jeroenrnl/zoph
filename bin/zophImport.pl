@@ -54,7 +54,7 @@ use Cwd 'abs_path';
 
 $| = 1;
  
-my $version = '0.8pre2;
+my $version = '0.8pre2';
  
 my $update     = 0; # update existing photo records instead of inserting
 my $updateSize = 0; # update the size, width and height (implies -update)
@@ -339,9 +339,9 @@ sub processImage {
                 }
             }
         } else {
-        my $thisPath = $img;
+            my $thisPath = $img;
             $thisPath =~ s|/?[^/]+$||;
-        if(!$update) {
+            if(!$update) {
                 if (abs_path($image_dir) ne abs_path($thisPath)) {
                     copy($img, "$image_dir/" . stripPath($img)) or
                         die "Could not copy file $img: $!\n";
@@ -349,8 +349,8 @@ sub processImage {
                         unlink($img);
                     }
                 }
-        } else {
-            $newPath=$thisPath;
+            } else {
+                $newPath=$thisPath;
             }
         } 
     
