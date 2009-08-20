@@ -92,6 +92,10 @@
     $qs=htmlentities($qs);
     $qs_no_action=htmlentities($qs_no_action);
 
+    if($qs_no_action) {
+        $qs_no_action .= "&amp;";
+    }
+
     if($_action=translate("search")) {
 ?>
 
