@@ -1,4 +1,12 @@
 Zoph Changelog
+Zoph 0.7.0.7
+24 Aug 2009
+
+Zoph 0.7.0.7 is an update of the stable 0.7 branch and fixes a cross site scripting security bug.
+
+Bugs
+* Fix for a cross site scripting bug found during development of Zoph 0.8
+
 Zoph 0.7.0.6
 2 July 2009
 

@@ -454,7 +454,7 @@ for ($i = 0; $i <= $count; $i++) {
 <?php echo create_operator_pulldown("_field_op[$i]", $_field_op[$i]) ?>
           </td>
           <td colspan="2">
-            <input type="text" name="field[<?php echo $i; ?>]" value="<?php echo $field[$i]; ?>" size="24" maxlength="64">
+            <input type="text" name="field[<?php echo $i; ?>]" value="<?php echo escape_string($field[$i]); ?>" size="24" maxlength="64">
           </td>
         </tr>
 <?php
@@ -496,7 +496,7 @@ for ($i = 0; $i <= $count; $i++) {
             <?php echo translate("like"); ?>
           </td>
           <td colspan=2>
-            <input type="text" name="text[<?php echo $i; ?>]" value="<?php echo $text[$i]; ?>" size="24" maxlength="64">
+            <input type="text" name="text[<?php echo $i; ?>]" value="<?php echo escape_string($text[$i]); ?>" size="24" maxlength="64">
           </td>
         </tr>
 <?php
