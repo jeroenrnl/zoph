@@ -213,9 +213,18 @@ for ($i = 0; $i <= $count; $i++) {
       /* photo album */
 
     $album_id = getvar('album_id'); 
-    $_album_id_conj = getvar('_album_id_conj'); 
-    $_album_id_op = getvar('_album_id_op');
-    $_album_id_children = getvar('_album_id_children');
+    if(!is_array($album_id) && !empty($album_id)) {
+        $album_id=explode(",", $album_id);
+        foreach($album_id as $key => $album) {
+            $_album_id_conj[$key]="or";
+            $_album_id_opp[$key]="=";
+            $_album_id_children[$key]="";
+        }
+    } else {
+        $_album_id_conj = getvar('_album_id_conj'); 
+        $_album_id_op = getvar('_album_id_op');
+        $_album_id_children = getvar('_album_id_children');
+    }
 
     $count = sizeof($album_id) - 1; 
     if ( $album_id[$count] == "+" ) { 
@@ -262,9 +271,18 @@ for ($i = 0; $i <= $count; $i++) {
       /* photo category */
 
     $category_id = getvar('category_id'); 
-    $_category_id_conj = getvar('_category_id_conj'); 
-    $_category_id_op = getvar('_category_id_op');
-    $_category_id_children = getvar('_category_id_children');
+    if(!is_array($category_id) && !empty($category_id)) {
+        $category_id=explode(",", $category_id);
+        foreach($category_id as $key => $cat) {
+            $_category_id_conj[$key]="or";
+            $_category_id_opp[$key]="=";
+            $_category_id_children[$key]="";
+        }
+    } else {
+        $_category_id_conj = getvar('_category_id_conj'); 
+        $_category_id_op = getvar('_category_id_op');
+        $_category_id_children = getvar('_category_id_children');
+    }
     
     $count = sizeof($category_id) - 1; 
     if ( $category_id[$count] == "+" ) { 
@@ -311,9 +329,18 @@ for ($i = 0; $i <= $count; $i++) {
       /* photo location */
 
     $location_id = getvar('location_id'); 
-    $_location_id_conj = getvar('_location_id_conj'); 
-    $_location_id_op = getvar('_location_id_op');
-    $_location_id_children = getvar('_location_id_children');
+    if(!is_array($location_id) && !empty($location_id)) {
+        $location_id=explode(",", $location_id);
+        foreach($location_id as $key => $loc) {
+            $_location_id_conj[$key]="or";
+            $_location_id_opp[$key]="=";
+            $_location_id_children[$key]="";
+        }
+    } else {
+        $_location_id_conj = getvar('_location_id_conj'); 
+        $_location_id_op = getvar('_location_id_op');
+        $_location_id_children = getvar('_location_id_children');
+    }
     
     $count = sizeof($location_id) - 1; 
     if ( $location_id[$count] == "+" ) { 
@@ -518,14 +545,14 @@ for ($i = 0; $i <= $count; $i++) {
 <?php echo create_operator_pulldown("_field_op[$i]", $_field_op[$i]) ?>
           </td>
           <td colspan="2">
-            <input type="text" name="field[<?php echo $i; ?>]" value="<?php echo $field[$i]; ?>" size="24" maxlength="64">
+            <input type="text" name="field[<?php echo $i; ?>]" value="<?php echo escape_string($field[$i]); ?>" size="24" maxlength="64">
           </td>
         </tr>
 <?php
     }
       /* Text search for albums/categories/people/photographers */
 
-    $text = getvar('text'); 
+    $text = getvar('text');
     $_text = getvar('_text'); 
     $_text_conj = getvar('_text_conj'); 
     $_text_op = getvar('_text_op');
@@ -560,7 +587,7 @@ for ($i = 0; $i <= $count; $i++) {
             <?php echo translate("like"); ?>
           </td>
           <td colspan=2>
-            <input type="text" name="text[<?php echo $i; ?>]" value="<?php echo $text[$i]; ?>" size="24" maxlength="64">
+            <input type="text" name="text[<?php echo $i; ?>]" value="<?php echo escape_string($text[$i]); ?>" size="24" maxlength="64">
           </td>
         </tr>
 <?php
