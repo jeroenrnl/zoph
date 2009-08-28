@@ -1,12 +1,42 @@
 Zoph Changelog
-Zoph 0.8pre2
 
+Zoph 0.8pre3
+28 August 2009
+
+This is the third pre-release for 0.8, it fixes the bugs discovered since v0.8pre2, including the security bug. It also updates several translations.
+
+Bugs
+    * Bug#2841196: PHP error when logging in as non-admin user
+    * zophImport.pl: Perl error due to missing quote and indentation fixes
+    * Bug#2841296: Not possible to download 4.2GB ZIP files
+    * Bug#2841357: Save search fails without an error in some cases
+    * Bug#2841373: Saved search does not always work correctly when saving a photo collection that was not the result of a search action.
+    * Fix for a cross site scripting bug (the same as the 0.7.0.7 release)
+    * Bug#2845750: zophImport.pl fails when --path contains multiple dirs
+
+Translations
+    * Dutch, Danish, French, Italian, Norwegian Bokmål and Swedish chef have been updated and are fully up to date.
+
+Documentation
+    * Various updates
+    * Removing very old changelog and upgrade instructions. They can still be read in the online (wikibooks) version.
+    * Adding long existing but until now not documented options DEFAULT_ORDER and DEFAULT_DIRECTION
+    * Completely rewritten requirements page
+
+Zoph 0.7.0.7
+24 Aug 2009 
+
+Zoph 0.7.0.7 is an update of the stable 0.7 branch and fixes a cross site scripting security bug.
+
+Bugs
+    * Fix for a cross site scripting bug that found during development of Zoph v0.8
+
+Zoph 0.8pre2
 8 July 2009
 
 This is the second pre-release for 0.8, it fixes the bugs discovered since v0.8pre1, including the security bug.
 
 Bugs
-
     * Bug#2813464: Date link on photo page links to the wrong year
     * Bug#2813467: '+' links to expand date/time, ratings and tree view do not work anymore after a Googlemaps update
     * Fix for a cross site scripting bug that was reported by "y3nh4ck3r".

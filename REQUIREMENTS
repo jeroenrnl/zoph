@@ -1,134 +1,76 @@
-Zoph 0.7 Requirements
-02 June 2007
+REQUIREMENTS
 
-This document is meant to help you install all the packages required by
-Zoph.  I've gotten everything running on Linux (Debian, Mandrake and Gentoo)
-and
-Mac OS X without too much trouble and people have reported getting Zoph
-to work under Windows and several flavours of BSD as well.  You might be able
-to skip this if you
-know your way around your system.
+Zoph is being developped on Linux, but it should be able to run on any OS that can run Apache, MySQL and PHP. Users have reported succesful installations on MacOSX, several BSD flavours and even Windows. Debian and Ubuntu users can install Zoph from apt by typing apt-get zoph.
 
-1. What You Need
-----------------
+Gentoo users could use the webapps overlay, although the version there is outdated.
 
-You need to have the following installed before running Zoph.
-Version numbers are what I have tested with, I expect any recent
-versions would work:
-
-    * MySQL 5.0.40 (Any 4.x or 5.x version should work, 3.x probably works too,
-but is no longer supported)
-    * Apache 2.0.58
-    * PHP 5.2.2
-	Make sure you have the following features (extensions) installed, if your
-	distribution does not automatically install all of them.
-	    * session
-	    * mysql
-	    * pcre
-	    * gd
-	    * xml (Zoph 0.7, for the autocomplete feature).
+Zoph requires the following:
+    * Apache 2.2
+    * PHP 5.2
+    * MySQL 5.0
     * Perl 5.8.8
-    * Perl DBI, DBD::mysql, File::stat, Image::Size,
-    * Perl File::Spec::Link (Zoph v0.7)
-    * ImageMagick 6.3.3
-    * Jhead 2.7
+    * ImageMagick 6.5
+    * Jhead 2.8x
 
-You probably already have many of these.  Getting most of them is fairly
-simple.  For example, using Debian you can simply:
+Other versions may work as well, see below for more details. How to install these applications and get them to work together is depending on your OS and distribution. Check the documentation of the application and/or your distribution for details.
+Contents
 
-$ apt-get update
-$ apt-get install perl apache php4 mysql-server php4-mysql imagemagick jhead
+Apache
+    * Current versions of Zoph are developped on Apache 2.2.x
+          o 2.0.x probably works too, but is no longer tested.
 
-If you are planning on using the web based importer you may need to install
-the GD 2 library for image support in PHP (http://www.boutell.com/gd/).  A
-Debian package named php4-gd2 is available.  Also, you may need to upgrade
-to PHP 4.2 if you want EXIF support.  GD is required to use the importer.
-PHP 4.2 is recommended but not required.
+PHP
+    * Current versions of Zoph are developped on PHP 5.2
+          o PHP 5.1 and 5.3 probably work too
+          o PHP 6 has not yet been released and Zoph has not been tested against it.
+          o PHP4 has been end of life since 31 December 2007. As of Zoph 0.8, PHP4 will no longer be supported by Zoph. Although most of the functionality will remain working with PHP4, after the release of Zoph 0.8, no bugs related to PHP4 compatibility will be accepted or fixed.
 
-Also, if you are using the web importer you may need to increase the
-max_execution_time defined in php.ini.  There is more info in the MANUAL.
+  Required features
+    * The following features (extensions) to PHP are required for Zoph. Not all distributions automatically install all of them.
+          o session
+          o mysql
+          o pcre
+          o gd2
+          o exif
+          o xml (Zoph >0.7)
+          o pear (if you want to use the e-mail features)
 
-2. Apache & PHP
----------------
+  php.ini settings
+    * If you are using the web importer you may need to increase the max_execution_time, upload_max_filesize, post_max_size and max_input_time in php.ini defined in php.ini. See MAX_UPLOAD on the Configuration page.
+    * If you are using the watermarking feature, you probably need to increase the memory_limit setting. See WATERMARKING on the Configuration page.
+    * The e-mail photo feature may require increasing the memory_limit setting. See EMAIL_PHOTOS on the Configuration page.
 
-You may have to edit your httpd.conf file to add PHP support.  Edit
-/var/apache/conf/httpd.conf (or the equivalent) and uncomment/add
-these lines:
+MySQL
+    * Current versions are developped with MySQL 5.0
+    * MySQL 5.1 should work too
+    * MySQL 4.0 and 4.1 may still work but are no longer supported.
 
-LoadModule php4_module /usr/lib/apache/1.3/libphp4.so
-AddType application/x-httpd-php .php
-AddType application/x-httpd-php-source .phps
-
-Save the file and restart apache:
-
-$ apachectl restart
-
-Put a php file in your webserver's path to test things out:
-$ cat /var/www/test.php 
-<?  echo phpinfo(); ?>
-
-Hit http://localhost/test.php and you should see info about your PHP version.
-
-3. MySQL
---------
-
-If MySQL is not up and running you'll need to start it:
-
-$ /etc/init.d/mysql start
-
-If you haven't set your root password, do it!
-
-$ mysqladmin -u root password <password>
-
-MySQL version 4.1 and above (Zoph 0.4 and earlier)
---------------------------------------------------
-
-If you are trying to install Zoph against MySQL version newer than 4.1, you
-will run into problems, when trying to login. It will always say your username
-and password are wrong. This is caused by the fact that from version 4.1,
-MySQL has changed the password encoding scheme from 16 bytes to 41 bytes. 
-The password field in Zoph is 32 bytes long, and thus the new passwordlength
-does not fit. If you want to use v0.4 or before with a post-4.1 MySQL version
-anyway, you can change the size of the password field manually by running the
-following query in MySQL:
-
-ALTER TABLE zoph_users CHANGE password password varchar(64); 
-
-After that, you will need to change the admin password again, so it will be
-inserted into the database using the 'new' encoding.
-
-UPDATE zoph_users SET password=password("admin") WHERE user_id=1; 
-
-MySQL version 4.1 and above (Zoph 0.5 and later)
-------------------------------------------------
-Zoph 0.5 has full support for MySQL > 4.1. Because Zoph 0.5 is able to
-transparently change passwords from the "old" password encoding to the "new"
-password encoding, it is recommended to first upgrade Zoph from 0.4 to 0.5
-and after that, upgrade your MySQL version. If you are a new user and
-installing
-Zoph 0.5 for the first time, it does not matter which MySQL version you are
-running.
-
-4. Perl Packages
-----------------
-
-You may already have the DBI and DBD::mysql but you probably have to
-install the Image::Size package.  You can use CPAN to do this.  (Note
-that the first time you run CPAN you'll have to answer some questions.
-You can just go with the defaults until you are asked to choose the
-hosts).
-
+Perl
+The commandline interface of Zoph (zophImport.pl and zophExport.pl) is written in Perl. If you do not intend to use it, you can skip this paragraph.
+    * Zoph is developped in Perl 5.8.8
+          o Zoph has not been tested against 5.9.x or 5.10.x because my distribution (Gentoo) still hasn't incorporated them.
+    * The following Perl modules are required for Zoph to run
+          o Perl DBI, DBD::mysql, File::stat, Image::Size,
+          o Perl File::Spec::Link (Zoph >v0.7)
+    * You may already have the DBI, DBD::mysql and File::stat but you probably have to install the Image::Size package. You can use CPAN to do this. (Note that the first time you run CPAN you'll have to answer some questions. You can just go with the defaults until you are asked to choose the hosts).
 $ perl -MCPAN -e 'install Image::Size'
+    * If needed, install the other Perl packages as above.
 
-If needed, install the other Perl packages as above.
+ImageMagick
+    * Current Zoph versions have been tested against ImageMagick 6.5.x
 
-5. Jhead
---------
+Jhead
+    * Jhead 2.8x
+          o Other versions probably work as well
 
-Jhead is a handy little program that extracts the information stored in
-the Exif headers that are added by most digital cameras.  Exif stores
-date and time plus a bunch of other info about a photo.  Zoph uses
-Jhead to parse the header so you'll need to install it.  You can
-download it from:
+Jhead is a handy little program that extracts the information stored in the Exif headers that are added by most digital cameras. Exif stores date and time plus a bunch of other info about a photo. Zoph uses Jhead to parse the header so you'll need to install it. You can download it from http://www.sentex.net/~mwandel/jhead/.
 
-http://www.sentex.net/~mwandel/jhead/
+Browser
+In order to be able to use Zoph, you will need a browser.
+    * Zoph is being developped and thoroughly tested with Firefox 3.x.
+    * Zoph should work with all recent browser versions
+          o Please report a bug if it doesn't.
+    * Older versions usually work, but layout may not be 100% ok.
+    * Some features require Javascript support
+          o You can turn off Javascript support in Zoph with the JAVASCRIPT configuration setting. Obviously features that require it will be disabled as well.
+          o Zoph should work when Javascript is turned off in the browser, except if the Autocomplete feature is enabled, however, Zoph will detect this and warn the user to turn Autocompletion off (or Javascript on).
