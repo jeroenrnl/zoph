@@ -330,7 +330,7 @@ sub processImage {
             $thisPath =~ s|/?[^/]+$||;
             if (abs_path($image_dir . "/" . $path) ne abs_path($thisPath)) {
                 if (not -d "$image_dir/$path") {
-                    mkdir("$image_dir/$path", 0755) or warn "Could not create dir: $!\n";
+                    mkdirRecursive("$image_dir/$path", 0755) or warn "Could not create dir '$image_dir/$path': $!\n";
                 }
                 copy($img, "$image_dir/$path/" . stripPath($img)) or
                     die "Could not copy $img: $!\n";
@@ -1099,4 +1099,5 @@ sub mkdirRecursive() {
             mkdir($fulldir, $mode) or die "Could not create directory $fulldir: $!\n";
         }
     }
+    return 1;
 }
