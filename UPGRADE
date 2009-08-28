@@ -1,8 +1,9 @@
-Zoph 0.7 to 0.8pre1 or 0.8pre2
+Zoph 0.7 to 0.8pre1, 0.8pre2 or 0.8pre3
 
 You can also use these instructions to go from 0.7.0.x to 0.7.5, for an update from 0.7.1, 0.7.2, 0.7.2.1, 0.7.3 or 0.7.4 see 0.7.x to 0.7.x
 
 Copy php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.
+Copy bin/zophImport.pl into the directory where you installed it, if you followed the installation instructions it is probably /usr/local/bin, otherwise, find out with 'which zophImport.pl'.
 
 Updating the Database
 
