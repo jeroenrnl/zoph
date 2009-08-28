@@ -158,8 +158,16 @@ $resolveSymlinks = 0;
 </ul>
 <p>If you see a bunch of code...</p>
 <ul>
-<li>make sure Apache is configured to handle PHP (see the REQUIREMENTS file)</li>
+<li>make sure Apache is configured to handle PHP
+<ul>
+<li>The Apache configuration needs to contain this:</li>
 </ul>
+</li>
+</ul>
+<pre>
+LoadModule php5_module /usr/lib/apache2/modules/libphp5.so
+AddType application/x-httpd-php .php
+</pre>
 <p>If you see a MySQL access denied error...</p>
 <ul>
 <li>make sure the DB_USER you specified in config.inc.php actually has access to the database. If your database is not on localhost, you will need to grant permissions to zoph_rw@hostname for that host.</li>
