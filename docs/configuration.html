@@ -30,6 +30,8 @@
 <li class="toclevel-2"><a href="#ICONSET"><span class="tocnumber">1.9</span> <span class="toctext">ICONSET</span></a></li>
 <li class="toclevel-2"><a href="#LANG_DIR"><span class="tocnumber">1.10</span> <span class="toctext">LANG_DIR</span></a></li>
 <li class="toclevel-2"><a href="#DEFAULT_LANG"><span class="tocnumber">1.11</span> <span class="toctext">DEFAULT_LANG</span></a></li>
+<li class="toclevel-2"><a href="#DEFAULT_ORDER"><span class="tocnumber">1.12</span> <span class="toctext">DEFAULT_ORDER</span></a></li>
+<li class="toclevel-2"><a href="#DEFAULT_DIRECTION"><span class="tocnumber">1.13</span> <span class="toctext">DEFAULT_DIRECTION</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1"><a href="#Authentication"><span class="tocnumber">2</span> <span class="toctext">Authentication</span></a>
@@ -341,6 +343,48 @@
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('DEFAULT_LANG', "nl");</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<p><a name="DEFAULT_ORDER" id="DEFAULT_ORDER"></a></p>
+<h3> <span class="mw-headline">DEFAULT_ORDER</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DEFAULT_ORDER</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Defines the default sort order Zoph uses to sort the photos on the thumbnail screen, it can be overided by the "order by" drop down on the top left of that screen.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>date</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>date</tt>, <tt>time</tt>, <tt>timestamp</tt>, <tt>name</tt>, <tt>path</tt>, <tt>title</tt>, <tt>view</tt>, <tt>description</tt>, <tt>width</tt>, <tt>height</tt>, <tt>size</tt>, <tt>aperture</tt>, <tt>camera_make</tt>, <tt>camera_model</tt>, <tt>compression</tt>, <tt>exposure</tt>, <tt>flash_used</tt>, <tt>focal_length</tt>, <tt>iso_equiv</tt>, <tt>metering_mode</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DEFAULT_ORDER', "name");</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<p><a name="DEFAULT_DIRECTION" id="DEFAULT_DIRECTION"></a></p>
+<h3> <span class="mw-headline">DEFAULT_DIRECTION</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DEFAULT_DIRECTION</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Defines the default sort order direction Zoph uses to sort the photos on the thumbnail screen, it can be overided by the black and white arrows next to the "order by" drop down on the top left of that screen.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>asc</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>asc</tt>: ascending or <tt>desc</tt>: descending</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DEFAULT_DIRECTION', "desc");</tt></td>
 </tr>
 </table>
 <p><br /></p>
