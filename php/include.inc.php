@@ -49,7 +49,7 @@
     require_once("page.inc.php");
     require_once("pageset.inc.php");
 
-    if(minimum_version("5.1.0")) {
+    if(minimum_version("5.2.0")) {
         require_once("timezone.inc.php");
     }
     require_once("photo.inc.php");

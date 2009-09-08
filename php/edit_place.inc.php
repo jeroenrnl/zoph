@@ -83,7 +83,7 @@
             <?php echo create_zoom_pulldown($place->get("mapzoom")) ?><br>
          </fieldset>
 <?php
-    if(minimum_version("5.1.0")) {
+    if(minimum_version("5.2.0")) {
         if(GUESS_TZ) {
             echo $place->guess_tz();
         }
