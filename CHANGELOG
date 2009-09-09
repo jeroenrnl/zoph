@@ -1,5 +1,17 @@
 Zoph Changelog
 
+Zoph 0.8
+9 Sept 2009
+
+Final 0.8 release. Only small changes compared to 0.8pre3:
+
+Bugs
+    * Fixed a bug that caused users of PHP 5.1.x get an error about non-existant DateTime class.
+
+Documentation
+    * Added a few long-existing but overlooked and therefore not documented configuration settings
+    * Added a troubleshooting section ("Solving Problems")
+
 Zoph 0.8pre3
 28 August 2009
 
@@ -15,7 +27,7 @@ Bugs
     * Bug#2845750: zophImport.pl fails when --path contains multiple dirs
 
 Translations
-    * Dutch, Danish, French, Italian, Norwegian Bokmål and Swedish chef have been updated and are fully up to date.
+    * Dutch, Danish, French, Italian, Norwegian Bokmï¿½l and Swedish chef have been updated and are fully up to date.
 
 Documentation
     * Various updates
@@ -216,15 +228,15 @@ Bugs
 
 Features
     * Zophcode: Possibility to add markup and smileys to comments. Smileys were taken from PHPBB. (they are under GPL)
-    * Patch#1923522 and Patch#1923525 Default language now configurable and logon screen translated. Thanks to Francisco Javier Félix for providing these patches.
-    * Req#1928328: Use an alternating colour scheme to make it easier to keep the overview on the list of people. Thanks to Francisco Javier Félix for providing this.
+    * Patch#1923522 and Patch#1923525 Default language now configurable and logon screen translated. Thanks to Francisco Javier Fï¿½lix for providing these patches.
+    * Req#1928328: Use an alternating colour scheme to make it easier to keep the overview on the list of people. Thanks to Francisco Javier Fï¿½lix for providing this.
     * Added Licence and some extra security to selection.inc.php (although there was no security isssue with this file, in case there will be one discovered in the future, it will be harder to exploit).
     * Moved the functionality from pager.inc.php to util.inc.php, so it is easier to re-use.
     * Added an admin page where administrator can manage settings. Replaced 'users' in the main menu with 'admin'.
     * Req#1506959: Zoph Pages feature that allows customization of the first page of an album/category/person/place.
 
 Translations
-    * Spanish was updated by Francisco Javier Félix
+    * Spanish was updated by Francisco Javier Fï¿½lix
     * Canadian English, German and Dutch were updated
 
 Zoph 0.7.1
@@ -743,7 +755,7 @@ destination path was set
 - Added a man page for zophImport.pl (thanks Mark Cooper)
 - Updated the tutorial renamed it as the manual
 - Added an updated language pack with Norwegian and Spanish translations
-(thanks Haavard Leonardo Lund and Alvaro González Crespo)
+(thanks Haavard Leonardo Lund and Alvaro Gonzï¿½lez Crespo)
 
 Zoph 0.3.2
 17 Oct 2002

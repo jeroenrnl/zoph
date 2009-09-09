@@ -78,6 +78,8 @@
 <li class="toclevel-2"><a href="#IMPORT_MOVE"><span class="tocnumber">6.8</span> <span class="toctext">IMPORT_MOVE</span></a></li>
 <li class="toclevel-2"><a href="#USE_DATED_DIRS"><span class="tocnumber">6.9</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
 <li class="toclevel-2"><a href="#HIER_DATED_DIRS"><span class="tocnumber">6.10</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#TAR_CMD"><span class="tocnumber">6.11</span> <span class="toctext">TAR_CMD</span></a></li>
+<li class="toclevel-2"><a href="#UNZIP_CMD"><span class="tocnumber">6.12</span> <span class="toctext">UNZIP_CMD</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1"><a href="#Features"><span class="tocnumber">7</span> <span class="toctext">Features</span></a>
@@ -961,6 +963,47 @@
 </tr>
 </table>
 <p><br /></p>
+<p><a name="TAR_CMD" id="TAR_CMD"></a></p>
+<h3> <span class="mw-headline">TAR_CMD</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">TAR_CMD</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> The command to use to untar .tar files uploaded via the web import.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: Disable TAR uploading. <tt>tar xvf</tt>: Will work on most systems, modify if your system requires another command</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('TAR_CMD', 'tar xvf');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<p><a name="UNZIP_CMD" id="UNZIP_CMD"></a></p>
+<h3> <span class="mw-headline">UNZIP_CMD</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">UNZIP_CMD</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> The command to use to unzip .zip files uploaded via the web import.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: Disable ZIP uploading. <tt>unzip</tt>: Will work on most systems, modify if your system requires another command</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('UNZIP_CMD', 'unzip');</tt></td>
+</tr>
+</table>
 <p><a name="Features" id="Features"></a></p>
 <h2> <span class="mw-headline">Features</span></h2>
 <p><a name="JAVASCRIPT" id="JAVASCRIPT"></a></p>

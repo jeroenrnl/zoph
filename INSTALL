@@ -1,21 +1,9 @@
-Zoph 0.7 installation
-02 June 2007
+Zoph 0.8 installation
+9 Sept 2009
 
 1. Requirements
 
-   The following need to be installed before Zoph will function.  For
-   details on installing these, read the REQUIREMENTS document.
-
-   - MySQL
-   - Apache
-   - PHP 4
-   - Perl 5
-   - Perl DBI, DBD::mysql, Image::Size, File::Spec::Link
-   - ImageMagick
-   - Jhead (http://www.sentex.net/~mwandel/jhead/)
-
-   You may also have to install mod_php and the MySQL PHP module to get
-   MySQL, PHP and Apache to play together.
+   See the REQUIREMENTS document.
 
 2. Creating the database
 
@@ -47,30 +35,8 @@ zoph_rw@localhost identified by 'PASSWORD';
    - DB_USER : zoph_rw, using the above example
    - DB_PASS : the password you set
 
-   - USE_IMAGE_SERVICE : see the section on the image service below.
-       the default is no (0).
-   - IMAGE_DIR : where your images are stored.  this is the absolute file
-       system path.  keep the trailing slash.
-   - WEB_IMAGE_DIR : the path to the the images off you web server's doc root.
-       if you enable the image service, this is ignored.
-
-   The following 6 parameters should always match their equivalents in
-   zophImport.pl.  If you edit one, edit the other too.
-
-   - THUMB_SIZE : max width or height of thumbnails (default 120 pixels)
-   - MID_SIZE : max width or height of mid size images (default 480 pixels)
-   - THUMB_PREFIX : thumbnail prefix (default 'thumb')
-   - MID_PREFIX : mid size prefix (default 'mid')
-   - MIXED_THUMBNAILS : the default is 1 which enables the Zoph 0.3 to behave
-       like previous versions.  Setting this to 0 means that Zoph will
-       assume all thumbnails have the extension specified in THUMB_EXTENSION.
-       This setting should match what is in zophImporter.pl.
-       If you are installing Zoph for the first time, I recommend you set
-       this to 0 and change zophImport.pl accordingly.
-       If you are upgrading, see the UPGRADE document for more information
-       about this.
-   - THUMB_EXTENSION : the extension to use for thumbnails.  This setting is
-       ignored if MIXED_THUMBNAILS is set.
+   For more information, see http://en.wikibooks.org/wiki/Zoph/Configuration or the
+   configuration.html in the docs directory.
 
 4. Install the templates
 
@@ -94,20 +60,18 @@ zoph_rw@localhost identified by 'PASSWORD';
 
    5.2 Configure the database variables
 
-       Edit bin/zophImport.pl and bin/zophExport.pl so that the following
-       variables match the values you put in config.inc.php:
+       Edit zophrc.sample and store it as .zophrc in your homedir. Make sure that the
+       following variables match the values you put in config.inc.php:
+
        $db_name = 'zoph';
        $db_user = 'zoph_rw';
        $db_pass = 'password';
-
-       In addtion, in zophExport.pl set $image_dir to you image directory.
+       $image_dir = '/data/images' 
 
    5.3 Copy bin/zophImport.pl and bin/zophExport.pl to /usr/local/bin
-
        Or some other directory in your PATH.
 
    5.4 Install the man page
-
        A man page for zophImport.pl is in the man/ directory.  Copy this
        to somewhere in your manpath, /usr/local/man/man1 for example.
 
@@ -128,7 +92,3 @@ zoph_rw@localhost identified by 'PASSWORD';
    + make sure the DB_USER you specified in config.inc.php actually has
      access to the database.  If your database is not on localhost, you
      will need to grant permissions to zoph_rw@hostname for that host.
-
-7. Add some photos
-
-   See the MANUAL to get started.
