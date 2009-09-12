@@ -95,12 +95,12 @@
 
     if (!empty($user)) {
         $user->prefs->load();
-        $rtplang = $user->load_language();
+        $lang=$user->load_language();
             
         if (minimum_version('4.1.0')) {
             $_SESSION['user'] = &$user;
         }
     } else {
-        $rtplang = new rtplang("lang", "en", "en", DEFAULT_LANG);
+        $lang = new language(DEFAULT_LANG);
     }        
 ?>

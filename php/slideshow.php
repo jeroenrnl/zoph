@@ -27,8 +27,7 @@
     $thumbnails;
     $clean_vars = clean_request_vars($request_vars);
     $num_photos = get_photos($clean_vars, $offset, 1, $thumbnails, $user);
-    $charset = $rtplang->get_encoding();
-    header("Content-Type: text/html; charset=" . $charset);
+    header("Content-Type: text/html; charset=utf-8");
 
     $num_thumbnails = sizeof($thumbnails);
     if  ($num_thumbnails) {

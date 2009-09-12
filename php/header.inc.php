@@ -15,37 +15,39 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-// Very important, rtp must send header and html start tags !
-
-print $rtplang->lang_header();
+    header("Content-Type: text/html; charset=utf-8")
 ?>
-<link type="text/css" rel="stylesheet" href="<?php echo CSS_SHEET ?>">
+<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">
+<html>
+    <head>
+        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charset\">
+        <link type="text/css" rel="stylesheet" href="<?php echo CSS_SHEET ?>">
 <?php
     if(JAVASCRIPT) {
 ?>
-<script type="text/javascript" src="js/util.js"></script>
-<script type="text/javascript" src="js/thumbview.js"></script>
+        <script type="text/javascript" src="js/util.js"></script>
+        <script type="text/javascript" src="js/thumbview.js"></script>
 <?php
         if(AUTOCOMPLETE) {
 ?>
-<script type="text/javascript" src="js/autocomplete.js"></script>
+        <script type="text/javascript" src="js/autocomplete.js"></script>
 <?php
         }
         if(MAPS) {
 ?>
-<script type="text/javascript" src="js/mapstraction.js"></script>
-<script type="text/javascript" src="js/maps.js"></script>
+        <script type="text/javascript" src="js/mapstraction.js"></script>
+        <script type="text/javascript" src="js/maps.js"></script>
 <?php
             switch (strtolower(MAPS)) {
             case 'google':
             case 'openstreetmap':
 ?>
-<script src="http://maps.google.com/maps?file=api&v=2&key=<?php echo GOOGLE_KEY ?>" type="text/javascript"></script>
+        <script src="http://maps.google.com/maps?file=api&v=2&key=<?php echo GOOGLE_KEY ?>" type="text/javascript"></script>
 <?php
             break;
             case 'yahoo':
 ?>
-<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=Zoph"></script>
+        <script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=Zoph"></script>
 <?php
             break;
             }
@@ -60,10 +62,10 @@ print $rtplang->lang_header();
 <?php
     }
 ?>
-<title><?php echo ZOPH_TITLE . ($title ? " - $title" : "") ?></title>
-</head>
-<body>
-    <ul class="menu">
+    <title><?php echo ZOPH_TITLE . ($title ? " - $title" : "") ?></title>
+    </head>
+    <body>
+        <ul class="menu">
 <?php
     $tabs = array(
         translate("home", 0) => "zoph.php",

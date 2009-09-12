@@ -28,19 +28,17 @@
         }
     }
     require_once("zoph_table.inc.php");
-    require_once("rtplang.class.php");
+    require_once("translation.inc.php");
     require_once("user.inc.php");
 
 
     $user = new user();
-    $rtplang = $user->load_language();
-
-    print $rtplang->lang_header();
+    $lang=$user->load_language();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link TYPE="text/css" REL="stylesheet" HREF="<?php echo CSS_SHEET ?>?logged_on=no">
 <title><?php echo ZOPH_TITLE . ' - ' . translate("logon",0) ?></title>
 </head>

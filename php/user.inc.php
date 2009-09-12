@@ -186,12 +186,9 @@ class user extends zoph_table {
 
         if ($this->prefs != null && $this->prefs->get("language") != null) {
             $iso = $this->prefs->get("language");
-
-            // instead of lang_exists() which requires the language name
-            if (file_exists(LANG_DIR . '/' . $iso)) {
-                $application_lang = "$iso";
-            }
+            $application_lang=language::exists($iso);
         }
+
 
         // check browser list if there is no pref (or an invalid one)
         if (!isset($application_lang) && isset($HTTP_ACCEPT_LANGUAGE)) {
@@ -199,11 +196,7 @@ class user extends zoph_table {
 
             for ($i = 0; $i < count($isotab) && !isset($application_lang); $i++) {
                 $iso = substr(trim($isotab[$i]), 0, 2);
-
-                // instead of lang_exists (which requires the language name
-                if (file_exists(LANG_DIR . '/' . $iso)) {
-                    $application_lang = "$iso";
-                }
+                $application_lang=language::exists($iso);
             }
         }
 
@@ -212,7 +205,8 @@ class user extends zoph_table {
           $application_lang = "en";
         }
 
-        $this->lang = new rtplang("lang", "en", "en", $application_lang);
+        $this->lang = new language($application_lang);
+        $this->lang->read();
         return $this->lang;
     }
 

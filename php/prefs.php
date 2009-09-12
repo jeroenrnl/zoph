@@ -24,7 +24,7 @@
             $user->prefs->set_fields($request_vars);
             $user->prefs->update();
             $user->prefs->load(1);
-            $rtplang = $user->load_language(1);
+            $lang = $user->load_language(1);
         }
         $action = "update";
     }
@@ -177,10 +177,10 @@
 <?php echo create_pulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), create_select_array(get_records("color_scheme", "name"), array("name"))) ?>
           </dd>
 <?php
-    $lang_array = $rtplang->get_available_languages();
+    $langs = language::get_all();
     $lang_select_array['null'] = translate("Browser Default");
-    while (list($code, $code_to_name) = each($lang_array)) {
-        $lang_select_array[$code] = $code_to_name[$code];
+    foreach ($langs as $language) {
+        $lang_select_array[$language->iso] = $language->name;
     }
 ?>
         <dt><?php echo translate("language") ?>

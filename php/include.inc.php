@@ -22,7 +22,7 @@
     require_once("util.inc.php");
     require_once("validator.inc.php");
 
-    require_once("rtplang.class.php");
+    require_once("translation.inc.php");
 
     require_once("zoph_table.inc.php");
     require_once("zoph_tree_table.inc.php");
