@@ -1,6 +1,5 @@
-#{@"htmltagoption"=>"nothing","charset"=>"iso-8859-1","name"=>"Canadian English","translator_0"=>"Ian Kerr, Jeroen Roos"}
-#
-#
+# Zoph Language File - Canadian English
+# Translated by Ian Kerr, Jeroen Roos
 %s chars max=%s chars max
 %s images loaded.=%s images loaded.
 %s photo(s) selected=%s photo(s) selected

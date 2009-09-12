@@ -1,6 +1,5 @@
-#{@"htmltagoption"=>"nothing","charset"=>"iso-8859-1","name"=>"Afrikaans","translator_0"=>"Neels Jordaan"}
-#
-#
+# Zoph Language File - Afrikaans
+# Translated by Neels Jordaan
 %s chars max=%s karakters maks
 %s images loaded.=%s beelde gelaai.
 %s photos in %s=%s fotos in %s

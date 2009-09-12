@@ -1,6 +1,6 @@
-#{@"htmltagoption"=>"nothing","charset"=>"UTF-8","name"=>"Español","translator_0"=>"Alvaro González Crespo <agonzalez@eresmas.com>","translator_1"=>"Francisco Javier Félix <ffelix@sshinf.com>"}
-#
-#
+# Zoph Language File - Español
+# Translated by Alvaro González Crespo <agonzalez@eresmas.com>
+# and Francisco Javier Félix <ffelix@sshinf.com>
 %s chars max=Máximo %s caracteres
 %s images loaded.=%s imágenes cargadas.
 %s photo(s) selected=%s foto(s) seleccionadas
