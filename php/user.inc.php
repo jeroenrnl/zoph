@@ -177,36 +177,19 @@ class user extends zoph_table {
     }
 
     function load_language($force = 0) {
-
-        global $HTTP_ACCEPT_LANGUAGE;
+        $langs=array();
 
         if (!$force && $this->lang != null) {
             return $this->lang;
         }
 
         if ($this->prefs != null && $this->prefs->get("language") != null) {
-            $iso = $this->prefs->get("language");
-            $application_lang=language::exists($iso);
+            $langs[] = $this->prefs->get("language");
         }
 
+        $langs=array_merge($langs, language::http_accept());
 
-        // check browser list if there is no pref (or an invalid one)
-        if (!isset($application_lang) && isset($HTTP_ACCEPT_LANGUAGE)) {
-            $isotab = explode(",", $HTTP_ACCEPT_LANGUAGE);
-
-            for ($i = 0; $i < count($isotab) && !isset($application_lang); $i++) {
-                $iso = substr(trim($isotab[$i]), 0, 2);
-                $application_lang=language::exists($iso);
-            }
-        }
-
-        // default to English
-        if(!isset($application_lang)) {
-          $application_lang = "en";
-        }
-
-        $this->lang = new language($application_lang);
-        $this->lang->read();
+        $this->lang=language::load($langs);
         return $this->lang;
     }
 

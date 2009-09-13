@@ -178,7 +178,7 @@
           </dd>
 <?php
     $langs = language::get_all();
-    $lang_select_array['null'] = translate("Browser Default");
+    $lang_select_array[null] = translate("Browser Default");
     foreach ($langs as $language) {
         $lang_select_array[$language->iso] = $language->name;
     }
