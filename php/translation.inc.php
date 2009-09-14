@@ -38,7 +38,11 @@ class language {
     public $name;
     private $filename;
     private $translations;
-    private $base="en";
+
+    # This defines what the base language is, the language the strings in the
+    # sourcecode are in.
+    public static $base="en";
+    public static $base_name="English";
 
     /**
      * @param string iso ISO definition of the language, usually 2 letters or 
@@ -48,7 +52,7 @@ class language {
     function __construct($iso) {
         $this->name=$iso;
         $this->filename=LANG_DIR. "/" . $iso;
-        $this->iso=$iso;
+        $this->iso=strtolower($iso);
     }
 
     /**
@@ -60,7 +64,7 @@ class language {
             try {
                 $file=fopen($this->filename, "r");
             } catch (Exception $e) {
-                if(DEBUG && 2) {
+                if(DEBUG & 2) {
                     echo "Could not read language file $this->filename: " .
                         "<pre>" . $e->getMessage() . "</pre><br>";
                 }
@@ -84,7 +88,7 @@ class language {
         $header=fgets($file);
         $zoph_header="# zoph language file - ";
         if(strtolower(substr($header,0,23))!=$zoph_header) {
-            if(DEBUG && 2) {
+            if(DEBUG & 2) {
                 echo "Incorrect language header in <b>" . $this->filename .
                     "<b>:<br><pre>" . $header. "</pre>";
             }
@@ -105,7 +109,7 @@ class language {
         if(!$file) { return false; }
         while ($line=fgets($file)) {
             if($line[0] == "#") {
-                if(DEBUG && 2) {
+                if(DEBUG & 2) {
                     echo "<b>" . $this->iso . "</b>:" . $line;
                 }
             } else {
@@ -130,7 +134,7 @@ class language {
         if($translation) {
             return $translation;
         } else {
-            if($error && !($this->iso==$this->base)) {
+            if($error && !($this->iso==language::$base)) {
                 $tag = "<b>[tr]</b> ";
             }
             return $tag . $string;
@@ -143,18 +147,40 @@ class language {
      */
     public static function get_all() {
         $langs=array();
-        if(is_dir(LANG_DIR)) {
+        if(is_dir(LANG_DIR) && is_readable(LANG_DIR)) {
             $handle=opendir(LANG_DIR);
             while ($filename = trim(readdir($handle))) {
                 if(!is_dir(LANG_DIR . "/" . $filename)) {
-                    $lang=new language($filename);
-                    if($lang->read_header()) {
-                        $langs[]=$lang;
+                    if(is_readable(strtolower(LANG_DIR . "/" . $filename))) {
+                        # making filename lowercase, so we won't include
+                        # any capitalized filenames... Zoph will not able
+                        # to find them back later...
+                        # is isocode nl file NL Nl or nl?
+                        $lang=new language($filename);
+                        if($lang->read_header()) {
+                            $langs[$filename]=$lang;
+                        }
+                    } else {
+                        if(DEBUG & 2) {
+                            echo "<br>Cannot read <b>" . $filename . "</b>, skipping. ";
+                            if($filename != strtolower($filename)) {
+                                echo "Language files should have lowercase names!<br>";
+                            }
+                            echo "<br>";
+                        }
                     }
                 }
             }
-        }
-        closedir($handle);
+            closedir($handle);
+        } else {
+            if(DEBUG & 2) {
+                echo "<b>Warning:</b> Cannot read language dir!<br>";
+            }
+        }    
+        $base_lang=new language(language::$base);
+        $base_lang->name=language::$base_name;
+        $langs[language::$base]=$base_lang;
+        ksort($langs);
         return $langs;
     }
 
@@ -178,21 +204,34 @@ class language {
      * @return language language object
      */
     public static function load($langs) {
-        array_push($langs, DEFAULT_LANG, "en");
+        array_push($langs, DEFAULT_LANG, language::$base);
         foreach ($langs as $l) {
-            if(DEBUG && 2) {
-                echo "Trying to load language: <b>" . $l . "</b>i<br>\n";
+            if(DEBUG & 2) {
+                echo "Trying to load language: <b>" . $l . "</b><br>\n";
             }
             if(language::exists($l)) {
                 $lang=new language($l);
                 if($lang->read_header() && $lang->read()) {
-                    if(DEBUG && 2) {
-                        echo "Loaded language: <b>" . $l . "</b>i<br>\n\n";
+                    if(DEBUG & 2) {
+                        echo "Loaded language: <b>" . $l . "</b><br>\n\n";
                     }
                     return $lang;
                 }
+            } else if ($l==language::$base) {
+                # If it is the base language, no file needs to exist
+                if(DEBUG & 2) {
+                    echo "Using base language: <b>" . $l . "</b><br>\n\n";
+                }
+                $lang=new language($l);
+                return $lang;
             }
+
         }
+        if(DEBUG & 2) {
+            echo "No languages found, falling back to default: <b>";
+            echo language::$base . "</b><br>\n";
+        }
+        return new language(language::$base);
     }
    
     /**
@@ -209,7 +248,7 @@ class language {
             # Some browers add a 'quality' identifier to indicate
             # the preference of this language, something like en;q=1.0
             $l=explode(";",$al);
-            $langs[]=$l[0];
+            $langs[]=strtolower($l[0]);
 
             # A user could select a "sublanguage" such as en-gb for British
             # English, or de-ch for Swiss German to make sure that 
@@ -218,12 +257,12 @@ class language {
             # translation for example), we add both en-gb and en to the list
             if(strpos($l[0], "-")) {
                 $genlang=explode("-", $l[0]);
-                $genlangs[]=$genlang[0];
+                $genlangs[]=strtolower($genlang[0]);
             }
         }
         
         $return=array_unique(array_merge($langs, $genlangs));
-        if(DEBUG && 2) {
+        if(DEBUG & 2) {
             echo "<b>HTTP_ACCEPT_LANGUAGE</b>: " . $HTTP_ACCEPT_LANGUAGE . "<br>\n";
             echo "<b>Zoph's interpretation</b>: ";
             print_r($return);
