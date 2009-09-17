@@ -15,6 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+    require_once("log.inc.php");
     require_once("config.inc.php");
     require_once("variables.inc.php");
     if(isset($HTTP_GET_VARS["redirect"])) {

@@ -54,9 +54,7 @@
                 }
            } catch (Exception $e){
                 echo "<b>Invalid time</b><br>";
-                if(DEBUG) {
-                    echo "<pre>" . $e->getMessage() . "</pre><br>";
-                }
+                log::msg("<pre>" . $e->getMessage() . "</pre>", log::DEBUG, log::GENERAL);
            }
         }
     }
@@ -86,11 +84,9 @@ function guess_tz($lat, $lon) {
             }
             return $tz;
         } else {
-            if(DEBUG) {
-                $error=error_get_last();
-                echo "<b>Error:</b> Could not connect to Geonames site: " . 
-                    $error["message"] . "<br>\n";
-            }
+            $error=error_get_last();
+            log::msg("Could not connect to Geonames site: " . 
+                $error["message"], log::ERROR, log::GENERAL);
             return null;
         }
     } else {

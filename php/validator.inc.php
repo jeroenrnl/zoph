@@ -64,9 +64,7 @@ class validator {
 
                 $user = new user($row["user_id"]);
             } else {
-                if (DEBUG>=5) {
-                    echo "No valid user found... trying old_password...<br>\n";
-                }
+                log::msg("No valid user found... trying old_password...", log::DEBUG, log::LOGIN);
                 /*
                  * No valid user has been found. It could be that we've upgraded
                  * MySQL to a post-4.1 version and the password is still in 

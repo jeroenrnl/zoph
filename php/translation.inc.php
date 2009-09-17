@@ -64,10 +64,8 @@ class language {
             try {
                 $file=fopen($this->filename, "r");
             } catch (Exception $e) {
-                if(DEBUG & 2) {
-                    echo "Could not read language file $this->filename: " .
-                        "<pre>" . $e->getMessage() . "</pre><br>";
-                }
+                log::msg("Could not read language file $this->filename: " .
+                        "<pre>" . $e->getMessage() . "</pre>", log::ERROR, log::LANG);
                 return false;
             }
             return $file;
@@ -88,10 +86,8 @@ class language {
         $header=fgets($file);
         $zoph_header="# zoph language file - ";
         if(strtolower(substr($header,0,23))!=$zoph_header) {
-            if(DEBUG & 2) {
-                echo "Incorrect language header in <b>" . $this->filename .
-                    "<b>:<br><pre>" . $header. "</pre>";
-            }
+            log::msg("Incorrect language header in <b>" . $this->filename . "</b>", log::ERROR, log::LANG);
+            log::msg("<pre>" . $header. "</pre>", log::DEBUG, log::LANG);
             return false;
         } else {
             $this->name=substr($header,23);
@@ -109,9 +105,7 @@ class language {
         if(!$file) { return false; }
         while ($line=fgets($file)) {
             if($line[0] == "#") {
-                if(DEBUG & 2) {
-                    echo "<b>" . $this->iso . "</b>:" . $line;
-                }
+                log::msg("<b>" . $this->iso . "</b>:" . $line, log::MOREDEBUG, log::LANG);
             } else {
                 $strings=explode("=",$line);
                 $this->translations[$strings[0]]=$strings[1];
@@ -161,21 +155,17 @@ class language {
                             $langs[$filename]=$lang;
                         }
                     } else {
-                        if(DEBUG & 2) {
-                            echo "<br>Cannot read <b>" . $filename . "</b>, skipping. ";
-                            if($filename != strtolower($filename)) {
-                                echo "Language files should have lowercase names!<br>";
-                            }
-                            echo "<br>";
+                        if($filename == strtolower($filename)) {
+                            log::msg("Cannot read <b>" . $filename . "</b>, skipping. ", log::ERROR, log::LANG);
+                        } else {
+                            log::msg("Language files should have lowercase names, cannot open <b>" . $filename . "</b>", log::WARN, log::LANG);
                         }
                     }
                 }
             }
             closedir($handle);
         } else {
-            if(DEBUG & 2) {
-                echo "<b>Warning:</b> Cannot read language dir!<br>";
-            }
+            log::msg("Cannot read language dir!", log::WARN, log::LANG);
         }    
         $base_lang=new language(language::$base);
         $base_lang->name=language::$base_name;
@@ -206,31 +196,24 @@ class language {
     public static function load($langs) {
         array_push($langs, DEFAULT_LANG, language::$base);
         foreach ($langs as $l) {
-            if(DEBUG & 2) {
-                echo "Trying to load language: <b>" . $l . "</b><br>\n";
-            }
+            log::msg("Trying to load language: <b>" . $l . "</b>", log::DEBUG, log::LANG);
             if(language::exists($l)) {
                 $lang=new language($l);
                 if($lang->read_header() && $lang->read()) {
-                    if(DEBUG & 2) {
-                        echo "Loaded language: <b>" . $l . "</b><br>\n\n";
-                    }
+                    log::msg("Loaded language: <b>" . $l . "</b><br>", log::DEBUG, log::LANG);
                     return $lang;
                 }
             } else if ($l==language::$base) {
                 # If it is the base language, no file needs to exist
-                if(DEBUG & 2) {
-                    echo "Using base language: <b>" . $l . "</b><br>\n\n";
-                }
+                log::msg("Using base language: <b>" . $l . "</b>", log::NOTIFY, log::LANG);
+
                 $lang=new language($l);
                 return $lang;
             }
 
         }
-        if(DEBUG & 2) {
-            echo "No languages found, falling back to default: <b>";
-            echo language::$base . "</b><br>\n";
-        }
+        log::msg("No languages found, falling back to default: <b>" .
+            language::$base . "</b>", log::NOTIFY, log::LANG);
         return new language(language::$base);
     }
    
@@ -262,12 +245,8 @@ class language {
         }
         
         $return=array_unique(array_merge($langs, $genlangs));
-        if(DEBUG & 2) {
-            echo "<b>HTTP_ACCEPT_LANGUAGE</b>: " . $HTTP_ACCEPT_LANGUAGE . "<br>\n";
-            echo "<b>Zoph's interpretation</b>: ";
-            print_r($return);
-            echo "<br>\n";
-        }
+        log::msg("<b>HTTP_ACCEPT_LANGUAGE</b>: " . $HTTP_ACCEPT_LANGUAGE, log::DEBUG, log::LANG);
+        log::msg("<b>Zoph's interpretation</b>: " . implode(", ", $return), log::DEBUG, log::LANG);
         return $return;
     }
 }

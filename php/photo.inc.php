@@ -723,7 +723,7 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
                 $orig_image = imagecreatefrompng($image_path);
                 break;
             default:
-                if (DEBUG) { echo "Unsupported image type."; }
+                log::msg("Unsupported image type.", log::ERROR, log::IMG);
                 return '';
         }
 
