@@ -223,7 +223,23 @@
     define('IMPORT_UMASK', 022);
     define('DIR_MODE', 0755);
 
-    define('DEBUG', 0);
+    // LOG_ALWAYS and LOG_SEVERITY can have the following values:
+    // log::DEBUG, log::NOTIFY, log::WARN, log::ERROR, log::FATAL, log::NONE
+
+    // Always show fatal errors
+    define('LOG_ALWAYS', log::FATAL);
+
+    // Use the next options to show errors on a specific subject
+    // You can use the following subjects:
+    // log::VARS, log::LANG, log::LOGIN, log::REDIRECT,
+    // log::DB, log::SQL, log::XML, log:IMG, log::GENERAL, log::ALL
+
+    // Combine several subjects with | and |~
+    // For example to see SQL and LANG errors, log::SQL | log::LANG
+    // to see all errors except redirect log::ALL | ~log::REDIRECT
+    // all erros except SQL and LANG: log::ALL | ~(log::SQL |log::LANG)
+    define('LOG_SEVERITY', log::NONE);
+    define('LOG_SUBJECT', log::ALL);
 
     // default photo results ordering
     $DEFAULT_ORDER = "date";

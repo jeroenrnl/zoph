@@ -55,7 +55,7 @@ class log {
     const IMG = 4096;
     /* 8192, 16384 are free */
     const GENERAL = 32768;
-    const ALL=65536;
+    const ALL=65535;
 
     function __construct() {
     }
@@ -66,9 +66,10 @@ class log {
      * @param string Message to be displayed
      * @param bigint Severity of the message, use the constants defined
      * @param bigint Subject of the message.
+     * @param bool echo the message or return the contents
      */
     public static function msg($msg, 
-        $severity = log::NOTIFY, $subj = log::GENERAL) {
+        $severity = log::NOTIFY, $subj = log::GENERAL, $print = true) {
 
         /** 
          * There are 3 settings in config.ing.php that are important;
@@ -80,7 +81,13 @@ class log {
 
         if(((LOG_SEVERITY >= $severity) && (LOG_SUBJECT & $subj)) ||
             (LOG_ALWAYS >= $severity)) {
-            echo "<b>" . self::$sev[$severity] . "</b>: " . $msg . "<br>\n";
+
+            $msg="<b>" . self::$sev[$severity] . "</b>: " . $msg . "<br>\n";
+            if($print) {
+                echo $msg;
+            } else {
+                return $msg;
+            }
         }
     }
 }
