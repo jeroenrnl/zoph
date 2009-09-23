@@ -40,7 +40,7 @@
         }
     }
     else {
-        header("Location: " . html_entity_decode(add_sid("photos.php?" . update_query_string($clean_vars, "_off", 0))));
+        redirect(html_entity_decode(add_sid("photos.php?" . update_query_string($clean_vars, "_off", 0))), "No photos");
     }
 
     $newoffset = $offset + 1;

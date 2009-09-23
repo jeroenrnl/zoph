@@ -1,4 +1,12 @@
 Zoph Changelog
+Zoph 0.7.0.8
+23 Sep 2009
+
+Security fix for 0.7
+
+Bugs
+* Fixes a security bug that caused a user to be able to execute admin-only pages.
+
 Zoph 0.7.0.7
 24 Aug 2009
 

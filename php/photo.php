@@ -31,7 +31,7 @@
 
     $_qs=getvar("_qs");
     if($user->prefs->get("auto_edit") && $_qs && $_action == "update") {
-        header("Location: photo.php?" . $_qs);
+        redirect("photo.php?" . $_qs, "Auto edit");
     }
 
     $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
@@ -131,12 +131,12 @@
             $_action == "delete" || $_action == "confirm") {
             // only an admin can do these
             $_action = "display"; // in case redirect fails
-            header("Location: " . add_sid("zoph.php"));
+            redirect(add_sid("zoph.php"));
         }
 
         if (!$permissions) {
             $photo = new photo(-1); // in case redirect fails
-            header("Location: " . add_sid("zoph.php"));
+            redirect(add_sid("zoph.php"));
         }
         else if ($permissions->get("writable") == 0) {
             $_action = "display";
@@ -219,7 +219,7 @@
         //}
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = "zoph.php"; }
-        header("Location: " . add_sid($link));
+        redirect(add_sid($link), "Go back");
     } else if ($_action == "select") {
         $sel_key=false;
         if(is_array($_SESSION["selected_photo"])) {
@@ -236,7 +236,7 @@
         if($sel_key !== false) {
             unset($_SESSION["selected_photo"][$sel_key]);
         }
-        header("Location: " . $return . "?" . html_entity_decode(urldecode($_qs)));
+        redirect($return . "?" . html_entity_decode(urldecode($_qs)), "Redirect");
     // 2005-04-10 --JCT
     //
     // lightbox and rate actions moved

@@ -650,4 +650,9 @@ function get_autothumb_order($autothumb) {
     return $order;
 }
 
+function redirect($url = "zoph.php", $msg = "Access denied") {
+    header("Location: " . $url);
+    echo "<a href='" . $url . "'>" . $msg . "</a>";
+    die();
+}
 ?>

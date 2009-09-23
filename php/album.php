@@ -18,7 +18,7 @@
     require_once("include.inc.php");
 
     if (!$user->is_admin()) {
-        header("Location: " . add_sid("zoph.php"));
+        redirect(add_sid("zoph.php"));
     }
 
     $album_id = getvar("album_id");
@@ -39,7 +39,7 @@
     }
 
     if ($action == "display") {
-        header("Location: " . add_sid("albums.php?parent_album_id=" . $album->get("album_id")));
+        redirect(add_sid("albums.php?parent_album_id=" . $album->get("album_id")), "Redirect");
     }
 
     if ($action != "insert") {

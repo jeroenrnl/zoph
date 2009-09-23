@@ -50,7 +50,7 @@
         $user->eat_crumb();
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = $redirect; }
-        header("Location: " . add_sid($link));
+        redirect(add_sid($link), "Redirect");
     }
     else {
         $action = "display";

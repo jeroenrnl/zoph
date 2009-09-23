@@ -18,7 +18,7 @@
     require_once("include.inc.php");
 
     if (!$user->is_admin()) {
-        header("Location: " . add_sid("zoph.php"));
+        redirect(add_sid("zoph.php"));
     }
 
     $category_id = getvar("category_id");
@@ -39,7 +39,7 @@
     }
 
     if ($action == "display") {
-        header("Location: " . add_sid("categories.php?parent_category_id=" . $category->get("category_id")));
+        redirect(add_sid("categories.php?parent_category_id=" . $category->get("category_id")), "Redirect");
     }
 
     if ($action != "insert") {

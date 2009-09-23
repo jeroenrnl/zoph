@@ -28,7 +28,7 @@
     }
 
     if (!$user->is_admin() && !$user->get("browse_places")) {
-        header("Location: " . add_sid("zoph.php"));
+        redirect(add_sid("zoph.php"));
     }
     $parent_place_id = getvar("parent_place_id");
     if (!$parent_place_id) {

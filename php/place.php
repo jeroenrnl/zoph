@@ -26,7 +26,7 @@
     $redirect = "places.php";
     require_once("actions.inc.php");
     if (!$user->is_admin() || $action == "display") {
-        header("Location: " . add_sid("places.php?parent_place_id=" . $place->get("place_id")));
+        redirect(add_sid("places.php?parent_place_id=" . $place->get("place_id")));
     }
 
     if ($action != "insert") {

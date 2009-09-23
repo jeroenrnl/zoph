@@ -31,7 +31,7 @@
     if (!(CLIENT_WEB_IMPORT || SERVER_WEB_IMPORT) ||
         (!$user->is_admin() && !$user->get("import"))) {
 
-        header("Location: " . add_sid("zoph.php"));
+        redirect(add_sid("zoph.php"));
     }
 
     $photo = new photo();
