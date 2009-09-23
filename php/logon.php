@@ -15,9 +15,10 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("log.inc.php");
     require_once("config.inc.php");
     require_once("variables.inc.php");
+    require_once("util.inc.php");
+
     if(isset($HTTP_GET_VARS["redirect"])) {
         $redirect = urlencode($HTTP_GET_VARS["redirect"]);
     } else {
@@ -25,21 +26,23 @@
     }
     if (FORCE_SSL_LOGIN || FORCE_SSL) {
         if (!array_key_exists('HTTPS', $_SERVER)) {
-            header("Location: " . ZOPH_SECURE_URL . "/logon.php?redirect=" . $redirect);
+            redirect(ZOPH_SECURE_URL . "/logon.php?redirect=" . $redirect, "https required");
         }
     }
     require_once("zoph_table.inc.php");
-    require_once("translation.inc.php");
+    require_once("rtplang.class.php");
     require_once("user.inc.php");
 
 
     $user = new user();
-    $lang=$user->load_language();
+    $rtplang = $user->load_language();
+
+    print $rtplang->lang_header();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link TYPE="text/css" REL="stylesheet" HREF="<?php echo CSS_SHEET ?>?logged_on=no">
 <title><?php echo ZOPH_TITLE . ' - ' . translate("logon",0) ?></title>
 </head>

@@ -895,4 +895,11 @@ function create_bar_graph($legend, $value_array, $scale) {
     $html.="</table>";
     return $html;
 }
+
+function redirect($url = "zoph.php", $msg = "Access denied") {
+    header("Location: " . $url);
+    echo "<a href='" . $url . "'>" . $msg . "</a>";
+    die();
+}
+
 ?>

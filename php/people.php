@@ -27,7 +27,7 @@
     }
 
     if (!$user->is_admin() && !$user->get("browse_people")) {
-        header("Location: " . add_sid("zoph.php"));
+        redirect(add_sid("zoph.php"));
     }
 
     $_l = getvar("_l");

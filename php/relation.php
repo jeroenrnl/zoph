@@ -18,7 +18,7 @@
     require_once("include.inc.php");
 
     if (!$user->is_admin()) {
-        header("Location: " . add_sid("zoph.php"));
+        redirect(add_sid("zoph.php"));
     }
 
     $photo_id_1=getvar("photo_id_1");
@@ -63,7 +63,7 @@
         $user->eat_crumb();
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = $redirect; }
-        header("Location: " . add_sid($link));
+        redirect(add_sid($link), "Redirect");
     } elseif ($_action == "update") {
         $desc_1=getvar("desc_1");
         $desc_2=getvar("desc_2");

@@ -18,7 +18,7 @@
     require_once("include.inc.php");
 
     if (!ALLOW_COMMENTS) {
-        header("Location: " . add_sid("zoph.php"));
+        redirect(add_sid("zoph.php"));
     }
 
     require_once("header.inc.php");

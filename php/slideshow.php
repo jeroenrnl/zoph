@@ -27,7 +27,8 @@
     $thumbnails;
     $clean_vars = clean_request_vars($request_vars);
     $num_photos = get_photos($clean_vars, $offset, 1, $thumbnails, $user);
-    header("Content-Type: text/html; charset=utf-8");
+    $charset = $rtplang->get_encoding();
+    header("Content-Type: text/html; charset=" . $charset);
 
     $num_thumbnails = sizeof($thumbnails);
     if  ($num_thumbnails) {
@@ -39,7 +40,7 @@
         }
     }
     else {
-        header("Location: " . html_entity_decode(add_sid("photos.php?" . update_query_string($clean_vars, "_off", 0))));
+        redirect(html_entity_decode(add_sid("photos.php?" . update_query_string($clean_vars, "_off", 0))), "No photos");
     }
 
     $newoffset = $offset + 1;
