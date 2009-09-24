@@ -40,12 +40,8 @@
         }
         session_destroy();
         $user = null;
-        header("Location: logon.php");
-        die;
+        redirect("logon.php", "Logout");
     } else if (empty($user)) {
-        if(FORCE_SSL_LOGIN && !FORCE_SSL) {
-            header("Location: " . ZOPH_URL . "/zoph.php");
-        }
         $uname = getvar("uname");
         $pword = getvar("pword");
         $redirect = getvar("redirect");
@@ -72,23 +68,9 @@
             // delete left over temp files
             delete_temp_annotated_files($user->get("user_id"));
 
-            if ($redirect) {
-                $redirect="/" . urldecode($redirect);
-                // The next line makes sure you are not tricked into deleting a
-                // photo by a url pointing you to the "confirm" action. Just
-                // to be extra sure, any action, except "search" is replaced by
-                // "display".
-                $redirect_clean=preg_replace("/action=(?!search).[^&]+/", "action=display", $redirect);
-                if(FORCE_SSL_LOGIN && !FORCE_SSL) {
-                    $redirect_clean = "http://" . $_SERVER['SERVER_NAME'] . $redirect_clean;
-                }
-                header("Location: " . $redirect_clean);
-            }
-        }
-        else {
+        } else {
             $this_page=urlencode(preg_replace("/^\//", "", $_SERVER['REQUEST_URI']));
-            header("Location: logon.php?redirect=" . $this_page);
-            die;
+            redirect("logon.php?redirect=" . $this_page);
         }
 
     }
@@ -100,7 +82,23 @@
         if (minimum_version('4.1.0')) {
             $_SESSION['user'] = &$user;
         }
+        if ($redirect) {
+            $redirect="/" . urldecode($redirect);
+            // The next line makes sure you are not tricked into deleting a
+            // photo by a url pointing you to the "confirm" action. Just
+            // to be extra sure, any action, except "search" is replaced by
+            // "display".
+            $redirect_clean=preg_replace("/action=(?!search).[^&]+/", "action=display", $redirect);
+            if (array_key_exists('HTTPS', $_SERVER) && (FORCE_SSL_LOGIN && !FORCE_SSL)) {
+                $redirect_clean = "http://" . $_SERVER['SERVER_NAME'] . $redirect_clean;
+            }
+            redirect($redirect_clean, "Redirect");
+        } 
+        if (array_key_exists('HTTPS', $_SERVER) && (FORCE_SSL_LOGIN && !FORCE_SSL)) {
+            redirect(ZOPH_URL . "/zoph.php", "switch back from https to http");
+        }
     } else {
         $lang = new language(DEFAULT_LANG);
     }        
+
 ?>

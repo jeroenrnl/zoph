@@ -19,7 +19,7 @@
     require_once("include.inc.php");
 
     if (!$user->is_admin()) {
-        header("Location: " . add_sid("zoph.php"));
+        redirect(add_sid("zoph.php"));
     }
 
     $title = translate("Color Schemes");

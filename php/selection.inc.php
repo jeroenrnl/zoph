@@ -17,7 +17,7 @@
  */
 $page=array_reverse(explode("/", $_SERVER["PHP_SELF"]));
 if($page[0]=="selection.inc.php") {
-   header("Location: zoph.php");
+   redirect("zoph.php");
 }
 if($_SESSION["selected_photo"]) {
 ?>

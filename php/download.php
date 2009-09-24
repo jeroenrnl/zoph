@@ -20,7 +20,7 @@
 
     $_action=getvar("_action");
     if(!DOWNLOAD || (!$user->get("download") && !$user->is_admin())) {
-        header("Location: " . add_sid("zoph.php"));
+        redirect(add_sid("zoph.php"));
     }
     if($_action=="getfile" || $_action=="download") {
         $filename=getvar("_filename");

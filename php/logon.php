@@ -18,6 +18,8 @@
     require_once("log.inc.php");
     require_once("config.inc.php");
     require_once("variables.inc.php");
+    require_once("util.inc.php");
+
     if(isset($HTTP_GET_VARS["redirect"])) {
         $redirect = urlencode($HTTP_GET_VARS["redirect"]);
     } else {
@@ -25,7 +27,7 @@
     }
     if (FORCE_SSL_LOGIN || FORCE_SSL) {
         if (!array_key_exists('HTTPS', $_SERVER)) {
-            header("Location: " . ZOPH_SECURE_URL . "/logon.php?redirect=" . $redirect);
+            redirect(ZOPH_SECURE_URL . "/logon.php?redirect=" . $redirect, "https required");
         }
     }
     require_once("zoph_table.inc.php");

@@ -30,7 +30,7 @@ if ($zophpage_id) {
     $title = translate("Create new page");
 } else {
     // no id given and action is not new
-    header("Location: " . add_sid("zoph.php"));
+    redirect(add_sid("zoph.php"));
 }
     
 if(!$user->is_admin()) {
