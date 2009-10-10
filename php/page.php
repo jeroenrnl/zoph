@@ -28,9 +28,9 @@ if ($zophpage_id) {
     }
 } else if ($_action == "new") {
     $title = translate("Create new page");
-} else {
-    // no id given and action is not new
-    redirect(add_sid("zoph.php"));
+} else if ($_action != "insert") {
+    // no id given and action is not new or insert
+    redirect(add_sid("zoph.php"), "No page id given!");
 }
     
 if(!$user->is_admin()) {
