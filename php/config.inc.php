@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.8');
+    define('VERSION', '0.8.1');
 
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'zoph');
@@ -28,9 +28,14 @@
     define('CSS_SHEET', 'css.php');
     define('ICONSET', 'default');
 
-    define('USE_IMAGE_SERVICE', 1);
     define('IMAGE_DIR', "/data/images/");
-    // Only needed when imaga service is off:
+
+    // DEPRECATED!
+    // The option USE_IMAGE_SERVICE will be removed in Zoph 0.9.
+    // IMAGE_SERVICE will always be on after that. If you are still 
+    // using define('USE_IMAGE_SERVICE', 0); you should change that now.
+    define('USE_IMAGE_SERVICE', 1);
+    // Only needed when image service is off:
     // define('WEB_IMAGE_DIR', "/images/"); // from webserver doc root
 
     // authentication method used from auth.inc.php
@@ -239,7 +244,7 @@
     // to see all errors except redirect log::ALL | ~log::REDIRECT
     // all erros except SQL and LANG: log::ALL | ~(log::SQL |log::LANG)
     define('LOG_SEVERITY', log::NONE);
-    define('LOG_SUBJECT', log::ALL);
+    define('LOG_SUBJECT', log::NONE);
 
     // default photo results ordering
     $DEFAULT_ORDER = "date";
