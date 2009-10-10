@@ -897,8 +897,10 @@ function create_bar_graph($legend, $value_array, $scale) {
 }
 
 function redirect($url = "zoph.php", $msg = "Access denied") {
-    header("Location: " . $url);
-    echo "<a href='" . $url . "'>" . $msg . "</a>";
+    if(!((LOG_SUBJECT & log::REDIRECT) && (LOG_SEVERITY >= log::DEBUG))) {
+        header("Location: " . $url);
+    }
+        echo "<a href='" . $url . "'>" . $msg . "</a>";
     die();
 }
 
