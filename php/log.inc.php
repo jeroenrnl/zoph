@@ -46,8 +46,9 @@ class log {
     const LANG = 2;
     const LOGIN = 4;
     const REDIRECT = 8;
+    const IMPORT = 16;
 
-    /* 16, 32 and 64 are free */
+    /* 32 and 64 are free */
     const DB = 128;
     const SQL = 256;
     const XML = 512;
@@ -88,6 +89,10 @@ class log {
             } else {
                 return $msg;
             }
+        }
+
+        if($severity == log::FATAL) {
+            die("fatal error");
         }
     }
 }
