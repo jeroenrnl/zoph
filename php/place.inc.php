@@ -95,6 +95,8 @@ class place extends zoph_tree_table {
             $tzarray=get_tz_select_array();
             $tz=$tzarray[$tzkey];
             $this->set("timezone", $tz);
+        } else {
+            $this->set("timezone", null);
         }
         unset($this->fields["timezone_id"]);
     }

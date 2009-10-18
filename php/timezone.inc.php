@@ -23,7 +23,7 @@
             $rootnode=$xml->createElement("zones");
 
             $zones=$this->listIdentifiers();
-            array_unshift($zones, " ");
+            array_unshift($zones, "&nbsp;");
             $len=strlen($search);
             foreach($zones as $id => $tz) {
                 $tzshort=strtolower(substr($tz,0,$len));

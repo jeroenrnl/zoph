@@ -169,7 +169,7 @@ function hidedropdown(obj) {
 function getXMLdata(object, constraint) {
     xmlobj=obj.id.split("_");
     if(xmlobj[1]=="parent") {
-        Array.shift(xmlobj);
+        xmlobj.shift();
     }
     var url="getxmldata.php?object=" + xmlobj[1];
     if(constraint) {
@@ -198,7 +198,7 @@ function useHttpResponse() {
             text.style.backgroundImage="url('images/down2.gif')";
             xmlobj=Busy.split("_");
             if(xmlobj[1]=="parent") {
-                Array.shift(xmlobj);
+                xmlobj.shift();
             }
             node=xmlobj[1];
             root=http.responseXML.getElementsByTagName(xmlrootnode[node]);
