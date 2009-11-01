@@ -32,14 +32,14 @@
     function escape_string($str) {
 
         $str=str_replace(array("<", ">", "\"", "(", ")"), array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;"), $str);
-        return mysql_escape_string($str);
+        return mysql_real_escape_string($str);
     }
 
     function query($sql, $error = false) {
         // Simply executes the given query. Will display error if something 
         // goes wrong, or nothing at all if $error is false
  
-        log::msg($sql, log::NOTIFY, log::SQL);
+        if (DEBUG > 1) { echo "$sql<br>\n"; }
         if (!$error) {
             $result=mysql_query($sql);
         } else {
@@ -118,7 +118,9 @@
         list($maj, $min) = split("\.", $version, 2);
 
         if (($dbmaj == $maj && $dbmin >= $min) || ($dbmaj >= ($maj + 1)) ) {
-            log::msg("Yep, we're running version " . $version . " or later", log::DEBUG, log::DB);
+            if (DEBUG>=5) {
+                echo "Yep, we're running version $version or later<br>\n";
+            }
             return true;
         } else {
             return false;
