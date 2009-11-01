@@ -1,5 +1,9 @@
-Zoph 0.8 to 0.8.0.1
-Copy php/* to the location of your installation. Make sure that you also copy the js and img subdirectories. 
+Zoph 0.8 to 0.8.0.x
+    * You can also use these instructions to go from 0.8.0.1 to 0.8.0.2
+
+Copy php/* to the location of your installation. Make sure to also copy the php/lang and the js and img subdirectories.
+
+You can upgrade directly from 0.7 to 0.8.0.x, simply use the zoph-0.8.0.x.tar.gz and execute the instructions for the 0.7 to 0.8 upgrade.
 
 Zoph 0.7 to 0.8
     * You can go directly to 0.8.0.1 instead of 0.8, use the zoph-0.8.0.1.tar.gz, and execute these instructions
