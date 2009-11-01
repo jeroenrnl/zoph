@@ -34,7 +34,7 @@ class admin {
 
     function tohtml() {
         $html="<li>\n";
-        $html.="  <a href='" . $this->url . "'\n";
+        $html.="  <a href='" . $this->url . "'>\n";
         $html.="    <img src='images/icons/" . ICONSET . "/" . 
                         $this->icon . "'>\n";
         $html.="    <br>" . translate($this->name) . "\n"; 
