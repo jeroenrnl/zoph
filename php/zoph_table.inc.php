@@ -43,8 +43,11 @@ class zoph_table {
      * Gets a field.
      */
     function get($name) {
-        log::msg("<b>GET</b> " . $name, log::DEBUG, log::VARS);  
-        log::msg("<pre>" . var_export($this->fields, true) . "</pre>", log::MOREDEBUG, log::VARS);
+        if(DEBUG>10) {
+           echo "<pre><b>GET " . $name . "</b>\n";
+           var_dump($this->fields);
+           echo "\n\n</pre>";
+        }
         if (isset($this->fields[$name])) {
             return $this->fields[$name];
         } else {
@@ -63,15 +66,21 @@ class zoph_table {
      * Sets fields from the given array.  Can be used to set vars
      * directly from a GET or POST.
      */
-    function set_fields($vars, $prefix = null, $suffix = null) {
+    function set_fields($vars, $prefix = null, $suffix = null, $null=true) {
 
         reset($vars);
         while (list($key, $val) = each($vars)) {
 
-            log::msg("<b>" . $key . "</b> = " . $val, log::DEBUG, log::VARS);
+            if (DEBUG > 2) { echo "<b>$key</b> = $val<br>\n"; }
 
             // ignore empty keys or values unless the field must be set.
-            if ((!in_array($key, $this->not_null)) && (empty($key) )) { continue; }
+
+            if ($null) {
+                if ((!in_array($key, $this->not_null)) && (empty($key) )) { continue; }
+            } else {
+                if ((!in_array($key, $this->not_null)) && (empty($key) || $val == "")) { continue; }
+            }
+
 
             if ($prefix) {
                 if (strpos($key, $prefix) === 0) {
@@ -119,7 +128,7 @@ class zoph_table {
     function lookup($sql = null) {
 
         if (!$this->table_name || !$this->primary_keys || !$this->fields) {
-            log::msg("Missing data", log::ERROR, log::GENERAL);
+            if (DEBUG) { echo "Missing data<br>\n"; }
             return;
         }
 
@@ -127,7 +136,7 @@ class zoph_table {
             $constraint = $this->create_constraints($this->primary_keys);
 
             if (!$constraint) {
-                log::msg("No constraint found", log::NOTIFY, log::GENERAL);
+                if (DEBUG) { echo "No constraint found<br>\n"; }
                 return;
             }
 
@@ -159,7 +168,7 @@ class zoph_table {
     function insert($keep_key = null) {
 
         if (!$this->table_name || !$this->fields) {
-            log::msg("Missing data", log::ERROR, log::GENERAL);
+            if (DEBUG) { echo "Missing data<br>\n"; }
             return;
         }
 
@@ -214,14 +223,14 @@ class zoph_table {
         if (!$keys) { $keys = $this->primary_keys; }
 
         if (!$this->table_name || !$keys || !$this->fields) {
-            log::msg("Missing data", log::ERROR, log::GENERAL);
+            if (DEBUG) { echo "Missing data<br>\n"; }
             return;
         }
 
         $constraints = $this->create_constraints($keys);
 
         if (!$constraints) {
-            log::msg("No constraint found", log::NOTIFY, log::GENERAL);
+            if (DEBUG) { echo "No constraint found<br>\n"; }
             return;
         }
 
@@ -245,14 +254,14 @@ class zoph_table {
         if (!$keys) { $keys = $this->primary_keys; }
 
         if (!$this->table_name || !$keys || !$this->fields) {
-            log::msg("Missing data", log::ERROR, log::GENERAL);
+            if (DEBUG) { echo "Missing data<br>\n"; }
             return;
         }
 
         $constraints = $this->create_constraints($keys);
 
         if (!$constraints) {
-            log::msg("No constraint found", log::NOTIFY, log::GENERAL);
+            if (DEBUG) { echo "No constraint found<br>\n"; }
             return;
         }
 

@@ -124,7 +124,7 @@
                     // set any specific fields
                     $photo->set_fields($request_vars, '__', "__$photo_id");
                     // set "apply to all" fields
-                    $photo->set_fields($request_vars, '__', '__all');
+                    $photo->set_fields($request_vars, '__', '__all', false);
 
                     $rating = $request_vars["_rating__$photo_id"];
                     if ($request_vars["_rating__all"]) {
@@ -133,7 +133,7 @@
                 }
                 else { // reverse order
                     $photo->set_fields($request_vars, '__', '__all');
-                    $photo->set_fields($request_vars, '__', "__$photo_id");
+                    $photo->set_fields($request_vars, '__', "__$photo_id", false);
 
                     $rating = $request_vars["_rating__all"];
                     if ($request_vars["_rating__$photo_id"]) {
