@@ -42,7 +42,13 @@
             $request_vars = clean_request_vars($request_vars);
 
             foreach($request_vars as $key => $val) {
+                # Change key#0 into key[0]:
                 $key=preg_replace("/\#([0-9]+)/", "[$1]", $key);
+
+                # Change key[0]-children into key_children[0] because everything after ] in a URL is lost
+                # fix for bug#2890387
+                $key=preg_replace("/\[(.+)\]-([a-z]+)/", "_$2[$1]", $key);
+
                 if($url) {
                     $url.="&";
                 }   

@@ -63,7 +63,7 @@ class zoph_table {
      * Sets fields from the given array.  Can be used to set vars
      * directly from a GET or POST.
      */
-    function set_fields($vars, $prefix = null, $suffix = null) {
+    function set_fields($vars, $prefix = null, $suffix = null, $null=true) {
 
         reset($vars);
         while (list($key, $val) = each($vars)) {
@@ -71,7 +71,13 @@ class zoph_table {
             log::msg("<b>" . $key . "</b> = " . $val, log::DEBUG, log::VARS);
 
             // ignore empty keys or values unless the field must be set.
-            if ((!in_array($key, $this->not_null)) && (empty($key) )) { continue; }
+
+            if ($null) {
+                if ((!in_array($key, $this->not_null)) && (empty($key) )) { continue; }
+            } else {
+                if ((!in_array($key, $this->not_null)) && (empty($key) || $val == "")) { continue; }
+            }
+
 
             if ($prefix) {
                 if (strpos($key, $prefix) === 0) {
