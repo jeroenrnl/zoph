@@ -1,5 +1,36 @@
 Zoph Changelog
 
+Zoph 0.8.0.2
+1 Nov 2009
+
+Zoph 0.8.0.2 is a bugfix release for Zoph 0.8.
+
+Bugs
+    * Bug#2876282: Not possible to create new pages.
+    * Bug#2873171: fatal error when autocomplete is switched off.
+    * Bug#2873171: Javascript error in MSIE when trying to change the parent place using the autocomplete dropdown.
+    * Bug#2873171: Timezone autocomplete does not work in MSIE
+    * Bug#2881212: Not possible to unset timezone.
+    * Bug#2889934: No icons in admin menu when using MSIE8
+    * Bug#2888263: Unintuative working of bulk edit page could lead to dataloss
+    * Bug#2890387: Saved search does not remember the "include sub-albums/categories/places" checkbox and the state of the "AND/OR" dropdown.
+
+Translations
+    * Added a Russion translation created by Sergey Chursin and Alexandr Bondarev
+
+Various
+    * Changed deprecated mysql_escape_string() into new mysql_real_escape_string().
+
+
+Zoph 0.8.0.1
+23 Sep 2009
+
+Security fix for 0.8
+
+Bugs
+* Fixes a security bug that caused a user to be able to execute admin-only pages.
+
+
 Zoph 0.8
 9 Sept 2009
 
