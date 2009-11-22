@@ -723,7 +723,7 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
                 $orig_image = imagecreatefrompng($image_path);
                 break;
             default:
-                log::msg("Unsupported image type.", log::ERROR, log::IMG);
+                if (DEBUG) { echo "Unsupported image type."; }
                 return '';
         }
 
@@ -1173,9 +1173,11 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         }    
         $html.=$this->get_thumbnail_link() .
           "<p><small>" . 
-          $this->get("date") . " " . $this->get("time") . "<br>" .
-          translate("by",0) . " " . $this->photographer->get_link(1) . "<br>" .
-          "</small></p>";
+          $this->get("date") . " " . $this->get("time") . "<br>";
+        if($this->photographer) {
+            $html.=translate("by",0) . " " . $this->photographer->get_link(1) . "<br>";
+        }
+        $html.="</small></p>";
         return $html;
     }
 
