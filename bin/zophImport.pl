@@ -846,7 +846,7 @@ sub lookupPersonId {
 
     my $query =
         "select person_id from " . $db_prefix . "people where " .
-        "concat(lower(first_name),\" \", lower(last_name)) = " .
+        "concat_ws(\" \",lower(first_name), lower(last_name)) = " .
         $dbh->quote($person);
 
     my @row_array = $dbh->selectrow_array($query);
