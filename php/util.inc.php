@@ -387,14 +387,21 @@ function create_date_link($date, $search_field = "date") {
 }
 
 function parse_date($date) {
-    // expects either YYYY-MM-DD or YYYYMMDDHHMMSS
+    // expects either YYYY-MM-DD, YYYY-MM-DD HH:MM:SS or YYYYMMDDHHMMSS
 
     $date_array = null;
 
-    if (preg_match("/^\d\d\d\d-\d\d-\d\d/", $date)) {
+    if (preg_match("/^\d\d\d\d-\d\d-\d\d$/", $date)) {
         $date_array['year'] = substr($date, 0, 4);
         $date_array['mon'] = substr($date, 5, 2);
         $date_array['day'] = substr($date, 8, 2);
+    } else if (preg_match("/^\d\d\d\d-\d\d-\d\d\ \d\d:\d\d:\d\d$/", $date)) {
+        $date_array['year'] = substr($date, 0, 4);
+        $date_array['mon'] = substr($date, 5, 2);
+        $date_array['day'] = substr($date, 8, 2);
+        $date_array['hour'] = substr($date, 11, 2);
+        $date_array['min'] = substr($date, 14, 2);
+        $date_array['sec'] = substr($date, 17, 2);
     }
     else if (preg_match("/^\d{14}/", $date)) {
         $date_array['year'] = substr($date, 0, 4);
