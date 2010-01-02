@@ -2,8 +2,8 @@
 
 #
 # zophImport.pl
-# Zoph 0.8
-# Jason Geiger & Jeroen Roos, 2002-2009
+# Zoph 0.8.1
+# Jason Geiger & Jeroen Roos, 2002-2010
 #
 # This file is part of Zoph.
 #
@@ -53,8 +53,8 @@ use File::Spec::Link;
 use Cwd 'abs_path';
 
 $| = 1;
- 
-my $version = '0.8';
+
+my $version = '0.8.1';
  
 my $update     = 0; # update existing photo records instead of inserting
 my $updateSize = 0; # update the size, width and height (implies -update)
@@ -846,7 +846,7 @@ sub lookupPersonId {
 
     my $query =
         "select person_id from " . $db_prefix . "people where " .
-        "concat(lower(first_name),\" \", lower(last_name)) = " .
+        "concat_ws(\" \",lower(first_name), lower(last_name)) = " .
         $dbh->quote($person);
 
     my @row_array = $dbh->selectrow_array($query);
