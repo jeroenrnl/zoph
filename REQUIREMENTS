@@ -23,7 +23,7 @@ PHP
     * Current versions of Zoph are developped on PHP 5.2
           o PHP 5.1 and 5.3 probably work too
           o PHP 6 has not yet been released and Zoph has not been tested against it.
-          o PHP4 has been end of life since 31 December 2007. As of Zoph 0.8, PHP4 will no longer be supported by Zoph. Although most of the functionality will remain working with PHP4, after the release of Zoph 0.8, no bugs related to PHP4 compatibility will be accepted or fixed.
+          o PHP4 has been end of life since 31 December 2007. As of Zoph 0.8, PHP4 will no longer be supported by Zoph. Zoph 0.8.1 does not work with PHP4
 
   Required features
     * The following features (extensions) to PHP are required for Zoph. Not all distributions automatically install all of them.

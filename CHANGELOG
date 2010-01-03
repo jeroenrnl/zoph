@@ -1,5 +1,22 @@
 Zoph Changelog
 
+Zoph 0.8.1
+3 Jan 2010
+
+Zoph 0.8.1 is the first feature release for v0.9. This release introduces a new logging system, that should allow users and developers to control more granular which debugging messages Zoph displays, more information can be found on this page. The other major change is that Zoph is now completely UTF-8 based, this should fix issues users had with international characters. This last change requires some manual changes to the MySQL database.
+
+Zoph 0.8.1 is beta release, I tested it as well as possible on my system, but especially the UTF-8 conversion is very dependent on specific situations on your system; therefore it should not be considered a "stable" version. I would, however, very much appreciate if people could test and give feedback on this release and the upgrade documentation, in this way I can make sure that the stable (v0.9) version will be as bug-free as possible.
+
+Features
+    * New logging/debugging system
+
+Bugs
+    * Bug#1985449: Zoph should be UTF-8
+    * Bug#2901852: Fatal error when a photo without a photographer is displayed on the map
+    * Bug#2902011: zophImport.pl cannot find people with no last name.
+    * Bug#2925030: Last modified time is not displayed correctly
+    * All the bugfixes from Zoph 0.8.0.1 and 0.8.0.2
+
 Zoph 0.8.0.2
 1 Nov 2009
 

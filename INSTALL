@@ -9,8 +9,8 @@ Zoph 0.8 installation
 
    2.1 Create a database and import the tables
 
-       $ mysqladmin -u root -p create zoph
-       $ mysql -u root -p zoph < sql/zoph.sql
+	$ mysql -u root -p -e "CREATE DATABASE zoph CHARACTER SET utf8 COLLATE utf8_general_ci"
+	$ mysql -u root -p zoph < sql/zoph.sql
 
    2.2 Create users for zoph
 
