@@ -343,7 +343,7 @@ CREATE TABLE zoph_prefs (
   reports_top_n smallint(5) unsigned NOT NULL default '5',
   color_scheme_id int(11) NOT NULL default '1',
   slideshow_time smallint(6) NOT NULL default '5',
-  language char(2) default NULL,
+  language char(5) default NULL,
   recent_photo_days smallint(6) NOT NULL default '7',
   auto_edit char(1) NOT NULL default '0',
   camera_info char(1) NOT NULL default '1',
