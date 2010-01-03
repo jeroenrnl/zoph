@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+    <head>
+        <title>Zoph Documentation - Changing_your_database_to_UTF-8</title>
+        <link TYPE="text/css" REL="stylesheet" HREF="style.css">
+    </head>
+    <body>
+    <p>
+    All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
+    </p>
+<h1 id="firstHeading" class="firstHeading">Zoph/Upgrading/Changing your database to UTF-8</h1>
+		<div id="bodyContent">
+			<p>As of Zoph v0.8.1, Zoph is using UTF-8 character encoding. In order to fully benefit from this change, you need to convert your database to UTF-8 encoding as well; especially if you are using any non-latin characters in your database.</p>
+<div style="width:50%; background:#FFFF66; color:black; border:1px solid black; margin:auto; font-weight:normal; padding: 0 2em 1em 2em;">
+<div style="color:red; font-size-adjust:0.5; margin:0.75em; text-align:center;"><b>Important!</b></div>
+<div>
+<p>This could be a riskful operation, make sure you make a backup of your database and do not delete it until you are very sure everything has converted correctly.</p>
+</div>
+</div>
+<table id="toc" class="toc">
+<tr>
+<td>
+<div id="toctitle">
+<h2>Contents</h2>
+</div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Converting_the_database_to_UTF-8"><span class="tocnumber">1</span> <span class="toctext">Converting the database to UTF-8</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#Changing_the_database_name_back_to_zoph"><span class="tocnumber">1.1</span> <span class="toctext">Changing the database name back to zoph</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Rolling_back_to_the_old_database"><span class="tocnumber">1.2</span> <span class="toctext">Rolling back to the old database</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Background"><span class="tocnumber">2</span> <span class="toctext">Background</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#What_is_UTF-8.3F"><span class="tocnumber">2.1</span> <span class="toctext">What is UTF-8?</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#How_did_Zoph_handle_this.3F"><span class="tocnumber">2.2</span> <span class="toctext">How did Zoph handle this?</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#The_solution"><span class="tocnumber">2.3</span> <span class="toctext">The solution</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Will_this_solve_all_the_issues.3F"><span class="tocnumber">2.4</span> <span class="toctext">Will this solve all the issues?</span></a></li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<h2> <span class="mw-headline" id="Converting_the_database_to_UTF-8">Converting the database to UTF-8</span></h2>
+<p>The safest way to perform this operation is probably to create a second Zoph database and test against that. This document will describe that method. If you wish to go back to the old database name later or can only use a single database, because of hosting restrictions, you will have to <tt>drop</tt> the "old" database and re-use the same database. Double-check your backup in that case!</p>
+<p>Create a backup</p>
+<pre>
+mysqldump -u root -p zoph | gzip &gt; zoph.sql.gz
+</pre>
+<p>Create a new database, with UTF-8 encoding</p>
+<pre>
+mysql -u root -p
+mysql&gt; CREATE DATABASE zophutf8 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+mysql&gt; exit
+</pre>
+<div style="width:50%; background:#FFFF66; color:black; border:1px solid black; margin:auto; font-weight:normal; padding: 0 2em 1em 2em;">
+<div style="color:red; font-size-adjust:0.5; margin:0.75em; text-align:center;"><b>Important!</b></div>
+<div>
+<p>You can not use <tt>ALTER TABLE</tt> to do this, because MySQL will then set the character encoding of the database to UTF-8, but will leave it on whatever it is (usually Latin-1) for the tables</p>
+</div>
+</div>
+<p>Find out what your current encoding is:</p>
+<pre>
+zcat zoph.sql.gz | grep CHARSET
+</pre>
+<p>Usually you will see several lines that look like this</p>
+<pre>
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+</pre>
+<p>In this case we have been using latin1 encodig so far. You will also see that some lines contain things like <tt>AUTO_INCREMENT=161</tt>, those are not important for us now.</p>
+<p>We will now change the encoding in this file to UTF-8. In the tests I have done, it was not needed to really convert the character sets, it was sufficient to just change the name of the encoding. If you do run into issues with texts that were correctly displaying before the change and no longer after the change, you may need to use <tt>iconv</tt> to do a conversion. If you do need that, let me know, or add the information to this document.</p>
+<pre>
+zcat zoph.sql.gz | sed "s/CHARSET=latin1/CHARSET=utf8/g" | gzip &gt; zophutf8.sql.gz
+</pre>
+<p>Import the database into the newly create database:</p>
+<pre>
+zcat zophutf8.sql.gz | mysql -u root -p zophutf8
+</pre>
+<p>You need to update config.inc.php and give rights to the user you use to connect to MySQL.</p>
+<pre>
+<b>config.inc.php</b>:
+define('DB_NAME', 'zophutf8');
+define('DB_USER', 'zoph_rw');
+define('DB_PASS', 'PASSWORD');
+</pre>
+<pre>
+mysql -u root -p
+mysql&gt; grant select, insert, update, delete on zophutf8.* to zoph_rw@localhost identified by 'PASSWORD';
+mysql&gt; grant all on zophutf8.* to zoph_admin identified by 'PASSWORD';
+</pre>
+<p>Now, perform the rest of the <a href="upgrading.html" title="Zoph/Upgrading">update</a> and test!</p>
+<h3> <span class="mw-headline" id="Changing_the_database_name_back_to_zoph">Changing the database name back to zoph</span></h3>
+<p>If you have tested and confirmed that the new database is working for you, and you want to change the name of the database back to <b>zoph</b>, you need to perform these steps. These steps are not really necessary, but do keep in mind that future Zoph documentation will refer to the database by the name of <b>zoph</b> and not <b>zophutf8</b>.</p>
+<pre>
+mysqldump -u root -p zophutf8 | gzip &gt; zophutf8.sql.gz
+mysqladmin -u root -p drop zoph
+mysql -u root -p
+mysql&gt; CREATE DATABASE zoph DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+mysql&gt; exit
+zcat zophutf8.sql.gz | mysql -u root -p zoph
+<b>config.inc.php</b>:
+define('DB_NAME', 'zoph');
+define('DB_USER', 'zoph_rw');
+define('DB_PASS', 'PASSWORD');
+</pre>
+<pre>
+mysql -u root -p
+mysql&gt; grant select, insert, update, delete on zoph.* to zoph_rw@localhost identified by 'PASSWORD';
+mysql&gt; grant all on zoph.* to zoph_admin identified by 'PASSWORD';
+</pre>
+<h3> <span class="mw-headline" id="Rolling_back_to_the_old_database">Rolling back to the old database</span></h3>
+<p>If you find during testing that the database conversion has not worked for you, you can easily roll back to the old database by changing <tt>config.inc.php</tt>:</p>
+<pre>
+define('DB_NAME', 'zoph')
+</pre>
+<p>Please <a href="http://www.zoph.org/bugs" class="external text" rel="nofollow">report a bug</a> or <a href="http://www.zoph.org/forum" class="external text" rel="nofollow">post on the forum</a> if you do run into problems.</p>
+<h2> <span class="mw-headline" id="Background">Background</span></h2>
+<p>If you don't know what UTF-8 is, here's some background. If you wish to find out more, follow the links to Wikipedia; the Wikipedia page on <a href="http://en.wikipedia.org/wiki/en:Character_encoding" class="extiw" title="w:en:Character encoding">character encoding</a> is a good starting point as well.</p>
+<h3> <span class="mw-headline" id="What_is_UTF-8.3F">What is UTF-8?</span></h3>
+<p><a href="http://en.wikipedia.org/wiki/en:UTF-8" class="extiw" title="w:en:UTF-8">UTF-8</a> is a way of encoding characters.</p>
+<p>Computers have been using <a href="http://en.wikipedia.org/wiki/en:ASCII" class="extiw" title="w:en:ASCII">ASCII</a>-encoding, which is a 7 bit encoding that has room for 128 different characters; 33 of those are used by control characters (such as escape and backspace), so there are 96 left for 26 lowercase letters, 26 uppercase letters, 10 digits and a handful symbols such as punctuation marks; leaving no room for "international" characters, such as é, ñ or ä. This is often referred to as <a href="http://en.wikipedia.org/wiki/en:US-ASCII" class="extiw" title="w:en:US-ASCII">US-ASCII</a>.</p>
+<p>However, when 8-bit character sets (often wrongfully referred to as "8 bit ASCII") started to get used, there was additional space for about 127 characters. That seems like a lot, but it was in no way sufficient to encode all the different characters used in different languages. A whole range of character sets were created to accommodate all of them. Eventually, this more or less standardized in a few dozen character sets, of which Latin-1 or <a href="http://en.wikipedia.org/wiki/en:ISO/IEC-8859-1" class="extiw" title="w:en:ISO/IEC-8859-1">ISO-8859-1</a>, which contains all the characters needed by most West-European languages, is probably one of the most common.</p>
+<p>Another issue arises with languages that have more than 26 (or 255 for that matter) characters, such as Chinese or Japanese. For these languages several double-byte encoded character sets were defined, such as <a href="http://en.wikipedia.org/wiki/en:Big5" class="extiw" title="w:en:Big5">Big5</a> and <a href="http://en.wikipedia.org/wiki/en:ISO/IEC-2022-JP" class="extiw" title="w:en:ISO/IEC-2022-JP">ISO-2022-JP</a>.</p>
+<p>Converting between different character sets is often not possible: besides the first 127 characters, containing the 'standard' Latin letters, numbers and symbols, there is little overlap between the character sets. Also, a computer needs to be told which character set it is reading, for example, code 232 in Latin-1 is è, while in Latin-2, which is meant for Central and Eastern European languages, it means č. Without a hint, it does not know how to decode it.</p>
+<p>Eventually, a solution to that problem was created, with <a href="http://en.wikipedia.org/wiki/en:UTF-16" class="extiw" title="w:en:UTF-16">UTF-16</a>, a double byte encoding system with sufficient space to encode all writing systems currently in use and by the possibility of even using 32 bits, the number of characters that can be encoded is virtually endless. However, this system also had it's issues: the limited backward compatibility with ASCII- or 8 bit ASCII-based encodings and the fact that any text in Latin characters would require a double amount of storage (16 bits per character, instead of 8).</p>
+<p>Eventually, UTF-8 was created to resolve this issue, where a character could be encoded in either 8, 16 or 32 bits, where the 8 bit encoding would correspond to the original 7-bit ASCII set, plus a leading zero - just like in the 8 bits ASCII-based character sets.</p>
+<h3> <span class="mw-headline" id="How_did_Zoph_handle_this.3F">How did Zoph handle this?</span></h3>
+<p>Zoph has been a multilingual program for a long time, only, the multi-language implementation of Zoph contained a design-error: Zoph would change it's encoding scheme based on the language the user was using Zoph in. So, this would mean, that a user using the Turkish language setting would create an album, Zoph would be using <a href="http://en.wikipedia.org/wiki/en:ISO/IEC-8859-9" class="extiw" title="w:en:ISO/IEC-8859-9">ISO-8859-9</a> to store data in the database; when another user, using the French translation and therefore using ISO-8859-1 would retrieve it, Zoph would be telling the browser "this is ISO-8859-1 encoded text" and then send ISO-8859-9 encoded text. This would usually not be a problem, except when using characters outside the US-ASCII set, then you'd end up with names like "Stato della Citt? del Vaticano", "ČeskÃ¡ republika" and "G?teborg".</p>
+<h3> <span class="mw-headline" id="The_solution">The solution</span></h3>
+<p>The solution to this problem, is to convert all the translations to UTF-8, always communicate with the browser with UTF-8 encoding and store all data in the database with UTF-8 encoding. The first 2, I have taken care of, however, you will need to convert your database to UTF-8.</p>
+<h3> <span class="mw-headline" id="Will_this_solve_all_the_issues.3F">Will this solve all the issues?</span></h3>
+<p>No, if you currently have texts like the ones mentionned above, with question marks or unreadable characters in your Zoph installation, chances are that you will not automatically get rid of those. Unfortunately, since there is no way of knowing in which encoding this was written to the database, it is not always possible to recover them.</p>
+<p>But... any future additions to the database, should no longer suffer from this problem. (<a href="http://www.zoph.org/bugs" class="external text" rel="nofollow">Tell me</a> if you do have issues!)</p>
+
+
+
+
+
+</div>
+</html>

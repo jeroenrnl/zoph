@@ -10,14 +10,14 @@
     </p>
 <h1 id="firstHeading" class="firstHeading">Zoph/Configuration</h1>
 		<div id="bodyContent">
-			<table id="toc" class="toc" summary="Contents">
+			<table id="toc" class="toc">
 <tr>
 <td>
 <div id="toctitle">
 <h2>Contents</h2>
 </div>
 <ul>
-<li class="toclevel-1"><a href="#Interface_configuration"><span class="tocnumber">1</span> <span class="toctext">Interface configuration</span></a>
+<li class="toclevel-1 tocsection-1"><a href="#Interface_configuration"><span class="tocnumber">1</span> <span class="toctext">Interface configuration</span></a>
 <ul>
 <li class="toclevel-2"><a href="#ZOPH_TITLE"><span class="tocnumber">1.1</span> <span class="toctext">ZOPH_TITLE</span></a></li>
 <li class="toclevel-2"><a href="#MAX_CRUMBS"><span class="tocnumber">1.2</span> <span class="toctext">MAX_CRUMBS</span></a></li>
@@ -34,80 +34,90 @@
 <li class="toclevel-2"><a href="#DEFAULT_DIRECTION"><span class="tocnumber">1.13</span> <span class="toctext">DEFAULT_DIRECTION</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Authentication"><span class="tocnumber">2</span> <span class="toctext">Authentication</span></a>
+<li class="toclevel-1 tocsection-2"><a href="#Authentication"><span class="tocnumber">2</span> <span class="toctext">Authentication</span></a>
 <ul>
 <li class="toclevel-2"><a href="#.24VALIDATOR"><span class="tocnumber">2.1</span> <span class="toctext">$VALIDATOR</span></a></li>
 <li class="toclevel-2"><a href="#FORCE_SSL"><span class="tocnumber">2.2</span> <span class="toctext">FORCE_SSL</span></a></li>
 <li class="toclevel-2"><a href="#FORCE_SSL_LOGIN"><span class="tocnumber">2.3</span> <span class="toctext">FORCE_SSL_LOGIN</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Resized_image_generation"><span class="tocnumber">3</span> <span class="toctext">Resized image generation</span></a>
+<li class="toclevel-1 tocsection-3"><a href="#Debugging"><span class="tocnumber">3</span> <span class="toctext">Debugging</span></a>
 <ul>
-<li class="toclevel-2"><a href="#THUMB_SIZE"><span class="tocnumber">3.1</span> <span class="toctext">THUMB_SIZE</span></a></li>
-<li class="toclevel-2"><a href="#MID_SIZE"><span class="tocnumber">3.2</span> <span class="toctext">MID_SIZE</span></a></li>
-<li class="toclevel-2"><a href="#THUMB_PREFIX"><span class="tocnumber">3.3</span> <span class="toctext">THUMB_PREFIX</span></a></li>
-<li class="toclevel-2"><a href="#MID_PREFIX"><span class="tocnumber">3.4</span> <span class="toctext">MID_PREFIX</span></a></li>
-<li class="toclevel-2"><a href="#MIXED_THUMBNAILS"><span class="tocnumber">3.5</span> <span class="toctext">MIXED_THUMBNAILS</span></a></li>
-<li class="toclevel-2"><a href="#THUMB_EXTENSION"><span class="tocnumber">3.6</span> <span class="toctext">THUMB_EXTENSION</span></a></li>
+<li class="toclevel-2"><a href="#DEBUG"><span class="tocnumber">3.1</span> <span class="toctext">DEBUG</span></a></li>
+<li class="toclevel-2"><a href="#LOG_ALWAYS"><span class="tocnumber">3.2</span> <span class="toctext">LOG_ALWAYS</span></a></li>
+<li class="toclevel-2"><a href="#LOG_SUBJECT"><span class="tocnumber">3.3</span> <span class="toctext">LOG_SUBJECT</span></a></li>
+<li class="toclevel-2"><a href="#LOG_SEVERITY"><span class="tocnumber">3.4</span> <span class="toctext">LOG_SEVERITY</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#Log_Severity_2"><span class="tocnumber">3.5</span> <span class="toctext">Log Severity</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Log_subjects"><span class="tocnumber">3.6</span> <span class="toctext">Log subjects</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Database_configuration"><span class="tocnumber">4</span> <span class="toctext">Database configuration</span></a>
+<li class="toclevel-1 tocsection-6"><a href="#Resized_image_generation"><span class="tocnumber">4</span> <span class="toctext">Resized image generation</span></a>
 <ul>
-<li class="toclevel-2"><a href="#DB_HOST"><span class="tocnumber">4.1</span> <span class="toctext">DB_HOST</span></a></li>
-<li class="toclevel-2"><a href="#DB_NAME"><span class="tocnumber">4.2</span> <span class="toctext">DB_NAME</span></a></li>
-<li class="toclevel-2"><a href="#DB_USER"><span class="tocnumber">4.3</span> <span class="toctext">DB_USER</span></a></li>
-<li class="toclevel-2"><a href="#DB_PASS"><span class="tocnumber">4.4</span> <span class="toctext">DB_PASS</span></a></li>
+<li class="toclevel-2"><a href="#THUMB_SIZE"><span class="tocnumber">4.1</span> <span class="toctext">THUMB_SIZE</span></a></li>
+<li class="toclevel-2"><a href="#MID_SIZE"><span class="tocnumber">4.2</span> <span class="toctext">MID_SIZE</span></a></li>
+<li class="toclevel-2"><a href="#THUMB_PREFIX"><span class="tocnumber">4.3</span> <span class="toctext">THUMB_PREFIX</span></a></li>
+<li class="toclevel-2"><a href="#MID_PREFIX"><span class="tocnumber">4.4</span> <span class="toctext">MID_PREFIX</span></a></li>
+<li class="toclevel-2"><a href="#MIXED_THUMBNAILS"><span class="tocnumber">4.5</span> <span class="toctext">MIXED_THUMBNAILS</span></a></li>
+<li class="toclevel-2"><a href="#THUMB_EXTENSION"><span class="tocnumber">4.6</span> <span class="toctext">THUMB_EXTENSION</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Image_location"><span class="tocnumber">5</span> <span class="toctext">Image location</span></a>
+<li class="toclevel-1 tocsection-7"><a href="#Database_configuration"><span class="tocnumber">5</span> <span class="toctext">Database configuration</span></a>
 <ul>
-<li class="toclevel-2"><a href="#IMAGE_DIR"><span class="tocnumber">5.1</span> <span class="toctext">IMAGE_DIR</span></a></li>
-<li class="toclevel-2"><a href="#WEB_IMAGE_DIR"><span class="tocnumber">5.2</span> <span class="toctext">WEB_IMAGE_DIR</span></a></li>
-<li class="toclevel-2"><a href="#USE_IMAGE_SERVICE"><span class="tocnumber">5.3</span> <span class="toctext">USE_IMAGE_SERVICE</span></a></li>
+<li class="toclevel-2"><a href="#DB_HOST"><span class="tocnumber">5.1</span> <span class="toctext">DB_HOST</span></a></li>
+<li class="toclevel-2"><a href="#DB_NAME"><span class="tocnumber">5.2</span> <span class="toctext">DB_NAME</span></a></li>
+<li class="toclevel-2"><a href="#DB_USER"><span class="tocnumber">5.3</span> <span class="toctext">DB_USER</span></a></li>
+<li class="toclevel-2"><a href="#DB_PASS"><span class="tocnumber">5.4</span> <span class="toctext">DB_PASS</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Import_settings"><span class="tocnumber">6</span> <span class="toctext">Import settings</span></a>
+<li class="toclevel-1 tocsection-8"><a href="#Image_location"><span class="tocnumber">6</span> <span class="toctext">Image location</span></a>
 <ul>
-<li class="toclevel-2"><a href="#CLIENT_WEB_IMPORT"><span class="tocnumber">6.1</span> <span class="toctext">CLIENT_WEB_IMPORT</span></a></li>
-<li class="toclevel-2"><a href="#SERVER_WEB_IMPORT"><span class="tocnumber">6.2</span> <span class="toctext">SERVER_WEB_IMPORT</span></a></li>
-<li class="toclevel-2"><a href="#WEB_IMPORT_.28depricated.29"><span class="tocnumber">6.3</span> <span class="toctext">WEB_IMPORT (depricated)</span></a></li>
-<li class="toclevel-2"><a href="#DEFAULT_DESTINATION_PATH"><span class="tocnumber">6.4</span> <span class="toctext">DEFAULT_DESTINATION_PATH</span></a></li>
-<li class="toclevel-2"><a href="#SHOW_DESTINATION_PATH"><span class="tocnumber">6.5</span> <span class="toctext">SHOW_DESTINATION_PATH</span></a></li>
-<li class="toclevel-2"><a href="#MAX_UPLOAD"><span class="tocnumber">6.6</span> <span class="toctext">MAX_UPLOAD</span></a></li>
-<li class="toclevel-2"><a href="#REMOVE_ARCHIVE"><span class="tocnumber">6.7</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
-<li class="toclevel-2"><a href="#IMPORT_MOVE"><span class="tocnumber">6.8</span> <span class="toctext">IMPORT_MOVE</span></a></li>
-<li class="toclevel-2"><a href="#USE_DATED_DIRS"><span class="tocnumber">6.9</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
-<li class="toclevel-2"><a href="#HIER_DATED_DIRS"><span class="tocnumber">6.10</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
-<li class="toclevel-2"><a href="#TAR_CMD"><span class="tocnumber">6.11</span> <span class="toctext">TAR_CMD</span></a></li>
-<li class="toclevel-2"><a href="#UNZIP_CMD"><span class="tocnumber">6.12</span> <span class="toctext">UNZIP_CMD</span></a></li>
+<li class="toclevel-2"><a href="#IMAGE_DIR"><span class="tocnumber">6.1</span> <span class="toctext">IMAGE_DIR</span></a></li>
+<li class="toclevel-2"><a href="#WEB_IMAGE_DIR"><span class="tocnumber">6.2</span> <span class="toctext">WEB_IMAGE_DIR</span></a></li>
+<li class="toclevel-2"><a href="#USE_IMAGE_SERVICE"><span class="tocnumber">6.3</span> <span class="toctext">USE_IMAGE_SERVICE</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Features"><span class="tocnumber">7</span> <span class="toctext">Features</span></a>
+<li class="toclevel-1 tocsection-9"><a href="#Import_settings"><span class="tocnumber">7</span> <span class="toctext">Import settings</span></a>
 <ul>
-<li class="toclevel-2"><a href="#JAVASCRIPT"><span class="tocnumber">7.1</span> <span class="toctext">JAVASCRIPT</span></a></li>
-<li class="toclevel-2"><a href="#EMAIL_PHOTOS"><span class="tocnumber">7.2</span> <span class="toctext">EMAIL_PHOTOS</span></a></li>
-<li class="toclevel-2"><a href="#WATERMARKING"><span class="tocnumber">7.3</span> <span class="toctext">WATERMARKING</span></a></li>
-<li class="toclevel-2"><a href="#WATERMARK"><span class="tocnumber">7.4</span> <span class="toctext">WATERMARK</span></a></li>
-<li class="toclevel-2"><a href="#WM_POSX"><span class="tocnumber">7.5</span> <span class="toctext">WM_POSX</span></a></li>
-<li class="toclevel-2"><a href="#WM_POSY"><span class="tocnumber">7.6</span> <span class="toctext">WM_POSY</span></a></li>
-<li class="toclevel-2"><a href="#WM_TRANS"><span class="tocnumber">7.7</span> <span class="toctext">WM_TRANS</span></a></li>
-<li class="toclevel-2"><a href="#ALLOW_COMMENTS"><span class="tocnumber">7.8</span> <span class="toctext">ALLOW_COMMENTS</span></a></li>
-<li class="toclevel-2"><a href="#AUTOCOMPLETE"><span class="tocnumber">7.9</span> <span class="toctext">AUTOCOMPLETE</span></a></li>
-<li class="toclevel-2"><a href="#DOWNLOAD"><span class="tocnumber">7.10</span> <span class="toctext">DOWNLOAD</span></a></li>
+<li class="toclevel-2"><a href="#CLIENT_WEB_IMPORT"><span class="tocnumber">7.1</span> <span class="toctext">CLIENT_WEB_IMPORT</span></a></li>
+<li class="toclevel-2"><a href="#SERVER_WEB_IMPORT"><span class="tocnumber">7.2</span> <span class="toctext">SERVER_WEB_IMPORT</span></a></li>
+<li class="toclevel-2"><a href="#WEB_IMPORT_.28deprecated.29"><span class="tocnumber">7.3</span> <span class="toctext">WEB_IMPORT (deprecated)</span></a></li>
+<li class="toclevel-2"><a href="#DEFAULT_DESTINATION_PATH"><span class="tocnumber">7.4</span> <span class="toctext">DEFAULT_DESTINATION_PATH</span></a></li>
+<li class="toclevel-2"><a href="#SHOW_DESTINATION_PATH"><span class="tocnumber">7.5</span> <span class="toctext">SHOW_DESTINATION_PATH</span></a></li>
+<li class="toclevel-2"><a href="#MAX_UPLOAD"><span class="tocnumber">7.6</span> <span class="toctext">MAX_UPLOAD</span></a></li>
+<li class="toclevel-2"><a href="#REMOVE_ARCHIVE"><span class="tocnumber">7.7</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
+<li class="toclevel-2"><a href="#IMPORT_MOVE"><span class="tocnumber">7.8</span> <span class="toctext">IMPORT_MOVE</span></a></li>
+<li class="toclevel-2"><a href="#USE_DATED_DIRS"><span class="tocnumber">7.9</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#HIER_DATED_DIRS"><span class="tocnumber">7.10</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#TAR_CMD"><span class="tocnumber">7.11</span> <span class="toctext">TAR_CMD</span></a></li>
+<li class="toclevel-2"><a href="#UNZIP_CMD"><span class="tocnumber">7.12</span> <span class="toctext">UNZIP_CMD</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Mapping_Support"><span class="tocnumber">8</span> <span class="toctext">Mapping Support</span></a>
+<li class="toclevel-1 tocsection-10"><a href="#Features"><span class="tocnumber">8</span> <span class="toctext">Features</span></a>
 <ul>
-<li class="toclevel-2"><a href="#MAPS"><span class="tocnumber">8.1</span> <span class="toctext">MAPS</span></a></li>
-<li class="toclevel-2"><a href="#GOOGLE_KEY"><span class="tocnumber">8.2</span> <span class="toctext">GOOGLE_KEY</span></a></li>
+<li class="toclevel-2"><a href="#JAVASCRIPT"><span class="tocnumber">8.1</span> <span class="toctext">JAVASCRIPT</span></a></li>
+<li class="toclevel-2"><a href="#EMAIL_PHOTOS"><span class="tocnumber">8.2</span> <span class="toctext">EMAIL_PHOTOS</span></a></li>
+<li class="toclevel-2"><a href="#WATERMARKING"><span class="tocnumber">8.3</span> <span class="toctext">WATERMARKING</span></a></li>
+<li class="toclevel-2"><a href="#WATERMARK"><span class="tocnumber">8.4</span> <span class="toctext">WATERMARK</span></a></li>
+<li class="toclevel-2"><a href="#WM_POSX"><span class="tocnumber">8.5</span> <span class="toctext">WM_POSX</span></a></li>
+<li class="toclevel-2"><a href="#WM_POSY"><span class="tocnumber">8.6</span> <span class="toctext">WM_POSY</span></a></li>
+<li class="toclevel-2"><a href="#WM_TRANS"><span class="tocnumber">8.7</span> <span class="toctext">WM_TRANS</span></a></li>
+<li class="toclevel-2"><a href="#ALLOW_COMMENTS"><span class="tocnumber">8.8</span> <span class="toctext">ALLOW_COMMENTS</span></a></li>
+<li class="toclevel-2"><a href="#AUTOCOMPLETE"><span class="tocnumber">8.9</span> <span class="toctext">AUTOCOMPLETE</span></a></li>
+<li class="toclevel-2"><a href="#DOWNLOAD"><span class="tocnumber">8.10</span> <span class="toctext">DOWNLOAD</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Timezone"><span class="tocnumber">9</span> <span class="toctext">Timezone</span></a>
+<li class="toclevel-1 tocsection-11"><a href="#Mapping_Support"><span class="tocnumber">9</span> <span class="toctext">Mapping Support</span></a>
 <ul>
-<li class="toclevel-2"><a href="#CAMERA_TZ"><span class="tocnumber">9.1</span> <span class="toctext">CAMERA_TZ</span></a></li>
-<li class="toclevel-2"><a href="#DATE_FORMAT"><span class="tocnumber">9.2</span> <span class="toctext">DATE_FORMAT</span></a></li>
-<li class="toclevel-2"><a href="#TIME_FORMAT"><span class="tocnumber">9.3</span> <span class="toctext">TIME_FORMAT</span></a></li>
-<li class="toclevel-2"><a href="#GUESS_TZ"><span class="tocnumber">9.4</span> <span class="toctext">GUESS_TZ</span></a></li>
+<li class="toclevel-2"><a href="#MAPS"><span class="tocnumber">9.1</span> <span class="toctext">MAPS</span></a></li>
+<li class="toclevel-2"><a href="#GOOGLE_KEY"><span class="tocnumber">9.2</span> <span class="toctext">GOOGLE_KEY</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#Timezone"><span class="tocnumber">10</span> <span class="toctext">Timezone</span></a>
+<ul>
+<li class="toclevel-2"><a href="#CAMERA_TZ"><span class="tocnumber">10.1</span> <span class="toctext">CAMERA_TZ</span></a></li>
+<li class="toclevel-2"><a href="#DATE_FORMAT"><span class="tocnumber">10.2</span> <span class="toctext">DATE_FORMAT</span></a></li>
+<li class="toclevel-2"><a href="#TIME_FORMAT"><span class="tocnumber">10.3</span> <span class="toctext">TIME_FORMAT</span></a></li>
+<li class="toclevel-2"><a href="#GUESS_TZ"><span class="tocnumber">10.4</span> <span class="toctext">GUESS_TZ</span></a></li>
 </ul>
 </li>
 </ul>
@@ -115,10 +125,8 @@
 </tr>
 </table>
 
-<p><a name="Interface_configuration" id="Interface_configuration"></a></p>
-<h2> <span class="mw-headline">Interface configuration</span></h2>
-<p><a name="ZOPH_TITLE" id="ZOPH_TITLE"></a></p>
-<h3> <span class="mw-headline">ZOPH_TITLE</span></h3>
+<h2> <span class="mw-headline" id="Interface_configuration">Interface configuration</span></h2>
+<h3> <span class="mw-headline" id="ZOPH_TITLE">ZOPH_TITLE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">ZOPH_TITLE</th>
@@ -138,8 +146,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="MAX_CRUMBS" id="MAX_CRUMBS"></a></p>
-<h3> <span class="mw-headline">MAX_CRUMBS</span></h3>
+<h3> <span class="mw-headline" id="MAX_CRUMBS">MAX_CRUMBS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">MAX_CRUMBS</th>
@@ -159,8 +166,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="MAX_DAYS_PAST" id="MAX_DAYS_PAST"></a></p>
-<h3> <span class="mw-headline">MAX_DAYS_PAST</span></h3>
+<h3> <span class="mw-headline" id="MAX_DAYS_PAST">MAX_DAYS_PAST</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">MAX_DAYS_PAST</th>
@@ -180,8 +186,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="ZOPH_URL" id="ZOPH_URL"></a></p>
-<h3> <span class="mw-headline">ZOPH_URL</span></h3>
+<h3> <span class="mw-headline" id="ZOPH_URL">ZOPH_URL</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">ZOPH_URL</th>
@@ -197,12 +202,11 @@
 <td colspan="2"><b>Options:</b></td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('ZOPH_URL', '<a href="http://www.myserver.com/zoph'" class="external free" title="http://www.myserver.com/zoph'" rel="nofollow">http://www.myserver.com/zoph'</a>);</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('ZOPH_URL', '<a href="http://www.myserver.com/zoph'" class="external free" rel="nofollow">http://www.myserver.com/zoph'</a>);</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<p><a name="ZOPH_SECURE_URL" id="ZOPH_SECURE_URL"></a></p>
-<h3> <span class="mw-headline">ZOPH_SECURE_URL</span></h3>
+<h3> <span class="mw-headline" id="ZOPH_SECURE_URL">ZOPH_SECURE_URL</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">ZOPH_SECURE_URL</th>
@@ -218,12 +222,11 @@
 <td colspan="2"><b>Options:</b></td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('ZOPH_SECURE_URL', '<a href="https://www.myserver.com/zoph'" class="external free" title="https://www.myserver.com/zoph'" rel="nofollow">https://www.myserver.com/zoph'</a>);</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('ZOPH_SECURE_URL', '<a href="https://www.myserver.com/zoph'" class="external free" rel="nofollow">https://www.myserver.com/zoph'</a>);</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<p><a name="MAX_PEOPLE_SLOTS" id="MAX_PEOPLE_SLOTS"></a></p>
-<h3> <span class="mw-headline">MAX_PEOPLE_SLOTS</span></h3>
+<h3> <span class="mw-headline" id="MAX_PEOPLE_SLOTS">MAX_PEOPLE_SLOTS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">MAX_PEOPLE_SLOTS</th>
@@ -243,8 +246,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="DEFAULT_TABLE_WIDTH" id="DEFAULT_TABLE_WIDTH"></a></p>
-<h3> <span class="mw-headline">DEFAULT_TABLE_WIDTH</span></h3>
+<h3> <span class="mw-headline" id="DEFAULT_TABLE_WIDTH">DEFAULT_TABLE_WIDTH</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DEFAULT_TABLE_WIDTH</th>
@@ -264,8 +266,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="CSS_SHEET" id="CSS_SHEET"></a></p>
-<h3> <span class="mw-headline">CSS_SHEET</span></h3>
+<h3> <span class="mw-headline" id="CSS_SHEET">CSS_SHEET</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">CSS_SHEET</th>
@@ -285,8 +286,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="ICONSET" id="ICONSET"></a></p>
-<h3> <span class="mw-headline">ICONSET</span></h3>
+<h3> <span class="mw-headline" id="ICONSET">ICONSET</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">ICONSET</th>
@@ -306,8 +306,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="LANG_DIR" id="LANG_DIR"></a></p>
-<h3> <span class="mw-headline">LANG_DIR</span></h3>
+<h3> <span class="mw-headline" id="LANG_DIR">LANG_DIR</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">LANG_DIR</th>
@@ -327,8 +326,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="DEFAULT_LANG" id="DEFAULT_LANG"></a></p>
-<h3> <span class="mw-headline">DEFAULT_LANG</span></h3>
+<h3> <span class="mw-headline" id="DEFAULT_LANG">DEFAULT_LANG</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DEFAULT_LANG</th>
@@ -348,8 +346,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="DEFAULT_ORDER" id="DEFAULT_ORDER"></a></p>
-<h3> <span class="mw-headline">DEFAULT_ORDER</span></h3>
+<h3> <span class="mw-headline" id="DEFAULT_ORDER">DEFAULT_ORDER</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DEFAULT_ORDER</th>
@@ -369,8 +366,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="DEFAULT_DIRECTION" id="DEFAULT_DIRECTION"></a></p>
-<h3> <span class="mw-headline">DEFAULT_DIRECTION</span></h3>
+<h3> <span class="mw-headline" id="DEFAULT_DIRECTION">DEFAULT_DIRECTION</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DEFAULT_DIRECTION</th>
@@ -390,10 +386,8 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="Authentication" id="Authentication"></a></p>
-<h2> <span class="mw-headline">Authentication</span></h2>
-<p><a name=".24VALIDATOR" id=".24VALIDATOR"></a></p>
-<h3> <span class="mw-headline">$VALIDATOR</span></h3>
+<h2> <span class="mw-headline" id="Authentication">Authentication</span></h2>
+<h3> <span class="mw-headline" id=".24VALIDATOR">$VALIDATOR</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">$VALIDATOR</th>
@@ -413,8 +407,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="FORCE_SSL" id="FORCE_SSL"></a></p>
-<h3> <span class="mw-headline">FORCE_SSL</span></h3>
+<h3> <span class="mw-headline" id="FORCE_SSL">FORCE_SSL</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">FORCE_SSL</th>
@@ -434,8 +427,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="FORCE_SSL_LOGIN" id="FORCE_SSL_LOGIN"></a></p>
-<h3> <span class="mw-headline">FORCE_SSL_LOGIN</span></h3>
+<h3> <span class="mw-headline" id="FORCE_SSL_LOGIN">FORCE_SSL_LOGIN</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">FORCE_SSL_LOGIN</th>
@@ -455,17 +447,192 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="Resized_image_generation" id="Resized_image_generation"></a></p>
-<h2> <span class="mw-headline">Resized image generation</span></h2>
+<h2> <span class="mw-headline" id="Debugging">Debugging</span></h2>
+<h3> <span class="mw-headline" id="DEBUG">DEBUG</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DEBUG</th>
+<td style="width: 450px;"><b>Versions:</b> v0.8 and before</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> The <a href="configuration.html#DEBUG" title="Zoph/Configuration">DEBUG</a> option was used to control debug output given by Zoph during execution. As of Zoph 0.8.1 this option has been replaced by <a href="configuration.html#LOG_ALWAYS" title="Zoph/Configuration">LOG_ALWAYS</a> and <a href="configuration.html#LOG_SEVERITY" title="Zoph/Configuration">LOG_SUBJECT</a>, which allow more granular control over what is displayed and what not.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: no debugging. <tt>1</tt> and up, show debugging information.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DEBUG', 5);</tt></td>
+</tr>
+</table>
+<p><br />
+An extensive explanation of Zoph's logging system can be found in <a href="logging_in_zoph_0.8.1_and_later.html" title="Zoph/Solving Problems/Logging in Zoph 0.8.1 and later">Logging in Zoph 0.8.1 and later</a>.</p>
+<h3> <span class="mw-headline" id="LOG_ALWAYS">LOG_ALWAYS</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">LOG_ALWAYS</th>
+<td style="width: 450px;"><b>Versions:</b> v0.8.1 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> This option controls how much debug information is showed. Zoph will show you the severity you configure and everything worse than that. So if you configure <b>log::ERROR</b>, you will see ERROR and FATAL messages and if you configure <b>log::DEBUG</b>, you will see all messages.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt><tt>log::FATAL</tt></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> See <a href="configuration.html#Log_Severity" title="Zoph/Configuration">log severity</a> below.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('LOG_ALWAYS', log::ERROR);</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="LOG_SUBJECT">LOG_SUBJECT</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">LOG_SUBJECT</th>
+<td style="width: 450px;"><b>Versions:</b> v0.8.1 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> This option, together with <a href="configuration.html#LOG_SEVERITY" title="Zoph/Configuration">LOG_SEVERITY</a> enables you to have granular control over which messages are displayed. With <a href="configuration.html#LOG_SUBJECT" title="Zoph/Configuration">LOG_SUBJECT</a> you configure on which subject you would like to see logging.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt><tt>log::NONE</tt></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> See <a href="configuration.html#Log_Subjects" title="Zoph/Configuration">log subjects</a> below. You can combine subjects with <tt>|</tt> (<b>or</b>) and <tt>~</tt> (<b>not</b>).</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b>
+<p>Display all messages which indicate an error or a fatal error, regarding the translation of Zoph or images:</p>
+<pre>
+define('LOG_SEVERITY', log::ERROR);
+define('LOG_SUBJECT', log::LANG | log::IMG);
+</pre>
+<p>Display all messages, except debug-level messages, except those regarding SQL queries:</p>
+<pre>
+define('LOG_SEVERITY', log::NOTIFY);
+define('LOG_SUBJECT', log::ALL | ~log::SQL);
+</pre>
+<p>Display all messages, except those regarding redirects or the database connection:</p>
+<pre>
+define('LOG_SEVERITY', log::DEBUG);
+define('LOG_SUBJECT', log::ALL ~(log::REDIRECT | log::DB));
+</pre></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="LOG_SEVERITY">LOG_SEVERITY</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">LOG_SEVERITY</th>
+<td style="width: 450px;"><b>Versions:</b> v0.8.1 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> This option, together with <a href="configuration.html#LOG_SUBJECT" title="Zoph/Configuration">LOG_SUBJECT</a> enables you to have granular control over which messages are displayed. With <a href="configuration.html#LOG_SEVERITY" title="Zoph/Configuration">LOG_SEVERITY</a> you configure how much debug information is showed. The difference with <a href="configuration.html#LOG_SUBJECT" title="Zoph/Configuration">LOG_ALWAYS</a> is, that the messages are <b>only</b> shown for the subject you have configured in <a href="configuration.html#LOG_SUBJECT" title="Zoph/Configuration">LOG_SUBJECT</a>. Zoph will show you the severity you configure and everything worse than that. So if you configure <b>log::ERROR</b>, you will see ERROR and FATAL messages and if you configure <b>log::DEBUG</b>, you will see all messages.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt><tt>log::NONE</tt></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> See <a href="configuration.html#Log_Severity" title="Zoph/Configuration">log severity</a> below.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('LOG_SEVERITY', log::NOTIFY);</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="Log_Severity_2">Log Severity</span></h3>
+<table class="wikitable" style="text-align: left; border-collapse: collapse;" border="1|">
+<caption>Severity indications</caption>
+<tr>
+<th style="text-align: left">log::DEBUG</th>
+<td>Debugging messages, Zoph gives information about what it's doing.</td>
+</tr>
+<tr>
+<th style="text-align: left">log::NOTIFY</th>
+<td>Notification about something that is happening which is influencing Zoph's program flow</td>
+</tr>
+<tr>
+<th style="text-align: left">log::WARN</th>
+<td>Warning about something that is happening</td>
+</tr>
+<tr>
+<th style="text-align: left">log::ERROR</th>
+<td>Error condition, something has gone wrong, but Zoph can recover</td>
+</tr>
+<tr>
+<th style="text-align: left">log::FATAL</th>
+<td>Fatal error, something has gone wrong and Zoph needs to stop execution of the current script.</td>
+</tr>
+<tr>
+<th style="text-align: left">log::NONE</th>
+<td>Do not display any messages</td>
+</tr>
+</table>
+<h3> <span class="mw-headline" id="Log_subjects">Log subjects</span></h3>
+<table class="wikitable" style="text-align: left; border-collapse: collapse;" border="1|">
+<caption>Message subjects</caption>
+<tr>
+<th style="text-align: left">log::ALL</th>
+<td>All messages</td>
+</tr>
+<tr>
+<th style="text-align: left">log::VARS</th>
+<td>Messages regarding setting of variables</td>
+</tr>
+<tr>
+<th style="text-align: left">log::LANG</th>
+<td>Messages regarding the translation of Zoph</td>
+</tr>
+<tr>
+<th style="text-align: left">log::LOGIN</th>
+<td>Messages regarding the Login procedure</td>
+</tr>
+<tr>
+<th style="text-align: left">log::REDIRECT</th>
+<td>Messages regarding redirection</td>
+</tr>
+<tr>
+<th style="text-align: left">log::DB</th>
+<td>Messages regarding the database connection</td>
+</tr>
+<tr>
+<th style="text-align: left">log::SQL</th>
+<td>Messages regarding SQL Queries</td>
+</tr>
+<tr>
+<th style="text-align: left">log::XML</th>
+<td>Messages regarding XML creation</td>
+</tr>
+<tr>
+<th style="text-align: left">log::IMG</th>
+<td>Messages regarding image creation</td>
+</tr>
+<tr>
+<th style="text-align: left">log::IMPORT</th>
+<td>Messages regarding the import functions</td>
+</tr>
+<tr>
+<th style="text-align: left">log::GENERAL</th>
+<td>Other messages</td>
+</tr>
+<tr>
+<th style="text-align: left">log::NONE</th>
+<td>No messages.</td>
+</tr>
+</table>
+<h2> <span class="mw-headline" id="Resized_image_generation">Resized image generation</span></h2>
 <p>Zoph automatically creates thumbnails and medium sized ('mid') images during import. To influence this proces, you can edit the following parameters:</p>
-<div style="width:50%; background:#FFFF66; color:black; border:1px solid black; margin:auto; font-weight:normal;">
+<div style="width:50%; background:#FFFF66; color:black; border:1px solid black; margin:auto; font-weight:normal; padding: 0 2em 1em 2em;">
 <div style="color:red; font-size-adjust:0.5; margin:0.75em; text-align:center;"><b>Important!</b></div>
 <div>
 <p>The options in this section have a matching setting in <tt>ZophImport.pl</tt>. These have to be set the same.</p>
 </div>
 </div>
-<p><a name="THUMB_SIZE" id="THUMB_SIZE"></a></p>
-<h3> <span class="mw-headline">THUMB_SIZE</span></h3>
+<h3> <span class="mw-headline" id="THUMB_SIZE">THUMB_SIZE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">THUMB_SIZE</th>
@@ -485,8 +652,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="MID_SIZE" id="MID_SIZE"></a></p>
-<h3> <span class="mw-headline">MID_SIZE</span></h3>
+<h3> <span class="mw-headline" id="MID_SIZE">MID_SIZE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">MID_SIZE</th>
@@ -506,8 +672,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="THUMB_PREFIX" id="THUMB_PREFIX"></a></p>
-<h3> <span class="mw-headline">THUMB_PREFIX</span></h3>
+<h3> <span class="mw-headline" id="THUMB_PREFIX">THUMB_PREFIX</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">THUMB_PREFIX</th>
@@ -527,8 +692,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="MID_PREFIX" id="MID_PREFIX"></a></p>
-<h3> <span class="mw-headline">MID_PREFIX</span></h3>
+<h3> <span class="mw-headline" id="MID_PREFIX">MID_PREFIX</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">MID_PREFIX</th>
@@ -548,8 +712,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="MIXED_THUMBNAILS" id="MIXED_THUMBNAILS"></a></p>
-<h3> <span class="mw-headline">MIXED_THUMBNAILS</span></h3>
+<h3> <span class="mw-headline" id="MIXED_THUMBNAILS">MIXED_THUMBNAILS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">MIXED_THUMBNAILS</th>
@@ -569,8 +732,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="THUMB_EXTENSION" id="THUMB_EXTENSION"></a></p>
-<h3> <span class="mw-headline">THUMB_EXTENSION</span></h3>
+<h3> <span class="mw-headline" id="THUMB_EXTENSION">THUMB_EXTENSION</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">THUMB_EXTENSION</th>
@@ -590,16 +752,14 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="Database_configuration" id="Database_configuration"></a></p>
-<h2> <span class="mw-headline">Database configuration</span></h2>
-<div style="width:50%; background:#FFFF66; color:black; border:1px solid black; margin:auto; font-weight:normal;">
+<h2> <span class="mw-headline" id="Database_configuration">Database configuration</span></h2>
+<div style="width:50%; background:#FFFF66; color:black; border:1px solid black; margin:auto; font-weight:normal; padding: 0 2em 1em 2em;">
 <div style="color:red; font-size-adjust:0.5; margin:0.75em; text-align:center;"><b>Important!</b></div>
 <div>
 <p>The options in this section have a matching setting in <tt>ZophImport.pl</tt>. These have to be set the same.</p>
 </div>
 </div>
-<p><a name="DB_HOST" id="DB_HOST"></a></p>
-<h3> <span class="mw-headline">DB_HOST</span></h3>
+<h3> <span class="mw-headline" id="DB_HOST">DB_HOST</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DB_HOST</th>
@@ -619,8 +779,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="DB_NAME" id="DB_NAME"></a></p>
-<h3> <span class="mw-headline">DB_NAME</span></h3>
+<h3> <span class="mw-headline" id="DB_NAME">DB_NAME</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DB_NAME</th>
@@ -640,8 +799,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="DB_USER" id="DB_USER"></a></p>
-<h3> <span class="mw-headline">DB_USER</span></h3>
+<h3> <span class="mw-headline" id="DB_USER">DB_USER</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DB_USER</th>
@@ -661,8 +819,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="DB_PASS" id="DB_PASS"></a></p>
-<h3> <span class="mw-headline">DB_PASS</span></h3>
+<h3> <span class="mw-headline" id="DB_PASS">DB_PASS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DB_PASS</th>
@@ -682,10 +839,8 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="Image_location" id="Image_location"></a></p>
-<h2> <span class="mw-headline">Image location</span></h2>
-<p><a name="IMAGE_DIR" id="IMAGE_DIR"></a></p>
-<h3> <span class="mw-headline">IMAGE_DIR</span></h3>
+<h2> <span class="mw-headline" id="Image_location">Image location</span></h2>
+<h3> <span class="mw-headline" id="IMAGE_DIR">IMAGE_DIR</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">IMAGE_DIR</th>
@@ -705,15 +860,14 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="WEB_IMAGE_DIR" id="WEB_IMAGE_DIR"></a></p>
-<h3> <span class="mw-headline">WEB_IMAGE_DIR</span></h3>
+<h3> <span class="mw-headline" id="WEB_IMAGE_DIR">WEB_IMAGE_DIR</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">WEB_IMAGE_DIR</th>
-<td style="width: 450px;"><b>Versions:</b> All versions</td>
+<td style="width: 450px;"><b>Versions:</b> <b>DEPRECATED</b> as of v0.8.1. Will be removed in v0.9</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> Location of the images relative to the webserver root.</td>
+<td colspan="2"><b>Description:</b> This setting is only needed when <a href="configuration.html#USE_IMAGE_SERVICE" title="Zoph/Configuration">USE_IMAGE_SERVICE</a>. Location of the images relative to the webserver root.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Default:</b> <tt>/data/images/</tt></td>
@@ -726,12 +880,11 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="USE_IMAGE_SERVICE" id="USE_IMAGE_SERVICE"></a></p>
-<h3> <span class="mw-headline">USE_IMAGE_SERVICE</span></h3>
+<h3> <span class="mw-headline" id="USE_IMAGE_SERVICE">USE_IMAGE_SERVICE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">USE_IMAGE_SERVICE</th>
-<td style="width: 450px;"><b>Versions:</b> All versions</td>
+<td style="width: 450px;"><b>Versions:</b> <b>DEPRECATED</b> as of v0.8.1. Will be removed in v0.9</td>
 </tr>
 <tr>
 <td colspan="2"><b>Description:</b> This setting defines wheter photo's will be pulled directly from the filesystem by the webserver or to use <tt>image_service.php</tt>.</td>
@@ -741,7 +894,7 @@
 </tr>
 <tr>
 <td colspan="2"><b>Options:</b> <tt>0</tt>: Take images from filesystem or <tt>1</tt>: Use <tt>image_service.php</tt>.
-<p>The latter could be slightly lower in performance, but is highly recommended as it is more secure in combination with user access rights. Image service is required to be on if you wish to use watermarking or annotated photos.</p>
+<p>The latter could be slightly lower in performance, but is highly recommended as it is more secure in combination with user access rights. Image service is required to be on if you wish to use watermarking or annotated photos. For this reason the option has been deprecated as of v0.8.1, and should always be on. In v0.9 this option will be removed and it will not be possible to use Zoph without the image service.</p>
 </td>
 </tr>
 <tr>
@@ -749,10 +902,8 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="Import_settings" id="Import_settings"></a></p>
-<h2> <span class="mw-headline">Import settings</span></h2>
-<p><a name="CLIENT_WEB_IMPORT" id="CLIENT_WEB_IMPORT"></a></p>
-<h3> <span class="mw-headline">CLIENT_WEB_IMPORT</span></h3>
+<h2> <span class="mw-headline" id="Import_settings">Import settings</span></h2>
+<h3> <span class="mw-headline" id="CLIENT_WEB_IMPORT">CLIENT_WEB_IMPORT</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">CLIENT_WEB_IMPORT</th>
@@ -772,8 +923,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="SERVER_WEB_IMPORT" id="SERVER_WEB_IMPORT"></a></p>
-<h3> <span class="mw-headline">SERVER_WEB_IMPORT</span></h3>
+<h3> <span class="mw-headline" id="SERVER_WEB_IMPORT">SERVER_WEB_IMPORT</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">SERVER_WEB_IMPORT</th>
@@ -793,11 +943,10 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="WEB_IMPORT_.28depricated.29" id="WEB_IMPORT_.28depricated.29"></a></p>
-<h3> <span class="mw-headline">WEB_IMPORT <i>(depricated)</i></span></h3>
+<h3> <span class="mw-headline" id="WEB_IMPORT_.28deprecated.29">WEB_IMPORT <i>(deprecated)</i></span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
-<th style="width: 150px;">WEB_IMPORT <i>(depricated)</i></th>
+<th style="width: 150px;">WEB_IMPORT <i>(deprecated)</i></th>
 <td style="width: 450px;"><b>Versions:</b> 0.3.2. and before</td>
 </tr>
 <tr>
@@ -814,15 +963,14 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="DEFAULT_DESTINATION_PATH" id="DEFAULT_DESTINATION_PATH"></a></p>
-<h3> <span class="mw-headline">DEFAULT_DESTINATION_PATH</span></h3>
+<h3> <span class="mw-headline" id="DEFAULT_DESTINATION_PATH">DEFAULT_DESTINATION_PATH</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DEFAULT_DESTINATION_PATH</th>
 <td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> Sets the default path to which photos are imported when using the webinterface, the path is relative to <a href="configuration.html#IMAGE_DIR" title="Zoph/Configuration">IMAGE_DIR</a>. You can have Zoph automatically add today's date to the path by using <tt>date(<i>format</i>)</tt>, where format is a format string like <a href="http://php.net/manual/en/function.date.php" class="external text" title="http://php.net/manual/en/function.date.php" rel="nofollow">PHP's date() function</a>, without quotes. Please note that this is the date the import is being done, not the the date the photo was taken, use <a href="configuration.html#USE_DATED_DIRS" title="Zoph/Configuration">USE_DATED_DIRS</a> if you want that.</td>
+<td colspan="2"><b>Description:</b> Sets the default path to which photos are imported when using the webinterface, the path is relative to <a href="configuration.html#IMAGE_DIR" title="Zoph/Configuration">IMAGE_DIR</a>. You can have Zoph automatically add today's date to the path by using <tt>date(<i>format</i>)</tt>, where format is a format string like <a href="http://php.net/manual/en/function.date.php" class="external text" rel="nofollow">PHP's date() function</a>, without quotes. Please note that this is the date the import is being done, not the the date the photo was taken, use <a href="configuration.html#USE_DATED_DIRS" title="Zoph/Configuration">USE_DATED_DIRS</a> if you want that.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Default:</b> <tt>uploads/date(Y.m.d)</tt></td>
@@ -835,8 +983,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="SHOW_DESTINATION_PATH" id="SHOW_DESTINATION_PATH"></a></p>
-<h3> <span class="mw-headline">SHOW_DESTINATION_PATH</span></h3>
+<h3> <span class="mw-headline" id="SHOW_DESTINATION_PATH">SHOW_DESTINATION_PATH</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">SHOW_DESTINATION_PATH</th>
@@ -858,8 +1005,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="MAX_UPLOAD" id="MAX_UPLOAD"></a></p>
-<h3> <span class="mw-headline">MAX_UPLOAD</span></h3>
+<h3> <span class="mw-headline" id="MAX_UPLOAD">MAX_UPLOAD</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">MAX_UPLOAD</th>
@@ -879,8 +1025,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="REMOVE_ARCHIVE" id="REMOVE_ARCHIVE"></a></p>
-<h3> <span class="mw-headline">REMOVE_ARCHIVE</span></h3>
+<h3> <span class="mw-headline" id="REMOVE_ARCHIVE">REMOVE_ARCHIVE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">REMOVE_ARCHIVE</th>
@@ -900,8 +1045,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="IMPORT_MOVE" id="IMPORT_MOVE"></a></p>
-<h3> <span class="mw-headline">IMPORT_MOVE</span></h3>
+<h3> <span class="mw-headline" id="IMPORT_MOVE">IMPORT_MOVE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">IMPORT_MOVE</th>
@@ -921,8 +1065,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="USE_DATED_DIRS" id="USE_DATED_DIRS"></a></p>
-<h3> <span class="mw-headline">USE_DATED_DIRS</span></h3>
+<h3> <span class="mw-headline" id="USE_DATED_DIRS">USE_DATED_DIRS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">USE_DATED_DIRS</th>
@@ -942,8 +1085,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="HIER_DATED_DIRS" id="HIER_DATED_DIRS"></a></p>
-<h3> <span class="mw-headline">HIER_DATED_DIRS</span></h3>
+<h3> <span class="mw-headline" id="HIER_DATED_DIRS">HIER_DATED_DIRS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">HIER_DATED_DIRS</th>
@@ -963,8 +1105,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="TAR_CMD" id="TAR_CMD"></a></p>
-<h3> <span class="mw-headline">TAR_CMD</span></h3>
+<h3> <span class="mw-headline" id="TAR_CMD">TAR_CMD</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">TAR_CMD</th>
@@ -984,8 +1125,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="UNZIP_CMD" id="UNZIP_CMD"></a></p>
-<h3> <span class="mw-headline">UNZIP_CMD</span></h3>
+<h3> <span class="mw-headline" id="UNZIP_CMD">UNZIP_CMD</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">UNZIP_CMD</th>
@@ -1004,10 +1144,8 @@
 <td colspan="2"><b>Example:</b> <tt>define('UNZIP_CMD', 'unzip');</tt></td>
 </tr>
 </table>
-<p><a name="Features" id="Features"></a></p>
-<h2> <span class="mw-headline">Features</span></h2>
-<p><a name="JAVASCRIPT" id="JAVASCRIPT"></a></p>
-<h3> <span class="mw-headline">JAVASCRIPT</span></h3>
+<h2> <span class="mw-headline" id="Features">Features</span></h2>
+<h3> <span class="mw-headline" id="JAVASCRIPT">JAVASCRIPT</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">JAVASCRIPT</th>
@@ -1027,8 +1165,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="EMAIL_PHOTOS" id="EMAIL_PHOTOS"></a></p>
-<h3> <span class="mw-headline">EMAIL_PHOTOS</span></h3>
+<h3> <span class="mw-headline" id="EMAIL_PHOTOS">EMAIL_PHOTOS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">EMAIL_PHOTOS</th>
@@ -1048,8 +1185,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="WATERMARKING" id="WATERMARKING"></a></p>
-<h3> <span class="mw-headline">WATERMARKING</span></h3>
+<h3> <span class="mw-headline" id="WATERMARKING">WATERMARKING</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">WATERMARKING</th>
@@ -1069,8 +1205,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="WATERMARK" id="WATERMARK"></a></p>
-<h3> <span class="mw-headline">WATERMARK</span></h3>
+<h3> <span class="mw-headline" id="WATERMARK">WATERMARK</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">WATERMARK</th>
@@ -1090,8 +1225,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="WM_POSX" id="WM_POSX"></a></p>
-<h3> <span class="mw-headline">WM_POSX</span></h3>
+<h3> <span class="mw-headline" id="WM_POSX">WM_POSX</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">WM_POSX</th>
@@ -1111,8 +1245,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="WM_POSY" id="WM_POSY"></a></p>
-<h3> <span class="mw-headline">WM_POSY</span></h3>
+<h3> <span class="mw-headline" id="WM_POSY">WM_POSY</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">WM_POSY</th>
@@ -1132,8 +1265,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="WM_TRANS" id="WM_TRANS"></a></p>
-<h3> <span class="mw-headline">WM_TRANS</span></h3>
+<h3> <span class="mw-headline" id="WM_TRANS">WM_TRANS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">WM_TRANS</th>
@@ -1153,8 +1285,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="ALLOW_COMMENTS" id="ALLOW_COMMENTS"></a></p>
-<h3> <span class="mw-headline">ALLOW_COMMENTS</span></h3>
+<h3> <span class="mw-headline" id="ALLOW_COMMENTS">ALLOW_COMMENTS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">ALLOW_COMMENTS</th>
@@ -1174,8 +1305,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="AUTOCOMPLETE" id="AUTOCOMPLETE"></a></p>
-<h3> <span class="mw-headline">AUTOCOMPLETE</span></h3>
+<h3> <span class="mw-headline" id="AUTOCOMPLETE">AUTOCOMPLETE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">AUTOCOMPLETE</th>
@@ -1195,8 +1325,7 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="DOWNLOAD" id="DOWNLOAD"></a></p>
-<h3> <span class="mw-headline">DOWNLOAD</span></h3>
+<h3> <span class="mw-headline" id="DOWNLOAD">DOWNLOAD</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DOWNLOAD</th>
@@ -1216,55 +1345,50 @@
 </tr>
 </table>
 <p><br /></p>
-<p><a name="Mapping_Support" id="Mapping_Support"></a></p>
-<h2> <span class="mw-headline">Mapping Support</span></h2>
-<p><a name="MAPS" id="MAPS"></a></p>
-<h3> <span class="mw-headline">MAPS</span></h3>
+<h2> <span class="mw-headline" id="Mapping_Support">Mapping Support</span></h2>
+<h3> <span class="mw-headline" id="MAPS">MAPS</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">MAPS</th>
 <td style="width: 450px;"><b>Versions:</b> 0.7.3 and later</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> With this setting you can enable mapping support for Zoph. Mapping is provided through the use of the <a href="http://www.mapstraction.com/" class="external text" title="http://www.mapstraction.com/" rel="nofollow">Mapstraction abstraction layer</a>, which enables support for many different mapping providers. You will need to enable Javascript throught the <a href="configuration.html#JAVASCRIPT" title="Zoph/Configuration">JAVASCRIPT</a> setting.</td>
+<td colspan="2"><b>Description:</b> With this setting you can enable mapping support for Zoph. Mapping is provided through the use of the <a href="http://www.mapstraction.com/" class="external text" rel="nofollow">Mapstraction abstraction layer</a>, which enables support for many different mapping providers. You will need to enable Javascript throught the <a href="configuration.html#JAVASCRIPT" title="Zoph/Configuration">JAVASCRIPT</a> setting.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Default:</b></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> <tt><i>empty</i></tt>: disable this feature; <tt>google</tt>: Use Google Maps, you need to define <a href="configuration.html#GOOGLE_KEY" title="Zoph/Configuration">GOOGLE_KEY</a> in order to be able to use Google Maps., <tt>yahoo</tt>: use Yahoo mapping or <tt>openstreetmap</tt>: use openstreetmap maps. Because the Openstreetmap project uses a part of Google's API, you will also need to define <a href="configuration.html#GOOGLE_KEY" title="Zoph/Configuration">GOOGLE_KEY</a>. It should be possible to use the other mapping providers <a href="http://www.mapstraction.com/" class="external text" title="http://www.mapstraction.com/" rel="nofollow">Mapstraction</a> supports, but they have not been tested with Zoph and are therefore not supported.</td>
+<td colspan="2"><b>Options:</b> <tt><i>empty</i></tt>: disable this feature; <tt>google</tt>: Use Google Maps, you need to define <a href="configuration.html#GOOGLE_KEY" title="Zoph/Configuration">GOOGLE_KEY</a> in order to be able to use Google Maps., <tt>yahoo</tt>: use Yahoo mapping or <tt>openstreetmap</tt>: use openstreetmap maps. Because the Openstreetmap project uses a part of Google's API, you will also need to define <a href="configuration.html#GOOGLE_KEY" title="Zoph/Configuration">GOOGLE_KEY</a>. It should be possible to use the other mapping providers <a href="http://www.mapstraction.com/" class="external text" rel="nofollow">Mapstraction</a> supports, but they have not been tested with Zoph and are therefore not supported.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('MAPS', 'google');</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<p><a name="GOOGLE_KEY" id="GOOGLE_KEY"></a></p>
-<h3> <span class="mw-headline">GOOGLE_KEY</span></h3>
+<h3> <span class="mw-headline" id="GOOGLE_KEY">GOOGLE_KEY</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">GOOGLE_KEY</th>
 <td style="width: 450px;"><b>Versions:</b> 0.7.3 and later</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> In order to use Googles Mapping API, you will need to request an API key with Google. You can do this at <a href="http://code.google.com/apis/maps" class="external free" title="http://code.google.com/apis/maps" rel="nofollow">http://code.google.com/apis/maps</a>, you will need to provide the URL to your Zoph installation, mapping will generate an error when the URL is wrong.</td>
+<td colspan="2"><b>Description:</b> In order to use Googles Mapping API, you will need to request an API key with Google. You can do this at <a href="http://code.google.com/apis/maps" class="external free" rel="nofollow">http://code.google.com/apis/maps</a>, you will need to provide the URL to your Zoph installation, mapping will generate an error when the URL is wrong.</td>
 </tr>
 <tr>
-<td colspan="2"><b>Default:</b> <tt>'Get yours at <a href="http://code.google.com/apis/maps'" class="external free" title="http://code.google.com/apis/maps'" rel="nofollow">http://code.google.com/apis/maps'</a></tt></td>
+<td colspan="2"><b>Default:</b> <tt>'Get yours at <a href="http://code.google.com/apis/maps'" class="external free" rel="nofollow">http://code.google.com/apis/maps'</a></tt></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> An API key provided by Google. It will look something like this the one in the example, witch is an invalid key, don't bother trying to use it.</td>
+<td colspan="2"><b>Options:</b> An API key provided by Google. It will look something like this the one in the example, which is an invalid key, don't bother trying to use it.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('GOOGLE_KEY', 'DDQIBBBBhW0vWZf8f0AAPt_86WXJrGGG9jpr3jOoJTHbWArKj23UyhEyLxRRtnOiOR-RSvuLRF1bguT8Nkh2jQ');</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<p><a name="Timezone" id="Timezone"></a></p>
-<h2> <span class="mw-headline">Timezone</span></h2>
+<h2> <span class="mw-headline" id="Timezone">Timezone</span></h2>
 <p>The following features are only available if your are running PHP 5.1.0 or later and are automatically disabled if you are not.</p>
-<p><a name="CAMERA_TZ" id="CAMERA_TZ"></a></p>
-<h3> <span class="mw-headline">CAMERA_TZ</span></h3>
+<h3> <span class="mw-headline" id="CAMERA_TZ">CAMERA_TZ</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">CAMERA_TZ</th>
@@ -1277,15 +1401,14 @@
 <td colspan="2"><b>Default:</b></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> Any timezone from this list <a href="http://www.php.net/manual/en/timezones.php" class="external free" title="http://www.php.net/manual/en/timezones.php" rel="nofollow">http://www.php.net/manual/en/timezones.php</a></td>
+<td colspan="2"><b>Options:</b> Any timezone from this list <a href="http://www.php.net/manual/en/timezones.php" class="external free" rel="nofollow">http://www.php.net/manual/en/timezones.php</a></td>
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('CAMERA_TZ', 'Europe/Amsterdam');</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<p><a name="DATE_FORMAT" id="DATE_FORMAT"></a></p>
-<h3> <span class="mw-headline">DATE_FORMAT</span></h3>
+<h3> <span class="mw-headline" id="DATE_FORMAT">DATE_FORMAT</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">DATE_FORMAT</th>
@@ -1298,15 +1421,14 @@
 <td colspan="2"><b>Default:</b> <tt>'H:i:s T'</tt></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> See <a href="http://www.php.net/manual/en/function.date.php" class="external free" title="http://www.php.net/manual/en/function.date.php" rel="nofollow">http://www.php.net/manual/en/function.date.php</a> for explanation.</td>
+<td colspan="2"><b>Options:</b> See <a href="http://www.php.net/manual/en/function.date.php" class="external free" rel="nofollow">http://www.php.net/manual/en/function.date.php</a> for explanation.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('TIME_FORMAT', 'H:i:s');</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<p><a name="TIME_FORMAT" id="TIME_FORMAT"></a></p>
-<h3> <span class="mw-headline">TIME_FORMAT</span></h3>
+<h3> <span class="mw-headline" id="TIME_FORMAT">TIME_FORMAT</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">TIME_FORMAT</th>
@@ -1319,22 +1441,21 @@
 <td colspan="2"><b>Default:</b> <tt>'d-m-Y'</tt></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> See <a href="http://www.php.net/manual/en/function.date.php" class="external free" title="http://www.php.net/manual/en/function.date.php" rel="nofollow">http://www.php.net/manual/en/function.date.php</a> for explanation.</td>
+<td colspan="2"><b>Options:</b> See <a href="http://www.php.net/manual/en/function.date.php" class="external free" rel="nofollow">http://www.php.net/manual/en/function.date.php</a> for explanation.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('DATE_FORMAT', 'Y-m-d');</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<p><a name="GUESS_TZ" id="GUESS_TZ"></a></p>
-<h3> <span class="mw-headline">GUESS_TZ</span></h3>
+<h3> <span class="mw-headline" id="GUESS_TZ">GUESS_TZ</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
 <th style="width: 150px;">GUESS_TZ</th>
 <td style="width: 450px;"><b>Versions:</b> 0.7.3 and later</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> If you have defined the precise location of a place (using the mapping feature), Zoph can 'guess' the timezone based on this location. It uses the <a href="http://www.geonames.org" class="external text" title="http://www.geonames.org" rel="nofollow">Geonames project</a> for this. This will, however, send information to their webserver, do not enable this feature if you're not comfortable with that.</td>
+<td colspan="2"><b>Description:</b> If you have defined the precise location of a place (using the mapping feature), Zoph can 'guess' the timezone based on this location. It uses the <a href="http://www.geonames.org" class="external text" rel="nofollow">Geonames project</a> for this. This will, however, send information to their webserver, do not enable this feature if you're not comfortable with that.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Default:</b> <tt>0</tt></td>
