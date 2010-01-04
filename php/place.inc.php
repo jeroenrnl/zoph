@@ -411,7 +411,7 @@ function get_places_count($user) {
         $places=get_photographed_places($user);
         return count($places);
     } else {
-        return get_count("category");
+        return get_count("place");
     }
 }
 
