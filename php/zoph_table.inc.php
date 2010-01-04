@@ -284,7 +284,7 @@ class zoph_table {
                 $values .= "$name = " . $value . "";
             } else if ($value == "" && in_array($name, $this->not_null)) {
 	    	    die("<p class='error'><b>$name</b> may not be empty</p>");
-	        } else if ($value !== "") {
+	        } else if ($value !== "" && !is_null($value)) {
                 $values .= "$name = '" . escape_string($value) . "'";
             } else {
                 $values .= "$name = null";
