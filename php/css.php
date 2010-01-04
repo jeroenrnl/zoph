@@ -18,7 +18,6 @@
 
 header("Content-Type: text/css");
 if(isset($_GET['logged_on'])) {
-    require_once("log.inc.php");
     require_once("config.inc.php");
     require_once("zoph_table.inc.php");
     require_once("user.inc.php");
@@ -114,7 +113,7 @@ ul.thumbs li {
     position: relative;
     display: block;
     text-align: center;
-    width: <?php echo THUMB_SIZE + 20 ?>px;
+    width: <?php echo THUMB_SIZE + 40 ?>px;
     height:<?php echo THUMB_SIZE + 40 ?>px;
     float:left;
     margin: 5px;
