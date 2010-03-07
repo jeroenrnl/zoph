@@ -126,7 +126,7 @@ class language {
     function translate($string, $error = true) {
         $translation=$this->translations[$string];
         if($translation) {
-            return $translation;
+            return trim($translation);
         } else {
             if($error && !($this->iso==language::$base)) {
                 $tag = "<b>[tr]</b> ";
