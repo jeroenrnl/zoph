@@ -19,7 +19,8 @@
 require_once("include.inc.php");
 
 header("Content-Type: text/xml");
-
+session_write_close();
+flush();
 $object=getvar("object");
 $search=getvar("search");
 
