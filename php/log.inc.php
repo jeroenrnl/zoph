@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Class that takes care of logging
  *
  * This file is part of Zoph.
@@ -17,15 +17,17 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
 /**
  * This class takes care of logging and debug
- * @author Jeroen Roos
- * @package Zoph
  */
 class log {
     
+    static $stopOnFatal=true;
+
     static $sev = array(
         60 => "Debug",
         50 => "Debug",
@@ -91,7 +93,7 @@ class log {
             }
         }
 
-        if($severity == log::FATAL) {
+        if($severity == log::FATAL && self::$stopOnFatal) {
             die("fatal error");
         }
     }
