@@ -21,7 +21,7 @@
 
 require_once("include.inc.php");
 
-if ((!SERVER_WEB_IMPORT) || (!$user->is_admin() && !$user->get("import"))) {
+if ((!IMPORT) || (!$user->is_admin() && !$user->get("import"))) {
         redirect(add_sid("zoph.php"));
 }
 
@@ -70,7 +70,7 @@ if(empty($_action)) {
     echo $tpl;
     include("footer.inc.php");
 } else if ($_action=="browse") {
-    if(CLIENT_WEB_IMPORT) {
+    if(UPLOAD) {
         $upload_num = $upload_id . "_" . $num;
         $tpl=new template("html", array("html_class" => "iframe_upload"));
         $tpl->js=array("js/import.js", "js/xml.js");
@@ -86,14 +86,14 @@ if(empty($_action)) {
             "width" => 300));
         echo $tpl;
     } else {
-        echo translate("Uploading photos has been disabled in config.inc.php. Set CLIENT_WEB_IMPORT to 1 to enable uploading images via the browser.");
+        echo translate("Uploading photos has been disabled in config.inc.php. Set UPLOAD to 1 to enable uploading images via the browser.");
     }
     ?>
     </body>
     </html>
 <?php
 } else if ($_action=="upload") {
-    if(CLIENT_WEB_IMPORT) {
+    if(UPLOAD) {
         if($_FILES["file"]) {
             $file=$_FILES["file"];
         }

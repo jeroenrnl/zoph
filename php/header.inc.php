@@ -95,7 +95,7 @@
 
     $tabs[translate("search",0)] = "search.php";
 
-    if ((CLIENT_WEB_IMPORT || SERVER_WEB_IMPORT) &&
+    if (IMPORT &&
         ($user->is_admin() || $user->get("import"))) {
 
         $tabs[translate("import", 0)] = "import.php";
