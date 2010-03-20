@@ -903,12 +903,73 @@ function create_bar_graph($legend, $value_array, $scale) {
     return $html;
 }
 
+function create_progress_bar($id = "progressbar", $w = 300, $complete = 0) {
+    $html = "<div id=\"" . $id . "_outer\" class=\"progressbar\" 
+                style=\"width: " . $w . "px\">\n";
+    $html.= "   <div id=\"" . $id . "_inner\" class=\"progressfill\"";
+
+    $html.= "style=\"width: " . $complete . "%\">\n";
+    $html.= $complete . "%";
+    $html.="    </div>\n";
+    $html.="</div>\n";
+    return $html;
+}
+
 function redirect($url = "zoph.php", $msg = "Access denied") {
     if(!((LOG_SUBJECT & log::REDIRECT) && (LOG_SEVERITY >= log::DEBUG))) {
         header("Location: " . $url);
     }
         echo "<a href='" . $url . "'>" . $msg . "</a>";
     die();
+}
+
+function get_mime($file) {
+    $fileinfo=new finfo(FILEINFO_MIME, MAGIC_FILE);
+    $mime=explode(";", $fileinfo->file($file));
+    log::msg("<b>" . $file . "</b>: " . $mime[0], log::DEBUG, log::IMPORT);
+    return $mime[0];
+}
+ 
+function get_filetype($mime) {
+    switch ($mime) {
+    case "image/jpeg":
+    case "image/png":
+    case "image/gif":
+        return "image";
+        break;
+    case "application/x-bzip2":
+    case "application/x-gzip":
+    case "application/x-tar":
+    case "application/zip":
+        return "archive";
+        break;
+    case "application/xml";
+        // return "xml";
+        // not implemented yet
+    default:
+        return false;
+    }
+}
+
+function create_dir($directory) {
+    if (file_exists($directory) == false) {
+        if (mkdir($directory, DIR_MODE)) {
+            echo translate("Created directory") . ": $directory<br>\n";
+            return true;
+        }
+        else {
+            echo translate("Could not create directory") . ": $directory<br>\n";
+            return false;
+        }
+    }
+    return 0;
+}
+
+function create_dir_recursive($directory){
+  foreach(split('/',$directory) as $subdir) {
+    $result=create_dir($nextdir="$nextdir$subdir/");
+  }
+  return $result;
 }
 
 ?>

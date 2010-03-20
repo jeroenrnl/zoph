@@ -261,7 +261,7 @@ class zoph_table {
             log::msg("No constraint found", log::NOTIFY, log::GENERAL);
             return;
         }
-
+        reset($this->fields);
         while (list($name, $value) = each($this->fields)) {
             if ($this->is_key($name, $keys)) { continue; }
 
@@ -565,7 +565,8 @@ function create_link_list($records) {
 
     return $links;
 }
-
+// This function doesn't really belong here.
+// should be replaced by a proper OO construction
 function get_xml($class, $search,$user=null) {
     $search=strtolower($search);
     if($class=="location" || $class=="home" || $class=="work") {
@@ -587,8 +588,12 @@ function get_xml($class, $search,$user=null) {
     if($class=="timezone") {
         $tz=new TimeZone("UTC");
         return $tz->get_xml($search);
-    }
-    if (class_exists($class)) {
+    } else if($class=="import_progress") {
+        $import=new Import($search);
+        return $import->get_xml();
+    } else if($class=="import_thumbs") {
+        return Import::getThumbsXML();
+    } else if (class_exists($class)) {
         $obj=new $class;
         $rootname=$obj->xml_rootname();
         $nodename=$obj->xml_nodename();

@@ -265,6 +265,63 @@ class photo extends zoph_table {
 
         return get_records_from_query("person", $sql);
     }
+    
+    function move($path) {
+        echo "$path<br>";
+        $oldpath=$this->get("path");
+        $filename=$this->get("name");
+
+        $conv=get_converted_image_name($filename);
+        $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
+        $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
+
+        if(USE_DATED_DIRS) {
+            // This is not really validating the date, just making sure
+            // no-one is playing tricks, such as setting the date to /etc/passwd or
+            // something.
+            $date=$this->get("date");
+            if(!preg_match("/^[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}$/", $date)) {
+                log::msg("Illegal date, using today's", log::ERROR, log::IMPORT);
+                $date=date("Y-m-d", now());
+            }
+
+            if (HIER_DATED_DIRS) {
+                $path .= "/" . cleanup_path(str_replace("-", "/", $date));
+            } else {
+                $path .= "/" . cleanup_path(str_replace("-", ".", $date));
+            }
+        }
+
+        
+        $old="/" . cleanup_path(IMAGE_DIR . "/" . $oldpath);
+        $new="/" . cleanup_path(IMAGE_DIR . "/" . $path);
+        
+        create_dir_recursive($new . "/" . MID_PREFIX);
+        create_dir_recursive($new . "/" . THUMB_PREFIX);
+
+        foreach(array($filename, $midname, $thumbname) as $file) {
+            if(!is_writable($new)) {
+                log::msg("Directory not writable: " . $new, log::FATAL, log::IMPORT);
+            }
+            if(!file_exists($old . "/" . $file)) {
+                log::msg("File not found: " . $file, log::FATAL, log::IMPORT);
+            }
+            if(file_exists($new . "/" . $file)) {
+                log::msg("File already exists: " . $file, log::FATAL, log::IMPORT);
+            }
+            if(!is_readable($old . "/" . $file)) {
+                log::msg("Cannot read file: " . $file, log::FATAL, log::IMPORT);
+            }
+        }
+        // We run this loop twice, because we only want to move the file if *all* 
+        // files have been checked.
+        foreach(array($filename, $midname, $thumbname) as $file) {
+            rename($old . "/" . $file, $new . "/" . $file); 
+        }
+        // Update the db to the new path;
+        $this->set("path", $path);
+        $this->update();
+    }
 
     function get_file_path() {
         return IMAGE_DIR . $this->get("path") . "/" . $this->get("name");
@@ -527,7 +584,6 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
             $img_src = $this->get_image_resource();
             $destroy = true;
         }
-
         $image_info = getimagesize($this->get_file_path());
         $width = $image_info[0];
         $height = $image_info[1];
@@ -542,9 +598,10 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
         }
 
         $img_dst = imagecreatetruecolor($new_width, $new_height);
+        flush();
         imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0,
             $new_width, $new_height, $width, $height);
-
+        flush();
         $new_image = IMAGE_DIR . $this->get("path") . '/' . $prefix . '/' .
             $prefix . '_' .  get_converted_image_name($this->get("name"));
 

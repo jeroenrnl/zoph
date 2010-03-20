@@ -20,10 +20,24 @@
 
     $photo_id = getvar("photo_id");
     $type = getvar("type");
+    
+    if($type=="import_thumb" && ($user->is_admin() || $user->get("import"))) {
+    
+        $md5 = getvar("file");
+        $file = file::getFromMD5(IMAGE_DIR . "/" . IMPORT_DIR, $md5);
+        
+        $photo = new photo();
+        $photo->set("name", basename($file));
+        $photo->set("path", IMPORT_DIR);
+        $type="thumb";
+        $found=true;
 
-    $photo = new photo($photo_id);
-    $found = $photo->lookup($user);
-
+    } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {
+        $photo = new photo($photo_id);
+        $found = $photo->lookup($user);
+    } else {
+        die("Illegal type");
+    }
     if ($found) {
 
         $annotated = getvar('annotated');
@@ -78,7 +92,6 @@
                     header("Content-Length: " . $filesize);
                     header("Content-Disposition: inline; filename=" . $name);
                     header("Last-Modified: " . $gmt_mtime);
-
                     header("Content-type: $image_type");
                     readfile($image_path);
                     exit;

@@ -114,7 +114,7 @@ ul.thumbs li {
     position: relative;
     display: block;
     text-align: center;
-    width: <?php echo THUMB_SIZE + 20 ?>px;
+    width: <?php echo THUMB_SIZE + 40 ?>px;
     height:<?php echo THUMB_SIZE + 40 ?>px;
     float:left;
     margin: 5px;
@@ -383,6 +383,7 @@ div.breadcrumb li.firstdots:before {
     padding: 10px;
     border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
     clear: both;
+    overflow: hidden;
     }
 
 div.warning {
@@ -568,13 +569,51 @@ span.photocount {
     font-size: x-small;
     }
 
-.actionlink:before, div.letter:before {
+span.actionlink:before, div.letter:before {
     content: "[ ";
     }
 
-.actionlink:after, div.letter:after {
+span.actionlink:after, div.letter:after {
     content: " ]";
     }
+
+/* New, semantic way to do actionlinks */
+
+ul.actionlink {
+    display: block;
+    margin: 1px;
+    text-align: right;
+    vertical-align: top;
+    font-size: x-small;
+    float: right;
+    font-weight: normal;
+    clear: right;
+    }
+
+ul.actionlink li:before {
+    content: ' | ';
+    }
+
+ul.actionlink li:first-child:before {
+    content: ' [ '; 
+    } 
+
+ul.actionlink li:last-child:after {
+    content: ' ] ';
+    }
+
+ul.actionlink li { 
+    display: inline; 
+    }
+
+ul.actionlink a {
+    text-decoration: none;
+    }
+
+ul.actionlink a:hover {
+    text-decoration: underline;
+    }
+
 
 /* Text next to 'remove' tickbox */
 .remove {
@@ -749,6 +788,19 @@ img.<?php echo MID_PREFIX ?> {
     display: block;
     }
 
+img.busy,
+img.waiting {
+    margin-left: auto;
+    margin-right: auto;
+    clear: both;
+    text-align: center;
+    display: block;
+    }
+
+span.md5 {
+    display: none;
+    }
+
 div#rotate {
     margin-left: auto;
     margin-right: auto;
@@ -798,6 +850,7 @@ div.thumbnail   {
     text-align: center;
     vertical-align: top;
     width: <?php echo THUMB_SIZE ?>px;
+    height: <?php echo THUMB_SIZE ?>px;
     float:left;
     margin: 2px;
     padding: 5px;
@@ -1158,8 +1211,170 @@ div.page div.background {
     width: 100%;
     }
 
-/* Styles for calendar */
+/* Styles for the import page */
+html.iframe_upload {
+    width: 100%;
+    clear: both;
+    border: none;
+    }
 
+html.iframe_upload body {
+    background: transparent;
+    width: 100%;
+    clear: both;
+    }
+
+html.iframe_upload input {
+    margin: 5px;
+}
+
+
+div.import_thumbs,
+div.import_uploads, 
+div.import,
+div.import_details {
+    float:      left;
+    -moz-border-radius: 5px;
+    background: <?php echo $TITLE_BG_COLOR ?>;
+    border: none;
+    margin: 10px;
+    width: 95%;
+    }
+
+div.import_details,
+div.import_thumbs {
+    display: none;
+    }
+
+div.import_thumbs div.thumbnail {
+    height: <?php echo THUMB_SIZE + 30 ?>px;
+    }
+
+div.import_thumbs img {
+    clear: both;
+    display: block;
+    margin: auto;
+    }
+
+div.import textarea {
+    width: 60%;
+    }
+
+iframe.upload {
+    border: none;
+    width: 100%;
+    margin-bottom: 3px;
+    height: 100px;
+    }
+
+div.uploadprogress {
+    float: right;
+    width: 350px;
+    }
+
+div.import_details,
+div.import {
+    min-height: 150px;
+}
+
+div.import_details div {
+    padding: 1em;
+    }
+
+div.import_thumbs h2,
+div.import_uploads h2,
+div.import h2,
+div.import_details h2 {
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    background: <?php echo $BREADCRUMB_BG_COLOR ?>;
+    color: <?php echo $TITLE_FONT_COLOR ?>;
+    border-bottom: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
+    text-align: center;
+    width: 100%;
+    clear: left;
+    font-size: large;
+    font-weight: bold;
+    display: block;
+    padding: 3px 0;
+    margin: 0;
+}
+
+    
+.upload {
+    width:      100%;
+    height:     80px;
+    border: none;
+    }
+
+.progressbar {
+    margin: auto;
+    padding: 0;
+    display: none;
+    height: 20px;
+    background: white;
+    border: 1px solid black;
+    -moz-border-radius: 5px;
+    overflow: hidden;
+    clear: both;
+}
+
+.progressfill {
+    height: 16px; 
+    margin: 2px;
+    padding: 0;
+    max-width: 99%;
+    -moz-border-radius: 4px;
+    text-align: center;
+    background: <?php echo $PAGE_BG_COLOR ?>;
+    color: white;
+    font-weight: bold;
+    overflow: hidden;
+    }
+
+span.filename {
+    display: block;
+    clear: left;
+    font-size: 70%;
+    }
+
+.fn_upload {
+    font-size: 70%;
+    margin: 2px;
+    display: block;
+    float: left;
+    font-weight: bold;
+    clear: both;
+    font-size: 80%;
+    margin-bottom: 0;
+}
+
+.sz_upload {
+    margin: 2px;
+    clear: right;
+    display: block;
+    font-size: 60%;
+    float: right;
+}
+
+form.import {
+    padding: 1.5em 0em 2em 0em;
+    }
+
+form.import fieldset#import_checkboxes {
+    display: none;
+    }
+
+fieldset.multiple {
+    background: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: 210px;
+}
+
+
+/* Styles for calendar */
 .calendar { 
     font-size: small; 
     text-align: center;

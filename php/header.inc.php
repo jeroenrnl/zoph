@@ -17,17 +17,23 @@
 
     header("Content-Type: text/html; charset=utf-8")
 ?>
-<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
     <head>
-        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$charset\">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link type="text/css" rel="stylesheet" href="<?php echo CSS_SHEET ?>">
 <?php
     if(JAVASCRIPT) {
 ?>
         <script type="text/javascript" src="js/util.js"></script>
+        <script type="text/javascript" src="js/xml.js"></script>
         <script type="text/javascript" src="js/thumbview.js"></script>
 <?php
+        if(basename($_SERVER["SCRIPT_NAME"])=="import.php") {
+?>
+        <script type="text/javascript" src="js/import.js"></script>
+<?php
+        }
         if(AUTOCOMPLETE) {
 ?>
         <script type="text/javascript" src="js/autocomplete.js"></script>

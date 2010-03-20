@@ -20,6 +20,7 @@
     require_once("log.inc.php");
 
     require_once("config.inc.php");
+    require_once("requirements.inc.php");
     require_once("util.inc.php");
     require_once("validator.inc.php");
 
@@ -49,6 +50,10 @@
 
     require_once("page.inc.php");
     require_once("pageset.inc.php");
+
+    require_once("file.inc.php");
+    require_once("import.inc.php");
+    require_once("template.inc.php");
 
     if(minimum_version("5.2.0")) {
         require_once("timezone.inc.php");

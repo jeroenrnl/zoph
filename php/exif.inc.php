@@ -33,6 +33,11 @@ function process_exif($image) {
 
     if ($exif === false) {
         echo translate("No EXIF header found.") . "<br>\n";
+
+        // Set date and time to file date/time
+        list($exifdata["date"],$exifdata["time"])=
+            explode(" ",date("Y-m-d H:i:s", filemtime($image)));
+
         return $exifdata;
     }
 
