@@ -311,6 +311,9 @@ class photo extends zoph_table {
             if(!is_readable($old . "/" . $file)) {
                 log::msg("Cannot read file: " . $file, log::FATAL, log::IMPORT);
             }
+            if(!is_writable($old . "/" . $file)) {
+                log::msg("File is not writable: " .$file, log::FATAL, log::IMPORT);
+            }
         }
         // We run this loop twice, because we only want to move the file if *all* 
         // files have been checked.
