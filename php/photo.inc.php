@@ -267,7 +267,6 @@ class photo extends zoph_table {
     }
     
     function move($path) {
-        echo "$path<br>";
         $oldpath=$this->get("path");
         $filename=$this->get("name");
 
@@ -320,7 +319,6 @@ class photo extends zoph_table {
         }
         // Update the db to the new path;
         $this->set("path", $path);
-        $this->update();
     }
 
     function get_file_path() {

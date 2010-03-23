@@ -285,26 +285,6 @@ class Import {
         log::msg($log, log::WARNING, log::IMPORT);
     }
 
-    public function exif() {
-        return "exif..<br>";
-    }
-
-    public function move() {
-        return "move..<br>";
-
-    }
-
-    public function create_photo() {
-        return "photo..<br>";
-
-    }
-
-    public function photo_params() {
-        return "params..<br>";
-
-    }
-    
-    
     /**
      * Get XML indicating progress of a certain upload
      * This requires the APC PHP extension.
@@ -480,13 +460,17 @@ class Import {
                 // want to move pics from other places...
                 $photo->set("path", IMPORT_DIR);
 
-                $image_info = getimagesize($file);
-                $width = $image_info[0];
-                $height = $image_info[1];
+                $image_info= getimagesize($file);
+                $width= $image_info[0];
+                $height= $image_info[1];
+                $size=filesize($file);
+                // Move the photo into place
+                $photo->move($path);
+                // Will die() if failed.
 
                 if ($photo->insert()) {
 
-                    $photo->set("size", filesize($file));
+                    $photo->set("size", $size);
                     $photo->set("width", $width);
                     $photo->set("height", $height);
 
@@ -507,8 +491,6 @@ class Import {
 
                     $loaded++;
 
-                    // Finally, move the photo into place.
-                    $photo->move($path);
                 } else {
                     echo translate("Insert failed.") . "<br>\n";
                 }
