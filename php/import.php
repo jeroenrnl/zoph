@@ -27,6 +27,8 @@ if ((!IMPORT) || (!$user->is_admin() && !$user->get("import"))) {
 
 $_action=getvar("_action");
 
+$title = translate("Import");
+
 if (empty($_action)) {
     require_once("header.inc.php");
 }
@@ -81,6 +83,8 @@ if(empty($_action)) {
         $tpl->param=array($num, $upload_num);
         echo $tpl;
         $tpl=new template("uploadprogressbar", array(
+            "name" => "",
+            "size" => 0,
             "upload_num" => $upload_num,
             "complete"  => 0,
             "width" => 300));
@@ -103,7 +107,7 @@ if(empty($_action)) {
         $tpl->js=array("js/import.js", "js/xml.js");
         $tpl->function=array("Import", "handleUpload");
         $tpl->param=array($file, $upload_id);
-        $tpl->style=".progressbar { display: block; }";
+        $tpl->style="div.uploadprogress { display: block; }";
         echo $tpl;
     }
 } else if ($_action=="process") {
