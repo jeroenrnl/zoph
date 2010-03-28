@@ -30,7 +30,6 @@ function process_exif($image) {
     $exifdata = array();
 
     $exif = read_exif_data($image);
-
     if ($exif === false) {
         echo translate("No EXIF header found.") . "<br>\n";
 
@@ -208,6 +207,56 @@ function process_exif($image) {
     if ($exif["Comment"]) {
         $exifdata["comment"] = $exif["Comment"];
     }
+
+    if (isset($exif["GPSLatitudeRef"]) && isset($exif["GPSLatitude"]) && 
+        isset($exif["GPSLongitudeRef"]) && isset($exif["GPSLongitude"])) {
+        $latarray=$exif["GPSLatitude"];
+
+        // This is an array that looks like this
+        // array(3) {
+        //            [0]=>string(5) "150/1"  (degrees)
+        //            [1]=>string(4) "47/1"   (minutes)
+        //            [2]=>string(8) "1239/100" (seconds)
+
+        $latdegarray=explode("/", $latarray[0]);
+        $latminarray=explode("/", $latarray[1]);
+        $latsecarray=explode("/", $latarray[2]);
+
+        $latdeg=$latdegarray[0] / $latdegarray[1];
+        $latmin=$latminarray[0] / $latminarray[1];
+        $latsec=$latsecarray[0] / $latsecarray[1];
+
+        $lat=$latdeg + ($latmin / 60) + ($latsec / 3600);
+
+        if($exif["GPSLatitudeRef"] == "S") {
+            $lat = $lat * -1;
+        }
+        $exifdata["lat"]=$lat;
+        
+        $lonarray=$exif["GPSLongitude"];
+
+        $londegarray=explode("/", $lonarray[0]);
+        $lonminarray=explode("/", $lonarray[1]);
+        $lonsecarray=explode("/", $lonarray[2]);
+
+        $londeg=$londegarray[0] / $londegarray[1];
+        $lonmin=$lonminarray[0] / $lonminarray[1];
+        $lonsec=$lonsecarray[0] / $lonsecarray[1];
+
+        $lon=$londeg + ($lonmin / 60) + ($lonsec / 3600);
+
+        if($exif["GPSLongitudeRef"] == "W") {
+            $lon = $lon * -1;
+        }
+        $exifdata["lon"]=$lon;
+
+        if(isset($exif["GPSAltitude"])) {
+            $altarray=explode("/", $exif["GPSAltitude"]);
+            $alt=$altarray[0] / $altarray[1];
+            // No alt in db yet
+        //    $exifdata["alt"]=$alt;
+        }
+    } 
 
     return $exifdata;
 }
