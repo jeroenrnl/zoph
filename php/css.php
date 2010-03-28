@@ -1380,7 +1380,7 @@ fieldset.multiple {
 }
 
 fieldset.multiple img.actionlink:last-child {
-    // hide the remove icon on last dropdown
+    /* hide the remove icon on last dropdown */
     display: none;
 }
     
