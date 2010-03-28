@@ -91,33 +91,33 @@ class photo extends zoph_table {
     }
 
     function update_relations($vars, $suffix = '', $user=null) {
-        if ($vars["_album$suffix"]) {
+        if (!empty($vars["_album$suffix"])) {
             $this->add_to_album($vars["_album$suffix"], $user);
         }
 
-        if ($vars["_remove_album$suffix"]) {
+        if (!empty($vars["_remove_album$suffix"])) {
             $this->remove_from_album($vars["_remove_album$suffix"]);
         }
 
-        if ($vars["_category$suffix"]) {
+        if (!empty($vars["_category$suffix"])) {
             $this->add_to_category($vars["_category$suffix"]);
         }
 
-        if ($vars["_remove_category$suffix"]) {
+        if (!empty($vars["_remove_category$suffix"])) {
             $this->remove_from_category($vars["_remove_category$suffix"]);
         }
 
-        if ($vars["_person$suffix"]) {
+        if (!empty($vars["_person$suffix"])) {
             $this->add_to_person($vars["_person$suffix"], $vars["_position$suffix"]);
         }
-        for ($i = 0; $i < MAX_PEOPLE_SLOTS; $i++) {
-           if ($vars["_person_" . $i . $suffix]) {
+        for ($i = 0; $i < (int) MAX_PEOPLE_SLOTS; $i++) {
+           if (!empty($vars["_person_" . $i . $suffix])) {
                $this->add_to_person($vars["_person_" . $i . $suffix], 
                   $vars["_position_" . $i . $suffix]);
            }
         }
 	
-        if ($vars["_remove_person$suffix"]) {
+        if (!empty($vars["_remove_person$suffix"])) {
             $this->remove_from_person($vars["_remove_person$suffix"]);
         }
     }
