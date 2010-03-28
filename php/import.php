@@ -61,7 +61,8 @@ if(empty($_action)) {
         "translate['delete']='" .trim(translate("delete", false)) . "';\n" .
         "upload_id='" . $upload_id ."';\n" .
         "num=" . $num . ";\n" .
-        "parallel=" . (int) IMPORT_PARALLEL  . ";\n";
+        "parallel=" . (int) IMPORT_PARALLEL  . ";\n" .
+        "ICONSET='" . ICONSET ."'\n";
 
     $tpl=new template("import", array(
         "upload_id" => $upload_id,

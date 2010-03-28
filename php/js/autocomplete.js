@@ -72,6 +72,25 @@ var autocomplete=function() {
         dropdown.style.display="none";
         
         el.parentNode.insertBefore(dropdown,el.nextSibling);
+
+        if(el.parentNode.className=="multiple" && el.id.indexOf("[")) {
+            // This is a field that can appear multiple times, so we add a
+            // 'remove' link
+            remove=document.createElement("img");
+            remove.setAttribute("onClick", "autocomplete.remove(this); return false");
+            remove.setAttribute("src", "images/icons/" + ICONSET + "/remove.png");
+            remove.className="actionlink";
+
+            el.parentNode.insertBefore(remove,el.nextSibling.nextSibling);
+            
+        }
+    }
+
+    function remove(obj) {
+        obj.parentNode.removeChild(obj.previousSibling); // remove dropdown
+        obj.parentNode.removeChild(obj.previousSibling); // remove input
+        obj.parentNode.removeChild(obj.previousSibling); // remove hidden input
+        obj.parentNode.removeChild(obj);             // remove icon
     }
 
     function httpResponse(object, xml) {
@@ -280,7 +299,7 @@ var autocomplete=function() {
     function createNewInput(after) {
         input=after.cloneNode(true);
         hidden=after.previousSibling.cloneNode(true);
-
+        
         input.id=increaseValueInBrackets(after.id);
         if(!document.getElementById(input.id)) {
             input.name=increaseValueInBrackets(after.name);
@@ -290,7 +309,7 @@ var autocomplete=function() {
             
             input.value="";
             hidden.value="";
-            after.parentNode.insertBefore(input,after.nextSibling.nextSibling);
+            after.parentNode.insertBefore(input,after.nextSibling.nextSibling.nextSibling);
             after.parentNode.insertBefore(hidden,input);
             inputToAutocomplete(input);
         }
@@ -419,7 +438,8 @@ var autocomplete=function() {
         setpos:setpos,
         init:init,
         hidedropdown:hidedropdown,
-        httpResponse:httpResponse
+        httpResponse:httpResponse,
+        remove:remove
     };
 }();
 

@@ -614,6 +614,12 @@ ul.actionlink a:hover {
     text-decoration: underline;
     }
 
+img.actionlink {
+    float: right;
+    position: relative;
+    top: 3px;
+    border: none;
+    }
 
 /* Text next to 'remove' tickbox */
 .remove {
@@ -1370,9 +1376,14 @@ fieldset.multiple {
     margin: 0;
     padding: 0;
     border: none;
-    width: 210px;
+    width: 220px;
 }
 
+fieldset.multiple img.actionlink:last-child {
+    // hide the remove icon on last dropdown
+    display: none;
+}
+    
 
 /* Styles for calendar */
 .calendar { 

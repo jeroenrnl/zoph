@@ -62,11 +62,11 @@ if(!ZOPH) { die("Illegal call"); }
                 <br>
                 <label for="album"><?php echo translate("albums") ?></label>
                 <fieldset class="multiple">
-                    <?php echo create_album_pulldown("_album_id[0]", "", $tpl_user) ?><br>
+                    <?php echo create_album_pulldown("_album_id[0]", "", $tpl_user) ?>
                 </fieldset>
                 <label for="category"><?php echo translate("categories") ?></label>
                 <fieldset class="multiple">
-                    <?php echo create_cat_pulldown("_category_id[0]", "", $tpl_user) ?><br>
+                    <?php echo create_cat_pulldown("_category_id[0]", "", $tpl_user) ?>
                 </fieldset>
                 <label for="title"><?php echo translate("title") ?></label>
                 <?php echo create_text_input("title", "", 40, 64) ?>
@@ -82,9 +82,13 @@ if(!ZOPH) { die("Illegal call"); }
                 <label for="rating"><?php echo translate("rating") ?></label>
                 <?php echo create_rating_pulldown("") ?>
                 <span class="inputhint">1 - 10</span><br>
+                <label for="people"><?php echo translate("people") ?></label>
+                <fieldset class="multiple">
+                    <?php echo create_person_pulldown("_person_id[0]", "", $tpl_user) ?>
+                </fieldset>
                 <label for="photographer"><?php echo translate("photographer") ?></label>
                 <?php echo create_photographer_pulldown("photographer_id", "", $tpl_user) ?><br>
-    <label for="level"><?php echo translate("level") ?></label>
+                <label for="level"><?php echo translate("level") ?></label>
                 <?php echo create_text_input("level", "", 4, 2) ?>
                 <span class="inputhint">1 - 10</span><br>
                 <label for="description"><?php echo translate("description") ?></label>

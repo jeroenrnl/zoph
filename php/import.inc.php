@@ -451,6 +451,9 @@ class Import {
             if(isset($vars["_category_id"])) {
                 $categories=$vars["_category_id"];
             }
+            if(isset($vars["_person_id"])) {
+                $people=$vars["_person_id"];
+            }
             if(isset($files)) {
                 foreach($files as $file) {
                     $photo=new photo();
@@ -497,6 +500,14 @@ class Import {
                         if(isset($categories)) {
                             foreach($categories as $cat) {
                                 $photo->add_to_category($cat);
+                            }
+                        }   
+
+                        if(isset($people)) {
+                            $pos=1;
+                            foreach($people as $person) {
+                                $photo->add_to_person($person, $pos);
+                                $pos++;
                             }
                         }   
 
