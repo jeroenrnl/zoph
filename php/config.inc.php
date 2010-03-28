@@ -236,7 +236,8 @@
     define('DEFAULT_SHOW_ALL', 1);
 
     // these two are for the importer
-    define('IMPORT_UMASK', 022);
+    // Make sure there are no quotes around these numbers!
+    define('FILE_MODE', 0644);
     define('DIR_MODE', 0755);
 
     // LOG_ALWAYS and LOG_SEVERITY can have the following values:

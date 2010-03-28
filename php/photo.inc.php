@@ -319,6 +319,13 @@ class photo extends zoph_table {
         // files have been checked.
         foreach(array($filename, $midname, $thumbname) as $file) {
             rename($old . "/" . $file, $new . "/" . $file); 
+            if(!defined("FILE_MODE") || !is_numeric(FILE_MODE)) {
+                define('FILE_MODE', 0644);
+                log::msg("FILE_MODE is not set correctly in config.inc.php, using default (0644)", LOG::WARN, LOG::GENERAL);
+            }
+            if(!chmod($new . "/" . $file, FILE_MODE)) {
+                log::msg("Could not change permissions for <b>" . $file . "</b>", LOG::ERROR, LOG::IMPORT);
+            }
         }
         // Update the db to the new path;
         $this->set("path", $path);
