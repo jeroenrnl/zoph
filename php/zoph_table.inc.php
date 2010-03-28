@@ -168,8 +168,8 @@ class zoph_table {
             log::msg("Missing data", log::ERROR, log::GENERAL);
             return;
         }
-        $names="";
-        $values="";
+        $names=null;
+        $values=null;
         while (list($name, $value) = each($this->fields)) {
             if ($this->primary_keys && !$keep_key && $this->is_key($name)) {
                 continue;
@@ -262,8 +262,8 @@ class zoph_table {
             return;
         }
         reset($this->fields);
-        $values="";
-        $names="";
+        $values=null;
+        $names=null;
         while (list($name, $value) = each($this->fields)) {
             if ($this->is_key($name, $keys)) { continue; }
 
@@ -302,7 +302,7 @@ class zoph_table {
      * Creates a constraint clause based on the given keys
      */
     function create_constraints($keys) {
-        $constraints="";
+        $constraints=null;
         foreach ($keys as $key) {
             $value = $this->fields[$key];
             if (!$value) { continue; }
