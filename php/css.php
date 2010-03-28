@@ -1268,6 +1268,7 @@ iframe.upload {
     }
 
 div.uploadprogress {
+    display: none;
     float: right;
     width: 350px;
     }
@@ -1310,7 +1311,6 @@ div.import_details h2 {
 .progressbar {
     margin: auto;
     padding: 0;
-    display: none;
     height: 20px;
     background: white;
     border: 1px solid black;

@@ -105,7 +105,7 @@
     }
 
     function get_db_server_info() {
-        return get_mysql_server_info();
+        return mysql_get_server_info();
     }
 
     function db_server() {

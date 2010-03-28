@@ -966,10 +966,12 @@ function create_dir($directory) {
 }
 
 function create_dir_recursive($directory){
-  foreach(split('/',$directory) as $subdir) {
-    $result=create_dir($nextdir="$nextdir$subdir/");
-  }
-  return $result;
+    $nextdir="";
+    foreach(split('/',$directory) as $subdir) {
+        $nextdir=$nextdir . $subdir . "/";
+        $result=create_dir($nextdir);
+    }
+    return $result;
 }
 
 ?>

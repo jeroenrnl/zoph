@@ -450,6 +450,8 @@ function create_person_pulldown($name, $value=null, $user) {
 }
 
 function create_photographer_pulldown($name, $value=null, $user) {
+    $text="";
+
     $id=ereg_replace("^_+", "", $name);
     if($value) {
         $person=new person($value);

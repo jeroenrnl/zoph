@@ -423,6 +423,8 @@ function get_popular_albums($user) {
 }
 
 function create_album_pulldown($name, $value=null, $user=null) {
+    $text="";
+
     $id=ereg_replace("^_+", "", $name);
     if($value) {
         $album=new album($value);

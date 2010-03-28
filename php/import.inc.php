@@ -92,7 +92,10 @@ class Import {
      * @param string identifier of the upload in the browser window
      */
     public static function handleUpload($file, $upload_num) {
-        // first show a 100% progressbar
+        
+        Import::processUpload($file);
+        
+        // show a 100% progressbar
         $tpl=new template("uploadprogressbar", array(
             "name" => $file["name"],
             "size" => get_human($file["size"]),
@@ -100,8 +103,6 @@ class Import {
             "complete" => 100,
             "width" => 300));
         echo $tpl;
-
-        Import::processUpload($file);
 ?>
     <script type="text/javascript">
         // This removes the iframe after 10 seconds.
@@ -396,11 +397,11 @@ class Import {
             $xmlfile->setAttribute("type",$type);
             $xmlmd5=$xml->createElement("md5", $md5);
             $xmlfile->appendChild($xmlmd5);
-            if($icon) {
+            if(!empty($icon)) {
                 $xmlicon=$xml->createElement("icon", $icon);
                 $xmlfile->appendChild($xmlicon);
             }
-            if($status) {
+            if(!empty($status)) {
                 $xmlstatus=$xml->createElement("status", $status);
                 $xmlfile->appendChild($xmlstatus);
             }
@@ -426,75 +427,86 @@ class Import {
     }
 
     public static function importPhotos($vars) {
-        if($vars["_path"]) {
+        $loaded=0;
+        if(isset($vars["_path"])) {
             $path=cleanup_path("/" . $vars["_path"] . "/");
             if(strpos($path, "..")) {
                 log::msg("Illegal characters in path", log::FATAL, log::IMPORT);
                 die();
             }
+        } else {
+            $path="";
         }
-        if($vars["_import_image"]) {
+
+        if(isset($vars["_import_image"])) {
             foreach($vars["_import_image"] as $md5) {
-                $files[]=file::getFromMD5(IMAGE_DIR . "/" . IMPORT_DIR, $md5);
+                $file=file::getFromMD5(IMAGE_DIR . "/" . IMPORT_DIR, $md5);
+                if(!empty($file)) {
+                   $files[]=$file;
+                }
             }
-
-            $albums=$vars["_album_id"];
-            $categories=$vars["_category_id"];
-
-            foreach($files as $file) {
-                $photo=new photo();
-                $exif=process_exif($file);
-                if($exif) {
-                    $photo->set_fields($exif);
-                }
-                if ($vars) {
-                    $photo->set_fields($vars);
-                }
-
-                $photo->set("name", basename($file));
-
-                // We simply set the path to UPLOAD dir
-                // this removes virtually all tricks to try to
-                // move files outside the IMAGE_DIR
-                // but could cause troubles if we would some time
-                // want to move pics from other places...
-                $photo->set("path", IMPORT_DIR);
-
-                $image_info= getimagesize($file);
-                $width= $image_info[0];
-                $height= $image_info[1];
-                $size=filesize($file);
-                // Move the photo into place
-                $photo->move($path);
-                // Will die() if failed.
-
-                if ($photo->insert()) {
-
-                    $photo->set("size", $size);
-                    $photo->set("width", $width);
-                    $photo->set("height", $height);
-
-
-                    $photo->update($vars);
-                    
-                    if($albums) {
-                        foreach($albums as $album) {
-                            $photo->add_to_album($album);
-                        }
+            if(isset($vars["_album_id"])) {
+                $albums=$vars["_album_id"];
+            }
+            if(isset($vars["_category_id"])) {
+                $categories=$vars["_category_id"];
+            }
+            if(isset($files)) {
+                foreach($files as $file) {
+                    $photo=new photo();
+                    $exif=process_exif($file);
+                    if($exif) {
+                        $photo->set_fields($exif);
+                    }
+                    if ($vars) {
+                        $photo->set_fields($vars);
                     }
 
-                    if($categories) {
-                        foreach($categories as $cat) {
-                            $photo->add_to_category($cat);
+                    $photo->set("name", basename($file));
+
+                    // We simply set the path to UPLOAD dir
+                    // this removes virtually all tricks to try to
+                    // move files outside the IMAGE_DIR
+                    // but could cause troubles if we would some time
+                    // want to move pics from other places...
+                    $photo->set("path", IMPORT_DIR);
+
+                    $image_info= getimagesize($file);
+                    $width= $image_info[0];
+                    $height= $image_info[1];
+                    $size=filesize($file);
+                    // Move the photo into place
+                    $photo->move($path);
+                    // Will die() if failed.
+
+                    if ($photo->insert()) {
+
+                        $photo->set("size", $size);
+                        $photo->set("width", $width);
+                        $photo->set("height", $height);
+
+
+                        $photo->update($vars);
+                        
+                        if(isset($albums)) {
+                            foreach($albums as $album) {
+                                $photo->add_to_album($album);
+                            }
                         }
-                    }   
 
-                    $loaded++;
+                        if(isset($categories)) {
+                            foreach($categories as $cat) {
+                                $photo->add_to_category($cat);
+                            }
+                        }   
 
-                } else {
-                    echo translate("Insert failed.") . "<br>\n";
+                        $loaded++;
+
+                    } else {
+                        echo translate("Insert failed.") . "<br>\n";
+                    }
                 }
-            }
+            } 
         } else {
             log::msg("No files specified", log::FATAL, log::IMPORT);
         }

@@ -82,7 +82,7 @@
         if (minimum_version('4.1.0')) {
             $_SESSION['user'] = &$user;
         }
-        if ($redirect) {
+        if (!empty($redirect)) {
             $redirect="/" . urldecode($redirect);
             // The next line makes sure you are not tricked into deleting a
             // photo by a url pointing you to the "confirm" action. Just

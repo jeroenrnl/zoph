@@ -168,17 +168,17 @@ class zoph_table {
             log::msg("Missing data", log::ERROR, log::GENERAL);
             return;
         }
-
+        $names="";
+        $values="";
         while (list($name, $value) = each($this->fields)) {
-
             if ($this->primary_keys && !$keep_key && $this->is_key($name)) {
                 continue;
             }
 
-            if ($names) {
+            if (!empty($names)) {
                 $names .= ", ";
                 $values .= ", ";
-            }
+            } 
 
             $names .= $name;
 
@@ -262,10 +262,12 @@ class zoph_table {
             return;
         }
         reset($this->fields);
+        $values="";
+        $names="";
         while (list($name, $value) = each($this->fields)) {
             if ($this->is_key($name, $keys)) { continue; }
 
-            if ($values) { $values .= ", "; }
+            if (!empty($values)) { $values .= ", "; }
             
             if (substr($name,0,7)=="parent_") {
                 $children=array();
@@ -491,8 +493,7 @@ function get_records_from_query($class, $sql, $min = 0, $num = 0) {
             $obj->set_fields($row);
             $objs[] = $obj;
         }
-    }
-    else {
+    } else {
         // use to grab ids, for example
         while ((!$limit || $num-- > 0) && $row = fetch_row($result)) {
             $objs[] = $row[0];

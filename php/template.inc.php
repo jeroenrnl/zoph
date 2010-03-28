@@ -57,7 +57,9 @@ class template {
         if($this->vars) {
             extract($this->vars,  EXTR_PREFIX_ALL, "tpl");
         }
-        define('ZOPH', true);
+        if(!defined("ZOPH")) {
+            define('ZOPH', true);
+        }
         flush();
         ob_start();
             include($this->template);
@@ -71,6 +73,7 @@ class template {
      * @access private
      */
     private function getHead() {
+        $html="";
         foreach ($this->js as $js_src) {
             $html.="    <script type='text/javascript' src='" . $js_src . "'>" .
                 "</script>\n";

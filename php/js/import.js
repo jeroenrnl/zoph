@@ -20,7 +20,7 @@ var zImport=function() {
 
         updateProgressbar(id + "_" + num);
         
-        div=document.getElementById("pb_" + id + "_" + num + "_outer");
+        div=document.getElementById("prog_" + id + "_" + num);
         div.style.display="block";
 
         num=parseInt(num, 10) + 1;

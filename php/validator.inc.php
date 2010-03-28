@@ -73,7 +73,7 @@ class validator {
                  * running running a newer version than 4.1:
                  */
             
-                if(db_server=="mysql" && db_min_version("4.1")) { 
+                if(db_server()=="mysql" && db_min_version("4.1")) { 
                     $query =
                         "select user_id from " . DB_PREFIX . "users where " .
                         "user_name = '" .  escape_string($this->username) . 

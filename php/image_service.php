@@ -46,6 +46,7 @@
                 $photo->get_annotated_file_name($user);
         }
         else {
+            $watermark_file="";
             $name = $photo->get("name");
             $image_path = IMAGE_DIR . $photo->get("path") . "/";
             if (!$user->is_admin()) {
@@ -82,7 +83,8 @@
 
                 // we assume that the client generates proper RFC 822/1123 dates
                 //   (should work for all modern browsers and proxy caches)
-                if ($HTTP_IF_MODIFIED_SINCE == $gmt_mtime) {
+                if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && 
+                    $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
                       header("HTTP/1.1 304 Not Modified");
                       exit;
                 }

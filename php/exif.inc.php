@@ -28,9 +28,14 @@
 function process_exif($image) {
 
     $exifdata = array();
+    if(get_mime($image) == "image/jpeg") {
+        $exif = read_exif_data($image);
+    } else {
+        $exif = false;
+    }
 
-    $exif = read_exif_data($image);
     if ($exif === false) {
+        echo "<b>" . basename($image) . "</b>" . ": ";
         echo translate("No EXIF header found.") . "<br>\n";
 
         // Set date and time to file date/time
@@ -40,17 +45,17 @@ function process_exif($image) {
         return $exifdata;
     }
 
-    if ($exif["DateTimeOriginal"]) {
+    if (isset($exif["DateTimeOriginal"])) {
         $datetime = $exif["DateTimeOriginal"];
     }
-    else if ($exif["DateTimeDigitized"]) {
+    else if (isset($exif["DateTimeDigitized"])) {
         $datetime = $exif["DateTimeDigitized"];
     }
-    else if ($exif["DateTime"]) {
+    else if (isset($exif["DateTime"])) {
         $datetime = $exif["DateTime"];
     }
 
-    if (!$datetime) {
+    if (!isset($datetime)) {
         $datetime = date ("Y-m-d H:i:s", filemtime($image));
     }
     list($date, $time) = explode(' ', $datetime);
@@ -59,11 +64,11 @@ function process_exif($image) {
     $exifdata["date"] = $date;
     $exifdata["time"] = $time;
 
-    if ($exif["Make"]) {
+    if (isset($exif["Make"])) {
         $exifdata["camera_make"] = ucwords(strtolower($exif["Make"]));
     }
 
-    if ($exif["Model"]) {
+    if (isset($exif["Model"])) {
         $exifdata["camera_model"] = ucwords(strtolower($exif["Model"]));
     }
 
@@ -98,14 +103,14 @@ function process_exif($image) {
         $exifdata["flash_used"] = $fYN;
     }
 
-    if ($exif["FocalLength"]) {
+    if (isset($exif["FocalLength"])) {
         list($a, $b) = explode('/', $exif["FocalLength"]);
         if($b>0) {
             $exifdata["focal_length"] = sprintf("%.1fmm", $a / $b);
         }
     }
 
-    if ($exif["ExposureTime"]) {
+    if (isset($exif["ExposureTime"])) {
         list($a, $b) = explode('/', $exif["ExposureTime"]);
         if($b>0) {
             $val = $a / $b;
@@ -116,7 +121,7 @@ function process_exif($image) {
         }
     }
 
-    if ($exif["ExposureProgram"]) {
+    if (isset($exif["ExposureProgram"])) {
         $ep = $exif["ExposureProgram"];
         switch ($ep) {
         case 2:
@@ -131,30 +136,30 @@ function process_exif($image) {
         }
     }
 
-    if ($exif["FNumber"]) {
+    if (isset($exif["FNumber"])) {
         list($a, $b) = explode('/', $exif["FNumber"]);
         if($b>0) {
             $exifdata["aperture"] = sprintf("f/%.1f", $a / $b);
         } 
     }
-    else if ($exif["ApertureValue"]) {
+    else if (isset($exif["ApertureValue"])) {
         list($a, $b) = explode('/', $exif["ApertureValue"]);
         if($b>0) {
             $exifdata["aperture"] = sprintf("f/%.1f", $a / $b * log(2) * 0.5);
         }
     }
-    else if ($exif["MaxApertureValue"]) {
+    else if (isset($exif["MaxApertureValue"])) {
         list($a, $b) = explode('/', $exif["MaxApertureValue"]);
         if($b>0) {
             $exifdata["aperture"] = sprintf("f/%.1f", $a / $b * log(2) * 0.5);
         }
     }
 
-    if ($exif["FocusDistance"]) {
+    if (isset($exif["FocusDistance"])) {
         $exifdata["focus_dist"] = $exif["FocusDistance"];
     }
 
-    if ($exif["MeteringMode"]) {
+    if (isset($exif["MeteringMode"])) {
         $mm = $exif["MeteringMode"];
         switch ($mm) {
         case 2:
@@ -169,7 +174,7 @@ function process_exif($image) {
         }
     }
 
-    if ($exif["ISOSpeedRatings"]) {
+    if (isset($exif["ISOSpeedRatings"])) {
         $a = $exif["ISOSpeedRatings"];
         if ($a < 50) { $a *= 200; }
         $exifdata["iso_equiv"] = $a;
@@ -186,7 +191,7 @@ function process_exif($image) {
     }
     */
 
-    if ($exif["CompressedBitsPerPixel"]) {
+    if (isset($exif["CompressedBitsPerPixel"])) {
         list($a, $b) = explode('/', $exif["CompressedBitsPerPixel"]);
         if($b>0) {
             $val = round($a / $b);
@@ -204,7 +209,7 @@ function process_exif($image) {
         }
     }
 
-    if ($exif["Comment"]) {
+    if (isset($exif["Comment"])) {
         $exifdata["comment"] = $exif["Comment"];
     }
 
