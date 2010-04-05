@@ -30,10 +30,7 @@
     */
 
     $_qs=getvar("_qs");
-    if($user->prefs->get("auto_edit") && $_qs && $_action == "update") {
-        redirect("photo.php?" . $_qs, "Auto edit");
-    }
-
+    
     $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
     $qs = preg_replace('/_action=\w+&?/', '', $qs);
     $encoded_qs = urlencode(htmlentities($_qs));
@@ -476,6 +473,9 @@ require_once("header.inc.php");
     }
     else {
 require_once("edit_photo.inc.php");
+        if($user->prefs->get("auto_edit") && $_qs && $_action == "update") {
+            redirect("photo.php?" . $_qs, "Auto edit");
+        }
     }
 ?>
 </div>
