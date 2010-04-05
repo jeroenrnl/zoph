@@ -478,3 +478,4 @@ yes=
 zip or zip+4=
 zip=
 zoom level=
+Uploading photos has been disabled in config.inc.php. Set UPLOAD to 1 to enable uploading images via the browser.=
