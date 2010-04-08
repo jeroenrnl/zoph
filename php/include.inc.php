@@ -20,6 +20,7 @@
     require_once("log.inc.php");
 
     require_once("config.inc.php");
+    require_once("settings.inc.php");
     require_once("requirements.inc.php");
     require_once("util.inc.php");
     require_once("validator.inc.php");

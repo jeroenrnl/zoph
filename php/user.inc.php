@@ -265,6 +265,13 @@ class user extends zoph_table {
         $comments=get_records_from_query("comment", $sql);
         return $comments;
     }
+    
+    public static function getByName($name) {
+        $sql = "select user_id from " . DB_PREFIX . "users where" .
+            " user_name = '" .  escape_string($name) ."'";
+        $users=get_records_from_query("user", $sql);
+        return $users[0];
+    }        
 }
 
 function get_users($order = "user_name") {

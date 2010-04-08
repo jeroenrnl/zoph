@@ -172,10 +172,21 @@ class Import {
 
         $dir=IMAGE_DIR . "/" . IMPORT_DIR . "/";
         $file=file::getFromMD5($dir, $md5);
-        $type=get_filetype(get_mime($file));
+        $mime=get_mime($file);
+        $type=get_filetype($mime);
         switch($type) {
         case "image":
-            return Import::resizeImage($file);
+            if($mime=="image/jpeg" && IMPORT_AUTOROTATE) {
+                $cmd = "jhead -autorot " . escapeshellarg($file);
+                    exec($cmd, $output, $return);
+                    if($return > 0) {
+                        echo implode($output, "<br>");
+                        echo "<br>";    
+                        touch($file . ".zophignore");
+                        die("Fatal error");
+                    }
+            }
+            Import::resizeImage($file);
             break;
         case "archive":
             return Import::unpackArchive($file);

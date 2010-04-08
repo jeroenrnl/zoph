@@ -18,11 +18,10 @@
 
     define('VERSION', '0.8.2pre');
 
-    define('DB_HOST', 'localhost');
-    define('DB_NAME', 'zoph');
-    define('DB_USER', 'zoph_rw');
-    define('DB_PASS', 'pass');
-    define('DB_PREFIX', 'zoph_'); // prefix for tables, '' for none
+    // DB_HOST, DB_NAME, DB_USER, DB_PASS and DB_PREFIX have been moved to
+    // zoph.ini. The location can be set by the next config item:
+    
+    define('INI_FILE', "/etc/zoph.ini");
 
     // Define how Zoph looks by choosing a stylesheet and iconset.
     define('CSS_SHEET', 'css.php');
@@ -149,6 +148,17 @@
     // on a fast server with multiple CPU's or cores, you could increase this
     define('IMPORT_PARALLEL', 1);
 
+    // Automatically rotate imported images
+    // requires "jhead"
+    define('IMPORT_AUTOROTATE', 0);
+
+    // How to resize an image during  import
+    // 'resample': high quality / high CPU / slow [default]
+    // 'resize': lower quality / low CPU / fast
+    // resize can be about 3 times faster, but the resized image has a
+    // lower quality.
+    define('IMPORT_RESIZE', 'resample');
+
     // Zoph needs a MIME Magic file to be able to determine the filetype of an 
     // uploaded file. This is an important security measure, since it prevents 
     // users from uploading files other than images and archives.
@@ -230,6 +240,12 @@
     // set to the id of a non admin user or to 0 to disable
     // note that this is a user_id, not a person_id
     define('DEFAULT_USER', 0);
+
+    // This is the user_id of the user that is used when using the CLI
+    // this user *must* be an admin user.
+    // If set to 0, zoph will try to find a Zoph user by the name of the
+    // currently logged on (unix) user.
+    define('CLI_USER', 0);
 
     // if this is non-zero the people and places pages will default to
     // "show all" instead of "a".

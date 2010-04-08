@@ -607,8 +607,16 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
 
         $img_dst = imagecreatetruecolor($new_width, $new_height);
         flush();
-        imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0,
-            $new_width, $new_height, $width, $height);
+        if(!defined("IMPORT_RESIZE")) {
+            define("IMPORT_RESIZE", "resample");
+        }
+        if (strtolower(IMPORT_RESIZE)=="resize") {
+            imagecopyresized($img_dst, $img_src, 0, 0, 0, 0,
+                $new_width, $new_height, $width, $height);
+        } else {
+            imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0,
+                $new_width, $new_height, $width, $height);
+        }
         flush();
         $new_image = IMAGE_DIR . $this->get("path") . '/' . $prefix . '/' .
             $prefix . '_' .  get_converted_image_name($this->get("name"));

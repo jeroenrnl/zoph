@@ -22,15 +22,29 @@
      * - a $user object was found in the session
      * - a default user has been defined in config.inc.php
      */
-    session_start();
+    if(!defined("CLI")) {
+        session_start();
 
-    $_action = getvar("_action");
+        $_action = getvar("_action");
 
-    if (minimum_version('4.1.0')) {
         if (array_key_exists('user', $_SESSION)) {
             $user = $_SESSION['user'];
         }
+    } else {
+        if(defined("CLI_USER")) {
+            if (CLI_USER != 0) {
+                $user=new user(CLI_USER);
+            } else {
+                $user=user::getByName($_SERVER["USER"]);
+            }
+        } else {
+            log::msg("CLI_USER is not defined in config.inc.php", log::FATAL, log::LOGIN);
+        }
+        $user->lookup();
+        $user->lookup_person();
+        $user->lookup_prefs();
     }
+
 
     // no user was in the session, try logging in
     if ($_action == "logout") {
@@ -79,7 +93,7 @@
         $user->prefs->load();
         $lang=$user->load_language();
             
-        if (minimum_version('4.1.0')) {
+        if (!defined("CLI")) {
             $_SESSION['user'] = &$user;
         }
         if (!empty($redirect)) {

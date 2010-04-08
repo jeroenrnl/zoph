@@ -79,16 +79,18 @@ var zImport=function() {
     }
 
     function getThumbs(notimer) {
-        http=new XMLHttpRequest();
+        var http=new XMLHttpRequest();
         http.open("GET", "getxmldata.php?object=import_thumbs", true);
-        http.onreadystatechange=showThumbs;
+        http.onreadystatechange=function() { 
+            zImport.showThumbs(http); 
+        };
         http.send(null);
         if(!notimer) {
             setTimeout(function() { zImport.getThumbs(false); }, 15000);
         }
     }
 
-    function showThumbs() {
+    function showThumbs(http) {
         var content;
         var status;
         if (http.readyState == 4) {
@@ -155,11 +157,9 @@ var zImport=function() {
                             for(var e=0; e<existing.childNodes.length; e++) {
                                 tag=existing.childNodes[e];
                                 if(tag.nodeName=="IMG") {
-                                    if(((tag.className=="waiting" || 
-                                            tag.className=="busy") &&
-                                            status=="done") || 
-                                        tag.className=="" && 
-                                        status!="done") {
+                                    if(((tag.className=="waiting" || tag.className=="busy") &&
+                                          (status=="done" || status=="ignore")) 
+                                          || tag.className=="" && status!="done"){
                                         // so this thumb is out of sync with
                                         // the status on disk. Could be due to
                                         // clicking 'back' or 'reload'
@@ -188,12 +188,15 @@ var zImport=function() {
                                 actionlinks.appendChild(retryli);
                                 imgsrc="image_service.php?type=import_thumb" +
                                     "&file=" + md5;
+                                img.setAttribute("onmouseover", "zImport.createPreviewDiv('" + md5 +"');");
+                                img.setAttribute("onmouseout", "zImport.destroyPreviewDiv('" + md5 +"');");
                                 break;
                             case "waiting":
                                 img.className="waiting";
                                 imgsrc=icon;    
                                 break;
                             case "ignore":
+                                img.className="ignore";
                                 actionlinks.appendChild(retryli);
                                 imgsrc=icon;    
                                 break;
@@ -288,14 +291,14 @@ var zImport=function() {
     }
 
     function doAction(action,md5) {
-        http=new XMLHttpRequest();
+        var http=new XMLHttpRequest();
         http.open("GET", "import.php?_action=" + action + "&file=" + md5, true);
         thumb=document.getElementById(md5);
         if(action=="delete" || action=="retry") {
             deleteNode(thumb);
         }
         http.onreadystatechange=function() {
-            XML.httpResponse('action');
+            XML.httpResponse(http,'action');
         };
         http.send(null);
         setTimeout(function() { zImport.getThumbs(true); }, 500);
@@ -337,14 +340,37 @@ var zImport=function() {
         }
     }
 
+    function createPreviewDiv(md5) {
+        var div=document.createElement("div");
+        var img=document.createElement("img");
+        var body=document.getElementsByTagName("body")[0];
+        
+        div.className="preview";
+        div.id="preview"+md5;
+
+        img.setAttribute("src", "image_service.php?type=import_mid" +
+            "&file=" + md5);
+        div.appendChild(img);
+
+        body.appendChild(div);
+    }
+    
+    function destroyPreviewDiv(md5) {
+        div=document.getElementById("preview" + md5);
+        deleteNode(div);
+    }
+
     return {
         getThumbs:getThumbs,
+        showThumbs:showThumbs,
         startUpload:startUpload,
         updateProgressbar:updateProgressbar,
         doAction:doAction,
         httpResponse:httpResponse,
         processDone:processDone,
-        importPhotos:importPhotos
+        importPhotos:importPhotos,
+        createPreviewDiv:createPreviewDiv,
+        destroyPreviewDiv:destroyPreviewDiv
     };
 }();
 

@@ -21,7 +21,7 @@
     $photo_id = getvar("photo_id");
     $type = getvar("type");
     
-    if($type=="import_thumb" && ($user->is_admin() || $user->get("import"))) {
+    if(($type=="import_thumb" || $type=="import_mid") && ($user->is_admin() || $user->get("import"))) {
     
         $md5 = getvar("file");
         $file = file::getFromMD5(IMAGE_DIR . "/" . IMPORT_DIR, $md5);
@@ -29,7 +29,11 @@
         $photo = new photo();
         $photo->set("name", basename($file));
         $photo->set("path", IMPORT_DIR);
-        $type="thumb";
+        if($type=="import_thumb") {
+            $type="thumb";
+        } else if ($type=="import_mid") {
+            $type="mid";
+        }
         $found=true;
 
     } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {

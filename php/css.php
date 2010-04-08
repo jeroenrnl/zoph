@@ -1384,6 +1384,15 @@ fieldset.multiple img.actionlink:last-child {
     display: none;
 }
     
+div.preview {
+    border: 2px solid black;
+    position: fixed;
+    background: white;
+    padding: 10px;
+    margin: 10px;
+    left: 0;
+    top: 0;
+    }
 
 /* Styles for calendar */
 .calendar { 

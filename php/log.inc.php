@@ -87,7 +87,13 @@ class log {
 
             $msg="<b>" . self::$sev[$severity] . "</b>: " . $msg . "<br>\n";
             if($print) {
-                echo $msg;
+                if(!defined("CLI")) {
+                    echo $msg;
+                } else {
+                    $html=array("<b>", "</b>", "<br>");
+                    $cli=array("\033[1m", "\033[0m", "\n");
+                    echo str_replace($html, $cli, $msg);
+                }
             } else {
                 return $msg;
             }
