@@ -198,6 +198,9 @@
         $photo->set_fields($request_vars);
         $photo->update($request_vars,'',$user); // pass again for add people, cats, etc
         $action = "update";
+        if(!empty($_qs)) {
+            redirect("photo.php?" . $_qs, "Update done");
+        }
     }
     else if ($_action == "new") {
         unset($actionlinks);
@@ -472,10 +475,7 @@ require_once("header.inc.php");
         echo $photo->get_midsize_img();
     }
     else {
-require_once("edit_photo.inc.php");
-        if($user->prefs->get("auto_edit") && $_qs && $_action == "update") {
-            redirect("photo.php?" . $_qs, "Auto edit");
-        }
+        require_once("edit_photo.inc.php");
     }
 ?>
 </div>
