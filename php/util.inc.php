@@ -36,8 +36,8 @@ function create_field_html($fields) {
     while (list($key, $val) = each($fields)) {
         if ($val) {
             $html .=
-            "<dt>$key</dt>\n" .
-            "<dd>$val</dd>\n";
+            "<dt>" . e($key) . "</dt>\n" .
+            "<dd>" . e($val) ." </dd>\n";
         }
     }
     return $html;
@@ -49,8 +49,8 @@ function create_field_html_table($fields) {
     while (list($key, $val) = each($fields)) {
         if ($val) {
             $html .=
-            "<tr>\n  <th>$key</th>\n" .
-            "  <td>$val</<td>\n</tr>\n";
+            "<tr>\n  <th>" . e($key) . "</th>\n" .
+            "  <td>" . e($val) . "</<td>\n</tr>\n";
         }
     }
     return $html;
@@ -60,14 +60,14 @@ function create_edit_fields($fields) {
     $html = "";
     while(list($key, $field) = each($fields)) {
         $html.=
-            "<label for=\"$key\">$field[0]</label>\n$field[1]<br>";
+            "<label for=\"$key\">$field[0]</label>\n" . $field[1] ."<br>";
     }
     return $html;
 }
 
 function create_text_input($name, $value, $size = 20, $max = 32) {
     $id=ereg_replace("^_+", "", $name);
-    return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"" . $value ."\" size=\"$size\" maxlength=\"$max\">\n";
+    return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"" . e($value) ."\" size=\"$size\" maxlength=\"$max\">\n";
 }
 
 function create_pulldown($name, $value, $value_array, $extraopt = null) {
@@ -77,7 +77,7 @@ function create_pulldown($name, $value, $value_array, $extraopt = null) {
     while (list($val, $label) = each($value_array)) {
         if ($val == $value) { $selected = " selected"; }
         else { $selected  = ""; }
-        $html .= "  <option value=\"$val\"$selected >" . ($label?$label:"&nbsp;") ."</option>\n";
+        $html .= "  <option value=\"$val\"$selected >" . ($label?e($label):"&nbsp;") ."</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -143,7 +143,7 @@ function create_inequality_operator_pulldown($var, $op = ">") {
 
 function create_photo_field_pulldown($var, $name = null) {
     return create_pulldown($var, $name, array(
-        "" => "&nbsp;",
+        "" => "",
         "date" => translate("date",0),
         "time" => translate("time",0),
         "timestamp" => translate("timestamp",0),
@@ -168,7 +168,7 @@ function create_photo_field_pulldown($var, $name = null) {
 
 function create_photo_text_pulldown($var, $name = null) {
     return create_pulldown($var, $name, array(
-        "" => "&nbsp;",
+        "" => "",
         "album" => translate("album",0),
         "category" => translate("category",0),
         "person" => translate("person",0),
@@ -903,75 +903,12 @@ function create_bar_graph($legend, $value_array, $scale) {
     return $html;
 }
 
-function create_progress_bar($id = "progressbar", $w = 300, $complete = 0) {
-    $html = "<div id=\"" . $id . "_outer\" class=\"progressbar\" 
-                style=\"width: " . $w . "px\">\n";
-    $html.= "   <div id=\"" . $id . "_inner\" class=\"progressfill\"";
-
-    $html.= "style=\"width: " . $complete . "%\">\n";
-    $html.= $complete . "%";
-    $html.="    </div>\n";
-    $html.="</div>\n";
-    return $html;
-}
-
 function redirect($url = "zoph.php", $msg = "Access denied") {
     if(!((LOG_SUBJECT & log::REDIRECT) && (LOG_SEVERITY >= log::DEBUG))) {
         header("Location: " . $url);
     }
         echo "<a href='" . $url . "'>" . $msg . "</a>";
     die();
-}
-
-function get_mime($file) {
-    $fileinfo=new finfo(FILEINFO_MIME, MAGIC_FILE);
-    $mime=explode(";", $fileinfo->file($file));
-    log::msg("<b>" . $file . "</b>: " . $mime[0], log::DEBUG, log::IMPORT);
-    return $mime[0];
-}
- 
-function get_filetype($mime) {
-    switch ($mime) {
-    case "image/jpeg":
-    case "image/png":
-    case "image/gif":
-        return "image";
-        break;
-    case "application/x-bzip2":
-    case "application/x-gzip":
-    case "application/x-tar":
-    case "application/zip":
-        return "archive";
-        break;
-    case "application/xml";
-        // return "xml";
-        // not implemented yet
-    default:
-        return false;
-    }
-}
-
-function create_dir($directory) {
-    if (file_exists($directory) == false) {
-        if (mkdir($directory, DIR_MODE)) {
-            echo translate("Created directory") . ": $directory<br>\n";
-            return true;
-        }
-        else {
-            echo translate("Could not create directory") . ": $directory<br>\n";
-            return false;
-        }
-    }
-    return 0;
-}
-
-function create_dir_recursive($directory){
-    $nextdir="";
-    foreach(split('/',$directory) as $subdir) {
-        $nextdir=$nextdir . $subdir . "/";
-        $result=create_dir($nextdir);
-    }
-    return $result;
 }
 
 ?>

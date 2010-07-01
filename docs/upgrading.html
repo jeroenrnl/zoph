@@ -9,8 +9,9 @@
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
 <h1 id="firstHeading" class="firstHeading">Zoph/Upgrading</h1>
-		<div id="bodyContent">
-			<p>Upgrading Zoph is a relatively simple process; it consists of moving the php, javascript, language and image files into your web root (beware that you may want to keep your <tt>config.inc.php</tt>) and running an SQL script that makes the database changes. More details about this process and special instructions per version are described below.</p>
+	<div id="bodyContent">
+		
+<p>Upgrading Zoph is a relatively simple process; it consists of moving the php, javascript, language and image files into your web root (beware that you may want to keep your <tt>config.inc.php</tt>) and running an SQL script that makes the database changes. More details about this process and special instructions per version are described below.</p>
 <table id="toc" class="toc">
 <tr>
 <td>
@@ -18,40 +19,44 @@
 <h2>Contents</h2>
 </div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#Zoph_0.8_to_0.8.0.x"><span class="tocnumber">1</span> <span class="toctext">Zoph 0.8 to 0.8.0.x</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Zoph_0.8_to_0.8.1"><span class="tocnumber">2</span> <span class="toctext">Zoph 0.8 to 0.8.1</span></a>
+<li class="toclevel-1 tocsection-1"><a href="#Zoph_0.8.1_to_0.8.1.1"><span class="tocnumber">1</span> <span class="toctext">Zoph 0.8.1 to 0.8.1.1</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Zoph_0.8_to_0.8.0.x"><span class="tocnumber">2</span> <span class="toctext">Zoph 0.8 to 0.8.0.x</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Zoph_0.8_to_0.8.1"><span class="tocnumber">3</span> <span class="toctext">Zoph 0.8 to 0.8.1</span></a>
 <ul>
-<li class="toclevel-2 tocsection-3"><a href="#Updating_the_database"><span class="tocnumber">2.1</span> <span class="toctext">Updating the database</span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="#Configuration_updates"><span class="tocnumber">2.2</span> <span class="toctext">Configuration updates</span></a>
+<li class="toclevel-2 tocsection-4"><a href="#Updating_the_database"><span class="tocnumber">3.1</span> <span class="toctext">Updating the database</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Configuration_updates"><span class="tocnumber">3.2</span> <span class="toctext">Configuration updates</span></a>
 <ul>
-<li class="toclevel-3 tocsection-5"><a href="#New_options"><span class="tocnumber">2.2.1</span> <span class="toctext">New options</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#New_options"><span class="tocnumber">3.2.1</span> <span class="toctext">New options</span></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-6"><a href="#Zoph_0.7_to_0.8"><span class="tocnumber">3</span> <span class="toctext">Zoph 0.7 to 0.8</span></a>
+<li class="toclevel-1 tocsection-7"><a href="#Zoph_0.7_to_0.8"><span class="tocnumber">4</span> <span class="toctext">Zoph 0.7 to 0.8</span></a>
 <ul>
-<li class="toclevel-2 tocsection-7"><a href="#Updating_the_Database_2"><span class="tocnumber">3.1</span> <span class="toctext">Updating the Database</span></a></li>
-<li class="toclevel-2 tocsection-8"><a href="#Configuration_updates_2"><span class="tocnumber">3.2</span> <span class="toctext">Configuration updates</span></a>
+<li class="toclevel-2 tocsection-8"><a href="#Updating_the_Database_2"><span class="tocnumber">4.1</span> <span class="toctext">Updating the Database</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Configuration_updates_2"><span class="tocnumber">4.2</span> <span class="toctext">Configuration updates</span></a>
 <ul>
-<li class="toclevel-3 tocsection-9"><a href="#New_options_2"><span class="tocnumber">3.2.1</span> <span class="toctext">New options</span></a></li>
+<li class="toclevel-3 tocsection-10"><a href="#New_options_2"><span class="tocnumber">4.2.1</span> <span class="toctext">New options</span></a></li>
 </ul>
 </li>
-<li class="toclevel-2 tocsection-10"><a href="#Group_access_rights"><span class="tocnumber">3.3</span> <span class="toctext">Group access rights</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Group_access_rights"><span class="tocnumber">4.3</span> <span class="toctext">Group access rights</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-11"><a href="#Zoph_0.7.x_to_0.8_update"><span class="tocnumber">4</span> <span class="toctext">Zoph 0.7.x to 0.8 update</span></a></li>
-<li class="toclevel-1 tocsection-12"><a href="#Zoph_0.7.5_or_0.8_pre-release_to_0.8"><span class="tocnumber">5</span> <span class="toctext">Zoph 0.7.5 or 0.8 pre-release to 0.8</span></a></li>
-<li class="toclevel-1 tocsection-13"><a href="#Zoph_0.7_to_Zoph_0.7.0.x"><span class="tocnumber">6</span> <span class="toctext">Zoph 0.7 to Zoph 0.7.0.x</span></a></li>
-<li class="toclevel-1 tocsection-14"><a href="#Older_versions"><span class="tocnumber">7</span> <span class="toctext">Older versions</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Zoph_0.7.x_to_0.8_update"><span class="tocnumber">5</span> <span class="toctext">Zoph 0.7.x to 0.8 update</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#Zoph_0.7.5_or_0.8_pre-release_to_0.8"><span class="tocnumber">6</span> <span class="toctext">Zoph 0.7.5 or 0.8 pre-release to 0.8</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#Zoph_0.7_to_Zoph_0.7.0.x"><span class="tocnumber">7</span> <span class="toctext">Zoph 0.7 to Zoph 0.7.0.x</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="#Older_versions"><span class="tocnumber">8</span> <span class="toctext">Older versions</span></a></li>
 </ul>
 </td>
 </tr>
 </table>
 
+<h2> <span class="mw-headline" id="Zoph_0.8.1_to_0.8.1.1">Zoph 0.8.1 to 0.8.1.1</span></h2>
+<p>Copy php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.</p>
+<p>You can upgrade directly from 0.8 to 0.8.1.1, simply use the zoph-0.8.1.1.tar.gz and execute the instructions for the 0.8 to 0.8.1 upgrade.</p>
 <h2> <span class="mw-headline" id="Zoph_0.8_to_0.8.0.x">Zoph 0.8 to 0.8.0.x</span></h2>
 <ul>
-<li><i>You can also use these instructions to go from 0.8.0.1 to 0.8.0.2</i></li>
+<li><i>You can also use these instructions to go from 0.8.0.1 to 0.8.0.2 or 0.8.0.3</i></li>
 </ul>
 <p>Copy php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.</p>
 <p>You can upgrade directly from 0.7 to 0.8.0.x, simply use the zoph-0.8.0.x.tar.gz and execute the instructions for the 0.7 to 0.8 upgrade.</p>

@@ -130,13 +130,13 @@ class person extends zoph_table {
 
     function get_display_array() {
         return array(
-            translate("called") => $this->get("called"),
-            translate("date of birth") => create_date_link($this->get("dob")),
-            translate("date of death") => create_date_link($this->get("dod")),
-            translate("gender") => $this->get_gender(),
-            translate("mother") => get_link("person", $this->get("mother_id")),
-            translate("father") => get_link("person", $this->get("father_id")),
-            translate("spouse") => get_link("person", $this->get("spouse_id")));
+            translate("called") => e($this->get("called")),
+            translate("date of birth") => create_date_link(e($this->get("dob"))),
+            translate("date of death") => create_date_link(e($this->get("dod"))),
+            translate("gender") => e($this->get_gender()),
+            translate("mother") => get_link("person", e($this->get("mother_id"))),
+            translate("father") => get_link("person", e($this->get("father_id"))),
+            translate("spouse") => get_link("person", e($this->get("spouse_id"))));
     }
     function xml_rootname() {
         return "people";
@@ -439,10 +439,10 @@ function create_person_pulldown($name, $value=null, $user) {
         $text=$person->get_name();
     }
     if($user->prefs->get("autocomp_people") && AUTOCOMPLETE && JAVASCRIPT) {
-        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
-            " value='" . $value . "'>";
-        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
-            " value='" . $text . "' class='autocomplete'>";
+        $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
+            " value='" . e($value) . "'>";
+        $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .
+            " value='" . e($text) . "' class='autocomplete'>";
     } else {
         $html=create_pulldown($name, $value, get_people_select_array(null,$user));
     }
@@ -450,8 +450,6 @@ function create_person_pulldown($name, $value=null, $user) {
 }
 
 function create_photographer_pulldown($name, $value=null, $user) {
-    $text="";
-
     $id=ereg_replace("^_+", "", $name);
     if($value) {
         $person=new person($value);
@@ -459,10 +457,10 @@ function create_photographer_pulldown($name, $value=null, $user) {
         $text=$person->get_name();
     }
     if($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPT) {
-        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
-            " value='" . $value . "'>";
-        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
-            " value='" . $text . "' class='autocomplete'>";
+        $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
+            " value='" . e($value) . "'>";
+        $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .
+            " value='" . e($text) . "' class='autocomplete'>";
     } else {
         $html=create_pulldown($name, $value, get_people_select_array(null, $user));
     }

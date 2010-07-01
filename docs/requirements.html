@@ -9,8 +9,9 @@
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
 <h1 id="firstHeading" class="firstHeading">Zoph/Requirements</h1>
-		<div id="bodyContent">
-			<p>Zoph is being developped on Linux, but it should be able to run on any OS that can run Apache, MySQL and PHP. Users have reported succesful installations on MacOSX, several BSD flavours and even Windows. Debian and Ubuntu users can install Zoph from apt by typing <tt>apt-get zoph</tt>.</p>
+	<div id="bodyContent">
+		
+<p>Zoph is being developped on Linux, but it should be able to run on any OS that can run Apache, MySQL and PHP. Users have reported succesful installations on MacOSX, several BSD flavours and even Windows. Debian and Ubuntu users can install Zoph from apt by typing <tt>apt-get zoph</tt>.</p>
 <p>Gentoo users could use the webapps overlay, although the version there is outdated.</p>
 <p>Zoph requires the following:</p>
 <ul>
@@ -33,14 +34,20 @@
 <li class="toclevel-1 tocsection-2"><a href="#PHP"><span class="tocnumber">2</span> <span class="toctext">PHP</span></a>
 <ul>
 <li class="toclevel-2 tocsection-3"><a href="#Required_features"><span class="tocnumber">2.1</span> <span class="toctext">Required features</span></a></li>
-<li class="toclevel-2 tocsection-4"><a href="#php.ini_settings"><span class="tocnumber">2.2</span> <span class="toctext">php.ini settings</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#php.ini_settings"><span class="tocnumber">2.2</span> <span class="toctext">php.ini settings</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="#max_input_time"><span class="tocnumber">2.2.1</span> <span class="toctext">max_input_time</span></a></li>
+<li class="toclevel-3 tocsection-6"><a href="#max_execution_time"><span class="tocnumber">2.2.2</span> <span class="toctext">max_execution_time</span></a></li>
+<li class="toclevel-3 tocsection-7"><a href="#memory_limit"><span class="tocnumber">2.2.3</span> <span class="toctext">memory_limit</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-5"><a href="#MySQL"><span class="tocnumber">3</span> <span class="toctext">MySQL</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#Perl"><span class="tocnumber">4</span> <span class="toctext">Perl</span></a></li>
-<li class="toclevel-1 tocsection-7"><a href="#ImageMagick"><span class="tocnumber">5</span> <span class="toctext">ImageMagick</span></a></li>
-<li class="toclevel-1 tocsection-8"><a href="#Jhead"><span class="tocnumber">6</span> <span class="toctext">Jhead</span></a></li>
-<li class="toclevel-1 tocsection-9"><a href="#Browser"><span class="tocnumber">7</span> <span class="toctext">Browser</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#MySQL"><span class="tocnumber">3</span> <span class="toctext">MySQL</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Perl"><span class="tocnumber">4</span> <span class="toctext">Perl</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#ImageMagick"><span class="tocnumber">5</span> <span class="toctext">ImageMagick</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Jhead"><span class="tocnumber">6</span> <span class="toctext">Jhead</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Browser"><span class="tocnumber">7</span> <span class="toctext">Browser</span></a></li>
 </ul>
 </td>
 </tr>
@@ -58,9 +65,10 @@
 <ul>
 <li>Current versions of Zoph are developped on PHP 5.2
 <ul>
-<li>PHP 5.1 and 5.3 probably work too</li>
+<li>PHP 5.3 probably works too</li>
 <li>PHP 6 has not yet been released and Zoph has not been tested against it.</li>
 <li>PHP4 has been <a href="http://www.php.net/downloads.php#v4" class="external text" rel="nofollow">end of life</a> since 31 December 2007. As of Zoph 0.8, PHP4 will no longer be supported by Zoph. Although most of the functionality will remain working with PHP4, after the release of Zoph 0.8, no bugs related to PHP4 compatibility will be accepted or fixed.</li>
+<li>PHP 5.0 and 5.1 are no longer supported for any release after 1 July 2010.</li>
 </ul>
 </li>
 </ul>
@@ -79,6 +87,13 @@
 </li>
 </ul>
 <h3> <span class="mw-headline" id="php.ini_settings"><tt>php.ini</tt> settings</span></h3>
+<p>Settings you may need to change in <tt>php.ini</tt>:</p>
+<h4> <span class="mw-headline" id="max_input_time"><tt>max_input_time</tt></span></h4>
+<p>This is the time Zoph is allowed by PHP to spend waiting for the file to be uploaded. Depending on the size of your files and the speed of your server's connection, 30 seconds (the default) is usually enough to process single images, if you are uploading zip or tar files, you may want to increase this to 60 or 120 seconds.</p>
+<h4> <span class="mw-headline" id="max_execution_time"><tt>max_execution_time</tt></span></h4>
+<p>This is the time Zoph is allowed by PHP to run. Depending on the speed of your webserver, Zoph could spend quite a lot of time resizing an image. 30 seconds may not be enough, especially if you have a camera with a lot of megapixels.</p>
+<h4> <span class="mw-headline" id="memory_limit"><tt>memory_limit</tt></span></h4>
+<p>This is the amount of memory PHP allows Zoph to use. Especially if you have large images, the default (8 or 16 Megabyte) may not be enough. If you have sufficient memory in your server, setting it to 128M is perfectly safe.</p>
 <ul>
 <li>If you are using the web importer you may need to increase the <tt>max_execution_time</tt>, <tt>upload_max_filesize</tt>, <tt>post_max_size</tt> and <tt>max_input_time</tt> in php.ini defined in <tt>php.ini</tt>. See <a href="configuration.html#MAX_UPLOAD" title="Zoph/Configuration">MAX_UPLOAD</a> on the <a href="configuration.html" title="Zoph/Configuration">Configuration</a> page.</li>
 <li>If you are using the watermarking feature, you probably need to increase the <tt>memory_limit</tt> setting. See <a href="configuration.html#WATERMARKING" title="Zoph/Configuration">WATERMARKING</a> on the <a href="configuration.html" title="Zoph/Configuration">Configuration</a> page.</li>

@@ -9,8 +9,9 @@
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
 <h1 id="firstHeading" class="firstHeading">Zoph/Using the Webinterface</h1>
-		<div id="bodyContent">
-			<p>This manual will describe how to start using Zoph. It assumes you have successfully installed all the components and are presented the logon screen when you visit <a href="http://localhost/zoph/logon.php" class="external free" rel="nofollow">http://localhost/zoph/logon.php</a>.</p>
+	<div id="bodyContent">
+		
+<p>This manual will describe how to start using Zoph. It assumes you have successfully installed all the components and are presented the logon screen when you visit <a href="http://localhost/zoph/logon.php" class="external free" rel="nofollow">http://localhost/zoph/logon.php</a>.</p>
 <p>Prior to version 0.3.3 this document was referred to as the tutorial.</p>
 <table id="toc" class="toc">
 <tr>
@@ -44,37 +45,58 @@
 </li>
 <li class="toclevel-1 tocsection-15"><a href="#Managing_Users.2C_Groups_.26_Restricting_Access"><span class="tocnumber">5</span> <span class="toctext">Managing Users, Groups &amp; Restricting Access</span></a>
 <ul>
-<li class="toclevel-2 tocsection-16"><a href="#Users"><span class="tocnumber">5.1</span> <span class="toctext">Users</span></a></li>
-<li class="toclevel-2 tocsection-17"><a href="#Groups"><span class="tocnumber">5.2</span> <span class="toctext">Groups</span></a></li>
-<li class="toclevel-2 tocsection-18"><a href="#Albums"><span class="tocnumber">5.3</span> <span class="toctext">Albums</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#Users"><span class="tocnumber">5.1</span> <span class="toctext">Users</span></a>
+<ul>
+<li class="toclevel-3 tocsection-17"><a href="#Creating_a_new_user_account"><span class="tocnumber">5.1.1</span> <span class="toctext">Creating a new user account</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Modifying_or_deleting_a_user_account"><span class="tocnumber">5.1.2</span> <span class="toctext">Modifying or deleting a user account</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-19"><a href="#Comments"><span class="tocnumber">6</span> <span class="toctext">Comments</span></a></li>
-<li class="toclevel-1 tocsection-20"><a href="#Watermarking"><span class="tocnumber">7</span> <span class="toctext">Watermarking</span></a></li>
-<li class="toclevel-1 tocsection-21"><a href="#Scenarios"><span class="tocnumber">8</span> <span class="toctext">Scenarios</span></a>
+<li class="toclevel-2 tocsection-19"><a href="#Groups"><span class="tocnumber">5.2</span> <span class="toctext">Groups</span></a>
 <ul>
-<li class="toclevel-2 tocsection-22"><a href="#Access_levels"><span class="tocnumber">8.1</span> <span class="toctext">Access levels</span></a></li>
-<li class="toclevel-2 tocsection-23"><a href="#Watermarks"><span class="tocnumber">8.2</span> <span class="toctext">Watermarks</span></a></li>
-<li class="toclevel-2 tocsection-24"><a href="#The_Image_Service"><span class="tocnumber">8.3</span> <span class="toctext">The Image Service</span></a></li>
-<li class="toclevel-2 tocsection-25"><a href="#But_Don.27t_Trust_Me"><span class="tocnumber">8.4</span> <span class="toctext">But Don't Trust Me</span></a></li>
-<li class="toclevel-2 tocsection-26"><a href="#Defining_a_Default_User"><span class="tocnumber">8.5</span> <span class="toctext">Defining a Default User</span></a></li>
+<li class="toclevel-3 tocsection-20"><a href="#Creating_a_group"><span class="tocnumber">5.2.1</span> <span class="toctext">Creating a group</span></a></li>
+<li class="toclevel-3 tocsection-21"><a href="#Modifying_a_group"><span class="tocnumber">5.2.2</span> <span class="toctext">Modifying a group</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-27"><a href="#Preferences"><span class="tocnumber">9</span> <span class="toctext">Preferences</span></a>
-<ul>
-<li class="toclevel-2 tocsection-28"><a href="#Breadcrumbs"><span class="tocnumber">9.1</span> <span class="toctext">Breadcrumbs</span></a></li>
-<li class="toclevel-2 tocsection-29"><a href="#Choosing_a_Language"><span class="tocnumber">9.2</span> <span class="toctext">Choosing a Language</span></a></li>
-<li class="toclevel-2 tocsection-30"><a href="#Other_Prefs"><span class="tocnumber">9.3</span> <span class="toctext">Other Prefs</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Albums"><span class="tocnumber">5.3</span> <span class="toctext">Albums</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-31"><a href="#Backing_Up_Your_Data"><span class="tocnumber">10</span> <span class="toctext">Backing Up Your Data</span></a></li>
-<li class="toclevel-1 tocsection-32"><a href="#Integrating_Zoph"><span class="tocnumber">11</span> <span class="toctext">Integrating Zoph</span></a></li>
-<li class="toclevel-1 tocsection-33"><a href="#Looking_Up_People"><span class="tocnumber">12</span> <span class="toctext">Looking Up People</span></a></li>
-<li class="toclevel-1 tocsection-34"><a href="#Other_Lookups"><span class="tocnumber">13</span> <span class="toctext">Other Lookups</span></a></li>
-<li class="toclevel-1 tocsection-35"><a href="#Incompatibilities"><span class="tocnumber">14</span> <span class="toctext">Incompatibilities</span></a>
+<li class="toclevel-1 tocsection-23"><a href="#Comments"><span class="tocnumber">6</span> <span class="toctext">Comments</span></a></li>
+<li class="toclevel-1 tocsection-24"><a href="#Watermarking"><span class="tocnumber">7</span> <span class="toctext">Watermarking</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="#Scenarios"><span class="tocnumber">8</span> <span class="toctext">Scenarios</span></a>
 <ul>
-<li class="toclevel-2 tocsection-36"><a href="#Slideshows_2"><span class="tocnumber">14.1</span> <span class="toctext">Slideshows</span></a></li>
-<li class="toclevel-2 tocsection-37"><a href="#Emailing_a_Photo"><span class="tocnumber">14.2</span> <span class="toctext">Emailing a Photo</span></a></li>
+<li class="toclevel-2 tocsection-26"><a href="#Access_levels"><span class="tocnumber">8.1</span> <span class="toctext">Access levels</span></a></li>
+<li class="toclevel-2 tocsection-27"><a href="#Watermarks"><span class="tocnumber">8.2</span> <span class="toctext">Watermarks</span></a></li>
+<li class="toclevel-2 tocsection-28"><a href="#The_Image_Service"><span class="tocnumber">8.3</span> <span class="toctext">The Image Service</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="#But_Don.27t_Trust_Me"><span class="tocnumber">8.4</span> <span class="toctext">But Don't Trust Me</span></a></li>
+<li class="toclevel-2 tocsection-30"><a href="#Defining_a_Default_User"><span class="tocnumber">8.5</span> <span class="toctext">Defining a Default User</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-31"><a href="#Pages.2C_Pagesets_and_ZophCode"><span class="tocnumber">9</span> <span class="toctext">Pages, Pagesets and ZophCode</span></a>
+<ul>
+<li class="toclevel-2 tocsection-32"><a href="#ZophCode"><span class="tocnumber">9.1</span> <span class="toctext">ZophCode</span></a></li>
+<li class="toclevel-2 tocsection-33"><a href="#Pages"><span class="tocnumber">9.2</span> <span class="toctext">Pages</span></a></li>
+<li class="toclevel-2 tocsection-34"><a href="#PageSets"><span class="tocnumber">9.3</span> <span class="toctext">PageSets</span></a>
+<ul>
+<li class="toclevel-3 tocsection-35"><a href="#Assigning_a_PageSet_to_an_object"><span class="tocnumber">9.3.1</span> <span class="toctext">Assigning a PageSet to an object</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-36"><a href="#Preferences"><span class="tocnumber">10</span> <span class="toctext">Preferences</span></a>
+<ul>
+<li class="toclevel-2 tocsection-37"><a href="#Breadcrumbs"><span class="tocnumber">10.1</span> <span class="toctext">Breadcrumbs</span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#Choosing_a_Language"><span class="tocnumber">10.2</span> <span class="toctext">Choosing a Language</span></a></li>
+<li class="toclevel-2 tocsection-39"><a href="#Other_Prefs"><span class="tocnumber">10.3</span> <span class="toctext">Other Prefs</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-40"><a href="#Backing_Up_Your_Data"><span class="tocnumber">11</span> <span class="toctext">Backing Up Your Data</span></a></li>
+<li class="toclevel-1 tocsection-41"><a href="#Integrating_Zoph"><span class="tocnumber">12</span> <span class="toctext">Integrating Zoph</span></a></li>
+<li class="toclevel-1 tocsection-42"><a href="#Looking_Up_People"><span class="tocnumber">13</span> <span class="toctext">Looking Up People</span></a></li>
+<li class="toclevel-1 tocsection-43"><a href="#Other_Lookups"><span class="tocnumber">14</span> <span class="toctext">Other Lookups</span></a></li>
+<li class="toclevel-1 tocsection-44"><a href="#Incompatibilities"><span class="tocnumber">15</span> <span class="toctext">Incompatibilities</span></a>
+<ul>
+<li class="toclevel-2 tocsection-45"><a href="#Slideshows_2"><span class="tocnumber">15.1</span> <span class="toctext">Slideshows</span></a></li>
+<li class="toclevel-2 tocsection-46"><a href="#Emailing_a_Photo"><span class="tocnumber">15.2</span> <span class="toctext">Emailing a Photo</span></a></li>
 </ul>
 </li>
 </ul>
@@ -99,7 +121,8 @@
 </ol>
 <p>Now create a user for yourself:</p>
 <ol>
-<li>Click on the 'users' tab.</li>
+<li>Click on the 'admin' tab.</li>
+<li>Click on the 'users' icon.</li>
 <li>Click on [ new ].</li>
 <li>Pick a username and password.</li>
 <li>Select yourself from the person pulldown.</li>
@@ -206,23 +229,88 @@
 <h2> <span class="mw-headline" id="Managing_Users.2C_Groups_.26_Restricting_Access">Managing Users, Groups &amp; Restricting Access</span></h2>
 <p>One of the features of Zoph is its system of access privileges. You have already created an admin class user for yourself. If you desire, you can create other users as well.</p>
 <h3> <span class="mw-headline" id="Users">Users</span></h3>
-<p>A description of some of the attributes of users follows:</p>
-<ul>
-<li>user name: the name for account (e.g. first initial + last name).</li>
-<li>person: every account must be associated with a person. You can use "Unknown Person" or create a similar person record for generic accounts.</li>
-<li>class: an Admin can do anything at all. A User has restrictions.</li>
-</ul>
-<p>The following only apply to non-Admin users:</p>
+<h4> <span class="mw-headline" id="Creating_a_new_user_account">Creating a new user account</span></h4>
+<ol>
+<li>Log on with an admin account.</li>
+<li>Click "admin" in the menubar.</li>
+<li>Click "users".</li>
+<li>Click "new" in the right top of the screen.</li>
+<li>Specify a user name (e.g. first initial + last name).</li>
+<li>If the user is also represented by a "person" in your database (for example because he or she has taken photos or appears on them), specify a person, otherwise leave it on "Unknown Person".</li>
+<li>Specify a password</li>
+<li>Select a user class: an Admin can do anything at all. A User has restrictions. In that case, you can specify what a user can see, besides photos:
 <ul>
 <li>browse people: the user can view the 'people' page in which all the people stored in the database can be seen.</li>
 <li>browse places: the user can view the 'places' page in which all the places stored in the database can be seen.</li>
 <li>details of people: if "Yes" the user can see all information about any person. If "No" the user will only see a person's name.</li>
 <li>details of places: if "Yes" the user can see all information about any place. If "No" the user will only see a place's title and city.</li>
 <li>import: if "Yes" the user can import photos</li>
+<li>download zipfiles: if "Yes", this user can download a set of photos (album, category, search result, etc.) as a zip file.</li>
+<li>leave comments: if "Yes", this user can leave comments with photos.</li>
+<li>rate photos: if "Yes", this user can rate photos.</li>
+<li>rate photos multiple times: if "Yes", this user can rate the same photo more than once. Use this if you create an account that is used by multiple people. Each photo can be rated once per IP address.</li>
 <li>lightbox: the user's lightbox album</li>
 </ul>
+</li>
+<li>Click "insert"</li>
+<li>Add the user to one or more groups. See <a href="#Groups">groups</a> how to do that.</li>
+</ol>
+<h4> <span class="mw-headline" id="Modifying_or_deleting_a_user_account">Modifying or deleting a user account</span></h4>
+<ol>
+<li>Log on with an admin account.</li>
+<li>Click "admin" in the menubar.</li>
+<li>Click "users".</li>
+<li>Click the user you want to modify</li>
+<li>Click "edit" or "delete"</li>
+<li>Make the desired changes or confirm in case of a deletion.
+<ul>
+<li>For a description of the fields, see <a href="#Creating_a_new_user_account">creating a new user account</a>.</li>
+</ul>
+</li>
+</ol>
 <h3> <span class="mw-headline" id="Groups">Groups</span></h3>
 <p>In order to give users access to photos, you must create one or more groups, you can then give accessrights to albums to those groups, you could for example create a group 'family', a group 'colleagues' and a group 'friends'. A user can be member of multiple groups and Zoph will combine the accessrights for all the groups.</p>
+<h4> <span class="mw-headline" id="Creating_a_group">Creating a group</span></h4>
+<ol>
+<li>Log on with an admin account.</li>
+<li>Click "admin" in the menubar.</li>
+<li>Click "groups".</li>
+<li>Enter a group name</li>
+<li>If desired, enter a description.</li>
+<li>Click "insert"</li>
+<li>You will automatically be taken to the edit group screen. See <a href="#Modifying_a_group">Modifying a group</a> for an explanation.</li>
+</ol>
+<h4> <span class="mw-headline" id="Modifying_a_group">Modifying a group</span></h4>
+<ol>
+<li>Log on with an admin account.</li>
+<li>Click "admin" in the menubar.</li>
+<li>Click "groups".</li>
+<li>Click on "display" next to the group name you wish to edit</li>
+<li>Click on "edit"</li>
+<li>You can change the group name or description and add or remove a member.
+<ul>
+<li>If you modify the group name, all the members will automatically change to the new group.</li>
+<li>Select a user from the list to add them to the group</li>
+<li>To remove a member from the group, tick the box in front of the username</li>
+</ul>
+</li>
+<li>Click "update".
+<ul>
+<li>This screen has two "update" buttons, be sure to click the top one for these modifications.</li>
+</ul>
+</li>
+<li>To add albums to the list this user can view, use the "grant access to all existing albums" or add a specific album.
+<ul>
+<li>For a more detailed explanation, see <a href="#Albums">albums</a>.</li>
+</ul>
+</li>
+<li>Click "update".
+<ul>
+<li>This screen has two "update" buttons, be sure to click the bottom one for these modifications.</li>
+<li>Be sure to modify either the top or the bottom half of this screen and not both.</li>
+</ul>
+</li>
+</ol>
 <h3> <span class="mw-headline" id="Albums">Albums</span></h3>
 <p>For non-Admin users, permissions to view photos are granted on a per album basis. For each album you grant a group access to, you must specify:</p>
 <ol>
@@ -245,7 +333,7 @@
 <h2> <span class="mw-headline" id="Comments">Comments</span></h2>
 <p>As of v0.6 users can leave comments, if <a href="configuration.html#ALLOW_COMMENTS" title="Zoph/Configuration">ALLOW_COMMENTS</a> is turned on.</p>
 <p>As of v0.7.2 / v0.8 users can use (limited) markup in the comments, as well as smileys.</p>
-<p>The following markup is supported: [u]underline[/u], [i]italics[/i] and [b]bold[/b], the various possible smileys are displayed with the comment input form: <a href="/wiki/File:ZophComment.png" class="image"><img alt="ZophComment.png" src="http://upload.wikimedia.org/wikibooks/en/1/1f/ZophComment.png" width="580" height="310" /></a></p>
+<p>The following markup is supported: [u]underline[/u], [i]italics[/i] and [b]bold[/b], the various possible smileys are displayed with the comment input form: <a href="/w/index.php?title=File:ZophComment.png&amp;filetimestamp=20080315201450" class="image"><img alt="ZophComment.png" src="http://upload.wikimedia.org/wikibooks/en/1/1f/ZophComment.png" width="580" height="310" /></a></p>
 <h2> <span class="mw-headline" id="Watermarking">Watermarking</span></h2>
 <p>You can let Zoph superimpose a watermark over the fullsize picture. You can use this feature if you want your users to be able to look at the high quality pictures, but not use them for publication. To use this feature, the <a href="configuration.html#IMAGE_SERVICE" title="Zoph/Configuration">IMAGE_SERVICE</a> has to be enabled. Zoph will put a watermark on each photo that has a level higher than the watermark level.</p>
 <h2> <span class="mw-headline" id="Scenarios">Scenarios</span></h2>
@@ -276,6 +364,126 @@ define(DEFAULT_USER, 3);
 </pre>
 <p>That's it. Now when you hit /zoph/zoph.php for the first time you'll be logged in as the guest user (if you are already logged in as someone you'll first have to log out). You can also log out when you are the guest user to be able to log back in as someone else.</p>
 <p>What if a guest hits logout and wants to get back in but doesn't know the guest account info? Hitting submit on the logon page without specifying a user name or password will log you in as the default user.</p>
+<h2> <span class="mw-headline" id="Pages.2C_Pagesets_and_ZophCode">Pages, Pagesets and ZophCode</span></h2>
+<p>By default, each album, category, place and person has a page that will show the basic data about this object. In some cases, you may want to customize this page. As of Zoph 0.7.2 it is possible to do so, using the ZophPages feature.</p>
+<h3> <span class="mw-headline" id="ZophCode">ZophCode</span></h3>
+<p>A ZophPage is written in ZophCode. ZophCode is very similar to bbCode or html and consist of tags in square brackets. Currently supported tags are:</p>
+<table class="wikitable" style="text-align: left; border-collapse: collapse;" border="1|">
+<caption>ZophCode</caption>
+<tr>
+<th style="text-align: left">Tag</th>
+<th style="text-align: left">Meaning</th>
+<th style="text-align: left">Example</th>
+</tr>
+<tr>
+<td>[b]...[/b]</td>
+<td>Bold</td>
+<td>You can make text [b]bold[/b].</td>
+</tr>
+<tr>
+<td>[i]...[/i]</td>
+<td>Italics</td>
+<td>To [i]emphasize[/i] a word...</td>
+</tr>
+<tr>
+<td>[u]...[/u]</td>
+<td>Underline</td>
+<td>[u]Underline[/u] a word.</td>
+</tr>
+<tr>
+<td>[h1]...[/h1]</td>
+<td>Level 1 (chapter) header</td>
+<td>[h1]My holiday[/h1]</td>
+</tr>
+<tr>
+<td>[h2]...[/h2]</td>
+<td>Level 2 (paragraph) header</td>
+<td>[h2]Second day[/h2]</td>
+</tr>
+<tr>
+<td>[h3]...[/h3]</td>
+<td>Level 3 (sub-paragraph) header</td>
+<td>[h3]Afternoon[/h3]</td>
+</tr>
+<tr>
+<td>[color=&lt;color&gt;]...[/color]</td>
+<td>Text colour.</td>
+<td>Words in [color=blue]blue[/color] and [color=#ff0000]red[/color].</td>
+</tr>
+<tr>
+<td>[font=&lt;font&gt;]...[/font]</td>
+<td>Text font</td>
+<td>Mixing [font=times]fonts[/font] can make your [font=courier]page[/font] look professional (or messy).</td>
+</tr>
+<tr>
+<td>[br]</td>
+<td>Line break</td>
+<td>Best regards,[br]Jeroen</td>
+</tr>
+<tr>
+<td>[background=&lt;color&gt;]...[/background]</td>
+<td>Background colour</td>
+<td>[background=blue]Blue background[/background]</td>
+</tr>
+<tr>
+<td>[photo=&lt;id&gt;]...[/photo]</td>
+<td>Link to a photo</td>
+<td>[photo=123]See this photo![/photo]</td>
+</tr>
+<tr>
+<td>[album=&lt;id&gt;]...[/album]</td>
+<td>Link to an album</td>
+<td>[album=123]See this album![/album]</td>
+</tr>
+<tr>
+<td>[person=&lt;id&gt;]...[/person]</td>
+<td>Link to a person</td>
+<td>[person=123]See this person![/person]</td>
+</tr>
+<tr>
+<td>[cat=&lt;id&gt;]...[/cat]</td>
+<td>Link to a category</td>
+<td>[cat=123]See this category![/cat]</td>
+</tr>
+<tr>
+<td>[place=&lt;id&gt;]...[/place]</td>
+<td>Link to a place</td>
+<td>[place=123]See this place![/place]</td>
+</tr>
+<tr>
+<td>[link=&lt;url&gt;]...[/link]</td>
+<td>Link to a webpage</td>
+<td>[link=http://www.zoph.org]Zoph[/link]</td>
+</tr>
+<tr>
+<td>[thumb=&lt;id&gt;]</td>
+<td>Thumbnail of a photo</td>
+<td>[thumb=123]</td>
+</tr>
+<tr>
+<td>[mid=&lt;id&gt;]</td>
+<td>Mid-size image of a photo</td>
+<td>[mid=123]</td>
+</tr>
+</table>
+<p>It is possible to nest tags. For example:</p>
+<pre>
+[h1]Holiday in [b]Spain[b][/h1]
+[i]more [u]emphasis[/u] by [b]combining[/b] tags[/i].
+Click on this thumbnail to see the photo: [photo=123][thumb=123][/photo]
+</pre>
+<p>Just make sure you open and close the tags in the right order:</p>
+<pre>
+[b]This [i]will[/b] not[/i] work!
+</pre>
+<p>Finally, you can use smileys. See <a href="#Comments">#Comments</a> for an overview.</p>
+<h3> <span class="mw-headline" id="Pages">Pages</span></h3>
+<p>You can create a new page by going to the admin page and clicking on "Pages". Just type your text and tags and save. If you would like to spread the content over multiple pages, just save this one and create another page.</p>
+<h3> <span class="mw-headline" id="PageSets">PageSets</span></h3>
+<p>The next step is to combine 1 or more pages into a pageset. Keep in mind that if you have only one page, you still have to put it into a pageset. Create a pageset from the admin page and add the pages you would like to have in this pageset to it. You can also define the order in which the pages appear in the pageset by clicking on "move up" and "move down".</p>
+<p>You also have to decide what you would like to do with the original page Zoph automatically creates for each album, category, place and person. You can choose to never display it, to display it on the first page, the last page or on each page. You can also choose whether you would like to see you own page first or the auto-generated. Keep in mind that if you choose to never display the original page, you could restrict navigation for your users. For example, if you have an album with a few sub-albums, your users will be unable to navigate to these subalbums unless you provide links in your page to these subalbums (and add new links every time you have added a new sub-album).</p>
+<h4> <span class="mw-headline" id="Assigning_a_PageSet_to_an_object">Assigning a PageSet to an object</span></h4>
+<p>The final step in enabling the ZophPages feature, is assigning the pageset to and album, category, place or person. You can do that by editing the specific object and choose the pageset.</p>
 <h2> <span class="mw-headline" id="Preferences">Preferences</span></h2>
 <p>A user can customize Zoph using the preferences page. Below are descriptions of a few of the prefs.</p>
 <h3> <span class="mw-headline" id="Breadcrumbs">Breadcrumbs</span></h3>
@@ -325,7 +533,6 @@ define(DEFAULT_USER, 3);
 <li>Didn't Work: InterMail + Eudora</li>
 </ul>
 <p>To play around with this, edit mail.php.</p>
-
 
 
 

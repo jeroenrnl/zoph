@@ -9,8 +9,9 @@
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
 <h1 id="firstHeading" class="firstHeading">Zoph/Solving problems</h1>
-		<div id="bodyContent">
-			<table id="toc" class="toc">
+	<div id="bodyContent">
+		
+<table id="toc" class="toc">
 <tr>
 <td>
 <div id="toctitle">
@@ -26,11 +27,12 @@
 <li class="toclevel-2 tocsection-6"><a href="#GD_Missing"><span class="tocnumber">5.1</span> <span class="toctext">GD Missing</span></a></li>
 <li class="toclevel-2 tocsection-7"><a href="#Allowed_memory_size_exhausted"><span class="tocnumber">5.2</span> <span class="toctext">Allowed memory size exhausted</span></a></li>
 <li class="toclevel-2 tocsection-8"><a href="#Maximum_execution_time_exceeded"><span class="tocnumber">5.3</span> <span class="toctext">Maximum execution time exceeded</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Webimport_fails_with_with_.27not_found.27_error"><span class="tocnumber">5.4</span> <span class="toctext">Webimport fails with with 'not found' error</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-9"><a href="#Reporting_a_bug"><span class="tocnumber">6</span> <span class="toctext">Reporting a bug</span></a></li>
-<li class="toclevel-1 tocsection-10"><a href="#Zoph_Forum"><span class="tocnumber">7</span> <span class="toctext">Zoph Forum</span></a></li>
-<li class="toclevel-1 tocsection-11"><a href="#Asking_for_help"><span class="tocnumber">8</span> <span class="toctext">Asking for help</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Reporting_a_bug"><span class="tocnumber">6</span> <span class="toctext">Reporting a bug</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Zoph_Forum"><span class="tocnumber">7</span> <span class="toctext">Zoph Forum</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Asking_for_help"><span class="tocnumber">8</span> <span class="toctext">Asking for help</span></a></li>
 </ul>
 </td>
 </tr>
@@ -116,6 +118,11 @@ memory_limit = 16M
 maximum_execution_time = 120
 </pre>
 <p>Since the amount of time Zoph needs to process images is dependant on your webservers CPU speed, load and the size of your photos, a rule of thumb cannot be given. Try increasing the time and/or upload smaller batches of images.</p>
+<h3> <span class="mw-headline" id="Webimport_fails_with_with_.27not_found.27_error">Webimport fails with with 'not found' error</span></h3>
+<pre>
+sh: 1 not found
+</pre>
+<p>You can see this error when you are using the webimport to upload .ZIP or .TAR files and have set <a href="configuration.html#UNZIP_CMD" title="Zoph/Configuration">UNZIP_CMD</a> or <a href="configuration.html#TAR_CMD" title="Zoph/Configuration">TAR_CMD</a> to <tt>'1'</tt> instead of the tar or unzip command, usually <tt>'unzip'</tt> and <tt>'tar xvf'</tt>, respectively. Change it in <tt>config.inc.php</tt> and try again.</p>
 <h2> <span class="mw-headline" id="Reporting_a_bug">Reporting a bug</span></h2>
 <p>If you suspect that the problem you have run in to is a bug in Zoph, please create a bug report on <a href="http://www.zoph.org/bugs" class="external free" rel="nofollow">http://www.zoph.org/bugs</a>.</p>
 <h2> <span class="mw-headline" id="Zoph_Forum">Zoph Forum</span></h2>

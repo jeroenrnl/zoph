@@ -9,8 +9,9 @@
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
 <h1 id="firstHeading" class="firstHeading">Zoph/Configuration</h1>
-		<div id="bodyContent">
-			<table id="toc" class="toc">
+	<div id="bodyContent">
+		
+<table id="toc" class="toc">
 <tr>
 <td>
 <div id="toctitle">
@@ -61,63 +62,86 @@
 <li class="toclevel-2"><a href="#THUMB_EXTENSION"><span class="tocnumber">4.6</span> <span class="toctext">THUMB_EXTENSION</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-7"><a href="#Database_configuration"><span class="tocnumber">5</span> <span class="toctext">Database configuration</span></a>
+<li class="toclevel-1 tocsection-7"><a href="#Rotating_images"><span class="tocnumber">5</span> <span class="toctext">Rotating images</span></a>
 <ul>
-<li class="toclevel-2"><a href="#DB_HOST"><span class="tocnumber">5.1</span> <span class="toctext">DB_HOST</span></a></li>
-<li class="toclevel-2"><a href="#DB_NAME"><span class="tocnumber">5.2</span> <span class="toctext">DB_NAME</span></a></li>
-<li class="toclevel-2"><a href="#DB_USER"><span class="tocnumber">5.3</span> <span class="toctext">DB_USER</span></a></li>
-<li class="toclevel-2"><a href="#DB_PASS"><span class="tocnumber">5.4</span> <span class="toctext">DB_PASS</span></a></li>
+<li class="toclevel-2"><a href="#ALLOW_ROTATIONS"><span class="tocnumber">5.1</span> <span class="toctext">ALLOW_ROTATIONS</span></a></li>
+<li class="toclevel-2"><a href="#ROTATE_CMD"><span class="tocnumber">5.2</span> <span class="toctext">ROTATE_CMD</span></a></li>
+<li class="toclevel-2"><a href="#BACKUP_ORIGINAL"><span class="tocnumber">5.3</span> <span class="toctext">BACKUP_ORIGINAL</span></a></li>
+<li class="toclevel-2"><a href="#BACKUP_PREFIX"><span class="tocnumber">5.4</span> <span class="toctext">BACKUP_PREFIX</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-8"><a href="#Image_location"><span class="tocnumber">6</span> <span class="toctext">Image location</span></a>
+<li class="toclevel-1 tocsection-8"><a href="#Database_configuration"><span class="tocnumber">6</span> <span class="toctext">Database configuration</span></a>
 <ul>
-<li class="toclevel-2"><a href="#IMAGE_DIR"><span class="tocnumber">6.1</span> <span class="toctext">IMAGE_DIR</span></a></li>
-<li class="toclevel-2"><a href="#WEB_IMAGE_DIR"><span class="tocnumber">6.2</span> <span class="toctext">WEB_IMAGE_DIR</span></a></li>
-<li class="toclevel-2"><a href="#USE_IMAGE_SERVICE"><span class="tocnumber">6.3</span> <span class="toctext">USE_IMAGE_SERVICE</span></a></li>
+<li class="toclevel-2"><a href="#DB_HOST"><span class="tocnumber">6.1</span> <span class="toctext">DB_HOST</span></a></li>
+<li class="toclevel-2"><a href="#DB_NAME"><span class="tocnumber">6.2</span> <span class="toctext">DB_NAME</span></a></li>
+<li class="toclevel-2"><a href="#DB_USER"><span class="tocnumber">6.3</span> <span class="toctext">DB_USER</span></a></li>
+<li class="toclevel-2"><a href="#DB_PASS"><span class="tocnumber">6.4</span> <span class="toctext">DB_PASS</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-9"><a href="#Import_settings"><span class="tocnumber">7</span> <span class="toctext">Import settings</span></a>
+<li class="toclevel-1 tocsection-9"><a href="#Image_location"><span class="tocnumber">7</span> <span class="toctext">Image location</span></a>
 <ul>
-<li class="toclevel-2"><a href="#CLIENT_WEB_IMPORT"><span class="tocnumber">7.1</span> <span class="toctext">CLIENT_WEB_IMPORT</span></a></li>
-<li class="toclevel-2"><a href="#SERVER_WEB_IMPORT"><span class="tocnumber">7.2</span> <span class="toctext">SERVER_WEB_IMPORT</span></a></li>
-<li class="toclevel-2"><a href="#WEB_IMPORT_.28deprecated.29"><span class="tocnumber">7.3</span> <span class="toctext">WEB_IMPORT (deprecated)</span></a></li>
-<li class="toclevel-2"><a href="#DEFAULT_DESTINATION_PATH"><span class="tocnumber">7.4</span> <span class="toctext">DEFAULT_DESTINATION_PATH</span></a></li>
-<li class="toclevel-2"><a href="#SHOW_DESTINATION_PATH"><span class="tocnumber">7.5</span> <span class="toctext">SHOW_DESTINATION_PATH</span></a></li>
-<li class="toclevel-2"><a href="#MAX_UPLOAD"><span class="tocnumber">7.6</span> <span class="toctext">MAX_UPLOAD</span></a></li>
-<li class="toclevel-2"><a href="#REMOVE_ARCHIVE"><span class="tocnumber">7.7</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
-<li class="toclevel-2"><a href="#IMPORT_MOVE"><span class="tocnumber">7.8</span> <span class="toctext">IMPORT_MOVE</span></a></li>
-<li class="toclevel-2"><a href="#USE_DATED_DIRS"><span class="tocnumber">7.9</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
-<li class="toclevel-2"><a href="#HIER_DATED_DIRS"><span class="tocnumber">7.10</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
-<li class="toclevel-2"><a href="#TAR_CMD"><span class="tocnumber">7.11</span> <span class="toctext">TAR_CMD</span></a></li>
-<li class="toclevel-2"><a href="#UNZIP_CMD"><span class="tocnumber">7.12</span> <span class="toctext">UNZIP_CMD</span></a></li>
+<li class="toclevel-2"><a href="#IMAGE_DIR"><span class="tocnumber">7.1</span> <span class="toctext">IMAGE_DIR</span></a></li>
+<li class="toclevel-2"><a href="#WEB_IMAGE_DIR"><span class="tocnumber">7.2</span> <span class="toctext">WEB_IMAGE_DIR</span></a></li>
+<li class="toclevel-2"><a href="#USE_IMAGE_SERVICE"><span class="tocnumber">7.3</span> <span class="toctext">USE_IMAGE_SERVICE</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-10"><a href="#Features"><span class="tocnumber">8</span> <span class="toctext">Features</span></a>
+<li class="toclevel-1 tocsection-10"><a href="#Import_settings_.280.8.2_and_later.29"><span class="tocnumber">8</span> <span class="toctext">Import settings (0.8.2 and later)</span></a>
 <ul>
-<li class="toclevel-2"><a href="#JAVASCRIPT"><span class="tocnumber">8.1</span> <span class="toctext">JAVASCRIPT</span></a></li>
-<li class="toclevel-2"><a href="#EMAIL_PHOTOS"><span class="tocnumber">8.2</span> <span class="toctext">EMAIL_PHOTOS</span></a></li>
-<li class="toclevel-2"><a href="#WATERMARKING"><span class="tocnumber">8.3</span> <span class="toctext">WATERMARKING</span></a></li>
-<li class="toclevel-2"><a href="#WATERMARK"><span class="tocnumber">8.4</span> <span class="toctext">WATERMARK</span></a></li>
-<li class="toclevel-2"><a href="#WM_POSX"><span class="tocnumber">8.5</span> <span class="toctext">WM_POSX</span></a></li>
-<li class="toclevel-2"><a href="#WM_POSY"><span class="tocnumber">8.6</span> <span class="toctext">WM_POSY</span></a></li>
-<li class="toclevel-2"><a href="#WM_TRANS"><span class="tocnumber">8.7</span> <span class="toctext">WM_TRANS</span></a></li>
-<li class="toclevel-2"><a href="#ALLOW_COMMENTS"><span class="tocnumber">8.8</span> <span class="toctext">ALLOW_COMMENTS</span></a></li>
-<li class="toclevel-2"><a href="#AUTOCOMPLETE"><span class="tocnumber">8.9</span> <span class="toctext">AUTOCOMPLETE</span></a></li>
-<li class="toclevel-2"><a href="#DOWNLOAD"><span class="tocnumber">8.10</span> <span class="toctext">DOWNLOAD</span></a></li>
+<li class="toclevel-2"><a href="#IMPORT"><span class="tocnumber">8.1</span> <span class="toctext">IMPORT</span></a></li>
+<li class="toclevel-2"><a href="#UPLOAD"><span class="tocnumber">8.2</span> <span class="toctext">UPLOAD</span></a></li>
+<li class="toclevel-2"><a href="#IMPORT_DIR"><span class="tocnumber">8.3</span> <span class="toctext">IMPORT_DIR</span></a></li>
+<li class="toclevel-2"><a href="#IMPORT_PARALLEL"><span class="tocnumber">8.4</span> <span class="toctext">IMPORT_PARALLEL</span></a></li>
+<li class="toclevel-2"><a href="#MAGIC_FILE"><span class="tocnumber">8.5</span> <span class="toctext">MAGIC_FILE</span></a></li>
+<li class="toclevel-2"><a href="#TAR_CMD"><span class="tocnumber">8.6</span> <span class="toctext">TAR_CMD</span></a></li>
+<li class="toclevel-2"><a href="#UNZIP_CMD"><span class="tocnumber">8.7</span> <span class="toctext">UNZIP_CMD</span></a></li>
+<li class="toclevel-2"><a href="#UNGZ_CMD"><span class="tocnumber">8.8</span> <span class="toctext">UNGZ_CMD</span></a></li>
+<li class="toclevel-2"><a href="#UNBZ_CMD"><span class="tocnumber">8.9</span> <span class="toctext">UNBZ_CMD</span></a></li>
+<li class="toclevel-2"><a href="#MAX_UPLOAD"><span class="tocnumber">8.10</span> <span class="toctext">MAX_UPLOAD</span></a></li>
+<li class="toclevel-2"><a href="#USE_DATED_DIRS"><span class="tocnumber">8.11</span> <span class="toctext">USE_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#HIER_DATED_DIRS"><span class="tocnumber">8.12</span> <span class="toctext">HIER_DATED_DIRS</span></a></li>
+<li class="toclevel-2"><a href="#DIR_MODE"><span class="tocnumber">8.13</span> <span class="toctext">DIR_MODE</span></a></li>
+<li class="toclevel-2"><a href="#FILE_MODE"><span class="tocnumber">8.14</span> <span class="toctext">FILE_MODE</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-11"><a href="#Mapping_Support"><span class="tocnumber">9</span> <span class="toctext">Mapping Support</span></a>
+<li class="toclevel-1 tocsection-11"><a href="#Import_settings_.280.8.1_and_before.29"><span class="tocnumber">9</span> <span class="toctext">Import settings (0.8.1 and before)</span></a>
 <ul>
-<li class="toclevel-2"><a href="#MAPS"><span class="tocnumber">9.1</span> <span class="toctext">MAPS</span></a></li>
-<li class="toclevel-2"><a href="#GOOGLE_KEY"><span class="tocnumber">9.2</span> <span class="toctext">GOOGLE_KEY</span></a></li>
+<li class="toclevel-2"><a href="#WEB_IMPORT_.28deprecated.29"><span class="tocnumber">9.1</span> <span class="toctext">WEB_IMPORT (deprecated)</span></a></li>
+<li class="toclevel-2"><a href="#CLIENT_WEB_IMPORT"><span class="tocnumber">9.2</span> <span class="toctext">CLIENT_WEB_IMPORT</span></a></li>
+<li class="toclevel-2"><a href="#SERVER_WEB_IMPORT"><span class="tocnumber">9.3</span> <span class="toctext">SERVER_WEB_IMPORT</span></a></li>
+<li class="toclevel-2"><a href="#WEB_IMPORT_.28deprecated.29_2"><span class="tocnumber">9.4</span> <span class="toctext">WEB_IMPORT (deprecated)</span></a></li>
+<li class="toclevel-2"><a href="#DEFAULT_DESTINATION_PATH"><span class="tocnumber">9.5</span> <span class="toctext">DEFAULT_DESTINATION_PATH</span></a></li>
+<li class="toclevel-2"><a href="#SHOW_DESTINATION_PATH"><span class="tocnumber">9.6</span> <span class="toctext">SHOW_DESTINATION_PATH</span></a></li>
+<li class="toclevel-2"><a href="#REMOVE_ARCHIVE"><span class="tocnumber">9.7</span> <span class="toctext">REMOVE_ARCHIVE</span></a></li>
+<li class="toclevel-2"><a href="#IMPORT_MOVE"><span class="tocnumber">9.8</span> <span class="toctext">IMPORT_MOVE</span></a></li>
+<li class="toclevel-2"><a href="#IMPORT_UMASK"><span class="tocnumber">9.9</span> <span class="toctext">IMPORT_UMASK</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-12"><a href="#Timezone"><span class="tocnumber">10</span> <span class="toctext">Timezone</span></a>
+<li class="toclevel-1 tocsection-12"><a href="#Features"><span class="tocnumber">10</span> <span class="toctext">Features</span></a>
 <ul>
-<li class="toclevel-2"><a href="#CAMERA_TZ"><span class="tocnumber">10.1</span> <span class="toctext">CAMERA_TZ</span></a></li>
-<li class="toclevel-2"><a href="#DATE_FORMAT"><span class="tocnumber">10.2</span> <span class="toctext">DATE_FORMAT</span></a></li>
-<li class="toclevel-2"><a href="#TIME_FORMAT"><span class="tocnumber">10.3</span> <span class="toctext">TIME_FORMAT</span></a></li>
-<li class="toclevel-2"><a href="#GUESS_TZ"><span class="tocnumber">10.4</span> <span class="toctext">GUESS_TZ</span></a></li>
+<li class="toclevel-2"><a href="#JAVASCRIPT"><span class="tocnumber">10.1</span> <span class="toctext">JAVASCRIPT</span></a></li>
+<li class="toclevel-2"><a href="#EMAIL_PHOTOS"><span class="tocnumber">10.2</span> <span class="toctext">EMAIL_PHOTOS</span></a></li>
+<li class="toclevel-2"><a href="#WATERMARKING"><span class="tocnumber">10.3</span> <span class="toctext">WATERMARKING</span></a></li>
+<li class="toclevel-2"><a href="#WATERMARK"><span class="tocnumber">10.4</span> <span class="toctext">WATERMARK</span></a></li>
+<li class="toclevel-2"><a href="#WM_POSX"><span class="tocnumber">10.5</span> <span class="toctext">WM_POSX</span></a></li>
+<li class="toclevel-2"><a href="#WM_POSY"><span class="tocnumber">10.6</span> <span class="toctext">WM_POSY</span></a></li>
+<li class="toclevel-2"><a href="#WM_TRANS"><span class="tocnumber">10.7</span> <span class="toctext">WM_TRANS</span></a></li>
+<li class="toclevel-2"><a href="#ALLOW_COMMENTS"><span class="tocnumber">10.8</span> <span class="toctext">ALLOW_COMMENTS</span></a></li>
+<li class="toclevel-2"><a href="#AUTOCOMPLETE"><span class="tocnumber">10.9</span> <span class="toctext">AUTOCOMPLETE</span></a></li>
+<li class="toclevel-2"><a href="#DOWNLOAD"><span class="tocnumber">10.10</span> <span class="toctext">DOWNLOAD</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Mapping_Support"><span class="tocnumber">11</span> <span class="toctext">Mapping Support</span></a>
+<ul>
+<li class="toclevel-2"><a href="#MAPS"><span class="tocnumber">11.1</span> <span class="toctext">MAPS</span></a></li>
+<li class="toclevel-2"><a href="#GOOGLE_KEY"><span class="tocnumber">11.2</span> <span class="toctext">GOOGLE_KEY</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Timezone"><span class="tocnumber">12</span> <span class="toctext">Timezone</span></a>
+<ul>
+<li class="toclevel-2"><a href="#CAMERA_TZ"><span class="tocnumber">12.1</span> <span class="toctext">CAMERA_TZ</span></a></li>
+<li class="toclevel-2"><a href="#DATE_FORMAT"><span class="tocnumber">12.2</span> <span class="toctext">DATE_FORMAT</span></a></li>
+<li class="toclevel-2"><a href="#TIME_FORMAT"><span class="tocnumber">12.3</span> <span class="toctext">TIME_FORMAT</span></a></li>
+<li class="toclevel-2"><a href="#GUESS_TZ"><span class="tocnumber">12.4</span> <span class="toctext">GUESS_TZ</span></a></li>
 </ul>
 </li>
 </ul>
@@ -752,6 +776,87 @@ define('LOG_SUBJECT', log::ALL ~(log::REDIRECT | log::DB));
 </tr>
 </table>
 <p><br /></p>
+<h2> <span class="mw-headline" id="Rotating_images">Rotating images</span></h2>
+<h3> <span class="mw-headline" id="ALLOW_ROTATIONS">ALLOW_ROTATIONS</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">ALLOW_ROTATIONS</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Images can be rotated from the webinterface. This option determines whether this feature is available.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>1</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>1</tt>: Allow rotations, <tt>0</tt>: Rotating from webinterface disabled</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('ALLOW_ROTATIONS', 0);</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="ROTATE_CMD">ROTATE_CMD</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">ROTATE_CMD</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Images can be rotated from the webinterface. This is done using an external (shell) command. This option determines which program is used</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>convert</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>convert</tt>: use ImageMagick's <tt>convert</tt> command to rotate images. <b>WARNING</b>: this is a lossy rotate function, <tt>jpegtran</tt>: use <tt>jpegtran</tt> from the Independant JPEG group to perform a lossless rotate. This only works for JPEG images.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('ROTATE_CMD', 'jpegtran');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="BACKUP_ORIGINAL">BACKUP_ORIGINAL</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">BACKUP_ORIGINAL</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Images can be rotated from the webinterface. This option determines whether Zoph keeps a copy of the original file. The backup filename is prepended with <a href="configuration.html#BACKUP_PREFIX" title="Zoph/Configuration">BACKUP_PREFIX</a>.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>1</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>1</tt>: Keep original. <tt>0</tt>: Do not keep original.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('BACKUP_ORIGINAL', 0);</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="BACKUP_PREFIX">BACKUP_PREFIX</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">BACKUP_PREFIX</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Images can be rotated from the webinterface. <a href="configuration.html#BACKUP_ORIGINAL" title="Zoph/Configuration">BACKUP_ORIGINAL</a> determines whether Zoph keeps a copy of the original file. If it does, the backup filename is prepended with the prefix set in this option.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>'orig_'</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any (short) prefix string. It is recommended to end it with an underscore.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('BACKUP_PREFIX', 'backup_');</tt></td>
+</tr>
+</table>
+<p><br /></p>
 <h2> <span class="mw-headline" id="Database_configuration">Database configuration</span></h2>
 <div style="width:50%; background:#FFFF66; color:black; border:1px solid black; margin:auto; font-weight:normal; padding: 0 2em 1em 2em;">
 <div style="color:red; font-size-adjust:0.5; margin:0.75em; text-align:center;"><b>Important!</b></div>
@@ -902,106 +1007,184 @@ define('LOG_SUBJECT', log::ALL ~(log::REDIRECT | log::DB));
 </tr>
 </table>
 <p><br /></p>
-<h2> <span class="mw-headline" id="Import_settings">Import settings</span></h2>
-<h3> <span class="mw-headline" id="CLIENT_WEB_IMPORT">CLIENT_WEB_IMPORT</span></h3>
+<h2> <span class="mw-headline" id="Import_settings_.280.8.2_and_later.29">Import settings (0.8.2 and later)</span></h2>
+<h3> <span class="mw-headline" id="IMPORT">IMPORT</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
-<th style="width: 150px;">CLIENT_WEB_IMPORT</th>
-<td style="width: 450px;"><b>Versions:</b> 0.3.3. and later</td>
+<th style="width: 150px;">IMPORT</th>
+<td style="width: 450px;"><b>Versions:</b> 0.8.2 and later</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> Use this option to enable or disable importing via the browser using a "browse" button to upload files from the client</td>
+<td colspan="2"><b>Description:</b> Use this option to enable or disable importing using the webbrowser. With this option on (<tt>1</tt>) an admin user, or a user with import rights, can import files placed in the <a href="configuration.html#IMPORT_DIR" title="Zoph/Configuration">IMPORT_DIR</a> into Zoph. If you want users to be able to upload as well, you need to enable <a href="configuration.html#UPLOAD" title="Zoph/Configuration">UPLOAD</a>. As of v0.8.2, Zoph requires Javascript for uploading and importing, so you need to enable <a href="configuration.html#JAVASCRIPT" title="Zoph/Configuration">JAVASCRIPT</a>.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Default:</b> <tt>1</tt></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing uploaded files</td>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing.</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define(CLIENT_WEB_IMPORT, '1');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define(IMPORT, '1');</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<h3> <span class="mw-headline" id="SERVER_WEB_IMPORT">SERVER_WEB_IMPORT</span></h3>
+<h3> <span class="mw-headline" id="UPLOAD">UPLOAD</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
-<th style="width: 150px;">SERVER_WEB_IMPORT</th>
-<td style="width: 450px;"><b>Versions:</b> 0.3.3. and later</td>
+<th style="width: 150px;">UPLOAD</th>
+<td style="width: 450px;"><b>Versions:</b> 0.8.2 and later</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> Use this option to enable or disable importing via the browser using a file already stored on the server</td>
+<td colspan="2"><b>Description:</b> Use this option to enable or disable uploading files. With this option on (<tt>1</tt>) an admin user, or a user with import rights, can upload files to the server running Zoph, they will be placed in the directory defined by <a href="configuration.html#IMPORT_DIR" title="Zoph/Configuration">IMPORT_DIR</a>. This option requires <a href="configuration.html#IMPORT" title="Zoph/Configuration">IMPORT</a> to be enabled.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>1</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable uploaded files.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define(IMPORT, '1');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="IMPORT_DIR">IMPORT_DIR</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">IMPORT_DIR</th>
+<td style="width: 450px;"><b>Versions:</b> 0.8.2 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Directory where uploaded files are stored and from where files are imported in Zoph. This is a directory under <a href="configuration.html#IMAGE_DIR" title="Zoph/Configuration">IMAGE_DIR</a>.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt><tt>upload</tt></tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any directory under <a href="configuration.html#IMAGE_DIR" title="Zoph/Configuration">IMAGE_DIR</a>. If <a href="configuration.html#IMAGE_DIR" title="Zoph/Configuration">IMAGE_DIR</a> is set to <tt>/data/images/</tt> and <a href="configuration.html#IMPORT_DIR" title="Zoph/Configuration">IMPORT_DIR</a> is set to <tt>upload</tt>, Zoph will upload photos to <tt>/data/images/upload</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define(IMPORT_DIR, 'upload');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="IMPORT_PARALLEL">IMPORT_PARALLEL</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">IMPORT_PARALLEL</th>
+<td style="width: 450px;"><b>Versions:</b> 0.8.2 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Photos will be resized to thumbnail and midsize images during import, this setting determines how many resize actions run in parallel.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>1</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any number. Don't change this, unless you have a fast server with multiple CPU's or cores.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define(IMPORT_PARALLEL, 2);</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="MAGIC_FILE">MAGIC_FILE</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">MAGIC_FILE</th>
+<td style="width: 450px;"><b>Versions:</b> 0.8.2 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Zoph needs a MIME Magic file to be able to determine the filetype of an uploaded file. This is an important security measure, since it prevents users from uploading files other than images and archives.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>/usr/share/misc/magic.mgc</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Full path to a MIME Magic file. Where this file is located, depends on your distribution, <tt>/usr/share/misc/magic.mgc</tt> (default), <tt>/usr/share/misc/file/magic.mgc</tt>, <tt>/usr/share/file/magic</tt> are often used.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define(MAGIC_FILE, '/usr/share/file/magic.mime');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="TAR_CMD">TAR_CMD</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">TAR_CMD</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> The command to use to untar .tar files.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Default:</b> <tt>0</tt></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing files stored on the server</td>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: Disable TAR uploading. <tt>tar xvf</tt>: Will work on most systems, modify if your system requires another command</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('SERVER_WEB_IMPORT', '1');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('TAR_CMD', 'tar xvf');</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<h3> <span class="mw-headline" id="WEB_IMPORT_.28deprecated.29">WEB_IMPORT <i>(deprecated)</i></span></h3>
+<h3> <span class="mw-headline" id="UNZIP_CMD">UNZIP_CMD</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
-<th style="width: 150px;">WEB_IMPORT <i>(deprecated)</i></th>
-<td style="width: 450px;"><b>Versions:</b> 0.3.2. and before</td>
+<th style="width: 150px;">UNZIP_CMD</th>
+<td style="width: 450px;"><b>Versions:</b> All versions</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> Use this option to enable or disable importing via the browser</td>
+<td colspan="2"><b>Description:</b> The command to use to unzip .zip files.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Default:</b> <tt>0</tt></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing files using the webinterface</td>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: Disable ZIP uploading. <tt>unzip</tt>: Will work on most systems, modify if your system requires another command</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('WEB_IMPORT', '1');</tt></td>
-</tr>
-</table>
-<p><br /></p>
-<h3> <span class="mw-headline" id="DEFAULT_DESTINATION_PATH">DEFAULT_DESTINATION_PATH</span></h3>
-<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
-<tr>
-<th style="width: 150px;">DEFAULT_DESTINATION_PATH</th>
-<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
-</tr>
-<tr>
-<td colspan="2"><b>Description:</b> Sets the default path to which photos are imported when using the webinterface, the path is relative to <a href="configuration.html#IMAGE_DIR" title="Zoph/Configuration">IMAGE_DIR</a>. You can have Zoph automatically add today's date to the path by using <tt>date(<i>format</i>)</tt>, where format is a format string like <a href="http://php.net/manual/en/function.date.php" class="external text" rel="nofollow">PHP's date() function</a>, without quotes. Please note that this is the date the import is being done, not the the date the photo was taken, use <a href="configuration.html#USE_DATED_DIRS" title="Zoph/Configuration">USE_DATED_DIRS</a> if you want that.</td>
-</tr>
-<tr>
-<td colspan="2"><b>Default:</b> <tt>uploads/date(Y.m.d)</tt></td>
-</tr>
-<tr>
-<td colspan="2"><b>Options:</b></td>
-</tr>
-<tr>
-<td colspan="2"><b>Example:</b> <tt>define('DEFAULT_DESTINATION_PATH', 'date(Y-M)');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('UNZIP_CMD', 'unzip');</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<h3> <span class="mw-headline" id="SHOW_DESTINATION_PATH">SHOW_DESTINATION_PATH</span></h3>
+<h3> <span class="mw-headline" id="UNGZ_CMD">UNGZ_CMD</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
-<th style="width: 150px;">SHOW_DESTINATION_PATH</th>
-<td style="width: 450px;"><b>Versions:</b> 0.4 and later</td>
+<th style="width: 150px;">UNGZ_CMD</th>
+<td style="width: 450px;"><b>Versions:</b> 0.8.2 and later</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> This determines whether or not the value configured by <a href="configuration.html#DEFAULT_DESTINATION_PATH" title="Zoph/Configuration">DEFAULT_DESTINATION_PATH</a> is visible/editable by a user. Please note that this is a <i>usability</i> feature and not a <i>security</i> feature, a user who has import rights can easily edit the value when changing the HTML file, then again, you shouldn't give untrustable users import rights.
-<p>This option is ignored for admin users, there it is always shown</p>
-</td>
+<td colspan="2"><b>Description:</b> The command to use to unzip gzip files.</td>
 </tr>
 <tr>
 <td colspan="2"><b>Default:</b> <tt>0</tt></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> <tt>0</tt>: do not show, or <tt>1</tt>: show the destination path field</td>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: Disable GZ uploading. <tt>ungzip</tt>: Will work on most systems, modify if your system requires another command</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('SHOW_DESTINATION_PATH', '1');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('UNGZ_CMD', 'ungzip');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="UNBZ_CMD">UNBZ_CMD</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">UNBZ_CMD</th>
+<td style="width: 450px;"><b>Versions:</b> 0.8.2 and later</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> The command to use to unzip bzip files.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: Disable BZIP uploading. <tt>unzip</tt>: Will work on most systems, modify if your system requires another command</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('UNZIP_CMD', 'unzip');</tt></td>
 </tr>
 </table>
 <p><br /></p>
@@ -1022,46 +1205,6 @@ define('LOG_SUBJECT', log::ALL ~(log::REDIRECT | log::DB));
 </tr>
 <tr>
 <td colspan="2"><b>Example:</b> <tt>define('MAX_UPLOAD', '10000000');</tt></td>
-</tr>
-</table>
-<p><br /></p>
-<h3> <span class="mw-headline" id="REMOVE_ARCHIVE">REMOVE_ARCHIVE</span></h3>
-<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
-<tr>
-<th style="width: 150px;">REMOVE_ARCHIVE</th>
-<td style="width: 450px;"><b>Versions:</b> 0.5 and later</td>
-</tr>
-<tr>
-<td colspan="2"><b>Description:</b> Remove the .tar or .zip file after a successful import.</td>
-</tr>
-<tr>
-<td colspan="2"><b>Default:</b> <tt>0</tt></td>
-</tr>
-<tr>
-<td colspan="2"><b>Options:</b> <tt>0</tt>: leave the file, or <tt>1</tt>: remove the file</td>
-</tr>
-<tr>
-<td colspan="2"><b>Example:</b> <tt>define('REMOVE_ARCHIVE', '0');</tt></td>
-</tr>
-</table>
-<p><br /></p>
-<h3> <span class="mw-headline" id="IMPORT_MOVE">IMPORT_MOVE</span></h3>
-<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
-<tr>
-<th style="width: 150px;">IMPORT_MOVE</th>
-<td style="width: 450px;"><b>Versions:</b> 0.7.1 and later</td>
-</tr>
-<tr>
-<td colspan="2"><b>Description:</b> Move, instead of copy the image from the default import location to the final location. In this way no duplicate files will be around.</td>
-</tr>
-<tr>
-<td colspan="2"><b>Default:</b> <tt>0</tt></td>
-</tr>
-<tr>
-<td colspan="2"><b>Options:</b> <tt>0</tt>: copy the file, or <tt>1</tt>: move the file</td>
-</tr>
-<tr>
-<td colspan="2"><b>Example:</b> <tt>define('IMPORT_MOVE', '0');</tt></td>
 </tr>
 </table>
 <p><br /></p>
@@ -1105,45 +1248,230 @@ define('LOG_SUBJECT', log::ALL ~(log::REDIRECT | log::DB));
 </tr>
 </table>
 <p><br /></p>
-<h3> <span class="mw-headline" id="TAR_CMD">TAR_CMD</span></h3>
+<h3> <span class="mw-headline" id="DIR_MODE">DIR_MODE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
-<th style="width: 150px;">TAR_CMD</th>
+<th style="width: 150px;">DIR_MODE</th>
 <td style="width: 450px;"><b>Versions:</b> All versions</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> The command to use to untar .tar files uploaded via the web import.</td>
+<td colspan="2"><b>Description:</b> Specifies the file permissions that are assigned to directories created by Zoph.</td>
 </tr>
 <tr>
-<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+<td colspan="2"><b>Default:</b> <tt>0755</tt></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> <tt>0</tt>: Disable TAR uploading. <tt>tar xvf</tt>: Will work on most systems, modify if your system requires another command</td>
+<td colspan="2"><b>Options:</b> Any valid chmod-mode, keep in mind that a directory needs to be executable, in order to use it. <b>Warning:</b> Do not place quotes around the value, or you will get strange results!</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('TAR_CMD', 'tar xvf');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('DIR_MODE', 0750);</tt></td>
 </tr>
 </table>
 <p><br /></p>
-<h3> <span class="mw-headline" id="UNZIP_CMD">UNZIP_CMD</span></h3>
+<h3> <span class="mw-headline" id="FILE_MODE">FILE_MODE</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
 <tr>
-<th style="width: 150px;">UNZIP_CMD</th>
-<td style="width: 450px;"><b>Versions:</b> All versions</td>
+<th style="width: 150px;">FILE_MODE</th>
+<td style="width: 450px;"><b>Versions:</b> 0.8.2 and later</td>
 </tr>
 <tr>
-<td colspan="2"><b>Description:</b> The command to use to unzip .zip files uploaded via the web import.</td>
+<td colspan="2"><b>Description:</b> Specifies the file permissions that are assigned to files created by Zoph. This replaces the <a href="configuration.html#IMPORT_UMASK" title="Zoph/Configuration">IMPORT_UMASK</a> setting</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0644</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any valid chmod-mode, keep in mind that an image should not be executable, but that it should be readable by Zoph. <b>Warning:</b> Do not place quotes around the value, or you will get strange results!</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('FILE_MODE', 0640);</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h2> <span class="mw-headline" id="Import_settings_.280.8.1_and_before.29">Import settings (0.8.1 and before)</span></h2>
+<h3> <span class="mw-headline" id="WEB_IMPORT_.28deprecated.29">WEB_IMPORT <i>(deprecated)</i></span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">WEB_IMPORT <i>(deprecated)</i></th>
+<td style="width: 450px;"><b>Versions:</b> 0.3.2. and before</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Use this option to enable or disable importing via the browser</td>
 </tr>
 <tr>
 <td colspan="2"><b>Default:</b> <tt>0</tt></td>
 </tr>
 <tr>
-<td colspan="2"><b>Options:</b> <tt>0</tt>: Disable ZIP uploading. <tt>unzip</tt>: Will work on most systems, modify if your system requires another command</td>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing files using the webinterface</td>
 </tr>
 <tr>
-<td colspan="2"><b>Example:</b> <tt>define('UNZIP_CMD', 'unzip');</tt></td>
+<td colspan="2"><b>Example:</b> <tt>define('WEB_IMPORT', '1');</tt></td>
 </tr>
 </table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="CLIENT_WEB_IMPORT">CLIENT_WEB_IMPORT</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">CLIENT_WEB_IMPORT</th>
+<td style="width: 450px;"><b>Versions:</b> 0.3.3 until 0.8.1</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Use this option to enable or disable importing via the browser using a "browse" buton to upload files from the client. As of v0.8.2 this has been replaced by <a href="configuration.html#UPLOAD" title="Zoph/Configuration">UPLOAD</a>.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>1</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing uploaded files.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define(CLIENT_WEB_IMPORT, '1');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="SERVER_WEB_IMPORT">SERVER_WEB_IMPORT</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">SERVER_WEB_IMPORT</th>
+<td style="width: 450px;"><b>Versions:</b> 0.3.3 until 0.8.1</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Use this option to enable or disable importing via the browser using a file already stored on the server. As of v0.8.2 this has been replaced by <a href="configuration.html#IMPORT" title="Zoph/Configuration">IMPORT</a>.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing files stored on the server.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('SERVER_WEB_IMPORT', '1');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="WEB_IMPORT_.28deprecated.29_2">WEB_IMPORT <i>(deprecated)</i></span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">WEB_IMPORT <i>(deprecated)</i></th>
+<td style="width: 450px;"><b>Versions:</b> 0.3.2. and before</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Use this option to enable or disable importing via the browser</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: disable, or <tt>1</tt>: enable importing files using the webinterface</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('WEB_IMPORT', '1');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="DEFAULT_DESTINATION_PATH">DEFAULT_DESTINATION_PATH</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">DEFAULT_DESTINATION_PATH</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 until 0.8.1</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Sets the default path to which photos are imported when using the webinterface, the path is relative to <a href="configuration.html#IMAGE_DIR" title="Zoph/Configuration">IMAGE_DIR</a>. You can have Zoph automatically add today's date to the path by using <tt>date(<i>format</i>)</tt>, where format is a format string like <a href="http://php.net/manual/en/function.date.php" class="external text" rel="nofollow">PHP's date() function</a>, without quotes. Please note that this is the date the import is being done, not the the date the photo was taken, use <a href="configuration.html#USE_DATED_DIRS" title="Zoph/Configuration">USE_DATED_DIRS</a> if you want that. As of Zoph 0.8.2, this option is no longer used, as all files are initially placed in <a href="configuration.html#IMPORT_DIR" title="Zoph/Configuration">IMPORT_DIR</a></td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>uploads/date(Y.m.d)</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b></td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('DEFAULT_DESTINATION_PATH', 'date(Y-M)');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="SHOW_DESTINATION_PATH">SHOW_DESTINATION_PATH</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">SHOW_DESTINATION_PATH</th>
+<td style="width: 450px;"><b>Versions:</b> 0.4 until 0.8.1</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> This determines whether or not the value configured by <a href="configuration.html#DEFAULT_DESTINATION_PATH" title="Zoph/Configuration">DEFAULT_DESTINATION_PATH</a> is visible/editable by a user. Please note that this is a <i>usability</i> feature and not a <i>security</i> feature, a user who has import rights can easily edit the value when changing the HTML file, then again, you shouldn't give untrustable users import rights.
+<p>This option is ignored for admin users, there it is always shown</p>
+</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: do not show, or <tt>1</tt>: show the destination path field</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('SHOW_DESTINATION_PATH', '1');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="REMOVE_ARCHIVE">REMOVE_ARCHIVE</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">REMOVE_ARCHIVE</th>
+<td style="width: 450px;"><b>Versions:</b> 0.5 until 0.8.1</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Remove the .tar or .zip file after a successful import.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: leave the file, or <tt>1</tt>: remove the file. As of v0.8.2, Zoph always removes the archive on a succesful extract of that archive.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('REMOVE_ARCHIVE', '0');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="IMPORT_MOVE">IMPORT_MOVE</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">IMPORT_MOVE</th>
+<td style="width: 450px;"><b>Versions:</b> 0.7.1 until 0.8.1</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Move, instead of copy the image from the default import location to the final location. In this way no duplicate files will be around. As of v0.8.2 this option is removed.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>0</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> <tt>0</tt>: copy the file, or <tt>1</tt>: move the file</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('IMPORT_MOVE', '0');</tt></td>
+</tr>
+</table>
+<p><br /></p>
+<h3> <span class="mw-headline" id="IMPORT_UMASK">IMPORT_UMASK</span></h3>
+<table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
+<tr>
+<th style="width: 150px;">IMPORT_UMASK</th>
+<td style="width: 450px;"><b>Versions:</b> 0.8.1 and before</td>
+</tr>
+<tr>
+<td colspan="2"><b>Description:</b> Specifies the file permissions that are assigned to files created by Zoph. This value is subtracted from the default chmod-file permissions of 666, so a umask of 022 means that the file permissions will become 644 (rw for owner, r for group and others) . This option has been replaced with <a href="configuration.html#FILE_MODE" title="Zoph/Configuration">FILE_MODE</a></td>
+</tr>
+<tr>
+<td colspan="2"><b>Default:</b> <tt>022</tt></td>
+</tr>
+<tr>
+<td colspan="2"><b>Options:</b> Any value that can be subtracted from the default 666 mode, keep in mind that an image should not be executable, but that it should be readable by Zoph.</td>
+</tr>
+<tr>
+<td colspan="2"><b>Example:</b> <tt>define('IMPORT_UMASK', '026');</tt></td>
+</tr>
+</table>
+<p><br />
+See also: <a href="configuration.html#TAR_CMD" title="Zoph/Configuration">TAR_CMD</a>, <a href="configuration.html#UNZIP_CMD" title="Zoph/Configuration">UNZIP_CMD</a>, <a href="configuration.html#USE_DATED_DIRS" title="Zoph/Configuration">USE_DATED_DIRS</a>, <a href="configuration.html#HIER_DATED_DIRS" title="Zoph/Configuration">HIER_DATED_DIRS</a>, <a href="configuration.html#MAX_UPLOAD" title="Zoph/Configuration">MAX_UPLOAD</a> and <a href="configuration.html#DIR_MODE" title="Zoph/Configuration">DIR_MODE</a></p>
 <h2> <span class="mw-headline" id="Features">Features</span></h2>
 <h3> <span class="mw-headline" id="JAVASCRIPT">JAVASCRIPT</span></h3>
 <table align="center" border="1" style="background: #dddddd; border: 2px solid #cccccc; border-collapse: collapse; margin: 0 1em 1em 1em; padding: 5px;">
@@ -1467,7 +1795,6 @@ define('LOG_SUBJECT', log::ALL ~(log::REDIRECT | log::DB));
 <td colspan="2"><b>Example:</b> <tt>define('GUESS_TZ', 1);</tt></td>
 </tr>
 </table>
-
 
 
 

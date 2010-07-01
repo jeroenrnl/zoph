@@ -42,7 +42,7 @@
 
     if ($action != "insert") {
         $this_user->lookup();
-        $title = $this_user->get("user_name");
+        $title = e($this_user->get("user_name"));
     } else {
         $title = translate("New User");
     }
@@ -61,7 +61,7 @@
           <?php echo translate("user") ?>
         </h1>
         <div class="main">
-          <h2><?php echo $this_user->get("user_name") ?></h2>
+          <h2><?php echo e($this_user->get("user_name")) ?></h2>
             <dl>
                 <?php echo create_field_html($this_user->get_display_array(), 3) ?>
             </dl>
@@ -77,20 +77,20 @@
 
         $subject = translate("Your Zoph Account", 0);
         $message =
-            translate("Hi",0) . " " . $name .  ",\n\n" .
+            translate("Hi",0) . " " . e($name) .  ",\n\n" .
             translate("I have created a Zoph account for you", 0) .
-            ":\n\n" .  "$url\n" .
+            ":\n\n" .  e($url) . "\n" .
             translate("user name", 0) . ": " .
-            $this_user->get("user_name") . "\n";
+            e($this_user->get("user_name")) . "\n";
 
         if ($_action == "insert") {
             $message .=
                 translate("password", 0) . ": " .
-                $this_user->get("password") . "\n";
+                e($this_user->get("password")) . "\n";
         }
         $message .=
             "\n" . translate("Regards,",0) . "\n" .
-            $user->person->get_name();
+            e($user->person->get_name());
 ?>
 <form action="notify.php" method="POST">
 <input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">

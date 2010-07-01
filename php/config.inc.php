@@ -16,12 +16,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.8.2pre');
+    define('VERSION', '0.8.1.1');
 
-    // DB_HOST, DB_NAME, DB_USER, DB_PASS and DB_PREFIX have been moved to
-    // zoph.ini. The location can be set by the next config item:
-    
-    define('INI_FILE', "/etc/zoph.ini");
+    define('DB_HOST', 'localhost');
+    define('DB_NAME', 'zoph');
+    define('DB_USER', 'zoph_rw');
+    define('DB_PASS', 'pass');
+    define('DB_PREFIX', 'zoph_'); // prefix for tables, '' for none
 
     // Define how Zoph looks by choosing a stylesheet and iconset.
     define('CSS_SHEET', 'css.php');
@@ -111,7 +112,7 @@
     // Watermark must be a GIF image, transparancy is honoured!
     // the filename is relative to the image root (IMAGE_DIR)
     define('WATERMARK', 'watermark.gif');
-
+    
     // Position of the watermark: left, centre or right
     define('WM_POSX', 'center');
     // Position of the watermark: top, centre or bottom
@@ -124,69 +125,47 @@
     // If set to 1, users can leave comments with photos
     define('ALLOW_COMMENTS', 0);
 
-    // Enable downloading of a set of photos in a ZIP file.
-    // Warning: the downloaded photos are NOT watermarked.
-    define('DOWNLOAD', 0);
 
-    // Import related options:
+    // web import of photos
+    define('CLIENT_WEB_IMPORT', 1);
+    define('SERVER_WEB_IMPORT', 0);
 
-    // Enable (1) or disable (0) importing through the webinterface.
-    define('IMPORT', 1);
-    // Enable (1) or disable (0) uploading photos.
-    define('UPLOAD', 0);
+    // If set to 1, move images into their final location after uploading, 
+    // otherwise, the images are copied and you have the same image twice.
+    define('IMPORT_MOVE',1);
 
     // Maximum filesize to be uploaded, in bytes:
     // Make sure you also change "upload_max_filesize" "post_max_size"
     // and possibly "max_execution_time" and "max_input_time" in php.ini
     define('MAX_UPLOAD', 10000000);
-
-    // Directory where uploads are placed until they are completely processed
-    // this is a directory under IMAGE_DIR
-    define('IMPORT_DIR', 'upload');
-
-    // Number of files to resize at the same time
-    // on a fast server with multiple CPU's or cores, you could increase this
-    define('IMPORT_PARALLEL', 1);
-
-    // Automatically rotate imported images
-    // requires "jhead"
-    define('IMPORT_AUTOROTATE', 0);
-
-    // How to resize an image during  import
-    // 'resample': high quality / high CPU / slow [default]
-    // 'resize': lower quality / low CPU / fast
-    // resize can be about 3 times faster, but the resized image has a
-    // lower quality.
-    define('IMPORT_RESIZE', 'resample');
-
-    // Zoph needs a MIME Magic file to be able to determine the filetype of an 
-    // uploaded file. This is an important security measure, since it prevents 
-    // users from uploading files other than images and archives.
-    //
-    // Where this file is located, depends on your distribution, 
-    // /usr/share/misc/magic.mgc (default), /usr/share/misc/file/magic.mgc, 
-    // /usr/share/file/magic are often used.
-    //
-    define('MAGIC_FILE', '/usr/share/misc/magic.mgc');
-
         
     // commands to use to expand uploaded archives.  set to 0 to disable.
-    // Set to a valid command to enable, NOT "1"
-
     define('UNZIP_CMD', 0);
     //define('UNZIP_CMD', 'unzip');
     define('UNTAR_CMD', 0);
     //define('UNTAR_CMD', 'tar xvf');
-    define('UNGZ_CMD', 0);
-    //define('UNGZ_CMD', 'gunzip');
-    define('UNBZ_CMD', 0);
-    //define('UNBZ_CMD', 'bunzip2');
+    
+    // Enable downloading of a set of photos in a ZIP file.
+    // Warning: the downloaded photos are NOT watermarked.
+    define('DOWNLOAD', 0);
+        
+    // directory to use to temporarily extract uploaded archives
+    define('EXTRACT_DIR', '/tmp');
+
+    // Remove zip or tar file after successful import
+    define('REMOVE_ARCHIVE', 0);
+
+    // destination path params for importing
+    // "date(format)" will be expanded to today's date
+    define('DEFAULT_DESTINATION_PATH', 'uploads/date(Y.m.d)');
 
     // Use dated dirs with web import 
     define('USE_DATED_DIRS', 0);
     // Use hierarchical dated dirs like 2005/12/21
     // This parameter is ignored when USE_DATED_DIRS is not set
     define('HIER_DATED_DIRS', 0);
+
+    define('SHOW_DESTINATION_PATH', 0); // show for non admin users
 
     // let users rate photos
     define('ALLOW_RATINGS', 1);
@@ -241,19 +220,12 @@
     // note that this is a user_id, not a person_id
     define('DEFAULT_USER', 0);
 
-    // This is the user_id of the user that is used when using the CLI
-    // this user *must* be an admin user.
-    // If set to 0, zoph will try to find a Zoph user by the name of the
-    // currently logged on (unix) user.
-    define('CLI_USER', 0);
-
     // if this is non-zero the people and places pages will default to
     // "show all" instead of "a".
     define('DEFAULT_SHOW_ALL', 1);
 
     // these two are for the importer
-    // Make sure there are no quotes around these numbers!
-    define('FILE_MODE', 0644);
+    define('IMPORT_UMASK', 022);
     define('DIR_MODE', 0755);
 
     // LOG_ALWAYS and LOG_SEVERITY can have the following values:

@@ -1,4 +1,15 @@
 Zoph Changelog
+Zoph 0.8.1.1
+July 1, 2010
+
+Zoph 0.8.1.1 is a security release that fixes a number of Cross Site Scripting (XSS) issues of which most were found by VUPEN Security. I would like to thank VUPEN for reporting these bugs.
+
+Zoph 0.8.1.1 does not fix any other bugs.
+
+Bugs
+    * Several XSS scripting issues found by VUPEN Security
+    * Several XSS scripting issues found during fixing of the above bugs
+
 
 Zoph 0.8.1
 3 Jan 2010

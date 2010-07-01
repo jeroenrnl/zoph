@@ -1,3 +1,9 @@
+Zoph 0.8.1 to 0.8.1.1
+=====================
+Copy php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.
+
+You can upgrade directly from 0.8 to 0.8.1.1, simply use the zoph-0.8.1.1.tar.gz and execute the instructions for the 0.8 to 0.8.1 upgrade.
+
 Zoph 0.8 to 0.8.1
 =================
     * Follow the upgrade instructions to 0.8 first if you are using an older version. (no need to really download and install v0.8, just execute the upgrade instructions).

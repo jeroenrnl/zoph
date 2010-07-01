@@ -91,33 +91,33 @@ class photo extends zoph_table {
     }
 
     function update_relations($vars, $suffix = '', $user=null) {
-        if (!empty($vars["_album$suffix"])) {
+        if ($vars["_album$suffix"]) {
             $this->add_to_album($vars["_album$suffix"], $user);
         }
 
-        if (!empty($vars["_remove_album$suffix"])) {
+        if ($vars["_remove_album$suffix"]) {
             $this->remove_from_album($vars["_remove_album$suffix"]);
         }
 
-        if (!empty($vars["_category$suffix"])) {
+        if ($vars["_category$suffix"]) {
             $this->add_to_category($vars["_category$suffix"]);
         }
 
-        if (!empty($vars["_remove_category$suffix"])) {
+        if ($vars["_remove_category$suffix"]) {
             $this->remove_from_category($vars["_remove_category$suffix"]);
         }
 
-        if (!empty($vars["_person$suffix"])) {
+        if ($vars["_person$suffix"]) {
             $this->add_to_person($vars["_person$suffix"], $vars["_position$suffix"]);
         }
-        for ($i = 0; $i < (int) MAX_PEOPLE_SLOTS; $i++) {
-           if (!empty($vars["_person_" . $i . $suffix])) {
+        for ($i = 0; $i < MAX_PEOPLE_SLOTS; $i++) {
+           if ($vars["_person_" . $i . $suffix]) {
                $this->add_to_person($vars["_person_" . $i . $suffix], 
                   $vars["_position_" . $i . $suffix]);
            }
         }
 	
-        if (!empty($vars["_remove_person$suffix"])) {
+        if ($vars["_remove_person$suffix"]) {
             $this->remove_from_person($vars["_remove_person$suffix"]);
         }
     }
@@ -264,71 +264,6 @@ class photo extends zoph_table {
             " and pp.person_id = psn.person_id order by pp.position";
 
         return get_records_from_query("person", $sql);
-    }
-    
-    function move($path) {
-        $oldpath=$this->get("path");
-        $filename=$this->get("name");
-
-        $conv=get_converted_image_name($filename);
-        $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
-        $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
-
-        if(USE_DATED_DIRS) {
-            // This is not really validating the date, just making sure
-            // no-one is playing tricks, such as setting the date to /etc/passwd or
-            // something.
-            $date=$this->get("date");
-            if(!preg_match("/^[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}$/", $date)) {
-                log::msg("Illegal date, using today's", log::ERROR, log::IMPORT);
-                $date=date("Y-m-d", now());
-            }
-
-            if (HIER_DATED_DIRS) {
-                $path .= "/" . cleanup_path(str_replace("-", "/", $date));
-            } else {
-                $path .= "/" . cleanup_path(str_replace("-", ".", $date));
-            }
-        }
-
-        
-        $old="/" . cleanup_path(IMAGE_DIR . "/" . $oldpath);
-        $new="/" . cleanup_path(IMAGE_DIR . "/" . $path);
-        
-        create_dir_recursive($new . "/" . MID_PREFIX);
-        create_dir_recursive($new . "/" . THUMB_PREFIX);
-
-        foreach(array($filename, $midname, $thumbname) as $file) {
-            if(!is_writable($new)) {
-                log::msg("Directory not writable: " . $new, log::FATAL, log::IMPORT);
-            }
-            if(!file_exists($old . "/" . $file)) {
-                log::msg("File not found: " . $file, log::FATAL, log::IMPORT);
-            }
-            if(file_exists($new . "/" . $file)) {
-                log::msg("File already exists: " . $file, log::FATAL, log::IMPORT);
-            }
-            if(!is_readable($old . "/" . $file)) {
-                log::msg("Cannot read file: " . $file, log::FATAL, log::IMPORT);
-            }
-            if(!is_writable($old . "/" . $file)) {
-                log::msg("File is not writable: " .$file, log::FATAL, log::IMPORT);
-            }
-        }
-        // We run this loop twice, because we only want to move the file if *all* 
-        // files have been checked.
-        foreach(array($filename, $midname, $thumbname) as $file) {
-            rename($old . "/" . $file, $new . "/" . $file); 
-            if(!defined("FILE_MODE") || !is_numeric(FILE_MODE)) {
-                define('FILE_MODE', 0644);
-                log::msg("FILE_MODE is not set correctly in config.inc.php, using default (0644)", LOG::WARN, LOG::GENERAL);
-            }
-            if(!chmod($new . "/" . $file, FILE_MODE)) {
-                log::msg("Could not change permissions for <b>" . $file . "</b>", LOG::ERROR, LOG::IMPORT);
-            }
-        }
-        // Update the db to the new path;
-        $this->set("path", $path);
     }
 
     function get_file_path() {
@@ -592,6 +527,7 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
             $img_src = $this->get_image_resource();
             $destroy = true;
         }
+
         $image_info = getimagesize($this->get_file_path());
         $width = $image_info[0];
         $height = $image_info[1];
@@ -606,18 +542,9 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
         }
 
         $img_dst = imagecreatetruecolor($new_width, $new_height);
-        flush();
-        if(!defined("IMPORT_RESIZE")) {
-            define("IMPORT_RESIZE", "resample");
-        }
-        if (strtolower(IMPORT_RESIZE)=="resize") {
-            imagecopyresized($img_dst, $img_src, 0, 0, 0, 0,
-                $new_width, $new_height, $width, $height);
-        } else {
-            imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0,
-                $new_width, $new_height, $width, $height);
-        }
-        flush();
+        imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0,
+            $new_width, $new_height, $width, $height);
+
         $new_image = IMAGE_DIR . $this->get("path") . '/' . $prefix . '/' .
             $prefix . '_' .  get_converted_image_name($this->get("name"));
 
@@ -1354,30 +1281,31 @@ function create_rating_graph($user) {
     while ($row = fetch_array($result)) {
     	$ratings[($row[0] ? $row[0] : translate("Not rated"))]=$row[1];
 	}
-    $html="<h3>" . translate("photo ratings") . "</h3>";
-    $legend=array(translate("rating"),translate("count"));
-    while (list($range, $count) = each($ratings)) {
-        if($range>0) {
-            $min_rating=$range-0.5;
-	        $max_rating=$range+0.5;
-            $link =
-              "search.php?rating%5B0%5D=" . $min_rating . 
-              "&amp;_rating_op%5B0%5D=%3E%3D" .
-              "&amp;rating%5B1%5D=" . $max_rating . 
-              "&amp;_rating_op%5B1%5D=%3C&amp;_action=" . translate("search");
-        } else {
+    if(is_array($ratings)) {
+        $html="<h3>" . translate("photo ratings") . "</h3>";
+        $legend=array(translate("rating"),translate("count"));
+        while (list($range, $count) = each($ratings)) {
+            if($range>0) {
+                $min_rating=$range-0.5;
+                $max_rating=$range+0.5;
+                $link =
+                  "search.php?rating%5B0%5D=" . $min_rating . 
+                  "&amp;_rating_op%5B0%5D=%3E%3D" .
+                  "&amp;rating%5B1%5D=" . $max_rating . 
+                  "&amp;_rating_op%5B1%5D=%3C&amp;_action=" . translate("search");
+            } else {
             $link = "photos.php?rating=null";
         }  
-        $row=array($range, $link, $count);
-        $value_array[]=$row;
+            $row=array($range, $link, $count);
+            $value_array[]=$row;
+        }
     }
-
     if($value_array) {
         $html.=create_bar_graph($legend, $value_array, 150);
     } else {
         $html.=translate("No photo was found.") . "\n";
     }
-
+    
     return $html;
 }
 

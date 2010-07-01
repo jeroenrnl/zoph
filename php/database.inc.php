@@ -30,8 +30,6 @@
 
 
     function escape_string($str) {
-
-        $str=str_replace(array("<", ">", "\"", "(", ")"), array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;"), $str);
         return mysql_real_escape_string($str);
     }
 
@@ -105,7 +103,7 @@
     }
 
     function get_db_server_info() {
-        return mysql_get_server_info();
+        return get_mysql_server_info();
     }
 
     function db_server() {
