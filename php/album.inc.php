@@ -431,10 +431,10 @@ function create_album_pulldown($name, $value=null, $user=null) {
     } 
     
     if($user->prefs->get("autocomp_albums") && AUTOCOMPLETE && JAVASCRIPT) {
-        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
-            " value='" . $value . "'>";
-        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
-            " value='" . $text . "' class='autocomplete'>";
+        $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
+            " value='" . e($value) . "'>";
+        $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 
+            "'" .  " value='" . e($text) . "' class='autocomplete'>";
     } else {
         $html=create_pulldown($name, $value, get_albums_search_array($user));
     }

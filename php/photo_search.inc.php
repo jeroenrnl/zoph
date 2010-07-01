@@ -93,7 +93,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $conj = "and";
         }
         if (!in_array($conj, $good_conj)) 
-            { die ("Illegal conjunction: " . $conj); }
+            { die ("Illegal conjunction: " . e($conj)); }
 
         if (!empty($vars[$index . "-op"])) {
             $op = $vars[$index . "-op"];
@@ -101,7 +101,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $op = "=";
         }
         if (!in_array($op, $good_ops)) 
-            { die ("Illegal operator: " . $op); }
+            { die ("Illegal operator: " . e($op)); }
 
         if (!empty($vars[$index . "-children"])) {
             $object=explode("_", $key);
@@ -121,7 +121,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $key = $vars["_" . $key . $suffix];
             }
             if (!in_array($key, $good_text))
-                { die ("Illegal text search: " . $key); }
+                { die ("Illegal text search: " . e($key)); }
               
             $val = escape_string($val);
             $key = escape_string($key);
@@ -336,7 +336,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $key = $vars["_" . $key . $suffix];
             }
             if (!in_array($key, $good_fields))
-                { die ("Illegal field: " . $key); }
+                { die ("Illegal field: " . e($key)); }
               
             $key = "ph.$key";
 

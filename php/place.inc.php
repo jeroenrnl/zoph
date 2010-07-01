@@ -112,17 +112,17 @@ class place extends zoph_tree_table {
     function get_address() {
         $html = "";
         if ($this->get("address"))  {
-            $html .= $this->get("address") . "<br>";
+            $html .= e($this->get("address")) . "<br>";
         }
         if ($this->get("address2")) {
-            $html .= $this->get("address2") . "<br>";
+            $html .= e($this->get("address2")) . "<br>";
         }
-        if ($this->get("city")) { $html .= $this->get("city"); }
+        if ($this->get("city")) { $html .= e($this->get("city")); }
         if ($this->get("city") && $this->get("state")) { $html .= ", "; }
-        if ($this->get("state")) { $html .= $this->get("state"); }
-        if ($this->get("zip")) { $html .= " " . $this->get("zip"); }
+        if ($this->get("state")) { $html .= e($this->get("state")); }
+        if ($this->get("zip")) { $html .= " " . e($this->get("zip")); }
         if ($this->get("country")) {
-            $html .= "<br>" . $this->get("country");
+            $html .= "<br>" . e($this->get("country"));
         }
 
         return $html;
@@ -132,20 +132,20 @@ class place extends zoph_tree_table {
 
         $html = "";
         if ($this->get("title"))    {
-            $html .= "<h2>" . $this->get("title") . "</h2>\n";
+            $html .= "<h2>" . e($this->get("title")) . "</h2>\n";
         }
         $html .= $this->get_address();
         if($this->get("url")) {
             $html .= "<br><br>\n";
-            $html .= "<a href=\"" . $this->get("url") . "\">";
-            $html .= $this->get("urldesc") . "</a>";
+            $html .= "<a href=\"" . e($this->get("url")) . "\">";
+            $html .= e($this->get("urldesc")) . "</a>";
         }
 
         return $html;
     }
 
     function get_link() {
-        $link = "<a href=\"places.php?parent_place_id=" . $this->get("place_id") . "\">" . $this->get_name() . "</a>";
+        $link = "<a href=\"places.php?parent_place_id=" . e($this->get("place_id")) . "\">" . e($this->get_name()) . "</a>";
 
         // add city link if title exists (and so was used by get_name())
   //      if ($this->get("title") && $this->get("city")) {
@@ -316,7 +316,8 @@ class place extends zoph_tree_table {
         // This really is a little quick and dirty, but solving it
         // in another place will mess up too much to do so shortly
         // before the v0.8 release.
-        return str_replace("'", "&apos;", $html);
+        //return str_replace("'", "&apos;", $html);
+        return $html;
     }
     function is_root() {
         // At this moment the root place is always 1, but this may
@@ -345,8 +346,8 @@ class place extends zoph_tree_table {
             if($tz) {
                 $html="<span class='actionlink'>" .
                     "<a href=place.php?_action=update&place_id=" .
-                    $this->get("place_id") . "&timezone=" . $tz .
-                    ">" . $tz . "</a></span>";
+                    e($this->get("place_id")) . "&timezone=" . e($tz) .
+                    ">" . e($tz) . "</a></span>";
             }
             return $html;
         }
@@ -469,10 +470,10 @@ function create_place_pulldown($name, $value=null, $user=null) {
         $text=$place->get("title");
     }
     if($user->prefs->get("autocomp_places") && AUTOCOMPLETE && JAVASCRIPT) {
-        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
-            " value='" . $value . "'>";
-        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
-            " value='" . $text . "' class='autocomplete'>";
+        $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
+            " value='" . e($value) . "'>";
+        $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 
+            "'" . " value='" . e($text) . "' class='autocomplete'>";
     } else {
         $html=create_pulldown($name, $value, get_places_search_array($user));
     }

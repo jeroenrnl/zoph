@@ -339,10 +339,10 @@ function create_cat_pulldown($name, $value=null, $user) {
         $text=$cat->get("category");
     }
     if($user->prefs->get("autocomp_categories") && AUTOCOMPLETE && JAVASCRIPT) {
-        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
-            " value='" . $value . "'>";
-        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
-            " value='" . $text . "' class='autocomplete'>";
+        $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
+            " value='" . e($value) . "'>";
+        $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 
+            "'" .  " value='" . e($text) . "' class='autocomplete'>";
     } else {
         $html=create_pulldown($name, $value, get_categories_search_array($user));
     }

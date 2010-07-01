@@ -9,62 +9,61 @@
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
 <h1 id="firstHeading" class="firstHeading">Zoph/Solving problems</h1>
-		<div id="bodyContent">
-			<table id="toc" class="toc" summary="Contents">
+	<div id="bodyContent">
+		
+<table id="toc" class="toc">
 <tr>
 <td>
 <div id="toctitle">
 <h2>Contents</h2>
 </div>
 <ul>
-<li class="toclevel-1"><a href="#Documentation"><span class="tocnumber">1</span> <span class="toctext">Documentation</span></a></li>
-<li class="toclevel-1"><a href="#Debug_.26_Troubleshooting"><span class="tocnumber">2</span> <span class="toctext">Debug &amp; Troubleshooting</span></a></li>
-<li class="toclevel-1"><a href="#Web_import"><span class="tocnumber">3</span> <span class="toctext">Web import</span></a></li>
-<li class="toclevel-1"><a href="#Autocomplete"><span class="tocnumber">4</span> <span class="toctext">Autocomplete</span></a></li>
-<li class="toclevel-1"><a href="#Common_PHP_Errors"><span class="tocnumber">5</span> <span class="toctext">Common PHP Errors</span></a>
+<li class="toclevel-1 tocsection-1"><a href="#Documentation"><span class="tocnumber">1</span> <span class="toctext">Documentation</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Debug_.26_Troubleshooting"><span class="tocnumber">2</span> <span class="toctext">Debug &amp; Troubleshooting</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Web_import"><span class="tocnumber">3</span> <span class="toctext">Web import</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Autocomplete"><span class="tocnumber">4</span> <span class="toctext">Autocomplete</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Common_PHP_Errors"><span class="tocnumber">5</span> <span class="toctext">Common PHP Errors</span></a>
 <ul>
-<li class="toclevel-2"><a href="#GD_Missing"><span class="tocnumber">5.1</span> <span class="toctext">GD Missing</span></a></li>
-<li class="toclevel-2"><a href="#Allowed_memory_size_exhausted"><span class="tocnumber">5.2</span> <span class="toctext">Allowed memory size exhausted</span></a></li>
-<li class="toclevel-2"><a href="#Maximum_execution_time_exceeded"><span class="tocnumber">5.3</span> <span class="toctext">Maximum execution time exceeded</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#GD_Missing"><span class="tocnumber">5.1</span> <span class="toctext">GD Missing</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Allowed_memory_size_exhausted"><span class="tocnumber">5.2</span> <span class="toctext">Allowed memory size exhausted</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Maximum_execution_time_exceeded"><span class="tocnumber">5.3</span> <span class="toctext">Maximum execution time exceeded</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Webimport_fails_with_with_.27not_found.27_error"><span class="tocnumber">5.4</span> <span class="toctext">Webimport fails with with 'not found' error</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1"><a href="#Reporting_a_bug"><span class="tocnumber">6</span> <span class="toctext">Reporting a bug</span></a></li>
-<li class="toclevel-1"><a href="#Zoph_Forum"><span class="tocnumber">7</span> <span class="toctext">Zoph Forum</span></a></li>
-<li class="toclevel-1"><a href="#Asking_for_help"><span class="tocnumber">8</span> <span class="toctext">Asking for help</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Reporting_a_bug"><span class="tocnumber">6</span> <span class="toctext">Reporting a bug</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Zoph_Forum"><span class="tocnumber">7</span> <span class="toctext">Zoph Forum</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#Asking_for_help"><span class="tocnumber">8</span> <span class="toctext">Asking for help</span></a></li>
 </ul>
 </td>
 </tr>
 </table>
 
-<p><a name="Documentation" id="Documentation"></a></p>
-<h2> <span class="mw-headline">Documentation</span></h2>
-<p>The first place to look in case things go wrong, is the <a href="http://en.wikibooks.org/wiki/Zoph" class="external text" title="http://en.wikibooks.org/wiki/Zoph" rel="nofollow">documentation wikibook</a>. The documentation is also included in the docs directory of the Zoph <i>tarball</i></p>
+<h2> <span class="mw-headline" id="Documentation">Documentation</span></h2>
+<p>The first place to look in case things go wrong, is the <a href="http://en.wikibooks.org/wiki/Zoph" class="external text" rel="nofollow">documentation wikibook</a>. The documentation is also included in the docs directory of the Zoph <i>tarball</i></p>
 <p>Some things to check:</p>
 <ul>
 <li>Have you installed all <a href="requirements.html" title="Zoph/Requirements">requirements</a>?</li>
 <li>Have you followed the correct <a href="installation.html" title="Zoph/Installation">installation</a>, <a href="configuration.html" title="Zoph/Configuration">configuration</a> and/or <a href="upgrading.html" title="Zoph/Upgrading">upgrade</a> instructions?</li>
 </ul>
-<p><a name="Debug_.26_Troubleshooting" id="Debug_.26_Troubleshooting"></a></p>
-<h2> <span class="mw-headline">Debug &amp; Troubleshooting</span></h2>
+<h2> <span class="mw-headline" id="Debug_.26_Troubleshooting">Debug &amp; Troubleshooting</span></h2>
+<p>For debugging in Zoph 0.8.1 and later, see <a href="logging_in_zoph_0.8.1_and_later.html" title="Zoph/Solving Problems/Logging in Zoph 0.8.1 and later">Zoph/Solving Problems/Logging in Zoph 0.8.1 and later</a>.</p>
 <p>You could try turning on Zoph's debug mode by setting the <tt>DEBUG</tt> setting in <tt>config.inc.php</tt> to a number higher than 0, the higher the number the more info you get. Also, check your <tt>php.ini</tt> for the configurations <tt>display_errors</tt> and <tt>error_reporting</tt>. PHP may not be showing error messages to you, setting them to.</p>
 <pre>
 error_reporting = E_ALL &amp; ~E_NOTICE 
 display_errors = On
 </pre>
 <p>will ensure that you will see PHP's error messages. <tt>zophImport.pl</tt> will tell you more about what it's doing if you add the <tt>--verbose</tt> commandline option. In some cases it may help to simplify the issue, for example if <tt>zophImport.pl</tt> fails, with 4 lines of commandline options, you could try if it still fails if you leave some options out.</p>
-<p><a name="Web_import" id="Web_import"></a></p>
-<h2> <span class="mw-headline">Web import</span></h2>
+<h2> <span class="mw-headline" id="Web_import">Web import</span></h2>
 <p>One of the parts of Zoph that is likely to cause problems, is the webimport. This is caused by the fact that the webimport depends more on external factors than most other parts of Zoph. In most cases the problems are caused by wrong settings in <tt>php.ini</tt>, insufficient permissions on the filesystem or missing <a href="requirements.html" title="Zoph/Requirements">requirements</a>. Also, at this moment the webimport does not sufficiently check for these things and will fail with a PHP error (or sometimes no error at all) instead of a clear error message. This will be fixed in Zoph 0.9, where the whole import section will be rewritten. Things to check:</p>
 <ul>
 <li>Check if PHP is displaying it's errors (see above for recommended <tt>display_errors</tt> and <tt>error_reporting</tt> configuration).</li>
 <li>If PHP gives an error see <a href="solving_problems.html#Common_PHP_Errors" title="Zoph/Solving problems">Common PHP Errors</a> below.</li>
 </ul>
-<p><a name="Autocomplete" id="Autocomplete"></a></p>
-<h2> <span class="mw-headline">Autocomplete</span></h2>
+<h2> <span class="mw-headline" id="Autocomplete">Autocomplete</span></h2>
 <p>Another feature that gives some more trouble than other features is the <b>autocomplete</b> feature. The autocomplete feature heavily relies on Javascript and although I try to test on many different browsers, it's always possible that your browser interpretes the Javascript code a little different than I intended. Things to try:</p>
 <ul>
 <li>Test with a recent version of Firefox, if possible.</li>
-<li>Try opening <a href="http://your.zoph.site/zoph/getxmldata.php?object=album" class="external free" title="http://your.zoph.site/zoph/getxmldata.php?object=album" rel="nofollow">http://your.zoph.site/zoph/getxmldata.php?object=album</a> in your browser. It should give an output like</li>
+<li>Try opening <a href="http://your.zoph.site/zoph/getxmldata.php?object=album" class="external free" rel="nofollow">http://your.zoph.site/zoph/getxmldata.php?object=album</a> in your browser. It should give an output like</li>
 </ul>
 <pre>
 &lt;albums&gt;
@@ -92,19 +91,16 @@ display_errors = On
 <ul>
 <li>Try disabling autocomplete (under preferences) and see if you can use Zoph now.</li>
 </ul>
-<p>If you find a browser-related problem (your site works correctly in Firefox, but not in another browser) please <a href="http://www.zoph.org/bugs" class="external text" title="http://www.zoph.org/bugs" rel="nofollow">report a bug</a>.</p>
-<p><a name="Common_PHP_Errors" id="Common_PHP_Errors"></a></p>
-<h2> <span class="mw-headline">Common PHP Errors</span></h2>
-<p>Here are some frequently seen PHP errors. If you get a different error, Try <a href="http://www.google.com" class="external text" title="http://www.google.com" rel="nofollow">Google</a> or posting a message on the <a href="http://www.zoph.org/forum" class="external text" title="http://www.zoph.org/forum" rel="nofollow">Zoph Forum</a>.</p>
-<p><a name="GD_Missing" id="GD_Missing"></a></p>
-<h3> <span class="mw-headline">GD Missing</span></h3>
+<p>If you find a browser-related problem (your site works correctly in Firefox, but not in another browser) please <a href="http://www.zoph.org/bugs" class="external text" rel="nofollow">report a bug</a>.</p>
+<h2> <span class="mw-headline" id="Common_PHP_Errors">Common PHP Errors</span></h2>
+<p>Here are some frequently seen PHP errors. If you get a different error, Try <a href="http://www.google.com" class="external text" rel="nofollow">Google</a> or posting a message on the <a href="http://www.zoph.org/forum" class="external text" rel="nofollow">Zoph Forum</a>.</p>
+<h3> <span class="mw-headline" id="GD_Missing">GD Missing</span></h3>
 <pre>
 <b>Fatal error</b>: Call to undefined function imagecreatefromjpeg() in /var/www/html/zoph 
 photo.inc.php on line 468 
 </pre>
 <p>You are missing GD support in PHP, Zoph requires GD in order to create mid and thumbnail size images. Check your distribution documentation on how to enable GD. Usually it is a package named something like <tt>php-gd</tt>.</p>
-<p><a name="Allowed_memory_size_exhausted" id="Allowed_memory_size_exhausted"></a></p>
-<h3> <span class="mw-headline">Allowed memory size exhausted</span></h3>
+<h3> <span class="mw-headline" id="Allowed_memory_size_exhausted">Allowed memory size exhausted</span></h3>
 <pre>
 <b>Fatal error</b>: Allowed memory size of <i>&lt;number&gt;</i> bytes exhausted (tried to allocate <i>&lt;number&gt;</i> bytes) in <i>&lt;filename&gt;</i> on line <i>&lt;number&gt;</i>
 </pre>
@@ -113,8 +109,7 @@ photo.inc.php on line 468
 memory_limit = 16M
 </pre>
 <p>and increase this. Zoph could get quite memory hungry while resizing the images or adding watermarks. A rule of thumb is that you should set the memory limit to at least 6x the number of megapixels your (biggest) camera has. So, if you have a 10 Megapixel camera, you should probably set it to 64M.</p>
-<p><a name="Maximum_execution_time_exceeded" id="Maximum_execution_time_exceeded"></a></p>
-<h3> <span class="mw-headline">Maximum execution time exceeded</span></h3>
+<h3> <span class="mw-headline" id="Maximum_execution_time_exceeded">Maximum execution time exceeded</span></h3>
 <pre>
 <b>Fatal error</b>: Maximum execution time of <i>&lt;number&gt;</i> seconds exceeded in <i>&lt;filename&gt;</i> on line <i>&lt;number&gt;</i>
 </pre>
@@ -123,14 +118,16 @@ memory_limit = 16M
 maximum_execution_time = 120
 </pre>
 <p>Since the amount of time Zoph needs to process images is dependant on your webservers CPU speed, load and the size of your photos, a rule of thumb cannot be given. Try increasing the time and/or upload smaller batches of images.</p>
-<p><a name="Reporting_a_bug" id="Reporting_a_bug"></a></p>
-<h2> <span class="mw-headline">Reporting a bug</span></h2>
-<p>If you suspect that the problem you have run in to is a bug in Zoph, please create a bug report on <a href="http://www.zoph.org/bugs" class="external free" title="http://www.zoph.org/bugs" rel="nofollow">http://www.zoph.org/bugs</a>.</p>
-<p><a name="Zoph_Forum" id="Zoph_Forum"></a></p>
-<h2> <span class="mw-headline">Zoph Forum</span></h2>
-<p>There is a Zoph Forum on <a href="http://www.zoph.org/forum" class="external free" title="http://www.zoph.org/forum" rel="nofollow">http://www.zoph.org/forum</a>. You can post a request for help there, of search to see if anyone has had a similar issue.</p>
-<p><a name="Asking_for_help" id="Asking_for_help"></a></p>
-<h2> <span class="mw-headline">Asking for help</span></h2>
+<h3> <span class="mw-headline" id="Webimport_fails_with_with_.27not_found.27_error">Webimport fails with with 'not found' error</span></h3>
+<pre>
+sh: 1 not found
+</pre>
+<p>You can see this error when you are using the webimport to upload .ZIP or .TAR files and have set <a href="configuration.html#UNZIP_CMD" title="Zoph/Configuration">UNZIP_CMD</a> or <a href="configuration.html#TAR_CMD" title="Zoph/Configuration">TAR_CMD</a> to <tt>'1'</tt> instead of the tar or unzip command, usually <tt>'unzip'</tt> and <tt>'tar xvf'</tt>, respectively. Change it in <tt>config.inc.php</tt> and try again.</p>
+<h2> <span class="mw-headline" id="Reporting_a_bug">Reporting a bug</span></h2>
+<p>If you suspect that the problem you have run in to is a bug in Zoph, please create a bug report on <a href="http://www.zoph.org/bugs" class="external free" rel="nofollow">http://www.zoph.org/bugs</a>.</p>
+<h2> <span class="mw-headline" id="Zoph_Forum">Zoph Forum</span></h2>
+<p>There is a Zoph Forum on <a href="http://www.zoph.org/forum" class="external free" rel="nofollow">http://www.zoph.org/forum</a>. You can post a request for help there, of search to see if anyone has had a similar issue.</p>
+<h2> <span class="mw-headline" id="Asking_for_help">Asking for help</span></h2>
 <p>You can really speed up the resolution time of your problem by including relevant information in your forum post or bug report:</p>
 <ul>
 <li>What were you trying to do?</li>

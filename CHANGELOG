@@ -1,4 +1,25 @@
 Zoph Changelog
+Zoph 0.8.0.3
+July 1, 2010
+
+Zoph 0.8.0.3 is a security release that fixes a number of Cross Site Scripting (XSS) issues of which most were found by VUPEN Security (http://www.vupen.com). I would like to thank VUPEN for reporting these bugs.
+
+This release also fixes all the bugs found since the 0.8.0.2 release.
+
+
+Bugs
+
+    * Several XSS scripting issues found by VUPEN Security
+    * Several XSS scripting issues found during fixing of the above bugs
+    * Bug#2901852: Fatal error when a photo without a photographer is displayed on the map
+    * Bug#2902011: zophImport.pl cannot find people with no last name.
+    * Bug#2925030: Last modified time is not displayed correctly
+    * Bug#2925498: NULL entries in the database change to 0.000 after rotating an image causing
+	fake map entries to appear. Fix by Jason Taylor.
+    * Bug#2925508: Thumbnail covers actionlinks on people page. Fix by Jason Taylor.
+    * Bug#2925506: Count of places is wrong. Fix by Jason Taylor.
+    * Bug#2982051: editting photo does not work when using "auto edit".
+    * Bug#3002691: Next/prev links lost after update.
 
 Zoph 0.8.0.2
 1 Nov 2009

@@ -124,7 +124,7 @@
         echo $place->to_html();
         if ($place->get("notes")) {
             echo "<p>";
-            echo $place->get("notes");
+            echo e($place->get("notes"));
             echo "</p>";
         }
     }

@@ -9,8 +9,9 @@
     All text is available under the terms of the <a href="http://en.wikibooks.org/wiki/GNU_Free_Documentation_License">GNU Free Documentation License</a>. For the latest version of this document, see <a href="http://en.wikibooks.org/wiki/Zoph">Wikibooks</a>.
     </p>
 <h1 id="firstHeading" class="firstHeading">Zoph/Upgrading</h1>
-		<div id="bodyContent">
-			<p>Upgrading Zoph is a relatively simple process; it consists of moving the php, javascript, language and image files into your web root (beware that you may want to keep your <tt>config.inc.php</tt>) and running an SQL script that makes the database changes. More details about this process and special instructions per version are described below.</p>
+	<div id="bodyContent">
+		
+<p>Upgrading Zoph is a relatively simple process; it consists of moving the php, javascript, language and image files into your web root (beware that you may want to keep your <tt>config.inc.php</tt>) and running an SQL script that makes the database changes. More details about this process and special instructions per version are described below.</p>
 <table id="toc" class="toc">
 <tr>
 <td>
@@ -51,7 +52,7 @@
 
 <h2> <span class="mw-headline" id="Zoph_0.8_to_0.8.0.x">Zoph 0.8 to 0.8.0.x</span></h2>
 <ul>
-<li><i>You can also use these instructions to go from 0.8.0.1 to 0.8.0.2</i></li>
+<li><i>You can also use these instructions to go from 0.8.0.1 to 0.8.0.2 or 0.8.0.3</i></li>
 </ul>
 <p>Copy php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.</p>
 <p>You can upgrade directly from 0.7 to 0.8.0.x, simply use the zoph-0.8.0.x.tar.gz and execute the instructions for the 0.7 to 0.8 upgrade.</p>
@@ -61,7 +62,7 @@
 </ul>
 <p>Copy <tt>php/*</tt> to the location of your installation. Make sure that you also copy the <tt>js</tt> and <tt>img</tt> subdirectories. If you use the translations in Zoph, make sure to also copy the <tt>lang</tt> directory.</p>
 <h3> <span class="mw-headline" id="Updating_the_database">Updating the database</span></h3>
-<p>Zoph 0.8.1 requires a manual upgrade to the database, this is described in <a href="upgrading.html/Changing_your_database_to_UTF-8" title="Zoph/Upgrading/Changing your database to UTF-8">Changing your database to UTF-8</a>.</p>
+<p>Zoph 0.8.1 requires a manual upgrade to the database, this is described in <a href="changing_your_database_to_utf-8.html" title="Zoph/Upgrading/Changing your database to UTF-8">Changing your database to UTF-8</a>.</p>
 <p>Execute zoph-update-0.8.sql:</p>
 <pre>
 mysql -u zoph_admin -p zoph &lt; sql/zoph_update-0.9.sql
@@ -151,7 +152,7 @@ mysql -u zoph_admin -p zoph &lt; sql/zoph_update-0.8.sql
 <p>Copy php/* to the location of your installation. Make sure to also copy the php/lang subdirectory.</p>
 <p>You can upgrade directly from 0.6 to 0.7.0.x, simply use the zoph-0.7.0.x.tar.gz and execute the instructions for the 0.6 to 0.7 upgrade.</p>
 <h2> <span class="mw-headline" id="Older_versions">Older versions</span></h2>
-<p>For upgrades from an older version of Zoph: <a href="upgrading.html/Archive" title="Zoph/Upgrading/Archive">Zoph/Upgrading/Archive</a></p>
+<p>For upgrades from an older version of Zoph: <a href="/wiki/Zoph/Archive" title="Zoph/Upgrading/Archive">Zoph/Upgrading/Archive</a></p>
 
 
 

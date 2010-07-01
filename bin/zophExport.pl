@@ -3,7 +3,7 @@
 #
 # zophExport.pl
 # v0.8
-# Jason Geiger & Jeroen Roos - 2002-2009
+# Jason Geiger & Jeroen Roos - 2002-2010
 # This file is part of Zoph.
 #
 # Zoph is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@ require $ENV{HOME}."/.zophrc" if -r $ENV{HOME}."/.zophrc";
 my $db_prefix = $::db_prefix;
 my $image_dir = $::image_dir;
 
-my $version = '0.8.0.2';
+my $version = '0.8.0.3';
 
 my $export_dir; # where to export to
 my $format;     # one of zoph, album, bins
