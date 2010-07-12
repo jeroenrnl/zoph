@@ -37,7 +37,7 @@ function create_field_html($fields) {
         if ($val) {
             $html .=
             "<dt>" . e($key) . "</dt>\n" .
-            "<dd>" . e($val) ." </dd>\n";
+            "<dd>" . $val ." </dd>\n";
         }
     }
     return $html;

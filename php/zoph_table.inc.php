@@ -168,17 +168,17 @@ class zoph_table {
             log::msg("Missing data", log::ERROR, log::GENERAL);
             return;
         }
-        $names=null;
-        $values=null;
+
         while (list($name, $value) = each($this->fields)) {
+
             if ($this->primary_keys && !$keep_key && $this->is_key($name)) {
                 continue;
             }
 
-            if (!empty($names)) {
+            if ($names) {
                 $names .= ", ";
                 $values .= ", ";
-            } 
+            }
 
             $names .= $name;
 
@@ -261,13 +261,11 @@ class zoph_table {
             log::msg("No constraint found", log::NOTIFY, log::GENERAL);
             return;
         }
-        reset($this->fields);
-        $values=null;
-        $names=null;
+
         while (list($name, $value) = each($this->fields)) {
             if ($this->is_key($name, $keys)) { continue; }
 
-            if (!empty($values)) { $values .= ", "; }
+            if ($values) { $values .= ", "; }
             
             if (substr($name,0,7)=="parent_") {
                 $children=array();
@@ -302,7 +300,7 @@ class zoph_table {
      * Creates a constraint clause based on the given keys
      */
     function create_constraints($keys) {
-        $constraints=null;
+        $constraints="";
         foreach ($keys as $key) {
             $value = $this->fields[$key];
             if (!$value) { continue; }
@@ -385,7 +383,7 @@ class zoph_table {
         if($lat && $lon) {
             $quicklook=$this->get_quicklook($user);
             return "  createMarker(" . $lat . "," . $lon . ", '" . $icon .
-                    "','" .  escape_string($title) . "','" . 
+                    "','" .  e($title) . "','" . 
                     $quicklook . "');\n";
         } else {
             return null;
@@ -493,7 +491,8 @@ function get_records_from_query($class, $sql, $min = 0, $num = 0) {
             $obj->set_fields($row);
             $objs[] = $obj;
         }
-    } else {
+    }
+    else {
         // use to grab ids, for example
         while ((!$limit || $num-- > 0) && $row = fetch_row($result)) {
             $objs[] = $row[0];
@@ -566,8 +565,7 @@ function create_link_list($records) {
 
     return $links;
 }
-// This function doesn't really belong here.
-// should be replaced by a proper OO construction
+
 function get_xml($class, $search,$user=null) {
     $search=strtolower($search);
     if($class=="location" || $class=="home" || $class=="work") {
@@ -589,12 +587,8 @@ function get_xml($class, $search,$user=null) {
     if($class=="timezone") {
         $tz=new TimeZone("UTC");
         return $tz->get_xml($search);
-    } else if($class=="import_progress") {
-        $import=new Import($search);
-        return $import->get_xml();
-    } else if($class=="import_thumbs") {
-        return Import::getThumbsXML();
-    } else if (class_exists($class)) {
+    }
+    if (class_exists($class)) {
         $obj=new $class;
         $rootname=$obj->xml_rootname();
         $nodename=$obj->xml_nodename();

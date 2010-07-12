@@ -1163,13 +1163,13 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     }
 
     function get_quicklook($user) {
-        $title=escape_string($this->get("title"));
+        $title=e($this->get("title"));
         $file=$this->get("name");
 
         if($title) {
-            $html="<h2>" . $title . "</h2><p>" . $file . "</p>";
+            $html="<h2>" . e($title) . "</h2><p>" . e($file) . "</p>";
         } else {
-            $html="<h2>" . $file . "</h2>";
+            $html="<h2>" . e($file) . "</h2>";
         }    
         $html.=$this->get_thumbnail_link() .
           "<p><small>" . 

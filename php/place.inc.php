@@ -304,13 +304,12 @@ class place extends zoph_tree_table {
         $html.=$this->get_coverphoto($user, $user->prefs->get("autothumb"));
         $count=$this->get_photo_count($user);
         $totalcount=$this->get_total_photo_count($user);
-       
         $html.="<br><small>" . 
-            escape_string(sprintf(translate("There are %s photos"), $count)) .
+            sprintf(translate("There are %s photos"), $count) .
             " " . translate("in this place") . "<br>";
         if($count!=$totalcount) {
-            $html.=escape_string(sprintf(translate("There are %s photos"),$totalcount) . 
-            " " . translate("in this place") . " " . translate("or its children")) . "<br>";
+            $html.=sprintf(translate("There are %s photos"),$totalcount) . 
+            " " . translate("in this place") . " " . translate("or its children") . "<br>";
         }
         $html.="</small>";
         // This really is a little quick and dirty, but solving it
