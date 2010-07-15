@@ -1,4 +1,14 @@
 Zoph Changelog
+
+Zoph 0.8.0.4
+July 15, 2010
+
+Zoph 0.8.0.4 is a bugfix release that fixes a few bugs in Zoph 0.8.0.3.
+
+Bugs
+    * A few cases of duplicate encoding, causing HTML code to appear instead of being interpreted by the browser
+
+
 Zoph 0.8.0.3
 July 1, 2010
 
