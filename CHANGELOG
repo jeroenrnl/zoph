@@ -1,4 +1,18 @@
 Zoph Changelog
+
+Zoph 0.8.1.2
+July 15, 2010
+
+Zoph 0.8.1.2 is a bugfix release that fixes a few bugs in Zoph 0.8.1.1.
+
+Bugs
+
+    * A few cases of duplicate encoding, causing HTML code to appear instead of being interpreted by the browser
+    * A bug that caused markers not to work correctly
+    * A bug that caused Zoph to loose timezone information when using the 'assign timezone to children' functionality.
+
+
+
 Zoph 0.8.1.1
 July 1, 2010
 
