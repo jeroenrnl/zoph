@@ -27,6 +27,10 @@ class place extends zoph_tree_table {
         $this->set("place_id", $id);
     }
 
+    public function getId() {
+        return $this->get("place_id");
+    }
+
     function insert() {
         $this->tzid_to_timezone();
         parent::insert();
@@ -183,8 +187,7 @@ class place extends zoph_tree_table {
                 "WHERE p.location_id = " . escape_string($id) .
                 " AND gu.user_id = '" . escape_string($user->get("user_id")) .
                 "' AND gp.access_level >= p.level";
-}
-        else {
+        } else {
             $sql =
                 "select count(*) from " .
                 DB_PREFIX . "photos " .
@@ -364,6 +367,21 @@ class place extends zoph_tree_table {
             }
         }
     }
+
+   /**
+    * Lookup place by name;
+    */
+    public static function getByName($name) {
+        if(empty($name)) {
+            return false;
+        }
+        $title=strtolower(escape_string($name));
+        $sql="SELECT place_id from " . DB_PREFIX . "places WHERE " .
+            " LOWER(title) LIKE \"%" . $title . "%\";";
+
+        return get_records_from_query("place", $sql);
+    }
+
 }
 
 function get_places($constraints = null, $conj = "and", $ops = null,

@@ -25,12 +25,10 @@
     }
     $name = getvar("person");
     if ($name) {
-        list($last_name, $first_name) = explode(',', $name);
-        $people = get_person_by_name($first_name, $last_name);
+        $people = person::getByName($name);
         if ($people && count($people) == 1) {
             $person = array_shift($people);
-        }
-        else {
+        } else {
             $person = new person();
         }
     }

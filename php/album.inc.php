@@ -27,6 +27,13 @@ class album extends zoph_tree_table {
         parent::zoph_table("albums", array("album_id"), array("album"));
         $this->set("album_id", $id);
     }
+   /**
+    * Get the Id
+    */
+
+    public function getId() {
+        return $this->get("album_id");
+    }
 
     function lookup($user = null) {
         $id = $this->get("album_id");
@@ -309,6 +316,21 @@ class album extends zoph_tree_table {
             return false;
         }
     }
+   /**
+    * Lookup album by name;
+    */
+    public static function getByName($name) {
+        if(empty($name)) {
+            return false;
+        }
+        $where =
+            "lower(album) ='" . escape_string(strtolower($name)) . "'";
+
+        $query = "select album_id from " . DB_PREFIX . "albums where $where";
+
+        return get_records_from_query("album", $query);
+    }
+        
 }
 
 function get_root_album() {
@@ -345,19 +367,6 @@ function get_newer_albums($user_id, $date = null) {
         "ORDER BY a.album_id";
 
     return get_records_from_query("album", $sql);
-}
-
-function get_album_by_name($album = null) {
-    if (!$album) {
-        return "";
-    }
-    $where =
-            "lower(album) like '%" . escape_string(strtolower($album))
- . "%'";
-
-    $query = "select album_id from " . DB_PREFIX . "albums where $where";
-
-    return get_records_from_query("album", $query);
 }
 
 function get_album_count($user = null) {

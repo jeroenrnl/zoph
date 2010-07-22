@@ -90,8 +90,8 @@ class log {
                 if(!defined("CLI")) {
                     echo $msg;
                 } else {
-                    $html=array("<b>", "</b>", "<br>");
-                    $cli=array("\033[1m", "\033[0m", "\n");
+                    $html=array("<b>", "</b>", "<strong>", "<strong>", "<br>");
+                    $cli=array("\033[1m", "\033[0m", "\033[1m", "\033[0m", "\n");
                     echo str_replace($html, $cli, $msg);
                 }
             } else {

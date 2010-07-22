@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
+    require_once("exception.inc.php");
     require_once("variables.inc.php");
     require_once("log.inc.php");
 
@@ -53,7 +53,6 @@
     require_once("pageset.inc.php");
 
     require_once("file.inc.php");
-    require_once("import.inc.php");
     require_once("template.inc.php");
 
     if(minimum_version("5.2.0")) {
@@ -63,4 +62,12 @@
     require_once("saved_search.inc.php");
     require_once("photo_search.inc.php");
 
+    require_once("import.inc.php");
+    if(defined("CLI")) {
+        require_once("cli/cli.inc.php");
+        require_once("cli/arguments.inc.php");
+        require_once("cli/cliimport.inc.php");
+    } else {
+        require_once("webimport.inc.php");
+    }
 ?>

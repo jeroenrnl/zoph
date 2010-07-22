@@ -266,14 +266,25 @@ class photo extends zoph_table {
         return get_records_from_query("person", $sql);
     }
     
-    function move($path) {
-        $oldpath=$this->get("path");
-        $filename=$this->get("name");
+    function import($filename) {
+        $path=dirname($filename);
+        $name=basename($filename);
+        $this->set("name", $name);
 
-        $conv=get_converted_image_name($filename);
+        $conv=get_converted_image_name($name);
         $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
         $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
+        
+        $toMove[]=new File($filename);
 
+        if(file_exists($path . "/". $thumbname)) {
+            $toMove[]=new File($path . "/" . $thumbname);
+        }
+        if(file_exists($path . "/". $midname)) {
+            $toMove[]=new File($path . "/" . $midname);
+        }
+
+        $newPath=$this->get("path") . "/";
         if(USE_DATED_DIRS) {
             // This is not really validating the date, just making sure
             // no-one is playing tricks, such as setting the date to /etc/passwd or
@@ -285,50 +296,34 @@ class photo extends zoph_table {
             }
 
             if (HIER_DATED_DIRS) {
-                $path .= "/" . cleanup_path(str_replace("-", "/", $date));
+                
+                $newPath .= cleanup_path(str_replace("-", "/", $date));
             } else {
-                $path .= "/" . cleanup_path(str_replace("-", ".", $date));
+                $newPath .= cleanup_path(str_replace("-", ".", $date));
             }
         }
+        $toPath="/" . cleanup_path(IMAGE_DIR . "/" . $newPath) . "/";
+
+        create_dir_recursive($toPath . "/" . MID_PREFIX);
+        create_dir_recursive($toPath . "/" . THUMB_PREFIX);
 
         
-        $old="/" . cleanup_path(IMAGE_DIR . "/" . $oldpath);
-        $new="/" . cleanup_path(IMAGE_DIR . "/" . $path);
-        
-        create_dir_recursive($new . "/" . MID_PREFIX);
-        create_dir_recursive($new . "/" . THUMB_PREFIX);
-
-        foreach(array($filename, $midname, $thumbname) as $file) {
-            if(!is_writable($new)) {
-                log::msg("Directory not writable: " . $new, log::FATAL, log::IMPORT);
+        try {
+            foreach($toMove as $fileToMove) {
+                $fileToMove->checkMove($toPath);
             }
-            if(!file_exists($old . "/" . $file)) {
-                log::msg("File not found: " . $file, log::FATAL, log::IMPORT);
-            }
-            if(file_exists($new . "/" . $file)) {
-                log::msg("File already exists: " . $file, log::FATAL, log::IMPORT);
-            }
-            if(!is_readable($old . "/" . $file)) {
-                log::msg("Cannot read file: " . $file, log::FATAL, log::IMPORT);
-            }
-            if(!is_writable($old . "/" . $file)) {
-                log::msg("File is not writable: " .$file, log::FATAL, log::IMPORT);
-            }
+        } catch (FileException $e) {
+            echo $e->getMessage();
+            throw $e;
         }
-        // We run this loop twice, because we only want to move the file if *all* 
-        // files have been checked.
-        foreach(array($filename, $midname, $thumbname) as $file) {
-            rename($old . "/" . $file, $new . "/" . $file); 
-            if(!defined("FILE_MODE") || !is_numeric(FILE_MODE)) {
-                define('FILE_MODE', 0644);
-                log::msg("FILE_MODE is not set correctly in config.inc.php, using default (0644)", LOG::WARN, LOG::GENERAL);
-            }
-            if(!chmod($new . "/" . $file, FILE_MODE)) {
-                log::msg("Could not change permissions for <b>" . $file . "</b>", LOG::ERROR, LOG::IMPORT);
-            }
+        // We run this loop twice, because we only want to move the file if 
+        // *all* files can be moved.
+        foreach($toMove as $fileToMove) {
+            $fileToMove->move($toPath);
+            $fileToMove->chmod();
         }
         // Update the db to the new path;
-        $this->set("path", $path);
+        $this->set("path", $newPath);
     }
 
     function get_file_path() {
@@ -580,18 +575,28 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
         return $img_src;
     }
 
-    function thumbnail($img_src = null) {
-        return
-            $this->create_thumbnail(THUMB_PREFIX, THUMB_SIZE, $img_src) &&
-            $this->create_thumbnail(MID_PREFIX, MID_SIZE, $img_src);
-    }
+    function thumbnail($force=true) {
+        $path=IMAGE_DIR . "/" . $this->get("path") . "/";
 
-    function create_thumbnail($prefix, $size, $img_src) {
-        $destroy = false;
-        if ($img_src == null) {
-            $img_src = $this->get_image_resource();
-            $destroy = true;
+        $conv=get_converted_image_name($this->name);
+        $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
+        $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
+
+        if(!file_exists($path . $midname) || $force===true) {
+            if(!$this->create_thumbnail(MID_PREFIX, MID_SIZE)) {
+                throw PhotoThumbCreationFailedException("Could not create " . MID_PREFIX . " image");
+            }
         }
+        if(!file_exists($path . $thumbname) || $force===true) {
+            if(!$this->create_thumbnail(THUMB_PREFIX, THUMB_SIZE)) {
+                throw PhotoThumbCreationFailedException("Could not create " . THUMB_PREFIX . " image");
+            }
+        }
+        return true;
+    }
+    function create_thumbnail($prefix, $size) {
+        $img_src = $this->get_image_resource();
+        
         $image_info = getimagesize($this->get_file_path());
         $width = $image_info[0];
         $height = $image_info[1];
@@ -633,9 +638,7 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
 
         imagedestroy($img_dst);
 
-        if ($destroy) {
-            imagedestroy($img_src);
-        }
+        imagedestroy($img_src);
 
         return $return;
     }
@@ -1443,4 +1446,6 @@ function ImageStringWrap($image, $font, $x, $y, $text, $color, $maxwidth) {
     }
 }
 
+class PhotoException extends ZophException {}
+class PhotoThumbCreationFailedException extends PhotoException {}
 ?>

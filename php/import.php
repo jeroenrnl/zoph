@@ -20,11 +20,16 @@
  */
 
 require_once("include.inc.php");
-
 if ((!IMPORT) || (!$user->is_admin() && !$user->get("import"))) {
         redirect(add_sid("zoph.php"));
 }
 
+// Detect upload larger than upload_max_filesize.
+if($_GET["upload"]==1 && $_POST==null) {
+    var_dump($_FILES);
+    echo webImport::handleUploadErrors(UPLOAD_ERR_INI_SIZE);
+    die();
+}
 $_action=getvar("_action");
 
 $title = translate("Import");
@@ -80,7 +85,7 @@ if(empty($_action)) {
         $tpl->script="upload_id='" . $upload_id . "';" .
                      "num='" . $num . "';";
 
-        $tpl->function=array("Import", "browseForm");
+        $tpl->function=array("WebImport", "browseForm");
         $tpl->param=array($num, $upload_num);
         echo $tpl;
         $tpl=new template("uploadprogressbar", array(
@@ -106,20 +111,21 @@ if(empty($_action)) {
         
         $tpl=new template("html", array("html_class" => "iframe_upload"));
         $tpl->js=array("js/import.js", "js/xml.js");
-        $tpl->function=array("Import", "handleUpload");
+        $tpl->function=array("WebImport", "handleUpload");
         $tpl->param=array($file, $upload_id);
         $tpl->style="div.uploadprogress { display: block; }";
         echo $tpl;
     }
 } else if ($_action=="process") {
     $file=getvar("file");
-    Import::processFile($file);
+    WebImport::processFile($file);
 } else if ($_action=="retry") {
     $file=getvar("file");
-    Import::retryFile($file);
+    WebImport::retryFile($file);
 } else if ($_action=="delete") {
     $file=getvar("file");
-    Import::deleteFile($file);
+    WebImport::deleteFile($file);
 } else if ($_action=="import") {
-    Import::importPhotos($request_vars);
+    $files=WebImport::getFileList($request_vars);
+    WebImport::photos($files, $request_vars);
 }

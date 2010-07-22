@@ -30,6 +30,10 @@ class person extends zoph_table {
         $this->set("person_id", $id);
     }
 
+    public function getId() {
+        return $this->get("person_id");
+    }
+
     function lookup() {
         parent::lookup();
         $this->lookup_places();
@@ -191,7 +195,22 @@ class person extends zoph_table {
             return $coverphoto->get_image_tag(THUMB_PREFIX);
         }
     }
- 
+   /**
+    * Lookup person by name;
+    */
+    public static function getByName($name) {
+       if(empty($name)) {
+           return false;
+       }
+
+        $sql = "SELECT person_id FROM " . DB_PREFIX . "people WHERE " .
+            "CONCAT(lower(first_name), \" \", lower(last_name)) LIKE " .
+            "\"%" . escape_string($name) . "%\"";
+
+        return get_records_from_query("person", $sql);
+    }
+
+
 }
 
 function get_people($constraints = null, $conj = "and", $ops = null,
@@ -363,32 +382,6 @@ function get_photo_person_links($photo) {
     }
 
     return $links;
-}
-
-function get_person_by_name($first_name = null, $last_name = null) {
-    if (!$first_name && !$last_name) {
-        return "";
-    }
-
-    if ($first_name) {
-        $first_name =
-            "lower(first_name) like '%" . escape_string(strtolower($first_name)) . "%'";
-    }
-
-    if ($last_name) {
-        $last_name =
-            "lower(last_name) like '%" . escape_string(strtolower($last_name)) . "%'";
-    }
-
-    $where = $first_name;
-    if ($first_name && $last_name) {
-        $where .= " and ";
-    }
-    $where .= $last_name;
-
-    $sql = "select person_id from " . DB_PREFIX . "people where $where";
-
-    return get_records_from_query("person", $sql);
 }
 
 function get_popular_people($user) {

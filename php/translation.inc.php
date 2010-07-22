@@ -260,8 +260,11 @@ class language {
  * @return string The translated string
  */
 function translate($str, $error=true){
-  global $lang;
-  return $lang->translate($str, $error);
+    global $lang;
+    if(get_class($lang)=="translate") {
+        return $lang->translate($str, $error);
+    } else {      
+        return $str;
+    }
 }
-
 ?>

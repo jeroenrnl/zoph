@@ -970,6 +970,9 @@ function create_dir_recursive($directory){
     foreach(split('/',$directory) as $subdir) {
         $nextdir=$nextdir . $subdir . "/";
         $result=create_dir($nextdir);
+        if($result=false) {
+            return false;
+        }
     }
     return $result;
 }

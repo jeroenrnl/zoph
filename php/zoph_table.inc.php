@@ -590,10 +590,10 @@ function get_xml($class, $search,$user=null) {
         $tz=new TimeZone("UTC");
         return $tz->get_xml($search);
     } else if($class=="import_progress") {
-        $import=new Import($search);
+        $import=new WebImport($search);
         return $import->get_xml();
     } else if($class=="import_thumbs") {
-        return Import::getThumbsXML();
+        return WebImport::getThumbsXML();
     } else if (class_exists($class)) {
         $obj=new $class;
         $rootname=$obj->xml_rootname();

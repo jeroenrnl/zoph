@@ -163,7 +163,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $search_string=explode("/", $album_name);
 
             foreach($search_string as $album_name) {
-                $albums = get_album_by_name($album_name);
+                $albums = album::getByName($album_name);
                 foreach($albums as $album) {
                     $album->lookup();
                     if(!$parent_album) {
@@ -199,7 +199,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $search_string=explode("/", $cat_name);
 
             foreach($search_string as $cat_name) {
-                $categories = get_category_by_name($cat_name);
+                $categories = category::getByName($cat_name);
                 foreach($categories as $category) {
                     $category->lookup();
                     if(!$parent_cat) {
