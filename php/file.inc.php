@@ -39,7 +39,7 @@ class file {
         $this->name=basename($name);
         $this->path=realpath(dirname($name));
     }
-
+    
     public function __toString() {
         return $this->path . "/" . $this->name;
     }
@@ -102,5 +102,81 @@ class file {
         }
     }
 
+    /**
+     * Makes checks to see if a file can be copied
+     *
+     * @param string destination of the file
+     */
+    public function checkCopy($dest) {
+        if(!is_writable($dest)) {
+            throw new FileDirNotWritableException("Directory not writable: " . $dir);
+        }
+        if(!file_exists($this)) {
+            throw new FileSourceNotFoundException("File not found: " . $this);
+        }
+        if(file_exists($dest . "/" . $this->name)) {
+            throw new FileExistsException("File already exists: " . $dest);
+        }
+        if(!is_readable($this)) {
+            throw new FileNotReadableException("Cannot read file: " . $this);
+        }
+        return true;
+    }
 
+    /**
+     * Makes checks if a file can be moved
+     *
+     * @param string destination of the file
+     */
+    public function checkMove($dest) {
+        // First checks are the same...
+        $this->checkCopy($dest);
+        if(!is_writable($this)) {
+            throw new FileNotWritableException("File is not writable: " . $this);
+        }
+        return true;
+    }
+
+    public function move($dest) {
+        log::msg("Going to move $this to $dest", LOG::DEBUG, LOG::GENERAL);
+        $this->checkMove($dest);
+        if(rename($this, $dest . "/" . $this->name)) {
+            $this->path=realpath($dest);
+        } else {
+            throw new FileMoveFailedException("Could not move $this to $dest");
+        }
+        return true;
+    }
+
+    public function copy($dest) {
+        $this->checkCopy($dest);
+        if(copy($this, $dest)) {
+            return new File($dest);
+        } else {
+            throw new FileCopyFailedException("Could not copy $this to $dest");
+        }
+    }
+
+    public function chmod($mode = null) {
+        if($mode===null) {
+            if(!defined("FILE_MODE") || !is_numeric(FILE_MODE)) {
+                define('FILE_MODE', 0644);
+                log::msg("FILE_MODE is not set correctly in config.inc.php, using default (0644)", LOG::WARN, LOG::GENERAL);
+            }
+            $mode=FILE_MODE;
+        }
+        if(!chmod($this, FILE_MODE)) {
+            log::msg("Could not change permissions for <b>" . $this . "</b>", LOG::ERROR, LOG::IMPORT);
+        }
+    }
+    
 }
+
+class FileException extends ZophException {}
+class FileDirNotWritableException extends FileException {}
+class FileSourceNotFoundException extends FileException {}
+class FileExistsException extends FileException {}
+class FileNotReadableException extends FileException {}
+class FileNotWritableException extends FileException {}
+class FileMoveFailedException extends FileException {}
+class FileCopyFailedException extends FileException {}

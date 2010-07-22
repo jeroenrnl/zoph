@@ -29,6 +29,10 @@ class category extends zoph_tree_table {
         $this->set("category_id", $id);
     }
 
+    public function getId() {
+        return $this->get("category_id");
+    }
+
     function delete() {
         parent::delete(array("photo_categories"));
     }
@@ -264,23 +268,26 @@ class category extends zoph_tree_table {
             return false;
         }
     }
+
+   /**
+    * Lookup category by name
+    */
+    public static function getByName($name) {
+        if(empty($name)) {
+            return false;
+        }
+        $where =
+            "lower(category)='" . escape_string(strtolower($name)) . "'";
+
+        $query = "select category_id from " . DB_PREFIX . "categories where $where";
+
+        return get_records_from_query("category", $query);
+    }
+
 }
 
 function get_root_category() {
     return new category(1);
-}
-
-function get_category_by_name($category = null) {
-    if (!$category) {
-        return "";
-    }
-    $where =
-            "lower(category) like '%" . escape_string(strtolower($category))
- . "%'";
-
-    $query = "select category_id from " . DB_PREFIX . "categories where $where";
-
-    return get_records_from_query("category", $query);
 }
 
 function get_categories_select_array($user = null, $search = 0) {

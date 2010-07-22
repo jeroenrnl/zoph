@@ -479,3 +479,7 @@ zip or zip+4=
 zip=
 zoom level=
 Uploading photos has been disabled in config.inc.php. Set UPLOAD to 1 to enable uploading images via the browser.=
+This may also be caused by the max_post_size (%s) in php.ini.=
+Failed to write to disk=
+A PHP extension stopped the upload. Don't ask me why.=
+
