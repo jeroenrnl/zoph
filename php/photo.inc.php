@@ -1239,13 +1239,13 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     }
 
     function get_quicklook($user) {
-        $title=escape_string($this->get("title"));
+        $title=e($this->get("title"));
         $file=$this->get("name");
 
         if($title) {
-            $html="<h2>" . $title . "</h2><p>" . $file . "</p>";
+            $html="<h2>" . e($title) . "</h2><p>" . e($file) . "</p>";
         } else {
-            $html="<h2>" . $file . "</h2>";
+            $html="<h2>" . e($file) . "</h2>";
         }    
         $html.=$this->get_thumbnail_link() .
           "<p><small>" . 
@@ -1357,30 +1357,31 @@ function create_rating_graph($user) {
     while ($row = fetch_array($result)) {
     	$ratings[($row[0] ? $row[0] : translate("Not rated"))]=$row[1];
 	}
-    $html="<h3>" . translate("photo ratings") . "</h3>";
-    $legend=array(translate("rating"),translate("count"));
-    while (list($range, $count) = each($ratings)) {
-        if($range>0) {
-            $min_rating=$range-0.5;
-	        $max_rating=$range+0.5;
-            $link =
-              "search.php?rating%5B0%5D=" . $min_rating . 
-              "&amp;_rating_op%5B0%5D=%3E%3D" .
-              "&amp;rating%5B1%5D=" . $max_rating . 
-              "&amp;_rating_op%5B1%5D=%3C&amp;_action=" . translate("search");
-        } else {
+    if(is_array($ratings)) {
+        $html="<h3>" . translate("photo ratings") . "</h3>";
+        $legend=array(translate("rating"),translate("count"));
+        while (list($range, $count) = each($ratings)) {
+            if($range>0) {
+                $min_rating=$range-0.5;
+                $max_rating=$range+0.5;
+                $link =
+                  "search.php?rating%5B0%5D=" . $min_rating . 
+                  "&amp;_rating_op%5B0%5D=%3E%3D" .
+                  "&amp;rating%5B1%5D=" . $max_rating . 
+                  "&amp;_rating_op%5B1%5D=%3C&amp;_action=" . translate("search");
+            } else {
             $link = "photos.php?rating=null";
         }  
-        $row=array($range, $link, $count);
-        $value_array[]=$row;
+            $row=array($range, $link, $count);
+            $value_array[]=$row;
+        }
     }
-
     if($value_array) {
         $html.=create_bar_graph($legend, $value_array, 150);
     } else {
         $html.=translate("No photo was found.") . "\n";
     }
-
+    
     return $html;
 }
 

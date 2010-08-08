@@ -42,21 +42,21 @@
             "X-Mailer" => "Html Mime Mail Class",
             "X-Zoph-Version" => VERSION
         );
-        $mail->setFrom("$from_name <$from_email>");
-        $mail->setSubject($subject);
+        $mail->setFrom(e($from_name) .  "<" . e($from_email) . ">");
+        $mail->setSubject(e($subject));
 
         if (strlen(BCC_ADDRESS) > 0) {
             $mail->setBCC(BCC_ADDRESS);
         }
 
-        $mail->setTXTBody($message);
+        $mail->setTXTBody(e($message));
         
         $body = $mail->get();
         $hdrs = $mail->headers($hdrs);
         foreach($hdrs as $header => $content) {
-            $headers .= $header . ": " . $content . "\n";
+            $headers .= $header . ": " . e($content) . "\n";
         }
-        if (mail($to_email,"", $body,$headers)) {
+        if (mail(e($to_email),"", $body,$headers)) {
             $msg = translate("Your mail has been sent.");
 
             $setlastmodified = getvar("setlastmodified");
@@ -103,7 +103,7 @@
         $showpassword = getvar("showpassword");
         $shownewalbums = getvar("shownewalbums");
 
-        $body = translate("Hi",0) . " " . $to_name . ",\n\n";
+        $body = translate("Hi",0) . " " . e($to_name) . ",\n\n";
 
         if ($shownewalbums) {
             $date = $u->get_lastnotify();
@@ -139,11 +139,11 @@
         if ($showusername) {
             $body .=
                 translate("user name", 0) . ": " .
-                $u->get('user_name') . "\n";
+                e($u->get('user_name')) . "\n";
         }
 
         $body .= "\n" . translate("Regards,",0) . "\n";
-        $body .= $from_name;
+        $body .= e($from_name);
 
         if (!$subject) {
             $subject = translate("New Albums on") . " " . ZOPH_TITLE;
@@ -162,20 +162,20 @@
 <?php
         }
 ?>
-            <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
+            <input type="hidden" name="user_id" value="<?php echo e($user_id) ?>">
             <label for="to_name"><?php echo translate("to (name)") ?>:</label>
-            <?php echo create_text_input("to_name", $to_name, 24, 32) ?><br>
+            <?php echo create_text_input("to_name", e($to_name), 24, 32) ?><br>
             <label for="to_email"><?php echo translate("to (email)") ?>:</label>
-            <?php echo create_text_input("to_email", $to_email, 24, 32) ?><br>
+            <?php echo create_text_input("to_email", e($to_email), 24, 32) ?><br>
             <label for="from_name"><?php echo translate("from (your name)") ?>:</label>
-            <?php echo create_text_input("from_name", $from_name, 24, 32) ?><br>
+            <?php echo create_text_input("from_name", e($from_name), 24, 32) ?><br>
             <label for="from_email"><?php echo translate("from (your email)") ?>:</label>
-            <?php echo create_text_input("from_email", $from_email, 24, 64) ?><br>
+            <?php echo create_text_input("from_email", e($from_email), 24, 64) ?><br>
             <label for="subject"><?php echo translate("subject") ?>:</label>
-            <?php echo create_text_input("subject", $subject, 48, 64) ?><br>
+            <?php echo create_text_input("subject", e($subject), 48, 64) ?><br>
             
 	        <label for="message"><?php echo translate("message:") ?></label><br>
-            <textarea name="message" class="email" cols="70" rows="15"><?php echo $message ?></textarea><br>
+            <textarea name="message" class="email" cols="70" rows="15"><?php echo e($message) ?></textarea><br>
             <input type="submit" name="_button" value="<?php echo translate("email", 0); ?>">
 	        <br>
 <?php

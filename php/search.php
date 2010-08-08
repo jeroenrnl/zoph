@@ -52,7 +52,7 @@
                 if($url) {
                     $url.="&";
                 }   
-                $url.=$key. "=" . $val;
+                $url.=e($key) . "=" . e($val);
             }
             $search=new search; 
             $search->set("search", $url);

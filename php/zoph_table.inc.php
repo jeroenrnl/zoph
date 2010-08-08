@@ -385,7 +385,7 @@ class zoph_table {
         if($lat && $lon) {
             $quicklook=$this->get_quicklook($user);
             return "  createMarker(" . $lat . "," . $lon . ", '" . $icon .
-                    "','" .  escape_string($title) . "','" . 
+                    "','" .  e($title) . "','" . 
                     $quicklook . "');\n";
         } else {
             return null;

@@ -50,7 +50,7 @@ function getvar($var) {
     }
 
     remove_magic_quotes($val);
-    return $val;
+    return i($val);
 }
 
 /*
@@ -63,6 +63,12 @@ function getvar($var) {
 function remove_magic_quotes(&$x) {
     if (is_array($x)) {
         while (list($key,$value) = each($x)) {
+            $oldkey=$key;
+            remove_magic_quotes($key);
+            if($key!=$oldkey) {
+                $x[$key]=$x[$oldkey];
+                unset($x[$oldkey]);
+            }
             if ($value) remove_magic_quotes($x[$key]);
         }
     }else if (ini_get('magic_quotes_sybase')) {
@@ -72,6 +78,33 @@ function remove_magic_quotes(&$x) {
     } else if (get_magic_quotes_gpc()) {
         $x = stripslashes($x);
     }
+}
+
+function i($var) {
+    if(is_array($var)) {
+        $return=array();
+        foreach($var as $key => $value) {
+            $return[i($key)]=i($value);
+        }
+    } else {
+        $return=strip_tags(html_entity_decode($var));
+    }
+    return $return;
+}
+
+function e($var) {
+    if(is_array($var)) {
+        $return=array();
+        foreach($var as $key => $value) {
+            $return[e($key)]=e($value);
+        }
+    } else {
+        $return=htmlspecialchars($var);
+        # Extra escape for a few chars that may cause troubles but are
+        # not escaped by htmlspecialchars.
+        $return=str_replace(array("<", ">", "\"", "(", ")", "'", "[",  "]", "{", "}", "~", "`"), array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;", "&#39","&#91", "&#93", "&#123", "&#125", "&#126", "&#96"), $return);
+    }
+    return $return;
 }
 
 if (minimum_version('4.1.0')) {
@@ -85,10 +118,11 @@ if (minimum_version('4.1.0')) {
 
     if ($_GET) { $request_vars = &$_GET; }
     else       { $request_vars = &$_POST; }
-}
-else {
-    if ($HTTP_GET_VARS) { $request_vars = &$HTTP_GET_VARS; }
+} else {
+    if ($HTTP_GET_VARS) { $request_vars = &$$HTTP_GET_VARS; }
     else                { $request_vars = &$HTTP_POST_VARS; }
 }
-
+remove_magic_quotes($request_vars);
+$request_vars=i($request_vars);
+    
 ?>

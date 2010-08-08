@@ -36,8 +36,8 @@ function create_field_html($fields) {
     while (list($key, $val) = each($fields)) {
         if ($val) {
             $html .=
-            "<dt>$key</dt>\n" .
-            "<dd>$val</dd>\n";
+            "<dt>" . e($key) . "</dt>\n" .
+            "<dd>" . $val ." </dd>\n";
         }
     }
     return $html;
@@ -49,8 +49,8 @@ function create_field_html_table($fields) {
     while (list($key, $val) = each($fields)) {
         if ($val) {
             $html .=
-            "<tr>\n  <th>$key</th>\n" .
-            "  <td>$val</<td>\n</tr>\n";
+            "<tr>\n  <th>" . e($key) . "</th>\n" .
+            "  <td>" . e($val) . "</<td>\n</tr>\n";
         }
     }
     return $html;
@@ -60,14 +60,14 @@ function create_edit_fields($fields) {
     $html = "";
     while(list($key, $field) = each($fields)) {
         $html.=
-            "<label for=\"$key\">$field[0]</label>\n$field[1]<br>";
+            "<label for=\"$key\">$field[0]</label>\n" . $field[1] ."<br>";
     }
     return $html;
 }
 
 function create_text_input($name, $value, $size = 20, $max = 32) {
     $id=ereg_replace("^_+", "", $name);
-    return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"" . $value ."\" size=\"$size\" maxlength=\"$max\">\n";
+    return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"" . e($value) ."\" size=\"$size\" maxlength=\"$max\">\n";
 }
 
 function create_pulldown($name, $value, $value_array, $extraopt = null) {
@@ -77,7 +77,7 @@ function create_pulldown($name, $value, $value_array, $extraopt = null) {
     while (list($val, $label) = each($value_array)) {
         if ($val == $value) { $selected = " selected"; }
         else { $selected  = ""; }
-        $html .= "  <option value=\"$val\"$selected >" . ($label?$label:"&nbsp;") ."</option>\n";
+        $html .= "  <option value=\"$val\"$selected >" . ($label?e($label):"&nbsp;") ."</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -143,7 +143,7 @@ function create_inequality_operator_pulldown($var, $op = ">") {
 
 function create_photo_field_pulldown($var, $name = null) {
     return create_pulldown($var, $name, array(
-        "" => "&nbsp;",
+        "" => "",
         "date" => translate("date",0),
         "time" => translate("time",0),
         "timestamp" => translate("timestamp",0),
@@ -168,7 +168,7 @@ function create_photo_field_pulldown($var, $name = null) {
 
 function create_photo_text_pulldown($var, $name = null) {
     return create_pulldown($var, $name, array(
-        "" => "&nbsp;",
+        "" => "",
         "album" => translate("album",0),
         "category" => translate("category",0),
         "person" => translate("person",0),

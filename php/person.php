@@ -42,7 +42,7 @@
     require_once("actions.inc.php");
     if ($action != "insert") {
         $person->lookup();
-        $title = $person->get_name();
+        $title = e($person->get_name());
     }
     else {
         $title = translate("New Person");
@@ -95,9 +95,9 @@
             <a href="photos.php?photographer_id=<?php echo $person->get("person_id") ?>"><?php echo "$photos_by " . translate("photos by") ?></a>
           </span>
           <h2>
-            <?php echo $person->get("first_name") ?>
-            <?php echo $person->get("middle_name") ?>
-            <?php echo $person->get("last_name") ?>
+            <?php echo e($person->get("first_name")) ?>
+            <?php echo e($person->get("middle_name")) ?>
+            <?php echo e($person->get("last_name")) ?>
           </h2>
           <p>
 <?php
@@ -113,7 +113,7 @@ if ($user->get("detailed_people") || $user->is_admin()) {
         if ($person->get_email()) {
 ?>
           <dt><?php echo translate("email") ?></dt>
-          <dd><a href="mailto:<?php echo $person->get_email() ?>"><?php echo $person->get_email() ?></a></dd>
+          <dd><a href="mailto:<?php echo e($person->get_email()) ?>"><?php echo e($person->get_email()) ?></a></dd>
 <?php
         }
         if ($person->home) {

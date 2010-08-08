@@ -53,9 +53,9 @@ class page extends zoph_table {
         $text="<div class='page-preview'>" . $zophcode->parse() . "</div>";
 
         return array(
-            translate("title") => $this->get("title"),
-            translate("date") => $this->get("date"),
-            translate("updated") => $this->get("timestamp"),
+            translate("title") => e($this->get("title")),
+            translate("date") => e($this->get("date")),
+            translate("updated") => e($this->get("timestamp")),
             translate("text") => $text
         );
     }

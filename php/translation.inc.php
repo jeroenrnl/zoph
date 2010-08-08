@@ -125,7 +125,7 @@ class language {
      */
     function translate($string, $error = true) {
         $tag="";
-        $translation=$this->translations[$string];
+        $translation=trim($this->translations[$string]);
         if($translation) {
             return trim($translation);
         } else {

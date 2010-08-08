@@ -30,8 +30,6 @@
 
 
     function escape_string($str) {
-
-        $str=str_replace(array("<", ">", "\"", "(", ")"), array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;"), $str);
         return mysql_real_escape_string($str);
     }
 
