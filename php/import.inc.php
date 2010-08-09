@@ -49,7 +49,7 @@ abstract class Import {
      * @param Array Files to be imported
      * @param  Array Vars to be applied to the photos.
      */
-    public static function photos(Array $files, Array $vars) {
+    public static function photos(Array $files, Array $vars, Array $switches) {
         if(isset($vars["_album_id"])) {
             $albums=$vars["_album_id"];
         }
@@ -80,7 +80,7 @@ abstract class Import {
             $height= $image_info[1];
             $size=filesize($file);
             try {
-                $photo->import($file);
+                $photo->import($file, $switches["copy"]);
             } catch (FileException $e) {
                 die();
             }

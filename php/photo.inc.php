@@ -266,7 +266,7 @@ class photo extends zoph_table {
         return get_records_from_query("person", $sql);
     }
     
-    function import($filename) {
+    function import($filename, $copy=false) {
         $path=dirname($filename);
         $name=basename($filename);
         $this->set("name", $name);
@@ -275,13 +275,13 @@ class photo extends zoph_table {
         $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
         $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
         
-        $toMove[]=new File($filename);
+        $files[]=new File($filename);
 
         if(file_exists($path . "/". $thumbname)) {
-            $toMove[]=new File($path . "/" . $thumbname);
+            $files[]=new File($path . "/" . $thumbname);
         }
         if(file_exists($path . "/". $midname)) {
-            $toMove[]=new File($path . "/" . $midname);
+            $files[]=new File($path . "/" . $midname);
         }
 
         $newPath=$this->get("path") . "/";
@@ -309,18 +309,31 @@ class photo extends zoph_table {
 
         
         try {
-            foreach($toMove as $fileToMove) {
-                $fileToMove->checkMove($toPath);
+            foreach($files as $file) {
+                if($copy===false) {
+                    $file->checkMove($toPath);
+                } else {
+                    $file->checkCopy($toPath);
+                }
             }
         } catch (FileException $e) {
-            echo $e->getMessage();
+            echo $e->getMessage() . "\n";
             throw $e;
         }
-        // We run this loop twice, because we only want to move the file if 
-        // *all* files can be moved.
-        foreach($toMove as $fileToMove) {
-            $fileToMove->move($toPath);
-            $fileToMove->chmod();
+        // We run this loop twice, because we only want to move/copy the file if 
+        // *all* files can be moved/copied.
+        try {
+            foreach($files as $file) {
+                if($copy===false) {
+                    $file->move($toPath);
+                } else {
+                    $file=$file->copy($toPath);
+                }
+                $file->chmod();
+            }
+        } catch (FileException $e) {
+            echo $e->getMessage() . "\n";
+            throw $e;
         }
         // Update the db to the new path;
         $this->set("path", $newPath);

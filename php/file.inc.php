@@ -114,8 +114,8 @@ class file {
         if(!file_exists($this)) {
             throw new FileSourceNotFoundException("File not found: " . $this);
         }
-        if(file_exists($dest . "/" . $this->name)) {
-            throw new FileExistsException("File already exists: " . $dest);
+        if(file_exists($dest . $this->name)) {
+            throw new FileExistsException("File already exists: " . $dest . $this->name);
         }
         if(!is_readable($this)) {
             throw new FileNotReadableException("Cannot read file: " . $this);
@@ -150,8 +150,8 @@ class file {
 
     public function copy($dest) {
         $this->checkCopy($dest);
-        if(copy($this, $dest)) {
-            return new File($dest);
+        if(copy($this, $dest . "/" . $this->name)) {
+            return new File($dest . "/" . $this->name);
         } else {
             throw new FileCopyFailedException("Could not copy $this to $dest");
         }
