@@ -93,6 +93,6 @@ if(!ZOPH) { die("Illegal call"); }
                 <span class="inputhint">1 - 10</span><br>
                 <label for="description"><?php echo translate("description") ?></label>
                 <textarea name="description" cols="40" rows="4"></textarea><br>
-                <input type="submit" value="<?php echo translate("import", 0) ?>">
+                <input id="import_submit" type="submit" value="<?php echo translate("import", 0) ?>">
             </form>
         </div>

@@ -1071,6 +1071,10 @@ input[type="reset"] {
     display: block;
     }
 
+input[disabled] {
+    background: #aaaaaa;
+    }
+
 div#rowscols input[type="submit"] {
     display: inline;
     margin: 0px 15px 0px 15px;

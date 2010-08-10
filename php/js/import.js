@@ -93,6 +93,8 @@ var zImport=function() {
     function showThumbs(http) {
         var content;
         var status;
+        var submit;
+
         if (http.readyState == 4) {
             if(http.status == 200) {
                 response=http.responseXML;
@@ -243,6 +245,10 @@ var zImport=function() {
                         oldfile=file;
                     }
                 }
+                // Re-enable the submit button
+                submit=document.getElementById("import_submit");
+                submit.disabled=false;
+                
                 processFiles();
                     
             }
@@ -305,11 +311,17 @@ var zImport=function() {
     }
 
     function importPhotos() {
+        var submit;
         var toImport=0;
 
         form=document.getElementById("import_form");
+        // Disable the submit button to prevent submitting twice
+        // it will be reactivated after refreshing the thumbnails
 
-        // First delete the old checkboxes, if any.
+        submit=document.getElementById("import_submit");
+        submit.disabled=true;
+
+        // Delete the old checkboxes, if any.
         fieldset=document.getElementById("import_checkboxes");
         if(fieldset) {
             removeChildren(fieldset);
