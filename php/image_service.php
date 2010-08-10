@@ -52,13 +52,13 @@
         else {
             $watermark_file="";
             $name = $photo->get("name");
-            $image_path = IMAGE_DIR . $photo->get("path") . "/";
+            $image_path = IMAGE_DIR . "/" . $photo->get("path") . "/";
             if (!$user->is_admin()) {
                 $permissions = $user->get_permissions_for_photo($photo_id);
                 $watermark = $permissions->get("watermark_level");
                 $photolevel=$photo->get("level");
                 if(WATERMARK && ($photolevel > $watermark)) {
-                    $watermark_file = IMAGE_DIR . WATERMARK;
+                    $watermark_file = IMAGE_DIR . "/" . WATERMARK;
                     if (!file_exists($watermark_file)) {
                         $watermark_file="";
                     }

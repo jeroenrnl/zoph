@@ -37,6 +37,23 @@ class WebImport extends Import {
     }
 
     /**
+     * Import photos
+     *
+     * Takes an array of files and an array of vars and imports them in Zoph
+     * @param Array Files to be imported
+     * @param  Array Vars to be applied to the photos.
+     */
+    public static function photos(Array $files, Array $vars) {
+        $switches=Array(
+            "thumbs" => false,
+            "copy" => false,
+            "dated" => USE_DATED_DIRS,
+            "hier" => HIER_DATED_DIRS,
+            "useids" => false
+        );
+        parent::photos($files, $vars, $switches);
+    }
+    /**
      * Creates the form with file selector, browse and upload button
      * @param int Number to separate concurrent uploads
      * @param string Combination of upload_id and upload_num

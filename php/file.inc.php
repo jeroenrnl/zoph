@@ -35,6 +35,8 @@ class file {
     private $name;
     private $path;
 
+    private $destination;
+
     public function __construct($name) {
         $this->name=basename($name);
         $this->path=realpath(dirname($name));
@@ -101,15 +103,21 @@ class file {
             }
         }
     }
+    /**
+     * Set the destination for copy or move operations;
+     * @param string destination of the file
+     */
+    public function setDestination($path) {
+        $this->destination="/" . cleanup_path($path) . "/";
+    }
 
     /**
      * Makes checks to see if a file can be copied
-     *
-     * @param string destination of the file
      */
-    public function checkCopy($dest) {
+    public function checkCopy() {
+        $dest=$this->destination;
         if(!is_writable($dest)) {
-            throw new FileDirNotWritableException("Directory not writable: " . $dir);
+            throw new FileDirNotWritableException("Directory not writable: " . $dest);
         }
         if(!file_exists($this)) {
             throw new FileSourceNotFoundException("File not found: " . $this);
@@ -125,21 +133,20 @@ class file {
 
     /**
      * Makes checks if a file can be moved
-     *
-     * @param string destination of the file
      */
-    public function checkMove($dest) {
+    public function checkMove() {
         // First checks are the same...
-        $this->checkCopy($dest);
+        $this->checkCopy();
         if(!is_writable($this)) {
             throw new FileNotWritableException("File is not writable: " . $this);
         }
         return true;
     }
 
-    public function move($dest) {
+    public function move() {
+        $dest=$this->destination;
         log::msg("Going to move $this to $dest", LOG::DEBUG, LOG::GENERAL);
-        $this->checkMove($dest);
+        $this->checkMove();
         if(rename($this, $dest . "/" . $this->name)) {
             $this->path=realpath($dest);
         } else {
@@ -148,8 +155,9 @@ class file {
         return true;
     }
 
-    public function copy($dest) {
-        $this->checkCopy($dest);
+    public function copy() {
+        $dest=$this->destination;
+        $this->checkCopy();
         if(copy($this, $dest . "/" . $this->name)) {
             return new File($dest . "/" . $this->name);
         } else {

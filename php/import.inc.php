@@ -38,7 +38,7 @@ abstract class Import {
          exec($cmd, $output, $return);
          if($return > 0) {
             $msg=implode($output, "<br>");
-            throw ImportAutorotException($msg);
+            throw new ImportAutorotException($msg);
          }
     }
 
@@ -48,6 +48,7 @@ abstract class Import {
      * Takes an array of files and an array of vars and imports them in Zoph
      * @param Array Files to be imported
      * @param  Array Vars to be applied to the photos.
+     * @param Array Switches that influence the import process, such as copy/move, dateddirs, etc.
      */
     public static function photos(Array $files, Array $vars, Array $switches) {
         if(isset($vars["_album_id"])) {
@@ -74,19 +75,21 @@ abstract class Import {
             }
 
             $photo->set("path", $path);
-
             $image_info= getimagesize($file);
             $width= $image_info[0];
             $height= $image_info[1];
             $size=filesize($file);
             try {
-                $photo->import($file, $switches["copy"]);
+                $photo->import($file, $switches);
             } catch (FileException $e) {
                 die();
             }
-
-            $photo->thumbnail(false);
-
+            
+            try {
+                $photo->thumbnail(false);
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
             if ($photo->insert()) {
                 $photo->set("size", $size);
                 $photo->set("width", $width);

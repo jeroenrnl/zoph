@@ -266,26 +266,13 @@ class photo extends zoph_table {
         return get_records_from_query("person", $sql);
     }
     
-    function import($filename, $copy=false) {
+    function import($filename, Array $switches) {
         $path=dirname($filename);
         $name=basename($filename);
         $this->set("name", $name);
 
-        $conv=get_converted_image_name($name);
-        $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
-        $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
-        
-        $files[]=new File($filename);
-
-        if(file_exists($path . "/". $thumbname)) {
-            $files[]=new File($path . "/" . $thumbname);
-        }
-        if(file_exists($path . "/". $midname)) {
-            $files[]=new File($path . "/" . $midname);
-        }
-
         $newPath=$this->get("path") . "/";
-        if(USE_DATED_DIRS) {
+        if($switches["dated"]) {
             // This is not really validating the date, just making sure
             // no-one is playing tricks, such as setting the date to /etc/passwd or
             // something.
@@ -295,8 +282,7 @@ class photo extends zoph_table {
                 $date=date("Y-m-d", now());
             }
 
-            if (HIER_DATED_DIRS) {
-                
+            if ($switches["hier"]) {
                 $newPath .= cleanup_path(str_replace("-", "/", $date));
             } else {
                 $newPath .= cleanup_path(str_replace("-", ".", $date));
@@ -307,13 +293,32 @@ class photo extends zoph_table {
         create_dir_recursive($toPath . "/" . MID_PREFIX);
         create_dir_recursive($toPath . "/" . THUMB_PREFIX);
 
+        $conv=get_converted_image_name($name);
+        $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
+        $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
+        
+        $image=new File($filename);
+        $image->setDestination($toPath);
+        $files[]=$image;
+
+        if(file_exists($path . "/". $thumbname)) {
+            $thumb=new File($path . "/" . $thumbname);
+            $thumb->setDestination($toPath . "/" . THUMB_PREFIX . "/");
+            $files[]=$thumb;
+        }
+        if(file_exists($path . "/". $midname)) {
+            $mid=new File($path . "/" . $midname);
+            $mid->setDestination($toPath . "/" . MID_PREFIX . "/");
+            $files[]=$mid;
+        }
+        
         
         try {
             foreach($files as $file) {
-                if($copy===false) {
-                    $file->checkMove($toPath);
+                if($switches["copy"]==false) {
+                    $file->checkMove();
                 } else {
-                    $file->checkCopy($toPath);
+                    $file->checkCopy();
                 }
             }
         } catch (FileException $e) {
@@ -324,10 +329,10 @@ class photo extends zoph_table {
         // *all* files can be moved/copied.
         try {
             foreach($files as $file) {
-                if($copy===false) {
-                    $file->move($toPath);
+                if($switches["copy"]==false) {
+                    $file->move();
                 } else {
-                    $file=$file->copy($toPath);
+                    $file=$file->copy();
                 }
                 $file->chmod();
             }
@@ -336,11 +341,11 @@ class photo extends zoph_table {
             throw $e;
         }
         // Update the db to the new path;
-        $this->set("path", $newPath);
+        $this->set("path", cleanup_path($newPath));
     }
 
     function get_file_path() {
-        return IMAGE_DIR . $this->get("path") . "/" . $this->get("name");
+        return IMAGE_DIR . "/" . $this->get("path") . "/" . $this->get("name");
     }
 
     function get_midsize_img() {
@@ -591,22 +596,23 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
     function thumbnail($force=true) {
         $path=IMAGE_DIR . "/" . $this->get("path") . "/";
 
-        $conv=get_converted_image_name($this->name);
+        $conv=get_converted_image_name($this->get("name"));
         $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
         $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
-
+        
         if(!file_exists($path . $midname) || $force===true) {
             if(!$this->create_thumbnail(MID_PREFIX, MID_SIZE)) {
-                throw PhotoThumbCreationFailedException("Could not create " . MID_PREFIX . " image");
+                throw new PhotoThumbCreationFailedException("Could not create " . MID_PREFIX . " image");
             }
         }
         if(!file_exists($path . $thumbname) || $force===true) {
             if(!$this->create_thumbnail(THUMB_PREFIX, THUMB_SIZE)) {
-                throw PhotoThumbCreationFailedException("Could not create " . THUMB_PREFIX . " image");
+                throw new PhotoThumbCreationFailedException("Could not create " . THUMB_PREFIX . " image");
             }
         }
         return true;
     }
+
     function create_thumbnail($prefix, $size) {
         $img_src = $this->get_image_resource();
         
@@ -636,7 +642,7 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
                 $new_width, $new_height, $width, $height);
         }
         flush();
-        $new_image = IMAGE_DIR . $this->get("path") . '/' . $prefix . '/' .
+        $new_image = IMAGE_DIR . '/' . $this->get("path") . '/' . $prefix . '/' .
             $prefix . '_' .  get_converted_image_name($this->get("name"));
 
         $image_type = get_image_type($new_image);
