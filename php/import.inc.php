@@ -84,12 +84,15 @@ abstract class Import {
             } catch (FileException $e) {
                 die();
             }
-            
-            try {
-                $photo->thumbnail(false);
-            } catch (Exception $e) {
-                echo $e->getMessage();
+           
+            if($switches["thumbs"]==true) {
+                try {
+                    $photo->thumbnail(false);
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                }
             }
+
             if ($photo->insert()) {
                 $photo->set("size", $size);
                 $photo->set("width", $width);
