@@ -95,7 +95,7 @@ class cli {
         switch($this->args->getCommand()) {
         case "import":
             if(is_array($this->files)) {
-                CliImport::photos($this->files, $this->args->getVars());
+                CliImport::photos($this->files, $this->args->getVars(), $this->args->getSwitches());
             } else {
                 exit(self::EXIT_NO_FILES);
             }
@@ -123,7 +123,8 @@ class cli {
      */
     private function processFiles() {
         $files=$this->args->getFiles();
-        $return=array();
+        $switches=$this->args->getSwitches();
+
         foreach($files as $file) {
             try {
                 if(substr($file,0,1)!="/") {
@@ -135,14 +136,12 @@ class cli {
                 if(!is_readable($file)) {
                     throw new Exception("Cannot read file: $file\n");
                 }
-                if (!is_writable($file)) {
-                    // FIXME: is file is going to be copied, this is not a problem
+                if ($switches["copy"] && !is_writable($file)) {
                     throw new Exception("Cannot write file: $file\n");
                 }
                 $this->files[]=$file;
             } catch (Exception $e) {
                 echo $e->getMessage();
-                var_dump($e);
             }
         }
     }
