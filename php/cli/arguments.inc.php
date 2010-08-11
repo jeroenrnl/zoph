@@ -83,6 +83,8 @@ class arguments {
         $args["thumbs"]=true;
         $args["copy"]=false;
         $args["useids"]=false;
+        $args["dated"]=USE_DATED_DIRS;
+        $args["hier"]=HIER_DATED_DIRS;
         
         foreach($argv as $arg) {
             switch($arg) {
@@ -106,6 +108,10 @@ class arguments {
                 case "--field":
                 case "-f":
                     $current=&$args["fields"];
+                    break;
+                case "--import":
+                    unset($current);
+                    $args["command"]="import";
                     break;
                 case "--place":
                 case "--location":
@@ -179,6 +185,7 @@ class arguments {
 
                 case "--dateddirs":
                 case "--datedDirs":
+                case "--dated":
                 case "-d":
                     unset($current);
                     $args["dated"]=true;
@@ -192,8 +199,10 @@ class arguments {
                     break;
                 case "--no-dateddirs":
                 case "--no-datedDirs":
+                case "--no-dated":
                 case "--nodateddirs":
                 case "--nodatedDirs":
+                case "--nodated":
                     unset($current);
                     $args["dated"]=false;
                     break;
