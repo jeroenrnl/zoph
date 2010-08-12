@@ -266,13 +266,13 @@ class photo extends zoph_table {
         return get_records_from_query("person", $sql);
     }
     
-    function import($filename, Array $switches) {
+    function import($filename) {
         $path=dirname($filename);
         $name=basename($filename);
         $this->set("name", $name);
 
         $newPath=$this->get("path") . "/";
-        if($switches["dated"]) {
+        if(settings::$importDated) {
             // This is not really validating the date, just making sure
             // no-one is playing tricks, such as setting the date to /etc/passwd or
             // something.
@@ -282,7 +282,7 @@ class photo extends zoph_table {
                 $date=date("Y-m-d", now());
             }
 
-            if ($switches["hier"]) {
+            if (settings::$importHier) {
                 $newPath .= cleanup_path(str_replace("-", "/", $date));
             } else {
                 $newPath .= cleanup_path(str_replace("-", ".", $date));
@@ -315,7 +315,7 @@ class photo extends zoph_table {
         
         try {
             foreach($files as $file) {
-                if($switches["copy"]==false) {
+                if(settings::$importCopy==false) {
                     $file->checkMove();
                 } else {
                     $file->checkCopy();
@@ -329,7 +329,7 @@ class photo extends zoph_table {
         // *all* files can be moved/copied.
         try {
             foreach($files as $file) {
-                if($switches["copy"]==false) {
+                if(settings::$importCopy==false) {
                     $file->move();
                 } else {
                     $file=$file->copy();
@@ -472,7 +472,7 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
         return $rating;
     }
 
-    /*
+    /**
      * Stores the rating of a photo for a user and updates the
      * average rating.
      *
@@ -1324,6 +1324,17 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         } else {
             return null;
         }
+    }
+
+    public static function getByName($file, $path=null) {
+        $sql="SELECT photo_id FROM " . DB_PREFIX . "photos " .
+            "WHERE file_name='" . escape_string($file) ."'";
+
+        if(!is_null($path)) {
+            $sql .= " AND path='" . escape_string($path) ."'";
+        }
+
+        return get_records_from_query("photo", $sql);
     }
 
 

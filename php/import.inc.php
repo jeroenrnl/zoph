@@ -48,9 +48,8 @@ abstract class Import {
      * Takes an array of files and an array of vars and imports them in Zoph
      * @param Array Files to be imported
      * @param  Array Vars to be applied to the photos.
-     * @param Array Switches that influence the import process, such as copy/move, dateddirs, etc.
      */
-    public static function photos(Array $files, Array $vars, Array $switches) {
+    public static function photos(Array $files, Array $vars) {
         if(isset($vars["_album_id"])) {
             $albums=$vars["_album_id"];
         }
@@ -80,12 +79,12 @@ abstract class Import {
             $height= $image_info[1];
             $size=filesize($file);
             try {
-                $photo->import($file, $switches);
+                $photo->import($file);
             } catch (FileException $e) {
                 die();
             }
            
-            if($switches["thumbs"]==true) {
+            if(settings::$importThumbs===true) {
                 try {
                     $photo->thumbnail(false);
                 } catch (Exception $e) {

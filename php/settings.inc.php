@@ -26,6 +26,14 @@
  */
 class settings {
 
+    public static $imprtVerbose=0;
+    
+    public static $importThumbs=true;
+    public static $importCopy=false;
+    public static $importDated=USE_DATED_DIRS;
+    public static $importHier=HIER_DATED_DIRS;
+    public static $importUseids=false;
+
    /**
     * Load ini file, as defined in the INI_FILE constant
     * Check if these settings are still made in config.inc.php

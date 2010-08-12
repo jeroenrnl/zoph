@@ -44,14 +44,8 @@ class WebImport extends Import {
      * @param  Array Vars to be applied to the photos.
      */
     public static function photos(Array $files, Array $vars) {
-        $switches=Array(
-            "thumbs" => false,
-            "copy" => false,
-            "dated" => USE_DATED_DIRS,
-            "hier" => HIER_DATED_DIRS,
-            "useids" => false
-        );
-        parent::photos($files, $vars, $switches);
+        settings::$importThumbs=false; // thumbnails have already been created, no need to repeat...
+        parent::photos($files, $vars);
     }
     /**
      * Creates the form with file selector, browse and upload button

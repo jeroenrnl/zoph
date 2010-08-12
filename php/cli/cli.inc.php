@@ -86,16 +86,15 @@ class cli {
      * Run the CLI
      */
     public function run() {
-        $switches=$this->args->getSwitches();
-        if($switches["useids"]===false) {
+        if(settings::$importUseids===false) {
             $this->processFiles();
         }
             
 
-        switch($this->args->getCommand()) {
+        switch(arguments::$command) {
         case "import":
             if(is_array($this->files)) {
-                CliImport::photos($this->files, $this->args->getVars(), $this->args->getSwitches());
+                CliImport::photos($this->files, $this->args->getVars());
             } else {
                 exit(self::EXIT_NO_FILES);
             }
@@ -123,7 +122,6 @@ class cli {
      */
     private function processFiles() {
         $files=$this->args->getFiles();
-        $switches=$this->args->getSwitches();
 
         foreach($files as $file) {
             try {
@@ -136,7 +134,7 @@ class cli {
                 if(!is_readable($file)) {
                     throw new Exception("Cannot read file: $file\n");
                 }
-                if ($switches["copy"] && !is_writable($file)) {
+                if (!settings::$importCopy && !is_writable($file)) {
                     throw new Exception("Cannot write file: $file\n");
                 }
                 $this->files[]=$file;

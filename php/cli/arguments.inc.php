@@ -37,6 +37,8 @@ class arguments {
      */
     private $vars = array();
 
+    public static $command="import";
+
     /**
      * Create a new instance of the class.
      * This construct also takes care of interpreting an d looking up of the
@@ -79,12 +81,6 @@ class arguments {
         $args["fields"]=array();
         $args["path"]="";
 
-        $args["command"]="import";
-        $args["thumbs"]=true;
-        $args["copy"]=false;
-        $args["useids"]=false;
-        $args["dated"]=USE_DATED_DIRS;
-        $args["hier"]=HIER_DATED_DIRS;
         
         foreach($argv as $arg) {
             switch($arg) {
@@ -111,7 +107,7 @@ class arguments {
                     break;
                 case "--import":
                     unset($current);
-                    $args["command"]="import";
+                    self::$command="import";
                     break;
                 case "--place":
                 case "--location":
@@ -132,25 +128,25 @@ class arguments {
                 case "--thumbs":
                 case "-t":
                     unset($current);
-                    $args["thumbs"]=true;
+                    settings::$importThumbs=true;
                     break;
                 case "--nothumbs":
                 case "--no-thumbs":
                 case "-n":
                     unset($current);
-                    $args["thumbs"]=false;
+                    settings::$importThumbs=false;
                     break;
 
 
                 case "--update":
                 case "-u":
                     unset($current);
-                    $args["command"]="update";
+                    self::$command="update";
                     break;
                 case "--import":
                 case "-I":
                     unset($current);
-                    $args["command"]="import";
+                    self::$command="import";
                     break;
                 case "--useIds":
                 case "--useids":
@@ -158,29 +154,29 @@ class arguments {
                 case "--useid":
                 case "--use-id":
                     unset($current);
-                    $args["useids"]=true;
+                    settings::$importUseids=true;
                     break;
                 case "--update-thumbs":
                 case "--updateThumbs":
                 case "--updatethumbs":
                     unset($current);
-                    $args["command"]="updatethumbs";
+                    self::$command="updatethumbs";
                     break;
                 case "--update-exif":
                 case "--updateEXIF":
                 case "--updateexif":
                     unset($current);
-                    $args["command"]="updateexif";
+                    self::$command="updateexif";
                     break;
 
 
                 case "--copy":
                     unset($current);
-                    $args["copy"]=true;
+                    settings::$importCopy=true;
                     break;
                 case "--move":
                     unset($current);
-                    $args["copy"]=false;
+                    settings::$importCopy=false;
                     break;
 
                 case "--dateddirs":
@@ -188,14 +184,14 @@ class arguments {
                 case "--dated":
                 case "-d":
                     unset($current);
-                    $args["dated"]=true;
+                    settings::$importDated=true;
                     break;
                 case "--hierarchical":
                 case "--hier":
                 case "-H":
                     unset($current);
-                    $args["dated"]=true;
-                    $args["hier"]=true;
+                    settings::$importDated=true;
+                    settings::$importHier=true;
                     break;
                 case "--no-dateddirs":
                 case "--no-datedDirs":
@@ -204,14 +200,14 @@ class arguments {
                 case "--nodatedDirs":
                 case "--nodated":
                     unset($current);
-                    $args["dated"]=false;
+                    settings::$importDated=false;
                     break;
                 case "--no-hierarchical":
                 case "--no-hier":
                 case "--nohierarchical":
                 case "--nohier":
                     unset($current);
-                    $args["hier"]=false;
+                    settings::$importHier=false;
                     break;
                 case "--path":
                     $current=&$args["path"];
@@ -219,17 +215,17 @@ class arguments {
                 case "-V":
                 case "--version":
                     unset($current);
-                    $args["command"]="version";
+                    self::$command="version";
                     break;
                 case "-h":
                 case "--help":
                     unset($current);
-                    $args["command"]="help";
+                    self::$command="help";
                     break;
                 case "-v":
                 case "--verbose":
                     unset($current);
-                    $args["verbose"]++;
+                    settings::$importVerbose++;
                     break;
                 default:
                     if(substr($arg,0,1)=="-") {
@@ -263,8 +259,8 @@ class arguments {
                 $args["fields"]=$newfields;
             }
 
-            if($args["useids"]==true && $args["command"]=="import") {
-                $args["command"]="update";
+            if(settings::$importUseids==true && self::$command=="import") {
+                self::$command="update";
             }
         }
     }
@@ -291,7 +287,6 @@ class arguments {
                             continue;
                         }
                     }
-                    
                     break;
                 case "categories":
                     foreach($arg as $name) {
@@ -353,29 +348,11 @@ class arguments {
     }
 
     /**
-     * Returns the chosen command
-     */
-    public function getCommand() {
-        return $this->processed["command"];
-    }
-    /**
      * Returns an array of variables, with keys.
      */
     public function getVars() {
         return $this->vars;
     }
     
-    /**
-     * Returns an array of variables, with keys.
-     */
-    public function getSwitches() {
-        return array(
-            "thumbs" => $this->processed["thumbs"],
-            "copy" => $this->processed["copy"],
-            "dated" => $this->processed["dated"],
-            "hier" => $this->processed["hier"],
-            "useids" => $this->processed["useids"]
-        );
-    }
 }
 ?>
