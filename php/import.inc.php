@@ -50,19 +50,6 @@ abstract class Import {
      * @param  Array Vars to be applied to the photos.
      */
     public static function photos(Array $files, Array $vars) {
-        if(isset($vars["_album_id"])) {
-            $albums=$vars["_album_id"];
-        }
-        if(isset($vars["_category_id"])) {
-            $categories=$vars["_category_id"];
-        }
-        if(isset($vars["_person_id"])) {
-            $people=$vars["_person_id"];
-        }
-        if(isset($vars["_path"])) {
-            $path=$vars["_path"];
-        }
-      
         foreach($files as $file) {
             $photo=new photo();
             $exif=process_exif($file);
@@ -81,6 +68,7 @@ abstract class Import {
             try {
                 $photo->import($file);
             } catch (FileException $e) {
+                echo $e->getMessage();
                 die();
             }
            
@@ -97,32 +85,20 @@ abstract class Import {
                 $photo->set("width", $width);
                 $photo->set("height", $height);
                 $photo->update($vars);
-                
-                if(isset($albums)) {
-                    foreach($albums as $album) {
-                        $photo->add_to_album($album);
-                    }
-                }
-                if(isset($categories)) {
-                    foreach($categories as $cat) {
-                        $photo->add_to_category($cat);
-                    }
-                }   
-                if(isset($people)) {
-                    $pos=1;
-                    foreach($people as $person) {
-                        $photo->add_to_person($person, $pos);
-                        $pos++;
-                    }
-                }   
+                $photo->updateRelations($vars);
+
             } else {
                 echo translate("Insert failed.") . "<br>\n";
             }
         }
-    } 
+    }
 }
 
 class ImportException extends ZophException {}
 class ImportAutorotException extends ImportException {}
+class ImportFileNotInPathException extends ImportException {}
+class ImportFileNotFoundException extends ImportException {}
+class ImportIdIsNotNumericException extends ImportException {}
+class ImportMultipleMatchesException extends ImportException {}
 
 ?>

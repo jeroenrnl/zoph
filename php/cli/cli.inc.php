@@ -58,8 +58,8 @@ class cli {
     /**
      * List of files to be imported
      */
-    private $files;
-
+    private $files=array();
+    private $photos=array();
 
     /**
      * Create cli object
@@ -86,23 +86,32 @@ class cli {
      * Run the CLI
      */
     public function run() {
-        if(settings::$importUseids===false) {
-            $this->processFiles();
-        }
-            
+        $this->processFiles();
 
         switch(arguments::$command) {
         case "import":
-            if(is_array($this->files)) {
+            if(is_array($this->files) && sizeof($this->files)>0) {
                 CliImport::photos($this->files, $this->args->getVars());
             } else {
+                echo "Nothing to do, exiting\n";
                 exit(self::EXIT_NO_FILES);
             }
             break;
         case "update":
+            if(is_array($this->photos) && sizeof($this->photos)>0) {
+                foreach($this->photos as $photo) {
+                    $photo->update($this->args->getVars());
+                    $photo->updateRelations($this->args->getVars());
+                 }
+            } else {
+                echo "Nothing to do, exiting\n";
+                exit(self::EXIT_NO_FILES);
+            }
+
+            break;
         case "updatethumbs":
         case "updateexif":
-            var_dump($this->files);
+            var_dump($this->fileIds);
             break;
         case "version":
             echo self::showVersion();
@@ -122,25 +131,106 @@ class cli {
      */
     private function processFiles() {
         $files=$this->args->getFiles();
-
         foreach($files as $file) {
             try {
-                if(substr($file,0,1)!="/") {
-                    $file=getcwd() . "/" . $file;
+                if(arguments::$command=="import") {
+                    if(substr($file,0,1)!="/") {
+                            $file=getcwd() . "/" . $file;
+                    }
+                    if(!file_exists($file)) {
+                        throw new ImportFileNotFoundException("File not found: $file\n");
+                    } 
+                    if(!is_readable($file)) {
+                        throw new Exception("Cannot read file: $file\n");
+                    }
+                    if (!settings::$importCopy && !is_writable($file)) {
+                        throw new Exception("Cannot write file: $file\n");
+                    }
+                    $this->files[]=$file;
+                } else {
+                    if(settings::$importUseids) {
+                        if(is_numeric($file)) {
+                            $this->photos[]=$this->lookupFileById($file);
+                        } else if (preg_match("/^[0-9]+-[0-9]+$/", $file)) {
+                            list($start, $end) = explode("-",$file);
+                            foreach (range($start, $end) as $id) {
+                                try {
+                                    $this->photos[]=$this->lookupFileById($id);
+                                } catch (ImportException $e) {
+                                    echo $e->getMessage();
+                                }
+                             }
+                        } else {
+                            throw new ImportIdIsNotNumericException("$file is not numeric, but --useids is set.\n");
+                            // @todo: should be caught
+                        }
+                    } else {
+                        $this->photos[]=$this->lookupFile($file);
+                    }
                 }
-                if(!file_exists($file)) {
-                    throw new Exception("File not found: $file\n");
-                } 
-                if(!is_readable($file)) {
-                    throw new Exception("Cannot read file: $file\n");
-                }
-                if (!settings::$importCopy && !is_writable($file)) {
-                    throw new Exception("Cannot write file: $file\n");
-                }
-                $this->files[]=$file;
             } catch (Exception $e) {
                 echo $e->getMessage();
+                // @todo: zophImport.pl had a --ignoreerror option, should return! Maybe as --stoponerror or something
+                // 
             }
+        }
+    }
+    /**
+     * Looks up a photo by photo_id
+     */
+    private function lookupFileById($id) {
+        $photo=new photo((int) $id);
+        $count=$photo->lookup();
+        if($count==1) {
+            return $photo;
+        } else if ($count==0) {
+            throw new ImportFileNotFoundException("No photo with id $id was found\n");
+        } else {
+            throw new ImportMultipleMatchesException("Multiple photos with id $id were found. This is probably a bug");
+        }
+    }
+        
+    private function lookupFile($file) { 
+        $filename=basename($file);
+        $path=dirname($file);
+        if($path==".") {
+            // No path given
+            unset($path);
+        }
+
+        if(substr($path,0,2)=="./") {
+            // Path relative to the current dir given, change into absolute path
+            $path="/" . cleanup_path(getcwd() . "/" . $path);
+        }
+
+        if($path[0]=="/") {
+            // absolute path given
+
+            $path="/" . cleanup_path($path);
+            
+            // check if path is in IMAGE_DIR
+            if(substr($path, 0, strlen(IMAGE_DIR))!=IMAGE_DIR) {
+                throw new ImportFileNotInPathException($file ." is not in IMAGE_DIR (" . IMAGE_DIR . "), skipping.\n");
+                // @todo: should be caught
+            } else {
+                $path=substr($path, strlen(IMAGE_DIR));
+                if($path[0]=="/") {
+                    // IMAGE_DIR didn't end in '/', let's cut it off
+                    $path=substr($path, 1);
+                }
+            }
+        } else {
+            $path=cleanup_path($path);
+        }
+        $photos=photo::getByName($filename, $path);
+        if(sizeof($photos)==0) {
+            throw new ImportFileNotFoundException($file ." not found.\n");
+            // @todo: should be caught
+        } else if (sizeof($photos)==1) {    
+            return $photos[0];
+        } else {
+            throw new ImportMultipleMatchesException("Multiple files named " . $file ." found.\n");
+            // @todo: should be caught
         }
     }
 

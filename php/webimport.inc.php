@@ -385,7 +385,7 @@ class WebImport extends Import {
         $return = array();
 
         foreach ($files as $file) {
-            if($file{0}!=".") {
+            if($file[0]!=".") {
                 if(is_dir($dir . "/" . $file) && $recursive) {
                     $return=array_merge($return,self::getFiles($dir . "/" . $file, true));
                 } else if(is_null($search) or preg_match($search, $file)) {

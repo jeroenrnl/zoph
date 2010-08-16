@@ -26,7 +26,6 @@ if ((!IMPORT) || (!$user->is_admin() && !$user->get("import"))) {
 
 // Detect upload larger than upload_max_filesize.
 if($_GET["upload"]==1 && $_POST==null) {
-    var_dump($_FILES);
     echo webImport::handleUploadErrors(UPLOAD_ERR_INI_SIZE);
     die();
 }

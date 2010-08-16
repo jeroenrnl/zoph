@@ -232,12 +232,7 @@ class arguments {
                         echo "unknown argument: " . $arg . "\n";
                         exit(1);
                     } else if (is_null($current)) {
-                        if($arg{0}=="/") {
-                            $args["files"][]=$arg;
-                        } else {
-                            $args["files"][]=getcwd() . "/" .$arg;
-                        }
-                            
+                        $args["files"][]=$arg;
                     } else if (!is_array($current)) {
                         $current=$arg;
                         unset($current);
@@ -250,7 +245,6 @@ class arguments {
                     }
                     break;
             }
-
             if(isset($args["fields"])) {
                 foreach($args["fields"] as $f) {
                     $field=explode("=", $f);

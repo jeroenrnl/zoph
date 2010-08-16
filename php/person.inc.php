@@ -204,9 +204,8 @@ class person extends zoph_table {
        }
 
         $sql = "SELECT person_id FROM " . DB_PREFIX . "people WHERE " .
-            "CONCAT(lower(first_name), \" \", lower(last_name)) LIKE " .
-            "\"%" . escape_string($name) . "%\"";
-
+            "CONCAT_WS(\" \", lower(first_name), lower(last_name))=" .
+            "lower(\"" . escape_string($name) . "\")";
         return get_records_from_query("person", $sql);
     }
 

@@ -122,6 +122,49 @@ class photo extends zoph_table {
         }
     }
 
+    /** 
+     * Update photo relations, such as albums, categories, etc.
+     * @todo: should be refactured to replace update_relations
+     */
+    public function updateRelations($vars) {
+        if(isset($vars["_album_id"])) {
+            $albums=$vars["_album_id"];
+        }
+        if(isset($vars["_category_id"])) {
+            $categories=$vars["_category_id"];
+        }
+        if(isset($vars["_person_id"])) {
+            $people=$vars["_person_id"];
+        }
+        if(isset($vars["_path"])) {
+            $path=$vars["_path"];
+        }
+
+        if(isset($albums)) {
+            foreach($albums as $album) {
+                $this->add_to_album($album);
+            }
+        }
+        
+        if(isset($categories)) {
+            foreach($categories as $cat) {
+                $this->add_to_category($cat);
+            }
+        }   
+        
+        if(isset($people)) {
+            $sql =
+                "SELECT max(position) AS pos FROM " . DB_PREFIX . "photo_people " .
+                "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "';";
+            $result=fetch_array(query($sql));
+            $pos=$result["pos"];
+            foreach($people as $person) {
+                $pos++;
+                $this->add_to_person($person, $pos);
+            }
+        } 
+    }
+
     function add_to_album($album_id, $user=null) {
         // This is only done when either $user has write permissions to the
         // album, when the user is admin or when $user = null, this is to
@@ -201,10 +244,27 @@ class photo extends zoph_table {
         }
 
         foreach ($person_ids as $person_id) {
+            // First, get the position for the person who is about to be removed
+            $sql =
+                "SELECT position FROM " . DB_PREFIX . "photo_people " .
+                "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "' " .
+                "AND person_id = '" . escape_string($person_id) . "'";
+            $result=fetch_array(query($sql));
+            $pos=$result["position"];
+
+            // Remove the victim
             $sql =
                 "delete from " . DB_PREFIX . "photo_people " .
                 "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
                 " and person_id = '" . escape_string($person_id) . "'";
+            query($sql);
+
+            // Finally, lower the position for everyone with a higher position by one
+            $sql=
+                "UPDATE " . DB_PREFIX . "photo_people " .
+                "SET position=position-1 " .
+                "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "' " .
+                "AND position > " . escape_string($pos);
             query($sql);
         }
     }
@@ -1328,12 +1388,10 @@ echo ("<br>\noutString:<br>\n" . $out_string);
 
     public static function getByName($file, $path=null) {
         $sql="SELECT photo_id FROM " . DB_PREFIX . "photos " .
-            "WHERE file_name='" . escape_string($file) ."'";
-
-        if(!is_null($path)) {
+            "WHERE name=\"" . escape_string($file) ."\"";
+        if(!empty($path)) {
             $sql .= " AND path='" . escape_string($path) ."'";
         }
-
         return get_records_from_query("photo", $sql);
     }
 
