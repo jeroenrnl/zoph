@@ -98,20 +98,30 @@ class cli {
             }
             break;
         case "update":
+        case "updatethumbs":
+        case "updateexif":
+        case "updatesize":
             if(is_array($this->photos) && sizeof($this->photos)>0) {
                 foreach($this->photos as $photo) {
+                    $photo->lookup();
                     $photo->update($this->args->getVars());
                     $photo->updateRelations($this->args->getVars());
-                 }
+                    switch(arguments::$command) {
+                    case "updatethumbs":
+                        $photo->thumbnail(true);
+                        break;
+                    case "updateexif":
+                        $photo->updateEXIF();
+                        break;
+                    case "updatesize":
+                        $photo->updateSize();
+                        break; 
+                    }
+                }
             } else {
                 echo "Nothing to do, exiting\n";
                 exit(self::EXIT_NO_FILES);
             }
-
-            break;
-        case "updatethumbs":
-        case "updateexif":
-            var_dump($this->fileIds);
             break;
         case "version":
             echo self::showVersion();

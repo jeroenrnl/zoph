@@ -165,6 +165,32 @@ class photo extends zoph_table {
         } 
     }
 
+    /**
+     * Updates the photo's dimensions and filesize
+     */
+    public function updateSize() {
+        $file=$this->get_file_path();
+        list($width, $height)=getimagesize($file);
+        $size=filesize($file);
+        $this->set("size", $size);
+        $this->set("width", $width);
+        $this->set("height", $height);
+        $this->update();
+    }
+
+    /**
+     * Rereads EXIF information from file and updates
+     */
+    public function updateEXIF() {
+        $file=$this->get_file_path();
+            echo $file;
+        $exif=process_exif($file);
+        if($exif) {
+            $this->set_fields($exif);
+            $this->update();
+        }
+    }
+
     function add_to_album($album_id, $user=null) {
         // This is only done when either $user has write permissions to the
         // album, when the user is admin or when $user = null, this is to
@@ -815,13 +841,8 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
 
         // update the size and dimensions
         // (only if original was rotated)
-        $file = $dir . $name;
-        $size = filesize($file);
-        $dimensions = getimagesize($file);
-        $this->set('size', $size);
-        $this->set('width', $dimensions[0]);
-        $this->set('height', $dimensions[1]);
         $this->update();
+        $this->updateSize();
 
         return 1;
     }

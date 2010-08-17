@@ -159,16 +159,25 @@ class arguments {
                 case "--update-thumbs":
                 case "--updateThumbs":
                 case "--updatethumbs":
+                case "--update-thumb":
+                case "--updateThumb":
+                case "--updatethumb":
                     unset($current);
                     self::$command="updatethumbs";
                     break;
                 case "--update-exif":
                 case "--updateEXIF":
                 case "--updateexif":
+                case "--updateExif":
                     unset($current);
                     self::$command="updateexif";
                     break;
-
+                case "--update-size":
+                case "--updatesize":
+                case "--updateSize":
+                    unset($current);
+                    self::$command="updatesize";
+                    break;
 
                 case "--copy":
                     unset($current);

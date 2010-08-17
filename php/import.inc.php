@@ -61,10 +61,6 @@ abstract class Import {
             }
 
             $photo->set("path", $path);
-            $image_info= getimagesize($file);
-            $width= $image_info[0];
-            $height= $image_info[1];
-            $size=filesize($file);
             try {
                 $photo->import($file);
             } catch (FileException $e) {
@@ -81,9 +77,7 @@ abstract class Import {
             }
 
             if ($photo->insert()) {
-                $photo->set("size", $size);
-                $photo->set("width", $width);
-                $photo->set("height", $height);
+                $photo->updateSize();
                 $photo->update($vars);
                 $photo->updateRelations($vars);
 
