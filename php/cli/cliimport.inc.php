@@ -21,12 +21,54 @@
 
 /**
  * Class that takes care of the import through the CLI
- *
- * This class could contain any functions specific for the import of the CLI
- * but for now, there aren't any and this class just inherits the functions
- * of Import
  */
 class CliImport extends Import {
+    /**
+     * Displays a progressbar on the CLI
+     * 
+     * The progressbar will not be wider than 60 characters, so we have 20 chars left for counter etc. on a 80 char screen
+     * the real width of the screen is not checked because it cannot be done in PHP without external programs
+     * After displaying the progressbar, it will 'backspace' to the beginning of the line, so any error message will
+     * not cause a distorted screen
+     * @var int progress
+     * @var int total
+     */
+
+    public static function progress($cur, $total) {
+
+        if($total>=60) {
+            $calccur=$cur/$total*60;
+            $dispcur=floor($calccur);
+            $disptotal=60;
+        } else {
+            $dispcur=$cur;
+            $disptotal=$total;
+        }
+        $display="[";
+        $display.=str_repeat("|", $dispcur);
+        $rem=round($calccur - $dispcur,2);
+        $num=$total/$disptotal;
+        if($num > 3) {
+            if($rem > 0.333  && $rem < 0.666 ) {
+                $display.=".";
+            } else if ($rem > 0.6666 && $rem < 0.999) {
+                $display.=":";
+            } else if ($rem > 0.999) {
+                $display.="|";
+            }
+        } else if ($num == 2) {
+            if($rem >= 0.5) {
+                $display.=".";
+            }
+        }
+
+        $display=str_pad($display, $disptotal + 1);
+        $display.="]";
+        $perc=floor($cur / $total * 100);
+        $display.= " [ $cur / $total (" . $perc . "%) ]";
+        echo $display;
+        echo str_repeat(chr(8), strlen($display));
+    }
 
 }
 

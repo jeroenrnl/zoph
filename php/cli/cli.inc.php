@@ -117,7 +117,11 @@ class cli {
                 settings::$importSize=false;
             }
             if(is_array($this->photos) && sizeof($this->photos)>0) {
+                $total=sizeof($this->photos);
+                $cur=0;
                 foreach($this->photos as $photo) {
+                    cliimport::progress($cur, $total);
+                    $cur++;
                     $photo->lookup();
                     $photo->update($this->args->getVars());
                     $photo->updateRelations($this->args->getVars());

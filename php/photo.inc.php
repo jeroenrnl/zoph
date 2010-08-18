@@ -375,56 +375,57 @@ class photo extends zoph_table {
             }
         }
         $toPath="/" . cleanup_path(IMAGE_DIR . "/" . $newPath) . "/";
-
-        create_dir_recursive($toPath . "/" . MID_PREFIX);
-        create_dir_recursive($toPath . "/" . THUMB_PREFIX);
-
-        $conv=get_converted_image_name($name);
-        $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
-        $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
         
-        $image=new File($filename);
-        $image->setDestination($toPath);
-        $files[]=$image;
+        if($path ."/" != $toPath) {
+            create_dir_recursive($toPath . "/" . MID_PREFIX);
+            create_dir_recursive($toPath . "/" . THUMB_PREFIX);
 
-        if(file_exists($path . "/". $thumbname)) {
-            $thumb=new File($path . "/" . $thumbname);
-            $thumb->setDestination($toPath . "/" . THUMB_PREFIX . "/");
-            $files[]=$thumb;
-        }
-        if(file_exists($path . "/". $midname)) {
-            $mid=new File($path . "/" . $midname);
-            $mid->setDestination($toPath . "/" . MID_PREFIX . "/");
-            $files[]=$mid;
-        }
-        
-        
-        try {
-            foreach($files as $file) {
-                if(settings::$importCopy==false) {
-                    $file->checkMove();
-                } else {
-                    $file->checkCopy();
-                }
+            $conv=get_converted_image_name($name);
+            $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
+            $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
+           
+            $image=new File($filename);
+            $image->setDestination($toPath);
+            $files[]=$image;
+
+            if(file_exists($path . "/". $thumbname)) {
+                $thumb=new File($path . "/" . $thumbname);
+                $thumb->setDestination($toPath . "/" . THUMB_PREFIX . "/");
+                $files[]=$thumb;
             }
-        } catch (FileException $e) {
-            echo $e->getMessage() . "\n";
-            throw $e;
-        }
-        // We run this loop twice, because we only want to move/copy the file if 
-        // *all* files can be moved/copied.
-        try {
-            foreach($files as $file) {
-                if(settings::$importCopy==false) {
-                    $file->move();
-                } else {
-                    $file=$file->copy();
+            if(file_exists($path . "/". $midname)) {
+                $mid=new File($path . "/" . $midname);
+                $mid->setDestination($toPath . "/" . MID_PREFIX . "/");
+                $files[]=$mid;
+            }
+        
+            try {
+                foreach($files as $file) {
+                    if(settings::$importCopy==false) {
+                        $file->checkMove();
+                    } else {
+                        $file->checkCopy();
+                    }
+                }
+            } catch (FileException $e) {
+                echo $e->getMessage() . "\n";
+                throw $e;
+            }
+            // We run this loop twice, because we only want to move/copy the file if 
+            // *all* files can be moved/copied.
+            try {
+                foreach($files as $file) {
+                    if(settings::$importCopy==false) {
+                        $file->move();
+                    } else {
+                        $file=$file->copy();
                 }
                 $file->chmod();
             }
-        } catch (FileException $e) {
-            echo $e->getMessage() . "\n";
-            throw $e;
+            } catch (FileException $e) {
+                echo $e->getMessage() . "\n";
+                throw $e;
+            }
         }
         // Update the db to the new path;
         $this->set("path", cleanup_path($newPath));

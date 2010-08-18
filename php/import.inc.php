@@ -50,7 +50,11 @@ abstract class Import {
      * @param  Array Vars to be applied to the photos.
      */
     public static function photos(Array $files, Array $vars) {
+        $total=sizeof($files);
+        $cur=0;
         foreach($files as $file) {
+            self::progress($cur, $total);
+            $cur++;
             $photo=new photo();
             if(settings::$importExif===true) {
                 $exif=process_exif($file);
@@ -90,6 +94,19 @@ abstract class Import {
             }
         }
     }
+    /**
+     * Displays a progressbar
+     * 
+     * This is a bit of a hack because PHP 5.2 and before do not support late static binding. For now, this
+     * method figures out whether it's in the CLI or not and then call the cliImport method. This is a bit dirty, but it works
+     * @todo: as soon as anything before PHP 5.3 is deprecated, this should be replaced by late static binding.
+     */
+    public static function progress($cur, $total) {
+        if(defined("CLI")) {
+            cliImport::progress($cur, $total);
+        }
+    }
+
 }
 
 class ImportException extends ZophException {}
