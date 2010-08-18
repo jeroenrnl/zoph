@@ -26,9 +26,11 @@
  */
 class settings {
 
-    public static $imprtVerbose=0;
+    public static $importVerbose=0;
     
-    public static $importThumbs=true;
+    public static $importThumbs;
+    public static $importExif;
+    public static $importSize;
     public static $importCopy=false;
     public static $importDated=USE_DATED_DIRS;
     public static $importHier=HIER_DATED_DIRS;

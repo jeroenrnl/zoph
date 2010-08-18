@@ -45,6 +45,8 @@ class WebImport extends Import {
      */
     public static function photos(Array $files, Array $vars) {
         settings::$importThumbs=false; // thumbnails have already been created, no need to repeat...
+        settings::$importExif=true;
+        settings::$importSize=true;
         parent::photos($files, $vars);
     }
     /**
@@ -304,16 +306,16 @@ class WebImport extends Import {
             } else if (!is_dir($mid_dir)) {
                 log::msg("Cannot create " . $mid_dir . ", file exists.", log::FATAL, log::IMPORT);
             }
-            if($photo->thumbnail()) {
-                log::msg("Thumb made succesfully.", log::DEBUG, log::IMPORT);
-                return true;
-            } else {
-                log::msg("Thumb could not be made.", log::ERROR, log::IMPORT);
+            try {
+                $photo->thumbnail();
+            } catch (Exception $e) {
+                echo "Thumb could not be made: " . $e->getMessage();
                 touch($file . ".zophignore");
-                return false;
             }
-        $log=ob_end_clean();
-        log::msg($log, log::WARNING, log::IMPORT);
+            log::msg("Thumb made succesfully.", log::DEBUG, log::IMPORT);
+        $log=ob_get_contents();
+        ob_end_clean();
+        echo $log;
     }
 
     /**

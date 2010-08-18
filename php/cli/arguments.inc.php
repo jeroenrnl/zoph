@@ -136,7 +136,28 @@ class arguments {
                     unset($current);
                     settings::$importThumbs=false;
                     break;
-
+                case "--exif":
+                case "--EXIF":
+                    unset($current);
+                    settings::$importExif=true;
+                    break;
+                case "--no-exif":
+                case "--noEXIF":
+                case "--noexif":
+                case "--no-EXIF":
+                    unset($current);
+                    settings::$importExif=false;
+                    break;
+                case "--size":
+                    unset($current);
+                    settings::$importSize=true;
+                    break;
+                case "--nosize":
+                case "--no-size":
+                    unset($current);
+                    settings::$importSize=false;
+                    break;
+                
 
                 case "--update":
                 case "-u":
@@ -148,6 +169,7 @@ class arguments {
                     unset($current);
                     self::$command="import";
                     break;
+
                 case "--useIds":
                 case "--useids":
                 case "--use-ids":
@@ -155,28 +177,6 @@ class arguments {
                 case "--use-id":
                     unset($current);
                     settings::$importUseids=true;
-                    break;
-                case "--update-thumbs":
-                case "--updateThumbs":
-                case "--updatethumbs":
-                case "--update-thumb":
-                case "--updateThumb":
-                case "--updatethumb":
-                    unset($current);
-                    self::$command="updatethumbs";
-                    break;
-                case "--update-exif":
-                case "--updateEXIF":
-                case "--updateexif":
-                case "--updateExif":
-                    unset($current);
-                    self::$command="updateexif";
-                    break;
-                case "--update-size":
-                case "--updatesize":
-                case "--updateSize":
-                    unset($current);
-                    self::$command="updatesize";
                     break;
 
                 case "--copy":
@@ -187,7 +187,7 @@ class arguments {
                     unset($current);
                     settings::$importCopy=false;
                     break;
-
+                
                 case "--dateddirs":
                 case "--datedDirs":
                 case "--dated":

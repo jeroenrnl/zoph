@@ -52,9 +52,11 @@ abstract class Import {
     public static function photos(Array $files, Array $vars) {
         foreach($files as $file) {
             $photo=new photo();
-            $exif=process_exif($file);
-            if($exif) {
-                $photo->set_fields($exif);
+            if(settings::$importExif===true) {
+                $exif=process_exif($file);
+                if($exif) {
+                    $photo->set_fields($exif);
+                }
             }
             if ($vars) {
                 $photo->set_fields($vars);
@@ -77,7 +79,9 @@ abstract class Import {
             }
 
             if ($photo->insert()) {
-                $photo->updateSize();
+                if(settings::$importSize===true) {
+                    $photo->updateSize();
+                }
                 $photo->update($vars);
                 $photo->updateRelations($vars);
 

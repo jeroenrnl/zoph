@@ -365,7 +365,7 @@ class photo extends zoph_table {
             $date=$this->get("date");
             if(!preg_match("/^[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}$/", $date)) {
                 log::msg("Illegal date, using today's", log::ERROR, log::IMPORT);
-                $date=date("Y-m-d", now());
+                $date=date("Y-m-d");
             }
 
             if (settings::$importHier) {
@@ -730,6 +730,12 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
         flush();
         $new_image = IMAGE_DIR . '/' . $this->get("path") . '/' . $prefix . '/' .
             $prefix . '_' .  get_converted_image_name($this->get("name"));
+        $dir=dirname($new_image);
+
+        if(!is_writable($dir)) {
+            // @todo is a FileException the right thing to throw here?
+            throw new FileDirNotWritableException("Directory not writable: " . $dir);
+        }
 
         $image_type = get_image_type($new_image);
 

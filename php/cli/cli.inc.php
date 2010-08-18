@@ -90,6 +90,15 @@ class cli {
 
         switch(arguments::$command) {
         case "import":
+            if(!isset(settings::$importThumbs)) {
+                settings::$importThumbs=true;
+            }
+            if(!isset(settings::$importExif)) {
+                settings::$importExif=true;
+            }
+            if(!isset(settings::$importSize)) {
+                settings::$importSize=true;
+            }
             if(is_array($this->files) && sizeof($this->files)>0) {
                 CliImport::photos($this->files, $this->args->getVars());
             } else {
@@ -98,24 +107,28 @@ class cli {
             }
             break;
         case "update":
-        case "updatethumbs":
-        case "updateexif":
-        case "updatesize":
+            if(!isset(settings::$importThumbs)) {
+                settings::$importThumbs=false;
+            }
+            if(!isset(settings::$importExif)) {
+                settings::$importExif=false;
+            }
+            if(!isset(settings::$importSize)) {
+                settings::$importSize=false;
+            }
             if(is_array($this->photos) && sizeof($this->photos)>0) {
                 foreach($this->photos as $photo) {
                     $photo->lookup();
                     $photo->update($this->args->getVars());
                     $photo->updateRelations($this->args->getVars());
-                    switch(arguments::$command) {
-                    case "updatethumbs":
+                    if(settings::$importThumbs===true) {
                         $photo->thumbnail(true);
-                        break;
-                    case "updateexif":
+                    }
+                    if(settings::$importExif===true) {
                         $photo->updateEXIF();
-                        break;
-                    case "updatesize":
+                    }
+                    if(settings::$importSize===true) {
                         $photo->updateSize();
-                        break; 
                     }
                 }
             } else {

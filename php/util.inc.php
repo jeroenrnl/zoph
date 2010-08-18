@@ -956,8 +956,7 @@ function create_dir($directory) {
         if (mkdir($directory, DIR_MODE)) {
             echo translate("Created directory") . ": $directory<br>\n";
             return true;
-        }
-        else {
+        } else {
             echo translate("Could not create directory") . ": $directory<br>\n";
             return false;
         }
@@ -967,6 +966,7 @@ function create_dir($directory) {
 
 function create_dir_recursive($directory){
     $nextdir="";
+    $directory="/" . cleanup_path($directory);
     foreach(split('/',$directory) as $subdir) {
         $nextdir=$nextdir . $subdir . "/";
         $result=create_dir($nextdir);
