@@ -81,6 +81,10 @@ function remove_magic_quotes(&$x) {
 }
 
 function i($var) {
+    if($var === "<" || $var === "<=" || $var === ">=" || $var === ">") {
+    	// Strip tags breaks some searches
+	return $var;
+    }
     if(is_array($var)) {
         $return=array();
         foreach($var as $key => $value) {
