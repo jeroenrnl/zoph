@@ -199,7 +199,7 @@ function create_tree_select_array($name, $user = null, $rec = null,
     $descname=$name;
     if($descname=="place"){ $descname="title"; }
 
-    $select_array[$key] = $level . $rec->get($descname);
+    $select_array[$key] = $level . e($rec->get($descname));
     if($user) {
         $user->lookup_prefs();
         $order = $user->prefs->get("child_sortorder");
