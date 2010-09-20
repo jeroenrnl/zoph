@@ -26,9 +26,12 @@ class CliImport extends Import {
     /**
      * Displays a progressbar on the CLI
      * 
-     * The progressbar will not be wider than 60 characters, so we have 20 chars left for counter etc. on a 80 char screen
-     * the real width of the screen is not checked because it cannot be done in PHP without external programs
-     * After displaying the progressbar, it will 'backspace' to the beginning of the line, so any error message will
+     * The progressbar will not be wider than 60 characters, so we have 
+     * 20 chars left for counter etc. on a 80 char screen
+     * the real width of the screen is not checked because it cannot be 
+     * done in PHP without external programs
+     * After displaying the progressbar, it will 'backspace' to the 
+     * beginning of the line, so any error message will
      * not cause a distorted screen
      * @var int progress
      * @var int total
