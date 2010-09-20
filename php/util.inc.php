@@ -953,12 +953,11 @@ function get_filetype($mime) {
 
 function create_dir($directory) {
     if (file_exists($directory) == false) {
-        if (mkdir($directory, DIR_MODE)) {
+        if (@mkdir($directory, DIR_MODE)) {
             echo translate("Created directory") . ": $directory<br>\n";
             return true;
         } else {
-            echo translate("Could not create directory") . ": $directory<br>\n";
-            return false;
+            throw new FileDirCreationFailedException(translate("Could not create directory") . ": $directory<br>\n");
         }
     }
     return 0;
@@ -969,9 +968,10 @@ function create_dir_recursive($directory){
     $directory="/" . cleanup_path($directory);
     foreach(split('/',$directory) as $subdir) {
         $nextdir=$nextdir . $subdir . "/";
-        $result=create_dir($nextdir);
-        if($result=false) {
-            return false;
+        try {
+            $result=create_dir($nextdir);
+        } catch (FileException $e) {
+            throw $e;
         }
     }
     return $result;

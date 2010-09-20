@@ -219,7 +219,7 @@ class WebImport extends Import {
             parent::autorotate($file);
         } catch (ImportAutorotException $e) {
             touch($file . ".zophignore");
-            log($e->getMessage(), log::FATAL, log::IMPORT);
+            log::msg($e->getMessage(), log::FATAL, log::IMPORT);
             die;
         }
     }
@@ -520,7 +520,7 @@ class WebImport extends Import {
             foreach($vars["_import_image"] as $md5) {
                 $file=file::getFromMD5(IMAGE_DIR . "/" . IMPORT_DIR, $md5);
                 if(!empty($file)) {
-                   $files[]=$file;
+                    $files[]=$file;
                 }
             }
         }

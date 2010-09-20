@@ -183,7 +183,6 @@ class photo extends zoph_table {
      */
     public function updateEXIF() {
         $file=$this->get_file_path();
-            echo $file;
         $exif=process_exif($file);
         if($exif) {
             $this->set_fields($exif);
@@ -352,10 +351,8 @@ class photo extends zoph_table {
         return get_records_from_query("person", $sql);
     }
     
-    function import($filename) {
-        $path=dirname($filename);
-        $name=basename($filename);
-        $this->set("name", $name);
+    function import($file) {
+        $this->set("name", $file->getName());
 
         $newPath=$this->get("path") . "/";
         if(settings::$importDated) {
@@ -366,6 +363,7 @@ class photo extends zoph_table {
             if(!preg_match("/^[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}$/", $date)) {
                 log::msg("Illegal date, using today's", log::ERROR, log::IMPORT);
                 $date=date("Y-m-d");
+                // @todo should be filedate
             }
 
             if (settings::$importHier) {
@@ -376,25 +374,25 @@ class photo extends zoph_table {
         }
         $toPath="/" . cleanup_path(IMAGE_DIR . "/" . $newPath) . "/";
         
-        if($path ."/" != $toPath) {
+        if($file->getPath() ."/" != $toPath) {
             create_dir_recursive($toPath . "/" . MID_PREFIX);
             create_dir_recursive($toPath . "/" . THUMB_PREFIX);
+                
 
-            $conv=get_converted_image_name($name);
+            $conv=get_converted_image_name($file->getName());
             $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
             $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
            
-            $image=new File($filename);
-            $image->setDestination($toPath);
-            $files[]=$image;
+            $file->setDestination($toPath);
+            $files[]=$file;
 
             if(file_exists($path . "/". $thumbname)) {
-                $thumb=new File($path . "/" . $thumbname);
+                $thumb=new file($path . "/" . $thumbname);
                 $thumb->setDestination($toPath . "/" . THUMB_PREFIX . "/");
                 $files[]=$thumb;
             }
             if(file_exists($path . "/". $midname)) {
-                $mid=new File($path . "/" . $midname);
+                $mid=new file($path . "/" . $midname);
                 $mid->setDestination($toPath . "/" . MID_PREFIX . "/");
                 $files[]=$mid;
             }
@@ -411,17 +409,19 @@ class photo extends zoph_table {
                 echo $e->getMessage() . "\n";
                 throw $e;
             }
-            // We run this loop twice, because we only want to move/copy the file if 
-            // *all* files can be moved/copied.
+            // We run this loop twice, because we only want to move/copy the 
+            // file if *all* files can be moved/copied.
             try {
                 foreach($files as $file) {
                     if(settings::$importCopy==false) {
-                        $file->move();
+                        $new=$file->move();
                     } else {
-                        $file=$file->copy();
+                        $new=$file->copy();
+                    }
+                    $new->chmod();
+                    // In case of a symlink, the filename changes during copy or move.
+                    $this->set("name", $new->getName());
                 }
-                $file->chmod();
-            }
             } catch (FileException $e) {
                 echo $e->getMessage() . "\n";
                 throw $e;
@@ -766,7 +766,7 @@ return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " al
             return;
         }
 
-        $dir = IMAGE_DIR . $this->get("path") . "/";
+        $dir = IMAGE_DIR . "/" . $this->get("path") . "/";
         $name = $this->get('name');
         $converted_name = get_converted_image_name($name);
 

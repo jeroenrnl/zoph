@@ -87,7 +87,6 @@ class cli {
      */
     public function run() {
         $this->processFiles();
-
         switch(arguments::$command) {
         case "import":
             if(!isset(settings::$importThumbs)) {
@@ -158,21 +157,18 @@ class cli {
      */
     private function processFiles() {
         $files=$this->args->getFiles();
-        foreach($files as $file) {
+        foreach($files as $filename) {
             try {
                 if(arguments::$command=="import") {
-                    if(substr($file,0,1)!="/") {
-                            $file=getcwd() . "/" . $file;
+                    
+                    $file=new file($filename);
+                    $file->check();
+
+                    $mime=$file->get_mime();
+                    if(get_filetype($mime)!="image") {
+                        throw new ImportFileNotImportableException("$file is not an image\n");
                     }
-                    if(!file_exists($file)) {
-                        throw new ImportFileNotFoundException("File not found: $file\n");
-                    } 
-                    if(!is_readable($file)) {
-                        throw new Exception("Cannot read file: $file\n");
-                    }
-                    if (!settings::$importCopy && !is_writable($file)) {
-                        throw new Exception("Cannot write file: $file\n");
-                    }
+
                     $this->files[]=$file;
                 } else {
                     if(settings::$importUseids) {

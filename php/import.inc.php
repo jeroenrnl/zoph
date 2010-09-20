@@ -55,8 +55,9 @@ abstract class Import {
         foreach($files as $file) {
             self::progress($cur, $total);
             $cur++;
+            $file->get_mime();
             $photo=new photo();
-            if(settings::$importExif===true) {
+            if(settings::$importExif===true && $mime=="image/jpeg") {
                 $exif=process_exif($file);
                 if($exif) {
                     $photo->set_fields($exif);
@@ -81,7 +82,6 @@ abstract class Import {
                     echo $e->getMessage();
                 }
             }
-
             if ($photo->insert()) {
                 if(settings::$importSize===true) {
                     $photo->updateSize();
@@ -97,9 +97,11 @@ abstract class Import {
     /**
      * Displays a progressbar
      * 
-     * This is a bit of a hack because PHP 5.2 and before do not support late static binding. For now, this
-     * method figures out whether it's in the CLI or not and then call the cliImport method. This is a bit dirty, but it works
-     * @todo: as soon as anything before PHP 5.3 is deprecated, this should be replaced by late static binding.
+     * This is a bit of a hack because PHP 5.2 and before do not support late static binding. For now, 
+     * this  method figures out whether it's in the CLI or not and then call the cliImport method. 
+     * This is a bit dirty, but it works
+     * @todo: as soon as anything before PHP 5.3 is deprecated, this should be replaced by late 
+     * static binding.
      */
     public static function progress($cur, $total) {
         if(defined("CLI")) {
@@ -115,5 +117,5 @@ class ImportFileNotInPathException extends ImportException {}
 class ImportFileNotFoundException extends ImportException {}
 class ImportIdIsNotNumericException extends ImportException {}
 class ImportMultipleMatchesException extends ImportException {}
-
+class ImportFileNotImportableException extends ImportException {}
 ?>

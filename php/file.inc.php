@@ -30,22 +30,80 @@
 class file {
 
     /**
-     * File name
+     * @var string File name
      */
     private $name;
     private $path;
 
+    /**
+     * @var string Used when file is going to be copied or moved
+     */
     private $destination;
 
-    public function __construct($name) {
-        $this->name=basename($name);
-        $this->path=realpath(dirname($name));
-    }
-    
-    public function __toString() {
-        return $this->path . "/" . $this->name;
+    public function __construct($filename) {
+        if(substr($filename,0,1)!="/") {
+            $filename=getcwd() . "/" . $filename;
+        }
+
+        if(is_link($filename)) {
+            if(@!stat($filename)) {
+                throw new FileSymlinkProblemException("There's something wrong with symlink $filename\n");
+            }
+        } else if (is_dir($filename)) {
+            throw new FileDirectoryNotSupportedException("$filename is a directory\n");
+        } 
+
+        $this->name=basename($filename);
+        $this->path=realpath(dirname($filename));
     }
 
+    /**
+     * Whether or not this file is a symlink
+     */
+    public function is_link() {
+        return is_link($this);
+    }
+
+    /**
+     * Returns the link destination. Contrary to the PHP readlink() function, this function
+     * recurses through the links until it has located a real file. So, in case a link points
+     * to a link, which points to a link, which points to... I guess you got it.
+     * Also, it will simply return a file object if the file is not a link.
+     */
+    public function readlink() {
+        if($this->is_link()) {
+            $file=new file(readlink($this));
+            return $file->readlink();
+        } else {
+            return $this;
+        }
+    }
+
+    /**
+     * This function returns the name of a file, referenced by a directory
+     * and an MD5 hash of the filename.
+     */
+    public static function getFromMD5($dir, $md5) {
+        $files=glob($dir . "/*");
+        foreach($files as $file) {
+            $f=realpath($file);
+            log::msg($f . ": " . md5($f), log::DEBUG, log::IMPORT);
+            if(md5($f) == $md5) {
+                return new file($f);
+            }
+        }
+    }
+
+    public function __toString() {
+        return $this->getPath() . "/" . $this->getName();
+    }
+   
+    public function getName() {
+        return $this->name;
+    }
+    public function getPath() {
+        return $this->path;
+    }
     /** 
      * This generates an MD5 for a filename, to uniquely identify a file
      * that is not (yet) in the database and therefore has no db key.
@@ -58,8 +116,8 @@ class file {
      * Deletes a file after doing some checks
      * @param bool Also delete related files, such as thumbnails
      * @param bool Do not delete the referenced file, only related files
+     * @todo 'related' files really should be part of the @see photo object.
      */
-
     public function delete($thumbs=false, $thumbs_only=false) {
         log::msg("Deleting " . $this, log::NOTIFY, log::IMPORT);
         if(!$thumbs_only) {
@@ -90,43 +148,42 @@ class file {
     }
 
     /**
-     * This function returns the name of a file, referenced by a directory
-     * and an MD5 hash of the filename.
-     */
-    public static function getFromMD5($dir, $md5) {
-        $files=glob($dir . "/*");
-        foreach($files as $file) {
-            $f=realpath($file);
-            log::msg($f . ": " . md5($f), log::DEBUG, log::IMPORT);
-            if(md5($f) == $md5) {
-                return new file($f);
-            }
-        }
-    }
-    /**
      * Set the destination for copy or move operations;
      * @param string destination of the file
      */
     public function setDestination($path) {
-        $this->destination="/" . cleanup_path($path) . "/";
+        $this->destPath="/" . cleanup_path($path) . "/";
+        $this->destName=basename($this->readlink());
+    }
+    
+    /**
+     * Makes checks if a file can be found and read
+     */
+
+    public function check() {
+        if(!file_exists($this)) {
+            throw new FileNotFoundException("File not found: $this\n");
+        }
+        if(!is_readable($this)) {
+            throw new FileNotReadableException("Cannot read file: $this\n");
+        }
+        if (!settings::$importCopy && !is_writable($this)) {
+            throw new FileNotWritableException("Cannot write file: $this\n");
+        }
     }
 
     /**
-     * Makes checks to see if a file can be copied
-     */
+    * Makes checks to see if a file can be copied
+    */
     public function checkCopy() {
-        $dest=$this->destination;
-        if(!is_writable($dest)) {
-            throw new FileDirNotWritableException("Directory not writable: " . $dest);
+        // First checks are the same...
+        $this->check();
+        if(!is_writable($this->destPath)) {
+            throw new FileDirNotWritableException("Directory not writable: " . 
+              $this->destPath);
         }
-        if(!file_exists($this)) {
-            throw new FileSourceNotFoundException("File not found: " . $this);
-        }
-        if(file_exists($dest . $this->name)) {
-            throw new FileExistsException("File already exists: " . $dest . $this->name);
-        }
-        if(!is_readable($this)) {
-            throw new FileNotReadableException("Cannot read file: " . $this);
+        if(file_exists($this->destPath . $this->destName)) {
+            throw new FileExistsException("File already exists: " . $this->destPath . $this->destName);
         }
         return true;
     }
@@ -144,22 +201,36 @@ class file {
     }
 
     public function move() {
-        $dest=$this->destination;
+        $destPath=$this->destPath;
+        $destName=$this->destName;
+        $dest=$destPath . "/" . $destName;
+
         log::msg("Going to move $this to $dest", LOG::DEBUG, LOG::GENERAL);
         $this->checkMove();
-        if(rename($this, $dest . "/" . $this->name)) {
-            $this->path=realpath($dest);
+        if($this->is_link()) {
+            // in case of a link, we copy the link destination and delete the link
+            $copy=$this->readlink();
+            $copy->setDestination($destPath);
+            $newfile=$copy->copy();
+            unlink($this);
+            return $newfile;
         } else {
-            throw new FileMoveFailedException("Could not move $this to $dest");
+            if(rename($this, $dest)) {
+                return new file($dest);
+            } else {
+                throw new FileMoveFailedException("Could not move $this to $dest");
+            }
         }
-        return true;
     }
 
     public function copy() {
-        $dest=$this->destination;
+        $destPath=$this->destPath;
+        $destName=$this->destName;
+        $dest=$destPath . "/" . $destName;
+        
         $this->checkCopy();
-        if(copy($this, $dest . "/" . $this->name)) {
-            return new File($dest . "/" . $this->name);
+        if(copy($this, $dest)) {
+            return new File($dest);
         } else {
             throw new FileCopyFailedException("Could not copy $this to $dest");
         }
@@ -177,14 +248,25 @@ class file {
             log::msg("Could not change permissions for <b>" . $this . "</b>", LOG::ERROR, LOG::IMPORT);
         }
     }
-    
+
+    /**
+     * Gets MIME type for this file
+     * @todo: OO-wrapper around non-OO function
+     */
+    public function get_mime() {
+        return get_mime($this->readlink());
+    }
 }
 
 class FileException extends ZophException {}
 class FileDirNotWritableException extends FileException {}
-class FileSourceNotFoundException extends FileException {}
+class FileDirectoryNotSupportedException extends FileException {}
+class FileDirCreationFailedException extends FileException {}
+class FileNotFoundException extends FileException {}
 class FileExistsException extends FileException {}
 class FileNotReadableException extends FileException {}
 class FileNotWritableException extends FileException {}
 class FileMoveFailedException extends FileException {}
 class FileCopyFailedException extends FileException {}
+class FileSymlinkProblemException extends FileException {}
+
