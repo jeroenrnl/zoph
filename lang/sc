@@ -1,5 +1,6 @@
-# Zoph Language File - Swedish Chef
-# Translated by Encheferizer
+#{@"htmltagoption"=>"nothing","charset"=>"iso-8859-1","name"=>"Swedish Chef","translator_0"=>"Encheferizer"}
+#
+#
 %s chars max=%s chers mex
 %s images loaded.=%s imeges lueded.
 %s photo(s) selected=%s phutu(s) selected
@@ -335,7 +336,7 @@ last ip address=lest ip eddress
 last login=lest lugeen
 last modified=lest mudeeffied
 last name=lest neme-a
-lattitude=letteetoode-a
+latitude=letteetoode-a
 less than=less thun
 level=lefel
 lightbox=leeghtbux

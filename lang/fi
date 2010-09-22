@@ -1,5 +1,6 @@
-# Zoph Language File - Finnish
-# Translated by Pekka Kutinlahti
+#{@"htmltagoption"=>"nothing","charset"=>"utf-8","name"=>"Finnish","translator_0"=>"Pekka Kutinlahti"}
+#
+#
 %s chars max=enintään %s merkkiä
 %s images loaded.=%s kuvaa ladattu.
 %s photo(s) selected=%s kuvaa valittuna
@@ -335,7 +336,7 @@ last ip address=viimeisin IP-osoite
 last login=viimeisin kirjautuminen
 last modified=muutettu viimeksi
 last name=sukunimi
-lattitude=leveysaste
+latitude=leveysaste
 less than=vähemmän kuin
 level=taso
 lightbox=suosikki
