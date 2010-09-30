@@ -172,6 +172,7 @@ class cli {
                     $this->files[]=$file;
                 } else {
                     if(settings::$importUseids) {
+                        $file=$filename;
                         if(is_numeric($file)) {
                             $this->photos[]=$this->lookupFileById($file);
                         } else if (preg_match("/^[0-9]+-[0-9]+$/", $file)) {
@@ -262,7 +263,35 @@ class cli {
      * @todo should actually do something
      */
     private static function showHelp() {
-        echo "Help is not available yet\n";
+        echo "zoph " . VERSION . "\n";
+        echo <<<END
+Usage: zoph [OPTIONS] [IMAGE ...]
+OPTIONS:
+    --instance "INSTANCE"
+
+    --import
+    --update
+    --version
+    --help
+
+    --album "ALBUM"
+    --category "CATEGORY"
+    --photographer "FIRST_NAME LAST_NAME"
+    --location "PLACE"
+    --person "FIRST_NAME LAST_NAME"
+    --field "FIELD=VALUE"
+
+    --[no-]thumbs
+    --[no-]exif
+    --[no-]size
+    --useids
+    --move 
+    --copy
+    --[no-]dateddirs
+    --[no-]hierarchical
+    --path
+
+END;
         exit(self::EXIT_NO_PROBLEM);
     }
 
