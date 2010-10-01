@@ -28,12 +28,18 @@ class place extends zoph_tree_table {
     }
 
     function insert() {
-        $this->tzid_to_timezone();
+        if($this->get("timezone_id")) {
+            $this->tzid_to_timezone();
+        }
+        unset($this->fields["timezone_id"]);
         parent::insert();
     }
 
     function update() {
-        $this->tzid_to_timezone();
+        if($this->get("timezone_id")) {
+            $this->tzid_to_timezone();
+        }
+        unset($this->fields["timezone_id"]);
         parent::update();
     }
 
