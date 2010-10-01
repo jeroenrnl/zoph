@@ -75,7 +75,7 @@
          <?php echo create_pulldown("pageset", $place->get("pageset"), get_pageset_select_array()) ?><br>
          <fieldset class="map">
             <legend><?php echo translate("map") ?></legend>
-            <label for="lat"><?php echo translate("lattitude") ?></label>
+            <label for="lat"><?php echo translate("latitude") ?></label>
             <?php echo create_text_input("lat", $place->get("lat"), 10, 10) ?><br>
             <label for="lat"><?php echo translate("longitude") ?></label>
             <?php echo create_text_input("lon", $place->get("lon"), 10, 10) ?><br>

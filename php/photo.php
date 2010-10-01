@@ -113,8 +113,7 @@
    if ($_action == "lightbox") {
         $photo->add_to_album($user->get("lightbox_id"));
         $action = "display";
-    }
-    else if ($_action == "rate") {
+    } else if ($_action == "rate") {
         if (ALLOW_RATINGS && ($user->is_admin() || $user->get("allow_rating"))) {
             $rating = getvar("rating");
             $photo->rate($user, $rating);
@@ -129,6 +128,19 @@
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = "zoph.php"; }
         redirect(add_sid($link));
+    }
+    if ($user->is_admin() || $permissions->get("writable")) {
+        $_deg = getvar("_deg");
+        $_thumbnail = getvar("_thumbnail");
+        if ($_deg && $_deg != 0) {
+            if (ALLOW_ROTATIONS) {
+                $photo->lookup();
+                $photo->rotate($_deg);
+            }
+        } else if ($_thumbnail) {
+            // thumbnails already recreated for rotations
+            $photo->thumbnail();
+        }
     }
 
 
@@ -198,6 +210,9 @@
         $photo->set_fields($request_vars);
         $photo->update($request_vars,'',$user); // pass again for add people, cats, etc
         $action = "update";
+        if(!empty($_qs)) {
+            redirect("photo.php?" . $_qs, "Update done");
+        }
     }
     else if ($_action == "new") {
         unset($actionlinks);
@@ -256,18 +271,7 @@
         $found = $photo->lookup($user);
         $title = $photo->get("name");
 
-        $_deg = getvar("_deg");
-        $_thumbnail = getvar("_thumbnail");
-        if ($_deg && $_deg != 0) {
-            if (ALLOW_ROTATIONS) {
-                $photo->rotate($_deg);
-            }
-        } // thumbnails already recreated for rotations
-        else if ($_thumbnail) {
-            $photo->thumbnail();
-        }
-    }
-    else {
+    } else {
         $title = translate("New Photo");
     }
 require_once("header.inc.php");
@@ -472,10 +476,7 @@ require_once("header.inc.php");
         echo $photo->get_midsize_img();
     }
     else {
-require_once("edit_photo.inc.php");
-        if($user->prefs->get("auto_edit") && $_qs && $_action == "update") {
-            redirect("photo.php?" . $_qs, "Auto edit");
-        }
+        require_once("edit_photo.inc.php");
     }
 ?>
 </div>

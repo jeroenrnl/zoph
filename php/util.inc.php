@@ -121,8 +121,8 @@ function create_operator_pulldown($var, $op = "=") {
     return create_pulldown($var, $op,
         array(
             "=" => "=", "!=" => "!=",
-            ">" => "&gt;", ">=" => "&gt;=",
-            "<" => "&lt;", "<=" => "&lt;=",
+            ">" => ">", ">=" => ">=",
+            "<" => "<", "<=" => "<=",
             "like" => translate("like",0), "not like" => translate("not like",0)));
 }
 

@@ -81,6 +81,10 @@ function remove_magic_quotes(&$x) {
 }
 
 function i($var) {
+    if($var === "<" || $var === "<=" || $var === ">=" || $var === ">") {
+    	// Strip tags breaks some searches
+	return $var;
+    }
     if(is_array($var)) {
         $return=array();
         foreach($var as $key => $value) {
@@ -102,7 +106,7 @@ function e($var) {
         $return=htmlspecialchars($var);
         # Extra escape for a few chars that may cause troubles but are
         # not escaped by htmlspecialchars.
-        $return=str_replace(array("<", ">", "\"", "(", ")", "'", "[",  "]", "{", "}", "~", "`"), array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;", "&#39","&#91", "&#93", "&#123", "&#125", "&#126", "&#96"), $return);
+        $return=str_replace(array("<", ">", "\"", "(", ")", "'", "[",  "]", "{", "}", "~", "`"), array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;", "&#39;","&#91;", "&#93;", "&#123;", "&#125;", "&#126;", "&#96;"), $return);
     }
     return $return;
 }

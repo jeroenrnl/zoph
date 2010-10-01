@@ -108,7 +108,7 @@
         }
 ?>
             <div class="mapinfo">
-                <label for="lat"><?php echo translate("lattitude") ?></label>
+                <label for="lat"><?php echo translate("latitude") ?></label>
                 <?php echo create_text_input("lat", $photo->get("lat"), 10, 10) ?><br>
                 <label for="lat"><?php echo translate("longitude") ?></label>
                 <?php echo create_text_input("lon", $photo->get("lon"), 10, 10) ?><br>
