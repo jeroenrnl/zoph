@@ -327,14 +327,25 @@ class WebImport extends Import {
         $xml = new DOMDocument('1.0','UTF-8');
         $rootnode=$xml->createElement($this->xml_rootname());
         $node=$xml->createElement($this->xml_nodename());
+            
 
         if(function_exists("apc_fetch")) {
             $progress=apc_fetch("upload_" . $this->upload_id);
+            if($progress===false) {
+                $progress['current']=0;
+                $progress['total']=0;
+                // probably something wrong with APC settings
+                if(ini_get("apc.enabled")==false) {
+                    $progress['filename']="Enable apc.enabled in PHP.ini";
+                } else if(ini_get("apc.rfc1867")==false) {
+                    $progress['filename']="Enable apc.rfc1867 in PHP.ini";
+                }
+            }     
         } else {
             // APC extension not available
             $progress['current']=0;
             $progress['total']=0;
-            $progress['filename']="Unknown";
+            $progress['filename']="APC extension not available";
         }
         $id=$xml->createElement("id");
         $current=$xml->createElement("current");
