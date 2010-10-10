@@ -47,8 +47,22 @@ if(!ZOPH) { die("Illegal call"); }
             </div>
         </div>
         <div id="import_thumbs" class="import_thumbs">
-            <h2><?php echo translate("Uploaded photos",0);?></h2>
+            <h2>
+                <?php echo translate("Uploaded photos",0);?>
+            </h2>
             <div id="import_thumbnails">
+                <ul class="actionlink">
+                    <li><a href="#" onClick="zImport.selectAll(); return false">
+                        <?php echo translate("select all")?></a>
+                    </li>
+                    <li><a href="#" onClick="zImport.toggleSelection(); return false">
+                        <?php echo translate("toggle selection")?></a>
+                    </li>
+                    <li><a href="#" onClick="zImport.deleteSelected(); return false">
+                        <?php echo translate("delete selected")?></a>
+                    </li>
+                </ul>
+                <br>
             </div>
         </div>
         <div class="import">

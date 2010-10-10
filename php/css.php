@@ -592,14 +592,17 @@ ul.actionlink {
 
 ul.actionlink li:before {
     content: ' | ';
+    color: <?php echo $TITLE_FONT_COLOR ?>;
     }
 
 ul.actionlink li:first-child:before {
     content: ' [ '; 
+    color: <?php echo $TITLE_FONT_COLOR ?>;
     } 
 
 ul.actionlink li:last-child:after {
     content: ' ] ';
+    color: <?php echo $TITLE_FONT_COLOR ?>;
     }
 
 ul.actionlink li { 

@@ -310,6 +310,39 @@ var zImport=function() {
         setTimeout(function() { zImport.getThumbs(true); }, 500);
     }
 
+    function deleteSelected() {
+        var images=document.getElementsByClassName("thumb_checkbox");
+        var toDelete=[];
+        for(var i=0; i<images.length; i++) {
+            if(images[i].checked) {
+                var cb=images[i].name.split("_");
+                var id=cb[1];
+                toDelete.push(id);
+             }
+         }
+        for(var i=0; i<toDelete.length; i++) {
+            doAction("delete", toDelete[i]);
+         }
+    }
+
+    function toggleSelection() {
+        var images=document.getElementsByClassName("thumb_checkbox");
+        for(var i=0; i<images.length; i++) {
+            if(images[i].checked) {
+                images[i].checked=false;
+            } else {
+                images[i].checked=true;
+            }
+         }
+    }
+
+    function selectAll() {
+        var images=document.getElementsByClassName("thumb_checkbox");
+        for(var i=0; i<images.length; i++) {
+            images[i].checked=true;
+         }
+    }
+
     function importPhotos() {
         var submit;
         var toImport=0;
@@ -376,6 +409,9 @@ var zImport=function() {
         getThumbs:getThumbs,
         showThumbs:showThumbs,
         startUpload:startUpload,
+        deleteSelected:deleteSelected,
+        selectAll:selectAll,
+        toggleSelection:toggleSelection,
         updateProgressbar:updateProgressbar,
         doAction:doAction,
         httpResponse:httpResponse,
