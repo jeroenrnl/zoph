@@ -35,10 +35,18 @@
             if (CLI_USER != 0) {
                 $user=new user(CLI_USER);
             } else {
-                $user=user::getByName($_SERVER["USER"]);
+                $username=$_SERVER["USER"];
+                $user=user::getByName($username);
+                if(!$user) {
+                    log::$stopOnFatal=false;
+                    log::msg("$username is not a valid user", log::FATAL, log::LOGIN);
+                    exit(EXIT_CLI_USER_NOT_VALID);
+                }    
             }
         } else {
+            log::$stopOnFatal=false;
             log::msg("CLI_USER is not defined in config.inc.php", log::FATAL, log::LOGIN);
+            exit(EXIT_CLI_USER_NOT_DEFINED);
         }
         $user->lookup();
         $user->lookup_person();

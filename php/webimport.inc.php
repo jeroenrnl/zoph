@@ -152,19 +152,20 @@ class WebImport extends Import {
             log::msg(self::handleUploadErrors($error), log::FATAL, log::IMPORT);
             return false;
         }
-        $mime=get_mime($tmp_name);
-        $type=get_filetype($mime);
 
-        if(!$type) {
+        $file=new file($tmp_name);
+        $mime=$file->getMime();
+
+        if(!$file->type) {
             log::msg("Illegal filetype: $mime", log::FATAL, log::IMPORT);
             return false;
         }
 
         $dir=realpath(IMAGE_DIR . "/" .IMPORT_DIR);
-        $file=$dir . "/" . basename($filename);
+        $dest=$dir . "/" . basename($filename);
         if(is_writable($dir)) {
-            if(!file_exists($file)) {
-                move_uploaded_file($tmp_name, $file);
+            if(!file_exists($dest)) {
+                move_uploaded_file($tmp_name, $dest);
             } else {
                 log::msg("A file named <b>" . $filename . 
                     "</b> already exists in <b>" . $dir . "</b>", log::FATAL, log::IMPORT);
@@ -191,8 +192,10 @@ class WebImport extends Import {
 
         $dir=IMAGE_DIR . "/" . IMPORT_DIR . "/";
         $file=file::getFromMD5($dir, $md5);
-        $mime=get_mime($file);
-        $type=get_filetype($mime);
+        
+        $mime=$file->getMime();
+        $type=$file->type;
+
         switch($type) {
         case "image":
             if($mime=="image/jpeg" && IMPORT_AUTOROTATE) {
@@ -231,9 +234,10 @@ class WebImport extends Import {
      * @see processFile
      * @param string full path to file
      */
-    private static function unpackArchive($file) { 
+    private static function unpackArchive($filename) { 
         $dir = IMAGE_DIR . "/" . IMPORT_DIR;
-        $mime=get_mime($file);
+        $file=new file($filename);
+        $mime=$file->getMime();
         switch($mime) {
         case "application/zip":
             $extr = UNZIP_CMD;
@@ -254,15 +258,15 @@ class WebImport extends Import {
         }
         if (!$extr || $extr == $msg) {
             log::msg("To be able to process an archive of type " . $mime . ", you need to set " . $msg . " in config.inc.php to a program that can unpack this file.", log::FATAL, log::IMPORT);
-            touch($file . ".zophignore");
+            touch($filename . ".zophignore");
             return false;
         }
         $upload_id=uniqid("zoph_");
         $unpack_dir=$dir . "/" . $upload_id;
-        $unpack_file=$unpack_dir . "/" . basename($file);
+        $unpack_file=$unpack_dir . "/" . basename($filename);
         ob_start();
             mkdir($unpack_dir);
-            rename($file, $unpack_file);
+            rename($filename, $unpack_file);
 
             $cmd = "cd " . escapeshellarg($unpack_dir) . " && " . 
                 $extr . " " .  escapeshellarg($unpack_file) . " 2>&1";
@@ -272,11 +276,12 @@ class WebImport extends Import {
             }
         $output=ob_end_clean();
         log::msg($output, log::NOTIFY, log::IMPORT);
-        $files=self::getFiles($unpack_dir, true);
+        $files=file::getFromDir($unpack_dir, true);
         foreach($files as $import_file) {
-            if($import_file[0] == "image" or $import_file[0] == "archive") {
-                $filename=basename($import_file[1]);
-                rename($import_file[1], $dir . "/" . $filename);
+            $type=$import_file->type;
+            if($type == "image" or $type == "archive") {
+                $file->setDestination($dir);
+                $file->move();
             }
         }
     }
@@ -292,6 +297,7 @@ class WebImport extends Import {
 
         $photo->set("path", IMPORT_DIR);
         $photo->set("name", basename($file));
+        
         ob_start();
             $dir=IMAGE_DIR . "/" . IMPORT_DIR;
             $thumb_dir=$dir. "/" . THUMB_PREFIX;
@@ -368,53 +374,25 @@ class WebImport extends Import {
     }
     
     /**
+     * XML Root element
+     *
      * Returns the name of the root element of an XML-file for this
      * object.
-     * @todo: should be changed into a static const.
+     * @todo should be changed into a static const.
      */
     public function xml_rootname() {
         return "importprogress";
     }
 
     /**
+     * XML Node name
+     *
      * Returns the name of a node in an XML-file for this object.
-     * @todo: should be changed into a static const.
+     * @param:
+     * @todo should be changed into a static const.
      */
     public function xml_nodename() {
         return "import";
-    }
-    /**
-     * Get files in a specific directory
-     *
-     * This function creates a list of files in a specific directory and
-     * filters it on a given search string and filetypes.
-     * @todo Maybe this belongs in the @see file class?
-     * @param string The dir to search
-     * @param bool Whether or not to descent into directories
-     * @param string Search string
-     */
-    public static function getFiles($dir, $recursive = false, $search=null) {
-        $files = scandir($dir);
-        $return = array();
-
-        foreach ($files as $file) {
-            if($file[0]!=".") {
-                if(is_dir($dir . "/" . $file) && $recursive) {
-                    $return=array_merge($return,self::getFiles($dir . "/" . $file, true));
-                } else if(is_null($search) or preg_match($search, $file)) {
-                    if(!file_exists($dir . "/" . $file . ".zophignore")) {
-                        $mime = get_mime($dir . "/" . $file);
-                        $type = get_filetype($mime);
-                    } else {
-                        $type = "ignore";
-                    }
-                    if($type) {
-                        $return[]=array($type, $dir . "/" . $file);
-                    }
-                }
-            }
-        }
-        return $return;
     }
 
     /**
@@ -424,20 +402,19 @@ class WebImport extends Import {
         $xml=new DOMDocument('1.0','UTF-8');
         $root=$xml->createElement("files");
 
-        $files = self::getFiles(IMAGE_DIR . "/" . IMPORT_DIR);
+        $files = file::getFromDir(IMAGE_DIR . "/" . IMPORT_DIR);
         foreach ($files as $file) {
             unset($icon);
             unset($status);
-            $name=basename($file[1]);
-            $f=new file($file[1]);
-            $md5=$f->getMD5();
+            
+            $md5=$file->getMD5();
            
-            $type=$file[0];
-
+            $type=$file->type;
+            
             switch ($type) {
             case "image":
-                $thumb=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . get_converted_image_name($name);
-                $mid=MID_PREFIX . "/" . MID_PREFIX . "_" . get_converted_image_name($name);
+                $thumb=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . get_converted_image_name($file->getName());
+                $mid=MID_PREFIX . "/" . MID_PREFIX . "_" . get_converted_image_name($file->getName());
                 if(file_exists(IMAGE_DIR . "/" . IMPORT_DIR . "/" . $thumb) &&
                   file_exists(IMAGE_DIR . "/" . IMPORT_DIR . "/" . $mid)) {
                     $status="done";
@@ -457,7 +434,7 @@ class WebImport extends Import {
             }
 
             $xmlfile=$xml->createElement("file");
-            $xmlfile->setAttribute("name", $name);
+            $xmlfile->setAttribute("name", $file->getName());
             $xmlfile->setAttribute("type",$type);
             $xmlmd5=$xml->createElement("md5", $md5);
             $xmlfile->appendChild($xmlmd5);
@@ -513,26 +490,13 @@ class WebImport extends Import {
      * Take a list of MD5 hashes (in $vars["_import_image"]) and return an 
      * array of @see file objects
      * @param Array $vars
-     * @todo What is the _path lookup doing here?
      */
-    public static function getFileList($vars) {
+    public static function getFileList(Array $import) {
         $loaded=0;
-        if(isset($vars["_path"])) {
-            $path=cleanup_path("/" . $vars["_path"] . "/");
-            if(strpos($path, "..")) {
-                log::msg("Illegal characters in path", log::FATAL, log::IMPORT);
-                die();
-            }
-        } else {
-            $path="";
-        }
-
-        if(isset($vars["_import_image"])) {
-            foreach($vars["_import_image"] as $md5) {
-                $file=file::getFromMD5(IMAGE_DIR . "/" . IMPORT_DIR, $md5);
-                if(!empty($file)) {
-                    $files[]=$file;
-                }
+        foreach($import as $md5) {
+            $file=file::getFromMD5(IMAGE_DIR . "/" . IMPORT_DIR, $md5);
+            if(!empty($file)) {
+                $files[]=$file;
             }
         }
         if(is_array($files)) {

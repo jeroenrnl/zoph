@@ -52,10 +52,21 @@ abstract class Import {
     public static function photos(Array $files, Array $vars) {
         $total=sizeof($files);
         $cur=0;
+
+        if(isset($vars["_path"])) {
+            $path=cleanup_path("/" . $vars["_path"] . "/");
+            if(strpos($path, "..") !== false) {
+                log::msg("Illegal characters in path", log::FATAL, log::IMPORT);
+                die();
+            }
+        } else {
+            $path="";
+        }
+
         foreach($files as $file) {
             self::progress($cur, $total);
             $cur++;
-            $file->get_mime();
+            $mime=$file->getMime();
             $photo=new photo();
             if(settings::$importExif===true && $mime=="image/jpeg") {
                 $exif=process_exif($file);
@@ -66,7 +77,6 @@ abstract class Import {
             if ($vars) {
                 $photo->set_fields($vars);
             }
-
             $photo->set("path", $path);
             try {
                 $photo->import($file);
@@ -100,7 +110,8 @@ abstract class Import {
      * This is a bit of a hack because PHP 5.2 and before do not support late static binding. For now, 
      * this  method figures out whether it's in the CLI or not and then call the cliImport method. 
      * This is a bit dirty, but it works
-     * @todo: as soon as anything before PHP 5.3 is deprecated, this should be replaced by late 
+     *
+     * @todo as soon as anything before PHP 5.3 is deprecated, this should be replaced by late 
      * static binding.
      */
     public static function progress($cur, $total) {

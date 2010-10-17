@@ -923,13 +923,6 @@ function redirect($url = "zoph.php", $msg = "Access denied") {
     die();
 }
 
-function get_mime($file) {
-    $fileinfo=new finfo(FILEINFO_MIME, MAGIC_FILE);
-    $mime=explode(";", $fileinfo->file($file));
-    log::msg("<b>" . $file . "</b>: " . $mime[0], log::DEBUG, log::IMPORT);
-    return $mime[0];
-}
- 
 function get_filetype($mime) {
     switch ($mime) {
     case "image/jpeg":
@@ -954,7 +947,9 @@ function get_filetype($mime) {
 function create_dir($directory) {
     if (file_exists($directory) == false) {
         if (@mkdir($directory, DIR_MODE)) {
-            echo translate("Created directory") . ": $directory<br>\n";
+            if(!defined("CLI") || settings::$importVerbose>=1) {
+                log::msg(translate("Created directory") . ": $directory", log::NONE, log::GENERAL);
+            }
             return true;
         } else {
             throw new FileDirCreationFailedException(translate("Could not create directory") . ": $directory<br>\n");

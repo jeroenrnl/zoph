@@ -34,7 +34,8 @@ class log {
         40 => "Notification",
         30 => "Warning",
         20 => "Error",
-        10 => "Fatal Error");
+        10 => "Fatal Error",
+        0 => "Message");
    
     const MOREDEBUG = 60;
     const DEBUG = 50;

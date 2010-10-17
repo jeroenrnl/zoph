@@ -34,7 +34,10 @@ class file {
      */
     private $name;
     private $path;
-
+    /**
+     * @var string type of file ("image", "archive", "ignore" ...)
+     */
+    public $type;
     /**
      * @var string Used when file is going to be copied or moved
      */
@@ -65,9 +68,10 @@ class file {
     }
 
     /**
-     * Returns the link destination. Contrary to the PHP readlink() function, this function
-     * recurses through the links until it has located a real file. So, in case a link points
-     * to a link, which points to a link, which points to... I guess you got it.
+     * Returns the link destination. Contrary to the PHP readlink() function, 
+     * this function recurses through the links until it has located a real 
+     * file. So, in case a link points to a link, which points to a link, 
+     * which points to... I guess you got it.
      * Also, it will simply return a file object if the file is not a link.
      */
     public function readlink() {
@@ -87,6 +91,7 @@ class file {
         $files=glob($dir . "/*");
         foreach($files as $file) {
             $f=realpath($file);
+            
             log::msg($f . ": " . md5($f), log::DEBUG, log::IMPORT);
             if(md5($f) == $md5) {
                 return new file($f);
@@ -104,6 +109,15 @@ class file {
     public function getPath() {
         return $this->path;
     }
+
+    /**
+     * When a symlink is copied or moved, the name changes
+     * this function returns the new name
+     */
+    public function getDestName() {
+        return $this->destName;
+    }
+
     /** 
      * This generates an MD5 for a filename, to uniquely identify a file
      * that is not (yet) in the database and therefore has no db key.
@@ -116,7 +130,8 @@ class file {
      * Deletes a file after doing some checks
      * @param bool Also delete related files, such as thumbnails
      * @param bool Do not delete the referenced file, only related files
-     * @todo 'related' files really should be part of the @see photo object.
+     * @todo 'related' files really should be part of the photo object.
+     * @see photo
      */
     public function delete($thumbs=false, $thumbs_only=false) {
         log::msg("Deleting " . $this, log::NOTIFY, log::IMPORT);
@@ -168,7 +183,7 @@ class file {
             throw new FileNotReadableException("Cannot read file: $this\n");
         }
         if (!settings::$importCopy && !is_writable($this)) {
-            throw new FileNotWritableException("Cannot write file: $this\n");
+            throw new FileNotWritableException("Cannot move file: $this\n");
         }
     }
 
@@ -251,10 +266,48 @@ class file {
 
     /**
      * Gets MIME type for this file
-     * @todo: OO-wrapper around non-OO function
      */
-    public function get_mime() {
-        return get_mime($this->readlink());
+    public function getMime() {
+        $fileinfo=new finfo(FILEINFO_MIME, MAGIC_FILE);
+        $mime=explode(";", $fileinfo->file($this->readlink()));
+        log::msg("<b>" . $file . "</b>: " . $mime[0], log::DEBUG, log::IMPORT);
+        $this->type=get_filetype($mime[0]);
+        return $mime[0];
+    }
+    
+    /**
+     * Get files in a specific directory
+     *
+     * This function creates a list of files in a specific directory and
+     * filters it on a given search string and filetypes.
+     * @param string The dir to search
+     * @param bool Whether or not to descent into directories
+     * @param string Search string
+     */
+    public static function getFromDir($dir, $recursive = false, $search=null) {
+        $files = scandir($dir);
+        $return = array();
+
+        foreach ($files as $filename) {
+            if($filename[0]!=".") {
+                if(is_dir($dir . "/" . $filename)) {
+                    if($recursive) {
+                        $return=array_merge($return,self::getFromDir($dir . "/" . $filename, true));
+                    }
+                } else if(is_null($search) or preg_match($search, $filename)) {
+                    $file=new file($dir . "/" . $filename);
+                    if(!file_exists($dir . "/" . $filename . ".zophignore")) {
+                        $file->getMime();
+                    } else {
+                        $file->type = "ignore";
+                    }
+                    if($file->type) {
+                        $return[]=$file;
+                    }
+                }
+            }
+        }
+        return $return;
     }
 }
 

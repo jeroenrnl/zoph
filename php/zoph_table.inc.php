@@ -551,7 +551,8 @@ function get_link($class, $id) {
     return $obj->get_link();
 }
 
-/*
+/**
+ * Create a link list
  * Creates a comma separated list of links from the given records.
  * The class of the records must implement the get_link function.
  */
@@ -566,8 +567,16 @@ function create_link_list($records) {
 
     return $links;
 }
-// This function doesn't really belong here.
-// should be replaced by a proper OO construction
+
+/**
+ * Get XML from a database table
+ * This is a wrapper around several objects which will call a method from 
+ * those objects
+ * @param string Name of the class to be used
+ * @param string Search string
+ * @param user Only return records that can be seen by this user
+ * @todo This should be replaced by a proper OO construction
+ */
 function get_xml($class, $search,$user=null) {
     $search=strtolower($search);
     if($class=="location" || $class=="home" || $class=="work") {

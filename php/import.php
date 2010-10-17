@@ -125,6 +125,6 @@ if(empty($_action)) {
     $file=getvar("file");
     WebImport::deleteFile($file);
 } else if ($_action=="import") {
-    $files=WebImport::getFileList($request_vars);
+    $files=WebImport::getFileList($request_vars["_import_image"]);
     WebImport::photos($files, $request_vars);
 }

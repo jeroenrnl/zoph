@@ -26,9 +26,11 @@
  * Jason
  */
 function process_exif($image) {
-
     $exifdata = array();
-    if(get_mime($image) == "image/jpeg") {
+    $file=new file($image);
+    $mime=$file->getMime();
+    
+    if($mime == "image/jpeg") {
         $exif = read_exif_data($image);
     } else {
         $exif = false;
