@@ -278,6 +278,9 @@ class arguments {
             if(empty($arg) || empty($type)) {
                 continue;
             }
+            
+            log::msg($type . "\t->\t" . $arg, log::DEBUG, log::IMPORT);
+
             switch($type) {
                 case "albums":
                     foreach($arg as $name) {
@@ -334,6 +337,9 @@ class arguments {
                         echo "Place not found: $arg\n";
                         continue;
                     }
+                    break;
+                case "path":
+                    $vars["_path"]=$arg;
                     break;
                 case "fields":
                     foreach($arg as $field=>$value) {

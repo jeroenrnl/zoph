@@ -23,7 +23,11 @@
  * Controller class for the CLI
  */
 class cli {
-    const API=1;
+    /**
+     * Defines the API version between the /bin/zoph binary and the files in the webroot
+     * these must be equal.
+     */
+    const API=2;
 
     const EXIT_NO_PROBLEM       = 0;
     const EXIT_NO_ARGUMENTS     = 1;
@@ -35,12 +39,13 @@ class cli {
     const EXIT_ALBUM_NOT_FOUND  = 40;
     const EXIT_CAT_NOT_FOUND    = 50;
 
-    // These two are also defined in /bin/zoph, as global constants.
+    // 90 - 97  are also defined in /bin/zoph, as global constants.
     const EXIT_INI_NOT_FOUND    = 90;
     const EXIT_INSTANCE_NOT_FOUND    = 91;
 
-
     const EXIT_CLI_USER_NOT_ADMIN    = 95;
+    const EXIT_CLI_USER_NOT_VALID    = 96;
+    const EXIT_CLI_USER_NOT_DEFINED    = 97;
 
     const EXIT_API_NOT_COMPATIBLE    = 99;
 
@@ -64,7 +69,8 @@ class cli {
     /**
      * Create cli object
      * @param User user doing the import
-     * @param int API version of the executable script. This is used to check if the executable script is compatible with the scripts in php directory
+     * @param int API version of the executable script. This is used to check if the executable 
+     *            script is compatible with the scripts in php directory
      */
     public function __construct($user, $api) {
         if($api != self::API) {
@@ -164,8 +170,8 @@ class cli {
                     $file=new file($filename);
                     $file->check();
 
-                    $mime=$file->get_mime();
-                    if(get_filetype($mime)!="image") {
+                    $mime=$file->getMime();
+                    if($file->type!="image") {
                         throw new ImportFileNotImportableException("$file is not an image\n");
                     }
 
@@ -186,16 +192,13 @@ class cli {
                              }
                         } else {
                             throw new ImportIdIsNotNumericException("$file is not numeric, but --useids is set.\n");
-                            // @todo: should be caught
                         }
                     } else {
-                        $this->photos[]=$this->lookupFile($file);
+                        $this->photos[]=$this->lookupFile($filename);
                     }
                 }
             } catch (Exception $e) {
                 echo $e->getMessage();
-                // @todo: zophImport.pl had a --ignoreerror option, should return! Maybe as --stoponerror or something
-                // 
             }
         }
     }
@@ -214,7 +217,7 @@ class cli {
         }
     }
         
-    private function lookupFile($file) { 
+    private function lookupFile($file) {
         $filename=basename($file);
         $path=dirname($file);
         if($path==".") {
@@ -235,7 +238,6 @@ class cli {
             // check if path is in IMAGE_DIR
             if(substr($path, 0, strlen(IMAGE_DIR))!=IMAGE_DIR) {
                 throw new ImportFileNotInPathException($file ." is not in IMAGE_DIR (" . IMAGE_DIR . "), skipping.\n");
-                // @todo: should be caught
             } else {
                 $path=substr($path, strlen(IMAGE_DIR));
                 if($path[0]=="/") {
@@ -249,18 +251,15 @@ class cli {
         $photos=photo::getByName($filename, $path);
         if(sizeof($photos)==0) {
             throw new ImportFileNotFoundException($file ." not found.\n");
-            // @todo: should be caught
         } else if (sizeof($photos)==1) {    
             return $photos[0];
         } else {
             throw new ImportMultipleMatchesException("Multiple files named " . $file ." found.\n");
-            // @todo: should be caught
         }
     }
 
     /**
      * Show help
-     * @todo should actually do something
      */
     private static function showHelp() {
         echo "zoph " . VERSION . "\n";
