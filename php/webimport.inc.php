@@ -170,6 +170,8 @@ class WebImport extends Import {
                 log::msg("A file named <b>" . $filename . 
                     "</b> already exists in <b>" . $dir . "</b>", log::FATAL, log::IMPORT);
             }
+        } else if ($dir === false) {
+            log::msg(IMAGE_DIR . "/" .IMPORT_DIR . " does not exist.", log::FATAL, log::IMPORT);
         } else {
             log::msg("Directory <b>" . $dir . "</b> is not writable", 
                 log::FATAL, log::IMPORT);
