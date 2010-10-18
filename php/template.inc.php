@@ -61,9 +61,14 @@ class template {
             define('ZOPH', true);
         }
         flush();
-        ob_start();
-            include($this->template);
-        return ob_get_clean();
+        try {
+            ob_start();
+                include($this->template);
+           return ob_get_clean();
+        } catch(Exception $e) {
+            echo $e->getMessage();
+            die();
+        }
     }
 
     /**

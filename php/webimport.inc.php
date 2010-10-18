@@ -162,6 +162,15 @@ class WebImport extends Import {
         }
 
         $dir=realpath(IMAGE_DIR . "/" .IMPORT_DIR);
+        if($dir === false) {
+            log::msg(IMAGE_DIR . "/" .IMPORT_DIR . " does not exist, creating...", log::WARN, log::IMPORT);
+            create_dir_recursive(IMAGE_DIR . "/" .IMPORT_DIR);
+            $dir=realpath(IMAGE_DIR . "/" .IMPORT_DIR);
+            if($dir === false) {
+                log::msg(IMAGE_DIR . "/" .IMPORT_DIR . " does not exist, and I can not create it.", log::WARN, log::FATAL);
+            }
+        }
+
         $dest=$dir . "/" . basename($filename);
         if(is_writable($dir)) {
             if(!file_exists($dest)) {
@@ -170,8 +179,6 @@ class WebImport extends Import {
                 log::msg("A file named <b>" . $filename . 
                     "</b> already exists in <b>" . $dir . "</b>", log::FATAL, log::IMPORT);
             }
-        } else if ($dir === false) {
-            log::msg(IMAGE_DIR . "/" .IMPORT_DIR . " does not exist.", log::FATAL, log::IMPORT);
         } else {
             log::msg("Directory <b>" . $dir . "</b> is not writable", 
                 log::FATAL, log::IMPORT);
