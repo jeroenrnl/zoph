@@ -357,7 +357,6 @@ class photo extends zoph_table {
      * This function takes a file object and imports it inot the database as a new photo
      *
      * @param file The file to be imported
-     * @todo If the file has no EXIF info, today's date is used, this should be the file date
      */
     function import($file) {
         $this->set("name", $file->getName());

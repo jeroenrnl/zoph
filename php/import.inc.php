@@ -77,6 +77,19 @@ abstract class Import {
             if ($vars) {
                 $photo->set_fields($vars);
             }
+            
+            if(strlen(trim($photo->get("date")))==0) {
+                $date=date("Y-m-d", filemtime($file));
+                log::msg("Photo has no date set, using filedate (" . $date . ").", log::NOTIFY, log::IMPORT);
+                $photo->set("date", $date);
+            }
+
+            if(strlen(trim($photo->get("time")))==0) {
+                $time=date("H:i:s", filemtime($file));
+                log::msg("Photo has no time set, using time from filedate (" . $time . ").", log::NOTIFY, log::IMPORT);
+                $photo->set("time", $time);
+            }
+
             $photo->set("path", $path);
             try {
                 $photo->import($file);
