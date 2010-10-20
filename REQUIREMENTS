@@ -8,12 +8,10 @@ Zoph requires the following:
     * Apache 2.2
     * PHP 5.2
     * MySQL 5.0
-    * Perl 5.8.8
-    * ImageMagick 6.5
+    * ImageMagick 6.6
     * Jhead 2.8x
 
 Other versions may work as well, see below for more details. How to install these applications and get them to work together is depending on your OS and distribution. Check the documentation of the application and/or your distribution for details.
-Contents
 
 Apache
     * Current versions of Zoph are developped on Apache 2.2.x
@@ -32,32 +30,30 @@ PHP
           o pcre
           o gd2
           o exif
-          o xml (Zoph >0.7)
+          o xml
           o pear (if you want to use the e-mail features)
-
+          o APC 
   php.ini settings
     * If you are using the web importer you may need to increase the max_execution_time, upload_max_filesize, post_max_size and max_input_time in php.ini defined in php.ini. See MAX_UPLOAD on the Configuration page.
     * If you are using the watermarking feature, you probably need to increase the memory_limit setting. See WATERMARKING on the Configuration page.
     * The e-mail photo feature may require increasing the memory_limit setting. See EMAIL_PHOTOS on the Configuration page.
 
+APC settings
+
+The file upload feature of Zoph v0.8.2 and later uses the PHP APC extension to track upload progress.
+
+apc.enabled = "1"
+apc.rfc1867="1"
+apc.rfc1867_prefix="upload_"
+apc.rfc1867_name="APC_UPLOAD_PROGRESS"
+
 MySQL
-    * Current versions are developped with MySQL 5.0
-    * MySQL 5.1 should work too
+    * Current versions are developped with MySQL 5.1
+    * MySQL 5.0 should work too
     * MySQL 4.0 and 4.1 may still work but are no longer supported.
 
-Perl
-The commandline interface of Zoph (zophImport.pl and zophExport.pl) is written in Perl. If you do not intend to use it, you can skip this paragraph.
-    * Zoph is developped in Perl 5.8.8
-          o Zoph has not been tested against 5.9.x or 5.10.x because my distribution (Gentoo) still hasn't incorporated them.
-    * The following Perl modules are required for Zoph to run
-          o Perl DBI, DBD::mysql, File::stat, Image::Size,
-          o Perl File::Spec::Link (Zoph >v0.7)
-    * You may already have the DBI, DBD::mysql and File::stat but you probably have to install the Image::Size package. You can use CPAN to do this. (Note that the first time you run CPAN you'll have to answer some questions. You can just go with the defaults until you are asked to choose the hosts).
-$ perl -MCPAN -e 'install Image::Size'
-    * If needed, install the other Perl packages as above.
-
 ImageMagick
-    * Current Zoph versions have been tested against ImageMagick 6.5.x
+    * Current Zoph versions have been tested against ImageMagick 6.6.x
 
 Jhead
     * Jhead 2.8x

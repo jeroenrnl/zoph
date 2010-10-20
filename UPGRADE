@@ -1,110 +1,87 @@
-Zoph 0.8 to 0.8.1
-=================
-    * Follow the upgrade instructions to 0.8 first if you are using an older version. (no need to really download and install v0.8, just execute the upgrade instructions).
+Zoph 0.8.1 to 0.8.2
 
-Copy php/* to the location of your installation. Make sure that you also copy the js and img subdirectories. If you use the translations in Zoph, make sure to also copy the lang directory.
-Updating the database
----------------------
+ * You can use these instructions to go from 0.8.1.x to 0.8.2
+ * If you want to upgrade from 0.8 or 0.8.0.x, first follow the upgrade instructions from 0.8 to 0.8.1 [http://en.wikibooks.org/wiki/Zoph/Upgrading#Zoph_0.8_to_0.8.1]
 
-Zoph 0.8.1 requires a manual upgrade to the database, see "Changing your database to UTF-8".
+As of 0.8.1, the bin and man directories in the Zoph tarball have been replaced by the cli directory. Also, zophExport.pl no longer exists and zophImport.pl has been replaced by zoph. If you had them installed, you should remove them from your system, they are no longer supported. Don't forget to remove the manpages (zophImport.pl.1.gz and zophExport.pl.1.gz) as well, they will usually be in /usr/share/man/man1.
 
-Execute zoph-update-0.8.sql:
+Copy the contents of the php directory into your webroot and copy the lang directory into the webroot as well. You should make a backup copy of config.inc.php to prevent overwriting it.
 
-mysql -u zoph_admin -p zoph < sql/zoph_update-0.9.sql
+	cp config.inc.php config.local.php
+	cp -a php/* /var/www/html/zoph
+	cp -a lang /var/www/html/zoph
 
-Change zoph into zophutf8 if you are working on the temporary database.
 
-The database upgrade script makes the following changes:
+Copy cli/zoph into /bin (or another directory in your $PATH).
 
-    * Make the language field in the prefs table longer so languages like en-ca can be stored (0.8.1)
+	cp cli/zoph /bin
 
-Configuration updates
-  New options
-    * LOG_ALWAYS (0.8.1)
-    * LOG_SEVERITY (0.8.1)
-    * LOG_SUBJECT (0.8.1)
+Copy zoph.1.gz into your man 1 directory (usually /usr/share/man/man1) and zoph.ini.5.gz into man 5 (usually /usr/share/man/man5).
+
+	cp cli/zoph.1.gz /usr/share/man/man1
+	cp cli/zoph.ini.5.gz /usr/share/man/man5
+
+CONFIGURATION CHANGES
+
+The most important configuration change is the replacement of .zophrc and a part of config.inc.php by zoph.ini. You can use zoph.ini.example in the cli dir as an example.
+
 (see http://en.wikibooks.org/wiki/Zoph/Configuration for details)
 
-Changing your database to UTF-8
-===============================
+Removed options
+---------------
 
-As of Zoph v0.8.1, Zoph is using UTF-8 character encoding. In order to fully benefit from this change, you need to convert your database to UTF-8 encoding as well; especially if you are using any non-latin characters in your database.
+The following configuration options no longer exist, you should remove them from you config.inc.php:
 
-***Important!***
-This could be a riskful operation, make sure you make a backup of your database and do not delete it until you are very sure everything has converted correctly.
-Contents
+	DB_HOST 
+	    Moved to zoph.ini (0.8.2)
+	DB_NAME 
+	    Moved to zoph.ini (0.8.2)
+	DB_USER 
+	    Moved to zoph.ini (0.8.2)
+	DB_PASS 
+	    Moved to zoph.ini (0.8.2)
+	CLIENT_WEB_IMPORT 
+	    Replaced by UPLOAD (0.8.2)
+	SERVER_WEB_IMPORT 
+	    Replaced by IMPORT (0.8.2)
+	DEFAULT_DESTINATION_PATH 
+	    Due to introduction of IMPORT_DIR no longer necessary (0.8.2)
+	SHOW_DESTINATION_PATH 
+	    Due to introduction of IMPORT_DIR no longer necessary (0.8.2)
+	REMOVE_ARCHIVE 
+	    As of Zoph 0.8.2, Zoph always removes an archive after a successful
+            decompress (0.8.2)
+	IMPORT_MOVE 
+	    Due to introduction of IMPORT_DIR, Zoph always moves files (0.8.2)
+	IMPORT_UMASK 
+	    Replaced by FILE_MODE (0.8.2)
 
-Converting the database to UTF-8
---------------------------------
-The safest way to perform this operation is probably to create a second Zoph database and test against that. This document will describe that method. If you wish to go back to the old database name later or can only use a single database, because of hosting restrictions, you will have to drop the "old" database and re-use the same database. Double-check your backup in that case!
+New options
+-----------
 
-Create a backup
-  mysqldump -u root -p zoph | gzip > zoph.sql.gz
+	CLI_USER 
+	    User id that the CLI client uses to connect to Zoph. Must be 
+            admin. Change this into '0' to let Zoph lookup the user from 
+            the Unix user that is running Zoph. (0.8.2)
+	IMPORT
+	    Enable ('1') or disable ('0') webimport
+	UPLOAD
+	    Enable ('1') or disable ('0') uploading photos through the browser
+	IMPORT_DIR
+	    Directory, relative to IMAGE_DIR, that will store uploaded photos
+            until they have been imported in Zoph.
+	IMPORT_PARALLEL
+	    Number of photos to resize concurrently.
+	MAGIC_FILE
+	    MIME Magic file. Zoph needs this to determine the file type of an 
+            imported file.
+	FILE_MODE
+	    File permissions for files imported in Zoph.
+	UNGZ_CMD
+	    Command to be used to decompress .gz files.
+	UNBZ_CMD
+	    Command to be used to decompress .bzip files.
 
-Create a new database, with UTF-8 encoding
-  mysql -u root -p
-  mysql> CREATE DATABASE zophutf8 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-  mysql> exit
+DATABASE CHANGES
 
-***Important!***
-You can not use ALTER TABLE to do this, because MySQL will then set the character encoding of the database to UTF-8, but will leave it on whatever it is (usually Latin-1) for the tables
-
-Find out what your current encoding is:
-  zcat zoph.sql.gz | grep CHARSET
-
-Usually you will see several lines that look like this
-
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-In this case we have been using latin1 encodig so far. You will also see that some lines contain things like AUTO_INCREMENT=161, those are not important for us now.
-
-We will now change the encoding in this file to UTF-8. In the tests I have done, it was not needed to really convert the character sets, it was sufficient to just change the name of the encoding. If you do run into issues with texts that were correctly displaying before the change and no longer after the change, you may need to use iconv to do a conversion. If you do need that, let me know, or add the information to this document.
-
-  zcat zoph.sql.gz | sed "s/CHARSET=latin1/CHARSET=utf8/g" | gzip > zophutf8.sql.gz
-
-Import the database into the newly create database:
-
-  zcat zophutf8.sql.gz | mysql -u root -p zophutf8
-
-You need to update config.inc.php and give rights to the user you use to connect to MySQL.
-
-config.inc.php:
-  define('DB_NAME', 'zophutf8');
-  define('DB_USER', 'zoph_rw');
-  define('DB_PASS', 'PASSWORD');
-
-mysql -u root -p
-mysql> grant select, insert, update, delete on zophutf8.* to zoph_rw@localhost identified by 'PASSWORD';
-mysql> grant all on zophutf8.* to zoph_admin identified by 'PASSWORD';
-
-Now, perform the rest of the update and test!
-
-Changing the database name back to zoph
----------------------------------------
-If you have tested and confirmed that the new database is working for you, and you want to change the name of the database back to zoph, you need to perform these steps. These steps are not really necessary, but do keep in mind that future Zoph documentation will refer to the database by the name of zoph and not zophutf8.
-
-  mysqldump -u root -p zophutf8 | gzip > zophutf8.sql.gz
-  mysqladmin -u root -p drop zoph
-  mysql -u root -p
-  mysql> CREATE DATABASE zoph DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-  mysql> exit
-  zcat zophutf8.sql.gz | mysql -u root -p zoph
-
-config.inc.php:
-  define('DB_NAME', 'zoph');
-  define('DB_USER', 'zoph_rw');
-  define('DB_PASS', 'PASSWORD');
-
-  mysql -u root -p
-  mysql> grant select, insert, update, delete on zoph.* to zoph_rw@localhost identified by 'PASSWORD';
-  mysql> grant all on zoph.* to zoph_admin identified by 'PASSWORD';
-
-Rolling back to the old database
---------------------------------
-If you find during testing that the database conversion has not worked for you, you can easily roll back to the old database by changing config.inc.php:
-
-  define('DB_NAME', 'zoph')
-
-Please report a bug or post on the forum if you do run into problems.
-
-For upgrades from an older version of Zoph: http://en.wikibooks.org/wiki/Zoph/Upgrading/Archive
+No database changes need to be made for Zoph 0.8.2

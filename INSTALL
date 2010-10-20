@@ -1,5 +1,5 @@
-Zoph 0.8 installation
-9 Sept 2009
+Zoph 0.8.2 installation
+20/10/2010
 
 1. Requirements
 
@@ -24,19 +24,23 @@ zoph_rw@localhost identified by 'PASSWORD';
 
        mysql> grant all on zoph.* to zoph_admin identified by 'PASSWORD';
 
-3. Configure the PHP templates
+3. Create zoph.ini
+   In Zoph 0.8.2 and later, you need to create a zoph.ini file, usually in 
+   /etc. zoph.ini is where you define database settings. A simple example:
 
-   The values to be configured are in the php/config.inc.php file.
+   [zoph]
+   db_host = localhost
+   db_name = zoph
+   db_user = zoph_rw
+   db_pass = pass
+   db_prefix = zoph_
 
-   You will have to edit the following:
+   php_location = /var/www/html/zoph
 
-   - DB_HOST : your database host (localhost, for example)
-   - DB_NAME : zoph (unless you used something else above)
-   - DB_USER : zoph_rw, using the above example
-   - DB_PASS : the password you set
-
-   For more information, see http://en.wikibooks.org/wiki/Zoph/Configuration or the
-   configuration.html in the docs directory.
+   An example zoph.ini file, called zoph.ini.example is included in the cli
+   directory.
+   See the man page for zoph.ini(5) or the Wikibooks documentation 
+   [http://en.wikibooks.org/wiki/Zoph/Configuration] for more details
 
 4. Install the templates
 
@@ -51,34 +55,32 @@ zoph_rw@localhost identified by 'PASSWORD';
 
        $ cp -r php/* /var/www/html/zoph/
 
-5. Install the perl scripts
+4. Configure the PHP templates
 
-   5.1 Check the path to perl
+   Many configuration items can be set in php/config.inc.php file.
+   For more information, see http://en.wikibooks.org/wiki/Zoph/Configuration.
 
-       The perl scripts points to /usr/bin/perl.  If your perl is
+5. Install the CLI scripts
+
+   5.1 Check the path to PHP
+
+       The CLI script points to /usr/bin/php.  If your PHP installation is
        in a different place, edit the first line of the script.
 
-   5.2 Configure the database variables
-
-       Edit zophrc.sample and store it as .zophrc in your homedir. Make sure that the
-       following variables match the values you put in config.inc.php:
-
-       $db_name = 'zoph';
-       $db_user = 'zoph_rw';
-       $db_pass = 'password';
-       $image_dir = '/data/images' 
-
-   5.3 Copy bin/zophImport.pl and bin/zophExport.pl to /usr/local/bin
+   5.2 Copy cli/zoph to /bin
        Or some other directory in your PATH.
 
-   5.4 Install the man page
-       A man page for zophImport.pl is in the man/ directory.  Copy this
-       to somewhere in your manpath, /usr/local/man/man1 for example.
+   5.3 Install the man page
+       Man pages for zoph and zoph.ini is in the cli/ directory. Copy these
+       to the man1 and man5 directoies in your manpath, /usr/local/man/man1 and
+       /usr/local/man/man5 for example.
 
 6. Test it
 
    Try hitting http://localhost/zoph/logon.php.  You should be presented
    with the logon screen.
+
+   You can log in with admin / admin. It is recommended to change this.
 
    If you get a 404 error...
    + make sure the zoph/ folder and templates can be seen by the web
@@ -89,6 +91,6 @@ zoph_rw@localhost identified by 'PASSWORD';
      file)
 
    If you see a MySQL access denied error...
-   + make sure the DB_USER you specified in config.inc.php actually has
+   + make sure the db_user you specified in zoph.ini actually has
      access to the database.  If your database is not on localhost, you
      will need to grant permissions to zoph_rw@hostname for that host.
