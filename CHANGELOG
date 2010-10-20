@@ -1,5 +1,19 @@
 Zoph Changelog
 
+Zoph 0.8.0.5
+October 20, 2010
+
+Zoph 0.8.0.5 is a bugfix release that fixes a few bugs in Zoph 0.8.0.4
+Bugs
+
+    * Bug#3049203: Rating links on search page do not work.
+    * Bug#3054562: HTML in rating dropdown on search page
+    * Bug#3054566: Search for albums/categories/places/people/photographers is broken after 0.8.0.2 update.
+    * Bug#3066174: Rotation not working in auto edit mode
+    * Bug#3064937: SQL error when inserting a place with no timezone.
+    * Bug#3064940: HTML in dropdown menu's.
+    * Bug#3072586: Latitude is misspelled as "lattitude"
+
 Zoph 0.8.0.4
 July 15, 2010
 

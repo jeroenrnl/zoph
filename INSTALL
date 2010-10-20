@@ -80,6 +80,8 @@ zoph_rw@localhost identified by 'PASSWORD';
    Try hitting http://localhost/zoph/logon.php.  You should be presented
    with the logon screen.
 
+   You can login with admin/admin. It is recommended to change this password.
+
    If you get a 404 error...
    + make sure the zoph/ folder and templates can be seen by the web
      server.

@@ -1,5 +1,5 @@
 Zoph 0.8 to 0.8.0.x
-    * You can also use these instructions to upgrade any 0.8.0.x-release to 0.8.0.4
+    * You can also use these instructions to upgrade any 0.8.0.x-release to 0.8.0.x
 
 Copy php/* to the location of your installation. Make sure to also copy the php/lang and the js and img subdirectories.
 
