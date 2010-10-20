@@ -1,4 +1,28 @@
 Zoph Changelog
+Zoph 0.8.2
+October 20, 2010
+
+Zoph 0.8.2 is the second pre-release for Zoph 0.9.
+
+Zoph 0.8.2 features a completely rewritten import system. The webinterface has been modernized. Error handling and user-friendliness have been improved. The CLI interface prior to v0.8.2 was written in Perl, because the rest of Zoph was written in PHP, a lot of duplicate work needed to be done whenever something needed to be changed in the import system. As of this version, the CLI interface has been rewritten in PHP as well.
+
+Zoph 0.8.2 is beta release, I tested it as well as possible on my system, but it should not be considered a "stable" version. I would, however, very much appreciate if people could test and give feedback on this release and the updated documentation, in this way I can make sure that the stable (v0.9) version will be as bug-free as possible.
+
+Features
+    * New webimport
+    * New CLI-import
+
+Bugs
+    * Bugfixes from v0.8.0.5 have been included in this release.
+
+Other changes
+    * Configuration of database connection has been moved from config.inc.php (webinterface)
+      and .zophrc (CLI interface) to /etc/zoph.ini, for both the webinterface and the CLI interface.
+    * bin and man directories in release tarball have been combined into the cli directory
+    * HTML documentation (docs directory) is no longer included in the release. Maintaining this
+      documentation cost a lot of time. The scripts I wrote to convert the Wikibooks documentation into
+      offline documentation could not handle images and the documentation I wrote for the new webimport
+      contains a lot of pictures.
 
 Zoph 0.8.1
 3 Jan 2010
