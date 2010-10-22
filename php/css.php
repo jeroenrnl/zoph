@@ -408,13 +408,19 @@ div.map small {
 div.minimap {
     float: right;
     right: 10px;
-    width: 300px;
+    width: 50%;
     height: 300px;
     }
 
 div.mapinfo {
+    margin-top: 2em;
     float: left;
+    width: 50%;
 }
+
+div.mapinfo label {
+    width: 6em;
+    }
 
 span.showhide {
     font-size: small;

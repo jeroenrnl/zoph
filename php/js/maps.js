@@ -16,35 +16,35 @@ var mapstraction;
 
 function createMap(div, provider) {
     // This creates a new map
-    mapstraction=new Mapstraction(div, provider);
+    mapstraction=new mxn.Mapstraction(div, provider);
     mapstraction.addControls({ pan: true, zoom: 'large', scale: true, map_type: true });
 
-    var center=new LatLonPoint(0,0);
+    var center=new mxn.LatLonPoint(0,0);
     mapstraction.setCenterAndZoom(center, 2);
 }
 
-function clickmap(point) {
+function clickmap(event_name, event_source, event_args) {
     var latfield=document.getElementById('lat');
     var lonfield=document.getElementById('lon');
     var zoomfield=document.getElementById('mapzoom');
     var maptypefield=document.getElementById('maptype');
 
-    latfield.value=point.lat;
-    lonfield.value=point.lon;
+    latfield.value=event_args.location.lat;
+    lonfield.value=event_args.location.lon;
     zoomfield.value=mapstraction.getZoom();
     mapstraction.removeMarker(mapstraction.markers[0]);
-    marker = new Marker(point);
+    marker = new mxn.Marker(event_args.location);
     mapstraction.addMarker(marker);
 }
 
-function zoomUpdate() {
+function zoomUpdate(event_name, event_source, event_args) {
     var zoomfield=document.getElementById('mapzoom');
     zoomfield.value=mapstraction.getZoom();
 }
 
 function createMarker(lat, lon, icon, title, infoBubble) {
-    var point=new LatLonPoint(lat, lon);
-    var marker=new Marker(point);
+    var point=new mxn.LatLonPoint(lat, lon);
+    var marker=new mxn.Marker(point);
     if (title) {
         marker.setLabel(title);
     }
@@ -78,13 +78,13 @@ function updateMap() {
     var zoomlevel=parseInt(zoomfield.value);
     mapstraction.removeMarker(mapstraction.markers[0]);
     createMarker(lat, lon,null,null,null);
-    mapstraction.setCenterAndZoom(new LatLonPoint(lat,lon),zoomlevel);
+    mapstraction.setCenterAndZoom(new mxn.LatLonPoint(lat,lon),zoomlevel);
 }
 
 function setUpdateHandlers() {
-    mapstraction.addEventListener('click', clickmap);
-//    mapstraction.addEventListener('zoomend', zoomUpdate);
-    mapstraction.moveendHandler(function(e) { zoomUpdate(); });
+    mapstraction.click.addHandler(clickmap);
+    mapstraction.changeZoom.addHandler(zoomUpdate);
+    mapstraction.endPan.addHandler(zoomUpdate);
     setFieldUpdate();
 }
 

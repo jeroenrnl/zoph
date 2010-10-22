@@ -41,19 +41,37 @@
         }
         if(MAPS) {
 ?>
-        <script type="text/javascript" src="js/mapstraction.js"></script>
+        <script type="text/javascript" src="js/mxn/mxn.js?(<?php echo strtolower(MAPS); ?>)"></script>
         <script type="text/javascript" src="js/maps.js"></script>
 <?php
             switch (strtolower(MAPS)) {
             case 'google':
-            case 'openstreetmap':
 ?>
         <script src="http://maps.google.com/maps?file=api&v=2&key=<?php echo GOOGLE_KEY ?>" type="text/javascript"></script>
+<?php
+            break;
+            case 'googlev3':
+?>
+        <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+
 <?php
             break;
             case 'yahoo':
 ?>
         <script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=Zoph"></script>
+<?php
+            break;
+            case 'openlayers':
+?>
+        <script src="http://openlayers.org/api/OpenLayers.js"></script>
+<?php
+            break;
+            case 'cloudmade':
+?>
+        <script type="text/javascript" src="http://tile.cloudmade.com/wml/0.2/web-maps-lite.js"></script>
+        <script type="text/javascript">
+            var cloudmade_key = "<?php echo CLOUDMADE_KEY; ?>";
+        </script>
 <?php
             break;
             }

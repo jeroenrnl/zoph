@@ -77,12 +77,15 @@
     define('AUTOCOMPLETE', 1);
 
     // Enable Mapping and determine hich mapping provider to use
-    // currently supported: 'google', 'yahoo', 'openstreetmap' or '' to disable
+    // currently supported: 'google', 'googlev3', 'yahoo', 'cloudmade' or '' to disable
     // This needs JAVASCRIPT to be on
     define('MAPS', '');
 
-    // API key for Google Maps
+    // API key for Google Maps, only needed if MAPS = 'google'
     define('GOOGLE_KEY', 'Get yours at http://code.google.com/apis/maps');
+    
+    // API key fore Cloudmade Maps, only needed if MAPS = 'cloudmade'
+    define('CLOUDMADE_KEY', 'Get yours at http://cloudmade.com/register');
 
     // The timezone your camera is set to
     // Leave empty if you always set your camera to local time
