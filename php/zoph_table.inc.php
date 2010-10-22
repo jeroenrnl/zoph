@@ -370,10 +370,10 @@ class zoph_table {
             "  var zoomlevel=" . $zoom . ";\n" .
             "  mapstraction.setCenterAndZoom(center,zoomlevel);\n";
          if ($marker ) {
-            $js.="  createMarker(" . $lat . "," . $lon . ",'" . $icon . "',null, null);\n";
+            $js.="  zMaps.createMarker(" . $lat . "," . $lon . ",'" . $icon . "',null, null);\n";
          }
          if ($edit) {
-            $js.="  setUpdateHandlers();\n";
+            $js.="  zMaps.setUpdateHandlers();\n";
          }
             $js.="</script>";
         return $js;
@@ -384,7 +384,7 @@ class zoph_table {
         $lon=$this->get("lon");
         if($lat && $lon) {
             $quicklook=$this->get_quicklook($user);
-            return "  createMarker(" . $lat . "," . $lon . ", '" . $icon .
+            return "  zMaps.createMarker(" . $lat . "," . $lon . ", '" . $icon .
                     "','" .  e($title) . "','" . 
                     $quicklook . "');\n";
         } else {

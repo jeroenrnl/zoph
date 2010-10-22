@@ -12,79 +12,94 @@
 // You should have received a copy of the GNU General Public License
 // along with Zoph; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+/**
+ * @todo Really should get rid of this global var...
+ */
+
 var mapstraction;
 
-function createMap(div, provider) {
-    // This creates a new map
-    mapstraction=new mxn.Mapstraction(div, provider);
-    mapstraction.addControls({ pan: true, zoom: 'large', scale: true, map_type: true });
+var zMaps=function() {
+    function createMap(div, provider) {
+        // This creates a new map
+        mapstraction=new mxn.Mapstraction(div, provider);
+        mapstraction.addControls({ pan: true, zoom: 'large', scale: true, map_type: true });
 
-    var center=new mxn.LatLonPoint(0,0);
-    mapstraction.setCenterAndZoom(center, 2);
-}
-
-function clickmap(event_name, event_source, event_args) {
-    var latfield=document.getElementById('lat');
-    var lonfield=document.getElementById('lon');
-    var zoomfield=document.getElementById('mapzoom');
-    var maptypefield=document.getElementById('maptype');
-
-    latfield.value=event_args.location.lat;
-    lonfield.value=event_args.location.lon;
-    zoomfield.value=mapstraction.getZoom();
-    mapstraction.removeMarker(mapstraction.markers[0]);
-    marker = new mxn.Marker(event_args.location);
-    mapstraction.addMarker(marker);
-}
-
-function zoomUpdate(event_name, event_source, event_args) {
-    var zoomfield=document.getElementById('mapzoom');
-    zoomfield.value=mapstraction.getZoom();
-}
-
-function createMarker(lat, lon, icon, title, infoBubble) {
-    var point=new mxn.LatLonPoint(lat, lon);
-    var marker=new mxn.Marker(point);
-    if (title) {
-        marker.setLabel(title);
+        var center=new mxn.LatLonPoint(0,0);
+        mapstraction.setCenterAndZoom(center, 2);
     }
-    if(icon) {
-        marker.setIcon('images/icons/' + icon, [22,22]);
+
+    function clickMap(event_name, event_source, event_args) {
+        var latfield=document.getElementById('lat');
+        var lonfield=document.getElementById('lon');
+        var zoomfield=document.getElementById('mapzoom');
+        var maptypefield=document.getElementById('maptype');
+
+        latfield.value=event_args.location.lat;
+        lonfield.value=event_args.location.lon;
+        zoomfield.value=mapstraction.getZoom();
+        mapstraction.removeMarker(mapstraction.markers[0]);
+        marker = new mxn.Marker(event_args.location);
+        mapstraction.addMarker(marker);
     }
-    if (infoBubble) {
-        marker.setInfoBubble(infoBubble);
+
+    function zoomUpdate(event_name, event_source, event_args) {
+        var zoomfield=document.getElementById('mapzoom');
+        zoomfield.value=mapstraction.getZoom();
     }
-    mapstraction.addMarker(marker);
-}
 
-function setFieldUpdate() {
-    // This makes sure that the map is updated when a user changes the
-    // Lat and Lon fields manually.
-    var latfield=document.getElementById("lat");
-    var lonfield=document.getElementById("lon");
-    var zoomfield=document.getElementById("mapzoom");
+    function createMarker(lat, lon, icon, title, infoBubble) {
+        var point=new mxn.LatLonPoint(lat, lon);
+        var marker=new mxn.Marker(point);
+        if (title) {
+            marker.setLabel(title);
+        }
+        if(icon) {
+            marker.setIcon('images/icons/' + icon, [22,22]);
+        }
+        if (infoBubble) {
+            marker.setInfoBubble(infoBubble);
+        }
+        mapstraction.addMarker(marker);
+    }
 
-    latfield.onchange=updateMap;
-    lonfield.onchange=updateMap;
-    zoomfield.onchange=updateMap;
-}
+    function setFieldUpdate() {
+        // This makes sure that the map is updated when a user changes the
+        // Lat and Lon fields manually.
+        var latfield=document.getElementById("lat");
+        var lonfield=document.getElementById("lon");
+        var zoomfield=document.getElementById("mapzoom");
 
-function updateMap() {
-    var latfield=document.getElementById("lat");
-    var lonfield=document.getElementById("lon");
-    var zoomfield=document.getElementById("mapzoom");
-    var lat=latfield.value;
-    var lon=lonfield.value;
-    var zoomlevel=parseInt(zoomfield.value);
-    mapstraction.removeMarker(mapstraction.markers[0]);
-    createMarker(lat, lon,null,null,null);
-    mapstraction.setCenterAndZoom(new mxn.LatLonPoint(lat,lon),zoomlevel);
-}
+        latfield.onchange=zMaps.updateMap;
+        lonfield.onchange=zMaps.updateMap;
+        zoomfield.onchange=zMaps.updateMap;
+    }
 
-function setUpdateHandlers() {
-    mapstraction.click.addHandler(clickmap);
-    mapstraction.changeZoom.addHandler(zoomUpdate);
-    mapstraction.endPan.addHandler(zoomUpdate);
-    setFieldUpdate();
-}
+    function updateMap() {
+        var latfield=document.getElementById("lat");
+        var lonfield=document.getElementById("lon");
+        var zoomfield=document.getElementById("mapzoom");
+        var lat=latfield.value;
+        var lon=lonfield.value;
+        var zoomlevel=parseInt(zoomfield.value);
+        mapstraction.removeMarker(mapstraction.markers[0]);
+        createMarker(lat, lon,null,null,null);
+        mapstraction.setCenterAndZoom(new mxn.LatLonPoint(lat,lon),zoomlevel);
+    }
 
+    function setUpdateHandlers() {
+        mapstraction.click.addHandler(zMaps.clickMap);
+        mapstraction.changeZoom.addHandler(zMaps.zoomUpdate);
+        mapstraction.endPan.addHandler(zMaps.zoomUpdate);
+        setFieldUpdate();
+    }
+
+    return {
+        createMap:createMap,
+        clickMap:clickMap,
+        zoomUpdate:zoomUpdate,
+        createMarker:createMarker,
+        updateMap:updateMap,
+        setUpdateHandlers:setUpdateHandlers
+    };
+}();

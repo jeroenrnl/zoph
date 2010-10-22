@@ -794,7 +794,7 @@ function get_markers($objects, $user) {
 
 function create_map_js($provider=MAPS, $map="map") {
     $js="<script type='text/javascript'>\n" .
-        "  createMap('" . $map . "','" . $provider . "');\n" .
+        "  zMaps.createMap('" . $map . "','" . $provider . "');\n" .
         "</script>";
     return $js;
 }
