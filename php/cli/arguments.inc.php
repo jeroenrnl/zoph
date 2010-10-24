@@ -290,7 +290,7 @@ class arguments {
                             $vars["_album_id"][]=$album_id;
                         } else {
                             echo "Album not found: $name\n";
-                            continue;
+                            exit(cli::EXIT_ALBUM_NOT_FOUND);
                         }
                     }
                     break;
@@ -302,7 +302,7 @@ class arguments {
                             $vars["_category_id"][]=$cat_id;
                         } else {
                             echo "Category not found: $name\n";
-                            continue;
+                            exit(cli::EXIT_CAT_NOT_FOUND);
                         }
                     }
                     break;
@@ -314,7 +314,7 @@ class arguments {
                             $vars["_person_id"][]=$person_id;
                         } else {
                             echo "Person not found: $name\n";
-                            continue;
+                            exit(cli::EXIT_PERSON_NOT_FOUND);
                         }
                     }
                     break;
@@ -325,7 +325,7 @@ class arguments {
                         $vars["photographer_id"]=$person_id;
                     } else {
                         echo "Person not found: $arg\n";
-                        continue;
+                        exit(cli::EXIT_PERSON_NOT_FOUND);
                     }
                     break;
                 case "location":
@@ -335,7 +335,7 @@ class arguments {
                         $vars["location_id"]=$place_id;
                     } else {
                         echo "Place not found: $arg\n";
-                        continue;
+                        exit(cli::EXIT_PLACE_NOT_FOUND);
                     }
                     break;
                 case "path":
