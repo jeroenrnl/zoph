@@ -322,7 +322,7 @@ class arguments {
                     $person=person::getByName($arg);
                     if($person) {
                         $person_id=$person[0]->getId();
-                        $vars["photographer_id"][]=$person_id;
+                        $vars["photographer_id"]=$person_id;
                     } else {
                         echo "Person not found: $arg\n";
                         continue;
@@ -332,7 +332,7 @@ class arguments {
                     $place=place::getByName($arg);
                     if($place) {
                         $place_id=$place[0]->getId();
-                        $vars["location_id"][]=$place_id;
+                        $vars["location_id"]=$place_id;
                     } else {
                         echo "Place not found: $arg\n";
                         continue;
