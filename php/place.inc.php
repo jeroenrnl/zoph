@@ -383,7 +383,7 @@ class place extends zoph_tree_table {
         }
         $title=strtolower(escape_string($name));
         $sql="SELECT place_id from " . DB_PREFIX . "places WHERE " .
-            " LOWER(title) LIKE \"%" . $title . "%\";";
+            " LOWER(title) = \"" . $title . "\";";
 
         return get_records_from_query("place", $sql);
     }
