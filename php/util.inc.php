@@ -77,7 +77,7 @@ function create_pulldown($name, $value, $value_array, $extraopt = null) {
     while (list($val, $label) = each($value_array)) {
         if ($val == $value) { $selected = " selected"; }
         else { $selected  = ""; }
-        $html .= "  <option value=\"$val\"$selected >" . ($label?e($label):"&nbsp;") ."</option>\n";
+        $html .= "  <option value=\"$val\"$selected >" . ($label?$label:"&nbsp;") ."</option>\n";
     }
     $html .= "</select>\n";
     return $html;
@@ -794,7 +794,7 @@ function get_markers($objects, $user) {
 
 function create_map_js($provider=MAPS, $map="map") {
     $js="<script type='text/javascript'>\n" .
-        "  zMaps.createMap('" . $map . "','" . $provider . "');\n" .
+        "  createMap('" . $map . "','" . $provider . "');\n" .
         "</script>";
     return $js;
 }
