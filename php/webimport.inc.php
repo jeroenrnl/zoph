@@ -49,19 +49,6 @@ class WebImport extends Import {
         settings::$importSize=true;
         parent::photos($files, $vars);
     }
-    /**
-     * Creates the form with file selector, browse and upload button
-     * @param int Number to separate concurrent uploads
-     * @param string Combination of upload_id and upload_num
-     */
-    public static function browseForm($num, $upload_num) {
-        $tpl=new template("uploadform", array(
-            "action" => "import.php?upload=1",
-            "onsubmit" => "zImport.startUpload(this, upload_id, num); return true",
-            "num" => $num,
-            "upload_num" => $upload_num));
-        echo $tpl;
-    }
     
     /**
      * Return a translated, textual error message from a PHP upload error
@@ -97,41 +84,6 @@ class WebImport extends Import {
             $errortext.=translate("An unknown file upload error occurred.");
         }
         return $errortext;
-    }
-
-    /**
-     * Handle an incoming upload
-     *
-     * This function will 'take' the incoming upload, fill the progressbar
-     * to 100%, hand off the upload to the processUpload function and
-     * finally launch a Javascript that will remove the iframe 10 seconds
-     * after the upload finished.
-     *
-     * @param array PHP _FILE var with data about the uploaded file
-     * @param string identifier of the upload in the browser window
-     */
-    public static function handleUpload($file, $upload_num) {
-        
-        self::processUpload($file);
-        
-        // show a 100% progressbar
-        $tpl=new template("uploadprogressbar", array(
-            "name" => $file["name"],
-            "size" => get_human($file["size"]),
-            "upload_num" => $upload_num,
-            "complete" => 100,
-            "width" => 300));
-        echo $tpl;
-?>
-    <script type="text/javascript">
-        // This removes the iframe after 10 seconds.
-        frame=frameElement;
-        frameparent=frame.parentNode;
-        setTimeout('frameparent.removeChild(frame)', 10000);
-    </script>
-
-<?php
-
     }
 
     /**
@@ -215,6 +167,9 @@ class WebImport extends Import {
         case "archive":
             return self::unpackArchive($file);
             break;
+        case "xml":
+            return self::XMLimport($file);
+            break;
         default:
             log::msg("Unknown filetype " . $type .
                  " for file" . $file, log::FATAL, log::IMPORT);
@@ -242,10 +197,10 @@ class WebImport extends Import {
      * use processFile() as a wrapper for this function
      * @see processFile
      * @param string full path to file
+     * @todo unpack_dir should be removed when done
      */
-    private static function unpackArchive($filename) { 
+    private static function unpackArchive(file $file) { 
         $dir = IMAGE_DIR . "/" . IMPORT_DIR;
-        $file=new file($filename);
         $mime=$file->getMime();
         switch($mime) {
         case "application/zip":
@@ -267,15 +222,15 @@ class WebImport extends Import {
         }
         if (!$extr || $extr == $msg) {
             log::msg("To be able to process an archive of type " . $mime . ", you need to set " . $msg . " in config.inc.php to a program that can unpack this file.", log::FATAL, log::IMPORT);
-            touch($filename . ".zophignore");
+            touch($file . ".zophignore");
             return false;
         }
         $upload_id=uniqid("zoph_");
         $unpack_dir=$dir . "/" . $upload_id;
-        $unpack_file=$unpack_dir . "/" . basename($filename);
+        $unpack_file=$unpack_dir . "/" . basename($file);
         ob_start();
             mkdir($unpack_dir);
-            rename($filename, $unpack_file);
+            rename($file, $unpack_file);
 
             $cmd = "cd " . escapeshellarg($unpack_dir) . " && " . 
                 $extr . " " .  escapeshellarg($unpack_file) . " 2>&1";
@@ -289,8 +244,12 @@ class WebImport extends Import {
         foreach($files as $import_file) {
             $type=$import_file->type;
             if($type == "image" or $type == "archive") {
-                $file->setDestination($dir);
-                $file->move();
+                $import_file->setDestination($dir);
+                try {
+                    $import_file->move();
+                } catch (fileException $e) {
+                    echo $e->getMessage() . "<br>\n";
+                }
             }
         }
     }
@@ -435,6 +394,10 @@ class WebImport extends Import {
             case "archive":
                 $icon="images/icons/" . ICONSET . "/archive.png";
                 $status="waiting";
+                break;
+            case "xml":
+                $icon="images/icons/" . ICONSET . "/tracks.png";
+                $status="done";
                 break;
             case "ignore":
                 $icon="images/icons/" . ICONSET . "/error.png";

@@ -14,6 +14,18 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+    // These additions are necessary because this file is now also included
+    // from the main template, where we are in class context and not in global
+    // contect. Of course this is a bit dirty, but this is temporary until
+    // Zoph has moved to templating entirely;
+
+    global $SHOW_BREADCRUMBS;
+    global $MAX_CRUMBS_TO_SHOW;
+    global $PHP_SELF;
+    global $REQUEST_URI;
+    global $user;
+
     if ($SHOW_BREADCRUMBS) {
 
     $_clear_crumbs = getvar("_clear_crumbs");
@@ -43,12 +55,13 @@
     else if ($_crumb) {
         $user->eat_crumb($_crumb);
     }
-
+    if(!empty($tpl_title)) {
+        $title=$tpl_title;
+    }
     // only add a crumb if a title was set and if there is either no
     // action or a safe action ("edit", "delete", etc would be unsafe)
     $page=array_reverse(explode("/",$PHP_SELF));
     $page=$page[0];
-    
     if (!isset($skipcrumb) && $title && count($user->crumbs) < MAX_CRUMBS &&
         (!$_action || ($_action == "display" || 
         $_action == "search" || $_action == translate("search") ||

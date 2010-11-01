@@ -33,6 +33,9 @@
     require_once("zoph_calendar.inc.php");
 
     require_once("place.inc.php");
+    require_once("track.inc.php");
+    require_once("point.inc.php");
+
     require_once("person.inc.php");
 
     require_once("group_permissions.inc.php");

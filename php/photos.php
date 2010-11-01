@@ -105,6 +105,7 @@
     if ($user->is_admin()) {
 ?>
             <a href="edit_photos.php?<?php echo $qs ?>"><?php echo translate("edit") ?></a> |
+            <a href="tracks.php?_action=geotag&<?php echo $qs_no_action ?>"><?php echo translate("geotag") ?></a> |
 <?php
     }
 ?>

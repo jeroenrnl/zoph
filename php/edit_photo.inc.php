@@ -117,8 +117,12 @@
              </div>
 <?php
         if(JAVASCRIPT && MAPS) {
-            echo create_map_js();
-            echo $photo->get_mapping_js($user, true);
+?>
+            <script type="text/javascript">
+                <?php echo create_map_js(); ?>
+                <?php echo $place->get_mapping_js($user, true); ?>
+            </script>
+<?php
         }
 ?>
           </fieldset>

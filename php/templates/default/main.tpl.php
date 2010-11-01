@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for progressbar
+ * Template for pages.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,27 +15,28 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package ZophTemplates
  * @author Jeroen Roos
+ * @package ZophTemplates
+ * @todo This is a temporary template until the entire zoph page is generated from a template
  */
 
-if(!ZOPH) {
-    die("Illegal call");
-}
+if(!ZOPH) { die("Illegal call"); }
+require_once("header.inc.php");
 ?>
-<div class="uploadprogress" id="prog_<?php echo $tpl_upload_num ?>">
-    <span id="fn_<?php echo $tpl_upload_num ?>" class="fn_upload">
-        <?php echo $tpl_name; ?>
-    </span>
-    <span id="sz_<?php echo $tpl_upload_num ?>" class="sz_upload">
-        <?php echo $tpl_size; ?>
-    </span>
-    <div id="pb_<?php echo $tpl_upload_num; ?>_outer" class="progressbar" 
-        style="width: <?php echo $tpl_width; ?>px">
-        <div id="pb_<?php echo $tpl_upload_num; ?>_inner" class="progressfill"
-            style="width: <?php echo $tpl_complete; ?>%">
-                <?php echo $tpl_complete; ?>%
-        </div>
+    <h1>
+        <?php echo $this->getActionlinks($tpl_header_actionlinks); ?>
+        <?php echo $tpl_title; ?>
+    </h1>
+    <div class="main">
+        <?php echo $this->getActionlinks($tpl_main_actionlinks); ?>
+        <?php echo $tpl_content; ?>
     </div>
-</div>
-
+    <?php if(!empty($tpl_mapping_js)): ?>
+    <div class="map" id="map">>
+    </div>
+    <script type='text/javascript'>
+        <?php echo $tpl_mapping_js; ?>
+        mapstraction.autoCenterAndZoom();
+    </script>
+    <?php endif; ?>
+    <?php require_once("footer.inc.php"); ?>

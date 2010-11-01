@@ -844,6 +844,11 @@ span.inputhint  {
     padding-left: 30px;
     text-align: right;
     }
+
+div.formtext {
+    padding: 15px;
+}
+    
 /* Checkbox on the annotate photo page */
 
 .checkbox   {
@@ -1020,14 +1025,14 @@ fieldset  {
     clear: right;
     }
 
-fieldset.editphotos, fieldset.map  {
+fieldset.editphotos, fieldset.map, fieldset.geotag  {
     margin-top: 10px;
     margin-bottom: 5px;
     padding-bottom: 20px;
     border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
     }
 
-fieldset.editphotos legend, fieldset.map legend {
+fieldset.editphotos legend, fieldset.map legend, fieldset.geotag legend {
     clear: both;
     display: block;
     left: 2em;
@@ -1063,6 +1068,10 @@ fieldset.checkboxlist {
     width: 60%;
     clear: right;
     }   
+
+fieldset.checkboxlist legend {
+    display: none;
+}
 
 input[type="button"],
 input[type="submit"],

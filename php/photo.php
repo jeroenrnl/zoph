@@ -18,7 +18,6 @@
  */
 
     require_once("include.inc.php");
-
     $photo_id = getvar("photo_id");
     $_off = getvar("_off");
 
@@ -487,8 +486,13 @@ require_once("header.inc.php");
 <?php
         $array=$photo->get_near(100);
         $array[]=$photo;
-        echo create_map_js();
-        echo get_markers($array, $user);
+        
+?>
+    <script type="text/javascript">
+        <?php echo create_map_js(); ?>
+        <?php echo get_markers($array, $user); ?>
+    </script>
+<?php
       }
 ?>
 

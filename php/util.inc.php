@@ -764,7 +764,7 @@ function pager($current, $total, $num_pages, $page_size, $max_size, $url, $reque
     return $html;
 }
 function get_markers($objects, $user) {
-    $js="<script type='text/javascript'>\n";
+    $js;
     $markers=array();
     if($objects) {
         foreach($objects as $object) {
@@ -781,7 +781,6 @@ function get_markers($objects, $user) {
             $js.=$marker;
         }
         $js.="  mapstraction.autoCenterAndZoom();\n";
-        $js.="</script>";
     }
     if(count($markers)>0) {
         // only return the javascript if anything is in there, to
@@ -793,10 +792,7 @@ function get_markers($objects, $user) {
 }
 
 function create_map_js($provider=MAPS, $map="map") {
-    $js="<script type='text/javascript'>\n" .
-        "  zMaps.createMap('" . $map . "','" . $provider . "');\n" .
-        "</script>";
-    return $js;
+    return "  zMaps.createMap('" . $map . "','" . $provider . "');\n";
 }
 
 function check_js($user) {
@@ -937,8 +933,8 @@ function get_filetype($mime) {
         return "archive";
         break;
     case "application/xml";
-        // return "xml";
-        // not implemented yet
+        return "xml";
+        break;
     default:
         return false;
     }

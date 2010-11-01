@@ -27,3 +27,30 @@
 #
 
 ALTER TABLE zoph_prefs MODIFY COLUMN language char(5) DEFAULT NULL;
+#
+# There are no db changes for 0.8.2
+#
+
+#
+# Changes for 0.8.3
+#
+CREATE TABLE zoph_track (
+  track_id int(11) NOT NULL auto_increment,
+  name varchar(64) NOT NULL default 'track',
+  PRIMARY KEY  (track_id)
+) ENGINE=MyISAM;
+
+CREATE TABLE zoph_point (
+  point_id int(11) NOT NULL auto_increment,
+  name varchar(64) default NULL,
+  track_id int(11) default NULL,
+  lat float(10,6) default NULL,
+  lon float(10,6) default NULL,
+  ele float(12,4) default NULL,
+  speed float(12,4) default NULL,
+  datetime datetime default NULL,
+  PRIMARY KEY  (point_id)
+) ENGINE=MyISAM;
+
+ALTER TABLE zoph_users 
+  ADD COLUMN browse_tracks char(1) NOT NULL DEFAULT 0 AFTER browse_places;  

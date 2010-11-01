@@ -30,7 +30,6 @@ class template {
     public $script="";
     public $css=array(CSS_SHEET);
     public $title="Zoph";
-    public $function="die";
 
     /**
      * Create template object
@@ -60,7 +59,6 @@ class template {
         if(!defined("ZOPH")) {
             define('ZOPH', true);
         }
-        flush();
         try {
             ob_start();
                 include($this->template);
@@ -71,11 +69,17 @@ class template {
         }
     }
 
+    public function toString() {
+        return sprintf("%s", $this);
+    }
+
     /**
      * Return the header section of the page
      *
      * @return string
      * @access private
+     * @todo This should be in a template, cannot be done at the moment because
+     *       there are so many pages not moved to the templating system.
      */
     private function getHead() {
         $html="";
@@ -104,17 +108,12 @@ class template {
         return $html;
     }
 
-    /**
-     * Return the body section of the page
-     *
-     * @return string
-     * @access private
-     */
-    private function getBody() {
-        if(is_callable($this->function)) {
-            echo call_user_func_array($this->function, $this->param);
-        } else {
-            echo "No such function: " . var_dump($this->function);
+    private function getActionlinks($actionlinks) {
+        if(is_array($actionlinks)) {
+            $tpl=new template("actionlinks", array(
+                "actionlinks" => $actionlinks)
+            );
+            return $tpl->toString();
         }
     }
 }

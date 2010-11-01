@@ -19,3 +19,4 @@ http://creativecommons.org/licenses/by-sa/2.5/
 64x64/mimetypes/document.png	pages.png
 64x64/mimetypes/contents2.png	pagesets.png
 64x64/mimetypes/zip.png		archive.png
+64x64/apps/ktorrent.png		tracks.png

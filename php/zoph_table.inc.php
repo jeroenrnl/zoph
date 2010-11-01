@@ -363,8 +363,7 @@ class zoph_table {
         if(!$lat) { $lat=0; }
         if(!$lon) { $lon=0; }
         if(!$zoom) { $zoom=2; }
-        $js="<script type='text/javascript'>\n" .
-            "  var center=new mxn.LatLonPoint(" .
+        $js="  var center=new mxn.LatLonPoint(" .
                 $lat . "," .
                 $lon . ");\n" .
             "  var zoomlevel=" . $zoom . ";\n" .
@@ -375,7 +374,6 @@ class zoph_table {
          if ($edit) {
             $js.="  zMaps.setUpdateHandlers();\n";
          }
-            $js.="</script>";
         return $js;
     }
 

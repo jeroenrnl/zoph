@@ -1,6 +1,6 @@
 <?php
-/*
- * This file is part of Zoph.
+/**
+ * Template for import page
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package ZophTemplates
+ * @author Jeroen Roos
+ * @todo This template still creates the h1 and div main tags itself.
+ *       this should be done by the main template;
  */
 
 if(!ZOPH) { die("Illegal call"); }

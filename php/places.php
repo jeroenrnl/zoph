@@ -51,10 +51,17 @@
     require_once("header.inc.php");
 ?>
     <h1>
+
 <?php
     if ($user->is_admin()) {
+        $new="<a href=\"place.php?_action=new&amp;parent_place_id=" . $place->get("place_id") . "\">" . translate("new") . "</a> |";
+    }
+    if ($user->is_admin() || $user->get("browse_tracks")) {
 ?>
-        <span class="actionlink"><a href="place.php?_action=new&amp;parent_place_id=<?php echo $place->get("place_id") ?>"><?php echo translate("new") ?></a></span>
+        <span class="actionlink">
+            <?php echo $new; ?>
+            <a href="tracks.php"><?php echo translate("tracks") ?></a>
+        </span>
 <?php
     }
 ?>
@@ -246,9 +253,12 @@
       if(JAVASCRIPT && MAPS) {
 ?>
         <div id="map" class="map"></div>
+        <script type="text/javascript">
+            <?php echo create_map_js(); ?>
+            <?php echo $place->get_mapping_js($user); ?>
+        </script>
 <?php
-        echo create_map_js();
-        echo $place->get_mapping_js($user);
+
       }
     } // if show_orig
     echo $page_html;

@@ -50,8 +50,8 @@ class log {
     const LOGIN = 4;
     const REDIRECT = 8;
     const IMPORT = 16;
-
-    /* 32 and 64 are free */
+    const GEOTAG = 32;
+    /* 64 is free */
     const DB = 128;
     const SQL = 256;
     const XML = 512;

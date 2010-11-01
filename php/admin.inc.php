@@ -60,5 +60,6 @@ function get_admin_array() {
     new admin(&$adminpage, "groups", "create or modify user groups", "groups.php", "groups.png");
     new admin(&$adminpage, "pages", "create or modify zoph pages", "pages.php", "pages.png");
     new admin(&$adminpage, "pagesets", "create or modify pagesets", "pagesets.php", "pagesets.png");
+    new admin(&$adminpage, "tracks", "create or modify GPS tracks", "tracks.php", "tracks.png");
     return $adminpage;
 }

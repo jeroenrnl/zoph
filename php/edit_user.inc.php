@@ -64,6 +64,8 @@
           <br>
           <label for="browseplaces"><?php echo translate("can browse places") ?></label>
           <?php echo create_pulldown("browse_places", $this_user->get("browse_places"), array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?><br>
+          <label for="browsetracks"><?php echo translate("can browse tracks") ?></label>
+          <?php echo create_pulldown("browse_tracks", $this_user->get("browse_tracks"), array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?><br>
           <label for="detailedpeople"><?php echo translate("can view details of people") ?></label>
           <?php echo create_pulldown("detailed_people", $this_user->get("detailed_people"), array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?>
           <br>

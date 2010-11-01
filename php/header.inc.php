@@ -15,7 +15,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    header("Content-Type: text/html; charset=utf-8")
+    header("Content-Type: text/html; charset=utf-8");
+    global $user;
+    global $PHP_SELF;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
@@ -95,7 +97,6 @@
         translate("home", 0) => "zoph.php",
         translate("albums", 0) => "albums.php",
         translate("categories", 0) => "categories.php");
-
     if ($user->is_admin() || $user->get("browse_people")) {
         $tabs[translate("people", 0)] = "people.php";
     }

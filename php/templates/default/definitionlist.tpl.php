@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for full page;
+ * Template for definitionlists
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,21 +15,16 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package ZophTemplates
  * @author Jeroen Roos
+ * @package ZophTemplates
  */
 
-if(!ZOPH) {
-    die("Illegal call");
-}
+if(!ZOPH) { die("Illegal call"); }
 ?>
-
-<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01//EN\">
-<html class="<?php echo $tpl_html_class ?>">
-    <head>
-        <?php echo $this->getHead(); ?>
-    </head>
-    <body <?php echo $tpl_body_attr; ?>>
-        <?php echo $tpl_body; ?>
-    </body>
-</html>
+        <dl>
+            <?php foreach ($tpl_dl as $key => $value): ?>
+                <dt><?php echo e($key) ?></dt>
+                <dd><?php echo $value ?></dd>
+            <?php endforeach; ?>
+        </dl>
+        <br>

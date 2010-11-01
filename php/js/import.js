@@ -38,6 +38,12 @@ var zImport=function() {
         frame.parentNode.insertBefore(iframe, frame);
     }
 
+    function deleteIframe(frame_id) {
+        frame=top.document.getElementById(frame_id);
+        frameparent=frame.parentNode;
+        setTimeout('frameparent.removeChild(frame)', 10000);
+    }
+
     function updateProgressbar(id) {
         setTimeout("zImport.updateProgressbar('" + id + "')", 1000);
         progress=XML.getData("import_progress", id);
@@ -146,7 +152,7 @@ var zImport=function() {
                         retry.href="#";
                         retry.setAttribute("onClick", "zImport.doAction('retry', '" + md5 + "'); return false");
                         retryli.appendChild(retry);
-
+                        
                         actionlinks.appendChild(deleteli);
 
                         checkbox=document.createElement("input");
@@ -186,12 +192,22 @@ var zImport=function() {
                             img=document.createElement("img");
                             switch(status) {
                             case "done":
-                                div.appendChild(checkbox);
-                                actionlinks.appendChild(retryli);
-                                imgsrc="image_service.php?type=import_thumb" +
-                                    "&file=" + md5;
-                                img.setAttribute("onmouseover", "zImport.createPreviewDiv('" + md5 +"');");
-                                img.setAttribute("onmouseout", "zImport.destroyPreviewDiv('" + md5 +"');");
+                                if(type=="xml") {
+                                    imgsrc=icon;
+                                    importli=document.createElement("li");
+                                    xmlimport=createNode("a", translate['import']);
+                                    xmlimport.href="#";
+                                    xmlimport.setAttribute("onClick", "zImport.doAction('process', '" + md5 + "'); return false");
+                                    importli.appendChild(xmlimport);
+                                    actionlinks.appendChild(importli);
+                                } else {
+                                    actionlinks.appendChild(retryli);
+                                    div.appendChild(checkbox);
+                                    imgsrc="image_service.php?type=import_thumb" +
+                                       "&file=" + md5;
+                                    img.setAttribute("onmouseover", "zImport.createPreviewDiv('" + md5 +"');");
+                                    img.setAttribute("onmouseout", "zImport.destroyPreviewDiv('" + md5 +"');");
+                                }
                                 break;
                             case "waiting":
                                 img.className="waiting";
@@ -413,6 +429,7 @@ var zImport=function() {
         selectAll:selectAll,
         toggleSelection:toggleSelection,
         updateProgressbar:updateProgressbar,
+        deleteIframe:deleteIframe,
         doAction:doAction,
         httpResponse:httpResponse,
         processDone:processDone,

@@ -49,7 +49,7 @@ if(empty($upload_id)) {
         log::msg("Illegal characters in upload_id", log::FATAL, log::IMPORT);
     }
 }
-    
+
 $num=escape_string(getvar("num"));
 if($num && !is_numeric($num)) {
     log::msg("num must be numeric", log::FATAL, log::IMPORT);
@@ -63,55 +63,73 @@ if(empty($_action)) {
         "translate=new Array();\n" .
         "translate['retry']='" .trim(translate("retry", false)) . "';\n" .
         "translate['delete']='" .trim(translate("delete", false)) . "';\n" .
+        "translate['import']='" .trim(translate("import", false)) . "';\n" .
         "upload_id='" . $upload_id ."';\n" .
         "num=" . $num . ";\n" .
         "parallel=" . (int) IMPORT_PARALLEL  . ";\n" .
         "ICONSET='" . ICONSET ."'\n";
 
     $tpl=new template("import", array(
-        "upload_id" => $upload_id,
-        "num" => $num,
-        "javascript" => $javascript,
-        "user" => $user));
+                "upload_id" => $upload_id,
+                "num" => $num,
+                "javascript" => $javascript,
+                "user" => $user));
     $tpl->js=array("js/util.js", "js/xml.js", "js/import.js");
     echo $tpl;
     include("footer.inc.php");
 } else if ($_action=="browse") {
     if(UPLOAD) {
         $upload_num = $upload_id . "_" . $num;
-        $tpl=new template("html", array("html_class" => "iframe_upload"));
-        $tpl->js=array("js/import.js", "js/xml.js");
-        $tpl->script="upload_id='" . $upload_id . "';" .
-                     "num='" . $num . "';";
 
-        $tpl->function=array("WebImport", "browseForm");
-        $tpl->param=array($num, $upload_num);
-        echo $tpl;
-        $tpl=new template("uploadprogressbar", array(
-            "name" => "",
-            "size" => 0,
-            "upload_num" => $upload_num,
-            "complete"  => 0,
-            "width" => 300));
-        echo $tpl;
-    } else {
-        echo translate("Uploading photos has been disabled in config.inc.php. Set UPLOAD to 1 to enable uploading images via the browser.");
-    }
-    ?>
-    </body>
-    </html>
-<?php
+        $body=new template("uploadform", array(
+                    "action" => "import.php?upload=1",
+                    "onsubmit" => "zImport.startUpload(this, upload_id, num); return true",
+                    "num" => $num,
+                    "upload_num" => $upload_num));
+
+        $tpl=new template("html", array(
+                    "html_class" => "iframe_upload",
+                    "body" => $body));
+                $tpl->js=array("js/import.js", "js/xml.js");
+                $tpl->script="upload_id='" . $upload_id . "';" .
+                "num='" . $num . "';";
+
+                echo $tpl;
+                $tpl=new template("uploadprogressbar", array(
+                        "name" => "",
+                        "size" => 0,
+                        "upload_num" => $upload_num,
+                        "complete"  => 0,
+                        "width" => 300));
+                echo $tpl;
+                } else {
+                echo translate("Uploading photos has been disabled in config.inc.php. Set UPLOAD to 1 to enable uploading images via the browser.");
+                }
+                ?>
+                </body>
+                </html>
+                <?php
 } else if ($_action=="upload") {
     if(UPLOAD) {
         if($_FILES["file"]) {
             $file=$_FILES["file"];
         }
-        $upload_id=getvar("APC_UPLOAD_PROGRESS");
-        
-        $tpl=new template("html", array("html_class" => "iframe_upload"));
+        $upload_num=getvar("APC_UPLOAD_PROGRESS");
+
+        webImport::processUpload($file);
+
+        $body=new template("uploadprogressbar", array(
+            "name" => $file["name"],
+            "size" => get_human($file["size"]),
+            "upload_num" => $upload_num,
+            "complete" => 100,
+            "width" => 300));
+
+        $tpl=new template("html", array(
+            "html_class" => "iframe_upload",
+            "body" => $body,
+            "body_attr" => "onload=\"zImport.deleteIframe('upload_" . $num . "');\""));
         $tpl->js=array("js/import.js", "js/xml.js");
-        $tpl->function=array("WebImport", "handleUpload");
-        $tpl->param=array($file, $upload_id);
         $tpl->style="div.uploadprogress { display: block; }";
         echo $tpl;
     }

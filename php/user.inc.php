@@ -138,6 +138,8 @@ class user extends zoph_table {
                 ? translate("Yes") : translate("No"),
             translate("can browse places") => $this->get("browse_places") == 1
                 ? translate("Yes") : translate("No"),
+            translate("can browse tracks") => $this->get("browse_tracks") == 1
+                ? translate("Yes") : translate("No"),
             translate("can view details of people") =>
                 $this->get("detailed_people") == 1
                 ? translate("Yes") : translate("No"),

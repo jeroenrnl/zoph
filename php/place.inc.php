@@ -308,8 +308,8 @@ class place extends zoph_tree_table {
     }
     
     function get_quicklook($user) {
-        $html="<h2>" . $this->get_link() . "</h2>";
-        $html.="<small>" . $this->get_address() . "</small><br>";
+        $html="<h2>" . $this->get_link() . "<\/h2>";
+        $html.="<small>" . $this->get_address() . "<\/small><br>";
         $html.=$this->get_coverphoto($user, $user->prefs->get("autothumb"));
         $count=$this->get_photo_count($user);
         $totalcount=$this->get_total_photo_count($user);
@@ -320,11 +320,7 @@ class place extends zoph_tree_table {
             $html.=sprintf(translate("There are %s photos"),$totalcount) . 
             " " . translate("in this place") . " " . translate("or its children") . "<br>";
         }
-        $html.="</small>";
-        // This really is a little quick and dirty, but solving it
-        // in another place will mess up too much to do so shortly
-        // before the v0.8 release.
-        //return str_replace("'", "&apos;", $html);
+        $html.="<\/small>";
         return $html;
     }
     function is_root() {

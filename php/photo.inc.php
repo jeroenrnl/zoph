@@ -1356,9 +1356,9 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         $file=$this->get("name");
 
         if($title) {
-            $html="<h2>" . e($title) . "</h2><p>" . e($file) . "</p>";
+            $html="<h2>" . e($title) . "<\/h2><p>" . e($file) . "<\/p>";
         } else {
-            $html="<h2>" . e($file) . "</h2>";
+            $html="<h2>" . e($file) . "<\/h2>";
         }    
         $html.=$this->get_thumbnail_link() .
           "<p><small>" . 
@@ -1366,7 +1366,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         if($this->photographer) {
             $html.=translate("by",0) . " " . $this->photographer->get_link(1) . "<br>";
         }
-        $html.="</small></p>";
+        $html.="<\/small><\/p>";
         return $html;
     }
 
@@ -1429,7 +1429,184 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         return get_records_from_query("photo", $sql);
     }
 
+    /**
+     * Set photo's lat/lon from a point object
+     *
+     * @param point
+     */
+    public function setLatLon(point $point) {
+       $this->set("lat", $point->get("lat"));
+       $this->set("lon", $point->get("lon"));
+    }
 
+    /**
+     * Try to determine the lat/lon position this photo was taken from one or all tracks;
+     *
+     * @param track track to use or null to use all tracks
+     * @param int maximum time the time can be off
+     * @param bool Whether to interpolate between 2 found times/positions
+     * @param int Interpolation max_distance: what is the maximum distance between two points to still interpolate
+     * @param string km / miles entity in which max_distance is measured
+     * @param int Interpolation maxtime Maximum time between to point to still interpolate
+     */
+    public function getLatLon(track $track=null, $max_time=300, $interpolate=true, 
+            $int_maxdist=5, $entity="km", $int_maxtime=600) {
+
+        date_default_timezone_set("UTC");
+        $datetime=$this->get_time("UTC");
+        $utc=strtotime($datetime[0] . " " . $datetime[1]);
+        
+        $mintime=$utc-$max_time;
+        $maxtime=$utc+$max_time;
+        
+        if($track) {
+            $track_id=$track->getId();
+            $where=" AND track_id=" . escape_string($track_id);
+        }
+        
+        $sql="SELECT * FROM " . DB_PREFIX . "point" .
+            " WHERE datetime > \"" . date("Y-m-d H:i:s", $mintime) . "\" AND" .
+            " datetime < \"" . date("Y-m-d H:i:s", $maxtime)  . "\"" .
+            $where .
+            " ORDER BY abs(timediff(datetime,\"" . date("Y-m-d H:i:s", $utc) . "\")) ASC" .
+            " LIMIT 1";
+
+        $points=get_records_from_query("point", $sql);
+
+        $point=$points[0];
+        if(get_class($piont)=="point") {
+            $pointtime=strtotime($point->get("datetime"));
+        } else {
+            // can't get a point, don't bother trying to interpolate.
+            unset($interpolate);
+        }
+        
+        if($interpolate && ($pointtime != $utc)) {
+            if($utc>$pointtime) {
+                $p1=$point;
+                $p2=$point->getNext();
+            } else {
+                $p1=$point->getPrev();
+                $p2=$point;
+            }
+            $p3=$p1->interpolate($p2,$utc,$int_maxdist, $entity, $int_maxtime);
+            if(get_class($p3)=="point") {
+                $point=$p3;
+            }
+        }
+        return $point;
+    }
+
+    /**
+     * Takes an array of photos and returns a subset
+     *
+     * @param array photos to return a subset from
+     * @param array Array should contain first and/or last and/or random to determine which subset(s)
+     * @param int count Number of each to return
+     * @return array subset of photos
+     */
+    public static function getSubset(array $photos, array $subset, $count) {
+        $first=array();
+        $last=array();
+        $random=array();
+        $begin=0;
+        $end=null;
+        
+        $max=count($photos);
+        
+        if($count>$max) {
+            $count=$max;
+        }
+
+        if(in_array("first", $subset)) {
+            $first=array_slice($photos, 0, $count);
+            $max=$max-$count;
+            $begin=$count;
+        }
+        if(in_array("last", $subset)) {
+            $last=array_slice($photos, -$count);
+            $max=$max-$count;
+            $end=-$count;
+        }
+
+        if(in_array("random", $subset) && ($max > 0)) {
+            $center=array_slice($photos,$begin,$end);
+            $max=count($center);
+
+            if($max!=0) {
+                if($count>$max) {
+                    $count=$max;
+                }
+                $random_keys=array_rand($center, $count);
+                if(is_array($random_keys)) {
+                    foreach($random_keys as $key) {
+                        $random[]=$center[$key];
+                    }
+                } else {
+                    $random[]=$center[$random_keys];
+                }
+            }
+        }
+        $subset=array_merge($first,$random,$last);
+
+        // remove duplicates due to overlap:
+        $clean_subset=array();
+        foreach($subset as $photo) {
+            $clean_subset[$photo->get("photo_id")]=$photo;
+        }
+
+        return $clean_subset;
+    }
+        
+    /**
+     * Take an array of photos and remove photos with no valid timezone
+     *
+     * This function is needed for geotagging: for photos without a valid timezone it is not possible to
+     * determine the UTC time, needed for geotagging.
+     * @param array Array of photos
+     * @return array Array of photos with a valid timezone
+     */
+    public static function removePhotosWithNoValidTZ(array $photos) {
+
+        $gphotos=array();
+        log::msg("Number of photos before valid timezone check: " . count($photos), log::GEOTAG, log::DEBUG);
+
+        foreach($photos as $photo) {
+            $photo->lookup();
+            $loc=$photo->location;
+            if(get_class($loc)=="place") {
+                $tz=$loc->get("timezone");
+                if(valid_tz($tz)) {
+                    $gphotos[]=$photo;
+                }
+            }
+        }
+        log::msg("Number of photos after valid timezone check: " . count($gphotos), log::GEOTAG, log::DEBUG);
+        return $gphotos;
+    }
+    
+    /**
+     * Take an array of photos and remove photos that already have lat/lon 
+     * information set
+     *
+     * This function is needed for geotagging, so photos that have lat/lon 
+     * manually set will not be overwritten
+     * @param array Array of photos
+     * @return array Array of photos with no lat/lon info
+     */
+    public static function removePhotosWithLatLon($photos) {
+        $gphotos=array();
+        log::msg("Number of photos before overwrite check: " . count($photos), log::GEOTAG, log::DEBUG);
+        foreach($photos as $photo) {
+            $photo->lookup();
+            if(!($photo->get("lat") or $photo->get("lon"))) {
+                $gphotos[]=$photo;
+            }
+        }
+        log::msg("Number of photos after overwrite check: " . count($gphotos), log::GEOTAG, log::DEBUG);
+        return $gphotos;
+    }
+        
 }
 
 function get_photo_sizes_sum() {
@@ -1569,6 +1746,4 @@ function ImageStringWrap($image, $font, $x, $y, $text, $color, $maxwidth) {
     }
 }
 
-class PhotoException extends ZophException {}
-class PhotoThumbCreationFailedException extends PhotoException {}
 ?>

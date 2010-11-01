@@ -310,16 +310,4 @@ class file {
         return $return;
     }
 }
-
-class FileException extends ZophException {}
-class FileDirNotWritableException extends FileException {}
-class FileDirectoryNotSupportedException extends FileException {}
-class FileDirCreationFailedException extends FileException {}
-class FileNotFoundException extends FileException {}
-class FileExistsException extends FileException {}
-class FileNotReadableException extends FileException {}
-class FileNotWritableException extends FileException {}
-class FileMoveFailedException extends FileException {}
-class FileCopyFailedException extends FileException {}
-class FileSymlinkProblemException extends FileException {}
-
+?>

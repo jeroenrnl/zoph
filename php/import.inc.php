@@ -132,14 +132,43 @@ abstract class Import {
             cliImport::progress($cur, $total);
         }
     }
+    
+    /**
+     * Import an XML file
+     *
+     * @param string MD5 hash of the filename to import
+     *
+     * This function tries to recognize the XML file by validating them against .xsd files
+     * For now only GPX (1.0 and 1.1) files are recognized.
+     */
+
+    public static function XMLimport(file $file) {
+        $xml=new DomDocument;
+        $xml->Load($file);
+
+        $schemas = array ( 
+            "gpx 1.0" => "xml/gpx10.xsd", 
+            "gpx 1.1" => "xml/gpx11.xsd" );
+
+        foreach ($schemas as $name => $schema) {
+            if(@$xml->schemaValidate($schema)) {
+                echo basename($file) ." is a valid " . $name . " file";
+                $xmltype=$name;
+            }
+        }
+        if(!isset($xmltype)) {
+            throw ImportFileNotImportableException(basename($file) . " is not a known XML file.");
+        } else {
+            switch($name) {
+                case "gpx 1.0":
+                case "gpx 1.1":
+                    $track=track::getFromGPX($file);
+                    $track->insert();
+                    $file->delete();
+                break;
+            }
+        }
+    }
 
 }
 
-class ImportException extends ZophException {}
-class ImportAutorotException extends ImportException {}
-class ImportFileNotInPathException extends ImportException {}
-class ImportFileNotFoundException extends ImportException {}
-class ImportIdIsNotNumericException extends ImportException {}
-class ImportMultipleMatchesException extends ImportException {}
-class ImportFileNotImportableException extends ImportException {}
-?>
