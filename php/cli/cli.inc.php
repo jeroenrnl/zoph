@@ -128,7 +128,8 @@ class cli {
                     cliimport::progress($cur, $total);
                     $cur++;
                     $photo->lookup();
-                    $photo->update($this->args->getVars());
+                    $photo->set_fields($this->args->getVars());
+                    $photo->update();
                     $photo->updateRelations($this->args->getVars());
                     if(settings::$importThumbs===true) {
                         $photo->thumbnail(true);
