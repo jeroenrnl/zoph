@@ -81,7 +81,6 @@ class arguments {
         $args["fields"]=array();
         $args["path"]="";
 
-        
         foreach($argv as $arg) {
             switch($arg) {
                 case "--instance":
@@ -254,17 +253,17 @@ class arguments {
                     }
                     break;
             }
-            if(isset($args["fields"])) {
-                foreach($args["fields"] as $f) {
-                    $field=explode("=", $f);
-                    $newfields[$field[0]]=$field[1];
-                }
-                $args["fields"]=$newfields;
+        }
+        if(isset($args["fields"])) {
+            foreach($args["fields"] as $f) {
+                $field=explode("=", $f);
+                $newfields[$field[0]]=$field[1];
             }
+            $args["fields"]=$newfields;
+        }
 
-            if(settings::$importUseids==true && self::$command=="import") {
-                self::$command="update";
-            }
+        if(settings::$importUseids==true && self::$command=="import") {
+            self::$command="update";
         }
     }
     /**
