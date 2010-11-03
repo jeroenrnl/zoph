@@ -242,10 +242,10 @@ class WebImport extends Import {
      * use processFile() as a wrapper for this function
      * @see processFile
      * @param string full path to file
+     * @todo unpack_dir should be removed when done
      */
-    private static function unpackArchive($filename) { 
+    private static function unpackArchive(file $file) { 
         $dir = IMAGE_DIR . "/" . IMPORT_DIR;
-        $file=new file($filename);
         $mime=$file->getMime();
         switch($mime) {
         case "application/zip":
@@ -267,15 +267,15 @@ class WebImport extends Import {
         }
         if (!$extr || $extr == $msg) {
             log::msg("To be able to process an archive of type " . $mime . ", you need to set " . $msg . " in config.inc.php to a program that can unpack this file.", log::FATAL, log::IMPORT);
-            touch($filename . ".zophignore");
+            touch($file . ".zophignore");
             return false;
         }
         $upload_id=uniqid("zoph_");
         $unpack_dir=$dir . "/" . $upload_id;
-        $unpack_file=$unpack_dir . "/" . basename($filename);
+        $unpack_file=$unpack_dir . "/" . basename($file);
         ob_start();
             mkdir($unpack_dir);
-            rename($filename, $unpack_file);
+            rename($file, $unpack_file);
 
             $cmd = "cd " . escapeshellarg($unpack_dir) . " && " . 
                 $extr . " " .  escapeshellarg($unpack_file) . " 2>&1";
@@ -289,8 +289,12 @@ class WebImport extends Import {
         foreach($files as $import_file) {
             $type=$import_file->type;
             if($type == "image" or $type == "archive") {
-                $file->setDestination($dir);
-                $file->move();
+                $import_file->setDestination($dir);
+                try {
+                    $import_file->move();
+                } catch (fileException $e) {
+                    echo $e->getMessage() . "<br>\n";
+                }
             }
         }
     }
