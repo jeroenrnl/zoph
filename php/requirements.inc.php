@@ -35,3 +35,9 @@ if(!file_exists(MAGIC_FILE)) {
     log::msg(MAGIC_FILE . " does not exist. Set MAGIC_FILE in config.inc.php to your MIME magic file.", log::FATAL);
     die();
 }
+
+if(!ini_get("date.timezone")) {
+    @$tz=date("e");
+    log::msg("You should set your timezone in php.ini, guessing it should be $tz", log::WARN, log::GENERAL);
+    date_default_timezone_set($tz);
+}

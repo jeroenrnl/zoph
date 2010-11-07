@@ -541,7 +541,7 @@ function get_popular_places($user) {
 function create_place_pulldown($name, $value=null, $user=null) {
     $text="";
 
-    $id=ereg_replace("^_+", "", $name);
+    $id=preg_replace("/^_+/", "", $name);
     if($value) {
         $place=new place($value);
         $place->lookup();

@@ -24,7 +24,7 @@
     $title=translate("Adminpage");
     require_once("header.inc.php");
     require_once("admin.inc.php");
-    $adminpage=get_admin_array();
+    $adminpage=admin::getArray();
 ?>
         <h1>
           <?php echo $title ?>

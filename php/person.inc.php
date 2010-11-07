@@ -424,7 +424,7 @@ function get_popular_people($user) {
 }
 
 function create_person_pulldown($name, $value=null, $user) {
-    $id=ereg_replace("^_+", "", $name);
+    $id=preg_replace("/^_+/", "", $name);
     if($value) {
         $person=new person($value);
         $person->lookup();
@@ -444,7 +444,7 @@ function create_person_pulldown($name, $value=null, $user) {
 function create_photographer_pulldown($name, $value=null, $user) {
     $text="";
 
-    $id=ereg_replace("^_+", "", $name);
+    $id=preg_replace("/^_+/", "", $name);
     if($value) {
         $person=new person($value);
         $person->lookup();

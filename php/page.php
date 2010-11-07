@@ -100,7 +100,7 @@ if ($action == "confirm") {
             <textarea name="text" rows="20" cols="80"><?php echo $zophpage->get("text") ?></textarea><br>
             <input type="submit" value="<?php echo translate($action, 0) ?>">
             <h2><?php echo translate("smileys you can use"); ?></h2>
-            <?php echo get_smiley_overview(); ?>
+            <?php echo smiley::getOverview(); ?>
         </form>
     </div>
 

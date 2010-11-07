@@ -94,7 +94,7 @@ function guess_tz($lat, $lon) {
     }
 }
 function create_timezone_pulldown($name, $value=null, $user=null) {
-    $id=ereg_replace("^_+", "", $name);
+    $id=preg_replace("/^_+/", "", $name);
     if($value) {
         $text=$value;
     }

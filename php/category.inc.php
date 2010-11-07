@@ -340,7 +340,7 @@ function get_popular_categories($user) {
 
 function create_cat_pulldown($name, $value=null, $user) {
     $text="";
-    $id=ereg_replace("^_+", "", $name);
+    $id=preg_replace("/^_+/", "", $name);
     if($value) {
         $cat=new category($value);
         $cat->lookup();

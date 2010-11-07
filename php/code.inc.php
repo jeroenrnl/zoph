@@ -22,26 +22,118 @@
 class replace {
     var $find;
     var $replace;
+    private static $replaces=array();
 
-    function replace($replaces, $find, $replace) {
+    function __construct($find, $replace) {
         $this->find=$find;
         $this->replace=$replace;
-        array_push($replaces, $this);
+    }
+
+    public static function getArray() {
+        if(empty(self::$replaces)) { 
+            self::createArray(); 
+        }
+        return self::$replaces;
+    }
+        
+    private static function createArray() {
+        // Watch the order of these... putting &amp; at the end of the array
+        // will make you end up with things like "&amp;lt;"...
+        self::$replaces=array(
+            new replace("&#40;", "("),  # Needed to revert anti
+            new replace("&#41;", ")"),  # SQL injection-code
+            new replace("&", "&amp;"),
+            new replace("<", "&lt;"),
+            new replace(">", "&gt;"),
+            new replace("\n", "<br>")
+        );
     }
 }
 class smiley {
     var $smiley;
     var $file;
     var $description;
-    function smiley($smileys, $smiley, $file, $description) {
+    private static $smileys=array();
+
+    public static function getArray() {
+        if(empty(self::$smileys)) { 
+            self::createArray(); 
+        }
+        return self::$smileys;
+    }
+
+        
+    private static function createArray() {
+        self::$smileys=array(
+            new smiley(":D", "icon_biggrin.gif","Very Happy"),
+            new smiley(":-D", "icon_biggrin.gif","Very Happy"),
+            new smiley(":grin:", "icon_biggrin.gif","Very Happy"),
+            new smiley(":)", "icon_smile.gif","Smile"),
+            new smiley(":-)", "icon_smile.gif","Smile"),
+            new smiley(":smile:", "icon_smile.gif","Smile"),
+            new smiley(":(", "icon_sad.gif","Sad"),
+            new smiley(":-(", "icon_sad.gif","Sad"),
+            new smiley(":sad:", "icon_sad.gif","Sad"),
+            new smiley(":o", "icon_surprised.gif","Surprised"),
+            new smiley(":-o", "icon_surprised.gif","Surprised"),
+            new smiley(":eek:", "icon_surprised.gif","Surprised"),
+            new smiley(":shock:", "icon_eek.gif","Shocked"),
+            new smiley(":?", "icon_confused.gif","Confused"),
+            new smiley(":-?", "icon_confused.gif","Confused"),
+            new smiley(":???:", "icon_confused.gif","Confused"),
+            new smiley("8)", "icon_cool.gif","Cool"),
+            new smiley("8-)", "icon_cool.gif","Cool"),
+            new smiley(":cool:", "icon_cool.gif","Cool"),
+            new smiley(":lol:", "icon_lol.gif","Laughing"),
+            new smiley(":x", "icon_mad.gif","Mad"),
+            new smiley(":-x", "icon_mad.gif","Mad"),
+            new smiley(":mad:", "icon_mad.gif","Mad"),
+            new smiley(":P", "icon_razz.gif","Razz"),
+            new smiley(":-P", "icon_razz.gif","Razz"),
+            new smiley(":razz:", "icon_razz.gif","Razz"),
+            new smiley(":oops:", "icon_redface.gif","Embarassed"),
+            new smiley(":cry:", "icon_cry.gif","Crying or Very sad"),
+            new smiley(":evil:", "icon_evil.gif","Evil or Very Mad"),
+            new smiley(":twisted:", "icon_twisted.gif","Twisted Evil"),
+            new smiley(":roll:", "icon_rolleyes.gif","Rolling Eyes"),
+            new smiley(":wink:", "icon_wink.gif","Wink"),
+            new smiley(";)", "icon_wink.gif","Wink"),
+            new smiley(";-)", "icon_wink.gif","Wink"),
+            new smiley(":!:", "icon_exclaim.gif","Exclamation"),
+            new smiley(":?:", "icon_question.gif","Question"),
+            new smiley(":idea:", "icon_idea.gif","Idea"),
+            new smiley(":arrow:", "icon_arrow.gif","Arrow"),
+            new smiley(":|", "icon_neutral.gif","Neutral"),
+            new smiley(":-|", "icon_neutral.gif","Neutral"),
+            new smiley(":neutral:", "icon_neutral.gif","Neutral"),
+            new smiley(":mrgreen:", "icon_mrgreen.gif","Mr. Green")
+        );
+    }    
+    function __construct($smiley, $file, $description) {
         $this->smiley=$smiley;
         $this->file=$file;
         $this->description=$description;
-        array_push($smileys, $this);
     }
+
     function get_image() {
         return "<img src=\"images/smileys/" . $this->file ."\" alt=\"" . $this->description . "\">";
     }
+
+    public static function getOverview() {
+        $smileys=self::getArray();
+        $html="<div class=\"smileys\">";
+        foreach (self::$smileys as $smiley) {
+            $html.="<div>";
+            $html.=$smiley->get_image();
+            $html.="<span>" . $smiley->smiley . "</span>";
+            $html.="</div>";
+        }
+        $html.="<br></div>";
+        return $html;
+    }
+            
+
+
 
 }   
 class tag {
@@ -52,13 +144,46 @@ class tag {
     var $close=true;        // True if this tags needs closure, 
                             // false if it does not
     
-    function tag($tags, $find, $replace, $regexp = null, $param = null,$close=true) {
+    private static $tags=array();
+
+    public static function getArray() {
+        if(empty(self::$tags)) { 
+            self::createArray(); 
+        }
+        return self::$tags;
+    }
+
+        
+    private static function createArray() {
+        self::$tags=array(
+            new tag("b", "b"),
+            new tag("i", "i"),
+            new tag("u", "u"),
+            new tag("h1", "h1"),
+            new tag("h2", "h2"),
+            new tag("h3", "h3"),
+            new tag("color", "span", "", "style=\"color: [param];\""),
+            new tag("font", "span", "", "style=\"font-family: [param];\""),
+            new tag("br", "br", null, null, false),
+            new tag("background", "div", "", "class='background' style=\"background: [param];\""),
+            new tag("photo", "a", "", "href=\"photo.php?photo_id=[param]\""),
+            new tag("album", "a", "", "href=\"album.php?album_id=[param]\""),
+            new tag("person", "a", "", "href=\"people.php?person_id=[param]\""),
+            new tag("cat", "a", "", "href=\"category.php?category_id=[param]\""),
+            new tag("link", "a", "", "href=\"[param]\""),
+            new tag("place", "a", "", "href=\"places.php?parent_place_id=[param]\""),
+            new tag("thumb", "img", "", "src=\"image_service.php?photo_id=[param]&type=thumb\"", false),
+            new tag("mid", "img", "", "src=\"image_service.php?photo_id=[param]&type=mid\"", false)
+        );
+    }
+
+    
+    public function __construct($find, $replace, $regexp = null, $param = null,$close=true) {
         $this->find=$find;
         $this->replace=$replace;
         $this->regexp=$regexp;
         $this->param=$param;
         $this->close=$close;
-        array_push($tags, $this);
     }
 
     function checkparam($value) {
@@ -79,25 +204,25 @@ class tag {
 class zophcode {
     var $message;
     var $allowed = array();
-    var $replaces = array();
-    var $smileys = array();
-    var $tags = array();
+    private $replaces = array();
+    private $smileys = array();
+    private $tags = array();
 
-    function zophcode($message, $allowed = null, 
+    function __construct($message, $allowed = null, 
         $replaces = null, $smileys = null, $tags = null) {
         if (!$replaces) {
-            $this->replaces = get_replaces_array();
+            $this->replaces = replace::getArray();
         } else {
             $this->replaces = $replaces;
         }
 
         if (!$smileys) {
-            $this->smileys = get_smileys_array();
+            $this->smileys = smiley::getArray();
         } else {
             $this->smileys = $smileys;
         }
         if (!$tags) {
-            $this->tags = get_tags_array();
+            $this->tags = tag::getArray();
         } else {
             $this->tags = $tags;
         }
@@ -235,102 +360,6 @@ function findtag($tags,$findtag) {
     }
 }
 
-function get_smiley_overview() {
-    $smileys=get_smileys_array();
-    $html="<div class=\"smileys\">";
-    foreach ($smileys as $smiley) {
-        $html.="<div>";
-        $html.=$smiley->get_image();
-        $html.="<span>" . $smiley->smiley . "</span>";
-        $html.="</div>";
-    }
-    $html.="<br></div>";
-    return $html;
-}
-        
 
-
-
-function get_smileys_array() {
-    $smileys=array();
-    new smiley(&$smileys, ":D", "icon_biggrin.gif","Very Happy");
-    new smiley(&$smileys, ":-D", "icon_biggrin.gif","Very Happy");
-    new smiley(&$smileys, ":grin:", "icon_biggrin.gif","Very Happy");
-    new smiley(&$smileys, ":)", "icon_smile.gif","Smile");
-    new smiley(&$smileys, ":-)", "icon_smile.gif","Smile");
-    new smiley(&$smileys, ":smile:", "icon_smile.gif","Smile");
-    new smiley(&$smileys, ":(", "icon_sad.gif","Sad");
-    new smiley(&$smileys, ":-(", "icon_sad.gif","Sad");
-    new smiley(&$smileys, ":sad:", "icon_sad.gif","Sad");
-    new smiley(&$smileys, ":o", "icon_surprised.gif","Surprised");
-    new smiley(&$smileys, ":-o", "icon_surprised.gif","Surprised");
-    new smiley(&$smileys, ":eek:", "icon_surprised.gif","Surprised");
-    new smiley(&$smileys, ":shock:", "icon_eek.gif","Shocked");
-    new smiley(&$smileys, ":?", "icon_confused.gif","Confused");
-    new smiley(&$smileys, ":-?", "icon_confused.gif","Confused");
-    new smiley(&$smileys, ":???:", "icon_confused.gif","Confused");
-    new smiley(&$smileys, "8)", "icon_cool.gif","Cool");
-    new smiley(&$smileys, "8-)", "icon_cool.gif","Cool");
-    new smiley(&$smileys, ":cool:", "icon_cool.gif","Cool");
-    new smiley(&$smileys, ":lol:", "icon_lol.gif","Laughing");
-    new smiley(&$smileys, ":x", "icon_mad.gif","Mad");
-    new smiley(&$smileys, ":-x", "icon_mad.gif","Mad");
-    new smiley(&$smileys, ":mad:", "icon_mad.gif","Mad");
-    new smiley(&$smileys, ":P", "icon_razz.gif","Razz");
-    new smiley(&$smileys, ":-P", "icon_razz.gif","Razz");
-    new smiley(&$smileys, ":razz:", "icon_razz.gif","Razz");
-    new smiley(&$smileys, ":oops:", "icon_redface.gif","Embarassed");
-    new smiley(&$smileys, ":cry:", "icon_cry.gif","Crying or Very sad");
-    new smiley(&$smileys, ":evil:", "icon_evil.gif","Evil or Very Mad");
-    new smiley(&$smileys, ":twisted:", "icon_twisted.gif","Twisted Evil");
-    new smiley(&$smileys, ":roll:", "icon_rolleyes.gif","Rolling Eyes");
-    new smiley(&$smileys, ":wink:", "icon_wink.gif","Wink");
-    new smiley(&$smileys, ";)", "icon_wink.gif","Wink");
-    new smiley(&$smileys, ";-)", "icon_wink.gif","Wink");
-    new smiley(&$smileys, ":!:", "icon_exclaim.gif","Exclamation");
-    new smiley(&$smileys, ":?:", "icon_question.gif","Question");
-    new smiley(&$smileys, ":idea:", "icon_idea.gif","Idea");
-    new smiley(&$smileys, ":arrow:", "icon_arrow.gif","Arrow");
-    new smiley(&$smileys, ":|", "icon_neutral.gif","Neutral");
-    new smiley(&$smileys, ":-|", "icon_neutral.gif","Neutral");
-    new smiley(&$smileys, ":neutral:", "icon_neutral.gif","Neutral");
-    new smiley(&$smileys, ":mrgreen:", "icon_mrgreen.gif","Mr. Green"); 
-    return $smileys;
-}
-
-function get_replaces_array() {
-    // Watch the order of these... putting &amp; at the end of the array
-    // will make you end up with things like "&amp;lt;"...
-    $replaces=array();
-    new replace(&$replaces, "&#40;", "(");  # Needed to revert anti
-    new replace(&$replaces, "&#41;", ")");  # SQL injection-code
-    new replace(&$replaces, "&", "&amp;");
-    new replace(&$replaces, "<", "&lt;");
-    new replace(&$replaces, ">", "&gt;");
-    new replace(&$replaces, "\n", "<br>");
-    return $replaces;
-}
-function get_tags_array() {
-    $tags=array();
-    new tag(&$tags, "b", "b");
-    new tag(&$tags, "i", "i");
-    new tag(&$tags, "u", "u");
-    new tag(&$tags, "h1", "h1");
-    new tag(&$tags, "h2", "h2");
-    new tag(&$tags, "h3", "h3");
-    new tag(&$tags, "color", "span", "", "style=\"color: [param];\"");
-    new tag(&$tags, "font", "span", "", "style=\"font-family: [param];\"");
-    new tag(&$tags, "br", "br", null, null, false);
-    new tag(&$tags, "background", "div", "", "class='background' style=\"background: [param];\"");
-    new tag(&$tags, "photo", "a", "", "href=\"photo.php?photo_id=[param]\"");
-    new tag(&$tags, "album", "a", "", "href=\"album.php?album_id=[param]\"");
-    new tag(&$tags, "person", "a", "", "href=\"people.php?person_id=[param]\"");
-    new tag(&$tags, "cat", "a", "", "href=\"category.php?category_id=[param]\"");
-    new tag(&$tags, "link", "a", "", "href=\"[param]\"");
-    new tag(&$tags, "place", "a", "", "href=\"places.php?parent_place_id=[param]\"");
-    new tag(&$tags, "thumb", "img", "", "src=\"image_service.php?photo_id=[param]&type=thumb\"", false);
-    new tag(&$tags, "mid", "img", "", "src=\"image_service.php?photo_id=[param]&type=mid\"", false);
-    return $tags;
-}
 
 ?>

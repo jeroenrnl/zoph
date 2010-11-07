@@ -66,12 +66,12 @@ function create_edit_fields($fields) {
 }
 
 function create_text_input($name, $value, $size = 20, $max = 32) {
-    $id=ereg_replace("^_+", "", $name);
+    $id=preg_replace("/^_+/", "", $name);
     return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"" . e($value) ."\" size=\"$size\" maxlength=\"$max\">\n";
 }
 
 function create_pulldown($name, $value, $value_array, $extraopt = null) {
-    $id=ereg_replace("^_+", "", $name);
+    $id=preg_replace("/^_+/", "", $name);
 
     $html = "<select name=\"$name\" id=\"$id\" $extraopt>\n";
     while (list($val, $label) = each($value_array)) {
@@ -957,7 +957,7 @@ function create_dir($directory) {
 function create_dir_recursive($directory){
     $nextdir="";
     $directory="/" . cleanup_path($directory);
-    foreach(split('/',$directory) as $subdir) {
+    foreach(explode("/",$directory) as $subdir) {
         $nextdir=$nextdir . $subdir . "/";
         try {
             $result=create_dir($nextdir);

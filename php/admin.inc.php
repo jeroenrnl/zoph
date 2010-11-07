@@ -23,13 +23,30 @@ class admin {
     var $url;
     var $desc;
     var $icon;
+    private static $pages=array();
 
-    function admin($adminpage, $name, $desc, $url, $icon) {
+    function __construct($name, $desc, $url, $icon) {
         $this->name=$name;
         $this->url=$url;
         $this->desc=$desc;
         $this->icon=$icon;
-        array_push($adminpage, $this);
+    }
+
+    public static function getArray() {
+        if(empty(self::$pages)) {
+            self::createArray();
+        }
+        return self::$pages;
+    }
+
+    private static function createArray() {
+        self::$pages=array(
+            new admin("users", "create or modify user accounts", "users.php", "users.png"),
+            new admin("groups", "create or modify user groups", "groups.php", "groups.png"),
+            new admin("pages", "create or modify zoph pages", "pages.php", "pages.png"),
+            new admin("pagesets", "create or modify pagesets", "pagesets.php", "pagesets.png"),
+            new admin("tracks", "create or modify GPS tracks", "tracks.php", "tracks.png")
+        );
     }
 
     function tohtml() {
@@ -54,12 +71,3 @@ function get_admin_page($adminpage) {
     return $html;
 }
 
-function get_admin_array() {
-    $adminpage=array();
-    new admin(&$adminpage, "users", "create or modify user accounts", "users.php", "users.png");
-    new admin(&$adminpage, "groups", "create or modify user groups", "groups.php", "groups.png");
-    new admin(&$adminpage, "pages", "create or modify zoph pages", "pages.php", "pages.png");
-    new admin(&$adminpage, "pagesets", "create or modify pagesets", "pagesets.php", "pagesets.png");
-    new admin(&$adminpage, "tracks", "create or modify GPS tracks", "tracks.php", "tracks.png");
-    return $adminpage;
-}

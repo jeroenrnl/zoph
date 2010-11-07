@@ -112,8 +112,8 @@
 
     function db_min_version($version) {
         $dbversion=get_db_server_info();
-        list($dbmaj, $dbmin) = split("\.", $dbversion, 2);
-        list($maj, $min) = split("\.", $version, 2);
+        list($dbmaj, $dbmin) = explode(".", $dbversion, 2);
+        list($maj, $min) = explode(".", $version, 2);
 
         if (($dbmaj == $maj && $dbmin >= $min) || ($dbmaj >= ($maj + 1)) ) {
             log::msg("Yep, we're running version " . $version . " or later", log::DEBUG, log::DB);
