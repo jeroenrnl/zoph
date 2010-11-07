@@ -212,9 +212,13 @@
       if(JAVASCRIPT && MAPS) {
 ?>
         <div id="map" class="map"></div>
+        <script type="text/javascript">
 <?php
         echo create_map_js();
         echo get_markers($thumbnails, $user);
-      }
+?>
+        </script>
+<?php
+    }
 ?>
 <?php require_once("footer.inc.php"); ?>
