@@ -44,11 +44,9 @@
             foreach($request_vars as $key => $val) {
                 # Change key#0 into key[0]:
                 $key=preg_replace("/\#([0-9]+)/", "[$1]", $key);
-
                 # Change key[0]-children into key_children[0] because everything after ] in a URL is lost
                 # fix for bug#2890387
                 $key=preg_replace("/\[(.+)\]-([a-z]+)/", "_$2[$1]", $key);
-
                 if($url) {
                     $url.="&";
                 }   
@@ -134,6 +132,7 @@
         <span>
             <input type="submit" name="_action" value="<?php echo translate("search", 0); ?>">
         </span>
+        <br>
       <table id="search">
 <?php
       /* photo taken date */
@@ -598,13 +597,59 @@ for ($i = 0; $i <= $count; $i++) {
         </tr>
 <?php
     }
+    // Search for location
+    $lat = getvar('lat');
+    $lon = getvar('lon'); 
+    $distance = getvar('_latlon_distance');
+    $entity = getvar('_latlon_entity'); 
+    $_latlon_conj = getvar('_latlon_conj'); 
+    $_latlon_op = getvar('_latlon_op');
+    
 ?>
-      </table>
-      <!-- And another search button for consistancy -->
-      <span>
-          <input type="submit" name="_action" value="<?php echo translate("search", 0); ?>">
-      </span>
-  </form>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <?php echo create_conjunction_pulldown("_latlon_conj", $_latlon_conj) ?>
+            </td>
+            <td>
+                <input type="checkbox" name="_latlon_photos" value="photos" checked><?php echo translate("photos taken") ?><br>
+                <input type="checkbox" name="_latlon_places" value="places"><?php echo translate("locations") ?>
+
+             </td>
+            <td>
+                &lt; <?php echo create_text_input("_latlon_distance", $distance, 5, 5) ?>
+            </td>
+            <td>
+                <?php echo create_pulldown("_latlon_entity", $entity, array("km" => "km", "miles" => "miles")) ?>
+                <?php echo translate("from"); ?>
+            </td>
+            </tr>
+            <tr>
+                <td colspan=5>
+                    <fieldset class="map">
+                        <legend><?php echo translate("map"); ?></legend>
+                        <div class="mapinfo">
+                            <label for="lat"><?php echo translate("latitude") ?></label>
+                            <?php echo create_text_input("lat", $lat, 10, 10) ?><br>
+                            <label for="lon"><?php echo translate("longitude") ?></label>
+                            <?php echo create_text_input("lon", $lon, 10, 10) ?><br>
+                        </div>
+                        <?php if(JAVASCRIPT && MAPS): ?>
+                            <div class="minimap" id="map"></div>
+                            <script type="text/javascript">
+                                <?php echo create_map_js(); ?>
+                                zMaps.setUpdateHandlers();
+                                zMaps.updateMap();
+                            </script>
+                        <?php endif; ?>
+                    </fieldset>
+            </td>
+        </tr>
+    </table><br>
+    <!-- And another search button for consistancy -->
+    <span>
+        <input type="submit" name="_action" value="<?php echo translate("search", 0); ?>">
+    </span>
 <?php
     echo get_list_of_saved_searches($user)
 ?>

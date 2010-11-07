@@ -330,6 +330,44 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                     $where .= "(ph.photo_id not in ($ids))";
                 }
             }
+        } else if ( $key=="lat" || $key=="lon") {
+
+            $latlon[$key]=$val;
+
+            if( !empty($latlon["lat"]) && !empty($latlon["lon"])) {
+
+                $ids=array();
+                $lat=(float) $latlon["lat"];
+                $lon=(float) $latlon["lon"];
+                $distance=(float) getvar("_latlon_distance");
+                if(getvar("_latlon_entity")=="miles") {
+                    $distance=$distance * 1.609344;
+                }
+                if(getvar("_latlon_photos")) {
+                    $photos=photo::getPhotosNear($lat, $lon, $distance, null);
+                    if($photos) {
+                        if ($where) { $where .= " $conj "; }
+                        foreach($photos as $photo) {
+                            $ids[]=$photo->get("photo_id");
+                        }
+                    }
+                }
+                if(getvar("_latlon_places")) {
+                    $places=place::getNear($lat, $lon, $distance, null);
+                    foreach($places as $place) {
+                        $photos=$place->getPhotos($user);
+                        foreach($photos as $photo) {
+                            $ids[]=$photo->get("photo_id");
+                        }
+                    }
+                }
+                if($ids) {
+                    $where.="ph.photo_id in (" . implode(",", array_unique($ids)) . ")";
+                } else {
+                    // No photos were found
+                    $where.="ph.photo_id = -1";
+                }
+            }
         } else { // any other field
 
             if (strncasecmp($key, "field", 5) == 0) {

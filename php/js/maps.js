@@ -37,7 +37,9 @@ var zMaps=function() {
 
         latfield.value=event_args.location.lat;
         lonfield.value=event_args.location.lon;
-        zoomfield.value=mapstraction.getZoom();
+        if(zoomfield) {
+            zoomfield.value=mapstraction.getZoom();
+        }
         mapstraction.removeMarker(mapstraction.markers[0]);
         marker = new mxn.Marker(event_args.location);
         mapstraction.addMarker(marker);
@@ -45,7 +47,9 @@ var zMaps=function() {
 
     function zoomUpdate(event_name, event_source, event_args) {
         var zoomfield=document.getElementById('mapzoom');
-        zoomfield.value=mapstraction.getZoom();
+        if(zoomfield) {
+            zoomfield.value=mapstraction.getZoom();
+        }
     }
 
     function createMarker(lat, lon, icon, title, infoBubble) {
@@ -72,7 +76,9 @@ var zMaps=function() {
 
         latfield.onchange=zMaps.updateMap;
         lonfield.onchange=zMaps.updateMap;
-        zoomfield.onchange=zMaps.updateMap;
+        if(zoomfield) {
+            zoomfield.onchange=zMaps.updateMap;
+        }
     }
 
     function updateMap() {
@@ -81,7 +87,11 @@ var zMaps=function() {
         var zoomfield=document.getElementById("mapzoom");
         var lat=latfield.value;
         var lon=lonfield.value;
-        var zoomlevel=parseInt(zoomfield.value);
+        if(zoomfield) {
+            var zoomlevel=parseInt(zoomfield.value);
+        } else {
+            zoomlevel=mapstraction.getZoom();
+        }
         mapstraction.removeMarker(mapstraction.markers[0]);
         createMarker(lat, lon,null,null,null);
         mapstraction.setCenterAndZoom(new mxn.LatLonPoint(lat,lon),zoomlevel);

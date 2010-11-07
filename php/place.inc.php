@@ -177,6 +177,31 @@ class place extends zoph_tree_table {
             translate("timezone") => $this->get("timezone"));
     }
     
+    public function getPhotos($user = null) {
+        $id = $this->get("place_id");
+
+        if ($user && !$user->is_admin()) {
+            $sql =
+                "select p.photo_id from " .
+                DB_PREFIX . "photos as p JOIN " .
+                DB_PREFIX . "photo_albums as pa " .
+                "ON p.photo_id = pa.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE p.location_id = " . escape_string($id) .
+                " AND gu.user_id = '" . escape_string($user->get("user_id")) .
+                "' AND gp.access_level >= p.level";
+        } else {
+            $sql =
+                "select photo_id from " .
+                DB_PREFIX . "photos " .
+                "where location_id = '" .  escape_string($id) . "'";
+        }
+
+        return get_records_from_query("photo", $sql);
+    }
     function get_photo_count($user = null) {
         $id = $this->get("place_id");
 
@@ -307,6 +332,38 @@ class place extends zoph_tree_table {
         return $js;
     }
     
+    public static function getNear($lat, $lon, $distance, 
+            $limit, $entity="km") { 
+            
+        // If lat and lon are not set, don't bother trying to find
+        // near locations
+        if($lat && $lon) {
+            $lat=(float) $lat;
+            $lon=(float) $lon;
+
+            if($entity=="miles") {
+                $distance=(float) $distance * 1.609344;
+            }
+            if($limit) {
+                $lim=" limit 0,". (int) $limit;
+            }
+            $sql="select place_id, (6371 * acos(" .
+                "cos(radians(" . $lat . ")) * " .
+                "cos(radians(lat) ) * cos(radians(lon) - " .
+                "radians(" . $lon . ")) +" . 
+                "sin(radians(" . $lat . ")) * " .
+                "sin(radians(lat)))) AS distance from " .
+                DB_PREFIX . "places " .
+                "having distance <= " . $distance . 
+                " order by distance" . $lim;
+
+            $near=get_records_from_query("place", $sql);
+            return $near;
+        } else {
+            return null;
+        }
+    }
+
     function get_quicklook($user) {
         $html="<h2>" . $this->get_link() . "<\/h2>";
         $html.="<small>" . $this->get_address() . "<\/small><br>";

@@ -1390,18 +1390,34 @@ echo ("<br>\noutString:<br>\n" . $out_string);
          return parent::get_mapping_js($user, ICONSET . "/geo-photo.png", $edit);
     }
 
-    function get_near($distance, $limit=100, $entity="km") { 
+    /**
+     * Get photos taken near this photo
+     */
+    public function get_near($distance, $limit=100, $entity="km") { 
         $lat=$this->get("lat");
         $lon=$this->get("lon");
-
         if($lat && $lon) {
-            // If lat and lon are not set, don't bother trying to find
-            // near photos
+            return self::getPhotosNear((float) $lat, (float) $lon, (float) $distance, (int) $limit, $entity);
+        }
+    }
+
+    /**
+     * Get photos taken near a lat/lon location
+     */
+    public static function getPhotosNear($lat, $lon, $distance, 
+            $limit, $entity="km") { 
+            
+        // If lat and lon are not set, don't bother trying to find
+        // near photos
+        if($lat && $lon) {
+            $lat=(float) $lat;
+            $lon=(float) $lon;
+
             if($entity=="miles") {
-                $distance=$distance * 1.609344;
+                $distance=(float) $distance * 1.609344;
             }
             if($limit) {
-                $lim=" limit 0,". $limit;
+                $lim=" limit 0,". (int) $limit;
             }
             $sql="select photo_id, (6371 * acos(" .
                 "cos(radians(" . $lat . ")) * " .
