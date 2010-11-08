@@ -1,7 +1,9 @@
 <?php
 
-/*
- * A parser for zophcode, a bbcode like markup language.
+/**
+ * This file contains 4 classes: replace, smiley, tag and zophcode. The class zophcode is 
+ * a parser for zophcode, a bbcode like markup language. The other classes are helper classes
+ * for that class.
  *
  * This file is part of Zoph.
  *
@@ -17,25 +19,45 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
+
+/**
+ * Replace problematic code in zophcode with escaped code
+ *
+ * @todo: this can possibly be integrated in the zophcode class
+ */
 class replace {
-    var $find;
-    var $replace;
+    public $find;
+    public $replace;
     private static $replaces=array();
 
-    function __construct($find, $replace) {
+    /**
+     * Create a new replace object
+     * @param string to replace
+     * @param string to replace with
+     */
+    private function __construct($find, $replace) {
         $this->find=$find;
         $this->replace=$replace;
     }
 
+    /**
+     * Get an array of all replace objects
+     */
     public static function getArray() {
         if(empty(self::$replaces)) { 
             self::createArray(); 
         }
         return self::$replaces;
     }
-        
+   
+    /**
+     * Fill the static $replaces.
+     */
     private static function createArray() {
         // Watch the order of these... putting &amp; at the end of the array
         // will make you end up with things like "&amp;lt;"...
@@ -49,12 +71,31 @@ class replace {
         );
     }
 }
+
+/**
+ * Create smileys
+ */
 class smiley {
-    var $smiley;
-    var $file;
-    var $description;
+    public $smiley;
+    public $file;
+    public $description;
     private static $smileys=array();
 
+    /**
+     * Create a new smiley object
+     * @param string smiley (e.g. ":-)")
+     * @param string filename of smiley image
+     * @param string short description
+     */
+    private function __construct($smiley, $file, $description) {
+        $this->smiley=$smiley;
+        $this->file=$file;
+        $this->description=$description;
+    }
+
+    /**
+     * Get an array of all smiley objects
+     */
     public static function getArray() {
         if(empty(self::$smileys)) { 
             self::createArray(); 
@@ -62,7 +103,9 @@ class smiley {
         return self::$smileys;
     }
 
-        
+    /**
+     * Fill the static $smileys.
+     */
     private static function createArray() {
         self::$smileys=array(
             new smiley(":D", "icon_biggrin.gif","Very Happy"),
@@ -109,43 +152,66 @@ class smiley {
             new smiley(":mrgreen:", "icon_mrgreen.gif","Mr. Green")
         );
     }    
-    function __construct($smiley, $file, $description) {
-        $this->smiley=$smiley;
-        $this->file=$file;
-        $this->description=$description;
-    }
 
-    function get_image() {
+    /**
+     * Get the smiley
+     * @todo contains HTML
+     */
+    public function __toString() {
         return "<img src=\"images/smileys/" . $this->file ."\" alt=\"" . $this->description . "\">";
     }
 
+    /**
+     * Get an overview of all defined smileys
+     * @todo contains HTML
+     */
     public static function getOverview() {
         $smileys=self::getArray();
         $html="<div class=\"smileys\">";
         foreach (self::$smileys as $smiley) {
             $html.="<div>";
-            $html.=$smiley->get_image();
+            $html.=$smiley;
             $html.="<span>" . $smiley->smiley . "</span>";
             $html.="</div>";
         }
         $html.="<br></div>";
         return $html;
     }
-            
+}
 
-
-
-}   
+/**
+ * zophcode tags
+ */
 class tag {
-    var $find;              // The tag in zophCode, without [ ]
-    var $replace;           // The tag in HTML without < >
-    var $regexp;            // How to check the parameter
-    var $param;             // How to translate parameter
-    var $close=true;        // True if this tags needs closure, 
-                            // false if it does not
+    public $find;
+    public $replace;
+    public $regexp;
+    public $param;
+    public $close=true;
     
     private static $tags=array();
 
+    /**
+     * Create a new tag object
+     *
+     * @param string The tag in zophCode, without [ ]
+     * @param string The tag in HTML without < >
+     * @param string How to check the parameter
+     * @param string How to translate parameter
+     * @param bool True if this tags needs closure, false if it does not
+     * @todo regexp check of param not implemented
+     */
+    public function __construct($find, $replace, $regexp = null, $param = null,$close=true) {
+        $this->find=$find;
+        $this->replace=$replace;
+        $this->regexp=$regexp;
+        $this->param=$param;
+        $this->close=$close;
+    }
+
+    /**
+     * Get an array of defined tags
+     */
     public static function getArray() {
         if(empty(self::$tags)) { 
             self::createArray(); 
@@ -153,7 +219,9 @@ class tag {
         return self::$tags;
     }
 
-        
+   /**   
+    * Fill static $tags
+    */
     private static function createArray() {
         self::$tags=array(
             new tag("b", "b"),
@@ -177,23 +245,38 @@ class tag {
         );
     }
 
-    
-    public function __construct($find, $replace, $regexp = null, $param = null,$close=true) {
-        $this->find=$find;
-        $this->replace=$replace;
-        $this->regexp=$regexp;
-        $this->param=$param;
-        $this->close=$close;
+    /**
+     * Find a tag by name
+     * @param string name
+     * @return tag found tag
+     */
+    public static function getFromName($name) {
+        // Check if tag is a valid tag.
+        foreach(self::getArray() as $tag) {
+            if($tag->find == $name) {
+                return $tag;
+            }
+        }
     }
-
+    /**
+     * Check whether a given value conforms to the requirement
+     * @param string Param value to check
+     * @todo currently not used
+     * @return bool true: validates, false: does not validate
+     */
     function checkparam($value) {
-        if(!empty($regexp)) {
+        if(!empty($this->regexp)) {
             return preg_match($regexp, $value);
         } else {
             return true;
         }
     }
 
+    /**
+     * Insert parameter value into tag
+     * @param string value to insert into tag
+     * @return string parameter with value inserted in place of [param] placeholder
+     */
     function param($value) {
         if ($this->checkparam($value)) {
             return " " . str_replace("[param]", $value, $this->param);
@@ -201,13 +284,30 @@ class tag {
     }
 }
 
+/**
+ * This class can be used to create a block of 'zophcode'
+ * 
+ * zophcode is very similar to bbcode
+ */
 class zophcode {
-    var $message;
-    var $allowed = array();
+    private $message;
+    private $allowed = array();
     private $replaces = array();
     private $smileys = array();
     private $tags = array();
 
+    /**
+     * Create a new zophcode object
+     *
+     * @param string Zophcode to parse
+     * @param array Allowed tags. This can be used to limit functionality.
+     * @param array Custom replaces
+     * @param array Custom smileys
+     * @param array Custom tags
+     * @see replace
+     * @see smiley
+     * @see tag
+     */
     function __construct($message, $allowed = null, 
         $replaces = null, $smileys = null, $tags = null) {
         if (!$replaces) {
@@ -230,10 +330,15 @@ class zophcode {
         $this->message = $message;
     }
     
-    function parse() {
+    /**
+     * Output zophcode parsed to HTML
+     */
+    function __toString() {
         // This function parses a message using the replaces, smileys and tags
         // given in the function call.
         $message = $this->message;
+
+        $return="";
 
         $stack=array(); // The stack is an array of currently open tags.
         list($find, $replace) =$this->get_replace_array();
@@ -242,7 +347,7 @@ class zophcode {
         while(strlen($message)) {
             $plaintext="";
             $replace_param="";
-            $opentag = strpos($message, "[", $start);
+            $opentag = strpos($message, "[", 0);
             
             if($opentag === false) {
                 $return .= $message;
@@ -280,7 +385,7 @@ class zophcode {
                 // certain tags in some positions.
                 // This is used for example to limit the number of options
                 // the user has while writing comments.
-                $foundtag=findtag($this->tags,$tag[0]);
+                $foundtag=tag::getFromName($tag[0]);
                 if($endtag === true && $foundtag->close === false) {
                     // This is an endcode for a tag that does not have an endcode
                     // such as [br]. We'll just ignore it.
@@ -326,17 +431,18 @@ class zophcode {
         }
         while($tag = array_pop($stack)) {
             // Now close all tags that have not yet been closed.
-            $foundtag=findtag($this->tags,$tag);
+            $foundtag=tag::getFromName($tag);
             $return .= "</" . $foundtag->replace . ">";
         }
 
         return $return;
     }
 
+    /**
+     * This function takes an array of 'replace' objects and
+     * an array of 'smiley' objects and return 2 arrays that
+     * can be fed to preg_replace */
     function get_replace_array() {
-        // This function takes an array of 'replace' objects and
-        // an array of 'smiley' objects and return 2 arrays that
-        // can be fed to preg_replace
         $find=array();
         $replace=array();
         foreach ($this->replaces as $repl) {
@@ -345,20 +451,12 @@ class zophcode {
         }
         foreach ($this->smileys as $smiley) {
             array_push($find, "/" . preg_quote($smiley->smiley) . "/");
-            array_push($replace, $smiley->get_image());
+            array_push($replace, $smiley);
         }
         return array($find, $replace);
     }
 }
 
-function findtag($tags,$findtag) {
-    // Check if tag is a valid tag.
-    foreach($tags as $tag) {
-        if($tag->find == $findtag) {
-            return $tag;
-        }
-    }
-}
 
 
 

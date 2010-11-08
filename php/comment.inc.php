@@ -56,7 +56,7 @@ class comment extends zoph_table {
         if($changed != $date) { $updated=$changed; }
 
         $zophcode = new zophcode($this->get("comment"), array("b","i", "u"));
-        $comment="<div>" . $zophcode->parse() . "</div>";
+        $comment="<div>" . $zophcode . "</div>";
     
         return array(
             translate("subject") => $this->get("subject"),
@@ -145,7 +145,7 @@ class comment extends zoph_table {
         }
         
         $zophcode = new zophcode($this->get("comment"), array("b","i", "u"));
-        $html .= $zophcode->parse();
+        $html .= $zophcode;
         $html .= "<br></div>\n";
         return $html;
     }

@@ -50,7 +50,7 @@ class page extends zoph_table {
     
     function get_display_array() {
         $zophcode = new zophcode($this->get("text"));
-        $text="<div class='page-preview'>" . $zophcode->parse() . "</div>";
+        $text="<div class='page-preview'>" . $zophcode . "</div>";
 
         return array(
             translate("title") => e($this->get("title")),
@@ -62,8 +62,9 @@ class page extends zoph_table {
 
     function display() {
         $zophcode = new zophcode($this->get("text"));
-        return $zophcode->parse();
+        return $zophcode;
     }
+
     function get_list_line($pageset_id=null) {
         $html="<tr>";
         $html.="<td><a href=page.php?page_id=" . $this->get("page_id") . ">";
@@ -97,6 +98,7 @@ class page extends zoph_table {
     }
 
     function get_pagesets() {
+        $html="";
         $sql = "select pageset_id from " . DB_PREFIX . "pages_pageset" .
             " where page_id = " . $this->get("page_id");
         $pagesets=get_records_from_query("pageset", $sql);
