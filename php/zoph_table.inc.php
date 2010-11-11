@@ -380,6 +380,7 @@ class zoph_table {
     function get_marker($user, $icon) {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
+        $title=$this->get("title");
         if($lat && $lon) {
             $quicklook=$this->get_quicklook($user);
             return "  zMaps.createMarker(" . $lat . "," . $lon . ", '" . $icon .

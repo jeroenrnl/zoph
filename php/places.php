@@ -71,6 +71,7 @@
     if ($user->is_admin()) {
         include("selection.inc.php");
     }
+    $page_html="";
     include("show_page.inc.php");
     if($show_orig) {
 ?>

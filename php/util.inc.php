@@ -574,6 +574,7 @@ function cleanup_path($path) {
 }
 
 function create_actionlinks($actionlinks) {
+    $bar="";
     if(is_array($actionlinks)) {
         $html="<span class=\"actionlink\">\n";
         while (list($key, $val) = each($actionlinks)) {
@@ -764,7 +765,7 @@ function pager($current, $total, $num_pages, $page_size, $max_size, $url, $reque
     return $html;
 }
 function get_markers($objects, $user) {
-    $js;
+    $js="";
     $markers=array();
     if($objects) {
         foreach($objects as $object) {

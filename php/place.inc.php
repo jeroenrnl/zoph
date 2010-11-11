@@ -67,6 +67,8 @@ class place extends zoph_tree_table {
     }
 
     function get_children($user=null,$order=null) {
+        $order_fields="";
+
         if($order=="sortname") {
             #places do not have a sortname
             $order="name";
@@ -259,7 +261,7 @@ class place extends zoph_tree_table {
                 "select count(distinct p.photo_id) from " .
                 DB_PREFIX . "photos p ";
 
-            if ($id_constraint) {
+            if (!empty($id_constraint)) {
                 $sql .= " where $id_constraint";
             }
         }
@@ -276,10 +278,11 @@ class place extends zoph_tree_table {
     }
 
     function get_coverphoto($user,$autothumb=null,$children=null) {
+        $cover=false;
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
             if($coverphoto->lookup($user)) {
-                $cover=TRUE;
+                $cover=true;
             }
         } 
         if ($autothumb && !$cover) {
@@ -314,7 +317,7 @@ class place extends zoph_tree_table {
             $coverphoto=array_shift(get_records_from_query("photo", $sql));
         }
 
-        if ($coverphoto) {
+        if (!empty($coverphoto)) {
             $coverphoto->lookup();
             return $coverphoto->get_image_tag(THUMB_PREFIX);
         } else if (!$children) {
