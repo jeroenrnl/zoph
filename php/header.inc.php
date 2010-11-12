@@ -45,7 +45,12 @@
 ?>
         <script type="text/javascript" src="js/mxn/mxn.js?(<?php echo strtolower(MAPS); ?>)"></script>
         <script type="text/javascript" src="js/maps.js"></script>
+<?php 
+        if(GEOCODE) { ?>
+
+        <script type="text/javascript" src="js/geocode.js"></script>
 <?php
+        }        
             switch (strtolower(MAPS)) {
             case 'google':
 ?>

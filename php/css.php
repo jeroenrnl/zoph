@@ -422,6 +422,37 @@ div.mapinfo label {
     width: 6em;
     }
 
+div.geocode {
+    position: absolute;
+    top: -10px;
+    right: 0px;
+    width: 150px;
+    }
+
+div#geocoderesults {
+    width: 144px;
+    margin: 0;
+    color: #666666;
+    text-align: center;
+    font-size: small;
+    }
+
+div.geocode input[type="button"] {
+    width: 140px;
+    margin: 2px;
+    float: left;
+    }
+
+input.geo_disabled {
+    background: #aaaaaa !important;
+    }
+
+input.leftright {
+    width: 68px !important;
+    height: 20px;
+}
+
+
 span.showhide {
     font-size: small;
     text-align: right;
@@ -1030,6 +1061,10 @@ fieldset.editphotos, fieldset.map, fieldset.geotag  {
     margin-bottom: 5px;
     padding-bottom: 20px;
     border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
+    }
+
+fieldset.map {
+    position: relative;
     }
 
 fieldset.editphotos legend, fieldset.map legend, fieldset.geotag legend {

@@ -517,3 +517,4 @@ Number of each=
 The location of %s photos has been determined. You can check the results below. Click 'geotag' to geotag all %s photos.=
 The location of none of the photos in the test set could be determined. This does not necessarily mean that none of the photos can be geotagged, since only a subset was tried. You can try to geotag %s photos by clicking 'geotag'.=
 No tracks found, you should import a GPX file.=
+Nothing found=

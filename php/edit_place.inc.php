@@ -81,6 +81,19 @@
             <?php echo create_text_input("lon", $place->get("lon"), 10, 10) ?><br>
             <label for="mapzoom"><?php echo translate("zoom level") ?></label>
             <?php echo create_zoom_pulldown($place->get("mapzoom")) ?><br>
+        <?php if(GEOCODE): ?>
+            <div class="geocode">
+                <input id="geocode" class="geocode" type="button" value="<?php echo translate("search", false) ?>">
+                <div id="geocoderesults"></div>
+                <script type="text/javascript">
+                    var translate={
+                        "An error occurred": "<?php echo trim(translate("An error occurred.", false)); ?>",
+                        "Nothing found": "<?php echo trim(translate("Nothing found", false)); ?>"
+                    };
+                    zGeocode.checkGeocode();
+                </script>
+            </div>
+         <?php endif; ?>
          </fieldset>
 <?php
     if(minimum_version("5.2.0")) {
