@@ -422,6 +422,12 @@ div.mapinfo label {
     width: 6em;
     }
 
+.olControlAttribution {
+    bottom: 1em !important;
+    display: block;
+    left: 10px;
+    }
+
 div.geocode {
     position: absolute;
     top: -10px;

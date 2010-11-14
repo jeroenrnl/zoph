@@ -26,6 +26,11 @@ var zMaps=function() {
         mapstraction.addControls({ pan: true, zoom: 'large', scale: true, map_type: true });
 
         var center=new mxn.LatLonPoint(0,0);
+        if(provider=="openlayers") {
+            var osm=mapstraction.getMap();
+            osm.baseLayer.attribution="<a href='http://www.openstreetmap.org/copyright'>&copy; OpenStreetMap</a>";
+            osm.addControl(new OpenLayers.Control.Attribution());
+        }
         mapstraction.setCenterAndZoom(center, 2);
     }
 
