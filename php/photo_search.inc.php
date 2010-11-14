@@ -335,7 +335,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $latlon[$key]=$val;
 
             if( !empty($latlon["lat"]) && !empty($latlon["lon"])) {
-
                 $ids=array();
                 $lat=(float) $latlon["lat"];
                 $lon=(float) $latlon["lon"];
@@ -346,7 +345,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 if(getvar("_latlon_photos")) {
                     $photos=photo::getPhotosNear($lat, $lon, $distance, null);
                     if($photos) {
-                        if ($where) { $where .= " $conj "; }
                         foreach($photos as $photo) {
                             $ids[]=$photo->get("photo_id");
                         }
@@ -361,6 +359,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                         }
                     }
                 }
+                if ($where) { $where .= " $conj "; }
                 if($ids) {
                     $where.="ph.photo_id in (" . implode(",", array_unique($ids)) . ")";
                 } else {
