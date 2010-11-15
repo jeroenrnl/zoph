@@ -359,7 +359,24 @@ class zoph_table {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         $zoom=$this->get("mapzoom");
-        if(!$lat && !$lon) { $marker=false; }
+        if(!$lat && !$lon) { 
+            $marker=false;
+
+            if($this instanceof photo) {
+                $lat=$this->location->get("lat");
+                $lon=$this->location->get("lon");
+                $zoom=$this->location->get("mapzoom");
+            } else if ($this instanceof place) {
+                foreach($this->get_ancestors() as $parent) {
+                    $lat=$parent->get("lat");
+                    $lon=$parent->get("lon");
+                    $zoom=$parent->get("mapzoom");
+                    if($lat && $lon) {
+                        break;
+                    }
+                }
+            }
+        }
         if(!$lat) { $lat=0; }
         if(!$lon) { $lon=0; }
         if(!$zoom) { $zoom=2; }
