@@ -81,11 +81,15 @@
     // This needs JAVASCRIPT to be on
     define('MAPS', '');
 
+    // Enable geocoding and specify provider. Currently only supported is
+    // 'geonames'.
+    define('GEOCODE', '');
     // API key for Google Maps, only needed if MAPS = 'google'
     define('GOOGLE_KEY', 'Get yours at http://code.google.com/apis/maps');
     
     // API key fore Cloudmade Maps, only needed if MAPS = 'cloudmade'
-    define('CLOUDMADE_KEY', 'Get yours at http://cloudmade.com/register');
+    // This is Zoph's API key. Please do not use for other applications
+    define('CLOUDMADE_KEY', 'f3b46b04edd64ea79066b7e6921205df');
 
     // The timezone your camera is set to
     // Leave empty if you always set your camera to local time
