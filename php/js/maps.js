@@ -90,13 +90,15 @@ var zMaps=function() {
         var latfield=document.getElementById("lat");
         var lonfield=document.getElementById("lon");
         var zoomfield=document.getElementById("mapzoom");
+        var distance=document.getElementById("latlon_distance");
         var lat=latfield.value;
         var lon=lonfield.value;
+        var zoomlevel=mapstraction.getZoom();
+        
         if(zoomfield) {
-            var zoomlevel=parseInt(zoomfield.value);
-        } else {
-            zoomlevel=mapstraction.getZoom();
+           zoomlevel=parseInt(zoomfield.value);
         }
+
         mapstraction.removeMarker(mapstraction.markers[0]);
         createMarker(lat, lon,null,null,null);
         mapstraction.setCenterAndZoom(new mxn.LatLonPoint(lat,lon),zoomlevel);
