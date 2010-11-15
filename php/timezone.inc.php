@@ -97,6 +97,8 @@ function create_timezone_pulldown($name, $value=null, $user=null) {
     $id=preg_replace("/^_+/", "", $name);
     if($value) {
         $text=$value;
+    } else {
+        $text="";
     }
 
     if(AUTOCOMPLETE && JAVASCRIPT) {
