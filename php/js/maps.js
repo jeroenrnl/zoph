@@ -32,6 +32,7 @@ var zMaps=function() {
             osm.addControl(new OpenLayers.Control.Attribution());
         }
         mapstraction.setCenterAndZoom(center, 2);
+        zMapsCustom.customMap(mapstraction);
     }
 
     function clickMap(event_name, event_source, event_args) {

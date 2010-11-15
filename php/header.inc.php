@@ -45,6 +45,7 @@
 ?>
         <script type="text/javascript" src="js/mxn/mxn.js?(<?php echo strtolower(MAPS); ?>)"></script>
         <script type="text/javascript" src="js/maps.js"></script>
+        <script type="text/javascript" src="js/custommaps.js"></script>
 <?php 
         if(GEOCODE) { ?>
 
