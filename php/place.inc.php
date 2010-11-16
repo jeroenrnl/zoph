@@ -314,11 +314,11 @@ class place extends zoph_tree_table {
         $count=$this->get_photo_count($user);
         $totalcount=$this->get_total_photo_count($user);
         $html.="<br><small>" . 
-            sprintf(translate("There are %s photos"), $count) .
-            " " . translate("in this place") . "<br>";
+            e(sprintf(translate("There are %s photos"), $count) .
+           " " . translate("in this place")) . "<br>";
         if($count!=$totalcount) {
-            $html.=sprintf(translate("There are %s photos"),$totalcount) . 
-            " " . translate("in this place") . " " . translate("or its children") . "<br>";
+            $html.=e(sprintf(translate("There are %s photos"),$totalcount) . 
+            " " . translate("in this place") . " " . translate("or its children")) . "<br>";
         }
         $html.="</small>";
         // This really is a little quick and dirty, but solving it
