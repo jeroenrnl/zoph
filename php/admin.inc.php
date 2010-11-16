@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Functions used in the admin page
  *
  * This file is part of Zoph.
@@ -17,21 +17,34 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
+ */
+
+/**
+ * This is a class to generate the admin page
  */
 class admin {
-    var $name;
-    var $url;
-    var $desc;
-    var $icon;
+    public $name;
+    public $url;
+    public $desc;
+    public $icon;
     private static $pages=array();
 
+    /**
+     * Create a new entry in the admin page
+     */
     function __construct($name, $desc, $url, $icon) {
         $this->name=$name;
         $this->url=$url;
         $this->desc=$desc;
-        $this->icon=$icon;
+        $this->icon=ICONSET . "/" . $icon;
     }
 
+    /**
+     * Get an array of all entries in the admin page
+     */
     public static function getArray() {
         if(empty(self::$pages)) {
             self::createArray();
@@ -39,6 +52,9 @@ class admin {
         return self::$pages;
     }
 
+    /**
+     * Fill the static array containing the entries for the admin page
+     */
     private static function createArray() {
         self::$pages=array(
             new admin("users", "create or modify user accounts", "users.php", "users.png"),
@@ -48,26 +64,5 @@ class admin {
             new admin("tracks", "create or modify GPS tracks", "tracks.php", "tracks.png")
         );
     }
-
-    function tohtml() {
-        $html="<li>\n";
-        $html.="  <a href='" . $this->url . "'>\n";
-        $html.="    <img src='images/icons/" . ICONSET . "/" . 
-                        $this->icon . "'>\n";
-        $html.="    <br>" . translate($this->name) . "\n"; 
-        $html.="  </a>\n";
-        $html.="</li>";
-
-        return $html;
-    }
-}
-
-function get_admin_page($adminpage) {
-    $html="<ul class='admin'>";
-    foreach ($adminpage as $admin) {
-        $html.=$admin->tohtml();
-    }
-    $html.="</ul><br>";
-    return $html;
 }
 
