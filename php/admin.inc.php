@@ -34,6 +34,10 @@ class admin {
 
     /**
      * Create a new entry in the admin page
+     * @param string Name
+     * @param string Description
+     * @param string URL to point to
+     * @param string Icon file (only <filename>.png, no path)
      */
     function __construct($name, $desc, $url, $icon) {
         $this->name=$name;
