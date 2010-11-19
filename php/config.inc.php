@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.8.2');
+    define('VERSION', '0.8.2.1');
 
     // DB_HOST, DB_NAME, DB_USER, DB_PASS and DB_PREFIX have been moved to
     // zoph.ini. The location can be set by the next config item:
@@ -77,15 +77,12 @@
     define('AUTOCOMPLETE', 1);
 
     // Enable Mapping and determine hich mapping provider to use
-    // currently supported: 'google', 'googlev3', 'yahoo', 'cloudmade' or '' to disable
+    // currently supported: 'google', 'yahoo', 'openstreetmap' or '' to disable
     // This needs JAVASCRIPT to be on
     define('MAPS', '');
 
-    // API key for Google Maps, only needed if MAPS = 'google'
+    // API key for Google Maps
     define('GOOGLE_KEY', 'Get yours at http://code.google.com/apis/maps');
-    
-    // API key fore Cloudmade Maps, only needed if MAPS = 'cloudmade'
-    define('CLOUDMADE_KEY', 'Get yours at http://cloudmade.com/register');
 
     // The timezone your camera is set to
     // Leave empty if you always set your camera to local time

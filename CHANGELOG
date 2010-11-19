@@ -1,4 +1,24 @@
 Zoph Changelog
+Zoph 0.8.2.1
+November 20, 2010
+
+Zoph 0.8.2.1 is a bugfix release for Zoph 0.8.2.
+
+Many changes were made in Zoph 0.8.2 and with so many changed lines of code, a few bugs is almost inevitable. This release fixes all known bugs in v0.8.2.
+
+Bugs
+    * Bug#3064940: HTML in dropdown menu's. (This bug was previously fixed in Zoph 0.8.0.5,
+	but the fix was not correctly ported to the development branch)
+    * Bug#3094182: New CLI does not store location and photographer
+    * Bug#3094198: New CLI does not always look up location name correctly.
+    * Bug#3094201: New CLI does not exit when it encounters an error (album, category, ... not found)
+    * Bug#3102078: Webimport of archives fails with no error
+    * Bug#3102080: New CLI --update can not set location and photographer
+    * Bug#3102148: New CLI --field gives an error
+    * Fix for an issue that caused javascript errors when an apostroph would appear in a 
+	title of a place.
+    * Bug#3108196: Translation not working in Zoph 0.8.2
+
 Zoph 0.8.2
 October 20, 2010
 
