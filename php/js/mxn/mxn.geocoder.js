@@ -18,7 +18,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
  * @private
  */
 var init = function() {
-	this.invoker.go('init', [ this.api, this.callback, this.error_callback ]);
+	this.invoker.go('init');
 };
 
 /**

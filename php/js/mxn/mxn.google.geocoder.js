@@ -14,8 +14,8 @@ mxn.register('google', {
 
 Geocoder: {
 	
-	init: function(element, api) {		
-		this.geocoders[api] = new GClientGeocoder();
+	init: function() {		
+		this.geocoders[this.api] = new GClientGeocoder();
 	},
 	
 	geocode: function(address){

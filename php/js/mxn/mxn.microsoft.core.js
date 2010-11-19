@@ -16,37 +16,43 @@ Mapstraction: {
 	
 	init: function(element, api) {		
 		var me = this;
-		if (VEMap){
-			this.maps[api] = new VEMap(element.id);
-			this.maps[api].AttachEvent('onclick', function(event){
-				me.clickHandler();
-				var x = event.mapX;
-				var y = event.mapY;
-				var pixel = new VEPixel(x,y);
-				me.click.fire({'location': new mxn.LatLonPoint(pixel.Latitude, pixel.Longitude)});
-			});
-			this.maps[api].AttachEvent('onendzoom', function(event){
-				me.moveendHandler(me);
-				me.changeZoom.fire();				
-			});
-			this.maps[api].AttachEvent('onendpan', function(event){
-				me.moveendHandler(me);
-				me.endPan.fire();
-			});
-			this.maps[api].AttachEvent('onchangeview', function(event){
-				me.endPan.fire();				
-			});
-			this.maps[api].LoadMap();
-			document.getElementById("MSVE_obliqueNotification").style.visibility = "hidden"; 
-		
-			//removes the bird's eye pop-up
-			this.loaded[api] = true;
-			me.load.fire();	
-		}
-		else{
+		if (!VEMap) {
 			throw api + ' map script not imported';
 		}
+		
+		this.maps[api] = new VEMap(element.id);
+		this.maps[api].AttachEvent('onclick', function(event){
+			me.clickHandler();
+			var map = me.maps[me.api];
+			var shape = map.GetShapeByID(event.elementID);
+			if (shape && shape.mapstraction_marker) {
+				shape.mapstraction_marker.click.fire();   
+			} 
+			else {
+				var x = event.mapX;
+				var y = event.mapY;
+				var pixel = new VEPixel(x, y);
+				var ll = map.PixelToLatLong(pixel);
+				me.click.fire({'location': new mxn.LatLonPoint(ll.Latitude, ll.Longitude)});
+			}
+		});
+		this.maps[api].AttachEvent('onendzoom', function(event){
+			me.moveendHandler(me);
+			me.changeZoom.fire();				
+		});
+		this.maps[api].AttachEvent('onendpan', function(event){
+			me.moveendHandler(me);
+			me.endPan.fire();
+		});
+		this.maps[api].AttachEvent('onchangeview', function(event){
+			me.endPan.fire();				
+		});
+		this.maps[api].LoadMap();
+		document.getElementById("MSVE_obliqueNotification").style.visibility = "hidden"; 
 	
+		//removes the bird's eye pop-up
+		this.loaded[api] = true;
+		me.load.fire();	
 	},
 	
 	applyOptions: function(){
@@ -122,6 +128,7 @@ Mapstraction: {
 		var map = this.maps[this.api];
 		marker.pinID = "mspin-"+new Date().getTime()+'-'+(Math.floor(Math.random()*Math.pow(2,16)));
 		var pin = marker.toProprietary(this.api);
+		
 		map.AddShape(pin);
 		//give onclick event
 		//give on double click event
@@ -267,7 +274,7 @@ Mapstraction: {
 		var map = this.maps[this.api];
 		var layer = new VEShapeLayer(); 
 		var mlayerspec = new VEShapeSourceSpecification(VEDataType.GeoRSS, url, layer);
-	 	map.AddShapeLayer(layer);
+	 	map.ImportShapeLayerData(mlayerspec);
 	},
 
 	addTileLayer: function(tile_url, opacity, copyright_text, min_zoom, max_zoom) {
@@ -315,6 +322,24 @@ Marker: {
 		var mmarker = new VEShape(VEShapeType.Pushpin, this.location.toProprietary('microsoft'));
 		mmarker.SetTitle(this.labelText);
 		mmarker.SetDescription(this.infoBubble);
+		
+		if (this.iconUrl) {
+			var customIcon = new VECustomIconSpecification();
+			customIcon.Image = this.iconUrl;
+			// See this article on how to patch 6.2 to correctly render offsets.
+			// http://social.msdn.microsoft.com/Forums/en-US/vemapcontroldev/thread/5ee2f15d-09bf-4158-955e-e3fa92f33cda?prof=required&ppud=4
+			if (this.iconAnchor) {
+			   customIcon.ImageOffset = new VEPixel(-this.iconAnchor[0], -this.iconAnchor[1]);
+			} 
+			else if (this.iconSize) {
+			   customIcon.ImageOffset = new VEPixel(-this.iconSize[0]/2, -this.iconSize[1]/2);
+			}
+			mmarker.SetCustomIcon(customIcon);	
+		}
+		if (this.draggable){
+			mmarker.Draggable = true;
+		}
+		
 		return mmarker;
 	},
 

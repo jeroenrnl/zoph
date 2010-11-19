@@ -67,8 +67,7 @@ var Mapstraction = mxn.Mapstraction = function(element, api, debug) {
 	 * @type {Array}
 	 */
 	this.markers = [];
-	this.layers = [];
-	
+		
 	/**
 	 * The polylines currently loaded.
 	 * @name mxn.Mapstraction#polylines
@@ -996,7 +995,7 @@ Mapstraction.prototype.addJSON = function(json) {
 					iconShadow : item.icon_shadow,
 					marker : item.id,
 					iconShadowSize : item.icon_shadow_size,
-					icon : "http://boston.openguides.org/markers/AQUA.png",
+					icon : item.icon,
 					iconSize : item.icon_size,
 					category : item.source_id,
 					draggable : false,
