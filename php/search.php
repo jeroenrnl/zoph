@@ -634,14 +634,6 @@ for ($i = 0; $i <= $count; $i++) {
                             <label for="lon"><?php echo translate("longitude") ?></label>
                             <?php echo create_text_input("lon", $lon, 10, 10) ?><br>
                         </div>
-                        <?php if(JAVASCRIPT && MAPS): ?>
-                            <div class="minimap" id="map"></div>
-                            <script type="text/javascript">
-                                <?php echo create_map_js(); ?>
-                                zMaps.setUpdateHandlers();
-                                zMaps.updateMap();
-                            </script>
-                        <?php endif; ?>
                     </fieldset>
             </td>
         </tr>
@@ -655,6 +647,14 @@ for ($i = 0; $i <= $count; $i++) {
 ?>
 
 </div>
+<?php if(JAVASCRIPT && MAPS): ?>
+<div class="map" id="map"></div>
+<script type="text/javascript">
+    <?php echo create_map_js(); ?>
+    zMaps.setUpdateHandlers();
+    zMaps.updateMap();
+</script>
+<?php endif; ?>
 <?php
 require_once("footer.inc.php");
 

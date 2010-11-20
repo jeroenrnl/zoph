@@ -480,7 +480,7 @@ require_once("header.inc.php");
 ?>
 </div>
 <?php
-      if(JAVASCRIPT && MAPS && ($_action=="display" || $_action==="")) {
+      if(JAVASCRIPT && MAPS && ($_action=="display" || $_action=="edit" || $_action==="")) {
 ?>
         <div id="map" class="map"></div>
 <?php
@@ -490,7 +490,11 @@ require_once("header.inc.php");
 ?>
     <script type="text/javascript">
         <?php echo create_map_js(); ?>
+    <?php if($_action=="edit"): ?>
+        <?php echo $photo->get_mapping_js($user, true); ?>
+    <?php else: ?>
         <?php echo get_markers($array, $user); ?>
+    <?php endif; ?>
     </script>
 <?php
       }

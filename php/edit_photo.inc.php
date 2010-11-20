@@ -99,14 +99,7 @@
 ?>
           <br>
           <fieldset class="map">
-                <legend><?php echo translate("map") ?></legend>
-<?php
-        if(JAVASCRIPT && MAPS) {
-?>
-            <div class="minimap" id="map"></div>
-<?php
-        }
-?>
+            <legend><?php echo translate("map") ?></legend>
             <div class="mapinfo">
                 <label for="lat"><?php echo translate("latitude") ?></label>
                 <?php echo create_text_input("lat", $photo->get("lat"), 10, 10) ?><br>
@@ -115,16 +108,6 @@
                 <label for="mapzoom"><?php echo translate("zoom level") ?></label>
                 <?php echo create_zoom_pulldown($photo->get("mapzoom")) ?><br>
              </div>
-<?php
-        if(JAVASCRIPT && MAPS) {
-?>
-            <script type="text/javascript">
-                <?php echo create_map_js(); ?>
-                <?php echo $photo->get_mapping_js($user, true); ?>
-            </script>
-<?php
-        }
-?>
           </fieldset>
           <label for="date"><?php echo translate("date") ?></label>
           <?php echo create_text_input("date", $photo->get("date"), 12, 10) ?>
