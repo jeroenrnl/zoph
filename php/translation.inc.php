@@ -261,7 +261,7 @@ class language {
  */
 function translate($str, $error=true){
     global $lang;
-    if(get_class($lang)=="translate") {
+    if(get_class($lang)=="language") {
         return $lang->translate($str, $error);
     } else {      
         return $str;

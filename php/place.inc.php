@@ -374,11 +374,11 @@ class place extends zoph_tree_table {
         $count=$this->get_photo_count($user);
         $totalcount=$this->get_total_photo_count($user);
         $html.="<br><small>" . 
-            sprintf(translate("There are %s photos"), $count) .
-            " " . translate("in this place") . "<br>";
+            e(sprintf(translate("There are %s photos"), $count) .
+           " " . translate("in this place")) . "<br>";
         if($count!=$totalcount) {
-            $html.=sprintf(translate("There are %s photos"),$totalcount) . 
-            " " . translate("in this place") . " " . translate("or its children") . "<br>";
+            $html.=e(sprintf(translate("There are %s photos"),$totalcount) . 
+            " " . translate("in this place") . " " . translate("or its children")) . "<br>";
         }
         $html.="<\/small>";
         return $html;
@@ -439,7 +439,7 @@ class place extends zoph_tree_table {
         }
         $title=strtolower(escape_string($name));
         $sql="SELECT place_id from " . DB_PREFIX . "places WHERE " .
-            " LOWER(title) LIKE \"%" . $title . "%\";";
+            " LOWER(title) = \"" . $title . "\";";
 
         return get_records_from_query("place", $sql);
     }

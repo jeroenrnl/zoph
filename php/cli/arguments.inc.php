@@ -81,7 +81,6 @@ class arguments {
         $args["fields"]=array();
         $args["path"]="";
 
-        
         foreach($argv as $arg) {
             switch($arg) {
                 case "--instance":
@@ -254,17 +253,17 @@ class arguments {
                     }
                     break;
             }
-            if(isset($args["fields"])) {
-                foreach($args["fields"] as $f) {
-                    $field=explode("=", $f);
-                    $newfields[$field[0]]=$field[1];
-                }
-                $args["fields"]=$newfields;
+        }
+        if(isset($args["fields"])) {
+            foreach($args["fields"] as $f) {
+                $field=explode("=", $f);
+                $newfields[$field[0]]=$field[1];
             }
+            $args["fields"]=$newfields;
+        }
 
-            if(settings::$importUseids==true && self::$command=="import") {
-                self::$command="update";
-            }
+        if(settings::$importUseids==true && self::$command=="import") {
+            self::$command="update";
         }
     }
     /**
@@ -290,7 +289,7 @@ class arguments {
                             $vars["_album_id"][]=$album_id;
                         } else {
                             echo "Album not found: $name\n";
-                            continue;
+                            exit(cli::EXIT_ALBUM_NOT_FOUND);
                         }
                     }
                     break;
@@ -302,7 +301,7 @@ class arguments {
                             $vars["_category_id"][]=$cat_id;
                         } else {
                             echo "Category not found: $name\n";
-                            continue;
+                            exit(cli::EXIT_CAT_NOT_FOUND);
                         }
                     }
                     break;
@@ -314,7 +313,7 @@ class arguments {
                             $vars["_person_id"][]=$person_id;
                         } else {
                             echo "Person not found: $name\n";
-                            continue;
+                            exit(cli::EXIT_PERSON_NOT_FOUND);
                         }
                     }
                     break;
@@ -322,20 +321,20 @@ class arguments {
                     $person=person::getByName($arg);
                     if($person) {
                         $person_id=$person[0]->getId();
-                        $vars["photographer_id"][]=$person_id;
+                        $vars["photographer_id"]=$person_id;
                     } else {
                         echo "Person not found: $arg\n";
-                        continue;
+                        exit(cli::EXIT_PERSON_NOT_FOUND);
                     }
                     break;
                 case "location":
                     $place=place::getByName($arg);
                     if($place) {
                         $place_id=$place[0]->getId();
-                        $vars["location_id"][]=$place_id;
+                        $vars["location_id"]=$place_id;
                     } else {
                         echo "Place not found: $arg\n";
-                        continue;
+                        exit(cli::EXIT_PLACE_NOT_FOUND);
                     }
                     break;
                 case "path":
