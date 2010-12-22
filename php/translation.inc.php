@@ -37,7 +37,7 @@ class language {
     public $iso;
     public $name;
     private $filename;
-    private $translations;
+    private $translations=array();
 
     # This defines what the base language is, the language the strings in the
     # sourcecode are in.
@@ -125,9 +125,8 @@ class language {
      */
     function translate($string, $error = true) {
         $tag="";
-        $translation=trim($this->translations[$string]);
-        if($translation) {
-            return trim($translation);
+        if(array_key_exists($string, $this->translations)) {
+            return trim($this->translations[$string]);
         } else {
             if($error && !($this->iso==language::$base)) {
                 $tag = "<b>[tr]</b> ";

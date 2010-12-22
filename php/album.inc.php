@@ -82,6 +82,7 @@ class album extends zoph_tree_table {
     }
 
     function get_children($user=null, $order=null) {
+        $order_fields="";
         if($order && $order!="name") {
             $order_fields=get_sql_for_order($order);
             $order=" ORDER BY " . $order . ", name ";
@@ -255,12 +256,14 @@ class album extends zoph_tree_table {
     }
 
     function get_coverphoto($user,$autothumb=null,$children=null) {
+        $coverphoto=null;
+        $cover=false;
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
             if($coverphoto->lookup($user)) {
                 $cover=TRUE;
             }
-        } 
+        }
         if ($autothumb && !$cover) {
             $order=get_autothumb_order($autothumb);
             if($children) {
@@ -296,7 +299,7 @@ class album extends zoph_tree_table {
             $coverphoto=array_shift(get_records_from_query("photo", $sql));
         }
 
-        if ($coverphoto) {
+        if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
             return $coverphoto->get_image_tag(THUMB_PREFIX);
         } else if (!$children) {

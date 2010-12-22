@@ -25,6 +25,7 @@
     global $PHP_SELF;
     global $REQUEST_URI;
     global $user;
+    global $_qs;
 
     if ($SHOW_BREADCRUMBS) {
 
