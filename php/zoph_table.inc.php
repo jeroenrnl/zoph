@@ -444,20 +444,20 @@ function get_count_from_query($sql) {
  */
 function get_records($class, $order = null, $constraints = null,
     $conj = "and", $ops = null) {
+    
 
     $obj = new $class;
     $sql = "select * from $obj->table_name";
     if ($constraints) {
         while (list($name, $value) = each($constraints)) {
-            if ($constraint_string) {
+            if (!empty($constraint_string)) {
                 $constraint_string .= " $conj ";
-            }
-            else {
-                $constraint_string .=  " where ";
+            } else {
+                $constraint_string =  " where ";
             }
 
             $op = "=";
-            if ($ops && $ops["$name"]) {
+            if ($ops && !empty($ops["$name"])) {
                 $op = $ops["$name"];
             }
 
