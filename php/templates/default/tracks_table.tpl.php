@@ -24,7 +24,11 @@
         <?php if(is_array($tpl_tracks)): ?>
         <table class="tracks">
             <tr>
-                <th><?php echo translate("name") ?><th>
+                <th><?php echo translate("name") ?></th>
+                <th><?php echo translate("time of first point") ?></th>
+                <th><?php echo translate("time of last point") ?></th>
+                <th><?php echo translate("number of points") ?></th>
+
             </tr>
             <?php foreach($tpl_tracks as $track): ?>
             <tr>
@@ -32,6 +36,15 @@
                      <a href="track.php?track_id=<?php echo $track->getId(); ?>">
                         <?php echo e($track->get("name")); ?>
                     </a>
+                </td>
+                <td>
+                    <?php echo e($track->getFirstPoint()->get("datetime")); ?>
+                </td>
+                <td>
+                    <?php echo e($track->getLastPoint()->get("datetime")); ?>
+                </td>
+                <td>
+                    <?php echo e($track->getPointCount()); ?>
                 </td>
             </tr>
             <?php endforeach; ?>

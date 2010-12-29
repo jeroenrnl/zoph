@@ -45,10 +45,17 @@ if (!$user->is_admin()) {
 
 if($_action=="" || $_action=="display") {
     $title = translate("Tracks");
-    $tracks_table=new template("tracks_table", array(
-        "tracks" => track::getAll()
-    ));
-    $content=$tracks_table->toString();
+    $tracks=track::getAll();
+    if(count($tracks>0)) {
+        $tracks_table=new template("tracks_table", array(
+            "tracks" => $tracks
+        ));
+        $content=$tracks_table->toString();
+    } else {
+        $content=translate("No tracks found, you should import a GPX file.");
+    }
+
+
 } else if ($_action=="geotag") {
     if ($num_photos<= 0) {
         $content=translate("No photos were found matching your search criteria.") . "\n";

@@ -501,6 +501,20 @@ table.ratingdetail th {
     color: <?php echo $TITLE_FONT_COLOR ?>;
 }
 
+table.tracks {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.tracks th, table.tracks td {
+    padding: 2px 5px;
+    text-align: left;
+}
+
+table.tracks tr:nth-child(odd) {
+    background: <?php echo $TITLE_BG_COLOR ?>;
+}
+    
 p.main, p.info {
     padding: 4px;
     }

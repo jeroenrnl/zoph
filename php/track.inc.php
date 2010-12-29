@@ -185,27 +185,43 @@ class track extends zoph_table {
         $js .= "    " . $map . ".addPolyline(track);\n";
         return $js;
     }
+    
+    public function getFirstPoint() {
+        $points=$this->getPoints();
+        $first=$points[0];
+        if(($first instanceof point)) {
+            return $first;
+        } else {
+            return new point;
+        }
+    }
 
+    public function getLastPoint() {
+        $points=$this->getPoints();
+        $last=end($points);
+        if(($last instanceof point)) {
+            return $last;
+        } else {
+            return new point;
+        }
+    }
+    
+    public function getPointCount() {
+        $points=$this->getPoints();
+        return count($points);
+    }
 
     /**
      * Get array that can be used to generate view for this track
      */
     public function getDisplayArray() {
-        $points=$this->getPoints();
-        $first=$points[0];
-        $last=end($points);
+        $first=$this->getFirstPoint();
+        $last=$this->getLastPoint();
         $count=count($points);
         
         $return[translate("name")] = $this->get("name");
-        if(($first instanceof point)) {
-            $return[translate("time of first point")] = 
-                $first->get("datetime") . " UTC";
-        }
-        if(($first instanceof point)) {
-            $return[translate("time of last point")] = 
-                $last->get("datetime") . " UTC";
-        }
-
+        $return[translate("time of first point")] = $first->get("datetime") . " UTC";
+        $return[translate("time of last point")] = $last->get("datetime") . " UTC";
         $return[translate("number of points")] = $count;
 
         return $return;
