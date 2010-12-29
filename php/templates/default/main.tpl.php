@@ -32,7 +32,7 @@ require_once("header.inc.php");
         <?php echo $tpl_content; ?>
     </div>
     <?php if(!empty($tpl_mapping_js)): ?>
-    <div class="map" id="map">>
+    <div class="map" id="map">
     </div>
     <script type='text/javascript'>
         <?php echo $tpl_mapping_js; ?>
