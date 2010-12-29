@@ -154,8 +154,12 @@ class WebImport extends Import {
         $dir=IMAGE_DIR . "/" . IMPORT_DIR . "/";
         $file=file::getFromMD5($dir, $md5);
         
-        $mime=$file->getMime();
-        $type=$file->type;
+        if($file instanceof file) {
+            $mime=$file->getMime();
+            $type=$file->type;
+        } else {
+            $type="unknown (file not found)";
+        }
 
         switch($type) {
         case "image":
