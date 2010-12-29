@@ -127,8 +127,10 @@ class track extends zoph_table {
             }
             while($xml->read()) {
                 if($xml->nodeType==XMLReader::ELEMENT) {
-                    // Keep track of the current open tags
-                    $stack[]=$xml->name;
+                    // Keep track of the current open tags  
+                    if(!$xml->isEmptyElement) {
+                        $stack[]=$xml->name;
+                    }
                     switch ($xml->name) {
                     case "name":
                         $current=$stack[count($stack) - 2];
@@ -217,7 +219,7 @@ class track extends zoph_table {
     public function getDisplayArray() {
         $first=$this->getFirstPoint();
         $last=$this->getLastPoint();
-        $count=count($points);
+        $count=$this->getPointCount();
         
         $return[translate("name")] = $this->get("name");
         $return[translate("time of first point")] = $first->get("datetime") . " UTC";
