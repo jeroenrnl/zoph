@@ -247,7 +247,7 @@ class WebImport extends Import {
         $files=file::getFromDir($unpack_dir, true);
         foreach($files as $import_file) {
             $type=$import_file->type;
-            if($type == "image" or $type == "archive") {
+            if($type == "image" or $type == "archive" or $type == "xml") {
                 $import_file->setDestination($dir);
                 try {
                     $import_file->move();
