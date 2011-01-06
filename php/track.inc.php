@@ -128,7 +128,7 @@ class track extends zoph_table {
             while($xml->read()) {
                 if($xml->nodeType==XMLReader::ELEMENT) {
                     // Keep track of the current open tags  
-                    if(!$xml->isEmptyElement) {
+                    if(!$xml->isEmptyElement) { 
                         $stack[]=$xml->name;
                     }
                     switch ($xml->name) {
@@ -142,8 +142,6 @@ class track extends zoph_table {
                         break;
                     case "wpt":
                         // not (yet?) supported
-                        $xml->next();
-                        array_pop($stack);
                         break;
                     case "trkpt":
                         // For now we are ignoring multiple tracks or segments
@@ -151,8 +149,6 @@ class track extends zoph_table {
                         $xml_point=$xml->readOuterXML();
                         $point=point::readFromXML($xml_point);
                         $track->addpoint($point);
-                        array_pop($stack);
-                        $xml->next();
                         break;
                     }
                 } else if ($xml->nodeType==XMLReader::END_ELEMENT) {
