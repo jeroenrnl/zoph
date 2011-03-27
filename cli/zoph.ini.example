@@ -23,24 +23,27 @@
 ; With only one instance, providing the -i / --instance commandline argument
 ; will not be necessary.
 ;
+; If the settings contain characters other than a-z / A-Z / 0-9 you must
+; enclose them in double quotes. 
+;
 
 [production]
 
-db_host = localhost
-db_name = zoph
-db_user = zoph_rw
-db_pass = pass
-db_prefix = zoph_
+db_host = "localhost"
+db_name = "zoph"
+db_user = "zoph_rw"
+db_pass = "pass"
+db_prefix = "zoph_"
 
-php_location = /var/www/html/zoph
+php_location = "/var/www/html/zoph"
 
 [development]
-db_host = localhost
-db_name = zophdev
-db_user = zoph_rw
-db_pass = pass
-db_prefix = zoph_
+db_host = "localhost"
+db_name = "zophdev"
+db_user = "zoph_rw"
+db_pass = "pass"
+db_prefix = "zoph_"
 
-php_location = /var/www/html/zophdev
+php_location = "/var/www/html/zophdev"
 
 
