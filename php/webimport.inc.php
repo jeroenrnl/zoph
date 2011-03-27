@@ -116,7 +116,13 @@ class WebImport extends Import {
         $dir=realpath(IMAGE_DIR . "/" .IMPORT_DIR);
         if($dir === false) {
             log::msg(IMAGE_DIR . "/" .IMPORT_DIR . " does not exist, creating...", log::WARN, log::IMPORT);
-            create_dir_recursive(IMAGE_DIR . "/" .IMPORT_DIR);
+            try {
+	        create_dir_recursive(IMAGE_DIR . "/" .IMPORT_DIR);
+	    } catch (FileDirCreationFailedException $e) {
+                log::msg(IMAGE_DIR . "/" .IMPORT_DIR . " does not exist, and I can not create it. (" . $e->getMessage() . ")", log::FATAL, log::IMPORT);
+		die();
+            }
+	    // doublecheck if path really has been correctly created.
             $dir=realpath(IMAGE_DIR . "/" .IMPORT_DIR);
             if($dir === false) {
                 log::msg(IMAGE_DIR . "/" .IMPORT_DIR . " does not exist, and I can not create it.", log::WARN, log::FATAL);
