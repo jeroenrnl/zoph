@@ -338,7 +338,7 @@
 	    $pager_vars[$key] = $val;
         }
         $request_vars = $pager_vars;
-        echo pager($offset, $num, $num_pages, $cells, $MAX_PAGER_SIZE, $PHP_SELF, $request_vars, "_off");
+        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $PHP_SELF, $request_vars, "_off");
     } // if photos
 ?>
 <br>
