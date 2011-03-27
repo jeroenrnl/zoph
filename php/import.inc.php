@@ -76,6 +76,9 @@ abstract class Import {
             }
             if ($vars) {
                 $photo->set_fields($vars);
+		if($photo->get("rating")==0) {
+		    $photo->set("rating", null);
+		}
             }
             
             if(strlen(trim($photo->get("date")))==0) {
