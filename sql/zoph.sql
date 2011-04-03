@@ -416,6 +416,7 @@ CREATE TABLE zoph_users (
   password varchar(64) default NULL,
   browse_people char(1) NOT NULL default '0',
   browse_places char(1) NOT NULL default '0',
+  browse_tracks char(1) NOT NULL DEFAULT '0',
   detailed_people char(1) NOT NULL default '0',
   detailed_places char(1) NOT NULL default '0',
   import char(1) NOT NULL default '0',
@@ -435,7 +436,7 @@ CREATE TABLE zoph_users (
 --
 
 
-INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1', '0', NULL,NULL,NULL,NULL);
+INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1','1','0', NULL,NULL,NULL,NULL);
 
 CREATE TABLE zoph_pageset (
   pageset_id int(11) NOT NULL auto_increment,
@@ -459,4 +460,23 @@ CREATE TABLE zoph_pages_pageset (
   pageset_id int(11) NOT NULL,
   page_id int(11) NOT NULL,
   page_order int(5) unsigned );
+
+CREATE TABLE zoph_track (
+  track_id int(11) NOT NULL auto_increment,
+  name varchar(64) NOT NULL default 'track',
+  PRIMARY KEY  (track_id)
+) ENGINE=MyISAM;
+
+CREATE TABLE zoph_point (
+  point_id int(11) NOT NULL auto_increment,
+  name varchar(64) default NULL,
+  track_id int(11) default NULL,
+  lat float(10,6) default NULL,
+  lon float(10,6) default NULL,
+  ele float(12,4) default NULL,
+  speed float(12,4) default NULL,
+  datetime datetime default NULL,
+  PRIMARY KEY  (point_id)
+) ENGINE=MyISAM;
+
 
