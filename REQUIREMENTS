@@ -6,8 +6,8 @@ Gentoo users could use the webapps overlay, although the version there is outdat
 
 Zoph requires the following:
     * Apache 2.2
-    * PHP 5.2
-    * MySQL 5.0
+    * PHP 5.2 or 5.3
+    * MySQL 5.1
     * ImageMagick 6.6
     * Jhead 2.8x
 
@@ -18,10 +18,10 @@ Apache
           o 2.0.x probably works too, but is no longer tested.
 
 PHP
-    * Current versions of Zoph are developped on PHP 5.2
-          o PHP 5.1 and 5.3 probably work too
+    * Current versions of Zoph are developped on PHP 5.3
+          o PHP 5.2 probably works too
           o PHP 6 has not yet been released and Zoph has not been tested against it.
-          o PHP4 has been end of life since 31 December 2007. As of Zoph 0.8, PHP4 will no longer be supported by Zoph. Zoph 0.8.1 does not work with PHP4
+          o PHP versions before 5.2 are no longer supported, and will probably NOT work.
 
   Required features
     * The following features (extensions) to PHP are required for Zoph. Not all distributions automatically install all of them.

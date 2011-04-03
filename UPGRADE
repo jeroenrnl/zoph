@@ -1,3 +1,23 @@
+Zoph 0.8.2 to 0.8.3
+    * You can use these instructions to go from 0.8.2.1 to 0.8.3
+    * If you want to upgrade from 0.8.1, first follow the upgrade instructions from 0.8.1 to 0.8.2
+    * If you want to upgrade from an older version, such as 0.8 or 0.8.0.x, first follow the upgrade instructions from 0.8 to 0.8.1, then the upgrade instructions from 0.8.1 to 0.8.2 and finally these instructions.
+    * If you're upgrading from an older version, it is not necessary to install the "in between" versions first, you can just install the current version and follow the upgrade instructions below.
+
+Copy the contents of the php directory, including all subdirs, into your webroot and copy the lang directory into the webroot as well. You should make a backup copy of config.inc.php to prevent overwriting it.
+
+	cp config.inc.php config.local.php
+	cp -a php/* /var/www/html/zoph
+	cp -a lang /var/www/html/zoph
+
+Database changes
+
+Because 0.8.3 is a version "in between" 0.8 and 0.9, you will need to edit the update script. You should comment out the changes that have already been applied to your system. Prepend the changes for 0.8.1 with a "#". There were no database changes in 0.8.2. Execute zoph-update-0.9.sql:
+
+	mysql -u zoph_admin -p zoph < sql/zoph_update-0.9.sql
+
+
+
 Zoph 0.8.1 to 0.8.2
 
  * You can use these instructions to go from 0.8.1.x to 0.8.2

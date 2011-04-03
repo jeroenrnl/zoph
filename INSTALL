@@ -29,11 +29,11 @@ zoph_rw@localhost identified by 'PASSWORD';
    /etc. zoph.ini is where you define database settings. A simple example:
 
    [zoph]
-   db_host = localhost
-   db_name = zoph
-   db_user = zoph_rw
-   db_pass = pass
-   db_prefix = zoph_
+   db_host = "localhost"
+   db_name = "zoph"
+   db_user = "zoph_rw"
+   db_pass = "pass"
+   db_prefix = "zoph_"
 
    php_location = /var/www/html/zoph
 

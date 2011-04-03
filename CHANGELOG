@@ -1,4 +1,44 @@
 Zoph Changelog
+
+Zoph 0.8.3
+03 April 2011
+
+
+Zoph 0.8.3 is a pre-release for Zoph 0.9.
+
+This version adds several feature improvements, mostly related to mapping. The most important addition is the support for geotagging. This version also fixes several bugs.
+
+Zoph 0.8.3 is beta release, I tested it as well as possible on my system, but it should not be considered a "stable" version. I would, however, very much appreciate if people could test and give feedback on this release and the updated documentation, in this way I can make sure that the stable (v0.9) version will be as bug-free as possible.
+
+Features
+    * Geotagging support
+    * Req#2974014: Search for location
+    * Geocoding: finding lat/lon location from city, county.
+    * Req#2974016: Additional mapping resources
+    * Req#3077944: When adding a new place, or editting a place with no location (lat/lon) set, zoph will zoom the map to the parent location. If a photo is editted, and the photo has no lat/lon, but it's location does, the map is zoomed to the location's lat/lon.
+
+Bugs
+    * Getting rid of a NOTICE regarding unset DB_PREFIX constant
+    * Several small changes to decrease the number of NOTICE messages.
+    * In photo edit mode, moved maps to bottom of page, to fix a bug with Openlayers maps
+    * Better error handling when UPLOAD_DIR does not exist.
+    * Zoph.ini: Added quotes around values, PHP fails if they contain special characters. As suggested by scantron.
+    * Bug#3237112: Rating counts are incorrect with new import
+    * Bug#3237012: There is no "next" link on the bulk edit page, although a "previous" link is present.
+
+Other
+    * Switched from Mapstraction 1.x to Mapstraction 2.0.15
+    * Namespacing in mapping Javascript.
+    * Some changes in templating system
+    * Various changes for PHP 5.3 compatibility
+    * Refactor of zophcode, tag, smiley and replace objects to new coding style, including added PHPdoc comments.
+    * Added a copyright note to Openlayers maps
+    * Refactor of the admin class & move admin page to a template.
+    * Getting rid of some warning messages
+
+Translations
+    * Dutch and Canadian English have been updated and are completely up to date
+
 Zoph 0.8.2
 October 20, 2010
 
