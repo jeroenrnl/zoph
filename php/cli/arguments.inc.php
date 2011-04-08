@@ -75,12 +75,24 @@ class arguments {
         $args["categories"]=array();
         $args["files"]=array();
         $args["people"]=array();
-        $args["photographer"]="";
-        $args["location"]="";
+        $args["photographer"]=array();
+        $args["location"]=array();
         $args["instance"]="";
         $args["fields"]=array();
         $args["path"]="";
 
+        /* For new albums, categories, places, people */
+        
+        $parent=0;
+        $args["palbum"]=array();
+        $args["pcat"]=array();
+        $args["pplace"]=array();
+
+        /*
+          Used short arguments: H I N P V a c d f h i l n p t u v
+
+
+        */
         foreach($argv as $arg) {
             switch($arg) {
                 case "--instance":
@@ -93,11 +105,14 @@ class arguments {
                 case "--album":
                 case "-a":
                     $current=&$args["albums"];
+                    $cur_parent=&$args["palbum"];
                     break;
+
                 case "--category":
                 case "--categories":
                 case "-c":
                     $current=&$args["categories"];
+                    $cur_parent=&$args["pcat"];
                     break;
                 case "--fields":
                 case "--field":
@@ -112,6 +127,7 @@ class arguments {
                 case "--location":
                 case "-l":
                     $current=&$args["location"];
+                    $cur_parent=&$args["pplace"];
                     break;
                 case "--people":
                 case "--persons":
@@ -122,6 +138,10 @@ class arguments {
                 case "--photographer":
                 case "-P":
                     $current=&$args["photographer"];
+                    break;
+
+                case "--parent":
+                    $current=&$parent;
                     break;
 
                 case "--thumbs":
@@ -167,6 +187,11 @@ class arguments {
                 case "-I":
                     unset($current);
                     self::$command="import";
+                    break;
+                case "--new":
+                case "-N":
+                    unset($current);
+                    self::$command="new";
                     break;
 
                 case "--useIds":
@@ -243,13 +268,24 @@ class arguments {
                         $args["files"][]=$arg;
                     } else if (!is_array($current)) {
                         $current=$arg;
+                        if(isset($cur_parent)) {
+                            $cur_parent[]=trim($parent);
+                        }
                         unset($current);
+                        unset($cur_parent);
                     } else {
                         $new=explode(",", $arg);
                         foreach($new as $n) {
                             $current[]=trim($n);
+                            if(isset($cur_parent)) {
+                                $cur_parent[]=trim($parent);
+                            }
+                        }
+                        if($arg!==$parent) {
+                            $parent=0;
                         }
                         unset($current);
+                        unset($cur_parent);
                     }
                     break;
             }
@@ -271,7 +307,6 @@ class arguments {
      */
     private function lookup() {
         $args=$this->processed;
-        
         $vars=&$this->vars;
         foreach($args as $type=>$arg) {
             if(empty($arg) || empty($type)) {
@@ -279,62 +314,127 @@ class arguments {
             }
             
             log::msg($type . "\t->\t" . $arg, log::DEBUG, log::IMPORT);
-
             switch($type) {
                 case "albums":
                     foreach($arg as $name) {
-                        $album=album::getByName($name);
-                        if($album) {
-                            $album_id=$album[0]->getId();
-                            $vars["_album_id"][]=$album_id;
+                        if(self::$command=="new") {
+                            $parent=array_shift($args["palbum"]);
+                            // this is a string comparison because the trim() in process() changes
+                            // everything into a string...
+                            if($parent==="0") {
+                                $parent_id=album::getRoot()->getId();
+                            } else {
+                                $palbum=album::getByName($parent);
+                                if($palbum) {
+                                    $parent_id=$palbum[0]->getId();
+                                } else {
+                                    echo "Album not found: $parent\n";
+                                    exit(cli::EXIT_ALBUM_NOT_FOUND);
+                                }
+                            }
+                            $vars["_new_album"][]=array("parent" => $parent_id, "name" => $name);
                         } else {
-                            echo "Album not found: $name\n";
-                            exit(cli::EXIT_ALBUM_NOT_FOUND);
+                            $album=album::getByName($name);
+                            if($album) {
+                                $album_id=$album[0]->getId();
+                                $vars["_album_id"][]=$album_id;
+                            } else {
+                                echo "Album not found: $name\n";
+                                exit(cli::EXIT_ALBUM_NOT_FOUND);
+                            }
                         }
                     }
                     break;
                 case "categories":
                     foreach($arg as $name) {
-                        $cat=category::getByName($name);
-                        if($cat) {
-                            $cat_id=$cat[0]->getId();
-                            $vars["_category_id"][]=$cat_id;
+                        if(self::$command=="new") {
+                            $parent=array_shift($args["pcat"]);
+                            // this is a string comparison because the trim() in process() changes
+                            // everything into a string...
+                            if($parent==="0") {
+                                $parent_id=category::getRoot()->getId();
+                            } else {
+                                $pcat=category::getByName($parent);
+                                if($pcat) {
+                                    $parent_id=$pcat[0]->getId();
+                                } else {
+                                    echo "Cetegory not found: $parent\n";
+                                    exit(cli::EXIT_CAT_NOT_FOUND);
+                                }
+                            }
+                            $vars["_new_cat"][]=array("parent" => $parent_id, "name" => $name);
                         } else {
-                            echo "Category not found: $name\n";
-                            exit(cli::EXIT_CAT_NOT_FOUND);
+                            $cat=category::getByName($name);
+                            if($cat) {
+                                $cat_id=$cat[0]->getId();
+                                $vars["_category_id"][]=$cat_id;
+                            } else {
+                                echo "Category not found: $name\n";
+                                exit(cli::EXIT_CAT_NOT_FOUND);
+                            }
                         }
                     }
                     break;
                 case "people":
                     foreach($arg as $name) {
-                        $person=person::getByName($name);
-                        if($person) {
-                            $person_id=$person[0]->getId();
-                            $vars["_person_id"][]=$person_id;
+                        if(self::$command=="new") {
+                            $vars["_new_person"][]=$name;
                         } else {
-                            echo "Person not found: $name\n";
-                            exit(cli::EXIT_PERSON_NOT_FOUND);
+                            $person=person::getByName($name);
+                            if($person) {
+                                $person_id=$person[0]->getId();
+                                $vars["_person_id"][]=$person_id;
+                            } else {
+                                echo "Person not found: $name\n";
+                                exit(cli::EXIT_PERSON_NOT_FOUND);
+                            }
                         }
                     }
                     break;
                 case "photographer":
-                    $person=person::getByName($arg);
-                    if($person) {
-                        $person_id=$person[0]->getId();
-                        $vars["photographer_id"]=$person_id;
+                    if(self::$command=="new") {
+                        foreach($arg as $name) {
+                            $vars["_new_person"][]=$name;
+                        }
                     } else {
-                        echo "Person not found: $arg\n";
-                        exit(cli::EXIT_PERSON_NOT_FOUND);
+                        $person=person::getByName($arg[0]);
+                        if($person) {
+                            $person_id=$person[0]->getId();
+                            $vars["photographer_id"]=$person_id;
+                        } else {
+                            echo "Person not found: $arg[0]\n";
+                            exit(cli::EXIT_PERSON_NOT_FOUND);
+                        }
                     }
                     break;
                 case "location":
-                    $place=place::getByName($arg);
-                    if($place) {
-                        $place_id=$place[0]->getId();
-                        $vars["location_id"]=$place_id;
+                    if(self::$command=="new") {
+                        foreach($arg as $name) {
+                            $parent=array_shift($args["pplace"]);
+                            // this is a string comparison because the trim() in process() changes
+                            // everything into a string...
+                            if($parent==="0") {
+                                $parent_id=place::getRoot()->getId();
+                            } else {
+                                $pplace=place::getByName($parent);
+                                if($pplace) {
+                                    $parent_id=$pplace[0]->getId();
+                                } else {
+                                echo "Location not found: $parent\n";
+                                exit(cli::EXIT_LOC_NOT_FOUND);
+                            }
+                        }
+                        $vars["_new_place"][]=array("parent" => $parent_id, "name" => $name);
+                        }
                     } else {
-                        echo "Place not found: $arg\n";
+                        $place=place::getByName($arg[0]);
+                        if($place) {
+                            $place_id=$place[0]->getId();
+                            $vars["location_id"]=$place_id;
+                        } else {
+                            echo "Place not found: $arg[0]\n";
                         exit(cli::EXIT_PLACE_NOT_FOUND);
+                        }
                     }
                     break;
                 case "path":

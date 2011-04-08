@@ -146,6 +146,73 @@ class cli {
                 exit(self::EXIT_NO_FILES);
             }
             break;
+        case "new":
+            $vars=$this->args->getVars();
+            foreach($vars as $var=>$array) {
+                switch($var) {
+                case "_new_album":
+                    foreach($array as $new) {
+                        $album=new album();
+                        $album->set("album", $new["name"]);
+                        $album->set("parent_album_id", (int) $new["parent"]);
+                        $album->insert();
+                    }
+                    break;
+                case "_new_cat":
+                    foreach($array as $new) {
+                        $cat=new category();
+                        $cat->set("category", $new["name"]);
+                        $cat->set("parent_category_id", (int) $new["parent"]);
+                        $cat->insert();
+                    }
+                    break;
+                case "_new_place":
+                    foreach($array as $new) {
+                        $place=new place();
+                        $place->set("title", $new["name"]);
+                        $place->set("parent_place_id", (int) $new["parent"]);
+                        $place->insert();
+                    }
+                    break;
+                case "_new_person":
+                    foreach($array as $new) {
+                        $person=new person();
+                        if(strpos($new, ":")!==false) {
+                            $name=array_pad(explode(":", $new),4,null);
+                            $person->set("first_name", $name[0]);
+                            $person->set("middle_name", $name[1]);
+                            $person->set("last_name", $name[2]);
+                            $person->set("called", $name[3]);
+                        } else {
+                            $name=explode(" ", $new);
+                            switch (sizeof($name)) {
+                            case 0:
+                                // shouldn't happen..
+                                die("something went wrong, report a bug");
+                                break;
+                            case 1:
+                                // Only one word, assume this is a first name
+                                $person->set("first_name", $name[0]);
+                                break;
+                            case 2:
+                                // Two words, asume this is first & last
+                                $person->set("first_name", $name[0]);
+                                $person->set("last_name", $name[1]);
+                                break;
+                            default:
+                                // 3 or more, assume first two are first, middle, rest is last
+                                $person->set("first_name", array_shift($name));
+                                $person->set("middle_name", array_shift($name));
+                                $person->set("last_name", implode($name, " "));
+                                break;
+                            }
+                        }
+                        $person->insert();
+                    }
+                    break;
+                }
+            }
+            break;
         case "version":
             echo self::showVersion();
             break;
