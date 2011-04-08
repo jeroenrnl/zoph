@@ -184,14 +184,10 @@ class zoph_tree_table extends zoph_table {
     }
 }
 
-function get_root($class) {
-    return new $class(1);
-}
-
 function create_tree_select_array($name, $user = null, $rec = null,
     $level = "", $select_array = null, $search = 0) {
     if (!$rec) {
-        $rec = get_root($name);
+        $rec = $name::getRoot();
         $rec->lookup();
         $select_array[""] = "";
     }

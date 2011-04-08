@@ -637,7 +637,7 @@ function get_xml($class, $search,$user=null) {
         $rootnode->appendChild($newchild);
 
         if ($tree) {
-            $obj = get_root($class);
+            $obj = $class::getRoot();
             $obj->lookup();
             $tree=$obj->get_xml_tree($xml, $search, $user);
             $rootnode->appendChild($tree);
@@ -678,8 +678,8 @@ function get_xml($class, $search,$user=null) {
 }
 
 function get_zoph_info_array() {
-    $album= get_root_album();
-    $category = get_root_category();
+    $album= album::getRoot();
+    $category = category::getRoot();
 
     $size=get_human(get_photo_sizes_sum());
     return array(

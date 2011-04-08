@@ -29,7 +29,7 @@
 
     $parent_album_id = getvar("parent_album_id");
     if (!$parent_album_id) {
-        $album = get_root_album();
+        $album = album::getRoot();
     }
     else {
         $album = new album($parent_album_id);

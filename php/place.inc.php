@@ -387,7 +387,7 @@ class place extends zoph_tree_table {
         // At this moment the root place is always 1, but this may
         // change in the future, so to be safe we'll make a function for
         // this
-        $root_place=get_root_place();
+        $root_place=place::getRoot();
         if($this->get("place_id") == $root_place->get("place_id")) {
             return true;
         } else {
@@ -444,15 +444,18 @@ class place extends zoph_tree_table {
         return get_records_from_query("place", $sql);
     }
 
+    /**
+     * Get the root place
+     * @todo Once the minimum PHP version is 5.3 this could move to zoph_tree_table
+     */
+    public static function getRoot() {
+        return new place(1);
+    }
 }
 
 function get_places($constraints = null, $conj = "and", $ops = null,
     $order = "city, title, address") {
     return get_records("place", $order, $constraints, $conj, $ops);
-}
-
-function get_root_place() {
-    return new place(1);
 }
 
 function get_photographed_places($user = null) {

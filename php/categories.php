@@ -28,7 +28,7 @@
 
     $parent_category_id = getvar("parent_category_id");
     if (!$parent_category_id) {
-        $category = get_root_category();
+        $category = category::getRoot();
     }
     else {
         $category = new category($parent_category_id);

@@ -261,7 +261,7 @@ class category extends zoph_tree_table {
         // At this moment the root cat is always 1, but this may
         // change in the future, so to be safe we'll make a function for
         // this
-        $root_cat=get_root_category();
+        $root_cat=category::getRoot();
         if($this->get("category_id") == $root_cat->get("category_id")) {
             return true;
         } else {
@@ -284,10 +284,13 @@ class category extends zoph_tree_table {
         return get_records_from_query("category", $query);
     }
 
-}
-
-function get_root_category() {
-    return new category(1);
+    /**
+     * Get the root category
+     * @todo Once the minimum PHP version is 5.3 this could move to zoph_tree_table
+     */
+    public static function getRoot() {
+        return new category(1);
+    }
 }
 
 function get_categories_select_array($user = null, $search = 0) {

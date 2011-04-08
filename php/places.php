@@ -32,7 +32,7 @@
     }
     $parent_place_id = getvar("parent_place_id");
     if (!$parent_place_id) {
-        $place = get_root_place();
+        $place = place::getRoot();
     }
     else {
         $place = new place($parent_place_id);

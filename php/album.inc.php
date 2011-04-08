@@ -312,7 +312,7 @@ class album extends zoph_tree_table {
         // At this moment the root album is always 1, but this may
         // change in the future, so to be safe we'll make a function for
         // this
-        $root_album=get_root_album();
+        $root_album=album::getRoot();
         if($this->get("album_id") == $root_album->get("album_id")) {
             return true;
         } else {
@@ -333,12 +333,16 @@ class album extends zoph_tree_table {
 
         return get_records_from_query("album", $query);
     }
-        
+
+    /**
+     * Get the root album
+     * @todo Once the minimum PHP version is 5.3 this could move to zoph_tree_table
+     */
+    public static function getRoot() {
+        return new album(1);
+    }
 }
 
-function get_root_album() {
-    return new album(1);
-}
 
 function get_albums($user = null) {
 

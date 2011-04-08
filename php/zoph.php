@@ -37,10 +37,10 @@
         echo $thumbnails[0]->get_thumbnail_link();
     }
 
-    $album = get_root_album();
+    $album = album::getRoot();
     $album_count = get_album_count($user);
     $album_photo_count = $album->get_total_photo_count($user);
-    $category = get_root_category();
+    $category = category::getRoot();
     $category_count = get_category_count($user);
     $category_photo_count = $category->get_total_photo_count($user);
     echo "\n";
