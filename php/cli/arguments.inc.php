@@ -89,7 +89,7 @@ class arguments {
         $args["pplace"]=array();
 
         /*
-          Used short arguments: A H I N P V a c d f h i l n p r t u v w
+          Used short arguments: A D H I N P V a c d f h i l n p r t u v w
         */
 
         foreach($argv as $arg) {
@@ -259,6 +259,7 @@ class arguments {
                     unset($current);
                     settings::$importHier=false;
                     break;
+                case "-D":
                 case "--path":
                     $current=&$args["path"];
                     break;
