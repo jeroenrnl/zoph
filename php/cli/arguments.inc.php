@@ -89,10 +89,9 @@ class arguments {
         $args["pplace"]=array();
 
         /*
-          Used short arguments: A H I N P V a c d f h i l n p t u v w
-
-
+          Used short arguments: A H I N P V a c d f h i l n p r t u v w
         */
+
         foreach($argv as $arg) {
             switch($arg) {
                 case "--instance":
@@ -223,6 +222,12 @@ class arguments {
                 case "--addalways":
                     settings::$importAddAlways=true;
                     break;
+                
+                case "-r":
+                case "--recursive":
+                    settings::$importRecursive=true;
+                    break;
+
                 
                 case "--dateddirs":
                 case "--datedDirs":

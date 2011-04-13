@@ -933,8 +933,11 @@ function get_filetype($mime) {
     case "application/zip":
         return "archive";
         break;
-    case "application/xml";
+    case "application/xml":
         return "xml";
+        break;
+    case "directory":
+        return "directory";
         break;
     default:
         return false;

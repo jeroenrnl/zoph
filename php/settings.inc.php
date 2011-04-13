@@ -37,6 +37,7 @@ class settings {
     public static $importUseids=false;
     public static $importAutoadd=false;
     public static $importAddAlways=false;
+    public static $importRecursive=false;
 
    /**
     * Load ini file, as defined in the INI_FILE constant

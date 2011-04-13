@@ -170,6 +170,7 @@ class cli {
      */
     private function processFiles() {
         $files=$this->args->getFiles();
+
         foreach($files as $filename) {
             try {
                 if(arguments::$command=="import") {
@@ -178,11 +179,13 @@ class cli {
                     $file->check();
 
                     $mime=$file->getMime();
-                    if($file->type!="image") {
+                    if($file->type=="directory" && settings::$importRecursive) {
+                        $this->files=array_merge($this->files, file::getFromDir($file, true));
+                    } else if($file->type!="image") {
                         throw new ImportFileNotImportableException("$file is not an image\n");
+                    } else {
+                        $this->files[]=$file;
                     }
-
-                    $this->files[]=$file;
                 } else {
                     if(settings::$importUseids) {
                         $file=$filename;
@@ -209,6 +212,7 @@ class cli {
             }
         }
     }
+
     /**
      * Looks up a photo by photo_id
      */

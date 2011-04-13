@@ -52,7 +52,7 @@ class file {
             if(@!stat($filename)) {
                 throw new FileSymlinkProblemException("There's something wrong with symlink $filename\n");
             }
-        } else if (is_dir($filename)) {
+        } else if (is_dir($filename) && !settings::$importRecursive) {
             throw new FileDirectoryNotSupportedException("$filename is a directory\n");
         } 
 
