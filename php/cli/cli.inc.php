@@ -39,6 +39,8 @@ class cli {
     const EXIT_ALBUM_NOT_FOUND  = 40;
     const EXIT_CAT_NOT_FOUND    = 50;
 
+    const EXIT_NO_PARENT        = 80;
+
     // 90 - 97  are also defined in /bin/zoph, as global constants.
     const EXIT_INI_NOT_FOUND    = 90;
     const EXIT_INSTANCE_NOT_FOUND    = 91;
@@ -95,6 +97,7 @@ class cli {
         $this->processFiles();
         switch(arguments::$command) {
         case "import":
+            $vars=$this->args->getVars();
             if(!isset(settings::$importThumbs)) {
                 settings::$importThumbs=true;
             }
@@ -104,8 +107,14 @@ class cli {
             if(!isset(settings::$importSize)) {
                 settings::$importSize=true;
             }
+            if(!isset(settings::$importAutoadd)) {
+                settings::$importAutoadd=false;
+            } else {
+                $vars=$this->addNew();
+            }
+            
             if(is_array($this->files) && sizeof($this->files)>0) {
-                CliImport::photos($this->files, $this->args->getVars());
+                CliImport::photos($this->files, $vars);
             } else {
                 echo "Nothing to do, exiting\n";
                 exit(self::EXIT_NO_FILES);
@@ -147,77 +156,7 @@ class cli {
             }
             break;
         case "new":
-            $vars=$this->args->getVars();
-            foreach($vars as $var=>$array) {
-                switch($var) {
-                case "_new_album":
-                    foreach($array as $new) {
-                        $album=new album();
-                        $album->set("album", $new["name"]);
-                        $album->set("parent_album_id", (int) $new["parent"]);
-                        $album->insert();
-                    }
-                    break;
-                case "_new_cat":
-                    foreach($array as $new) {
-                        $cat=new category();
-                        $cat->set("category", $new["name"]);
-                        $cat->set("parent_category_id", (int) $new["parent"]);
-                        $cat->insert();
-                    }
-                    break;
-                case "_new_place":
-                    foreach($array as $new) {
-                        $place=new place();
-                        $place->set("title", $new["name"]);
-                        $place->set("parent_place_id", (int) $new["parent"]);
-                        $place->insert();
-                    }
-                    break;
-                case "_new_person":
-                    foreach($array as $new) {
-                        $person=new person();
-                        if(strpos($new, ":")!==false) {
-                            $name=array_pad(explode(":", $new),4,null);
-                            $person->set("first_name", $name[0]);
-                            $person->set("middle_name", $name[1]);
-                            $person->set("last_name", $name[2]);
-                            $person->set("called", $name[3]);
-                        } else {
-                            $name=explode(" ", $new);
-                            switch (sizeof($name)) {
-                            case 0:
-                                // shouldn't happen..
-                                die("something went wrong, report a bug");
-                                break;
-                            case 1:
-                                // Only one word, assume this is a first name
-                                $person->set("first_name", $name[0]);
-                                break;
-                            case 2:
-                                // Two words, asume this is first & last
-                                $person->set("first_name", $name[0]);
-                                $person->set("last_name", $name[1]);
-                                break;
-                            default:
-                                // 3 or more, assume first two are first, middle, rest is last
-                                $person->set("first_name", array_shift($name));
-                                $person->set("middle_name", array_shift($name));
-                                $person->set("last_name", implode($name, " "));
-                                break;
-                            }
-                        }
-                        $person->insert();
-                    }
-                    break;
-                }
-            }
-            break;
-        case "version":
-            echo self::showVersion();
-            break;
-        case "help":
-            echo self::showHelp();
+            $this->addNew();
             break;
         default:
             echo "Unknown command, please file a bug\n";
@@ -325,7 +264,78 @@ class cli {
             throw new ImportMultipleMatchesException("Multiple files named " . $file ." found.\n");
         }
     }
+    
+    /**
+     * Add albums, categories, places, people that should be added because of --new or --autoadd
+     * if $vars is given, 
+     */
+    public function addNew() {
+        $vars=$this->args->getVars();
+        $newvars=array();
+        $return_vars=array();
 
+        foreach($vars as $var=>$array) {
+            switch($var) {
+            case "_new_album":
+                $newvars["_album_id"]=array();
+                foreach($array as $new) {
+                    $album=new album();
+                    $album->set("album", $new["name"]);
+                    $album->set("parent_album_id", (int) $new["parent"]);
+                    $album->insert();
+                    $newvars["_album_id"][]=$album->getId();
+                }
+                break;
+            case "_new_cat":
+                $newvars["_category_id"]=array();
+                foreach($array as $new) {
+                    $cat=new category();
+                    $cat->set("category", $new["name"]);
+                    $cat->set("parent_category_id", (int) $new["parent"]);
+                    $cat->insert();
+                    $newvars["_category_id"][]=$cat->getId();
+                }
+                break;
+            case "_new_place":
+                foreach($array as $new) {
+                    $place=new place();
+                    $place->set("title", $new["name"]);
+                    $place->set("parent_place_id", (int) $new["parent"]);
+                    $place->insert();
+                    $newvars["location_id"]=$place->getId();
+                }
+                break;
+            case "_new_person":
+                $newvars["_person_id"]=array();
+                foreach($array as $new) {
+                    $person=new person();
+                    $person->setName($new);
+                    $person->insert();
+                    $newvars["_person_id"][]=$person->getId();
+                }
+                break;
+            case "_new_photographer":
+                foreach($array as $new) {
+                    $person=new person();
+                    $person->setName($new);
+                    $person->insert();
+                    $newvars["photographer_id"]=$person->getId();
+                }
+            default:
+                $return_vars[$var]=$array;
+            }
+        }
+        foreach($newvars as $name=>$array) {
+            if(is_array($return_vars[$name])) {
+                $return_vars[$name]=array_merge($return_vars[$name], $array);
+            } else {
+                $return_vars[$name]=$array;
+            }
+        }
+        return($return_vars);
+    }
+
+    
     /**
      * Show help
      */

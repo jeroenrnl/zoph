@@ -195,6 +195,46 @@ class person extends zoph_table {
             return $coverphoto->get_image_tag(THUMB_PREFIX);
         }
     }
+
+    /**
+     * Set first, middle, last and called name from single string
+     * "first", "first last", "first middle last last last"
+     * or "first:middle:last:called"
+     */
+
+    public function setName($name) {
+        if(strpos($name, ":")!==false) {
+            $name_array=array_pad(explode(":", $name),4,null);
+            $this->set("first_name", $name_array[0]);
+            $this->set("middle_name", $name_array[1]);
+            $this->set("last_name", $name_array[2]);
+            $this->set("called", $name_array[3]);
+        } else {
+            $name_array=explode(" ", $name);
+            switch (sizeof($name_array)) {
+            case 0:
+                // shouldn't happen..
+                die("something went wrong, report a bug");
+                break;
+            case 1:
+                // Only one word, assume this is a first name
+                $this->set("first_name", $name_array[0]);
+                break;
+            case 2:
+                // Two words, asume this is first & last
+                $this->set("first_name", $name_array[0]);
+                $this->set("last_name", $name_array[1]);
+                break;
+            default:
+                // 3 or more, assume first two are first, middle, rest is last
+                $this->set("first_name", array_shift($name_array));
+                $this->set("middle_name", array_shift($name_array));
+                $this->set("last_name", implode($name_array, " "));
+                break;
+            }
+        }
+   }
+
    /**
     * Lookup person by name;
     */
@@ -209,7 +249,7 @@ class person extends zoph_table {
         return get_records_from_query("person", $sql);
     }
 
-
+    
 }
 
 function get_people($constraints = null, $conj = "and", $ops = null,

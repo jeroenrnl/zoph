@@ -89,7 +89,7 @@ class arguments {
         $args["pplace"]=array();
 
         /*
-          Used short arguments: H I N P V a c d f h i l n p t u v
+          Used short arguments: A H I N P V a c d f h i l n p t u v w
 
 
         */
@@ -212,6 +212,18 @@ class arguments {
                     settings::$importCopy=false;
                     break;
                 
+                case "-A":
+                case "--autoadd":
+                case "--auto-add":
+                    settings::$importAutoadd=true;
+                    break;
+
+                case "-w":
+                case "--add-always":
+                case "--addalways":
+                    settings::$importAddAlways=true;
+                    break;
+                
                 case "--dateddirs":
                 case "--datedDirs":
                 case "--dated":
@@ -317,12 +329,17 @@ class arguments {
             switch($type) {
                 case "albums":
                     foreach($arg as $name) {
-                        if(self::$command=="new") {
+                        if(self::$command=="new" || (settings::$importAutoadd && !album::getByName($name))) {
                             $parent=array_shift($args["palbum"]);
                             // this is a string comparison because the trim() in process() changes
                             // everything into a string...
                             if($parent==="0") {
-                                $parent_id=album::getRoot()->getId();
+                                if(settings::$importAddAlways) {
+                                    $parent_id=album::getRoot()->getId();
+                                } else {
+                                    echo "No parent for album $name\n";
+                                    exit(cli::EXIT_NO_PARENT);
+                                }
                             } else {
                                 $palbum=album::getByName($parent);
                                 if($palbum) {
@@ -347,18 +364,23 @@ class arguments {
                     break;
                 case "categories":
                     foreach($arg as $name) {
-                        if(self::$command=="new") {
+                        if(self::$command=="new" || (settings::$importAutoadd && !category::getByName($name))) {
                             $parent=array_shift($args["pcat"]);
                             // this is a string comparison because the trim() in process() changes
                             // everything into a string...
                             if($parent==="0") {
-                                $parent_id=category::getRoot()->getId();
+                                if(settings::$importAddAlways) {
+                                    $parent_id=category::getRoot()->getId();
+                                } else {
+                                    echo "No parent for category $name\n";
+                                    exit(cli::EXIT_NO_PARENT);
+                                }
                             } else {
                                 $pcat=category::getByName($parent);
                                 if($pcat) {
                                     $parent_id=$pcat[0]->getId();
                                 } else {
-                                    echo "Cetegory not found: $parent\n";
+                                    echo "Category not found: $parent\n";
                                     exit(cli::EXIT_CAT_NOT_FOUND);
                                 }
                             }
@@ -377,7 +399,7 @@ class arguments {
                     break;
                 case "people":
                     foreach($arg as $name) {
-                        if(self::$command=="new") {
+                        if(self::$command=="new" || (settings::$importAutoadd && !person::getByName($name))) {
                             $vars["_new_person"][]=$name;
                         } else {
                             $person=person::getByName($name);
@@ -392,9 +414,9 @@ class arguments {
                     }
                     break;
                 case "photographer":
-                    if(self::$command=="new") {
+                    if(self::$command=="new" || (settings::$importAutoadd && !person::getByName($name))) {
                         foreach($arg as $name) {
-                            $vars["_new_person"][]=$name;
+                            $vars["_new_photographer"][]=$name;
                         }
                     } else {
                         $person=person::getByName($arg[0]);
@@ -408,13 +430,18 @@ class arguments {
                     }
                     break;
                 case "location":
-                    if(self::$command=="new") {
+                    if(self::$command=="new" || (settings::$importAutoadd && !place::getByName($name))) {
                         foreach($arg as $name) {
                             $parent=array_shift($args["pplace"]);
                             // this is a string comparison because the trim() in process() changes
                             // everything into a string...
                             if($parent==="0") {
-                                $parent_id=place::getRoot()->getId();
+                                if(settings::$importAddAlways) {
+                                    $parent_id=place::getRoot()->getId();
+                                } else {
+                                    echo "No parent for location $name\n";
+                                    exit(cli::EXIT_NO_PARENT);
+                                }
                             } else {
                                 $pplace=place::getByName($parent);
                                 if($pplace) {

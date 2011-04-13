@@ -35,6 +35,8 @@ class settings {
     public static $importDated=USE_DATED_DIRS;
     public static $importHier=HIER_DATED_DIRS;
     public static $importUseids=false;
+    public static $importAutoadd=false;
+    public static $importAddAlways=false;
 
    /**
     * Load ini file, as defined in the INI_FILE constant
