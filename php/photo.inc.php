@@ -24,6 +24,12 @@ class photo extends zoph_table {
     var $photographer;
     var $location;
 
+    /**
+     * For now this is only used during import, however, in the future, the photo object
+     * will be split in a photo object, referencing one or more file objects.
+     */
+    public $file=array();
+
     function photo($id = 0) {
         if($id && !is_numeric($id)) { die("photo_id must be numeric"); }
         parent::zoph_table("photos", array("photo_id"), array(""));
@@ -128,6 +134,11 @@ class photo extends zoph_table {
      * @see update_relations
      */
     public function updateRelations($vars) {
+        $albums=array();
+        $categories=array();
+        $people=array();
+        $path="";
+
         if(isset($vars["_album_id"])) {
             $albums=$vars["_album_id"];
         }
@@ -140,8 +151,24 @@ class photo extends zoph_table {
         if(isset($vars["_path"])) {
             $path=$vars["_path"];
         }
+        
+        if(isset($this->_album_id)) {
+            $albums=array_merge($albums,$this->_album_id);
+            unset($this->_album_id);
+        }
+
+        if(isset($this->_category_id)) {
+            $categories=array_merge($categories,$this->_category_id);
+            unset($this->_category_id);
+        }
+
+        if(isset($this->_person_id)) {
+            $people=array_merge($people,$this->_person_id);
+            unset($this->_person_id);
+        }
 
         if(isset($albums)) {
+                
             foreach($albums as $album) {
                 $this->add_to_album($album);
             }
@@ -381,10 +408,10 @@ class photo extends zoph_table {
         $toPath="/" . cleanup_path(IMAGE_DIR . "/" . $newPath) . "/";
         
         $path=$file->getPath();
+        create_dir_recursive($toPath . "/" . MID_PREFIX);
+        create_dir_recursive($toPath . "/" . THUMB_PREFIX);
+        
         if($path ."/" != $toPath) {
-            create_dir_recursive($toPath . "/" . MID_PREFIX);
-            create_dir_recursive($toPath . "/" . THUMB_PREFIX);
-                
             $file->setDestination($toPath);
             $files[]=$file;
 

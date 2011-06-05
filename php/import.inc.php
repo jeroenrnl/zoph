@@ -50,6 +50,8 @@ abstract class Import {
      * @param  Array Vars to be applied to the photos.
      */
     public static function photos(Array $files, Array $vars) {
+        $photos=array();
+
         $total=sizeof($files);
         $cur=0;
 
@@ -66,8 +68,15 @@ abstract class Import {
         foreach($files as $file) {
             self::progress($cur, $total);
             $cur++;
+
+            if($file instanceof photo) {
+                $photo=$file;
+                $file=$photo->file["orig"];
+            } else if ($file instanceof file) {
+                $photo=new photo();
+            }
+
             $mime=$file->getMime();
-            $photo=new photo();
             if(settings::$importExif===true && $mime=="image/jpeg") {
                 $exif=process_exif($file);
                 if($exif) {
@@ -76,9 +85,9 @@ abstract class Import {
             }
             if ($vars) {
                 $photo->set_fields($vars);
-		if($photo->get("rating")==0) {
-		    $photo->set("rating", null);
-		}
+                if($photo->get("rating")==0) {
+                    $photo->set("rating", null);
+                }
             }
             
             if(strlen(trim($photo->get("date")))==0) {
@@ -92,8 +101,12 @@ abstract class Import {
                 log::msg("Photo has no time set, using time from filedate (" . $time . ").", log::NOTIFY, log::IMPORT);
                 $photo->set("time", $time);
             }
-
-            $photo->set("path", $path);
+            if(isset($photo->_path)) {
+                $photo->set("path", $path . "/" . $photo->_path);
+                unset($photo->_path);
+            } else {
+                $photo->set("path", $path);
+            }
             try {
                 $photo->import($file);
             } catch (FileException $e) {
@@ -114,11 +127,12 @@ abstract class Import {
                 }
                 $photo->update($vars);
                 $photo->updateRelations($vars);
-
+                $photos[]=$photo;
             } else {
                 echo translate("Insert failed.") . "<br>\n";
             }
         }
+        return $photos;
     }
     /**
      * Displays a progressbar

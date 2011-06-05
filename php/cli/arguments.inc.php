@@ -80,6 +80,7 @@ class arguments {
         $args["instance"]="";
         $args["fields"]=array();
         $args["path"]="";
+        $args["dirpattern"]="";
 
         /* For new albums, categories, places, people */
         
@@ -263,6 +264,11 @@ class arguments {
                 case "--path":
                     $current=&$args["path"];
                     break;
+
+                case "--dirpattern":
+                    $current=&$args["dirpattern"];
+                    break;
+
                 case "-V":
                 case "--version":
                     unset($current);
@@ -473,6 +479,15 @@ class arguments {
                 case "path":
                     $vars["_path"]=$arg;
                     break;
+                case "dirpattern":
+                    if(!preg_match("/^[aclpDP]+$/", $arg)) {
+                        echo "Illegal characters in --dirpattern, allowed are: aclpDP\n";
+                        exit(cli::EXIT_ILLEGAL_DIRPATTERN);
+                    } else {
+                        $vars["_dirpattern"]=$arg;
+                    }
+                    break;
+
                 case "fields":
                     foreach($arg as $field=>$value) {
                         $vars[$field]=$value;

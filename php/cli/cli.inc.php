@@ -38,7 +38,8 @@ class cli {
     const EXIT_PLACE_NOT_FOUND  = 30;
     const EXIT_ALBUM_NOT_FOUND  = 40;
     const EXIT_CAT_NOT_FOUND    = 50;
-
+    const EXIT_NOT_IN_CWD       = 61;
+    const EXIT_ILLEGAL_DIRPATTERN = 62;
     const EXIT_NO_PARENT        = 80;
 
     // 90 - 97  are also defined in /bin/zoph, as global constants.
@@ -112,13 +113,24 @@ class cli {
             } else {
                 $vars=$this->addNew();
             }
-            
             if(is_array($this->files) && sizeof($this->files)>0) {
-                CliImport::photos($this->files, $vars);
+                if(!isset($vars["_dirpattern"])) {
+                    $photos=array();
+                    foreach($this->files as $file) {
+                        $photo=new photo();
+                        $photo->file["orig"]=$file;
+                        $photos[]=$photo;
+                    }
+                } else {
+                    $photos=$this->processDirpattern();
+                }
+                CliImport::photos($photos, $vars);
             } else {
                 echo "Nothing to do, exiting\n";
                 exit(self::EXIT_NO_FILES);
             }
+
+
             break;
         case "update":
             if(!isset(settings::$importThumbs)) {
@@ -339,7 +351,109 @@ class cli {
         return($return_vars);
     }
 
-    
+    public function processDirpattern() {
+        $vars=$this->args->getVars();
+
+        $patt=str_split($vars["_dirpattern"]);
+
+        $cur=getcwd();
+        $curlen=strlen($cur);
+        $files=array();
+        foreach($this->files as $file) {
+            if(substr($file, 0, $curlen) != $cur) {
+                echo "Sorry, --dirpattern can only be used when importing files under the current dir\n";
+                echo "i.e. do not use absolute paths or '../' when specifying --dirpattern.\n";
+                die(self::EXIT_PATH_NOT_IN_CWD);
+            }
+            $filename=substr($file, $curlen + 1);
+            $dirs=explode("/", $filename);
+            array_pop($dirs);
+            
+            $photo=new photo();
+            $photo->file["orig"]=$file;
+
+            $counter=0;
+            foreach($dirs as $dir) {
+                if(isset($patt[$counter])) {
+                    switch($patt[$counter]) {
+                    case "a":
+                        // album
+                        $album=album::getByName($dir);
+                        if($album[0] instanceof album) {
+                            if(!is_array($photo->_album_id)) {
+                                $photo->_album_id=array();
+                            }
+                            $photo->_album_id[]=$album[0]->getId();
+                        } else {
+                            echo "Album not found: " . $dir . "\n";
+                            die(self::EXIT_ALBUM_NOT_FOUND);
+                        }
+                        break;
+                    case "c":
+                        // category
+                        $cat=category::getByName($dir);
+                        if($cat[0] instanceof category) {
+                            if(!is_array($photo->_category_id)) {
+                                $photo->_category_id=array();
+                            }
+                            $photo->_category_id[]=$cat[0]->getId();
+                        } else {
+                            echo "Category not found: " . $dir . "\n";
+                            die(self::EXIT_CAT_NOT_FOUND);
+                        }
+                        break;
+                    case "l":
+                        // location
+                        $place=place::getByName($dir);
+                        if ($place[0] instanceof place) {
+                           $photo->set("location_id", $place[0]->getId());
+                        } else {
+                            echo "Place not found: " . $dir . "\n";
+                            die(self::EXIT_PLACE_NOT_FOUND);
+                        }
+                        break;
+                    case "p":
+                        // person
+                        $person=person::getByName($dir);
+                        if($person[0] instanceof person) {
+                            if(!is_array($photo->_person_id)) {
+                                $photo->_person_id=array();
+                            }
+                            $photo->_person_id[]=$person[0]->getId();
+                        } else {
+                            echo "Person not found: " . $dir . "\n";
+                            die(self::EXIT_PERSON_NOT_FOUND);
+                        }
+                        break;
+                    case "D":
+                        // dir / path
+                        $path=$photo->_path;
+                        if(!empty($path)) {
+                            $path .= "/";
+                        }
+                        $photo->_path=$path . $dir;
+                        break;
+                    case "P":
+                        // photographer
+                        $person=person::getByName($dir);
+                        if($person[0] instanceof person) {
+                            $photo->set("photographer_id", $person[0]->getId());
+                        } else {
+                            echo "Person not found: " . $dir . "\n";
+                            die(self::EXIT_PERSON_NOT_FOUND);
+                        }
+                        break;
+                    default:
+                        // should never happen...
+                        die(self::EXIT_UNKNOWN_ERROR);
+                    }
+                }
+                $counter++;
+            }
+            $photos[]=$photo;
+        }
+        return $photos;
+    }
     /**
      * Show help
      */
