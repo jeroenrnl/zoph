@@ -169,12 +169,14 @@
     // Zoph needs a MIME Magic file to be able to determine the filetype of an 
     // uploaded file. This is an important security measure, since it prevents 
     // users from uploading files other than images and archives.
-    //
+    // 
+    // If left empty, PHP will use the built-in Magic file, if for some reason
+    // this does not work, you can specify the location of the MIME magic file
     // Where this file is located, depends on your distribution, 
-    // /usr/share/misc/magic.mgc (default), /usr/share/misc/file/magic.mgc, 
+    // /usr/share/misc/magic.mgc, /usr/share/misc/file/magic.mgc, 
     // /usr/share/file/magic are often used.
     //
-    define('MAGIC_FILE', '/usr/share/misc/magic.mgc');
+    define('MAGIC_FILE', '');
 
         
     // commands to use to expand uploaded archives.  set to 0 to disable.
