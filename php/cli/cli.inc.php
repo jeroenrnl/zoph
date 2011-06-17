@@ -149,7 +149,7 @@ class cli {
                     cliimport::progress($cur, $total);
                     $cur++;
                     $photo->lookup();
-                    $photo->set_fields($this->args->getVars());
+                    $photo->setFields($this->args->getVars());
                     $photo->update();
                     $photo->updateRelations($this->args->getVars());
                     if(settings::$importThumbs===true) {
@@ -240,6 +240,10 @@ class cli {
         }
     }
         
+    /**
+     * Looks up a file by filename
+     * @todo Maybe this should be moved into the file object?
+     */
     private function lookupFile($file) {
         $filename=basename($file);
         $path=dirname($file);
@@ -351,6 +355,9 @@ class cli {
         return($return_vars);
     }
 
+    /**
+     * Process the --dirpattern setting
+     */
     public function processDirpattern() {
         $vars=$this->args->getVars();
 

@@ -19,7 +19,7 @@
  * @package Zoph
  */
 
-class track extends zoph_table {
+class track extends zophTable {
     private $points=array();
 
     /**
@@ -31,7 +31,7 @@ class track extends zoph_table {
      */
     public function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("track_id must be numeric"); }
-        parent::zoph_table("track", array("track_id"), array("name"));
+        parent::__construct("track", array("track_id"), array("name"));
         $this->set("track_id", $id);
     }
 
@@ -59,7 +59,7 @@ class track extends zoph_table {
      * Return the ID of the current object
      *
      * @todo Once the refactoring of the Zoph objects has been done, this
-     *       method should be in the zoph_table object
+     *       method should be in the zophTable object
      */
     public function getId() {
         return $this->get("track_id");
@@ -184,6 +184,9 @@ class track extends zoph_table {
         return $js;
     }
     
+    /**
+     * Get the first point from a track
+     */
     public function getFirstPoint() {
         $points=$this->getPoints();
         $first=$points[0];
@@ -194,6 +197,9 @@ class track extends zoph_table {
         }
     }
 
+    /**
+     * Get the last point from a track
+     */
     public function getLastPoint() {
         $points=$this->getPoints();
         $last=end($points);
@@ -204,6 +210,9 @@ class track extends zoph_table {
         }
     }
     
+    /**
+     * Get the number of points in a track
+     */
     public function getPointCount() {
         $points=$this->getPoints();
         return count($points);
@@ -227,12 +236,12 @@ class track extends zoph_table {
 
     /**
      * Get all tracks
-     * @todo should move to zoph_table when refactoring classes
+     * @todo should move to zophTable when refactoring classes
      */
     public static function getAll($constraints = null, $conj = "and", 
         $ops = null, $order = "name") {
 
-        return get_records("track", $order, $constraints, $conj, $ops);
+        return track::getRecords("track", $order, $constraints, $conj, $ops);
     }
 
 }

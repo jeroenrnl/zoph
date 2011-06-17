@@ -83,7 +83,7 @@ if ($action == "confirm") {
 <dl>
 <?php 
     $pageset->lookup();
-    echo create_field_html($pageset->get_display_array());
+    echo create_field_html($pageset->getDisplayArray());
 ?>
 </dl>
 <br>

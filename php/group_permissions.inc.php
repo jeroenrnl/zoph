@@ -22,12 +22,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class group_permissions extends zoph_table {
+class group_permissions extends zophTable {
 
-    function group_permissions($gid = -1, $aid = -1) {
+    function __construct($gid = -1, $aid = -1) {
         if($gid && !is_numeric($gid)) { die("group_id must be numeric"); }
         if($aid && !is_numeric($aid)) { die("album_id must be numeric"); }
-        parent::zoph_table("group_permissions", array("group_id", "album_id"), array(""));
+        parent::__construct("group_permissions", array("group_id", "album_id"), array(""));
         $this->set("group_id", $gid);
         $this->set("album_id", $aid);
     }

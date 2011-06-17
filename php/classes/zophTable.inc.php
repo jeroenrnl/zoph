@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * A generic table class.  Is is meant to be subclassed by particular
  * table classes.  A table is represented by a name, an array of
  * primary keys, and an array mapping field names to values.
@@ -19,30 +18,46 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jason Geiger, Jeroen Roos
+ * @package Zoph
  */
 
-class zoph_table {
+/**
+ * A generic table class.  Is is meant to be subclassed by particular
+ * table classes.  A table is represented by a name, an array of
+ * primary keys, and an array mapping field names to values.
+ */
+abstract class zophTable {
+    /** @var string The name of the database table */
+    public $table_name;
+    /** @var array Lisy of primary keys */
+    public $primary_keys;
+    /** @var array Contains the values of attributes that will be stored in the db */
+    public $fields;
+    /** @var array Fields that may not be empty */
+    public $not_null; 
 
-    var $table_name;
-    var $primary_keys;
-    var $fields;
-    var $not_null; // Fields that may not be empty
-
-    /*
+    /**
      * This construnctor should be called from the constructor
      * of a subclass.
+     * @param string Name of the db table
+     * @param array List of primary keys
+     * @param array List of fields that may not be NULL
      */
-    function zoph_table($table_name, $primary_keys, $not_null) {
+    public function __construct($table_name, array $primary_keys, array $not_null) {
         $this->table_name = DB_PREFIX . $table_name;
         $this->primary_keys = $primary_keys;
         $this->not_null = $not_null;
         $this->fields = array();
     }
 
-    /*
-     * Gets a field.
+    /**
+     * Returns the value of a field
+     * @param string name of field to get
+     * @return string value of the field
      */
-    function get($name) {
+    public function get($name) {
         log::msg("<b>GET</b> " . $name, log::DEBUG, log::VARS);  
         log::msg("<pre>" . var_export($this->fields, true) . "</pre>", log::MOREDEBUG, log::VARS);
         if (isset($this->fields[$name])) {
@@ -52,18 +67,24 @@ class zoph_table {
         }
     }
 
-    /*
-     * Sets a field.
+    /**
+     * Sets the value of a field.
+     * @param string Name of the field to set
+     * @param string Value to set it to
      */
-    function set($name, $value) {
+    public function set($name, $value) {
         $this->fields[$name] = $value;
     }
 
-    /*
+    /**
      * Sets fields from the given array.  Can be used to set vars
      * directly from a GET or POST.
-     */
-    function set_fields($vars, $prefix = null, $suffix = null, $null=true) {
+     * @param array Variables to be set (like $_GET)
+     * @param string Prefix to cut off from beginning of key name
+     * @param string Suffic to cut off from end of key name
+     * @param bool Whether or not to process empty fields
+      */
+    public function setFields(array $vars, $prefix = null, $suffix = null, $null=true) {
 
         reset($vars);
         while (list($key, $val) = each($vars)) {
@@ -82,12 +103,10 @@ class zoph_table {
             if ($prefix) {
                 if (strpos($key, $prefix) === 0) {
                     $key = substr($key, strlen($prefix));
-                }
-                else {
+                } else {
                     continue;
                 }
-            }
-            else if ($key[0] == '_') {
+            } else if ($key[0] == '_') {
                 // a leading uderscore signals a non-database field
                 continue;
             }
@@ -108,21 +127,27 @@ class zoph_table {
             $this->fields[$key] = stripslashes($val);
 
         }
-
     }
 
-    /*
+    /**
      * Checks to see if the given field is listed as a primary key.
+     * @param string Name of the field
+     * @param array List of primary keys to be used instead class-defined list
+     * @return bool Whether or not field is listed
      */
-    function is_key($name, $keys = null) {
+    public function isKey($name, $keys = null) {
         if (!$keys) { $keys = $this->primary_keys; }
         return in_array($name, $keys);
     }
 
-    /*
+    /**
      * Looks up a record.
+     * @param string SQL query to use instead of the generated query
+     * @return mixed 1 or 0
+     * @todo Should return something more sensible
+     * @todo Check if the 'supply your own SQL' is used anywhere
      */
-    function lookup($sql = null) {
+    public function lookup($sql = null) {
 
         if (!$this->table_name || !$this->primary_keys || !$this->fields) {
             log::msg("Missing data", log::ERROR, log::GENERAL);
@@ -130,7 +155,7 @@ class zoph_table {
         }
 
         if (!$sql) {
-            $constraint = $this->create_constraints($this->primary_keys);
+            $constraint = $this->createConstraints($this->primary_keys);
 
             if (!$constraint) {
                 log::msg("No constraint found", log::NOTIFY, log::GENERAL);
@@ -146,7 +171,6 @@ class zoph_table {
 
             $this->fields = array();
 
-            //$this->set_fields($row);
             $this->fields = array_merge($this->fields, $row);
 
             return 1;
@@ -156,11 +180,14 @@ class zoph_table {
 
     }
 
-    /*
+    /**
      * Inserts a record.  The default behavior is to ignore the
      * primary key field(s) with the assumption that these will
      * be generated by the db (auto_increment).  Passing a non null
      * parameter causes these fields to be manually inserted.
+     * @param bool Whether or not a key should be overwritten
+     * @return int Key ID
+     * @todo Check if the keep_key function is ever used
      */
     function insert($keep_key = null) {
 
@@ -171,7 +198,7 @@ class zoph_table {
         $names=null;
         $values=null;
         while (list($name, $value) = each($this->fields)) {
-            if ($this->primary_keys && !$keep_key && $this->is_key($name)) {
+            if ($this->primary_keys && !$keep_key && $this->isKey($name)) {
                 continue;
             }
 
@@ -212,11 +239,13 @@ class zoph_table {
 
     }
 
-    /*
+    /**
      * Deletes a record.  If extra tables are specified, entries from
      * those tables this match the keys are removed as well.
+     * @param array Fields to use as primary keys
+     * @param array Tables to delete referencing objects from
      */
-    function delete($keys = null, $extra_tables = null) {
+    public function delete(array $keys = null, array $extra_tables = null) {
         if (!$keys) { $keys = $this->primary_keys; }
 
         if (!$this->table_name || !$keys || !$this->fields) {
@@ -224,7 +253,7 @@ class zoph_table {
             return;
         }
 
-        $constraints = $this->create_constraints($keys);
+        $constraints = $this->createConstraints($keys);
 
         if (!$constraints) {
             log::msg("No constraint found", log::NOTIFY, log::GENERAL);
@@ -244,10 +273,11 @@ class zoph_table {
         }
     }
 
-    /*
+    /**
      * Updates a record.
+     * @param array Fields to use as primary keys
      */
-    function update($keys = null) {
+    public function update(array $keys = null) {
         if (!$keys) { $keys = $this->primary_keys; }
 
         if (!$this->table_name || !$keys || !$this->fields) {
@@ -255,7 +285,7 @@ class zoph_table {
             return;
         }
 
-        $constraints = $this->create_constraints($keys);
+        $constraints = $this->createConstraints($keys);
 
         if (!$constraints) {
             log::msg("No constraint found", log::NOTIFY, log::GENERAL);
@@ -265,7 +295,7 @@ class zoph_table {
         $values=null;
         $names=null;
         while (list($name, $value) = each($this->fields)) {
-            if ($this->is_key($name, $keys)) { continue; }
+            if ($this->isKey($name, $keys)) { continue; }
 
             if (!empty($values)) { $values .= ", "; }
             
@@ -298,10 +328,11 @@ class zoph_table {
 
     }
 
-    /*
+    /**
      * Creates a constraint clause based on the given keys
+     * @param array Fields to use for contstraints
      */
-    function create_constraints($keys) {
+    private function createConstraints(array $keys) {
         $constraints=null;
         foreach ($keys as $key) {
             $value = $this->fields[$key];
@@ -312,17 +343,18 @@ class zoph_table {
         return $constraints;
     }
 
-    /*
+    /**
      * Creates an alphabetized array of field names and values.
+     * @return array Array for displaying object
      */
-    function get_display_array() {
+    function getDisplayArray() {
         if (!$this->fields) { return; }
 
         $keys = array_keys($this->fields);
         sort($keys);
         reset($keys);
         foreach ($keys as $k) {
-            if ($this->is_key($k)) { continue; }
+            if ($this->isKey($k)) { continue; }
             $title = make_title($k);
             $da[$title] = $this->fields[$k];
         }
@@ -330,10 +362,12 @@ class zoph_table {
         return $da;
     }
 
-    /*
+    /**
      * Creates an alphabetized array of field names and text input blocks.
+     * @todo Returns HTML, should be moved to template
+     * @return array of field names and HTML text input fields
      */
-    function get_edit_array() {
+    public function getEditArray() {
         if (!$this->fields) { return; }
 
         $field_lengths = get_field_lengths($this->table_name);
@@ -342,7 +376,7 @@ class zoph_table {
         sort($keys);
         reset($keys);
         foreach ($keys as $k) {
-            if ($this->is_key($k)) { continue; }
+            if ($this->isKey($k)) { continue; }
             $title = make_title($k);
 
             $len = $field_lengths[$k];
@@ -354,7 +388,18 @@ class zoph_table {
         return $ea;
     }
 
-    function get_mapping_js($user,$icon,$edit=false) {
+    /**
+     * Get Javascript for map
+     * This is here because it is used by both location and photo
+     * but this is really not a good place, since other objects do not use it
+     * @todo Move this to another object.
+     * @todo Remove user object
+     * @todo Contains javascript
+     * @param user User object, seems to be unused
+     * @param string Icon to be used
+     * @param bool true when JS is used for editable map
+     */
+    protected function getMappingJs(user $user, $icon,$edit=false) {
         $marker=true;
         $lat=$this->get("lat");
         $lon=$this->get("lon");
@@ -394,7 +439,16 @@ class zoph_table {
         return $js;
     }
 
-    function get_marker($user, $icon) {
+    /**
+     * Get Javascript for marker
+     * This is here because it is used by both location and photo
+     * but this is really not a good place, since other objects do not use it
+     * @todo Move this to another object
+     * @param user logged in user
+     * @param string icon to use
+     * @return string Javascript to display a marker on the map
+     */
+    protected function getMarker(user $user, $icon) {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         $title=$this->get("title");
@@ -408,180 +462,136 @@ class zoph_table {
         }
     }
 
-
-}
-
-/*
- * Gets the total count of records in the table for the given class.
- */
-function get_count($class) {
-
-    if (class_exists($class)) {
-        $obj = new $class;
-        $table = $obj->table_name;
-    }
-    else {
-        $table = DB_PREFIX . $class;
-    }
-
-    $sql = "select count(*) from $table";
-
-    return get_count_from_query($sql);
-}
-
-
-/*
- * Executes the given query and returns the result.
- */
-function get_count_from_query($sql) {
-    $result = query($sql, "Unable to get count");
-    return result($result, 0, 0);
-}
-
-/*
- * Gets an array of the records for a table by doing a * "select *"
- * and storing the results in classes of the given type.
- */
-function get_records($class, $order = null, $constraints = null,
-    $conj = "and", $ops = null) {
-    
-
-    $obj = new $class;
-    $sql = "select * from $obj->table_name";
-    if ($constraints) {
-        while (list($name, $value) = each($constraints)) {
-            if (!empty($constraint_string)) {
-                $constraint_string .= " $conj ";
-            } else {
-                $constraint_string =  " where ";
-            }
-
-            $op = "=";
-            if ($ops && !empty($ops["$name"])) {
-                $op = $ops["$name"];
-            }
-
-            $n = strpos($name, "#");
-            if ($n > 1) {
-                $name = substr($name, 0, $n);
-            }
-
-            if ($value == "null" || $value == "''") {
-                // ok
-            }
-            else {
-                $value = "'" . escape_string($value) . "'";
-            }
-
-            $constraint_string .= "$name $op $value";
-        }
-        $sql .= $constraint_string;
-    }
-
-    if ($order) {
-        $sql .= " order by $order";
-    }
-    return get_records_from_query($class, $sql);
-}
-
-/*
- * Stores the results the the given query in an array of objects of
- * this given type.
- */
-function get_records_from_query($class, $sql, $min = 0, $num = 0) {
-
-    $result = query($sql, "Unable to get records");
-
-    if ($min) {
-        data_seek($result, $min);
-    }
-
-    if ($num) {
-        $limit = true;
-    } else {
-        $limit = false;
-    }
-
-    $objs = array();
-    if ($class != null) {
-        while ((!$limit || $num-- > 0) && $row = fetch_assoc($result)) {
+    /**
+     * Gets the total count of records in the table for the given class.
+     * @param string Classname
+     * @return int count
+     * @todo Once the mimimum PHP version is 5.3, the $class param should
+     *       be removed and replaced by get_called_class()
+     */
+    public static function getCount($class) {
+        if (class_exists($class)) {
             $obj = new $class;
-            $obj->set_fields($row);
-            $objs[] = $obj;
-        }
-    } else {
-        // use to grab ids, for example
-        while ((!$limit || $num-- > 0) && $row = fetch_row($result)) {
-            $objs[] = $row[0];
-        }
-    }
-
-    free_result($result);
-    return $objs;
-}
-
-/*
- * Executes a query and returns an array in which each record's
- * link is mapped to its count (dirived by a group by clause).
- */
-function get_popular_results($class, $query) {
-    $records = get_records_from_query($class, $query);
-    foreach ($records as $rec) {
-        $pop_array[$rec->get_link()] = $rec->get("count");
-    }
-    return $pop_array;
-}
-
-/*
- * Creates an array to be used in the create_pulldown methods.  The
- * values of the fields in the name_fields parameter are concatentated
- * together to construnct the titles of the selections.
- */
-function create_select_array($records, $name_fields) {
-    if (!$records || !$name_fields) { return; }
-
-    foreach ($records as $rec) {
-        // this only makes sense when there is one key
-        $id = $rec->get($rec->primary_keys[0]);
-
-        $name = "";
-        foreach ($name_fields as $n) {
-            if ($name) { $name .= " "; }
-            $name .= $rec->get($n);
+            $table = $obj->table_name;
+        } else {
+            $table = DB_PREFIX . $class;
         }
 
-        $sa[$id] = $name;
+        $sql = "select count(*) from $table";
+
+        return $obj::getCountFromQuery($sql);
     }
 
-    return $sa;
-}
-
-/*
- * Creates an object of the given class and returns the output of
- * its get_link() method.
- */
-function get_link($class, $id) {
-    if (!$class || !$id) { return ""; }
-    $obj = new $class($id);
-    $obj->lookup();
-    return $obj->get_link();
-}
-
-/**
- * Create a link list
- * Creates a comma separated list of links from the given records.
- * The class of the records must implement the get_link function.
- */
-function create_link_list($records) {
-    $links = "";
-    if ($records) {
+    /**
+     * Generates an array for Top N albums/cat/.. 
+     * Executes a query and returns an array in which each record's
+     * link is mapped to its count (dirived by a group by clause).
+     * @param string classname
+     * @param string query SQL query to use
+     * @return array Table of Top N most popular $class
+     * @todo Once minimum PHP version is 5.3, the $class can be replaced by
+     *       get_called_class()
+     */
+    public static function getTopN($class, $query) {
+        $records = $class::getRecordsFromQuery($class, $query);
         foreach ($records as $rec) {
-            if ($links) { $links .= ", "; }
-            $links .= $rec->get_link();
+            $pop_array[$rec->getLink()] = $rec->get("count");
         }
+        return $pop_array;
+    }
+    
+    /**
+     * Executes a "SELECT COUNT(*) FROM ..." query and returns the counter
+     */
+    public static function getCountFromQuery($sql) {
+        $result = query($sql, "Unable to get count");
+        return result($result, 0, 0);
     }
 
-    return $links;
+
+    /**
+     * Gets an array of the records for a table by doing a * "select *"
+     * and storing the results in classes of the given type.
+     * @todo the $class can be removed when PHP5.3 is min version
+     */
+    public static function getRecords($class, $order = null, $constraints = null,
+        $conj = "and", $ops = null) {
+        
+
+        $obj = new $class;
+        $sql = "select * from $obj->table_name";
+        if ($constraints) {
+            while (list($name, $value) = each($constraints)) {
+                if (!empty($constraint_string)) {
+                    $constraint_string .= " $conj ";
+                } else {
+                    $constraint_string =  " where ";
+                }
+
+                $op = "=";
+                if ($ops && !empty($ops["$name"])) {
+                    $op = $ops["$name"];
+                }
+
+                $n = strpos($name, "#");
+                if ($n > 1) {
+                    $name = substr($name, 0, $n);
+                }
+
+                if ($value == "null" || $value == "''") {
+                    // ok
+                }
+                else {
+                    $value = "'" . escape_string($value) . "'";
+                }
+
+                $constraint_string .= "$name $op $value";
+            }
+            $sql .= $constraint_string;
+        }
+
+        if ($order) {
+            $sql .= " order by $order";
+        }
+        return self::getRecordsFromQuery($class, $sql);
+    }
+
+    /*
+     * Stores the results the the given query in an array of objects of
+     * this given type.
+     * @todo the $class can be removed when PHP5.3 is min version
+     */
+    public static function getRecordsFromQuery($class, $sql, $min = 0, $num = 0) {
+
+        $result = query($sql, "Unable to get records");
+
+        if ($min) {
+            data_seek($result, $min);
+        }
+
+        if ($num) {
+            $limit = true;
+        } else {
+            $limit = false;
+        }
+
+        $objs = array();
+        if ($class != null) {
+            while ((!$limit || $num-- > 0) && $row = fetch_assoc($result)) {
+                $obj = new $class;
+                $obj->setFields($row);
+                $objs[] = $obj;
+            }
+        } else {
+            // use to grab ids, for example
+            while ((!$limit || $num-- > 0) && $row = fetch_row($result)) {
+                $objs[] = $row[0];
+            }
+        }
+
+        free_result($result);
+        return $objs;
+    }
 }
 
 /**
@@ -675,23 +685,6 @@ function get_xml($class, $search,$user=null) {
     }
     $xml->appendChild($rootnode);
     return $xml->saveXML();
-}
-
-function get_zoph_info_array() {
-    $album= album::getRoot();
-    $category = category::getRoot();
-
-    $size=get_human(get_photo_sizes_sum());
-    return array(
-        translate("number of photos") => get_count("photo"),
-        translate("size of photos") => "$size",
-        translate("number of photos in an album") =>
-            $album->get_total_photo_count(),
-        translate("number of categorized photos") =>
-            $category->get_total_photo_count(),
-        translate("number of people") => get_count("person"),
-        translate("number of places") => get_count("place")
-    );
 }
 
 ?>

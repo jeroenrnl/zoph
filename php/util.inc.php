@@ -764,13 +764,13 @@ function pager($current, $total, $num_pages, $page_size, $max_size, $url, $reque
     }
     return $html;
 }
-function get_markers($objects, $user) {
+function getMarkers($objects, $user) {
     $js="";
     $markers=array();
     if($objects) {
         foreach($objects as $object) {
             $object->lookup();
-            $marker=$object->get_marker($user);
+            $marker=$object->getMarker($user);
             if($marker) {
                 $markers[]=$marker;
             }

@@ -215,7 +215,7 @@
         <script type="text/javascript">
 <?php
         echo create_map_js();
-        echo get_markers($thumbnails, $user);
+        echo getMarkers($thumbnails, $user);
 ?>
         </script>
 <?php

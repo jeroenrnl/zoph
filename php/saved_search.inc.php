@@ -19,11 +19,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class search extends zoph_table {
+class search extends zophTable {
 
-    function search($id = 0) {
+    function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("search_id must be numeric"); }
-        parent::zoph_table("saved_search", array("search_id"), array("name"));
+        parent::__construct("saved_search", array("search_id"), array("name"));
         $this->set("search_id", $id);
 
     }
@@ -50,7 +50,7 @@ class search extends zoph_table {
         // This should be created some time, but might slow down too much
     }
 
-    function get_edit_array($user) {
+    function getEditArray($user) {
         $edit_array=array();
 
 
@@ -61,7 +61,7 @@ class search extends zoph_table {
         if($user->is_admin()) {
             $edit_array[]=array (
                 translate("Owner"),
-                create_pulldown("owner", $this->get("owner"), create_select_array(get_records("user", "user_name"), array("user_name"))));
+                create_pulldown("owner", $this->get("owner"), template::createSelectArray(user::getRecords("user", "user_name"), array("user_name"))));
             $edit_array[]=array(
                 translate("Public"),
                 create_pulldown("public", $this->get("public"), array("0" => translate("No",0), "1" => translate("Yes",0))) );
@@ -75,14 +75,14 @@ class search extends zoph_table {
             $owner=new user($this->get("owner"));
             $owner->lookup();
             $ownertext="<span class='searchinfo'>(" . translate("by") . " " .
-                $owner->get_link() . ")</span>";
+                $owner->getLink() . ")</span>";
         }
-        return "<a href='" . $this->get_link() . "&_action=" . 
+        return "<a href='" . $this->getLink() . "&_action=" . 
             translate("search") . "'>" . $this->get_name() .
             "</a> " . $ownertext;
     }
 
-    function get_link() {
+    function getLink() {
         return "search.php?" . $this->get("search");
     }
 }
@@ -94,7 +94,7 @@ function get_saved_searches($user) {
         $sql.=" WHERE (owner=" . escape_string($user->get("user_id")) . 
             " OR " .  "public=TRUE)"; 
     }
-    return get_records_from_query("search", $sql);
+    return search::getRecordsFromQuery("search", $sql);
 }
 
 function get_list_of_saved_searches($user) {
@@ -105,7 +105,7 @@ function get_list_of_saved_searches($user) {
 
         foreach ($searches as $search) {
             $html.="<span class='actionlink'>";
-            $html.="<a href='" . $search->get_link() . "'>" .
+            $html.="<a href='" . $search->getLink() . "'>" .
                 translate("load") . "</a>";
             if(($search->get("owner") == $user->get("user_id")) || 
                 $user->is_admin()) {

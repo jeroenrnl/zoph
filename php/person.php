@@ -108,7 +108,7 @@
 <?php
 if ($user->get("detailed_people") || $user->is_admin()) {
 ?>
-<?php echo create_field_html($person->get_display_array()) ?>
+<?php echo create_field_html($person->getDisplayArray()) ?>
 <?php
         if ($person->get_email()) {
 ?>

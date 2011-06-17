@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -16,12 +16,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-/*
- * zoph_tree_table represents a hierarchical table.  Since the album
+/**
+ * zophTreeTable represents a hierarchical table.  Since the album
  * and category tables are identical in structure, some of the methods
  * those classes share are abstracted and placed here.
  */
-class zoph_tree_table extends zoph_table {
+abstract class zophTreeTable extends zophTable {
 
     var $children;
     var $ancestors;
@@ -59,7 +59,7 @@ class zoph_tree_table extends zoph_table {
             $sql .= " order by $order";
         }
 
-        $this->children = get_records_from_query(get_class($this), $sql);
+        $this->children = zophTreeTable::getRecordsFromQuery(get_class($this), $sql);
         return $this->children;
 
     }
@@ -130,7 +130,7 @@ class zoph_tree_table extends zoph_table {
         } else {
             $html.="<span>&nbsp;&nbsp;</span>";
         }
-        $html.=$this->get_link();
+        $html.=$this->getLink();
         if($children) {
             $html.= "<ul>";
         }

@@ -18,10 +18,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class page extends zoph_table {
-    function page($id = 0) {
+class page extends zophTable {
+    function __construct($id = 0) {
          if($id && !is_numeric($id)) { die("page_id must be numeric"); }
-        parent::zoph_table("pages", array("page_id"), array("title"));
+        parent::__construct("pages", array("page_id"), array("title"));
         $this->set("page_id", $id);
     }
     
@@ -48,7 +48,7 @@ class page extends zoph_table {
     }
     
     
-    function get_display_array() {
+    function getDisplayArray() {
         $zophcode = new zophcode($this->get("text"));
         $text="<div class='page-preview'>" . $zophcode . "</div>";
 
@@ -101,7 +101,7 @@ class page extends zoph_table {
         $html="";
         $sql = "select pageset_id from " . DB_PREFIX . "pages_pageset" .
             " where page_id = " . $this->get("page_id");
-        $pagesets=get_records_from_query("pageset", $sql);
+        $pagesets=pageset::getRecordsFromQuery("pageset", $sql);
         if(!empty($pagesets)) {
             $html=get_pagesets_table_header();
             foreach ($pagesets as $pageset) {
@@ -148,7 +148,7 @@ function get_page_table($pages_array, $pageset_id) {
 function get_pages($constraints = null, $conj = "and", $ops = null,
     $order = "title") {
 
-    return get_records("page", $order, $constraints, $conj, $ops);
+    return pageset::getRecords("page", $order, $constraints, $conj, $ops);
 }
 
 function get_pages_select_array($pages_array = null) {

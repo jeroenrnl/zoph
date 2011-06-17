@@ -115,7 +115,7 @@
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
 ?>
-            <?php echo $parent->get_link() ?> &gt;
+            <?php echo $parent->getLink() ?> &gt;
 <?php
         }
     }
@@ -256,7 +256,7 @@
         <div id="map" class="map"></div>
         <script type="text/javascript">
             <?php echo create_map_js(); ?>
-            <?php echo $place->get_mapping_js($user); ?>
+            <?php echo $place->getMappingJs($user); ?>
         </script>
 <?php
 

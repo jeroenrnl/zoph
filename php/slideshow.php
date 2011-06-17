@@ -125,7 +125,7 @@ if (!$_pause) {
 ?>
         <br>
      <dl>
-<?php echo create_field_html($photo->get_display_array(), 2) ?>
+<?php echo create_field_html($photo->getDisplayArray(), 2) ?>
 <?php
         if ($photo->get("description")) {
 ?>

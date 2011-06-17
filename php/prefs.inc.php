@@ -20,13 +20,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class prefs extends zoph_table {
+class prefs extends zophTable {
 
     var $color_scheme;
 
-    function prefs($id = 0) {
+    function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("user_id must be numeric"); }
-        parent::zoph_table("prefs", array("user_id"), array(""));
+        parent::__construct("prefs", array("user_id"), array(""));
         $this->set("user_id", $id);
     }
 

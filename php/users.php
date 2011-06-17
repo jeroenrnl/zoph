@@ -45,7 +45,7 @@
             <a href="user.php?user_id=<?php echo $u->get("user_id") ?>"><?php echo $u->get("user_name") ?></a>
           </td>
           <td>
-            <?php echo $u->person->get_link() ?>
+            <?php echo $u->person->getLink() ?>
           </td>
           <td>
           <span class="actionlink">

@@ -68,7 +68,12 @@ class template {
             die();
         }
     }
-
+    
+    /**
+     * Return the template in a string
+     * 
+     * @return string
+     */
     public function toString() {
         return sprintf("%s", $this);
     }
@@ -108,6 +113,9 @@ class template {
         return $html;
     }
 
+    /**
+     * Markup an array of actionlinks using the actionlinks template
+     */
     private function getActionlinks($actionlinks) {
         if(is_array($actionlinks)) {
             $tpl=new template("actionlinks", array(
@@ -116,4 +124,46 @@ class template {
             return $tpl->toString();
         }
     }
+    
+    /**
+     * Create a link list
+     * Creates a comma separated list of links from the given records.
+     * The class of the records must implement the getLink function.
+     */
+    public static function createLinkList($records) {
+        $links = "";
+        if ($records) {
+            foreach ($records as $rec) {
+                if ($links) { $links .= ", "; }
+                $links .= $rec->getLink();
+            }
+        }
+
+        return $links;
+    }
+
+    /**
+     * Creates an array to be used in the create_pulldown methods.  The
+     * values of the fields in the name_fields parameter are concatentated
+     * together to construnct the titles of the selections.
+     */
+    public static function createSelectArray($records, $name_fields) {
+        if (!$records || !$name_fields) { return; }
+
+        foreach ($records as $rec) {
+            // this only makes sense when there is one key
+            $id = $rec->get($rec->primary_keys[0]);
+
+            $name = "";
+            foreach ($name_fields as $n) {
+                if ($name) { $name .= " "; }
+                $name .= $rec->get($n);
+            }
+
+            $sa[$id] = $name;
+        }
+
+        return $sa;
+    }
+
 }

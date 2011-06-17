@@ -116,7 +116,7 @@ if($_action=="" || $_action=="display") {
         if($tagged>0) {
             $js;
             foreach ($tphotos as $photo) {
-                $js.=$photo->get_marker(null,$user);
+                $js.=$photo->getMarker(null,$user);
             }
             
             $mapping_js=create_map_js() . $js;

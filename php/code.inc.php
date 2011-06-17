@@ -456,8 +456,4 @@ class zophcode {
         return array($find, $replace);
     }
 }
-
-
-
-
 ?>

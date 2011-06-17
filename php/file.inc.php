@@ -99,13 +99,23 @@ class file {
         }
     }
 
+    /**
+     * Returns full path + filename
+     */
     public function __toString() {
         return $this->getPath() . "/" . $this->getName();
     }
    
+    /**
+     * Returns filename
+     */
     public function getName() {
         return $this->name;
     }
+
+    /**
+     * Returns full path
+     */
     public function getPath() {
         return $this->path;
     }
@@ -174,7 +184,6 @@ class file {
     /**
      * Makes checks if a file can be found and read
      */
-
     public function check() {
         if(!file_exists($this)) {
             throw new FileNotFoundException("File not found: $this\n");
@@ -215,6 +224,9 @@ class file {
         return true;
     }
 
+    /**
+     * Moves a file
+     */
     public function move() {
         $destPath=$this->destPath;
         $destName=$this->destName;
@@ -238,6 +250,9 @@ class file {
         }
     }
 
+    /**
+     * Copies a file
+     */
     public function copy() {
         $destPath=$this->destPath;
         $destName=$this->destName;
@@ -251,6 +266,9 @@ class file {
         }
     }
 
+    /**
+     * Changes the permissions for a file
+     */
     public function chmod($mode = null) {
         if($mode===null) {
             if(!defined("FILE_MODE") || !is_numeric(FILE_MODE)) {

@@ -19,14 +19,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class person extends zoph_table {
+class person extends zophTable {
 
     var $home;
     var $work;
 
     function person($id = 0) {
         if($id && !is_numeric($id)) { die("person_id must be numeric"); }
-        parent::zoph_table("people", array("person_id"), array("first_name"));
+        parent::__construct("people", array("person_id"), array("first_name"));
         $this->set("person_id", $id);
     }
 
@@ -78,16 +78,25 @@ class person extends zoph_table {
         return;
     }
 
-    function get_father() {
-        return get_person($this->get("father_id"));
+    public static function getFromId($person_id) {
+        $person=null;
+        if(!is_null($person_id) && $person_id!=0) {
+            $person=new person($person_id);
+            $person->lookup();
+        }
+        return $person;
     }
 
-    function get_mother() {
-        return new person($this->get("mother_id"));
+    function getFather() {
+        return person::getFromId($this->get("father_id"));
     }
 
-    function get_spouse() {
-        return new person($this->get("spouse_id"));
+    function getMother() {
+        return person::getFromId($this->get("mother_id"));
+    }
+
+    function getSpouse() {
+        return person::getFromId($this->get("spouse_id"));
     }
 
     function get_children() {
@@ -120,7 +129,11 @@ class person extends zoph_table {
         return get_name();
     }
 
-    function get_link($show_last_name = 1) {
+    /**
+     * Get a link to this person
+     * @todo Not proper OO, parent function does not have parameter
+     */
+    function getLink($show_last_name = 1) {
         if ($show_last_name) {
             $name = $this->get_name();
         }
@@ -132,15 +145,26 @@ class person extends zoph_table {
         return "<a href=\"person.php?person_id=" . $this->get("person_id") . "\">$name</a>";
     }
 
-    function get_display_array() {
-        return array(
+    function getDisplayArray() {
+        $mother=$this->getMother();
+        $father=$this->getFather();
+        $spouse=$this->getSpouse();
+
+        $display=array(
             translate("called") => e($this->get("called")),
             translate("date of birth") => create_date_link(e($this->get("dob"))),
             translate("date of death") => create_date_link(e($this->get("dod"))),
-            translate("gender") => e($this->get_gender()),
-            translate("mother") => get_link("person", e($this->get("mother_id"))),
-            translate("father") => get_link("person", e($this->get("father_id"))),
-            translate("spouse") => get_link("person", e($this->get("spouse_id"))));
+            translate("gender") => e($this->get_gender()));
+        if($mother instanceof person) {
+            $display[translate("mother")] = $mother->getLink();
+        }
+        if($father instanceof person) {
+            $display[translate("father")] = $father->getLink();
+        }
+        if($spouse instanceof person) {
+            $display[translate("spouse")] = $spouse->getLink();
+        }
+        return $display;
     }
     function xml_rootname() {
         return "people";
@@ -187,7 +211,8 @@ class person extends zoph_table {
                     escape_string($this->get("person_id")) .
                     " " . $order;
             }
-            $coverphoto=array_shift(get_records_from_query("photo", $sql));
+            $coverphoto=array_shift(photo::getRecordsFromQuery("photo", $sql));
+
         }
 
         if ($coverphoto) {
@@ -246,15 +271,64 @@ class person extends zoph_table {
         $sql = "SELECT person_id FROM " . DB_PREFIX . "people WHERE " .
             "CONCAT_WS(\" \", lower(first_name), lower(last_name))=" .
             "lower(\"" . escape_string($name) . "\")";
-        return get_records_from_query("person", $sql);
+        return person::getRecordsFromQuery("person", $sql);
     }
 
-    
+    /**
+     * Gets the total count of records in the table
+     * @todo Can be removed when minimum PHP version is 5.3 
+     */
+    public static function getCount($dummy=null) {
+        return parent::getCount("person");
+    }
+
+    /**
+     * Get Top N people
+     */
+    public static function getTopN(user $user=null) {
+
+        global $TOP_N;
+
+        if ($user && !$user->is_admin()) {
+            $sql =
+                "SELECT ppl.*, COUNT(DISTINCT ph.photo_id) AS count FROM " .
+                DB_PREFIX . "people as ppl JOIN " .
+                DB_PREFIX . "photo_people as pp " .
+                "ON pp.person_id = ppl.person_id JOIN " .
+                DB_PREFIX . "photos as ph " .
+                "ON pp.photo_id = ph.photo_id JOIN " .
+                DB_PREFIX . "photo_albums as pa " .
+                "ON pa.photo_id = pp.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE gu.user_id = '" . 
+                escape_string($user->get("user_id")) . "' " .
+                " AND gp.access_level >= ph.level " .
+                "GROUP BY ppl.person_id " .
+                "ORDER BY count DESC, ppl.last_name, ppl.first_name " .
+                "LIMIT 0, " . escape_string($TOP_N);
+        }
+        else {
+            $sql =
+                "select ppl.*, count(*) as count from " .
+                DB_PREFIX . "people as ppl, " .
+                DB_PREFIX . "photo_people as pp " .
+                "where ppl.person_id = pp.person_id " .
+                "group by ppl.person_id " .
+                "order by count desc, ppl.last_name, ppl.first_name " .
+                "limit 0, " . escape_string($TOP_N);
+        }
+
+        return parent::getTopN("person", $sql);
+
+    }
 }
 
 function get_people($constraints = null, $conj = "and", $ops = null,
     $order = "last_name, first_name", $user=null) {
-    return get_records("person", $order, $constraints, $conj, $ops);
+    return person::getRecords("person", $order, $constraints, $conj, $ops);
 }
 
 function get_people_count($user = null, $search = null) {
@@ -273,7 +347,7 @@ function get_people_count($user = null, $search = null) {
 
         return count($allowed);
     } else {
-        return get_count("person");
+        return person::getCount();
     }
 }
 
@@ -303,7 +377,7 @@ function get_all_people($user = null, $search = null, $search_first = false) {
     $sql="SELECT * FROM " . DB_PREFIX . "people AS ppl " . $where .
         " ORDER BY last_name, called, first_name";
 
-    return get_records_from_query("person", $sql);
+    return person::getRecordsFromQuery("person", $sql);
 }
 
 function get_photographed_people($user = null, $search=null, $search_first = false) {
@@ -336,7 +410,7 @@ function get_photographed_people($user = null, $search=null, $search_first = fal
             " order by ppl.last_name, ppl.called, ppl.first_name";
     }
 
-    return get_records_from_query("person", $sql);
+    return person::getRecordsFromQuery("person", $sql);
 }
 
 function get_photographers($user = null, $search = null, $search_first = null) {
@@ -369,7 +443,7 @@ function get_photographers($user = null, $search = null, $search_first = null) {
             "order by ppl.last_name, ppl.called, ppl.first_name";
     }
 
-    return get_records_from_query("person", $sql);
+    return person::getRecordsFromQuery("person", $sql);
 }
 
 function get_where_for_search($conj, $search, $search_first) {
@@ -416,52 +490,13 @@ function get_photo_person_links($photo) {
     if ($people) {
         foreach ($people as $person) {
             if ($links) { $links .= ", "; }
-            $links .= $person->get_link(0);
+            $links .= $person->getLink(0);
         }
     }
 
     return $links;
 }
 
-function get_popular_people($user) {
-
-    global $TOP_N;
-
-    if ($user && !$user->is_admin()) {
-        $sql =
-            "SELECT ppl.*, COUNT(DISTINCT ph.photo_id) AS count FROM " .
-            DB_PREFIX . "people as ppl JOIN " .
-            DB_PREFIX . "photo_people as pp " .
-            "ON pp.person_id = ppl.person_id JOIN " .
-            DB_PREFIX . "photos as ph " .
-            "ON pp.photo_id = ph.photo_id JOIN " .
-            DB_PREFIX . "photo_albums as pa " .
-            "ON pa.photo_id = pp.photo_id JOIN " .
-            DB_PREFIX . "group_permissions as gp " .
-            "ON pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users as gu " .
-            "ON gp.group_id = gu.group_id " .
-            "WHERE gu.user_id = '" . 
-            escape_string($user->get("user_id")) . "' " .
-            " AND gp.access_level >= ph.level " .
-            "GROUP BY ppl.person_id " .
-            "ORDER BY count DESC, ppl.last_name, ppl.first_name " .
-            "LIMIT 0, " . escape_string($TOP_N);
-    }
-    else {
-        $sql =
-            "select ppl.*, count(*) as count from " .
-            DB_PREFIX . "people as ppl, " .
-            DB_PREFIX . "photo_people as pp " .
-            "where ppl.person_id = pp.person_id " .
-            "group by ppl.person_id " .
-            "order by count desc, ppl.last_name, ppl.first_name " .
-            "limit 0, " . escape_string($TOP_N);
-    }
-
-    return get_popular_results("person", $sql);
-
-}
 
 function create_person_pulldown($name, $value=null, $user) {
     $id=preg_replace("/^_+/", "", $name);

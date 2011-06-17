@@ -47,7 +47,7 @@
 ?>
         </div>
         <div class="intro" id="first">
-            <?php echo sprintf(translate("Welcome %s. %s currently contains"), $user->person->get_link(), ZOPH_TITLE);
+            <?php echo sprintf(translate("Welcome %s. %s currently contains"), $user->person->getLink(), ZOPH_TITLE);
     echo "\n"; ?>
             <ul class="intro">
               <li><?php echo sprintf(translate("%s photos in %s"),  $album_photo_count, $album_count) ?> <a href="albums.php"><?php echo $album_count == 1 ? translate("album") : translate("albums") ?></a></li>

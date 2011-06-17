@@ -18,11 +18,11 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-class comment extends zoph_table {
+class comment extends zophTable {
 
-    function comment($id = 0) {
+    function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("comment_id must be numeric"); }
-        parent::zoph_table("comments", array("comment_id"), array("subject"));
+        parent::__construct("comments", array("comment_id"), array("subject"));
         $this->set("comment_id", $id);
     }
 
@@ -50,7 +50,7 @@ class comment extends zoph_table {
     }
     
     
-    function get_display_array($user = null) {
+    function getDisplayArray($user = null) {
         $date=$this->get("comment_date");
         $changed=$this->get("timestamp");
         if($changed != $date) { $updated=$changed; }
@@ -84,7 +84,7 @@ class comment extends zoph_table {
         $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
             " where comment_id=" . escape_string($this->get("comment_id")) .
             " limit 1";
-        $result=get_records_from_query("photo", $sql);
+        $result=photo::getRecordsFromQuery("photo", $sql);
         if($result[0]) { 
             $result[0]->lookup();
             return $result[0];
@@ -152,7 +152,7 @@ class comment extends zoph_table {
 }
 
 function get_all_comments() {
-   return get_records_from_query("comment", "select comment_id from " . DB_PREFIX . "comments");
+   return comment::getRecordsFromQuery("comment", "select comment_id from " . DB_PREFIX . "comments");
    }
 
 function format_comments($user, $comments) {

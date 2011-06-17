@@ -19,13 +19,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class category extends zoph_tree_table {
+class category extends zophTreeTable {
 
     var $photo_count;
 
     function category($id = 0) {
         if($id && !is_numeric($id)) { die("category_id must be numeric"); }
-        parent::zoph_table("categories", array("category_id"), array("category"));
+        parent::__construct("categories", array("category_id"), array("category"));
         $this->set("category_id", $id);
     }
 
@@ -63,7 +63,7 @@ class category extends zoph_tree_table {
             "WHERE parent_category_id=" . $id .
             " GROUP BY c.category_id " .
             $order;
-        $this->children=get_records_from_query("category", $sql);
+        $this->children=category::getRecordsFromQuery("category", $sql);
         if($user && !$user->is_admin()) {
             return(remove_empty($this->children,$user));
         } else {
@@ -103,7 +103,7 @@ class category extends zoph_tree_table {
                 "where category_id = '" .  escape_string($id) . "'";
         }
 
-        return get_count_from_query($sql);
+        return category::getCountFromQuery($sql);
     }
 
     function get_total_photo_count($user = null) {
@@ -145,10 +145,10 @@ class category extends zoph_tree_table {
             }
         }
 
-        return get_count_from_query($sql);
+        return category::getCountFromQuery($sql);
     }
 
-    function get_edit_array($user) {
+    function getEditArray($user) {
         if($this->is_root()) {
             $parent=array(
                 translate("parent category"),
@@ -187,7 +187,7 @@ class category extends zoph_tree_table {
         );
     }
 
-    function get_link() {
+    function getLink() {
         if ($this->get("parent_category_id")) {
             $name = $this->get("category");
         }
@@ -244,7 +244,7 @@ class category extends zoph_tree_table {
                     " pc.photo_id = p.photo_id" .
                     $cat_where . " " . $order;
             }
-            $coverphoto=array_shift(get_records_from_query("photo", $sql));
+            $coverphoto=array_shift(photo::getRecordsFromQuery("photo", $sql));
         }
 
         if ($coverphoto) {
@@ -281,7 +281,7 @@ class category extends zoph_tree_table {
 
         $query = "select category_id from " . DB_PREFIX . "categories where $where";
 
-        return get_records_from_query("category", $query);
+        return category::getRecordsFromQuery("category", $query);
     }
 
     /**
@@ -290,6 +290,57 @@ class category extends zoph_tree_table {
      */
     public static function getRoot() {
         return new category(1);
+    }
+    
+    /**
+     * Gets the total count of records in the table
+     * @todo Can be removed when minimum PHP version is 5.3 
+     */
+    public static function getCount($dummy=null) {
+        return parent::getCount("category");
+    }
+
+    /**
+     * Get Top N categories
+     */
+    public static function getTopN(user $user=null) {
+
+        global $TOP_N;
+
+        if ($user && !$user->is_admin()) {
+            $sql =
+                "select cat.*, count(distinct ph.photo_id) as count from " .
+                DB_PREFIX . "categories as cat JOIN " .
+                DB_PREFIX . "photo_categories as pc ON " .
+                "pc.category_id = cat.category_id JOIN " .
+                DB_PREFIX . "photos as ph ON " .
+                " pc.photo_id = ph.photo_id JOIN " .
+                DB_PREFIX . "photo_albums as pa ON " .
+                " pa.photo_id = pc.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp ON " .
+                "pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu ON " .
+                "gp.group_id = gu.group_id " .
+                "WHERE gu.user_id = '" . 
+                escape_string($user->get("user_id")) . "'" .
+                "AND gp.access_level >= ph.level " .
+                "GROUP BY cat.category_id " .
+                "ORDER BY count desc, cat.category " .
+                "LIMIT 0, " . escape_string($TOP_N);
+        }
+        else {
+            $sql =
+                "select cat.*, count(*) as count from " .
+                DB_PREFIX . "categories as cat, " .
+                DB_PREFIX . "photo_categories as pc " .
+                "where pc.category_id = cat.category_id " .
+                "group by cat.category_id " .
+                "order by count desc, cat.category " .
+                "limit 0, " . escape_string($TOP_N);
+        }
+
+        return parent::getTopN("category", $sql);
+
     }
 }
 
@@ -301,45 +352,6 @@ function get_categories_search_array($user = null) {
     return get_categories_select_array($user, 1);
 }
 
-function get_popular_categories($user) {
-
-    global $TOP_N;
-
-    if ($user && !$user->is_admin()) {
-        $sql =
-            "select cat.*, count(distinct ph.photo_id) as count from " .
-            DB_PREFIX . "categories as cat JOIN " .
-            DB_PREFIX . "photo_categories as pc ON " .
-            "pc.category_id = cat.category_id JOIN " .
-            DB_PREFIX . "photos as ph ON " .
-            " pc.photo_id = ph.photo_id JOIN " .
-            DB_PREFIX . "photo_albums as pa ON " .
-            " pa.photo_id = pc.photo_id JOIN " .
-            DB_PREFIX . "group_permissions as gp ON " .
-            "pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users as gu ON " .
-            "gp.group_id = gu.group_id " .
-            "WHERE gu.user_id = '" . 
-            escape_string($user->get("user_id")) . "'" .
-            "AND gp.access_level >= ph.level " .
-            "GROUP BY cat.category_id " .
-            "ORDER BY count desc, cat.category " .
-            "LIMIT 0, " . escape_string($TOP_N);
-    }
-    else {
-        $sql =
-            "select cat.*, count(*) as count from " .
-            DB_PREFIX . "categories as cat, " .
-            DB_PREFIX . "photo_categories as pc " .
-            "where pc.category_id = cat.category_id " .
-            "group by cat.category_id " .
-            "order by count desc, cat.category " .
-            "limit 0, " . escape_string($TOP_N);
-    }
-
-    return get_popular_results("category", $sql);
-
-}
 
 function create_cat_pulldown($name, $value=null, $user) {
     $text="";
@@ -365,11 +377,11 @@ function get_category_count($user) {
         $sql =
             "SELECT category_id, parent_category_id  FROM " .
             DB_PREFIX . "categories as c";
-        $cats=get_records_from_query("category", $sql);
+        $cats=category::getRecordsFromQuery("category", $sql);
         $cat_clean=remove_empty($cats,$user);
         return count($cat_clean);
     } else {
-        return get_count("category");
+        return category::getCount();
     }
 }
  

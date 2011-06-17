@@ -18,11 +18,11 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-class color_scheme extends zoph_table {
+class color_scheme extends zophTable {
 
     function color_scheme($id = 0) {
         if($id && !is_numeric($id)) { die("color_scheme_id must be numeric"); }
-        parent::zoph_table("color_schemes", array("color_scheme_id"), array("name"));
+        parent::__construct("color_schemes", array("color_scheme_id"), array("name"));
         $this->set("color_scheme_id", $id);
     }
 

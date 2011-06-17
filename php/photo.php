@@ -206,7 +206,7 @@
         unset($actionlinks["cancel"]);
         unset($actionlinks["edit"]);
 
-        $photo->set_fields($request_vars);
+        $photo->setFields($request_vars);
         $photo->update($request_vars,'',$user); // pass again for add people, cats, etc
         $action = "update";
         if(!empty($_qs)) {
@@ -219,7 +219,7 @@
         $action = "insert";
     }
     else if ($_action == "insert") {
-        $photo->set_fields($request_vars);
+        $photo->setFields($request_vars);
         $photo->insert();
         $action = "update";
         
@@ -350,7 +350,7 @@ require_once("header.inc.php");
         }
 ?>
 <dl>
-<?php echo create_field_html($photo->get_display_array()) ?>
+<?php echo create_field_html($photo->getDisplayArray()) ?>
 <?php
         if ((ALLOW_RATINGS  && ($user->is_admin() || $user->get("allow_rating"))) || $photo->get("rating")) {
             $rating=$photo->get("rating") != 0 ? $photo->get("rating") . 
@@ -380,14 +380,14 @@ require_once("header.inc.php");
 ?>
 <?php
         }
-        if ($album_links = create_link_list($photo->lookup_albums($user))) {
+        if ($album_links = template::createLinkList($photo->lookup_albums($user))) {
 ?>
 <dt><?php echo translate("albums") ?></dt>
 <dd><?php echo $album_links ?></dd>
 <?php
         }
 
-        if ($category_links = create_link_list($photo->lookup_categories())) {
+        if ($category_links = template::createLinkList($photo->lookup_categories())) {
 ?>
           <dt><?php echo translate("categories") ?></dt>
           <dd><?php echo $category_links ?></dd>
@@ -491,9 +491,9 @@ require_once("header.inc.php");
     <script type="text/javascript">
         <?php echo create_map_js(); ?>
     <?php if($_action=="edit"): ?>
-        <?php echo $photo->get_mapping_js($user, true); ?>
+        <?php echo $photo->getMappingJs($user, true); ?>
     <?php else: ?>
-        <?php echo get_markers($array, $user); ?>
+        <?php echo getMarkers($array, $user); ?>
     <?php endif; ?>
     </script>
 <?php

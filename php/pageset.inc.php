@@ -17,10 +17,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class pageset extends zoph_table {
+class pageset extends zophTable {
     function pageset($id = 0) {
         if($id && !is_numeric($id)) { die("pageset_id must be numeric"); }
-        parent::zoph_table("pageset", array("pageset_id"), array("title"));
+        parent::__construct("pageset", array("pageset_id"), array("title"));
         $this->set("pageset_id", $id);
         $this->set("date","now()");
     }
@@ -42,7 +42,7 @@ class pageset extends zoph_table {
     }
     
     
-    function get_display_array() {
+    function getDisplayArray() {
         return array(
             translate("title") => $this->get("title"),
             translate("date") => $this->get("date"),
@@ -67,14 +67,14 @@ class pageset extends zoph_table {
         if($pagenum) {
             $sql.=" limit " . escape_string($pagenum) . ",1";
         }
-        $pages=get_records_from_query("page", $sql);
+        $pages=page::getRecordsFromQuery("page", $sql);
         return $pages;
     }
 
     function get_pagecount() {
         $sql = "select count(page_id) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id = " . $this->get("pageset_id");
-        return get_count_from_query($sql);
+        return pageset::getCountFromQuery($sql);
     }
 
     function addpage($page_id) {
@@ -183,7 +183,7 @@ class pageset extends zoph_table {
 function get_all_pagesets() {
     $sql = "select pageset_id,title,date,timestamp,user from " . DB_PREFIX . "pageset";
 
-    $pagesets=get_records_from_query("pageset", $sql);
+    $pagesets=pageset::getRecordsFromQuery("pageset", $sql);
     $html=get_pagesets_table_header();
 
     foreach ($pagesets as $pageset) {
@@ -205,7 +205,7 @@ function get_pagesets_table_header() {
 function get_pagesets($constraints = null, $conj = "and", $ops = null,
     $order = "title") {
 
-    return get_records("pageset", $order, $constraints, $conj, $ops);
+    return pageset::getRecords("pageset", $order, $constraints, $conj, $ops);
 }
 
 function get_pageset_select_array($pageset_array = null) {

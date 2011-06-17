@@ -31,7 +31,7 @@
             redirect(ZOPH_SECURE_URL . "/logon.php?redirect=" . $redirect, "https required");
         }
     }
-    require_once("zoph_table.inc.php");
+    require_once("classes/zophTable.inc.php");
     require_once("translation.inc.php");
     require_once("user.inc.php");
 

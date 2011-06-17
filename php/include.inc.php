@@ -15,6 +15,14 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+    /**
+     * Autoload classes
+     */
+
+    function __autoload($class) {
+        require_once("classes/" . $class . ".inc.php");
+    }
+
     require_once("exception.inc.php");
     require_once("variables.inc.php");
     require_once("log.inc.php");
@@ -27,10 +35,13 @@
 
     require_once("translation.inc.php");
 
-    require_once("zoph_table.inc.php");
-    require_once("zoph_tree_table.inc.php");
-
     require_once("zoph_calendar.inc.php");
+
+    /**
+     * @todo remove once all global functions have been removed
+     */
+    require_once("classes/zophTable.inc.php");
+    require_once("classes/zophTreeTable.inc.php");
 
     require_once("place.inc.php");
     require_once("track.inc.php");

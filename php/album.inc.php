@@ -19,12 +19,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class album extends zoph_tree_table {
+class album extends zophTreeTable {
 
     var $photo_count;
     function album($id = 0) {
         if($id && !is_numeric($id)) { die("album_id must be numeric"); }
-        parent::zoph_table("albums", array("album_id"), array("album"));
+        parent::__construct("albums", array("album_id"), array("album"));
         $this->set("album_id", $id);
     }
    /**
@@ -63,10 +63,10 @@ class album extends zoph_tree_table {
 
     function delete() {
         parent::delete(array("photo_albums", "group_permissions"));
-        $users = get_records("user", "user_id", array("lightbox_id" => $this->get("album_id")));
+        $users = user::getRecords("user", "user_id", array("lightbox_id" => $this->get("album_id")));
         if ($users) {
           foreach ($users as $user) {
-            $user->set_fields(array("lightbox_id" => "null"));
+            $user->setFields(array("lightbox_id" => "null"));
             $user->update();
           }
         }
@@ -124,7 +124,7 @@ class album extends zoph_tree_table {
                 escape_string($order);
         }
 
-        $this->children=get_records_from_query("album", $sql);
+        $this->children=album::getRecordsFromQuery("album", $sql);
         return $this->children;
     }    
 
@@ -154,7 +154,7 @@ class album extends zoph_tree_table {
                 "where album_id = '" .  escape_string($id) . "'";
         }
 
-        return get_count_from_query($sql);
+        return album::getCountFromQuery($sql);
     }
 
     function get_total_photo_count($user = null) {
@@ -194,10 +194,10 @@ class album extends zoph_tree_table {
             }
         }
 
-        return get_count_from_query($sql);
+        return album::getCountFromQuery($sql);
     }
 
-    function get_edit_array($user) {
+    function getEditArray($user) {
         if($this->is_root()) {
             $parent=array (
                 translate("parent album"),
@@ -235,7 +235,7 @@ class album extends zoph_tree_table {
         );
     }
 
-    function get_link() {
+    function getLink() {
         if ($this->get("parent_album_id")) {
             $name = $this->get("album");
         }
@@ -296,7 +296,7 @@ class album extends zoph_tree_table {
                     $album_where .
                     " " . $order;
             }
-            $coverphoto=array_shift(get_records_from_query("photo", $sql));
+            $coverphoto=array_shift(photo::getRecordsFromQuery("photo", $sql));
         }
 
         if ($coverphoto instanceof photo) {
@@ -331,7 +331,7 @@ class album extends zoph_tree_table {
 
         $query = "select album_id from " . DB_PREFIX . "albums where $where";
 
-        return get_records_from_query("album", $query);
+        return album::getRecordsFromQuery("album", $query);
     }
 
     /**
@@ -341,6 +341,47 @@ class album extends zoph_tree_table {
     public static function getRoot() {
         return new album(1);
     }
+
+    /**
+     * Get Top N albums
+     */
+    public static function getTopN(user $user=null) {
+
+        global $TOP_N;
+
+        if ($user && !$user->is_admin()) {
+            $sql =
+                "SELECT al.*, count(distinct ph.photo_id) AS count FROM " .
+                DB_PREFIX . "albums AS al JOIN " .
+                DB_PREFIX . "photo_albums AS pa ON " .
+                " al.album_id = pa.album_id JOIN " .
+                DB_PREFIX . "photos AS ph ON " .
+                "pa.photo_id = ph.photo_id JOIN " .
+                DB_PREFIX . "group_permissions AS gp ON " .
+                "pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users AS gu ON " .
+                "gp.group_id = gu.group_id " .
+                "WHERE gu.user_id = '" . escape_string($user->get("user_id")). "'" .
+                " AND gp.access_level >= ph.level " .
+                "GROUP BY al.album_id " .
+                "ORDER BY count desc, al.album " .
+                "LIMIT 0, " . escape_string($TOP_N);
+        }
+        else {
+            $sql =
+                "select al.*, count(*) as count from " .
+                DB_PREFIX . "albums as al, " .
+                DB_PREFIX . "photo_albums as pa " .
+                "where pa.album_id = al.album_id " .
+                "group by al.album_id " .
+                "order by count desc, al.album " .
+                "limit 0, " . escape_string($TOP_N);
+        }
+
+        return parent::getTopN("album", $sql);
+
+    }
+
 }
 
 
@@ -360,7 +401,7 @@ function get_albums($user = null) {
         $sql = "select * from " . DB_PREFIX . "albums order by album";
     }
 
-    return get_records_from_query("album", $sql);
+    return album::getRecordsFromQuery("album", $sql);
 }
 
 function get_newer_albums($user_id, $date = null) {
@@ -373,7 +414,7 @@ function get_newer_albums($user_id, $date = null) {
         "' AND gp.changedate > '" . escape_string($date) . "' " .
         "ORDER BY a.album_id";
 
-    return get_records_from_query("album", $sql);
+    return album::getRecordsFromQuery("album", $sql);
 }
 
 function get_album_count($user = null) {
@@ -390,7 +431,7 @@ function get_album_count($user = null) {
         $sql = "select count(*) from " . DB_PREFIX . "albums";
     }
 
-    return get_count_from_query($sql);
+    return album::getCountFromQuery($sql);
 }
 
 function get_albums_select_array($user = null, $search = 0) {
@@ -401,42 +442,6 @@ function get_albums_search_array($user = null) {
     return get_albums_select_array($user, 1);
 }
 
-function get_popular_albums($user) {
-
-    global $TOP_N;
-
-    if ($user && !$user->is_admin()) {
-        $sql =
-            "SELECT al.*, count(distinct ph.photo_id) AS count FROM " .
-            DB_PREFIX . "albums AS al JOIN " .
-            DB_PREFIX . "photo_albums AS pa ON " .
-            " al.album_id = pa.album_id JOIN " .
-            DB_PREFIX . "photos AS ph ON " .
-            "pa.photo_id = ph.photo_id JOIN " .
-            DB_PREFIX . "group_permissions AS gp ON " .
-            "pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users AS gu ON " .
-            "gp.group_id = gu.group_id " .
-            "WHERE gu.user_id = '" . escape_string($user->get("user_id")). "'" .
-            " AND gp.access_level >= ph.level " .
-            "GROUP BY al.album_id " .
-            "ORDER BY count desc, al.album " .
-            "LIMIT 0, " . escape_string($TOP_N);
-    }
-    else {
-        $sql =
-            "select al.*, count(*) as count from " .
-            DB_PREFIX . "albums as al, " .
-            DB_PREFIX . "photo_albums as pa " .
-            "where pa.album_id = al.album_id " .
-            "group by al.album_id " .
-            "order by count desc, al.album " .
-            "limit 0, " . escape_string($TOP_N);
-    }
-
-    return get_popular_results("album", $sql);
-
-}
 
 function create_album_pulldown($name, $value=null, $user=null) {
     $text="";

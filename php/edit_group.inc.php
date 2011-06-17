@@ -48,7 +48,7 @@
 ?>
                 <input class="remove" type="checkbox" name="_remove_user[]" value="<?php echo $member->get("user_id")?>">
 <?php
-                echo $member->get_link() . "<br>\n";
+                echo $member->getLink() . "<br>\n";
              }
              echo $group->get_new_member_pulldown("_member");
              echo "</fieldset>";

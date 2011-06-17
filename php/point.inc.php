@@ -22,10 +22,16 @@
  * @package Zoph
  */
 
-class point extends zoph_table {
+/**
+ * This class describes a point, which is a GPS position + timestamp
+ */
+class point extends zophTable {
+    /**
+     * Create a point object
+     */
     public function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("point_id must be numeric"); }
-        parent::zoph_table("point", array("point_id"), array());
+        parent::__construct("point", array("point_id"), array());
         $this->set("point_id", $id);
     }
 
@@ -77,7 +83,7 @@ class point extends zoph_table {
             " track_id = " . escape_string($this->get("track_id")) . " AND " .
             " datetime>\"" . escape_string($this->get("datetime")) . "\"" .
             " ORDER BY datetime LIMIT 1";
-        $point=get_records_from_query("point", $sql);
+        $point=point::getRecordsFromQuery("point", $sql);
         return $point[0];
     }
     
@@ -89,7 +95,7 @@ class point extends zoph_table {
             " track_id = " . escape_string($this->get("track_id")) . " AND " .
             " datetime<\"" . escape_string($this->get("datetime")) . "\"" .
             " ORDER BY datetime DESC LIMIT 1";
-        $point=get_records_from_query("point", $sql);
+        $point=point::getRecordsFromQuery("point", $sql);
         return $point[0];
     }
 
@@ -106,7 +112,7 @@ class point extends zoph_table {
     public static function getAll($constraints = null, $conj = "and", 
         $ops = null, $order = "name") {
     
-        return get_records("point", $order, $constraints, $conj, $ops);
+        return point::getRecords("point", $order, $constraints, $conj, $ops);
     }
 
     /**

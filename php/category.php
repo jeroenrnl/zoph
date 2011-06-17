@@ -30,7 +30,7 @@
 
     if($_action=="update" && getvar("sortorder")=="") {
     // overiding the default action, to be able to clear the sortorder
-        $obj->set_fields($request_vars);
+        $obj->setFields($request_vars);
         $obj->set("sortorder", "");
         $obj->update();
         $action = "display";
@@ -78,7 +78,7 @@
         <form action="category.php">
           <input type="hidden" name="_action" value="<?php echo $action ?>">
           <input type="hidden" name="category_id" value="<?php echo $category->get("category_id") ?>">
-          <?php echo create_edit_fields($category->get_edit_array($user)) ?>
+          <?php echo create_edit_fields($category->getEditArray($user)) ?>
           <input type="submit" value="<?php echo translate($action, 0) ?>">
         </form>
 <?php

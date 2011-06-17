@@ -23,7 +23,7 @@
     <h1><?php echo translate("reports") ?></h1>
       <div class="main">
 <?php
-    $top_albums = get_popular_albums($user);
+    $top_albums = album::getTopN($user);
     if ($top_albums) {
 ?>
             <table class="reports">
@@ -49,7 +49,7 @@
     }
 ?>
 <?php
-    $top_categories = get_popular_categories($user);
+    $top_categories = category::getTopN($user);
     if ($top_categories) {
 ?>
             <table class="reports">
@@ -73,7 +73,7 @@
     else {
         echo "&nbsp;\n";
     }
-    $top_people = get_popular_people($user);
+    $top_people = person::getTopN($user);
     if ($top_people) {
 ?>
             <table class="reports">
@@ -97,7 +97,7 @@
     else {
         echo "&nbsp;\n";
     }
-    $top_places = get_popular_places($user);
+    $top_places = place::getTopN($user);
     if ($top_places) {
 ?>
             <table class="reports">

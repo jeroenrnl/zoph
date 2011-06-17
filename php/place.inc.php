@@ -19,11 +19,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class place extends zoph_tree_table {
+class place extends zophTreeTable {
 
     function place($id = 0) {
         if($id && !is_numeric($id)) { die("place_id must be numeric"); }
-        parent::zoph_table("places", array("place_id"), array("title"));
+        parent::__construct("places", array("place_id"), array("title"));
         $this->set("place_id", $id);
     }
 
@@ -93,7 +93,7 @@ class place extends zoph_tree_table {
             " GROUP BY pl.place_id " .
             $order; 
 
-        $this->children=get_records_from_query("place", $sql);
+        $this->children=place::getRecordsFromQuery("place", $sql);
         if($user) {
             return remove_empty($this->children, $user);
         } else {
@@ -156,7 +156,7 @@ class place extends zoph_tree_table {
         return $html;
     }
 
-    function get_link() {
+    function getLink() {
         $link = "<a href=\"places.php?parent_place_id=" . e($this->get("place_id")) . "\">" . e($this->get_name()) . "</a>";
 
         // add city link if title exists (and so was used by get_name())
@@ -167,7 +167,7 @@ class place extends zoph_tree_table {
     }
 
 
-    function get_display_array() {
+    function getDisplayArray() {
         return array(
             translate("address") => $this->get("address"),
             translate("address") . "2" => $this->get("address2"),
@@ -202,7 +202,7 @@ class place extends zoph_tree_table {
                 "where location_id = '" .  escape_string($id) . "'";
         }
 
-        return get_records_from_query("photo", $sql);
+        return photo::getRecordsFromQuery("photo", $sql);
     }
     function get_photo_count($user = null) {
         $id = $this->get("place_id");
@@ -227,7 +227,7 @@ class place extends zoph_tree_table {
                 "where location_id = '" .  escape_string($id) . "'";
         }
 
-        return get_count_from_query($sql);
+        return photo::getCountFromQuery($sql);
     }
 
     function get_total_photo_count($user = null) {
@@ -266,7 +266,7 @@ class place extends zoph_tree_table {
             }
         }
 
-        return get_count_from_query($sql);
+        return zophTable::getCountFromQuery($sql);
     }
 
     function xml_rootname() {
@@ -314,7 +314,7 @@ class place extends zoph_tree_table {
                     DB_PREFIX . "photos as p" .
                     $place_where . " " . $order;
             }
-            $coverphoto=array_shift(get_records_from_query("photo", $sql));
+            $coverphoto=array_shift(photo::getRecordsFromQuery("photo", $sql));
         }
 
         if (!empty($coverphoto)) {
@@ -327,10 +327,10 @@ class place extends zoph_tree_table {
         }
 
     }
-    function get_mapping_js($user,$edit=false) {
-         $js=parent::get_mapping_js($user, ICONSET . "/geo-place.png", $edit);
+    function getMappingJs($user,$edit=false) {
+         $js=parent::getMappingJs($user, ICONSET . "/geo-place.png", $edit);
          if (!$edit) {
-            $js.=get_markers($this->get_children($user), $user);
+            $js.=getMarkers($this->get_children($user), $user);
         }
         return $js;
     }
@@ -360,7 +360,7 @@ class place extends zoph_tree_table {
                 "having distance <= " . $distance . 
                 " order by distance" . $lim;
 
-            $near=get_records_from_query("place", $sql);
+            $near=place::getRecordsFromQuery("place", $sql);
             return $near;
         } else {
             return null;
@@ -368,7 +368,7 @@ class place extends zoph_tree_table {
     }
 
     function get_quicklook($user) {
-        $html="<h2>" . $this->get_link() . "<\/h2>";
+        $html="<h2>" . $this->getLink() . "<\/h2>";
         $html.="<small>" . $this->get_address() . "<\/small><br>";
         $html.=$this->get_coverphoto($user, $user->prefs->get("autothumb"));
         $count=$this->get_photo_count($user);
@@ -396,9 +396,9 @@ class place extends zoph_tree_table {
     }
         
 
-    function get_marker($user) {
+    function getMarker($user) {
         $icon=ICONSET . "/geo-place.png";
-        return parent::get_marker($user, $icon);
+        return parent::getMarker($user, $icon);
     }
 
     function guess_tz() {
@@ -441,7 +441,7 @@ class place extends zoph_tree_table {
         $sql="SELECT place_id from " . DB_PREFIX . "places WHERE " .
             " LOWER(title) = \"" . $title . "\";";
 
-        return get_records_from_query("place", $sql);
+        return place::getRecordsFromQuery("place", $sql);
     }
 
     /**
@@ -451,11 +451,60 @@ class place extends zoph_tree_table {
     public static function getRoot() {
         return new place(1);
     }
+
+    /**
+     * Gets the total count of records in the table
+     * @todo Can be removed when minimum PHP version is 5.3 
+     */
+    public static function getCount($dummy=null) {
+        return parent::getCount("place");
+    }
+
+    /**
+     * Get Top N people
+     */
+    public static function getTopN(user $user=null) {
+
+        global $TOP_N;
+
+        if ($user && !$user->is_admin()) {
+            $sql =
+                "SELECT plc.*, count(distinct ph.photo_id) AS count FROM " .
+                DB_PREFIX . "photos as ph JOIN " .
+                DB_PREFIX . "places as plc " .
+                "ON ph.location_id = plc.place_id JOIN " .
+                DB_PREFIX . "photo_albums as pa " .
+                "ON pa.photo_id = ph.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE gu.user_id = '" . 
+                escape_string($user->get("user_id")) . 
+                "' AND gp.access_level >= ph.level " .
+                "GROUP BY plc.place_id " .
+                "ORDER BY count desc, plc.title, plc.city " .
+                "LIMIT 0, $TOP_N";
+        }
+        else {
+            $sql =
+                "select plc.*, count(*) as count from " .
+                DB_PREFIX . "places as plc, " .
+                DB_PREFIX . "photos as ph " .
+                "where plc.place_id = ph.location_id " .
+                "group by plc.place_id " .
+                "order by count desc, plc.title, plc.city " .
+                "limit 0, $TOP_N";
+        }
+
+        return parent::getTopN("place", $sql);
+
+    }
 }
 
 function get_places($constraints = null, $conj = "and", $ops = null,
     $order = "city, title, address") {
-    return get_records("place", $order, $constraints, $conj, $ops);
+    return place::getRecords("place", $order, $constraints, $conj, $ops);
 }
 
 function get_photographed_places($user = null) {
@@ -486,7 +535,7 @@ function get_photographed_places($user = null) {
             "order by plc.city, plc.title";
     }
 
-    return get_records_from_query("place", $sql);
+    return place::getRecordsFromQuery("place", $sql);
 }
 
 function get_places_count($user) {
@@ -494,7 +543,7 @@ function get_places_count($user) {
         $places=get_photographed_places($user);
         return count($places);
     } else {
-        return get_count("place");
+        return place::getCount();
     }
 }
 
@@ -506,43 +555,6 @@ function get_places_search_array($user = null) {
     return get_places_select_array($user, 1);
 }
 
-function get_popular_places($user) {
-
-    global $TOP_N;
-
-    if ($user && !$user->is_admin()) {
-        $sql =
-            "SELECT plc.*, count(distinct ph.photo_id) AS count FROM " .
-            DB_PREFIX . "photos as ph JOIN " .
-            DB_PREFIX . "places as plc " .
-            "ON ph.location_id = plc.place_id JOIN " .
-            DB_PREFIX . "photo_albums as pa " .
-            "ON pa.photo_id = ph.photo_id JOIN " .
-            DB_PREFIX . "group_permissions as gp " .
-            "ON pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users as gu " .
-            "ON gp.group_id = gu.group_id " .
-            "WHERE gu.user_id = '" . 
-            escape_string($user->get("user_id")) . 
-            "' AND gp.access_level >= ph.level " .
-            "GROUP BY plc.place_id " .
-            "ORDER BY count desc, plc.title, plc.city " .
-            "LIMIT 0, $TOP_N";
-    }
-    else {
-        $sql =
-            "select plc.*, count(*) as count from " .
-            DB_PREFIX . "places as plc, " .
-            DB_PREFIX . "photos as ph " .
-            "where plc.place_id = ph.location_id " .
-            "group by plc.place_id " .
-            "order by count desc, plc.title, plc.city " .
-            "limit 0, $TOP_N";
-    }
-
-    return get_popular_results("place", $sql);
-
-}
 
 function create_place_pulldown($name, $value=null, $user=null) {
     $text="";

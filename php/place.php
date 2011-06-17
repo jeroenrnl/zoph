@@ -69,7 +69,7 @@ require_once("edit_place.inc.php");
         <div id="map" class="map"></div>
         <script type="text/javascript">
             <?php echo create_map_js(); ?>
-            <?php echo $place->get_mapping_js($user, true); ?>
+            <?php echo $place->getMappingJs($user, true); ?>
         </script>
 <?php
       }

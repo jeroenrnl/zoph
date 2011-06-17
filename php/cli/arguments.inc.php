@@ -36,7 +36,10 @@ class arguments {
      * Contains the interpreted arguments, after lookup
      */
     private $vars = array();
-
+    
+    /**
+     * Default command
+     */
     public static $command="import";
 
     /**

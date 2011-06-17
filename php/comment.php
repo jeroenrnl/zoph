@@ -108,7 +108,7 @@ if ($action == "confirm") {
 ?>
 <br>
 <dl>
-<?php echo create_field_html($comment->get_display_array($user)) ?>
+<?php echo create_field_html($comment->getDisplayArray($user)) ?>
 </dl>
 <br>
   </div>

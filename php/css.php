@@ -20,7 +20,7 @@ header("Content-Type: text/css");
 if(isset($_GET['logged_on'])) {
     require_once("log.inc.php");
     require_once("config.inc.php");
-    require_once("zoph_table.inc.php");
+    require_once("classes/zophTable.inc.php");
     require_once("user.inc.php");
     echo "/* This is the default CSS, the user is not logged on */";
 } else {

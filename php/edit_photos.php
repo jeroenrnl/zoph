@@ -122,9 +122,9 @@
                 $rating = null;
                 if ($request_vars['_overwrite']) {
                     // set any specific fields
-                    $photo->set_fields($request_vars, '__', "__$photo_id");
+                    $photo->setFields($request_vars, '__', "__$photo_id");
                     // set "apply to all" fields
-                    $photo->set_fields($request_vars, '__', '__all', false);
+                    $photo->setFields($request_vars, '__', '__all', false);
 
                     $rating = $request_vars["_rating__$photo_id"];
                     if ($request_vars["_rating__all"]) {
@@ -132,8 +132,8 @@
                     }
                 }
                 else { // reverse order
-                    $photo->set_fields($request_vars, '__', '__all');
-                    $photo->set_fields($request_vars, '__', "__$photo_id", false);
+                    $photo->setFields($request_vars, '__', '__all');
+                    $photo->setFields($request_vars, '__', "__$photo_id", false);
 
                     $rating = $request_vars["_rating__all"];
                     if ($request_vars["_rating__$photo_id"]) {
@@ -259,7 +259,7 @@
 ?>
                        <?php echo $append ?>
                        <input type="checkbox" name="_remove_album__<?php echo $photo_id ?>[]" value="<?php echo $album->get("album_id") ?>">
-                       <?php echo $album->get_link() ?>
+                       <?php echo $album->getLink() ?>
 <?php
                         $append = "<br>";
                     }
@@ -278,7 +278,7 @@
 ?>
                        <?php echo $append ?>
                        <input type="checkbox" name="_remove_category__<?php echo $photo_id ?>[]" value="<?php echo $category->get("category_id") ?>">
-                       <?php echo $category->get_link() ?>
+                       <?php echo $category->getLink() ?>
 <?php
                         $append = "<br>\n";
                     }
@@ -299,7 +299,7 @@
 ?>
                        <?php echo $append ?>
                        <input type="checkbox" name="_remove_person__<?php echo $photo_id ?>[]" value="<?php echo $person->get("person_id") ?>">
-                       <?php echo $person->get_link() ?>
+                       <?php echo $person->getLink() ?>
 <?php
                         $append = "<br>\n";
                     }

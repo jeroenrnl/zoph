@@ -18,11 +18,11 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-class group extends zoph_table {
+class group extends zophTable {
 
     function group($id = 0) {
         if($id && !is_numeric($id)) { die("user_id must be numeric"); }
-        parent::zoph_table("groups", array("group_id"), array("group_name"));
+        parent::__construct("groups", array("group_id"), array("group_name"));
         $this->set("group_id", $id);
     }
 
@@ -55,10 +55,10 @@ class group extends zoph_table {
         $sql="SELECT album_id FROM " .
             DB_PREFIX . "group_permissions " .
             "WHERE group_id=" . escape_string($this->get("group_id"));
-        return get_records_from_query("album", $sql);
+        return album::getRecordsFromQuery("album", $sql);
     }
 
-    function get_display_array() {
+    function getDisplayArray() {
         $members=$this->get_members();
 
         $da = array(
@@ -74,7 +74,7 @@ class group extends zoph_table {
             DB_PREFIX . "groups_users " .
             "WHERE group_id=" . escape_string($this->get("group_id"));
 
-        return get_records_from_query("user", $sql);
+        return user::getRecordsFromQuery("user", $sql);
     }
 
     function add_member($member_id) {
@@ -141,7 +141,7 @@ class group extends zoph_table {
         if($members) {
             foreach ($members as $member) {
                 $member->lookup();
-                $html.=$member->get_link() . $separator;
+                $html.=$member->getLink() . $separator;
             }
         }
         return $html;
@@ -149,7 +149,7 @@ class group extends zoph_table {
 }
 
 function get_groups($order = "group_name") {
-    return get_records("group", $order);
+    return group::getRecords("group", $order);
 }
 
 ?>

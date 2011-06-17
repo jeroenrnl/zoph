@@ -32,7 +32,6 @@ abstract class Import {
      * Calls external program jhead for this.
      * @param string Filename
      */
-
     protected static function autorotate($file) {
          $cmd = "jhead -autorot " . escapeshellarg($file);
          exec($cmd, $output, $return);
@@ -80,11 +79,11 @@ abstract class Import {
             if(settings::$importExif===true && $mime=="image/jpeg") {
                 $exif=process_exif($file);
                 if($exif) {
-                    $photo->set_fields($exif);
+                    $photo->setFields($exif);
                 }
             }
             if ($vars) {
-                $photo->set_fields($vars);
+                $photo->setFields($vars);
                 if($photo->get("rating")==0) {
                     $photo->set("rating", null);
                 }

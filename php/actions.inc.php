@@ -26,16 +26,16 @@
         $action = "update";
     }
     else if ($_action == "update") {
-        $obj->set_fields($request_vars);
+        $obj->setFields($request_vars);
         $obj->update();
         $action = "display";
     }
     else if ($_action == "new") {
-        $obj->set_fields($request_vars);
+        $obj->setFields($request_vars);
         $action = "insert";
     }
     else if ($_action == "insert") {
-        $obj->set_fields($request_vars);
+        $obj->setFields($request_vars);
         $obj->insert();
         $action = "display";
     }

@@ -72,7 +72,7 @@
         <h2><?php echo $color_scheme->get("name") ?></h2>
             <dl>
 <?php
-        $colors = $color_scheme->get_display_array();
+        $colors = $color_scheme->getDisplayArray();
 ?>
 <?php
         while (list($name, $value) = each($colors)) {
@@ -97,7 +97,7 @@
 <?php
     }
     else {
-        $colors = $color_scheme->get_edit_array();
+        $colors = $color_scheme->getEditArray();
 ?>
         <h1>
             <span class="actionlink">

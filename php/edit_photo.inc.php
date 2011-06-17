@@ -162,7 +162,7 @@
 ?>
                 <input class="remove" type="checkbox" name="_remove_person[]" value="<?php echo $person->get("person_id")?>">
 <?php
-                echo $person->get_link() . "<br>\n";
+                echo $person->getLink() . "<br>\n";
             }
         }
         else {
@@ -189,7 +189,7 @@
             foreach ($albums as $album) {
 ?>
               <input type="checkbox" name="_remove_album[]" value="<?php echo $album->get("album_id")?>">
-              <?php echo $album->get_link() ?><br>
+              <?php echo $album->getLink() ?><br>
 <?php
             }
         }
@@ -208,7 +208,7 @@
             foreach ($categories as $category) {
 ?>
                 <input type="checkbox" name="_remove_category[]" value="<?php echo $category->get("category_id")?>">
-              <?php echo $category->get_link() ?><br>
+              <?php echo $category->getLink() ?><br>
 <?php
             }
         }

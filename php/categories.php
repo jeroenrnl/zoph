@@ -83,7 +83,7 @@
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
 ?>
-            <?php echo $parent->get_link() ?> &gt;
+            <?php echo $parent->getLink() ?> &gt;
 <?php
         }
     }

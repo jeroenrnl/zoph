@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Class that takes care of the translation of strings in Zoph. 
  *
  * This file is part of Zoph.

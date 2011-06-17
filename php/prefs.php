@@ -21,7 +21,7 @@
     }
     else if ($_action == "update") {
         if (DEFAULT_USER != $user->get("user_id")) {
-            $user->prefs->set_fields($request_vars);
+            $user->prefs->setFields($request_vars);
             $user->prefs->update();
             $user->prefs->load(1);
             $lang = $user->load_language(1);
@@ -174,7 +174,7 @@
 ?>
           </dt>
           <dd>
-<?php echo create_pulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), create_select_array(get_records("color_scheme", "name"), array("name"))) ?>
+<?php echo create_pulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), template::createSelectArray(color_scheme::getRecords("color_scheme", "name"), array("name"))) ?>
           </dd>
 <?php
     $langs = language::get_all();

@@ -36,7 +36,7 @@
                 foreach ($albums as $alb) {
                     $permissions = new group_permissions(
                         $group_id, $alb->get("album_id"));
-                    $permissions->set_fields($request_vars,"","_all");
+                    $permissions->setFields($request_vars,"","_all");
                     if(!WATERMARKING) {
                         $permissions->set("watermark_level", 0);
                     }
@@ -58,7 +58,7 @@
         // Check if new album should be added
         if($album_id_new) {
             $permissions = new group_permissions();
-            $permissions->set_fields($request_vars,"","_new");
+            $permissions->setFields($request_vars,"","_new");
             if(!WATERMARKING) {
                 $permissions->set("watermark_level", 0);
             }
@@ -72,13 +72,13 @@
             $name=$album->get("album");
             $id=$album->get("album_id");
             $permissions = new group_permissions();
-            $permissions->set_fields($request_vars,"","__$id");
+            $permissions->setFields($request_vars,"","__$id");
             $permissions->update();
         }
 
         $action = "update";
     } else if ($_action=="update") {
-        $group->set_fields($request_vars);
+        $group->setFields($request_vars);
         $group->update($request_vars);
         $action = "update";
     } else {
@@ -116,7 +116,7 @@
       <div class="main">
         <h2><?php echo $group->get("group_name") ?></h2>
             <dl>
-                <?php echo create_field_html($group->get_display_array()) ?>
+                <?php echo create_field_html($group->getDisplayArray()) ?>
             </dl>
             <br>
         <h3><?php echo translate("Albums") ?></h3>

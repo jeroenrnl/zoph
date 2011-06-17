@@ -38,7 +38,7 @@
 ?>
 <br>
 <table id="zophinfo">
-<?php echo create_field_html_table(get_zoph_info_array()) ?>
+<?php echo create_field_html_table(report::getInfoArray()) ?>
 <?php
     }
 ?>

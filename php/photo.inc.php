@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class photo extends zoph_table {
+class photo extends zophTable {
 
     var $photographer;
     var $location;
@@ -32,7 +32,7 @@ class photo extends zoph_table {
 
     function photo($id = 0) {
         if($id && !is_numeric($id)) { die("photo_id must be numeric"); }
-        parent::zoph_table("photos", array("photo_id"), array(""));
+        parent::__construct("photos", array("photo_id"), array(""));
         $this->set("photo_id",$id);
     }
 
@@ -213,7 +213,7 @@ class photo extends zoph_table {
         $file=$this->get_file_path();
         $exif=process_exif($file);
         if($exif) {
-            $this->set_fields($exif);
+            $this->setFields($exif);
             $this->update();
         }
     }
@@ -352,7 +352,7 @@ class photo extends zoph_table {
                 " and pa.album_id = al.album_id order by al.album";
         }
 
-        return get_records_from_query("album", $sql);
+        return album::getRecordsFromQuery("album", $sql);
     }
 
     function lookup_categories($user = null) {
@@ -363,7 +363,7 @@ class photo extends zoph_table {
             "where pc.photo_id = '" . escape_string($this->get("photo_id")) . "'" .
             " and pc.category_id = cat.category_id order by cat.category";
 
-        return get_records_from_query("category", $sql);
+        return album::getRecordsFromQuery("category", $sql);
     }
 
     function lookup_people() {
@@ -376,7 +376,7 @@ class photo extends zoph_table {
             escape_string($this->get("photo_id")) . "'" .
             " and pp.person_id = psn.person_id order by pp.position";
 
-        return get_records_from_query("person", $sql);
+        return album::getRecordsFromQuery("person", $sql);
     }
     /**
      * Import a file into the database
@@ -1075,18 +1075,18 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         return ANNOTATE_TEMP_PREFIX . $user->get("user_id") . "_" . $this->get("name");
     }
 
-    function get_display_array() {
+    function getDisplayArray() {
         $datetime=$this->get_time(null, "Y-m-d");
 
         return array(
             translate("title") => $this->get("title"),
             translate("location") => $this->location
-                ? $this->location->get_link() : "",
+                ? $this->location->getLink() : "",
             translate("view") => $this->get("view"),
             translate("date") => create_date_link($datetime[0]),
             translate("time") => $this->get_time_details($datetime[1]),
             translate("photographer") => $this->photographer
-                ? $this->photographer->get_link() : ""
+                ? $this->photographer->getLink() : ""
         );
     }
 
@@ -1120,7 +1120,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             translate("comment") => $this->get("comment"));
     }
 
-    function get_edit_array() {
+    function getEditArray() {
         return array(
             "Title" => create_text_input("title", $this->title),
             "Date" => create_text_input("date", $this->date_taken),
@@ -1257,7 +1257,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             $html.="<tr>\n";
             $this_user=new user($row[1]);
             $this_user->lookup();
-            $html.="<td>" . $this_user->get_link() . "</td>\n" .
+            $html.="<td>" . $this_user->getLink() . "</td>\n" .
                 "<td>" . $row[2] . "</td>\n" .
                 "<td>" . $row[3] . "</td>\n" .
                 "<td>" . $row[4] . "</td>\n" .
@@ -1274,7 +1274,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     function get_comments() {
         $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .
             " photo_id = " .  $this->get("photo_id");
-        $comments=get_records_from_query("comment", $sql);
+        $comments=comment::getRecordsFromQuery("comment", $sql);
         return $comments;
     }
 
@@ -1285,7 +1285,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             " union select photo_id_2 as photo_id from " . 
             DB_PREFIX . "photo_relations where" .
             " photo_id_1 = " .  $this->get("photo_id");
-        $related=get_records_from_query("photo", $sql);
+        $related=photo::getRecordsFromQuery("photo", $sql);
         return $related;
     }
 
@@ -1391,19 +1391,19 @@ echo ("<br>\noutString:<br>\n" . $out_string);
           "<p><small>" . 
           $this->get("date") . " " . $this->get("time") . "<br>";
         if($this->photographer) {
-            $html.=translate("by",0) . " " . $this->photographer->get_link(1) . "<br>";
+            $html.=translate("by",0) . " " . $this->photographer->getLink(1) . "<br>";
         }
         $html.="<\/small><\/p>";
         return $html;
     }
 
-    function get_marker($user, $check_loc=true) {
+    function getMarker($user, $check_loc=true) {
         $icon=ICONSET . "/geo-photo.png";
-        $js=parent::get_marker($user, $icon); 
+        $js=parent::getMarker($user, $icon); 
         if(!$js && $check_loc) {
             $loc=$this->location;
             if($loc) {
-                $js=$loc->get_marker($user); 
+                $js=$loc->getMarker($user); 
             }
         }
         if($js) {
@@ -1413,8 +1413,8 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         }
     }
 
-    function get_mapping_js($user,$edit=false) {
-         return parent::get_mapping_js($user, ICONSET . "/geo-photo.png", $edit);
+    function getMappingJs($user,$edit=false) {
+         return parent::getMappingJs($user, ICONSET . "/geo-photo.png", $edit);
     }
 
     /**
@@ -1456,7 +1456,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 "having distance <= " . $distance . 
                 " order by distance" . $lim;
 
-            $near=get_records_from_query("photo", $sql);
+            $near=photo::getRecordsFromQuery("photo", $sql);
             return $near;
         } else {
             return null;
@@ -1469,7 +1469,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         if(!empty($path)) {
             $sql .= " AND path='" . escape_string($path) ."'";
         }
-        return get_records_from_query("photo", $sql);
+        return photo::getRecordsFromQuery("photo", $sql);
     }
 
     /**
@@ -1514,7 +1514,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             " ORDER BY abs(timediff(datetime,\"" . date("Y-m-d H:i:s", $utc) . "\")) ASC" .
             " LIMIT 1";
 
-        $points=get_records_from_query("point", $sql);
+        $points=point::getRecordsFromQuery("point", $sql);
 
         $point=$points[0];
         if(get_class($piont)=="point") {
@@ -1649,12 +1649,21 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         log::msg("Number of photos after overwrite check: " . count($gphotos), log::GEOTAG, log::DEBUG);
         return $gphotos;
     }
+
+    /**
+     * Gets the total count of records in the table
+     * @todo Can be removed when minimum PHP version is 5.3 
+     */
+    public static function getCount($dummy=null) {
+        return parent::getCount("photo");
+    }
+
         
 }
 
 function get_photo_sizes_sum() {
     $sql = "select sum(size) from " . DB_PREFIX . "photos";
-    return get_count_from_query($sql);
+    return photo::getCountFromQuery($sql);
 }
 
 function get_filesize($photos, $human=false) {

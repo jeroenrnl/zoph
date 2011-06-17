@@ -32,7 +32,7 @@
 
     if ($_action == "update" &&
         $user->get("user_id") == $this_user->get("user_id")) {
-        $user->set_fields($request_vars);
+        $user->setFields($request_vars);
     }
 
     // edit after insert to add album permissions
@@ -63,7 +63,7 @@
         <div class="main">
           <h2><?php echo e($this_user->get("user_name")) ?></h2>
             <dl>
-                <?php echo create_field_html($this_user->get_display_array(), 3) ?>
+                <?php echo create_field_html($this_user->getDisplayArray(), 3) ?>
             </dl>
             <br>
 <?php

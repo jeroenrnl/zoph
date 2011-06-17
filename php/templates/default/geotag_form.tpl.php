@@ -54,7 +54,7 @@
                     <legend><?php echo translate("Tracks"); ?></legend>
                     <input type="radio" name="_tracks" id="tracks" value="all" checked><?php echo translate("All tracks"); ?><br>
                     <input type="radio" name="_tracks" id="tracks2" value="specific"><?php echo translate("Specific track") . ": " ?>
-                    <?php echo create_pulldown("_track", "", create_select_array(get_records("track", "track_id"), array("name"))) ?>
+                    <?php echo create_pulldown("_track", "", template::createSelectArray(track::getRecords("track", "track_id"), array("name"))) ?>
                 </fieldset>
             </fieldset>
             <fieldset class="geotag">
