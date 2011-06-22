@@ -21,7 +21,7 @@
 
 class category extends zophTreeTable {
 
-    var $photo_count;
+    var $photoCount;
 
     function category($id = 0) {
         if($id && !is_numeric($id)) { die("category_id must be numeric"); }
@@ -30,18 +30,18 @@ class category extends zophTreeTable {
     }
 
     public function getId() {
-        return $this->get("category_id");
+        return (int) $this->get("category_id");
     }
 
     function delete() {
         parent::delete(array("photo_categories"));
     }
 
-    function get_name() {
+    function getName() {
         return $this->get("category");
     }
 
-    function get_children($user=null,$order=null) {
+    function getChildren($user=null,$order=null) {
         if($order && $order!="name") {
             $order_fields=get_sql_for_order($order);
             $order=" ORDER BY " . $order . ", name ";
@@ -75,8 +75,8 @@ class category extends zophTreeTable {
         return parent::get_branch_ids($user);
     }
 
-    function get_photo_count($user) {
-        if ($this->photo_count) { return $photo_count; }
+    function getPhotoCount($user) {
+        if ($this->photoCount) { return $photoCount; }
 
         $id = $this->get("category_id");
 
@@ -106,7 +106,7 @@ class category extends zophTreeTable {
         return category::getCountFromQuery($sql);
     }
 
-    function get_total_photo_count($user = null) {
+    function getTotalPhotoCount($user = null) {
         if ($this->get("parent_category_id")) {
             $id_list = $this->get_branch_ids($user);
             $id_constraint = "pc.category_id in ($id_list)";
@@ -194,8 +194,13 @@ class category extends zophTreeTable {
         else {
             $name = translate("Categories");
         }
-        return "<a href=\"categories.php?parent_category_id=" . $this->get("category_id") . "\">$name</a>";
+        return "<a href=\"" . $this->getURL() . "\">$name</a>";
     }
+
+    function getURL() {
+        return "categories.php?parent_category_id=" . $this->getId();
+    }
+
     function xml_rootname() {
         return "categories";
     }

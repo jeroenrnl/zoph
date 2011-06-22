@@ -39,7 +39,7 @@ if (!$user->is_admin()) {
     $vars=clean_request_vars($request_vars);
     $new_vars=update_query_string($vars, "_action", "do_geotag", array("_test", "_testcount"));
     $photos;
-    $total_photo_count = get_photos($vars, 0, 999999999, $photos, $user);
+    $totalPhotoCount = get_photos($vars, 0, 999999999, $photos, $user);
     $num_photos=sizeof($photos);
 }
 

@@ -99,13 +99,13 @@ class person extends zophTable {
         return person::getFromId($this->get("spouse_id"));
     }
 
-    function get_children() {
+    function getChildren() {
         $constraints["father_id"] = $this->get("person_id");
         $constraints["mother_id"] = $this->get("person_id");
         return get_people($constraints, "or");
     }
 
-    function get_name() {
+    function getName() {
         if ($this->get("called")) {
             $name = $this->get("called");
         }
@@ -126,7 +126,7 @@ class person extends zophTable {
     }
 
     function to_html() {
-        return get_name();
+        return getName();
     }
 
     /**
@@ -135,7 +135,7 @@ class person extends zophTable {
      */
     function getLink($show_last_name = 1) {
         if ($show_last_name) {
-            $name = $this->get_name();
+            $name = $this->getName();
         }
         else {
             $name = $this->get("called") ? $this->get("called") :
@@ -143,6 +143,14 @@ class person extends zophTable {
         }
 
         return "<a href=\"person.php?person_id=" . $this->get("person_id") . "\">$name</a>";
+    }
+
+    /**
+     * Get URL to this person
+     */
+
+    function getURL() {
+        return "person.php?person_id=" . $this->getId();
     }
 
     function getDisplayArray() {
@@ -173,6 +181,23 @@ class person extends zophTable {
     function xml_nodename() {
         return "person";
     }
+
+    public function getPhotoCount(user $user) {
+        $ignore=null;
+        $vars=array(
+            "photographer_id" => $this->getId()
+        );
+        return get_photos($vars, 0, 1, $ignore, $user);
+    }
+    
+    public function getPhotographerCount(user $user) {
+        $ignore=null;
+        $vars=array(
+            "person_id" => $this->getId()
+        );
+        return get_photos($vars, 0, 1, $ignore, $user);
+    }
+
 
     function get_coverphoto($user,$autothumb=null) {
         if ($this->get("coverphoto")) {
@@ -503,7 +528,7 @@ function create_person_pulldown($name, $value=null, $user) {
     if($value) {
         $person=new person($value);
         $person->lookup();
-        $text=$person->get_name();
+        $text=$person->getName();
     }
     if($user->prefs->get("autocomp_people") && AUTOCOMPLETE && JAVASCRIPT) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
@@ -523,7 +548,7 @@ function create_photographer_pulldown($name, $value=null, $user) {
     if($value) {
         $person=new person($value);
         $person->lookup();
-        $text=$person->get_name();
+        $text=$person->getName();
     }
     if($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPT) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .

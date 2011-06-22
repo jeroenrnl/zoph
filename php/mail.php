@@ -114,7 +114,7 @@
 
     }
 
-    $from_name = $user->person->get_name();
+    $from_name = $user->person->getName();
     $from_email = $user->person->get_email();
 
     require_once("header.inc.php");

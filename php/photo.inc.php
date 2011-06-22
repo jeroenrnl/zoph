@@ -1084,7 +1084,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 ? $this->location->getLink() : "",
             translate("view") => $this->get("view"),
             translate("date") => create_date_link($datetime[0]),
-            translate("time") => $this->get_time_details($datetime[1]),
+            translate("time") => $this->get_time_details(),
             translate("photographer") => $this->photographer
                 ? $this->photographer->getLink() : ""
         );
@@ -1099,7 +1099,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             translate("date") => $this->get("date"),
             translate("time") => $this->get("time"),
             translate("photographer") => $this->photographer
-                ? $this->photographer->get_name() : "",
+                ? $this->photographer->getName() : "",
             translate("description") => $this->get("description")
         );
     }
@@ -1125,9 +1125,9 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             "Title" => create_text_input("title", $this->title),
             "Date" => create_text_input("date", $this->date_taken),
             "Photographer" => create_text_input("photographer",
-                $this->photographer ? $this->photographer->get_name() : ""),
+                $this->photographer ? $this->photographer->getName() : ""),
             "Location" => create_text_input("location",
-                $this->location ? $this->location->get_name() : ""),
+                $this->location ? $this->location->getName() : ""),
             "View" => create_text_input("view", $this->view),
             "Level" => create_text_input("level", $this->level, 4, 2));
     }
@@ -1182,94 +1182,59 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         return array($date,$time);
     }
 
-    function get_time_details($content, $open=false) {
-        $html="&nbsp;";
-        if ($open) {
-            $html.="<span onclick=\"collapse(this)\">-&nbsp;</span>";
-        } else {
-            $html.="<span onclick=\"expand(this)\">+&nbsp;</span>";
-        }
-        $html.="<span class='showhide'>" . $content . "</span>";
-        $html.="<div class='timedetail'>\n<dl>\n";
-        $html.="<h3>" . translate("database") . "</h3>\n";
-        $html.="<dt>" . translate("date") . "</dt>\n";
-        $html.="<dd>" . $this->get("date") . "</dd>\n";
-        $html.="<dt>" . translate("time") . "</dt>\n";
-        $html.="<dd>" . $this->get("time") . "</dd>\n";
-        $html.="<dt>" . translate("timezone") . "</dt>\n";
+    function get_time_details() {
+        $tz=null;
         if(valid_tz(CAMERA_TZ)) {
-            $html.="<dd>" . CAMERA_TZ . "</dd>\n<br>\n";
-        } else {
-            $html.="<dd><i>" . translate ("not set") . "</i></dd><br>\n";
+            $tz=CAMERA_TZ;
         }
-        $corr=$this->get("time_corr");
-        if($corr) {
-            $html.="<dt>" . translate("correction") . "</dt>\n";
-            $html.="<dd>" . $corr . " " . translate("minutes") . "</dd>\n";
-        }
-        $html.="<br>";
+        
         $this->lookup_location();
         $place=$this->location;
-        if($place) {
-            $html.="<h3>" . translate("location") . "</h3>\n";
-            $html.="<dt>" . translate("location") . "</dt>\n";
-            $html.="<dd>" . $place->get("title") . "</dd>\n";
-            $html.="<dt>" . translate("timezone") . "</dt>\n";
-            $tz=$place->get("timezone");
-            $datetime=$this->get_time();
-            if($tz) {
-                $html.="<dd>" . $tz . "</dd>\n<br>\n";
-            } else {
-                $html.="<dd><i>" . translate ("not set") . "</i></dd><br>\n";
-            }
+        $place_tz=null;
+        if(isset($place)) {
+            $place_tz=$place->get("timezone");
         }
-        $html.="<h3>" .translate("calculated time") . "</h3>\n";
-        $html.="<dt>" . translate("date") . "</dt>\n";
-        $html.="<dd>" . $datetime[0] . "</dd>\n";
-        $html.="<dt>" . translate("time") . "</dt>\n";
-        $html.="<dd>" . $datetime[1] . "</dd>\n";
-        $html.="</dl>\n<br>\n</div>";
-        return $html;
+       
+        $datetime=$this->get_time();
+
+        $tpl=new template("time_details", array(
+            "photo_date" => $this->get("date"),
+            "photo_time" => $this->get("time"),
+            "camera_tz" => $tz,
+            "corr" => $this->get("time_corr"),
+            "location" => $place->get("title"),
+            "loc_tz" => $place_tz,
+            "calc_date" => $datetime[0],
+            "calc_time" => $datetime[1]
+        ));
+        return $tpl->toString();
     }
 
-    function get_rating_details($content, $open=false) {
+    function get_rating_details() {
+        $rating=$this->get("rating");
+
         $sql="SELECT rating_id, user_id, rating, ipaddress, timestamp FROM " .
             DB_PREFIX . "photo_ratings WHERE photo_id=" .
             escape_string($this->get("photo_id"));
 
-        $result=query($sql);
-        
-        $html="&nbsp;";
-        if ($open) {
-            $html.="<span onclick=\"collapse(this)\">-&nbsp;</span>";
-        } else {
-            $html.="<span onclick=\"expand(this)\">+&nbsp;</span>";
-        }
-        $html.="<span class='showhide'>" . $content . "</span>";
-        $html.="<div class='ratingdetail'>\n";
-        $html.="<table class='ratingdetail'>\n<tr>\n";
-        $html.="<th>" . translate("user") . "</th>";
-        $html.="<th>" . translate("rating") . "</th>";
-        $html.="<th>" . translate("IP address") . "</th>";
-        $html.="<th>" . translate("date") . "</th></tr>";
-
-        while($row=fetch_row($result)) {
-            $html.="<tr>\n";
-            $this_user=new user($row[1]);
+        $result=query($sql); 
+        $ratings=array();
+        while($row=fetch_assoc($result)) {
+            $this_user=new user($row["user_id"]);
             $this_user->lookup();
-            $html.="<td>" . $this_user->getLink() . "</td>\n" .
-                "<td>" . $row[2] . "</td>\n" .
-                "<td>" . $row[3] . "</td>\n" .
-                "<td>" . $row[4] . "</td>\n" .
-                "<td><span class='actionlink'>" .
-                "<a href='photo.php?_action=delrate" .
-                "&photo_id=" . $this->get("photo_id") .
-                "&_rating_id=" .  $row[0] . "'>" . 
-                translate("delete") . "</a></span></td>" .
-                "</tr>\n";
+            $row["user_name"]=$this_user->getName();
+            $row["user_url"]=$this_user->getURL();
+            $ratings[]=$row;
         }
-        $html.="</table>\n</div>";
-        return $html;
+        
+        $tpl=new template("rating_details",array(
+            "rating" => $rating,
+            "ratings" => $ratings,
+            "photo_id" => $this->photo_id
+        ));
+
+
+        return $tpl->toString();
     }
     function get_comments() {
         $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .

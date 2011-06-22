@@ -73,7 +73,7 @@
         }
 
         $this_user->lookup_person();
-        $name = $this_user->person->get_name();
+        $name = $this_user->person->getName();
 
         $subject = translate("Your Zoph Account", 0);
         $message =
@@ -90,7 +90,7 @@
         }
         $message .=
             "\n" . translate("Regards,",0) . "\n" .
-            e($user->person->get_name());
+            e($user->person->getName());
 ?>
 <form action="notify.php" method="POST">
 <input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">

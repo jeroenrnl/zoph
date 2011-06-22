@@ -11,6 +11,8 @@ http://creativecommons.org/licenses/by-sa/2.5/
 64x64/actions/window_nofullscreen.png resize.png
 64x64/actions/window_fullscreen.png unpack.png
 16x16/actions/ktremove.png	remove.png (resized to 8x8)
+16x16/actions/1rightarrow.png	1rightarrow.png
+16x16/actions/1downarrow.png	1downarrow.png
 64x64/actions/player_pause.png 	pause.png
 64x64/apps/system-users.png	groups.png
 64x64/apps/userconfig.png	users.png

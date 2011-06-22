@@ -62,7 +62,7 @@ class group_permissions extends zophTable {
         $album = new album($this->get("album_id"));
         $album->lookup();
 
-        $children = $album->get_children();
+        $children = $album->getChildren();
         foreach ($children as $child) {
             $gp = new group_permissions(
                 $this->get("group_id"), $child->get("album_id"));

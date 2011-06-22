@@ -92,37 +92,29 @@
         $first_letter = $_l;
     }
     $ppl = get_all_people($user, $first_letter);
-?>
-        <ul class="<?php echo $_view ?>">
-<?php
     if ($ppl) {
-        foreach($ppl as $p) {
-            echo "<li" . (++$i%2 ? " class=\"alternate\"":"") . ">";
-?> 
-            <span class="actionlink"><a href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("display") ?></a> | <a href="photos.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos of") ?></a> | <a href="photos.php?photographer_id=<?php echo $p->get("person_id") ?>"><?php echo translate("photos by") ?></a></span>
-<?php
         if ($_view=="thumbs") {
-?>
-            <p>
-                <?php echo $p->get_coverphoto($user,$_autothumb); ?>
-                &nbsp;
-            </p>
-           <div>
-<?php
+            $template="view_thumbs";
+        } else {
+            $template="view_list";
         }
-?>
-            <a class="person" href="person.php?person_id=<?php echo $p->get("person_id") ?>"><?php echo $p->get("last_name") ? $p->get("last_name") . ", " : "" ?><?php echo $p->get("first_name") ?></a>
-        </li>
-<?php
-        }
-    }
-    else {
+        $tpl=new template($template, array(
+            "id" => $_view . "view",
+            "items" => $ppl,
+            "user" => $user,
+            "autothumb" => $_autothumb,
+            "links" => array(
+                translate("photos of") => "photos.php?person_id=",
+                translate("photos by") => "photos.php?photogapher_id="
+            )
+        ));
+        echo $tpl;
+    } else {
 ?>
           <div class="error"><?php echo sprintf(translate("No people were found with a last name beginning with '%s'."), htmlentities($_l)) ?></div>
 <?php
     }
 ?>
-    </ul>
     <br>
 
 </div>

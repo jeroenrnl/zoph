@@ -74,10 +74,10 @@
         $u->lookup();
         $u->lookup_person();
 
-        $from_name = $user->person->get_name();
+        $from_name = $user->person->getName();
         $from_email = $user->person->get_email();
 
-        $to_name = $u->person->get_name();
+        $to_name = $u->person->getName();
         $to_email = $u->person->get_email();
     }
 

@@ -28,7 +28,7 @@ class place extends zophTreeTable {
     }
 
     public function getId() {
-        return $this->get("place_id");
+        return (int) $this->get("place_id");
     }
 
     function insert() {
@@ -66,7 +66,7 @@ class place extends zophTreeTable {
         parent::delete();
     }
 
-    function get_children($user=null,$order=null) {
+    function getChildren($user=null,$order=null) {
         $order_fields="";
 
         if($order=="sortname") {
@@ -113,7 +113,7 @@ class place extends zophTreeTable {
         unset($this->fields["timezone_id"]);
     }
 
-    function get_name() {
+    function getName() {
         if ($this->get("title")) { return $this->get("title"); }
 
         if ($this->get("address")) { $name = $this->get("address"); }
@@ -157,13 +157,13 @@ class place extends zophTreeTable {
     }
 
     function getLink() {
-        $link = "<a href=\"places.php?parent_place_id=" . e($this->get("place_id")) . "\">" . e($this->get_name()) . "</a>";
+        $link = "<a href=\"" . $this->getURL() . "\">" . e($this->getName()) . "</a>";
 
-        // add city link if title exists (and so was used by get_name())
-  //      if ($this->get("title") && $this->get("city")) {
-    //        $link .= ", <a href=\"places.php?_l=" . rawurlencode(strtolower($this->get("city"))) . "\">" . $this->get("city") . "</a>";
-     //   }
         return $link;
+    }
+
+    public function getURL() {
+        return "places.php?parent_place_id=" . $this->getId();
     }
 
 
@@ -204,7 +204,7 @@ class place extends zophTreeTable {
 
         return photo::getRecordsFromQuery("photo", $sql);
     }
-    function get_photo_count($user = null) {
+    function getPhotoCount($user = null) {
         $id = $this->get("place_id");
 
         if ($user && !$user->is_admin()) {
@@ -230,7 +230,7 @@ class place extends zophTreeTable {
         return photo::getCountFromQuery($sql);
     }
 
-    function get_total_photo_count($user = null) {
+    function getTotalPhotoCount($user = null) {
         if ($this->get("parent_place_id")) {
             $id_list = $this->get_branch_ids($user);
             $id_constraint = "p.location_id in ($id_list)";
@@ -330,7 +330,7 @@ class place extends zophTreeTable {
     function getMappingJs($user,$edit=false) {
          $js=parent::getMappingJs($user, ICONSET . "/geo-place.png", $edit);
          if (!$edit) {
-            $js.=getMarkers($this->get_children($user), $user);
+            $js.=getMarkers($this->getChildren($user), $user);
         }
         return $js;
     }
@@ -371,8 +371,8 @@ class place extends zophTreeTable {
         $html="<h2>" . $this->getLink() . "<\/h2>";
         $html.="<small>" . $this->get_address() . "<\/small><br>";
         $html.=$this->get_coverphoto($user, $user->prefs->get("autothumb"));
-        $count=$this->get_photo_count($user);
-        $totalcount=$this->get_total_photo_count($user);
+        $count=$this->getPhotoCount($user);
+        $totalcount=$this->getTotalPhotoCount($user);
         $html.="<br><small>" . 
             e(sprintf(translate("There are %s photos"), $count) .
            " " . translate("in this place")) . "<br>";

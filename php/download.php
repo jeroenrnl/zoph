@@ -76,7 +76,7 @@
 
         $photos;
 
-        $total_photo_count =
+        $totalPhotoCount =
             get_photos($vars, $offset, $maxfiles, $photos, $user);
 
         $num_photos = sizeof($photos);
@@ -96,9 +96,9 @@
             if($new_qs==$qs) {
                 $new_qs=$new_qs . "&_filenum=" . ($filenum + 1);
             }
-            if($newoffset < $total_photo_count) {
+            if($newoffset < $totalPhotoCount) {
 ?>
-                <?php echo sprintf(translate("Downloaded %s of %s photos."), $newoffset, $total_photo_count) ?>
+                <?php echo sprintf(translate("Downloaded %s of %s photos."), $newoffset, $totalPhotoCount) ?>
                 <span class="actionlink">
                     <a href="download.php?<?php echo $new_qs?>">
                         <?php echo translate("download next file") ?></a>
@@ -124,7 +124,7 @@
         }
     } else {
         # Give me a call if you have more than 999999999 photos!
-        $total_photo_count =
+        $totalPhotoCount =
             get_photos($vars, 0, 999999999, $photos, $user);
         $num_photos=sizeof($photos);
         if ($num_photos<= 0) {

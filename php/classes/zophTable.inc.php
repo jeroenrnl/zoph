@@ -674,7 +674,7 @@ function get_xml($class, $search,$user=null) {
                 $key=$xml->createElement("key");
                 $title=$xml->createElement("title");
                 $key->appendChild($xml->createTextNode($record->get($idname)));
-                $title->appendChild($xml->createTextNode($record->get_name()));
+                $title->appendChild($xml->createTextNode($record->getName()));
                 $newchild->appendChild($key);
                 $newchild->appendChild($title);
                 $rootnode->appendChild($newchild);

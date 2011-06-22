@@ -42,7 +42,7 @@
     require_once("actions.inc.php");
     if ($action != "insert") {
         $person->lookup();
-        $title = e($person->get_name());
+        $title = e($person->getName());
     }
     else {
         $title = translate("New Person");
@@ -50,15 +50,8 @@
 
     require_once("header.inc.php");
     if ($action == "display") {
-
-        $ignore; // don't need the thumbnails, only get 1
-
-        $vars["person_id"] = $person->get("person_id");
-        $photos_of = get_photos($vars, 0, 1, $ignore, $user);
-
-        $vars = null;
-        $vars["photographer_id"] = $person->get("person_id");
-        $photos_by = get_photos($vars, 0, 1, $ignore, $user);
+        $photos_of = $person->getPhotoCount($user);
+        $photos_by = $person->getPhotographerCount($user);
 ?>
       <h1>
 <?php
@@ -166,7 +159,7 @@ if ($user->get("detailed_people") || $user->is_admin()) {
             <a href="person.php?_action=confirm&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("delete") ?></a> |
             <a href="person.php?_action=display&amp;person_id=<?php echo $person->get("person_id") ?>"><?php echo translate("cancel") ?></a>
           </span>
-            <?php echo sprintf(translate("Confirm deletion of '%s'"), $person->get_name()) ?>:
+            <?php echo sprintf(translate("Confirm deletion of '%s'"), $person->getName()) ?>:
          <br>
        </div>
 <?php

@@ -38,9 +38,9 @@
     $obj=&$album;
     $ancestors = $album->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
-    $children = $album->get_children($user, $order);
-    $total_photo_count = $album->get_total_photo_count($user);
-    $photo_count = $album->get_photo_count($user);
+    $children = $album->getChildren($user, $order);
+    $totalPhotoCount = $album->getTotalPhotoCount($user);
+    $photoCount = $album->getPhotoCount($user);
 
     $title = $album->get("parent_album_id") ? $album->get("album") : translate("Albums");
 
@@ -125,19 +125,19 @@
     if ($sortorder) {
         $sort = "&amp;_order=" . $sortorder;
     }
-    if ($total_photo_count > 0) {
-        if ($total_photo_count > $photo_count && $children) {
+    if ($totalPhotoCount > 0) {
+        if ($totalPhotoCount > $photoCount && $children) {
 ?>
             <span class="actionlink">
                 <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
             </span>
 <?php
             $fragment .= " " . translate("or its children");
-            if($total_photo_count>1) {
-                echo sprintf(translate("There are %s photos"), $total_photo_count);
+            if($totalPhotoCount>1) {
+                echo sprintf(translate("There are %s photos"), $totalPhotoCount);
                 echo " $fragment.<br>\n";
             } else {
-                echo sprintf(translate("There is %s photo"), $total_photo_count);
+                echo sprintf(translate("There is %s photo"), $totalPhotoCount);
                 echo " $fragment.<br>\n";
             }
             $fragment = translate("in this album");
@@ -147,75 +147,32 @@
 
         }
     }
-    if ($photo_count > 0) {
+    if ($photoCount > 0) {
 ?>
         <span class="actionlink">
             <a href="photos.php?album_id=<?php echo $album->get("album_id") . $sort ?>"><?php echo translate("view photos")?></a>
         </span>
 <?php
-        if ($photo_count > 1) {
-            echo sprintf(translate("There are %s photos"), $photo_count);
+        if ($photoCount > 1) {
+            echo sprintf(translate("There are %s photos"), $photoCount);
             echo " $fragment.\n";
         } else {
-            echo sprintf(translate("There is %s photo"), $photo_count);
+            echo sprintf(translate("There is %s photo"), $photoCount);
             echo " $fragment.\n";
         }
     }
     if ($children) {
-        if($_view=="tree" && JAVASCRIPT) {
-?>
-            <span class="actionlink">
-                <a href='#' onclick='expandall()'>
-                    <?php echo translate("expand all");?></a> |
-                <a href='#' onclick='collapseall()'>
-                    <?php echo translate("collapse all");?></a>
-            </span><br>
-<?php
-        }
-?>
-        <ul class="<?php echo $_view ?>">
-<?php
-        if($_view!="tree") {
-            foreach($children as $a) {
-                $photo_count=$a->get_photo_count($user);
-                $total_photo_count=$a->get_total_photo_count($user);
-                if($photo_count==$total_photo_count) {
-                    $count=" <span class=\"photocount\">(" . $photo_count . ")</span>";
-                } else {
-                    $count=" <span class=\"photocount\">(" . $photo_count ."/" . $total_photo_count . ")</span>";
-                }
-?>
-                <li>
-                    <a href="albums.php?parent_album_id=<?php echo $a->get("album_id") ?>">
-<?php
-                        if ($_view=="thumbs") {
-?>
-                            <p>
-                                <?php echo $a->get_coverphoto($user,$_autothumb); ?>
-                                &nbsp;
-                            </p>
-                            <div>
-<?php
-                        }   
-                        echo $a->get("album");
-                        echo $count;
-                        if ($_view=="thumbs") {
-?>
-                            </div>
-<?php
-                        }       
-?>
-                    </a>
-                </li>
-<?php
-            }
-        } else {
-            echo $album->get_html_tree($user);
-        }
-?>
-        </ul>
-        <br>
-<?php
+        $tpl=new template("view_" . $_view, array(
+            "id" => $_view . "view",
+            "items" => $children,
+            "user" => $user,
+            "autothumb" => $_autothumb,
+            "topnode" => true,
+            "links" => array(
+                translate("view photos") => "photos.php?album_id="
+            )
+        ));
+        echo $tpl;
     }
 ?>
     </div>

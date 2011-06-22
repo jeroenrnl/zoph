@@ -361,7 +361,7 @@ require_once("header.inc.php");
 <?php
                 if($rating) {
                     if($user->is_admin()) {
-                        echo $photo->get_rating_details($rating, false);
+                        echo $photo->get_rating_details();
                     } else {
                         echo $rating;
                     }

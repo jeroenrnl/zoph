@@ -39,9 +39,9 @@ class report {
             translate("number of photos") => photo::getCount(),
             translate("size of photos") => "$size",
             translate("number of photos in an album") =>
-                $album->get_total_photo_count(),
+                $album->getTotalPhotoCount(),
             translate("number of categorized photos") =>
-                $category->get_total_photo_count(),
+                $category->getTotalPhotoCount(),
             translate("number of people") => person::getCount(),
             translate("number of places") => place::getCount()
         );

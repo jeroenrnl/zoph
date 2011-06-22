@@ -73,7 +73,7 @@ class comment extends zophTable {
         $comment_user->lookup();
         $user_name = $comment_user->get("user_name");
         $comment_user->lookup_person();
-        $comment_person = $comment_user->person->get_name();
+        $comment_person = $comment_user->person->getName();
         $comment_person_id = $comment_user->person->get("person_id");
         $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> (<a href=person.php?person_id=%s>%s</a>)", $this->get("user_id"), $user_name, $comment_person_id, $comment_person);
         return $return; 

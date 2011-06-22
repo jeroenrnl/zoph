@@ -171,7 +171,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                         $parent_album=$album;
                     } else if ($hiersearch){
                         $next_album_id=$album->get("album_id");
-                        $children=$parent_album->get_children();
+                        $children=$parent_album->getChildren();
                         foreach ($children as $child) {
                             $child->lookup();
                             if ($child->get("album_id")==$next_album_id) {
@@ -207,7 +207,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                         $parent_cat=$category;
                     } else if ($hiersearch){
                         $next_cat_id=$category->get("category_id");
-                        $children=$parent_cat->get_children();
+                        $children=$parent_cat->getChildren();
                         foreach ($children as $child) {
                             $child->lookup();
                             if ($child->get("category_id")==$next_cat_id) {

@@ -30,7 +30,7 @@ abstract class zophTreeTable extends zophTable {
      * Deletes a record along with all of its descendants.
      */
     function delete($extra_tables = null) {
-        $this->get_children();
+        $this->getChildren();
         if ($this->children) {
             foreach ($this->children as $child) {
                 $child->delete();
@@ -43,7 +43,7 @@ abstract class zophTreeTable extends zophTable {
     /*
      * Gets the children of this record.
      */
-    function get_children($user = null, $order = null) {
+    function getChildren($user = null, $order = null) {
 
         if ($this->children) { return $this->children; }
         if (!$this->primary_keys) { return; }
@@ -96,7 +96,7 @@ abstract class zophTreeTable extends zophTable {
         $key = $this->primary_keys[0];
         $id_array[] = $this->get($key);
 
-        $this->get_children();
+        $this->getChildren();
         if ($this->children) {
             foreach($this->children as $c) {
                 $c->get_branch_id_array($id_array, $user);
@@ -118,7 +118,7 @@ abstract class zophTreeTable extends zophTable {
 
     function get_html_tree($user=null,$open=true) {
         $this->lookup();
-        $children=$this->get_children($user);
+        $children=$this->getChildren($user);
 
         $html="\n<li>";
         if($children) {
@@ -154,7 +154,7 @@ abstract class zophTreeTable extends zophTable {
 
         $newchild=$xml->createElement($nodename);
 
-        $title=$this->get_name();
+        $title=$this->getName();
         $titleshort=strtolower(substr($title, 0, strlen($search)));
         if($titleshort == strtolower($search)) {
             $key=$this->get($idname);
@@ -168,7 +168,7 @@ abstract class zophTreeTable extends zophTable {
             $newchild->appendChild($newchildtitle);
        }
        $order = $user->prefs->get("child_sortorder");
-       $children=$this->get_children($user, $order);
+       $children=$this->getChildren($user, $order);
         if($children) {
             $childset=$xml->createElement($rootname);
             foreach($children as $child) {
@@ -202,7 +202,7 @@ function create_tree_select_array($name, $user = null, $rec = null,
     } else {
         $order="name";
     }
-    $children = $rec->get_children($user, $order);
+    $children = $rec->getChildren($user, $order);
     if ($children) {
         foreach ($children as $child) {
             $select_array = create_tree_select_array($name, $user, $child,

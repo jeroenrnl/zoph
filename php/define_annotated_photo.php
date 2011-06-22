@@ -99,7 +99,7 @@
         if($p_id) {
             $person = new person($p_id);
             $person->lookup();
-            $photographer = $person->get_name();
+            $photographer = $person->getName();
         }
 ?>
           <input type="checkbox" name="photographer_cb">
@@ -121,7 +121,7 @@
             foreach ($people as $person) {
                if ($count > 0) { $people_string .= ", "; }
                $count++;
-               $people_string .= $person->get_name();
+               $people_string .= $person->getName();
             }
         }
 ?>

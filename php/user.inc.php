@@ -31,6 +31,10 @@ class user extends zophTable {
         $this->set("user_id", $id);
     }
 
+    public function getId() {
+        return $this->get("user_id");
+    }
+
     function insert() {
         parent::insert();
         $this->prefs = new prefs($this->get("user_id"));
@@ -59,9 +63,25 @@ class user extends zophTable {
         return $this->get("lastnotify");
     }
 
+    /**
+     * Get a link to this object
+     * @todo should be phased out in favour of @see getURL, since this contains HTML
+     * @return string link
+     */
     function getLink() {
-        return "<a href='user.php?user_id=" . $this->get("user_id") . "'>" .
-            $this->get("user_name") . "</a>";
+        return "<a href='" . $this->getURL() . "'>" . $this->getName();
+    }
+
+    /**
+     * Get URL to this object
+     * @return string URL
+     */
+    function getURL() {
+        return "user.php?user_id=" . $this->getId();
+    }
+
+    function getName() {
+        return $this->get("user_name");
     }
 
     function get_groups() {

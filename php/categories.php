@@ -37,10 +37,10 @@
     $obj=&$category;
     $ancestors = $category->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
-    $children = $category->get_children($user, $order);
+    $children = $category->getChildren($user, $order);
 
-    $photo_count = $category->get_photo_count($user);
-    $total_photo_count = $category->get_total_photo_count($user);
+    $photoCount = $category->getPhotoCount($user);
+    $totalPhotoCount = $category->getTotalPhotoCount($user);
 
     $title = $category->get("parent_category_id") ? $category->get("category") : translate("Categories");
 
@@ -127,8 +127,8 @@ if ($category->get("category_description")) {
     if ($sortorder) {
         $sort = "&amp;_order=" . $sortorder;
     }
-    if ($total_photo_count > 0) {
-        if ($total_photo_count > $photo_count && $children) {
+    if ($totalPhotoCount > 0) {
+        if ($totalPhotoCount > $photoCount && $children) {
 ?>
             <span class="actionlink">
                 <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
@@ -142,11 +142,11 @@ if ($category->get("category_description")) {
                 }
             }
 
-            if ($total_photo_count > 1) {
-                echo sprintf(translate("There are %s photos"), $total_photo_count);
+            if ($totalPhotoCount > 1) {
+                echo sprintf(translate("There are %s photos"), $totalPhotoCount);
                 echo " $fragment.<br>\n";
             } else {
-                echo sprintf(translate("There is %s photo"), $total_photo_count);
+                echo sprintf(translate("There is %s photo"), $totalPhotoCount);
                 echo " $fragment.<br>\n";
             }
 ?>
@@ -154,17 +154,17 @@ if ($category->get("category_description")) {
         }
     }
     $fragment = translate("in this category");
-    if ($photo_count > 0) {
+    if ($photoCount > 0) {
 ?>
         <span class="actionlink">
             <a href="photos.php?category_id=<?php echo $category->get("category_id") . $sort ?>"><?php echo translate("view photos")?></a>
         </span>
 <?php
-        if ($photo_count > 1) {
-            echo sprintf(translate("There are %s photos"), $photo_count);
+        if ($photoCount > 1) {
+            echo sprintf(translate("There are %s photos"), $photoCount);
             echo " $fragment.<br>\n";
         } else {
-            echo sprintf(translate("There is %s photo"), $photo_count);
+            echo sprintf(translate("There is %s photo"), $photoCount);
             echo " $fragment.<br>\n";
         }
     }
@@ -172,62 +172,17 @@ if ($category->get("category_description")) {
 ?>
 <?php
     if ($children) {
-        if($_view=="tree" && JAVASCRIPT) {
-?>
-            <span class="actionlink">
-                <a href='#' onclick='expandall()'>
-                    <?php echo translate("expand all");?></a> | 
-                <a href='#' onclick='collapseall()'>
-                    <?php echo translate("collapse all");?></a>
-            </span><br>
-<?php
-        }
-?>
-        <ul class="<?php echo $_view ?>">
-<?php
-            if($_view!="tree") {
-                foreach($children as $c) {
-                    $photo_count=$c->get_photo_count($user);
-                    $total_photo_count=$c->get_total_photo_count($user);
-                    if($photo_count==$total_photo_count) {
-                        $count=" <span class=\"photocount\">(" . 
-                            $photo_count . ")</span>";
-                    } else {
-                        $count=" <span class=\"photocount\">(" . 
-                            $photo_count ."/" . $total_photo_count . ")</span>";
-                    }   
-?>
-                    <li>
-                        <a href="categories.php?parent_category_id=<?php echo $c->get("category_id") ?>">
-<?php
-                            if ($_view=="thumbs") {
-?>
-                                <p>
-                                    <?php echo $c->get_coverphoto($user,$_autothumb); ?>
-                                    &nbsp;
-                                </p>
-                                <div>
-<?php
-                            }
-                            echo $c->get("category");
-                            echo $count;
-                            if ($_view=="thumbs") {
-?>
-                                </div>
-<?php
-                            }
-?>
-                        </a>
-                    </li>
-<?php
-                }
-            } else {
-                echo $category->get_html_tree($user);
-            }
-?>
-        </ul>
-        <br>
-<?php
+        $tpl=new template("view_" . $_view, array(
+            "id" => $_view . "view",
+            "items" => $children,
+            "user" => $user,
+            "autothumb" => $_autothumb,
+            "topnode" => true,
+            "links" => array(
+                translate("view photos") => "photos.php?category_id="
+            )
+        ));
+        echo $tpl;
     }
 ?>
     </div>

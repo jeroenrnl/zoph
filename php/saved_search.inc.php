@@ -42,11 +42,11 @@ class search extends zophTable {
         return parent::lookup($sql);
     }
 
-    function get_name() {
+    function getName() {
         return $this->get("name");
     }
 
-    function get_photo_count($user = null) {
+    function getPhotoCount($user = null) {
         // This should be created some time, but might slow down too much
     }
 
@@ -78,7 +78,7 @@ class search extends zophTable {
                 $owner->getLink() . ")</span>";
         }
         return "<a href='" . $this->getLink() . "&_action=" . 
-            translate("search") . "'>" . $this->get_name() .
+            translate("search") . "'>" . $this->getName() .
             "</a> " . $ownertext;
     }
 

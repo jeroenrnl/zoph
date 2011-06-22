@@ -148,24 +148,43 @@ ul.list {
     list-style: none;
     }
 
-ul.list li.alternate {
+ul.list > li:nth-child(2n) {
     background-color: <?php echo $TITLE_BG_COLOR ?>;
     }
 
 ul.tree {
     clear: both;
     list-style: none;
-    }
+}
 
 ul.tree ul {
     list-style: none;
     margin-top: 0;
     margin-bottom: 0;
-    }
+}
 
-ul.tree ul ul {
+
+li.collapsed > ul.tree,
+div.collapsed > div.timedetail,
+div.collapsed > div.ratingdetail {
     display: none;
-    }
+}
+
+.collapsed > div.toggle {
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin: 0 0 0 -25px;
+    background: url("images/icons/<?php echo ICONSET ?>/1rightarrow.png");
+}
+
+.expanded > div.toggle {
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin: 0 0 0 -25px;
+    background: url("images/icons/<?php echo ICONSET ?>/1downarrow.png");
+}
 
 ul.thumbs a {
     text-align: center;
@@ -459,13 +478,12 @@ input.leftright {
 }
 
 
-span.showhide {
-    font-size: small;
-    text-align: right;
-    }
+div.timedetails, div.ratingdetails {
+    width: 100%;
+    margin-left: 24px;
+}
 
 div.timedetail, div.ratingdetail {
-    display: none;
     border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
     background: white;
     width: 100%;

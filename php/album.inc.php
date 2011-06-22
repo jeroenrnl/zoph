@@ -21,20 +21,20 @@
 
 class album extends zophTreeTable {
 
-    var $photo_count;
+    var $photoCount;
     function album($id = 0) {
         if($id && !is_numeric($id)) { die("album_id must be numeric"); }
         parent::__construct("albums", array("album_id"), array("album"));
         $this->set("album_id", $id);
     }
+
    /**
     * Get the Id
     */
-
     public function getId() {
-        return $this->get("album_id");
+        return (int) $this->get("album_id");
     }
-
+    
     function lookup($user = null) {
         $id = $this->get("album_id");
         if(!is_numeric($id)) { die("album_id must be numeric"); }
@@ -72,16 +72,16 @@ class album extends zophTreeTable {
         }
     }
 
-    function get_name() {
+    function getName() {
         return $this->get("album");
     }
 
     function get_indented_name() {
         $indent=str_repeat("&nbsp;&nbsp;&nbsp;", count($this->get_ancestors()));
-        return $indent . $this->get_name();
+        return $indent . $this->getName();
     }
 
-    function get_children($user=null, $order=null) {
+    function getChildren($user=null, $order=null) {
         $order_fields="";
         if($order && $order!="name") {
             $order_fields=get_sql_for_order($order);
@@ -128,8 +128,8 @@ class album extends zophTreeTable {
         return $this->children;
     }    
 
-    function get_photo_count($user = null) {
-        if ($this->photo_count) { return $photo_count; }
+    function getPhotoCount($user = null) {
+        if ($this->photoCount) { return $photoCount; }
 
         $id = $this->get("album_id");
 
@@ -157,7 +157,7 @@ class album extends zophTreeTable {
         return album::getCountFromQuery($sql);
     }
 
-    function get_total_photo_count($user = null) {
+    function getTotalPhotoCount($user = null) {
         // Without the lookup, parent_album_id is not available!
         $this->lookup();
         if ($this->get("parent_album_id")) {
@@ -243,8 +243,18 @@ class album extends zophTreeTable {
             $name = "Albums";
         }
 
-        return "<a href=\"albums.php?parent_album_id=" .
-            $this->get("album_id") . "\">$name</a>";
+        return "<a href=\"" .  $this->getURL . "\">$name</a>";
+    }
+
+    /**
+     * Return the URL to the current album
+     * This should eventually replace getLink, since that contains
+     * HTML.
+     * @todo PHP 5.3 -> move into zophTable
+     * @return string URL
+     */
+    function getURL() {
+        return "albums.php?parent_album_id=" . $this->getId();
     }
 
     function xml_rootname() {
