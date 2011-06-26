@@ -274,6 +274,77 @@ class category extends zophTreeTable {
         }
     }
 
+    /**
+     * Get details (statistics) about this category from db
+     * @param user Only show albums this user is allowed to see
+     * @return array Array with statistics
+     */
+    public function getDetails(user $user=null) {
+        $id = (int) $this->getId();
+        if(isset($user)) {
+            $user_id = (int) $user->getId();
+        } 
+
+        if ($user && !$user->is_admin()) {
+            $sql = "SELECT " .
+                "COUNT(ph.photo_id) AS count, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(ph.timestamp) AS first, " .
+                "MAX(ph.timestamp) AS last, " .
+                "ROUND(MIN(ph.rating),1) AS lowest, " .
+                "ROUND(MAX(ph.rating),1) AS highest, " . 
+                "ROUND(AVG(ph.rating),2) AS average FROM " . 
+                DB_PREFIX . "photo_categories pc JOIN " .
+                DB_PREFIX . "photos ph " .
+                "ON ph.photo_id=pc.photo_id LEFT JOIN " .
+                DB_PREFIX . "photo_albums pa " .
+                "ON ph.photo_id=pa.photo_id LEFT JOIN " .
+                DB_PREFIX . "group_permissions gp " .
+                "ON pa.album_id=gp.album_id LEFT JOIN " . 
+                DB_PREFIX . "groups_users gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE ph.level<gp.access_level AND " .
+                "gu.user_id=" . escape_string($user_id) . " AND " .
+                "pc.category_id=" . escape_string($id) .
+                " GROUP BY pc.category_id";
+        } else {
+            $sql = "SELECT ".
+                "COUNT(ph.photo_id) AS count, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(ph.timestamp) AS first, " .
+                "MAX(ph.timestamp) AS last, " .
+                "ROUND(MIN(ph.rating),1) AS lowest, " .
+                "ROUND(MAX(ph.rating),1) AS highest, " . 
+                "ROUND(AVG(ph.rating),2) AS average FROM " . 
+                DB_PREFIX . "photo_categories pc JOIN " .
+                DB_PREFIX . "photos ph " .
+                "ON ph.photo_id=pc.photo_id " .
+                "WHERE pc.category_id=" . escape_string($id) .
+                " GROUP BY pc.category_id";
+        }
+        $result=query($sql);
+        if($result) {
+            return fetch_assoc($result);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Turn the array from @see getDetails() into XML
+     * @param user Show only info about photos this user can see
+     * @param array Don't fetch details, but use the given array
+     */
+    public function getDetailsXML(user $user, array $details=null) {
+        if(!isset($details)) {
+            $details=$this->getDetails($user);
+        }
+        $details["title"]=translate("In this category:", false);
+        return parent::getDetailsXML($user, $details);
+    }
+
    /**
     * Lookup category by name
     */

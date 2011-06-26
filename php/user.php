@@ -62,7 +62,7 @@
         </h1>
         <div class="main">
           <h2><?php echo e($this_user->get("user_name")) ?></h2>
-            <dl>
+            <dl class='users'>
                 <?php echo create_field_html($this_user->getDisplayArray(), 3) ?>
             </dl>
             <br>

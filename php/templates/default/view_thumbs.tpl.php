@@ -22,33 +22,35 @@
 if(!ZOPH) { die("Illegal call"); }
 ?>
 <ul class="thumbs">
-<?php foreach ($tpl_items as $item): ?>
-    <li>
-        <a href="<?php echo $item->getURL() ?>">
-            <p>
-                <?php echo $item->get_coverphoto($tpl_user, $tpl_autothumb); ?>
-            </p>
-            <div>
-                <?php echo $item->getName() ?>
-                <span class="photocount">
-                    <?php
-                        $count=$item->getPhotoCount($tpl_user);
-                        if($item instanceof zophTreeTable): 
-                            $count2=$item->getTotalPhotoCount($tpl_user);
-                        elseif ($item instanceof person):
-                            $count2=$item->getPhotographerCount($tpl_user);
-                        else:
-                            $count2=0;
-                        endif;
-                    ?>
-                    <?php if($count==$count2): ?>
-                        (<?php echo $count; ?>)
-                    <?php else: ?>
-                        (<?php echo $count; ?>/<?php echo $count2; ?>)
-                    <?php endif; ?>
-                </span>
+    <?php foreach ($tpl_items as $item): ?>
+        <li class="popup" id="thumb_<?php echo get_class($item);?>_<?php echo $item->getId(); ?>" >
+            <div class="coverphoto">
+                <a href="<?php echo $item->getURL() ?>">
+                    <?php echo $item->get_coverphoto($tpl_user, $tpl_autothumb); ?>
+                </a>
             </div>
-        </a>
-     </li>
-<?php endforeach ?>
+            <div class="name">
+                <a href="<?php echo $item->getURL() ?>">
+                    <?php echo $item->getName() ?>
+                    <span class="photocount">
+                        <?php
+                            $count=$item->getPhotoCount($tpl_user);
+                            if($item instanceof zophTreeTable): 
+                                $count2=$item->getTotalPhotoCount($tpl_user);
+                            elseif ($item instanceof person):
+                                $count2=$item->getPhotographerCount($tpl_user);
+                            else:
+                                $count2=0;
+                            endif;
+                        ?>
+                        <?php if($count==$count2): ?>
+                            (<?php echo $count; ?>)
+                        <?php else: ?>
+                            (<?php echo $count; ?>/<?php echo $count2; ?>)
+                        <?php endif; ?>
+                    </span>
+               </div>
+            </a>
+        </li>
+    <?php endforeach ?>
 </ul>

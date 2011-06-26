@@ -62,6 +62,7 @@ if ($action == "confirm") {
     $title=translate("delete track");
 } else if ($action == "display") {
     $tpl=new template("definitionlist",array(
+        "class" = "track",
         "dl" => $track->getDisplayArray()
     ));
     $content=$tpl->toString();

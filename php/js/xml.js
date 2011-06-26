@@ -50,14 +50,19 @@ var XML=function() {
 
     function getData(object, constraint) {
         var http=new XMLHttpRequest();
+
         if(object=='import_progress') {
             xmlobj='import_progress';
         } else {
             newobj=object.split("_");
-            if(newobj[1]=="parent") {
-                newobj.shift();
-            }
-            xmlobj=newobj[1];
+            if(newobj[0]=="details") {
+                xmlobj=object;
+            } else {
+                if(newobj[1]=="parent") {
+                    newobj.shift();
+                }
+                xmlobj=newobj[1];
+           }
         }
 
         var url="getxmldata.php?object=" + xmlobj;
@@ -67,7 +72,7 @@ var XML=function() {
 
         if (http) {
             input=document.getElementById(object);
-            if(input) {
+            if(input && input.nodeName=="input") {
                 input.style.backgroundImage="url('images/pleasewait.gif')";
             }
             http.open("GET", url, true);
@@ -86,10 +91,13 @@ var XML=function() {
         input=document.getElementById(object);
         if (http.readyState == 4) {
             if(http.status == 200) {
-                if(input) {
+                if(input && input.nodeName=="input") {
                     input.style.backgroundImage="url('images/down2.gif')";
                 }
-                if(object=='import_progress') {
+
+                if(object.split("_")[0]==="details") {
+                    thumbview.httpResponse(http.responseXML);
+                } else if(object=='import_progress') {
                     zImport.httpResponse(object, http.responseXML);
                 } else if ((object=='import') || (object=='action')) {
                     zImport.processDone(http.responseText);

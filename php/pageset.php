@@ -80,7 +80,7 @@ if ($action == "confirm") {
           </h1>
       <div class="main">
 <br>
-<dl>
+<dl class=pageset>
 <?php 
     $pageset->lookup();
     echo create_field_html($pageset->getDisplayArray());

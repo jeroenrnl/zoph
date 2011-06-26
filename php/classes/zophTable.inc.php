@@ -463,6 +463,88 @@ abstract class zophTable {
     }
 
     /**
+     * Turn the array from @see getDetails() into XML
+     * @param user Show only info about photos this user can see
+     * @param array Don't fetch details, but use the given array
+     */
+    public function getDetailsXML(user $user, array $details=null) {
+        if(!isset($details)) {
+            $details=$this->getDetails($user);
+        }
+        if(isset($details["title"])) {    
+            $display["title"]=$details["title"];
+        }
+        if($details["count"] > 0) {
+            $display["count"]=$details["count"] . " " . translate("photos");
+            $display["taken"]=sprintf(translate("taken between %s and %s",false), $details["oldest"], $details["newest"]);
+            $display["modified"]=sprintf(translate("last changed from %s to %s",false), $details["first"], $details["last"]);
+            if(isset($details["lowest"]) && isset($details["highest"]) && isset($details["average"])) {
+                $display["rated"]=sprintf(translate("rated between %s and %s and an average of %s",false), $details["lowest"], $details["highest"], $details["average"]);
+            } else {
+                $display["rated"]=translate("no rating", false);
+            }
+        } else {
+            $display["count"]=translate("no photos", false);
+        }
+
+        if(isset($details["children"])) {
+            $count=$details["children"];
+            if($count==0) {
+                $display["children"]="";
+                $no="no ";
+            } else {
+                $display["children"]=$count . " ";
+                $no="";
+            }
+
+            if($this instanceof album) {
+                $text=translate($no . "sub-albums", false);
+            } else if ($this instanceof category) {
+                $text=translate($no . "sub-categories", false);
+            } else if ($this instanceof place) {
+                $text=translate($no . "sub-places", false);
+            } else {
+                $text=translate($no . "children", false);
+            }
+
+
+            $display["children"].=$text;
+
+        }
+        $xml = new DOMDocument('1.0','UTF-8');
+        $rootnode=$xml->createElement("details");
+        $request=$xml->createElement("request");
+
+        $class=$xml->createElement("class");
+        $class->appendChild($xml->createTextNode(get_class($this)));
+        $id=$xml->createElement("id");
+        $id->appendChild($xml->createTextNode($this->getId()));
+        
+        $request->appendChild($class);
+        $request->appendChild($id);
+        $rootnode->appendChild($request);
+       
+        $response=$xml->createElement("response");
+
+        foreach($display as $subj => $data) {
+            $detail=$xml->createElement("detail");
+            $subject=$xml->createElement("subject");
+            $subject->appendChild($xml->createTextNode($subj));
+            $xmldata=$xml->createElement("data");
+            $xmldata->appendChild($xml->createTextNode($data));
+            $detail->appendChild($subject);
+            $detail->appendChild($xmldata);
+            $response->appendChild($detail);
+        }
+        $rootnode->appendChild($response);
+        $xml->appendChild($rootnode);
+        return $xml->saveXML();
+    }
+
+
+        
+
+    /**
      * Gets the total count of records in the table for the given class.
      * @param string Classname
      * @return int count

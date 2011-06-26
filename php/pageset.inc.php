@@ -47,7 +47,7 @@ class pageset extends zophTable {
             translate("title") => $this->get("title"),
             translate("date") => $this->get("date"),
             translate("updated") => $this->get("timestamp"),
-            translate("created by") => $this->lookup_user(),
+            translate("created by", false) => $this->lookup_user(),
             translate("show original page") => translate($this->get("show_orig"),0),
             translate("position of original") => translate($this->get("orig_pos"),0)
         );

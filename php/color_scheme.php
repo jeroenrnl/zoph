@@ -70,7 +70,7 @@
           </h1>
       <div class="main">
         <h2><?php echo $color_scheme->get("name") ?></h2>
-            <dl>
+            <dl class="color_scheme">
 <?php
         $colors = $color_scheme->getDisplayArray();
 ?>

@@ -21,7 +21,7 @@
 
 if(!ZOPH) { die("Illegal call"); }
 ?>
-        <dl>
+        <dl class="<?php echo $tpl_class; ?>">
             <?php foreach ($tpl_dl as $key => $value): ?>
                 <dt><?php echo e($key) ?></dt>
                 <dd><?php echo $value ?></dd>

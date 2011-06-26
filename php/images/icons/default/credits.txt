@@ -6,19 +6,24 @@ license for these icons:
 Creative Commons attribution share-alike:
 http://creativecommons.org/licenses/by-sa/2.5/
 
+16x16/actions/1downarrow.png	1downarrow.png
+16x16/actions/1rightarrow.png	1rightarrow.png
+16x16/actions/ktremove.png	remove.png (resized to 8x8)
+22x22/actions/favorites.png 	rating.png
+22x22/apps/office-calendar.png  date.png
+22x22/apps/web-browser.png	geo-place.png
+22x22/categories/package_engineering.png	modified.png
+22x22/devices/camera.png	geo-photo.png
+22x22/filesystems/folder.png	folder.png
+22x22/mimetypes/image.png	photo.png
 64x64/actions/button_cancel.png error.png
 64x64/actions/messagebox_warning.png warning.png
-64x64/actions/window_nofullscreen.png resize.png
-64x64/actions/window_fullscreen.png unpack.png
-16x16/actions/ktremove.png	remove.png (resized to 8x8)
-16x16/actions/1rightarrow.png	1rightarrow.png
-16x16/actions/1downarrow.png	1downarrow.png
 64x64/actions/player_pause.png 	pause.png
+64x64/actions/window_fullscreen.png unpack.png
+64x64/actions/window_nofullscreen.png resize.png
+64x64/apps/ktorrent.png		tracks.png
 64x64/apps/system-users.png	groups.png
 64x64/apps/userconfig.png	users.png
-22x22/apps/web-browser.png	geo-place.png
-22x22/devices/camera.png	geo-photo.png
-64x64/mimetypes/document.png	pages.png
 64x64/mimetypes/contents2.png	pagesets.png
+64x64/mimetypes/document.png	pages.png
 64x64/mimetypes/zip.png		archive.png
-64x64/apps/ktorrent.png		tracks.png

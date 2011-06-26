@@ -26,7 +26,7 @@ if(!ZOPH) { die("Illegal call"); }
     <div class="toggle" onclick="thumbview.toggle(this.parentNode)"></div>
     <?php echo $tpl_calc_time ?>
     <div class="timedetail">
-        <dl>
+        <dl class="timedetail">
             <h3><?php echo translate("database"); ?></h3>
             <dt><?php echo translate("date"); ?></dt>
             <dd><?php echo $tpl_photo_date; ?></dd>

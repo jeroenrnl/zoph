@@ -116,37 +116,6 @@ abstract class zophTreeTable extends zophTable {
         return implode(",", $id_array);
     }
 
-    function get_html_tree($user=null,$open=true) {
-        $this->lookup();
-        $children=$this->getChildren($user);
-
-        $html="\n<li>";
-        if($children) {
-          if ($open) {
-                $html.="<span class='treenode' onclick=\"collapse(this)\">-&nbsp;</span>";
-           } else {
-                $html.="<span class='treenode' onclick=\"expand(this)\">+&nbsp;</span>";
-           }
-        } else {
-            $html.="<span>&nbsp;&nbsp;</span>";
-        }
-        $html.=$this->getLink();
-        if($children) {
-            $html.= "<ul>";
-        }
-        foreach($children as $child) {
-            $html .= $child->get_html_tree($user,false);
-        }
-        if($children) {
-            $html .= "</ul>";
-        }
-        $html.="</li>\n";
-        return $html;
-    }
-
-
-
-
     function get_xml_tree($xml, $search, $user=null) {
         $rootname=$this->xml_rootname();
         $nodename=$this->xml_nodename();
@@ -181,6 +150,22 @@ abstract class zophTreeTable extends zophTable {
 
         }
         return $newchild;
+    }
+    
+    /**
+     * Turn the array from @see getDetails() into XML
+     * @param user Show only info about photos this user can see
+     * @param array Don't fetch details, but use the given array
+     */
+    public function getDetailsXML(user $user, array $details=null) {
+        if(!isset($details)) {
+            $details=$this->getDetails($user);
+        }
+        $children=$this->getChildren($user);
+        if(is_array($children)) {
+            $details["children"]=count($children);
+        }
+        return parent::getDetailsXML($user, $details);
     }
 }
 

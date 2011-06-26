@@ -349,7 +349,7 @@ require_once("header.inc.php");
 <?php
         }
 ?>
-<dl>
+<dl class="photo">
 <?php echo create_field_html($photo->getDisplayArray()) ?>
 <?php
         if ((ALLOW_RATINGS  && ($user->is_admin() || $user->get("allow_rating"))) || $photo->get("rating")) {

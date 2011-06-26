@@ -104,44 +104,103 @@ ul  {
 ul.thumbs {
     clear: both;
     list-style: none;
+    padding-bottom: 80px;
     }
 
-ul.thumbs li {
+ul.thumbs > li {
     background: <?php echo $TITLE_BG_COLOR ?>;
     color: <?php echo $TITLE_FONT_COLOR ?>;
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
-    border-radius: 10px;
+    //border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
     position: relative;
     display: block;
     text-align: center;
     width: <?php echo THUMB_SIZE + 40 ?>px;
-    height:<?php echo THUMB_SIZE + 40 ?>px;
+    height:<?php echo THUMB_SIZE + 60 ?>px;
     float:left;
     margin: 5px;
     padding: 5px;
+    
+    border-radius: 10px;
     -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,0.6) inset;
+    -moz-box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,0.6) inset;
+}
+
+ul.thumbs > li dl.extradata {
+    display: none;
     }
 
-ul.thumbs li p {
+div.details {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: <?php echo THUMB_SIZE ?>px;
+    position: absolute;
+    float: left;
+
+    padding: 20px;
+    background: rgba(255,255,255,0.9);
+    
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+    -moz-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
     }
+
+div.details > h3 {
+    margin: -20px -20px 0 -20px;
+    padding: 5px 20px;
+    border-radius: 10px 10px 0 0;
+    -moz-border-radius: 10px 10px 0 0;
+    -webkit-border-radius: 10px 10px 0 0;
+    width: 100%;
+    background: <?php echo $TAB_BG_COLOR ?>;
+    color: <?php echo $TAB_FONT_COLOR ?>;
+    font-size: large;
+    text-align: left;
+}
+
+div.details > dl {
+    display: block;
+    width: 100%
+}
+
+div.details > dl > dt {
+    float: left;
+    clear: left;
+    margin: 1px 5px;
+}
+
+div.details > dl > dd {
+    float: left;
+    clear: right;
+    margin: 1px 5px;
+}
+
+ul.thumbs > li div.coverphoto {
+    width: 100%;
+    height:<?php echo THUMB_SIZE + 20 ?>px;
+    margin: 0;
+    padding: 0;
+    clear: right;
+}
+
+ul.thumbs > li div.name {
+    position: absolute;
+    width: 90%;
+    max-height: 40px;
+    bottom: 0;
+    margin: 0 2px 2px 2px;
+    padding: 0;
+    clear: both;
+}
 
 ul.thumbs li img {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 10px auto;
+    -moz-box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
-
-ul.thumbs li div {
-    left: 5%;
-    position: absolute;
-    bottom: 0px;
-    text-align: center;
-    width: 90%;
-    }
 
 ul.list {
     clear: both;
@@ -993,11 +1052,6 @@ br.noclear {
     float: left;
     }
 
-/* Mid size photo */
-.photo  {
-    text-align: center;
-    }
-
 /* Person / place in the list of persons / places */
 .person, .place, .showattr {
     text-align: left;
@@ -1011,20 +1065,54 @@ br.noclear {
     width: 90%
     }
 
-label, dt, dd    { 
+dl.color_scheme,
+dl.comment,
+dl.page,
+dl.pageset,
+dl photo,
+dl.users {
+    margin-top: 0px;
+    margin-bottom: 30px;
+    /* Workaround for Firefox bug */
+    border: 1px solid transparent;
+    }
+
+label,     
+dl.color_scheme dt,
+dl.comment dt,
+dl.page dt,
+dl.pageset dt,
+dl.photo dt,
+dl.users dt, 
+dl.color_scheme dd,
+dl.comment dd,
+dl.page dd,
+dl.pageset dd,
+dl.photo dd,
+dl.users dd {
     font-size: medium; 
     padding-left: 4px;
     padding-right: 4px;
     min-height: 1.3em;
     }
 
-dd {
+dl.color_scheme dd,
+dl.comment dd,
+dl.page dd,
+dl.pageset dd,
+dl.photo dd,
+dl.users dd {
     float: left;
     width: 55%;
     margin: 5px;
     }
 
-dt {
+dl.color_scheme dt,
+dl.comment dt,
+dl.page dt,
+dl.pageset dt,
+dl.photo dt,
+dl.users dt {
     clear: left;
     float: left;
     width: 40%;
@@ -1034,19 +1122,12 @@ dt {
     margin-bottom: 5px;
     }
 
-dl  {
-    margin-top: 0px;
-    margin-bottom: 30px;
-    /* Workaround for Firefox bug */
-    border: 1px solid transparent;
-    }
-
-dl#allexif {
+dl.allexif {
     display: none;
     width: 100%;
     }
 
-dl#allexif dl {
+dl.allexif dl {
     width: 100%
     }
 

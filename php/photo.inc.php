@@ -1315,7 +1315,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         if (exif_imagetype($this->get_file_path())==IMAGETYPE_JPEG) {
             $exif=read_exif_data($this->get_file_path());
             if ($exif) {
-                $return="<dl id=\"allexif\">\n";
+                $return="<dl class='allexif'>\n";
 
                 foreach($exif as $key => $value) {
                     if(!is_array($value)) {

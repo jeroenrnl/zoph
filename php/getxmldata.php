@@ -24,5 +24,13 @@ flush();
 $object=getvar("object");
 $search=getvar("search");
 
-echo get_xml($object, $search, $user);
+$obj_array=explode("_", $object);
+if($obj_array[0]=="details") {
+    $obj_name=$obj_array[1];
+    $obj=new $obj_name((int) $obj_array[2]);
+
+    echo $obj->getDetailsXML($user);
+} else {
+    echo get_xml($object, $search, $user);
+}
 ?>

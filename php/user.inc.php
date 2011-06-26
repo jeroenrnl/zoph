@@ -69,7 +69,7 @@ class user extends zophTable {
      * @return string link
      */
     function getLink() {
-        return "<a href='" . $this->getURL() . "'>" . $this->getName();
+        return "<a href='" . $this->getURL() . "'>" . $this->getName() . "</a>";
     }
 
     /**
@@ -149,9 +149,10 @@ class user extends zophTable {
     }
 
     function getDisplayArray() {
+        $this->lookup_person();
         $da = array(
             translate("username") => $this->get("user_name"),
-            translate("person") => $this->getLink(),
+            translate("person") => $this->person->getLink(),
             translate("class") =>
                 $this->get("user_class") == 0 ? "Admin" : "User",
             translate("can browse people") => $this->get("browse_people") == 1
