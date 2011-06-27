@@ -313,7 +313,7 @@ class album extends zophTreeTable {
             $name = "Albums";
         }
 
-        return "<a href=\"" .  $this->getURL . "\">$name</a>";
+        return "<a href=\"" .  $this->getURL() . "\">$name</a>";
     }
 
     /**
@@ -523,7 +523,7 @@ function get_albums_search_array($user = null) {
 }
 
 
-function create_album_pulldown($name, $value=null, $user=null) {
+function create_album_pulldown($name, $value=null, $user=null, $sa=null) {
     $text="";
 
     $id=preg_replace("/^_+/", "", $name);
@@ -539,7 +539,10 @@ function create_album_pulldown($name, $value=null, $user=null) {
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 
             "'" .  " value='" . e($text) . "' class='autocomplete'>";
     } else {
-        $html=create_pulldown($name, $value, get_albums_search_array($user));
+        if(!isset($sa)) {
+            $sa=get_albums_select_array($user);
+        }
+        $html=create_pulldown($name, $value, $sa);
     }
     return $html;
 }

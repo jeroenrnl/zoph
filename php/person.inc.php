@@ -594,7 +594,7 @@ function get_photo_person_links($photo) {
 }
 
 
-function create_person_pulldown($name, $value=null, $user) {
+function create_person_pulldown($name, $value=null, user $user, $sa=null) {
     $id=preg_replace("/^_+/", "", $name);
     if($value) {
         $person=new person($value);
@@ -607,7 +607,10 @@ function create_person_pulldown($name, $value=null, $user) {
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .
             " value='" . e($text) . "' class='autocomplete'>";
     } else {
-        $html=create_pulldown($name, $value, get_people_select_array(null,$user));
+        if(!isset($sa)) {
+            $sa=get_people_select_array(null,$user);
+        }
+        $html=create_pulldown($name, $value, $sa);
     }
     return $html;
 }

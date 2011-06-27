@@ -65,9 +65,14 @@ function create_edit_fields($fields) {
     return $html;
 }
 
-function create_text_input($name, $value, $size = 20, $max = 32) {
+function create_text_input($name, $value, $size = 20, $max = 32, $type="text") {
+    if($type=="time") {
+        $step="step=\"1\"";
+    } else {
+        $step="";
+    }
     $id=preg_replace("/^_+/", "", $name);
-    return "<input type=\"text\" name=\"$name\" id=\"$id\" value=\"" . e($value) ."\" size=\"$size\" maxlength=\"$max\">\n";
+    return "<input type=\"$type\" $step name=\"$name\" id=\"$id\" value=\"" . e($value) ."\" size=\"$size\" maxlength=\"$max\">\n";
 }
 
 function create_pulldown($name, $value, $value_array, $extraopt = null) {
