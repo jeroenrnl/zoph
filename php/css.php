@@ -1070,6 +1070,7 @@ dl.comment,
 dl.page,
 dl.pageset,
 dl photo,
+dl prefs,
 dl.users {
     margin-top: 0px;
     margin-bottom: 30px;
@@ -1083,12 +1084,14 @@ dl.comment dt,
 dl.page dt,
 dl.pageset dt,
 dl.photo dt,
+dl.prefs dt,
 dl.users dt, 
 dl.color_scheme dd,
 dl.comment dd,
 dl.page dd,
 dl.pageset dd,
 dl.photo dd,
+dl.prefs dd,
 dl.users dd {
     font-size: medium; 
     padding-left: 4px;
@@ -1101,6 +1104,7 @@ dl.comment dd,
 dl.page dd,
 dl.pageset dd,
 dl.photo dd,
+dl.prefs dd,
 dl.users dd {
     float: left;
     width: 55%;
@@ -1112,6 +1116,7 @@ dl.comment dt,
 dl.page dt,
 dl.pageset dt,
 dl.photo dt,
+dl.prefs dt,
 dl.users dt {
     clear: left;
     float: left;
