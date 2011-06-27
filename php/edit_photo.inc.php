@@ -110,10 +110,10 @@
              </div>
           </fieldset>
           <label for="date"><?php echo translate("date") ?></label>
-          <?php echo create_text_input("date", $photo->get("date"), 12, 10) ?>
+          <?php echo create_text_input("date", $photo->get("date"), 12, 10, "date") ?>
           <span class="inputhint">YYYY-MM-DD</span><br>
           <label for="time"><?php echo translate("time") ?></label>
-          <?php echo create_text_input("time", $photo->get("time"), 10, 8) ?>
+          <?php echo create_text_input("time", $photo->get("time"), 10, 8, "time") ?>
           <span class="inputhint">HH:MM:SS</span><br>
           <label for="time_corr"><?php echo translate("time correction") ?></label>
           <?php echo create_text_input("time_corr", $photo->get("time_corr"), 10, 8) ?>
