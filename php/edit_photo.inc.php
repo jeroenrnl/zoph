@@ -151,14 +151,14 @@
 <?php
         if ($action != "insert") {
 ?>
-          <label for="person_0"><?php echo translate("people") ?></label>
-          <fieldset>
+          <label for="person_id[0]"><?php echo translate("people") ?><br>
+            <span class="inputhint"><?php echo translate("(left to right, front to back).") ?></span>
+          </label>
+          <fieldset class="multiple">
 <?php
         $people = $photo->lookup_people();
-        $next_pos = 1;
         if ($people) {
             foreach ($people as $person) {
-                $next_pos++;
 ?>
                 <input class="remove" type="checkbox" name="_remove_person[]" value="<?php echo $person->get("person_id")?>">
 <?php
@@ -170,19 +170,11 @@
               <?php echo translate("No people have been added to this photo.") ?><br>
 <?php
         }
-        for ($i = 0; $i < $PEOPLE_SLOTS; $i++ ) {
-            echo create_person_pulldown("_person_$i", null, $user);
+        echo create_person_pulldown("_person_id[0]", null, $user);
 ?>
-            <?php echo translate("position") ?>:
-            <?php echo create_text_input("_position_" . $i, ($next_pos + $i), 2, 2) ?>
-            <br>
-<?php
-        }
-?>
-            <span class="inputhint"><?php echo translate("(left to right, front to back).") ?></span>
           </fieldset>
           <label for="albums"><?php echo translate("albums") ?></label>
-          <fieldset class="albums">
+          <fieldset class="albums multiple">
 <?php
         $albums = $photo->lookup_albums($user);
         if ($albums) {
@@ -197,11 +189,11 @@
             echo translate("This photo is not in any albums.");
             echo "<br>\n";
         }
-        echo create_album_pulldown("_album", "", $user);
+        echo create_album_pulldown("_album_id[0]", "", $user);
         ?>
         </fieldset>
           <label for="categories"><?php echo translate("categories") ?></label>
-          <fieldset class="categories">
+          <fieldset class="categories multiple">
 <?php
         $categories = $photo->lookup_categories($user);
         if ($categories) {
@@ -217,9 +209,10 @@
               <?php echo translate("This photo is not in any categories.") ?><br>
 <?php
         }
-        echo create_cat_pulldown("_category", "", $user);
+        echo create_cat_pulldown("_category_id[0]", "", $user);
 ?>
       </fieldset>
+      <br>
 <?php
         $_show = getvar("_show");
         if ($_show) {

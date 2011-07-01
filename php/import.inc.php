@@ -125,7 +125,7 @@ abstract class Import {
                     $photo->updateSize();
                 }
                 $photo->update($vars);
-                $photo->updateRelations($vars);
+                $photo->updateRelations($vars, "_id");
                 $photos[]=$photo;
             } else {
                 echo translate("Insert failed.") . "<br>\n";

@@ -523,7 +523,7 @@ function get_albums_search_array($user = null) {
 }
 
 
-function create_album_pulldown($name, $value=null, $user=null, $sa=null) {
+function create_album_pulldown($name, $value=null, user $user=null, $sa=null) {
     $text="";
 
     $id=preg_replace("/^_+/", "", $name);

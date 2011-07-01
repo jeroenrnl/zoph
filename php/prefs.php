@@ -112,12 +112,6 @@
         <dd>
             <?php echo create_text_input("recent_photo_days", $user->prefs->get("recent_photo_days"), 4, 4) ?>
         </dd>
-        <dt>
-            <?php echo translate("number of people to add at once") ?>
-        </dt>
-        <dd>
-            <?php echo create_integer_pulldown("people_slots", $user->prefs->get("people_slots"), 1, MAX_PEOPLE_SLOTS) ?>
-        </dd>
 <?php
     if (MAX_THUMB_DESC) {
 ?>

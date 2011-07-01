@@ -151,7 +151,7 @@ class cli {
                     $photo->lookup();
                     $photo->setFields($this->args->getVars());
                     $photo->update();
-                    $photo->updateRelations($this->args->getVars());
+                    $photo->updateRelations($this->args->getVars(), "_id");
                     if(settings::$importThumbs===true) {
                         $photo->thumbnail(true);
                     }

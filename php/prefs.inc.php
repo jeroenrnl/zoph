@@ -70,7 +70,6 @@ class prefs extends zophTable {
         global $TOP_N;
         global $SLIDESHOW_TIME;
         global $FULLSIZE_NEW_WIN;
-        global $PEOPLE_SLOTS;
 
         global $PAGE_BG_COLOR;
         global $TEXT_COLOR;
@@ -95,10 +94,6 @@ class prefs extends zophTable {
         $TOP_N = intval($this->get("reports_top_n"));
         $SLIDESHOW_TIME = intval($this->get("slideshow_time"));
         $FULLSIZE_NEW_WIN = $this->get("fullsize_new_win");
-        $PEOPLE_SLOTS = intval($this->get("people_slots"));
-        if ($PEOPLE_SLOTS > MAX_PEOPLE_SLOTS) {
-            $PEOPLE_SLOTS = MAX_PEOPLE_SLOTS;
-        }
 
         if ($this->lookup_color_scheme($force)) {
             $cs = $this->color_scheme;

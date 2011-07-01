@@ -39,8 +39,8 @@ var autocomplete=function() {
         // This function converts an input field to an autocomplete field
 
         // Take _id from the id.
-        id = el.id;
-        underscore=id.indexOf("_");
+        var id = el.id;
+        var underscore=id.indexOf("_");
         if(underscore>0) {
             id = id.substring(0,underscore);
         } else {
@@ -48,7 +48,7 @@ var autocomplete=function() {
             el.id=id + "_id";
         }
         
-        text=el;
+        var text=el;
         text.id=id; 
         text.onmousedown=show;
         text.onkeyup=change;
@@ -63,7 +63,7 @@ var autocomplete=function() {
         text.className=text.className.replace("autocomplete", "autocompinput");
         text.style.width="200px";
 
-        dropdown=document.createElement("ul");
+        var dropdown=document.createElement("ul");
         
         dropdown.className="autocompdropdown";
         dropdown.id=id + "dropdown";
@@ -72,13 +72,13 @@ var autocomplete=function() {
         dropdown.style.display="none";
         
         el.parentNode.insertBefore(dropdown,el.nextSibling);
-
-        if(el.parentNode.className=="multiple" && el.id.indexOf("[")) {
+        
+        if(el.parentNode.className.indexOf("multiple")>=0 && el.id.indexOf("[")) {
             // This is a field that can appear multiple times, so we add a
             // 'remove' link
-            remove=document.createElement("img");
+            var remove=document.createElement("img");
             remove.setAttribute("onClick", "autocomplete.remove(this); return false");
-            remove.setAttribute("src", "images/icons/" + ICONSET + "/remove.png");
+            remove.setAttribute("src", "images/icons/default/remove.png");
             remove.className="actionlink";
 
             el.parentNode.insertBefore(remove,el.nextSibling.nextSibling);
@@ -289,7 +289,7 @@ var autocomplete=function() {
         orig_field.value = key;
 
         hidedropdown(field);
-        if(field.parentNode.className=="multiple" && field.id.indexOf("[")) {
+        if(field.parentNode.className.indexOf("multiple")>=0 && field.id.indexOf("[")) {
             // if a dropdown field is inside a fieldset with class 'multiple'
             // we will automatically generate a new dropdown for this field.
             createNewInput(field);

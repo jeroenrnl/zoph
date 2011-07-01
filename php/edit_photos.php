@@ -141,9 +141,7 @@
             unset($request_vars["___photographer_id__" . $photo_id]);
             unset($request_vars["__album__" . $photo_id]);
             unset($request_vars["__category__" . $photo_id]);
-            for ($p = 0; $p < $user->prefs->get("people_slots"); $p++ ) {
-                unset($request_vars["__person_" . $p . "__" . $photo_id]);
-            }
+            unset($request_vars["__person__" . $photo_id]);
             $permissions = $user->get_permissions_for_photo($photo_id);
             if (!$user->is_admin() && !$permissions) {
                 continue;
@@ -194,7 +192,7 @@
 
                 // update "apply to all" albums, cats & people
 
-                $photo->update_relations($request_vars, '__all');
+                $photo->updateRelations($request_vars, '__all');
 
                 $deg = $request_vars["_deg__$photo_id"];
                 if ($deg && $deg != 0) {
@@ -224,10 +222,8 @@
             $queryIgnoreArray[] = "_category__$photo_id";
             $queryIgnoreArray[] = "_remove_category__$photo_id";
             $queryIgnoreArray[] = "_remove_person__$photo_id";
-            for ($p = 0; $p < $user->prefs->get("people_slots"); $p++ ) {
-                $queryIgnoreArray[] = "_position_" . $p . "__" . $photo_id;
-                $queryIgnoreArray[] = "_person_" . $p . "__" . $photo_id;
-            }
+            $queryIgnoreArray[] = "_position__" . $photo_id;
+            $queryIgnoreArray[] = "_person__" . $photo_id;
             $queryIgnoreArray[] = "_deg__$photo_id";
             $queryIgnoreArray[] = "_action__$photo_id";
 ?>
@@ -339,7 +335,7 @@
                         <?php echo create_cat_pulldown("_category__$photo_id", null, $user, $category_select_array) ?>
                       </fieldset><br>
                       <label for="person_0__<?php echo $photo_id ?>"><?php echo translate("people") ?></label>
-                      <fieldset class="checkboxlist">
+                      <fieldset class="checkboxlist multiple">
 <?php
                 $people = $photo->lookup_people();
                 $next_pos = 1;
@@ -356,14 +352,10 @@
                     }
                     echo "<br>\n";
                 }
-                for ($p = 0; $p < $user->prefs->get("people_slots"); $p++ ) {
 ?>
-                       <?php echo create_person_pulldown("_person_" . $p . "__" . $photo_id, "", $user, $people_select_array) ?>
-                       <?php echo translate("position") ?>:
-                       <?php echo create_text_input("_position_" . $p ."__" . $photo_id, $next_pos + $p, 2, 2) ?><br>
-<?php
-                }
-?>
+                   <?php echo create_person_pulldown("_person__" . $photo_id . "[0]", "", $user, $people_select_array) ?>
+                   <?php echo translate("position") ?>:
+                   <?php echo create_text_input("_position__" . $photo_id . "[0]", $next_pos, 2, 2) ?><br>
                       </fieldset><br>
                      <br>
                   </fieldset>
@@ -382,7 +374,7 @@
     // all the edits made on this page.
         while (list($key, $val) = each($clean_vars)) {
             if (in_array($key, $queryIgnoreArray)) { continue; }
-	    $pager_vars[$key] = $val;
+            $pager_vars[$key] = $val;
         }
         $request_vars = $pager_vars;
         echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $PHP_SELF, $request_vars, "_off");

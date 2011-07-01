@@ -966,6 +966,7 @@ div#personlink  {
     font-size: small;
     padding-left: 4px;
     padding-right: 4px;
+    font-weight: normal;
     }
 
 span.inputhint  {
@@ -1178,6 +1179,9 @@ fieldset  {
     padding: 0;
     margin-bottom: 5px;
     clear: right;
+    overflow: hidden;
+    display: block;
+    float: left;
     }
 
 fieldset.editphotos, fieldset.map, fieldset.geotag  {
@@ -1554,7 +1558,7 @@ form.import fieldset#import_checkboxes {
 
 fieldset.multiple {
     background: transparent;
-    margin: 0;
+    margin: 0 0 5px 0;
     padding: 0;
     border: none;
     width: 220px;
@@ -1601,3 +1605,4 @@ div.preview {
     font-size: small;
     margin-bottom: 2px;
     }
+

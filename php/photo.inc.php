@@ -93,68 +93,53 @@ class photo extends zophTable {
     function update($vars = null, $suffix = '', $user=null) {
         parent::update();
         if (!$vars) { return; }
-        $this->update_relations($vars, $suffix, $user);
+        $this->updateRelations($vars, $suffix, $user);
     }
 
-    function update_relations($vars, $suffix = '', $user=null) {
-        if (!empty($vars["_album$suffix"])) {
-            $this->add_to_album($vars["_album$suffix"], $user);
+    /** 
+     * Update photo relations, such as albums, categories, etc.
+     */
+    public function updateRelations($vars, $suffix = "", user $user=null) {
+        $albums=array();
+        $categories=array();
+        $people=array();
+        
+
+        // Albums
+        if(isset($vars["_album" . $suffix])) {
+            if(is_array($vars["_album" . $suffix])) {
+                $albums=$vars["_album" . $suffix];
+            } else {
+                $albums[]=$vars["_album" . $suffix];
+            }
         }
 
         if (!empty($vars["_remove_album$suffix"])) {
             $this->remove_from_album($vars["_remove_album$suffix"]);
         }
-
-        if (!empty($vars["_category$suffix"])) {
-            $this->add_to_category($vars["_category$suffix"]);
-        }
-
-        if (!empty($vars["_remove_category$suffix"])) {
-            $this->remove_from_category($vars["_remove_category$suffix"]);
-        }
-
-        if (!empty($vars["_person$suffix"])) {
-            $this->add_to_person($vars["_person$suffix"], $vars["_position$suffix"]);
-        }
-        for ($i = 0; $i < (int) MAX_PEOPLE_SLOTS; $i++) {
-           if (!empty($vars["_person_" . $i . $suffix])) {
-               $this->add_to_person($vars["_person_" . $i . $suffix], 
-                  $vars["_position_" . $i . $suffix]);
-           }
-        }
-	
-        if (!empty($vars["_remove_person$suffix"])) {
-            $this->remove_from_person($vars["_remove_person$suffix"]);
-        }
-    }
-
-    /** 
-     * Update photo relations, such as albums, categories, etc.
-     * @todo should be refactured to replace update_relations
-     * @see update_relations
-     */
-    public function updateRelations($vars) {
-        $albums=array();
-        $categories=array();
-        $people=array();
-        $path="";
-
-        if(isset($vars["_album_id"])) {
-            $albums=$vars["_album_id"];
-        }
-        if(isset($vars["_category_id"])) {
-            $categories=$vars["_category_id"];
-        }
-        if(isset($vars["_person_id"])) {
-            $people=$vars["_person_id"];
-        }
-        if(isset($vars["_path"])) {
-            $path=$vars["_path"];
-        }
         
         if(isset($this->_album_id)) {
             $albums=array_merge($albums,$this->_album_id);
             unset($this->_album_id);
+        }
+        
+        if(isset($albums)) {
+            foreach($albums as $album) {
+                $this->add_to_album($album);
+            }
+        }
+
+        // Categories
+        if(isset($vars["_category" . $suffix])) {
+            if(is_array($vars["_category" . $suffix])) {
+                $categories=$vars["_category" . $suffix];
+            } else {
+                $categories[]=$vars["_category" . $suffix];
+            }
+        }
+
+        if (!empty($vars["_remove_category$suffix"])) {
+            $this->remove_from_category($vars["_remove_category$suffix"]);
         }
 
         if(isset($this->_category_id)) {
@@ -162,37 +147,37 @@ class photo extends zophTable {
             unset($this->_category_id);
         }
 
-        if(isset($this->_person_id)) {
-            $people=array_merge($people,$this->_person_id);
-            unset($this->_person_id);
-        }
-
-        if(isset($albums)) {
-                
-            foreach($albums as $album) {
-                $this->add_to_album($album);
-            }
-        }
-        
         if(isset($categories)) {
             foreach($categories as $cat) {
                 $this->add_to_category($cat);
             }
-        }   
+        }
+
+        // People
+        if(isset($vars["_person" . $suffix])) {
+            if(is_array($vars["_person" . $suffix])) {
+                $people=$vars["_person" . $suffix];
+            } else {
+                $people[]=$vars["_person" . $suffix];
+            }
+        }
+        
+        if (!empty($vars["_remove_person$suffix"])) {
+            $this->remove_from_person($vars["_remove_person$suffix"]);
+        }
+
+        if(isset($this->_person_id)) {
+            $people=array_merge($people,$this->_person_id);
+            unset($this->_person_id);
+        }
         
         if(isset($people)) {
-            $sql =
-                "SELECT max(position) AS pos FROM " . DB_PREFIX . "photo_people " .
-                "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "';";
-            $result=fetch_array(query($sql));
-            $pos=$result["pos"];
             foreach($people as $person) {
-                $pos++;
-                $this->add_to_person($person, $pos);
+                $this->add_to_person($person);
             }
         } 
     }
-
+    
     /**
      * Updates the photo's dimensions and filesize
      */
@@ -216,6 +201,18 @@ class photo extends zophTable {
             $this->setFields($exif);
             $this->update();
         }
+    }
+
+    /**
+     * Gets last used position for people on a photo
+     * @return int position
+     */
+    public function getLastPersonPos() {
+        $sql =
+            "SELECT max(position) AS pos FROM " . DB_PREFIX . "photo_people " .
+            "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "';";
+        $result=fetch_array(query($sql));
+        return (int) $result["pos"];
     }
 
     function add_to_album($album_id, $user=null) {
@@ -278,17 +275,18 @@ class photo extends zophTable {
         }
     }
 
-    function add_to_person($person_id, $position = "null") {
-        if ($position && $position != "null") {
-            $position = "'" . escape_string($position) . "'";
-        }
+    function add_to_person($person_id) {
+        if($person_id>0) {
+            $position=$this->getLastPersonPos();
+            $position++;
 
-        $sql =
-            "insert into " . DB_PREFIX . "photo_people " .
-            "(photo_id, person_id, position) " .
-            "values ('" . escape_string($this->get("photo_id")) . "', '" .
-            escape_string($person_id) . "', $position)";
-        query($sql, "Failed to add person");
+            $sql =
+                "insert into " . DB_PREFIX . "photo_people " .
+                "(photo_id, person_id, position) " .
+                "values ('" . escape_string($this->get("photo_id")) . "', '" .
+                (int) $person_id . "', " . (int) $position . ")";
+            query($sql, "Failed to add person");
+        }
     }
 
     function remove_from_person($person_ids) {

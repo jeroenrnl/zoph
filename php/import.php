@@ -66,8 +66,7 @@ if(empty($_action)) {
         "translate['import']='" .trim(translate("import", false)) . "';\n" .
         "upload_id='" . $upload_id ."';\n" .
         "num=" . $num . ";\n" .
-        "parallel=" . (int) IMPORT_PARALLEL  . ";\n" .
-        "ICONSET='" . ICONSET ."'\n";
+        "parallel=" . (int) IMPORT_PARALLEL  . ";\n";
 
     $tpl=new template("import", array(
                 "upload_id" => $upload_id,
