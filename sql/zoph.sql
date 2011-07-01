@@ -355,7 +355,6 @@ CREATE TABLE zoph_prefs (
   autocomp_people char(1) default '1',
   desc_thumbnails char(1) NOT NULL default '0',
   fullsize_new_win char(1) NOT NULL default '0',
-  people_slots tinyint(3) NOT NULL default 1,
   view enum('list','tree','thumbs') default 'list' NOT NULL,
   autothumb enum('oldest','newest','first','last','highest','random') 
   	default 'highest' NOT NULL,
@@ -369,7 +368,7 @@ CREATE TABLE zoph_prefs (
 --
 
 
-INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0','1','1','1','1','1','0','0','1','list','highest','sortname');
+INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0','1','1','1','1','1','0','0','list','highest','sortname');
 
 --
 -- Table structure for table 'zoph_photo_ratings'

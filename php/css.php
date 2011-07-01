@@ -490,16 +490,6 @@ div.minimap {
     height: 300px;
     }
 
-div.mapinfo {
-    margin-top: 2em;
-    float: left;
-    width: 50%;
-}
-
-div.mapinfo label {
-    width: 6em;
-    }
-
 .olControlAttribution {
     bottom: 1em !important;
     display: block;
@@ -1193,6 +1183,11 @@ fieldset.editphotos, fieldset.map, fieldset.geotag  {
 
 fieldset.map {
     position: relative;
+    width: 100%;
+    }
+
+table fieldset.map {
+    width: 90%;
     }
 
 fieldset.editphotos legend, fieldset.map legend, fieldset.geotag legend {

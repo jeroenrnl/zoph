@@ -628,12 +628,10 @@ for ($i = 0; $i <= $count; $i++) {
                 <td colspan=5>
                     <fieldset class="map">
                         <legend><?php echo translate("map"); ?></legend>
-                        <div class="mapinfo">
-                            <label for="lat"><?php echo translate("latitude") ?></label>
-                            <?php echo create_text_input("lat", $lat, 10, 10) ?><br>
-                            <label for="lon"><?php echo translate("longitude") ?></label>
-                            <?php echo create_text_input("lon", $lon, 10, 10) ?><br>
-                        </div>
+                        <label for="lat"><?php echo translate("latitude") ?></label>
+                        <?php echo create_text_input("lat", $lat, 10, 10) ?><br>
+                        <label for="lon"><?php echo translate("longitude") ?></label>
+                        <?php echo create_text_input("lon", $lon, 10, 10) ?><br>
                     </fieldset>
             </td>
         </tr>

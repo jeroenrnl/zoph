@@ -54,3 +54,10 @@ CREATE TABLE zoph_point (
 
 ALTER TABLE zoph_users 
   ADD COLUMN browse_tracks char(1) NOT NULL DEFAULT 0 AFTER browse_places;  
+
+
+#
+# Changes for 0.8.4
+#
+
+ALTER TABLE zoph_prefs DROP COLUMN people_slots;
