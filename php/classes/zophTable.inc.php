@@ -242,11 +242,17 @@ abstract class zophTable {
     /**
      * Deletes a record.  If extra tables are specified, entries from
      * those tables this match the keys are removed as well.
-     * @param array Fields to use as primary keys
      * @param array Tables to delete referencing objects from
      */
-    public function delete(array $keys = null, array $extra_tables = null) {
-        if (!$keys) { $keys = $this->primary_keys; }
+    public function delete() {
+        
+        // simulate overloading
+        if(func_num_args()>=1) {
+            $extra_tables = func_get_arg(0);
+        } else {
+            $extra_tables = null;
+        }
+        $keys = $this->primary_keys;
 
         if (!$this->table_name || !$keys || !$this->fields) {
             log::msg("Missing data", log::ERROR, log::GENERAL);

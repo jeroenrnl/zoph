@@ -42,7 +42,7 @@ class user extends zophTable {
     }
 
     function delete() {
-        parent::delete(null, array("prefs"));
+        parent::delete(array("prefs"));
     }
 
     function lookup_person() {

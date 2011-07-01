@@ -69,7 +69,7 @@ class person extends zophTable {
             "photographer_id=" .  $id;
         query($sql, "Could not remove references:");
         
-        parent::delete(null, array("photo_people"));
+        parent::delete(array("photo_people"));
     }
 
     function get_gender() {

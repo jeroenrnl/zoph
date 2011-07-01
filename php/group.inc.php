@@ -39,7 +39,7 @@ class group extends zophTable {
     }
 
     function delete() {
-        parent::delete(null, array("groups_users", "group_permissions"));
+        parent::delete(array("groups_users", "group_permissions"));
     }
 
     function get_group_permissions($album_id) {

@@ -33,12 +33,7 @@ class pageset extends zophTable {
 
     function delete() {
         if(!$this->get("pageset_id")) { return; }
-        parent::delete();
-        
-        $sql = "delete from " . DB_PREFIX . "pages_pageset where pageset_id=";
-        $sql .= $this->get("pageiset_id");
-    
-        query($sql, "Could not remove page from pageset: ");
+        parent::delete(array("pages_pageset"));
     }
     
     

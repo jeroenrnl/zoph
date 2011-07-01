@@ -26,10 +26,19 @@ abstract class zophTreeTable extends zophTable {
     var $children;
     var $ancestors;
 
-    /*
+    /**
      * Deletes a record along with all of its descendants.
+     * @param array Names of tables from which entries also should be deleted.
      */
-    function delete($extra_tables = null) {
+    public function delete() {
+
+        // simulate overloading
+        if(func_num_args()>=1) {
+            $extra_tables = func_get_arg(0);
+        } else {
+            $extra_tables = null;
+        }
+
         $this->getChildren();
         if ($this->children) {
             foreach ($this->children as $child) {
@@ -37,7 +46,7 @@ abstract class zophTreeTable extends zophTable {
             }
         }
 
-        parent::delete(null, $extra_tables);
+        parent::delete($extra_tables);
     }
 
     /*

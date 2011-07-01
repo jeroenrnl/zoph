@@ -86,8 +86,7 @@ class photo extends zophTable {
     }
 
     function delete() {
-        parent::delete(null, array("photo_people", "photo_categories",
-            "photo_albums"));
+        parent::delete(array("photo_people", "photo_categories", "photo_albums"));
     }
 
     function update($vars = null, $suffix = '', $user=null) {
