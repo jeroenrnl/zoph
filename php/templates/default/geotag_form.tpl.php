@@ -103,6 +103,7 @@
                 </label>
                 <input type="text" id="testcount" name="_testcount" value="5">
             </fieldset>
+            <br>
         <p>
         <input type="submit" value="<?php echo translate("geotag") ?>">
         </p>

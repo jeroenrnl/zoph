@@ -559,8 +559,7 @@ function get_where_for_search($conj, $search, $search_first) {
     return $where;
 }
 
-function get_people_select_array($people_array = null, $user = null) {
-
+function get_people_select_array(user $user = null, array $people_array = null) {
     $ppl[""] = "";
 
     if (!$people_array) {
@@ -608,7 +607,7 @@ function create_person_pulldown($name, $value=null, user $user, $sa=null) {
             " value='" . e($text) . "' class='autocomplete'>";
     } else {
         if(!isset($sa)) {
-            $sa=get_people_select_array(null,$user);
+            $sa=get_people_select_array($user);
         }
         $html=create_pulldown($name, $value, $sa);
     }
@@ -630,7 +629,7 @@ function create_photographer_pulldown($name, $value=null, $user) {
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .
             " value='" . e($text) . "' class='autocomplete'>";
     } else {
-        $html=create_pulldown($name, $value, get_people_select_array(null, $user));
+        $html=create_pulldown($name, $value, get_people_select_array($user));
     }
     return $html;
 }

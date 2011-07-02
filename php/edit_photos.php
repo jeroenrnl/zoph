@@ -121,9 +121,13 @@
                   <label for="rating__all"><?php echo translate("rating") ?></label>
                   <?php echo create_rating_pulldown(null, "_rating__all") ?><br>
                   <label for="album__all"><?php echo translate("albums") ?></label>
-                  <?php echo create_album_pulldown("_album__all", null, $user, $album_select_array) ?><br>
+                  <fieldset class="multiple">
+                      <?php echo create_album_pulldown("_album__all[0]", null, $user, $album_select_array) ?>
+                  </fieldset><br>
                   <label for="category__all"><?php echo translate("categories") ?></label>
-                  <?php echo create_cat_pulldown("_category__all", null, $user, $category_select_array) ?><br>
+                  <fieldset class="multiple">
+                      <?php echo create_cat_pulldown("_category__all[0]", null, $user, $category_select_array) ?>
+                  </fieldset><br>
                 </fieldset>
 <?php
         // These are used by the autocomplete script
@@ -222,7 +226,6 @@
             $queryIgnoreArray[] = "_category__$photo_id";
             $queryIgnoreArray[] = "_remove_category__$photo_id";
             $queryIgnoreArray[] = "_remove_person__$photo_id";
-            $queryIgnoreArray[] = "_position__" . $photo_id;
             $queryIgnoreArray[] = "_person__" . $photo_id;
             $queryIgnoreArray[] = "_deg__$photo_id";
             $queryIgnoreArray[] = "_action__$photo_id";
@@ -273,7 +276,7 @@
                     <fieldset class="editphotos-fields">
                       <label for="title__<?php echo $photo_id?>"><?php echo translate("title") ?></label>
                       <?php echo create_text_input("__title__$photo_id", $photo->get("title"), 30, 64) ?>
-                    <br>
+                      <br>
                       <label for="date__<?php echo $photo_id ?>"><?php echo translate("date") ?></label>
                       <?php echo create_text_input("__date__$photo_id", $photo->get("date") , 12, 10, "date") ?>
                       <span class="inputhint">YYYY-MM-DD</span><br>
@@ -281,9 +284,9 @@
                       <?php echo create_text_input("__time__$photo_id", $photo->get("time"), 10, 8, "time") ?>
                       <span class="inputhint">HH:MM:SS</span><br>
                       <label for="location_id__<?php echo $photo_id ?>"><?php echo translate("location") ?></label>
-            <?php echo create_place_pulldown("__location_id__$photo_id", $photo->get("location_id"), $user, $places_select_array) ?><br>
+                      <?php echo create_place_pulldown("__location_id__$photo_id", $photo->get("location_id"), $user, $places_select_array) ?><br>
                       <label for="photographer_id__<?php echo $photo_id?>"><?php echo translate("photographer") ?></label>
-            <?php echo create_person_pulldown("__photographer_id__$photo_id", $photo->get("photographer_id"), $user, $people_select_array) ?><br>
+                      <?php echo create_person_pulldown("__photographer_id__$photo_id", $photo->get("photographer_id"), $user, $people_select_array) ?><br>
                       <label for="rating__<?php echo $photo_id?>"><?php echo translate("rating") ?></label>
 <?php
     $rating = $photo->get('rating');
@@ -291,11 +294,11 @@
         $rating = $photo->get_rating($user);
     }
 ?>
-                        <?php echo create_rating_pulldown($rating, "_rating__$photo_id") ?>
-                    <br>
+                      <?php echo create_rating_pulldown($rating, "_rating__$photo_id") ?>
+                      <br>
                       <label for="description__<?php echo $photo_id?>"><?php echo translate("description") ?></label>
-                        <textarea name="__description__<?php echo $photo_id ?>" id="description__<?php echo $photo_id?>" class="desc" cols="50" rows="3"><?php echo $photo->get("description") ?></textarea>
-                        <br>
+                      <textarea name="__description__<?php echo $photo_id ?>" id="description__<?php echo $photo_id?>" class="desc" cols="50" rows="3"><?php echo $photo->get("description") ?></textarea>
+                      <br>
                       <label for="album__<?php echo $photo_id?>"><?php echo translate("albums") ?></label>
                       <fieldset class="checkboxlist">
 <?php
@@ -313,8 +316,10 @@
                     echo "<br>\n";
                 }
 ?>
-                        <?php echo create_album_pulldown("_album__$photo_id", null, $user, $album_select_array) ?>
+                      <fieldset class="multiple">
+                        <?php echo create_album_pulldown("_album__" . $photo_id . "[0]", null, $user, $album_select_array) ?>
                       </fieldset><br>
+                  </fieldset><br>
                       <label for="category__<?php echo $photo_id?>"><?php echo translate("categories") ?></label>
                       <fieldset class="checkboxlist">
 <?php
@@ -332,17 +337,17 @@
                     echo "<br>\n";
                 }
 ?>
-                        <?php echo create_cat_pulldown("_category__$photo_id", null, $user, $category_select_array) ?>
+                          <fieldset class="multiple">
+                            <?php echo create_cat_pulldown("_category__" . $photo_id . "[0]", null, $user, $category_select_array) ?>
+                          </fieldset><br>
                       </fieldset><br>
                       <label for="person_0__<?php echo $photo_id ?>"><?php echo translate("people") ?></label>
                       <fieldset class="checkboxlist multiple">
 <?php
                 $people = $photo->lookup_people();
-                $next_pos = 1;
                 if ($people) {
                     $append = "";
                     foreach ($people as $person) {
-                        $next_pos++;
 ?>
                        <?php echo $append ?>
                        <input type="checkbox" name="_remove_person__<?php echo $photo_id ?>[]" value="<?php echo $person->get("person_id") ?>">
@@ -354,8 +359,6 @@
                 }
 ?>
                    <?php echo create_person_pulldown("_person__" . $photo_id . "[0]", "", $user, $people_select_array) ?>
-                   <?php echo translate("position") ?>:
-                   <?php echo create_text_input("_position__" . $photo_id . "[0]", $next_pos, 2, 2) ?><br>
                       </fieldset><br>
                      <br>
                   </fieldset>

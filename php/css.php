@@ -1175,19 +1175,16 @@ fieldset  {
     }
 
 fieldset.editphotos, fieldset.map, fieldset.geotag  {
+    width: 100%;
     margin-top: 10px;
     margin-bottom: 5px;
     padding-bottom: 20px;
     border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
     }
 
-fieldset.map {
-    position: relative;
-    width: 100%;
-    }
-
+// The map is inside a table on the search page
 table fieldset.map {
-    width: 90%;
+    width: 95%;
     }
 
 fieldset.editphotos legend, fieldset.map legend, fieldset.geotag legend {
