@@ -203,7 +203,7 @@ var zImport=function() {
                                 } else {
                                     actionlinks.appendChild(retryli);
                                     div.appendChild(checkbox);
-                                    imgsrc="image_service.php?type=import_thumb" +
+                                    imgsrc="image.php?type=import_thumb" +
                                        "&file=" + md5;
                                     img.setAttribute("onmouseover", "zImport.createPreviewDiv('" + md5 +"');");
                                     img.setAttribute("onmouseout", "zImport.destroyPreviewDiv('" + md5 +"');");
@@ -409,7 +409,7 @@ var zImport=function() {
         div.className="preview";
         div.id="preview"+md5;
 
-        img.setAttribute("src", "image_service.php?type=import_mid" +
+        img.setAttribute("src", "image.php?type=import_mid" +
             "&file=" + md5);
         div.appendChild(img);
 

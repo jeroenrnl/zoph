@@ -187,7 +187,7 @@
 <?php
         if ($annotate) {
 ?>
-            <img src="image_service.php?photo_id=<?php echo $photo_id ?>&annotated=1" alt="<?= $photo->get("title") ? $photo->get("title") : $photo->get("name") ?>">
+            <img src="image.php?photo_id=<?php echo $photo_id ?>&annotated=1" alt="<?= $photo->get("title") ? $photo->get("title") : $photo->get("name") ?>">
 <?php
         }
         else {

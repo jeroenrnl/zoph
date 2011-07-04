@@ -240,8 +240,8 @@ class tag {
             new tag("cat", "a", "", "href=\"category.php?category_id=[param]\""),
             new tag("link", "a", "", "href=\"[param]\""),
             new tag("place", "a", "", "href=\"places.php?parent_place_id=[param]\""),
-            new tag("thumb", "img", "", "src=\"image_service.php?photo_id=[param]&type=thumb\"", false),
-            new tag("mid", "img", "", "src=\"image_service.php?photo_id=[param]&type=mid\"", false)
+            new tag("thumb", "img", "", "src=\"image.php?photo_id=[param]&type=thumb\"", false),
+            new tag("mid", "img", "", "src=\"image.php?photo_id=[param]&type=mid\"", false)
         );
     }
 

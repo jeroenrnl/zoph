@@ -52,7 +52,7 @@
             <input type="hidden" name="_action" value="compose">
             <input type="hidden" name="annotate" value="1">
             <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
-            <img src="<?php echo $photo->get_image_href("mid")?>" class="mid" ALT="<?php $photo->get("title") ?>">
+            <img src="<?php echo $photo->getURL("mid")?>" class="mid" ALT="<?php $photo->get("title") ?>">
           <br>
           <label for="size"><?php echo translate("send fullsize") ?></label>
           <?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>

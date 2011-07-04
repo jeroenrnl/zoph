@@ -478,27 +478,36 @@ class photo extends zophTable {
     }
 
     function get_fullsize_link($title, $FULLSIZE_NEW_WIN) {
-        $image = $this->get_image_href();
+        $image = $this->getURL();
         $newwin = ($FULLSIZE_NEW_WIN ? "target=\"_blank\"" : "");
         return "<a href=\"$image\" $newwin>$title</a>";
     }
+    
+    /**
+     * Get the URL to an image
+     * @param string "mid" or "thumb"
+     * @return string URL
+     */
+    public function getURL($type = null) {
 
-    function get_image_href($type = null) {
-
-        $image_href = "image_service.php?photo_id=" . $this->get("photo_id");
+        $url = "image.php?photo_id=" . $this->get("photo_id");
         if ($type) {
-            $image_href .= "&amp;type=" . $type;
+            $url .= "&amp;type=" . $type;
         }
 
         if (SID) {
-            $image_href .= "&amp;" . SID;
+            $url .= "&amp;" . SID;
         }
-        return $image_href;
+        return $url;
+    }
+
+    public function getDirectLink() {
+        
     }
 
     function get_image_tag($type = null) {
 
-        $image_href = $this->get_image_href($type);
+        $image_href = $this->getURL($type);
 
         if (!$image_href) {
             return "";
@@ -1596,8 +1605,6 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     public static function getCount($dummy=null) {
         return parent::getCount("photo");
     }
-
-        
 }
 
 function get_photo_sizes_sum() {

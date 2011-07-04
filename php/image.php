@@ -105,7 +105,6 @@
             }
          }
     }
-
     require_once("header.inc.php");
 ?>
           <h1>
