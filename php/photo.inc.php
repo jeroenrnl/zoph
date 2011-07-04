@@ -483,39 +483,16 @@ class photo extends zophTable {
         return "<a href=\"$image\" $newwin>$title</a>";
     }
 
-    function get_image_href($type = null, $use_file = 0) {
+    function get_image_href($type = null) {
 
-        if (USE_IMAGE_SERVICE && !$use_file) {
-            $image_href = "image_service.php?photo_id=" . $this->get("photo_id");
-            if ($type) {
-                $image_href .= "&amp;type=" . $type;
-            }
-
-            if (SID) {
-                $image_href .= "&amp;" . SID;
-            }
-        }
-        else {
-            if ($use_file) {
-                $dir = IMAGE_DIR;
-            }
-            else {
-                $dir = WEB_IMAGE_DIR;
-            }
-
-            $image_href = $dir . $this->get("path") . "/";
-
-            if ($type) {
-                $image_href .= $type . "/" . $type . "_" .
-                    get_converted_image_name($this->get("name"));
-            }
-            else {
-                $image_href .= $this->get("name");
-            }
-
-            $image_href = encode_href($image_href);
+        $image_href = "image_service.php?photo_id=" . $this->get("photo_id");
+        if ($type) {
+            $image_href .= "&amp;type=" . $type;
         }
 
+        if (SID) {
+            $image_href .= "&amp;" . SID;
+        }
         return $image_href;
     }
 
@@ -559,8 +536,8 @@ class photo extends zophTable {
 
         $size_string = " width=\"$width\" height=\"$height\"";
         $alt = escape_string($this->get("title"));
-return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " alt=\"$alt\"" . ">";
-}
+        return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " alt=\"$alt\"" . ">";
+    }
 
     function get_rating($user) {
 

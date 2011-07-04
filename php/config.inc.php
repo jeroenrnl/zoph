@@ -29,14 +29,6 @@
 
     define('IMAGE_DIR', "/data/images/");
 
-    // DEPRECATED!
-    // The option USE_IMAGE_SERVICE will be removed in Zoph 0.9.
-    // IMAGE_SERVICE will always be on after that. If you are still 
-    // using define('USE_IMAGE_SERVICE', 0); you should change that now.
-    define('USE_IMAGE_SERVICE', 1);
-    // Only needed when image service is off:
-    // define('WEB_IMAGE_DIR', "/images/"); // from webserver doc root
-
     // authentication method used from auth.inc.php
     // (this needs to be the name of a function in validator.inc.php)
     $VALIDATOR = 'default_validate';
