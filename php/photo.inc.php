@@ -1174,8 +1174,10 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         $this->lookup_location();
         $place=$this->location;
         $place_tz=null;
+        $location=null;
         if(isset($place)) {
             $place_tz=$place->get("timezone");
+            $location=$place->get("title");
         }
        
         $datetime=$this->get_time();
@@ -1185,7 +1187,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             "photo_time" => $this->get("time"),
             "camera_tz" => $tz,
             "corr" => $this->get("time_corr"),
-            "location" => $place->get("title"),
+            "location" => $location,
             "loc_tz" => $place_tz,
             "calc_date" => $datetime[0],
             "calc_time" => $datetime[1]
@@ -1420,6 +1422,29 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         return photo::getRecordsFromQuery("photo", $sql);
     }
 
+    public function getHashFromFile() {
+        $file=$this->get_file_path();
+        if(file_exists($file)) {
+            return sha1_file($file);
+        } else {
+            throw new FileNotFoundException("File not found:" . $file);
+        }
+    }
+
+    public function getHash() {
+        $hash=$this->get("hash");
+        if(empty($hash)) {
+            try {
+                $hash=$this->getHashFromFile();
+                $this->set("hash", $hash);
+                $this->update();
+            } catch (Exception $e) {
+                log::msg($e->getMessage(), log::ERROR, log::IMG);
+            }
+        }
+        return $hash;
+    }
+
     /**
      * Set photo's lat/lon from a point object
      *
@@ -1605,6 +1630,28 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     public static function getCount($dummy=null) {
         return parent::getCount("photo");
     }
+    
+    /**
+     * Find a photo from a SHA1-hashed string
+     * @param string hash
+     * @return photo found photo
+     */
+
+    public static function getFromHash($hash) {
+        if(!preg_match("/^[A-Za-z0-9]+$/", $hash)) {
+            die("Illegal characters in hash");
+        }
+        $sql="SELECT * FROM " . DB_PREFIX . "photos WHERE " .
+                "hash=\"" . escape_string($hash) . "\";";
+
+        $photos=photo::getRecordsFromQuery("photo", $sql);
+        if(is_array($photos) && sizeof($photos) > 0) {
+            return $photos[0];
+        } else {
+            throw new PhotoNotFoundException("Could not find photo from hash");
+        }
+    }
+        
 }
 
 function get_photo_sizes_sum() {

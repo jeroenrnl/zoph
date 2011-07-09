@@ -120,12 +120,20 @@ abstract class Import {
                     echo $e->getMessage();
                 }
             }
+
             if ($photo->insert()) {
                 if(settings::$importSize===true) {
                     $photo->updateSize();
                 }
                 $photo->update($vars);
                 $photo->updateRelations($vars, "_id");
+                if(settings::$importHash===true) {
+                    try {
+                        $photo->getHash();
+                    } catch (Exception $e) {
+                        echo $e->getMessage();
+                    }
+                }
                 $photos[]=$photo;
             } else {
                 echo translate("Insert failed.") . "<br>\n";

@@ -44,8 +44,7 @@
 
     if ($photo_id) { // would be passed for edit or delete
         $photo = new photo($photo_id);
-    }
-    else { // for display
+    } else { // for display
         if (!$_off)  { $_off = 0; }
         $offset = $_off;
 
@@ -334,11 +333,26 @@ require_once("header.inc.php");
 <?php
         }
 ?>
-          <?php echo $photo->get_fullsize_link($photo->get("name"),$FULLSIZE_NEW_WIN) ?> :
-                  <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
+            <?php echo $photo->get_fullsize_link($photo->get("name"),$FULLSIZE_NEW_WIN) ?> :
+            <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
             <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
-            </div>    
-            <div class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
+        </div>    
+        <div class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
+        <ul class="tabs">
+<?php
+        if(defined("SHARE") && SHARE===1 && ($user->is_admin() || $user->get("allow_share"))) {
+            $hash=$photo->getHash();
+            $link=getZophURL() . "image.php?hash=" . $hash;
+
+            $tpl_share=new template("photo_share", array(
+                "hash" => $hash,
+                "link" => $link
+            ));
+            echo $tpl_share;
+
+        }
+?>
+        </ul>
             <?php echo $photo->get_fullsize_link($photo->get_midsize_img(),$FULLSIZE_NEW_WIN) ?>
 <?php
         if (($user->is_admin() || $user->get("browse_people")) && $people_links = get_photo_person_links($photo)) {

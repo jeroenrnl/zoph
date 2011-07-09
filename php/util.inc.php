@@ -487,6 +487,18 @@ function file_extension($str) {
     return substr($str, strrpos($str, '.') + 1);
 }
 
+function getZophURL() {
+    $current_url=$_SERVER["SERVER_NAME"] . "/" . $_SERVER["PHP_SELF"];
+    $url=substr($current_url, 0, strrpos($current_url, "/"));
+    
+    if(isset($_SERVER["HTTPS"]) && !empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != "off")) {
+        $proto="https://";
+    } else {
+        $proto="http://";
+    }
+    return $proto . preg_replace("/\/\//","/", $url) . "/";
+}
+
 function get_image_type($name) {
     $ext = strtolower(file_extension($name));
     if ($ext == "jpg" || $ext == "jpeg" || $ext == "jpe") {

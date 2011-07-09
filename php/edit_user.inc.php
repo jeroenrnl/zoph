@@ -87,6 +87,9 @@
           <label for="allow_multirating"><?php echo translate("can rate the same photo multiple times") ?></label>
           <?php echo create_pulldown("allow_multirating", $this_user->get("allow_multirating"), array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?>
           <br>
+          <label for="allow_share"><?php echo translate("can share photos") ?></label>
+          <?php echo create_pulldown("allow_share", $this_user->get("allow_share"), array("0" => translate("No",0), "1" => translate("Yes",0)) ) ?>
+          <br>
           <label for="lightboxid"><?php echo translate("lightbox album") ?></label>
 <?php
     $lightbox_array = get_albums_select_array();

@@ -99,6 +99,10 @@
     // information to the Geonames project. http://www.geonames.org/
     define('GUESS_TZ', 0);
  
+    // The SHARE feature allows you to publish a link to a photo that people 
+    // can see without logging in to Zoph
+    define('SHARE', 0);
+    
     // allow annotation of photos for emailing
     define('ANNOTATE_PHOTOS', 1);
     define('ANNOTATE_TEMP_DIR', '/tmp');

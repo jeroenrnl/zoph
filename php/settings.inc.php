@@ -31,6 +31,7 @@ class settings {
     public static $importThumbs;
     public static $importExif;
     public static $importSize;
+    public static $importHash=true;
     public static $importCopy=false;
     public static $importDated=USE_DATED_DIRS;
     public static $importHier=HIER_DATED_DIRS;

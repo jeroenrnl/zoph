@@ -48,4 +48,5 @@ class FileSymlinkProblemException extends FileException {}
 
 class PhotoException extends ZophException {}
 class PhotoThumbCreationFailedException extends PhotoException {}
+class PhotoNotFoundException extends PhotoException {}
 ?>

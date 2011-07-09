@@ -19,6 +19,7 @@
     require_once("include.inc.php");
 
     $photo_id = getvar("photo_id");
+    $hash = getvar("hash");
     $type = getvar("type");
     
     if(($type=="import_thumb" || $type=="import_mid") && ($user->is_admin() || $user->get("import"))) {
@@ -35,7 +36,16 @@
             $type="mid";
         }
         $found=true;
-
+    } else if (DIRECT_LINK && !empty($hash)) {
+        try {
+            $photo=photo::getFromHash($hash);
+            $photo->lookup();
+            $found = true;
+        } catch(PhotoException $e) {
+            /** @todo This should be changed into a nicer error display; */
+            echo $e->getMessage();
+            $found = false;
+        }
     } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {
         $photo = new photo($photo_id);
         $found = $photo->lookup($user);

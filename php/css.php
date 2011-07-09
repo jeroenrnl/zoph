@@ -919,6 +919,7 @@ img.<?php echo MID_PREFIX ?> {
     clear: both;
     text-align: center;
     display: block;
+    padding: 10px;
     }
 
 img.busy,
@@ -1571,6 +1572,127 @@ div.preview {
     top: 0;
     }
 
+
+/* tabs on the right side of the photo, for now only used for
+   the sharing tab, but maybe some other features will be added later */
+
+ul.tabs {
+    list-style: none;
+    float:right;
+    margin: 0 -10px 0 -35px;
+    width: 35px;
+    height: 0;
+    padding: 0;
+    clear: left;
+}
+
+ul.tabs > li {
+    position: relative;
+    margin: 0;
+    z-index: 5;
+    display: block;
+    float: right;
+    height: 55px;
+    width: 35px;
+    clear: both;
+
+    overflow: hiddden;
+    
+    -webkit-transition: width 700ms ease-out 200ms;
+    -moz-transition: width 700ms ease-out 200ms;
+    -o-transition: width 700ms ease-out 200ms;
+    -ms-transition: width 700ms ease-out 200ms; 
+    transition: width 700ms ease-out 200ms;
+    
+}
+
+ul.tabs div.tab {
+    position: relative;
+    background: <?php echo $TITLE_BG_COLOR ?>;
+    color: <?php echo $TITLE_FONT_COLOR ?>;
+    border: none;
+
+    border-radius: 10px 0 0 10px;
+    -moz-border-radius: 10px 0 0 10px;
+    -webkit-border-radius: 10px 0 0 10px;
+    -o-border-radius: 10px 0 0 10px;
+    
+    width: 25px;
+    height: 25px;
+    margin: 0 -3px 0 0;
+    padding: 10px 6px 10px 10px;
+    
+    box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
+    -moz-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
+    -o-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
+    -ms-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
+    z-index: 3;
+    }
+
+ul.tabs div.contents > h1 {
+    border: none;
+    height: 25px;
+    padding: 10px 20px;
+    }
+
+ul.tabs div.contents {
+    display: block;
+    overflow: hidden;
+    position: relative;
+
+    top: -45px;
+    left: 40px;
+    border-radius: 0 0 0 20px;
+    -moz-border-radius: 0 0 0 20px;
+    -webkit-border-radius: 0 0 0 20px;
+    -o-border-radius: 0 0 0 20px;
+    -ms-border-radius: 0 0 0 20px;
+
+
+    box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
+    -moz-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
+    -o-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
+    -ms-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
+    width: 515px;
+
+    border: none;
+    background: rgba(255,255,255,0.9);
+    z-index: 1;
+}
+
+ul.tabs li:hover {
+    width: 550px;
+    }
+
+li.share div.contents ul {
+    list-style: none;
+    }
+
+li.share div.contents > ul > li {
+    background-repeat: no-repeat;
+    padding-left: 25px;
+    }
+
+li.share li.direct_link {
+    background-image: url("images/icons/default/link.png");
+}
+
+li.share li.html {
+    background-image: url("images/icons/default/html.png");
+}
+
+li.share input {
+    border: 1px solid black;
+    width: 30em;
+    }
+    
+li.share textarea {
+    border: 1px solid black;
+    width: 30em;
+    }
+    
 /* Styles for calendar */
 .calendar { 
     font-size: small; 

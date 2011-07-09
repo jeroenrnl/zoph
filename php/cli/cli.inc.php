@@ -161,6 +161,9 @@ class cli {
                     if(settings::$importSize===true) {
                         $photo->updateSize();
                     }
+                    if(settings::$importHash===true) {
+                        $photo->getHash();
+                    }
                 }
             } else {
                 echo "Nothing to do, exiting\n";
@@ -249,18 +252,18 @@ class cli {
         $path=dirname($file);
         if($path==".") {
             // No path given
-            unset($path);
+            //unset($path);
+            $path="./";
         }
 
         if(substr($path,0,2)=="./") {
             // Path relative to the current dir given, change into absolute path
             $path="/" . cleanup_path(getcwd() . "/" . $path);
         }
-
         if($path[0]=="/") {
             // absolute path given
 
-            $path="/" . cleanup_path($path);
+            $path="/" . cleanup_path($path) . "/";
             
             // check if path is in IMAGE_DIR
             if(substr($path, 0, strlen(IMAGE_DIR))!=IMAGE_DIR) {

@@ -423,6 +423,7 @@ CREATE TABLE zoph_users (
   leave_comments char(1) NOT NULL default '0',
   allow_rating char(1) NOT NULL DEFAULT '1',
   allow_multirating char(1) NOT NULL DEFAULT '0',
+  allow_share char(1) NOT NULL DEFAULT '0',
   lightbox_id int(11) default NULL,
   lastnotify datetime default NULL,
   lastlogin datetime default NULL,
@@ -435,7 +436,7 @@ CREATE TABLE zoph_users (
 --
 
 
-INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1','1','0', NULL,NULL,NULL,NULL);
+INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1','1','0', '1', NULL,NULL,NULL,NULL);
 
 CREATE TABLE zoph_pageset (
   pageset_id int(11) NOT NULL auto_increment,

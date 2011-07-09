@@ -182,6 +182,9 @@ class user extends zophTable {
             translate("can rate the same photo multiple times") =>
                 $this->get("allow_multirating") == 1
                 ? translate("Yes") : translate("No"),
+            translate("can share photos", 0) =>
+                $this->get("allow_share") == 1
+                ? translate("Yes") : translate("No"),
             translate("last login") =>
                 $this->get("lastlogin"),
             translate("last ip address") =>

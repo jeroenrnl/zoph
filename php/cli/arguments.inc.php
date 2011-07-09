@@ -179,7 +179,15 @@ class arguments {
                     unset($current);
                     settings::$importSize=false;
                     break;
-                
+                case "--hash":
+                    unset($current);
+                    settings::$importHash=true;
+                    break;
+                case "--no-hash":
+                    unset($current);
+                    settings::$importHash=false;
+                    break;
+
 
                 case "--update":
                 case "-u":
