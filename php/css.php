@@ -1188,6 +1188,10 @@ table fieldset.map {
     width: 95%;
     }
 
+fieldset.map {
+    position: relative;
+    }
+
 fieldset.editphotos legend, fieldset.map legend, fieldset.geotag legend {
     clear: both;
     display: block;
