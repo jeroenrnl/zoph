@@ -61,4 +61,5 @@ ALTER TABLE zoph_users
 #
 
 ALTER TABLE zoph_prefs DROP COLUMN people_slots;
+ALTER TABLE zoph_photos ADD COLUMN hash char(40);
 ALTER TABLE zoph_users ADD COLUMN allow_share char(1) NOT NULL DEFAULT '0' AFTER allow_multirating;
