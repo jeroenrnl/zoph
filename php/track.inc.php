@@ -188,7 +188,10 @@ class track extends zophTable {
      * Get the first point from a track
      */
     public function getFirstPoint() {
-        $points=$this->getPoints();
+        $sql="SELECT * FROM " . DB_PREFIX . "point" .
+                " WHERE track_id=" . (int) escape_string($this->getId()) .
+                " ORDER BY datetime ASC LIMIT 1";
+        $points=point::getRecordsFromQuery("point", $sql);
         $first=$points[0];
         if(($first instanceof point)) {
             return $first;
@@ -201,8 +204,11 @@ class track extends zophTable {
      * Get the last point from a track
      */
     public function getLastPoint() {
-        $points=$this->getPoints();
-        $last=end($points);
+        $sql="SELECT * FROM " . DB_PREFIX . "point" .
+                " WHERE track_id=" . (int) escape_string($this->getId()) .
+                " ORDER BY datetime DESC LIMIT 1";
+        $points=point::getRecordsFromQuery("point", $sql);
+        $last=$points[0];
         if(($last instanceof point)) {
             return $last;
         } else {
@@ -214,8 +220,11 @@ class track extends zophTable {
      * Get the number of points in a track
      */
     public function getPointCount() {
-        $points=$this->getPoints();
-        return count($points);
+        //$points=$this->getPoints();
+        //return count($points);
+        $sql="SELECT count(*) FROM " . DB_PREFIX . "point" .
+                " WHERE track_id=" . (int) escape_string($this->getId());
+        return self::getCountFromQuery($sql);
     }
 
     /**
