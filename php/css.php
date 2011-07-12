@@ -965,6 +965,12 @@ span.inputhint  {
     text-align: right;
     }
 
+div.inputhint {
+    margin: -2px 0 15px 180px;
+    clear: left;
+    float: left;
+}
+
 div.formtext {
     padding: 15px;
 }
@@ -1063,7 +1069,8 @@ dl.page,
 dl.pageset,
 dl photo,
 dl prefs,
-dl.users {
+dl.users,
+dl.track {
     margin-top: 0px;
     margin-bottom: 30px;
     /* Workaround for Firefox bug */
@@ -1078,13 +1085,15 @@ dl.pageset dt,
 dl.photo dt,
 dl.prefs dt,
 dl.users dt, 
+dl.track dt, 
 dl.color_scheme dd,
 dl.comment dd,
 dl.page dd,
 dl.pageset dd,
 dl.photo dd,
 dl.prefs dd,
-dl.users dd {
+dl.users dd,
+dl.track dd {
     font-size: medium; 
     padding-left: 4px;
     padding-right: 4px;
@@ -1097,7 +1106,8 @@ dl.page dd,
 dl.pageset dd,
 dl.photo dd,
 dl.prefs dd,
-dl.users dd {
+dl.users dd,
+dl.track dd {
     float: left;
     width: 55%;
     margin: 5px;
@@ -1109,7 +1119,8 @@ dl.page dt,
 dl.pageset dt,
 dl.photo dt,
 dl.prefs dt,
-dl.users dt {
+dl.users dt,
+dl.track dt {
     clear: left;
     float: left;
     width: 40%;
@@ -1314,6 +1325,20 @@ div#passwordchange input[type="password"]   {
 input, select {
     margin: 2px;
     }
+
+form.geotag select,
+form.import select,
+form.geotag input,
+form.import input {
+    float: left;
+}
+
+/* There is text to the left of this select box, floating
+   caused the text and the select to be in the wrong order
+   so, a small workaround to stop this: */
+form.geotag fieldset.checkboxlist select {
+    float: none;
+}
 
 table#users,
 table.credits {
