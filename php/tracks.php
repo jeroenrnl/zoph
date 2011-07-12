@@ -23,7 +23,7 @@
 
 require_once("include.inc.php");
 
-$title="";
+$title=translate("Geotag");
 $mapping_js="";
 
 $_action=getvar("_action");
@@ -39,8 +39,6 @@ if (!$user->is_admin()) {
     $vars=clean_request_vars($request_vars);
     $new_vars=update_query_string($vars, "_action", "do_geotag", array("_test", "_testcount"));
     $photos;
-    $totalPhotoCount = get_photos($vars, 0, 999999999, $photos, $user);
-    $num_photos=sizeof($photos);
 }
 
 if($_action=="" || $_action=="display") {
@@ -57,6 +55,8 @@ if($_action=="" || $_action=="display") {
 
 
 } else if ($_action=="geotag") {
+    $totalPhotoCount = get_photos($vars, 0, 999999999, $photos, $user);
+    $num_photos=sizeof($photos);
     if ($num_photos<= 0) {
         $content=translate("No photos were found matching your search criteria.") . "\n";
     } else {
@@ -116,7 +116,7 @@ if($_action=="" || $_action=="display") {
         if($tagged>0) {
             $js;
             foreach ($tphotos as $photo) {
-                $js.=$photo->getMarker(null,$user);
+                $js.=$photo->getMarker($user);
             }
             
             $mapping_js=create_map_js() . $js;
