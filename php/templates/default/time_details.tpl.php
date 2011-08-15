@@ -40,7 +40,7 @@ if(!ZOPH) { die("Illegal call"); }
             <?php endif; ?>
             <?php if(!empty($tpl_corr)): ?>
                 <dt><?php echo translate("correction"); ?></dt>
-                <dd><?php echo $corr . " " . translate("minutes"); ?></dd>
+                <dd><?php echo $tpl_corr . " " . translate("minutes"); ?></dd>
             <?php endif; ?>
             <br>
             <?php if(isset($tpl_location)): ?>
