@@ -185,7 +185,7 @@ class person extends zophTable {
     public function getPhotoCount(user $user) {
         $ignore=null;
         $vars=array(
-            "photographer_id" => $this->getId()
+            "person_id" => $this->getId()
         );
         return get_photos($vars, 0, 1, $ignore, $user);
     }
@@ -193,7 +193,7 @@ class person extends zophTable {
     public function getPhotographerCount(user $user) {
         $ignore=null;
         $vars=array(
-            "person_id" => $this->getId()
+            "photographer_id" => $this->getId()
         );
         return get_photos($vars, 0, 1, $ignore, $user);
     }
