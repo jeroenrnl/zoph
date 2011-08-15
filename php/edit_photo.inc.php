@@ -175,7 +175,7 @@
         if ($people) {
             foreach ($people as $person) {
 ?>
-                <input class="remove" type="checkbox" name="_remove_person[]" value="<?php echo $person->get("person_id")?>">
+                <input class="remove" type="checkbox" name="_remove_person_id[]" value="<?php echo $person->get("person_id")?>">
 <?php
                 echo $person->getLink() . "<br>\n";
             }
