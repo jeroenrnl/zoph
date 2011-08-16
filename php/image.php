@@ -36,15 +36,22 @@
             $type="mid";
         }
         $found=true;
-    } else if (DIRECT_LINK && !empty($hash)) {
+    } else if (defined("SHARE") && SHARE===1 && !empty($hash)) {
         try {
-            $photo=photo::getFromHash($hash);
+            $photo=photo::getFromHash($hash, "full");
             $photo->lookup();
             $found = true;
-        } catch(PhotoException $e) {
-            /** @todo This should be changed into a nicer error display; */
-            echo $e->getMessage();
-            $found = false;
+        } catch(PhotoNotFoundException $e) {
+            try {
+                $photo=photo::getFromHash($hash, "mid");
+                $photo->lookup();
+                $type="mid";
+                $found = true;
+            } catch(PhotoNotFoundException $e) {
+                /** @todo This should be changed into a nicer error display; */
+                echo $e->getMessage();
+                $found = false;
+            }
         }
     } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {
         $photo = new photo($photo_id);

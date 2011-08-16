@@ -102,6 +102,14 @@
     // The SHARE feature allows you to publish a link to a photo that people 
     // can see without logging in to Zoph
     define('SHARE', 0);
+    // To prevent people from generating hashes for the share functions,
+    // you should provide Zoph with a unique salt, for both fullsize images and
+    // midsize images. Both MUST be different. Longer is better. It should be
+    // 10 characters at the very least. This is the only place where you need them,
+    // so you don't need to remember them. You should keep them secret.
+    define('SHARE_SALT_FULL', 'Set this to a long secret string');
+    define('SHARE_SALT_MID', 'Set this to a long, different secret string');
+
     
     // allow annotation of photos for emailing
     define('ANNOTATE_PHOTOS', 1);

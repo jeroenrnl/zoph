@@ -1431,7 +1431,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         }
     }
 
-    public function getHash() {
+    public function getHash($type="file") {
         $hash=$this->get("hash");
         if(empty($hash)) {
             try {
@@ -1442,7 +1442,20 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 log::msg($e->getMessage(), log::ERROR, log::IMG);
             }
         }
-        return $hash;
+        switch($type) {
+            case "file":
+                return $hash;
+                break;
+            case "full":
+                return sha1(SHARE_SALT_FULL . $hash);
+                break;
+            case "mid":
+                return sha1(SHARE_SALT_MID . $hash);
+                break;
+            default:
+                die("Unsupported hash type");
+                break;
+        }
     }
 
     /**
@@ -1637,12 +1650,29 @@ echo ("<br>\noutString:<br>\n" . $out_string);
      * @return photo found photo
      */
 
-    public static function getFromHash($hash) {
+    public static function getFromHash($hash, $type="file") {
         if(!preg_match("/^[A-Za-z0-9]+$/", $hash)) {
             die("Illegal characters in hash");
         }
-        $sql="SELECT * FROM " . DB_PREFIX . "photos WHERE " .
-                "hash=\"" . escape_string($hash) . "\";";
+        switch($type) {
+            case "file":
+                $where="WHERE hash=\"" . escape_string($hash) . "\";";
+                break;
+            case "full":
+                $where="WHERE sha1(CONCAT('" . SHARE_SALT_FULL . "', hash))=" .
+                   "\"" . escape_string($hash) . "\";";
+                break;
+            case "mid":
+                $where="WHERE sha1(CONCAT('" . SHARE_SALT_MID . "', hash))=" .
+                   "\"" . escape_string($hash) . "\";";
+                break;
+            default:
+                die("Unsupported hash type");
+                break;
+        }
+
+
+        $sql="SELECT * FROM " . DB_PREFIX . "photos " . $where;
 
         $photos=photo::getRecordsFromQuery("photo", $sql);
         if(is_array($photos) && sizeof($photos) > 0) {
