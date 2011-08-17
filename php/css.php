@@ -138,14 +138,21 @@ div.details {
     float: left;
 
     padding: 20px;
+    /* For stupid MSIE */
+    background: #ffffff; 
     background: rgba(255,255,255,0.9);
     
     border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
+    -o-border-radius: 10px;
+    -ms-border-radius: 10px;
     
     box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
     -moz-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+    -o-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+    -ms-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
     }
 
 div.details > h3 {
