@@ -1719,6 +1719,8 @@ ul.tabs div.contents {
     width: 515px;
 
     border: none;
+    /* For stupid MSIE */
+    background: #ffffff; 
     background: rgba(255,255,255,0.9);
     z-index: 1;
 }
