@@ -327,7 +327,7 @@ var zImport=function() {
     }
 
     function deleteSelected() {
-        var images=document.getElementsByClassName("thumb_checkbox");
+        var images=getElementsByClass("thumb_checkbox");
         var toDelete=[];
         for(var i=0; i<images.length; i++) {
             if(images[i].checked) {
@@ -342,7 +342,7 @@ var zImport=function() {
     }
 
     function toggleSelection() {
-        var images=document.getElementsByClassName("thumb_checkbox");
+        var images=getElementsByClass("thumb_checkbox");
         for(var i=0; i<images.length; i++) {
             if(images[i].checked) {
                 images[i].checked=false;
@@ -353,7 +353,7 @@ var zImport=function() {
     }
 
     function selectAll() {
-        var images=document.getElementsByClassName("thumb_checkbox");
+        var images=getElementsByClass("thumb_checkbox");
         for(var i=0; i<images.length; i++) {
             images[i].checked=true;
          }
@@ -380,7 +380,7 @@ var zImport=function() {
             form.appendChild(fieldset);
         }
         // Now copy the checkboxes from the form above into this form
-        images=document.getElementsByClassName("thumb_checkbox");
+        images=getElementsByClass("thumb_checkbox");
         for(var i=0; i<images.length; i++) {
             if(images[i].checked) {
                 input=document.createElement("input");
