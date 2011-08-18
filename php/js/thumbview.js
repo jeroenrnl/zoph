@@ -35,16 +35,16 @@ var thumbview = function () {
     function collapseall(id) {
         obj=document.getElementById(id);
         nodes=getElementsByClass('expanded', obj);
-        while(nodes.length>0) {
-            nodes[0].className=nodes[0].className.replace(/\bexpanded\b/g,'collapsed');
+        for(var i=0; i<nodes.length; i++) {
+            nodes[i].className=nodes[i].className.replace(/\bexpanded\b/g,'collapsed');
         }
     }
 
     function expandall(id) {
         obj=document.getElementById(id);
         nodes=getElementsByClass('collapsed',obj);
-        while(nodes.length>0) {
-            nodes[0].className=nodes[0].className.replace(/\bcollapsed\b/g,'expanded');
+        for(var i=0; i<nodes.length; i++) {
+            nodes[i].className=nodes[i].className.replace(/\bcollapsed\b/g,'expanded');
         }
     }
 
@@ -148,6 +148,6 @@ var thumbview = function () {
 if(window.addEventListener) {
     window.addEventListener("load",thumbview.init,false);
 } else {
-    // Of course, M$ Internet Exploder must differ from the standard
+    // Why can't M$ simply follow the standard?
     window.attachEvent("onload",thumbview.init);
 }
