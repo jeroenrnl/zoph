@@ -339,6 +339,15 @@ form.addpage label {
     display: inline;
 }
 
+form.grouppermissions,
+form.editgroup {
+    display: block;
+    clear: both;
+    float: left;
+}
+
+
+
 ul.autocompdropdown {
     position: relative;
     background: <?php echo $PAGE_BG_COLOR ?>;
@@ -1193,13 +1202,26 @@ fieldset  {
     float: left;
     }
 
-fieldset.editphotos, fieldset.map, fieldset.geotag  {
+fieldset.editphotos, 
+fieldset.map, 
+fieldset.geotag  {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 5px;
     padding-bottom: 20px;
     border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
     }
+
+fieldset.addusers {
+    width: 15em;
+    padding: 10px;
+    margin-left: 12em;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-bottom: 20px;
+    border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
+    }
+
 
 // The map is inside a table on the search page
 table fieldset.map {
@@ -1210,7 +1232,10 @@ fieldset.map {
     position: relative;
     }
 
-fieldset.editphotos legend, fieldset.map legend, fieldset.geotag legend {
+fieldset.editphotos legend, 
+fieldset.map legend, 
+fieldset.geotag legend,
+fieldset.addusers legend {
     clear: both;
     display: block;
     left: 2em;

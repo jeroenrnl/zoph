@@ -25,7 +25,8 @@
             <?php echo translate("add/edit group") ?>
           </h1>
       <div class="main">
-        <form action="group.php" method="POST">
+        <form action="group.php" method="POST" class="editgroup">
+          <p>
           <input type="hidden" name="_action" value="<?php echo $action ?>">
           <input type="hidden" name="group_id" value="<?php echo $group->get("group_id") ?>">
            <label for="groupname"><?php echo translate("group name") ?></label>
@@ -39,8 +40,9 @@
 <?php
     if($action!="insert") {
 ?>
-            <label for="member"><?php echo translate("members") ?></label>
-            <fieldset>
+            <fieldset class="addusers">
+            <legend><?php echo translate("members") ?></legend>
+
 <?php
             $members=$group->get_members();
             foreach($members as $member) {
@@ -55,5 +57,6 @@
      }
 ?>
             <input type="submit" value="<?php echo translate($action, 0) ?>">
+            </p>
 </form>
-<!-- end edit_user.inc !-->
+<!-- end edit_group.inc !-->

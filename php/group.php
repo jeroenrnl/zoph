@@ -176,7 +176,7 @@
    } else {
 require_once("edit_group.inc.php");
 ?>
-        <form action="group.php" method="post">
+        <form action="group.php" method="post" class="grouppermissions">
             <table class="permissions">
                 <col class="col1"><col class="col2"><col class="col3"><col class="col4">
                     <tr>
@@ -215,7 +215,7 @@ require_once("edit_group.inc.php");
 <?php 
         }
 ?>
-                        <th>writable</th>
+                        <th><?php echo translate("writable"); ?></th>
                         </tr>
                         <tr>
                         <td>

@@ -242,6 +242,7 @@ Zoph version %s, released %s.=
 about=
 access level=
 add comment=
+add/edit group=
 add/edit user=
 address continued=
 address=
