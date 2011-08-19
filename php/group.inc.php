@@ -26,7 +26,7 @@ class group extends zophTable {
         $this->set("group_id", $id);
     }
 
-    function update($vars = null) {
+    function updateMembers($vars = null) {
         parent::update();
         if($vars["_member"]) {
             $this->add_member($vars["_member"]);

@@ -206,7 +206,8 @@
         unset($actionlinks["edit"]);
 
         $photo->setFields($request_vars);
-        $photo->update($request_vars,"_id",$user); // pass again for add people, cats, etc
+        $photo->updateRelations($request_vars,"_id",$user); // pass again for add people, cats, etc
+        $photo->update();
         $action = "update";
         if(!empty($_qs)) {
             redirect("photo.php?" . $_qs, "Update done");

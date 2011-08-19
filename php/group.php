@@ -79,7 +79,8 @@
         $action = "update";
     } else if ($_action=="update") {
         $group->setFields($request_vars);
-        $group->update($request_vars);
+        $group->updateMembers($request_vars);
+        $group->update();
         $action = "update";
     } else {
         $obj = &$group;

@@ -125,7 +125,7 @@ abstract class Import {
                 if(settings::$importSize===true) {
                     $photo->updateSize();
                 }
-                $photo->update($vars);
+                $photo->update();
                 $photo->updateRelations($vars, "_id");
                 if(settings::$importHash===true) {
                     try {

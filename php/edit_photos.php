@@ -192,7 +192,7 @@
                 }
 
                 // this will update any specific albums, cats & people
-                $photo->update($request_vars, "__$photo_id");
+                $photo->update();
 
                 // update "apply to all" albums, cats & people
 

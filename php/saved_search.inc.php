@@ -39,7 +39,7 @@ class search extends zophTable {
             $where .
             "search_id=" . escape_string($this->get("search_id"));
             
-        return parent::lookup($sql);
+        return $this->lookupFromSQL($sql);
     }
 
     function getName() {

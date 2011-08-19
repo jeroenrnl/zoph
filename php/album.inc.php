@@ -58,7 +58,7 @@ class album extends zophTreeTable {
                 "where album_id = " . escape_string($id);
         }
 
-        return parent::lookup($sql);
+        return $this->lookupFromSQL($sql);
     }
 
     function delete() {

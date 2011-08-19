@@ -61,7 +61,7 @@ class photo extends zophTable {
                 "where photo_id = '" . escape_string($this->get("photo_id")) . "'";
         }
 
-        $success = parent::lookup($sql);
+        $success = $this->lookupFromSQL($sql);
 
         if ($success) {
             $this->lookup_photographer();
@@ -87,12 +87,6 @@ class photo extends zophTable {
 
     function delete() {
         parent::delete(array("photo_people", "photo_categories", "photo_albums"));
-    }
-
-    function update($vars = null, $suffix = '', $user=null) {
-        parent::update();
-        if (!$vars) { return; }
-        $this->updateRelations($vars, $suffix, $user);
     }
 
     /** 
