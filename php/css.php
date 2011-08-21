@@ -1253,11 +1253,11 @@ fieldset.editphotos div.thumbnail {
     margin: 0px;
     margin-left: -10em;
     float: right;
-    width: 10em;
     }
 
 fieldset.editphotos-fields {
-    margin: 0;
+    margin: 0 0 0 20px;
+
     clear: none;
     width: 90%;
     padding-top: 10px;
