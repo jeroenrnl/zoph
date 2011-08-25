@@ -145,7 +145,7 @@
                     </label>
                     <input type="text" id="filename" name="_filename" value="zoph">
                     <span class="inputhint">
-                        <?php echo translate("Use alphanumeric, - and _, Do not provide an extension.") ?>
+                        <?php echo translate("Use alphanumeric, - and _. Do not provide an extension.") ?>
                     </span><br>
                     <label for="maxfiles">
                         <?php echo translate("Maximum number of files per zipfile") ?>
