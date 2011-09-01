@@ -278,6 +278,7 @@ CREATE TABLE zoph_photos (
   lat float(10,6),
   lon float(10,6),
   mapzoom tinyint unsigned,
+  `hash` char(40) DEFAULT NULL,
   PRIMARY KEY  (photo_id),
   KEY photo_photog_id (photographer_id),
   KEY photo_loc_id (location_id),
@@ -436,7 +437,7 @@ CREATE TABLE zoph_users (
 --
 
 
-INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1','1','0', '1', NULL,NULL,NULL,NULL);
+INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1','1','0', '0', NULL,NULL,NULL,NULL);
 
 CREATE TABLE zoph_pageset (
   pageset_id int(11) NOT NULL auto_increment,
