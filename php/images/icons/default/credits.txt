@@ -1,4 +1,14 @@
-The icons in this directory were taken from the BC Tango KDE iconset which can
+Share Icon
+==========
+
+The 'share' icon was taken from the 'share icon' project. 
+http://shareicons.com.
+
+share-icon-24x24.png
+
+BC Tango KDE Icons
+==================
+These icons were taken from the BC Tango KDE iconset which can
 be downloaded from
 http://www.kde-look.org/content/show.php/BC+Tango+KDE?content=50036.
 
@@ -29,3 +39,4 @@ http://creativecommons.org/licenses/by-sa/2.5/
 64x64/mimetypes/contents2.png	pagesets.png
 64x64/mimetypes/document.png	pages.png
 64x64/mimetypes/zip.png		archive.png
+

@@ -1640,8 +1640,8 @@ div.preview {
 ul.tabs {
     list-style: none;
     float:right;
-    margin: 0 -10px 0 -35px;
-    width: 35px;
+    margin: 0 -10px 0 -40px;
+    width: 40px;
     height: 0;
     padding: 0;
     clear: left;
@@ -1654,7 +1654,7 @@ ul.tabs > li {
     display: block;
     float: right;
     height: 55px;
-    width: 35px;
+    width: 40px;
     clear: both;
 
     overflow: hiddden;
@@ -1678,7 +1678,7 @@ ul.tabs div.tab {
     -webkit-border-radius: 10px 0 0 10px;
     -o-border-radius: 10px 0 0 10px;
     
-    width: 25px;
+    width: 30px;
     height: 25px;
     margin: 0 -3px 0 0;
     padding: 10px 6px 10px 10px;
@@ -1703,7 +1703,7 @@ ul.tabs div.contents {
     position: relative;
 
     top: -45px;
-    left: 40px;
+    left: 45px;
     border-radius: 0 0 0 20px;
     -moz-border-radius: 0 0 0 20px;
     -webkit-border-radius: 0 0 0 20px;
