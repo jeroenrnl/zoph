@@ -16,10 +16,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
     session_cache_limiter("public");
+    require_once("log.inc.php");
+    require_once("config.inc.php");
+    require_once("variables.inc.php");
+    $hash = getvar("hash");
+
+    if (defined("SHARE") && SHARE===1 && !empty($hash) && empty($user)) {
+        define("IMAGE_PHP", 1);
+        require_once("classes/anonymousUser.inc.php");
+        $user = new anonymousUser();
+    }
     require_once("include.inc.php");
 
     $photo_id = getvar("photo_id");
-    $hash = getvar("hash");
     $type = getvar("type");
     
     if(($type=="import_thumb" || $type=="import_mid") && ($user->is_admin() || $user->get("import"))) {
@@ -49,8 +58,7 @@
                 $found = true;
             } catch(PhotoNotFoundException $e) {
                 /** @todo This should be changed into a nicer error display; */
-                echo $e->getMessage();
-                $found = false;
+                die($e->getMessage());
             }
         }
     } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {

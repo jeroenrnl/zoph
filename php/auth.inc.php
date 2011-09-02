@@ -24,12 +24,19 @@
      */
     if(!defined("CLI")) {
         session_start();
-
-        $_action = getvar("_action");
-
         if (array_key_exists('user', $_SESSION)) {
             $user = $_SESSION['user'];
+
+            if($user instanceof anonymousUser) {
+                if(!defined("IMAGE_PHP")) {
+                    unset($user);
+                    $_action=("logout");
+                }
+            } else {
+                $_action = getvar("_action");
+            }
         }
+
     } else {
         if(defined("CLI_USER")) {
             if (CLI_USER != 0) {
