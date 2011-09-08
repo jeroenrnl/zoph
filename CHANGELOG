@@ -1,5 +1,60 @@
 Zoph Changelog
 
+Zoph 0.8.4
+9 Sept 2011
+
+Zoph 0.8.4 is the final pre-release for Zoph 0.9.
+
+This version adds several feature improvements. More features have been added the new CLI import, which was introduced in v0.8.2. The 'bulk edit' page has been improved, both in features as in loading speed (100x faster in some cases!). The 'tree view' and 'thumb view' overview pages have been improved. Several coding style modernisation changes have been made.
+[edit] Features
+
+    * Req#1985439: Adding albums, categories, places and people via the CLI
+    * Req#1985439: Automatically adding albums, categories, places and people via the CLI
+    * Req#3042674: Recursive import of directories
+    * Req#1985439: Setting album, category, person, photographer, path from import dir.
+    * Req#1756507: photocount in tree view.
+    * Req#1491208: Show more info in thumbnail overview
+    * REQ#2813979: Added date & time fields to bulk edit page
+    * Added autocomplete support to bulk edit page
+    * Changed the photo edit page to automatically add new dropdowns to albums, categories and people.
+    * Removed 'people_slots' functionality
+    * Changed add people on bulk photo edit page to use multiple dropdowns
+    * Add multiple albums, categories, persons on both single and bulk photo edit.
+    * Req#2871210: Added 'share photo' feature.
+    * Zoph now stores a hash of a photo in the database
+    * zoph CLI: Added -D as shorthand for --path
+
+Bugs
+    * Bug#3312029: MAGIC_FILE cannot be empty
+    * Fixed an issue that caused the 'search' button for geocoding on the edit location page to be misplaced.
+    * Fixed a typo that caused the 'track' screen to no longer work
+
+Translations
+    * Updated translations
+    * Added some previously forgotten translations
+
+Refactoring
+
+Zoph has started it's life in the era of PHP3, while the current version of PHP is version 5.3. In between a lot has been changed in PHP. I have started to adopt PHP5-style programming some time ago for new development. I have now also started to refactor the other code to a new coding style. Currently, Zoph still has a lot of global functions and I am slowly moving almost all of them to static methods.
+
+    * Made several changes to function names to accomodate new coding style
+    * Refactored photo->update_relations() to merge with the similar photo->updateRelations() that the 
+      new import introduced.
+    * Moved get_root_...() functions into static functions.
+    * Refactor of zoph_table object (now called zophTable)
+    * Renamed function photo->get_image_href() to photo->getURL()
+    * Made some changes to the delete() methods so PHP strict standards are followed.
+
+Other
+    * Inline documentation improvements
+    * Improved expand/collapse Javascript robustness
+    * Some eyecandy (esp expand/collapse)
+    * Changed the date and time field to type 'date' and type 'time', which are new types for HTML5. Tested in Chromium.
+    * Removed deprecated IMAGE_SERVICE setting. IMAGE_SERVICE is now always on.
+    * Renamed image_service.php to image.php
+    * Improved loading speed of the 'tracks' page by using a different, better cachable SQL query
+
+
 Zoph 0.8.3
 03 April 2011
 

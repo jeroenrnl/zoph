@@ -1,3 +1,68 @@
+Zoph 0.8.3 to 0.8.4
+###################
+    * If you want to upgrade from 0.8.2, first follow the upgrade instructions from 0.8.2 to 0.8.3
+    * If you want to upgrade from an older version, such as 0.8 or 0.8.0.x, first follow the upgrade instructions from 0.8 to 0.8.1, then the upgrade instructions from 0.8.1 to 0.8.2, then upgrade instructions from 0.8.2 to 0.8.3 and finally these instructions.
+    * If you're upgrading from an older version, it is not necessary to install the "in between" versions first, you can just install the current version and follow the upgrade instructions below.
+
+Copy the contents of the php directory, including all subdirs, into your webroot and copy the lang directory into the webroot as well. You should make a backup copy of config.inc.php to prevent overwriting it.
+
+cp config.inc.php config.local.php
+cp -a php/* /var/www/html/zoph
+cp -a lang /var/www/html/zoph
+
+Database changes
+================
+
+Because 0.8.4 is a version "in between" 0.8 and 0.9, you will need to edit the update script. You should comment out the changes that have already been applied to your system. Prepend the changes for 0.8.1 and/or 0.8.3 with a "#". There were no database changes in 0.8.2. Execute zoph-update-0.9.sql:
+
+mysql -u zoph_admin -p zoph < sql/zoph_update-0.9.sql
+
+Changes this script makes:
+
+    * Remove the people_slots setting from the user preferences table
+    * Add a hash to the photos table
+    * Add a setting to control whether or not the user is allowed to use the sharing feature in the users table
+
+Configuration changes
+=====================
+(see http://en.wikibooks.org/wiki/Zoph/Configuration for details):
+New options
+-----------
+SHARE 
+    Enable the possibility to share a photo by using a URL that can be used without logging in to Zoph. Once enabled, 
+    you can determine per user whether or not this user is allowed to see these URLs. (0.8.4)
+SHARE_SALT_FULL 
+    When using the SHARE feature, Zoph uses a hash to identify a photo. Because you do not want people who have
+    access to you full size photos (via Zoph or otherwise) to be able to generate these hashes, you should give
+    Zoph a secret salt so only authorized users of your Zoph installation can generate them. This one is used
+    for fullsize photos (0.8.4)
+SHARE_SALT_FULL 
+    When using the SHARE feature, Zoph uses a hash to identify a photo. Because you do not want people who have
+    access to you full size photos (via Zoph or otherwise) to be able to generate these hashes, you should give
+    Zoph a secret salt so only authorized users of your Zoph installation can generate them. This one is used
+    for midsize photos (0.8.4)
+
+Removed options
+---------------
+USE_IMAGE_SERVICE 
+    The Image Service is now always on. If you were previously using define('USE_IMAGE_SERVICE', 0), you should
+    move your images out of your webroot, and update IMAGE_DIR accordingly. (0.8.4)
+WEB_IMAGE_DIR 
+    This was only needed when USE_IMAGE_SERVICE was enabled. (0.8.4)
+MAX_PEOPLE_SLOTS 
+    The people slots feature, that allowed multiple 'add people' dropdowns on the edit photo and bulk edit
+    photo pages has been replaced by a Javascript that automatically adds a new dropdown whenever a new person
+    is added, allowing a virtually unlimited amount of people to be added in one edit. (0.8.4)
+
+Changed options
+---------------
+
+MAGIC_FILE 
+    Zoph would give an error when MAGIC_FILE was empty in Zoph 0.8.2 and 0.8.3 (it didn't exist in 0.8.1 and
+    before). As of 0.8.4, the default and recommended value is empty, letting PHP use the built-in Magic file.
+    Only if that does not work, you can set an alternative Magic file, according to your distribution's standards. (0.8.4) 
+
+
 Zoph 0.8.2 to 0.8.3
     * You can use these instructions to go from 0.8.2.1 to 0.8.3
     * If you want to upgrade from 0.8.1, first follow the upgrade instructions from 0.8.1 to 0.8.2
