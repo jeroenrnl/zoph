@@ -21,6 +21,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 
 /**
@@ -97,7 +100,7 @@ final class anonymousUser extends user {
      * at this moment this is used nowhere...
      */
     function getName() {
-        return(translate("Anonymous User", true));
+        return("Anonymous User");
     }
 
     /**
@@ -118,11 +121,10 @@ final class anonymousUser extends user {
 
     /**
      * Get permissions for specific photo.
-     * No permissions for anonymous user, so return bogus
-     * group_permissions object.
+     * No permissions for anonymous user
      */
     function get_permissions_for_photo($photo_id) {
-        return new group_permissions(0,0);
+        return null;
     }
 
     /**
