@@ -195,7 +195,7 @@
         if ($albums) {
             foreach ($albums as $album) {
 ?>
-              <input type="checkbox" name="_remove_album[]" value="<?php echo $album->get("album_id")?>">
+              <input type="checkbox" name="_remove_album_id[]" value="<?php echo $album->get("album_id")?>">
               <?php echo $album->getLink() ?><br>
 <?php
             }
@@ -214,7 +214,7 @@
         if ($categories) {
             foreach ($categories as $category) {
 ?>
-                <input type="checkbox" name="_remove_category[]" value="<?php echo $category->get("category_id")?>">
+                <input type="checkbox" name="_remove_category_id[]" value="<?php echo $category->get("category_id")?>">
               <?php echo $category->getLink() ?><br>
 <?php
             }
