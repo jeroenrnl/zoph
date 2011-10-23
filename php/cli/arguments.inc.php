@@ -437,24 +437,24 @@ class arguments {
                     }
                     break;
                 case "photographer":
-                    if(self::$command=="new" || (settings::$importAutoadd && !person::getByName($name))) {
-                        foreach($arg as $name) {
+                    foreach($arg as $name) {
+                        if(self::$command=="new" || (settings::$importAutoadd && !person::getByName($name))) {
                             $vars["_new_photographer"][]=$name;
-                        }
-                    } else {
-                        $person=person::getByName($arg[0]);
-                        if($person) {
-                            $person_id=$person[0]->getId();
-                            $vars["photographer_id"]=$person_id;
                         } else {
-                            echo "Person not found: $arg[0]\n";
-                            exit(cli::EXIT_PERSON_NOT_FOUND);
+                            $person=person::getByName($name);
+                            if($person) {
+                                $person_id=$person[0]->getId();
+                                $vars["photographer_id"]=$person_id;
+                            } else {
+                                echo "Person not found: $name\n";
+                                exit(cli::EXIT_PERSON_NOT_FOUND);
+                            }
                         }
                     }
                     break;
                 case "location":
-                    if(self::$command=="new" || (settings::$importAutoadd && !place::getByName($name))) {
-                        foreach($arg as $name) {
+                    foreach($arg as $name) {
+                        if(self::$command=="new" || (settings::$importAutoadd && !place::getByName($name))) {
                             $parent=array_shift($args["pplace"]);
                             // this is a string comparison because the trim() in process() changes
                             // everything into a string...
@@ -470,20 +470,20 @@ class arguments {
                                 if($pplace) {
                                     $parent_id=$pplace[0]->getId();
                                 } else {
-                                echo "Location not found: $parent\n";
-                                exit(cli::EXIT_LOC_NOT_FOUND);
+                                    echo "Location not found: $parent\n";
+                                    exit(cli::EXIT_PLACE_NOT_FOUND);
+                                }
                             }
-                        }
-                        $vars["_new_place"][]=array("parent" => $parent_id, "name" => $name);
-                        }
-                    } else {
-                        $place=place::getByName($arg[0]);
-                        if($place) {
-                            $place_id=$place[0]->getId();
-                            $vars["location_id"]=$place_id;
+                            $vars["_new_place"][]=array("parent" => $parent_id, "name" => $name);
                         } else {
-                            echo "Place not found: $arg[0]\n";
-                        exit(cli::EXIT_PLACE_NOT_FOUND);
+                            $place=place::getByName($arg[0]);
+                            if($place) {
+                                $place_id=$place[0]->getId();
+                                $vars["location_id"]=$place_id;
+                            } else {
+                                echo "Place not found: $arg[0]\n";
+                                exit(cli::EXIT_PLACE_NOT_FOUND); 
+                            }
                         }
                     }
                     break;
