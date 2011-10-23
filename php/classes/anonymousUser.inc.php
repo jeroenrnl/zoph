@@ -124,7 +124,7 @@ final class anonymousUser extends user {
      * No permissions for anonymous user
      */
     function get_permissions_for_photo($photo_id) {
-        return null;
+        return new group_permissions(0,0);
     }
 
     /**
