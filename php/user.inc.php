@@ -95,6 +95,7 @@ class user extends zophTable {
 
 
     function get_album_permissions($album_id) {
+        $group_id_array=array();
         if(!is_numeric($album_id)) { die("album_id must be numeric"); }
         if(!$album_id) { return; }
 
