@@ -224,28 +224,30 @@ class language {
     public static function http_accept() {
         $langs=array();
         $genlangs=array();
+        $return=array();
+        if(isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
+            $accept_langs=explode(",", $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
+            foreach ($accept_langs as $al) {
+                # Some browers add a 'quality' identifier to indicate
+                # the preference of this language, something like en;q=1.0
+                $l=explode(";",$al);
+                $langs[]=strtolower($l[0]);
 
-        $accept_langs=explode(",", $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
-        foreach ($accept_langs as $al) {
-            # Some browers add a 'quality' identifier to indicate
-            # the preference of this language, something like en;q=1.0
-            $l=explode(";",$al);
-            $langs[]=strtolower($l[0]);
-
-            # A user could select a "sublanguage" such as en-gb for British
-            # English, or de-ch for Swiss German to make sure that 
-            # Zoph offers these users English or German, unless the more
-            # specific one is available (Zoph has a Canadian English
-            # translation for example), we add both en-gb and en to the list
-            if(strpos($l[0], "-")) {
-                $genlang=explode("-", $l[0]);
-                $genlangs[]=strtolower($genlang[0]);
+                # A user could select a "sublanguage" such as en-gb for British
+                # English, or de-ch for Swiss German to make sure that 
+                # Zoph offers these users English or German, unless the more
+                # specific one is available (Zoph has a Canadian English
+                # translation for example), we add both en-gb and en to the list
+                if(strpos($l[0], "-")) {
+                    $genlang=explode("-", $l[0]);
+                    $genlangs[]=strtolower($genlang[0]);
+                }
             }
+            
+            $return=array_unique(array_merge($langs, $genlangs));
+            log::msg("<b>Client accepts language(s):</b>: " . $_SERVER["HTTP_ACCEPT_LANGUAGE"], log::DEBUG, log::LANG);
+            log::msg("<b>Zoph's interpretation</b>: " . implode(", ", $return), log::DEBUG, log::LANG);
         }
-        
-        $return=array_unique(array_merge($langs, $genlangs));
-        log::msg("<b>Client accepts language(s):</b>: " . $_SERVER["HTTP_ACCEPT_LANGUAGE"], log::DEBUG, log::LANG);
-        log::msg("<b>Zoph's interpretation</b>: " . implode(", ", $return), log::DEBUG, log::LANG);
         return $return;
     }
 }
