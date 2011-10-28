@@ -63,7 +63,7 @@
         }
     } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {
         $photo = new photo($photo_id);
-        $found = $photo->lookup($user);
+        $found = $photo->lookupForUser($user);
     } else {
         die("Illegal type");
     }
@@ -117,7 +117,6 @@
                       header("HTTP/1.1 304 Not Modified");
                       exit;
                 }
-
                 $image_type = get_image_type($image_path);
                 if ($image_type) {
                     header("Content-Length: " . $filesize);

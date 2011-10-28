@@ -30,7 +30,7 @@
 
     $_qs=getvar("_qs");
     
-    $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
+    $qs = preg_replace('/_crumb=\d+&?/', '', $_SERVER["QUERY_STRING"]);
     $qs = preg_replace('/_action=\w+&?/', '', $qs);
     $encoded_qs = urlencode(htmlentities($_qs));
     if (empty($encoded_qs)) {
@@ -57,16 +57,22 @@
             $photo_id = $photo->get("photo_id");
             if(isset($_action) && !$_action=="" ) {
                 $act="_action=" . $_action . "&";
+            } else {
+                $act="";
             }
 
             if ($offset > 0) {
                 $newoffset = $offset - 1;
-                $prev_link = "<a href=\"" . $PHP_SELF . "?" . $act . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Prev") . "</a>";
+                $prev_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Prev") . "</a>";
+            } else {
+                $prev_link = "";
             }
 
             if ($offset + 1 < $num_photos) {
                 $newoffset = $offset + 1;
-                $next_link = "<a href=\"" . $PHP_SELF . "?" . $act . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Next") . "</a>";
+                $next_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Next") . "</a>";
+            } else {
+                $next_link = "";
             }
         }
         else {
@@ -267,7 +273,7 @@
     }
 
     if ($action != "insert") {
-        $found = $photo->lookup($user);
+        $found = $photo->lookupForUser($user);
         $title = $photo->get("name");
 
     } else {
@@ -310,7 +316,7 @@ require_once("header.inc.php");
         if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
         <div id="rotate">
-            <form action="<?php echo $PHP_SELF ?>" method="POST">
+            <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
                 <p>
                     <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
                     <select name="_deg">
@@ -387,7 +393,7 @@ require_once("header.inc.php");
                 }
             if (ALLOW_RATINGS && ($user->is_admin() || $user->get("allow_rating"))) {
 ?>
-<form id="ratingform" action="<?php echo $PHP_SELF ?>" method="POST">
+<form id="ratingform" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
         <input type="hidden" name="_action" value="rate">
         <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
         <?php echo create_rating_pulldown($photo->get_rating($user)); ?>

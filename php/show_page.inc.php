@@ -22,6 +22,7 @@ if($page[0]=="show_page.inc.php") {
 }
 
 // If no page is set, we always show original.
+$page_html="";
 $show_orig=true;
 if($obj->get("pageset")) {
     $pageset=new pageset($obj->get("pageset"));
@@ -50,12 +51,12 @@ if($obj->get("pageset")) {
     $page->lookup();
     $page_html="<div class='page'>" .
         $page->display() .
-        pager($pageset_page, $pagecount, $pagecount, 1, 5, $PHP_SELF, $request_vars, "_pageset_page") .
+        pager($pageset_page, $pagecount, $pagecount, 1, 5, $request_vars, "_pageset_page") .
         "<br>\n</div>\n";
 
     if($pageset->get("orig_pos") == "bottom") {
         echo $page_html;
-        unset($page_html);
+        $page_html="";
     }
 }
 

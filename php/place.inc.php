@@ -281,7 +281,7 @@ class place extends zophTreeTable {
         $cover=false;
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-            if($coverphoto->lookup($user)) {
+            if($coverphoto->lookupForUser($user)) {
                 $cover=true;
             }
         } 
@@ -314,7 +314,8 @@ class place extends zophTreeTable {
                     DB_PREFIX . "photos as p" .
                     $place_where . " " . $order;
             }
-            $coverphoto=array_shift(photo::getRecordsFromQuery("photo", $sql));
+            $coverphotos=photo::getRecordsFromQuery("photo", $sql);
+            $coverphoto=array_shift($coverphotos);
         }
 
         if (!empty($coverphoto)) {
@@ -327,8 +328,8 @@ class place extends zophTreeTable {
         }
 
     }
-    function getMappingJs($user,$edit=false) {
-         $js=parent::getMappingJs($user, ICONSET . "/geo-place.png", $edit);
+    function getMappingJs(user $user, $edit=false, $icon = "/geo-place.png") {
+         $js=parent::getMappingJs($user, $edit, $icon);
          if (!$edit) {
             $js.=getMarkers($this->getChildren($user), $user);
         }
@@ -463,8 +464,7 @@ class place extends zophTreeTable {
     }
         
 
-    function getMarker($user) {
-        $icon=ICONSET . "/geo-place.png";
+    function getMarker(user $user, $icon="geo-place.png") {
         return parent::getMarker($user, $icon);
     }
 
@@ -564,7 +564,7 @@ class place extends zophTreeTable {
                 "limit 0, $TOP_N";
         }
 
-        return parent::getTopN("place", $sql);
+        return parent::getTopNfromSQL("place", $sql);
 
     }
 }

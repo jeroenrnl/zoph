@@ -29,7 +29,7 @@ if(!ZOPH) {
     <head>
         <?php echo $this->getHead(); ?>
     </head>
-    <body <?php echo $tpl_body_attr; ?>>
+    <body>
         <?php echo $tpl_body; ?>
     </body>
 </html>

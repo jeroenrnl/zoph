@@ -52,7 +52,7 @@
       <div class="main" id="passwordchange">
          <form action="password.php" method="POST">
 <?php
-    if ($msg) {
+    if (isset($msg)) {
 ?>
           <?php echo $msg ?>.
 <?php

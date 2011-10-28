@@ -36,11 +36,25 @@ class photo extends zophTable {
         $this->set("photo_id",$id);
     }
 
-    function lookup($user = null) {
+    function lookup() {
+        $sql = "SELECT * FROM " . DB_PREFIX . "photos " .
+            "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "'";
+        
+        $success = $this->lookupFromSQL($sql);
+
+        if ($success) {
+            $this->lookup_photographer();
+            $this->lookup_location();
+        }
+
+        return $success;
+    }
+
+    function lookupForUser(user $user) {
 
         if (!$this->get("photo_id")) { return; }
 
-        if ($user && !$user->is_admin()) {
+        if (!$user->is_admin()) {
             $sql =
                 "select p.* from " .
                 DB_PREFIX . "photos as p JOIN " .
@@ -54,11 +68,8 @@ class photo extends zophTable {
                 " AND gu.user_id = '" . escape_string($user->get("user_id")) . "'" .
                 " AND gp.access_level >= p.level " .
                 "LIMIT 0, 1";
-        }
-        else {
-            $sql =
-                "select * from " . DB_PREFIX . "photos " .
-                "where photo_id = '" . escape_string($this->get("photo_id")) . "'";
+        } else {
+            return $this->lookup();
         }
 
         $success = $this->lookupFromSQL($sql);
@@ -70,6 +81,8 @@ class photo extends zophTable {
 
         return $success;
     }
+
+    
 
     function lookup_photographer() {
         if ($this->get("photographer_id") > 0) {
@@ -552,6 +565,8 @@ class photo extends zophTable {
             // times, however we will allow only one from the same IP
             $where = " and ipaddress = '" . 
                 escape_string($_SERVER["REMOTE_ADDR"])."' ";
+        } else {
+            $where="";
         }
 
         $query =
@@ -944,7 +959,6 @@ class photo extends zophTable {
 
                 $real_key = Substr($key, 0, strlen($key) - 3);
                 $real_val = $vars[$real_key];
-                remove_magic_quotes($real_val);
 
                 /* *****************************************
                  *  Have to handle title separately because
@@ -957,7 +971,6 @@ class photo extends zophTable {
                 }
                 else if ($real_key == "extra") {
                    $real_key = $vars["extra_name"];
-                   remove_magic_quotes($real_key);
                 }
 
             $out_array[$real_key] = translate($real_key, 0) . ": " .
@@ -1097,7 +1110,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             translate("comment") => $this->get("comment"));
     }
 
-    function getEditArray() {
+    public function getEditArray(user $user = null) {
         return array(
             "Title" => create_text_input("title", $this->title),
             "Date" => create_text_input("date", $this->date_taken),
@@ -1124,13 +1137,13 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 $camera_tz=new TimeZone(CAMERA_TZ);
             }    
                 
-            if(!$place_tz && $camera_tz) {
+            if(!isset($place_tz) && isset($camera_tz)) {
                 // Camera timezone is known, place timezone is not.
                 $place_tz=$camera_tz;
-            } else if ($place_tz && !$camera_tz) {
+            } else if (isset($place_tz) && !isset($camera_tz)) {
                 // Place timezone is known, camera timezone is not.
                 $camera_tz=$place_tz;
-            } else if (!$place_tz && !$camera_tz) {
+            } else if (!isset($place_tz) && !isset($camera_tz)) {
                 // Neither are set
                 $camera_tz=new TimeZone(date_default_timezone_get());
                 $place_tz=$camera_tz;
@@ -1209,7 +1222,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         $tpl=new template("rating_details",array(
             "rating" => $rating,
             "ratings" => $ratings,
-            "photo_id" => $this->photo_id
+            "photo_id" => $this->get("photo_id")
         ));
 
 
@@ -1341,24 +1354,15 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         return $html;
     }
 
-    function getMarker($user, $check_loc=true) {
-        $icon=ICONSET . "/geo-photo.png";
+    function getMarker(user $user, $icon="geo-photo.png") {
         $js=parent::getMarker($user, $icon); 
-        if(!$js && $check_loc) {
+        if(empty($js)) {
             $loc=$this->location;
             if($loc) {
                 $js=$loc->getMarker($user); 
             }
         }
-        if($js) {
-            return($js);
-        } else {
-            return null;
-        }
-    }
-
-    function getMappingJs($user,$edit=false) {
-         return parent::getMappingJs($user, ICONSET . "/geo-photo.png", $edit);
+        return $js;
     }
 
     /**

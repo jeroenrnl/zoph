@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * Check if user is logged in, or perform authentication
+ * 
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,14 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * This file lets a user pass through if one of the following is true:
+ * - a valid username/password was given
+ * - a $user object was found in the session
+ * - a default user has been defined in config.inc.php
+ * @todo Should be moved inside a class
+ *
+ * @package zoph
+ * @author Jason Geiger and Jeroen Roos
  */
-
-    /*
-     * This file lets a user pass through if one of the following is true:
-     * - a valid username/password was given
-     * - a $user object was found in the session
-     * - a default user has been defined in config.inc.php
-     */
+    $_action="display";
     if(!defined("CLI")) {
         session_start();
         if (array_key_exists('user', $_SESSION)) {
@@ -83,10 +88,6 @@
             $user->lookup();
             $user->lookup_person();
             $user->lookup_prefs();
-
-            if (!minimum_version('4.1.0')) {
-                session_register("user");
-            }
 
             // Update Last Login Fields
             $updated_user = new user($user->get("user_id"));

@@ -137,6 +137,7 @@ class group extends zophTable {
     }
 
     function get_members_links($separator="&nbsp;") {
+        $html="";
         $members=$this->get_members();
         if($members) {
             foreach ($members as $member) {

@@ -202,11 +202,11 @@ class person extends zophTable {
     function get_coverphoto($user,$autothumb=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-            if(!$coverphoto->lookup($user)) {
+            if(!$coverphoto->lookupForUser($user)) {
                 unset($coverphoto);
             }
         } 
-        if ($autothumb && !$coverphoto) {
+        if (!is_null($autothumb) && !isset($coverphoto)) {
             $order=get_autothumb_order($autothumb);
             if ($user && !$user->is_admin()) {
                 $sql=
@@ -236,7 +236,8 @@ class person extends zophTable {
                     escape_string($this->get("person_id")) .
                     " " . $order;
             }
-            $coverphoto=array_shift(photo::getRecordsFromQuery("photo", $sql));
+            $coverphotos=photo::getRecordsFromQuery("photo", $sql);
+            $coverphoto=array_shift($coverphotos);
 
         }
 
@@ -417,7 +418,7 @@ class person extends zophTable {
                 "limit 0, " . escape_string($TOP_N);
         }
 
-        return parent::getTopN("person", $sql);
+        return parent::getTopNfromSQL("person", $sql);
 
     }
 }
@@ -468,6 +469,8 @@ function get_all_people($user = null, $search = null, $search_first = false) {
         $where=" WHERE person_id IN (" .$keys . ")";
     } else if ($search!==null) {
         $where=get_where_for_search(" WHERE ", $search, $search_first);
+    } else {
+        $where="";
     }
 
     $sql="SELECT * FROM " . DB_PREFIX . "people AS ppl " . $where .
@@ -599,6 +602,8 @@ function create_person_pulldown($name, $value=null, user $user, $sa=null) {
         $person=new person($value);
         $person->lookup();
         $text=$person->getName();
+    } else {
+        $text = "";
     }
     if($user->prefs->get("autocomp_people") && AUTOCOMPLETE && JAVASCRIPT) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .

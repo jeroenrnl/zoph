@@ -88,9 +88,9 @@
            <?php echo translate("email") ?>
          </h1>
       <div class="main">
-<form action="<?php echo $PHP_SELF ?>" method="POST">
+<form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
 <?php
-    if ($msg) {
+    if (isset($msg)) {
 ?>
             <?php echo $msg ?>
 <?php

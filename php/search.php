@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
     require_once("include.inc.php");
+    $title=translate("search",0);
     if ($_action=="insert") {
         $search=new search();
         $search->set("owner", $user->get("user_id"));
@@ -24,7 +25,7 @@
                $_action == "delete" ) {
         $search_id=getvar("search_id");
         $search=new search($search_id);
-        $search->lookup($user);
+        $search->lookupForUser($user);
         if (!($search->get("owner") == $user->get("user_id") || 
             $user->is_admin())) {
             redirect(add_sid("zoph.php"));
@@ -59,7 +60,7 @@
             $action="update";
             $search_id=getvar("search_id");
             $search=new search($search_id);
-            $search->lookup($user);
+            $search->lookupForUser($user);
             $url=$search->get("search");
         }   
         require_once("header.inc.php");
@@ -90,7 +91,7 @@
     } else if ($_action=="delete") {
         $search_id=getvar("search_id");
         $search=new search($search_id);
-        $search->lookup($user);
+        $search->lookupForUser($user);
         $url="search.php?search_id=" . $search->get("search_id") . 
             "&_action=confirm";
         require_once("header.inc.php");

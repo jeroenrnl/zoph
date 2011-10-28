@@ -200,7 +200,7 @@
 
                 $deg = $request_vars["_deg__$photo_id"];
                 if ($deg && $deg != 0) {
-                    $photo->lookup($user);
+                    $photo->lookupForUser($user);
                     $photo->rotate($deg);
                 }
             }
@@ -213,7 +213,7 @@
                 $request_vars["_action"]="display";
             }
 		
-            $photo->lookup($user);
+            $photo->lookupForUser($user);
 
             $queryIgnoreArray[] = "__photo_id__$photo_id";
             $queryIgnoreArray[] = "__location_id__$photo_id";
@@ -380,7 +380,7 @@
             $pager_vars[$key] = $val;
         }
         $request_vars = $pager_vars;
-        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $PHP_SELF, $request_vars, "_off");
+        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $request_vars, "_off");
     } // if photos
 ?>
 <br>

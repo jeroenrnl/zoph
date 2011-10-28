@@ -17,14 +17,17 @@
  */
 
 function get_url() {
-    // set to _SERVER in variables.inc.php for versions >= 4.1
-    global $HTTP_SERVER_VARS;
+    $script = $_SERVER['PHP_SELF'];
 
-    $script = $HTTP_SERVER_VARS['PHP_SELF'];
+
+    if(isset($_SERVER["HTTPS"]) && !empty($_SERVER['HTTPS'])) {
+        $proto="https://";
+    } else {
+        $proto="http://";
+    }
 
     $url =
-        "http" . ($HTTP_SERVER_VARS['HTTPS'] == 'on' ? 's' : '') . '://' .
-        $HTTP_SERVER_VARS['SERVER_NAME'] . '/' .
+        $proto . $_SERVER['SERVER_NAME'] . '/' .
         substr($script, 1, strrpos($script, '/'));
 
     return $url;
@@ -379,6 +382,15 @@ function add_sid($url) {
     return $url;
 }
 
+function minimum_version($vercheck) {
+    $minver = (int)str_replace('.', '', $vercheck);
+    $curver = (int)str_replace('.', '', phpversion());
+    if($curver >= $minver)
+        return true;
+    return false;
+}
+
+
 function make_title($string) {
     $string = str_replace("_", " ", $string);
     $string = preg_replace("/\b(\w)/e", "strtoupper('\\1')", $string);
@@ -720,7 +732,8 @@ function watermark_image($orig, $watermark, $positionX = "center", $positionY = 
     return $orig;
 }
 
-function pager($current, $total, $num_pages, $page_size, $max_size, $url, $request_vars, $var) {
+function pager($current, $total, $num_pages, $page_size, $max_size, $request_vars, $var) {
+    $url=$_SERVER['PHP_SELF'];
     $page_num = floor($current / $page_size) + 1;
     if ($current > 0) {
         $new_offset = max(0, $current - $page_size);
@@ -730,7 +743,7 @@ function pager($current, $total, $num_pages, $page_size, $max_size, $url, $reque
         $html.="'>" . translate("Prev") . "</a> ]\n";
         $html.="</div>\n";
     } else {
-        $html.="<div class='prev'>&nbsp;</div>\n";
+        $html="<div class='prev'>&nbsp;</div>\n";
     }
 
     if ($num_pages > 1) {
@@ -868,7 +881,7 @@ function get_sql_for_order($order) {
         $sql="rand() as random ";
         break;
     }
-    if($sql) {
+    if(isset($sql)) {
         return ", " . $sql;
     } else {
         return null;

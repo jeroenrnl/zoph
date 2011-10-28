@@ -28,10 +28,7 @@ class prefs extends zophTable {
         if($id && !is_numeric($id)) { die("user_id must be numeric"); }
         parent::__construct("prefs", array("user_id"), array(""));
         $this->set("user_id", $id);
-    }
-
-    function insert() {
-        parent::insert(1); // insert user_id primary key
+        $this->keepKeys = true;
     }
 
     function lookup_color_scheme($force = 0) {

@@ -222,11 +222,10 @@ class language {
      * @return array array of languages in preference order
      */
     public static function http_accept() {
-        global $HTTP_ACCEPT_LANGUAGE;
         $langs=array();
         $genlangs=array();
 
-        $accept_langs=explode(",", $HTTP_ACCEPT_LANGUAGE);
+        $accept_langs=explode(",", $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
         foreach ($accept_langs as $al) {
             # Some browers add a 'quality' identifier to indicate
             # the preference of this language, something like en;q=1.0
@@ -245,7 +244,7 @@ class language {
         }
         
         $return=array_unique(array_merge($langs, $genlangs));
-        log::msg("<b>HTTP_ACCEPT_LANGUAGE</b>: " . $HTTP_ACCEPT_LANGUAGE, log::DEBUG, log::LANG);
+        log::msg("<b>Client accepts language(s):</b>: " . $_SERVER["HTTP_ACCEPT_LANGUAGE"], log::DEBUG, log::LANG);
         log::msg("<b>Zoph's interpretation</b>: " . implode(", ", $return), log::DEBUG, log::LANG);
         return $return;
     }

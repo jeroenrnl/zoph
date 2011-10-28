@@ -36,7 +36,7 @@
     require_once("header.inc.php");
     $photo_id = getvar("photo_id");
     $photo = new photo($photo_id);
-    $found = $photo->lookup($user);
+    $found = $photo->lookupForUser($user);
 ?>
           <h1><?php echo strtolower($title) ?></h1>
       <div class="main">

@@ -22,8 +22,6 @@
 
     global $SHOW_BREADCRUMBS;
     global $MAX_CRUMBS_TO_SHOW;
-    global $PHP_SELF;
-    global $REQUEST_URI;
     global $user;
     global $_qs;
 
@@ -34,9 +32,9 @@
 
     // construct the link for clearing the crumbs (the 'x' on the right)
     if($_POST) {
-        $clear_url=$PHP_SELF . "?" . $_qs;
+        $clear_url=$_SERVER["PHP_SELF"] . "?" . $_qs;
     } else {
-        $clear_url = htmlentities($REQUEST_URI);
+        $clear_url = htmlentities($_SERVER["REQUEST_URI"]);
     }
 
     if(strpos($clear_url, "clear_crumbs") == 0) {
@@ -61,17 +59,16 @@
     }
     // only add a crumb if a title was set and if there is either no
     // action or a safe action ("edit", "delete", etc would be unsafe)
-    $page=array_reverse(explode("/",$PHP_SELF));
+    $page=array_reverse(explode("/",$_SERVER['PHP_SELF']));
     $page=$page[0];
-    if (!isset($skipcrumb) && $title && count($user->crumbs) < MAX_CRUMBS &&
-        (!$_action || ($_action == "display" || 
+    if (!isset($skipcrumb) && isset($title) && count($user->crumbs) < MAX_CRUMBS &&
+        (empty($_action) || ($_action == "display" || 
         $_action == "search" || $_action == translate("search") ||
         $_action == "notify" || $_action == "compose" || 
         ($user->prefs->get("auto_edit") && $_action != "update" &&
         $_action != "select" && $_action != "deselect" &&
         $_action != "delrate" && $page == "photo.php")))) {
-
-        $user->add_crumb($title, htmlentities($REQUEST_URI));
+        $user->add_crumb($title, htmlentities($_SERVER["REQUEST_URI"]));
     }
 
     if (!$user->crumbs) {

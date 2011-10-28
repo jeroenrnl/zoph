@@ -21,8 +21,8 @@
     require_once("variables.inc.php");
     require_once("util.inc.php");
 
-    if(isset($HTTP_GET_VARS["redirect"])) {
-        $redirect = urlencode($HTTP_GET_VARS["redirect"]);
+    if(isset($_GET["redirect"])) {
+        $redirect = urlencode($_GET["redirect"]);
     } else {
         $redirect = "";
     }

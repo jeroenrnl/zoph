@@ -44,10 +44,10 @@
 
     $newoffset = $offset + 1;
 
-    $qs = implode("&amp;", explode("&", $QUERY_STRING));
+    $qs = implode("&amp;", explode("&", $_SERVER["QUERY_STRING"]));
     $clean_qs=update_query_string($clean_vars, "", 0);
     $new_qs = $qs;
-    if (strpos($QUERY_STRING, "_off=") !== false ) {
+    if (strpos($_SERVER["QUERY_STRING"], "_off=") !== false ) {
         $new_qs = str_replace("_off=$offset", "_off=$newoffset", $new_qs);
     }
     else {
@@ -66,12 +66,9 @@
 <link TYPE="text/css" REL="stylesheet" HREF="<?php echo CSS_SHEET ?>">
 <?php
 if (!$_pause) {
-        // bug#667480: header() didn't work with IE on Mac
-        // manually set http-equiv instead
-        //header("Refresh: $SLIDESHOW_TIME;URL=$PHP_SELF?$new_qs");
-        $header = "<meta http-equiv=\"refresh\" content=\"$SLIDESHOW_TIME;URL=$PHP_SELF?$new_qs\">\n";
-    }
-    else {
+        $header = "<meta http-equiv=\"refresh\" content=\"" . $SLIDESHOW_TIME . ";URL=" . $_SERVER["PHP_SELF"] . "?" . $new_qs. "\">\n";
+    } else {
+        $header="";
         $new_qs = str_replace("&amp;_pause=1", "", $new_qs);
     }
 
@@ -85,12 +82,12 @@ if (!$_pause) {
 <?php
     if ($_pause) {
 ?>
-      <a href="<?php echo $PHP_SELF . '?' . $new_qs ?>"><?php echo translate("continue") ?></a> |
+      <a href="<?php echo $_SERVER["PHP_SELF"] . '?' . $new_qs ?>"><?php echo translate("continue") ?></a> |
 <?php
     }
     else {
 ?>
-      <a href="<?php echo $PHP_SELF . '?' . $qs . '&amp;' . "_pause=1" ?>"><?php echo translate("pause") ?></a> |
+      <a href="<?php echo $_SERVER["PHP_SELF"] . '?' . $qs . '&amp;' . "_pause=1" ?>"><?php echo translate("pause") ?></a> |
 <?php
     }
 ?>

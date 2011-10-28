@@ -41,7 +41,7 @@
     }
 
     $photo = new photo($photo_id);
-    $found = $photo->lookup($user);
+    $found = $photo->lookupForUser($user);
 
     if (!$found) {
         $msg = sprintf(translate("Could not find photo id %s."), $photo_id);
@@ -131,7 +131,7 @@
 ?>
   <?php echo translate("email photo") ?>
           </h1>
-<form action="<?php echo $PHP_SELF ?>" method="post">
+<form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="post">
       <div class="main">
 <?php
     if ($msg) {

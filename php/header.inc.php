@@ -17,7 +17,6 @@
 
     header("Content-Type: text/html; charset=utf-8");
     global $user;
-    global $PHP_SELF;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
@@ -142,11 +141,11 @@
         $tabs[translate("logout", 0)] = "zoph.php?_action=logout";
     }
 
-    if (strpos($PHP_SELF, "/") === false) {
-        $self = $PHP_SELF;
+    if (strpos($_SERVER["PHP_SELF"], "/") === false) {
+        $self = $_SERVER["PHP_SELF"];
     }
     else {
-        $self = substr(strrchr($PHP_SELF, "/"), 1);
+        $self = substr(strrchr($_SERVER['PHP_SELF'], "/"), 1);
     }
 
     while (list($label, $page) = each($tabs)) {

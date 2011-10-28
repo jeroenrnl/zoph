@@ -41,3 +41,12 @@ if(!ini_get("date.timezone")) {
     log::msg("You should set your timezone in php.ini, guessing it should be $tz", log::WARN, log::GENERAL);
     date_default_timezone_set($tz);
 }
+
+if (ini_get('magic_quotes_sybase')) {
+    log::msg("magic_quotes_sybase is on, switch off in php.ini", log::FATAL, log::VARS);
+} else if (get_magic_quotes_runtime()) {
+    log::msg("magic_quotes_runtime is on, switch off in php.ini", log::FATAL, log::VARS);
+} else if (get_magic_quotes_gpc()) {
+    log::msg("magic_quotes_gpc is on, switch off in php.ini", log::FATAL, log::VARS);
+}
+

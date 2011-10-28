@@ -86,7 +86,7 @@
     <h1>
         <span class="actionlink">
 <?php
-    $qs = preg_replace('/_crumb=\d+&?/', '', $QUERY_STRING);
+    $qs = preg_replace('/_crumb=\d+&?/', '', $_SERVER["QUERY_STRING"]);
     $qs_no_action=preg_replace('/_action=\w+&?/', '', $qs);
 
     $qs=htmlentities($qs);
@@ -202,7 +202,7 @@
 ?>
        <br>
 <?php
-        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $PHP_SELF, $vars, "_off");
+        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $vars, "_off");
     } // if photos
 ?>
        <br>

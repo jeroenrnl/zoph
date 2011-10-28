@@ -42,6 +42,7 @@ class category extends zophTreeTable {
     }
 
     function getChildren($user=null,$order=null) {
+        $order_fields="";
         if($order && $order!="name") {
             $order_fields=get_sql_for_order($order);
             $order=" ORDER BY " . $order . ", name ";
@@ -148,7 +149,7 @@ class category extends zophTreeTable {
         return category::getCountFromQuery($sql);
     }
 
-    function getEditArray($user) {
+    public function getEditArray(user $user = null) {
         if($this->is_root()) {
             $parent=array(
                 translate("parent category"),
@@ -212,11 +213,11 @@ class category extends zophTreeTable {
     function get_coverphoto($user,$autothumb=null,$children=null) {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-            if ($coverphoto->lookup($user)) {
-                $cover=TRUE;
+            if (!$coverphoto->lookupForUser($user)) {
+                unset($coverphoto);
             }
         }
-        if ($autothumb && !$cover) {
+        if (isset($autothumb) && !isset($coverphoto)) {
             $order=get_autothumb_order($autothumb);
             if($children) {
                 $cat_where=" WHERE pc.category_id in (" . $this->get_branch_ids($user) .")";
@@ -249,10 +250,11 @@ class category extends zophTreeTable {
                     " pc.photo_id = p.photo_id" .
                     $cat_where . " " . $order;
             }
-            $coverphoto=array_shift(photo::getRecordsFromQuery("photo", $sql));
+            $coverphotos=photo::getRecordsFromQuery("photo", $sql);
+            $coverphoto=array_shift($coverphotos);
         }
 
-        if ($coverphoto) {
+        if (isset($coverphoto) && $coverphoto instanceof photo) {
             $coverphoto->lookup();
             return $coverphoto->get_image_tag(THUMB_PREFIX);
         } else if (!$children) {
@@ -415,7 +417,7 @@ class category extends zophTreeTable {
                 "limit 0, " . escape_string($TOP_N);
         }
 
-        return parent::getTopN("category", $sql);
+        return parent::getTopNfromSQL("category", $sql);
 
     }
 }

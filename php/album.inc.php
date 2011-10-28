@@ -34,13 +34,24 @@ class album extends zophTreeTable {
     public function getId() {
         return (int) $this->get("album_id");
     }
+
+    public function lookup() {
+        $id = $this->get("album_id");
+        if(!is_numeric($id)) { die("album_id must be numeric"); }
+        if (!$id) { return; }
     
-    function lookup($user = null) {
+        $sql =
+            "select * from " . DB_PREFIX . "albums " .
+            "where album_id = " . escape_string($id);
+        return $this->lookupFromSQL($sql);
+    }
+
+    public function lookupForUser(user $user) {
         $id = $this->get("album_id");
         if(!is_numeric($id)) { die("album_id must be numeric"); }
         if (!$id) { return; }
 
-        if ($user && !$user->is_admin()) {
+        if (!$user->is_admin()) {
             $sql =
                  "select a.* from "  .
                  DB_PREFIX . "albums as a JOIN " .
@@ -51,14 +62,10 @@ class album extends zophTreeTable {
                  "where gp.album_id = '" . escape_string($id) . "'" .
                  " and gu.user_id = '" . 
                  escape_string($user->get("user_id"))."'";
+            return $this->lookupFromSQL($sql);
+        } else {
+            return $this->lookup();
         }
-        else {
-            $sql =
-                "select * from " . DB_PREFIX . "albums " .
-                "where album_id = " . escape_string($id);
-        }
-
-        return $this->lookupFromSQL($sql);
     }
 
     function delete() {
@@ -267,7 +274,7 @@ class album extends zophTreeTable {
         return album::getCountFromQuery($sql);
     }
 
-    function getEditArray($user) {
+    public function getEditArray(user $user = null) {
         if($this->is_root()) {
             $parent=array (
                 translate("parent album"),
@@ -340,7 +347,7 @@ class album extends zophTreeTable {
         $cover=false;
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-            if($coverphoto->lookup($user)) {
+            if($coverphoto->lookupForUser($user)) {
                 $cover=TRUE;
             }
         }
@@ -376,7 +383,8 @@ class album extends zophTreeTable {
                     $album_where .
                     " " . $order;
             }
-            $coverphoto=array_shift(photo::getRecordsFromQuery("photo", $sql));
+            $coverphotos=photo::getRecordsFromQuery("photo", $sql);
+            $coverphoto=array_shift($coverphotos);
         }
 
         if ($coverphoto instanceof photo) {
@@ -458,7 +466,7 @@ class album extends zophTreeTable {
                 "limit 0, " . escape_string($TOP_N);
         }
 
-        return parent::getTopN("album", $sql);
+        return parent::getTopNfromSQL("album", $sql);
 
     }
 

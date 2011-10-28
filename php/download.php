@@ -87,8 +87,8 @@
             $newoffset=$offset + $number + 1;
             echo "<iframe style=\"border: none; width: 100%; height: 4em\" src=download.php?_action=download&_filename=" . $filename . "&_filenum=" . $filenum . "></iframe>";
                        
-            $new_qs=str_replace("_off=$offset", "_off=$newoffset", $QUERY_STRING);
-            if($new_qs==$QUERY_STRING) {
+            $new_qs=str_replace("_off=$offset", "_off=$newoffset", $_SERVER["QUERY_STRING"]);
+            if($new_qs==$_SERVER["QUERY_STRING"]) {
                 $new_qs=$new_qs . "&_off=$newoffset";
             }
             $qs=$new_qs;

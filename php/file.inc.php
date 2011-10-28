@@ -288,7 +288,7 @@ class file {
     public function getMime() {
         $fileinfo=new finfo(FILEINFO_MIME, MAGIC_FILE);
         $mime=explode(";", $fileinfo->file($this->readlink()));
-        log::msg("<b>" . $file . "</b>: " . $mime[0], log::DEBUG, log::IMPORT);
+        log::msg("<b>" . $this->readlink() . "</b>: " . $mime[0], log::DEBUG, log::IMPORT);
         $this->type=get_filetype($mime[0]);
         return $mime[0];
     }

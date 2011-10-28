@@ -30,6 +30,7 @@ class group_permissions extends zophTable {
         parent::__construct("group_permissions", array("group_id", "album_id"), array(""));
         $this->set("group_id", $gid);
         $this->set("album_id", $aid);
+        $this->keepKeys=true;
     }
 
     function insert() {
@@ -53,7 +54,7 @@ class group_permissions extends zophTable {
             $gp->insert();
         }
 
-        parent::insert(1);
+        parent::insert();
     }
 
     function delete() {

@@ -27,8 +27,14 @@ class search extends zophTable {
         $this->set("search_id", $id);
 
     }
+    
+    public function lookup() {
+        $sql="SELECT * FROM " . DB_PREFIX . "saved_search WHERE " .
+            "search_id=" . escape_string($this->get("search_id"));
+        return $this->lookupFromSQL($sql);
+    }
 
-    function lookup($user) {
+    public function lookupForUser(user $user) {
         
         if(!$user->is_admin()) {
             $where= "(owner=" . escape_string($user->get("user_id")) . 
@@ -50,7 +56,7 @@ class search extends zophTable {
         // This should be created some time, but might slow down too much
     }
 
-    function getEditArray($user) {
+    public function getEditArray(user $user = null) {
         $edit_array=array();
 
 
@@ -58,7 +64,7 @@ class search extends zophTable {
             translate("Name"),  
             create_text_input("name", $this->get("name"),40,64));
 
-        if($user->is_admin()) {
+        if($user instanceof user && $user->is_admin()) {
             $edit_array[]=array (
                 translate("Owner"),
                 create_pulldown("owner", $this->get("owner"), template::createSelectArray(user::getRecords("user", "user_name"), array("user_name"))));

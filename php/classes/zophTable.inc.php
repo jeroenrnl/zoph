@@ -31,13 +31,15 @@
 abstract class zophTable {
     /** @var string The name of the database table */
     public $table_name;
-    /** @var array Lisy of primary keys */
+    /** @var array List of primary keys */
     public $primary_keys;
     /** @var array Contains the values of attributes that will be stored in the db */
     public $fields;
     /** @var array Fields that may not be empty */
     public $not_null; 
-
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected $keepKeys = false;
+    
     /**
      * This construnctor should be called from the constructor
      * of a subclass.
@@ -144,7 +146,7 @@ abstract class zophTable {
      * @return mixed 1 or 0
      * @todo Should return something more sensible
      */
-    public function lookup($sql = null) {
+    public function lookup() {
 
         if (!$this->table_name || !$this->primary_keys || !$this->fields) {
             log::msg("Missing data", log::ERROR, log::GENERAL);
@@ -165,7 +167,7 @@ abstract class zophTable {
 
     /**
      * Looks up a record using supplied SQL query
-     * @param string SQL query to use instead of the generated query
+     * @param string SQL query to use 
      */
     public function lookupFromSQL($sql) {
         $result = query($sql, "Lookup failed:");
@@ -192,7 +194,7 @@ abstract class zophTable {
      *       descendants of this class. It is used by the
      *       @see group_permissions class.
      */
-    public function insert($keep_key = null) {
+    public function insert() {
 
         if (!$this->table_name || !$this->fields) {
             log::msg("Missing data", log::ERROR, log::GENERAL);
@@ -201,7 +203,7 @@ abstract class zophTable {
         $names=null;
         $values=null;
         while (list($name, $value) = each($this->fields)) {
-            if ($this->primary_keys && !$keep_key && $this->isKey($name)) {
+            if ($this->primary_keys && !$this->keepKeys && $this->isKey($name)) {
                 continue;
             }
 
@@ -358,9 +360,10 @@ abstract class zophTable {
     /**
      * Creates an alphabetized array of field names and text input blocks.
      * @todo Returns HTML, should be moved to template
+     * @param user Unused, but some of the decendant classes do.
      * @return array of field names and HTML text input fields
      */
-    public function getEditArray() {
+    public function getEditArray(user $user=null) {
         if (!$this->fields) { return; }
 
         $field_lengths = get_field_lengths($this->table_name);
@@ -493,7 +496,7 @@ abstract class zophTable {
      * @todo Once minimum PHP version is 5.3, the $class can be replaced by
      *       get_called_class()
      */
-    public static function getTopN($class, $query) {
+    protected static function getTopNfromSQL($class, $query) {
         $records = $class::getRecordsFromQuery($class, $query);
         foreach ($records as $rec) {
             $pop_array[$rec->getLink()] = $rec->get("count");
@@ -605,7 +608,7 @@ abstract class zophTable {
      * @param string Icon to be used
      * @param bool true when JS is used for editable map
      */
-    protected function getMappingJs(user $user, $icon,$edit=false) {
+    protected function getMappingJs(user $user, $edit=false, $icon = "geo-photo.png") {
         $marker=true;
         $lat=$this->get("lat");
         $lon=$this->get("lon");
@@ -637,7 +640,7 @@ abstract class zophTable {
             "  var zoomlevel=" . $zoom . ";\n" .
             "  mapstraction.setCenterAndZoom(center,zoomlevel);\n";
          if ($marker ) {
-            $js.="  zMaps.createMarker(" . $lat . "," . $lon . ",'" . $icon . "',null, null);\n";
+            $js.="  zMaps.createMarker(" . $lat . "," . $lon . ",'" . ICONSET . "/" . $icon . "',null, null);\n";
          }
          if ($edit) {
             $js.="  zMaps.setUpdateHandlers();\n";
@@ -660,7 +663,7 @@ abstract class zophTable {
         $title=$this->get("title");
         if($lat && $lon) {
             $quicklook=$this->get_quicklook($user);
-            return "  zMaps.createMarker(" . $lat . "," . $lon . ", '" . $icon .
+            return "  zMaps.createMarker(" . $lat . "," . $lon . ", '" . ICONSET . "/" . $icon .
                     "','" .  e($title) . "','" . 
                     $quicklook . "');\n";
         } else {

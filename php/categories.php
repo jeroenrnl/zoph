@@ -126,7 +126,10 @@ if ($category->get("category_description")) {
     $sortorder = $category->get("sortorder");
     if ($sortorder) {
         $sort = "&amp;_order=" . $sortorder;
+    } else {
+        $sort = "";
     }
+
     if ($totalPhotoCount > 0) {
         if ($totalPhotoCount > $photoCount && $children) {
 ?>

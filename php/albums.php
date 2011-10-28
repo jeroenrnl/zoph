@@ -34,7 +34,7 @@
     else {
         $album = new album($parent_album_id);
     }
-    $album->lookup($user);
+    $album->lookupForUser($user);
     $obj=&$album;
     $ancestors = $album->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
