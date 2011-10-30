@@ -156,6 +156,7 @@ function get_all_comments() {
    }
 
 function format_comments($user, $comments) {
+    $html=null;
     foreach ($comments as $comment) {
         $comment->lookup();
         $html.=$comment->to_html($user, true);

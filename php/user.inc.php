@@ -262,6 +262,7 @@ class user extends zophTable {
     }
 
     function get_rating_graph() {
+        $value_array=array();
         $sql = "SELECT ROUND(rating), count(*) FROM " . 
             DB_PREFIX . "photo_ratings " .
             "WHERE user_id=" . escape_string($this->get("user_id")) .
@@ -281,11 +282,12 @@ class user extends zophTable {
 
             $value_array[]=array($value, $link, $count);
         }
-        if($value_array) {
+        if(!empty($value_array)) {
             return "<h3>" . translate("photo ratings") . "</h3>" .
                 create_bar_graph($legend, $value_array, 150);
         }
     }
+
     function get_comments() {
         $sql = "select comment_id from " . DB_PREFIX . "comments where" .
             " user_id = " .  $this->get("user_id") . " order by comment_date";

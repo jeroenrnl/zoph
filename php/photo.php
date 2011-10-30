@@ -42,6 +42,10 @@
         $qs=$_qs;
     }
 
+    $prev_link="";
+    $next_link="";
+    $act="";
+    $num_photos=0;
     if ($photo_id) { // would be passed for edit or delete
         $photo = new photo($photo_id);
     } else { // for display
@@ -57,22 +61,16 @@
             $photo_id = $photo->get("photo_id");
             if(isset($_action) && !$_action=="" ) {
                 $act="_action=" . $_action . "&";
-            } else {
-                $act="";
             }
 
             if ($offset > 0) {
                 $newoffset = $offset - 1;
                 $prev_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Prev") . "</a>";
-            } else {
-                $prev_link = "";
             }
 
             if ($offset + 1 < $num_photos) {
                 $newoffset = $offset + 1;
                 $next_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Next") . "</a>";
-            } else {
-                $next_link = "";
             }
         }
         else {
@@ -334,7 +332,7 @@ require_once("header.inc.php");
         <div class="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
         <div class="photohdr">
 <?php
-        if ($up_link) {
+        if (isset($up_link)) {
 ?>
             [ <?php echo $up_link ?> ]<br>
 <?php
