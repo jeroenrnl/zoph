@@ -152,11 +152,15 @@
             }
 
             $can_edit = false;
+            $action="";
             $can_edit = $user->is_admin() || $permissions->get("writable");
 
             $photo = new photo($photo_id);
+            
+            if(array_key_exists("_action__" . $photo_id, $request_vars)) {
+                $action = $request_vars["_action__" . $photo_id];
+            }
 
-            $action = $request_vars["_action__$photo_id"];
             if ($can_edit && $action == 'update') {
 
                 $rating = null;

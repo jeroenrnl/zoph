@@ -122,6 +122,7 @@
 <?php
     $fragment = translate("in this album");
     $sortorder = $album->get("sortorder");
+    $sort="";
     if ($sortorder) {
         $sort = "&amp;_order=" . $sortorder;
     }
