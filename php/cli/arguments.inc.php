@@ -299,7 +299,7 @@ class arguments {
                     if(substr($arg,0,1)=="-") {
                         echo "unknown argument: " . $arg . "\n";
                         exit(1);
-                    } else if (is_null($current)) {
+                    } else if (!isset($current) || is_null($current)) {
                         $args["files"][]=$arg;
                     } else if (!is_array($current)) {
                         $current=$arg;
@@ -326,6 +326,7 @@ class arguments {
             }
         }
         if(isset($args["fields"])) {
+            $newfields=array();
             foreach($args["fields"] as $f) {
                 $field=explode("=", $f);
                 $newfields[$field[0]]=$field[1];

@@ -44,6 +44,7 @@ class CliImport extends Import {
             $dispcur=floor($calccur);
             $disptotal=60;
         } else {
+            $calccur=0;
             $dispcur=$cur;
             $disptotal=$total;
         }
