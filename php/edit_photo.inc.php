@@ -90,14 +90,17 @@
 <?php
         if(defined("SHARE") && SHARE===1 && ($user->is_admin() || $user->get("allow_share"))) {
             $hash=$photo->getHash();
-            $link=getZophURL() . "image.php?hash=" . $hash;
+            $full_hash=sha1(SHARE_SALT_FULL . $hash);
+            $mid_hash=sha1(SHARE_SALT_MID . $hash);
+            $full_link=getZophURL() . "image.php?hash=" . $full_hash;
+            $mid_link=getZophURL() . "image.php?hash=" . $mid_hash;
 
             $tpl_share=new template("photo_share", array(
                 "hash" => $hash,
-                "link" => $link
+                "full_link" => $full_link,
+                "mid_link" => $mid_link
             ));
             echo $tpl_share;
-
         }
 ?>
         </ul>
