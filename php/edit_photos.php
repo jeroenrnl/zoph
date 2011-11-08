@@ -197,6 +197,7 @@
 
                 // this will update any specific albums, cats & people
                 $photo->update();
+                $photo->updateRelations($request_vars, '__' . $photo_id);
 
                 // update "apply to all" albums, cats & people
 
