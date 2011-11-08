@@ -592,7 +592,7 @@ class photo extends zophTable {
      * This function from Jan Miczaika
      */
     function rate($user, $rating) {
-
+        $where="";
         if (!$user || !$rating) {
             return null;
         }
