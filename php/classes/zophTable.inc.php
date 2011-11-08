@@ -396,7 +396,7 @@ abstract class zophTable {
         if(isset($details["title"])) {    
             $display["title"]=$details["title"];
         }
-        if($details["count"] > 0) {
+        if(array_key_exists("count", $details) && $details["count"] > 0) {
             $display["count"]=$details["count"] . " " . translate("photos");
             $display["taken"]=sprintf(translate("taken between %s and %s",false), $details["oldest"], $details["newest"]);
             $display["modified"]=sprintf(translate("last changed from %s to %s",false), $details["first"], $details["last"]);
