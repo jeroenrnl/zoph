@@ -49,14 +49,21 @@ var thumbview = function () {
     }
 
     function showDetails(e) {
-        if(!e) var e=window.event;
-        e.cancelBubble=true;
-        if(e.stopPropagation) e.stopPropagation();
-        destroyAllDetails();
-        id=this.id.split("_");
-        id.shift();
+        var body=document.getElementsByTagName("body")[0];
         
-        XML.getData("details_" + id.join("_"));
+        var id=this.id.split("_");
+        id.shift();
+       
+        
+        var div=document.createElement("div");
+        div.className="details";
+        div.id="details_" + id.join("_");
+        div.style.visibility="hidden";
+        
+        body.appendChild(div);
+        
+       
+        XML.getData(div.id);
     }
 
     function httpResponse(xml) {
@@ -69,67 +76,58 @@ var thumbview = function () {
             "children": "folder.png"
         };
 
-        var body=document.getElementsByTagName("body")[0];
         
         var request=xml.getElementsByTagName("request")[0];
 
         var classname=request.getElementsByTagName("class")[0].firstChild.nodeValue;
         var id=request.getElementsByTagName("id")[0].firstChild.nodeValue;
        
-        var div=document.createElement("div");
-        div.className="details";
-        div.id="details_" + classname + "_" + id;
 
-        
-        var dl=document.createElement("dl");
+        var div=document.getElementById("details_" + classname + "_" + id);
+        if(div) {
+            removeChildren(div);
+            var dl=document.createElement("dl");
 
-        li_id="thumb_" + classname + "_" + id;
+            var li_id="thumb_" + classname + "_" + id;
 
-        li=document.getElementById(li_id);
+            var li=document.getElementById(li_id);
 
-        var detail=xml.getElementsByTagName("detail");
-        var title, dt, dd, icon, subject, data;
+            var detail=xml.getElementsByTagName("detail");
+            var title, dt, dd, icon, subject, data;
 
-        for(var i=0; i<detail.length; i++) {
+            for(var i=0; i<detail.length; i++) {
 
-            subject=detail[i].getElementsByTagName("subject")[0].firstChild.nodeValue;
-            data=detail[i].getElementsByTagName("data")[0].firstChild.nodeValue;
-        
-            if(subject==="title") {
-                title=createNode("h3", data);
-                div.appendChild(title);
-            } else {
-                dt=document.createElement("dt");
-                icon=document.createElement("img");
+                subject=detail[i].getElementsByTagName("subject")[0].firstChild.nodeValue;
+                data=detail[i].getElementsByTagName("data")[0].firstChild.nodeValue;
+            
+                if(subject==="title") {
+                    title=createNode("h3", data);
+                    div.appendChild(title);
+                } else {
+                    dt=document.createElement("dt");
+                    icon=document.createElement("img");
 
-                icon.setAttribute("src", "images/icons/default/" + icons[subject] );
-                icon.setAttribute("alt", subject);
-                dt.appendChild(icon);
-                dd=createNode("dd", data);
-                
-                dl.appendChild(dt);
-                dl.appendChild(dd);
+                    icon.setAttribute("src", "images/icons/default/" + icons[subject] );
+                    icon.setAttribute("alt", subject);
+                    dt.appendChild(icon);
+                    dd=createNode("dd", data);
+                    
+                    dl.appendChild(dt);
+                    dl.appendChild(dd);
+                }
             }
-        }
-        destroyAllDetails();
-        div.appendChild(dl);
-        body.appendChild(div);
-        div.style.left=findPos(li)[0] - 20 + "px";
-        div.style.top=findPos(li)[1] - div.offsetHeight + "px";
+            div.appendChild(dl);
+        
+            div.style.left=findPos(li)[0] - 20 + "px";
+            div.style.top=findPos(li)[1] - div.offsetHeight + "px";
+            div.style.visibility="visible";
+       } 
    }
 
    function destroyDetails(e) {
-        if(!e) var e=window.event;
-        e.cancelBubble=true;
-        if(e.stopPropagation) e.stopPropagation();
-        destroyAllDetails();
-   }
-
-   function destroyAllDetails() {
-        details=getElementsByClass('details');
-        for(var i=0; i<details.length; i++) {
-            deleteNode(details[i]);
-        }
+        var id=this.id.split("_");
+        id.shift();
+        deleteNode(document.getElementById("details_" + id.join("_")));
    }
 
     return {

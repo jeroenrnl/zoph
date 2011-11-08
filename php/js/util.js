@@ -47,8 +47,10 @@ function trim(stringToTrim) {
 }
 
 function removeChildren(obj) {
-    while (obj.childNodes[0]) {
-        obj.removeChild(obj.firstChild);
+    if(obj && obj.childNodes) {
+        while (obj.childNodes[0]) {
+            obj.removeChild(obj.firstChild);
+        }
     }
 }
 
