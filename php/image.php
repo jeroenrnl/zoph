@@ -122,7 +122,7 @@
                     header("Content-Length: " . $filesize);
                     header("Content-Disposition: inline; filename=" . $name);
                     header("Last-Modified: " . $gmt_mtime);
-                    header("Content-type: $image_type");
+                    header("Content-type: " . $image_type);
                     readfile($image_path);
                     exit;
                 }
