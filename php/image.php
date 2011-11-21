@@ -19,6 +19,7 @@
     require_once("log.inc.php");
     require_once("config.inc.php");
     require_once("variables.inc.php");
+    require_once("settings.inc.php");
     $hash = getvar("hash");
 
     if (defined("SHARE") && SHARE===1 && !empty($hash) && empty($user)) {
