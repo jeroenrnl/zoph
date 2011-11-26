@@ -1,5 +1,35 @@
 Zoph Changelog
 
+Zoph 0.9pre1
+26 Nov 2011
+
+Zoph 0.9pre1 is the first release candidate for Zoph 0.9. Zoph is now completely feature-frozen for the 0.9 release, only bugfixes will be made.
+
+Bugs
+
+    Bug#3420574: When using --autoadd, zoph CLI import sometimes tries to create new locations or photographers even though they already exist in the database.
+    Bug#3427517: Share this photo feature does not work
+    Bug#3427518: Not possible to remove and album or category from a photo
+    Bug#3433687: Not possible to remove album or category from photo (bulk)
+    Bug#3431130: Share this photo doesn't show links in photo edit mode
+    Bug#3433810: Popup for albums, categories, people and places doesn't always disappear when moving mouse away.
+    Removed a warning that in some cases caused images not to be displayed.
+
+Translations
+
+    Added a few missing strings, reported by Pekka Kutinlahti.
+    Updated Italian translation, by Francesco Ciattaglia
+    Updated Dutch, German, Canadian English and Finnish
+
+Other
+    Got rid of a lot of PHP warnings
+    Got rid of a lot of PHP strict messages
+    Cut down on the number of global variables
+    Removed support for magic_quotes
+    Removed (last traces of) PHP4 support
+    Bug#3435181: Variable inside quotes
+    Updated wikibooks documentation
+
 Zoph 0.8.4
 9 Sept 2011
 
