@@ -92,8 +92,13 @@
         </style>
 <?php
     }
+    if (isset($title)) {
+        $html_title=ZOPH_TITLE . " - " . $title;
+    } else {
+        $html_title=ZOPH_TITLE; 
+    }
 ?>
-    <title><?php echo ZOPH_TITLE . ($title ? " - $title" : "") ?></title>
+    <title><?php echo $html_title ?></title>
     </head>
     <body>
         <ul class="menu">
