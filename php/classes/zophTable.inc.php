@@ -608,7 +608,7 @@ abstract class zophTable {
      * @param string Icon to be used
      * @param bool true when JS is used for editable map
      */
-    protected function getMappingJs(user $user, $edit=false, $icon = "geo-photo.png") {
+    public function getMappingJs(user $user, $edit=false, $icon = "geo-photo.png") {
         $marker=true;
         $lat=$this->get("lat");
         $lon=$this->get("lon");
