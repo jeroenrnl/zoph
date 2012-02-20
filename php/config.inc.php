@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.9pre1');
+    define('VERSION', '0.9pre2');
 
     // DB_HOST, DB_NAME, DB_USER, DB_PASS and DB_PREFIX have been moved to
     // zoph.ini. The location can be set by the next config item:

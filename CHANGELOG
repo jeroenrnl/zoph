@@ -1,5 +1,15 @@
 Zoph Changelog
 
+Zoph 0.9pre2
+20 Feb 2012
+
+Zoph 0.9pre2 is the second release candidate for Zoph 0.9. Zoph is now completely feature-frozen for the 0.9 release, only bugfixes will be made.
+
+Bugs
+
+    Bug#3471099: Map not displaying when looking at photo in edit mode
+    Bug#3471100: On some pages, title contains PHP warning
+
 Zoph 0.9pre1
 26 Nov 2011
 
