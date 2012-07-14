@@ -650,6 +650,10 @@ class photo extends zophTable {
         $this->recalculate_rating();
     }
 
+    /**
+     * Recalculate the rating for this photo
+     * @todo Should update the object, not the database
+     */
     function recalculate_rating() {
         $photo_id = $this->get("photo_id");
         $query = "select avg(rating) from " . DB_PREFIX . "photo_ratings ".

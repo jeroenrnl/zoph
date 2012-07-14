@@ -19,9 +19,10 @@
      * Autoload classes
      */
 
-    function __autoload($class) {
+    function zophAutoload($class) {
         require_once("classes/" . $class . ".inc.php");
     }
+    spl_autoload_register("zophAutoload");
 
     require_once("exception.inc.php");
     require_once("variables.inc.php");
@@ -56,7 +57,10 @@
     require_once("group.inc.php");
 
     require_once("database.inc.php");
-    require_once("auth.inc.php");
+
+    if(!defined("TEST")) {
+        require_once("auth.inc.php");
+    }
 
     require_once("album.inc.php");
     require_once("category.inc.php");
@@ -77,7 +81,7 @@
     require_once("photo_search.inc.php");
 
     require_once("import.inc.php");
-    if(defined("CLI")) {
+    if(defined("CLI") || defined("TEST")) {
         require_once("cli/cli.inc.php");
         require_once("cli/arguments.inc.php");
         require_once("cli/cliimport.inc.php");
