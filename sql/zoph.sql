@@ -28,7 +28,7 @@ CREATE TABLE zoph_albums (
   sortorder varchar(32) default NULL,
   PRIMARY KEY  (album_id),
   KEY album_parent_id (parent_album_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_albums'
@@ -52,7 +52,7 @@ CREATE TABLE zoph_categories (
   sortorder varchar(32) default NULL,
   PRIMARY KEY  (category_id),
   KEY cat_parent_id (parent_category_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_categories'
@@ -81,7 +81,7 @@ CREATE TABLE zoph_color_schemes (
   selected_tab_font_color varchar(6) default NULL,
   title_font_color varchar(6) default NULL,
   PRIMARY KEY  (color_scheme_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_color_schemes'
@@ -109,13 +109,14 @@ CREATE TABLE zoph_comments (
   timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   ipaddr varchar(16) default '',
   PRIMARY KEY  (comment_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE zoph_groups (
         group_id int(11) NOT NULL auto_increment,
         group_name varchar(32),
         description varchar(128),
-        PRIMARY KEY  (group_id));
+        PRIMARY KEY  (group_id)
+) ENGINE=MyISAM;
 
 CREATE TABLE zoph_group_permissions (
         group_id int(11) NOT NULL default '0',
@@ -126,14 +127,14 @@ CREATE TABLE zoph_group_permissions (
         changedate timestamp NOT NULL,
         PRIMARY KEY  (group_id,album_id),
         KEY ap_access_level (access_level)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE zoph_groups_users (
         group_id int(11) NOT NULL default '0',
         user_id int(11) NOT NULL default '0',
         changedate timestamp NOT NULL,
         PRIMARY KEY  (group_id,user_id)
-);
+) ENGINE=MyISAM;
 --
 -- Table structure for table 'zoph_people'
 --
@@ -159,7 +160,7 @@ CREATE TABLE zoph_people (
   PRIMARY KEY  (person_id),
   KEY person_last_name (last_name(10)),
   KEY person_first_name (first_name(10))
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_people'
@@ -176,7 +177,7 @@ CREATE TABLE zoph_photo_albums (
   photo_id int(11) NOT NULL default '0',
   album_id int(11) NOT NULL default '0',
   PRIMARY KEY  (photo_id,album_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_photo_albums'
@@ -192,7 +193,7 @@ CREATE TABLE zoph_photo_categories (
   photo_id int(11) NOT NULL default '0',
   category_id int(11) NOT NULL default '0',
   PRIMARY KEY  (photo_id,category_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_photo_categories'
@@ -206,7 +207,7 @@ CREATE TABLE zoph_photo_comments (
   photo_id int(11) NOT NULL default '0',
   comment_id int(11) NOT NULL default '0',
   PRIMARY KEY  (photo_id,comment_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
 
@@ -219,7 +220,7 @@ CREATE TABLE zoph_photo_people (
   person_id int(11) NOT NULL default '0',
   position int(11) default NULL,
   PRIMARY KEY  (photo_id,person_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_photo_people'
@@ -235,7 +236,7 @@ CREATE TABLE zoph_photo_relations (
   desc_1 varchar(128) default NULL,
   desc_2 varchar(128) default NULL,
   PRIMARY KEY  (photo_id_1,photo_id_2)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_photo_relations'
@@ -284,7 +285,7 @@ CREATE TABLE zoph_photos (
   KEY photo_loc_id (location_id),
   KEY photo_rating (rating),
   KEY photo_level (level)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_photos'
@@ -319,7 +320,7 @@ CREATE TABLE zoph_places (
   PRIMARY KEY  (place_id),
   KEY place_city (city(10)),
   KEY place_title (title(10))
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
@@ -362,7 +363,7 @@ CREATE TABLE zoph_prefs (
   child_sortorder enum('name', 'sortname', 'oldest', 'newest', 
 	'first', 'last', 'lowest', 'highest', 'average') default 'sortname',
   PRIMARY KEY  (user_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_prefs'
@@ -383,7 +384,7 @@ CREATE TABLE zoph_photo_ratings (
   ipaddress varchar(16),
   timestamp timestamp,
   PRIMARY KEY  (rating_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE INDEX user_photo ON zoph_photo_ratings (user_id,photo_id);
 
@@ -401,7 +402,7 @@ CREATE TABLE zoph_saved_search (
         timestamp timestamp NOT NULL default CURRENT_TIMESTAMP
                 on update CURRENT_TIMESTAMP,
         PRIMARY KEY  (`search_id`)
-);
+) ENGINE=MyISAM;
 
 
 --
@@ -430,7 +431,7 @@ CREATE TABLE zoph_users (
   lastlogin datetime default NULL,
   lastip varchar(16) default NULL,
   PRIMARY KEY  (user_id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'zoph_users'
@@ -447,7 +448,8 @@ CREATE TABLE zoph_pageset (
   date datetime,
   user int(11) ,
   timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY  (pageset_id));
+  PRIMARY KEY  (pageset_id)
+) ENGINE=MyISAM;
 
 CREATE TABLE zoph_pages (
   page_id int(11) NOT NULL auto_increment,
@@ -455,12 +457,14 @@ CREATE TABLE zoph_pages (
   text blob,
   date datetime,
   timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY  (page_id));
+  PRIMARY KEY  (page_id)
+) ENGINE=MyISAM;
 
 CREATE TABLE zoph_pages_pageset (
   pageset_id int(11) NOT NULL,
   page_id int(11) NOT NULL,
-  page_order int(5) unsigned );
+  page_order int(5) unsigned
+) ENGINE=MyISAM;
 
 CREATE TABLE zoph_track (
   track_id int(11) NOT NULL auto_increment,
