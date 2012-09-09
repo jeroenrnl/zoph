@@ -497,6 +497,7 @@ abstract class zophTable {
      *       get_called_class()
      */
     protected static function getTopNfromSQL($class, $query) {
+        $pop_array=array();
         $records = $class::getRecordsFromQuery($class, $query);
         foreach ($records as $rec) {
             $pop_array[$rec->getLink()] = $rec->get("count");
