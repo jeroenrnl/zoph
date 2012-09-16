@@ -178,7 +178,7 @@ class point extends zophTable {
         }
 
         if($maxdist) {
-            $p1->getDistanceTo($p2, $entity);
+            $dist=$p1->getDistanceTo($p2, $entity);
             if ($dist > $maxdist) {
                 return false;
             }

@@ -57,21 +57,25 @@
           <?php echo sprintf(translate("Confirm deletion of '%s'"), $title) ?>:
 
 <?php
-    }
-    else {
+    } else {
 require_once("edit_place.inc.php");
     }
 ?>
 </div>
 <?php
-      if(JAVASCRIPT && MAPS) {
-?>
-        <div id="map" class="map"></div>
-        <script type="text/javascript">
-            <?php echo create_map_js(); ?>
-            <?php echo $place->getMappingJs($user, true); ?>
-        </script>
-<?php
-      }
+    if(JAVASCRIPT && MAPS) {
+        $map=new map();
+        $marker=$place->getMarker($user);
+        $map->setCenterAndZoomFromObj($place);
+        if($marker instanceof marker) {
+            $map->addMarker($marker);
+        }
+        if($_action == "edit") {
+            $map->setEditable();
+        }
+        echo $map;
+    }
+
+
 ?>
 <?php require_once("footer.inc.php"); ?>

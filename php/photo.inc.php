@@ -1354,15 +1354,22 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         return $html;
     }
 
+    /**
+     * Get Marker to be placed on map
+     * @param user Currently logged on user
+     * @param string icon to be used.
+     * @return marker instance of marker class
+     */
     function getMarker(user $user, $icon="geo-photo.png") {
-        $js=parent::getMarker($user, $icon); 
-        if(empty($js)) {
+        $marker=map::getMarkerFromObj($this, $user, $icon); 
+        if(!$marker instanceof marker) {
             $loc=$this->location;
-            if($loc) {
-                $js=$loc->getMarker($user); 
+            if($loc instanceof place) {
+                return $loc->getMarker($user); 
             }
+        } else {
+            return $marker;
         }
-        return $js;
     }
 
     /**
@@ -1489,6 +1496,8 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         if($track) {
             $track_id=$track->getId();
             $where=" AND track_id=" . escape_string($track_id);
+        } else {
+            $where="";
         }
         
         $sql="SELECT * FROM " . DB_PREFIX . "point" .
@@ -1501,7 +1510,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         $points=point::getRecordsFromQuery("point", $sql);
 
         $point=$points[0];
-        if(get_class($piont)=="point") {
+        if(get_class($point)=="point") {
             $pointtime=strtotime($point->get("datetime"));
         } else {
             // can't get a point, don't bother trying to interpolate.
@@ -1516,7 +1525,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 $p1=$point->getPrev();
                 $p2=$point;
             }
-            $p3=$p1->interpolate($p2,$utc,$int_maxdist, $entity, $int_maxtime);
+            $p3=point::interpolate($p1, $p2,$utc,$int_maxdist, $entity, $int_maxtime);
             if(get_class($p3)=="point") {
                 $point=$p3;
             }
