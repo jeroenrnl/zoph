@@ -1124,16 +1124,16 @@ echo ("<br>\noutString:<br>\n" . $out_string);
 
     function get_time($timezone=null, $date_format=DATE_FORMAT, $time_format=TIME_FORMAT) { 
         if(minimum_version("5.1.0")) {
-            if(valid_tz($timezone)) {
+            if(TimeZone::validate($timezone)) {
                 $place_tz=new TimeZone($timezone);
             } else { 
                 $this->lookup_location();
                 $loc=$this->location;
-                if($loc && valid_tz($loc->get("timezone"))) {
+                if($loc && TimeZone::validate($loc->get("timezone"))) {
                     $place_tz=new TimeZone($loc->get("timezone"));
                 } 
             }
-            if(valid_tz(CAMERA_TZ)) {
+            if(TimeZone::validate(CAMERA_TZ)) {
                 $camera_tz=new TimeZone(CAMERA_TZ);
             }    
                 
@@ -1174,7 +1174,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
 
     function get_time_details() {
         $tz=null;
-        if(valid_tz(CAMERA_TZ)) {
+        if(TimeZone::validate(CAMERA_TZ)) {
             $tz=CAMERA_TZ;
         }
         
@@ -1612,7 +1612,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             $loc=$photo->location;
             if(get_class($loc)=="place") {
                 $tz=$loc->get("timezone");
-                if(valid_tz($tz)) {
+                if(TimeZone::validate($tz)) {
                     $gphotos[]=$photo;
                 }
             }
@@ -1778,7 +1778,7 @@ function create_rating_graph($user) {
  * Function to rotate an image
  */
 function goodrotate($src_img, $degrees = 90) {
-    // angles = 0°
+    // angles = 0deg
     $degrees %= 360;
     if($degrees == 0) {
         $dst_img = $src_image;

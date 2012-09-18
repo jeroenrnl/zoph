@@ -104,7 +104,7 @@ class place extends zophTreeTable {
     function tzid_to_timezone() {
         $tzkey=$this->get("timezone_id");
         if($tzkey>0) {
-            $tzarray=get_tz_select_array();
+            $tzarray=TimeZone::getSelectArray();
             $tz=$tzarray[$tzkey];
             $this->set("timezone", $tz);
         } else {
@@ -472,7 +472,7 @@ class place extends zophTreeTable {
         $lon=$this->get("lon");
         $timezone=$this->get("timezone");
         if((!$timezone && $lat && $lon) && minimum_version("5.1.0")) {
-            $tz=guess_tz($lat, $lon);
+            $tz=TimeZone::guess($lat, $lon);
             if($tz) {
                 $html="<span class='actionlink'>" .
                     "<a href=place.php?_action=update&place_id=" .

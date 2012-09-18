@@ -110,7 +110,7 @@
 ?>
 
          <label for="timezone_id"><?php echo translate("timezone") ?></label>
-         <?php echo create_timezone_pulldown("timezone_id", $place->get("timezone"), $user); ?>
+         <?php echo TimeZone::createPulldown("timezone_id", $place->get("timezone"), $user); ?>
 <?php
     }
 ?>

@@ -42,12 +42,73 @@
             $xml->appendChild($rootnode);
             return $xml->saveXML();
         }   
+        public static function getSelectArray() {
+            $zones=self::listIdentifiers();
+            array_unshift($zones, "");
+            return $zones;
+        }
+        
+        public static function getKey($tz) {
+            return array_search($tz,self::getSelectArray());
+        }
+
+        public static function createPulldown($name, $value=null, $user=null) {
+            $id=preg_replace("/^_+/", "", $name);
+            if($value) {
+                $text=$value;
+            } else {
+                $text="";
+            }
+
+            if(AUTOCOMPLETE && JAVASCRIPT) {
+                $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
+                    " value='" . $value . "'>";
+                $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
+                    " value='" . $text . "' class='autocomplete'>";
+            } else {
+                $html=create_pulldown("timezone_id", self::getKey($value), self::getSelectArray());
+            }
+            return $html;
+        }
+
+
+        public static function validate($tz) {
+            // Checks if $tz contains a valid timezone string
+            $tzones=DateTimeZone::listIdentifiers();
+            return array_search($tz, $tzones);
+        }
+
+        public static function guess($lat, $lon) {
+            if(minimum_version("5.1.2") && class_exists("XMLReader")) {
+                $xml=new XMLReader();
+                @$xml->open("http://ws.geonames.org/timezone?lat=" . 
+                    $lat . "&lng=" . $lon) or $failed=true;
+                
+                if (!$failed) {
+                    while($xml->read() && !$tz) {
+                        if($xml->name=="timezoneId") {
+                            $xml->read();
+                            $tz=$xml->value;
+                        }
+                    }
+                    return $tz;
+                } else {
+                    $error=error_get_last();
+                    log::msg("Could not connect to Geonames site: " . 
+                        $error["message"], log::ERROR, log::GENERAL);
+                    return null;
+                }
+            } else {
+                return null;
+            }
+
+        }    
     }
 
     class Time extends DateTime {
         function __construct($datetime, $tz=null) {
             try {
-                if(valid_tz($tz->getName())) {
+                if(TimeZone::validate($tz->getName())) {
                     parent::__construct($datetime,$tz);
                 } else {
                     parent::__construct($datetime);
@@ -59,64 +120,6 @@
         }
     }
 
-function get_tz_select_array() {
-    $zones=DateTimeZone::listIdentifiers();
-    array_unshift($zones, "");
-    return $zones;
-}
-
-function get_tz_key($tz) {
-    return array_search($tz,get_tz_select_array());
-}
-
-function guess_tz($lat, $lon) {
-    if(minimum_version("5.1.2") && class_exists("XMLReader")) {
-        $xml=new XMLReader();
-        @$xml->open("http://ws.geonames.org/timezone?lat=" . 
-            $lat . "&lng=" . $lon) or $failed=true;
-        
-        if (!$failed) {
-            while($xml->read() && !$tz) {
-                if($xml->name=="timezoneId") {
-                    $xml->read();
-                    $tz=$xml->value;
-                }
-            }
-            return $tz;
-        } else {
-            $error=error_get_last();
-            log::msg("Could not connect to Geonames site: " . 
-                $error["message"], log::ERROR, log::GENERAL);
-            return null;
-        }
-    } else {
-        return null;
-    }
-}
-function create_timezone_pulldown($name, $value=null, $user=null) {
-    $id=preg_replace("/^_+/", "", $name);
-    if($value) {
-        $text=$value;
-    } else {
-        $text="";
-    }
-
-    if(AUTOCOMPLETE && JAVASCRIPT) {
-        $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
-            " value='" . $value . "'>";
-        $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
-            " value='" . $text . "' class='autocomplete'>";
-    } else {
-        $html=create_pulldown("timezone_id", get_tz_key($value), get_tz_select_array());
-    }
-    return $html;
-}
 
 
-function valid_tz($tz) {
-    // Checks if $tz contains a valid timezone string
-    $tzones=DateTimeZone::listIdentifiers();
-    return array_search($tz, $tzones);
-}
-    
 ?>
