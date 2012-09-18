@@ -1189,7 +1189,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
        
         $datetime=$this->get_time();
 
-        $tpl=new template("time_details", array(
+        $tpl=new block("time_details", array(
             "photo_date" => $this->get("date"),
             "photo_time" => $this->get("time"),
             "camera_tz" => $tz,
@@ -1199,7 +1199,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             "calc_date" => $datetime[0],
             "calc_time" => $datetime[1]
         ));
-        return $tpl->toString();
+        return $tpl;
     }
 
     function get_rating_details() {
@@ -1219,14 +1219,14 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             $ratings[]=$row;
         }
         
-        $tpl=new template("rating_details",array(
+        $tpl=new block("rating_details",array(
             "rating" => $rating,
             "ratings" => $ratings,
             "photo_id" => $this->get("photo_id")
         ));
 
 
-        return $tpl->toString();
+        return $tpl;
     }
     function get_comments() {
         $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .
