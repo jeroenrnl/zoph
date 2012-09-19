@@ -69,9 +69,6 @@
     require_once("file.inc.php");
     require_once("template.inc.php");
 
-    if(minimum_version("5.2.0")) {
-        require_once("timezone.inc.php");
-    }
     require_once("photo.inc.php");
     require_once("saved_search.inc.php");
     require_once("photo_search.inc.php");
