@@ -1702,6 +1702,9 @@ function get_filesize($photos, $human=false) {
     }
 }
 function create_rating_graph($user) {
+    $ratings=array();
+    $value_array=array();
+    $html="";
 
     if ($user && !$user->is_admin()) {
         $query =
@@ -1729,7 +1732,7 @@ function create_rating_graph($user) {
     while ($row = fetch_array($result)) {
     	$ratings[($row[0] ? $row[0] : translate("Not rated"))]=$row[1];
 	}
-    if(is_array($ratings)) {
+    if(!empty($ratings)) {
         $html="<h3>" . translate("photo ratings") . "</h3>";
         $legend=array(translate("rating"),translate("count"));
         while (list($range, $count) = each($ratings)) {
@@ -1748,7 +1751,7 @@ function create_rating_graph($user) {
             $value_array[]=$row;
         }
     }
-    if($value_array) {
+    if(!empty($value_array)) {
         $html.=create_bar_graph($legend, $value_array, 150);
     } else {
         $html.=translate("No photo was found.") . "\n";
