@@ -94,7 +94,7 @@
             if (WATERMARKING && $watermark_file && !$type) {
                 $image_path .= $name;
                 $image=imagecreatefromjpeg($image_path);
-                watermark_image(&$image, $watermark_file, WM_POSX, WM_POSY, WM_TRANS);
+                watermark_image($image, $watermark_file, WM_POSX, WM_POSY, WM_TRANS);
                 header("Content-type: image/jpeg");
                 imagejpeg($image);
                 imagedestroy($image);

@@ -348,8 +348,8 @@ class arguments {
             if(empty($arg) || empty($type)) {
                 continue;
             }
-            
-            log::msg($type . "\t->\t" . $arg, log::DEBUG, log::IMPORT);
+
+            log::msg($type . "\t->\t" . implode(",", (array) $arg), log::DEBUG, log::IMPORT);
             switch($type) {
                 case "albums":
                     foreach($arg as $name) {
