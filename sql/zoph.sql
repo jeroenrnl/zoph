@@ -275,7 +275,7 @@ CREATE TABLE zoph_photos (
   focus_dist varchar(16) default NULL,
   ccd_width varchar(16) default NULL,
   comment varchar(128) default NULL,
-  timestamp timestamp(14) NOT NULL,
+  timestamp timestamp NOT NULL,
   lat float(10,6),
   lon float(10,6),
   mapzoom tinyint unsigned,
