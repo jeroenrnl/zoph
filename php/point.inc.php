@@ -83,8 +83,12 @@ class point extends zophTable {
             " track_id = " . escape_string($this->get("track_id")) . " AND " .
             " datetime>\"" . escape_string($this->get("datetime")) . "\"" .
             " ORDER BY datetime LIMIT 1";
-        $point=point::getRecordsFromQuery("point", $sql);
-        return $point[0];
+        $points=point::getRecordsFromQuery("point", $sql);
+        if(is_array($points) && sizeof($points) > 0) {
+            return $points[0];
+        } else {
+            return null;
+        }
     }
     
     /**
@@ -95,8 +99,13 @@ class point extends zophTable {
             " track_id = " . escape_string($this->get("track_id")) . " AND " .
             " datetime<\"" . escape_string($this->get("datetime")) . "\"" .
             " ORDER BY datetime DESC LIMIT 1";
-        $point=point::getRecordsFromQuery("point", $sql);
-        return $point[0];
+        $points=point::getRecordsFromQuery("point", $sql);
+        if(is_array($points) && sizeof($points) > 0) {
+            return $points[0];
+        } else {
+            return null;
+        }
+        return $points[0];
     }
 
     /**
@@ -178,7 +187,7 @@ class point extends zophTable {
         }
 
         if($maxdist) {
-            $p1->getDistanceTo($p2, $entity);
+            $dist=$p1->getDistanceTo($p2, $entity);
             if ($dist > $maxdist) {
                 return false;
             }

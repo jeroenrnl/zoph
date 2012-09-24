@@ -1489,6 +1489,8 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         if($track) {
             $track_id=$track->getId();
             $where=" AND track_id=" . escape_string($track_id);
+        } else {
+            $where="";
         }
         
         $sql="SELECT * FROM " . DB_PREFIX . "point" .
@@ -1499,13 +1501,13 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             " LIMIT 1";
 
         $points=point::getRecordsFromQuery("point", $sql);
-
-        $point=$points[0];
-        if(get_class($piont)=="point") {
+        if(sizeof($points) > 0 && $points[0] instanceof point) {
+            $point=$points[0];
             $pointtime=strtotime($point->get("datetime"));
         } else {
             // can't get a point, don't bother trying to interpolate.
-            unset($interpolate);
+            $interpolate=false;
+            $point=null;
         }
         
         if($interpolate && ($pointtime != $utc)) {
@@ -1516,9 +1518,11 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 $p1=$point->getPrev();
                 $p2=$point;
             }
-            $p3=$p1->interpolate($p2,$utc,$int_maxdist, $entity, $int_maxtime);
-            if(get_class($p3)=="point") {
-                $point=$p3;
+            if($p1 instanceof point && $p2 instanceof point) {
+                $p3=point::interpolate($p1,$p2,$utc,$int_maxdist, $entity, $int_maxtime);
+                if($p3 instanceof point) {
+                    $point=$p3;
+                }
             }
         }
         return $point;
@@ -1596,7 +1600,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     public static function removePhotosWithNoValidTZ(array $photos) {
 
         $gphotos=array();
-        log::msg("Number of photos before valid timezone check: " . count($photos), log::GEOTAG, log::DEBUG);
+        log::msg("Number of photos before valid timezone check: " . count($photos), log::DEBUG, log::GEOTAG);
 
         foreach($photos as $photo) {
             $photo->lookup();
@@ -1608,7 +1612,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 }
             }
         }
-        log::msg("Number of photos after valid timezone check: " . count($gphotos), log::GEOTAG, log::DEBUG);
+        log::msg("Number of photos after valid timezone check: " . count($gphotos), log::DEBUG, log::GEOTAG);
         return $gphotos;
     }
     
@@ -1623,14 +1627,14 @@ echo ("<br>\noutString:<br>\n" . $out_string);
      */
     public static function removePhotosWithLatLon($photos) {
         $gphotos=array();
-        log::msg("Number of photos before overwrite check: " . count($photos), log::GEOTAG, log::DEBUG);
+        log::msg("Number of photos before overwrite check: " . count($photos), log::DEBUG, log::GEOTAG);
         foreach($photos as $photo) {
             $photo->lookup();
             if(!($photo->get("lat") or $photo->get("lon"))) {
                 $gphotos[]=$photo;
             }
         }
-        log::msg("Number of photos after overwrite check: " . count($gphotos), log::GEOTAG, log::DEBUG);
+        log::msg("Number of photos after overwrite check: " . count($gphotos), log::DEBUG, log::GEOTAG);
         return $gphotos;
     }
 
