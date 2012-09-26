@@ -206,7 +206,12 @@
                 $deg = $request_vars["_deg__$photo_id"];
                 if ($deg && $deg != 0) {
                     $photo->lookupForUser($user);
-                    $photo->rotate($deg);
+                    try {
+                        $photo->rotate($deg);
+                    } catch (Exception $e) {
+                        echo $e->getMessage();
+                        die;
+                    }
                 }
             }
             else if ($can_edit && $action == 'delete') {

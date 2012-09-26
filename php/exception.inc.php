@@ -44,6 +44,7 @@ class FileNotReadableException extends FileException {}
 class FileNotWritableException extends FileException {}
 class FileMoveFailedException extends FileException {}
 class FileCopyFailedException extends FileException {}
+class FileRenameException extends FileException {}
 class FileSymlinkProblemException extends FileException {}
 
 class PhotoException extends ZophException {}
