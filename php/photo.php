@@ -137,7 +137,12 @@
         if ($_deg && $_deg != 0) {
             if (ALLOW_ROTATIONS) {
                 $photo->lookup();
-                $photo->rotate($_deg);
+                try {
+                    $photo->rotate($_deg);
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                    die;
+                }
             }
         } else if ($_thumbnail) {
             // thumbnails already recreated for rotations

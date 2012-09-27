@@ -814,7 +814,8 @@ class photo extends zophTable {
             // is always preserved.
             if (!file_exists($dir . $backup_name)) {
                 if (!copy($dir . $name, $dir . $backup_name)) {
-                    echo sprintf(translate("Could not copy %s to %s."), $name, $backup_name) . "<br>\n";
+                    throw new FileCopyFailedException(
+                        sprintf(translate("Could not copy %s to %s."), $name, $backup_name));
                     return;
                 }
             }
@@ -860,13 +861,12 @@ class photo extends zophTable {
             $output = system($cmd);
 
             if ($output) { // error
-                echo translate("An error occurred.") . " $output<br>\n";
-                continue; // or return;
+                throw new ZophException(translate("An error occurred. ") . $output);
             }
 
             if (!rename($tmp_file, $file)) {
-                echo sprintf(translate("Could not rename %s to %s."), $tmp_file, $file) . "<br>\n";
-                continue; // or return;
+                throw new FileRenameException(
+                    sprintf(translate("Could not rename %s to %s."), $tmp_file, $file));
             }
 
         }
@@ -875,8 +875,6 @@ class photo extends zophTable {
         // (only if original was rotated)
         $this->update();
         $this->updateSize();
-
-        return 1;
     }
 
     /*
