@@ -1,6 +1,6 @@
 <?php
 /**
- * A confGroup is groups several configurationitems (@see confItem) together.
+ * A confGroup groups several configuration items (@see confItem) together.
  *
  * This file is part of Zoph.
  *
@@ -21,42 +21,75 @@
  * @author Jeroen Roos
  */
 
+/**
+ * Group of @see confItem objects
+ */
 class confGroup implements ArrayAccess, IteratorAggregate {
-
-    private $desc;
+    /** @var string Name of group */
     private $name;
+    /** @var string Description */
+    private $desc;
+    /** @var array confItem objects */
     private $items=array();
-
-
-    function __construct() {
-
-    }
-
+    
+    /**
+     * Set the name of the group
+     * @param string Name
+     */
     public function setName($name) {
         $this->name=$name;
     }
 
+    /**
+     * Set the description of the group
+     * @param string Description
+     */
     public function setDesc($desc) {
         $this->desc=$desc;
     }
 
+    /**
+     * Get name
+     * @return string Name
+     */
     public function getName() {
         return $this->name;
     }
 
+    /**
+     * Get description
+     * @return string Description
+     */
     public function getDesc() {
         return $this->desc;
     }
 
-
+    /**
+     * Check if item exists
+     * For ArrayAccess interface
+     * @param string offset
+     * @return bool whether or not key $off exists in items array
+     */
     public function offsetExists($off) {
         return isset($this->items[$off]);
     }
 
+    /**
+     * Return item
+     * For ArrayAccess interface
+     * @param string offset
+     * @return confItem 
+     */
     public function offsetGet($off) {
         return $this->items[$off];
     }
 
+    /**
+     * Add item
+     * For ArrayAccess interface
+     * @param string offset
+     * @param string value 
+     */
     public function offsetSet($off, $value) {
         if(is_null($off)) {
             if($value instanceof confItem) {
@@ -70,6 +103,11 @@ class confGroup implements ArrayAccess, IteratorAggregate {
         }
     }
 
+    /**
+     * Unset item (remove)
+     * For ArrayAccess interface
+     * @param string offset
+     */
     public function offsetUnset($off) {
         unset($this->items[$off]);
     }
@@ -82,10 +120,10 @@ class confGroup implements ArrayAccess, IteratorAggregate {
         return new ArrayIterator($this->items);
     }
 
-    private function readFromDB() {
-
-    }
-
+    /**
+     * Display group
+     * @return block template block
+     */
     public function display() {
         $tpl=new block("confGroup", array(
             "title" => $this->getName(),

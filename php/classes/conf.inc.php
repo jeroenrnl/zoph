@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Via this class Zoph can read configurations from the database
  * the configurations themselves are stored in confItem objects
  *
@@ -24,17 +24,34 @@
 
 require_once("database.inc.php");
 
+/**
+ * conf is the main object for access to Zoph's configuration
+ * in the database
+ */
 class conf {
-    private static $groups=array();
 
+    /**
+     * @var array Groups are one or more configuration objects that
+     *            belong together;
+     */
+    private static $groups=array();
+    
+    /**
+     * @var bool whether or not the configuration has been loaded from the db
+     */
     private static $loaded=false;
 
+    /**
+     * Initialize object
+     */
     public static function init() {
         self::getDefault();
-        self::buildConfig();
         self::loadFromDB();
     }
 
+    /**
+     * Read configuration from database
+     */
     public static function loadFromDB() {
         $sql="SELECT conf_id, value FROM " . DB_PREFIX . "conf";
 
@@ -50,6 +67,12 @@ class conf {
         
     }
 
+    /**
+     * Read configuration from submitted form
+     * @param array $_GET or $_POST variables
+     * @todo: bug - when submit contains both GET and POST, only GET is loaded in $vars
+     *        POST is needed, so in case there are GET vars, this will not work!
+     */
     public static function loadFromRequestVars(array $vars) {
         foreach($vars as $key=>$value) {
             if(substr($key,0,1) == "_") { continue; }
@@ -64,6 +87,13 @@ class conf {
         }
     }
 
+
+    /**
+     * Get a configuration item by name
+     * @param string Name of item to return
+     * @return confItem Configuration item
+     * @throws ConfigurationException
+     */
     public static function getItemByName($name) {
         $name_arr=explode(".", $name);
         $group=array_shift($name_arr);
@@ -74,16 +104,30 @@ class conf {
         }
     }
 
+    /**
+     * Get the value of a configuration item
+     * @param string Name of item to return
+     * @return string Value of parameter
+     */
     public static function get($key) {
         $item=conf::getItemByName($key);
         return $item->getValue();
             
     }
 
+    /**
+     * Get all configuration items (in groups)
+     * @return array Array of group objects
+     */
     public static function getAll() {
         return self::$groups;
     }
 
+    /**
+     * Create a new confGroup and add it to the list
+     * @param string name
+     * @param string description
+     */
     public static function addGroup($name, $desc = "") {
         $group = new confGroup();
 
@@ -95,15 +139,10 @@ class conf {
         return $group;
     }
 
-    private static function buildConfig() {
-        foreach(self::$groups as $group) {
-            foreach($group as $item) {
-                $name=$item->getName();
-                $value=$item->getDefault();
-            }
-        }
-    }
-            
+    /**
+     * Returns the default configuration
+     * This is used to define all configurable items in Zoph
+     */
     private static function getDefault() {
         $interface = self::addGroup("interface", "Zoph interface settings");
 
