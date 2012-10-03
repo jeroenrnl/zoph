@@ -71,7 +71,7 @@
                     MID_PREFIX . "/";
             }
             if($includeurl) {
-                $link = "\n" . sprintf(translate("See this photo in %s"), ZOPH_TITLE) . ": " . ZOPH_URL . "/photo.php?photo_id=" . $photo_id;
+                $link = "\n" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . ": " . ZOPH_URL . "/photo.php?photo_id=" . $photo_id;
             }
 
             if ($html) {
@@ -79,7 +79,7 @@
                 $html .= "<img src=\"" . $file . "\"><br>\n";
                 $html .= str_replace("\n", "<br>\n", $message);
                 if($includeurl) {
-                    $html .= "<a href=\"" . ZOPH_URL . "/photo.php?photo_id=" . $photo_id . "\">" . sprintf(translate("See this photo in %s"), ZOPH_TITLE) . "</a>";
+                    $html .= "<a href=\"" . ZOPH_URL . "/photo.php?photo_id=" . $photo_id . "\">" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . "</a>";
                 }
                 $html .= "</center>\n";
 
@@ -142,7 +142,7 @@
 
     if ($found && $_action == "compose") {
 
-        $subject = sprintf(translate("A Photo from %s"), ZOPH_TITLE) . ": " . $photo->get("name");
+        $subject = sprintf(translate("A Photo from %s"), conf::get("interface.title")) . ": " . $photo->get("name");
         $ea = $photo->get_email_array();
 
         if ($ea) {

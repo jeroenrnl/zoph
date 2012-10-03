@@ -65,7 +65,8 @@ class admin {
             new admin("groups", "create or modify user groups", "groups.php", "groups.png"),
             new admin("pages", "create or modify zoph pages", "pages.php", "pages.png"),
             new admin("pagesets", "create or modify pagesets", "pagesets.php", "pagesets.png"),
-            new admin("tracks", "create or modify GPS tracks", "tracks.php", "tracks.png")
+            new admin("tracks", "create or modify GPS tracks", "tracks.php", "tracks.png"),
+            new admin("config", "modify configuration items", "config.php", "config.png")
         );
     }
 }

@@ -24,7 +24,8 @@
     define('INI_FILE', "/etc/zoph.ini");
 
     // Define how Zoph looks by choosing a stylesheet and iconset.
-    define('CSS_SHEET', 'css.php');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('CSS_SHEET', 'css.php');
     define('ICONSET', 'default');
 
     define('IMAGE_DIR', "/data/images/");
@@ -40,7 +41,8 @@
     define('FORCE_SSL_LOGIN', 0);
     define('FORCE_SSL', 0);
 
-    define('ZOPH_TITLE', "Zoph");
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('ZOPH_TITLE', "Zoph");
 
     define('LANG_DIR', "lang"); // where language files are stored
 
@@ -71,7 +73,8 @@
     // Enable Mapping and determine hich mapping provider to use
     // currently supported: 'google', 'googlev3', 'yahoo', 'cloudmade' or '' to disable
     // This needs JAVASCRIPT to be on
-    define('MAPS', '');
+    // Deprecated: Modify through admin -> config in web interface.
+    // define('MAPS', '');
 
     // Enable geocoding and specify provider. Currently only supported is
     // 'geonames'.
@@ -85,7 +88,8 @@
 
     // The timezone your camera is set to
     // Leave empty if you always set your camera to local time
-    define('CAMERA_TZ','');
+    // Deprecated: Modify through admin -> config in web interface.
+    // define('CAMERA_TZ','');
     // Define how Zoph displays date and time
     // See http://www.php.net/manual/en/function.date.php for explanation.
     define('DATE_FORMAT', 'd-m-Y');

@@ -66,7 +66,18 @@ class TimeZone extends DateTimeZone {
         array_unshift($zones, "");
         return $zones;
     }
-    
+
+    /**
+     * Get array of timezones with timezone names as key
+     * @return array zones with names as key
+     */
+    public static function getTzArray() {
+        $zones=self::getSelectArray();
+        $zones=array_values($zones);
+        $zones=array_combine($zones, $zones);
+        return $zones;
+    }
+
     /**
      * Get Key from timezone name
      * @param string timezone

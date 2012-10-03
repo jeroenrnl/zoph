@@ -108,6 +108,7 @@ class point extends zophTable {
      * @param string sort order
      *
      * @return array of points
+     * @todo useless wrapper around getRecords, should be removed
      */
     public static function getAll($constraints = null, $conj = "and", 
         $ops = null, $order = "name") {

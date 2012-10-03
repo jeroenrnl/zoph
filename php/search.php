@@ -647,7 +647,7 @@ for ($i = 0; $i <= $count; $i++) {
 
 </div>
 <?php 
-if(JAVASCRIPT && MAPS) {
+if(JAVASCRIPT && conf::get("maps.provider")) {
     $map=new map();
     $map->setEditable();
     $map->setCenterAndZoom(0,0,2);

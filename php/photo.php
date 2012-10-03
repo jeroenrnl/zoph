@@ -503,7 +503,7 @@ require_once("header.inc.php");
 ?>
 </div>
 <?php
-      if(JAVASCRIPT && MAPS && ($_action=="display" || $_action=="edit" || $_action==="")) {
+      if(JAVASCRIPT && conf::get("maps.provider") && ($_action=="display" || $_action=="edit" || $_action==="")) {
         $map=new map();
 
         if($_action == "edit") {

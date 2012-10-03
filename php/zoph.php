@@ -29,7 +29,7 @@
     $num_photos = get_photos($vars, 0, 1, $thumbnails, $user);
 ?>
 
-    <h1><?php echo ZOPH_TITLE ?></h1>
+    <h1><?php echo conf::get("interface.title"); ?></h1>
     <div class="main">
         <div class="thumbnail" id="random">
 <?php
@@ -47,7 +47,7 @@
 ?>
         </div>
         <div class="intro" id="first">
-            <?php echo sprintf(translate("Welcome %s. %s currently contains"), $user->person->getLink(), ZOPH_TITLE);
+            <?php echo sprintf(translate("Welcome %s. %s currently contains"), $user->person->getLink(), conf::get("interface.title"));
     echo "\n"; ?>
             <ul class="intro">
               <li><?php echo sprintf(translate("%s photos in %s"),  $album_photoCount, $album_count) ?> <a href="albums.php"><?php echo $album_count == 1 ? translate("album") : translate("albums") ?></a></li>

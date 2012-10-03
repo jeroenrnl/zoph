@@ -28,7 +28,7 @@ class template {
     public $js=array();
     public $style="";
     public $script="";
-    public $css=array(CSS_SHEET);
+    public $css=array();
     public $title="Zoph";
 
     /** @var array contains actionlinks */
@@ -49,6 +49,7 @@ class template {
      * @return template
      */
     public function __construct($template, $vars=null) {
+        $this->css[]=conf::get("interface.css");
         $this->vars=$vars;
         if(!preg_match("/^[A-Za-z0-9_]+$/", $template)) {
             log::msg("Illegal characters in template", log::FATAL, log::GENERAL);

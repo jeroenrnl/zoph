@@ -146,7 +146,7 @@
         $body .= e($from_name);
 
         if (!$subject) {
-            $subject = translate("New Albums on") . " " . ZOPH_TITLE;
+            $subject = translate("New Albums on") . " " . conf::get("interface.title");
         }
 
         $message = $body;

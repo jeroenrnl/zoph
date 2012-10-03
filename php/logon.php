@@ -15,11 +15,8 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("log.inc.php");
-    require_once("config.inc.php");
-    require_once("settings.inc.php");
-    require_once("variables.inc.php");
-    require_once("util.inc.php");
+    define("LOGON", true);
+    require_once("include.inc.php");
 
     if(isset($_GET["redirect"])) {
         $redirect = urlencode($_GET["redirect"]);
@@ -31,10 +28,6 @@
             redirect(ZOPH_SECURE_URL . "/logon.php?redirect=" . $redirect, "https required");
         }
     }
-    require_once("classes/zophTable.inc.php");
-    require_once("translation.inc.php");
-    require_once("user.inc.php");
-
 
     $user = new user();
     $lang=$user->load_language();
@@ -43,14 +36,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link TYPE="text/css" REL="stylesheet" HREF="<?php echo CSS_SHEET ?>?logged_on=no">
-<title><?php echo ZOPH_TITLE . ' - ' . translate("logon",0) ?></title>
+<link TYPE="text/css" REL="stylesheet" HREF="<?php echo conf::get("interface.css"); ?>?logged_on=no">
+<title><?php echo conf::get("interface.title") . ' - ' . translate("logon",0) ?></title>
 </head>
 <body>
     <h1><?php echo translate("logon",0) ?></h1>
     <div class="main" id="logon">
         <form action="zoph.php" method="POST">
-            <h2 class="logon"><?php echo ZOPH_TITLE ?></h2>
+            <h2 class="logon"><?php echo conf::get("interface.title") ?></h2>
             <label for="uname"><?php echo translate("username",0) ?></label>
             <input type="text" name="uname" id="uname"><br>
             <label for="pword"><?php echo translate("password",0) ?></label>

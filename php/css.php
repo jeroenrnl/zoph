@@ -346,7 +346,12 @@ form.editgroup {
     float: left;
 }
 
-
+/*
+ For form validation
+ */
+:invalid {
+    background: rgba(255,0,0,0.1);
+    }
 
 ul.autocompdropdown {
     position: relative;
@@ -510,6 +515,46 @@ div.minimap {
     width: 50%;
     height: 300px;
     }
+
+/* explanation of the config item on the config page */
+div.main#config .desc {
+    clear: both;
+    width: 50%;
+    color: <?php echo $TITLE_FONT_COLOR ?>;
+    border: 1px solid <?php echo $TITLE_FONT_COLOR ?>;
+    margin-left: 11.5em;
+    padding: 0.5em;
+    background: rgba(0,0,0,0.05);
+    border-radius: 4px;
+}
+
+div.main#config div.confGroup > .desc {
+    color: <?php echo $TEXT_COLOR ?>;
+    background: none;
+    margin-left: 0;
+    width: 100%;
+    border: none;
+}
+
+div.main#config h2 {
+    position: relative;
+    left: -11px;
+    clear: both;
+    display: block;
+    padding: 5px 10px;
+    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    background: <?php echo $BREADCRUMB_BG_COLOR ?>;
+    color: <?php echo $BREADCRUMB_FONT_COLOR ?>;
+    width: 100%;
+}
+
+div.main#config input {
+    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    padding: 2px;
+    border-radius: 2px;
+
+}
+    
 
 .olControlAttribution {
     bottom: 1em !important;

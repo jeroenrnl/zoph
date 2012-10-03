@@ -1133,8 +1133,8 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                     $place_tz=new TimeZone($loc->get("timezone"));
                 } 
             }
-            if(TimeZone::validate(CAMERA_TZ)) {
-                $camera_tz=new TimeZone(CAMERA_TZ);
+            if(TimeZone::validate(conf::get("date.tz"))) {
+                $camera_tz=new TimeZone(conf::get("date.tz"));
             }    
                 
             if(!isset($place_tz) && isset($camera_tz)) {
@@ -1174,8 +1174,8 @@ echo ("<br>\noutString:<br>\n" . $out_string);
 
     function get_time_details() {
         $tz=null;
-        if(TimeZone::validate(CAMERA_TZ)) {
-            $tz=CAMERA_TZ;
+        if(TimeZone::validate(conf::get("date.tz"))) {
+            $tz=conf::get("date.tz");
         }
         
         $this->lookup_location();

@@ -208,7 +208,7 @@
 ?>
     </div>
 <?php
-        if(JAVASCRIPT && MAPS) {
+        if(JAVASCRIPT && conf::get("maps.provider")) {
             $map=new map();
             $map->setCenterAndZoomFromObj($place);
             $marker=$place->getMarker($user);

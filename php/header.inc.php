@@ -22,7 +22,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link type="text/css" rel="stylesheet" href="<?php echo CSS_SHEET ?>">
+        <link type="text/css" rel="stylesheet" href="<?php echo conf::get("interface.css") ?>">
 <?php
     if(JAVASCRIPT) {
 ?>
@@ -40,9 +40,9 @@
         <script type="text/javascript" src="js/autocomplete.js"></script>
 <?php
         }
-        if(MAPS) {
+        if(conf::get("maps.provider")) {
 ?>
-        <script type="text/javascript" src="js/mxn/mxn.js?(<?php echo strtolower(MAPS); ?>)"></script>
+        <script type="text/javascript" src="js/mxn/mxn.js?(<?php echo conf::get("maps.provider"); ?>)"></script>
         <script type="text/javascript" src="js/maps.js"></script>
         <script type="text/javascript" src="js/custommaps.js"></script>
 <?php 
@@ -51,7 +51,7 @@
         <script type="text/javascript" src="js/geocode.js"></script>
 <?php
         }        
-            switch (strtolower(MAPS)) {
+            switch (strtolower(conf::get("maps.provider"))) {
             case 'google':
 ?>
         <script src="http://maps.google.com/maps?file=api&v=2&key=<?php echo GOOGLE_KEY ?>" type="text/javascript"></script>
@@ -92,10 +92,9 @@
         </style>
 <?php
     }
+    $html_title=conf::get("interface.title");
     if (isset($title)) {
-        $html_title=ZOPH_TITLE . " - " . $title;
-    } else {
-        $html_title=ZOPH_TITLE; 
+        $html_title.=" - " . $title;
     }
 ?>
     <title><?php echo $html_title ?></title>

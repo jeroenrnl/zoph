@@ -209,7 +209,7 @@
 
       </div>
 <?php
-      if(JAVASCRIPT && MAPS) {
+      if(JAVASCRIPT && conf::get("maps.provider")) {
         $map=new map();
         foreach($thumbnails as $thumbnail) {
             $thumbnail->lookup();
