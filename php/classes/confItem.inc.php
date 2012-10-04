@@ -21,14 +21,26 @@
  * @author Jeroen Roos
  */
 
+/**
+ * Configuration item
+ */
 abstract class confItem extends zophTable {
-
+    /** @var string Label to display */
     protected $label;
+    /** @var string Longer description of item */
     protected $desc;
+    /** @var string Default value */
     protected $default;
+    /** @var string Input hint (format to use)
     protected $hint;
+    /** @var array fields for database */
     public $fields=array();
 
+    /**
+     * Create confItem object
+     * @param string id, to fetch object from database.
+     * @retrun confItem new object
+     */
     function __construct($id = 0) {
         $this->keepKeys=true;
         if($id === 0 || preg_match("/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/", $id)) {
@@ -41,6 +53,12 @@ abstract class confItem extends zophTable {
 
     }
 
+    /**
+     * Update or insert configuration item
+     * checks if item already exists in db
+     * and updates it if it does or inserts
+     * if it does not.
+     */
     final public function update() {
         $sql="SELECT COUNT(conf_id) FROM " . DB_PREFIX . "conf WHERE conf_id=";
         $sql.="\"" . escape_string($this->fields["conf_id"]) . "\"";
@@ -50,22 +68,39 @@ abstract class confItem extends zophTable {
         } else {
             parent::insert();
         }
-
     }
     
+    /**
+     * Get name of item
+     * @return string name
+     */
     final public function getName() {
         return $this->fields["conf_id"];
     }
 
     
+    /**
+     * Get label for item
+     * @return string label
+     */
+
     final public function getLabel() {
         return $this->label;
     }
 
+    /**
+     * Get description for item
+     * @return string description
+     */
     final public function getDesc() {
         return $this->desc;
     }
-    
+
+    /**
+     * Get value of item
+     * if value is not set, get default
+     * @return string value
+     */
     final public function getValue() {
         if(!isset($this->fields["value"]) || $this->fields["value"]===null) {
             return $this->getDefault();
@@ -74,6 +109,11 @@ abstract class confItem extends zophTable {
         }
     }
     
+    /**
+     * Set value of item
+     * @return string value
+     * @throws ConfigurationException
+     */
     public function setValue($value) {
         if($this->checkValue($value)) {
             $this->fields["value"]=$value;
@@ -82,36 +122,71 @@ abstract class confItem extends zophTable {
         }
     }
     
+    /**
+     * Get default value of item
+     * @return string default value
+     */
     final public function getDefault() {
         return $this->default;
     }
     
+    /**
+     * Get hint for item
+     * @return string hint
+     */
     final public function getHint() {
         return $this->hint;
     }
 
+    /**
+     * Set name (id) of item
+     * @param string name
+     */
     final public function setName($name) {
         $this->fields["conf_id"]=$name;
     }
 
+    /**
+     * Set label for item
+     * @param string label
+     */
     final public function setLabel($label) {
         $this->label=$label;
     }
 
+    /**
+     * Set label for item
+     * @param string label
+     */
     final public function setDesc($desc) {
         $this->desc=$desc;
     }
-    
+
+    /**
+     * Set hint for item
+     * @param string hint
+     */
     final public function setHint($hint) {
         $this->hint=$hint;
     }
     
+    /**
+     * Set default value for item
+     * @param string default
+     */
     final public function setDefault($default) {
         $this->default=$default;
     }
-
+   
+    /**
+     * Display the item
+     */
     abstract public function display();
     
+    /**
+     * Check whether value is legal
+     * @param string value
+     */
     abstract public function checkValue($value);
 
 }
