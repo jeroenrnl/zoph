@@ -111,7 +111,7 @@ abstract class confItem extends zophTable {
     
     /**
      * Set value of item
-     * @return string value
+     * @param string value
      * @throws ConfigurationException
      */
     public function setValue($value) {
