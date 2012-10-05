@@ -1,6 +1,6 @@
 <?php
 /**
- * A confItemString defines a configuration item that is defined using a user-specified string
+ * A confItemSelect defines a configuration item that is defined using a selectbox
  *
  * This file is part of Zoph.
  *
@@ -21,27 +21,54 @@
  * @author Jeroen Roos
  */
 
+/**
+ * A confItemSelect defines a configuration item that is defined using a selectbox
+ */
 class confItemSelect extends confItem {
+    /** @var array list of options */
     private $options=array();
 
+    /**
+     * Add an option
+     * @param string key
+     * @param string description
+     */
     public function addOption($key, $desc) {
         $this->options[$key]=$desc;
     }
 
+    /**
+     * Add multiple options
+     * @param array array of options
+     */
     public function addOptions(array $options) {
         foreach($options as $key=>$desc) {
             $this->addOption($key, $desc);
         }
     }
    
+    /**
+     * Get array of options
+     * @return array options
+     */
     public function getOptions() {
         return $this->options;
     }
 
+    /** 
+     * Check value
+     * check if a specific value is legal for this option
+     * @param string value
+     * @return bool
+     */
     public function checkValue($value) {
         return array_key_exists($value, $this->options);
     }
 
+    /**
+     * Display this option through template
+     * @return block template block
+     */
     public function display() {
         $tpl=new block("confItemSelect", array(
             "label" => $this->getLabel(),
@@ -54,7 +81,4 @@ class confItemSelect extends confItem {
         ));
         return $tpl;
      }
-
-
-
 }
