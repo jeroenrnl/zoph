@@ -76,9 +76,6 @@
     if($show_orig) {
 ?>
     <div class="main">
-<?php
-    if(JAVASCRIPT) {
-?>
         <form class="viewsettings" method="get" action="places.php">
 <?php
             echo create_pulldown("parent_place_id", 0, get_places_select_array($user), "onChange='form.submit()'");
@@ -93,8 +90,6 @@
         </form>
      <br>
 <?php
-    }
-
     if ($user->is_admin()) {
 ?>
         <span class="actionlink">
@@ -208,7 +203,7 @@
 ?>
     </div>
 <?php
-        if(JAVASCRIPT && conf::get("maps.provider")) {
+        if(conf::get("maps.provider")) {
             $map=new map();
             $map->setCenterAndZoomFromObj($place);
             $marker=$place->getMarker($user);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for confItemString object
+ * Template for a boolean configuration item
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,14 +21,13 @@
 
 if(!ZOPH) { die("Illegal call"); }
 ?>
-    <div>
-        <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
-        <input type="text" pattern="<?php echo $tpl_regex ?>" title="<?php echo $tpl_title ?>" name="<?php echo $tpl_name ?>" value="<?php echo $tpl_value; ?>">
-        <div class="desc">
-            <?php echo $tpl_desc ?>
-        </div>
-        <div class="inputhint">
-            <?php echo $tpl_hint ?>
-        </div>
+    <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
+    <input type="hidden" name="<?php echo $tpl_name ?>" value="0">
+    <input type="checkbox" name="<?php echo $tpl_name ?>" value="1" <?php echo $tpl_checked ?>>
+    <div class="desc">
+        <?php echo $tpl_desc ?>
+    </div>
+    <div class="inputhint">
+        <?php echo $tpl_hint ?>
     </div>
     

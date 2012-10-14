@@ -73,22 +73,22 @@
     }
     else {
         // create once
-        if(!($user->prefs->get("autocomp_categories") && AUTOCOMPLETE && JAVASCRIPT)) {
+        if(!($user->prefs->get("autocomp_categories") && AUTOCOMPLETE)) {
             $category_select_array = get_categories_select_array($user);
         } else {
             $category_select_array = null;
         }
-        if(!($user->prefs->get("autocomp_albums") && AUTOCOMPLETE && JAVASCRIPT)) {
+        if(!($user->prefs->get("autocomp_albums") && AUTOCOMPLETE)) {
             $album_select_array = get_albums_select_array($user);
         } else {
             $album_select_array = null;
         }
-        if(!($user->prefs->get("autocomp_places") && AUTOCOMPLETE && JAVASCRIPT)) {
+        if(!($user->prefs->get("autocomp_places") && AUTOCOMPLETE)) {
             $places_select_array = get_places_select_array($user);
         } else {
             $places_select_array = null;
         }
-        if(!($user->prefs->get("autocomp_people") && AUTOCOMPLETE && JAVASCRIPT)) {
+        if(!($user->prefs->get("autocomp_people") && AUTOCOMPLETE)) {
             $people_select_array = get_people_select_array($user);
         } else {
             $people_select_array = null;

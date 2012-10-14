@@ -16,17 +16,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
     session_cache_limiter("public");
-    require_once("log.inc.php");
-    require_once("config.inc.php");
     require_once("variables.inc.php");
-    require_once("settings.inc.php");
     $hash = getvar("hash");
-
-    if (defined("SHARE") && SHARE===1 && !empty($hash) && empty($user)) {
-        define("IMAGE_PHP", 1);
-        require_once("classes/anonymousUser.inc.php");
-        $user = new anonymousUser();
-    }
+    define("IMAGE_PHP", 1);
     require_once("include.inc.php");
 
     $photo_id = getvar("photo_id");
@@ -46,7 +38,7 @@
             $type="mid";
         }
         $found=true;
-    } else if (defined("SHARE") && SHARE===1 && !empty($hash)) {
+    } else if (conf::get("interface.share") && !empty($hash)) {
         try {
             $photo=photo::getFromHash($hash, "full");
             $photo->lookup();

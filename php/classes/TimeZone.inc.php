@@ -104,7 +104,7 @@ class TimeZone extends DateTimeZone {
             $text="";
         }
 
-        if(AUTOCOMPLETE && JAVASCRIPT) {
+        if(AUTOCOMPLETE) {
             $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
                 " value='" . $value . "'>";
             $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .

@@ -541,7 +541,7 @@ function create_album_pulldown($name, $value=null, user $user=null, $sa=null) {
         $text=$album->get("album");
     } 
     
-    if($user->prefs->get("autocomp_albums") && AUTOCOMPLETE && JAVASCRIPT) {
+    if($user->prefs->get("autocomp_albums") && AUTOCOMPLETE) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
             " value='" . e($value) . "'>";
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 

@@ -353,6 +353,17 @@ form.editgroup {
     background: rgba(255,0,0,0.1);
     }
 
+div.generate input {
+    display: block;
+    margin: 0;
+    float: left;
+    }
+
+div.generate > input[type="button"] {
+    height: 20px;
+    }
+        
+
 ul.autocompdropdown {
     position: relative;
     background: <?php echo $PAGE_BG_COLOR ?>;

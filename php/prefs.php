@@ -123,8 +123,6 @@
         </dd>
 <?php
     }
-
-    if (JAVASCRIPT) {
 ?>
         <dt>
             <?php echo translate("open fullsize photo in new window") ?>
@@ -132,9 +130,6 @@
         <dd>
             <?php echo create_pulldown("fullsize_new_win", $user->prefs->get("fullsize_new_win"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
         </dd>
-<?php
-    }
-?>
         <dt>
             <?php echo translate("display camera info") ?>
         </dt>
@@ -201,9 +196,9 @@
         </dd>
     </dl>
 <?php
-    if (JAVASCRIPT && AUTOCOMPLETE) {
+    if (AUTOCOMPLETE) {
 ?>
-    <br><h2><?php echo translate("Autocomplete")?></h2");
+    <br><h2><?php echo translate("Autocomplete")?></h2>
     <dl class="prefs">
         <dt><?php echo translate("albums") ?></dt>
         <dd>

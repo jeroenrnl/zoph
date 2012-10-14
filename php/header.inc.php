@@ -23,9 +23,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link type="text/css" rel="stylesheet" href="<?php echo conf::get("interface.css") ?>">
-<?php
-    if(JAVASCRIPT) {
-?>
+        
         <script type="text/javascript" src="js/util.js"></script>
         <script type="text/javascript" src="js/xml.js"></script>
         <script type="text/javascript" src="js/thumbview.js"></script>
@@ -33,6 +31,11 @@
         if(basename($_SERVER["SCRIPT_NAME"])=="import.php") {
 ?>
         <script type="text/javascript" src="js/import.js"></script>
+<?php
+        }
+        if(basename($_SERVER["SCRIPT_NAME"])=="config.php") {
+?>
+        <script type="text/javascript" src="js/conf.js"></script>
 <?php
         }
         if(AUTOCOMPLETE) {
@@ -83,8 +86,6 @@
             break;
             }
         }
-
-    }
     if (isset($extrastyle)) {
 ?>
         <style type="text/css">

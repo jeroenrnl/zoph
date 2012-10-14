@@ -605,7 +605,7 @@ function create_person_pulldown($name, $value=null, user $user, $sa=null) {
     } else {
         $text = "";
     }
-    if($user->prefs->get("autocomp_people") && AUTOCOMPLETE && JAVASCRIPT) {
+    if($user->prefs->get("autocomp_people") && AUTOCOMPLETE) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
             " value='" . e($value) . "'>";
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .
@@ -628,7 +628,7 @@ function create_photographer_pulldown($name, $value=null, $user) {
         $person->lookup();
         $text=$person->getName();
     }
-    if($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPT) {
+    if($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
             " value='" . e($value) . "'>";
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .

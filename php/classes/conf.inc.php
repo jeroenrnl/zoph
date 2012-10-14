@@ -45,14 +45,17 @@ class conf {
      * Initialize object
      */
     public static function init() {
-        self::getDefault();
-        self::loadFromDB();
+        if(!self::$loaded) {
+            self::getDefault();
+            self::loadFromDB();
+        }
     }
 
     /**
      * Read configuration from database
      */
     public static function loadFromDB() {
+        self::getDefault();
         $sql="SELECT conf_id, value FROM " . DB_PREFIX . "conf";
 
         $result=query($sql, "Cannot load configuration from database");
@@ -74,6 +77,7 @@ class conf {
      *        POST is needed, so in case there are GET vars, this will not work!
      */
     public static function loadFromRequestVars(array $vars) {
+        self::getDefault();
         foreach($vars as $key=>$value) {
             if(substr($key,0,1) == "_") { continue; }
             $key=str_replace("_", ".", $key);
@@ -85,6 +89,7 @@ class conf {
                 log::msg("Configuration cannot be updated: " . $e->getMessage(), log::ERROR, log::CONFIG);
             }
         }
+        self::$loaded=true;
     }
 
 
@@ -100,7 +105,7 @@ class conf {
         if(isset(self::$groups[$group]) && isset(self::$groups[$group][$name])) {
             return self::$groups[$group][$name];
         } else {
-            throw new ConfigurationException("Unknown configuration item " . $id);
+            throw new ConfigurationException("Unknown configuration item " . $name);
         }
     }
 
@@ -110,6 +115,7 @@ class conf {
      * @return string Value of parameter
      */
     public static function get($key) {
+        self::init();
         $item=conf::getItemByName($key);
         return $item->getValue();
             
@@ -120,6 +126,7 @@ class conf {
      * @return array Array of group objects
      */
     public static function getAll() {
+        self::init();
         return self::$groups;
     }
 
@@ -148,21 +155,43 @@ class conf {
 
         $int_title = new confItemString();
         $int_title->setName("interface.title");
-        $int_title->setLabel("title");
+        $int_title->setLabel("Title");
         $int_title->setDesc("The title for the application. This is what appears on the home page and in the browser's title bar.");
         $int_title->setDefault("Zoph");
-        $int_title->setRegex("^[\x20-\x7E]+$");
         $int_title->setRegex("^.*$");
         $interface[]=$int_title;
 
         $int_css = new confItemString(); 
         $int_css->setName("interface.css");
-        $int_css->setLabel("style sheet");
+        $int_css->setLabel("Style Sheet");
         $int_css->setDesc("The CSS file Zoph uses");
         $int_css->setDefault("css.php");
         $int_css->setRegex("^[A-Za-z0-9_\.]+$");
         $interface[]=$int_css;
 
+        $int_share = new confItemBool();
+        $int_share->setName("interface.share");
+        $int_share->setLabel("Sharing");
+        $int_share->setDesc("Sometimes, you may wish to share an image in Zoph without creating a user account for those who will be watching them. For example, in order to post a link to an image on a forum or website. When this option is enabled, you will see a 'share' tab next to a photo, where you will find a few ways to share a photo, such as a url and a HTML &lt;img&gt; tag. With this special url, it is possible to open a photo without logging in to Zoph. You can determine per user whether or not this user will see the tab and therefore the urls.");
+        $int_share->setDefault(false);
+        $interface[]=$int_share;
+
+        $int_salt_full = new confItemSalt();
+        $int_salt_full->setName("interface.share.salt.full");
+        $int_salt_full->setLabel("Salt for sharing full size images");
+        $int_salt_full->setDesc("When using the sharing feature, Zoph uses a hash to identify a photo. Because you do not want people who have access to you full size photos (via Zoph or otherwise) to be able to generate these hashes, you should give Zoph a secret salt so only authorized users of your Zoph installation can generate them. The salt for full size images (this one) must be different from the salt of mid size images (below), because this allows Zoph to distinguish between them. If a link to your Zoph installation is being abused (for example because someone whom you mailed a link has published it on a forum), you can modify the salt to make all hash-based links to your Zoph invalid.");
+        $int_salt_full->setDefault("Change this");
+        $interface[]=$int_salt_full;
+
+        $path = self::addGroup("path", "File and directory locations");
+        
+
+        $int_salt_mid = new confItemSalt();
+        $int_salt_mid->setName("interface.share.salt.mid");
+        $int_salt_mid->setLabel("Salt for sharing mid size images");
+        $int_salt_mid->setDesc("The salt for mid size images (this one) must be different from the salt of mid full images (above), because this allows Zoph to distinguish between them. If a link to your Zoph installation is being abused (for example because someone whom you mailed a link has published it on a forum), you can modify the salt to make all hash-based links to your Zoph invalid.");
+        $int_salt_mid->setDefault("Modify this");
+        $interface[]=$int_salt_mid;
 
         $path = self::addGroup("path", "File and directory locations");
         
@@ -203,6 +232,14 @@ class conf {
         $date_tz->setDefault("");
 
         $date[]=$date_tz;
+        
+        $date_guesstz = new confItemBool();
+        $date_guesstz->setName("date.guesstz");
+        $date_guesstz->setLabel("Guess timezone");
+        $date_guesstz->setDesc("If you have defined the precise location of a place (using the mapping feature), Zoph can 'guess' the timezone based on this location. It uses the Geonames project for this. This will, however, send information to their webserver, do not enable this feature if you're not comfortable with that.");
+        $date_guesstz->setDefault(false);
+        $date[]=$date_guesstz;
+
     }
 }
 

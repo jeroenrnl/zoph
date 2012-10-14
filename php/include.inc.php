@@ -84,5 +84,4 @@
             require_once("webimport.inc.php");
         }
     }
-    conf::init();
     ?>

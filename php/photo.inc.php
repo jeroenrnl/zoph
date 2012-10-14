@@ -1452,10 +1452,10 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 return $hash;
                 break;
             case "full":
-                return sha1(SHARE_SALT_FULL . $hash);
+                return sha1(conf::get("interface.share.salt.full") . $hash);
                 break;
             case "mid":
-                return sha1(SHARE_SALT_MID . $hash);
+                return sha1(conf::get("interface.share.salt.mid") . $hash);
                 break;
             default:
                 die("Unsupported hash type");
@@ -1666,11 +1666,13 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 $where="WHERE hash=\"" . escape_string($hash) . "\";";
                 break;
             case "full":
-                $where="WHERE sha1(CONCAT('" . SHARE_SALT_FULL . "', hash))=" .
+                $salt=conf::get("interface.share.salt.full");
+                $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
                    "\"" . escape_string($hash) . "\";";
                 break;
             case "mid":
-                $where="WHERE sha1(CONCAT('" . SHARE_SALT_MID . "', hash))=" .
+                $salt=conf::get("interface.share.salt.mid");
+                $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
                    "\"" . escape_string($hash) . "\";";
                 break;
             default:

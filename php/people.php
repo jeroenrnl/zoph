@@ -69,9 +69,6 @@
         </div>
         <div class="main">
 
-<?php
-    if(JAVASCRIPT) {
-?>
             <form class="viewsettings" method="get" action="people.php">
                 <?php echo create_form($request_vars, array ("_view", "_autothumb",
 "_button")) ?>
@@ -83,7 +80,6 @@
             </form>
             <br>
 <?php
-    }
     if ($_l == "all") {
         $first_letter=null;
     } else if ($_l == "no last name") {

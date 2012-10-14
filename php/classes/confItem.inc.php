@@ -31,7 +31,7 @@ abstract class confItem extends zophTable {
     protected $desc;
     /** @var string Default value */
     protected $default;
-    /** @var string Input hint (format to use)
+    /** @var string Input hint (format to use) */
     protected $hint;
     /** @var array fields for database */
     public $fields=array();

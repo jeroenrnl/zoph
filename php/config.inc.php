@@ -64,15 +64,14 @@
 
     // If set to 0 Zoph will not use any Javascript
     // Of course this might mean some functionality is not available
-    define('JAVASCRIPT', 1);
+    // Deprecated: as of v0.9.1, Javascript can no longer be turned off.
+    //define('JAVASCRIPT', 1);
 
     // Enable the autocompletion feature
-    // This needs JAVASCRIPT to be on
     define('AUTOCOMPLETE', 1);
 
     // Enable Mapping and determine hich mapping provider to use
     // currently supported: 'google', 'googlev3', 'yahoo', 'cloudmade' or '' to disable
-    // This needs JAVASCRIPT to be on
     // Deprecated: Modify through admin -> config in web interface.
     // define('MAPS', '');
 
@@ -101,18 +100,23 @@
     // If you want to enable guessing the timezone based on the current
     // coordinated, set this to 1, this will however mean, that Zoph sends
     // information to the Geonames project. http://www.geonames.org/
-    define('GUESS_TZ', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    // define('GUESS_TZ', 0);
  
     // The SHARE feature allows you to publish a link to a photo that people 
     // can see without logging in to Zoph
-    define('SHARE', 0);
+    //
+    // Deprecated: Modify through admin -> config in web interface.
+    //    define('SHARE', 0);
     // To prevent people from generating hashes for the share functions,
     // you should provide Zoph with a unique salt, for both fullsize images and
     // midsize images. Both MUST be different. Longer is better. It should be
     // 10 characters at the very least. This is the only place where you need them,
     // so you don't need to remember them. You should keep them secret.
-    define('SHARE_SALT_FULL', 'Set this to a long secret string');
-    define('SHARE_SALT_MID', 'Set this to a long, different secret string');
+    
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('SHARE_SALT_FULL', 'Set this to a long secret string');
+    //define('SHARE_SALT_MID', 'Set this to a long, different secret string');
 
     
     // allow annotation of photos for emailing

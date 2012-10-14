@@ -439,7 +439,7 @@ function create_cat_pulldown($name, $value=null, $user, $sa=null) {
         $cat->lookup();
         $text=$cat->get("category");
     }
-    if($user->prefs->get("autocomp_categories") && AUTOCOMPLETE && JAVASCRIPT) {
+    if($user->prefs->get("autocomp_categories") && AUTOCOMPLETE) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
             " value='" . e($value) . "'>";
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 

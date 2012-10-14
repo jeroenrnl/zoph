@@ -801,7 +801,7 @@ function check_js($user) {
         ($user->prefs->get("autocomp_places")) || 
         ($user->prefs->get("autocomp_people")) ||  
         ($user->prefs->get("autocomp_photographer")) 
-        && AUTOCOMPLETE && JAVASCRIPT) {
+        && AUTOCOMPLETE) {
         
         return "<noscript><div class='warning'><img class='icon' src='images/icons/" . ICONSET . "/" . "warning.png'>" . translate("You have enabled autocompletion for one or more dropdown boxes on this page, however, you do not seem to have Javascript support. You should either enable javascript or turn autocompletion off, or this page will not work as expected!") . "</div></noscript>";
     }

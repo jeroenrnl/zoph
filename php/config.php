@@ -22,7 +22,6 @@
     if (!$user->is_admin()) {
         redirect(add_sid("zoph.php"));
     }
-
     $_action=getvar("_action");
     if($_action == "setconfig") {
         conf::loadFromRequestVars($request_vars);
@@ -33,10 +32,13 @@
     $tpl=new template("config", array(
         "title" => $title,
     ));
-    
+
+    // this doesn't work yet, because the page is not fully template-generated
+    // it is also included in header.inc.php, but header.inc.php should be
+    // phased out soon.
+    $tpl->js[]="js/conf.js";
     foreach(conf::getAll() as $name=>$item) {
         $tpl->addBlock($item->display());
     }
     echo $tpl;
-
 ?>

@@ -345,10 +345,10 @@ require_once("header.inc.php");
         <div class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
         <ul class="tabs">
 <?php
-        if(defined("SHARE") && SHARE===1 && ($user->is_admin() || $user->get("allow_share"))) {
+        if(conf::get("interface.share") && ($user->is_admin() || $user->get("allow_share"))) {
             $hash=$photo->getHash();
-            $full_hash=sha1(SHARE_SALT_FULL . $hash);
-            $mid_hash=sha1(SHARE_SALT_MID . $hash);
+            $full_hash=sha1(conf::get("interface.share.salt.full") . $hash);
+            $mid_hash=sha1(conf::get("interface.share.salt.mid") . $hash);
             $full_link=getZophURL() . "image.php?hash=" . $full_hash;
             $mid_link=getZophURL() . "image.php?hash=" . $mid_hash;
 
@@ -503,7 +503,7 @@ require_once("header.inc.php");
 ?>
 </div>
 <?php
-      if(JAVASCRIPT && conf::get("maps.provider") && ($_action=="display" || $_action=="edit" || $_action==="")) {
+      if(conf::get("maps.provider") && ($_action=="display" || $_action=="edit" || $_action==="")) {
         $map=new map();
 
         if($_action == "edit") {

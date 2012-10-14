@@ -63,9 +63,6 @@
     if($show_orig) {
 ?>
     <div class="main">
-<?php
-    if (JAVASCRIPT) {
-?>
         <form class="viewsettings" method="get" action="categories.php">
             <?php echo create_form($request_vars, array ("_view", "_autothumb",
 "_button")) ?>
@@ -75,9 +72,6 @@
             <?php echo create_autothumb_pulldown("_autothumb", $_autothumb,"onChange='form.submit()'") ?>
         </form>
         <br>
-<?php
-    }
-?>
         <h2>
 <?php
     if ($ancestors) {

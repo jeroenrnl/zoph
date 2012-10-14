@@ -1,0 +1,48 @@
+<?php
+/**
+ * A confItemSalt is a special kind of confItemString, which allows auto generation
+ * of a secure salt string.
+ *
+ * This file is part of Zoph.
+ *
+ * Zoph is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * Zoph is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with Zoph; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
+ */
+
+/**
+ * A confItemSalt is a special kind of confItemString, which allows auto generation
+ * of a secure salt string.
+ */
+class confItemSalt extends confItemString {
+    
+    protected $regex="[a-zA-Z0-9]{10,40}";
+    protected $title="";
+
+    public function display() {
+        $id=str_replace(".", "_", $this->getName());
+        $tpl=new block("confItemSalt", array(
+            "label" => e($this->getLabel()),
+            "name" => e($this->getName()),
+            "id" => e($id),
+            "value" => e($this->getValue()),
+            "desc" => e($this->getDesc()),
+            "hint" => e($this->getHint()),
+            "regex" => e($this->regex),
+            "title" => e($this->title)
+        ));
+        return $tpl;
+    }
+}

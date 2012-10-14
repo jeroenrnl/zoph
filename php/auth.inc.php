@@ -23,7 +23,7 @@
  * - a default user has been defined in config.inc.php
  * @todo Should be moved inside a class
  *
- * @package zoph
+ * @package Zoph
  * @author Jason Geiger and Jeroen Roos
  */
     $_action="display";
@@ -76,12 +76,18 @@
         $user = null;
         redirect("logon.php", "Logout");
     } else if (empty($user)) {
-        $uname = getvar("uname");
-        $pword = getvar("pword");
-        $redirect = getvar("redirect");
+        $hash=getvar("hash");
+        if(defined("IMAGE_PHP") && conf::get("interface.share") && !empty($hash)) {
+            require_once("classes/anonymousUser.inc.php");
+            $user = new anonymousUser();
+        } else {
+            $uname = getvar("uname");
+            $pword = getvar("pword");
+            $redirect = getvar("redirect");
 
-        $validator = new validator($uname, $pword);
-        $user = $validator->validate();
+            $validator = new validator($uname, $pword);
+            $user = $validator->validate();
+        }
 
         // we have a valid user
         if (!empty($user)) {

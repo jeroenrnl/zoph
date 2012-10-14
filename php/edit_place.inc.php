@@ -96,8 +96,7 @@
          <?php endif; ?>
          </fieldset>
 <?php
-    if(minimum_version("5.2.0")) {
-        if(GUESS_TZ) {
+        if(conf::get("date.guesstz")) {
             echo $place->guess_tz();
         }
         if($place->get("timezone")) {
@@ -111,9 +110,7 @@
 
          <label for="timezone_id"><?php echo translate("timezone") ?></label>
          <?php echo TimeZone::createPulldown("timezone_id", $place->get("timezone"), $user); ?>
-<?php
-    }
-?>
+
          <label for="notes"><?php echo translate("notes") ?></label>
          <textarea name="notes" cols="40" rows="4"><?php echo $place->get("notes") ?></textarea>
          <input type="submit" value="<?php echo translate($action, 0) ?>">

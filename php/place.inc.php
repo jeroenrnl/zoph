@@ -631,7 +631,7 @@ function create_place_pulldown($name, $value=null, $user=null) {
         $place->lookup();
         $text=$place->get("title");
     }
-    if($user->prefs->get("autocomp_places") && AUTOCOMPLETE && JAVASCRIPT) {
+    if($user->prefs->get("autocomp_places") && AUTOCOMPLETE) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
             " value='" . e($value) . "'>";
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 
