@@ -196,7 +196,7 @@
         </dd>
     </dl>
 <?php
-    if (AUTOCOMPLETE) {
+    if (conf::get("interface.autocomplete")) {
 ?>
     <br><h2><?php echo translate("Autocomplete")?></h2>
     <dl class="prefs">

@@ -68,7 +68,8 @@
     //define('JAVASCRIPT', 1);
 
     // Enable the autocompletion feature
-    define('AUTOCOMPLETE', 1);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('AUTOCOMPLETE', 1);
 
     // Enable Mapping and determine hich mapping provider to use
     // currently supported: 'google', 'googlev3', 'yahoo', 'cloudmade' or '' to disable

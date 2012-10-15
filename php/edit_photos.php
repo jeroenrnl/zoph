@@ -72,27 +72,27 @@
 <?php
     }
     else {
+        $category_select_array = null;
+        $album_select_array = null;
+        $places_select_array = null;
+        $people_select_array = null;
+        
+        
         // create once
-        if(!($user->prefs->get("autocomp_categories") && AUTOCOMPLETE)) {
-            $category_select_array = get_categories_select_array($user);
-        } else {
-            $category_select_array = null;
+        if(!conf::get("interface.autocomplete")) {
+            if(!$user->prefs->get("autocomp_categories")) {
+                $category_select_array = get_categories_select_array($user);
+            }
+            if(!$user->prefs->get("autocomp_albums")) {
+                $album_select_array = get_albums_select_array($user);
+            }
+            if(!$user->prefs->get("autocomp_places")) {
+                $places_select_array = get_places_select_array($user);
+            }
+            if(!$user->prefs->get("autocomp_people")) {
+                $people_select_array = get_people_select_array($user);
+            }
         }
-        if(!($user->prefs->get("autocomp_albums") && AUTOCOMPLETE)) {
-            $album_select_array = get_albums_select_array($user);
-        } else {
-            $album_select_array = null;
-        }
-        if(!($user->prefs->get("autocomp_places") && AUTOCOMPLETE)) {
-            $places_select_array = get_places_select_array($user);
-        } else {
-            $places_select_array = null;
-        }
-        if(!($user->prefs->get("autocomp_people") && AUTOCOMPLETE)) {
-            $people_select_array = get_people_select_array($user);
-        } else {
-            $people_select_array = null;
-        } 
 	
         // used to create hidden fields for recreating the results query
         $queryIgnoreArray[] = '_action';

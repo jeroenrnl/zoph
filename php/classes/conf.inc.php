@@ -183,15 +183,20 @@ class conf {
         $int_salt_full->setDefault("Change this");
         $interface[]=$int_salt_full;
 
-        $path = self::addGroup("path", "File and directory locations");
-        
-
         $int_salt_mid = new confItemSalt();
         $int_salt_mid->setName("interface.share.salt.mid");
         $int_salt_mid->setLabel("Salt for sharing mid size images");
         $int_salt_mid->setDesc("The salt for mid size images (this one) must be different from the salt of mid full images (above), because this allows Zoph to distinguish between them. If a link to your Zoph installation is being abused (for example because someone whom you mailed a link has published it on a forum), you can modify the salt to make all hash-based links to your Zoph invalid.");
         $int_salt_mid->setDefault("Modify this");
         $interface[]=$int_salt_mid;
+
+        $int_autoc = new confItemBool();
+        $int_autoc->setName("interface.autocomplete");
+        $int_autoc->setLabel("Autocomplete");
+        $int_autoc->setDesc("Use autocompletion for selection of albums, categories, places and people instead of standard HTML selectboxes. Can be individually switched off from user preferences.");
+        $int_autoc->setDefault(true);
+        $interface[]=$int_autoc;
+
 
         $path = self::addGroup("path", "File and directory locations");
         

@@ -38,7 +38,7 @@
         <script type="text/javascript" src="js/conf.js"></script>
 <?php
         }
-        if(AUTOCOMPLETE) {
+        if(conf::get("interface.autocomplete")) {
 ?>
         <script type="text/javascript" src="js/autocomplete.js"></script>
 <?php
