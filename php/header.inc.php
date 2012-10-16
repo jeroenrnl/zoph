@@ -124,7 +124,7 @@
 
     $tabs[translate("search",0)] = "search.php";
 
-    if (IMPORT &&
+    if (conf::get("import.enable") &&
         ($user->is_admin() || $user->get("import"))) {
 
         $tabs[translate("import", 0)] = "import.php";

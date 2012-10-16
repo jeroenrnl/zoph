@@ -63,11 +63,11 @@
             }
             else if ($size == "full") {
                 $file = $photo->get("name");
-                $dir = IMAGE_DIR . $photo->get("path") . "/";
+                $dir = conf::get("path.images") . $photo->get("path") . "/";
             }
             else {
                 $file = MID_PREFIX . "_" . $photo->get("name");
-                $dir = IMAGE_DIR . $photo->get("path") . "/" .
+                $dir = conf::get("path.images") . $photo->get("path") . "/" .
                     MID_PREFIX . "/";
             }
             if($includeurl) {

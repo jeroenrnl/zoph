@@ -27,11 +27,11 @@
     if(($type=="import_thumb" || $type=="import_mid") && ($user->is_admin() || $user->get("import"))) {
     
         $md5 = getvar("file");
-        $file = file::getFromMD5(IMAGE_DIR . "/" . IMPORT_DIR, $md5);
+        $file = file::getFromMD5(conf::get("path.images") . "/" . conf::get("path.upload"), $md5);
         
         $photo = new photo();
         $photo->set("name", basename($file));
-        $photo->set("path", IMPORT_DIR);
+        $photo->set("path", conf::get("path.upload"));
         if($type=="import_thumb") {
             $type="thumb";
         } else if ($type=="import_mid") {
@@ -70,13 +70,13 @@
         else {
             $watermark_file="";
             $name = $photo->get("name");
-            $image_path = IMAGE_DIR . "/" . $photo->get("path") . "/";
+            $image_path = conf::get("path.images") . "/" . $photo->get("path") . "/";
             if (!$user->is_admin()) {
                 $permissions = $user->get_permissions_for_photo($photo_id);
                 $watermark = $permissions->get("watermark_level");
                 $photolevel=$photo->get("level");
                 if(WATERMARK && ($photolevel > $watermark)) {
-                    $watermark_file = IMAGE_DIR . "/" . WATERMARK;
+                    $watermark_file = conf::get("path.images") . "/" . WATERMARK;
                     if (!file_exists($watermark_file)) {
                         $watermark_file="";
                     }

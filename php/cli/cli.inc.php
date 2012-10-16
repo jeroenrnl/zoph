@@ -265,13 +265,13 @@ class cli {
 
             $path="/" . cleanup_path($path) . "/";
             
-            // check if path is in IMAGE_DIR
-            if(substr($path, 0, strlen(IMAGE_DIR))!=IMAGE_DIR) {
-                throw new ImportFileNotInPathException($file ." is not in IMAGE_DIR (" . IMAGE_DIR . "), skipping.\n");
+            // check if path is in conf::get("path.images")
+            if(substr($path, 0, strlen(conf::get("path.images")))!=conf::get("path.images")) {
+                throw new ImportFileNotInPathException($file ." is not in conf::get("path.images") (" . conf::get("path.images") . "), skipping.\n");
             } else {
-                $path=substr($path, strlen(IMAGE_DIR));
+                $path=substr($path, strlen(conf::get("path.images")));
                 if($path[0]=="/") {
-                    // IMAGE_DIR didn't end in '/', let's cut it off
+                    // conf::get("path.images") didn't end in '/', let's cut it off
                     $path=substr($path, 1);
                 }
             }

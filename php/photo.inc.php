@@ -409,7 +409,7 @@ class photo extends zophTable {
                 $newPath .= cleanup_path(str_replace("-", ".", $date));
             }
         }
-        $toPath="/" . cleanup_path(IMAGE_DIR . "/" . $newPath) . "/";
+        $toPath="/" . cleanup_path(conf::get("path.images") . "/" . $newPath) . "/";
         
         $path=$file->getPath();
         create_dir_recursive($toPath . "/" . MID_PREFIX);
@@ -470,7 +470,7 @@ class photo extends zophTable {
     }
 
     function get_file_path() {
-        return IMAGE_DIR . "/" . $this->get("path") . "/" . $this->get("name");
+        return conf::get("path.images") . "/" . $this->get("path") . "/" . $this->get("name");
     }
 
     function get_midsize_img() {
@@ -707,7 +707,7 @@ class photo extends zophTable {
     }
 
     function thumbnail($force=true) {
-        $path=IMAGE_DIR . "/" . $this->get("path") . "/";
+        $path=conf::get("path.images") . "/" . $this->get("path") . "/";
 
         $conv=get_converted_image_name($this->get("name"));
         $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
@@ -744,10 +744,7 @@ class photo extends zophTable {
 
         $img_dst = imagecreatetruecolor($new_width, $new_height);
         flush();
-        if(!defined("IMPORT_RESIZE")) {
-            define("IMPORT_RESIZE", "resample");
-        }
-        if (strtolower(IMPORT_RESIZE)=="resize") {
+        if (conf::get("import.resize")=="resize") {
             imagecopyresized($img_dst, $img_src, 0, 0, 0, 0,
                 $new_width, $new_height, $width, $height);
         } else {
@@ -755,7 +752,7 @@ class photo extends zophTable {
                 $new_width, $new_height, $width, $height);
         }
         flush();
-        $new_image = IMAGE_DIR . '/' . $this->get("path") . '/' . $prefix . '/' .
+        $new_image = conf::get("path.images") . '/' . $this->get("path") . '/' . $prefix . '/' .
             $prefix . '_' .  get_converted_image_name($this->get("name"));
         $dir=dirname($new_image);
 
@@ -791,7 +788,7 @@ class photo extends zophTable {
             return;
         }
 
-        $dir = IMAGE_DIR . "/" . $this->get("path") . "/";
+        $dir = conf::get("path.images") . "/" . $this->get("path") . "/";
         $name = $this->get('name');
         $converted_name = get_converted_image_name($name);
 
@@ -911,7 +908,7 @@ class photo extends zophTable {
          *  the width of the text lines.
          * ********************************/
 
-        $image_path = IMAGE_DIR . $this->get("path");
+        $image_path = conf::get("path.images") . $this->get("path");
         if ($size == 'full') {
             $image_path .= "/" . $this->get("name");
         }

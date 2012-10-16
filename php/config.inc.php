@@ -28,7 +28,8 @@
     //define('CSS_SHEET', 'css.php');
     define('ICONSET', 'default');
 
-    define('IMAGE_DIR', "/data/images/");
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('IMAGE_DIR', "/data/images/");
 
     // authentication method used from auth.inc.php
     // (this needs to be the name of a function in validator.inc.php)
@@ -151,33 +152,40 @@
     // Import related options:
 
     // Enable (1) or disable (0) importing through the webinterface.
-    define('IMPORT', 1);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('IMPORT', 1);
     // Enable (1) or disable (0) uploading photos.
-    define('UPLOAD', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('UPLOAD', 0);
 
     // Maximum filesize to be uploaded, in bytes:
     // Make sure you also change "upload_max_filesize" "post_max_size"
     // and possibly "max_execution_time" and "max_input_time" in php.ini
-    define('MAX_UPLOAD', 10000000);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('MAX_UPLOAD', 10000000);
 
     // Directory where uploads are placed until they are completely processed
     // this is a directory under IMAGE_DIR
-    define('IMPORT_DIR', 'upload');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('IMPORT_DIR', 'upload');
 
     // Number of files to resize at the same time
     // on a fast server with multiple CPU's or cores, you could increase this
-    define('IMPORT_PARALLEL', 1);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('IMPORT_PARALLEL', 1);
 
     // Automatically rotate imported images
     // requires "jhead"
-    define('IMPORT_AUTOROTATE', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('IMPORT_AUTOROTATE', 0);
 
     // How to resize an image during  import
     // 'resample': high quality / high CPU / slow [default]
     // 'resize': lower quality / low CPU / fast
     // resize can be about 3 times faster, but the resized image has a
     // lower quality.
-    define('IMPORT_RESIZE', 'resample');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('IMPORT_RESIZE', 'resample');
 
     // Zoph needs a MIME Magic file to be able to determine the filetype of an 
     // uploaded file. This is an important security measure, since it prevents 
@@ -189,7 +197,8 @@
     // /usr/share/misc/magic.mgc, /usr/share/misc/file/magic.mgc, 
     // /usr/share/file/magic are often used.
     //
-    define('MAGIC_FILE', '');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('MAGIC_FILE', '');
 
         
     // commands to use to expand uploaded archives.  set to 0 to disable.
@@ -205,10 +214,12 @@
     //define('UNBZ_CMD', 'bunzip2');
 
     // Use dated dirs with web import 
-    define('USE_DATED_DIRS', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('USE_DATED_DIRS', 0);
     // Use hierarchical dated dirs like 2005/12/21
     // This parameter is ignored when USE_DATED_DIRS is not set
-    define('HIER_DATED_DIRS', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('HIER_DATED_DIRS', 0);
 
     // let users rate photos
     define('ALLOW_RATINGS', 1);

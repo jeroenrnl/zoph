@@ -20,7 +20,7 @@
  */
 
 require_once("include.inc.php");
-if ((!IMPORT) || (!$user->is_admin() && !$user->get("import"))) {
+if ((!conf::get("import.enable")) || (!$user->is_admin() && !$user->get("import"))) {
         redirect(add_sid("zoph.php"));
 }
 
@@ -66,7 +66,7 @@ if(empty($_action)) {
         "translate['import']='" .trim(translate("import", false)) . "';\n" .
         "upload_id='" . $upload_id ."';\n" .
         "num=" . $num . ";\n" .
-        "parallel=" . (int) IMPORT_PARALLEL  . ";\n";
+        "parallel=" . (int) conf::get("import.parallel")  . ";\n";
 
     $tpl=new template("import", array(
                 "upload_id" => $upload_id,
@@ -77,7 +77,7 @@ if(empty($_action)) {
     echo $tpl;
     include("footer.inc.php");
 } else if ($_action=="browse") {
-    if(UPLOAD) {
+    if(conf::get("import.upload")) {
         $upload_num = $upload_id . "_" . $num;
 
         $body=new template("uploadform", array(
@@ -102,14 +102,14 @@ if(empty($_action)) {
                         "width" => 300));
                 echo $tpl;
                 } else {
-                echo translate("Uploading photos has been disabled in config.inc.php. Set UPLOAD to 1 to enable uploading images via the browser.");
+                echo translate("Uploading photos has been disabled in configuration.");
                 }
                 ?>
                 </body>
                 </html>
                 <?php
 } else if ($_action=="upload") {
-    if(UPLOAD) {
+    if(conf::get("import.upload")) {
         if($_FILES["file"]) {
             $file=$_FILES["file"];
         }

@@ -204,12 +204,29 @@ class conf {
         $path_images = new confItemString();
         $path_images->setName("path.images");
         $path_images->setLabel("Images directory");
-        $path_images->setDesc("Location of the images on the filesystem");
+        $path_images->setDesc("Location of the images on the filesystem. Absolute path, thus starting with a /");
         $path_images->setDefault("/data/images");
         $path_images->setRegex("^\/[A-Za-z0-9_\.\/]+$");
-        $path_images->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_).");
+        $path_images->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Must start with a /");
         $path[]=$path_images;
 
+        $path_upload = new confItemString();
+        $path_upload->setName("path.upload");
+        $path_upload->setLabel("Upload dir");
+        $path_upload->setDesc("Directory where uploaded files are stored and from where files are imported in Zoph. This is a directory under the images directorty (above). For example, if the images directory is set to /data/images and this is set to upload, photos will be uploaded to /data/images/upload.");
+        $path_upload->setDefault("upload");
+        $path_upload->setRegex("^[A-Za-z0-9_]+[A-Za-z0-9_\.\/]*$");
+        $path_upload->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
+        $path[]=$path_upload;
+        
+        $path_magic = new confItemString();
+        $path_magic->setName("path.magic");
+        $path_magic->setLabel("Magic file");
+        $path_magic->setDesc("Zoph needs a MIME Magic file to be able to determine the filetype of an uploaded file. This is an important security measure, since it prevents users from uploading files other than images and archives. If left empty, PHP will use the built-in Magic file, if for some reason this does not work, you can specify the location of the MIME magic file. Where this file is located, depends on your distribution, /usr/share/misc/magic.mgc, /usr/share/misc/file/magic.mgc, /usr/share/file/magic are often used.");
+        $path_magic->setDefault("");
+        $path_magic->setRegex("^(\/[A-Za-z0-9_\.\/]+|)$");
+        $path_magic->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Must start with a /. Can be empty for PHP builtin magix file.");
+        $path[]=$path_magic;
 
         $maps = self::addGroup("maps", "Mapping support");
 
@@ -223,8 +240,70 @@ class conf {
         $maps_provider->addOption("yahoo", "Yahoo maps");
         $maps_provider->addOption("cloudmade", "Cloudmade (OpenStreetMap)");
         $maps_provider->setDefault("");
-
         $maps[]=$maps_provider;
+        
+        $import = self::addGroup("import", "Importing and uploading photos");
+
+        $import_enable = new confItemBool();
+        $import_enable->setName("import.enable");
+        $import_enable->setLabel("Import through webinterface");
+        $import_enable->setDesc("Use this option to enable or disable importing using the webbrowser. With this option enabled, an admin user, or a user with import rights, can import files placed in the import directory (below) into Zoph. If you want users to be able to upload as well, you need to enable uploading as well.");
+        $import_enable->setDefault(false);
+        $import[]=$import_enable;
+
+        $import_upload = new confItemBool();
+        $import_upload->setName("import.upload");
+        $import_upload->setLabel("Upload through webinterface");
+        $import_upload->setDesc("Use this option to enable or disable uploading files. With this option enabled, an admin user, or a user with import rights, can upload files to the server running Zoph, they will be placed in the import directory (below). This option requires \"import through web interface\" (above) enabled.");
+        $import_upload->setDefault(false);
+        $import[]=$import_upload;
+
+
+        $import_maxupload = new confItemString(); 
+        $import_maxupload->setName("import.maxupload");
+        $import_maxupload->setLabel("Maximum filesize");
+        $import_maxupload->setDesc("Maximum size of uploaded file in bytes. You might also need to change upload_max_filesize, post_max_size and possibly max_execution_time and max_input_time in php.ini.");
+        $import_maxupload->setRegex("^[0-9]+$");
+        $import_maxupload->setDefault("10000000");
+        $import[]=$import_maxupload;
+        
+        $import_parallel = new confItemString(); 
+        $import_parallel->setName("import.parallel");
+        $import_parallel->setLabel("Resize parallel");
+        $import_parallel->setDesc("Photos will be resized to thumbnail and midsize images during import, this setting determines how many resize actions run in parallel. Can be set to any number. Don't change this, unless you have a fast server with multiple CPU's or cores.");
+        $import_parallel->setRegex("^[0-9]+$");
+        $import_parallel->setDefault("1");
+        $import[]=$import_parallel;
+
+        $import_rotate = new confItemBool();
+        $import_rotate->setName("import.rotate");
+        $import_rotate->setLabel("Rotate images");
+        $import_rotate->setDesc("Automatically rotate imported images, requires jhead");
+        $import_rotate->setDefault(false);
+        $import[]=$import_rotate;
+
+        $import_resize = new confItemSelect();
+        $import_resize->setName("import.resize");
+        $import_resize->setLabel("Resize method");
+        $import_resize->setDesc("Determines how to resize an image during import. Resize can be about 3 times faster than resample, but the resized image has a lower quality.");
+        $import_resize->addOption("resize", "Resize (lower quality / low CPU / fast)");
+        $import_resize->addOption("resample", "Resample (high quality / high CPU / slow)");
+        $import_resize->setDefault("resample");
+        $import[]=$import_resize;
+
+        $import_dated = new confItemBool();
+        $import_dated->setName("import.dated");
+        $import_dated->setLabel("Dated dirs");
+        $import_dated->setDesc("Automatically place photos in dated dirs (\"2012.10.16/\") during import");
+        $import_dated->setDefault(false);
+        $import[]=$import_dated;
+
+        $import_dated_hier = new confItemBool();
+        $import_dated_hier->setName("import.dated.hier");
+        $import_dated_hier->setLabel("Hierarchical dated dirs");
+        $import_dated_hier->setDesc("Automatically place photos in a dated directory tree (\"2012/10/16/\") during import. Ignored unless \"Dated dirs\" is also enabled");
+        $import_dated_hier->setDefault(false);
+        $import[]=$import_dated_hier;
 
         $date = self::addGroup("date", "Date and time");
 
