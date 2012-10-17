@@ -1,4 +1,22 @@
 Zoph Changelog
+Zoph 0.9.0.1
+18 oct 2012
+
+Zoph 0.9.0.1 is the first maintenance release for Zoph 0.9. It adds compatibility with MySQL 5.4.4 and later and PHP 5.4 support. Several bugs were fixed.
+
+
+Bugs
+
+    issue#1  Changed TYPE=MyISAM to ENGINE=MyISAM for MySQL > 5.4.4 compatibility
+    issue#1  Fixed: PHP Notice: Array to string conversion
+    issue#2  Changed timestamp(14) into timestamp
+    issue#3  Removed pass-by-reference for PHP 5.4 compatibility
+    issue#6  Missing French translation
+    issue#30 Remove warning about undefined variables
+    issue#31 Fixed several errors in geotagging code
+    issue#33 Fixed: no error message when rotate fails
+             Fixed a small layout issue on the prefs page
+
 Zoph 0.9
 23 jun 2012
 
