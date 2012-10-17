@@ -90,8 +90,7 @@ abstract class zophTable {
 
         reset($vars);
         while (list($key, $val) = each($vars)) {
-
-            log::msg("<b>" . $key . "</b> = " . $val, log::DEBUG, log::VARS);
+            log::msg("<b>" . $key . "</b> = " . implode(",", (array) $val), log::DEBUG, log::VARS);
 
             // ignore empty keys or values unless the field must be set.
 
