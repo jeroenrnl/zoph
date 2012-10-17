@@ -203,7 +203,7 @@
 <?php
     if (JAVASCRIPT && AUTOCOMPLETE) {
 ?>
-    <br><h2><?php echo translate("Autocomplete")?></h2");
+    <br><h2><?php echo translate("Autocomplete")?></h2>
     <dl class="prefs">
         <dt><?php echo translate("albums") ?></dt>
         <dd>
