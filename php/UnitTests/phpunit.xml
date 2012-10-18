@@ -1,0 +1,29 @@
+<phpunit>
+  <logging>
+    <log type="coverage-html" target="./output" yui="true" />
+    <log type="junit" target="./output/junit.xml" />
+  </logging>
+  <filter>
+    <blacklist>
+        <directory>/usr/share</directory>
+        <directory>../UnitTests</directory>
+    </blacklist>
+  </filter>
+  <php>
+    <var name="INSTANCE" value="zophtest" />
+  </php>
+  <testsuites>
+    <testsuite name="Zoph">
+      <file>userTest.php</file>
+      <file>anonymousUserTest.php</file> 
+      <file>albumTest.php</file> 
+      <file>categoryTest.php</file> 
+      <file>groupTest.php</file> 
+      <file>groupPermissionsTest.php</file> 
+      <file>importTest.php</file> 
+      <file>personTest.php</file> 
+      <file>photoTest.php</file> 
+      <file>placeTest.php</file> 
+    </testsuite>
+  </testsuites>
+</phpunit>
