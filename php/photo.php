@@ -509,22 +509,19 @@ require_once("header.inc.php");
 </div>
 <?php
       if(JAVASCRIPT && MAPS && ($_action=="display" || $_action=="edit" || $_action==="")) {
-?>
-        <div id="map" class="map"></div>
-<?php
-        $array=$photo->get_near(100);
-        $array[]=$photo;
+        $map=new map();
+
+        if($_action == "edit") {
+            $map->setEditable();
+            $map->setCenterAndZoomFromObj($photo);
+            $map->addMarkers(array($photo), $user);
+        } else {
+            $photos=$photo->get_near(100);
+            $photos[]=$photo;
+            $map->addMarkers($photos, $user);
+        }
+        echo $map;
         
-?>
-    <script type="text/javascript">
-        <?php echo create_map_js(); ?>
-    <?php if($_action=="edit"): ?>
-        <?php echo $photo->getMappingJs($user, true); ?>
-    <?php else: ?>
-        <?php echo getMarkers($array, $user); ?>
-    <?php endif; ?>
-    </script>
-<?php
       }
 ?>
 

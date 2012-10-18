@@ -478,7 +478,12 @@ div.breadcrumb li.firstdots:before {
     border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
     clear: both;
     overflow: hidden;
-    }
+}
+
+.main > div.map {
+    left: -1px;
+    padding: 0;
+}
 
 div.warning {
     background: #ffffcc;

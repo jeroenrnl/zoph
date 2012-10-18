@@ -23,7 +23,7 @@
  * - a default user has been defined in config.inc.php
  * @todo Should be moved inside a class
  *
- * @package zoph
+ * @package Zoph
  * @author Jason Geiger and Jeroen Roos
  */
     $_action="display";

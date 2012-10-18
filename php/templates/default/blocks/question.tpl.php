@@ -1,6 +1,9 @@
 <?php
 /**
- * Template for pages.
+ * Template for a simple question, such as a 'confirm deletion' request
+ * eventually, this whould be replaced by a javascript-based
+ * modal window, but for now, we just try to stay close to the current
+ * way of doing things.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,27 +18,16 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @author Jeroen Roos
  * @package ZophTemplates
- * @todo This is a temporary template until the entire zoph page is generated from a template
+ * @author Jeroen Roos
  */
 
 if(!ZOPH) { die("Illegal call"); }
-require_once("header.inc.php");
 ?>
-    <h1>
-        <?php echo $this->getActionlinks(); ?>
-        <?php echo $tpl_title; ?>
-    </h1>
-    <div class="main">
-        <?php echo $this->displayBlocks(); ?>
-    </div>
-    <?php if(!empty($tpl_mapping_js)): ?>
-    <div class="map" id="map">
-    </div>
-    <script type='text/javascript'>
-        <?php echo $tpl_mapping_js; ?>
-        mapstraction.autoCenterAndZoom();
-    </script>
-    <?php endif; ?>
-    <?php require_once("footer.inc.php"); ?>
+
+<div class="confirm">
+    <?php echo $tpl_question ?>
+    <?php echo $this->getActionlinks(); ?>
+</div>
+
+            

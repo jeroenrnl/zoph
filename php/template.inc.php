@@ -31,6 +31,16 @@ class template {
     public $css=array(CSS_SHEET);
     public $title="Zoph";
 
+    /** @var array contains actionlinks */
+    private $actionlinks=array();
+
+    /** 
+     * @var array contains blocks or sub-templates that will be 
+     *              displayed inside this template by calling the
+     *              getBlocks() function from within the template 
+     */
+    private $blocks=array();
+
     /**
      * Create template object
      *
@@ -113,10 +123,54 @@ class template {
         return $html;
     }
 
+
+    /**
+     * Add a block
+     */
+    public function addBlock(block $block) {
+        $this->blocks[]=$block;
+    }
+
+    /**
+     * Get an array of blocks
+     */
+
+    protected function getBlocks() {
+        return $this->blocks;
+    }
+
+    protected function displayBlocks() {
+        $html="";
+        foreach($this->getBlocks() as $block) {
+            $html.=$block;
+        }
+        return $html;
+    }
+
+
+    /**
+     * Add an actionlink
+     */
+    public function addActionlink($title, $link) {
+        $this->actionlinks[$title]=$link;
+    }
+
+    /**
+     * Add multiple actionlinks
+     */
+    public function addActionlinks(array $al) {
+        foreach($al as $title => $link) {
+            $this->addActionlink($title, $link);
+        }
+    }
+
     /**
      * Markup an array of actionlinks using the actionlinks template
      */
-    private function getActionlinks($actionlinks) {
+    private function getActionlinks(array $actionlinks=null) {
+        if($actionlinks==null) {
+            $actionlinks=$this->actionlinks;
+        }
         if(is_array($actionlinks)) {
             $tpl=new template("actionlinks", array(
                 "actionlinks" => $actionlinks)

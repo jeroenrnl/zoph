@@ -208,16 +208,19 @@
 ?>
     </div>
 <?php
-      if(JAVASCRIPT && MAPS) {
-?>
-        <div id="map" class="map"></div>
-        <script type="text/javascript">
-            <?php echo create_map_js(); ?>
-            <?php echo $place->getMappingJs($user); ?>
-        </script>
-<?php
+        if(JAVASCRIPT && MAPS) {
+            $map=new map();
+            $map->setCenterAndZoomFromObj($place);
+            $marker=$place->getMarker($user);
+            if($marker instanceof marker) {
+                $map->addMarker($marker);
+            }
+            $map->addMarkers($children, $user);
+            echo $map;
+        }
+       
 
-      }
+
     } // if show_orig
     echo $page_html;
     require_once("footer.inc.php");

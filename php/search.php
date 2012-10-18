@@ -646,15 +646,13 @@ for ($i = 0; $i <= $count; $i++) {
 ?>
 
 </div>
-<?php if(JAVASCRIPT && MAPS): ?>
-<div class="map" id="map"></div>
-<script type="text/javascript">
-    <?php echo create_map_js(); ?>
-    zMaps.setUpdateHandlers();
-    zMaps.updateMap();
-</script>
-<?php endif; ?>
-<?php
+<?php 
+if(JAVASCRIPT && MAPS) {
+    $map=new map();
+    $map->setEditable();
+    $map->setCenterAndZoom(0,0,2);
+    echo $map;
+}
 require_once("footer.inc.php");
 
 }

@@ -104,7 +104,7 @@ class place extends zophTreeTable {
     function tzid_to_timezone() {
         $tzkey=$this->get("timezone_id");
         if($tzkey>0) {
-            $tzarray=get_tz_select_array();
+            $tzarray=TimeZone::getSelectArray();
             $tz=$tzarray[$tzkey];
             $this->set("timezone", $tz);
         } else {
@@ -328,14 +328,17 @@ class place extends zophTreeTable {
         }
 
     }
-    function getMappingJs(user $user, $edit=false, $icon = "/geo-place.png") {
-         $js=parent::getMappingJs($user, $edit, $icon);
-         if (!$edit) {
-            $js.=getMarkers($this->getChildren($user), $user);
-        }
-        return $js;
+
+    /**
+     * Get Marker to be placed on map
+     * @param user Currently logged on user
+     * @param string icon to be used.
+     * @return marker instance of marker class
+     */
+    public function getMarker(user $user, $icon="geo-place.png") {
+        return map::getMarkerFromObj($this, $user, $icon);
     }
-    
+
     /**
      * Get details (statistics) about this place from db
      * @param user Only show albums this user is allowed to see
@@ -464,16 +467,12 @@ class place extends zophTreeTable {
     }
         
 
-    function getMarker(user $user, $icon="geo-place.png") {
-        return parent::getMarker($user, $icon);
-    }
-
     function guess_tz() {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         $timezone=$this->get("timezone");
         if((!$timezone && $lat && $lon) && minimum_version("5.1.0")) {
-            $tz=guess_tz($lat, $lon);
+            $tz=TimeZone::guess($lat, $lon);
             if($tz) {
                 $html="<span class='actionlink'>" .
                     "<a href=place.php?_action=update&place_id=" .

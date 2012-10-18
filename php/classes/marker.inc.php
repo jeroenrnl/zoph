@@ -1,6 +1,8 @@
 <?php
 /**
- * Template for pages.
+ * Marker to be displayed on map
+ *
+ * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,26 +18,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @author Jeroen Roos
- * @package ZophTemplates
- * @todo This is a temporary template until the entire zoph page is generated from a template
+ * @package Zoph
  */
 
-if(!ZOPH) { die("Illegal call"); }
-require_once("header.inc.php");
-?>
-    <h1>
-        <?php echo $this->getActionlinks(); ?>
-        <?php echo $tpl_title; ?>
-    </h1>
-    <div class="main">
-        <?php echo $this->displayBlocks(); ?>
-    </div>
-    <?php if(!empty($tpl_mapping_js)): ?>
-    <div class="map" id="map">
-    </div>
-    <script type='text/javascript'>
-        <?php echo $tpl_mapping_js; ?>
-        mapstraction.autoCenterAndZoom();
-    </script>
-    <?php endif; ?>
-    <?php require_once("footer.inc.php"); ?>
+/**
+ * Class to display markers on a map
+ */
+class marker {
+
+    public $lat=0;
+    public $lon=0;
+    public $icon=0;
+    public $title="";
+    public $quicklook="";
+
+    public function __construct($lat, $lon, $icon, $title, $quicklook) {
+        $this->lat=$lat;
+        $this->lon=$lon;
+        $this->icon=$icon;
+        $this->title=$title;
+        $this->quicklook=$quicklook;
+    }
+}

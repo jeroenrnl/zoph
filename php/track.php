@@ -22,8 +22,6 @@ require_once("include.inc.php");
 
 $title="Zoph";
 $content="";
-$header_actionlinks="";
-$main_actionlinks="";
 $mapping_js="";
 
 if (!$user->is_admin()) {
@@ -52,40 +50,42 @@ $obj = &$track;
 
 require_once("actions.inc.php");
 
-    
+$tpl=new template("main", array(
+    "title"     => $title
+));
+
 if ($action == "confirm") {
-    $main_actionlinks=array(
+    $q=new block("question", array(
+        "question"  => translate("confirm deletion of this track"),
+        "title"     => translate("delete track")
+    ));
+    $q->addActionlinks(array(
         translate("delete") => "track.php?_action=confirm&amp;track_id=" . $track_id,
         translate("cancel") => "track.php?_action=display&amp;track_id=" . $track->get("track_id"),
-    );
-    $content=translate("confirm deletion of this track");
-    $title=translate("delete track");
-} else if ($action == "display") {
-    $tpl=new template("definitionlist",array(
-        "class" => "track",
-        "dl" => $track->getDisplayArray()
     ));
-    $content=$tpl->toString();
-    $header_actionlinks=array (
+    $tpl->addBlock($q);
+} else if ($action == "display") {
+    $tpl->addActionlinks(array(
         translate("return") => "tracks.php",
         translate("edit") => "track.php?_action=edit&amp;track_id=" . $track->get("track_id"),
         translate("delete") => "track.php?_action=delete&amp;track_id=" . $track->get("track_id")
-    );
-    $mapping_js = create_map_js() . $track->get_js();
+    ));
+    $dl=new block("definitionlist",array(
+        "class" => "track",
+        "dl" => $track->getDisplayArray()
+    ));
+    $tpl->addBlock($dl);
+
+    $map=new map();
+    $map->addTrack($track);
+    $tpl->addBlock($map);
 } else {
-    $tpl=new template("track_form", array(
+    $form=new block("track_form", array(
         "action"    => $action,
         "track_id"  => $track->getId(),
         "name"      => $track->get("name")
     ));
-    $content=$tpl->toString();
+    $tpl->addBlock($form);
 }
-$tpl=new template("main", array(
-    "title"     => $title,
-    "content"   => $content,
-    "header_actionlinks" => $header_actionlinks,
-    "main_actionlinks" => $main_actionlinks,
-    "mapping_js" => $mapping_js
-));
 echo $tpl;
 ?>

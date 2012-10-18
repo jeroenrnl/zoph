@@ -794,37 +794,6 @@ function pager($current, $total, $num_pages, $page_size, $max_size, $request_var
     }
     return $html;
 }
-function getMarkers($objects, $user) {
-    $js="";
-    $markers=array();
-    if($objects) {
-        foreach($objects as $object) {
-            $object->lookup();
-            $marker=$object->getMarker($user);
-            if($marker) {
-                $markers[]=$marker;
-            }
-        }
-        // if multiple photos are taken in the same place, that place 
-        // is multiple times in the array, let's remove doubles:
-        $markers=array_unique($markers);
-        foreach($markers as $marker) {
-            $js.=$marker;
-        }
-        $js.="  mapstraction.autoCenterAndZoom();\n";
-    }
-    if(count($markers)>0) {
-        // only return the javascript if anything is in there, to
-        // prevent an empty <script> tag.
-        return $js;
-    } else {
-        return null;
-    }
-}
-
-function create_map_js($provider=MAPS, $map="map") {
-    return "  zMaps.createMap('" . $map . "','" . $provider . "');\n";
-}
 
 function check_js($user) {
     if (($user->prefs->get("autocomp_albums")) || 

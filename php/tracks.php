@@ -20,14 +20,13 @@
  * @package Zoph
  * @author Jeroen Roos
  */
-
 require_once("include.inc.php");
 
 $title=translate("Geotag");
-$mapping_js="";
 
 $_action=getvar("_action");
 $test=getvar("_test");
+$map=null;
 
 if (!$user->is_admin()) {
     if($user->get("browse_tracks")) {
@@ -47,28 +46,28 @@ if($_action=="" || $_action=="display") {
     $title = translate("Tracks");
     $tracks=track::getAll();
     if(count($tracks>0)) {
-        $tracks_table=new template("tracks_table", array(
+        $content=new block("tracks_table", array(
             "tracks" => $tracks
         ));
-        $content=$tracks_table->toString();
     } else {
-        $content=translate("No tracks found, you should import a GPX file.");
+        $content=new block("error", array(
+            "error" => translate("No tracks found, you should import a GPX file.")
+        ));
     }
-
-
 } else if ($_action=="geotag") {
     if ($num_photos<= 0) {
-        $content=translate("No photos were found matching your search criteria.") . "\n";
+        $content=new block("error", array(
+            "error" => translate("No photos were found matching your search criteria.")
+        ));
     } else {
         $hidden=$vars;
         unset($hidden["_off"]);
         $hidden["_action"]="do_geotag";
 
-        $form=new template("geotag_form", array(
+        $content=new block("geotag_form", array(
             "num_photos"    => $num_photos,
             "hidden"        => $hidden));
 
-        $content=$form->toString();
     }
         
 } else if ($_action=="do_geotag") {
@@ -117,18 +116,12 @@ if($_action=="" || $_action=="display") {
             }
         }
         $tagged=count($tphotos);
-        if($tagged>0) {
-            $js="";
-            foreach ($tphotos as $photo) {
-                $js.=$photo->getMarker($user);
-            }
-            
-            $mapping_js=create_map_js() . $js;
-        }
+        $map=new map();
+        $map->addMarkers($tphotos, $user);
     } else {
         $tagged=0;
     }
-    $results=new template("tracks_geotag_results", array(
+    $content=new block("tracks_geotag_results", array(
         "count"         => $total,
         "actionlinks"   => 
             array(translate("geotag") => "tracks.php?" . html_entity_decode($new_vars)),
@@ -136,14 +129,15 @@ if($_action=="" || $_action=="display") {
         "tagged_count"  => (int) $tagged,
         "total_count"   => (int) $total
     ));
-    $content=$results->toString();
 }
 $tpl=new template("main", array(
     "title" => $title,
-    "content" => $content,
-    "mapping_js" => $mapping_js,
-    "header_actionlinks" => null,
-    "main_actionlinks" => null
 ));
+if($content instanceof block) {
+    $tpl->addBlock($content);
+}
+if($map instanceof block) {
+    $tpl->addBlock($map);
+}
 echo $tpl;
 ?>

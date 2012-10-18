@@ -170,21 +170,6 @@ class track extends zophTable {
     }
 
     /**
-     * Create Javascript code for this track
-     */
-    public function get_js($map="mapstraction") {
-        $js="    points=new Array();\n";
-        foreach($this->points as $point) {
-            $lat=$point->get("lat");
-            $lon=$point->get("lon");
-            $js .= "    points.push(new mxn.LatLonPoint(" . $lat .", " .$lon . "));\n";
-        }
-        $js .= "    track=new mxn.Polyline(points);\n";
-        $js .= "    " . $map . ".addPolyline(track);\n";
-        return $js;
-    }
-    
-    /**
      * Get the first point from a track
      */
     public function getFirstPoint() {

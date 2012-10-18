@@ -1126,16 +1126,16 @@ echo ("<br>\noutString:<br>\n" . $out_string);
 
     function get_time($timezone=null, $date_format=DATE_FORMAT, $time_format=TIME_FORMAT) { 
         if(minimum_version("5.1.0")) {
-            if(valid_tz($timezone)) {
+            if(TimeZone::validate($timezone)) {
                 $place_tz=new TimeZone($timezone);
             } else { 
                 $this->lookup_location();
                 $loc=$this->location;
-                if($loc && valid_tz($loc->get("timezone"))) {
+                if($loc && TimeZone::validate($loc->get("timezone"))) {
                     $place_tz=new TimeZone($loc->get("timezone"));
                 } 
             }
-            if(valid_tz(CAMERA_TZ)) {
+            if(TimeZone::validate(CAMERA_TZ)) {
                 $camera_tz=new TimeZone(CAMERA_TZ);
             }    
                 
@@ -1176,7 +1176,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
 
     function get_time_details() {
         $tz=null;
-        if(valid_tz(CAMERA_TZ)) {
+        if(TimeZone::validate(CAMERA_TZ)) {
             $tz=CAMERA_TZ;
         }
         
@@ -1191,7 +1191,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
        
         $datetime=$this->get_time();
 
-        $tpl=new template("time_details", array(
+        $tpl=new block("time_details", array(
             "photo_date" => $this->get("date"),
             "photo_time" => $this->get("time"),
             "camera_tz" => $tz,
@@ -1201,7 +1201,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             "calc_date" => $datetime[0],
             "calc_time" => $datetime[1]
         ));
-        return $tpl->toString();
+        return $tpl;
     }
 
     function get_rating_details() {
@@ -1221,14 +1221,14 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             $ratings[]=$row;
         }
         
-        $tpl=new template("rating_details",array(
+        $tpl=new block("rating_details",array(
             "rating" => $rating,
             "ratings" => $ratings,
             "photo_id" => $this->get("photo_id")
         ));
 
 
-        return $tpl->toString();
+        return $tpl;
     }
     function get_comments() {
         $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .
@@ -1356,15 +1356,22 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         return $html;
     }
 
+    /**
+     * Get Marker to be placed on map
+     * @param user Currently logged on user
+     * @param string icon to be used.
+     * @return marker instance of marker class
+     */
     function getMarker(user $user, $icon="geo-photo.png") {
-        $js=parent::getMarker($user, $icon); 
-        if(empty($js)) {
+        $marker=map::getMarkerFromObj($this, $user, $icon); 
+        if(!$marker instanceof marker) {
             $loc=$this->location;
-            if($loc) {
-                $js=$loc->getMarker($user); 
+            if($loc instanceof place) {
+                return $loc->getMarker($user); 
             }
+        } else {
+            return $marker;
         }
-        return $js;
     }
 
     /**
@@ -1609,7 +1616,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             $loc=$photo->location;
             if(get_class($loc)=="place") {
                 $tz=$loc->get("timezone");
-                if(valid_tz($tz)) {
+                if(TimeZone::validate($tz)) {
                     $gphotos[]=$photo;
                 }
             }
@@ -1778,7 +1785,7 @@ function create_rating_graph($user) {
  * Function to rotate an image
  */
 function goodrotate($src_img, $degrees = 90) {
-    // angles = 0°
+    // angles = 0deg
     $degrees %= 360;
     if($degrees == 0) {
         $dst_img = $src_image;

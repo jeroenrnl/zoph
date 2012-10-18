@@ -210,15 +210,15 @@
       </div>
 <?php
       if(JAVASCRIPT && MAPS) {
-?>
-        <div id="map" class="map"></div>
-        <script type="text/javascript">
-<?php
-        echo create_map_js();
-        echo getMarkers($thumbnails, $user);
-?>
-        </script>
-<?php
+        $map=new map();
+        foreach($thumbnails as $thumbnail) {
+            $thumbnail->lookup();
+            $marker=$thumbnail->getMarker($user);
+            if($marker instanceof marker) {
+                $map->addMarker($marker);
+            }
+        }
+        echo $map;
     }
 ?>
 <?php require_once("footer.inc.php"); ?>
