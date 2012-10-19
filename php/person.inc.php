@@ -241,7 +241,7 @@ class person extends zophTable {
 
         }
 
-        if ($coverphoto) {
+        if (isset($coverphoto)) {
             $coverphoto->lookup();
             return $coverphoto->get_image_tag(THUMB_PREFIX);
         }

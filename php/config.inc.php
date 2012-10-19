@@ -280,7 +280,8 @@
 
     // if this is non-zero the people and places pages will default to
     // "show all" instead of "a".
-    define('DEFAULT_SHOW_ALL', 1);
+    // deprecated
+    //define('DEFAULT_SHOW_ALL', 1);
 
     // these two are for the importer
     // Make sure there are no quotes around these numbers!

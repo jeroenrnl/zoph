@@ -33,12 +33,7 @@
     $_l = getvar("_l");
 
     if (empty($_l)) {
-        if (DEFAULT_SHOW_ALL) {
-            $_l = "all";
-        }
-        else {
-            $_l = "a";
-        }
+        $_l = "all";
     }
     $title = translate("People");
     require_once("header.inc.php");
