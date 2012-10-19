@@ -158,11 +158,10 @@ class file {
         if($thumbs) {
             $dir=dirname($this);
             $file=basename($this);
-            $conv=get_converted_image_name($file);
             $midname=$dir . "/" . MID_PREFIX . "/" . 
-                MID_PREFIX . "_" . $conv;
+                MID_PREFIX . "_" . $file;
             $thumbname=$dir . "/" . THUMB_PREFIX . "/" . 
-                THUMB_PREFIX . "_" . $conv;
+                THUMB_PREFIX . "_" . $file;
             $mid=new file($midname);
             $mid->delete();
             $thumb=new file($thumbname);

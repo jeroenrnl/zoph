@@ -244,12 +244,14 @@
     // beginning with Zoph 0.3, all thumbnails may be jpegs.
     // however, if you wish to avoid regenerating thumbnails for
     // other types (gif, tiff, etc.), you can set this var to 1.
-    define('MIXED_THUMBNAILS', 1);
+    // deprecated
+    //define('MIXED_THUMBNAILS', 1);
 
     // the extension used for thumbnails.  this should correspond
     // to what is found in zophImport.pl.  this is ignored (for some
     // image types - jpg, gif, tif) if MIXED_THUMBNAILS is set.
-    define('THUMB_EXTENSION', "jpg");
+    // deprecated
+    //define('THUMB_EXTENSION', "jpg");
 
     // allow images to be rotated
     define('ALLOW_ROTATIONS', 1);

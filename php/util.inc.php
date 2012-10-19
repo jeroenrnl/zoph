@@ -544,23 +544,6 @@ function valid_image($name) {
     return false;
 }
 
-function get_converted_image_name($name) {
-
-    $extension = file_extension($name);
-
-    // if you used a version of Zoph prior to 0.3 AND have thumbnails
-    // for image types other than jpegs, you may want to define
-    // MIXED_THUMBNAILS in config.inc.php to avoid having to regenerate
-    // your thumbnails.
-
-    if (MIXED_THUMBNAILS && valid_image($name)) {
-        return $name;
-    }
-
-    // zophImport.pl should have generated jpg thumbnails for other image types
-    return preg_replace("/" . $extension . "$/", THUMB_EXTENSION, $name);
-}
-
 function delete_temp_annotated_files($user_id) {
     if (!ANNOTATE_PHOTOS) {
         return;

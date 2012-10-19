@@ -391,8 +391,8 @@ class WebImport extends Import {
             
             switch ($type) {
             case "image":
-                $thumb=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . get_converted_image_name($file->getName());
-                $mid=MID_PREFIX . "/" . MID_PREFIX . "_" . get_converted_image_name($file->getName());
+                $thumb=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $file->getName();
+                $mid=MID_PREFIX . "/" . MID_PREFIX . "_" . $file->getName();
                 if(file_exists(conf::get("path.images") . "/" . conf::get("path.upload") . "/" . $thumb) &&
                   file_exists(conf::get("path.images") . "/" . conf::get("path.upload") . "/" . $mid)) {
                     $status="done";

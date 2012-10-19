@@ -421,9 +421,8 @@ class photo extends zophTable {
 
             $newname=$file->getDestName();
 
-            $conv=get_converted_image_name($newname);
-            $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
-            $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
+            $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $newname;
+            $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $newname;
             
             if(file_exists($path . "/". $thumbname)) {
                 $thumb=new file($path . "/" . $thumbname);
@@ -709,9 +708,9 @@ class photo extends zophTable {
     function thumbnail($force=true) {
         $path=conf::get("path.images") . "/" . $this->get("path") . "/";
 
-        $conv=get_converted_image_name($this->get("name"));
-        $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
-        $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
+        $name=$this->get("name");
+        $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $name;
+        $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $name;
         
         if(!file_exists($path . $midname) || $force===true) {
             if(!$this->create_thumbnail(MID_PREFIX, MID_SIZE)) {
@@ -753,7 +752,7 @@ class photo extends zophTable {
         }
         flush();
         $new_image = conf::get("path.images") . '/' . $this->get("path") . '/' . $prefix . '/' .
-            $prefix . '_' .  get_converted_image_name($this->get("name"));
+            $prefix . '_' .  $this->get("name");
         $dir=dirname($new_image);
 
         if(!is_writable($dir)) {
@@ -790,15 +789,14 @@ class photo extends zophTable {
 
         $dir = conf::get("path.images") . "/" . $this->get("path") . "/";
         $name = $this->get('name');
-        $converted_name = get_converted_image_name($name);
 
         $images[$dir . THUMB_PREFIX . '/' . THUMB_PREFIX . '_' . 
-            $converted_name] = 
+            $name] = 
             $dir . THUMB_PREFIX . '/rot_' . THUMB_PREFIX . '_' . 
-            $converted_name;
+            $name;
 
-        $images[$dir . MID_PREFIX . '/' . MID_PREFIX . '_' . $converted_name] =
-            $dir . MID_PREFIX . '/rot_' . MID_PREFIX . '_' . $converted_name;
+        $images[$dir . MID_PREFIX . '/' . MID_PREFIX . '_' . $name] =
+            $dir . MID_PREFIX . '/rot_' . MID_PREFIX . '_' . $name;
 
         $images[$dir . $name] = $dir . 'rot_' . $name;
 

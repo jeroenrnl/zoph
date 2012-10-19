@@ -94,7 +94,6 @@
             } else {
                 if ($type) {
                     $image_path .= $type . "/" . $type . "_";
-                    $name = get_converted_image_name($name);
                 }
                 $image_path .= $name;
 
