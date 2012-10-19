@@ -29,10 +29,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     if(!is_numeric($offset)) { die("offset must be numeric"); }
     if(!is_numeric($rows)) { die("rows must be numeric"); }
 
-    if (MAX_THUMB_DESC && $user && $user->prefs->get("desc_thumbnails")) {
-        $select .= ", ph.description";
-    }
-
     $from_clause=DB_PREFIX . "photos as ph";
 
     if ($user && !$user->is_admin()) {

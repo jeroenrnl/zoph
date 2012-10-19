@@ -31,3 +31,5 @@ CREATE TABLE zoph_conf (
 	timestamp timestamp, 
 	PRIMARY kEY (conf_id)
 	) EGINE=MyISAM;
+
+ALTER TABLE zoph_prefs DROP COLUMN desc_thumbnails;

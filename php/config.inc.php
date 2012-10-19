@@ -232,7 +232,8 @@
     // the maximum number of characters of a description to display
     // under a thumbnail (see also desc_thumbnail pref).  Set this
     // to 0 to disable this feature (and override a user's pref).
-    define('MAX_THUMB_DESC', 40);
+    // Deprecated
+    //define('MAX_THUMB_DESC', 40);
 
     define('THUMB_SIZE', 120);
     define('MID_SIZE', 480);

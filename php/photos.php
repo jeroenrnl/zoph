@@ -153,10 +153,6 @@
         </form>
         <br>
 <?php
-        if (MAX_THUMB_DESC && $user->prefs->get("desc_thumbnails")) {
-            $desc_thumbnails = true;
-        }
-
         for ($i = 0; $i < $num; $i++) {
 
             if ($i > 0 && $i % $_cols == 0) {
@@ -173,16 +169,8 @@
             } else {
                 echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n"; 
             }
-            if (!empty($desc_thumbnails) && $thumbnails[$i]->get("description")) {
-?>
-                <br>
-                <div class="thumbdesc"><?php echo substr($thumbnails[$i]->get("description"), 0, MAX_THUMB_DESC) ?></div>
-<?php
-                if (strlen($thumbnails[$i]->get("description")) > MAX_THUMB_DESC) { echo "..."; }
-            }
 
             if (!empty($lightbox)) {
-                if (!isset($desc_thumbnails)) { echo "<br>\n"; }
 ?>
                 <div class="actionlink"><a href="photos.php?<?php echo update_query_string($vars, "_photo_id", $thumbnails[$i]->get("photo_id"), $ignore) ?>">x</a></div>
 <?php

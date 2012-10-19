@@ -112,18 +112,6 @@
         <dd>
             <?php echo create_text_input("recent_photo_days", $user->prefs->get("recent_photo_days"), 4, 4) ?>
         </dd>
-<?php
-    if (MAX_THUMB_DESC) {
-?>
-        <dt>
-            <?php echo translate("show descriptions under thumbnails") ?>
-        </dt>
-        <dd>
-            <?php echo create_pulldown("desc_thumbnails", $user->prefs->get("desc_thumbnails"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
-        </dd>
-<?php
-    }
-?>
         <dt>
             <?php echo translate("open fullsize photo in new window") ?>
         </dt>
