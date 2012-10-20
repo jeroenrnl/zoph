@@ -265,7 +265,8 @@
     // width of the main table
     // May be in pixels ("px") or percent ("%").
     // As of v0.6, the entity is required.
-    define('DEFAULT_TABLE_WIDTH', "600px");
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('DEFAULT_TABLE_WIDTH', "600px");
     // define('DEFAULT_TABLE_WIDTH', "90%");
 
     // set to the id of a non admin user or to 0 to disable

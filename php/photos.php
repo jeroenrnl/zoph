@@ -77,7 +77,8 @@
 
     if (!($num_thumbnails == 0 || $_cols <= 4)) {
         $width = ((THUMB_SIZE + 14) * $_cols) + 25;
-        if ($width > DEFAULT_TABLE_WIDTH || strpos(DEFAULT_TABLE_WIDTH, "%")) {
+        $default_width= conf::get("interface.width");
+        if ($width > $default_width || strpos($default_width, "%")) {
             $extrastyle = "body	{ width: " . $width . "px; }\n"; 
         }
     }

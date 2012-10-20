@@ -161,6 +161,14 @@ class conf {
         $int_title->setRegex("^.*$");
         $interface[]=$int_title;
 
+        $int_width = new confItemString(); 
+        $int_width->setName("interface.width");
+        $int_width->setLabel("Screen width");
+        $int_width->setDesc("A number in pixels (\"px\") or percent (\"%\"), the latter is a percentage of the user's browser window width.");
+        $int_width->setDefault("600px");
+        $int_width->setRegex("^[0-9]+(px|%)$");
+        $interface[]=$int_width;
+
         $int_css = new confItemString(); 
         $int_css->setName("interface.css");
         $int_css->setLabel("Style Sheet");

@@ -18,15 +18,12 @@
 
 header("Content-Type: text/css");
 if(isset($_GET['logged_on'])) {
-    require_once("log.inc.php");
-    require_once("config.inc.php");
-    require_once("classes/zophTable.inc.php");
-    require_once("user.inc.php");
+    define("LOGON", true);
     echo "/* This is the default CSS, the user is not logged on */";
 } else {
-    require_once("include.inc.php");
     echo "/* This is the customized CSS, user is logged on */";
 }
+require_once("include.inc.php");
 
 ?>
 
@@ -39,7 +36,7 @@ body    {
     font-size: medium;
     color: <?php echo $TEXT_COLOR ?>;
     background: <?php echo $PAGE_BG_COLOR ?>;
-    width: <?php echo DEFAULT_TABLE_WIDTH ?>;
+    width: <?php echo conf::get("interface.width"); ?>;
     border: none;
     margin-left: auto; /* To center the page */
     margin-right: auto;
@@ -670,9 +667,9 @@ p.main, p.info {
     }
 
 div.intro {
-    float: right;
+    margin-left: 15px;
+    float: left;
     clear: right;
-    width: <?php echo DEFAULT_TABLE_WIDTH-THUMB_SIZE-50 ?>px;
     }
 
 div.intro ul {
