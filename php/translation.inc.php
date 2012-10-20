@@ -22,7 +22,7 @@
  */
 
 /**
- * This class contains a set of translations read from a file in the LANG_DIR
+ * This class contains a set of translations read from a file in the self::LANG_DIR
  * directory.
  * These files have the following format
  * # Zoph Language File - <language name>
@@ -44,6 +44,8 @@ class language {
     public static $base="en";
     public static $base_name="English";
 
+    const LANG_DIR="lang";
+
     /**
      * @param string iso ISO definition of the language, usually 2 letters or 
      * two letters dash two letters, for example nl en-ca.
@@ -51,7 +53,7 @@ class language {
      */
     function __construct($iso) {
         $this->name=$iso;
-        $this->filename=LANG_DIR. "/" . $iso;
+        $this->filename=self::LANG_DIR. "/" . $iso;
         $this->iso=strtolower($iso);
     }
 
@@ -141,11 +143,11 @@ class language {
      */
     public static function get_all() {
         $langs=array();
-        if(is_dir(LANG_DIR) && is_readable(LANG_DIR)) {
-            $handle=opendir(LANG_DIR);
+        if(is_dir(self::LANG_DIR) && is_readable(self::LANG_DIR)) {
+            $handle=opendir(self::LANG_DIR);
             while ($filename = trim(readdir($handle))) {
-                if(!is_dir(LANG_DIR . "/" . $filename)) {
-                    if(is_readable(strtolower(LANG_DIR . "/" . $filename))) {
+                if(!is_dir(self::LANG_DIR . "/" . $filename)) {
+                    if(is_readable(strtolower(self::LANG_DIR . "/" . $filename))) {
                         # making filename lowercase, so we won't include
                         # any capitalized filenames... Zoph will not able
                         # to find them back later...
@@ -180,7 +182,7 @@ class language {
      * @return string null|iso
      */
     public static function exists($iso) {
-        $file=LANG_DIR . '/' . $iso;
+        $file=self::LANG_DIR . '/' . $iso;
         if (file_exists($file) && is_file($file)) {
             return $iso;
         } else {

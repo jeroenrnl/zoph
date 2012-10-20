@@ -45,7 +45,8 @@
     // Deprecated: Modify through admin -> config in web interface.
     //define('ZOPH_TITLE', "Zoph");
 
-    define('LANG_DIR', "lang"); // where language files are stored
+    // deprecated
+    //define('LANG_DIR', "lang"); // where language files are stored
 
     # Use this language when neither user or browser specify a language
     define('DEFAULT_LANG', 'en');
