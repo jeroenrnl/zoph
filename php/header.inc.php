@@ -49,17 +49,12 @@
         <script type="text/javascript" src="js/maps.js"></script>
         <script type="text/javascript" src="js/custommaps.js"></script>
 <?php 
-        if(GEOCODE) { ?>
+        if(conf::get("maps.geocode")) { ?>
 
         <script type="text/javascript" src="js/geocode.js"></script>
 <?php
         }        
             switch (strtolower(conf::get("maps.provider"))) {
-            case 'google':
-?>
-        <script src="http://maps.google.com/maps?file=api&v=2&key=<?php echo GOOGLE_KEY ?>" type="text/javascript"></script>
-<?php
-            break;
             case 'googlev3':
 ?>
         <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
@@ -80,7 +75,7 @@
 ?>
         <script type="text/javascript" src="http://tile.cloudmade.com/wml/0.2/web-maps-lite.js"></script>
         <script type="text/javascript">
-            var cloudmade_key = "<?php echo CLOUDMADE_KEY; ?>";
+            var cloudmade_key = "<?php echo conf::get("maps.key.cloudmade"); ?>";
         </script>
 <?php
             break;

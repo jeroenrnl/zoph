@@ -25,6 +25,7 @@ class confItemString extends confItem {
     
     protected $regex=".+";
     protected $title="";
+    protected $size=30;
 
     public function display() {
         $tpl=new block("confItemString", array(
@@ -34,6 +35,7 @@ class confItemString extends confItem {
             "desc" => e($this->getDesc()),
             "hint" => e($this->getHint()),
             "regex" => e($this->regex),
+            "size" => (int) $this->size,
             "title" => e($this->title)
         ));
         return $tpl;
@@ -53,6 +55,10 @@ class confItemString extends confItem {
         } else {
             return true;
         }
+    }
+
+    public function setSize($size) {
+        $this->size=(int) $size;
     }
 
 

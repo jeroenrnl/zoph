@@ -24,7 +24,7 @@ if(!ZOPH) { die("Illegal call"); }
     <div>
         <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
         <div class="generate">
-            <input type="text" id="<?php echo $tpl_id ?>" pattern="<?php echo $tpl_regex ?>" title="<?php echo $tpl_title ?>" name="<?php echo $tpl_name ?>" value="<?php echo $tpl_value; ?>" size=40>
+            <input type="text" id="<?php echo $tpl_id ?>" pattern="<?php echo $tpl_regex ?>" title="<?php echo $tpl_title ?>" name="<?php echo $tpl_name ?>" value="<?php echo $tpl_value; ?>" size="<?php echo $tpl_size ?>">
             <input type="button" onclick="zConf.genSalt('<?php echo $tpl_id ?>')" value="<?php echo translate("Generate"); ?>">
         </div>
         <div class="desc">

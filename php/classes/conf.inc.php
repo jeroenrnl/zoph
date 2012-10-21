@@ -63,8 +63,23 @@ class conf {
         while($row= fetch_row($result)) {
             $key=$row[0];
             $value=$row[1];
-            $item=conf::getItemByName($key);
-            $item->setValue($value);
+            try {
+                $item=conf::getItemByName($key);
+            } catch (ConfigurationException $e) {
+                /* An unknown item will automatically be deleted from the
+                   database, so we can remove items without leaving a mess */
+                echo $e->getMessage();
+                $sql="DELETE FROM " . DB_PREFIX . "conf WHERE " .
+                    "conf_id='" . escape_string($key) . "';";
+                    echo $sql;
+                query($sql);
+            }
+            try {
+                $item->setValue($value);
+            } catch (ConfigurationException $e) {
+                /* An illegal value is automatically set to the default */
+                echo $e->getMessage();
+            }
         }
         self::$loaded=true;
         
@@ -151,6 +166,8 @@ class conf {
      * This is used to define all configurable items in Zoph
      */
     private static function getDefault() {
+
+        /************************** INTERFACE **************************/
         $interface = self::addGroup("interface", "Zoph interface settings");
 
         $int_title = new confItemString();
@@ -206,6 +223,7 @@ class conf {
         $interface[]=$int_autoc;
 
 
+        /************************** PATH **************************/
         $path = self::addGroup("path", "File and directory locations");
         
 
@@ -236,6 +254,7 @@ class conf {
         $path_magic->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Must start with a /. Can be empty for PHP builtin magix file.");
         $path[]=$path_magic;
 
+        /************************** MAPS **************************/
         $maps = self::addGroup("maps", "Mapping support");
 
         $maps_provider = new confItemSelect();
@@ -243,13 +262,33 @@ class conf {
         $maps_provider->setDesc("Enable or disable mapping support and choose the mapping provider");
         $maps_provider->setLabel("Mapping provider");
         $maps_provider->addOption("", "Disabled");
-        $maps_provider->addOption("google", "Google Maps");
         $maps_provider->addOption("googlev3", "Google Maps v3");
         $maps_provider->addOption("yahoo", "Yahoo maps");
         $maps_provider->addOption("cloudmade", "Cloudmade (OpenStreetMap)");
+        $maps_provider->addOption("openlayers", "OpenLayers (OpenStreetMap)");
         $maps_provider->setDefault("");
         $maps[]=$maps_provider;
+
+        $maps_geocode = new confItemSelect();
+        $maps_geocode->setName("maps.geocode");
+        $maps_geocode->setLabel("Geocode provider");
+        $maps_geocode->setDesc("With geocoding you can lookup the location of a place from it's name. Here you can select the provider. Currently the only one available is 'geonames'");
+        $maps_geocode->addOption("", "Disabled");
+        $maps_geocode->addOption("geonames", "GeoNames");
+        $maps_geocode->setDefault("");
+        $maps[]=$maps_geocode;
+
+        $maps_key_cloudmade = new confItemString();
+        $maps_key_cloudmade->setName("maps.key.cloudmade");
+        $maps_key_cloudmade->setLabel("Cloudmade Key");
+        $maps_key_cloudmade->setDesc("API key for Cloudmade Maps. Only needed if using \"Cloudmade\" as provider. You can use Zoph's key (which is the default), but please do not use this key for any other applications..");
+        $maps_key_cloudmade->setRegex("(^$|[a-z0-9]{32})"); 
+        $maps_key_cloudmade->setDefault("f3b46b04edd64ea79066b7e6921205df");
+        $maps[]=$maps_key_cloudmade;
+
+
         
+        /************************** IMPORT **************************/
         $import = self::addGroup("import", "Importing and uploading photos");
 
         $import_enable = new confItemBool();
@@ -313,6 +352,7 @@ class conf {
         $import_dated_hier->setDefault(false);
         $import[]=$import_dated_hier;
 
+        /************************** DATE **************************/
         $date = self::addGroup("date", "Date and time");
 
         $date_tz = new confItemSelect();

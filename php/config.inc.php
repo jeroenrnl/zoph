@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    define('VERSION', '0.9');
+    define('VERSION', '0.9.1pre');
 
     // DB_HOST, DB_NAME, DB_USER, DB_PASS and DB_PREFIX have been moved to
     // zoph.ini. The location can be set by the next config item:
@@ -80,13 +80,16 @@
 
     // Enable geocoding and specify provider. Currently only supported is
     // 'geonames'.
-    define('GEOCODE', '');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('GEOCODE', '');
     // API key for Google Maps, only needed if MAPS = 'google'
-    define('GOOGLE_KEY', 'Get yours at http://code.google.com/apis/maps');
+    // Deprecated: Google has deprecated the v2 API, use Googlev3, which does not need a key.
+    //define('GOOGLE_KEY', 'Get yours at http://code.google.com/apis/maps');
     
     // API key fore Cloudmade Maps, only needed if MAPS = 'cloudmade'
     // This is Zoph's API key. Please do not use for other applications
-    define('CLOUDMADE_KEY', 'f3b46b04edd64ea79066b7e6921205df');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('CLOUDMADE_KEY', 'f3b46b04edd64ea79066b7e6921205df');
 
     // The timezone your camera is set to
     // Leave empty if you always set your camera to local time
