@@ -36,20 +36,8 @@ class conf {
      */
     private static $groups=array();
     
-    /**
-     * @var bool whether or not the configuration has been loaded from the db
-     */
+    /** @var bool whether or not the configuration has been loaded from the db */
     private static $loaded=false;
-
-    /**
-     * Initialize object
-     */
-    public static function init() {
-        if(!self::$loaded) {
-            self::getDefault();
-            self::loadFromDB();
-        }
-    }
 
     /**
      * Read configuration from database
@@ -74,6 +62,7 @@ class conf {
                     echo $sql;
                 query($sql);
             }
+
             try {
                 $item->setValue($value);
             } catch (ConfigurationException $e) {
@@ -130,7 +119,9 @@ class conf {
      * @return string Value of parameter
      */
     public static function get($key) {
-        self::init();
+        if(!self::$loaded) {
+            self::loadFromDB();
+        }
         $item=conf::getItemByName($key);
         return $item->getValue();
             
@@ -141,7 +132,9 @@ class conf {
      * @return array Array of group objects
      */
     public static function getAll() {
-        self::init();
+        if(!self::$loaded) {
+            self::loadFromDB();
+        }
         return self::$groups;
     }
 
@@ -222,6 +215,24 @@ class conf {
         $int_autoc->setDefault(true);
         $interface[]=$int_autoc;
 
+        /************************** URL **************************/
+        $url = self::addGroup("url", "URLs");
+
+        $url_http = new confItemString();
+        $url_http->setName("url.http");
+        $url_http->setLabel("Zoph's URL");
+        $url_http->setDesc("Override autodetection of Zoph's URL, for example if you use a domainname to access Zoph but get redirected to a different URL.");
+        $url_http->setDefault("");
+        $url_http->setRegex("(^$|^https?:\/\/[^\s\/$.?#].[^\s]*$)"); // Stolen from http://mathiasbynens.be/demo/url-regex, @stephenhay
+        $url[]=$url_http;
+
+        $url_https = new confItemString();
+        $url_https->setName("url.https");
+        $url_https->setLabel("Zoph's Secure URL");
+        $url_https->setDesc("Override autodetection of Zoph's Secure URL (https).");
+        $url_https->setDefault("");
+        $url_https->setRegex("(^$|^https:\/\/[^\s\/$.?#].[^\s]*$)"); // Stolen from http://mathiasbynens.be/demo/url-regex, @stephenhay
+        $url[]=$url_https;
 
         /************************** PATH **************************/
         $path = self::addGroup("path", "File and directory locations");

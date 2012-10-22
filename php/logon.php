@@ -25,7 +25,7 @@
     }
     if (FORCE_SSL_LOGIN || FORCE_SSL) {
         if (!array_key_exists('HTTPS', $_SERVER)) {
-            redirect(ZOPH_SECURE_URL . "/logon.php?redirect=" . $redirect, "https required");
+            redirect(getZophURL("https") . "/logon.php?redirect=" . $redirect, "https required");
         }
     }
 

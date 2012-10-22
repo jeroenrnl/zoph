@@ -67,10 +67,7 @@
             </dl>
             <br>
 <?php
-        $url = ZOPH_URL;
-        if (empty($url)) {
-            $url = get_url() . "login.php";
-        }
+        $url = getZophURL() . "login.php";
 
         $this_user->lookup_person();
         $name = $this_user->person->getName();

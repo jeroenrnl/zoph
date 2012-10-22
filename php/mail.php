@@ -71,7 +71,7 @@
                     MID_PREFIX . "/";
             }
             if($includeurl) {
-                $link = "\n" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . ": " . ZOPH_URL . "/photo.php?photo_id=" . $photo_id;
+                $link = "\n" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . ": " . getZophURL() . "/photo.php?photo_id=" . $photo_id;
             }
 
             if ($html) {
@@ -79,7 +79,7 @@
                 $html .= "<img src=\"" . $file . "\"><br>\n";
                 $html .= str_replace("\n", "<br>\n", $message);
                 if($includeurl) {
-                    $html .= "<a href=\"" . ZOPH_URL . "/photo.php?photo_id=" . $photo_id . "\">" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . "</a>";
+                    $html .= "<a href=\"" . getZophURL() . "/photo.php?photo_id=" . $photo_id . "\">" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . "</a>";
                 }
                 $html .= "</center>\n";
 

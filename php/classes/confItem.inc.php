@@ -41,7 +41,7 @@ abstract class confItem extends zophTable {
      * @param string id, to fetch object from database.
      * @retrun confItem new object
      */
-    function __construct($id = 0) {
+    public function __construct($id = 0) {
         $this->keepKeys=true;
         if($id === 0 || preg_match("/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/", $id)) {
             parent::__construct("conf", array("conf_id"), array(""));
@@ -177,7 +177,7 @@ abstract class confItem extends zophTable {
     final public function setDefault($default) {
         $this->default=$default;
     }
-   
+
     /**
      * Display the item
      */

@@ -128,10 +128,7 @@
             reset($album_list);
             $body .= implode("\n", $album_list) . "\n";
 
-            $url = ZOPH_URL;
-            if (empty($url)) {
-                $url = get_url() . "login.php";
-            }
+            $url = getZophURL() . "login.php";
 
             $body .= "\n" . translate("For accessing these Albums you have to use this URL:",0) . " " . $url . "\n";
         }

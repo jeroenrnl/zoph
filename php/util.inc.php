@@ -16,23 +16,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-function get_url() {
-    $script = $_SERVER['PHP_SELF'];
-
-
-    if(isset($_SERVER["HTTPS"]) && !empty($_SERVER['HTTPS'])) {
-        $proto="https://";
-    } else {
-        $proto="http://";
-    }
-
-    $url =
-        $proto . $_SERVER['SERVER_NAME'] . '/' .
-        substr($script, 1, strrpos($script, '/'));
-
-    return $url;
-}
-
 function create_field_html($fields) {
 
     $html = "";
@@ -499,16 +482,41 @@ function file_extension($str) {
     return substr($str, strrpos($str, '.') + 1);
 }
 
-function getZophURL() {
-    $current_url=$_SERVER["SERVER_NAME"] . "/" . $_SERVER["PHP_SELF"];
-    $url=substr($current_url, 0, strrpos($current_url, "/"));
-    
-    if(isset($_SERVER["HTTPS"]) && !empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != "off")) {
-        $proto="https://";
+/**
+ * Get the current Zoph URL
+ * Autodetect or use the URL set in configuration.
+ * @param string Override protocol (http/https) autodetection
+ * @return string URL
+ */
+function getZophURL($proto=null) {
+    if(is_null($proto)) {
+        if(isset($_SERVER["HTTPS"]) && !empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != "off")) {
+            $proto="https";
+        } else {
+            $proto="http";
+        }
     } else {
-        $proto="http://";
+        if(!preg_match("/^http(s?)$/", $proto)) {
+            die("illegal protocol");
+        }
     }
-    return $proto . preg_replace("/\/\//","/", $url) . "/";
+    
+    $current_url=$_SERVER["SERVER_NAME"] . "/" . $_SERVER["PHP_SELF"];
+    $new_url=substr($current_url, 0, strrpos($current_url, "/"));
+    $url=$proto . "://" . preg_replace("/\/\//","/", $new_url);
+    
+    if(conf::get("url.http") && $proto = "http") {
+        $url=conf::get("url.http");
+    }
+
+    if(conf::get("url.https") && $proto = "https") {
+        $url=conf::get("url.http");
+    }
+
+    if(substr($url, -1) != "/") {
+        $url.="/";
+    }
+    return $url;
 }
 
 function get_image_type($name) {

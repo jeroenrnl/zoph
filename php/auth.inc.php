@@ -131,7 +131,7 @@
             redirect($redirect_clean, "Redirect");
         } 
         if (array_key_exists('HTTPS', $_SERVER) && (FORCE_SSL_LOGIN && !FORCE_SSL)) {
-            redirect(ZOPH_URL . "/zoph.php", "switch back from https to http");
+            redirect(getZophURL("http"), "switch back from https to http");
         }
     } else {
         $lang = new language(DEFAULT_LANG);
