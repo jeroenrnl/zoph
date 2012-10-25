@@ -23,7 +23,7 @@
     } else {
         $redirect = "";
     }
-    if (FORCE_SSL_LOGIN || FORCE_SSL) {
+    if (conf::get("ssl.force") != "never") {
         if (!array_key_exists('HTTPS', $_SERVER)) {
             redirect(getZophURL("https") . "/logon.php?redirect=" . $redirect, "https required");
         }

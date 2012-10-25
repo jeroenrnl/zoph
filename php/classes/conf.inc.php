@@ -215,6 +215,19 @@ class conf {
         $int_autoc->setDefault(true);
         $interface[]=$int_autoc;
 
+        /************************** SSL **************************/
+        $ssl = self::addGroup("ssl", "SSL");
+
+        $ssl_force = new confItemSelect();
+        $ssl_force->setName("ssl.force");
+        $ssl_force->setLabel("Force SSL");
+        $ssl_force->setDesc("Force users to use https when using Zoph. When connecting to Zoph using http, the user will automatically be redirected to the same URL, but with https. If choosing \"login only\", the user will be redirected back to http after logging in. If your https-site is hosted on a different URL, you will need to define the correct url below.");
+        $ssl_force->addOption("never", "Never");
+        $ssl_force->addOption("always", "Always");
+        $ssl_force->addOption("login", "Login only");
+        $ssl_force->setDefault("never");
+        $ssl[]=$ssl_force;
+
         /************************** URL **************************/
         $url = self::addGroup("url", "URLs");
 

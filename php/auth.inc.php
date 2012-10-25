@@ -125,12 +125,12 @@
             // to be extra sure, any action, except "search" is replaced by
             // "display".
             $redirect_clean=preg_replace("/action=(?!search).[^&]+/", "action=display", $redirect);
-            if (array_key_exists('HTTPS', $_SERVER) && (FORCE_SSL_LOGIN && !FORCE_SSL)) {
+            if (array_key_exists('HTTPS', $_SERVER) && (conf::get("ssl.force")=="login")) {
                 $redirect_clean = "http://" . $_SERVER['SERVER_NAME'] . $redirect_clean;
             }
             redirect($redirect_clean, "Redirect");
         } 
-        if (array_key_exists('HTTPS', $_SERVER) && (FORCE_SSL_LOGIN && !FORCE_SSL)) {
+        if (array_key_exists('HTTPS', $_SERVER) && (conf::get("ssl.force")=="login")) {
             redirect(getZophURL("http"), "switch back from https to http");
         }
     } else {
