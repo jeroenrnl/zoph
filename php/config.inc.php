@@ -134,18 +134,23 @@
 
     // Enable watermarking
     // Image service must be enabled to make this work!
-    define('WATERMARKING', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('WATERMARKING', 0);
     // Watermark must be a GIF image, transparancy is honoured!
     // the filename is relative to the image root (IMAGE_DIR)
-    define('WATERMARK', 'watermark.gif');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('WATERMARK', 'watermark.gif');
 
     // Position of the watermark: left, centre or right
-    define('WM_POSX', 'center');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('WM_POSX', 'center');
     // Position of the watermark: top, centre or bottom
-    define('WM_POSY', 'center');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('WM_POSY', 'center');
     // Transparency of the watermark overlay
     // 0 = fully transparent (invisible) to 100 = no transparency
-    define('WM_TRANS', 50);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('WM_TRANS', 50);
 
 
     // If set to 1, users can leave comments with photos

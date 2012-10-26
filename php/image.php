@@ -75,18 +75,18 @@
                 $permissions = $user->get_permissions_for_photo($photo_id);
                 $watermark = $permissions->get("watermark_level");
                 $photolevel=$photo->get("level");
-                if(WATERMARK && ($photolevel > $watermark)) {
-                    $watermark_file = conf::get("path.images") . "/" . WATERMARK;
+                if(conf::get("watermark.enable") && ($photolevel > $watermark)) {
+                    $watermark_file = conf::get("path.images") . "/" . conf::get("watermark.file");
                     if (!file_exists($watermark_file)) {
                         $watermark_file="";
                     }
                 }
             }
 
-            if (WATERMARKING && $watermark_file && !$type) {
+            if (conf::get("watermark.enable") && $watermark_file && !$type) {
                 $image_path .= $name;
                 $image=imagecreatefromjpeg($image_path);
-                watermark_image(&$image, $watermark_file, WM_POSX, WM_POSY, WM_TRANS);
+                watermark_image(&$image, $watermark_file, conf::get("watermark.pos.x"), conf::get("watermark.pos.y"), conf::get("watermark.transparency"));
                 header("Content-type: image/jpeg");
                 imagejpeg($image);
                 imagedestroy($image);

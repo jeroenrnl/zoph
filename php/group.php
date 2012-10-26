@@ -37,7 +37,7 @@
                     $permissions = new group_permissions(
                         $group_id, $alb->get("album_id"));
                     $permissions->setFields($request_vars,"","_all");
-                    if(!WATERMARKING) {
+                    if(!conf::get("watermark.enable")) {
                         $permissions->set("watermark_level", 0);
                     }
                     $permissions->insert();
@@ -59,7 +59,7 @@
         if($album_id_new) {
             $permissions = new group_permissions();
             $permissions->setFields($request_vars,"","_new");
-            if(!WATERMARKING) {
+            if(!conf::get("watermark.enable")) {
                 $permissions->set("watermark_level", 0);
             }
             $permissions->insert();
@@ -126,7 +126,7 @@
             <th><?php echo translate("name") ?></th>
             <th><?php echo translate("access level") ?></th>
 <?php 
-    if (WATERMARKING) { 
+    if (conf::get("watermark.enable")) { 
 ?>
             <th><?php echo translate("watermark level") ?></th>
 <?php 
@@ -145,7 +145,7 @@
             <td><?php echo $name ?></td>
             <td><?php echo $permissions->get("access_level") ?></td>
 <?php 
-    if (WATERMARKING) { 
+    if (conf::get("watermark.enable")) { 
 ?>
             <td><?php echo $permissions->get("watermark_level") ?></td>
 <?php 
@@ -200,7 +200,7 @@ require_once("edit_group.inc.php");
                         <td colspan="4">
 <?php
             echo translate("Granting access to an album will also grant access to that album's ancestors if required. Granting access to all albums will not overwrite previously granted permissions.");
-        if (WATERMARKING) { 
+        if (conf::get("watermark.enable")) { 
                 echo "<br>\n" . translate("A photo will be watermarked if the photo level is higher than the watermark level.");
         }
 ?>
@@ -210,7 +210,7 @@ require_once("edit_group.inc.php");
                         <th colspan="2"><?php echo translate("name") ?></th>
                         <th><?php echo translate("access level") ?></th>
 <?php
-        if (WATERMARKING) { 
+        if (conf::get("watermark.enable")) { 
 ?>
                         <th><?php echo translate("watermark level") ?></th>
 <?php 
@@ -231,7 +231,7 @@ require_once("edit_group.inc.php");
                             <?php echo create_text_input("access_level_all", "5", 4, 2) ?>
                     </td>
 <?php 
-        if (WATERMARKING) { 
+        if (conf::get("watermark.enable")) { 
 ?>
                     <td>
                             <?php echo create_text_input("watermark_level_all", "5", 4, 2) ?>
@@ -254,7 +254,7 @@ require_once("edit_group.inc.php");
                             <?php echo create_text_input("access_level_new", "5", 4, 2) ?>
                     </td>
 <?php 
-            if (WATERMARKING) { 
+            if (conf::get("watermark.enable")) { 
 ?>
                     <td>
                             <?php echo create_text_input("watermark_level_new", "5", 4, 2) ?>
@@ -292,7 +292,7 @@ require_once("edit_group.inc.php");
                             <?php echo create_text_input("access_level__$id", $permissions->get("access_level"), 4, 2) ?>
                     </td>
 <?php 
-                    if (WATERMARKING) { 
+                    if (conf::get("watermark.enable")) { 
 ?>
                         <td>
                             <?php echo create_text_input("watermark_level__$id", $permissions->get("watermark_level"), 4, 2) ?>

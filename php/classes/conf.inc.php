@@ -376,6 +376,58 @@ class conf {
         $import_dated_hier->setDefault(false);
         $import[]=$import_dated_hier;
 
+        /************************** WATERMARK **************************/
+        $wm = self::addGroup("watermark", "Watermarking");
+
+        $wm_enable = new confItemBool();
+        $wm_enable->setName("watermark.enable");
+        $wm_enable->setLabel("Enable Watermarking");
+        $wm_enable->setDesc("Watermarking can display a (copyright) watermark over your full-size images. Watermarking only works the watermark file below is set to an existing GIF image. Please note that enabling this function uses a rather large amount of memory on the webserver. PHP by default allows a script to use a maximum of 8MB memory. You should probably increase this by changing memory_limit in php.ini. A rough estimation of how much memory it will use is 6 times the number of megapixels in your camera. For example, if you have a 5 megapixel camera, change the line in php.ini to memory_limit=30M");
+        $wm_enable->setDefault(false);
+        $wm[]=$wm_enable;
+
+        /** @todo: should allow .png too */
+        $wm_file = new confItemString();
+        $wm_file->setName("watermark.file");
+        $wm_file->setLabel("Watermark file");
+        $wm_file->setDesc("If watermarking is used, this should be set to the name of the file that will be used as the watermark. It should be a GIF file, for best results, use contrasting colours and transparency. In the Contrib directory, 3 example files are included. The filename is relative to the image directory, defined above.");
+        $wm_file->setDefault("");
+        $wm_file->setRegex("(^$|^[A-Za-z0-9_]+[A-Za-z0-9_\.\/]*\.gif$)");
+        $wm_file->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
+        $wm[]=$wm_file;
+
+        $wm_pos_x = new confItemSelect();
+        $wm_pos_x->setName("watermark.pos.x");
+        $wm_pos_x->setLabel("Horizontal position");
+        $wm_pos_x->setDesc("Define where the watermark will be placed horizontally.");
+        $wm_pos_x->addOptions(array(
+            "left" => "Left",
+            "center" => "Center",
+            "right" => "Right"
+        ));
+        $wm_pos_x->setDefault("center");
+        $wm[]=$wm_pos_x;
+
+        $wm_pos_y = new confItemSelect();
+        $wm_pos_y->setName("watermark.pos.y");
+        $wm_pos_y->setLabel("Horizontal position");
+        $wm_pos_y->setDesc("Define where the watermark will be placed vertically.");
+        $wm_pos_y->addOptions(array(
+            "top" => "Top",
+            "center" => "Center",
+            "bottom" => "Bottom"
+        ));
+        $wm_pos_y->setDefault("center");
+        $wm[]=$wm_pos_y;
+        
+        $wm_trans = new confItemString();
+        $wm_trans->setName("watermark.transparency");
+        $wm_trans->setLabel("Watermark transparency");
+        $wm_trans->setDesc("Define the transparency of a watermark. 0: fully tranparent (invisible, don't use this, it's pointless and eats up a lot of resources, better turn off the watermark feature altogether) to 100: no transparency.");
+        $wm_trans->setDefault("50");
+        $wm_trans->setRegex("^(100|[0-9]{1,2})$");
+        $wm[]=$wm_trans;
+
         /************************** DATE **************************/
         $date = self::addGroup("date", "Date and time");
 
