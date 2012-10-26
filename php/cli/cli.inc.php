@@ -267,7 +267,7 @@ class cli {
             
             // check if path is in conf::get("path.images")
             if(substr($path, 0, strlen(conf::get("path.images")))!=conf::get("path.images")) {
-                throw new ImportFileNotInPathException($file ." is not in conf::get("path.images") (" . conf::get("path.images") . "), skipping.\n");
+                throw new ImportFileNotInPathException($file ." is not in the images path (" . conf::get("path.images") . "), skipping.\n");
             } else {
                 $path=substr($path, strlen(conf::get("path.images")));
                 if($path[0]=="/") {

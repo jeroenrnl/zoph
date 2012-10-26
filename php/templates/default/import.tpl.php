@@ -75,7 +75,7 @@ if(!ZOPH) { die("Illegal call"); }
             <form id="import_form" class="import" onSubmit="zImport.importPhotos(); return false;">
                 <label for="_path"><?php echo translate("path") ?> </label>
                 <?php echo create_text_input("_path", "", 40, 64) ?>
-                <?php if (USE_DATED_DIRS) { ?>
+                <?php if (conf::get("import.dated")) { ?>
                 <span class="inputhint"><?php echo translate("Dated directory will be appended") ?></span>
                 <?php } ?>
                 <br>

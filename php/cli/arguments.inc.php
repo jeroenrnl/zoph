@@ -49,6 +49,11 @@ class arguments {
      */
     public function __construct() {
         global $argv;
+
+        /* Set defaults to what is configured in web interface */
+        settings::$importDated=conf::get("import.dated");
+        settings::$importHier=conf::get("import.dated.hier");
+
         if(is_array($argv)) {
             // We don't care about the name of the script
             array_shift($argv);
