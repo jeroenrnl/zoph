@@ -349,13 +349,10 @@ class cli {
             }
         }
         foreach($newvars as $name=>$array) {
-            if(array_key_exists($name, $return_vars)) {
-                if(is_array($return_vars[$name])) {
-                    $return_vars[$name]=array_merge($return_vars[$name], $array);
-                } else {
-                    $return_vars[$name]=$array;
-                }
+            if(array_key_exists($name, $return_vars) && is_array($return_vars[$name])) {
+                $return_vars[$name]=array_merge($return_vars[$name], $array);
             }
+            $return_vars[$name]=$array;
         }
         return($return_vars);
     }

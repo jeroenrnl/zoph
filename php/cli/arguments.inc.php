@@ -24,27 +24,19 @@
  */
 
 class arguments {
-    /**
-     * Contains the non-interpreted arguments
-     */
+    /** Contains the non-interpreted arguments */
     private $arguments = array();
-    /**
-     * Contains the interpreted arguments, before lookup
-     */
+    /** Contains the interpreted arguments, before lookup */
     private $processed = array();
-    /**
-     * Contains the interpreted arguments, after lookup
-     */
+    /** Contains the interpreted arguments, after lookup */
     private $vars = array();
     
-    /**
-     * Default command
-     */
+    /** Default command */
     public static $command="import";
 
     /**
      * Create a new instance of the class.
-     * This construct also takes care of interpreting an d looking up of the
+     * This construct also takes care of interpreting and looking up of the
      * values
      */
     public function __construct() {
@@ -101,112 +93,122 @@ class arguments {
           Used short arguments: A D H I N P V a c d f h i l n p r t u v w
         */
 
-        foreach($argv as $arg) {
-            switch($arg) {
+        for($i=0; $i<sizeof($argv); $i++) {
+            switch($argv[$i]) {
                 case "--instance":
                 case "-i":
-                    $current=&$args["instance"];
+                    $args["instance"]=$argv[++$i];
                     break;
 
 
                 case "--albums":
                 case "--album":
                 case "-a":
-                    $current=&$args["albums"];
-                    $cur_parent=&$args["palbum"];
+                    $albums=explode(",",$argv[++$i]);
+                    foreach($albums as $album) {
+                        $args["albums"][]=trim($album);
+                        if(isset($parent)) {
+                            $args["palbum"][]=trim($parent);
+                        }
+                    }
+                    $parent=0;
                     break;
 
                 case "--category":
                 case "--categories":
                 case "-c":
-                    $current=&$args["categories"];
-                    $cur_parent=&$args["pcat"];
+                    $cats=explode(",",$argv[++$i]);
+                    foreach($cats as $cat) {
+                        $args["categories"][]=trim($cat);
+                        if(isset($parent)) {
+                            $args["pcat"][]=trim($parent);
+                        }
+                    }
+                    $parent=0;
                     break;
                 case "--fields":
                 case "--field":
                 case "-f":
-                    $current=&$args["fields"];
+                    $args["fields"][]=$argv[++$i];
                     break;
                 case "--import":
-                    unset($current);
                     self::$command="import";
                     break;
                 case "--place":
                 case "--location":
                 case "-l":
-                    $current=&$args["location"];
-                    $cur_parent=&$args["pplace"];
+                    // Multiple locations are possible when using --new
+                    $locs=explode(",",$argv[++$i]);
+                    foreach($locs as $loc) {
+                        $args["location"][]=trim($loc);
+                        if(isset($parent)) {
+                            $args["pplace"][]=trim($parent);
+                        }
+                    }
+                    $parent=0;
                     break;
                 case "--people":
                 case "--persons":
                 case "--person":
                 case "-p":
-                    $current=&$args["people"];
+                    $people=explode(",",$argv[++$i]);
+                    foreach($people as $person) {
+                        $args["people"][]=trim($person);
+                    }
                     break;
                 case "--photographer":
                 case "-P":
-                    $current=&$args["photographer"];
+                    $args["photographer"]=$argv[++$i];
                     break;
 
                 case "--parent":
-                    $current=&$parent;
+                    $parent=$argv[++$i];
                     break;
 
                 case "--thumbs":
                 case "-t":
-                    unset($current);
                     settings::$importThumbs=true;
                     break;
                 case "--nothumbs":
                 case "--no-thumbs":
                 case "-n":
-                    unset($current);
                     settings::$importThumbs=false;
                     break;
                 case "--exif":
                 case "--EXIF":
-                    unset($current);
                     settings::$importExif=true;
                     break;
                 case "--no-exif":
                 case "--noEXIF":
                 case "--noexif":
                 case "--no-EXIF":
-                    unset($current);
                     settings::$importExif=false;
                     break;
                 case "--size":
-                    unset($current);
                     settings::$importSize=true;
                     break;
                 case "--nosize":
                 case "--no-size":
-                    unset($current);
                     settings::$importSize=false;
                     break;
                 case "--hash":
-                    unset($current);
                     settings::$importHash=true;
                     break;
                 case "--no-hash":
-                    unset($current);
                     settings::$importHash=false;
                     break;
 
 
                 case "--update":
                 case "-u":
-                    unset($current);
                     self::$command="update";
                     break;
                 case "--import":
                 case "-I":
-                    unset($current);
                     self::$command="import";
                     break;
                 case "--new":
                 case "-N":
-                    unset($current);
                     self::$command="new";
                     break;
 
@@ -215,16 +217,13 @@ class arguments {
                 case "--use-ids":
                 case "--useid":
                 case "--use-id":
-                    unset($current);
                     settings::$importUseids=true;
                     break;
 
                 case "--copy":
-                    unset($current);
                     settings::$importCopy=true;
                     break;
                 case "--move":
-                    unset($current);
                     settings::$importCopy=false;
                     break;
                 
@@ -250,13 +249,11 @@ class arguments {
                 case "--datedDirs":
                 case "--dated":
                 case "-d":
-                    unset($current);
                     settings::$importDated=true;
                     break;
                 case "--hierarchical":
                 case "--hier":
                 case "-H":
-                    unset($current);
                     settings::$importDated=true;
                     settings::$importHier=true;
                     break;
@@ -266,66 +263,41 @@ class arguments {
                 case "--nodateddirs":
                 case "--nodatedDirs":
                 case "--nodated":
-                    unset($current);
                     settings::$importDated=false;
                     break;
                 case "--no-hierarchical":
                 case "--no-hier":
                 case "--nohierarchical":
                 case "--nohier":
-                    unset($current);
                     settings::$importHier=false;
                     break;
                 case "-D":
                 case "--path":
-                    $current=&$args["path"];
+                    $args["path"]=$argv[++$i];
                     break;
 
                 case "--dirpattern":
-                    $current=&$args["dirpattern"];
+                    $args["dirpattern"]=$argv[++$i];
                     break;
 
                 case "-V":
                 case "--version":
-                    unset($current);
                     self::$command="version";
                     break;
                 case "-h":
                 case "--help":
-                    unset($current);
                     self::$command="help";
                     break;
                 case "-v":
                 case "--verbose":
-                    unset($current);
                     settings::$importVerbose++;
                     break;
                 default:
-                    if(substr($arg,0,1)=="-") {
-                        echo "unknown argument: " . $arg . "\n";
+                    if(substr($argv[$i],0,1)=="-") {
+                        echo "unknown argument: " . $argv[$i] . "\n";
                         exit(1);
-                    } else if (!isset($current) || is_null($current)) {
-                        $args["files"][]=$arg;
-                    } else if (!is_array($current)) {
-                        $current=$arg;
-                        if(isset($cur_parent)) {
-                            $cur_parent[]=trim($parent);
-                        }
-                        unset($current);
-                        unset($cur_parent);
                     } else {
-                        $new=explode(",", $arg);
-                        foreach($new as $n) {
-                            $current[]=trim($n);
-                            if(isset($cur_parent)) {
-                                $cur_parent[]=trim($parent);
-                            }
-                        }
-                        if($arg!==$parent) {
-                            $parent=0;
-                        }
-                        unset($current);
-                        unset($cur_parent);
+                        $args["files"][]=$argv[$i];
                     }
                     break;
             }
@@ -443,18 +415,16 @@ class arguments {
                     }
                     break;
                 case "photographer":
-                    foreach($arg as $name) {
-                        if(self::$command=="new" || (settings::$importAutoadd && !person::getByName($name))) {
-                            $vars["_new_photographer"][]=$name;
+                    if(self::$command=="new" || (settings::$importAutoadd && !person::getByName($name))) {
+                        $vars["_new_photographer"][]=$name;
+                    } else {
+                        $person=person::getByName($name);
+                        if($person) {
+                            $person_id=$person[0]->getId();
+                            $vars["photographer_id"]=$person_id;
                         } else {
-                            $person=person::getByName($name);
-                            if($person) {
-                                $person_id=$person[0]->getId();
-                                $vars["photographer_id"]=$person_id;
-                            } else {
-                                echo "Person not found: $name\n";
-                                exit(cli::EXIT_PERSON_NOT_FOUND);
-                            }
+                            echo "Person not found: $name\n";
+                            exit(cli::EXIT_PERSON_NOT_FOUND);
                         }
                     }
                     break;
