@@ -173,6 +173,42 @@ class cli {
         case "new":
             $this->addNew();
             break;
+        case "config":
+            $vars=$this->args->getVars();
+            $name=$vars["_configitem"];
+            $default=isset($vars["_configdefault"]);
+            $item=conf::getItemByName($name);
+
+            if($default) {
+                $value=$item->getDefault();
+            } else {
+                $value=$vars["_configvalue"];
+            }
+
+            if(settings::$importVerbose > 0) {
+                echo "Setting config \"$name\" to \"$value\""  . ( $default ? " (default)" : "" ) . "\n";
+            }
+
+
+            $item->setValue($value);
+            $item->update();
+ 
+            
+            break;
+        case "dumpconfig":
+            $conf=conf::getAll();
+            foreach ($conf as $name=>$item) {
+                foreach ($item as $citem) {
+                    if($citem instanceof confItemBool) {
+                        $value=( $citem->getValue() ? "true": "false" );
+                    } else {
+                        $value=$citem->getValue();
+                    }
+                    echo $citem->getName() . ": " . $value . "\n";
+                }
+            }
+            break;
+
         default:
             echo "Unknown command, please file a bug\n";
             exit(self::EXIT_UNKNOWN_ERROR);

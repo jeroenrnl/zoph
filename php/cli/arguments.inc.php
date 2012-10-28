@@ -90,7 +90,7 @@ class arguments {
         $args["pplace"]=array();
 
         /*
-          Used short arguments: A D H I N P V a c d f h i l n p r t u v w
+          Used short arguments: A C D H I N P V a c d f h i l n p r t u v w
         */
 
         for($i=0; $i<sizeof($argv); $i++) {
@@ -125,6 +125,20 @@ class arguments {
                         }
                     }
                     $parent=0;
+                    break;
+
+                case "--config":
+                case "-C":
+                    self::$command="config";
+                    $args["_configitem"]=$argv[++$i];
+                    if(isset($argv[$i+1])) {
+                        $args["_configvalue"]=$argv[++$i];
+                    } else {
+                        $args["_configdefault"]=true;
+                    }
+                    break;
+                case "--dumpconfig":
+                    self::$command="dumpconfig";
                     break;
                 case "--fields":
                 case "--field":
@@ -480,6 +494,12 @@ class arguments {
                         $vars[$field]=$value;
                     }
                     break;
+                case "_configitem":
+                case "_configvalue":
+                case "_configdefault":
+                    $vars[$type]=$arg;
+                    break;
+                
             }
         }
     }
