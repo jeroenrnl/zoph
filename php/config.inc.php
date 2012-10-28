@@ -33,7 +33,10 @@
 
     // authentication method used from auth.inc.php
     // (this needs to be the name of a function in validator.inc.php)
-    $VALIDATOR = 'default_validate';
+    // Deprecated: htpasswd class is heavily outdated and no longer
+    //             maintained, php_validate does not seem to offer
+    //             any additional value.
+    //$VALIDATOR = 'default_validate';
     //$VALIDATOR = 'htpasswd_validate';
     //$VALIDATOR = 'php_validate';
 
