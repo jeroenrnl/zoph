@@ -471,7 +471,7 @@ class place extends zophTreeTable {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         $timezone=$this->get("timezone");
-        if((!$timezone && $lat && $lon) && minimum_version("5.1.0")) {
+        if((!$timezone && $lat && $lon)) {
             $tz=TimeZone::guess($lat, $lon);
             if($tz) {
                 $html="<span class='actionlink'>" .

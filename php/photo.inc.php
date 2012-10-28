@@ -1118,52 +1118,44 @@ echo ("<br>\noutString:<br>\n" . $out_string);
     }
 
     function get_time($timezone=null, $date_format=DATE_FORMAT, $time_format=TIME_FORMAT) { 
-        if(minimum_version("5.1.0")) {
-            if(TimeZone::validate($timezone)) {
-                $place_tz=new TimeZone($timezone);
-            } else { 
-                $this->lookup_location();
-                $loc=$this->location;
-                if($loc && TimeZone::validate($loc->get("timezone"))) {
-                    $place_tz=new TimeZone($loc->get("timezone"));
-                } 
-            }
-            if(TimeZone::validate(conf::get("date.tz"))) {
-                $camera_tz=new TimeZone(conf::get("date.tz"));
-            }    
-                
-            if(!isset($place_tz) && isset($camera_tz)) {
-                // Camera timezone is known, place timezone is not.
-                $place_tz=$camera_tz;
-            } else if (isset($place_tz) && !isset($camera_tz)) {
-                // Place timezone is known, camera timezone is not.
-                $camera_tz=$place_tz;
-            } else if (!isset($place_tz) && !isset($camera_tz)) {
-                // Neither are set
-                $camera_tz=new TimeZone(date_default_timezone_get());
-                $place_tz=$camera_tz;
-            }
-            
-            $camera_time=new Time(
-                $this->get("date") . " " .
-                $this->get("time"),
-                $camera_tz);
-            $place_time=$camera_time;
-            $place_time->setTimezone($place_tz);
-            $corr=$this->get("time_corr");
-            if($corr) {
-                $place_time->modify($corr . " minutes");
-            }
-            
-            $date=$place_time->format($date_format);
-            $time=$place_time->format($time_format);
-        } else {
-            // Timezone support was introduced in PHP 5.1
-            // so we'll just return date and time as they are
-            // stored in db.
-            $date=$this->get("date");
-            $time=$this->get("time");
+        if(TimeZone::validate($timezone)) {
+            $place_tz=new TimeZone($timezone);
+        } else { 
+            $this->lookup_location();
+            $loc=$this->location;
+            if($loc && TimeZone::validate($loc->get("timezone"))) {
+                $place_tz=new TimeZone($loc->get("timezone"));
+            } 
         }
+        if(TimeZone::validate(conf::get("date.tz"))) {
+            $camera_tz=new TimeZone(conf::get("date.tz"));
+        }    
+            
+        if(!isset($place_tz) && isset($camera_tz)) {
+            // Camera timezone is known, place timezone is not.
+            $place_tz=$camera_tz;
+        } else if (isset($place_tz) && !isset($camera_tz)) {
+            // Place timezone is known, camera timezone is not.
+            $camera_tz=$place_tz;
+        } else if (!isset($place_tz) && !isset($camera_tz)) {
+            // Neither are set
+            $camera_tz=new TimeZone(date_default_timezone_get());
+            $place_tz=$camera_tz;
+        }
+        
+        $camera_time=new Time(
+            $this->get("date") . " " .
+            $this->get("time"),
+            $camera_tz);
+        $place_time=$camera_time;
+        $place_time->setTimezone($place_tz);
+        $corr=$this->get("time_corr");
+        if($corr) {
+            $place_time->modify($corr . " minutes");
+        }
+        
+        $date=$place_time->format($date_format);
+        $time=$place_time->format($time_format);
         return array($date,$time);
     }
 

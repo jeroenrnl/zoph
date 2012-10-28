@@ -134,7 +134,7 @@ class TimeZone extends DateTimeZone {
      * @return string timezone
      */
     public static function guess($lat, $lon) {
-        if(minimum_version("5.1.2") && class_exists("XMLReader")) {
+        if(class_exists("XMLReader")) {
             $failed=false;
             $xml=new XMLReader();
             @$xml->open("http://ws.geonames.org/timezone?lat=" . 
