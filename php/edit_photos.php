@@ -187,11 +187,8 @@
                 }
 
                 if ($rating != null) {
-                    if (ALLOW_RATINGS) { // multiple ratings
+                    if (conf::get("feature.rating")) {
                         $photo->rate($user, $rating);
-                    }
-                    else { // single rating
-                        $photo->set('rating', $rating);
                     }
                 }
 
@@ -295,7 +292,7 @@
                       <label for="rating__<?php echo $photo_id?>"><?php echo translate("rating") ?></label>
 <?php
     $rating = $photo->get('rating');
-    if (ALLOW_RATINGS) {
+    if (conf::get("feature.rating")) {
         $rating = $photo->get_rating($user);
     }
 ?>

@@ -427,6 +427,48 @@ class conf {
         $wm_trans->setDefault("50");
         $wm_trans->setRegex("^(100|[0-9]{1,2})$");
         $wm[]=$wm_trans;
+        /*********************** FEATURES *************************/
+
+        $ft = self::addGroup("feature", "Features");
+
+        $ft_download = new confItemBool();
+        $ft_download->setName("feature.download");
+        $ft_download->setLabel("Downloading");
+        $ft_download->setDesc("With this feature you can use download a set of photos (Albums, Categories, Places, People or a search result) in one or more ZIP files. Important! The photos in the ZIP file will NOT be watermarked. You must also grant each non-admin user you want to give these rights permission by changing \"can download zipfiles\" in the user's profile.");
+        $ft_download->setDefault(false);
+        $ft[]=$ft_download;
+
+        $ft_comments = new confItemBool(); 
+        $ft_comments->setName("feature.comments");
+        $ft_comments->setLabel("Comments");
+        $ft_comments->setDesc("Enable comments. Before a user can actually leave comments, you should also give the user these rights through the edit user screen.");
+        $ft_comments->setDefault(false);
+        $ft[]=$ft_comments;
+
+        $ft_mail = new confItemBool(); 
+        $ft_mail->setName("feature.mail");
+        $ft_mail->setLabel("Mail photos");
+        $ft_mail->setDesc("You can enable or disable the \"mail this photo feature\" using this option. Since Zoph needs to convert the photo into Base64 encoding for mail, it requires quite a large amount of memory if you try to send full size images and you may need to adjust memory_limit in php.ini, you should give it at least about 4 times the size of your largest image.");
+        $ft_mail->setDefault(false);
+        $ft[]=$ft_mail;
+
+        $ft_mail_bcc = new confItemString();
+        $ft_mail_bcc->setName("feature.mail.bcc");
+        $ft_mail_bcc->setLabel("BCC address");
+        $ft_mail_bcc->setDesc("Automatically Blind Carbon Copy this mailaddress when a mail from Zoph is sent");
+        $ft_mail_bcc->setDefault("");
+        $ft_mail_bcc->setRegex("^([0-9a-zA-Z_\-%\.]+@([0-9a-zA-Z\-]+\.)+[a-zA-Z]{2,10})?$"); // not sure how long the "new" TLD's are going to be, 
+                                                                                             // 10 should be enough for most, feel free to report 
+                                                                                             // a bug if your TLD is longer.
+        $ft[]=$ft_mail_bcc;
+
+        $ft_rating = new confItemBool(); 
+        $ft_rating->setName("feature.rating");
+        $ft_rating->setLabel("Photo rating");
+        $ft_rating->setDesc("Allow users to rate photos. Before a non-admin user can actually rate, you should also give the user these rights through the edit user screen.");
+        $ft_rating->setDefault(true);
+        $ft[]=$ft_rating;
+
 
         /************************** DATE **************************/
         $date = self::addGroup("date", "Date and time");

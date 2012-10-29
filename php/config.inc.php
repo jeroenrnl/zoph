@@ -55,11 +55,13 @@
     # Use this language when neither user or browser specify a language
     define('DEFAULT_LANG', 'en');
 
-    define('EMAIL_PHOTOS', 1); // enable email photo feature
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('EMAIL_PHOTOS', 1); // enable email photo feature
 
     // sent all emails also to this address
     // set to '' if not needed
-    define('BCC_ADDRESS', '');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('BCC_ADDRESS', '');
 
     // URL used in Notification EMail and for https logons
     // set to '' if not needed, example:
@@ -157,11 +159,13 @@
 
 
     // If set to 1, users can leave comments with photos
-    define('ALLOW_COMMENTS', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('ALLOW_COMMENTS', 0);
 
     // Enable downloading of a set of photos in a ZIP file.
     // Warning: the downloaded photos are NOT watermarked.
-    define('DOWNLOAD', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('DOWNLOAD', 0);
 
     // Import related options:
 
@@ -236,7 +240,8 @@
     //define('HIER_DATED_DIRS', 0);
 
     // let users rate photos
-    define('ALLOW_RATINGS', 1);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('ALLOW_RATINGS', 1);
 
     define('MAX_CRUMBS', 100);
 

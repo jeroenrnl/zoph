@@ -45,8 +45,8 @@
         $mail->setFrom(e($from_name) .  "<" . e($from_email) . ">");
         $mail->setSubject(e($subject));
 
-        if (strlen(BCC_ADDRESS) > 0) {
-            $mail->setBCC(BCC_ADDRESS);
+        if (strlen(conf::get("feature.mail.bcc")) > 0) {
+            $mail->setBCC(conf::get("feature.mail.bcc"));
         }
 
         $mail->setTXTBody(e($message));

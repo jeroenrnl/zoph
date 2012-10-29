@@ -139,17 +139,6 @@
           <label for="view"><?php echo translate("view") ?></label>
           <?php echo create_text_input("view", $photo->get("view"), 40, 64) ?>
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
-<?php
-    // if people are allowed to rate photos, the rating field
-    // is an average so don't edit it.
-    if (!ALLOW_RATINGS) {
-?>
-          <label for="rating"><?php echo translate("rating") ?></label>
-          <?php echo create_rating_pulldown($photo->get("rating")) ?>
-          <span class="inputhint">1 - 10</span><br>
-<?php
-    }
-?>
           <label for="_photographer_id"><?php echo translate("photographer") ?></label>
 <?php 
             echo create_photographer_pulldown("photographer_id", $photo->get("photographer_id"), $user);

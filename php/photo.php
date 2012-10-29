@@ -116,7 +116,7 @@
         $photo->add_to_album($user->get("lightbox_id"));
         $action = "display";
     } else if ($_action == "rate") {
-        if (ALLOW_RATINGS && ($user->is_admin() || $user->get("allow_rating"))) {
+        if (conf::get("feature.rating") && ($user->is_admin() || $user->get("allow_rating"))) {
             $rating = getvar("rating");
             $photo->rate($user, $rating);
             $link = strip_href($user->get_last_crumb());
@@ -164,7 +164,7 @@
     }
 
 
-    if (EMAIL_PHOTOS) {
+    if (conf::get("feature.mail")) {
         $actionlinks["email"]="mail.php?_action=compose&amp;photo_id=" . $photo->get("photo_id");
     }
 
@@ -174,7 +174,7 @@
     if ($user->get("lightbox_id")) {
         $actionlinks["lightbox"]="photo.php?_action=lightbox&amp;" . $qs;
     }
-    if ((ALLOW_COMMENTS) && ($user->is_admin() || $user->get("leave_comments"))) {
+    if (conf::get("feature.comments") && ($user->is_admin() || $user->get("leave_comments"))) {
         $actionlinks["add comment"]="comment.php?_action=new&amp;photo_id=" . $photo->get("photo_id");
     }
 
@@ -375,7 +375,7 @@ require_once("header.inc.php");
 <dl class="photo">
 <?php echo create_field_html($photo->getDisplayArray()) ?>
 <?php
-        if ((ALLOW_RATINGS  && ($user->is_admin() || $user->get("allow_rating"))) || $photo->get("rating")) {
+        if ((conf::get("feature.rating")  && ($user->is_admin() || $user->get("allow_rating"))) || $photo->get("rating")) {
             $rating=$photo->get("rating") != 0 ? $photo->get("rating") . 
             " / 10" : "";
 ?>
@@ -389,7 +389,7 @@ require_once("header.inc.php");
                         echo $rating;
                     }
                 }
-            if (ALLOW_RATINGS && ($user->is_admin() || $user->get("allow_rating"))) {
+            if (conf::get("feature.rating") && ($user->is_admin() || $user->get("allow_rating"))) {
 ?>
 <form id="ratingform" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
         <input type="hidden" name="_action" value="rate">
@@ -473,7 +473,7 @@ require_once("header.inc.php");
           }
           echo "<br>";
         }
-        if (ALLOW_COMMENTS) {
+        if (conf::get("feature.comments")) {
             $comments=$photo->get_comments();
 
             if($comments) {

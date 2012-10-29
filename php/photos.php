@@ -112,7 +112,7 @@
 ?>
             <a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a> 
 <?php
-        if(DOWNLOAD && ($user->get("download") || $user->is_admin())) {
+        if(conf::get("feature.download") && ($user->get("download") || $user->is_admin())) {
 ?>
             |
             <a href="download.php?<?php echo $qs ?>"><?php echo translate("download") ?></a>
