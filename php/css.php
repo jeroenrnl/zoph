@@ -556,13 +556,9 @@ div.main#config h2 {
     width: 100%;
 }
 
-div.main#config input {
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
-    padding: 2px;
-    border-radius: 2px;
-
+div.main#config input[type="checkbox"] {
+    margin: 7px;
 }
-    
 
 .olControlAttribution {
     bottom: 1em !important;
@@ -1172,6 +1168,7 @@ dl.track dd {
     padding-left: 4px;
     padding-right: 4px;
     min-height: 1.3em;
+    margin: 4px 0px;
     }
 
 dl.color_scheme dd,
@@ -1396,6 +1393,10 @@ textarea.desc {
     }   
 
 
+input, select {
+    margin: 2px;
+    }
+
 input[type="checkbox"] {
     float: left;
     }
@@ -1412,9 +1413,20 @@ div#passwordchange input[type="password"]   {
     margin-left: 5px;
     }
 
-input, select {
+select,
+input[type="text"],
+input[type="time"],
+input[type="date"],
+input[type="password"],
+textarea {
+    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    padding: 2px;
+    border-radius: 2px;
     margin: 2px;
-    }
+    background: white;
+    float: left;
+}
+
 
 form.geotag select,
 form.import select,
