@@ -53,7 +53,8 @@
     //define('LANG_DIR', "lang"); // where language files are stored
 
     # Use this language when neither user or browser specify a language
-    define('DEFAULT_LANG', 'en');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('DEFAULT_LANG', 'en');
 
     // Deprecated: Modify through admin -> config in web interface.
     //define('EMAIL_PHOTOS', 1); // enable email photo feature

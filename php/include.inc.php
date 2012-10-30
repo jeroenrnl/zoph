@@ -34,8 +34,6 @@
 
     require_once("validator.inc.php");
 
-    require_once("translation.inc.php");
-
     require_once("zoph_calendar.inc.php");
 
     /**

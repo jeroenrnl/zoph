@@ -39,8 +39,10 @@ class language {
     private $filename;
     private $translations=array();
 
-    # This defines what the base language is, the language the strings in the
-    # sourcecode are in.
+    /**
+     * @var This defines what the base language is, the language the strings in the
+     * sourcecode are in.
+     */
     public static $base="en";
     public static $base_name="English";
 
@@ -61,7 +63,7 @@ class language {
      * Open the file
      * @return filedescriptor file
      */
-    private function open_file() {
+    private function openFile() {
         if (file_exists($this->filename) && is_readable($this->filename)) {
             try {
                 $file=fopen($this->filename, "r");
@@ -82,8 +84,8 @@ class language {
      * a wrong header, they will be silently ignored.
      * @return bool true|false
      */
-    function read_header() {
-        $file=$this->open_file();
+    function readHeader() {
+        $file=$this->openFile();
         if(!$file) { return false; }
         $header=fgets($file);
         $zoph_header="# zoph language file - ";
@@ -103,7 +105,7 @@ class language {
      * @return bool true|false
      */
     function read() {
-        $file=$this->open_file();
+        $file=$this->openFile();
         if(!$file) { return false; }
         while ($line=fgets($file)) {
             if($line[0] == "#") {
@@ -130,7 +132,7 @@ class language {
         if(array_key_exists($string, $this->translations)) {
             return trim($this->translations[$string]);
         } else {
-            if($error && !($this->iso==language::$base)) {
+            if($error && !($this->iso==self::$base)) {
                 $tag = "<b>[tr]</b> ";
             }
             return $tag . $string;
@@ -141,7 +143,7 @@ class language {
      * Get all languages
      * @return array array of language objects
      */
-    public static function get_all() {
+    public static function getAll() {
         $langs=array();
         if(is_dir(self::LANG_DIR) && is_readable(self::LANG_DIR)) {
             $handle=opendir(self::LANG_DIR);
@@ -153,7 +155,7 @@ class language {
                         # to find them back later...
                         # is isocode nl file NL Nl or nl?
                         $lang=new language($filename);
-                        if($lang->read_header()) {
+                        if($lang->readHeader()) {
                             $langs[$filename]=$lang;
                         }
                     } else {
@@ -196,12 +198,12 @@ class language {
      * @return language language object
      */
     public static function load($langs) {
-        array_push($langs, DEFAULT_LANG, language::$base);
+        array_push($langs, conf::get("interface.language"), language::$base);
         foreach ($langs as $l) {
             log::msg("Trying to load language: <b>" . $l . "</b>", log::DEBUG, log::LANG);
             if(language::exists($l)) {
                 $lang=new language($l);
-                if($lang->read_header() && $lang->read()) {
+                if($lang->readHeader() && $lang->read()) {
                     log::msg("Loaded language: <b>" . $l . "</b><br>", log::DEBUG, log::LANG);
                     return $lang;
                 }
@@ -223,7 +225,7 @@ class language {
      * Get HTTP_ACCEPT_LANG and interprete it
      * @return array array of languages in preference order
      */
-    public static function http_accept() {
+    public static function httpAccept() {
         $langs=array();
         $genlangs=array();
         $return=array();

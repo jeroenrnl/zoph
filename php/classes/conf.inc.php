@@ -215,6 +215,17 @@ class conf {
         $int_autoc->setDefault(true);
         $interface[]=$int_autoc;
 
+        $int_lang = new confItemSelect();
+        $int_lang->setName("interface.language");
+        $int_lang->setLabel("Default language");
+        $int_lang->setDesc("Set the language used when neither the user or the browser specifies a preference");
+        $langs=language::getAll();
+        foreach ($langs as $iso=>$lang) {
+            $int_lang->addOption($iso, $lang->name);
+        }
+        $int_lang->setDefault("en");
+        $interface[]=$int_lang;
+
         /************************** SSL **************************/
         $ssl = self::addGroup("ssl", "SSL");
 

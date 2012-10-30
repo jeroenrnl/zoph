@@ -134,7 +134,7 @@
             redirect(getZophURL("http"), "switch back from https to http");
         }
     } else {
-        $lang = new language(DEFAULT_LANG);
+        $lang = new language(conf::get("interface.language"));
     }        
 
 ?>

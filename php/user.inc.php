@@ -214,7 +214,7 @@ class user extends zophTable {
             $langs[] = $this->prefs->get("language");
         }
 
-        $langs=array_merge($langs, language::http_accept());
+        $langs=array_merge($langs, language::httpAccept());
 
         $this->lang=language::load($langs);
         return $this->lang;
