@@ -49,66 +49,69 @@
     else {
 
         if ($_action == "mail") {
-
-            $mail = new Mail_mime();
-            $hdrs = array (
-                "X-Mailer" => "Html Mime Mail Class",
-                "X-Zoph-Version" => VERSION
-            );
-            $size = getvar("_size");
-
-            if ($annotate) {
-                $file = $photo->get_annotated_file_name($user);
-                $dir = ANNOTATE_TEMP_DIR . "/";
-            }
-            else if ($size == "full") {
-                $file = $photo->get("name");
-                $dir = conf::get("path.images") . $photo->get("path") . "/";
-            }
-            else {
-                $file = MID_PREFIX . "_" . $photo->get("name");
-                $dir = conf::get("path.images") . $photo->get("path") . "/" .
-                    MID_PREFIX . "/";
-            }
-            if($includeurl) {
-                $link = "\n" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . ": " . getZophURL() . "/photo.php?photo_id=" . $photo_id;
-            }
-
-            if ($html) {
-                $html = "<center>\n"; 
-                $html .= "<img src=\"" . $file . "\"><br>\n";
-                $html .= str_replace("\n", "<br>\n", $message);
-                if($includeurl) {
-                    $html .= "<a href=\"" . getZophURL() . "/photo.php?photo_id=" . $photo_id . "\">" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . "</a>";
-                }
-                $html .= "</center>\n";
-
-                $mail->addHTMLImage($dir . "/" . $file, get_image_type($file), $file);
-                $mail->setHTMLBody($html);
-                $mail->setTXTBody($message . $link);
-            } else {
-                $mail->setTXTBody($message . $link);
-                $mail->addAttachment($dir . "/" . $file, get_image_type($file));
-            }
-            $mail->setFrom("$from_name <$from_email>");
-
-            if (strlen(conf::get("feature.mail.bcc")) > 0) {
-                $mail->setBCC(conf::get("feature.mail.bcc"));
-            }
-            $body = $mail->get();
-            $hdrs = $mail->headers($hdrs);
-            foreach($hdrs as $header => $content) {
-                $headers .= $header . ": " . $content . "\n";
-            }
-            if (mail($to_email,$subject, $body,$headers)) {
-                $msg = translate("Your mail has been sent.");
+            try {
+                $mail = new Mail_mime();
+                $hdrs = array (
+                    "X-Mailer" => "Html Mime Mail Class",
+                    "X-Zoph-Version" => VERSION
+                );
+                $headers="";
+                $size = getvar("_size");
 
                 if ($annotate) {
-                    unlink(ANNOTATE_TEMP_DIR . "/" . $photo->get_annotated_file_name($user));
+                    $file = $photo->get_annotated_file_name($user);
+                    $dir = ANNOTATE_TEMP_DIR . "/";
                 }
-            }
-            else {
-                $msg = translate("Could not send mail.");
+                else if ($size == "full") {
+                    $file = $photo->get("name");
+                    $dir = conf::get("path.images") . $photo->get("path") . "/";
+                }
+                else {
+                    $file = MID_PREFIX . "_" . $photo->get("name");
+                    $dir = conf::get("path.images") . $photo->get("path") . "/" .
+                        MID_PREFIX . "/";
+                }
+
+                if ($html) {
+                    $html = "<center>\n"; 
+                    $html .= "<img src=\"" . $file . "\"><br>\n";
+                    $html .= str_replace("\n", "<br>\n", $message);
+                    if($includeurl) {
+                        $html .= "<a href=\"" . getZophURL() . "/photo.php?photo_id=" . $photo_id . "\">" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . "</a>";
+                    }
+                    $html .= "</center>\n";
+                    
+                    $mail->addHTMLImage($dir . "/" . $file, get_image_type($file), $file);
+                    $mail->setHTMLBody($html);
+                    $mail->setTXTBody($message);
+                } else {
+                    if($includeurl) {
+                        $message .= "\n" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . ": " . getZophURL() . "/photo.php?photo_id=" . $photo_id;
+                    }
+                    $mail->setTXTBody($message);
+                    $mail->addAttachment($dir . "/" . $file, get_image_type($file));
+                }
+                $mail->setFrom("$from_name <$from_email>");
+
+                if (strlen(conf::get("feature.mail.bcc")) > 0) {
+                    $mail->setBCC(conf::get("feature.mail.bcc"));
+                }
+                $body = $mail->get();
+                $hdrs = $mail->headers($hdrs);
+                foreach($hdrs as $header => $content) {
+                    $headers .= $header . ": " . $content . "\n";
+                }
+                if (mail($to_email,$subject, $body,$headers)) {
+                    $msg = translate("Your mail has been sent.");
+
+                    if ($annotate) {
+                        unlink(ANNOTATE_TEMP_DIR . "/" . $photo->get_annotated_file_name($user));
+                    }
+                } else {
+                    $msg = translate("Could not send mail.");
+                }
+            } catch (MailException $e) {
+                $msg = $e->getMessage();
             }
         }
 
@@ -134,13 +137,14 @@
 <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="post">
       <div class="main">
 <?php
-    if ($msg) {
+    if (isset($msg)) {
 ?>
             <?php echo $msg ?>
 <?php
     }
 
     if ($found && $_action == "compose") {
+        $body="";
 
         $subject = sprintf(translate("A Photo from %s"), conf::get("interface.title")) . ": " . $photo->get("name");
         $ea = $photo->get_email_array();

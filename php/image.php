@@ -61,15 +61,14 @@
         die("Illegal type");
     }
     if ($found) {
+        $name = $photo->get("name");
 
         $annotated = getvar('annotated');
         if (ANNOTATE_PHOTOS && $annotated) {
             $image_path = ANNOTATE_TEMP_DIR . "/" .
                 $photo->get_annotated_file_name($user);
-        }
-        else {
+        } else {
             $watermark_file="";
-            $name = $photo->get("name");
             $image_path = conf::get("path.images") . "/" . $photo->get("path") . "/";
             if (!$user->is_admin()) {
                 $permissions = $user->get_permissions_for_photo($photo_id);
@@ -96,29 +95,28 @@
                     $image_path .= $type . "/" . $type . "_";
                 }
                 $image_path .= $name;
-
-                // the following thanks to Alan Shutko
-                $mtime = filemtime($image_path);
-                $filesize = filesize($image_path);
-                $gmt_mtime = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
-
-                // we assume that the client generates proper RFC 822/1123 dates
-                //   (should work for all modern browsers and proxy caches)
-                if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && 
-                    $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
-                      header("HTTP/1.1 304 Not Modified");
-                      exit;
-                }
-                $image_type = get_image_type($image_path);
-                if ($image_type) {
-                    header("Content-Length: " . $filesize);
-                    header("Content-Disposition: inline; filename=" . $name);
-                    header("Last-Modified: " . $gmt_mtime);
-                    header("Content-type: " . $image_type);
-                    readfile($image_path);
-                    exit;
-                }
             }
+        }
+        // the following thanks to Alan Shutko
+        $mtime = filemtime($image_path);
+        $filesize = filesize($image_path);
+        $gmt_mtime = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
+
+        // we assume that the client generates proper RFC 822/1123 dates
+        //   (should work for all modern browsers and proxy caches)
+        if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && 
+            $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
+              header("HTTP/1.1 304 Not Modified");
+              exit;
+        }
+        $image_type = get_image_type($image_path);
+        if ($image_type) {
+            header("Content-Length: " . $filesize);
+            header("Content-Disposition: inline; filename=" . $name);
+            header("Last-Modified: " . $gmt_mtime);
+            header("Content-type: " . $image_type);
+            readfile($image_path);
+            exit;
          }
     }
     require_once("header.inc.php");

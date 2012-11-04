@@ -1004,7 +1004,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
         */
 
         $count = 0;
-        array($final_array);
+        $final_array=array();
         if ($out_array) {
             while (list($key, $val) = each($out_array)) {
                 $tmp_array = explode("\n", wordwrap($val, $maxWidthChars, "\n   "));

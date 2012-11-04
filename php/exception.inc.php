@@ -53,5 +53,5 @@ class PhotoException extends ZophException {}
 class PhotoThumbCreationFailedException extends PhotoException {}
 class PhotoNotFoundException extends PhotoException {}
 
-
+class MailException extends ZophException {}
 ?>
