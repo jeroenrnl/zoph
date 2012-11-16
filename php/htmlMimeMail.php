@@ -136,23 +136,15 @@ class Mail_mime {
     }
 
     /**
-     * Adds an image to the list of embedded images.
+     * Adds an image to the list of embedded images. The source is a string containing the image.
      *
-     * @param  string The image file name OR image data itself
-     * @param  string The content type
-     * @param  string The filename of the image. Only use if $file is the image data
-     * @param  bool Whether $file is a filename or not. Defaults to true
+     * @paramstring The image data.
+     * @param string The file name
+     * @param string The content type
      * @return bool true 
      */
-    public function addHTMLImage($file, $c_type='application/octet-stream',
-                          $name = '', $isfilename = true) {
-        $filedata = ($isfilename === true) ? $this->file2str($file)
-                                       : $file;
-        if ($isfilename === true) {
-            $filename = ($name == '' ? basename($file) : basename($name));
-        } else {
-            $filename = basename($name);
-        }
+    public function addHTMLImageFromString($filedata, $filename, $c_type='application/octet-stream') {
+        $filename = basename($filename);
         $this->html_images[] = array(
             'body'   => $filedata,
             'name'   => $filename,
@@ -163,45 +155,58 @@ class Mail_mime {
     }
 
     /**
-     * Adds a file to the list of attachments.
+     * Adds an image to the list of embedded images. The source is a file on disk.
      *
-     * @param  string The file name of the file to attach OR the file data itself
-     * @param  string The content type
-     * @param  string The filename of the attachment. Only use if $file is the file data
-     * @param  bool Whether $file is a filename or not. Defaults to true
-     * @return bool true
+     * @param string The file to be used as attachment
+     * @param string The content type
+     * @param string encoding.
+     */
+    public function addHTMLImageFromFile($file, $c_type='application/octet-stream') {
+        $filedata = $this->file2str($file);
+        return $this->addHTMLImageFromString($filedata, $file, $c_type);
+    }
+
+    /**
+     * Adds a file to the list of attachments. The source is a string containing the contents of the file.
+     *
+     * @param string The file data to use as attachment
+     * @param string The content type
+     * @param string The filename of the attachment. 
+     * @param string encoding.
      * @throws MailException
      */
-    public function addAttachment($file, $c_type = 'application/octet-stream',
-                           $name = '', $isfilename = true,
-                           $encoding = 'base64') {
-        $filedata = ($isfilename === true) ? $this->file2str($file)
-                                           : $file;
-        if ($isfilename === true) {
-            // Force the name the user supplied, otherwise use $file
-            $filename = (!empty($name)) ? $name : $file;
-        } else {
-            $filename = $name;
-        }
+    public function addAttachmentFromString($filedata, $filename, $c_type = 'application/octet-stream', $encoding = 'base64') {
         if (empty($filename)) {
             throw new MailException("The supplied filename for the attachment can\'t be empty");
         }
         $filename = basename($filename);
-
         $this->parts[] = array(
             'body'     => $filedata,
             'name'     => $filename,
             'c_type'   => $c_type,
             'encoding' => $encoding
         );
-        return true;
     }
+
+    /**
+     * Adds a file to the list of attachments. The source is a file on disk.
+     *
+     * @param string The file to be used as attachment
+     * @param string The content type
+     * @param string encoding.
+     */
+    public function addAttachmentFromFile($file, $c_type = 'application/octet-stream', $encoding = 'base64') {
+        $filedata=$this->file2str($file);
+        $this->addAttachmentFromString($filedata, $file, $c_type, $encoding);
+    }
+
 
     /**
      * Get the contents of the given file name as string
      *
      * @param  string  path of file to process
      * @return string  contents of $file_name
+     * @throws mailException
      */
     private function file2str($file_name) {
         if (!is_readable($file_name)) {

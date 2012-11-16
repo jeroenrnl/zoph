@@ -552,19 +552,6 @@ function valid_image($name) {
     return false;
 }
 
-function delete_temp_annotated_files($user_id) {
-    if (!ANNOTATE_PHOTOS) {
-        return;
-    }
-
-    $tmp_dir = dir(ANNOTATE_TEMP_DIR);
-    $search_str = ANNOTATE_TEMP_PREFIX . $user_id;
-    while ($entry = $tmp_dir->read()) {
-        if (strpos(" $entry", $search_str) == 1) {
-            unlink(ANNOTATE_TEMP_DIR . "/" . $entry);
-        }
-    }
-}
 /* based on urlencode_array
    By linus at flowingcreativity dot net
    from: http://www.php.net/manual/en/function.urlencode.php
@@ -683,44 +670,6 @@ function get_human($bytes) {
         $length=floor(log($bytes,2)/10);
         return round($bytes/pow(2,10*($length)),1) . $prefixes[floor($length)] . "B";
     }
-}
-
-function watermark_image($orig, $watermark, $positionX = "center", $positionY = "center", $transparency = 50) {
-
-    $wm=imagecreatefromgif($watermark);
-    
-    $width_orig=ImageSX($orig);
-    $height_orig=ImageSY($orig);
-
-    $width_wm=ImageSX($wm);
-    $height_wm=ImageSY($wm);
-
-    switch ($positionX) {
-    case "left":
-        $destX = 5;
-        break;
-    case "right":
-        $destX = $width_orig - $width_wm - 5;
-        break;
-    default:
-        $destX = ($width_orig / 2) - ($width_wm / 2);
-        break;
-    }
-
-    switch ($positionY) {
-    case "top":
-        $destY = 5;
-        break;
-    case "bottom":
-        $destY = $height_orig - $height_wm - 5;
-        break;
-    default:
-        $destY = ($height_orig / 2) - ($height_wm / 2);
-        break;
-    }
-    ImageCopyMerge($orig, $wm, $destX, $destY, 0, 0, $width_wm, $height_wm, $transparency);
-    imagedestroy($wm);
-    return $orig;
 }
 
 function pager($current, $total, $num_pages, $page_size, $max_size, $request_vars, $var) {

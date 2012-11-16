@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,10 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @author Alan Shutko
  */
     session_cache_limiter("public");
     require_once("variables.inc.php");
     $hash = getvar("hash");
+    $annotated = getvar('annotated');
     define("IMAGE_PHP", 1);
     require_once("include.inc.php");
 
@@ -54,6 +60,13 @@
                 die($e->getMessage());
             }
         }
+    } else if (ANNOTATE_PHOTOS && $annotated) {
+        $photo = new annotatedPhoto($photo_id);
+        $found = $photo->lookupForUser($user);
+        $photo->setVars($request_vars);
+        if(getvar("_size")=="mid") {
+            $type=MID_PREFIX;
+        }
     } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {
         $photo = new photo($photo_id);
         $found = $photo->lookupForUser($user);
@@ -62,62 +75,27 @@
     }
     if ($found) {
         $name = $photo->get("name");
-
-        $annotated = getvar('annotated');
-        if (ANNOTATE_PHOTOS && $annotated) {
-            $image_path = ANNOTATE_TEMP_DIR . "/" .
-                $photo->get_annotated_file_name($user);
+        $image_path = conf::get("path.images") . "/" . $photo->get("path") . "/";
+        $watermark_file="";
+        
+        if(!$user->is_admin() && conf::get("watermark.enable")) {
+            $permissions = $user->get_permissions_for_photo($photo_id);
+            $watermark = $permissions->get("watermark_level");
+            $photolevel=$photo->get("level");
+            if($photolevel > $watermark) {
+                $photo=new watermarkedPhoto($photo_id);
+                $photo->lookup();
+            }
         } else {
-            $watermark_file="";
-            $image_path = conf::get("path.images") . "/" . $photo->get("path") . "/";
-            if (!$user->is_admin()) {
-                $permissions = $user->get_permissions_for_photo($photo_id);
-                $watermark = $permissions->get("watermark_level");
-                $photolevel=$photo->get("level");
-                if(conf::get("watermark.enable") && ($photolevel > $watermark)) {
-                    $watermark_file = conf::get("path.images") . "/" . conf::get("watermark.file");
-                    if (!file_exists($watermark_file)) {
-                        $watermark_file="";
-                    }
-                }
-            }
-
-            if (conf::get("watermark.enable") && $watermark_file && !$type) {
-                $image_path .= $name;
-                $image=imagecreatefromjpeg($image_path);
-                watermark_image(&$image, $watermark_file, conf::get("watermark.pos.x"), conf::get("watermark.pos.y"), conf::get("watermark.transparency"));
-                header("Content-type: image/jpeg");
-                imagejpeg($image);
-                imagedestroy($image);
-                exit;
-            } else {
-                if ($type) {
-                    $image_path .= $type . "/" . $type . "_";
-                }
-                $image_path .= $name;
-            }
         }
-        // the following thanks to Alan Shutko
-        $mtime = filemtime($image_path);
-        $filesize = filesize($image_path);
-        $gmt_mtime = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
 
-        // we assume that the client generates proper RFC 822/1123 dates
-        //   (should work for all modern browsers and proxy caches)
-        if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && 
-            $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
-              header("HTTP/1.1 304 Not Modified");
-              exit;
+        list($headers, $image)=$photo->display($type);
+
+        foreach($headers as $label=>$value) {
+            header($label . ": " . $value);
         }
-        $image_type = get_image_type($image_path);
-        if ($image_type) {
-            header("Content-Length: " . $filesize);
-            header("Content-Disposition: inline; filename=" . $name);
-            header("Last-Modified: " . $gmt_mtime);
-            header("Content-type: " . $image_type);
-            readfile($image_path);
-            exit;
-         }
+        echo $image;
+        exit;
     }
     require_once("header.inc.php");
 ?>

@@ -36,6 +36,55 @@ class photo extends zophTable {
         $this->set("photo_id",$id);
     }
 
+    /**
+    * Display the image
+    * @param string type of image to display mid, thumb or null for full-sized
+    * @return array Return an array that contains:
+    *               array headers: the headers
+    *               string jpeg: the jpeg file
+    * @todo only supports JPEG currently, should support more filetypes
+    */
+    public function display($type=null) {
+        $headers=array();
+        $name = $this->get("name");
+        $image_path = conf::get("path.images") . "/" . $this->get("path") . "/";
+
+        if ($type) {
+            $image_path .= $type . "/" . $type . "_";
+        }
+        $image_path .= $name;
+
+        $mtime = filemtime($image_path);
+        $filesize = filesize($image_path);
+        $gmt_mtime = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
+
+        // we assume that the client generates proper RFC 822/1123 dates
+        //   (should work for all modern browsers and proxy caches)
+        if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) &&
+            $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
+              header("HTTP/1.1 304 Not Modified");
+              exit;
+        }
+
+        $image_type = get_image_type($image_path);
+        if ($image_type) {
+            $header["Content-Length"] = $filesize;
+            $header["Content-Disposition"]="inline; filename=" . $name;
+            $header["Last-Modified"]=$gmt_mtime;
+            $header["Content-type"]=$image_type;
+            $jpeg=file_get_contents($image_path);
+            return array($header, $jpeg);
+         }
+
+        /**
+         * @todo error handling
+         */
+    }
+
+
+
+
+
     function lookup() {
         $sql = "SELECT * FROM " . DB_PREFIX . "photos " .
             "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "'";
@@ -874,192 +923,6 @@ class photo extends zophTable {
         return 1;
     }
 
-    /*
-     * Creates a jpeg photo with
-     * text annotation at the bottom.
-     *
-     * Copyright 2003, Nixon P. Childs
-     * License: The same as the rest of Zoph.
-     */
-    function annotate($vars, $user, $size = 'mid') {
-        if ($vars['_size']) {
-            $size = $vars['_size'];
-        }
-
-        if ($size == 'mid') {
-            $font = 4;
-            $padding = 2;
-            $indent = 8;
-        }
-        else if ($size == 'full') {
-            $font = 5;
-            $padding = 2;
-            $indent = 8;
-        }
-        else {
-            return '';
-        }
-
-        /* ********************************
-         *  Read in original image.
-         *  Need to do now so we know
-         *  the width of the text lines.
-         * ********************************/
-
-        $image_path = conf::get("path.images") . $this->get("path");
-        if ($size == 'full') {
-            $image_path .= "/" . $this->get("name");
-        }
-        else {
-            $image_path .= "/" . $size . "/" . $size . "_" . $this->get("name");
-        }
-
-        $image_info = getimagesize($image_path);
-        switch ($image_info[2]) {
-            case 1:
-                $orig_image = imagecreatefromgif($image_path);
-                break;
-            case 2:
-                $orig_image = imagecreatefromjpeg($image_path);
-                break;
-            case 3:
-                $orig_image = imagecreatefrompng($image_path);
-                break;
-            default:
-                log::msg("Unsupported image type.", log::ERROR, log::IMG);
-                return '';
-        }
-
-        $row = ImageSY($orig_image) + ($padding/2);
-        $maxWidthPixels = ImageSX($orig_image) - (2 * $indent);
-        $maxWidthChars = floor($maxWidthPixels / ImageFontWidth($font)) - 1;
-
-        /*
-         * Sets fields from the given array.  Can be used to set vars
-         * directly from a GET or POST.
-         */
-        reset($vars);
-        $lines = 0;
-        while (list($key, $val) = each($vars)) {
-
-            // ignore empty keys or values
-            if (empty($key) || $val == "") { continue; }
-
-            if (strcmp(Substr($key, strlen($key) - 3), "_cb") == 0) {
-
-                /* *****************************************
-                 *  Everthing else uses the checkbox name
-                 *  as the "get" key.
-                 * *****************************************/
-
-                $real_key = Substr($key, 0, strlen($key) - 3);
-                $real_val = $vars[$real_key];
-
-                /* *****************************************
-                 *  Have to handle title separately because
-                 *  breadcrumbs.inc.php assumes title is
-                 *  the page title.
-                 * *****************************************/
-
-                if ($real_key == "photo_title") {
-                   $real_key = "title";
-                }
-                else if ($real_key == "extra") {
-                   $real_key = $vars["extra_name"];
-                }
-
-            $out_array[$real_key] = translate($real_key, 0) . ": " .
-                    $real_val;
-                $lines += ceil(strlen($out_array[$real_key]) / $maxWidthChars);
-            }
-        }
-
-        /* **********************************************
-         *  Create Image
-         *  In order to create the text area, we must
-         *  first create the text and determine how much
-         *  space it requires.
-         *
-         *  I tried implode;wordwrap;explode, but
-         *  wordwrap doesn't respect \n's in the text.
-         *  To complicate things, ImageString just
-         *  renders \n as an upside-down Y.
-         *
-         *  So the current solution is a little awkward,
-         *  but it works.  The only (known) problem is
-         *  that wrapped lines don't have the same
-         *  right margin as non-wrapped lines.  This is
-         *  because wordwrap doesn't take into account
-         *  the line separation string.
-         * **********************************************/
-
-
-        /*
-        $tmpString = implode("\n", $out_array);
-echo ("tmpString:<br>\n" . $tmpString);
-        $out_string = wordwrap($tmpString, floor($maxWidthPixels / ImageFontWidth($font)) - 1, "\n     ");
-echo ("<br>\noutString:<br>\n" . $out_string);
-        $formatted_array = explode("\n", $out_string);
-        $lines = sizeof($formatted_array);
-        */
-
-        $count = 0;
-        $final_array=array();
-        if ($out_array) {
-            while (list($key, $val) = each($out_array)) {
-                $tmp_array = explode("\n", wordwrap($val, $maxWidthChars, "\n   "));
-                while (list($key1, $val1) = each($tmp_array)) {
-                    $final_array[$count++] = $val1;
-                }
-            }
-        }
-
-        $noted_image = ImageCreateTrueColor (ImageSX($orig_image), ImageSY($orig_image) + ((ImageFontHeight($font) + $padding) * $count));
-        $white = ImageColorAllocate($noted_image, 255,255, 255);
-
-        /* ********************************
-         *  Use a light grey background to
-         *  hide the jpeg artifacts caused
-         *  by the sharp edges in text.
-         * ******************************/
-
-        $offwhite = ImageColorAllocate($noted_image, 240,240, 240);
-        ImageFill($noted_image, 0, ImageSY($orig_image) +1, $offwhite);
-        $black = ImageColorAllocate($noted_image, 0, 0, 0);
-        ImageColorTransparent($noted_image, $black);
-
-        ImageCopy($noted_image, $orig_image, 0, 0, 0, 0, ImageSX($orig_image), ImageSY($orig_image));
-
-        if ($final_array) {
-            while (list($key, $val) = each($final_array)) {
-                ImageString ($noted_image, $font, $indent, $row, $val, $black);
-                $row += ImageFontHeight($font) + $padding;
-            }
-        }
-
-        /*
-        while (list($key, $val) = each($out_array)) {
-            ImageStringWrap ($noted_image, $font, $padding, $row, $val, $black, $maxWidthPixels);
-            $row += ImageFontHeight($font) + $padding;
-            //echo ($val . "<br>");
-        }
-        */
-
-        //$rnd_name = rand(1, 10000);
-        //$temp_name = "zoph" . $user->get("user_id") . "_" . $rnd_name . $photo->get("name");
-
-        $temp_name = $this->get_annotated_file_name($user);
-        ImageJPEG($noted_image, ANNOTATE_TEMP_DIR . "/" . $temp_name);
-        ImageDestroy($orig_image);
-        ImageDestroy($noted_image);
-
-        return $temp_name;
-    }
-
-    function get_annotated_file_name($user) {
-        return ANNOTATE_TEMP_PREFIX . $user->get("user_id") . "_" . $this->get("name");
-    }
-
     function getDisplayArray() {
         $datetime=$this->get_time(null, "Y-m-d");
 
@@ -1794,27 +1657,6 @@ function goodrotate($src_img, $degrees = 90) {
         }
     }
     return $dst_img;
-}
-
-/*
- * For Nixon Childs' annotate function.
- *
- * Shamelessly stolen from the php.net comment board.
- */
-function ImageStringWrap($image, $font, $x, $y, $text, $color, $maxwidth) {
-    $fontwidth = ImageFontWidth($font);
-    $fontheight = ImageFontHeight($font);
-
-    if ($maxwidth != NULL) {
-        $maxcharsperline = floor($maxwidth / $fontwidth);
-        $text = wordwrap($text, $maxcharsperline, "\n", 1);
-    }
-
-    $lines = explode("\n", $text);
-    while (list($numl, $line) = each($lines)) {
-        ImageString($image, $font, $x, $y, $line, $color);
-        $y += $fontheight;
-    }
 }
 
 ?>

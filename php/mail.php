@@ -30,17 +30,26 @@
     $message = getvar("message");
     $includeurl = getvar("includeurl");
     $annotate = getvar("annotate");
+    $annotate_vars = getvar("annotate_vars");
 
     if (!ANNOTATE_PHOTOS) {
         $annotate = 0;
     }
 
-    // image will have been deleted if sent
     if ($annotate) {
         $skipcrumb = true;
+        $photo=new annotatedPhoto($photo_id);
+        if(!empty($annotate_vars)) {
+            parse_str($annotate_vars, $vars);
+        } else {
+            $vars=$request_vars;
+            $annotate_vars=http_build_query($vars, "&amp;");
+        }
+        $photo->setVars($vars);
+    } else {
+        $photo = new photo($photo_id);
     }
 
-    $photo = new photo($photo_id);
     $found = $photo->lookupForUser($user);
 
     if (!$found) {
@@ -56,17 +65,16 @@
                     "X-Zoph-Version" => VERSION
                 );
                 $headers="";
+                
                 $size = getvar("_size");
-
-                if ($annotate) {
-                    $file = $photo->get_annotated_file_name($user);
-                    $dir = ANNOTATE_TEMP_DIR . "/";
-                }
-                else if ($size == "full") {
+                
+                if($annotate) {
+                    $file=$photo->get("name");
+                    $size = $vars["_size"];
+                } else if ($size == "full") {
                     $file = $photo->get("name");
                     $dir = conf::get("path.images") . $photo->get("path") . "/";
-                }
-                else {
+                } else {
                     $file = MID_PREFIX . "_" . $photo->get("name");
                     $dir = conf::get("path.images") . $photo->get("path") . "/" .
                         MID_PREFIX . "/";
@@ -81,7 +89,12 @@
                     }
                     $html .= "</center>\n";
                     
-                    $mail->addHTMLImage($dir . "/" . $file, get_image_type($file), $file);
+                    if($annotate) {
+                        list($headers,$image)=$photo->display($size);
+                        $mail->addHTMLImageFromString($image, $photo->get("name"), $headers["Content-type"]);
+                    } else {
+                        $mail->addHTMLImageFromFile($dir . "/" . $file, get_image_type($file));
+                    }
                     $mail->setHTMLBody($html);
                     $mail->setTXTBody($message);
                 } else {
@@ -89,7 +102,12 @@
                         $message .= "\n" . sprintf(translate("See this photo in %s"), conf::get("interface.title")) . ": " . getZophURL() . "/photo.php?photo_id=" . $photo_id;
                     }
                     $mail->setTXTBody($message);
-                    $mail->addAttachment($dir . "/" . $file, get_image_type($file));
+                    if($annotate) {
+                        list($headers,$image)=$photo->display($size);
+                        $mail->addAttachmentFromString($image, $photo->get("name"), $headers["Content-type"]);
+                    } else {
+                        $mail->addAttachmentFromFile($dir . "/" . $file, get_image_type($file));
+                    }
                 }
                 $mail->setFrom("$from_name <$from_email>");
 
@@ -103,10 +121,6 @@
                 }
                 if (mail($to_email,$subject, $body,$headers)) {
                     $msg = translate("Your mail has been sent.");
-
-                    if ($annotate) {
-                        unlink(ANNOTATE_TEMP_DIR . "/" . $photo->get_annotated_file_name($user));
-                    }
                 } else {
                     $msg = translate("Could not send mail.");
                 }
@@ -156,14 +170,11 @@
                 }
             }
         }
-
-        if ($annotate) {
-            $photo->annotate($request_vars, $user);
-        }
 ?>
 <input type="hidden" name="_action" value="mail">
 <input type="hidden" name="photo_id" value="<?php echo $photo_id ?>">
 <input type="hidden" name="annotate" value="<?php echo $annotate ?>">
+<input type="hidden" name="annotate_vars" value="<?php echo $annotate_vars ?>">
        <label for="html"><?php echo translate("send as html") ?></label>
        <?php echo create_pulldown("html", "1", array("1" => translate("Yes",0), "0" => translate("No",0))) ?><br>
        <label for="toname"><?php echo translate("to (name)") ?></label>
@@ -191,7 +202,7 @@
 <?php
         if ($annotate) {
 ?>
-            <img src="image.php?photo_id=<?php echo $photo_id ?>&annotated=1" alt="<?= $photo->get("title") ? $photo->get("title") : $photo->get("name") ?>">
+            <img src="image.php?photo_id=<?php echo $photo_id ?>&annotated=1&<?php echo $annotate_vars ?>" alt="<?= $photo->get("title") ? $photo->get("title") : $photo->get("name") ?>">
 <?php
         }
         else {

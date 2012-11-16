@@ -68,10 +68,6 @@
 
     // no user was in the session, try logging in
     if ($_action == "logout") {
-        // delete left over temp files
-        if($user) {
-            delete_temp_annotated_files($user->get("user_id"));
-        }
         session_destroy();
         $user = null;
         redirect("logon.php", "Logout");
@@ -100,10 +96,6 @@
             $updated_user->set("lastlogin", "now()");
             $updated_user->set("lastip", $_SERVER["REMOTE_ADDR"]);
             $updated_user->update();
-
-            // delete left over temp files
-            delete_temp_annotated_files($user->get("user_id"));
-
         } else {
             $this_page=urlencode(preg_replace("/^\//", "", $_SERVER['REQUEST_URI']));
             redirect("logon.php?redirect=" . $this_page);
