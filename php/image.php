@@ -60,7 +60,7 @@
                 die($e->getMessage());
             }
         }
-    } else if (ANNOTATE_PHOTOS && $annotated) {
+    } else if (conf::get("feature.annotate") && $annotated) {
         $photo = new annotatedPhoto($photo_id);
         $found = $photo->lookupForUser($user);
         $photo->setVars($request_vars);

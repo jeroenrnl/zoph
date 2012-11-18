@@ -472,6 +472,13 @@ class conf {
                                                                                              // 10 should be enough for most, feel free to report 
                                                                                              // a bug if your TLD is longer.
         $ft[]=$ft_mail_bcc;
+        
+        $ft_annotate = new confItemBool(); 
+        $ft_annotate->setName("feature.annotate");
+        $ft_annotate->setLabel("Annotate photos");
+        $ft_annotate->setDesc("A user can use the annotate photo function to e-mail a photo with a textual annotation. Can only be used in combination with the \"Mail photos\" feature above.");
+        $ft_annotate->setDefault(false);
+        $ft[]=$ft_annotate;
 
         $ft_rating = new confItemBool(); 
         $ft_rating->setName("feature.rating");

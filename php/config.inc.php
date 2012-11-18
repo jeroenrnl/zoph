@@ -134,9 +134,11 @@
 
     
     // allow annotation of photos for emailing
-    define('ANNOTATE_PHOTOS', 1);
-    define('ANNOTATE_TEMP_DIR', '/tmp');
-    define('ANNOTATE_TEMP_PREFIX', 'zoph');
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('ANNOTATE_PHOTOS', 1);
+    // Deprecated
+    // define('ANNOTATE_TEMP_DIR', '/tmp');
+    // define('ANNOTATE_TEMP_PREFIX', 'zoph');
 
     // Enable watermarking
     // Image service must be enabled to make this work!

@@ -29,11 +29,12 @@
     $subject = getvar("subject");
     $message = getvar("message");
     $includeurl = getvar("includeurl");
-    $annotate = getvar("annotate");
-    $annotate_vars = getvar("annotate_vars");
 
-    if (!ANNOTATE_PHOTOS) {
-        $annotate = 0;
+    if (conf::get("feature.annotate")) {
+        $annotate = getvar("annotate");
+        $annotate_vars = getvar("annotate_vars");
+    } else {
+        $annotate=0;
     }
 
     if ($annotate) {
@@ -138,7 +139,7 @@
 ?>
 
           <h1>
-  <?php if (ANNOTATE_PHOTOS) {
+  <?php if (conf::get("feature.annotate")) {
 ?>
           <span class="actionlink"> 
             <a href="define_annotated_photo.php?photo_id=<?php echo $photo->get("photo_id") ?>"><?php echo translate("create annotated photo", 0) ?></a> 
@@ -174,7 +175,6 @@
 <input type="hidden" name="_action" value="mail">
 <input type="hidden" name="photo_id" value="<?php echo $photo_id ?>">
 <input type="hidden" name="annotate" value="<?php echo $annotate ?>">
-<input type="hidden" name="annotate_vars" value="<?php echo $annotate_vars ?>">
        <label for="html"><?php echo translate("send as html") ?></label>
        <?php echo create_pulldown("html", "1", array("1" => translate("Yes",0), "0" => translate("No",0))) ?><br>
        <label for="toname"><?php echo translate("to (name)") ?></label>
@@ -190,10 +190,10 @@
 <?php
         if (!$annotate) {
 ?>
-       <label for="size"><?php echo translate("send fullsize") ?></label>
-       <?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
-       <label for="includeurl"><?php echo translate("include URL") ?></label>
-       <?php echo create_pulldown("includeurl", "1", array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?><br>
+           <label for="size"><?php echo translate("send fullsize") ?></label>
+           <?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
+           <label for="includeurl"><?php echo translate("include URL") ?></label>
+           <?php echo create_pulldown("includeurl", "1", array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?><br>
 <?php
         }
 ?>
@@ -202,10 +202,10 @@
 <?php
         if ($annotate) {
 ?>
+            <input type="hidden" name="annotate_vars" value="<?php echo $annotate_vars ?>">
             <img src="image.php?photo_id=<?php echo $photo_id ?>&annotated=1&<?php echo $annotate_vars ?>" alt="<?= $photo->get("title") ? $photo->get("title") : $photo->get("name") ?>">
 <?php
-        }
-        else {
+        } else {
 ?>
             <?php echo $photo->get_midsize_img() ?>
 <?php
