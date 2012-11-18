@@ -113,7 +113,7 @@
                 $mail->setFrom("$from_name <$from_email>");
 
                 if (strlen(conf::get("feature.mail.bcc")) > 0) {
-                    $mail->setBCC(conf::get("feature.mail.bcc"));
+                    $mail->addBcc(conf::get("feature.mail.bcc"));
                 }
                 $body = $mail->get();
                 $hdrs = $mail->headers($hdrs);
