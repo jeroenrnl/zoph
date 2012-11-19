@@ -294,17 +294,26 @@ class user extends zophTable {
         $comments=comment::getRecordsFromQuery("comment", $sql);
         return $comments;
     }
-    
+
+    /**
+     * Get user object by searching for username
+     * @param string name
+     * @return user user object
+     */
     public static function getByName($name) {
         $sql = "select user_id from " . DB_PREFIX . "users where" .
             " user_name = '" .  escape_string($name) ."'";
         $users=user::getRecordsFromQuery("user", $sql);
         return $users[0];
-    }        
-}
+    } 
 
-function get_users($order = "user_name") {
-    return user::getRecords("user", $order);
+    /**
+     * Get all users
+     * @param string sort order
+     * @return array Array of all users
+     */
+    public static function getAll($order = "user_name") {
+        return self::getRecords("user", $order);
+    }
 }
-
 ?>

@@ -102,7 +102,7 @@ class group extends zophTable {
     }
 
     function get_non_members() {
-        $users=get_users();
+        $users=user::getAll();
         $members=$this->get_members();
         
         foreach($users as $u) {
