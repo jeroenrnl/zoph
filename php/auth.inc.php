@@ -43,22 +43,16 @@
         }
 
     } else {
-        if(defined("CLI_USER")) {
-            if (CLI_USER != 0) {
-                $user=new user(CLI_USER);
-            } else {
-                $username=$_SERVER["USER"];
-                $user=user::getByName($username);
-                if(!$user) {
-                    log::$stopOnFatal=false;
-                    log::msg("$username is not a valid user", log::FATAL, log::LOGIN);
-                    exit(EXIT_CLI_USER_NOT_VALID);
-                }    
-            }
+        if (conf::get("interface.user.cli")!==0) {
+            $user=new user(conf::get("interface.user.cli"));
         } else {
-            log::$stopOnFatal=false;
-            log::msg("CLI_USER is not defined in config.inc.php", log::FATAL, log::LOGIN);
-            exit(EXIT_CLI_USER_NOT_DEFINED);
+            $username=$_SERVER["USER"];
+            $user=user::getByName($username);
+            if(!$user) {
+                log::$stopOnFatal=false;
+                log::msg("$username is not a valid user", log::FATAL, log::LOGIN);
+                exit(EXIT_CLI_USER_NOT_VALID);
+            }    
         }
         $user->lookup();
         $user->lookup_person();

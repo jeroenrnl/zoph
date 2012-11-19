@@ -40,8 +40,8 @@ class validator {
 
         // No username or password are given, and a default user is defined
         // let's login as that...
-        if (!$this->username && !$this->password && DEFAULT_USER) {
-            $user = new user(DEFAULT_USER);
+        if (!$this->username && !$this->password && conf::get("interface.user.default")) {
+            $user = new user(conf::get("interface.user.default"));
         } else {
 
             $query =

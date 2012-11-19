@@ -293,13 +293,15 @@
 
     // set to the id of a non admin user or to 0 to disable
     // note that this is a user_id, not a person_id
-    define('DEFAULT_USER', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('DEFAULT_USER', 0);
 
     // This is the user_id of the user that is used when using the CLI
     // this user *must* be an admin user.
     // If set to 0, zoph will try to find a Zoph user by the name of the
     // currently logged on (unix) user.
-    define('CLI_USER', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('CLI_USER', 0);
 
     // if this is non-zero the people and places pages will default to
     // "show all" instead of "a".

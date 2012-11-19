@@ -48,7 +48,6 @@ class cli {
 
     const EXIT_CLI_USER_NOT_ADMIN    = 95;
     const EXIT_CLI_USER_NOT_VALID    = 96;
-    const EXIT_CLI_USER_NOT_DEFINED    = 97;
 
     const EXIT_API_NOT_COMPATIBLE    = 99;
 

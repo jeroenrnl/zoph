@@ -23,6 +23,7 @@
  */
 
 require_once("database.inc.php");
+require_once("user.inc.php");
 
 /**
  * conf is the main object for access to Zoph's configuration
@@ -225,6 +226,35 @@ class conf {
         }
         $int_lang->setDefault("en");
         $interface[]=$int_lang;
+        
+        $users=user::getAll();
+        
+        $int_user_default = new confItemSelect();
+        $int_user_default->setName("interface.user.default");
+        $int_user_default->setLabel("Default user");
+        $int_user_default->setDesc("Automatically log on as this user when not logged on. Can be used to give people access without a username and password. This user should be a non-admin user and should not have any change permissions.");
+        $int_user_default->addOption(0, "Disabled");
+        foreach ($users as $usr) {
+            if(!$usr->is_admin()) {
+                $int_user_default->addOption($usr->getId(), $usr->getName());
+            }
+        }
+        $int_user_default->setDefault(0);
+        $interface[]=$int_user_default;
+
+        $int_user_cli = new confItemSelect();
+        $int_user_cli->setName("interface.user.cli");
+        $int_user_cli->setLabel("CLI user");
+        $int_user_cli->setDesc("This is the Zoph user that is used when using the CLI interface when interacting with Zoph. You should set it to the user_id of a valid Zoph user. This user must be an admin user. You can also set it to \"autodetect\", which means Zoph will lookup the name of the Unix user starting the CLI client and tries to find that user's name in the Zoph database.");
+        $int_user_cli->addOption(0, "Autodetect");
+        foreach ($users as $usr) {
+            if($usr->is_admin()) {
+                $int_user_cli->addOption($usr->getId(), $usr->getName());
+            }
+        }
+        $int_user_cli->setDefault(0);
+        $interface[]=$int_user_cli;
+
 
         /************************** SSL **************************/
         $ssl = self::addGroup("ssl", "SSL");

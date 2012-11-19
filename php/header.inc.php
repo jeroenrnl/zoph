@@ -134,7 +134,7 @@
         translate("prefs", 0) => "prefs.php",
         translate("about", 0) => "info.php");
 
-    if ($user->get("user_id") == DEFAULT_USER) {
+    if ($user->get("user_id") == conf::get("interface.user.default")) {
         $tabs[translate("logon", 0)] = "zoph.php?_action=logout";
     }
     else {

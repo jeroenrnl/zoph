@@ -79,7 +79,7 @@
     echo "\n        <p class=\"intro\">\n";
     echo sprintf(translate("These options are always available in the tabs on the upper right. Use the %s home %s link to return here. Click on any thumbnail to see a larger version along with information about that photo."),"<a href=\"zoph.php\">","</a>"); 
     echo "\n        </p>\n";
-    if ($user->get("user_id") != DEFAULT_USER) {
+    if ($user->get("user_id") != conf::get("interface.user.default")) {
 ?>
         <p class="intro">
 <?php echo sprintf(translate("To edit your preferences or change your password, click %s here %s."),"<a href=\"prefs.php\">","</a>");
