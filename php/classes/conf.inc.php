@@ -200,6 +200,7 @@ class conf {
         $int_salt_full->setLabel("Salt for sharing full size images");
         $int_salt_full->setDesc("When using the sharing feature, Zoph uses a hash to identify a photo. Because you do not want people who have access to you full size photos (via Zoph or otherwise) to be able to generate these hashes, you should give Zoph a secret salt so only authorized users of your Zoph installation can generate them. The salt for full size images (this one) must be different from the salt of mid size images (below), because this allows Zoph to distinguish between them. If a link to your Zoph installation is being abused (for example because someone whom you mailed a link has published it on a forum), you can modify the salt to make all hash-based links to your Zoph invalid.");
         $int_salt_full->setDefault("Change this");
+        $int_salt_full->setRequired();
         $interface[]=$int_salt_full;
 
         $int_salt_mid = new confItemSalt();
@@ -207,6 +208,7 @@ class conf {
         $int_salt_mid->setLabel("Salt for sharing mid size images");
         $int_salt_mid->setDesc("The salt for mid size images (this one) must be different from the salt of mid full images (above), because this allows Zoph to distinguish between them. If a link to your Zoph installation is being abused (for example because someone whom you mailed a link has published it on a forum), you can modify the salt to make all hash-based links to your Zoph invalid.");
         $int_salt_mid->setDefault("Modify this");
+        $int_salt_mid->setRequired();
         $interface[]=$int_salt_mid;
 
         $int_autoc = new confItemBool();
@@ -299,6 +301,7 @@ class conf {
         $path_images->setDefault("/data/images");
         $path_images->setRegex("^\/[A-Za-z0-9_\.\/]+$");
         $path_images->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Must start with a /");
+        $path_images->setRequired();
         $path[]=$path_images;
 
         $path_upload = new confItemString();
@@ -468,6 +471,51 @@ class conf {
         $wm_trans->setDefault("50");
         $wm_trans->setRegex("^(100|[0-9]{1,2})$");
         $wm[]=$wm_trans;
+
+
+        /*********************** ROTATIONS ************************/
+
+        $rt = self::addGroup("rotate", "Rotation");
+
+        $rt_enable = new confItemBool();
+        $rt_enable->setName("rotate.enable");
+        $rt_enable->setLabel("Rotation");
+        $rt_enable->setDesc("Allow users (admins or with write access) to rotate images");
+        $rt_enable->setDefault(false);
+        $rt[]=$rt_enable;
+
+        $rt_command = new confItemSelect();
+        $rt_command->setName("rotate.command");
+        $rt_command->setLabel("Rotate command");
+        $rt_command->setDesc("Determine which command is used to rotate the image. This command must be available on your system. Convert is a lossy rotate function, which means it will lower the image quality of your photo. JPEGtran, on the other hand, only works on JPEG images, but is lossless.");
+        $rt_command->addOptions(array(
+            "convert" => "convert",
+            "jpegtran" => "jpegtran"
+        ));
+        $rt_command->setDefault("convert");
+        $rt[]=$rt_command;
+        
+        $rt_backup = new confItemBool();
+        $rt_backup->setName("rotate.backup");
+        $rt_backup->setLabel("Backup");
+        $rt_backup->setDesc("Keep a backup image when rotating an image.");
+        $rt_backup->setDefault(true);
+        $rt[]=$rt_backup;
+
+        $rt_backup_prefix = new confItemString();
+        $rt_backup_prefix->setName("rotate.backup.prefix");
+        $rt_backup_prefix->setLabel("Backup prefix");
+        $rt_backup_prefix->setDesc("Prepend backup file for rotation backups with this.");
+        $rt_backup_prefix->setDefault("orig_");
+        $rt_backup_prefix->setRegex("^[a-zA-Z0-9_\-]+$");
+        $rt_backup_prefix->setRequired();
+        $rt[]=$rt_backup_prefix;
+
+
+
+
+        
+
         /*********************** FEATURES *************************/
 
         $ft = self::addGroup("feature", "Features");

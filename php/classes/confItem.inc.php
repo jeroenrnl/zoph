@@ -33,6 +33,8 @@ abstract class confItem extends zophTable {
     protected $default;
     /** @var string Input hint (format to use) */
     protected $hint;
+    /** @var bool required, whether or not field may be empty*/
+    protected $required=false;
     /** @var array fields for database */
     public $fields=array();
 
@@ -170,6 +172,13 @@ abstract class confItem extends zophTable {
         $this->hint=$hint;
     }
     
+    /**
+     * Set whether or not a field is required
+     * @param bool 
+     */
+    final public function setRequired($req=true) {
+        $this->required=(bool) $req;
+    }
     /**
      * Set default value for item
      * @param string default

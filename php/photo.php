@@ -135,7 +135,7 @@
         $_deg = getvar("_deg");
         $_thumbnail = getvar("_thumbnail");
         if ($_deg && $_deg != 0) {
-            if (ALLOW_ROTATIONS) {
+            if (conf::get("rotate.enable")) {
                 $photo->lookup();
                 $photo->rotate($_deg);
             }
@@ -311,7 +311,7 @@ require_once("header.inc.php");
     <div class="main">
 
 <?php
-        if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
+        if (conf::get("rotate.enable") && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
         <div id="rotate">
             <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">

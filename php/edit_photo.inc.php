@@ -53,7 +53,7 @@
 ?>
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
 <?php
-    if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
+    if (conf::get("rotate.enable") && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
           <div class="rotate">
 <?php echo translate("rotate", 0) ?>

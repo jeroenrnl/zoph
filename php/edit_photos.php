@@ -252,7 +252,7 @@
                 <div class="thumbnail">
                   <?php echo $photo->get_thumbnail_link("photo.php?photo_id=$photo_id") . "\n" ?><br>
 <?php
-                if ($can_edit && ALLOW_ROTATIONS &&
+                if ($can_edit && conf::get("rotate.enable") &&
                     ($user->is_admin() || $permissions->get("writable"))) {
 ?>
                   <?php echo translate("rotate", 0) ?>

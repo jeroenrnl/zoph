@@ -826,13 +826,7 @@ class photo extends zophTable {
     }
 
     function rotate($deg) {
-/*
-        This line breaks things if dated-dirs are not used: in that case the path field is empty...
-        if (!ALLOW_ROTATIONS || !$this->get('name') || !$this->get('path')) {
-            return;
-        }
-*/
-        if (!ALLOW_ROTATIONS || !$this->get('name')) {
+        if (!conf::get("rotate.enable") || !$this->get('name')) {
             return;
         }
 
@@ -849,8 +843,8 @@ class photo extends zophTable {
 
         $images[$dir . $name] = $dir . 'rot_' . $name;
 
-        if (BACKUP_ORIGINAL) {
-            $backup_name = BACKUP_PREFIX . $name;
+        if (conf::get("rotate.backup")) {
+            $backup_name = conf::get("rotate.backup.prefix") . $name;
 
             // file_exists() check from From Michael Hanke:
             // Once a rotation had occurred, the backup file won't be
@@ -887,14 +881,15 @@ class photo extends zophTable {
               imagejpeg($new_image, $tmp_file, 95);
             */
 
-            $cmd = ROTATE_CMD;
-            if (strpos(" $cmd", 'jpegtran')) {
-                $cmd .= ' -copy all -rotate ' .  escapeshellarg($deg) .
+            switch(conf::get("rotate.command")) {
+            case "jpegtran":
+                $cmd = 'jpegtran -copy all -rotate ' .  escapeshellarg($deg) .
                     ' -outfile ' .  escapeshellarg($tmp_file) . ' ' .
                     escapeshellarg($file);
-            }
-            else if (strpos(" $cmd", 'convert')) {
-                $cmd .= ' -rotate ' . escapeshellarg($deg) . ' ' .
+                break;
+            case "convert":
+            default:
+                $cmd = 'convert -rotate ' . escapeshellarg($deg) . ' ' .
                     escapeshellarg($file) . ' ' . escapeshellarg($tmp_file);
             }
 

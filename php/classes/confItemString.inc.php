@@ -36,7 +36,8 @@ class confItemString extends confItem {
             "hint" => e($this->getHint()),
             "regex" => e($this->regex),
             "size" => (int) $this->size,
-            "title" => e($this->title)
+            "title" => e($this->title),
+            "req" => ($this->required ? "required" : "")
         ));
         return $tpl;
     }
@@ -50,6 +51,10 @@ class confItemString extends confItem {
     }
 
     public function checkValue($value) {
+        if($this->required && $value=="") {
+            return false;
+        }
+
         if(isset($this->regex)) {
             return preg_match("/" . $this->regex ."/", $value);
         } else {

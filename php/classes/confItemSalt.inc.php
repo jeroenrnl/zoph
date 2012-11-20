@@ -43,7 +43,8 @@ class confItemSalt extends confItemString {
             "hint" => e($this->getHint()),
             "regex" => e($this->regex),
             "size" => (int) $this->size,
-            "title" => e($this->title)
+            "title" => e($this->title),
+            "req" => ($this->required ? "required" : "")
         ));
         return $tpl;
     }
