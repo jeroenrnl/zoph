@@ -311,8 +311,9 @@
 
     // these two are for the importer
     // Make sure there are no quotes around these numbers!
-    define('FILE_MODE', 0644);
-    define('DIR_MODE', 0755);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('FILE_MODE', 0644);
+    //define('DIR_MODE', 0755);
 
     // LOG_ALWAYS and LOG_SEVERITY can have the following values:
     // log::DEBUG, log::NOTIFY, log::WARN, log::ERROR, log::FATAL, log::NONE

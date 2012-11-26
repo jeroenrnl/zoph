@@ -420,6 +420,42 @@ class conf {
         $import_dated_hier->setDefault(false);
         $import[]=$import_dated_hier;
 
+        /**
+         * @todo This requires octdec to be run before using it so use octdec(conf::get("import.filemode")) or you will get "funny" results
+         */
+        $import_filemode = new confItemSelect();
+        $import_filemode->setName("import.filemode");
+        $import_filemode->setLabel("File mode");
+        $import_filemode->setDesc("File mode for the files that are imported in Zoph. Determines who can Read or Write the files. (RW=Read/Write, RO=Read Only)");
+        $import_filemode->addOptions(array(
+            "0644" => "RW for user, RO for others (0644)", 
+            "0664" => "RW for user/group, RO for others (0664)",
+            "0666" => "RW for everyone (0666)",
+            "0660" => "RW for user/group, not readable for others (0660)",
+            "0640" => "RW for user, RO for group, not readable for others (0640)",
+            "0600" => "RW for user, not readable for others (0600)"
+        ));
+        $import_filemode->setDefault("0644");
+        $import[]=$import_filemode;
+
+        /**
+         * @todo This requires octdec to be run before using it so use octdec(conf::get("import.dirmode")) or you will get "funny" results
+         */
+        $import_dirmode = new confItemSelect();
+        $import_dirmode->setName("import.dirmode");
+        $import_dirmode->setLabel("dir mode");
+        $import_dirmode->setDesc("Mode for directories that are created by Zoph. Determines who can Read or Write the files. (RW=Read/Write, RO=Read Only)");
+        $import_dirmode->addOptions(array(
+            "0755" => "RW for user, RO for others (0755)", 
+            "0775" => "RW for user/group, RO for others (0775)",
+            "0777" => "RW for everyone (0777)",
+            "0770" => "RW for user/group, not readable for others (0770)",
+            "0750" => "RW for user, RO for group, not readable for others (0750)",
+            "0700" => "RW for user, not readable for others (0700)"
+        ));
+        $import_dirmode->setDefault("0755");
+        $import[]=$import_dirmode;
+
         /************************** WATERMARK **************************/
         $wm = self::addGroup("watermark", "Watermarking");
 
@@ -510,11 +546,6 @@ class conf {
         $rt_backup_prefix->setRegex("^[a-zA-Z0-9_\-]+$");
         $rt_backup_prefix->setRequired();
         $rt[]=$rt_backup_prefix;
-
-
-
-
-        
 
         /*********************** FEATURES *************************/
 

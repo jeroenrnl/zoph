@@ -270,13 +270,9 @@ class file {
      */
     public function chmod($mode = null) {
         if($mode===null) {
-            if(!defined("FILE_MODE") || !is_numeric(FILE_MODE)) {
-                define('FILE_MODE', 0644);
-                log::msg("FILE_MODE is not set correctly in config.inc.php, using default (0644)", LOG::WARN, LOG::GENERAL);
-            }
-            $mode=FILE_MODE;
+            $mode=octdec(conf::get("import.filemode"));
         }
-        if(!chmod($this, FILE_MODE)) {
+        if(!chmod($this, $mode)) {
             log::msg("Could not change permissions for <b>" . $this . "</b>", LOG::ERROR, LOG::IMPORT);
         }
     }
