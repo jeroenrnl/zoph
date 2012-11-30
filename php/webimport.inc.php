@@ -169,7 +169,7 @@ class WebImport extends Import {
 
         switch($type) {
         case "image":
-            if($mime=="image/jpeg" && conf::get("import_rotate")) {
+            if($mime=="image/jpeg" && conf::get("import.rotate")) {
                 self::autorotate($file);
             }
             self::resizeImage($file);
@@ -214,24 +214,24 @@ class WebImport extends Import {
         $mime=$file->getMime();
         switch($mime) {
         case "application/zip":
-            $extr = UNZIP_CMD;
-            $msg = "UNZIP_CMD";
+            $extr = conf::get("path.unzip");
+            $msg = "Unzip command";
             break;
         case "application/x-tar":
-            $extr = UNTAR_CMD;
-            $msg = "UNTAR_CMD";
+            $extr = conf::get("path.untar");
+            $msg = "Untar command";
             break;
         case "application/x-gzip":
-            $extr = UNGZ_CMD;
-            $msg = "UNGZ_CMD";
+            $extr = conf::get("path.ungz");
+            $msg = "Ungzip command";
             break;
         case "application/x-bzip2":
-            $extr = UNBZ_CMD;
-            $msg = "UNBZ_CMD";
+            $extr = conf::get("path.unbz");
+            $msg = "Unbzip command";
             break;
         }
-        if (!$extr || $extr == $msg) {
-            log::msg("To be able to process an archive of type " . $mime . ", you need to set " . $msg . " in config.inc.php to a program that can unpack this file.", log::FATAL, log::IMPORT);
+        if (empty($extr)) {
+            log::msg("To be able to process an archive of type " . $mime . ", you need to set \"" . $msg . "\" in the configuration screen to a program that can unpack this file.", log::FATAL, log::IMPORT);
             touch($file . ".zophignore");
             return false;
         }

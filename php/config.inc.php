@@ -225,13 +225,14 @@
     // commands to use to expand uploaded archives.  set to 0 to disable.
     // Set to a valid command to enable, NOT "1"
 
-    define('UNZIP_CMD', 0);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('UNZIP_CMD', 0);
     //define('UNZIP_CMD', 'unzip');
-    define('UNTAR_CMD', 0);
+    //define('UNTAR_CMD', 0);
     //define('UNTAR_CMD', 'tar xvf');
-    define('UNGZ_CMD', 0);
+    //define('UNGZ_CMD', 0);
     //define('UNGZ_CMD', 'gunzip');
-    define('UNBZ_CMD', 0);
+    //define('UNBZ_CMD', 0);
     //define('UNBZ_CMD', 'bunzip2');
 
     // Use dated dirs with web import 

@@ -319,8 +319,53 @@ class conf {
         $path_magic->setDesc("Zoph needs a MIME Magic file to be able to determine the filetype of an uploaded file. This is an important security measure, since it prevents users from uploading files other than images and archives. If left empty, PHP will use the built-in Magic file, if for some reason this does not work, you can specify the location of the MIME magic file. Where this file is located, depends on your distribution, /usr/share/misc/magic.mgc, /usr/share/misc/file/magic.mgc, /usr/share/file/magic are often used.");
         $path_magic->setDefault("");
         $path_magic->setRegex("^(\/[A-Za-z0-9_\.\/]+|)$");
-        $path_magic->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Must start with a /. Can be empty for PHP builtin magix file.");
+        $path_magic->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Must start with a /. Can be empty for PHP builtin magic file.");
         $path[]=$path_magic;
+
+        $path_unzip = new confItemString();
+        $path_unzip->setName("path.unzip");
+        $path_unzip->setLabel("Unzip command");
+        $path_unzip->setDesc("The command to use to unzip gzip files. Leave empty to disable uploading .gz files. On most systems \"unzip\" will work.");
+        $path_unzip->setDefault("");
+        $path_unzip->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
+        $path_unzip->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
+        $path[]=$path_unzip;
+
+        $path_unzip = new confItemString();
+        $path_unzip->setName("path.unzip");
+        $path_unzip->setLabel("Unzip command");
+        $path_unzip->setDesc("The command to use to unzip zip files. Leave empty to disable uploading .zip files. On most systems \"unzip\" will work.");
+        $path_unzip->setDefault("");
+        $path_unzip->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
+        $path_unzip->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
+        $path[]=$path_unzip;
+
+        $path_untar = new confItemString();
+        $path_untar->setName("path.untar");
+        $path_untar->setLabel("Untar command");
+        $path_untar->setDesc("The command to use to untar tar files. Leave empty to disable uploading .tar files. On most systems \"tar xvf\" will work.");
+        $path_untar->setDefault("");
+        $path_untar->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
+        $path_untar->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
+        $path[]=$path_untar;
+        
+        $path_ungz = new confItemString();
+        $path_ungz->setName("path.ungz");
+        $path_ungz->setLabel("Ungzip command");
+        $path_ungz->setDesc("The command to use to unzip gzip files. Leave empty to disable uploading .gz files. On most systems \"gunzip\" will work.");
+        $path_ungz->setDefault("");
+        $path_ungz->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
+        $path_ungz->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
+        $path[]=$path_ungz;
+        
+        $path_unbz = new confItemString();
+        $path_unbz->setName("path.unbz");
+        $path_unbz->setLabel("Unbzip command");
+        $path_unbz->setDesc("The command to use to unzip bzip files. Leave empty to disable uploading .bz files. On most systems \"bunzip2\" will work.");
+        $path_unbz->setDefault("");
+        $path_unbz->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
+        $path_unbz->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
+        $path[]=$path_unbz;
 
         /************************** MAPS **************************/
         $maps = self::addGroup("maps", "Mapping support");
