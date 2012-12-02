@@ -99,14 +99,14 @@
     // Deprecated: Modify through admin -> config in web interface.
     //define('CLOUDMADE_KEY', 'f3b46b04edd64ea79066b7e6921205df');
 
+    // Deprecated: Modify through admin -> config in web interface.
     // The timezone your camera is set to
     // Leave empty if you always set your camera to local time
-    // Deprecated: Modify through admin -> config in web interface.
     // define('CAMERA_TZ','');
     // Define how Zoph displays date and time
     // See http://www.php.net/manual/en/function.date.php for explanation.
-    define('DATE_FORMAT', 'd-m-Y');
-    define('TIME_FORMAT', 'H:i:s T');
+    //define('DATE_FORMAT', 'd-m-Y');
+    //define('TIME_FORMAT', 'H:i:s T');
 
     // if you set your camera to local time you may want to use this
     //define('TIME_FORMAT', 'H:i:s');

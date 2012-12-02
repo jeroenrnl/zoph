@@ -662,6 +662,24 @@ class conf {
         $date_guesstz->setDefault(false);
         $date[]=$date_guesstz;
 
+        $date_fd = new confItemString();
+        $date_fd->setName("date.format");
+        $date_fd->setLabel("Date format");
+        $date_fd->setDesc("This determines how Zoph displays dates. You can use the following characters: dDjlNSwzWFmMntLoYy (for explanation, see http://php.net/manual/en/function.date.php) and /, space, -, (, ), :, \",\" and .");
+        $date_fd->setDefault("d-m-Y");
+        $date_fd->setRegex("^[dDjlNSwzWFmMntLoYy\/\ \-\(\)\:\,\.]+$");
+        $date_fd->setRequired();
+        $date[]=$date_fd;
+
+        $date_ft = new confItemString();
+        $date_ft->setName("date.timeformat");
+        $date_ft->setLabel("Time format");
+        $date_ft->setDesc("This determines how Zoph displays times. You can use the following characters: aABgGhHisueIOPTZcrU (for explanation, see http://php.net/manual/en/function.date.php) and /, space, -, (, ), :, \",\" and .");
+        $date_ft->setDefault("H:i:s T");
+        $date_ft->setRegex("^[aABgGhHisueIOPTZcrU\/\ \-\(\)\:\,\.]+$");
+        $date_ft->setRequired();
+        $date[]=$date_ft;
+
     }
 }
 

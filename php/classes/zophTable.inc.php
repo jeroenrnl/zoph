@@ -397,9 +397,31 @@ abstract class zophTable {
             $display["title"]=$details["title"];
         }
         if(array_key_exists("count", $details) && $details["count"] > 0) {
+
+            // Remove timezone identifiers from time format
+            // Because in the current way Zoph works, they do not make sense
+            // It's not completely correct this way, because the data comes
+            // from the database where it is not yet timezone-corrected.
+            $timezone=array("e", "I", "O", "P", "T", "Z");
+            $timeformat=str_replace($timezone, "", conf::get("date.timeformat"));
+            $timeformat=trim(preg_replace("/\s\s+/", "", $timeformat));
+            $format=conf::get("date.format") . " " . $timeformat;
+
+            $oldest=new Time($details["oldest"]);
+            $disp_oldest=$oldest->format($format);
+            
+            $newest=new Time($details["newest"]);
+            $disp_newest=$newest->format($format);
+            
+            $first=new Time($details["first"]);
+            $disp_first=$first->format($format);
+            
+            $last=new Time($details["last"]);
+            $disp_last=$newest->format($format);
+            
             $display["count"]=$details["count"] . " " . translate("photos");
-            $display["taken"]=sprintf(translate("taken between %s and %s",false), $details["oldest"], $details["newest"]);
-            $display["modified"]=sprintf(translate("last changed from %s to %s",false), $details["first"], $details["last"]);
+            $display["taken"]=sprintf(translate("taken between %s and %s",false), $disp_oldest, $disp_newest);
+            $display["modified"]=sprintf(translate("last changed from %s to %s",false), $disp_first, $disp_last);
             if(isset($details["lowest"]) && isset($details["highest"]) && isset($details["average"])) {
                 $display["rated"]=sprintf(translate("rated between %s and %s and an average of %s",false), $details["lowest"], $details["highest"], $details["average"]);
             } else {

@@ -32,9 +32,9 @@ class Time extends DateTime {
      * @param string Timezone
      * @return Time time object
      */
-    function __construct($datetime, $tz=null) {
+    function __construct($datetime=null, $tz=null) {
         try {
-            if(TimeZone::validate($tz->getName())) {
+            if($tz instanceof TimeZone && TimeZone::validate($tz->getName())) {
                 parent::__construct($datetime,$tz);
             } else {
                 parent::__construct($datetime);

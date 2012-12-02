@@ -975,7 +975,14 @@ class photo extends zophTable {
             "Level" => create_text_input("level", $this->level, 4, 2));
     }
 
-    function get_time($timezone=null, $date_format=DATE_FORMAT, $time_format=TIME_FORMAT) { 
+    function get_time($timezone=null, $date_format = null, $time_format = null) { 
+        if(is_null($date_format)) {
+            $date_format=conf::get("date.format");
+        }
+        if(is_null($time_format)) {
+            $time_format=conf::get("date.timeformat");
+        }
+
         if(TimeZone::validate($timezone)) {
             $place_tz=new TimeZone($timezone);
         } else { 

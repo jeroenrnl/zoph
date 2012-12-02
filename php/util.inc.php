@@ -380,77 +380,42 @@ function make_title($string) {
     return $string;
 }
 
+/**
+ * Create a link to the calendar page
+ * @param string Date in "yyyy-mm-dd" format
+ * @param string Search field, the field to search from from the calendar page
+ * @return string link.
+ * @todo Contains HTML
+ * @todo Should be better separated, possibly included in Time object
+ */
 function create_date_link($date, $search_field = "date") {
+    $dt = new Time($date);
+    
     if ($date) {
-        return "<a href=\"calendar.php?date=$date&amp;search_field=$search_field\">$date</a>";
+        $html="<a href=\"calendar.php?date=$date&amp;search_field=$search_field\">";
+        $html.=$dt->format(conf::get("date.format"));
+        $html.="</a>";
+        return $html;
     }
 }
 
-function parse_date($date) {
-    // expects either YYYY-MM-DD, YYYY-MM-DD HH:MM:SS or YYYYMMDDHHMMSS
-
-    $date_array = null;
-
-    if (preg_match("/^\d\d\d\d-\d\d-\d\d$/", $date)) {
-        $date_array['year'] = substr($date, 0, 4);
-        $date_array['mon'] = substr($date, 5, 2);
-        $date_array['day'] = substr($date, 8, 2);
-    } else if (preg_match("/^\d\d\d\d-\d\d-\d\d\ \d\d:\d\d:\d\d$/", $date)) {
-        $date_array['year'] = substr($date, 0, 4);
-        $date_array['mon'] = substr($date, 5, 2);
-        $date_array['day'] = substr($date, 8, 2);
-        $date_array['hour'] = substr($date, 11, 2);
-        $date_array['min'] = substr($date, 14, 2);
-        $date_array['sec'] = substr($date, 17, 2);
-    }
-    else if (preg_match("/^\d{14}/", $date)) {
-        $date_array['year'] = substr($date, 0, 4);
-        $date_array['mon'] = substr($date, 4, 2);
-        $date_array['day'] = substr($date, 6, 2);
-        $date_array['hour'] = substr($date, 8, 2);
-        $date_array['min'] = substr($date, 10, 2);
-        $date_array['sec'] = substr($date, 12, 2);
-    }
-
-    return $date_array;
-}
-
+/**
+ * Format a timestamp
+ * Temporary, is really redundant
+ */
 function format_timestamp($ts) {
-    $da = parse_date($ts);
-    $date = $da['year'] . '-' . $da['mon'] . '-' . $da['day'];
-    $time = $da['hour'] . ':' . $da['min'] . ':' . $da['sec'];
-    return create_date_link($date, "timestamp") . ' ' . $time;
-}
-
-function subtract_days($date, $days) {
-    $da = parse_date($date);
-    $time = mktime(0, 0, 0, $da['mon'], $da['day'] - $days, $da['year']);
-
-    /*
-    MySQL's timestamp seems smart enough to do convertions so that
-    timestamp >= '2002-09-01' does work.
-
-    if (strpos($date, '-')) {
-        $new_date = strftime("%Y-%m-%d", $time);
-    }
-    else {
-        $new_date = strftime("%Y%m%d", $time);
-        $new_date .= $da['hour'] . $da['min'] . $da['sec'];
-    }
-
-    return $new_date;
-    */
-
-    return strftime("%Y-%m-%d", $time);
+    $dt=new Time($ts);
+    return create_date_link($dt->format("Y-m-d"), "timestamp") . ' ' . $dt->format(conf::get("date.timeformat"));
 }
 
 function get_date_select_array($date, $days) {
-    $da = parse_date($date);
+    $dt=new Time($date);
 
     $date_array[""] = "";
+    $day=new DateInterval("P1D");
     for ($i = 1; $i <= $days; $i++) {
-        $time = mktime(0, 0, 0, $da['mon'], $da['day'] - $i, $da['year']);
-        $date_array[strftime("%Y-%m-%d", $time)] = $i;
+        $dt->sub($day);
+        $date_array[$dt->format("Y-m-d")] = $i;
     }
 
     return $date_array;

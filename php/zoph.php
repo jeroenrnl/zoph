@@ -70,10 +70,12 @@
         </div>
         <p class="intro">
 <?php
-    $today = date("Y-m-d");
-    $sub_days = $user->prefs->get("recent_photo_days");
+    $recent = new Time();
+    $sub_days = (int) $user->prefs->get("recent_photo_days");
+    $recent->sub(new DateInterval("P" . (int) $sub_days . "D"));
+    $timestamp=$recent->format("Y-m-d");
 
-    echo sprintf(translate("You may search for photos %s taken %s or %s modified %s in the past %s days."), "<a href=\"photos.php?_date-op=%3E%3D&amp;date=" . subtract_days($today, $sub_days) . "\">", "</a>", "<a href=\"photos.php?_timestamp-op=%3E%3D&amp;timestamp=" . subtract_days($today, $sub_days) . "\">", "</a>", $sub_days);
+    echo sprintf(translate("You may search for photos %s taken %s or %s modified %s in the past %s days."), "<a href=\"photos.php?_date-op=%3E%3D&amp;date=" . $timestamp . "\">", "</a>", "<a href=\"photos.php?_timestamp-op=%3E%3D&amp;timestamp=" . $timestamp . "\">", "</a>", $sub_days);
     echo "\n";
     echo sprintf(translate("Or you may use the %s search page %s to find photos using multiple criteria. You may also view a %s randomly chosen photo %s like the one above."), "<a href=\"search.php\">", "</a>", "<a href=\"photos.php?_random=1&amp;_rating-op=%3E%3D&amp;rating=$RANDOM_PHOTO_MIN_RATING\">","</a>");
     echo "\n        <p class=\"intro\">\n";
