@@ -67,7 +67,6 @@
         require_once("pageset.inc.php");
 
         require_once("file.inc.php");
-        require_once("template.inc.php");
 
         require_once("photo.inc.php");
         require_once("saved_search.inc.php");

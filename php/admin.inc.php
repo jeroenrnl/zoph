@@ -37,13 +37,13 @@ class admin {
      * @param string Name
      * @param string Description
      * @param string URL to point to
-     * @param string Icon file (only <filename>.png, no path)
+     * @param string Icon name (only <filename>.png, no path)
      */
     function __construct($name, $desc, $url, $icon) {
         $this->name=$name;
         $this->url=$url;
         $this->desc=$desc;
-        $this->icon=ICONSET . "/" . $icon;
+        $this->icon=template::getImage("icons/" . $icon);
     }
 
     /**

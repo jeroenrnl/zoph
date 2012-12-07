@@ -397,20 +397,20 @@ class WebImport extends Import {
                   file_exists(conf::get("path.images") . "/" . conf::get("path.upload") . "/" . $mid)) {
                     $status="done";
                 } else {
-                    $icon="images/icons/" . ICONSET . "/pause.png";
+                    $icon=template::getImage("icons/pause.png");
                     $status="waiting";
                 }
                 break;
             case "archive":
-                $icon="images/icons/" . ICONSET . "/archive.png";
+                $icon=template::getImage("icons/archive.png");
                 $status="waiting";
                 break;
             case "xml":
-                $icon="images/icons/" . ICONSET . "/tracks.png";
+                $icon=template::getImage("icons/tracks.png");
                 $status="done";
                 break;
             case "ignore":
-                $icon="images/icons/" . ICONSET . "/error.png";
+                $icon=template::getImage("icons/error.png");
                 $status="ignore";
                 break;
             }

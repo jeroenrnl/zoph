@@ -36,7 +36,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link TYPE="text/css" REL="stylesheet" HREF="<?php echo conf::get("interface.css"); ?>?logged_on=no">
+<link TYPE="text/css" REL="stylesheet" HREF="css.php?logged_on=no">
 <title><?php echo conf::get("interface.title") . ' - ' . translate("logon",0) ?></title>
 </head>
 <body>

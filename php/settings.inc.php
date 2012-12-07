@@ -39,7 +39,7 @@ class settings {
     public static $importAutoadd=false;
     public static $importAddAlways=false;
     public static $importRecursive=false;
-
+    public static $php_loc;
    /**
     * Load ini file, as defined in the INI_FILE constant
     * Check if these settings are still made in config.inc.php
@@ -79,6 +79,11 @@ class settings {
     * @param array section from ini file
     */
     public static function parseINI($i) {
+        if(!isset($i["php_location"])) {
+            log::msg("No php_location setting in " . INI_FILE . " found that matches " . $php_loc, log::FATAL, log::GENERAL);
+        } else {
+            self::$php_loc=$i["php_location"];
+        }
         if(!isset($i["db_host"]) || !isset($i["db_name"]) ||
           !isset($i["db_user"]) || !isset($i["db_pass"]) ||
           !isset($i["db_prefix"])) {

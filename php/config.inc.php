@@ -26,7 +26,7 @@
     // Define how Zoph looks by choosing a stylesheet and iconset.
     // Deprecated: Modify through admin -> config in web interface.
     //define('CSS_SHEET', 'css.php');
-    define('ICONSET', 'default');
+    //define('ICONSET', 'default');
 
     // Deprecated: Modify through admin -> config in web interface.
     //define('IMAGE_DIR', "/data/images/");

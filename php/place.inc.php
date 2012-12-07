@@ -335,7 +335,7 @@ class place extends zophTreeTable {
      * @param string icon to be used.
      * @return marker instance of marker class
      */
-    public function getMarker(user $user, $icon="geo-place.png") {
+    public function getMarker(user $user, $icon="geo-place") {
         return map::getMarkerFromObj($this, $user, $icon);
     }
 

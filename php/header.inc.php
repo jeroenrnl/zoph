@@ -17,12 +17,36 @@
 
     header("Content-Type: text/html; charset=utf-8");
     global $user;
+
+    $icons=array(
+        "count" => template::getImage("icons/photo.png"),
+        "taken" => template::getImage("icons/date.png"),
+        "modified" => template::getImage("icons/modified.png"),
+        "rated" => template::getImage("icons/rating.png"),
+        "children" => template::getImage("icons/folder.png"),
+        "geo-photo" => template::getImage("icons/geo-photo.png"),
+        "geo-place" => template::getImage("icons/geo-place.png"),
+        "resize" => template::getImage("icons/resize.png"), 
+        "unpack" => template::getImage("icons/unpack.png"),
+        "remove" => template::getImage("icons/remove.png"),
+        "down2" => template::getImage("down2.gif"),
+        "pleasewait" => template::getImage("pleasewait.gif")
+   ); 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link type="text/css" rel="stylesheet" href="<?php echo conf::get("interface.css") ?>">
+        <link type="text/css" rel="stylesheet" href="css.php">
+        <script type="text/javascript">
+            var template = "<?php echo conf::get("interface.template"); ?>";
+            var icons={
+            <?php foreach($icons as $icon=>$file): ?>
+                "<?php echo $icon ?>": "<?php echo $file ?>",
+            <?php endforeach ?>
+            };
+
+        </script>
         
         <script type="text/javascript" src="js/util.js"></script>
         <script type="text/javascript" src="js/xml.js"></script>

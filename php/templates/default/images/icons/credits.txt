@@ -18,7 +18,7 @@ http://creativecommons.org/licenses/by-sa/2.5/
 
 16x16/actions/1downarrow.png	1downarrow.png
 16x16/actions/1rightarrow.png	1rightarrow.png
-16x16/actions/ktremove.png	remove.png (resized to 8x8)
+16x16/actions/ktremove.png	remove.png 
 22x22/actions/attach.png	link.png
 22x22/actions/favorites.png 	rating.png
 22x22/apps/office-calendar.png  date.png

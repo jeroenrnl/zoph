@@ -145,29 +145,27 @@ class language {
      */
     public static function getAll() {
         $langs=array();
-        if(is_dir(self::LANG_DIR) && is_readable(self::LANG_DIR)) {
-            $handle=opendir(self::LANG_DIR);
-            while ($filename = trim(readdir($handle))) {
-                if(!is_dir(self::LANG_DIR . "/" . $filename)) {
-                    if(is_readable(strtolower(self::LANG_DIR . "/" . $filename))) {
+        $dir=settings::$php_loc . "/" . self::LANG_DIR;
+        if(is_dir($dir) && is_readable($dir)) {
+            foreach(glob($dir . "/*") as $filename) {
+                if(!is_dir($filename)  && is_readable($filename)) {
+                    $iso=basename($filename);
+                    if($iso == strtolower($iso)) {
                         # making filename lowercase, so we won't include
                         # any capitalized filenames... Zoph will not able
                         # to find them back later...
                         # is isocode nl file NL Nl or nl?
-                        $lang=new language($filename);
+                        $lang=new language($iso);
                         if($lang->readHeader()) {
-                            $langs[$filename]=$lang;
+                            $langs[$iso]=$lang;
                         }
                     } else {
-                        if($filename == strtolower($filename)) {
-                            log::msg("Cannot read <b>" . $filename . "</b>, skipping. ", log::ERROR, log::LANG);
-                        } else {
-                            log::msg("Language files should have lowercase names, cannot open <b>" . $filename . "</b>", log::WARN, log::LANG);
-                        }
+                        log::msg("Language files should have lowercase names, cannot open <b>" . $filename . "</b>", log::WARN, log::LANG);
                     }
+                } else {
+                    log::msg("Cannot read <b>" . $filename . "</b>, skipping. ", log::ERROR, log::LANG);
                 }
             }
-            closedir($handle);
         } else {
             log::msg("Cannot read language dir!", log::WARN, log::LANG);
         }    

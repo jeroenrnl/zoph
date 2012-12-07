@@ -60,7 +60,6 @@ class conf {
                 echo $e->getMessage();
                 $sql="DELETE FROM " . DB_PREFIX . "conf WHERE " .
                     "conf_id='" . escape_string($key) . "';";
-                    echo $sql;
                 query($sql);
             }
 
@@ -180,13 +179,13 @@ class conf {
         $int_width->setRegex("^[0-9]+(px|%)$");
         $interface[]=$int_width;
 
-        $int_css = new confItemString(); 
-        $int_css->setName("interface.css");
-        $int_css->setLabel("Style Sheet");
-        $int_css->setDesc("The CSS file Zoph uses");
-        $int_css->setDefault("css.php");
-        $int_css->setRegex("^[A-Za-z0-9_\.]+$");
-        $interface[]=$int_css;
+        $int_tpl = new confItemSelect();
+        $int_tpl->setName("interface.template");
+        $int_tpl->setLabel("Template");
+        $int_tpl->setDesc("The template Zoph uses");
+        $int_tpl->addOptions(template::getAll());
+        $int_tpl->setDefault("default");
+        $interface[]=$int_tpl;
 
         $int_share = new confItemBool();
         $int_share->setName("interface.share");

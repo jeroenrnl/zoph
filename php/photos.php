@@ -130,8 +130,18 @@
             <?php echo translate("No photos were found matching your search criteria.") . "\n" ?>
         </form>
 <?php
-    }
-    else {
+    } else {
+        switch($_dir) {
+        case "asc":
+            $up = template::getImage("up1.gif");
+            $down = template::getImage("down2.gif");
+            break;
+        case "desc":
+            $up = template::getImage("up2.gif");
+            $down = template::getImage("down1.gif");
+            break;
+        }
+        
 ?>
             <div id="sortorder">
 <?php echo create_form($vars, array ("_rows", "_cols", "_order", "_button")) ?>
@@ -139,8 +149,8 @@
                 <?php echo create_photo_field_pulldown("_order", $_order) ?>
             </div>
             <div id="updown">
-                <a href="photos.php?<?php echo update_query_string($vars, "_dir", "asc") ?>"><img class="up" alt="sort ascending" src="images/up<?php echo $_dir == "asc" ? 1 : 2 ?>.gif"></a>
-                <a href="photos.php?<?php echo update_query_string($vars, "_dir", "desc") ?>"><img class="down" alt="sort descending" src="images/down<?php echo $_dir == "asc" ? 2 : 1 ?>.gif"></a>
+                <a href="photos.php?<?php echo update_query_string($vars, "_dir", "asc") ?>"><img class="up" alt="sort ascending" src="<?php echo $up ?>"></a>
+                <a href="photos.php?<?php echo update_query_string($vars, "_dir", "desc") ?>"><img class="down" alt="sort descending" src="<?php echo $down ?>"></a>
             </div>
             <div id="rowscols">
 <?php

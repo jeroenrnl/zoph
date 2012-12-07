@@ -211,6 +211,7 @@ These options are always available in the tabs on the upper right. Use the %s ho
 This feature is not available because the photo was not found.=
 This may also be caused by the max_post_size (%s) in php.ini.=
 This page is used in the following pagesets:=
+This page needs Javascript switched on and will not function without it.=
 This photo is not in any albums.=
 This photo is not in any categories.=
 Thumbnails=

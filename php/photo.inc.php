@@ -1212,7 +1212,7 @@ class photo extends zophTable {
      * @param string icon to be used.
      * @return marker instance of marker class
      */
-    function getMarker(user $user, $icon="geo-photo.png") {
+    function getMarker(user $user, $icon="geo-photo") {
         $marker=map::getMarkerFromObj($this, $user, $icon); 
         if(!$marker instanceof marker) {
             $loc=$this->location;

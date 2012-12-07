@@ -65,7 +65,7 @@ var zMaps=function() {
             marker.setLabel(title);
         }
         if(icon) {
-            marker.setIcon('images/icons/' + icon, [22,22]);
+            marker.setIcon(icon, [22,22]);
         }
         if (infoBubble) {
             marker.setInfoBubble(infoBubble);

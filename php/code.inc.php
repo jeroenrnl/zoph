@@ -158,7 +158,7 @@ class smiley {
      * @todo contains HTML
      */
     public function __toString() {
-        return "<img src=\"images/smileys/" . $this->file ."\" alt=\"" . $this->description . "\">";
+        return "<img src=\"" . template::getImage("smileys/" . $this->file) . "\" alt=\"" . $this->description . "\">";
     }
 
     /**

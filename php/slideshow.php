@@ -63,7 +63,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset;?>">
-<link TYPE="text/css" REL="stylesheet" HREF="<?php echo conf::get("interface.css") ?>">
+<link TYPE="text/css" REL="stylesheet" HREF="css.php">
 <?php
 if (!$_pause) {
         $header = "<meta http-equiv=\"refresh\" content=\"" . $SLIDESHOW_TIME . ";URL=" . $_SERVER["PHP_SELF"] . "?" . $new_qs. "\">\n";

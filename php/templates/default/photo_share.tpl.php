@@ -22,7 +22,7 @@
 if(!ZOPH) { die("Illegal call"); }
 ?>
 <li class="share">
-    <div class="tab"><img src="images/icons/default/share-icon-24x24.png"></div>
+    <div class="tab"><img src="<?php echo template::getImage("icons/share-icon-24x24.png") ?>"></div>
     <div class="contents">
         <h1><?echo translate("share this photo", 0) ?></h1>
         <ul class="share">

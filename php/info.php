@@ -31,7 +31,7 @@
 <p>
 <?php echo sprintf(translate("Releases and documentation can be found at %s.", 0), "<a href=\"http://www.zoph.org/\">http://www.zoph.org/</a>") ?>
 
-<?php echo sprintf(translate("Send feedback to %s.", 0), "<img src=\"images/mailaddr.png\">") ?>
+<?php echo sprintf(translate("Send feedback to %s.", 0), "<img src=\"" . template::getImage("mailaddr.png") . "\">") ?>
 </p>
 <?php
     if ($user->is_admin()) {
