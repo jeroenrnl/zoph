@@ -61,7 +61,7 @@
     // action or a safe action ("edit", "delete", etc would be unsafe)
     $page=array_reverse(explode("/",$_SERVER['PHP_SELF']));
     $page=$page[0];
-    if (!isset($skipcrumb) && isset($title) && count($user->crumbs) < MAX_CRUMBS &&
+    if (!isset($skipcrumb) && isset($title) && count($user->crumbs) < 100 &&
         (empty($_action) || ($_action == "display" || 
         $_action == "search" || $_action == translate("search") ||
         $_action == "notify" || $_action == "compose" || 

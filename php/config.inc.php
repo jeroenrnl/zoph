@@ -247,10 +247,12 @@
     // Deprecated: Modify through admin -> config in web interface.
     //define('ALLOW_RATINGS', 1);
 
-    define('MAX_CRUMBS', 100);
+    // Deprecated: now hardcoded to 100
+    //define('MAX_CRUMBS', 100);
 
     // max days for photos taken/modified X days ago pulldown
-    define('MAX_DAYS_PAST', 30);
+    // Deprecated: Modify through admin -> config in web interface.
+    //define('MAX_DAYS_PAST', 30);
 
     // the maximum number of characters of a description to display
     // under a thumbnail (see also desc_thumbnail pref).  Set this

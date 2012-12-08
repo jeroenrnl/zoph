@@ -256,6 +256,14 @@ class conf {
         $int_user_cli->setDefault(0);
         $interface[]=$int_user_cli;
 
+        $int_max_days = new confItemString(); 
+        $int_max_days->setName("interface.max.days");
+        $int_max_days->setLabel("Maximum days");
+        $int_max_days->setDesc("The maximum days Zoph displays in a dropdown box for 'photos changed / made in the past ... days' on the search screen");
+        $int_max_days->setDefault("30");
+        $int_max_days->setRegex("^[1-9][0-9]{0,3}$");
+        $interface[]=$int_max_days;
+
 
         /************************** SSL **************************/
         $ssl = self::addGroup("ssl", "SSL");
