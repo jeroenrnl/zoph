@@ -67,21 +67,7 @@ class prefs extends zophTable {
         global $TOP_N;
         global $SLIDESHOW_TIME;
         global $FULLSIZE_NEW_WIN;
-
-        global $PAGE_BG_COLOR;
-        global $TEXT_COLOR;
-        global $LINK_COLOR;
-        global $VLINK_COLOR;
-        global $TABLE_BG_COLOR;
-        global $TABLE_BORDER_COLOR;
-        global $BREADCRUMB_BG_COLOR;
-        global $TITLE_BG_COLOR;
-        global $TITLE_FONT_COLOR;
-        global $TAB_BG_COLOR;
-        global $TAB_FONT_COLOR;
-        global $SELECTED_TAB_BG_COLOR;
-        global $SELECTED_TAB_FONT_COLOR;
-
+        
         $SHOW_BREADCRUMBS = $this->get("show_breadcrumbs");
         $MAX_CRUMBS_TO_SHOW = intval($this->get("num_breadcrumbs"));
         $DEFAULT_ROWS = intval($this->get("num_rows"));
@@ -93,20 +79,7 @@ class prefs extends zophTable {
         $FULLSIZE_NEW_WIN = $this->get("fullsize_new_win");
 
         if ($this->lookup_color_scheme($force)) {
-            $cs = $this->color_scheme;
-            $PAGE_BG_COLOR = "#" . $cs->get("page_bg_color");
-            $TEXT_COLOR = "#" . $cs->get("text_color");
-            $LINK_COLOR = "#" . $cs->get("link_color");
-            $VLINK_COLOR = "#" . $cs->get("vlink_color");
-            $TABLE_BG_COLOR = "#" . $cs->get("table_bg_color");
-            $TABLE_BORDER_COLOR = "#" . $cs->get("table_border_color");
-            $BREADCRUMB_BG_COLOR = "#" . $cs->get("breadcrumb_bg_color");
-            $TITLE_BG_COLOR = "#" . $cs->get("title_bg_color");
-            $TITLE_FONT_COLOR = "#" . $cs->get("title_font_color");
-            $TAB_BG_COLOR = "#" . $cs->get("tab_bg_color");
-            $TAB_FONT_COLOR = "#" . $cs->get("tab_font_color");
-            $SELECTED_TAB_BG_COLOR = "#" . $cs->get("selected_tab_bg_color");
-            $SELECTED_TAB_FONT_COLOR = "#" . $cs->get("selected_tab_font_color");
+            color_scheme::setCurrent($this->color_scheme);
         }
     }
 

@@ -24,8 +24,8 @@
 body    {
     font-family: Arial, Verdana, sans-serif;
     font-size: medium;
-    color: <?php echo $TEXT_COLOR ?>;
-    background: <?php echo $PAGE_BG_COLOR ?>;
+    color: <?php echo color_scheme::getColor("text_color") ?>;
+    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
     width: <?php echo conf::get("interface.width"); ?>; 
     border: none;
     margin-left: auto; /* To center the page */
@@ -37,7 +37,7 @@ body    {
 /* Links */
 
 a   {
-    color: <?php echo $LINK_COLOR ?>;
+    color: <?php echo color_scheme::getColor("link_color") ?>;
     background: transparent;
     }
 
@@ -48,9 +48,9 @@ a IMG   {
     }
 
 h1  {
-    background: <?php echo $TITLE_BG_COLOR ?>;
-    color: <?php echo $TITLE_FONT_COLOR ?>;
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>; 
     text-align: left;
     width: 100%;
     clear: left;
@@ -95,9 +95,9 @@ ul.thumbs {
     }
 
 ul.thumbs > li {
-    background: <?php echo $TITLE_BG_COLOR ?>;
-    color: <?php echo $TITLE_FONT_COLOR ?>;
-    //border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    //border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>; 
     position: relative;
     display: block;
     text-align: center;
@@ -149,8 +149,8 @@ div.details > h3 {
     -moz-border-radius: 10px 10px 0 0;
     -webkit-border-radius: 10px 10px 0 0;
     width: 100%;
-    background: <?php echo $TAB_BG_COLOR ?>;
-    color: <?php echo $TAB_FONT_COLOR ?>;
+    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
     font-size: large;
     text-align: left;
 }
@@ -202,7 +202,7 @@ ul.list {
     }
 
 ul.list > li:nth-child(2n) {
-    background-color: <?php echo $TITLE_BG_COLOR ?>;
+    background-color: <?php echo color_scheme::getColor("title_bg_color") ?>;
     }
 
 ul.tree {
@@ -267,8 +267,8 @@ ul.admin a {
     }
 
 ul.admin a:hover {
-    background: <?php echo $BREADCRUMB_BG_COLOR ?>;
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     }
 
 /* Form properties */
@@ -353,9 +353,9 @@ div.generate > input[type="button"] {
 
 ul.autocompdropdown {
     position: relative;
-    background: <?php echo $PAGE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
     width: 300px;
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>; 
     max-height: 15em;
     overflow: auto;
     margin: 0;
@@ -384,13 +384,13 @@ input[type=text].autocompinput {
 
 ul.autocompdropdown li:hover,
 ul.autocompdropdown li#selected {
-    background: <?php echo $TAB_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
 }
 
 /* Menubar */
 
 ul.menu {
-    background: <?php echo $PAGE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
     margin-left: 4px;
     padding: 0 0 0 10px; 
     display: inline;
@@ -404,40 +404,40 @@ ul.menu li  {
     text-align: center;
     list-style: none;
     display: inline;
-    background: <?php echo $TAB_BG_COLOR ?>;
-    color: <?php echo $TAB_FONT_COLOR ?>;
+    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
     font-size: small;
     }
 
 ul.menu li:hover {
     position: relative;
-    background: <?php echo $BREADCRUMB_BG_COLOR ?>;
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     border-bottom: none;
     padding: 2px 0 2px 0;
     }
 
 ul.menu li.selected {
-    background: <?php echo $SELECTED_TAB_BG_COLOR ?>;
-    color: <?php echo $SELECTED_TAB_FONT_COLOR ?>;
+    background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>;
     }
                                 
 /* since the A element does not inherit font colors from it's parents, we set it explicetly here. Also underlining is removed from links in menu, unless it is hovered */
 
 ul.menu li a { 
-    color: <?php echo $TAB_FONT_COLOR ?>; 
+    color: <?php echo color_scheme::getColor("tab_font_color") ?>; 
     text-decoration: none; 
     }
     
 ul.menu li > a:hover { text-decoration: underline; }
-ul.menu li.selected > a { color: <?php echo $SELECTED_TAB_FONT_COLOR ?>; }
+ul.menu li.selected > a { color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>; }
 
 /* The breadcrumb line at the top of the page */
 
 div.breadcrumb {
-    background: <?php echo $BREADCRUMB_BG_COLOR ?>;
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
-    color: <?php echo $TEXT_COLOR ?>;
+    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    color: <?php echo color_scheme::getColor("text_color") ?>;
     font-size: small;
     float: left;
     margin: 0;
@@ -474,12 +474,12 @@ div.breadcrumb li.firstdots:before {
 
 /* Main page */
 .main, .info, .letter, .page, div.map, div#selection, .warning   {
-    background: <?php echo $TABLE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     width: 100%;
     border-spacing: 0px;
     padding: 10px;
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     clear: both;
     overflow: hidden;
 }
@@ -519,8 +519,8 @@ div.minimap {
 div.main#config .desc {
     clear: both;
     width: 50%;
-    color: <?php echo $TITLE_FONT_COLOR ?>;
-    border: 1px solid <?php echo $TITLE_FONT_COLOR ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    border: 1px solid <?php echo color_scheme::getColor("title_font_color") ?>;
     margin-left: 11.5em;
     padding: 0.5em;
     background: rgba(0,0,0,0.05);
@@ -528,7 +528,7 @@ div.main#config .desc {
 }
 
 div.main#config div.confGroup > .desc {
-    color: <?php echo $TEXT_COLOR ?>;
+    color: <?php echo color_scheme::getColor("text_color") ?>;
     background: none;
     margin-left: 0;
     width: 100%;
@@ -541,9 +541,9 @@ div.main#config h2 {
     clear: both;
     display: block;
     padding: 5px 10px;
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
-    background: <?php echo $BREADCRUMB_BG_COLOR ?>;
-    color: <?php echo $BREADCRUMB_FONT_COLOR ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("text_color") ?>;
     width: 100%;
 }
 
@@ -594,7 +594,7 @@ div.timedetails, div.ratingdetails {
 }
 
 div.timedetail, div.ratingdetail {
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     background: white;
     width: 100%;
     }
@@ -608,8 +608,8 @@ div.timedetail dt {
     }
 
 div.timedetail h3 {
-    background: <?php echo $TITLE_BG_COLOR ?>;
-    color: <?php echo $TITLE_FONT_COLOR ?>;
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
     font-size: large;
 }
 
@@ -625,8 +625,8 @@ table.ratingdetail td, table.ratingdetail th {
 }
 
 table.ratingdetail th {
-    background: <?php echo $TITLE_BG_COLOR ?>;
-    color: <?php echo $TITLE_FONT_COLOR ?>;
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
 }
 
 table.tracks {
@@ -640,7 +640,7 @@ table.tracks th, table.tracks td {
 }
 
 table.tracks tr:nth-child(odd) {
-    background: <?php echo $TITLE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
 }
     
 p.main, p.info {
@@ -714,8 +714,8 @@ div.smileys img {
 /* This is the bar that shows the number of photos for each rating */
 div.ratings   {
     float: left;
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
-    background: <?php echo $BREADCRUMB_BG_COLOR ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
     }
 
 table#search td {
@@ -777,17 +777,17 @@ ul.actionlink {
 
 ul.actionlink li:before {
     content: ' | ';
-    color: <?php echo $TITLE_FONT_COLOR ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
     }
 
 ul.actionlink li:first-child:before {
     content: ' [ '; 
-    color: <?php echo $TITLE_FONT_COLOR ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
     } 
 
 ul.actionlink li:last-child:after {
     content: ' ] ';
-    color: <?php echo $TITLE_FONT_COLOR ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
     }
 
 ul.actionlink li { 
@@ -836,9 +836,9 @@ img.actionlink {
     
 /* Description of a photo */
 .photodesc  {
-    border:  4px solid <?php echo $TITLE_BG_COLOR ?>;
+    border:  4px solid <?php echo color_scheme::getColor("title_bg_color") ?>;
     font-size: small;
-    background: <?php echo $TABLE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     clear: both;
     }
 /* The description of a photo in thumbnail view */
@@ -872,7 +872,7 @@ div.color {
 /* Tables for the permissions */
 
 table.permissions   {
-    background: <?php echo $TABLE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     width: 90%;
     margin-left: auto; /* To center the page */
     margin-right: auto;
@@ -881,7 +881,7 @@ table.permissions   {
     }   
 
 table.permissions td, table.permissions th  {
-    background: <?php echo $TABLE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     }
 
@@ -1070,7 +1070,7 @@ div.thumbnail   {
     }
 
 div.comment {
-    border: 1px solid <?PHP echo $TABLE_BORDER_COLOR ?>;
+    border: 1px solid <?PHP echo color_scheme::getColor("table_border_color") ?>;
     background: transparent;
     font-size: small;
     min-height: 5em;
@@ -1080,14 +1080,14 @@ div.comment {
 
 div.comment h3 {
     width: 100%;
-    background: <?php echo $TITLE_BG_COLOR ?>;
-    color: <?php echo $TITLE_FONT_COLOR ?>;
-    border-bottom: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    border-bottom: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>; 
     text-align: left;
     }
 
 div.commentinfo {
-    border-bottom: 1px dashed <?PHP echo $TABLE_BORDER_COLOR ?>;
+    border-bottom: 1px dashed <?PHP echo color_scheme::getColor("table_border_color") ?>;
     width: 100%;
     font-size: x-small;
     font-style: italic;
@@ -1261,7 +1261,7 @@ fieldset.geotag  {
     margin-top: 10px;
     margin-bottom: 5px;
     padding-bottom: 20px;
-    border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
+    border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
     }
 
 fieldset.addusers {
@@ -1271,7 +1271,7 @@ fieldset.addusers {
     margin-top: 10px;
     margin-bottom: 5px;
     padding-bottom: 20px;
-    border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
+    border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
     }
 
 
@@ -1294,8 +1294,8 @@ fieldset.addusers legend {
     padding-right: 2em;
     padding-left: 2em;
         font-weight: bold;
-    border: 1px solid <?php echo $PAGE_BG_COLOR ?>;
-    background: <?php echo $TITLE_BG_COLOR ?>;
+    border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
     }
 
 fieldset.editphotos div.thumbnail {
@@ -1332,8 +1332,8 @@ input[type="button"],
 input[type="submit"],
 input[type="reset"] {
     border: 2px outset;
-    background: <?php echo $TAB_BG_COLOR ?>;
-    color: <?php echo $TAB_FONT_COLOR ?>;
+    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
     font-weight: bold;
     width: 100px;
     height: 25px;
@@ -1416,7 +1416,7 @@ input[type="time"],
 input[type="date"],
 input[type="password"],
 textarea {
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     padding: 2px;
     border-radius: 2px;
     margin: 2px;
@@ -1486,11 +1486,11 @@ div.page-preview {
     max-height: 600px;
     min-width: 600px;
     overflow: scroll;
-    background: <?php echo $TABLE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     border-spacing: 0px;
     padding: 10px;
-    border: 1px solid <?php echo $TABLE_BORDER_COLOR ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     clear: both;
     }
 
@@ -1501,7 +1501,7 @@ div.page h1, div.page-preview h1 {
     width: 100%;
     border-left: 0px;
     border-right: 0px;
-    background: <?php echo $TITLE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
     font-size: large;
     text-align: center;
 
@@ -1546,7 +1546,7 @@ div.import,
 div.import_details {
     float:      left;
     -moz-border-radius: 5px;
-    background: <?php echo $TITLE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
     border: none;
     margin: 10px;
     width: 95%;
@@ -1599,9 +1599,9 @@ div.import h2,
 div.import_details h2 {
     -moz-border-radius-topleft: 5px;
     -moz-border-radius-topright: 5px;
-    background: <?php echo $BREADCRUMB_BG_COLOR ?>;
-    color: <?php echo $TITLE_FONT_COLOR ?>;
-    border-bottom: 1px solid <?php echo $TABLE_BORDER_COLOR ?>; 
+    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    border-bottom: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>; 
     text-align: center;
     width: 100%;
     clear: left;
@@ -1637,7 +1637,7 @@ div.import_details h2 {
     max-width: 99%;
     -moz-border-radius: 4px;
     text-align: center;
-    background: <?php echo $PAGE_BG_COLOR ?>;
+    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
     color: white;
     font-weight: bold;
     overflow: hidden;
@@ -1735,8 +1735,8 @@ ul.tabs > li {
 
 ul.tabs div.tab {
     position: relative;
-    background: <?php echo $TITLE_BG_COLOR ?>;
-    color: <?php echo $TITLE_FONT_COLOR ?>;
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
     border: none;
 
     border-radius: 10px 0 0 10px;

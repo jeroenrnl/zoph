@@ -352,18 +352,4 @@
     $TOP_N = 5;
     $SLIDESHOW_TIME = 5; // seconds
 
-    $PAGE_BG_COLOR = "#ffffff";
-    $TEXT_COLOR = "#000000";
-    $LINK_COLOR = "#111111";
-    $VLINK_COLOR = "#444444";
-    $TABLE_BG_COLOR = "#ffffff";
-    $TABLE_BORDER_COLOR = "#000000";
-    $BREADCRUMB_BG_COLOR = "#ffffff";
-    $TITLE_BG_COLOR = "#f0f0f0";
-    $TITLE_FONT_COLOR = "#000000";
-    $TAB_BG_COLOR = "#000000";
-    $TAB_FONT_COLOR = "#ffffff";
-    $SELECTED_TAB_BG_COLOR = "#c0c0c0";
-    $SELECTED_TAB_FONT_COLOR = "#000000";
-
 ?>
