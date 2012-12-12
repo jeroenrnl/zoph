@@ -42,10 +42,6 @@ class arguments {
     public function __construct() {
         global $argv;
 
-        /* Set defaults to what is configured in web interface */
-        settings::$importDated=conf::get("import.dated");
-        settings::$importHier=conf::get("import.dated.hier");
-
         if(is_array($argv)) {
             // We don't care about the name of the script
             array_shift($argv);
@@ -181,35 +177,35 @@ class arguments {
 
                 case "--thumbs":
                 case "-t":
-                    settings::$importThumbs=true;
+                    conf::set("import.cli.thumbs", true);
                     break;
                 case "--nothumbs":
                 case "--no-thumbs":
                 case "-n":
-                    settings::$importThumbs=false;
+                    conf::set("import.cli.thumbs", false);
                     break;
                 case "--exif":
                 case "--EXIF":
-                    settings::$importExif=true;
+                    conf::set("import.cli.exif", true);
                     break;
                 case "--no-exif":
                 case "--noEXIF":
                 case "--noexif":
                 case "--no-EXIF":
-                    settings::$importExif=false;
+                    conf::set("import.cli.exif", false);
                     break;
                 case "--size":
-                    settings::$importSize=true;
+                    conf::set("import.cli.size", true);
                     break;
                 case "--nosize":
                 case "--no-size":
-                    settings::$importSize=false;
+                    conf::set("import.cli.size", false);
                     break;
                 case "--hash":
-                    settings::$importHash=true;
+                    conf::set("import.cli.hash", true);
                     break;
                 case "--no-hash":
-                    settings::$importHash=false;
+                    conf::set("import.cli.hash", false);
                     break;
 
 
@@ -231,31 +227,31 @@ class arguments {
                 case "--use-ids":
                 case "--useid":
                 case "--use-id":
-                    settings::$importUseids=true;
+                    conf::set("import.cli.useids", true);
                     break;
 
                 case "--copy":
-                    settings::$importCopy=true;
+                    conf::set("import.cli.copy", true);
                     break;
                 case "--move":
-                    settings::$importCopy=false;
+                    conf::set("import.cli.copy", false);
                     break;
                 
                 case "-A":
                 case "--autoadd":
                 case "--auto-add":
-                    settings::$importAutoadd=true;
+                    conf::set("import.cli.add.auto", true);
                     break;
 
                 case "-w":
                 case "--add-always":
                 case "--addalways":
-                    settings::$importAddAlways=true;
+                    conf::set("import.cli.add.always", true);
                     break;
                 
                 case "-r":
                 case "--recursive":
-                    settings::$importRecursive=true;
+                    conf::set("import.cli.recursive", true);
                     break;
 
                 
@@ -263,13 +259,13 @@ class arguments {
                 case "--datedDirs":
                 case "--dated":
                 case "-d":
-                    settings::$importDated=true;
+                    conf::set("import.cli.dated", true);
                     break;
                 case "--hierarchical":
                 case "--hier":
                 case "-H":
-                    settings::$importDated=true;
-                    settings::$importHier=true;
+                    conf::set("import.cli.dated", true);
+                    conf::set("import.cli.dated.hier", true);
                     break;
                 case "--no-dateddirs":
                 case "--no-datedDirs":
@@ -277,13 +273,13 @@ class arguments {
                 case "--nodateddirs":
                 case "--nodatedDirs":
                 case "--nodated":
-                    settings::$importDated=false;
+                    conf::set("import.cli.dated", false);
                     break;
                 case "--no-hierarchical":
                 case "--no-hier":
                 case "--nohierarchical":
                 case "--nohier":
-                    settings::$importHier=false;
+                    conf::set("import.cli.dated.hier", false);
                     break;
                 case "-D":
                 case "--path":
@@ -304,7 +300,8 @@ class arguments {
                     break;
                 case "-v":
                 case "--verbose":
-                    settings::$importVerbose++;
+                    $verbose=conf::get("import.cli.verbose");
+                    conf::set("import.cli.verbose", ++$verbose);
                     break;
                 default:
                     if(substr($argv[$i],0,1)=="-") {
@@ -325,7 +322,7 @@ class arguments {
             $args["fields"]=$newfields;
         }
 
-        if(settings::$importUseids==true && self::$command=="import") {
+        if(conf::get("import.cli.useids")==true && self::$command=="import") {
             self::$command="update";
         }
     }
@@ -344,12 +341,12 @@ class arguments {
             switch($type) {
                 case "albums":
                     foreach($arg as $name) {
-                        if(self::$command=="new" || (settings::$importAutoadd && !album::getByName($name))) {
+                        if(self::$command=="new" || (conf::get("import.cli.add.auto") && !album::getByName($name))) {
                             $parent=array_shift($args["palbum"]);
                             // this is a string comparison because the trim() in process() changes
                             // everything into a string...
                             if($parent==="0") {
-                                if(settings::$importAddAlways) {
+                                if(conf::get("import.cli.add.always")) {
                                     $parent_id=album::getRoot()->getId();
                                 } else {
                                     echo "No parent for album $name\n";
@@ -379,12 +376,12 @@ class arguments {
                     break;
                 case "categories":
                     foreach($arg as $name) {
-                        if(self::$command=="new" || (settings::$importAutoadd && !category::getByName($name))) {
+                        if(self::$command=="new" || (conf::get("import.cli.add.auto") && !category::getByName($name))) {
                             $parent=array_shift($args["pcat"]);
                             // this is a string comparison because the trim() in process() changes
                             // everything into a string...
                             if($parent==="0") {
-                                if(settings::$importAddAlways) {
+                                if(conf::get("import.cli.add.always")) {
                                     $parent_id=category::getRoot()->getId();
                                 } else {
                                     echo "No parent for category $name\n";
@@ -414,7 +411,7 @@ class arguments {
                     break;
                 case "people":
                     foreach($arg as $name) {
-                        if(self::$command=="new" || (settings::$importAutoadd && !person::getByName($name))) {
+                        if(self::$command=="new" || (conf::get("import.cli.add.auto") && !person::getByName($name))) {
                             $vars["_new_person"][]=$name;
                         } else {
                             $person=person::getByName($name);
@@ -429,7 +426,7 @@ class arguments {
                     }
                     break;
                 case "photographer":
-                    if(self::$command=="new" || (settings::$importAutoadd && !person::getByName($name))) {
+                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && !person::getByName($name))) {
                         $vars["_new_photographer"][]=$name;
                     } else {
                         $person=person::getByName($name);
@@ -444,12 +441,12 @@ class arguments {
                     break;
                 case "location":
                     foreach($arg as $name) {
-                        if(self::$command=="new" || (settings::$importAutoadd && !place::getByName($name))) {
+                        if(self::$command=="new" || (conf::get("import.cli.add.auto") && !place::getByName($name))) {
                             $parent=array_shift($args["pplace"]);
                             // this is a string comparison because the trim() in process() changes
                             // everything into a string...
                             if($parent==="0") {
-                                if(settings::$importAddAlways) {
+                                if(conf::get("import.cli.add.always")) {
                                     $parent_id=place::getRoot()->getId();
                                 } else {
                                     echo "No parent for location $name\n";

@@ -26,19 +26,6 @@
  */
 class settings {
 
-    public static $importVerbose=0;
-    
-    public static $importThumbs;
-    public static $importExif;
-    public static $importSize;
-    public static $importHash=true;
-    public static $importCopy=false;
-    public static $importDated=false;
-    public static $importHier=false;
-    public static $importUseids=false;
-    public static $importAutoadd=false;
-    public static $importAddAlways=false;
-    public static $importRecursive=false;
     public static $php_loc;
    /**
     * Load ini file, as defined in the INI_FILE constant

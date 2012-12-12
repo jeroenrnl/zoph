@@ -52,7 +52,7 @@ class file {
             if(@!stat($filename)) {
                 throw new FileSymlinkProblemException("There's something wrong with symlink $filename\n");
             }
-        } else if (is_dir($filename) && !settings::$importRecursive) {
+        } else if (is_dir($filename) && !conf::get("import.cli.recursive")) {
             throw new FileDirectoryNotSupportedException("$filename is a directory\n");
         } 
 
@@ -190,7 +190,7 @@ class file {
         if(!is_readable($this)) {
             throw new FileNotReadableException("Cannot read file: $this\n");
         }
-        if (!settings::$importCopy && !is_writable($this)) {
+        if (!conf::get("import.cli.copy") && !is_writable($this)) {
             throw new FileNotWritableException("Cannot move file: $this\n");
         }
     }

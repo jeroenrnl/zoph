@@ -76,7 +76,7 @@ abstract class Import {
             }
 
             $mime=$file->getMime();
-            if(settings::$importExif===true && $mime=="image/jpeg") {
+            if(conf::get("import.cli.exif")===true && $mime=="image/jpeg") {
                 $exif=process_exif($file);
                 if($exif) {
                     $photo->setFields($exif);
@@ -113,7 +113,7 @@ abstract class Import {
                 die();
             }
            
-            if(settings::$importThumbs===true) {
+            if(conf::get("import.cli.thumbs")===true) {
                 try {
                     $photo->thumbnail(false);
                 } catch (Exception $e) {
@@ -122,12 +122,12 @@ abstract class Import {
             }
 
             if ($photo->insert()) {
-                if(settings::$importSize===true) {
+                if(conf::get("import.cli.size")===true) {
                     $photo->updateSize();
                 }
                 $photo->update();
                 $photo->updateRelations($vars, "_id");
-                if(settings::$importHash===true) {
+                if(conf::get("import.cli.hash")===true) {
                     try {
                         $photo->getHash();
                     } catch (Exception $e) {

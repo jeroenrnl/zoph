@@ -442,7 +442,7 @@ class photo extends zophTable {
         $this->set("name", $file->getName());
         
         $newPath=$this->get("path") . "/";
-        if(settings::$importDated) {
+        if(conf::get("import.dated")) {
             // This is not really validating the date, just making sure
             // no-one is playing tricks, such as setting the date to /etc/passwd or
             // something.
@@ -452,7 +452,7 @@ class photo extends zophTable {
                 $date=date("Y-m-d");
             }
 
-            if (settings::$importHier) {
+            if (conf::get("import.dated.hier")) {
                 $newPath .= cleanup_path(str_replace("-", "/", $date));
             } else {
                 $newPath .= cleanup_path(str_replace("-", ".", $date));
@@ -486,7 +486,7 @@ class photo extends zophTable {
         
             try {
                 foreach($files as $file) {
-                    if(settings::$importCopy==false) {
+                    if(conf::get("import.cli.copy")==false) {
                         $file->checkMove();
                     } else {
                         $file->checkCopy();
@@ -500,7 +500,7 @@ class photo extends zophTable {
             // file if *all* files can be moved/copied.
             try {
                 foreach($files as $file) {
-                    if(settings::$importCopy==false) {
+                    if(conf::get("import.cli.copy")==false) {
                         $new=$file->move();
                     } else {
                         $new=$file->copy();

@@ -35,6 +35,8 @@ abstract class confItem extends zophTable {
     protected $hint;
     /** @var bool required, whether or not field may be empty*/
     protected $required=false;
+    /** @var bool internal, internal settings can not be changed from webinterface */
+    protected $internal=false;
     /** @var array fields for database */
     public $fields=array();
 
@@ -179,6 +181,18 @@ abstract class confItem extends zophTable {
     final public function setRequired($req=true) {
         $this->required=(bool) $req;
     }
+
+    /**
+     * Set whether or not a field is internal
+     * an internal field is not exposed in the webinterface
+     * and (at this moment) not stored in the database, although this is not enforced
+     * as there may be a future use-case where this will change.
+     * @param bool 
+     */
+    final public function setInternal($int=true) {
+        $this->internal=(bool) $int;
+    }
+
     /**
      * Set default value for item
      * @param string default

@@ -126,6 +126,22 @@ class conf {
         return $item->getValue();
             
     }
+    
+    /**
+     * Set the value of a configuration item
+     * Does not store this value in the database as this is mainly
+     * used for runtime-overriding a stored value. This function returns
+     * the object so the calling function can do a $item->update() if
+     * it should be stored in the db.
+     * @param string Name of item to change
+     * @param string Value to set
+     * @return confItem the item that has been updated
+     */
+    public static function set($key, $value) {
+        $item=conf::getItemByName($key);
+        $item->setValue($value);
+        return $item;
+    }
 
     /**
      * Get all configuration items (in groups)
@@ -256,12 +272,13 @@ class conf {
         $int_user_cli->setDefault(0);
         $interface[]=$int_user_cli;
 
-        $int_max_days = new confItemString(); 
+        $int_max_days = new confItemNumber(); 
         $int_max_days->setName("interface.max.days");
         $int_max_days->setLabel("Maximum days");
         $int_max_days->setDesc("The maximum days Zoph displays in a dropdown box for 'photos changed / made in the past ... days' on the search screen");
         $int_max_days->setDefault("30");
-        $int_max_days->setRegex("^[1-9][0-9]{0,3}$");
+        $int_max_days->setRegex("^[1-9][0-9]{0,2}$");
+        $int_max_days->setBounds(0,365,1);
         $interface[]=$int_max_days;
 
 
@@ -426,19 +443,21 @@ class conf {
         $import[]=$import_upload;
 
 
-        $import_maxupload = new confItemString(); 
+        $import_maxupload = new confItemNumber(); 
         $import_maxupload->setName("import.maxupload");
         $import_maxupload->setLabel("Maximum filesize");
         $import_maxupload->setDesc("Maximum size of uploaded file in bytes. You might also need to change upload_max_filesize, post_max_size and possibly max_execution_time and max_input_time in php.ini.");
         $import_maxupload->setRegex("^[0-9]+$");
         $import_maxupload->setDefault("10000000");
+        $import_maxupload->setBounds(0,1000000000,1); // max = 1GB
         $import[]=$import_maxupload;
         
-        $import_parallel = new confItemString(); 
+        $import_parallel = new confItemNumber(); 
         $import_parallel->setName("import.parallel");
         $import_parallel->setLabel("Resize parallel");
         $import_parallel->setDesc("Photos will be resized to thumbnail and midsize images during import, this setting determines how many resize actions run in parallel. Can be set to any number. Don't change this, unless you have a fast server with multiple CPU's or cores.");
         $import_parallel->setRegex("^[0-9]+$");
+        $import_parallel->setBounds(1,99,1);
         $import_parallel->setDefault("1");
         $import[]=$import_parallel;
 
@@ -508,6 +527,82 @@ class conf {
         $import_dirmode->setDefault("0755");
         $import[]=$import_dirmode;
 
+        $import_cli_verbose=new confItemNumber();
+        $import_cli_verbose->setName("import.cli.verbose");
+        $import_cli_verbose->setLabel("CLI verbose");
+        $import_cli_verbose->setDesc("Set CLI verbosity, can be overriden with --verbose");
+        $import_cli_verbose->setDefault("0");
+        $import_parallel->setBounds(1,99,1);
+        $import_cli_verbose->setInternal();
+        $import[]=$import_cli_verbose;
+
+        $import_cli_thumbs=new confItemBool();
+        $import_cli_thumbs->setName("import.cli.thumbs");
+        $import_cli_thumbs->setLabel("CLI: generate thumbnails");
+        $import_cli_thumbs->setDesc("Generate thumbnails when importing via CLI. Can be overridden with --thumbs (-t) and --no-thumbs (-n).");
+        $import_cli_thumbs->setDefault(true);
+        $import[]=$import_cli_thumbs;
+
+        $import_cli_exif=new confItemBool();
+        $import_cli_exif->setName("import.cli.exif");
+        $import_cli_exif->setLabel("CLI: read EXIF data");
+        $import_cli_exif->setDesc("Read EXIF data when importing via CLI. The default behaviour can be overridden with --exif and --no-exif.");
+        $import_cli_exif->setDefault(true);
+        $import[]=$import_cli_exif;
+
+        $import_cli_size=new confItemBool();
+        $import_cli_size->setName("import.cli.size");
+        $import_cli_size->setLabel("CLI: size of image");
+        $import_cli_size->setDesc("Update image dimensions in database when importing via CLI. The default behaviour can be overridden with --size and --no-size.");
+        $import_cli_size->setDefault(true);
+        $import[]=$import_cli_size;
+
+        $import_cli_hash=new confItemBool();
+        $import_cli_hash->setName("import.cli.hash");
+        $import_cli_hash->setLabel("CLI: calculate hash");
+        $import_cli_hash->setDesc("Calculate a hash when importing or updating a photo using the CLI. Can be overridden with --hash and --no-hash.");
+        $import_cli_hash->setDefault(true);
+        $import[]=$import_cli_hash;
+
+        $import_cli_copy=new confItemBool();
+        $import_cli_copy->setName("import.cli.copy");
+        $import_cli_copy->setDefault(false);
+        $import_cli_copy->setLabel("CLI: copy on import");
+        $import_cli_copy->setDesc("Make a copy of a photo that is imported using the CLI. Can be overridden with --copy and --move.");
+        $import[]=$import_cli_copy;
+
+        $import_cli_useids=new confItemBool();
+        $import_cli_useids->setName("import.cli.useids");
+        $import_cli_useids->setLabel("CLI: Use Ids");
+        $import_cli_useids->setDesc("Use ids instead of filenames when referencing photos.");
+        $import_cli_useids->setDefault(false);
+        $import_cli_useids->setInternal();
+        $import[]=$import_cli_useids;
+
+        $import_cli_add_auto=new confItemBool();
+        $import_cli_add_auto->setName("import.cli.add.auto");
+        $import_cli_add_auto->setLabel("CLI: Auto add");
+        $import_cli_add_auto->setDesc("Add non-existent albums, categories, places and people, when a parent is defined.");
+        $import_cli_add_auto->setDefault(false);
+        $import_cli_add_auto->setInternal();
+        $import[]=$import_cli_add_auto;
+
+        $import_cli_add_always=new confItemBool();
+        $import_cli_add_always->setName("import.cli.add.always");
+        $import_cli_add_always->setLabel("CLI: Auto add always");
+        $import_cli_add_always->setDesc("Add non-existent albums, categories, places and people, regardsless of whether a parent is defined.");
+        $import_cli_add_always->setDefault(false);
+        $import_cli_add_always->setInternal();
+        $import[]=$import_cli_add_always;
+
+        $import_cli_recursive=new confItemBool();
+        $import_cli_recursive->setName("import.cli.recursive");
+        $import_cli_recursive->setLabel("CLI: Recursive");
+        $import_cli_recursive->setDesc("Recursively import directories when importing using the CLI.");
+        $import_cli_recursive->setDefault(false);
+        $import_cli_recursive->setInternal();
+        $import[]=$import_cli_recursive;
+
         /************************** WATERMARK **************************/
         $wm = self::addGroup("watermark", "Watermarking");
 
@@ -552,12 +647,13 @@ class conf {
         $wm_pos_y->setDefault("center");
         $wm[]=$wm_pos_y;
         
-        $wm_trans = new confItemString();
+        $wm_trans = new confItemNumber();
         $wm_trans->setName("watermark.transparency");
         $wm_trans->setLabel("Watermark transparency");
         $wm_trans->setDesc("Define the transparency of a watermark. 0: fully tranparent (invisible, don't use this, it's pointless and eats up a lot of resources, better turn off the watermark feature altogether) to 100: no transparency.");
         $wm_trans->setDefault("50");
         $wm_trans->setRegex("^(100|[0-9]{1,2})$");
+        $wm_trans->setBounds(0, 100,1);
         $wm[]=$wm_trans;
 
 

@@ -49,6 +49,9 @@ class confItemBool extends confItem {
      * @return block template block
      */
     public function display() {
+        if($this->internal) {
+            return;
+        }
         $tpl=new block("confItemBool", array(
             "label" => $this->getLabel(),
             "name" => $this->getName(),

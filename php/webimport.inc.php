@@ -44,9 +44,9 @@ class WebImport extends Import {
      * @param  Array Vars to be applied to the photos.
      */
     public static function photos(Array $files, Array $vars) {
-        settings::$importThumbs=false; // thumbnails have already been created, no need to repeat...
-        settings::$importExif=true;
-        settings::$importSize=true;
+        conf::set("import.cli.thumbs", false); // thumbnails have already been created, no need to repeat...
+        conf::set("import.cli.exif", true);
+        conf::set("import.cli.size", true);
         parent::photos($files, $vars);
     }
     
@@ -63,7 +63,7 @@ class WebImport extends Import {
             $errortext.=" " . sprintf(translate("This may also be caused by the max_post_size (%s) in php.ini."), ini_get("max_post_size"));
             break;
         case UPLOAD_ERR_FORM_SIZE:
-            $errortext.=sprintf(translate("The uploaded file exceeds the MAX_UPLOAD setting in config.inc.php (%s)."), MAX_UPLOAD);
+            $errortext.=sprintf(translate("The uploaded file exceeds the maximum filesize setting in config.inc.php (%s)."), conf::get("import.maxupload"));
             break;
         case UPLOAD_ERR_PARTIAL:
             $errortext.=translate("The uploaded file was only partially uploaded.");

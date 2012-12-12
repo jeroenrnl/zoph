@@ -1,6 +1,6 @@
 <?php
 /**
- * A confItemString defines a configuration item that is defined using a user-specified string
+ * A confItemNumber defines a configuration item that is defined using a user-specified number
  *
  * This file is part of Zoph.
  *
@@ -21,17 +21,18 @@
  * @author Jeroen Roos
  */
 
-class confItemString extends confItem {
+class confItemNumber extends confItemString {
     
-    protected $regex=".+";
-    protected $title="";
-    protected $size=30;
+    protected $regex="[0-9]+";
+    protected $min=0;
+    protected $max=99;
+    protected $step=1;
 
     public function display() {
         if($this->internal) {
             return;
         }
-        $tpl=new block("confItemString", array(
+        $tpl=new block("confItemNumber", array(
             "label" => e($this->getLabel()),
             "name" => e($this->getName()),
             "value" => e($this->getValue()),
@@ -39,18 +40,13 @@ class confItemString extends confItem {
             "hint" => e($this->getHint()),
             "regex" => e($this->regex),
             "size" => (int) $this->size,
+            "min" => (float) $this->min,
+            "max" => (float) $this->max,
+            "step" => (float) $this->step,
             "title" => e($this->title),
             "req" => ($this->required ? "required" : "")
         ));
         return $tpl;
-    }
-
-    public function setRegex($regex) {
-        $this->regex=$regex;
-    }
-
-    public function setTitle($title) {
-        $this->title=$title;
     }
 
     public function checkValue($value) {
@@ -58,15 +54,21 @@ class confItemString extends confItem {
             return false;
         }
 
-        if(isset($this->regex)) {
+        if((isset($this->min) && ($value < $this->min)) || 
+           (isset($this->max) && ($value > $this->max)) ||
+           (isset($this->step) && ($value % $this->step !== 0))) {
+            return false;
+        } else if(isset($this->regex)) {
             return preg_match("/" . $this->regex ."/", $value);
         } else {
             return true;
         }
     }
 
-    public function setSize($size) {
-        $this->size=(int) $size;
+    public function setBounds($min, $max, $step=1) {
+        $this->min=$min;
+        $this->max=$max;
+        $this->step=$step;
     }
 
 

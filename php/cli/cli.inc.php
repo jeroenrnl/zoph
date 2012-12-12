@@ -98,18 +98,7 @@ class cli {
         switch(arguments::$command) {
         case "import":
             $vars=$this->args->getVars();
-            if(!isset(settings::$importThumbs)) {
-                settings::$importThumbs=true;
-            }
-            if(!isset(settings::$importExif)) {
-                settings::$importExif=true;
-            }
-            if(!isset(settings::$importSize)) {
-                settings::$importSize=true;
-            }
-            if(!isset(settings::$importAutoadd)) {
-                settings::$importAutoadd=false;
-            } else {
+            if(conf::get("import.cli.add.auto")) {
                 $vars=$this->addNew();
             }
             if(is_array($this->files) && sizeof($this->files)>0) {
@@ -132,15 +121,6 @@ class cli {
 
             break;
         case "update":
-            if(!isset(settings::$importThumbs)) {
-                settings::$importThumbs=false;
-            }
-            if(!isset(settings::$importExif)) {
-                settings::$importExif=false;
-            }
-            if(!isset(settings::$importSize)) {
-                settings::$importSize=false;
-            }
             if(is_array($this->photos) && sizeof($this->photos)>0) {
                 $total=sizeof($this->photos);
                 $cur=0;
@@ -151,16 +131,16 @@ class cli {
                     $photo->setFields($this->args->getVars());
                     $photo->update();
                     $photo->updateRelations($this->args->getVars(), "_id");
-                    if(settings::$importThumbs===true) {
+                    if(conf::get("import.cli.thumbs")===true) {
                         $photo->thumbnail(true);
                     }
-                    if(settings::$importExif===true) {
+                    if(conf::get("import.cli.exif")===true) {
                         $photo->updateEXIF();
                     }
-                    if(settings::$importSize===true) {
+                    if(conf::get("import.cli.size")===true) {
                         $photo->updateSize();
                     }
-                    if(settings::$importHash===true) {
+                    if(conf::get("import.cli.hash")===true) {
                         $photo->getHash();
                     }
                 }
@@ -184,7 +164,7 @@ class cli {
                 $value=$vars["_configvalue"];
             }
 
-            if(settings::$importVerbose > 0) {
+            if(conf::get("import.cli.verbose") > 0) {
                 echo "Setting config \"$name\" to \"$value\""  . ( $default ? " (default)" : "" ) . "\n";
             }
 
@@ -229,7 +209,7 @@ class cli {
                     $file->check();
 
                     $mime=$file->getMime();
-                    if($file->type=="directory" && settings::$importRecursive) {
+                    if($file->type=="directory" && conf::get("import.cli.recursive")) {
                         $this->files=array_merge($this->files, file::getFromDir($file, true));
                     } else if($file->type!="image") {
                         throw new ImportFileNotImportableException("$file is not an image\n");
@@ -237,7 +217,7 @@ class cli {
                         $this->files[]=$file;
                     }
                 } else {
-                    if(settings::$importUseids) {
+                    if(conf::get("import.cli.useids")) {
                         $file=$filename;
                         if(is_numeric($file)) {
                             $this->photos[]=$this->lookupFileById($file);
