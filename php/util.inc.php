@@ -132,29 +132,12 @@ function create_inequality_operator_pulldown($var, $op = ">") {
         array(">" => translate("less than"), "<" => translate("more than")));
 }
 
+/**
+ * This function is now only a wrapper around the static function in the photo class
+ * @todo get rid of it
+ */
 function create_photo_field_pulldown($var, $name = null) {
-    return create_pulldown($var, $name, array(
-        "" => "",
-        "date" => translate("date",0),
-        "time" => translate("time",0),
-        "timestamp" => translate("timestamp",0),
-        "name" => translate("file name",0),
-        "path" => translate("path",0),
-        "title" => translate("title",0),
-        "view" => translate("view",0),
-        "description" => translate("description",0),
-        "width" => translate("width",0),
-        "height" => translate("height",0),
-        "size" => translate("size",0),
-        "aperture" => translate("aperture",0),
-        "camera_make" => translate("camera make",0),
-        "camera_model" => translate("camera model",0),
-        "compression" => translate("compression",0),
-        "exposure" => translate("exposure",0),
-        "flash_used" => translate("flash used",0),
-        "focal_length" => translate("focal length",0),
-        "iso_equiv" => translate("iso equiv",0),
-        "metering_mode" => translate("metering mode",0)));
+    return create_pulldown($var, $name, translate(photo::getFields(),0));
 }
 
 function create_photo_text_pulldown($var, $name = null) {

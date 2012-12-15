@@ -337,16 +337,16 @@
     define('LOG_SUBJECT', log::NONE);
 
     // default photo results ordering
-    $DEFAULT_ORDER = "date";
+    //    $DEFAULT_ORDER = "date";
     // default direction of ordering
-    $DEFAULT_DIRECTION = "asc";
+    //    $DEFAULT_DIRECTION = "asc";
 
     // the following values are defaults that can be overriden
     // by a user's preferences
-    $SHOW_BREADCRUMBS = 1;
-    $MAX_CRUMBS_TO_SHOW = 8;
-    $DEFAULT_ROWS = 3;
-    $DEFAULT_COLS = 4;
+    //    $SHOW_BREADCRUMBS = 1;
+    //    $MAX_CRUMBS_TO_SHOW = 8;
+    //    $DEFAULT_ROWS = 3;
+    //    $DEFAULT_COLS = 4;
     $MAX_PAGER_SIZE = 10;
     $RANDOM_PHOTO_MIN_RATING = 5;
     $TOP_N = 5;

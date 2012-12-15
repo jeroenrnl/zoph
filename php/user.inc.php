@@ -20,6 +20,8 @@
  */
 class user extends zophTable {
 
+    private static $current; 
+
     var $person;
     var $prefs;
     var $crumbs;
@@ -315,5 +317,28 @@ class user extends zophTable {
     public static function getAll($order = "user_name") {
         return self::getRecords("user", $order);
     }
+
+    /**
+     * Set currently logged in user
+     * @param user user object
+     */
+    public static function setCurrent(user $user) {
+        self::$current=$user;
+    }
+
+    /**
+     * Delete currently logged in user
+     */
+    public static function unsetCurrent() {
+        self::$current=null;
+    }
+
+    /**
+     * Get currently logged in user
+     */
+    public static function getCurrent() {
+        return self::$current;
+    }
+
 }
 ?>

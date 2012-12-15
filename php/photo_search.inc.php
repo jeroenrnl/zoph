@@ -47,18 +47,16 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         $where = "";
     }
 
-    global $DEFAULT_ORDER;
     if (isset($vars["_order"])) {
         $ord = $vars["_order"];
     } else {
-        $ord = $DEFAULT_ORDER;
+        $ord = conf::get("interface.sort.order");
     }
 
-    global $DEFAULT_DIRECTION;
     if (isset($vars["_dir"])) {
         $dir = $vars["_dir"];
     } else {
-        $dir = $DEFAULT_DIRECTION;
+        $dir = conf::get("interface.sort.dir");
     }
 
     $order = "ph." . $ord . " $dir";

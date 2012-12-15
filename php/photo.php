@@ -87,12 +87,12 @@
         # To fix bug #1259152:
         # get $_off, round it down to a multiple of cols x rows.
 
-        $_cols = getvar("_cols");
-        $_rows = getvar("_rows");
-        $_off = getvar("_off");
+        $_cols = (int) getvar("_cols");
+        $_rows = (int) getvar("_rows");
+        $_off = (int) getvar("_off");
 
-        if (!$_cols) { $_cols = $DEFAULT_COLS; }
-        if (!$_rows) { $_rows = $DEFAULT_ROWS; }
+        if (!$_cols) { $_cols = $user->prefs->get("num_rows"); }
+        if (!$_rows) { $_rows = $user->prefs->get("num_cols"); }
         if (!$_off)  { $_off = 0; }
 
         $cells = $_cols * $_rows;

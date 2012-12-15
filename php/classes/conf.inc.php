@@ -24,6 +24,7 @@
 
 require_once("database.inc.php");
 require_once("user.inc.php");
+require_once("photo.inc.php");
 
 /**
  * conf is the main object for access to Zoph's configuration
@@ -281,6 +282,22 @@ class conf {
         $int_max_days->setBounds(0,365,1);
         $interface[]=$int_max_days;
 
+        $int_sort_order = new confItemSelect();
+        $int_sort_order->setName("interface.sort.order");
+        $int_sort_order->setLabel("Default sort order");
+        $int_sort_order->setDesc("Default sort order of photos");
+        $int_sort_order->addOptions(photo::getFields());
+        $int_sort_order->setDefault("date");
+        $interface[]=$int_sort_order;
+
+        $int_sort_dir = new confItemSelect();
+        $int_sort_dir->setName("interface.sort.dir");
+        $int_sort_dir->setLabel("Default sort direction");
+        $int_sort_dir->setDesc("Default sort order of photos, ascending or descending");
+        $int_sort_dir->addOption("asc", "Ascending");
+        $int_sort_dir->addOption("desc", "Descending");
+        $int_sort_dir->setDefault("asc");
+        $interface[]=$int_sort_dir;
 
         /************************** SSL **************************/
         $ssl = self::addGroup("ssl", "SSL");
@@ -423,8 +440,6 @@ class conf {
         $maps_key_cloudmade->setDefault("f3b46b04edd64ea79066b7e6921205df");
         $maps[]=$maps_key_cloudmade;
 
-
-        
         /************************** IMPORT **************************/
         $import = self::addGroup("import", "Importing and uploading photos");
 

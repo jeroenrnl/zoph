@@ -1542,6 +1542,37 @@ class photo extends zophTable {
             throw new PhotoNotFoundException("Could not find photo from hash");
         }
     }
+    
+    /**
+     * Create a list of fields that can be used to sort photos on
+     * @return array list of fields
+     */
+    public static function getFields() {
+        return array(
+            "" => "",
+            "date" => "date",
+            "time" => "time",
+            "timestamp" => "timestamp",
+            "name" => "file name",
+            "path" => "path",
+            "title" => "title",
+            "view" => "view",
+            "description" => "description",
+            "width" => "width",
+            "height" => "height",
+            "size" => "size",
+            "aperture" => "aperture",
+            "camera_make" => "camera make",
+            "camera_model" => "camera model",
+            "compression" => "compression",
+            "exposure" => "exposure",
+            "flash_used" => "flash used",
+            "focal_length" => "focal length",
+            "iso_equiv" => "iso equiv",
+            "metering_mode" => "metering mode"
+        );
+    }
+
         
 }
 
@@ -1636,9 +1667,9 @@ function goodrotate($src_img, $degrees = 90) {
     $degrees %= 360;
     if($degrees == 0) {
         $dst_img = $src_image;
-    } Elseif ($degrees == 180) {
+    } else if ($degrees == 180) {
         $dst_img = imagerotate($src_img, $degrees, 0);
-    } Else {
+    } else {
         $width = imagesx($src_img);
         $height = imagesy($src_img);
         if ($width > $height) {

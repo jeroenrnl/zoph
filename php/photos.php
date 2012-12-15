@@ -17,9 +17,11 @@
  */
     require_once("include.inc.php");
 
-    $_cols = getvar("_cols");
-    $_rows = getvar("_rows");
-    $_off = getvar("_off");
+    
+    $_cols = (int) getvar("_cols");
+    $_rows = (int) getvar("_rows");
+    $_off = (int) getvar("_off"); 
+    
     $_order = getvar("_order");
     $_dir = getvar("_dir");
     $_show = getvar("_show");
@@ -28,14 +30,13 @@
         die("Illegal characters in _order");
     }
 
-    if (!$_cols) { $_cols = $DEFAULT_COLS; }
-    if (!$_rows) { $_rows = $DEFAULT_ROWS; }
+    if (!$_cols) { $_cols = $user->prefs->get("num_rows"); }
+    if (!$_rows) { $_rows = $user->prefs->get("num_cols"); }
     if (!$_off)  { $_off = 0; }
 
-
-    if (!$_order) { $_order = $DEFAULT_ORDER; }
-    if (!$_dir)   { $_dir = $DEFAULT_DIRECTION; }
-
+    if (!$_order) { $_order = conf::get("interface.sort.order"); }
+    if (!$_dir)   { $_dir = conf::get("interface.sort.dir"); }
+   
     $cells = $_cols * $_rows;
     $offset = $_off;
 

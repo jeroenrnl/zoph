@@ -122,13 +122,16 @@ class language {
 
     /**
      * Translate the given string
-     * @param string The string to be translated
+     * @param string|array The string or array to be translated
      * @param bool If true add [tr] before any string that cannot be
      *   translated.
      * @return string The translated string
      */
     function translate($string, $error = true) {
         $tag="";
+        if(is_array($string)) {
+            return $this->translateArray($string, $error);
+        }
         if(array_key_exists($string, $this->translations)) {
             return trim($this->translations[$string]);
         } else {
@@ -139,6 +142,22 @@ class language {
        }
     }
 
+    /**
+     * Translate an array
+     * translates all the values in an array, not the keys.
+     * @param array The array to be translated
+     * @param bool If true add [tr] before any string that cannot be
+     *   translated.
+     * @return string The translated array 
+     */
+    private function translateArray($array, $error = true) {
+        $tr=array();
+        foreach($array as $key=>$string) {
+            $tr[$key]=translate($string, $error);
+        }
+        return $tr;
+    }
+            
     /**
      * Get all languages
      * @return array array of language objects

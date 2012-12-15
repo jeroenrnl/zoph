@@ -35,7 +35,7 @@
             if($user instanceof anonymousUser) {
                 if(!defined("IMAGE_PHP")) {
                     unset($user);
-                    $_action=("logout");
+                    $_action="logout";
                 }
             } else {
                 $_action = getvar("_action");
@@ -64,6 +64,7 @@
     if ($_action == "logout") {
         session_destroy();
         $user = null;
+        user::unsetCurrent();
         redirect("logon.php", "Logout");
     } else if (empty($user)) {
         $hash=getvar("hash");
@@ -84,7 +85,7 @@
             $user->lookup();
             $user->lookup_person();
             $user->lookup_prefs();
-
+            
             // Update Last Login Fields
             $updated_user = new user($user->get("user_id"));
             $updated_user->set("lastlogin", "now()");
@@ -100,6 +101,7 @@
     if (!empty($user)) {
         $user->prefs->load();
         $lang=$user->load_language();
+        user::setCurrent($user);
             
         if (!defined("CLI")) {
             $_SESSION['user'] = &$user;
