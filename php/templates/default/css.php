@@ -1414,6 +1414,7 @@ select,
 input[type="text"],
 input[type="time"],
 input[type="date"],
+input[type="number"],
 input[type="password"],
 textarea {
     border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
