@@ -22,7 +22,7 @@
 
     // get one random photo
     $vars["_random"] = 1;
-    $vars["rating"] = $RANDOM_PHOTO_MIN_RATING;
+    $vars["rating"] = $user->prefs->get("random_photo_min_rating");
     $vars["_rating-op"] = ">=";
 
     $thumnails;
@@ -72,12 +72,13 @@
 <?php
     $recent = new Time();
     $sub_days = (int) $user->prefs->get("recent_photo_days");
+    $min_rating = (int) $user->prefs->get("random_photo_min_rating");
     $recent->sub(new DateInterval("P" . (int) $sub_days . "D"));
     $timestamp=$recent->format("Y-m-d");
 
     echo sprintf(translate("You may search for photos %s taken %s or %s modified %s in the past %s days."), "<a href=\"photos.php?_date-op=%3E%3D&amp;date=" . $timestamp . "\">", "</a>", "<a href=\"photos.php?_timestamp-op=%3E%3D&amp;timestamp=" . $timestamp . "\">", "</a>", $sub_days);
     echo "\n";
-    echo sprintf(translate("Or you may use the %s search page %s to find photos using multiple criteria. You may also view a %s randomly chosen photo %s like the one above."), "<a href=\"search.php\">", "</a>", "<a href=\"photos.php?_random=1&amp;_rating-op=%3E%3D&amp;rating=$RANDOM_PHOTO_MIN_RATING\">","</a>");
+    echo sprintf(translate("Or you may use the %s search page %s to find photos using multiple criteria. You may also view a %s randomly chosen photo %s like the one above."), "<a href=\"search.php\">", "</a>", "<a href=\"photos.php?_random=1&amp;_rating-op=%3E%3D&amp;rating=" . $min_rating . "\">","</a>");
     echo "\n        <p class=\"intro\">\n";
     echo sprintf(translate("These options are always available in the tabs on the upper right. Use the %s home %s link to return here. Click on any thumbnail to see a larger version along with information about that photo."),"<a href=\"zoph.php\">","</a>"); 
     echo "\n        </p>\n";

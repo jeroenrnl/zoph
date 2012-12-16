@@ -532,9 +532,10 @@ class photo extends zophTable {
         return "            <a href=\"$link\">" . $this->get_image_tag(THUMB_PREFIX) . "</a>";
     }
 
-    function get_fullsize_link($title, $FULLSIZE_NEW_WIN) {
+    function get_fullsize_link($title) {
+        $user=user::getCurrent();
         $image = $this->getURL();
-        $newwin = ($FULLSIZE_NEW_WIN ? "target=\"_blank\"" : "");
+        $newwin = ($user->prefs->get("fullsize_new_win") ? "target=\"_blank\"" : "");
         return "<a href=\"$image\" $newwin>$title</a>";
     }
     

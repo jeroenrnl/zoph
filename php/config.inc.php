@@ -347,9 +347,9 @@
     //    $MAX_CRUMBS_TO_SHOW = 8;
     //    $DEFAULT_ROWS = 3;
     //    $DEFAULT_COLS = 4;
-    $MAX_PAGER_SIZE = 10;
-    $RANDOM_PHOTO_MIN_RATING = 5;
-    $TOP_N = 5;
-    $SLIDESHOW_TIME = 5; // seconds
+    //  $MAX_PAGER_SIZE = 10;
+    //  $RANDOM_PHOTO_MIN_RATING = 5;
+    //  $TOP_N = 5;
+    //  $SLIDESHOW_TIME = 5; // seconds
 
 ?>

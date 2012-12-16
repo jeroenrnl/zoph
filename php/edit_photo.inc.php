@@ -80,7 +80,7 @@
 
                 <div class="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
                 <div class="photohdr">
-                  <?php echo $photo->get_fullsize_link($photo->get("name"),$FULLSIZE_NEW_WIN) ?> :
+                  <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
                   <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
                   <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
                 </div>
@@ -105,7 +105,7 @@
 ?>
         </ul>
 
-            <?php echo $photo->get_fullsize_link($photo->get_midsize_img(),$FULLSIZE_NEW_WIN) ?>
+            <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
 <?php
     }
 ?>

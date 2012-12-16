@@ -435,8 +435,6 @@ class album extends zophTreeTable {
      */
     public static function getTopN(user $user=null) {
 
-        global $TOP_N;
-
         if ($user && !$user->is_admin()) {
             $sql =
                 "SELECT al.*, count(distinct ph.photo_id) AS count FROM " .
@@ -453,7 +451,7 @@ class album extends zophTreeTable {
                 " AND gp.access_level >= ph.level " .
                 "GROUP BY al.album_id " .
                 "ORDER BY count desc, al.album " .
-                "LIMIT 0, " . escape_string($TOP_N);
+                "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
         else {
             $sql =
@@ -463,7 +461,7 @@ class album extends zophTreeTable {
                 "where pa.album_id = al.album_id " .
                 "group by al.album_id " .
                 "order by count desc, al.album " .
-                "limit 0, " . escape_string($TOP_N);
+                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
 
         return parent::getTopNfromSQL("album", $sql);

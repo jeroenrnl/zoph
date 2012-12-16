@@ -382,9 +382,6 @@ class category extends zophTreeTable {
      * Get Top N categories
      */
     public static function getTopN(user $user=null) {
-
-        global $TOP_N;
-
         if ($user && !$user->is_admin()) {
             $sql =
                 "select cat.*, count(distinct ph.photo_id) as count from " .
@@ -404,7 +401,7 @@ class category extends zophTreeTable {
                 "AND gp.access_level >= ph.level " .
                 "GROUP BY cat.category_id " .
                 "ORDER BY count desc, cat.category " .
-                "LIMIT 0, " . escape_string($TOP_N);
+                "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
         else {
             $sql =
@@ -414,7 +411,7 @@ class category extends zophTreeTable {
                 "where pc.category_id = cat.category_id " .
                 "group by cat.category_id " .
                 "order by count desc, cat.category " .
-                "limit 0, " . escape_string($TOP_N);
+                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
 
         return parent::getTopNfromSQL("category", $sql);

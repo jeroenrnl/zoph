@@ -382,7 +382,7 @@
             $pager_vars[$key] = $val;
         }
         $request_vars = $pager_vars;
-        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $request_vars, "_off");
+        echo pager($offset, $num_photos, $num_pages, $cells, $user->prefs->get("max_pageer_size"), $request_vars, "_off");
     } // if photos
 ?>
 <br>

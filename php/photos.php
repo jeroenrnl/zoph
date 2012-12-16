@@ -202,7 +202,7 @@
 ?>
        <br>
 <?php
-        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $vars, "_off");
+        echo pager($offset, $num_photos, $num_pages, $cells, $user->prefs->get("max_pager_size"), $vars, "_off");
     } // if photos
 ?>
        <br>

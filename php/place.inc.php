@@ -530,9 +530,6 @@ class place extends zophTreeTable {
      * Get Top N people
      */
     public static function getTopN(user $user=null) {
-
-        global $TOP_N;
-
         if ($user && !$user->is_admin()) {
             $sql =
                 "SELECT plc.*, count(distinct ph.photo_id) AS count FROM " .
@@ -550,7 +547,7 @@ class place extends zophTreeTable {
                 "' AND gp.access_level >= ph.level " .
                 "GROUP BY plc.place_id " .
                 "ORDER BY count desc, plc.title, plc.city " .
-                "LIMIT 0, $TOP_N";
+                "LIMIT 0, " . (int) $user->prefs->get("reports_top_n");
         }
         else {
             $sql =
@@ -560,7 +557,7 @@ class place extends zophTreeTable {
                 "where plc.place_id = ph.location_id " .
                 "group by plc.place_id " .
                 "order by count desc, plc.title, plc.city " .
-                "limit 0, $TOP_N";
+                "limit 0, " . (int) $user->prefs->get("reports_top_n");
         }
 
         return parent::getTopNfromSQL("place", $sql);
