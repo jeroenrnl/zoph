@@ -1305,10 +1305,10 @@ class photo extends zophTable {
                 return $hash;
                 break;
             case "full":
-                return sha1(conf::get("interface.share.salt.full") . $hash);
+                return sha1(conf::get("share.salt.full") . $hash);
                 break;
             case "mid":
-                return sha1(conf::get("interface.share.salt.mid") . $hash);
+                return sha1(conf::get("share.salt.mid") . $hash);
                 break;
             default:
                 die("Unsupported hash type");
@@ -1519,12 +1519,12 @@ class photo extends zophTable {
                 $where="WHERE hash=\"" . escape_string($hash) . "\";";
                 break;
             case "full":
-                $salt=conf::get("interface.share.salt.full");
+                $salt=conf::get("share.salt.full");
                 $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
                    "\"" . escape_string($hash) . "\";";
                 break;
             case "mid":
-                $salt=conf::get("interface.share.salt.mid");
+                $salt=conf::get("share.salt.mid");
                 $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
                    "\"" . escape_string($hash) . "\";";
                 break;

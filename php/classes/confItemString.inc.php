@@ -32,10 +32,10 @@ class confItemString extends confItem {
             return;
         }
         $tpl=new block("confItemString", array(
-            "label" => e($this->getLabel()),
+            "label" => e(translate($this->getLabel(),0)),
             "name" => e($this->getName()),
             "value" => e($this->getValue()),
-            "desc" => e($this->getDesc()),
+            "desc" => e(translate($this->getDesc(),0)),
             "hint" => e($this->getHint()),
             "regex" => e($this->regex),
             "size" => (int) $this->size,

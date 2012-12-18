@@ -33,17 +33,17 @@ class confItemNumber extends confItemString {
             return;
         }
         $tpl=new block("confItemNumber", array(
-            "label" => e($this->getLabel()),
+            "label" => e(translate($this->getLabel(),0)),
             "name" => e($this->getName()),
             "value" => e($this->getValue()),
-            "desc" => e($this->getDesc()),
-            "hint" => e($this->getHint()),
+            "desc" => e(translate($this->getDesc(),0)),
+            "hint" => e(translate($this->getHint(),0)),
             "regex" => e($this->regex),
             "size" => (int) $this->size,
             "min" => (float) $this->min,
             "max" => (float) $this->max,
             "step" => (float) $this->step,
-            "title" => e($this->title),
+            "title" => e(translate($this->title),0),
             "req" => ($this->required ? "required" : "")
         ));
         return $tpl;

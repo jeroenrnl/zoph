@@ -27,6 +27,8 @@
 class confGroup implements ArrayAccess, IteratorAggregate {
     /** @var string Name of group */
     private $name;
+    /** @var string Label */
+    private $label;
     /** @var string Description */
     private $desc;
     /** @var array confItem objects */
@@ -49,6 +51,14 @@ class confGroup implements ArrayAccess, IteratorAggregate {
     }
 
     /**
+     * Set the label of the group
+     * @param string Label
+     */
+    public function setLabel($label) {
+        $this->label=$label;
+    }
+
+    /**
      * Get name
      * @return string Name
      */
@@ -62,6 +72,14 @@ class confGroup implements ArrayAccess, IteratorAggregate {
      */
     public function getDesc() {
         return $this->desc;
+    }
+
+    /**
+     * Get label
+     * @return string Label
+     */
+    public function getLabel() {
+        return $this->label;
     }
 
     /**
@@ -126,8 +144,8 @@ class confGroup implements ArrayAccess, IteratorAggregate {
      */
     public function display() {
         $tpl=new block("confGroup", array(
-            "title" => $this->getName(),
-            "desc"  => $this->getDesc(),
+            "title" => translate($this->getLabel(),0),
+            "desc"  => translate($this->getDesc(),0),
             "items" => $this->items
         ));
         return $tpl;

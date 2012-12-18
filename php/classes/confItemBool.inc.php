@@ -53,11 +53,11 @@ class confItemBool extends confItem {
             return;
         }
         $tpl=new block("confItemBool", array(
-            "label" => $this->getLabel(),
-            "name" => $this->getName(),
+            "label" => e(translate($this->getLabel(),0)),
+            "name" => e($this->getName()),
             "checked" => $this->getValue() ? "checked" : "",
-            "desc" => $this->getDesc(),
-            "hint" => $this->getHint(),
+            "desc" => e(translate($this->getDesc(),0)),
+            "hint" => e(translate($this->getHint(),0)),
         ));
         return $tpl;
      }

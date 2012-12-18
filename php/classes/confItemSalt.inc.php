@@ -35,12 +35,12 @@ class confItemSalt extends confItemString {
     public function display() {
         $id=str_replace(".", "_", $this->getName());
         $tpl=new block("confItemSalt", array(
-            "label" => e($this->getLabel()),
+            "label" => e(translate($this->getLabel(),0)),
             "name" => e($this->getName()),
             "id" => e($id),
             "value" => e($this->getValue()),
-            "desc" => e($this->getDesc()),
-            "hint" => e($this->getHint()),
+            "desc" => e(translate($this->getDesc(),0)),
+            "hint" => e(translate($this->getHint(),0)),
             "regex" => e($this->regex),
             "size" => (int) $this->size,
             "title" => e($this->title),

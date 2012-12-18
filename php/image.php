@@ -44,7 +44,7 @@
             $type="mid";
         }
         $found=true;
-    } else if (conf::get("interface.share") && !empty($hash)) {
+    } else if (conf::get("share.enable") && !empty($hash)) {
         try {
             $photo=photo::getFromHash($hash, "full");
             $photo->lookup();

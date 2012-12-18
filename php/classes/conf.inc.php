@@ -160,10 +160,11 @@ class conf {
      * @param string name
      * @param string description
      */
-    public static function addGroup($name, $desc = "") {
+    public static function addGroup($name, $label, $desc = "") {
         $group = new confGroup();
 
         $group->setName($name);
+        $group->setLabel($label);
         $group->setDesc($desc);
 
 
@@ -178,7 +179,7 @@ class conf {
     private static function getDefault() {
 
         /************************** INTERFACE **************************/
-        $interface = self::addGroup("interface", "Zoph interface settings");
+        $interface = self::addGroup("interface", "Interface settings", "Settings that define how Zoph looks");
 
         $int_title = new confItemString();
         $int_title->setName("interface.title");
@@ -203,29 +204,6 @@ class conf {
         $int_tpl->addOptions(template::getAll());
         $int_tpl->setDefault("default");
         $interface[]=$int_tpl;
-
-        $int_share = new confItemBool();
-        $int_share->setName("interface.share");
-        $int_share->setLabel("Sharing");
-        $int_share->setDesc("Sometimes, you may wish to share an image in Zoph without creating a user account for those who will be watching them. For example, in order to post a link to an image on a forum or website. When this option is enabled, you will see a 'share' tab next to a photo, where you will find a few ways to share a photo, such as a url and a HTML &lt;img&gt; tag. With this special url, it is possible to open a photo without logging in to Zoph. You can determine per user whether or not this user will see the tab and therefore the urls.");
-        $int_share->setDefault(false);
-        $interface[]=$int_share;
-
-        $int_salt_full = new confItemSalt();
-        $int_salt_full->setName("interface.share.salt.full");
-        $int_salt_full->setLabel("Salt for sharing full size images");
-        $int_salt_full->setDesc("When using the sharing feature, Zoph uses a hash to identify a photo. Because you do not want people who have access to you full size photos (via Zoph or otherwise) to be able to generate these hashes, you should give Zoph a secret salt so only authorized users of your Zoph installation can generate them. The salt for full size images (this one) must be different from the salt of mid size images (below), because this allows Zoph to distinguish between them. If a link to your Zoph installation is being abused (for example because someone whom you mailed a link has published it on a forum), you can modify the salt to make all hash-based links to your Zoph invalid.");
-        $int_salt_full->setDefault("Change this");
-        $int_salt_full->setRequired();
-        $interface[]=$int_salt_full;
-
-        $int_salt_mid = new confItemSalt();
-        $int_salt_mid->setName("interface.share.salt.mid");
-        $int_salt_mid->setLabel("Salt for sharing mid size images");
-        $int_salt_mid->setDesc("The salt for mid size images (this one) must be different from the salt of mid full images (above), because this allows Zoph to distinguish between them. If a link to your Zoph installation is being abused (for example because someone whom you mailed a link has published it on a forum), you can modify the salt to make all hash-based links to your Zoph invalid.");
-        $int_salt_mid->setDefault("Modify this");
-        $int_salt_mid->setRequired();
-        $interface[]=$int_salt_mid;
 
         $int_autoc = new confItemBool();
         $int_autoc->setName("interface.autocomplete");
@@ -263,7 +241,7 @@ class conf {
         $int_user_cli = new confItemSelect();
         $int_user_cli->setName("interface.user.cli");
         $int_user_cli->setLabel("CLI user");
-        $int_user_cli->setDesc("This is the Zoph user that is used when using the CLI interface when interacting with Zoph. You should set it to the user_id of a valid Zoph user. This user must be an admin user. You can also set it to \"autodetect\", which means Zoph will lookup the name of the Unix user starting the CLI client and tries to find that user's name in the Zoph database.");
+        $int_user_cli->setDesc("This is the Zoph user that is used when using the CLI interface when interacting with Zoph. This user must be an admin user. You can also set it to \"autodetect\", which means Zoph will lookup the name of the Unix user starting the CLI client and tries to find that user's name in the Zoph database.");
         $int_user_cli->addOption(0, "Autodetect");
         foreach ($users as $usr) {
             if($usr->is_admin()) {
@@ -300,12 +278,12 @@ class conf {
         $interface[]=$int_sort_dir;
 
         /************************** SSL **************************/
-        $ssl = self::addGroup("ssl", "SSL");
+        $ssl = self::addGroup("ssl", "SSL", "Protect your site against eavesdropping by using https. You will need to configure this in your webserver as well.");
 
         $ssl_force = new confItemSelect();
         $ssl_force->setName("ssl.force");
         $ssl_force->setLabel("Force SSL");
-        $ssl_force->setDesc("Force users to use https when using Zoph. When connecting to Zoph using http, the user will automatically be redirected to the same URL, but with https. If choosing \"login only\", the user will be redirected back to http after logging in. If your https-site is hosted on a different URL, you will need to define the correct url below.");
+        $ssl_force->setDesc("Force users to use https when using Zoph. When connecting to Zoph using http, the user will automatically be redirected to the same URL, but with https. When choosing \"login only\", the user will be redirected back to http after logging in. If your https-site is hosted on a different URL, you will need to define the correct url below.");
         $ssl_force->addOption("never", "Never");
         $ssl_force->addOption("always", "Always");
         $ssl_force->addOption("login", "Login only");
@@ -313,7 +291,7 @@ class conf {
         $ssl[]=$ssl_force;
 
         /************************** URL **************************/
-        $url = self::addGroup("url", "URLs");
+        $url = self::addGroup("url", "URLs", "Define the URLs that are used to access Zoph. Only configure this if Zoph cannot determine it automatically.");
 
         $url_http = new confItemString();
         $url_http->setName("url.http");
@@ -332,7 +310,7 @@ class conf {
         $url[]=$url_https;
 
         /************************** PATH **************************/
-        $path = self::addGroup("path", "File and directory locations");
+        $path = self::addGroup("path", "Paths", "File and directory locations");
         
 
         $path_images = new confItemString();
@@ -409,7 +387,7 @@ class conf {
         $path[]=$path_unbz;
 
         /************************** MAPS **************************/
-        $maps = self::addGroup("maps", "Mapping support");
+        $maps = self::addGroup("maps", "Mapping support", "Add maps to Zoph using various different mapping providers.");
 
         $maps_provider = new confItemSelect();
         $maps_provider->setName("maps.provider");
@@ -435,13 +413,13 @@ class conf {
         $maps_key_cloudmade = new confItemString();
         $maps_key_cloudmade->setName("maps.key.cloudmade");
         $maps_key_cloudmade->setLabel("Cloudmade Key");
-        $maps_key_cloudmade->setDesc("API key for Cloudmade Maps. Only needed if using \"Cloudmade\" as provider. You can use Zoph's key (which is the default), but please do not use this key for any other applications..");
+        $maps_key_cloudmade->setDesc("API key for Cloudmade Maps. Only needed if using \"Cloudmade\" as provider. You can use Zoph's key (which is the default), but please do not use this key for any other applications.");
         $maps_key_cloudmade->setRegex("(^$|[a-z0-9]{32})"); 
         $maps_key_cloudmade->setDefault("f3b46b04edd64ea79066b7e6921205df");
         $maps[]=$maps_key_cloudmade;
 
         /************************** IMPORT **************************/
-        $import = self::addGroup("import", "Importing and uploading photos");
+        $import = self::addGroup("import", "Import", "Importing and uploading photos");
 
         $import_enable = new confItemBool();
         $import_enable->setName("import.enable");
@@ -457,7 +435,6 @@ class conf {
         $import_upload->setDefault(false);
         $import[]=$import_upload;
 
-
         $import_maxupload = new confItemNumber(); 
         $import_maxupload->setName("import.maxupload");
         $import_maxupload->setLabel("Maximum filesize");
@@ -470,7 +447,7 @@ class conf {
         $import_parallel = new confItemNumber(); 
         $import_parallel->setName("import.parallel");
         $import_parallel->setLabel("Resize parallel");
-        $import_parallel->setDesc("Photos will be resized to thumbnail and midsize images during import, this setting determines how many resize actions run in parallel. Can be set to any number. Don't change this, unless you have a fast server with multiple CPU's or cores.");
+        $import_parallel->setDesc("Photos will be resized to thumbnail and midsize images during import, this setting determines how many resize actions run in parallel. Can be set to any number. If you have a fast server with multiple CPU's or cores, you can increase this for faster response on the import page.");
         $import_parallel->setRegex("^[0-9]+$");
         $import_parallel->setBounds(1,99,1);
         $import_parallel->setDefault("1");
@@ -512,7 +489,7 @@ class conf {
         $import_filemode = new confItemSelect();
         $import_filemode->setName("import.filemode");
         $import_filemode->setLabel("File mode");
-        $import_filemode->setDesc("File mode for the files that are imported in Zoph. Determines who can Read or Write the files. (RW=Read/Write, RO=Read Only)");
+        $import_filemode->setDesc("File mode for the files that are imported in Zoph. Determines who can read or write the files. (RW: Read/Write, RO: Read Only)");
         $import_filemode->addOptions(array(
             "0644" => "RW for user, RO for others (0644)", 
             "0664" => "RW for user/group, RO for others (0664)",
@@ -530,7 +507,7 @@ class conf {
         $import_dirmode = new confItemSelect();
         $import_dirmode->setName("import.dirmode");
         $import_dirmode->setLabel("dir mode");
-        $import_dirmode->setDesc("Mode for directories that are created by Zoph. Determines who can Read or Write the files. (RW=Read/Write, RO=Read Only)");
+        $import_dirmode->setDesc("Mode for directories that are created by Zoph. Determines who can read or write the files. (RW: Read/Write, RO: Read Only)");
         $import_dirmode->addOptions(array(
             "0755" => "RW for user, RO for others (0755)", 
             "0775" => "RW for user/group, RO for others (0775)",
@@ -619,12 +596,12 @@ class conf {
         $import[]=$import_cli_recursive;
 
         /************************** WATERMARK **************************/
-        $wm = self::addGroup("watermark", "Watermarking");
+        $wm = self::addGroup("watermark", "Watermarking", "Watermarking can display a (copyright) watermark over your full-size images.");
 
         $wm_enable = new confItemBool();
         $wm_enable->setName("watermark.enable");
         $wm_enable->setLabel("Enable Watermarking");
-        $wm_enable->setDesc("Watermarking can display a (copyright) watermark over your full-size images. Watermarking only works the watermark file below is set to an existing GIF image. Please note that enabling this function uses a rather large amount of memory on the webserver. PHP by default allows a script to use a maximum of 8MB memory. You should probably increase this by changing memory_limit in php.ini. A rough estimation of how much memory it will use is 6 times the number of megapixels in your camera. For example, if you have a 5 megapixel camera, change the line in php.ini to memory_limit=30M");
+        $wm_enable->setDesc("Watermarking only works if the watermark file below is set to an existing GIF image. Please note that enabling this function uses a rather large amount of memory on the webserver. PHP by default allows a script to use a maximum of 8MB memory. You should probably increase this by changing memory_limit in php.ini. A rough estimation of how much memory it will use is 6 times the number of megapixels in your camera. For example, if you have a 5 megapixel camera, change memory_limit in php.ini to 30M"); 
         $wm_enable->setDefault(false);
         $wm[]=$wm_enable;
 
@@ -652,7 +629,7 @@ class conf {
 
         $wm_pos_y = new confItemSelect();
         $wm_pos_y->setName("watermark.pos.y");
-        $wm_pos_y->setLabel("Horizontal position");
+        $wm_pos_y->setLabel("Vertical position");
         $wm_pos_y->setDesc("Define where the watermark will be placed vertically.");
         $wm_pos_y->addOptions(array(
             "top" => "Top",
@@ -665,7 +642,7 @@ class conf {
         $wm_trans = new confItemNumber();
         $wm_trans->setName("watermark.transparency");
         $wm_trans->setLabel("Watermark transparency");
-        $wm_trans->setDesc("Define the transparency of a watermark. 0: fully tranparent (invisible, don't use this, it's pointless and eats up a lot of resources, better turn off the watermark feature altogether) to 100: no transparency.");
+        $wm_trans->setDesc("Define the transparency of a watermark. 0: fully transparent (invisible, don't use this, it's pointless and eats up a lot of resources, better turn off the watermark feature altogether) to 100: no transparency.");
         $wm_trans->setDefault("50");
         $wm_trans->setRegex("^(100|[0-9]{1,2})$");
         $wm_trans->setBounds(0, 100,1);
@@ -674,7 +651,7 @@ class conf {
 
         /*********************** ROTATIONS ************************/
 
-        $rt = self::addGroup("rotate", "Rotation");
+        $rt = self::addGroup("rotate", "Rotation", "Rotate images");
 
         $rt_enable = new confItemBool();
         $rt_enable->setName("rotate.enable");
@@ -710,9 +687,36 @@ class conf {
         $rt_backup_prefix->setRequired();
         $rt[]=$rt_backup_prefix;
 
+        /*********************** SHARING ************************/
+
+        $share = self::addGroup("share", "Sharing", "Sharing photos with non-logged on users");
+
+        $share_enable = new confItemBool();
+        $share_enable->setName("share.enable");
+        $share_enable->setLabel("Sharing");
+        $share_enable->setDesc("Sometimes, you may wish to share an image in Zoph without creating a user account for those who will be watching them. For example, in order to post a link to an image on a forum or website. When this option is enabled, you will see a 'share' tab next to a photo, where you will find a few ways to share a photo, such as a url and a HTML &lt;img&gt; tag. With this special url, it is possible to open a photo without logging in to Zoph. You can determine per user whether or not this user will see the tab and therefore the urls.");
+        $share_enable->setDefault(false);
+        $share[]=$share_enable;
+
+        $share_salt_full = new confItemSalt();
+        $share_salt_full->setName("share.salt.full");
+        $share_salt_full->setLabel("Salt for sharing full size images");
+        $share_salt_full->setDesc("When using the sharing feature, Zoph uses a hash to identify a photo. Because you do not want people who have access to you full size photos (via Zoph or otherwise) to be able to generate these hashes, you should give Zoph a secret salt so only authorized users of your Zoph installation can generate them. The salt for full size images (this one) must be different from the salt of mid size images (below), because this allows Zoph to distinguish between them. If a link to your Zoph installation is being abused (for example because someone whom you mailed a link has published it on a forum), you can modify the salt to make all hash-based links to your Zoph invalid.");
+        $share_salt_full->setDefault("Change this");
+        $share_salt_full->setRequired();
+        $share[]=$share_salt_full;
+
+        $share_salt_mid = new confItemSalt();
+        $share_salt_mid->setName("share.salt.mid");
+        $share_salt_mid->setLabel("Salt for sharing mid size images");
+        $share_salt_mid->setDesc("The salt for mid size images (this one) must be different from the salt of full images (above), because this allows Zoph to distinguish between them. If a link to your Zoph installation is being abused (for example because someone whom you mailed a link has published it on a forum), you can modify the salt to make all hash-based links to your Zoph invalid.");
+        $share_salt_mid->setDefault("Modify this");
+        $share_salt_mid->setRequired();
+        $share[]=$share_salt_mid;
+
         /*********************** FEATURES *************************/
 
-        $ft = self::addGroup("feature", "Features");
+        $ft = self::addGroup("feature", "Features", "Various features");
 
         $ft_download = new confItemBool();
         $ft_download->setName("feature.download");
@@ -761,7 +765,7 @@ class conf {
 
 
         /************************** DATE **************************/
-        $date = self::addGroup("date", "Date and time");
+        $date = self::addGroup("date", "Date and time", "Date and time related settings");
 
         $date_tz = new confItemSelect();
         $date_tz->setName("date.tz");

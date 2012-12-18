@@ -71,12 +71,12 @@ class confItemSelect extends confItem {
      */
     public function display() {
         $tpl=new block("confItemSelect", array(
-            "label" => $this->getLabel(),
-            "name" => $this->getName(),
-            "value" => $this->getValue(),
-            "desc" => $this->getDesc(),
-            "hint" => $this->getHint(),
-            "options" => $this->getOptions()
+            "label" => e(translate($this->getLabel(),0)),
+            "name" => e($this->getName()),
+            "value" => e($this->getValue()),
+            "desc" => e(translate($this->getDesc(),0)),
+            "hint" => e(translate($this->getHint(),0)),
+            "options" => translate($this->getOptions(),0)
 
         ));
         return $tpl;
