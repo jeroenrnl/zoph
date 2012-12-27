@@ -24,6 +24,8 @@ if(!ZOPH) { die("Illegal call"); }
     <div>
         <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
         <input type="number" pattern="<?php echo $tpl_regex ?>" name="<?php echo $tpl_name ?>" value="<?php echo $tpl_value; ?>" size="<?php echo $tpl_size ?>" <?php echo $tpl_req ?> min="<?php echo $tpl_min ?>" max="<?php echo $tpl_max ?>"  step="<?php echo $tpl_step ?>">
+        <input class="reset" type="checkbox" name="_reset_<?php echo $tpl_name ?>">
+        <span><?php echo translate("reset to default",0) ?></span>
         <?php if(!empty($tpl_hint)): ?>
             <div class="inputhint">
                 <?php echo $tpl_hint ?>

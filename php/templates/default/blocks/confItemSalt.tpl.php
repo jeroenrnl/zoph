@@ -27,6 +27,8 @@ if(!ZOPH) { die("Illegal call"); }
             <input type="text" id="<?php echo $tpl_id ?>" pattern="<?php echo $tpl_regex ?>" name="<?php echo $tpl_name ?>" value="<?php echo $tpl_value; ?>" size="<?php echo $tpl_size ?>" <?php echo $tpl_req ?>>
             <input type="button" onclick="zConf.genSalt('<?php echo $tpl_id ?>')" value="<?php echo translate("Generate",0); ?>">
         </div>
+        <input class="reset" type="checkbox" name="_reset_<?php echo $tpl_name ?>">
+        <span><?php echo translate("reset to default",0) ?></span>
         <?php if(!empty($tpl_hint)): ?>
             <div class="inputhint">
                 <?php echo $tpl_hint ?>

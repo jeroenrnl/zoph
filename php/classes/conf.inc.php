@@ -78,18 +78,25 @@ class conf {
     /**
      * Read configuration from submitted form
      * @param array $_GET or $_POST variables
-     * @todo: bug - when submit contains both GET and POST, only GET is loaded in $vars
-     *        POST is needed, so in case there are GET vars, this will not work!
      */
     public static function loadFromRequestVars(array $vars) {
         self::getDefault();
         foreach($vars as $key=>$value) {
-            if(substr($key,0,1) == "_") { continue; }
+            if(substr($key,0,1) == "_") {
+                if(substr($key,0,7) == "_reset_") {
+                    $key=substr(str_replace("_", ".", $key),7);
+                    $item=conf::getItemByName($key);
+                    $item->delete();
+                } 
+                continue;
+            }
             $key=str_replace("_", ".", $key);
             try {
-                $item=conf::getItemByName($key);
-                $item->setValue($value);
-                $item->update();
+                if(!isset($vars["_reset_" . $key])) {
+                    $item=conf::getItemByName($key);
+                    $item->setValue($value);
+                    $item->update();
+                }
             } catch(ConfigurationException $e) { 
                 log::msg("Configuration cannot be updated: " . $e->getMessage(), log::ERROR, log::CONFIG);
             }

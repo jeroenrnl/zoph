@@ -346,11 +346,6 @@ div.generate input {
     float: left;
     }
 
-div.generate > input[type="button"] {
-    height: 20px;
-    }
-        
-
 ul.autocompdropdown {
     position: relative;
     background: <?php echo color_scheme::getColor("page_bg_color") ?>;
@@ -550,6 +545,31 @@ div.main#config h2 {
 
 div.main#config input[type="checkbox"] {
     margin: 7px;
+}
+
+div.main#config input.reset {
+    float: right;
+    }
+    
+div.main#config input.reset + span {
+    margin-top: 2px;
+    height: 1em;
+    overflow: hidden;
+    display: block;
+    float: right;
+    
+    -webkit-transition: opacity 700ms ease-out 200ms;
+    -moz-transition: opacity 700ms ease-out 200ms;
+    -o-transition: opacity 700ms ease-out 200ms;
+    -ms-transition: opacity 700ms ease-out 200ms; 
+    transition: opacity 700ms ease-out 200ms;
+
+    opacity: 0;
+}
+
+div.main#config input.reset:hover + span, 
+div.main#config input.reset:checked + span {
+    opacity: 1;
 }
 
 .olControlAttribution {

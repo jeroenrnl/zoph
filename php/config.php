@@ -22,12 +22,17 @@
     if (!$user->is_admin()) {
         redirect(add_sid("zoph.php"));
     }
+
+    // Configuration setting depends on POST
+    if(!empty($_GET)) {
+        redirect(add_sid("config.php"));
+    }
+
     $_action=getvar("_action");
     if($_action == "setconfig") {
         conf::loadFromRequestVars($request_vars);
-    } else {
-        conf::loadFromDB();
     }
+    conf::loadFromDB();
 
     $tpl=new template("config", array(
         "title" => $title,

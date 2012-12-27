@@ -656,6 +656,7 @@ related photos=
 relationship=
 remove=
 reports=
+reset to default=
 return=
 rotate=
 rows=

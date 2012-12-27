@@ -32,6 +32,8 @@ if(!ZOPH) { die("Illegal call"); }
             <option <?php echo $selected; ?> value="<?php echo $option ?>"><?php echo $label ?></option>
         <?php endforeach ?>
     </select>
+    <input class="reset" type="checkbox" name="_reset_<?php echo $tpl_name ?>">
+    <span><?php echo translate("reset to default",0) ?></span>
     <?php if(!empty($tpl_hint)): ?>
         <div class="inputhint">
             <?php echo $tpl_hint ?>
