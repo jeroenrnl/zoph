@@ -67,15 +67,6 @@ var thumbview = function () {
     }
 
     function httpResponse(xml) {
-
-        var icons={
-            "count": "photo.png",
-            "taken": "date.png",
-            "modified": "modified.png",
-            "rated": "rating.png",
-            "children": "folder.png"
-        };
-
         
         var request=xml.getElementsByTagName("request")[0];
 
@@ -107,7 +98,7 @@ var thumbview = function () {
                     dt=document.createElement("dt");
                     icon=document.createElement("img");
 
-                    icon.setAttribute("src", "images/icons/default/" + icons[subject] );
+                    icon.setAttribute("src", icons[subject] );
                     icon.setAttribute("alt", subject);
                     dt.appendChild(icon);
                     dd=createNode("dd", data);

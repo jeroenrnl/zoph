@@ -17,15 +17,37 @@
 
     header("Content-Type: text/html; charset=utf-8");
     global $user;
+
+    $icons=array(
+        "count" => template::getImage("icons/photo.png"),
+        "taken" => template::getImage("icons/date.png"),
+        "modified" => template::getImage("icons/modified.png"),
+        "rated" => template::getImage("icons/rating.png"),
+        "children" => template::getImage("icons/folder.png"),
+        "geo-photo" => template::getImage("icons/geo-photo.png"),
+        "geo-place" => template::getImage("icons/geo-place.png"),
+        "resize" => template::getImage("icons/resize.png"), 
+        "unpack" => template::getImage("icons/unpack.png"),
+        "remove" => template::getImage("icons/remove.png"),
+        "down2" => template::getImage("down2.gif"),
+        "pleasewait" => template::getImage("pleasewait.gif")
+   ); 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link type="text/css" rel="stylesheet" href="<?php echo CSS_SHEET ?>">
-<?php
-    if(JAVASCRIPT) {
-?>
+        <link type="text/css" rel="stylesheet" href="css.php">
+        <script type="text/javascript">
+            var template = "<?php echo conf::get("interface.template"); ?>";
+            var icons={
+            <?php foreach($icons as $icon=>$file): ?>
+                "<?php echo $icon ?>": "<?php echo $file ?>",
+            <?php endforeach ?>
+            };
+
+        </script>
+        
         <script type="text/javascript" src="js/util.js"></script>
         <script type="text/javascript" src="js/xml.js"></script>
         <script type="text/javascript" src="js/thumbview.js"></script>
@@ -35,28 +57,28 @@
         <script type="text/javascript" src="js/import.js"></script>
 <?php
         }
-        if(AUTOCOMPLETE) {
+        if(basename($_SERVER["SCRIPT_NAME"])=="config.php") {
+?>
+        <script type="text/javascript" src="js/conf.js"></script>
+<?php
+        }
+        if(conf::get("interface.autocomplete")) {
 ?>
         <script type="text/javascript" src="js/autocomplete.js"></script>
 <?php
         }
-        if(MAPS) {
+        if(conf::get("maps.provider")) {
 ?>
-        <script type="text/javascript" src="js/mxn/mxn.js?(<?php echo strtolower(MAPS); ?>)"></script>
+        <script type="text/javascript" src="js/mxn/mxn.js?(<?php echo conf::get("maps.provider"); ?>)"></script>
         <script type="text/javascript" src="js/maps.js"></script>
         <script type="text/javascript" src="js/custommaps.js"></script>
 <?php 
-        if(GEOCODE) { ?>
+        if(conf::get("maps.geocode")) { ?>
 
         <script type="text/javascript" src="js/geocode.js"></script>
 <?php
         }        
-            switch (strtolower(MAPS)) {
-            case 'google':
-?>
-        <script src="http://maps.google.com/maps?file=api&v=2&key=<?php echo GOOGLE_KEY ?>" type="text/javascript"></script>
-<?php
-            break;
+            switch (strtolower(conf::get("maps.provider"))) {
             case 'googlev3':
 ?>
         <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
@@ -77,14 +99,12 @@
 ?>
         <script type="text/javascript" src="http://tile.cloudmade.com/wml/0.2/web-maps-lite.js"></script>
         <script type="text/javascript">
-            var cloudmade_key = "<?php echo CLOUDMADE_KEY; ?>";
+            var cloudmade_key = "<?php echo conf::get("maps.key.cloudmade"); ?>";
         </script>
 <?php
             break;
             }
         }
-
-    }
     if (isset($extrastyle)) {
 ?>
         <style type="text/css">
@@ -92,10 +112,9 @@
         </style>
 <?php
     }
+    $html_title=conf::get("interface.title");
     if (isset($title)) {
-        $html_title=ZOPH_TITLE . " - " . $title;
-    } else {
-        $html_title=ZOPH_TITLE; 
+        $html_title.=" - " . $title;
     }
 ?>
     <title><?php echo $html_title ?></title>
@@ -124,7 +143,7 @@
 
     $tabs[translate("search",0)] = "search.php";
 
-    if (IMPORT &&
+    if (conf::get("import.enable") &&
         ($user->is_admin() || $user->get("import"))) {
 
         $tabs[translate("import", 0)] = "import.php";
@@ -139,7 +158,7 @@
         translate("prefs", 0) => "prefs.php",
         translate("about", 0) => "info.php");
 
-    if ($user->get("user_id") == DEFAULT_USER) {
+    if ($user->get("user_id") == conf::get("interface.user.default")) {
         $tabs[translate("logon", 0)] = "zoph.php?_action=logout";
     }
     else {

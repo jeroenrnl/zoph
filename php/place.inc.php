@@ -335,7 +335,7 @@ class place extends zophTreeTable {
      * @param string icon to be used.
      * @return marker instance of marker class
      */
-    public function getMarker(user $user, $icon="geo-place.png") {
+    public function getMarker(user $user, $icon="geo-place") {
         return map::getMarkerFromObj($this, $user, $icon);
     }
 
@@ -471,7 +471,7 @@ class place extends zophTreeTable {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         $timezone=$this->get("timezone");
-        if((!$timezone && $lat && $lon) && minimum_version("5.1.0")) {
+        if((!$timezone && $lat && $lon)) {
             $tz=TimeZone::guess($lat, $lon);
             if($tz) {
                 $html="<span class='actionlink'>" .
@@ -530,9 +530,6 @@ class place extends zophTreeTable {
      * Get Top N people
      */
     public static function getTopN(user $user=null) {
-
-        global $TOP_N;
-
         if ($user && !$user->is_admin()) {
             $sql =
                 "SELECT plc.*, count(distinct ph.photo_id) AS count FROM " .
@@ -550,7 +547,7 @@ class place extends zophTreeTable {
                 "' AND gp.access_level >= ph.level " .
                 "GROUP BY plc.place_id " .
                 "ORDER BY count desc, plc.title, plc.city " .
-                "LIMIT 0, $TOP_N";
+                "LIMIT 0, " . (int) $user->prefs->get("reports_top_n");
         }
         else {
             $sql =
@@ -560,7 +557,7 @@ class place extends zophTreeTable {
                 "where plc.place_id = ph.location_id " .
                 "group by plc.place_id " .
                 "order by count desc, plc.title, plc.city " .
-                "limit 0, $TOP_N";
+                "limit 0, " . (int) $user->prefs->get("reports_top_n");
         }
 
         return parent::getTopNfromSQL("place", $sql);
@@ -631,7 +628,7 @@ function create_place_pulldown($name, $value=null, $user=null) {
         $place->lookup();
         $text=$place->get("title");
     }
-    if($user->prefs->get("autocomp_places") && AUTOCOMPLETE && JAVASCRIPT) {
+    if($user->prefs->get("autocomp_places") && conf::get("interface.autocomplete")) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
             " value='" . e($value) . "'>";
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 

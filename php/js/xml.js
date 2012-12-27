@@ -72,8 +72,8 @@ var XML=function() {
 
         if (http) {
             input=document.getElementById(object);
-            if(input && input.nodeName=="input") {
-                input.style.backgroundImage="url('images/pleasewait.gif')";
+            if(input && input.nodeName=="INPUT") {
+                input.style.backgroundImage="url('" + icons["pleasewait"] + "')";
             }
             http.open("GET", url, true);
             http.onreadystatechange=function() {
@@ -91,8 +91,8 @@ var XML=function() {
         input=document.getElementById(object);
         if (http.readyState == 4) {
             if(http.status == 200) {
-                if(input && input.nodeName=="input") {
-                    input.style.backgroundImage="url('images/down2.gif')";
+                if(input && input.nodeName=="INPUT") {
+                    input.style.backgroundImage="url('" + icons["down2"] + "')";
                 }
 
                 if(object.split("_")[0]==="details") {

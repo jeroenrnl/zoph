@@ -32,9 +32,8 @@
     require_once("settings.inc.php");
     require_once("requirements.inc.php");
     require_once("util.inc.php");
-    require_once("validator.inc.php");
 
-    require_once("translation.inc.php");
+    require_once("validator.inc.php");
 
     require_once("zoph_calendar.inc.php");
 
@@ -58,31 +57,32 @@
 
     require_once("database.inc.php");
 
-    if(!defined("TEST")) {
-        require_once("auth.inc.php");
+    if(!defined("LOGON")) {
+        if(!defined("TEST")) {
+            require_once("auth.inc.php");
+        }
+
+        require_once("album.inc.php");
+        require_once("category.inc.php");
+        require_once("code.inc.php");
+        require_once("comment.inc.php");
+
+        require_once("page.inc.php");
+        require_once("pageset.inc.php");
+
+        require_once("file.inc.php");
+
+        require_once("photo.inc.php");
+        require_once("saved_search.inc.php");
+        require_once("photo_search.inc.php");
+
+        require_once("import.inc.php");
+        if(defined("CLI") || defined("TEST")) {
+            require_once("cli/cli.inc.php");
+            require_once("cli/arguments.inc.php");
+            require_once("cli/cliimport.inc.php");
+        } else {
+            require_once("webimport.inc.php");
+        }
     }
-
-    require_once("album.inc.php");
-    require_once("category.inc.php");
-    require_once("code.inc.php");
-    require_once("comment.inc.php");
-
-    require_once("page.inc.php");
-    require_once("pageset.inc.php");
-
-    require_once("file.inc.php");
-    require_once("template.inc.php");
-
-    require_once("photo.inc.php");
-    require_once("saved_search.inc.php");
-    require_once("photo_search.inc.php");
-
-    require_once("import.inc.php");
-    if(defined("CLI") || defined("TEST")) {
-        require_once("cli/cli.inc.php");
-        require_once("cli/arguments.inc.php");
-        require_once("cli/cliimport.inc.php");
-    } else {
-        require_once("webimport.inc.php");
-    }
-?>
+    ?>

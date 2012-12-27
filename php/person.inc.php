@@ -383,9 +383,6 @@ class person extends zophTable {
      * Get Top N people
      */
     public static function getTopN(user $user=null) {
-
-        global $TOP_N;
-
         if ($user && !$user->is_admin()) {
             $sql =
                 "SELECT ppl.*, COUNT(DISTINCT ph.photo_id) AS count FROM " .
@@ -405,9 +402,8 @@ class person extends zophTable {
                 " AND gp.access_level >= ph.level " .
                 "GROUP BY ppl.person_id " .
                 "ORDER BY count DESC, ppl.last_name, ppl.first_name " .
-                "LIMIT 0, " . escape_string($TOP_N);
-        }
-        else {
+                "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
+        } else {
             $sql =
                 "select ppl.*, count(*) as count from " .
                 DB_PREFIX . "people as ppl, " .
@@ -415,7 +411,7 @@ class person extends zophTable {
                 "where ppl.person_id = pp.person_id " .
                 "group by ppl.person_id " .
                 "order by count desc, ppl.last_name, ppl.first_name " .
-                "limit 0, " . escape_string($TOP_N);
+                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
 
         return parent::getTopNfromSQL("person", $sql);
@@ -605,7 +601,7 @@ function create_person_pulldown($name, $value=null, user $user, $sa=null) {
     } else {
         $text = "";
     }
-    if($user->prefs->get("autocomp_people") && AUTOCOMPLETE && JAVASCRIPT) {
+    if($user->prefs->get("autocomp_people") && conf::get("interface.autocomplete")) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
             " value='" . e($value) . "'>";
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .
@@ -628,7 +624,7 @@ function create_photographer_pulldown($name, $value=null, $user) {
         $person->lookup();
         $text=$person->getName();
     }
-    if($user->prefs->get("autocomp_photographer") && AUTOCOMPLETE && JAVASCRIPT) {
+    if($user->prefs->get("autocomp_photographer") && conf::get("interface.autocomplete")) {
         $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
             " value='" . e($value) . "'>";
         $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .

@@ -45,8 +45,8 @@
         $mail->setFrom(e($from_name) .  "<" . e($from_email) . ">");
         $mail->setSubject(e($subject));
 
-        if (strlen(BCC_ADDRESS) > 0) {
-            $mail->setBCC(BCC_ADDRESS);
+        if (strlen(conf::get("feature.mail.bcc")) > 0) {
+            $mail->setBCC(conf::get("feature.mail.bcc"));
         }
 
         $mail->setTXTBody(e($message));
@@ -128,10 +128,7 @@
             reset($album_list);
             $body .= implode("\n", $album_list) . "\n";
 
-            $url = ZOPH_URL;
-            if (empty($url)) {
-                $url = get_url() . "login.php";
-            }
+            $url = getZophURL() . "login.php";
 
             $body .= "\n" . translate("For accessing these Albums you have to use this URL:",0) . " " . $url . "\n";
         }
@@ -146,7 +143,7 @@
         $body .= e($from_name);
 
         if (!$subject) {
-            $subject = translate("New Albums on") . " " . ZOPH_TITLE;
+            $subject = translate("New Albums on") . " " . conf::get("interface.title");
         }
 
         $message = $body;

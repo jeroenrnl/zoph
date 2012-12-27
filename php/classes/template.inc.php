@@ -28,7 +28,7 @@ class template {
     public $js=array();
     public $style="";
     public $script="";
-    public $css=array(CSS_SHEET);
+    public $css=array();
     public $title="Zoph";
 
     /** @var array contains actionlinks */
@@ -49,11 +49,38 @@ class template {
      * @return template
      */
     public function __construct($template, $vars=null) {
+        $tpl=conf::get("interface.template");
         $this->vars=$vars;
-        if(!preg_match("/^[A-Za-z0-9_]+$/", $template)) {
-            log::msg("Illegal characters in template", log::FATAL, log::GENERAL);
+        if(preg_match("/^[A-Za-z0-9_\-]+$/", $tpl) && preg_match("/^[A-Za-z0-9_\-]+$/", $template)) {
+            $file="templates/" . $tpl . "/" . $template . ".tpl.php";
+            if(!file_exists($file)) {
+                $file="templates/default/" . $template . ".tpl.php";
+            }
+            $this->template=$file;
+
+            $this->css[]="css.php";
         } else {
-            $this->template="templates/default/" . $template . ".tpl.php";
+            log::msg("Illegal characters in template", log::FATAL, log::GENERAL);
+        }
+    }
+    /**
+     * Get image URL for specific template
+     * if the image does not exist in the current template, the default will be be returned
+     * This enables template builders to only include the parts of the template that
+     * have been changed
+     * @param string image name
+     * @return string relative image url
+     */
+    public static function getImage($image) {
+        $tpl=conf::get("interface.template");
+        if(preg_match("/^[A-Za-z0-9_\-\/\.]+$/", $image) && !preg_match("/\.\./", $image)) {
+            $file="templates/" . $tpl . "/images/" . $image;
+            if(!file_exists($file)) {
+                $file="templates/default/images/" . $image;
+            }
+            return $file;
+        } else {    
+            log::msg("Illegal characters in icon name", log::FATAL, log::GENERAL);
         }
     }
 
@@ -126,19 +153,24 @@ class template {
 
     /**
      * Add a block
+     * @param block Block to be added
      */
     public function addBlock(block $block) {
         $this->blocks[]=$block;
     }
 
     /**
-     * Get an array of blocks
+     * Get the blocks inside this template
+     * @return array blocks
      */
-
     protected function getBlocks() {
         return $this->blocks;
     }
 
+    /**
+     * Display the blocks inside this template
+     * @return string HTML code for the blocks
+     */
     protected function displayBlocks() {
         $html="";
         foreach($this->getBlocks() as $block) {
@@ -150,6 +182,8 @@ class template {
 
     /**
      * Add an actionlink
+     * @param string Title to be displayed
+     * @param string URL
      */
     public function addActionlink($title, $link) {
         $this->actionlinks[$title]=$link;
@@ -157,6 +191,7 @@ class template {
 
     /**
      * Add multiple actionlinks
+     * @param array of actionlinks
      */
     public function addActionlinks(array $al) {
         foreach($al as $title => $link) {
@@ -166,6 +201,7 @@ class template {
 
     /**
      * Markup an array of actionlinks using the actionlinks template
+     * @param array Optional array of actionlinks, otherwise use the ones in the class
      */
     private function getActionlinks(array $actionlinks=null) {
         if($actionlinks==null) {
@@ -183,8 +219,12 @@ class template {
      * Create a link list
      * Creates a comma separated list of links from the given records.
      * The class of the records must implement the getLink function.
+     * @param array Array of records to be displayed
+     * @return string Comma separated links to records
+     * @todo Could maybe better move into zophTable?
+     * @todo Should check whether the object is of a supported class
      */
-    public static function createLinkList($records) {
+    public static function createLinkList(array $records) {
         $links = "";
         if ($records) {
             foreach ($records as $rec) {
@@ -200,8 +240,11 @@ class template {
      * Creates an array to be used in the create_pulldown methods.  The
      * values of the fields in the name_fields parameter are concatentated
      * together to construnct the titles of the selections.
+     * @param array Records to be processed
+     * @param array fields to use to contruct title
+     * @return array Array that can be fed to the create_pulldown methods.
      */
-    public static function createSelectArray($records, $name_fields) {
+    public static function createSelectArray(array $records, array $name_fields) {
         if (!$records || !$name_fields) { return; }
 
         foreach ($records as $rec) {
@@ -220,4 +263,16 @@ class template {
         return $sa;
     }
 
+    /**
+     * Get all templates
+     * Search the template directory for directory entries
+     */
+    public static function getAll() {
+        $templates=array();
+        foreach(glob(settings::$php_loc . "/templates/*", GLOB_ONLYDIR) as $tpl) {
+            $tpl=basename($tpl);
+            $templates[$tpl]=$tpl;
+        }
+        return $templates;
+    }
 }

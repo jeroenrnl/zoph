@@ -36,6 +36,55 @@ class photo extends zophTable {
         $this->set("photo_id",$id);
     }
 
+    /**
+    * Display the image
+    * @param string type of image to display mid, thumb or null for full-sized
+    * @return array Return an array that contains:
+    *               array headers: the headers
+    *               string jpeg: the jpeg file
+    * @todo only supports JPEG currently, should support more filetypes
+    */
+    public function display($type=null) {
+        $headers=array();
+        $name = $this->get("name");
+        $image_path = conf::get("path.images") . "/" . $this->get("path") . "/";
+
+        if ($type) {
+            $image_path .= $type . "/" . $type . "_";
+        }
+        $image_path .= $name;
+
+        $mtime = filemtime($image_path);
+        $filesize = filesize($image_path);
+        $gmt_mtime = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
+
+        // we assume that the client generates proper RFC 822/1123 dates
+        //   (should work for all modern browsers and proxy caches)
+        if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) &&
+            $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
+              header("HTTP/1.1 304 Not Modified");
+              exit;
+        }
+
+        $image_type = get_image_type($image_path);
+        if ($image_type) {
+            $header["Content-Length"] = $filesize;
+            $header["Content-Disposition"]="inline; filename=" . $name;
+            $header["Last-Modified"]=$gmt_mtime;
+            $header["Content-type"]=$image_type;
+            $jpeg=file_get_contents($image_path);
+            return array($header, $jpeg);
+         }
+
+        /**
+         * @todo error handling
+         */
+    }
+
+
+
+
+
     function lookup() {
         $sql = "SELECT * FROM " . DB_PREFIX . "photos " .
             "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "'";
@@ -393,7 +442,7 @@ class photo extends zophTable {
         $this->set("name", $file->getName());
         
         $newPath=$this->get("path") . "/";
-        if(settings::$importDated) {
+        if(conf::get("import.dated")) {
             // This is not really validating the date, just making sure
             // no-one is playing tricks, such as setting the date to /etc/passwd or
             // something.
@@ -403,13 +452,13 @@ class photo extends zophTable {
                 $date=date("Y-m-d");
             }
 
-            if (settings::$importHier) {
+            if (conf::get("import.dated.hier")) {
                 $newPath .= cleanup_path(str_replace("-", "/", $date));
             } else {
                 $newPath .= cleanup_path(str_replace("-", ".", $date));
             }
         }
-        $toPath="/" . cleanup_path(IMAGE_DIR . "/" . $newPath) . "/";
+        $toPath="/" . cleanup_path(conf::get("path.images") . "/" . $newPath) . "/";
         
         $path=$file->getPath();
         create_dir_recursive($toPath . "/" . MID_PREFIX);
@@ -421,9 +470,8 @@ class photo extends zophTable {
 
             $newname=$file->getDestName();
 
-            $conv=get_converted_image_name($newname);
-            $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
-            $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
+            $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $newname;
+            $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $newname;
             
             if(file_exists($path . "/". $thumbname)) {
                 $thumb=new file($path . "/" . $thumbname);
@@ -438,7 +486,7 @@ class photo extends zophTable {
         
             try {
                 foreach($files as $file) {
-                    if(settings::$importCopy==false) {
+                    if(conf::get("import.cli.copy")==false) {
                         $file->checkMove();
                     } else {
                         $file->checkCopy();
@@ -452,7 +500,7 @@ class photo extends zophTable {
             // file if *all* files can be moved/copied.
             try {
                 foreach($files as $file) {
-                    if(settings::$importCopy==false) {
+                    if(conf::get("import.cli.copy")==false) {
                         $new=$file->move();
                     } else {
                         $new=$file->copy();
@@ -470,7 +518,7 @@ class photo extends zophTable {
     }
 
     function get_file_path() {
-        return IMAGE_DIR . "/" . $this->get("path") . "/" . $this->get("name");
+        return conf::get("path.images") . "/" . $this->get("path") . "/" . $this->get("name");
     }
 
     function get_midsize_img() {
@@ -484,9 +532,10 @@ class photo extends zophTable {
         return "            <a href=\"$link\">" . $this->get_image_tag(THUMB_PREFIX) . "</a>";
     }
 
-    function get_fullsize_link($title, $FULLSIZE_NEW_WIN) {
+    function get_fullsize_link($title) {
+        $user=user::getCurrent();
         $image = $this->getURL();
-        $newwin = ($FULLSIZE_NEW_WIN ? "target=\"_blank\"" : "");
+        $newwin = ($user->prefs->get("fullsize_new_win") ? "target=\"_blank\"" : "");
         return "<a href=\"$image\" $newwin>$title</a>";
     }
     
@@ -711,11 +760,11 @@ class photo extends zophTable {
     }
 
     function thumbnail($force=true) {
-        $path=IMAGE_DIR . "/" . $this->get("path") . "/";
+        $path=conf::get("path.images") . "/" . $this->get("path") . "/";
 
-        $conv=get_converted_image_name($this->get("name"));
-        $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $conv;
-        $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $conv;
+        $name=$this->get("name");
+        $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $name;
+        $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $name;
         
         if(!file_exists($path . $midname) || $force===true) {
             if(!$this->create_thumbnail(MID_PREFIX, MID_SIZE)) {
@@ -748,10 +797,7 @@ class photo extends zophTable {
 
         $img_dst = imagecreatetruecolor($new_width, $new_height);
         flush();
-        if(!defined("IMPORT_RESIZE")) {
-            define("IMPORT_RESIZE", "resample");
-        }
-        if (strtolower(IMPORT_RESIZE)=="resize") {
+        if (conf::get("import.resize")=="resize") {
             imagecopyresized($img_dst, $img_src, 0, 0, 0, 0,
                 $new_width, $new_height, $width, $height);
         } else {
@@ -759,8 +805,8 @@ class photo extends zophTable {
                 $new_width, $new_height, $width, $height);
         }
         flush();
-        $new_image = IMAGE_DIR . '/' . $this->get("path") . '/' . $prefix . '/' .
-            $prefix . '_' .  get_converted_image_name($this->get("name"));
+        $new_image = conf::get("path.images") . '/' . $this->get("path") . '/' . $prefix . '/' .
+            $prefix . '_' .  $this->get("name");
         $dir=dirname($new_image);
 
         if(!is_writable($dir)) {
@@ -785,32 +831,25 @@ class photo extends zophTable {
     }
 
     function rotate($deg) {
-/*
-        This line breaks things if dated-dirs are not used: in that case the path field is empty...
-        if (!ALLOW_ROTATIONS || !$this->get('name') || !$this->get('path')) {
-            return;
-        }
-*/
-        if (!ALLOW_ROTATIONS || !$this->get('name')) {
+        if (!conf::get("rotate.enable") || !$this->get('name')) {
             return;
         }
 
-        $dir = IMAGE_DIR . "/" . $this->get("path") . "/";
+        $dir = conf::get("path.images") . "/" . $this->get("path") . "/";
         $name = $this->get('name');
-        $converted_name = get_converted_image_name($name);
 
         $images[$dir . THUMB_PREFIX . '/' . THUMB_PREFIX . '_' . 
-            $converted_name] = 
+            $name] = 
             $dir . THUMB_PREFIX . '/rot_' . THUMB_PREFIX . '_' . 
-            $converted_name;
+            $name;
 
-        $images[$dir . MID_PREFIX . '/' . MID_PREFIX . '_' . $converted_name] =
-            $dir . MID_PREFIX . '/rot_' . MID_PREFIX . '_' . $converted_name;
+        $images[$dir . MID_PREFIX . '/' . MID_PREFIX . '_' . $name] =
+            $dir . MID_PREFIX . '/rot_' . MID_PREFIX . '_' . $name;
 
         $images[$dir . $name] = $dir . 'rot_' . $name;
 
-        if (BACKUP_ORIGINAL) {
-            $backup_name = BACKUP_PREFIX . $name;
+        if (conf::get("rotate.backup")) {
+            $backup_name = conf::get("rotate.backup.prefix") . $name;
 
             // file_exists() check from From Michael Hanke:
             // Once a rotation had occurred, the backup file won't be
@@ -848,14 +887,15 @@ class photo extends zophTable {
               imagejpeg($new_image, $tmp_file, 95);
             */
 
-            $cmd = ROTATE_CMD;
-            if (strpos(" $cmd", 'jpegtran')) {
-                $cmd .= ' -copy all -rotate ' .  escapeshellarg($deg) .
+            switch(conf::get("rotate.command")) {
+            case "jpegtran":
+                $cmd = 'jpegtran -copy all -rotate ' .  escapeshellarg($deg) .
                     ' -outfile ' .  escapeshellarg($tmp_file) . ' ' .
                     escapeshellarg($file);
-            }
-            else if (strpos(" $cmd", 'convert')) {
-                $cmd .= ' -rotate ' . escapeshellarg($deg) . ' ' .
+                break;
+            case "convert":
+            default:
+                $cmd = 'convert -rotate ' . escapeshellarg($deg) . ' ' .
                     escapeshellarg($file) . ' ' . escapeshellarg($tmp_file);
             }
 
@@ -879,192 +919,6 @@ class photo extends zophTable {
         // (only if original was rotated)
         $this->update();
         $this->updateSize();
-    }
-
-    /*
-     * Creates a jpeg photo with
-     * text annotation at the bottom.
-     *
-     * Copyright 2003, Nixon P. Childs
-     * License: The same as the rest of Zoph.
-     */
-    function annotate($vars, $user, $size = 'mid') {
-        if ($vars['_size']) {
-            $size = $vars['_size'];
-        }
-
-        if ($size == 'mid') {
-            $font = 4;
-            $padding = 2;
-            $indent = 8;
-        }
-        else if ($size == 'full') {
-            $font = 5;
-            $padding = 2;
-            $indent = 8;
-        }
-        else {
-            return '';
-        }
-
-        /* ********************************
-         *  Read in original image.
-         *  Need to do now so we know
-         *  the width of the text lines.
-         * ********************************/
-
-        $image_path = IMAGE_DIR . $this->get("path");
-        if ($size == 'full') {
-            $image_path .= "/" . $this->get("name");
-        }
-        else {
-            $image_path .= "/" . $size . "/" . $size . "_" . $this->get("name");
-        }
-
-        $image_info = getimagesize($image_path);
-        switch ($image_info[2]) {
-            case 1:
-                $orig_image = imagecreatefromgif($image_path);
-                break;
-            case 2:
-                $orig_image = imagecreatefromjpeg($image_path);
-                break;
-            case 3:
-                $orig_image = imagecreatefrompng($image_path);
-                break;
-            default:
-                log::msg("Unsupported image type.", log::ERROR, log::IMG);
-                return '';
-        }
-
-        $row = ImageSY($orig_image) + ($padding/2);
-        $maxWidthPixels = ImageSX($orig_image) - (2 * $indent);
-        $maxWidthChars = floor($maxWidthPixels / ImageFontWidth($font)) - 1;
-
-        /*
-         * Sets fields from the given array.  Can be used to set vars
-         * directly from a GET or POST.
-         */
-        reset($vars);
-        $lines = 0;
-        while (list($key, $val) = each($vars)) {
-
-            // ignore empty keys or values
-            if (empty($key) || $val == "") { continue; }
-
-            if (strcmp(Substr($key, strlen($key) - 3), "_cb") == 0) {
-
-                /* *****************************************
-                 *  Everthing else uses the checkbox name
-                 *  as the "get" key.
-                 * *****************************************/
-
-                $real_key = Substr($key, 0, strlen($key) - 3);
-                $real_val = $vars[$real_key];
-
-                /* *****************************************
-                 *  Have to handle title separately because
-                 *  breadcrumbs.inc.php assumes title is
-                 *  the page title.
-                 * *****************************************/
-
-                if ($real_key == "photo_title") {
-                   $real_key = "title";
-                }
-                else if ($real_key == "extra") {
-                   $real_key = $vars["extra_name"];
-                }
-
-            $out_array[$real_key] = translate($real_key, 0) . ": " .
-                    $real_val;
-                $lines += ceil(strlen($out_array[$real_key]) / $maxWidthChars);
-            }
-        }
-
-        /* **********************************************
-         *  Create Image
-         *  In order to create the text area, we must
-         *  first create the text and determine how much
-         *  space it requires.
-         *
-         *  I tried implode;wordwrap;explode, but
-         *  wordwrap doesn't respect \n's in the text.
-         *  To complicate things, ImageString just
-         *  renders \n as an upside-down Y.
-         *
-         *  So the current solution is a little awkward,
-         *  but it works.  The only (known) problem is
-         *  that wrapped lines don't have the same
-         *  right margin as non-wrapped lines.  This is
-         *  because wordwrap doesn't take into account
-         *  the line separation string.
-         * **********************************************/
-
-
-        /*
-        $tmpString = implode("\n", $out_array);
-echo ("tmpString:<br>\n" . $tmpString);
-        $out_string = wordwrap($tmpString, floor($maxWidthPixels / ImageFontWidth($font)) - 1, "\n     ");
-echo ("<br>\noutString:<br>\n" . $out_string);
-        $formatted_array = explode("\n", $out_string);
-        $lines = sizeof($formatted_array);
-        */
-
-        $count = 0;
-        array($final_array);
-        if ($out_array) {
-            while (list($key, $val) = each($out_array)) {
-                $tmp_array = explode("\n", wordwrap($val, $maxWidthChars, "\n   "));
-                while (list($key1, $val1) = each($tmp_array)) {
-                    $final_array[$count++] = $val1;
-                }
-            }
-        }
-
-        $noted_image = ImageCreateTrueColor (ImageSX($orig_image), ImageSY($orig_image) + ((ImageFontHeight($font) + $padding) * $count));
-        $white = ImageColorAllocate($noted_image, 255,255, 255);
-
-        /* ********************************
-         *  Use a light grey background to
-         *  hide the jpeg artifacts caused
-         *  by the sharp edges in text.
-         * ******************************/
-
-        $offwhite = ImageColorAllocate($noted_image, 240,240, 240);
-        ImageFill($noted_image, 0, ImageSY($orig_image) +1, $offwhite);
-        $black = ImageColorAllocate($noted_image, 0, 0, 0);
-        ImageColorTransparent($noted_image, $black);
-
-        ImageCopy($noted_image, $orig_image, 0, 0, 0, 0, ImageSX($orig_image), ImageSY($orig_image));
-
-        if ($final_array) {
-            while (list($key, $val) = each($final_array)) {
-                ImageString ($noted_image, $font, $indent, $row, $val, $black);
-                $row += ImageFontHeight($font) + $padding;
-            }
-        }
-
-        /*
-        while (list($key, $val) = each($out_array)) {
-            ImageStringWrap ($noted_image, $font, $padding, $row, $val, $black, $maxWidthPixels);
-            $row += ImageFontHeight($font) + $padding;
-            //echo ($val . "<br>");
-        }
-        */
-
-        //$rnd_name = rand(1, 10000);
-        //$temp_name = "zoph" . $user->get("user_id") . "_" . $rnd_name . $photo->get("name");
-
-        $temp_name = $this->get_annotated_file_name($user);
-        ImageJPEG($noted_image, ANNOTATE_TEMP_DIR . "/" . $temp_name);
-        ImageDestroy($orig_image);
-        ImageDestroy($noted_image);
-
-        return $temp_name;
-    }
-
-    function get_annotated_file_name($user) {
-        return ANNOTATE_TEMP_PREFIX . $user->get("user_id") . "_" . $this->get("name");
     }
 
     function getDisplayArray() {
@@ -1124,60 +978,59 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             "Level" => create_text_input("level", $this->level, 4, 2));
     }
 
-    function get_time($timezone=null, $date_format=DATE_FORMAT, $time_format=TIME_FORMAT) { 
-        if(minimum_version("5.1.0")) {
-            if(TimeZone::validate($timezone)) {
-                $place_tz=new TimeZone($timezone);
-            } else { 
-                $this->lookup_location();
-                $loc=$this->location;
-                if($loc && TimeZone::validate($loc->get("timezone"))) {
-                    $place_tz=new TimeZone($loc->get("timezone"));
-                } 
-            }
-            if(TimeZone::validate(CAMERA_TZ)) {
-                $camera_tz=new TimeZone(CAMERA_TZ);
-            }    
-                
-            if(!isset($place_tz) && isset($camera_tz)) {
-                // Camera timezone is known, place timezone is not.
-                $place_tz=$camera_tz;
-            } else if (isset($place_tz) && !isset($camera_tz)) {
-                // Place timezone is known, camera timezone is not.
-                $camera_tz=$place_tz;
-            } else if (!isset($place_tz) && !isset($camera_tz)) {
-                // Neither are set
-                $camera_tz=new TimeZone(date_default_timezone_get());
-                $place_tz=$camera_tz;
-            }
-            
-            $camera_time=new Time(
-                $this->get("date") . " " .
-                $this->get("time"),
-                $camera_tz);
-            $place_time=$camera_time;
-            $place_time->setTimezone($place_tz);
-            $corr=$this->get("time_corr");
-            if($corr) {
-                $place_time->modify($corr . " minutes");
-            }
-            
-            $date=$place_time->format($date_format);
-            $time=$place_time->format($time_format);
-        } else {
-            // Timezone support was introduced in PHP 5.1
-            // so we'll just return date and time as they are
-            // stored in db.
-            $date=$this->get("date");
-            $time=$this->get("time");
+    function get_time($timezone=null, $date_format = null, $time_format = null) { 
+        if(is_null($date_format)) {
+            $date_format=conf::get("date.format");
         }
+        if(is_null($time_format)) {
+            $time_format=conf::get("date.timeformat");
+        }
+
+        if(TimeZone::validate($timezone)) {
+            $place_tz=new TimeZone($timezone);
+        } else { 
+            $this->lookup_location();
+            $loc=$this->location;
+            if($loc && TimeZone::validate($loc->get("timezone"))) {
+                $place_tz=new TimeZone($loc->get("timezone"));
+            } 
+        }
+        if(TimeZone::validate(conf::get("date.tz"))) {
+            $camera_tz=new TimeZone(conf::get("date.tz"));
+        }    
+            
+        if(!isset($place_tz) && isset($camera_tz)) {
+            // Camera timezone is known, place timezone is not.
+            $place_tz=$camera_tz;
+        } else if (isset($place_tz) && !isset($camera_tz)) {
+            // Place timezone is known, camera timezone is not.
+            $camera_tz=$place_tz;
+        } else if (!isset($place_tz) && !isset($camera_tz)) {
+            // Neither are set
+            $camera_tz=new TimeZone(date_default_timezone_get());
+            $place_tz=$camera_tz;
+        }
+        
+        $camera_time=new Time(
+            $this->get("date") . " " .
+            $this->get("time"),
+            $camera_tz);
+        $place_time=$camera_time;
+        $place_time->setTimezone($place_tz);
+        $corr=$this->get("time_corr");
+        if($corr) {
+            $place_time->modify($corr . " minutes");
+        }
+        
+        $date=$place_time->format($date_format);
+        $time=$place_time->format($time_format);
         return array($date,$time);
     }
 
     function get_time_details() {
         $tz=null;
-        if(TimeZone::validate(CAMERA_TZ)) {
-            $tz=CAMERA_TZ;
+        if(TimeZone::validate(conf::get("date.tz"))) {
+            $tz=conf::get("date.tz");
         }
         
         $this->lookup_location();
@@ -1362,7 +1215,7 @@ echo ("<br>\noutString:<br>\n" . $out_string);
      * @param string icon to be used.
      * @return marker instance of marker class
      */
-    function getMarker(user $user, $icon="geo-photo.png") {
+    function getMarker(user $user, $icon="geo-photo") {
         $marker=map::getMarkerFromObj($this, $user, $icon); 
         if(!$marker instanceof marker) {
             $loc=$this->location;
@@ -1454,10 +1307,10 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 return $hash;
                 break;
             case "full":
-                return sha1(SHARE_SALT_FULL . $hash);
+                return sha1(conf::get("share.salt.full") . $hash);
                 break;
             case "mid":
-                return sha1(SHARE_SALT_MID . $hash);
+                return sha1(conf::get("share.salt.mid") . $hash);
                 break;
             default:
                 die("Unsupported hash type");
@@ -1670,11 +1523,13 @@ echo ("<br>\noutString:<br>\n" . $out_string);
                 $where="WHERE hash=\"" . escape_string($hash) . "\";";
                 break;
             case "full":
-                $where="WHERE sha1(CONCAT('" . SHARE_SALT_FULL . "', hash))=" .
+                $salt=conf::get("share.salt.full");
+                $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
                    "\"" . escape_string($hash) . "\";";
                 break;
             case "mid":
-                $where="WHERE sha1(CONCAT('" . SHARE_SALT_MID . "', hash))=" .
+                $salt=conf::get("share.salt.mid");
+                $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
                    "\"" . escape_string($hash) . "\";";
                 break;
             default:
@@ -1692,6 +1547,37 @@ echo ("<br>\noutString:<br>\n" . $out_string);
             throw new PhotoNotFoundException("Could not find photo from hash");
         }
     }
+    
+    /**
+     * Create a list of fields that can be used to sort photos on
+     * @return array list of fields
+     */
+    public static function getFields() {
+        return array(
+            "" => "",
+            "date" => "date",
+            "time" => "time",
+            "timestamp" => "timestamp",
+            "name" => "file name",
+            "path" => "path",
+            "title" => "title",
+            "view" => "view",
+            "description" => "description",
+            "width" => "width",
+            "height" => "height",
+            "size" => "size",
+            "aperture" => "aperture",
+            "camera_make" => "camera make",
+            "camera_model" => "camera model",
+            "compression" => "compression",
+            "exposure" => "exposure",
+            "flash_used" => "flash used",
+            "focal_length" => "focal length",
+            "iso_equiv" => "iso equiv",
+            "metering_mode" => "metering mode"
+        );
+    }
+
         
 }
 
@@ -1789,9 +1675,9 @@ function goodrotate($src_img, $degrees = 90) {
     $degrees %= 360;
     if($degrees == 0) {
         $dst_img = $src_image;
-    } Elseif ($degrees == 180) {
+    } else if ($degrees == 180) {
         $dst_img = imagerotate($src_img, $degrees, 0);
-    } Else {
+    } else {
         $width = imagesx($src_img);
         $height = imagesy($src_img);
         if ($width > $height) {
@@ -1812,27 +1698,6 @@ function goodrotate($src_img, $degrees = 90) {
         }
     }
     return $dst_img;
-}
-
-/*
- * For Nixon Childs' annotate function.
- *
- * Shamelessly stolen from the php.net comment board.
- */
-function ImageStringWrap($image, $font, $x, $y, $text, $color, $maxwidth) {
-    $fontwidth = ImageFontWidth($font);
-    $fontheight = ImageFontHeight($font);
-
-    if ($maxwidth != NULL) {
-        $maxcharsperline = floor($maxwidth / $fontwidth);
-        $text = wordwrap($text, $maxcharsperline, "\n", 1);
-    }
-
-    $lines = explode("\n", $text);
-    while (list($numl, $line) = each($lines)) {
-        ImageString($image, $font, $x, $y, $line, $color);
-        $y += $fontheight;
-    }
 }
 
 ?>

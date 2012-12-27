@@ -15,17 +15,16 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    // These additions are necessary because this file is now also included
-    // from the main template, where we are in class context and not in global
-    // contect. Of course this is a bit dirty, but this is temporary until
-    // Zoph has moved to templating entirely;
-
-    global $SHOW_BREADCRUMBS;
-    global $MAX_CRUMBS_TO_SHOW;
-    global $user;
+    // This is needed because this file is sometimes included from 
+    // global context and sometimes from class context. 
+    // This is temporary until Zoph has moved to templating entirely
+    // or the global $user has been completely phased out.
+    if(!isset($user)) {
+        $user=user::getCurrent();
+    }
     global $_qs;
-
-    if ($SHOW_BREADCRUMBS) {
+    
+    if ($user->prefs->get("show_breadcrumbs")) {
 
     $_clear_crumbs = getvar("_clear_crumbs");
     $_crumb = getvar("_crumb");
@@ -61,7 +60,7 @@
     // action or a safe action ("edit", "delete", etc would be unsafe)
     $page=array_reverse(explode("/",$_SERVER['PHP_SELF']));
     $page=$page[0];
-    if (!isset($skipcrumb) && isset($title) && count($user->crumbs) < MAX_CRUMBS &&
+    if (!isset($skipcrumb) && isset($title) && count($user->crumbs) < 100 &&
         (empty($_action) || ($_action == "display" || 
         $_action == "search" || $_action == translate("search") ||
         $_action == "notify" || $_action == "compose" || 
@@ -70,13 +69,13 @@
         $_action != "delrate" && $page == "photo.php")))) {
         $user->add_crumb($title, htmlentities($_SERVER["REQUEST_URI"]));
     }
-
+    
+    $max_crumbs=$user->prefs->get("num_breadcrumbs");
     if (!$user->crumbs) {
         $crumb_string = "&nbsp;";
-    }
-    else if (($num_crumbs = count($user->crumbs)) > $MAX_CRUMBS_TO_SHOW) {
+    } else if (($num_crumbs = count($user->crumbs)) > $max_crumbs) {
         $crumb_string = "<li class=\"firstdots\">" .  implode(" <li>",
-            array_slice($user->crumbs, $num_crumbs - $MAX_CRUMBS_TO_SHOW));
+            array_slice($user->crumbs, $num_crumbs - $max_crumbs));
     }
     else {
         $crumb_string = "<li class=\"first\">" . implode("<li>", $user->crumbs);

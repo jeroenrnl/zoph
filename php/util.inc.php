@@ -16,23 +16,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-function get_url() {
-    $script = $_SERVER['PHP_SELF'];
-
-
-    if(isset($_SERVER["HTTPS"]) && !empty($_SERVER['HTTPS'])) {
-        $proto="https://";
-    } else {
-        $proto="http://";
-    }
-
-    $url =
-        $proto . $_SERVER['SERVER_NAME'] . '/' .
-        substr($script, 1, strrpos($script, '/'));
-
-    return $url;
-}
-
 function create_field_html($fields) {
 
     $html = "";
@@ -149,29 +132,12 @@ function create_inequality_operator_pulldown($var, $op = ">") {
         array(">" => translate("less than"), "<" => translate("more than")));
 }
 
+/**
+ * This function is now only a wrapper around the static function in the photo class
+ * @todo get rid of it
+ */
 function create_photo_field_pulldown($var, $name = null) {
-    return create_pulldown($var, $name, array(
-        "" => "",
-        "date" => translate("date",0),
-        "time" => translate("time",0),
-        "timestamp" => translate("timestamp",0),
-        "name" => translate("file name",0),
-        "path" => translate("path",0),
-        "title" => translate("title",0),
-        "view" => translate("view",0),
-        "description" => translate("description",0),
-        "width" => translate("width",0),
-        "height" => translate("height",0),
-        "size" => translate("size",0),
-        "aperture" => translate("aperture",0),
-        "camera_make" => translate("camera make",0),
-        "camera_model" => translate("camera model",0),
-        "compression" => translate("compression",0),
-        "exposure" => translate("exposure",0),
-        "flash_used" => translate("flash used",0),
-        "focal_length" => translate("focal length",0),
-        "iso_equiv" => translate("iso equiv",0),
-        "metering_mode" => translate("metering mode",0)));
+    return create_pulldown($var, $name, translate(photo::getFields(),0));
 }
 
 function create_photo_text_pulldown($var, $name = null) {
@@ -397,77 +363,42 @@ function make_title($string) {
     return $string;
 }
 
+/**
+ * Create a link to the calendar page
+ * @param string Date in "yyyy-mm-dd" format
+ * @param string Search field, the field to search from from the calendar page
+ * @return string link.
+ * @todo Contains HTML
+ * @todo Should be better separated, possibly included in Time object
+ */
 function create_date_link($date, $search_field = "date") {
+    $dt = new Time($date);
+    
     if ($date) {
-        return "<a href=\"calendar.php?date=$date&amp;search_field=$search_field\">$date</a>";
+        $html="<a href=\"calendar.php?date=$date&amp;search_field=$search_field\">";
+        $html.=$dt->format(conf::get("date.format"));
+        $html.="</a>";
+        return $html;
     }
 }
 
-function parse_date($date) {
-    // expects either YYYY-MM-DD, YYYY-MM-DD HH:MM:SS or YYYYMMDDHHMMSS
-
-    $date_array = null;
-
-    if (preg_match("/^\d\d\d\d-\d\d-\d\d$/", $date)) {
-        $date_array['year'] = substr($date, 0, 4);
-        $date_array['mon'] = substr($date, 5, 2);
-        $date_array['day'] = substr($date, 8, 2);
-    } else if (preg_match("/^\d\d\d\d-\d\d-\d\d\ \d\d:\d\d:\d\d$/", $date)) {
-        $date_array['year'] = substr($date, 0, 4);
-        $date_array['mon'] = substr($date, 5, 2);
-        $date_array['day'] = substr($date, 8, 2);
-        $date_array['hour'] = substr($date, 11, 2);
-        $date_array['min'] = substr($date, 14, 2);
-        $date_array['sec'] = substr($date, 17, 2);
-    }
-    else if (preg_match("/^\d{14}/", $date)) {
-        $date_array['year'] = substr($date, 0, 4);
-        $date_array['mon'] = substr($date, 4, 2);
-        $date_array['day'] = substr($date, 6, 2);
-        $date_array['hour'] = substr($date, 8, 2);
-        $date_array['min'] = substr($date, 10, 2);
-        $date_array['sec'] = substr($date, 12, 2);
-    }
-
-    return $date_array;
-}
-
+/**
+ * Format a timestamp
+ * Temporary, is really redundant
+ */
 function format_timestamp($ts) {
-    $da = parse_date($ts);
-    $date = $da['year'] . '-' . $da['mon'] . '-' . $da['day'];
-    $time = $da['hour'] . ':' . $da['min'] . ':' . $da['sec'];
-    return create_date_link($date, "timestamp") . ' ' . $time;
-}
-
-function subtract_days($date, $days) {
-    $da = parse_date($date);
-    $time = mktime(0, 0, 0, $da['mon'], $da['day'] - $days, $da['year']);
-
-    /*
-    MySQL's timestamp seems smart enough to do convertions so that
-    timestamp >= '2002-09-01' does work.
-
-    if (strpos($date, '-')) {
-        $new_date = strftime("%Y-%m-%d", $time);
-    }
-    else {
-        $new_date = strftime("%Y%m%d", $time);
-        $new_date .= $da['hour'] . $da['min'] . $da['sec'];
-    }
-
-    return $new_date;
-    */
-
-    return strftime("%Y-%m-%d", $time);
+    $dt=new Time($ts);
+    return create_date_link($dt->format("Y-m-d"), "timestamp") . ' ' . $dt->format(conf::get("date.timeformat"));
 }
 
 function get_date_select_array($date, $days) {
-    $da = parse_date($date);
+    $dt=new Time($date);
 
     $date_array[""] = "";
+    $day=new DateInterval("P1D");
     for ($i = 1; $i <= $days; $i++) {
-        $time = mktime(0, 0, 0, $da['mon'], $da['day'] - $i, $da['year']);
-        $date_array[strftime("%Y-%m-%d", $time)] = $i;
+        $dt->sub($day);
+        $date_array[$dt->format("Y-m-d")] = $i;
     }
 
     return $date_array;
@@ -499,16 +430,41 @@ function file_extension($str) {
     return substr($str, strrpos($str, '.') + 1);
 }
 
-function getZophURL() {
-    $current_url=$_SERVER["SERVER_NAME"] . "/" . $_SERVER["PHP_SELF"];
-    $url=substr($current_url, 0, strrpos($current_url, "/"));
-    
-    if(isset($_SERVER["HTTPS"]) && !empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != "off")) {
-        $proto="https://";
+/**
+ * Get the current Zoph URL
+ * Autodetect or use the URL set in configuration.
+ * @param string Override protocol (http/https) autodetection
+ * @return string URL
+ */
+function getZophURL($proto=null) {
+    if(is_null($proto)) {
+        if(isset($_SERVER["HTTPS"]) && !empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != "off")) {
+            $proto="https";
+        } else {
+            $proto="http";
+        }
     } else {
-        $proto="http://";
+        if(!preg_match("/^http(s?)$/", $proto)) {
+            die("illegal protocol");
+        }
     }
-    return $proto . preg_replace("/\/\//","/", $url) . "/";
+    
+    $current_url=$_SERVER["SERVER_NAME"] . "/" . $_SERVER["PHP_SELF"];
+    $new_url=substr($current_url, 0, strrpos($current_url, "/"));
+    $url=$proto . "://" . preg_replace("/\/\//","/", $new_url);
+    
+    if(conf::get("url.http") && $proto = "http") {
+        $url=conf::get("url.http");
+    }
+
+    if(conf::get("url.https") && $proto = "https") {
+        $url=conf::get("url.http");
+    }
+
+    if(substr($url, -1) != "/") {
+        $url.="/";
+    }
+    return $url;
 }
 
 function get_image_type($name) {
@@ -544,36 +500,6 @@ function valid_image($name) {
     return false;
 }
 
-function get_converted_image_name($name) {
-
-    $extension = file_extension($name);
-
-    // if you used a version of Zoph prior to 0.3 AND have thumbnails
-    // for image types other than jpegs, you may want to define
-    // MIXED_THUMBNAILS in config.inc.php to avoid having to regenerate
-    // your thumbnails.
-
-    if (MIXED_THUMBNAILS && valid_image($name)) {
-        return $name;
-    }
-
-    // zophImport.pl should have generated jpg thumbnails for other image types
-    return preg_replace("/" . $extension . "$/", THUMB_EXTENSION, $name);
-}
-
-function delete_temp_annotated_files($user_id) {
-    if (!ANNOTATE_PHOTOS) {
-        return;
-    }
-
-    $tmp_dir = dir(ANNOTATE_TEMP_DIR);
-    $search_str = ANNOTATE_TEMP_PREFIX . $user_id;
-    while ($entry = $tmp_dir->read()) {
-        if (strpos(" $entry", $search_str) == 1) {
-            unlink(ANNOTATE_TEMP_DIR . "/" . $entry);
-        }
-    }
-}
 /* based on urlencode_array
    By linus at flowingcreativity dot net
    from: http://www.php.net/manual/en/function.urlencode.php
@@ -694,44 +620,6 @@ function get_human($bytes) {
     }
 }
 
-function watermark_image($orig, $watermark, $positionX = "center", $positionY = "center", $transparency = 50) {
-
-    $wm=imagecreatefromgif($watermark);
-    
-    $width_orig=ImageSX($orig);
-    $height_orig=ImageSY($orig);
-
-    $width_wm=ImageSX($wm);
-    $height_wm=ImageSY($wm);
-
-    switch ($positionX) {
-    case "left":
-        $destX = 5;
-        break;
-    case "right":
-        $destX = $width_orig - $width_wm - 5;
-        break;
-    default:
-        $destX = ($width_orig / 2) - ($width_wm / 2);
-        break;
-    }
-
-    switch ($positionY) {
-    case "top":
-        $destY = 5;
-        break;
-    case "bottom":
-        $destY = $height_orig - $height_wm - 5;
-        break;
-    default:
-        $destY = ($height_orig / 2) - ($height_wm / 2);
-        break;
-    }
-    ImageCopyMerge($orig, $wm, $destX, $destY, 0, 0, $width_wm, $height_wm, $transparency);
-    imagedestroy($wm);
-    return $orig;
-}
-
 function pager($current, $total, $num_pages, $page_size, $max_size, $request_vars, $var) {
     $url=$_SERVER['PHP_SELF'];
     $page_num = floor($current / $page_size) + 1;
@@ -800,10 +688,10 @@ function check_js($user) {
         ($user->prefs->get("autocomp_categories")) || 
         ($user->prefs->get("autocomp_places")) || 
         ($user->prefs->get("autocomp_people")) ||  
-        ($user->prefs->get("autocomp_photographer")) 
-        && AUTOCOMPLETE && JAVASCRIPT) {
+        ($user->prefs->get("autocomp_photographer")) &&
+        conf::get("interface.autocomplete")) {
         
-        return "<noscript><div class='warning'><img class='icon' src='images/icons/" . ICONSET . "/" . "warning.png'>" . translate("You have enabled autocompletion for one or more dropdown boxes on this page, however, you do not seem to have Javascript support. You should either enable javascript or turn autocompletion off, or this page will not work as expected!") . "</div></noscript>";
+        return "<noscript><div class='warning'><img class='icon' src='" . template::getImage("icons/warning.png") . "'>" . translate("You have enabled autocompletion for one or more dropdown boxes on this page, however, you do not seem to have Javascript support. You should either enable javascript or turn autocompletion off, or this page will not work as expected!") . "</div></noscript>";
     }
 }
 
@@ -945,7 +833,7 @@ function get_filetype($mime) {
 
 function create_dir($directory) {
     if (file_exists($directory) == false) {
-        if (@mkdir($directory, DIR_MODE)) {
+        if (@mkdir($directory, octdec(conf::get("import.dirmode")))) {
             if(!defined("CLI") || settings::$importVerbose>=1) {
                 log::msg(translate("Created directory") . ": $directory", log::NONE, log::GENERAL);
             }

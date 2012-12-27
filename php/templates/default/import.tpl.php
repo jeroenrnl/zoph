@@ -30,7 +30,7 @@ if(!ZOPH) { die("Illegal call"); }
     <h1>
         <?php echo translate("import photos"); ?>
     </h1>
-    <noscript><div class='warning'><img class='icon' src='images/icons/<?php echo ICONSET; ?>/warning.png'><?php echo translate("This page needs Javascript switched on and will not function without it."); ?></div></noscript>
+    <noscript><div class='warning'><img class='icon' src='<?php echo template::getImage("icons/warning.png") ?>'><?php echo translate("This page needs Javascript switched on and will not function without it."); ?></div></noscript>
     <div class="main">
         <div class="import_uploads">
             <h2><?php echo translate("Upload photo",0);?></h2>
@@ -75,7 +75,7 @@ if(!ZOPH) { die("Illegal call"); }
             <form id="import_form" class="import" onSubmit="zImport.importPhotos(); return false;">
                 <label for="_path"><?php echo translate("path") ?> </label>
                 <?php echo create_text_input("_path", "", 40, 64) ?>
-                <?php if (USE_DATED_DIRS) { ?>
+                <?php if (conf::get("import.dated")) { ?>
                 <span class="inputhint"><?php echo translate("Dated directory will be appended") ?></span>
                 <?php } ?>
                 <br>

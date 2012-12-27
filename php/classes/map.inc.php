@@ -26,7 +26,6 @@
  */
 class map extends block {
 
-    private $provider = MAPS;
     private $map = "map";
 
     protected $clat;
@@ -52,7 +51,7 @@ class map extends block {
             $vars["id"]=$this->map;
         }
         if(!array_key_exists("provider", $vars)) {
-            $vars["provider"]=$this->provider;
+            $vars["provider"]=conf::get("maps.provider");
         }
         parent::__construct($template, $vars);
 

@@ -282,17 +282,15 @@ var zImport=function() {
             busy.className="busy";
             thumbs=top.document.getElementById("import_thumbs");
             thumbs.style.display="block";
-            icon=busy.src;
-            iconpath=icon.substr(0,icon.lastIndexOf('/'));
             md5=busy.parentNode.id;
             filename=busy.nextSibling.innerHTML;
 
             switch(getFileType(filename)) {
             case "image":
-                busy.src=iconpath + "/resize.png";
+                busy.src=icons["resize"];
                 break;
             case "archive":
-                busy.src=iconpath + "/unpack.png";
+                busy.src=icons["unpack"];
                 break;
             }
             doAction("process", md5);

@@ -31,8 +31,8 @@ if(!is_callable("finfo_file")) {
     die();
 }
 
-if(!file_exists(MAGIC_FILE) && strlen(MAGIC_FILE)>0) {
-    log::msg(MAGIC_FILE . " does not exist. Set MAGIC_FILE in config.inc.php to your MIME magic file.", log::FATAL);
+if(!file_exists(conf::get("path.magic")) && strlen(conf::get("path.magic"))>0) {
+    log::msg(conf::get("path.magic") . " does not exist. Set the location of your magic file in admin -> config to your MIME magic file.", log::FATAL);
     die();
 }
 

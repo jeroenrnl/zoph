@@ -17,9 +17,11 @@
  */
     require_once("include.inc.php");
 
-    $_cols = getvar("_cols");
-    $_rows = getvar("_rows");
-    $_off = getvar("_off");
+    
+    $_cols = (int) getvar("_cols");
+    $_rows = (int) getvar("_rows");
+    $_off = (int) getvar("_off"); 
+    
     $_order = getvar("_order");
     $_dir = getvar("_dir");
     $_show = getvar("_show");
@@ -28,14 +30,13 @@
         die("Illegal characters in _order");
     }
 
-    if (!$_cols) { $_cols = $DEFAULT_COLS; }
-    if (!$_rows) { $_rows = $DEFAULT_ROWS; }
+    if (!$_cols) { $_cols = $user->prefs->get("num_rows"); }
+    if (!$_rows) { $_rows = $user->prefs->get("num_cols"); }
     if (!$_off)  { $_off = 0; }
 
-
-    if (!$_order) { $_order = $DEFAULT_ORDER; }
-    if (!$_dir)   { $_dir = $DEFAULT_DIRECTION; }
-
+    if (!$_order) { $_order = conf::get("interface.sort.order"); }
+    if (!$_dir)   { $_dir = conf::get("interface.sort.dir"); }
+   
     $cells = $_cols * $_rows;
     $offset = $_off;
 
@@ -77,7 +78,8 @@
 
     if (!($num_thumbnails == 0 || $_cols <= 4)) {
         $width = ((THUMB_SIZE + 14) * $_cols) + 25;
-        if ($width > DEFAULT_TABLE_WIDTH || strpos(DEFAULT_TABLE_WIDTH, "%")) {
+        $default_width= conf::get("interface.width");
+        if ($width > $default_width || strpos($default_width, "%")) {
             $extrastyle = "body	{ width: " . $width . "px; }\n"; 
         }
     }
@@ -111,7 +113,7 @@
 ?>
             <a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a> 
 <?php
-        if(DOWNLOAD && ($user->get("download") || $user->is_admin())) {
+        if(conf::get("feature.download") && ($user->get("download") || $user->is_admin())) {
 ?>
             |
             <a href="download.php?<?php echo $qs ?>"><?php echo translate("download") ?></a>
@@ -129,8 +131,18 @@
             <?php echo translate("No photos were found matching your search criteria.") . "\n" ?>
         </form>
 <?php
-    }
-    else {
+    } else {
+        switch($_dir) {
+        case "asc":
+            $up = template::getImage("up1.gif");
+            $down = template::getImage("down2.gif");
+            break;
+        case "desc":
+            $up = template::getImage("up2.gif");
+            $down = template::getImage("down1.gif");
+            break;
+        }
+        
 ?>
             <div id="sortorder">
 <?php echo create_form($vars, array ("_rows", "_cols", "_order", "_button")) ?>
@@ -138,8 +150,8 @@
                 <?php echo create_photo_field_pulldown("_order", $_order) ?>
             </div>
             <div id="updown">
-                <a href="photos.php?<?php echo update_query_string($vars, "_dir", "asc") ?>"><img class="up" alt="sort ascending" src="images/up<?php echo $_dir == "asc" ? 1 : 2 ?>.gif"></a>
-                <a href="photos.php?<?php echo update_query_string($vars, "_dir", "desc") ?>"><img class="down" alt="sort descending" src="images/down<?php echo $_dir == "asc" ? 2 : 1 ?>.gif"></a>
+                <a href="photos.php?<?php echo update_query_string($vars, "_dir", "asc") ?>"><img class="up" alt="sort ascending" src="<?php echo $up ?>"></a>
+                <a href="photos.php?<?php echo update_query_string($vars, "_dir", "desc") ?>"><img class="down" alt="sort descending" src="<?php echo $down ?>"></a>
             </div>
             <div id="rowscols">
 <?php
@@ -153,10 +165,6 @@
         </form>
         <br>
 <?php
-        if (MAX_THUMB_DESC && $user->prefs->get("desc_thumbnails")) {
-            $desc_thumbnails = true;
-        }
-
         for ($i = 0; $i < $num; $i++) {
 
             if ($i > 0 && $i % $_cols == 0) {
@@ -173,16 +181,8 @@
             } else {
                 echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n"; 
             }
-            if (!empty($desc_thumbnails) && $thumbnails[$i]->get("description")) {
-?>
-                <br>
-                <div class="thumbdesc"><?php echo substr($thumbnails[$i]->get("description"), 0, MAX_THUMB_DESC) ?></div>
-<?php
-                if (strlen($thumbnails[$i]->get("description")) > MAX_THUMB_DESC) { echo "..."; }
-            }
 
             if (!empty($lightbox)) {
-                if (!isset($desc_thumbnails)) { echo "<br>\n"; }
 ?>
                 <div class="actionlink"><a href="photos.php?<?php echo update_query_string($vars, "_photo_id", $thumbnails[$i]->get("photo_id"), $ignore) ?>">x</a></div>
 <?php
@@ -202,14 +202,14 @@
 ?>
        <br>
 <?php
-        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $vars, "_off");
+        echo pager($offset, $num_photos, $num_pages, $cells, $user->prefs->get("max_pager_size"), $vars, "_off");
     } // if photos
 ?>
        <br>
 
       </div>
 <?php
-      if(JAVASCRIPT && MAPS) {
+      if(conf::get("maps.provider")) {
         $map=new map();
         foreach($thumbnails as $thumbnail) {
             $thumbnail->lookup();

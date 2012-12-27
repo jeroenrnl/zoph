@@ -28,7 +28,7 @@
 
     require_once("include.inc.php");
 
-    if (!ANNOTATE_PHOTOS) {
+    if (!conf::get("feature.annotate")) {
         redirect(add_sid("zoph.php"));
     }
 

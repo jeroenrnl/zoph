@@ -170,7 +170,7 @@
 <?php echo create_inequality_operator_pulldown("_date_op[$i]", $_date_op[$i]) ?>
           </td>
           <td colspan="2">
-<?php echo create_pulldown("date[$i]", $date[$i], get_date_select_array($today, MAX_DAYS_PAST)) ?>
+<?php echo create_pulldown("date[$i]", $date[$i], get_date_select_array($today, conf::get("interface.max.days"))) ?>
 <?php echo translate("days ago") ?>
           </td>
         </tr>
@@ -210,7 +210,7 @@ for ($i = 0; $i <= $count; $i++) {
 <?php echo create_inequality_operator_pulldown("_timestamp_op[$i]", $_timestamp_op[$i]) ?>
           </td>
           <td colspan="2">
-<?php echo create_pulldown("timestamp[$i]", $timestamp[$i], get_date_select_array($today, MAX_DAYS_PAST)) ?>
+<?php echo create_pulldown("timestamp[$i]", $timestamp[$i], get_date_select_array($today, conf::get("interface.max.days"))) ?>
 <?php echo translate("days ago") ?>
           </td>
         </tr>
@@ -647,7 +647,7 @@ for ($i = 0; $i <= $count; $i++) {
 
 </div>
 <?php 
-if(JAVASCRIPT && MAPS) {
+if(conf::get("maps.provider")) {
     $map=new map();
     $map->setEditable();
     $map->setCenterAndZoom(0,0,2);

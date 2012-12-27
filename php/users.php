@@ -34,7 +34,7 @@
         <div class="main">
           <table id="users">
 <?php
-    $users = get_users();
+    $users = user::getAll();
 
     if ($users) {
         foreach($users as $u) {

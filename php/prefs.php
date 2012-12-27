@@ -20,7 +20,7 @@
         $action = "update";
     }
     else if ($_action == "update") {
-        if (DEFAULT_USER != $user->get("user_id")) {
+        if (conf::get("interface.user.default") != $user->get("user_id")) {
             $user->prefs->setFields($request_vars);
             $user->prefs->update();
             $user->prefs->load(1);
@@ -43,7 +43,7 @@
       <div class="main">
       <form action="prefs.php" method="GET">
 <?php
-    if ($user->get("user_id") == DEFAULT_USER) {
+    if ($user->get("user_id") == conf::get("interface.user.default")) {
 ?>
         <?php echo sprintf(translate("The user %s is currently defined as the default user and does not have permission to change its preferences. The current values are shown below but any changes made will be ignored until a different default user is defined."), $user->get("user_name")); ?>
 <?php
@@ -112,29 +112,12 @@
         <dd>
             <?php echo create_text_input("recent_photo_days", $user->prefs->get("recent_photo_days"), 4, 4) ?>
         </dd>
-<?php
-    if (MAX_THUMB_DESC) {
-?>
-        <dt>
-            <?php echo translate("show descriptions under thumbnails") ?>
-        </dt>
-        <dd>
-            <?php echo create_pulldown("desc_thumbnails", $user->prefs->get("desc_thumbnails"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
-        </dd>
-<?php
-    }
-
-    if (JAVASCRIPT) {
-?>
         <dt>
             <?php echo translate("open fullsize photo in new window") ?>
         </dt>
         <dd>
             <?php echo create_pulldown("fullsize_new_win", $user->prefs->get("fullsize_new_win"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
         </dd>
-<?php
-    }
-?>
         <dt>
             <?php echo translate("display camera info") ?>
         </dt>
@@ -171,7 +154,7 @@
 <?php echo create_pulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), template::createSelectArray(color_scheme::getRecords("color_scheme", "name"), array("name"))) ?>
           </dd>
 <?php
-    $langs = language::get_all();
+    $langs = language::getAll();
     $lang_select_array[null] = translate("Browser Default");
     foreach ($langs as $language) {
         $lang_select_array[$language->iso] = $language->name;
@@ -201,7 +184,7 @@
         </dd>
     </dl>
 <?php
-    if (JAVASCRIPT && AUTOCOMPLETE) {
+    if (conf::get("interface.autocomplete")) {
 ?>
     <br><h2><?php echo translate("Autocomplete")?></h2>
     <dl class="prefs">

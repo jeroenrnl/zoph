@@ -52,7 +52,7 @@ class file {
             if(@!stat($filename)) {
                 throw new FileSymlinkProblemException("There's something wrong with symlink $filename\n");
             }
-        } else if (is_dir($filename) && !settings::$importRecursive) {
+        } else if (is_dir($filename) && !conf::get("import.cli.recursive")) {
             throw new FileDirectoryNotSupportedException("$filename is a directory\n");
         } 
 
@@ -158,11 +158,10 @@ class file {
         if($thumbs) {
             $dir=dirname($this);
             $file=basename($this);
-            $conv=get_converted_image_name($file);
             $midname=$dir . "/" . MID_PREFIX . "/" . 
-                MID_PREFIX . "_" . $conv;
+                MID_PREFIX . "_" . $file;
             $thumbname=$dir . "/" . THUMB_PREFIX . "/" . 
-                THUMB_PREFIX . "_" . $conv;
+                THUMB_PREFIX . "_" . $file;
             $mid=new file($midname);
             $mid->delete();
             $thumb=new file($thumbname);
@@ -191,7 +190,7 @@ class file {
         if(!is_readable($this)) {
             throw new FileNotReadableException("Cannot read file: $this\n");
         }
-        if (!settings::$importCopy && !is_writable($this)) {
+        if (!conf::get("import.cli.copy") && !is_writable($this)) {
             throw new FileNotWritableException("Cannot move file: $this\n");
         }
     }
@@ -271,13 +270,9 @@ class file {
      */
     public function chmod($mode = null) {
         if($mode===null) {
-            if(!defined("FILE_MODE") || !is_numeric(FILE_MODE)) {
-                define('FILE_MODE', 0644);
-                log::msg("FILE_MODE is not set correctly in config.inc.php, using default (0644)", LOG::WARN, LOG::GENERAL);
-            }
-            $mode=FILE_MODE;
+            $mode=octdec(conf::get("import.filemode"));
         }
-        if(!chmod($this, FILE_MODE)) {
+        if(!chmod($this, $mode)) {
             log::msg("Could not change permissions for <b>" . $this . "</b>", LOG::ERROR, LOG::IMPORT);
         }
     }
@@ -286,7 +281,7 @@ class file {
      * Gets MIME type for this file
      */
     public function getMime() {
-        $fileinfo=new finfo(FILEINFO_MIME, MAGIC_FILE);
+        $fileinfo=new finfo(FILEINFO_MIME, conf::get("path.magic"));
         $mime=explode(";", $fileinfo->file($this->readlink()));
         log::msg("<b>" . $this->readlink() . "</b>: " . $mime[0], log::DEBUG, log::IMPORT);
         $this->type=get_filetype($mime[0]);

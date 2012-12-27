@@ -30,7 +30,7 @@ require_once("header.inc.php");
             <?php foreach($tpl_adminpages as $adminpage): ?>
             <li>
                 <a href="<?php echo $adminpage->url ?>">
-                    <img src="images/icons/<?php echo $adminpage->icon; ?>">
+                    <img src="<?php echo $adminpage->icon; ?>">
                     <br>
                     <?php echo translate($adminpage->name); ?>
                 </a>

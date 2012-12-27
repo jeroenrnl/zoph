@@ -66,7 +66,18 @@ class TimeZone extends DateTimeZone {
         array_unshift($zones, "");
         return $zones;
     }
-    
+
+    /**
+     * Get array of timezones with timezone names as key
+     * @return array zones with names as key
+     */
+    public static function getTzArray() {
+        $zones=self::getSelectArray();
+        $zones=array_values($zones);
+        $zones=array_combine($zones, $zones);
+        return $zones;
+    }
+
     /**
      * Get Key from timezone name
      * @param string timezone
@@ -93,7 +104,7 @@ class TimeZone extends DateTimeZone {
             $text="";
         }
 
-        if(AUTOCOMPLETE && JAVASCRIPT) {
+        if(conf::get("interface.autocomplete")) {
             $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
                 " value='" . $value . "'>";
             $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
@@ -123,7 +134,7 @@ class TimeZone extends DateTimeZone {
      * @return string timezone
      */
     public static function guess($lat, $lon) {
-        if(minimum_version("5.1.2") && class_exists("XMLReader")) {
+        if(class_exists("XMLReader")) {
             $failed=false;
             $xml=new XMLReader();
             @$xml->open("http://ws.geonames.org/timezone?lat=" . 

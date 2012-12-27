@@ -27,7 +27,7 @@
     } else {
         $change=$user;
     }
-    if ($_action == "update" && DEFAULT_USER != $user->get("user_id")) {
+    if ($_action == "update" && conf::get("interface.user.default") != $user->get("user_id")) {
 
         if ($password) {
             if ($password == $confirm) {
@@ -60,7 +60,7 @@
 ?>
             <h2><?php echo $change->get("user_name") ?></h2>
 <?php
-    if (!$user->is_admin() && DEFAULT_USER == $change->get("user_id")) {
+    if (!$user->is_admin() && conf::get("interface.user.default") == $change->get("user_id")) {
 ?>
        <?php echo sprintf(translate("The user '%s' is currently defined as the default user and does not have permission to change its password."), $user->get("user_name")) ?>
 <?php

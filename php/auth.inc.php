@@ -35,7 +35,7 @@
             if($user instanceof anonymousUser) {
                 if(!defined("IMAGE_PHP")) {
                     unset($user);
-                    $_action=("logout");
+                    $_action="logout";
                 }
             } else {
                 $_action = getvar("_action");
@@ -43,22 +43,16 @@
         }
 
     } else {
-        if(defined("CLI_USER")) {
-            if (CLI_USER != 0) {
-                $user=new user(CLI_USER);
-            } else {
-                $username=$_SERVER["USER"];
-                $user=user::getByName($username);
-                if(!$user) {
-                    log::$stopOnFatal=false;
-                    log::msg("$username is not a valid user", log::FATAL, log::LOGIN);
-                    exit(EXIT_CLI_USER_NOT_VALID);
-                }    
-            }
+        if (conf::get("interface.user.cli")!==0) {
+            $user=new user(conf::get("interface.user.cli"));
         } else {
-            log::$stopOnFatal=false;
-            log::msg("CLI_USER is not defined in config.inc.php", log::FATAL, log::LOGIN);
-            exit(EXIT_CLI_USER_NOT_DEFINED);
+            $username=$_SERVER["USER"];
+            $user=user::getByName($username);
+            if(!$user) {
+                log::$stopOnFatal=false;
+                log::msg("$username is not a valid user", log::FATAL, log::LOGIN);
+                exit(EXIT_CLI_USER_NOT_VALID);
+            }    
         }
         $user->lookup();
         $user->lookup_person();
@@ -68,36 +62,35 @@
 
     // no user was in the session, try logging in
     if ($_action == "logout") {
-        // delete left over temp files
-        if($user) {
-            delete_temp_annotated_files($user->get("user_id"));
-        }
         session_destroy();
         $user = null;
+        user::unsetCurrent();
         redirect("logon.php", "Logout");
     } else if (empty($user)) {
-        $uname = getvar("uname");
-        $pword = getvar("pword");
-        $redirect = getvar("redirect");
+        $hash=getvar("hash");
+        if(defined("IMAGE_PHP") && conf::get("share.enable") && !empty($hash)) {
+            require_once("classes/anonymousUser.inc.php");
+            $user = new anonymousUser();
+        } else {
+            $uname = getvar("uname");
+            $pword = getvar("pword");
+            $redirect = getvar("redirect");
 
-        $validator = new validator($uname, $pword);
-        $user = $validator->validate();
+            $validator = new validator($uname, $pword);
+            $user = $validator->validate();
+        }
 
         // we have a valid user
         if (!empty($user)) {
             $user->lookup();
             $user->lookup_person();
             $user->lookup_prefs();
-
+            
             // Update Last Login Fields
             $updated_user = new user($user->get("user_id"));
             $updated_user->set("lastlogin", "now()");
             $updated_user->set("lastip", $_SERVER["REMOTE_ADDR"]);
             $updated_user->update();
-
-            // delete left over temp files
-            delete_temp_annotated_files($user->get("user_id"));
-
         } else {
             $this_page=urlencode(preg_replace("/^\//", "", $_SERVER['REQUEST_URI']));
             redirect("logon.php?redirect=" . $this_page);
@@ -108,6 +101,7 @@
     if (!empty($user)) {
         $user->prefs->load();
         $lang=$user->load_language();
+        user::setCurrent($user);
             
         if (!defined("CLI")) {
             $_SESSION['user'] = &$user;
@@ -119,16 +113,16 @@
             // to be extra sure, any action, except "search" is replaced by
             // "display".
             $redirect_clean=preg_replace("/action=(?!search).[^&]+/", "action=display", $redirect);
-            if (array_key_exists('HTTPS', $_SERVER) && (FORCE_SSL_LOGIN && !FORCE_SSL)) {
+            if (array_key_exists('HTTPS', $_SERVER) && (conf::get("ssl.force")=="login")) {
                 $redirect_clean = "http://" . $_SERVER['SERVER_NAME'] . $redirect_clean;
             }
             redirect($redirect_clean, "Redirect");
         } 
-        if (array_key_exists('HTTPS', $_SERVER) && (FORCE_SSL_LOGIN && !FORCE_SSL)) {
-            redirect(ZOPH_URL . "/zoph.php", "switch back from https to http");
+        if (array_key_exists('HTTPS', $_SERVER) && (conf::get("ssl.force")=="login")) {
+            redirect(getZophURL("http"), "switch back from https to http");
         }
     } else {
-        $lang = new language(DEFAULT_LANG);
+        $lang = new language(conf::get("interface.language"));
     }        
 
 ?>

@@ -53,7 +53,7 @@
 ?>
 <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
 <?php
-    if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
+    if (conf::get("rotate.enable") && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
           <div class="rotate">
 <?php echo translate("rotate", 0) ?>
@@ -80,7 +80,7 @@
 
                 <div class="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
                 <div class="photohdr">
-                  <?php echo $photo->get_fullsize_link($photo->get("name"),$FULLSIZE_NEW_WIN) ?> :
+                  <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
                   <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
                   <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
                 </div>
@@ -88,10 +88,10 @@
 
         <ul class="tabs">
 <?php
-        if(defined("SHARE") && SHARE===1 && ($user->is_admin() || $user->get("allow_share"))) {
+        if(conf::get("share.enable") && ($user->is_admin() || $user->get("allow_share"))) {
             $hash=$photo->getHash();
-            $full_hash=sha1(SHARE_SALT_FULL . $hash);
-            $mid_hash=sha1(SHARE_SALT_MID . $hash);
+            $full_hash=sha1(conf::get("share.salt.full") . $hash);
+            $mid_hash=sha1(conf::get("share.salt.mid") . $hash);
             $full_link=getZophURL() . "image.php?hash=" . $full_hash;
             $mid_link=getZophURL() . "image.php?hash=" . $mid_hash;
 
@@ -105,7 +105,7 @@
 ?>
         </ul>
 
-            <?php echo $photo->get_fullsize_link($photo->get_midsize_img(),$FULLSIZE_NEW_WIN) ?>
+            <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
 <?php
     }
 ?>
@@ -139,17 +139,6 @@
           <label for="view"><?php echo translate("view") ?></label>
           <?php echo create_text_input("view", $photo->get("view"), 40, 64) ?>
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
-<?php
-    // if people are allowed to rate photos, the rating field
-    // is an average so don't edit it.
-    if (!ALLOW_RATINGS) {
-?>
-          <label for="rating"><?php echo translate("rating") ?></label>
-          <?php echo create_rating_pulldown($photo->get("rating")) ?>
-          <span class="inputhint">1 - 10</span><br>
-<?php
-    }
-?>
           <label for="_photographer_id"><?php echo translate("photographer") ?></label>
 <?php 
             echo create_photographer_pulldown("photographer_id", $photo->get("photographer_id"), $user);

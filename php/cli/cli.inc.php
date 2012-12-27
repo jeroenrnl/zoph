@@ -48,7 +48,6 @@ class cli {
 
     const EXIT_CLI_USER_NOT_ADMIN    = 95;
     const EXIT_CLI_USER_NOT_VALID    = 96;
-    const EXIT_CLI_USER_NOT_DEFINED    = 97;
 
     const EXIT_API_NOT_COMPATIBLE    = 99;
 
@@ -99,18 +98,7 @@ class cli {
         switch(arguments::$command) {
         case "import":
             $vars=$this->args->getVars();
-            if(!isset(settings::$importThumbs)) {
-                settings::$importThumbs=true;
-            }
-            if(!isset(settings::$importExif)) {
-                settings::$importExif=true;
-            }
-            if(!isset(settings::$importSize)) {
-                settings::$importSize=true;
-            }
-            if(!isset(settings::$importAutoadd)) {
-                settings::$importAutoadd=false;
-            } else {
+            if(conf::get("import.cli.add.auto")) {
                 $vars=$this->addNew();
             }
             if(is_array($this->files) && sizeof($this->files)>0) {
@@ -133,15 +121,6 @@ class cli {
 
             break;
         case "update":
-            if(!isset(settings::$importThumbs)) {
-                settings::$importThumbs=false;
-            }
-            if(!isset(settings::$importExif)) {
-                settings::$importExif=false;
-            }
-            if(!isset(settings::$importSize)) {
-                settings::$importSize=false;
-            }
             if(is_array($this->photos) && sizeof($this->photos)>0) {
                 $total=sizeof($this->photos);
                 $cur=0;
@@ -152,16 +131,16 @@ class cli {
                     $photo->setFields($this->args->getVars());
                     $photo->update();
                     $photo->updateRelations($this->args->getVars(), "_id");
-                    if(settings::$importThumbs===true) {
+                    if(conf::get("import.cli.thumbs")===true) {
                         $photo->thumbnail(true);
                     }
-                    if(settings::$importExif===true) {
+                    if(conf::get("import.cli.exif")===true) {
                         $photo->updateEXIF();
                     }
-                    if(settings::$importSize===true) {
+                    if(conf::get("import.cli.size")===true) {
                         $photo->updateSize();
                     }
-                    if(settings::$importHash===true) {
+                    if(conf::get("import.cli.hash")===true) {
                         $photo->getHash();
                     }
                 }
@@ -173,6 +152,42 @@ class cli {
         case "new":
             $this->addNew();
             break;
+        case "config":
+            $vars=$this->args->getVars();
+            $name=$vars["_configitem"];
+            $default=isset($vars["_configdefault"]);
+            $item=conf::getItemByName($name);
+
+            if($default) {
+                $value=$item->getDefault();
+            } else {
+                $value=$vars["_configvalue"];
+            }
+
+            if(conf::get("import.cli.verbose") > 0) {
+                echo "Setting config \"$name\" to \"$value\""  . ( $default ? " (default)" : "" ) . "\n";
+            }
+
+
+            $item->setValue($value);
+            $item->update();
+ 
+            
+            break;
+        case "dumpconfig":
+            $conf=conf::getAll();
+            foreach ($conf as $name=>$item) {
+                foreach ($item as $citem) {
+                    if($citem instanceof confItemBool) {
+                        $value=( $citem->getValue() ? "true": "false" );
+                    } else {
+                        $value=$citem->getValue();
+                    }
+                    echo $citem->getName() . ": " . $value . "\n";
+                }
+            }
+            break;
+
         default:
             echo "Unknown command, please file a bug\n";
             exit(self::EXIT_UNKNOWN_ERROR);
@@ -194,7 +209,7 @@ class cli {
                     $file->check();
 
                     $mime=$file->getMime();
-                    if($file->type=="directory" && settings::$importRecursive) {
+                    if($file->type=="directory" && conf::get("import.cli.recursive")) {
                         $this->files=array_merge($this->files, file::getFromDir($file, true));
                     } else if($file->type!="image") {
                         throw new ImportFileNotImportableException("$file is not an image\n");
@@ -202,7 +217,7 @@ class cli {
                         $this->files[]=$file;
                     }
                 } else {
-                    if(settings::$importUseids) {
+                    if(conf::get("import.cli.useids")) {
                         $file=$filename;
                         if(is_numeric($file)) {
                             $this->photos[]=$this->lookupFileById($file);
@@ -265,13 +280,13 @@ class cli {
 
             $path="/" . cleanup_path($path) . "/";
             
-            // check if path is in IMAGE_DIR
-            if(substr($path, 0, strlen(IMAGE_DIR))!=IMAGE_DIR) {
-                throw new ImportFileNotInPathException($file ." is not in IMAGE_DIR (" . IMAGE_DIR . "), skipping.\n");
+            // check if path is in conf::get("path.images")
+            if(substr($path, 0, strlen(conf::get("path.images")))!=conf::get("path.images")) {
+                throw new ImportFileNotInPathException($file ." is not in the images path (" . conf::get("path.images") . "), skipping.\n");
             } else {
-                $path=substr($path, strlen(IMAGE_DIR));
+                $path=substr($path, strlen(conf::get("path.images")));
                 if($path[0]=="/") {
-                    // IMAGE_DIR didn't end in '/', let's cut it off
+                    // conf::get("path.images") didn't end in '/', let's cut it off
                     $path=substr($path, 1);
                 }
             }
@@ -349,13 +364,10 @@ class cli {
             }
         }
         foreach($newvars as $name=>$array) {
-            if(array_key_exists($name, $return_vars)) {
-                if(is_array($return_vars[$name])) {
-                    $return_vars[$name]=array_merge($return_vars[$name], $array);
-                } else {
-                    $return_vars[$name]=$array;
-                }
+            if(array_key_exists($name, $return_vars) && is_array($return_vars[$name])) {
+                $return_vars[$name]=array_merge($return_vars[$name], $array);
             }
+            $return_vars[$name]=$array;
         }
         return($return_vars);
     }

@@ -18,7 +18,7 @@ http://creativecommons.org/licenses/by-sa/2.5/
 
 16x16/actions/1downarrow.png	1downarrow.png
 16x16/actions/1rightarrow.png	1rightarrow.png
-16x16/actions/ktremove.png	remove.png (resized to 8x8)
+16x16/actions/ktremove.png	remove.png 
 22x22/actions/attach.png	link.png
 22x22/actions/favorites.png 	rating.png
 22x22/apps/office-calendar.png  date.png
@@ -29,6 +29,7 @@ http://creativecommons.org/licenses/by-sa/2.5/
 22x22/mimetypes/html.png	html.png
 22x22/mimetypes/image.png	photo.png
 64x64/actions/button_cancel.png error.png
+64x64/actions/configure.png 	configure.png
 64x64/actions/messagebox_warning.png warning.png
 64x64/actions/player_pause.png 	pause.png
 64x64/actions/window_fullscreen.png unpack.png

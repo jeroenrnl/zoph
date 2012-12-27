@@ -63,7 +63,7 @@ require_once("edit_place.inc.php");
 ?>
 </div>
 <?php
-    if(JAVASCRIPT && MAPS) {
+    if(conf::get("maps.provider")) {
         $map=new map();
         $marker=$place->getMarker($user);
         $map->setCenterAndZoomFromObj($place);

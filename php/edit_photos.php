@@ -16,9 +16,9 @@
  */
     require_once("include.inc.php");
 
-    $_cols = getvar("_cols");
-    $_rows = getvar("_rows");
-    $_off = getvar("_off");
+    $_cols = (int) getvar("_cols");
+    $_rows = (int) getvar("_rows");
+    $_off = (int) getvar("_off");
     $_order = getvar("_order");
     $_dir = getvar("_dir");
 
@@ -26,12 +26,12 @@
         die("Illegal characters in _order");
     }
 
-    if (!$_cols) { $_cols = $DEFAULT_COLS; }
-    if (!$_rows) { $_rows = $DEFAULT_ROWS; }
+    if (!$_cols) { $_cols = $user->prefs->get("num_rows"); }
+    if (!$_rows) { $_rows = $user->prefs->get("num_cols"); }
     if (!$_off)  { $_off = 0; }
 
-    if (!$_order) { $_order = $DEFAULT_ORDER; }
-    if (!$_dir)   { $_dir = $DEFAULT_DIRECTION; }
+    if (!$_order) { $_order = conf::get("interface.sort.order"); }
+    if (!$_dir)   { $_dir = conf::get("interface.sort.dir"); }
 
     $cells = $_cols * $_rows;
     $offset = $_off;
@@ -72,27 +72,27 @@
 <?php
     }
     else {
+        $category_select_array = null;
+        $album_select_array = null;
+        $places_select_array = null;
+        $people_select_array = null;
+        
+        
         // create once
-        if(!($user->prefs->get("autocomp_categories") && AUTOCOMPLETE && JAVASCRIPT)) {
-            $category_select_array = get_categories_select_array($user);
-        } else {
-            $category_select_array = null;
+        if(!conf::get("interface.autocomplete")) {
+            if(!$user->prefs->get("autocomp_categories")) {
+                $category_select_array = get_categories_select_array($user);
+            }
+            if(!$user->prefs->get("autocomp_albums")) {
+                $album_select_array = get_albums_select_array($user);
+            }
+            if(!$user->prefs->get("autocomp_places")) {
+                $places_select_array = get_places_select_array($user);
+            }
+            if(!$user->prefs->get("autocomp_people")) {
+                $people_select_array = get_people_select_array($user);
+            }
         }
-        if(!($user->prefs->get("autocomp_albums") && AUTOCOMPLETE && JAVASCRIPT)) {
-            $album_select_array = get_albums_select_array($user);
-        } else {
-            $album_select_array = null;
-        }
-        if(!($user->prefs->get("autocomp_places") && AUTOCOMPLETE && JAVASCRIPT)) {
-            $places_select_array = get_places_select_array($user);
-        } else {
-            $places_select_array = null;
-        }
-        if(!($user->prefs->get("autocomp_people") && AUTOCOMPLETE && JAVASCRIPT)) {
-            $people_select_array = get_people_select_array($user);
-        } else {
-            $people_select_array = null;
-        } 
 	
         // used to create hidden fields for recreating the results query
         $queryIgnoreArray[] = '_action';
@@ -187,11 +187,8 @@
                 }
 
                 if ($rating != null) {
-                    if (ALLOW_RATINGS) { // multiple ratings
+                    if (conf::get("feature.rating")) {
                         $photo->rate($user, $rating);
-                    }
-                    else { // single rating
-                        $photo->set('rating', $rating);
                     }
                 }
 
@@ -260,7 +257,7 @@
                 <div class="thumbnail">
                   <?php echo $photo->get_thumbnail_link("photo.php?photo_id=$photo_id") . "\n" ?><br>
 <?php
-                if ($can_edit && ALLOW_ROTATIONS &&
+                if ($can_edit && conf::get("rotate.enable") &&
                     ($user->is_admin() || $permissions->get("writable"))) {
 ?>
                   <?php echo translate("rotate", 0) ?>
@@ -300,7 +297,7 @@
                       <label for="rating__<?php echo $photo_id?>"><?php echo translate("rating") ?></label>
 <?php
     $rating = $photo->get('rating');
-    if (ALLOW_RATINGS) {
+    if (conf::get("feature.rating")) {
         $rating = $photo->get_rating($user);
     }
 ?>
@@ -390,7 +387,7 @@
             $pager_vars[$key] = $val;
         }
         $request_vars = $pager_vars;
-        echo pager($offset, $num_photos, $num_pages, $cells, $MAX_PAGER_SIZE, $request_vars, "_off");
+        echo pager($offset, $num_photos, $num_pages, $cells, $user->prefs->get("max_pageer_size"), $request_vars, "_off");
     } // if photos
 ?>
 <br>

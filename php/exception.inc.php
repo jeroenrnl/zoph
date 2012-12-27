@@ -26,6 +26,9 @@
  */
 class ZophException extends Exception {}
 
+class ConfigurationException extends ZophException {}
+
+
 class ImportException extends ZophException {}
 class ImportAutorotException extends ImportException {}
 class ImportFileNotInPathException extends ImportException {}
@@ -50,4 +53,6 @@ class FileSymlinkProblemException extends FileException {}
 class PhotoException extends ZophException {}
 class PhotoThumbCreationFailedException extends PhotoException {}
 class PhotoNotFoundException extends PhotoException {}
+
+class MailException extends ZophException {}
 ?>

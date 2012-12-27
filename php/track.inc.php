@@ -113,7 +113,7 @@ class track extends zophTable {
      */
     public static function getFromGPX($file) {
         $track = new track;
-        if(minimum_version("5.1.2") && class_exists("XMLReader")) {
+        if(class_exists("XMLReader")) {
             $xml=new XMLReader();
             $xml->open($file);
             

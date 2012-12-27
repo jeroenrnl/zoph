@@ -17,7 +17,7 @@
  */
     require_once("include.inc.php");
 
-    if (!ALLOW_COMMENTS) {
+    if (!conf::get("feature.comments")) {
         redirect(add_sid("zoph.php"));
     }
 

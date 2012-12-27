@@ -78,7 +78,7 @@ var autocomplete=function() {
             // 'remove' link
             var remove=document.createElement("img");
             remove.setAttribute("onClick", "autocomplete.remove(this); return false");
-            remove.setAttribute("src", "images/icons/default/remove.png");
+            remove.setAttribute("src", icons["remove"]);
             remove.className="actionlink";
 
             el.parentNode.insertBefore(remove,el.nextSibling.nextSibling);
@@ -98,7 +98,7 @@ var autocomplete=function() {
         var text=document.getElementById(object);
         var root=[];
         removeChildren(dropdown);
-        text.style.backgroundImage="url('images/down2.gif')";
+        text.style.backgroundImage=icons["down2"];
         xmlobj=object.split("_");
         if(xmlobj[1]=="parent") {
             xmlobj.shift();

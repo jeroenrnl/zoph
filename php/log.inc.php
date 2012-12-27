@@ -51,7 +51,7 @@ class log {
     const REDIRECT = 8;
     const IMPORT = 16;
     const GEOTAG = 32;
-    /* 64 is free */
+    const CONFIG = 64;
     const DB = 128;
     const SQL = 256;
     const XML = 512;

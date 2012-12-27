@@ -87,12 +87,12 @@
         # To fix bug #1259152:
         # get $_off, round it down to a multiple of cols x rows.
 
-        $_cols = getvar("_cols");
-        $_rows = getvar("_rows");
-        $_off = getvar("_off");
+        $_cols = (int) getvar("_cols");
+        $_rows = (int) getvar("_rows");
+        $_off = (int) getvar("_off");
 
-        if (!$_cols) { $_cols = $DEFAULT_COLS; }
-        if (!$_rows) { $_rows = $DEFAULT_ROWS; }
+        if (!$_cols) { $_cols = $user->prefs->get("num_rows"); }
+        if (!$_rows) { $_rows = $user->prefs->get("num_cols"); }
         if (!$_off)  { $_off = 0; }
 
         $cells = $_cols * $_rows;
@@ -116,7 +116,7 @@
         $photo->add_to_album($user->get("lightbox_id"));
         $action = "display";
     } else if ($_action == "rate") {
-        if (ALLOW_RATINGS && ($user->is_admin() || $user->get("allow_rating"))) {
+        if (conf::get("feature.rating") && ($user->is_admin() || $user->get("allow_rating"))) {
             $rating = getvar("rating");
             $photo->rate($user, $rating);
             $link = strip_href($user->get_last_crumb());
@@ -135,7 +135,7 @@
         $_deg = getvar("_deg");
         $_thumbnail = getvar("_thumbnail");
         if ($_deg && $_deg != 0) {
-            if (ALLOW_ROTATIONS) {
+            if (conf::get("rotate.enable")) {
                 $photo->lookup();
                 try {
                     $photo->rotate($_deg);
@@ -169,7 +169,7 @@
     }
 
 
-    if (EMAIL_PHOTOS) {
+    if (conf::get("feature.mail")) {
         $actionlinks["email"]="mail.php?_action=compose&amp;photo_id=" . $photo->get("photo_id");
     }
 
@@ -179,7 +179,7 @@
     if ($user->get("lightbox_id")) {
         $actionlinks["lightbox"]="photo.php?_action=lightbox&amp;" . $qs;
     }
-    if ((ALLOW_COMMENTS) && ($user->is_admin() || $user->get("leave_comments"))) {
+    if (conf::get("feature.comments") && ($user->is_admin() || $user->get("leave_comments"))) {
         $actionlinks["add comment"]="comment.php?_action=new&amp;photo_id=" . $photo->get("photo_id");
     }
 
@@ -316,7 +316,7 @@ require_once("header.inc.php");
     <div class="main">
 
 <?php
-        if (ALLOW_ROTATIONS && ($user->is_admin() || $permissions->get("writable"))) {
+        if (conf::get("rotate.enable") && ($user->is_admin() || $permissions->get("writable"))) {
 ?>
         <div id="rotate">
             <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
@@ -343,17 +343,17 @@ require_once("header.inc.php");
 <?php
         }
 ?>
-            <?php echo $photo->get_fullsize_link($photo->get("name"),$FULLSIZE_NEW_WIN) ?> :
+            <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
             <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
             <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
         </div>    
         <div class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
         <ul class="tabs">
 <?php
-        if(defined("SHARE") && SHARE===1 && ($user->is_admin() || $user->get("allow_share"))) {
+        if(conf::get("share.enable") && ($user->is_admin() || $user->get("allow_share"))) {
             $hash=$photo->getHash();
-            $full_hash=sha1(SHARE_SALT_FULL . $hash);
-            $mid_hash=sha1(SHARE_SALT_MID . $hash);
+            $full_hash=sha1(conf::get("share.salt.full") . $hash);
+            $mid_hash=sha1(conf::get("share.salt.mid") . $hash);
             $full_link=getZophURL() . "image.php?hash=" . $full_hash;
             $mid_link=getZophURL() . "image.php?hash=" . $mid_hash;
 
@@ -367,7 +367,7 @@ require_once("header.inc.php");
         }
 ?>
         </ul>
-            <?php echo $photo->get_fullsize_link($photo->get_midsize_img(),$FULLSIZE_NEW_WIN) ?>
+            <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
 <?php
         if (($user->is_admin() || $user->get("browse_people")) && $people_links = get_photo_person_links($photo)) {
 ?>
@@ -380,7 +380,7 @@ require_once("header.inc.php");
 <dl class="photo">
 <?php echo create_field_html($photo->getDisplayArray()) ?>
 <?php
-        if ((ALLOW_RATINGS  && ($user->is_admin() || $user->get("allow_rating"))) || $photo->get("rating")) {
+        if ((conf::get("feature.rating")  && ($user->is_admin() || $user->get("allow_rating"))) || $photo->get("rating")) {
             $rating=$photo->get("rating") != 0 ? $photo->get("rating") . 
             " / 10" : "";
 ?>
@@ -394,7 +394,7 @@ require_once("header.inc.php");
                         echo $rating;
                     }
                 }
-            if (ALLOW_RATINGS && ($user->is_admin() || $user->get("allow_rating"))) {
+            if (conf::get("feature.rating") && ($user->is_admin() || $user->get("allow_rating"))) {
 ?>
 <form id="ratingform" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
         <input type="hidden" name="_action" value="rate">
@@ -478,7 +478,7 @@ require_once("header.inc.php");
           }
           echo "<br>";
         }
-        if (ALLOW_COMMENTS) {
+        if (conf::get("feature.comments")) {
             $comments=$photo->get_comments();
 
             if($comments) {
@@ -508,7 +508,7 @@ require_once("header.inc.php");
 ?>
 </div>
 <?php
-      if(JAVASCRIPT && MAPS && ($_action=="display" || $_action=="edit" || $_action==="")) {
+      if(conf::get("maps.provider") && ($_action=="display" || $_action=="edit" || $_action==="")) {
         $map=new map();
 
         if($_action == "edit") {

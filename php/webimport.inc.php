@@ -44,9 +44,9 @@ class WebImport extends Import {
      * @param  Array Vars to be applied to the photos.
      */
     public static function photos(Array $files, Array $vars) {
-        settings::$importThumbs=false; // thumbnails have already been created, no need to repeat...
-        settings::$importExif=true;
-        settings::$importSize=true;
+        conf::set("import.cli.thumbs", false); // thumbnails have already been created, no need to repeat...
+        conf::set("import.cli.exif", true);
+        conf::set("import.cli.size", true);
         parent::photos($files, $vars);
     }
     
@@ -63,7 +63,7 @@ class WebImport extends Import {
             $errortext.=" " . sprintf(translate("This may also be caused by the max_post_size (%s) in php.ini."), ini_get("max_post_size"));
             break;
         case UPLOAD_ERR_FORM_SIZE:
-            $errortext.=sprintf(translate("The uploaded file exceeds the MAX_UPLOAD setting in config.inc.php (%s)."), MAX_UPLOAD);
+            $errortext.=sprintf(translate("The uploaded file exceeds the maximum filesize setting in config.inc.php (%s)."), conf::get("import.maxupload"));
             break;
         case UPLOAD_ERR_PARTIAL:
             $errortext.=translate("The uploaded file was only partially uploaded.");
@@ -113,19 +113,19 @@ class WebImport extends Import {
             return false;
         }
 
-        $dir=realpath(IMAGE_DIR . "/" .IMPORT_DIR);
+        $dir=realpath(conf::get("path.images") . "/" .conf::get("path.upload"));
         if($dir === false) {
-            log::msg(IMAGE_DIR . "/" .IMPORT_DIR . " does not exist, creating...", log::WARN, log::IMPORT);
+            log::msg(conf::get("path.images") . "/" .conf::get("path.upload") . " does not exist, creating...", log::WARN, log::IMPORT);
             try {
-	        create_dir_recursive(IMAGE_DIR . "/" .IMPORT_DIR);
+	        create_dir_recursive(conf::get("path.images") . "/" .conf::get("path.upload"));
 	    } catch (FileDirCreationFailedException $e) {
-                log::msg(IMAGE_DIR . "/" .IMPORT_DIR . " does not exist, and I can not create it. (" . $e->getMessage() . ")", log::FATAL, log::IMPORT);
+                log::msg(conf::get("path.images") . "/" .conf::get("path.upload") . " does not exist, and I can not create it. (" . $e->getMessage() . ")", log::FATAL, log::IMPORT);
 		die();
             }
 	    // doublecheck if path really has been correctly created.
-            $dir=realpath(IMAGE_DIR . "/" .IMPORT_DIR);
+            $dir=realpath(conf::get("path.images") . "/" .conf::get("path.upload"));
             if($dir === false) {
-                log::msg(IMAGE_DIR . "/" .IMPORT_DIR . " does not exist, and I can not create it.", log::WARN, log::FATAL);
+                log::msg(conf::get("path.images") . "/" .conf::get("path.upload") . " does not exist, and I can not create it.", log::WARN, log::FATAL);
             }
         }
 
@@ -157,7 +157,7 @@ class WebImport extends Import {
         // continue when hitting fatal error.
         log::$stopOnFatal=false;
 
-        $dir=IMAGE_DIR . "/" . IMPORT_DIR . "/";
+        $dir=conf::get("path.images") . "/" . conf::get("path.upload") . "/";
         $file=file::getFromMD5($dir, $md5);
         
         if($file instanceof file) {
@@ -169,7 +169,7 @@ class WebImport extends Import {
 
         switch($type) {
         case "image":
-            if($mime=="image/jpeg" && IMPORT_AUTOROTATE) {
+            if($mime=="image/jpeg" && conf::get("import.rotate")) {
                 self::autorotate($file);
             }
             self::resizeImage($file);
@@ -210,28 +210,28 @@ class WebImport extends Import {
      * @todo unpack_dir should be removed when done
      */
     private static function unpackArchive(file $file) { 
-        $dir = IMAGE_DIR . "/" . IMPORT_DIR;
+        $dir = conf::get("path.images") . "/" . conf::get("path.upload");
         $mime=$file->getMime();
         switch($mime) {
         case "application/zip":
-            $extr = UNZIP_CMD;
-            $msg = "UNZIP_CMD";
+            $extr = conf::get("path.unzip");
+            $msg = "Unzip command";
             break;
         case "application/x-tar":
-            $extr = UNTAR_CMD;
-            $msg = "UNTAR_CMD";
+            $extr = conf::get("path.untar");
+            $msg = "Untar command";
             break;
         case "application/x-gzip":
-            $extr = UNGZ_CMD;
-            $msg = "UNGZ_CMD";
+            $extr = conf::get("path.ungz");
+            $msg = "Ungzip command";
             break;
         case "application/x-bzip2":
-            $extr = UNBZ_CMD;
-            $msg = "UNBZ_CMD";
+            $extr = conf::get("path.unbz");
+            $msg = "Unbzip command";
             break;
         }
-        if (!$extr || $extr == $msg) {
-            log::msg("To be able to process an archive of type " . $mime . ", you need to set " . $msg . " in config.inc.php to a program that can unpack this file.", log::FATAL, log::IMPORT);
+        if (empty($extr)) {
+            log::msg("To be able to process an archive of type " . $mime . ", you need to set \"" . $msg . "\" in the configuration screen to a program that can unpack this file.", log::FATAL, log::IMPORT);
             touch($file . ".zophignore");
             return false;
         }
@@ -273,11 +273,11 @@ class WebImport extends Import {
         log::msg("resizing" . $file, log::DEBUG, log::IMPORT);
         $photo = new photo();
 
-        $photo->set("path", IMPORT_DIR);
+        $photo->set("path", conf::get("path.upload"));
         $photo->set("name", basename($file));
         
         ob_start();
-            $dir=IMAGE_DIR . "/" . IMPORT_DIR;
+            $dir=conf::get("path.images") . "/" . conf::get("path.upload");
             $thumb_dir=$dir. "/" . THUMB_PREFIX;
             $mid_dir=$dir . "/" . MID_PREFIX;
             if(!file_exists($thumb_dir)) {
@@ -380,7 +380,7 @@ class WebImport extends Import {
         $xml=new DOMDocument('1.0','UTF-8');
         $root=$xml->createElement("files");
 
-        $files = file::getFromDir(IMAGE_DIR . "/" . IMPORT_DIR);
+        $files = file::getFromDir(conf::get("path.images") . "/" . conf::get("path.upload"));
         foreach ($files as $file) {
             unset($icon);
             unset($status);
@@ -391,26 +391,26 @@ class WebImport extends Import {
             
             switch ($type) {
             case "image":
-                $thumb=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . get_converted_image_name($file->getName());
-                $mid=MID_PREFIX . "/" . MID_PREFIX . "_" . get_converted_image_name($file->getName());
-                if(file_exists(IMAGE_DIR . "/" . IMPORT_DIR . "/" . $thumb) &&
-                  file_exists(IMAGE_DIR . "/" . IMPORT_DIR . "/" . $mid)) {
+                $thumb=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $file->getName();
+                $mid=MID_PREFIX . "/" . MID_PREFIX . "_" . $file->getName();
+                if(file_exists(conf::get("path.images") . "/" . conf::get("path.upload") . "/" . $thumb) &&
+                  file_exists(conf::get("path.images") . "/" . conf::get("path.upload") . "/" . $mid)) {
                     $status="done";
                 } else {
-                    $icon="images/icons/" . ICONSET . "/pause.png";
+                    $icon=template::getImage("icons/pause.png");
                     $status="waiting";
                 }
                 break;
             case "archive":
-                $icon="images/icons/" . ICONSET . "/archive.png";
+                $icon=template::getImage("icons/archive.png");
                 $status="waiting";
                 break;
             case "xml":
-                $icon="images/icons/" . ICONSET . "/tracks.png";
+                $icon=template::getImage("icons/tracks.png");
                 $status="done";
                 break;
             case "ignore":
-                $icon="images/icons/" . ICONSET . "/error.png";
+                $icon=template::getImage("icons/error.png");
                 $status="ignore";
                 break;
             }
@@ -446,7 +446,7 @@ class WebImport extends Import {
      */
 
     public static function retryFile($md5) {
-        $dir=IMAGE_DIR . "/" . IMPORT_DIR;
+        $dir=conf::get("path.images") . "/" . conf::get("path.upload");
 
         $file=file::getFromMD5($dir, $md5);
         // only delete "related files", not the referenced file.
@@ -461,7 +461,7 @@ class WebImport extends Import {
      * @param string md5 hash of the filename
      */
     public static function deleteFile($md5) {
-        $dir=IMAGE_DIR . "/" . IMPORT_DIR;
+        $dir=conf::get("path.images") . "/" . conf::get("path.upload");
 
         $file=file::getFromMD5($dir, $md5);
         $file->delete(true);
@@ -476,7 +476,7 @@ class WebImport extends Import {
     public static function getFileList(Array $import) {
         $loaded=0;
         foreach($import as $md5) {
-            $file=file::getFromMD5(IMAGE_DIR . "/" . IMPORT_DIR, $md5);
+            $file=file::getFromMD5(conf::get("path.images") . "/" . conf::get("path.upload"), $md5);
             if(!empty($file)) {
                 $files[]=$file;
             }

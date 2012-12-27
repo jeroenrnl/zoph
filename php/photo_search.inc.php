@@ -29,10 +29,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     if(!is_numeric($offset)) { die("offset must be numeric"); }
     if(!is_numeric($rows)) { die("rows must be numeric"); }
 
-    if (MAX_THUMB_DESC && $user && $user->prefs->get("desc_thumbnails")) {
-        $select .= ", ph.description";
-    }
-
     $from_clause=DB_PREFIX . "photos as ph";
 
     if ($user && !$user->is_admin()) {
@@ -51,18 +47,16 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         $where = "";
     }
 
-    global $DEFAULT_ORDER;
     if (isset($vars["_order"])) {
         $ord = $vars["_order"];
     } else {
-        $ord = $DEFAULT_ORDER;
+        $ord = conf::get("interface.sort.order");
     }
 
-    global $DEFAULT_DIRECTION;
     if (isset($vars["_dir"])) {
         $dir = $vars["_dir"];
     } else {
-        $dir = $DEFAULT_DIRECTION;
+        $dir = conf::get("interface.sort.dir");
     }
 
     $order = "ph." . $ord . " $dir";

@@ -37,13 +37,13 @@ class admin {
      * @param string Name
      * @param string Description
      * @param string URL to point to
-     * @param string Icon file (only <filename>.png, no path)
+     * @param string Icon name (only <filename>.png, no path)
      */
     function __construct($name, $desc, $url, $icon) {
         $this->name=$name;
         $this->url=$url;
         $this->desc=$desc;
-        $this->icon=ICONSET . "/" . $icon;
+        $this->icon=template::getImage("icons/" . $icon);
     }
 
     /**
@@ -65,7 +65,8 @@ class admin {
             new admin("groups", "create or modify user groups", "groups.php", "groups.png"),
             new admin("pages", "create or modify zoph pages", "pages.php", "pages.png"),
             new admin("pagesets", "create or modify pagesets", "pagesets.php", "pagesets.png"),
-            new admin("tracks", "create or modify GPS tracks", "tracks.php", "tracks.png")
+            new admin("tracks", "create or modify GPS tracks", "tracks.php", "tracks.png"),
+            new admin("config", "modify configuration items", "config.php", "configure.png")
         );
     }
 }
