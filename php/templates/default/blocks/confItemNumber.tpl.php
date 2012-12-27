@@ -23,12 +23,16 @@ if(!ZOPH) { die("Illegal call"); }
 ?>
     <div>
         <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
-        <input type="number" pattern="<?php echo $tpl_regex ?>" title="<?php echo $tpl_title ?>" name="<?php echo $tpl_name ?>" value="<?php echo $tpl_value; ?>" size="<?php echo $tpl_size ?>" <?php echo $tpl_req ?> min="<?php echo $tpl_min ?>" max="<?php echo $tpl_max ?>"  step="<?php echo $tpl_step ?>">
-        <div class="desc">
-            <?php echo $tpl_desc ?>
-        </div>
-        <div class="inputhint">
-            <?php echo $tpl_hint ?>
-        </div>
+        <input type="number" pattern="<?php echo $tpl_regex ?>" name="<?php echo $tpl_name ?>" value="<?php echo $tpl_value; ?>" size="<?php echo $tpl_size ?>" <?php echo $tpl_req ?> min="<?php echo $tpl_min ?>" max="<?php echo $tpl_max ?>"  step="<?php echo $tpl_step ?>">
+        <?php if(!empty($tpl_hint)): ?>
+            <div class="inputhint">
+                <?php echo $tpl_hint ?>
+            </div>
+        <?php endif; ?>
+        <?php if(!empty($tpl_desc)): ?>
+            <div class="desc">
+                <?php echo $tpl_desc ?>
+            </div>
+        <?php endif; ?>
     </div>
     

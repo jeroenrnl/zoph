@@ -319,7 +319,7 @@ class conf {
         $path_images->setDesc("Location of the images on the filesystem. Absolute path, thus starting with a /");
         $path_images->setDefault("/data/images");
         $path_images->setRegex("^\/[A-Za-z0-9_\.\/]+$");
-        $path_images->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Must start with a /");
+        $path_images->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Must start with a /");
         $path_images->setRequired();
         $path[]=$path_images;
 
@@ -329,7 +329,7 @@ class conf {
         $path_upload->setDesc("Directory where uploaded files are stored and from where files are imported in Zoph. This is a directory under the images directorty (above). For example, if the images directory is set to /data/images and this is set to upload, photos will be uploaded to /data/images/upload.");
         $path_upload->setDefault("upload");
         $path_upload->setRegex("^[A-Za-z0-9_]+[A-Za-z0-9_\.\/]*$");
-        $path_upload->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
+        $path_upload->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
         $path[]=$path_upload;
         
         $path_magic = new confItemString();
@@ -338,7 +338,7 @@ class conf {
         $path_magic->setDesc("Zoph needs a MIME Magic file to be able to determine the filetype of an uploaded file. This is an important security measure, since it prevents users from uploading files other than images and archives. If left empty, PHP will use the built-in Magic file, if for some reason this does not work, you can specify the location of the MIME magic file. Where this file is located, depends on your distribution, /usr/share/misc/magic.mgc, /usr/share/misc/file/magic.mgc, /usr/share/file/magic are often used.");
         $path_magic->setDefault("");
         $path_magic->setRegex("^(\/[A-Za-z0-9_\.\/]+|)$");
-        $path_magic->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Must start with a /. Can be empty for PHP builtin magic file.");
+        $path_magic->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Must start with a /. Can be empty for PHP builtin magic file.");
         $path[]=$path_magic;
 
         $path_unzip = new confItemString();
@@ -347,7 +347,7 @@ class conf {
         $path_unzip->setDesc("The command to use to unzip gzip files. Leave empty to disable uploading .gz files. On most systems \"unzip\" will work.");
         $path_unzip->setDefault("");
         $path_unzip->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
-        $path_unzip->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
+        $path_unzip->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$path_unzip;
 
         $path_unzip = new confItemString();
@@ -356,7 +356,7 @@ class conf {
         $path_unzip->setDesc("The command to use to unzip zip files. Leave empty to disable uploading .zip files. On most systems \"unzip\" will work.");
         $path_unzip->setDefault("");
         $path_unzip->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
-        $path_unzip->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
+        $path_unzip->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$path_unzip;
 
         $path_untar = new confItemString();
@@ -365,7 +365,7 @@ class conf {
         $path_untar->setDesc("The command to use to untar tar files. Leave empty to disable uploading .tar files. On most systems \"tar xvf\" will work.");
         $path_untar->setDefault("");
         $path_untar->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
-        $path_untar->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
+        $path_untar->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$path_untar;
         
         $path_ungz = new confItemString();
@@ -374,7 +374,7 @@ class conf {
         $path_ungz->setDesc("The command to use to unzip gzip files. Leave empty to disable uploading .gz files. On most systems \"gunzip\" will work.");
         $path_ungz->setDefault("");
         $path_ungz->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
-        $path_ungz->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
+        $path_ungz->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$path_ungz;
         
         $path_unbz = new confItemString();
@@ -383,7 +383,7 @@ class conf {
         $path_unbz->setDesc("The command to use to unzip bzip files. Leave empty to disable uploading .bz files. On most systems \"bunzip2\" will work.");
         $path_unbz->setDefault("");
         $path_unbz->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
-        $path_unbz->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
+        $path_unbz->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$path_unbz;
 
         /************************** MAPS **************************/
@@ -612,7 +612,7 @@ class conf {
         $wm_file->setDesc("If watermarking is used, this should be set to the name of the file that will be used as the watermark. It should be a GIF file, for best results, use contrasting colours and transparency. In the Contrib directory, 3 example files are included. The filename is relative to the image directory, defined above.");
         $wm_file->setDefault("");
         $wm_file->setRegex("(^$|^[A-Za-z0-9_]+[A-Za-z0-9_\.\/]*\.gif$)");
-        $wm_file->setTitle("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
+        $wm_file->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
         $wm[]=$wm_file;
 
         $wm_pos_x = new confItemSelect();

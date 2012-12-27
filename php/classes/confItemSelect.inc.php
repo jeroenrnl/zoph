@@ -70,6 +70,9 @@ class confItemSelect extends confItem {
      * @return block template block
      */
     public function display() {
+        if($this->internal) {
+            return;
+        }
         $tpl=new block("confItemSelect", array(
             "label" => e(translate($this->getLabel(),0)),
             "name" => e($this->getName()),
@@ -77,7 +80,6 @@ class confItemSelect extends confItem {
             "desc" => e(translate($this->getDesc(),0)),
             "hint" => e(translate($this->getHint(),0)),
             "options" => translate($this->getOptions(),0)
-
         ));
         return $tpl;
      }

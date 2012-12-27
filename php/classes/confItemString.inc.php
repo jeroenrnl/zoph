@@ -24,7 +24,6 @@
 class confItemString extends confItem {
     
     protected $regex=".+";
-    protected $title="";
     protected $size=30;
 
     public function display() {
@@ -39,7 +38,6 @@ class confItemString extends confItem {
             "hint" => e($this->getHint()),
             "regex" => e($this->regex),
             "size" => (int) $this->size,
-            "title" => e($this->title),
             "req" => ($this->required ? "required" : "")
         ));
         return $tpl;
@@ -47,10 +45,6 @@ class confItemString extends confItem {
 
     public function setRegex($regex) {
         $this->regex=$regex;
-    }
-
-    public function setTitle($title) {
-        $this->title=$title;
     }
 
     public function checkValue($value) {

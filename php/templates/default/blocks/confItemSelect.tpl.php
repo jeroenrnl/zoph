@@ -32,10 +32,14 @@ if(!ZOPH) { die("Illegal call"); }
             <option <?php echo $selected; ?> value="<?php echo $option ?>"><?php echo $label ?></option>
         <?php endforeach ?>
     </select>
-    <div class="desc">
-        <?php echo $tpl_desc ?>
-    </div>
-    <div class="inputhint">
-        <?php echo $tpl_hint ?>
-    </div>
+    <?php if(!empty($tpl_hint)): ?>
+        <div class="inputhint">
+            <?php echo $tpl_hint ?>
+        </div>
+    <?php endif; ?>
+    <?php if(!empty($tpl_desc)): ?>
+        <div class="desc">
+            <?php echo $tpl_desc ?>
+        </div>
+    <?php endif; ?>
     

@@ -43,7 +43,6 @@ class confItemNumber extends confItemString {
             "min" => (float) $this->min,
             "max" => (float) $this->max,
             "step" => (float) $this->step,
-            "title" => e(translate($this->title),0),
             "req" => ($this->required ? "required" : "")
         ));
         return $tpl;

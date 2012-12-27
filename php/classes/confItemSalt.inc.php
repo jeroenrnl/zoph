@@ -29,10 +29,12 @@
 class confItemSalt extends confItemString {
     
     protected $regex="[a-zA-Z0-9]{10,40}";
-    protected $title="";
     protected $size=40;
 
     public function display() {
+        if($this->internal) {
+            return;
+        }
         $id=str_replace(".", "_", $this->getName());
         $tpl=new block("confItemSalt", array(
             "label" => e(translate($this->getLabel(),0)),
@@ -43,7 +45,6 @@ class confItemSalt extends confItemString {
             "hint" => e(translate($this->getHint(),0)),
             "regex" => e($this->regex),
             "size" => (int) $this->size,
-            "title" => e($this->title),
             "req" => ($this->required ? "required" : "")
         ));
         return $tpl;

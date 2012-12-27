@@ -24,10 +24,14 @@ if(!ZOPH) { die("Illegal call"); }
     <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
     <input type="hidden" name="<?php echo $tpl_name ?>" value="0">
     <input type="checkbox" name="<?php echo $tpl_name ?>" value="1" <?php echo $tpl_checked ?>>
-    <div class="desc">
-        <?php echo $tpl_desc ?>
-    </div>
-    <div class="inputhint">
-        <?php echo $tpl_hint ?>
-    </div>
+    <?php if(!empty($tpl_hint)): ?>
+        <div class="inputhint">
+            <?php echo $tpl_hint ?>
+        </div>
+    <?php endif; ?>
+    <?php if(!empty($tpl_desc)): ?>
+        <div class="desc">
+            <?php echo $tpl_desc ?>
+        </div>
+    <?php endif; ?>
     

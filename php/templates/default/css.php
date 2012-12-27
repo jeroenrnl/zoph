@@ -522,6 +522,7 @@ div.main#config .desc {
     color: <?php echo color_scheme::getColor("title_font_color") ?>;
     border: 1px solid <?php echo color_scheme::getColor("title_font_color") ?>;
     margin-left: 11.5em;
+    margin-bottom: 15px;
     padding: 0.5em;
     background: rgba(0,0,0,0.05);
     border-radius: 4px;
