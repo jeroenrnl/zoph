@@ -38,6 +38,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link type="text/css" rel="stylesheet" href="css.php">
+        <link type="image/png" rel="icon" href="<?php echo template::getImage("icons/favicon.png") ?>">
         <script type="text/javascript">
             var template = "<?php echo conf::get("interface.template"); ?>";
             var icons={

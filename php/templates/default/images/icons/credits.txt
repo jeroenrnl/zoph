@@ -37,6 +37,7 @@ http://creativecommons.org/licenses/by-sa/2.5/
 64x64/apps/ktorrent.png		tracks.png
 64x64/apps/system-users.png	groups.png
 64x64/apps/userconfig.png	users.png
+64x64/mimetypes/camera.png	favicon.png
 64x64/mimetypes/contents2.png	pagesets.png
 64x64/mimetypes/document.png	pages.png
 64x64/mimetypes/zip.png		archive.png
