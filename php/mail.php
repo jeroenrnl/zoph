@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
     require_once("include.inc.php");
-    require_once("htmlMimeMail.php");
 
     $title = translate("E-Mail Photo");
 
@@ -60,7 +59,7 @@
 
         if ($_action == "mail") {
             try {
-                $mail = new Mail_mime();
+                $mail = new mailMime();
                 $hdrs = array (
                     "X-Mailer" => "Html Mime Mail Class",
                     "X-Zoph-Version" => VERSION
@@ -74,10 +73,10 @@
                     $size = $vars["_size"];
                 } else if ($size == "full") {
                     $file = $photo->get("name");
-                    $dir = conf::get("path.images") . $photo->get("path") . "/";
+                    $dir = conf::get("path.images") . "/" . $photo->get("path") . "/";
                 } else {
                     $file = MID_PREFIX . "_" . $photo->get("name");
-                    $dir = conf::get("path.images") . $photo->get("path") . "/" .
+                    $dir = conf::get("path.images") . "/" . $photo->get("path") . "/" .
                         MID_PREFIX . "/";
                 }
 

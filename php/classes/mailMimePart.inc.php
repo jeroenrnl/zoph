@@ -1,97 +1,100 @@
 <?php
-// +-----------------------------------------------------------------------+
-// | Copyright (c) 2002-2003  Richard Heyes                                     |
-// | All rights reserved.                                                  |
-// |                                                                       |
-// | Redistribution and use in source and binary forms, with or without    |
-// | modification, are permitted provided that the following conditions    |
-// | are met:                                                              |
-// |                                                                       |
-// | o Redistributions of source code must retain the above copyright      |
-// |   notice, this list of conditions and the following disclaimer.       |
-// | o Redistributions in binary form must reproduce the above copyright   |
-// |   notice, this list of conditions and the following disclaimer in the |
-// |   documentation and/or other materials provided with the distribution.|
-// | o The names of the authors may not be used to endorse or promote      |
-// |   products derived from this software without specific prior written  |
-// |   permission.                                                         |
-// |                                                                       |
-// | THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   |
-// | "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     |
-// | LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR |
-// | A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT  |
-// | OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, |
-// | SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT      |
-// | LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, |
-// | DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY |
-// | THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT   |
-// | (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE |
-// | OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  |
-// |                                                                       |
-// +-----------------------------------------------------------------------+
-// | Author: Richard Heyes <richard@phpguru.org>                           |
-// +-----------------------------------------------------------------------+
+/**
+ * Raw MIME encoder class
+ *
+ *  @copyright 2002-2003  Richard Heyes                                
+ *  All rights reserved.                                                  
+ *                                                                        
+ *  Redistribution and use in source and binary forms, with or without    
+ *  modification, are permitted provided that the following conditions    
+ *  are met:                                                              
+ *                                                                        
+ *  o Redistributions of source code must retain the above copyright      
+ *    notice, this list of conditions and the following disclaimer.       
+ *  o Redistributions in binary form must reproduce the above copyright   
+ *    notice, this list of conditions and the following disclaimer in the 
+ *    documentation and/or other materials provided with the distribution.
+ *  o The names of the authors may not be used to endorse or promote      
+ *    products derived from this software without specific prior written  
+ *    permission.                                                         
+ *                                                                        
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT  
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT      
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT   
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+ *                                                                        
+ * @author Richard Heyes <richard@phpguru.org>                           
+ * @author Jeroen Roos
+ *
+ * @package Zoph
+ */
+
 
 /**
-*
-*  Raw mime encoding class
-*
-* What is it?
-*   This class enables you to manipulate and build
-*   a mime email from the ground up.
-*
-* Why use this instead of mime.php?
-*   mime.php is a userfriendly api to this class for
-*   people who aren't interested in the internals of
-*   mime mail. This class however allows full control
-*   over the email.
-*
-* Eg.
-*
-* // Since multipart/mixed has no real body, (the body is
-* // the subpart), we set the body argument to blank.
-*
-* $params['content_type'] = 'multipart/mixed';
-* $email = new Mail_mimePart('', $params);
-*
-* // Here we add a text part to the multipart we have
-* // already. Assume $body contains plain text.
-*
-* $params['content_type'] = 'text/plain';
-* $params['encoding']     = '7bit';
-* $text = $email->addSubPart($body, $params);
-*
-* // Now add an attachment. Assume $attach is
-* the contents of the attachment
-*
-* $params['content_type'] = 'application/zip';
-* $params['encoding']     = 'base64';
-* $params['disposition']  = 'attachment';
-* $params['dfilename']    = 'example.zip';
-* $attach =& $email->addSubPart($body, $params);
-*
-* // Now build the email. Note that the encode
-* // function returns an associative array containing two
-* // elements, body and headers. You will need to add extra
-* // headers, (eg. Mime-Version) before sending.
-*
-* $email = $message->encode();
-* $email['headers'][] = 'Mime-Version: 1.0';
-*
-*
-* Further examples are available at http://www.phpguru.org
-*
-* TODO:
-*  - Set encode() to return the $obj->encoded if encode()
-*    has already been run. Unless a flag is passed to specifically
-*    re-build the message.
-*
-* @author  Richard Heyes <richard@phpguru.org>
-* @version 1.13
-* @package Mail
-*/
+ *  Raw mime encoding class
+ *
+ * What is it?
+ *   This class enables you to manipulate and build
+ *   a mime email from the ground up.
+ *
+ * Why use this instead of mime.php?
+ *   mime.php is a userfriendly api to this class for
+ *   people who aren't interested in the internals of
+ *   mime mail. This class however allows full control
+ *   over the email.
+ *
+ * Eg.
+ *
+ * // Since multipart/mixed has no real body, (the body is
+ * // the subpart), we set the body argument to blank.
+ *
+ * $params['content_type'] = 'multipart/mixed';
+ * $email = new mailMimePart('', $params);
+ *
+ * // Here we add a text part to the multipart we have
+ * // already. Assume $body contains plain text.
+ *
+ * $params['content_type'] = 'text/plain';
+ * $params['encoding']     = '7bit';
+ * $text = $email->addSubPart($body, $params);
+ *
+ * // Now add an attachment. Assume $attach is
+ * the contents of the attachment
+ *
+ * $params['content_type'] = 'application/zip';
+ * $params['encoding']     = 'base64';
+ * $params['disposition']  = 'attachment';
+ * $params['dfilename']    = 'example.zip';
+ * $attach =& $email->addSubPart($body, $params);
+ *
+ * // Now build the email. Note that the encode
+ * // function returns an associative array containing two
+ * // elements, body and headers. You will need to add extra
+ * // headers, (eg. Mime-Version) before sending.
+ *
+ * $email = $message->encode();
+ * $email['headers'][] = 'Mime-Version: 1.0';
+ *
+ *
+ * Further examples are available at http://www.phpguru.org
+ *
+ * TODO:
+ *  - Set encode() to return the $obj->encoded if encode()
+ *    has already been run. Unless a flag is passed to specifically
+ *    re-build the message.
+ *
+ * @author  Richard Heyes <richard@phpguru.org>
+ * @version 1.13
+ */
 
-class Mail_mimePart {
+class mailMimePart {
 
    /** @var string The encoding type of this part */
     private $encoding;
@@ -227,10 +230,10 @@ class Mail_mimePart {
      * @param string The body of the subpart, if any.
      * @param array The parameters for the subpart, same
      *                as the $params argument for constructor.
-     * @return Mail_mimePart the part you just added. 
+     * @return mailMimePart the part you just added. 
      */
     public function addSubPart($body, $params) {
-        $this->subparts[] = new Mail_mimePart($body, $params);
+        $this->subparts[] = new mailMimePart($body, $params);
         return $this->subparts[count($this->subparts) - 1];
     }
 
@@ -304,4 +307,5 @@ class Mail_mimePart {
         return $output;
     }
 } // End of class
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 ?>

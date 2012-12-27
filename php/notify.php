@@ -21,8 +21,6 @@
         redirect(add_sid("zoph.php"));
     }
 
-    require_once("htmlMimeMail.php");
-
     $title = translate("Notify");
 
     $user_id = getvar("user_id");
@@ -37,7 +35,7 @@
         $from_name = getvar("from_name");
         $from_email = getvar("from_email");
 
-        $mail = new Mail_mime();
+        $mail = new mailMime();
         $hdrs = array (
             "X-Mailer" => "Html Mime Mail Class",
             "X-Zoph-Version" => VERSION
