@@ -38,6 +38,24 @@
 
     $thumbnails;
     $clean_vars = clean_request_vars($request_vars);
+
+    $_qs=getvar("_qs");
+
+    $qs = preg_replace('/_crumb=\d+&?/', '', $_SERVER["QUERY_STRING"]);
+    $qs = preg_replace('/_action=\w+&?/', '', $qs);
+    $encoded_qs = urlencode(htmlentities($_qs));
+    if (empty($encoded_qs)) {
+        $encoded_qs = urlencode(htmlentities($qs));
+    }
+    /* if page is called via a HTTP POST, the $QUERY_STRING variable is empty
+       so we need to fill $qs differently... */
+    if (empty($qs)) {
+        $qs=$_qs;
+    }
+
+    $actionlinks["return"]="photos.php?" .  $qs;
+
+
     $num_photos =
         get_photos($clean_vars, $offset, $cells, $thumbnails, $user);
 
@@ -59,7 +77,14 @@
 
     require_once("header.inc.php");
 ?>
-          <h1><?php echo $title_bar ?></h1>
+        <h1>
+<?php
+    echo create_actionlinks($actionlinks);
+    echo $title_bar
+?>
+        </h1>
+
+
       <div class="main">
       <form action="edit_photos.php" method="POST">
         <p>
