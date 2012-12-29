@@ -53,13 +53,13 @@ class importTest extends ZophDataBaseTestCase {
      */
 
     public function testImportImages($id, $name, $bg, $fg) {
-        if(file_exists(IMAGE_DIR . "/" . $name)) {
-            unlink(IMAGE_DIR . "/" . $name);        
+        if(file_exists(conf::get("path.images") . "/" . $name)) {
+            unlink(conf::get("path.images") . "/" . $name);        
         }
         self::createTestImage($name, $bg, $fg);
         $photos[]=new file("/tmp/" . $name);
-        settings::$importThumbs=true;
-        settings::$importSize=true;
+        conf::set("import.cli.thumbs", true);
+        conf::set("import.cli.size", true);
 
 
         $imported=cliimport::photos($photos, array());
@@ -68,7 +68,7 @@ class importTest extends ZophDataBaseTestCase {
             $this->assertEquals($name, $photo->get("name"));
 
             $this->assertEquals($id, $photo->get("photo_id"));
-            $this->assertFileExists(IMAGE_DIR . "/" . $name);
+            $this->assertFileExists(conf::get("path.images") . "/" . $name);
         }
     }
 

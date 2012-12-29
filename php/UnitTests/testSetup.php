@@ -41,6 +41,7 @@ require_once("PHPUnit/Extensions/Database/Operation/Truncate.php");
 require_once("PHPUnit/Extensions/Database/Operation/RowBased.php");
 require_once("PHPUnit/Extensions/Database/Operation/Insert.php");
 require_once("PHPUnit/Extensions/Database/Operation/Null.php");
+require_once("PHPUnit/Extensions/Database/Operation/Exception.php");
 require_once("PHPUnit/Extensions/Database/DataSet/IDataSet.php");
 require_once("PHPUnit/Extensions/Database/DataSet/AbstractDataSet.php");
 require_once("PHPUnit/Extensions/Database/DB/DataSet.php");
