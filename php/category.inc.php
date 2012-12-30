@@ -19,11 +19,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class category extends zophTreeTable {
+class category extends zophTreeTable implements Organizer {
 
     var $photoCount;
 
-    function category($id = 0) {
+    function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("category_id must be numeric"); }
         parent::__construct("categories", array("category_id"), array("category"));
         $this->set("category_id", $id);
@@ -41,7 +41,8 @@ class category extends zophTreeTable {
         return $this->get("category");
     }
 
-    function getChildren($user=null,$order=null) {
+    function getChildren($order=null) {
+        $user=user::getCurrent();
         $order_fields="";
         if($order && $order!="name") {
             $order_fields=get_sql_for_order($order);
@@ -65,23 +66,27 @@ class category extends zophTreeTable {
             " GROUP BY c.category_id " .
             $order;
         $this->children=category::getRecordsFromQuery("category", $sql);
-        if($user && !$user->is_admin()) {
-            return(remove_empty($this->children,$user));
+         
+        if(!$user->is_admin()) {
+            return(remove_empty($this->children));
         } else {
             return $this->children;
         }
     }    
     
-    function get_branch_ids($user = null) {
-        return parent::get_branch_ids($user);
-    }
+    function getPhotoCount() {
+        $user=user::getCurrent();
 
-    function getPhotoCount($user) {
         if ($this->photoCount) { return $photoCount; }
 
         $id = $this->get("category_id");
 
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql =
+                "select count(photo_id) from " .
+                DB_PREFIX . "photo_categories " .
+                "where category_id = '" .  escape_string($id) . "'";
+        } else {
             $sql =
                 "select count(distinct pc.photo_id) from " .
                 DB_PREFIX . "photo_categories as pc JOIN " .
@@ -97,59 +102,53 @@ class category extends zophTreeTable {
                 "AND gu.user_id = '" . escape_string($user->get("user_id")) . 
                 "' AND gp.access_level >= p.level";
         }
-        else {
-            $sql =
-                "select count(photo_id) from " .
-                DB_PREFIX . "photo_categories " .
-                "where category_id = '" .  escape_string($id) . "'";
-        }
 
         return category::getCountFromQuery($sql);
     }
 
-    function getTotalPhotoCount($user = null) {
+    function getTotalPhotoCount() {
+        $user=user::getCurrent();
         if ($this->get("parent_category_id")) {
-            $id_list = $this->get_branch_ids($user);
+            $id_list = $this->getBranchIds();
             $id_constraint = "pc.category_id in ($id_list)";
-        }
-        else {
+        } else {
             $id_constraint = "";
         }
 
 
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
             $sql =
-                "select count(distinct pc.photo_id) from " .
-                DB_PREFIX . "photo_categories as pc JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
+                "SELECT COUNT(DISTINCT pc.photo_id) FROM " .
+                DB_PREFIX . "photo_categories AS pc";
+            if ($id_constraint) {
+                $sql .= " WHERE $id_constraint";
+            }
+        } else {
+            $sql =
+                "SELECT COUNT(DISTINCT pc.photo_id) FROM " .
+                DB_PREFIX . "photo_categories AS pc JOIN " .
+                DB_PREFIX . "photo_albums AS pa " .
                 "ON pc.photo_id = pa.photo_id JOIN " .
                 DB_PREFIX . "photos as p " .
                 "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
+                DB_PREFIX . "group_permissions AS gp " .
                 "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
+                DB_PREFIX . "groups_users AS gu " .
                 "ON gp.group_id = gu.group_id " .
                 "WHERE gu.user_id = '" . escape_string($user->get("user_id")) .
                 "' AND gp.access_level >= p.level";
 
             if ($id_constraint) {
-                $sql .= " and $id_constraint";
+                $sql .= " AND $id_constraint";
             }
         }
-        else {
-            $sql =
-                "select count(distinct pc.photo_id) from " .
-                DB_PREFIX . "photo_categories as pc";
 
-            if ($id_constraint) {
-                $sql .= " where $id_constraint";
-            }
-        }
 
         return category::getCountFromQuery($sql);
     }
 
-    public function getEditArray(user $user = null) {
+    public function getEditArray() {
+        $user=user::getCurrent();
         if($this->is_root()) {
             $parent=array(
                 translate("parent category"),
@@ -210,22 +209,30 @@ class category extends zophTreeTable {
         return "category";
     }
 
-    function get_coverphoto($user,$autothumb=null,$children=null) {
+    function getCoverphoto($autothumb=null,$children=null) {
+        $user=user::getCurrent();
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-            if (!$coverphoto->lookupForUser($user)) {
+            if (!$coverphoto->lookup()) {
                 unset($coverphoto);
             }
         }
         if (isset($autothumb) && !isset($coverphoto)) {
             $order=get_autothumb_order($autothumb);
             if($children) {
-                $cat_where=" WHERE pc.category_id in (" . $this->get_branch_ids($user) .")";
+                $cat_where=" WHERE pc.category_id in (" . $this->getBranchIds() .")";
             } else {
                 $cat_where=" WHERE pc.category_id =" .$this->get("category_id");
             }
 
-            if ($user && !$user->is_admin()) {
+            if ($user->is_admin()) {
+                $sql =
+                    "select distinct p.photo_id from " .
+                    DB_PREFIX . "photos as p JOIN " .
+                    DB_PREFIX . "photo_categories as pc ON" .
+                    " pc.photo_id = p.photo_id" .
+                    $cat_where . " " . $order;
+            } else {
                 $sql=
                     "select distinct p.photo_id from " .
                     DB_PREFIX . "photos as p JOIN " .
@@ -242,13 +249,6 @@ class category extends zophTreeTable {
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " AND gp.access_level >= p.level " .
                     $order;
-            } else {
-                $sql =
-                    "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p JOIN " .
-                    DB_PREFIX . "photo_categories as pc ON" .
-                    " pc.photo_id = p.photo_id" .
-                    $cat_where . " " . $order;
             }
             $coverphotos=photo::getRecordsFromQuery("photo", $sql);
             $coverphoto=array_shift($coverphotos);
@@ -260,10 +260,11 @@ class category extends zophTreeTable {
         } else if (!$children) {
             // No photos found in this cat... let's look again, but now 
             // also in subcat...
-            return $this->get_coverphoto($user, $autothumb, true);
+            return $this->getCoverphoto($autothumb, true);
 
         }
     }
+
     function is_root() {
         // At this moment the root cat is always 1, but this may
         // change in the future, so to be safe we'll make a function for
@@ -281,13 +282,27 @@ class category extends zophTreeTable {
      * @param user Only show albums this user is allowed to see
      * @return array Array with statistics
      */
-    public function getDetails(user $user=null) {
+    public function getDetails() {
+        $user=user::getCurrent();
+        $user_id = (int) $user->getId();
         $id = (int) $this->getId();
-        if(isset($user)) {
-            $user_id = (int) $user->getId();
-        } 
 
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql = "SELECT ".
+                "COUNT(ph.photo_id) AS count, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(ph.timestamp) AS first, " .
+                "MAX(ph.timestamp) AS last, " .
+                "ROUND(MIN(ph.rating),1) AS lowest, " .
+                "ROUND(MAX(ph.rating),1) AS highest, " . 
+                "ROUND(AVG(ph.rating),2) AS average FROM " . 
+                DB_PREFIX . "photo_categories pc JOIN " .
+                DB_PREFIX . "photos ph " .
+                "ON ph.photo_id=pc.photo_id " .
+                "WHERE pc.category_id=" . escape_string($id) .
+                " GROUP BY pc.category_id";
+        } else {
             $sql = "SELECT " .
                 "COUNT(ph.photo_id) AS count, " .
                 "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
@@ -310,21 +325,6 @@ class category extends zophTreeTable {
                 "gu.user_id=" . escape_string($user_id) . " AND " .
                 "pc.category_id=" . escape_string($id) .
                 " GROUP BY pc.category_id";
-        } else {
-            $sql = "SELECT ".
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ph.rating),1) AS lowest, " .
-                "ROUND(MAX(ph.rating),1) AS highest, " . 
-                "ROUND(AVG(ph.rating),2) AS average FROM " . 
-                DB_PREFIX . "photo_categories pc JOIN " .
-                DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pc.photo_id " .
-                "WHERE pc.category_id=" . escape_string($id) .
-                " GROUP BY pc.category_id";
         }
         $result=query($sql);
         if($result) {
@@ -339,12 +339,12 @@ class category extends zophTreeTable {
      * @param user Show only info about photos this user can see
      * @param array Don't fetch details, but use the given array
      */
-    public function getDetailsXML(user $user, array $details=null) {
+    public function getDetailsXML(array $details=null) {
         if(!isset($details)) {
-            $details=$this->getDetails($user);
+            $details=$this->getDetails();
         }
         $details["title"]=translate("In this category:", false);
-        return parent::getDetailsXML($user, $details);
+        return parent::getDetailsXML($details);
     }
 
    /**
@@ -381,8 +381,18 @@ class category extends zophTreeTable {
     /**
      * Get Top N categories
      */
-    public static function getTopN(user $user=null) {
-        if ($user && !$user->is_admin()) {
+    public static function getTopN() {
+        $user=user::getCurrent();
+        if ($user->is_admin()) {
+            $sql =
+                "select cat.*, count(*) as count from " .
+                DB_PREFIX . "categories as cat, " .
+                DB_PREFIX . "photo_categories as pc " .
+                "where pc.category_id = cat.category_id " .
+                "group by cat.category_id " .
+                "order by count desc, cat.category " .
+                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
+        } else {
             $sql =
                 "select cat.*, count(distinct ph.photo_id) as count from " .
                 DB_PREFIX . "categories as cat JOIN " .
@@ -402,16 +412,6 @@ class category extends zophTreeTable {
                 "GROUP BY cat.category_id " .
                 "ORDER BY count desc, cat.category " .
                 "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
-        }
-        else {
-            $sql =
-                "select cat.*, count(*) as count from " .
-                DB_PREFIX . "categories as cat, " .
-                DB_PREFIX . "photo_categories as pc " .
-                "where pc.category_id = cat.category_id " .
-                "group by cat.category_id " .
-                "order by count desc, cat.category " .
-                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
 
         return parent::getTopNfromSQL("category", $sql);
@@ -456,7 +456,7 @@ function get_category_count($user) {
             "SELECT category_id, parent_category_id  FROM " .
             DB_PREFIX . "categories as c";
         $cats=category::getRecordsFromQuery("category", $sql);
-        $cat_clean=remove_empty($cats,$user);
+        $cat_clean=remove_empty($cats);
         return count($cat_clean);
     } else {
         return category::getCount();

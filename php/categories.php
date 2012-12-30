@@ -37,10 +37,10 @@
     $obj=&$category;
     $ancestors = $category->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
-    $children = $category->getChildren($user, $order);
+    $children = $category->getChildren($order);
 
-    $photoCount = $category->getPhotoCount($user);
-    $totalPhotoCount = $category->getTotalPhotoCount($user);
+    $photoCount = $category->getPhotoCount();
+    $totalPhotoCount = $category->getTotalPhotoCount();
 
     $title = $category->get("parent_category_id") ? $category->get("category") : translate("Categories");
 
@@ -102,7 +102,7 @@
         <p>
 <?php
     }
-    echo $category->get_coverphoto($user);
+    echo $category->getCoverphoto();
 ?>
         </p>
 <?php
@@ -128,7 +128,7 @@ if ($category->get("category_description")) {
         if ($totalPhotoCount > $photoCount && $children) {
 ?>
             <span class="actionlink">
-                <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
+                <a href="photos.php?category_id=<?php echo $category->getBranchIds() . $sort ?>"><?php echo translate("view photos") ?></a>
             </span>
 <?php
             if (!$category->get("parent_category_id")) {
@@ -172,7 +172,6 @@ if ($category->get("category_description")) {
         $tpl=new template("view_" . $_view, array(
             "id" => $_view . "view",
             "items" => $children,
-            "user" => $user,
             "autothumb" => $_autothumb,
             "topnode" => true,
             "links" => array(

@@ -92,7 +92,6 @@
         $tpl=new template($template, array(
             "id" => $_view . "view",
             "items" => $ppl,
-            "user" => $user,
             "autothumb" => $_autothumb,
             "links" => array(
                 translate("photos of") => "photos.php?person_id=",

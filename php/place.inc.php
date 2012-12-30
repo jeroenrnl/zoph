@@ -19,9 +19,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class place extends zophTreeTable {
+class place extends zophTreeTable implements Organizer {
 
-    function place($id = 0) {
+    function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("place_id must be numeric"); }
         parent::__construct("places", array("place_id"), array("title"));
         $this->set("place_id", $id);
@@ -31,7 +31,7 @@ class place extends zophTreeTable {
         return (int) $this->get("place_id");
     }
 
-    function insert() {
+    public function insert() {
         if($this->get("timezone_id")) {
             $this->tzid_to_timezone();
         }
@@ -39,7 +39,7 @@ class place extends zophTreeTable {
         parent::insert();
     }
 
-    function update() {
+    public function update() {
         if($this->get("timezone_id")) {
             $this->tzid_to_timezone();
         }
@@ -47,7 +47,7 @@ class place extends zophTreeTable {
         parent::update();
     }
 
-    function delete() {
+    public function delete() {
         $id=escape_string($this->get("place_id"));
         if(!is_numeric($id)) {die("place_id is not numeric"); }
 
@@ -66,7 +66,9 @@ class place extends zophTreeTable {
         parent::delete();
     }
 
-    function getChildren($user=null,$order=null) {
+    function getChildren($order=null) {
+        $user=user::getCurrent();
+
         $order_fields="";
 
         if($order=="sortname") {
@@ -94,14 +96,14 @@ class place extends zophTreeTable {
             $order; 
 
         $this->children=place::getRecordsFromQuery("place", $sql);
-        if($user) {
-            return remove_empty($this->children, $user);
-        } else {
+        if($user->is_admin()) {
             return $this->children; 
+        } else {
+            return remove_empty($this->children);
         }
     }    
     
-    function tzid_to_timezone() {
+    public function tzid_to_timezone() {
         $tzkey=$this->get("timezone_id");
         if($tzkey>0) {
             $tzarray=TimeZone::getSelectArray();
@@ -113,7 +115,7 @@ class place extends zophTreeTable {
         unset($this->fields["timezone_id"]);
     }
 
-    function getName() {
+    public function getName() {
         if ($this->get("title")) { return $this->get("title"); }
 
         if ($this->get("address")) { $name = $this->get("address"); }
@@ -179,10 +181,17 @@ class place extends zophTreeTable {
             translate("timezone") => $this->get("timezone"));
     }
     
-    public function getPhotos($user = null) {
+    public function getPhotos() {
+        $user=user::getCurrent();
+
         $id = $this->get("place_id");
 
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql =
+                "select photo_id from " .
+                DB_PREFIX . "photos " .
+                "where location_id = '" .  escape_string($id) . "'";
+        } else {
             $sql =
                 "select p.photo_id from " .
                 DB_PREFIX . "photos as p JOIN " .
@@ -195,19 +204,22 @@ class place extends zophTreeTable {
                 "WHERE p.location_id = " . escape_string($id) .
                 " AND gu.user_id = '" . escape_string($user->get("user_id")) .
                 "' AND gp.access_level >= p.level";
-        } else {
-            $sql =
-                "select photo_id from " .
-                DB_PREFIX . "photos " .
-                "where location_id = '" .  escape_string($id) . "'";
         }
 
         return photo::getRecordsFromQuery("photo", $sql);
     }
-    function getPhotoCount($user = null) {
+
+    public function getPhotoCount() {
+        $user=user::getCurrent();
+
         $id = $this->get("place_id");
 
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql =
+                "select count(*) from " .
+                DB_PREFIX . "photos " .
+                "where location_id = '" .  escape_string($id) . "'";
+        } else {
             $sql =
                 "select count(*) from " .
                 DB_PREFIX . "photos as p JOIN " .
@@ -220,26 +232,30 @@ class place extends zophTreeTable {
                 "WHERE p.location_id = " . escape_string($id) .
                 " AND gu.user_id = '" . escape_string($user->get("user_id")) .
                 "' AND gp.access_level >= p.level";
-        } else {
-            $sql =
-                "select count(*) from " .
-                DB_PREFIX . "photos " .
-                "where location_id = '" .  escape_string($id) . "'";
         }
 
         return photo::getCountFromQuery($sql);
     }
 
-    function getTotalPhotoCount($user = null) {
+    function getTotalPhotoCount() {
+        $user=user::getCurrent();
         if ($this->get("parent_place_id")) {
-            $id_list = $this->get_branch_ids($user);
+            $id_list = $this->getBranchIds();
             $id_constraint = "p.location_id in ($id_list)";
         }
         else {
             $id_constraint = "";
         }
 
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql =
+                "SELECT COUNT(DISTINCT p.photo_id) FROM " .
+                DB_PREFIX . "photos p ";
+
+            if (!empty($id_constraint)) {
+                $sql .= " WHERE $id_constraint";
+            }
+        } else {
             $sql =
                 "select count(distinct pa.photo_id) from " .
                 DB_PREFIX . "photos as p JOIN " .
@@ -256,15 +272,6 @@ class place extends zophTreeTable {
                 $sql .= " AND $id_constraint";
             }
         }
-        else {
-            $sql =
-                "select count(distinct p.photo_id) from " .
-                DB_PREFIX . "photos p ";
-
-            if (!empty($id_constraint)) {
-                $sql .= " where $id_constraint";
-            }
-        }
 
         return zophTable::getCountFromQuery($sql);
     }
@@ -277,42 +284,43 @@ class place extends zophTreeTable {
         return "place";
     }
 
-    function get_coverphoto($user,$autothumb=null,$children=null) {
+    public function getCoverphoto($autothumb=null,$children=null) {
+        $user=user::getCurrent();
         $cover=false;
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-            if($coverphoto->lookupForUser($user)) {
+            if($coverphoto->lookup()) {
                 $cover=true;
             }
         } 
         if ($autothumb && !$cover) {
             $order=get_autothumb_order($autothumb);
             if($children) {
-                $place_where=" WHERE p.location_id in (" . $this->get_branch_ids($user) .")";
+                $place_where=" WHERE p.location_id in (" . $this->getBranchIds() .")";
             } else {
                 $place_where=" WHERE p.location_id =" .$this->get("place_id");
             }
 
-            if ($user && !$user->is_admin()) {
+            if ($user->is_admin()) {
+                $sql =
+                    "SELECT DISTINCT p.photo_id FROM " .
+                    DB_PREFIX . "photos AS p" .
+                    $place_where . " " . $order;
+            } else {
                 $sql=
-                    "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p JOIN " .
-                    DB_PREFIX . "photo_albums as pa" .
+                    "SELECT DISTINCT p.photo_id FROM " .
+                    DB_PREFIX . "photos AS p JOIN " .
+                    DB_PREFIX . "photo_albums AS pa" .
                     " ON pa.photo_id = p.photo_id JOIN " .
-                    DB_PREFIX . "group_permissions as gp " .
+                    DB_PREFIX . "group_permissions AS gp " .
                     "ON pa.album_id = gp.album_id JOIN " .
-                    DB_PREFIX . "groups_users as gu " .
+                    DB_PREFIX . "groups_users AS gu " .
                     "ON gp.group_id = gu.group_id " .
                     $place_where .
                     " AND gu.user_id =" .
                     " '" . escape_string($user->get("user_id")) . "'" .
-                    " and gp.access_level >= p.level " .
+                    " AND gp.access_level >= p.level " .
                     $order;
-            } else {
-                $sql =
-                    "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p" .
-                    $place_where . " " . $order;
             }
             $coverphotos=photo::getRecordsFromQuery("photo", $sql);
             $coverphoto=array_shift($coverphotos);
@@ -324,19 +332,18 @@ class place extends zophTreeTable {
         } else if (!$children) {
             // No photos found in this place... let's look again, but now 
             // also in sub-places...
-            return $this->get_coverphoto($user, $autothumb, true);
+            return $this->getCoverphoto($autothumb, true);
         }
 
     }
 
     /**
      * Get Marker to be placed on map
-     * @param user Currently logged on user
      * @param string icon to be used.
      * @return marker instance of marker class
      */
-    public function getMarker(user $user, $icon="geo-place") {
-        return map::getMarkerFromObj($this, $user, $icon);
+    public function getMarker($icon="geo-place") {
+        return map::getMarkerFromObj($this, $icon);
     }
 
     /**
@@ -344,13 +351,25 @@ class place extends zophTreeTable {
      * @param user Only show albums this user is allowed to see
      * @return array Array with statistics
      */
-    public function getDetails(user $user=null) {
+    public function getDetails() {
         $id = (int) $this->getId();
-        if(isset($user)) {
-            $user_id = (int) $user->getId();
-        } 
+        $user=user::getCurrent();
+        $user_id = (int) $user->getId();
 
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql = "SELECT ".
+                "COUNT(ph.photo_id) AS count, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(ph.timestamp) AS first, " .
+                "MAX(ph.timestamp) AS last, " .
+                "ROUND(MIN(ph.rating),1) AS lowest, " .
+                "ROUND(MAX(ph.rating),1) AS highest, " . 
+                "ROUND(AVG(ph.rating),2) AS average FROM " . 
+                DB_PREFIX . "photos ph " .
+                "WHERE ph.location_id=" . escape_string($id) .
+                " GROUP BY ph.location_id";
+        } else {
             $sql = "SELECT " .
                 "COUNT(ph.photo_id) AS count, " .
                 "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
@@ -371,19 +390,6 @@ class place extends zophTreeTable {
                 "gu.user_id=" . escape_string($user_id) . " AND " .
                 "ph.location_id=" . escape_string($id) .
                 " GROUP BY ph.location_id";
-        } else {
-            $sql = "SELECT ".
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ph.rating),1) AS lowest, " .
-                "ROUND(MAX(ph.rating),1) AS highest, " . 
-                "ROUND(AVG(ph.rating),2) AS average FROM " . 
-                DB_PREFIX . "photos ph " .
-                "WHERE ph.location_id=" . escape_string($id) .
-                " GROUP BY ph.location_id";
         }
         $result=query($sql);
         if($result) {
@@ -398,12 +404,12 @@ class place extends zophTreeTable {
      * @param user Show only info about photos this user can see
      * @param array Don't fetch details, but use the given array
      */
-    public function getDetailsXML(user $user, array $details=null) {
+    public function getDetailsXML(array $details=null) {
         if(!isset($details)) {
-            $details=$this->getDetails($user);
+            $details=$this->getDetails();
         }
         $details["title"]=translate("In this place:", false);
-        return parent::getDetailsXML($user, $details);
+        return parent::getDetailsXML($details);
     }
 
     public static function getNear($lat, $lon, $distance, 
@@ -438,12 +444,12 @@ class place extends zophTreeTable {
         }
     }
 
-    function get_quicklook($user) {
+    function getQuicklook() {
         $html="<h2>" . $this->getLink() . "<\/h2>";
         $html.="<small>" . $this->get_address() . "<\/small><br>";
-        $html.=$this->get_coverphoto($user, $user->prefs->get("autothumb"));
-        $count=$this->getPhotoCount($user);
-        $totalcount=$this->getTotalPhotoCount($user);
+        $html.=$this->getCoverphoto(user::getCurrent()->prefs->get("autothumb"));
+        $count=$this->getPhotoCount();
+        $totalcount=$this->getTotalPhotoCount();
         $html.="<br><small>" . 
             e(sprintf(translate("There are %s photos"), $count) .
            " " . translate("in this place")) . "<br>";
@@ -454,6 +460,7 @@ class place extends zophTreeTable {
         $html.="<\/small>";
         return $html;
     }
+
     function is_root() {
         // At this moment the root place is always 1, but this may
         // change in the future, so to be safe we'll make a function for
@@ -486,7 +493,7 @@ class place extends zophTreeTable {
 
     function set_tz_children($tz) {
         $places;
-        $places=$this->get_branch_id_array($places);
+        $places=$this->getBranchIdArray($places);
         if($places) {
             foreach ($places as $place_id) {
                 $place=new place($place_id);
@@ -529,8 +536,19 @@ class place extends zophTreeTable {
     /**
      * Get Top N people
      */
-    public static function getTopN(user $user=null) {
-        if ($user && !$user->is_admin()) {
+    public static function getTopN() {
+        $user=user::getCurrent();
+
+        if ($user->is_admin()) {
+            $sql =
+                "select plc.*, count(*) as count from " .
+                DB_PREFIX . "places as plc, " .
+                DB_PREFIX . "photos as ph " .
+                "where plc.place_id = ph.location_id " .
+                "group by plc.place_id " .
+                "order by count desc, plc.title, plc.city " .
+                "limit 0, " . (int) $user->prefs->get("reports_top_n");
+        } else {
             $sql =
                 "SELECT plc.*, count(distinct ph.photo_id) AS count FROM " .
                 DB_PREFIX . "photos as ph JOIN " .
@@ -548,16 +566,6 @@ class place extends zophTreeTable {
                 "GROUP BY plc.place_id " .
                 "ORDER BY count desc, plc.title, plc.city " .
                 "LIMIT 0, " . (int) $user->prefs->get("reports_top_n");
-        }
-        else {
-            $sql =
-                "select plc.*, count(*) as count from " .
-                DB_PREFIX . "places as plc, " .
-                DB_PREFIX . "photos as ph " .
-                "where plc.place_id = ph.location_id " .
-                "group by plc.place_id " .
-                "order by count desc, plc.title, plc.city " .
-                "limit 0, " . (int) $user->prefs->get("reports_top_n");
         }
 
         return parent::getTopNfromSQL("place", $sql);

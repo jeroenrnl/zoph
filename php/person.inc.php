@@ -182,7 +182,9 @@ class person extends zophTable {
         return "person";
     }
 
-    public function getPhotoCount(user $user) {
+    public function getPhotoCount() {
+        $user=user::getCurrent();
+        
         $ignore=null;
         $vars=array(
             "person_id" => $this->getId()
@@ -190,7 +192,9 @@ class person extends zophTable {
         return get_photos($vars, 0, 1, $ignore, $user);
     }
     
-    public function getPhotographerCount(user $user) {
+    public function getPhotographerCount() {
+        $user=user::getCurrent();
+        
         $ignore=null;
         $vars=array(
             "photographer_id" => $this->getId()
@@ -199,18 +203,29 @@ class person extends zophTable {
     }
 
 
-    function get_coverphoto($user,$autothumb=null) {
+    function getCoverphoto($autothumb=null) {
+        $user=user::getCurrent();
+
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-            if(!$coverphoto->lookupForUser($user)) {
+            if(!$coverphoto->lookup()) {
                 unset($coverphoto);
             }
         } 
         if (!is_null($autothumb) && !isset($coverphoto)) {
             $order=get_autothumb_order($autothumb);
-            if ($user && !$user->is_admin()) {
+            if ($user->is_admin()) {
+                $sql =
+                    "SELECT DISTINCT p.photo_id FROM " .
+                    DB_PREFIX . "photos AS p JOIN " .
+                    DB_PREFIX . "photo_people AS pp" .
+                    " ON pp.photo_id = p.photo_id " .
+                    " WHERE pp.person_id = " . 
+                    escape_string($this->get("person_id")) .
+                    " " . $order;
+            } else {
                 $sql=
-                    "select distinct p.photo_id from " .
+                    "SELECT DISTINCT p.photo_id FROM " .
                     DB_PREFIX . "photos AS p JOIN " .
                     DB_PREFIX . "photo_albums AS pa " .
                     "ON pa.photo_id = p.photo_id JOIN " .
@@ -226,15 +241,6 @@ class person extends zophTable {
                     " '" . escape_string($user->get("user_id")) . "'" .
                     " AND gp.access_level >= p.level " .
                     $order;
-            } else {
-                $sql =
-                    "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p JOIN " .
-                    DB_PREFIX . "photo_people as pp" .
-                    " ON pp.photo_id = p.photo_id " .
-                    " WHERE pp.person_id = " . 
-                    escape_string($this->get("person_id")) .
-                    " " . $order;
             }
             $coverphotos=photo::getRecordsFromQuery("photo", $sql);
             $coverphoto=array_shift($coverphotos);
@@ -288,19 +294,30 @@ class person extends zophTable {
     
     /**
      * Get details (statistics) about this person from db
-     * @param user Only show albums this user is allowed to see
      * @return array Array with statistics
      * @todo For now, this only tells about the photos this person
      *       has taken. Details about the photos this person appears
      *       should be added some time.
      */
-    public function getDetails(user $user=null) {
+    public function getDetails() {
+        $user=user::getCurrent();
+        $user_id = (int) $user->getId();
         $id = (int) $this->getId();
-        if(isset($user)) {
-            $user_id = (int) $user->getId();
-        } 
 
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql = "SELECT ".
+                "COUNT(ph.photo_id) AS count, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(ph.timestamp) AS first, " .
+                "MAX(ph.timestamp) AS last, " .
+                "ROUND(MIN(ph.rating),1) AS lowest, " .
+                "ROUND(MAX(ph.rating),1) AS highest, " . 
+                "ROUND(AVG(ph.rating),2) AS average FROM " . 
+                DB_PREFIX . "photos ph " .
+                "WHERE ph.photographer_id=" . escape_string($id) .
+                " GROUP BY ph.photographer_id";
+        } else {
             $sql = "SELECT " .
                 "COUNT(ph.photo_id) AS count, " .
                 "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
@@ -321,19 +338,6 @@ class person extends zophTable {
                 "gu.user_id=" . escape_string($user_id) . " AND " .
                 "ph.photographer_id=" . escape_string($id) .
                 " GROUP BY ph.photographer_id";
-        } else {
-            $sql = "SELECT ".
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ph.rating),1) AS lowest, " .
-                "ROUND(MAX(ph.rating),1) AS highest, " . 
-                "ROUND(AVG(ph.rating),2) AS average FROM " . 
-                DB_PREFIX . "photos ph " .
-                "WHERE ph.photographer_id=" . escape_string($id) .
-                " GROUP BY ph.photographer_id";
         }
         $result=query($sql);
         if($result) {
@@ -348,12 +352,12 @@ class person extends zophTable {
      * @param user Show only info about photos this user can see
      * @param array Don't fetch details, but use the given array
      */
-    public function getDetailsXML(user $user, array $details=null) {
+    public function getDetailsXML(array $details=null) {
         if(!isset($details)) {
-            $details=$this->getDetails($user);
+            $details=$this->getDetails();
         }
         $details["title"]=translate("Photos taken by this person:", false);
-        return parent::getDetailsXML($user, $details);
+        return parent::getDetailsXML($details);
     }
 
 
@@ -382,8 +386,19 @@ class person extends zophTable {
     /**
      * Get Top N people
      */
-    public static function getTopN(user $user=null) {
-        if ($user && !$user->is_admin()) {
+    public static function getTopN() {
+        $user=user::getCurrent();
+
+        if ($user->is_admin()) {
+            $sql =
+                "select ppl.*, count(*) as count from " .
+                DB_PREFIX . "people as ppl, " .
+                DB_PREFIX . "photo_people as pp " .
+                "where ppl.person_id = pp.person_id " .
+                "group by ppl.person_id " .
+                "order by count desc, ppl.last_name, ppl.first_name " .
+                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
+        } else {
             $sql =
                 "SELECT ppl.*, COUNT(DISTINCT ph.photo_id) AS count FROM " .
                 DB_PREFIX . "people as ppl JOIN " .
@@ -403,15 +418,6 @@ class person extends zophTable {
                 "GROUP BY ppl.person_id " .
                 "ORDER BY count DESC, ppl.last_name, ppl.first_name " .
                 "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
-        } else {
-            $sql =
-                "select ppl.*, count(*) as count from " .
-                DB_PREFIX . "people as ppl, " .
-                DB_PREFIX . "photo_people as pp " .
-                "where ppl.person_id = pp.person_id " .
-                "group by ppl.person_id " .
-                "order by count desc, ppl.last_name, ppl.first_name " .
-                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
 
         return parent::getTopNfromSQL("person", $sql);

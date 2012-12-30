@@ -41,10 +41,10 @@
     $obj=&$place;
     $ancestors = $place->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
-    $children = $place->getChildren($user, $order);
+    $children = $place->getChildren($order);
  
-    $totalPhotoCount = $place->getTotalPhotoCount($user);
-    $photoCount = $place->getPhotoCount($user);
+    $totalPhotoCount = $place->getTotalPhotoCount();
+    $photoCount = $place->getPhotoCount();
 
     $title = $place->get("parent_place_id") ? $place->get("title") : translate("Places");
 
@@ -119,7 +119,7 @@
         <p>
 <?php
     }
-    echo $place->get_coverphoto($user);
+    echo $place->getCoverphoto();
 ?>
         </p>
 <?php
@@ -148,7 +148,7 @@
         if ($totalPhotoCount > $photoCount && $children) {
 ?>
         <span class="actionlink">
-            <a href="photos.php?location_id=<?php echo $place->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a>
+            <a href="photos.php?location_id=<?php echo $place->getBranchIds() ?>"><?php echo translate("view photos") ?></a>
         </span>
 <?php   
             $fragment .= " " . translate("or its children");
@@ -190,7 +190,6 @@
         $tpl=new template("view_" . $_view, array(
             "id" => $_view . "view",
             "items" => $children,
-            "user" => $user,
             "autothumb" => $_autothumb,
             "topnode" => true,
             "links" => array(
@@ -206,11 +205,11 @@
         if(conf::get("maps.provider")) {
             $map=new map();
             $map->setCenterAndZoomFromObj($place);
-            $marker=$place->getMarker($user);
+            $marker=$place->getMarker();
             if($marker instanceof marker) {
                 $map->addMarker($marker);
             }
-            $map->addMarkers($children, $user);
+            $map->addMarkers($children);
             echo $map;
         }
        

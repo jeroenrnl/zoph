@@ -34,13 +34,13 @@
     else {
         $album = new album($parent_album_id);
     }
-    $album->lookupForUser($user);
+    $album->lookup();
     $obj=&$album;
     $ancestors = $album->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
-    $children = $album->getChildren($user, $order);
-    $totalPhotoCount = $album->getTotalPhotoCount($user);
-    $photoCount = $album->getPhotoCount($user);
+    $children = $album->getChildren($order);
+    $totalPhotoCount = $album->getTotalPhotoCount();
+    $photoCount = $album->getPhotoCount();
 
     $title = $album->get("parent_album_id") ? $album->get("album") : translate("Albums");
 
@@ -101,7 +101,7 @@
         <p>
 <?php
     }
-    echo $album->get_coverphoto($user);
+    echo $album->getCoverphoto();
 ?>
         </p>
 <?php
@@ -124,7 +124,7 @@
         if ($totalPhotoCount > $photoCount && $children) {
 ?>
             <span class="actionlink">
-                <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
+                <a href="photos.php?album_id=<?php echo $album->getBranchIds() . $sort ?>"><?php echo translate("view photos") ?></a>
             </span>
 <?php
             $fragment .= " " . translate("or its children");
@@ -160,7 +160,6 @@
         $tpl=new template("view_" . $_view, array(
             "id" => $_view . "view",
             "items" => $children,
-            "user" => $user,
             "autothumb" => $_autothumb,
             "topnode" => true,
             "links" => array(

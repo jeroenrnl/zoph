@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * A class corresponding to the photos table.
  *
  * This file is part of Zoph.
@@ -17,20 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
+/**
+ * A class corresponding to the photos table.
+ */
 class photo extends zophTable {
-
-    var $photographer;
-    var $location;
+    /** @var photographer */
+    public $photographer;
+    /** @var location */
+    public $location;
 
     /**
-     * For now this is only used during import, however, in the future, the photo object
+     * @var For now this is only used during import, however, in the future, the photo object
      * will be split in a photo object, referencing one or more file objects.
      */
     public $file=array();
 
-    function photo($id = 0) {
+    /**
+     * Create a new photo object
+     * @param int photo_id
+     */
+    public function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("photo_id must be numeric"); }
         parent::__construct("photos", array("photo_id"), array(""));
         $this->set("photo_id",$id);
@@ -81,29 +92,17 @@ class photo extends zophTable {
          */
     }
 
-
-
-
-
-    function lookup() {
-        $sql = "SELECT * FROM " . DB_PREFIX . "photos " .
-            "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "'";
-        
-        $success = $this->lookupFromSQL($sql);
-
-        if ($success) {
-            $this->lookup_photographer();
-            $this->lookup_location();
-        }
-
-        return $success;
-    }
-
-    function lookupForUser(user $user) {
-
+    /**
+     * Lookup a photo, considering access rights
+     */
+    public function lookup() {
+        $user=user::getCurrent();
         if (!$this->get("photo_id")) { return; }
 
-        if (!$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql = "SELECT * FROM " . DB_PREFIX . "photos " .
+                "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "'";
+        } else {
             $sql =
                 "select p.* from " .
                 DB_PREFIX . "photos as p JOIN " .
@@ -117,37 +116,43 @@ class photo extends zophTable {
                 " AND gu.user_id = '" . escape_string($user->get("user_id")) . "'" .
                 " AND gp.access_level >= p.level " .
                 "LIMIT 0, 1";
-        } else {
-            return $this->lookup();
         }
 
         $success = $this->lookupFromSQL($sql);
 
         if ($success) {
-            $this->lookup_photographer();
-            $this->lookup_location();
+            $this->lookupPhotographer();
+            $this->lookupLocation();
         }
 
         return $success;
     }
 
-    
-
-    function lookup_photographer() {
+    /**
+     * Lookup photographer of this photo
+     */
+    private function lookupPhotographer() {
         if ($this->get("photographer_id") > 0) {
             $this->photographer = new person($this->get("photographer_id"));
             $this->photographer->lookup();
         }
     }
 
-    function lookup_location() {
+    /**
+     * Lookup location of this photo
+     */
+    private function lookupLocation() {
         if ($this->get("location_id") > 0) {
             $this->location = new place($this->get("location_id"));
             $this->location->lookup();
         }
     }
 
-    function delete() {
+    /**
+     * Delete this photo from database
+     * does not delete the photo on disk
+     */
+    public function delete() {
         parent::delete(array("photo_people", "photo_categories", "photo_albums"));
     }
 
@@ -989,7 +994,7 @@ class photo extends zophTable {
         if(TimeZone::validate($timezone)) {
             $place_tz=new TimeZone($timezone);
         } else { 
-            $this->lookup_location();
+            $this->lookup();
             $loc=$this->location;
             if($loc && TimeZone::validate($loc->get("timezone"))) {
                 $place_tz=new TimeZone($loc->get("timezone"));
@@ -1033,7 +1038,7 @@ class photo extends zophTable {
             $tz=conf::get("date.tz");
         }
         
-        $this->lookup_location();
+        $this->lookup();
         $place=$this->location;
         $place_tz=null;
         $location=null;
@@ -1190,7 +1195,7 @@ class photo extends zophTable {
         return $return;
     }
 
-    function get_quicklook($user) {
+    function getQuicklook() {
         $title=e($this->get("title"));
         $file=$this->get("name");
 
@@ -1211,16 +1216,15 @@ class photo extends zophTable {
 
     /**
      * Get Marker to be placed on map
-     * @param user Currently logged on user
      * @param string icon to be used.
      * @return marker instance of marker class
      */
-    function getMarker(user $user, $icon="geo-photo") {
-        $marker=map::getMarkerFromObj($this, $user, $icon); 
+    function getMarker($icon="geo-photo") {
+        $marker=map::getMarkerFromObj($this, $icon); 
         if(!$marker instanceof marker) {
             $loc=$this->location;
             if($loc instanceof place) {
-                return $loc->getMarker($user); 
+                return $loc->getMarker(); 
             }
         } else {
             return $marker;
@@ -1600,33 +1604,33 @@ function get_filesize($photos, $human=false) {
         return $bytes;
     }
 }
-function create_rating_graph($user) {
+function createRatingGraph() {
+    $user=user::getCurrent();
+
     $ratings=array();
     $value_array=array();
     $html="";
 
-    if ($user && !$user->is_admin()) {
-        $query =
-            "select floor(ph.rating+0.5), " . 
-            "count(distinct ph.photo_id) as count from " .
-            DB_PREFIX . "photos as ph JOIN " .
-            DB_PREFIX . "photo_albums as pa " .
+    if ($user->is_admin()) {
+        $sql = "SELECT FLOOR(rating+0.5), COUNT(*) FROM " . DB_PREFIX . "photos " .
+            "GROUP BY FLOOR(rating+0.5) ORDER BY FLOOR(rating+0.5)";
+    } else {
+        $sql = "SELECT FLOOR(ph.rating+0.5), " . 
+            "COUNT(DISTINCT ph.photo_id) AS COUNT FROM " .
+            DB_PREFIX . "photos AS ph JOIN " .
+            DB_PREFIX . "photo_albums AS pa " .
             "ON ph.photo_id = pa.photo_id JOIN " .
-            DB_PREFIX . "group_permissions as gp " .
+            DB_PREFIX . "group_permissions AS gp " .
             "ON pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users as gu " .
+            DB_PREFIX . "groups_users AS gu " .
             "ON gp.group_id = gu.group_id " .
             "WHERE gu.user_id = '" . 
             escape_string($user->get("user_id")) .
             "' AND gp.access_level >= ph.level " .
             "GROUP BY floor(rating+0.5) ORDER BY floor(rating+0.5)";
-    } else {
-        $query =
-            "select floor(rating+0.5), count(*) from " . DB_PREFIX . "photos " .
-            "group by floor(rating+0.5) order by floor(rating+0.5)";
     }
 
-    $result = query($query, "Rating grouping failed");
+    $result = query($sql, "Rating grouping failed");
 
     while ($row = fetch_array($result)) {
     	$ratings[($row[0] ? $row[0] : translate("Not rated"))]=$row[1];

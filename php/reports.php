@@ -23,7 +23,7 @@
     <h1><?php echo translate("reports") ?></h1>
       <div class="main">
 <?php
-    $top_albums = album::getTopN($user);
+    $top_albums = album::getTopN();
     if ($top_albums) {
 ?>
             <table class="reports">
@@ -49,7 +49,7 @@
     }
 ?>
 <?php
-    $top_categories = category::getTopN($user);
+    $top_categories = category::getTopN();
     if ($top_categories) {
 ?>
             <table class="reports">
@@ -73,7 +73,7 @@
     else {
         echo "&nbsp;\n";
     }
-    $top_people = person::getTopN($user);
+    $top_people = person::getTopN();
     if ($top_people) {
 ?>
             <table class="reports">
@@ -97,7 +97,7 @@
     else {
         echo "&nbsp;\n";
     }
-    $top_places = place::getTopN($user);
+    $top_places = place::getTopN();
     if ($top_places) {
 ?>
             <table class="reports">
@@ -123,7 +123,7 @@
     }
 ?>
 <br>
-<?php echo create_rating_graph($user) ?>
+<?php echo createRatingGraph() ?>
 </div>
 <?php
     require_once("footer.inc.php");

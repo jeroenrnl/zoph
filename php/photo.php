@@ -276,7 +276,7 @@
     }
 
     if ($action != "insert") {
-        $found = $photo->lookupForUser($user);
+        $found = $photo->lookup();
         $title = $photo->get("name");
 
     } else {

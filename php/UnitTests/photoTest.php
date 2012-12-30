@@ -34,7 +34,7 @@ class photoTest extends ZophDataBaseTestCase {
         $photo=new photo($photo);
         $photo->set("location_id",$loc);
         $photo->update();
-        $photo->lookup_location();
+        $photo->lookup();
         $this->assertInstanceOf("place", $photo->location);
         $this->assertEquals($photo->location->getId(), $loc);
     }
@@ -47,7 +47,7 @@ class photoTest extends ZophDataBaseTestCase {
         $photo=new photo($photo);
         $photo->set("photographer_id",$phg);
         $photo->update();
-        $photo->lookup_photographer();
+        $photo->lookup();
         $this->assertInstanceOf("person", $photo->photographer);
         $this->assertEquals($photo->photographer->getId(), $phg);
     }

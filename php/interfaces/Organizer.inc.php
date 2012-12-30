@@ -1,6 +1,8 @@
 <?php
-
-/* This file is part of Zoph.
+/**
+ * Organizer interface
+ *
+ * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,23 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 
-require_once("include.inc.php");
-
-header("Content-Type: text/xml");
-session_write_close();
-flush();
-$object=getvar("object");
-$search=getvar("search");
-
-$obj_array=explode("_", $object);
-if($obj_array[0]=="details") {
-    $obj_name=$obj_array[1];
-    $obj=new $obj_name((int) $obj_array[2]);
-
-    echo $obj->getDetailsXML();
-} else {
-    echo get_xml($object, $search, $user);
+/**
+ * An Organizer is an item that can be used to organize photos
+ */
+interface Organizer {
+    public function delete();
+    public function getCoverphoto();
+    public function getDetails();
+    public function getDetailsXML(array $details);
+    public function getPhotoCount();
+    public function getTotalPhotoCount();
+    public function getURL();
+    public static function getByName($name);
+    public static function getTopN();
 }
-?>

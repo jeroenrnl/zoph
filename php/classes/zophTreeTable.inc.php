@@ -52,7 +52,7 @@ abstract class zophTreeTable extends zophTable {
     /*
      * Gets the children of this record.
      */
-    function getChildren($user = null, $order = null) {
+    function getChildren($order = null) {
 
         if ($this->children) { return $this->children; }
         if (!$this->primary_keys) { return; }
@@ -101,14 +101,14 @@ abstract class zophTreeTable extends zophTable {
      * Gets a list of the id of this record along with the ids of
      * all of its descendants.
      */
-    function get_branch_id_array(&$id_array, $user = null) {
+    function getBranchIdArray(&$id_array) {
         $key = $this->primary_keys[0];
         $id_array[] = $this->get($key);
 
         $this->getChildren();
         if ($this->children) {
             foreach($this->children as $c) {
-                $c->get_branch_id_array($id_array, $user);
+                $c->getBranchIdArray($id_array);
             }
         }
         return $id_array;
@@ -119,9 +119,9 @@ abstract class zophTreeTable extends zophTable {
      * all of its descendant's ids.  Useful to make "record_id in
      * (id_list)" clauses.
      */
-    function get_branch_ids($user = null) {
+    function getBranchIds() {
         $id_array;
-        $this->get_branch_id_array($id_array, $user);
+        $this->getBranchIdArray($id_array);
         return implode(",", $id_array);
     }
 
@@ -146,7 +146,7 @@ abstract class zophTreeTable extends zophTable {
             $newchild->appendChild($newchildtitle);
        }
        $order = $user->prefs->get("child_sortorder");
-       $children=$this->getChildren($user, $order);
+       $children=$this->getChildren($order);
         if($children) {
             $childset=$xml->createElement($rootname);
             foreach($children as $child) {
@@ -163,18 +163,17 @@ abstract class zophTreeTable extends zophTable {
     
     /**
      * Turn the array from @see getDetails() into XML
-     * @param user Show only info about photos this user can see
      * @param array Don't fetch details, but use the given array
      */
-    public function getDetailsXML(user $user, array $details=null) {
+    public function getDetailsXML(array $details=null) {
         if(!isset($details)) {
-            $details=$this->getDetails($user);
+            $details=$this->getDetails();
         }
-        $children=$this->getChildren($user);
+        $children=$this->getChildren();
         if(is_array($children)) {
             $details["children"]=count($children);
         }
-        return parent::getDetailsXML($user, $details);
+        return parent::getDetailsXML($details);
     }
 }
 
@@ -196,7 +195,7 @@ function create_tree_select_array($name, $user = null, $rec = null,
     } else {
         $order="name";
     }
-    $children = $rec->getChildren($user, $order);
+    $children = $rec->getChildren($order);
     if ($children) {
         foreach ($children as $child) {
             $select_array = create_tree_select_array($name, $user, $child,

@@ -213,7 +213,7 @@
         $map=new map();
         foreach($thumbnails as $thumbnail) {
             $thumbnail->lookup();
-            $marker=$thumbnail->getMarker($user);
+            $marker=$thumbnail->getMarker();
             if($marker instanceof marker) {
                 $map->addMarker($marker);
             }

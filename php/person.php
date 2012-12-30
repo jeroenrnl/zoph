@@ -50,8 +50,8 @@
 
     require_once("header.inc.php");
     if ($action == "display") {
-        $photos_of = $person->getPhotoCount($user);
-        $photos_by = $person->getPhotographerCount($user);
+        $photos_of = $person->getPhotoCount();
+        $photos_by = $person->getPhotographerCount();
 ?>
       <h1>
 <?php
@@ -94,7 +94,7 @@
           </h2>
           <p>
 <?php
-    echo $person->get_coverphoto($user);
+    echo $person->getCoverphoto();
 ?>
           </p>
           <dl>

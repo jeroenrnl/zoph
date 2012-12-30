@@ -50,7 +50,7 @@
         $photo = new photo($photo_id);
     }
 
-    $found = $photo->lookupForUser($user);
+    $found = $photo->lookup();
 
     if (!$found) {
         $msg = sprintf(translate("Could not find photo id %s."), $photo_id);

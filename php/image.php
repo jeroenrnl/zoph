@@ -62,14 +62,14 @@
         }
     } else if (conf::get("feature.annotate") && $annotated) {
         $photo = new annotatedPhoto($photo_id);
-        $found = $photo->lookupForUser($user);
+        $found = $photo->lookup();
         $photo->setVars($request_vars);
         if(getvar("_size")=="mid") {
             $type=MID_PREFIX;
         }
     } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {
         $photo = new photo($photo_id);
-        $found = $photo->lookupForUser($user);
+        $found = $photo->lookup();
     } else {
         die("Illegal type");
     }

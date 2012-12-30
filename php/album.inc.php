@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-class album extends zophTreeTable {
+class album extends zophTreeTable implements Organizer {
 
     var $photoCount;
     function album($id = 0) {
@@ -36,22 +36,16 @@ class album extends zophTreeTable {
     }
 
     public function lookup() {
-        $id = $this->get("album_id");
-        if(!is_numeric($id)) { die("album_id must be numeric"); }
-        if (!$id) { return; }
-    
-        $sql =
-            "select * from " . DB_PREFIX . "albums " .
-            "where album_id = " . escape_string($id);
-        return $this->lookupFromSQL($sql);
-    }
-
-    public function lookupForUser(user $user) {
+        $user=user::getCurrent();
         $id = $this->get("album_id");
         if(!is_numeric($id)) { die("album_id must be numeric"); }
         if (!$id) { return; }
 
-        if (!$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql =
+                "select * from " . DB_PREFIX . "albums " .
+                "where album_id = " . escape_string($id);
+        } else {
             $sql =
                  "select a.* from "  .
                  DB_PREFIX . "albums as a JOIN " .
@@ -62,10 +56,8 @@ class album extends zophTreeTable {
                  "where gp.album_id = '" . escape_string($id) . "'" .
                  " and gu.user_id = '" . 
                  escape_string($user->get("user_id"))."'";
-            return $this->lookupFromSQL($sql);
-        } else {
-            return $this->lookup();
         }
+        return $this->lookupFromSQL($sql);
     }
 
     function delete() {
@@ -88,7 +80,8 @@ class album extends zophTreeTable {
         return $indent . $this->getName();
     }
 
-    function getChildren($user=null, $order=null) {
+    function getChildren($order=null) {
+        $user=user::getCurrent();
         $order_fields="";
         if($order && $order!="name") {
             $order_fields=get_sql_for_order($order);
@@ -100,9 +93,20 @@ class album extends zophTreeTable {
         $id = $this->get("album_id");
         if (!$id) { return; }
         
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
             $sql =
-        "SELECT a.*, album as name " .
+                "SELECT a.*, album as name " .
+                $order_fields . " FROM " .
+                DB_PREFIX . "albums as a LEFT JOIN " .
+                DB_PREFIX . "photo_albums as pa " .
+                "ON a.album_id=pa.album_id LEFT JOIN " .
+                DB_PREFIX . "photos as ph " .
+                "ON pa.photo_id=ph.photo_id " .
+                "WHERE parent_album_id=" . escape_string($id) .
+                " GROUP BY album_id" .
+                escape_string($order);
+        } else {
+            $sql = "SELECT a.*, album as name " .
             $order_fields . " FROM " .
             DB_PREFIX . "albums as a LEFT JOIN " .
             DB_PREFIX . "photo_albums as pa " .
@@ -117,18 +121,6 @@ class album extends zophTreeTable {
             " AND parent_album_id=" . escape_string($id) .
             " GROUP BY album_id" .
             escape_string($order);
-         } else {
-            $sql =
-                "SELECT a.*, album as name " .
-                $order_fields . " FROM " .
-                DB_PREFIX . "albums as a LEFT JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON a.album_id=pa.album_id LEFT JOIN " .
-                DB_PREFIX . "photos as ph " .
-                "ON pa.photo_id=ph.photo_id " .
-                "WHERE parent_album_id=" . escape_string($id) .
-                " GROUP BY album_id" .
-                escape_string($order);
         }
 
         $this->children=album::getRecordsFromQuery("album", $sql);
@@ -137,16 +129,14 @@ class album extends zophTreeTable {
 
     /**
      * Get details (statistics) about this album from db
-     * @param user Only show albums this user is allowed to see
      * @return array Array with statistics
      */
-    public function getDetails(user $user=null) {
+    public function getDetails() {
         $id = (int) $this->getId();
-        if(isset($user)) {
-            $user_id = (int) $user->getId();
-        } 
+        $user=user::getCurrent();
+        $user_id = (int) $user->getId();
 
-        if ($user && !$user->is_admin()) {
+        if (!$user->is_admin()) {
             $sql = "SELECT " .
                 "COUNT(ph.photo_id) AS count, " .
                 "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
@@ -194,25 +184,31 @@ class album extends zophTreeTable {
 
     /**
      * Turn the array from @see getDetails() into XML
-     * @param user Show only info about photos this user can see
      * @param array Don't fetch details, but use the given array
      */
-    public function getDetailsXML(user $user, array $details=null) {
+    public function getDetailsXML(array $details=null) {
         if(!isset($details)) {
-            $details=$this->getDetails($user);
+            $details=$this->getDetails();
         }
         $details["title"]=translate("In this album:", false);
-        return parent::getDetailsXML($user, $details);
+        return parent::getDetailsXML($details);
     }
 
-    function getPhotoCount($user = null) {
+    public function getPhotoCount() {
+        $user=user::getCurrent();
+
         if ($this->photoCount) { return $photoCount; }
 
         $id = $this->get("album_id");
 
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
             $sql =
-                "select count(*) from " .
+                "SELECT COUNT(*) FROM " .
+                DB_PREFIX . "photo_albums " .
+                "WHERE album_id = '" .  escape_string($id) . "'";
+        } else {
+            $sql =
+                "SELECT COUNT(*) FROM " .
                 DB_PREFIX . "photo_albums AS pa JOIN " .
                 DB_PREFIX . "photos AS p ON " .
                 "pa.photo_id = p.photo_id JOIN " .
@@ -221,14 +217,8 @@ class album extends zophTreeTable {
                 DB_PREFIX . "groups_users AS gu ON " .
                 "gp.group_id = gu.group_id " .
                 "WHERE pa.album_id = " . escape_string($id) .
-                " and gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' and gp.access_level >= p.level";
-        }
-        else {
-            $sql =
-                "select count(*) from " .
-                DB_PREFIX . "photo_albums " .
-                "where album_id = '" .  escape_string($id) . "'";
+                " AND gu.user_id = '" . escape_string($user->get("user_id")) .
+                "' AND gp.access_level >= p.level";
         }
 
         return album::getCountFromQuery($sql);
@@ -238,7 +228,7 @@ class album extends zophTreeTable {
         // Without the lookup, parent_album_id is not available!
         $this->lookup();
         if ($this->get("parent_album_id")) {
-            $id_list = $this->get_branch_ids($user);
+            $id_list = $this->getBranchIds();
             $id_constraint = "pa.album_id in ($id_list)";
         }
         else {
@@ -342,23 +332,32 @@ class album extends zophTreeTable {
         return "album";
     }
 
-    function get_coverphoto($user,$autothumb=null,$children=null) {
+    function getCoverphoto($autothumb=null,$children=null) {
+        $user=user::getCurrent();
         $coverphoto=null;
         $cover=false;
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-            if($coverphoto->lookupForUser($user)) {
+            if($coverphoto->lookup()) {
                 $cover=TRUE;
             }
         }
         if ($autothumb && !$cover) {
             $order=get_autothumb_order($autothumb);
             if($children) {
-                $album_where=" WHERE pa.album_id in (" . $this->get_branch_ids($user) .")";
+                $album_where=" WHERE pa.album_id in (" . $this->getBranchIds() .")";
             } else {
                 $album_where=" WHERE pa.album_id =" .$this->get("album_id");
             }
-            if ($user && !$user->is_admin()) {
+            if ($user->is_admin()) {
+                $sql =
+                    "select distinct p.photo_id from " .
+                    DB_PREFIX . "photos as p JOIN " .
+                    DB_PREFIX . "photo_albums pa ON" .
+                    " pa.photo_id = p.photo_id" .
+                    $album_where .
+                    " " . $order;
+            } else {
                 $sql=
                     "select distinct p.photo_id from " .
                     DB_PREFIX . "photos as p JOIN " .
@@ -374,14 +373,6 @@ class album extends zophTreeTable {
                     " and pa.photo_id = p.photo_id " .
                     " and gp.access_level >= p.level " .
                     $order;
-            } else {
-                $sql =
-                    "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p JOIN " .
-                    DB_PREFIX . "photo_albums pa ON" .
-                    " pa.photo_id = p.photo_id" .
-                    $album_where .
-                    " " . $order;
             }
             $coverphotos=photo::getRecordsFromQuery("photo", $sql);
             $coverphoto=array_shift($coverphotos);
@@ -393,7 +384,7 @@ class album extends zophTreeTable {
         } else if (!$children) {
             // No photos found in this album... let's look again, but now 
             // also in sub-albums...
-            return $this->get_coverphoto($user, $autothumb, true);
+            return $this->getCoverphoto($autothumb, true);
         }
     }
     function is_root() {
@@ -433,9 +424,19 @@ class album extends zophTreeTable {
     /**
      * Get Top N albums
      */
-    public static function getTopN(user $user=null) {
+    public static function getTopN() {
+        $user=user::getCurrent();
 
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql =
+                "select al.*, count(*) as count from " .
+                DB_PREFIX . "albums as al, " .
+                DB_PREFIX . "photo_albums as pa " .
+                "where pa.album_id = al.album_id " .
+                "group by al.album_id " .
+                "order by count desc, al.album " .
+                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
+        } else {
             $sql =
                 "SELECT al.*, count(distinct ph.photo_id) AS count FROM " .
                 DB_PREFIX . "albums AS al JOIN " .
@@ -452,16 +453,6 @@ class album extends zophTreeTable {
                 "GROUP BY al.album_id " .
                 "ORDER BY count desc, al.album " .
                 "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
-        }
-        else {
-            $sql =
-                "select al.*, count(*) as count from " .
-                DB_PREFIX . "albums as al, " .
-                DB_PREFIX . "photo_albums as pa " .
-                "where pa.album_id = al.album_id " .
-                "group by al.album_id " .
-                "order by count desc, al.album " .
-                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
 
         return parent::getTopNfromSQL("album", $sql);

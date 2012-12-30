@@ -227,7 +227,7 @@
 
                 $deg = $request_vars["_deg__$photo_id"];
                 if ($deg && $deg != 0) {
-                    $photo->lookupForUser($user);
+                    $photo->lookup();
                     try {
                         $photo->rotate($deg);
                     } catch (Exception $e) {
@@ -245,7 +245,7 @@
                 $request_vars["_action"]="display";
             }
 		
-            $photo->lookupForUser($user);
+            $photo->lookup();
 
             $queryIgnoreArray[] = "__photo_id__$photo_id";
             $queryIgnoreArray[] = "__location_id__$photo_id";

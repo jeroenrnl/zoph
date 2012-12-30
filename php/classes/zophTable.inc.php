@@ -385,12 +385,11 @@ abstract class zophTable {
 
     /**
      * Turn the array from @see getDetails() into XML
-     * @param user Show only info about photos this user can see
      * @param array Don't fetch details, but use the given array
      */
-    public function getDetailsXML(user $user, array $details=null) {
+    public function getDetailsXML(array $details=null) {
         if(!isset($details)) {
-            $details=$this->getDetails($user);
+            $details=$this->getDetails();
         }
         if(isset($details["title"])) {    
             $display["title"]=$details["title"];

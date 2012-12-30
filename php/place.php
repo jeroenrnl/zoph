@@ -65,7 +65,7 @@ require_once("edit_place.inc.php");
 <?php
     if(conf::get("maps.provider")) {
         $map=new map();
-        $marker=$place->getMarker($user);
+        $marker=$place->getMarker();
         $map->setCenterAndZoomFromObj($place);
         if($marker instanceof marker) {
             $map->addMarker($marker);

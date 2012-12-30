@@ -38,7 +38,7 @@ if(!ZOPH) { die("Illegal call"); }
 
 <ul class="tree" id="<?php echo $tpl_id ?>">
 <?php foreach ($tpl_items as $item): ?>
-    <?php $children=$item->getChildren($tpl_user); ?>
+    <?php $children=$item->getChildren(); ?>
     <li class="collapsed">
         <?php if($children): ?>
             <div class="toggle" onclick="thumbview.toggle(this.parentNode)"></div>
@@ -47,8 +47,8 @@ if(!ZOPH) { die("Illegal call"); }
             <?php echo $item->getName() ?></a>
         <span class="photocount">
             <?php 
-                $pc=$item->getPhotoCount($tpl_user);
-                $tpc=$item->getTotalPhotoCount($tpl_user);
+                $pc=$item->getPhotoCount();
+                $tpc=$item->getTotalPhotoCount();
             ?>
             <?php if($pc==$tpc): ?>
                 (<?php echo $pc; ?>)

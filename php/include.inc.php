@@ -17,10 +17,21 @@
  */
     /**
      * Autoload classes
+     * @todo return false should change into an exception
      */
 
     function zophAutoload($class) {
-        require_once("classes/" . $class . ".inc.php");
+        $file="classes/" . $class . ".inc.php";
+        if(file_exists($file)) {
+            require_once($file);
+        } else {
+            $file="interfaces/" . $class . ".inc.php";
+            if(file_exists($file)) {
+                require_once($file);
+            } else {
+                return false;
+            }
+        }
     }
     spl_autoload_register("zophAutoload");
 

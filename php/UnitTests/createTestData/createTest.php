@@ -209,12 +209,12 @@ class createTestData {
             if(isset($photoLocation[$id])) {
                 $photo->set("location_id",$photoLocation[$id]);
                 $photo->update();
-                $photo->lookup_location();
+                $photo->lookup();
             }
             if(isset($photographer[$id])) {
                 $photo->set("photographer_id",$photographer[$id]);
                 $photo->update();
-                $photo->lookup_photographer();
+                $photo->lookup();
             }
             if(is_array($photoAlbums[$id])) {
                 foreach($photoAlbums[$id] as $alb) {

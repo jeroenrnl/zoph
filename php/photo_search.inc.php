@@ -101,7 +101,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $object=explode("_", $key);
             if($object[0]=="location") { $object[0] = "place"; } 
             $obj=new $object[0]($val);
-            $val_with_children=$obj->get_branch_ids();
+            $val_with_children=$obj->getBranchIds();
             $val=$val_with_children;
         }
 
