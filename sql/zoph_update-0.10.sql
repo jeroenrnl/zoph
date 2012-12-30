@@ -28,8 +28,8 @@
 CREATE TABLE zoph_conf ( 
 	conf_id char(64) NOT NULL, 
 	value varchar(128) default NULL, 
-	timestamp timestamp, 
-	PRIMARY kEY (conf_id)
-	) EGINE=MyISAM;
+	timestamp timestamp,
+	PRIMARY KEY (conf_id)
+	) ENGINE=MyISAM;
 
 ALTER TABLE zoph_prefs DROP COLUMN desc_thumbnails;

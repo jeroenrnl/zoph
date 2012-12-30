@@ -197,10 +197,10 @@ class createTestData {
 
         $files=array();
         foreach($photos as $id=>$photo) {
-            $files[]=new file(IMAGE_DIR . "/" . $photo);
+            $files[]=new file(conf::get("path.images") . "/" . $photo);
         }
-        settings::$importThumbs=true;
-        settings::$importSize=true;
+        conf::set("import.cli.thumbs", true);
+        conf::set("import.cli.size", true);
 
 
         $imported=cliimport::photos($files, array());

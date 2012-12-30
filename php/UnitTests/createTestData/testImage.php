@@ -143,7 +143,7 @@ class testImage {
         }
             
             
-        $image->writeImage(IMAGE_DIR . "/" . $this->getName());
+        $image->writeImage(conf::get("path.images") . "/" . $this->getName());
         $image->destroy();
         unset($image);
     }
