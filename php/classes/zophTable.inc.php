@@ -362,7 +362,7 @@ abstract class zophTable {
      * @param user Unused, but some of the decendant classes do.
      * @return array of field names and HTML text input fields
      */
-    public function getEditArray(user $user=null) {
+    public function getEditArray() {
         if (!$this->fields) { return; }
 
         $field_lengths = get_field_lengths($this->table_name);

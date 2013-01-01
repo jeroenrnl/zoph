@@ -264,7 +264,8 @@ class album extends zophTreeTable implements Organizer {
         return album::getCountFromQuery($sql);
     }
 
-    public function getEditArray(user $user = null) {
+    public function getEditArray() {
+        $user=user::getCurrent();
         if($this->is_root()) {
             $parent=array (
                 translate("parent album"),

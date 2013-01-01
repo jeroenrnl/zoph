@@ -70,7 +70,7 @@
     <form>
         <input type="hidden" name="search_id" value="<?php echo $search->get("search_id") ?>">
 
-        <?php echo create_edit_fields($search->getEditArray($user)) ?>
+        <?php echo create_edit_fields($search->getEditArray()) ?>
         <input type="hidden" name="search" value="<?php echo $url ?>">
         <input type="hidden" name="_action" value="<?php echo $action?>">
         <input type="submit" name="_button" value="<?php echo translate($action,0)?>">

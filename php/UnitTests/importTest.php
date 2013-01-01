@@ -53,6 +53,7 @@ class importTest extends ZophDataBaseTestCase {
      */
 
     public function testImportImages($id, $name, $bg, $fg) {
+        user::setCurrent(new user(1));
         if(file_exists(conf::get("path.images") . "/" . $name)) {
             unlink(conf::get("path.images") . "/" . $name);        
         }

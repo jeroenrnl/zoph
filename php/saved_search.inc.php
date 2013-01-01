@@ -50,7 +50,8 @@ class search extends zophTable {
         // This should be created some time, but might slow down too much
     }
 
-    public function getEditArray(user $user = null) {
+    public function getEditArray() {
+        $user=user::getCurrent();
         $edit_array=array();
 
 
@@ -58,7 +59,7 @@ class search extends zophTable {
             translate("Name"),  
             create_text_input("name", $this->get("name"),40,64));
 
-        if($user instanceof user && $user->is_admin()) {
+        if($user->is_admin()) {
             $edit_array[]=array (
                 translate("Owner"),
                 create_pulldown("owner", $this->get("owner"), template::createSelectArray(user::getRecords("user", "user_name"), array("user_name"))));

@@ -971,7 +971,7 @@ class photo extends zophTable {
             translate("comment") => $this->get("comment"));
     }
 
-    public function getEditArray(user $user = null) {
+    public function getEditArray() {
         return array(
             "Title" => create_text_input("title", $this->title),
             "Date" => create_text_input("date", $this->date_taken),

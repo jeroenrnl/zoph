@@ -78,7 +78,7 @@
         <form action="category.php">
           <input type="hidden" name="_action" value="<?php echo $action ?>">
           <input type="hidden" name="category_id" value="<?php echo $category->get("category_id") ?>">
-          <?php echo create_edit_fields($category->getEditArray($user)) ?>
+          <?php echo create_edit_fields($category->getEditArray()) ?>
           <input type="submit" value="<?php echo translate($action, 0) ?>">
         </form>
 <?php
