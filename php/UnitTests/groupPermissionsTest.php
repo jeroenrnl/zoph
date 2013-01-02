@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Group Permissions Test
  *
  * This file is part of Zoph.

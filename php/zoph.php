@@ -39,10 +39,10 @@
 
     $album = album::getRoot();
     $album_count = get_album_count($user);
-    $album_photoCount = $album->getTotalPhotoCount($user);
+    $album_photoCount = $album->getTotalPhotoCount();
     $category = category::getRoot();
     $category_count = get_category_count($user);
-    $category_photoCount = $category->getTotalPhotoCount($user);
+    $category_photoCount = $category->getTotalPhotoCount();
     echo "\n";
 ?>
         </div>

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Setup unit test environment
  *
  * This file is part of Zoph.

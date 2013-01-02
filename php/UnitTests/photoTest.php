@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Unittests for photo class
  *
  * This file is part of Zoph.
@@ -60,7 +60,7 @@ class photoTest extends ZophDataBaseTestCase {
         $ids=array();
         $photo=new photo($photo);
         foreach($newalbums as $alb) {
-            $photo->add_to_album($alb);
+            $photo->addTo(new album($alb));
         }
         $albums=$photo->lookup_albums();
         foreach($albums as $album) {
@@ -80,7 +80,7 @@ class photoTest extends ZophDataBaseTestCase {
         $ids=array();
         $photo=new photo($photo);
         foreach($newcats as $cat) {
-            $photo->add_to_category($cat);
+            $photo->addTo(new category($cat));
         }
         $cats=$photo->lookup_categories();
         foreach($cats as $cat) {
@@ -100,7 +100,7 @@ class photoTest extends ZophDataBaseTestCase {
         $ids=array();
         $photo=new photo($photo);
         foreach($newpers as $pers) {
-            $photo->add_to_person($pers);
+            $photo->addTo(new person($pers));
         }
         $peo=$photo->lookup_people();
         foreach($peo as $per) {

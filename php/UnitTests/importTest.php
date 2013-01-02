@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Import test
  *
  * This file is part of Zoph.

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * A class corresponding to the people table.
  *
  * This file is part of Zoph.
@@ -17,19 +17,71 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ *
+ * @package Zoph
  */
 
+/**
+ * Person class
+ */
 class person extends zophTable {
+    /** @var location Home address of this person */
+    public $home;
+    /** @var location Work address of this person */
+    public $work;
 
-    var $home;
-    var $work;
-
-    function person($id = 0) {
+    function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("person_id must be numeric"); }
         parent::__construct("people", array("person_id"), array("first_name"));
         $this->set("person_id", $id);
     }
 
+    /**
+     * Add this person to a photo.
+     * This records in the database that this person appears on the photo
+     * @param photo Photo to add the person to
+     */
+    public function addPhoto(photo $photo) {
+        $pos = $photo->getLastPersonPos();
+        $pos++;
+        $sql = "INSERT INTO " . DB_PREFIX . "photo_people " .
+            "(photo_id, person_id, position) " .
+            "values (" . (int) $photo->getId() . ", " .
+            (int) $this->getId() . ", " . (int) $pos . ")";
+        query($sql, "Failed to add person");
+    }
+
+    /**
+     * Remove person from a photo
+     * @param photo photo to remove the person from
+     */
+    public function removePhoto(photo $photo) {
+       // First, get the position for the person who is about to be removed
+        $sql = "SELECT position FROM " . DB_PREFIX . "photo_people " .
+            "WHERE photo_id = '" . (int) $photo->getId() . "' " .
+            "AND person_id = '" . (int) $this->getId() . "'";
+        $result=fetch_array(query($sql));
+        $pos=$result["position"];
+
+        // Remove the victim
+        $sql = "DELETE FROM " . DB_PREFIX . "photo_people " .
+            "WHERE photo_id = '" . (int) $photo->getId() . "'" .
+            " AND person_id = '" . (int) $this->getId() . "'";
+        query($sql);
+
+        // Finally, lower the position for everyone with a higher position by one
+        $sql=
+            "UPDATE " . DB_PREFIX . "photo_people " .
+            "SET position=position-1 " .
+            "WHERE photo_id = '" . (int) $photo->getId() . "' " .
+            "AND position > " . (int) $pos;
+        query($sql);
+    }
+
+        
     public function getId() {
         return $this->get("person_id");
     }

@@ -218,17 +218,17 @@ class createTestData {
             }
             if(is_array($photoAlbums[$id])) {
                 foreach($photoAlbums[$id] as $alb) {
-                    $photo->add_to_album($alb);
+                    $photo->addTo(new album($alb));
                 }
             }
             if(is_array($photoCategories[$id])) {
                 foreach($photoCategories[$id] as $cat) {
-                    $photo->add_to_category($cat);
+                    $photo->addTo(new category($cat));
                 }
             }
             if(is_array($photoPeople[$id])) {
                 foreach($photoPeople[$id] as $pers) {
-                    $photo->add_to_person($pers);
+                    $photo->addTo(new person ($pers));
                 }
             }
             if(isset($comments[$id])) {

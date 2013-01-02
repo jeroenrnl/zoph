@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Group test
  *
  * This file is part of Zoph.

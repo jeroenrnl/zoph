@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Person test
  *
  * This file is part of Zoph.

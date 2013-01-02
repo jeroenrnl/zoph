@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Test the album class
  *
  * This file is part of Zoph.

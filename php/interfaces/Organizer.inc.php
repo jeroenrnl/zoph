@@ -25,6 +25,7 @@
  * An Organizer is an item that can be used to organize photos
  */
 interface Organizer {
+    public function addPhoto(photo $photo);
     public function delete();
     public function getCoverphoto();
     public function getDetails();
@@ -32,6 +33,7 @@ interface Organizer {
     public function getPhotoCount();
     public function getTotalPhotoCount();
     public function getURL();
+    public function removePhoto(photo $photo);
     public static function getByName($name);
     public static function getTopN();
 }

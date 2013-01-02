@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * A class corresponding to the places table.
  *
  * This file is part of Zoph.
@@ -17,8 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 
+/**
+ * A class corresponding to the places table.
+ */
 class place extends zophTreeTable implements Organizer {
 
     function __construct($id = 0) {
@@ -26,11 +33,36 @@ class place extends zophTreeTable implements Organizer {
         parent::__construct("places", array("place_id"), array("title"));
         $this->set("place_id", $id);
     }
+    
+    /**
+     * Add a photo to this place
+     * @param photo photo to add
+     */
+    public function addPhoto(photo $photo) {
+        $photo->setLocation($this);
+    }
 
+    
+    /**
+     * Remove a photo from this place
+     * @param photo photo to remove
+     */
+    public function removePhoto(photo $photo) {
+        if($photo->getLocation == $this) {
+            $photo->unsetLocation();
+        }
+    }
+
+    /**
+     * Get the Id of this place
+     */
     public function getId() {
         return (int) $this->get("place_id");
     }
 
+    /**
+     * Insert place into database
+     */
     public function insert() {
         if($this->get("timezone_id")) {
             $this->tzid_to_timezone();
@@ -38,7 +70,10 @@ class place extends zophTreeTable implements Organizer {
         unset($this->fields["timezone_id"]);
         parent::insert();
     }
-
+    
+    /**
+     * Update existing place with new data
+     */
     public function update() {
         if($this->get("timezone_id")) {
             $this->tzid_to_timezone();
@@ -47,6 +82,9 @@ class place extends zophTreeTable implements Organizer {
         parent::update();
     }
 
+    /**
+     * Delete this place from database
+     */
     public function delete() {
         $id=escape_string($this->get("place_id"));
         if(!is_numeric($id)) {die("place_id is not numeric"); }
@@ -66,7 +104,12 @@ class place extends zophTreeTable implements Organizer {
         parent::delete();
     }
 
-    function getChildren($order=null) {
+    /**
+     * Get children of this place
+     * @param string optional order
+     * @return array of places.
+     */
+    public function getChildren($order=null) {
         $user=user::getCurrent();
 
         $order_fields="";
@@ -115,6 +158,10 @@ class place extends zophTreeTable implements Organizer {
         unset($this->fields["timezone_id"]);
     }
 
+    /**
+     * Get the name of this place
+     * @return string name of this place
+     */
     public function getName() {
         if ($this->get("title")) { return $this->get("title"); }
 
@@ -209,6 +256,10 @@ class place extends zophTreeTable implements Organizer {
         return photo::getRecordsFromQuery("photo", $sql);
     }
 
+    /**
+     * Get count of photos in this place
+     * @return int count
+     */
     public function getPhotoCount() {
         $user=user::getCurrent();
 
@@ -237,7 +288,11 @@ class place extends zophTreeTable implements Organizer {
         return photo::getCountFromQuery($sql);
     }
 
-    function getTotalPhotoCount() {
+    /**
+     * Get count of photos in this place and it's children
+     * @return int count
+     */
+    public function getTotalPhotoCount() {
         $user=user::getCurrent();
         if ($this->get("parent_place_id")) {
             $id_list = $this->getBranchIds();

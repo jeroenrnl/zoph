@@ -113,7 +113,7 @@
     }
 
    if ($_action == "lightbox") {
-        $photo->add_to_album($user->get("lightbox_id"));
+        $photo->addTo(new album($user->get("lightbox_id")));
         $action = "display";
     } else if ($_action == "rate") {
         if (conf::get("feature.rating") && ($user->is_admin() || $user->get("allow_rating"))) {

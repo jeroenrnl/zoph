@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * A photo album class corresponding to the album table.
  *
  * This file is part of Zoph.
@@ -17,12 +17,26 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @auther Jeroen Roos
  */
 
+/**
+ * Photo album
+ */
 class album extends zophTreeTable implements Organizer {
 
-    var $photoCount;
-    function album($id = 0) {
+    /** @var Cache the count of photos */
+    private $photoCount;
+
+    /**
+     * Create an album object
+     * @param int id
+     * @return album created object
+     */
+    function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("album_id must be numeric"); }
         parent::__construct("albums", array("album_id"), array("album"));
         $this->set("album_id", $id);
@@ -59,8 +73,40 @@ class album extends zophTreeTable implements Organizer {
         }
         return $this->lookupFromSQL($sql);
     }
+    
+    /**
+     * Add a photo to this album
+     * @param photo Photo to add
+     */
+    public function addPhoto(photo $photo) {
+        $user=user::getCurrent();
+        if($user->is_admin() || $user->get_album_permissions($this->get("album_id"))->get("writable")) {
+            $sql = "INSERT INTO " . DB_PREFIX . "photo_albums " .
+                "(photo_id, album_id) values ('" .
+                escape_string($photo->get("photo_id")) . "', '" .
+                escape_string($this->get("album_id")) . "')";
+            query($sql);
+        }
+    }
 
-    function delete() {
+    /**
+     * Remove a photo from this album
+     * @param photo Photo to remove
+     */
+    public function removePhoto(photo $photo) {
+        $user=user::getCurrent();
+        if($user->is_admin() || $user->get_album_permissions($this->get("album_id"))->get("writable")) {
+            $sql = "DELETE FROM " . DB_PREFIX . "photo_albums " .
+                "WHERE photo_id = '" . escape_string($photo->get("photo_id")) . "'" .
+                " AND album_id = '" . escape_string($this->get("album_id")) . "'";
+            query($sql);
+        }
+    }
+
+    /**
+     * Delete this album
+     */
+    public function delete() {
         parent::delete(array("photo_albums", "group_permissions"));
         $users = user::getRecords("user", "user_id", array("lightbox_id" => $this->get("album_id")));
         if ($users) {
@@ -71,7 +117,10 @@ class album extends zophTreeTable implements Organizer {
         }
     }
 
-    function getName() {
+    /**
+     * Get the name of this album
+     */
+    public function getName() {
         return $this->get("album");
     }
 
@@ -80,7 +129,12 @@ class album extends zophTreeTable implements Organizer {
         return $indent . $this->getName();
     }
 
-    function getChildren($order=null) {
+    /**
+     * Get the subalbums of this album
+     * @param string optional order
+     * @return array of albums
+     */
+    public function getChildren($order=null) {
         $user=user::getCurrent();
         $order_fields="";
         if($order && $order!="name") {
@@ -194,6 +248,9 @@ class album extends zophTreeTable implements Organizer {
         return parent::getDetailsXML($details);
     }
 
+    /**
+     * Return the amount of photos in this album
+     */
     public function getPhotoCount() {
         $user=user::getCurrent();
 
@@ -224,7 +281,11 @@ class album extends zophTreeTable implements Organizer {
         return album::getCountFromQuery($sql);
     }
 
-    function getTotalPhotoCount($user = null) {
+    /**
+     * Return the amount of photos in this album and it's children
+     */
+    function getTotalPhotoCount() {
+        $user=user::getCurrent();
         // Without the lookup, parent_album_id is not available!
         $this->lookup();
         if ($this->get("parent_album_id")) {
@@ -234,9 +295,16 @@ class album extends zophTreeTable implements Organizer {
         else {
             $id_constraint = "";
         }
-        if ($user && !$user->is_admin()) {
+        if ($user->is_admin()) {
+            $sql = "SELECT COUNT(distinct pa.photo_id) FROM " .
+                DB_PREFIX . "photo_albums pa ";
+
+            if ($id_constraint) {
+                $sql .= " WHERE $id_constraint";
+            }
+        } else {
             $sql =
-                "select count(distinct pa.photo_id) from " .
+                "SELECT COUNT(distinct pa.photo_id) FROM " .
                 DB_PREFIX . "photo_albums as pa JOIN " .
                 DB_PREFIX . "photos as p ON " .
                 "pa.photo_id = p.photo_id JOIN " .
@@ -245,25 +313,20 @@ class album extends zophTreeTable implements Organizer {
                 DB_PREFIX . "groups_users AS gu ON " .
                 "gp.group_id = gu.group_id " .
                 "WHERE gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' and gp.access_level >= p.level";
+                "' AND gp.access_level >= p.level";
 
             if ($id_constraint) {
                 $sql .= " and $id_constraint";
-            }
-        }
-        else {
-            $sql =
-                "select count(distinct pa.photo_id) from " .
-                DB_PREFIX . "photo_albums pa ";
-
-            if ($id_constraint) {
-                $sql .= " where $id_constraint";
             }
         }
 
         return album::getCountFromQuery($sql);
     }
 
+    /**
+     * Get array of fields/values to create an edit form
+     * @return array fields/values
+     */
     public function getEditArray() {
         $user=user::getCurrent();
         if($this->is_root()) {

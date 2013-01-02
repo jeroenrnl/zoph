@@ -700,7 +700,7 @@ function remove_empty($children, $user) {
     // If user is not admin, remove any children that do not have photos
     if($user && !$user->is_admin()) {
         foreach($children as $child) {
-            $count=$child->getTotalPhotoCount($user);
+            $count=$child->getTotalPhotoCount();
             if($count>0) {
                 $clean[]=$child;
             }

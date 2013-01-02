@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * A Unit Test for the anonymousUser object.
  *
  * This file is part of Zoph.

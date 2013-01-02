@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Category test
  *
  * This file is part of Zoph.

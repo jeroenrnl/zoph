@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Create test database from XML-MySQL Dump
  *
  * This file is part of Zoph.

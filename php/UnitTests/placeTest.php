@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Place test
  *
  * This file is part of Zoph.

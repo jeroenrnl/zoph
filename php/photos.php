@@ -44,7 +44,7 @@
     $photo_id = getvar("_photo_id");
     if ($user->get("lightbox_id") && $photo_id) {
         $photo = new photo($photo_id);
-        $photo->remove_from_album($user->get("lightbox_id"));
+        $photo->removeFrom(new album($user->get("lightbox_id")));
     }
 
     $album_id = getvar("album_id");

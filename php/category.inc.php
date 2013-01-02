@@ -29,6 +29,35 @@ class category extends zophTreeTable implements Organizer {
         $this->set("category_id", $id);
     }
 
+    /**
+     * Add a photo to this album
+     * @param photo Photo to add
+     * @todo Permissions are currently not checked, this should be done before calling this function
+     */
+    public function addPhoto(photo $photo) {
+        $sql = "INSERT INTO " . DB_PREFIX . "photo_categories " .
+            "(photo_id, category_id) VALUES ('" .
+            escape_string($photo->getId()) . "', '" .
+            escape_string($this->getId()) . "')";
+        query($sql);
+    }
+
+    /**
+     * Remove a photo from this album
+     * @param photo Photo to remove
+     * @todo Permissions are currently not checked, this should be done before calling this function
+     */
+    public function removePhoto(photo $photo) {
+        $sql = "DELETE FROM " . DB_PREFIX . "photo_categories " .
+            "WHERE photo_id = '" . escape_string($photo->getId()) . "'" .
+            " AND category_id = '" . escape_string($this->getId()) . "'";
+        query($sql);
+    }
+
+    /**
+     * Get the key of this category
+     * @return int id
+     */
     public function getId() {
         return (int) $this->get("category_id");
     }

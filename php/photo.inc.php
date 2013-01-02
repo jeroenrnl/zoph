@@ -175,7 +175,9 @@ class photo extends zophTable {
         }
 
         if (!empty($vars["_remove_album$suffix"])) {
-            $this->remove_from_album($vars["_remove_album$suffix"]);
+            foreach((array) $vars["_remove_album$suffix"] as $alb) {
+                $this->removeFrom(new album($alb));
+            }
         }
         
         if(isset($this->_album_id)) {
@@ -185,7 +187,7 @@ class photo extends zophTable {
         
         if(isset($albums)) {
             foreach($albums as $album) {
-                $this->add_to_album($album);
+                $this->addTo(new album($album));
             }
         }
 
@@ -199,7 +201,9 @@ class photo extends zophTable {
         }
 
         if (!empty($vars["_remove_category$suffix"])) {
-            $this->remove_from_category($vars["_remove_category$suffix"]);
+            foreach((array) $vars["_remove_category$suffix"] as $cat) {
+                $this->removeFrom(new category($cat));
+            }
         }
 
         if(isset($this->_category_id)) {
@@ -209,7 +213,7 @@ class photo extends zophTable {
 
         if(isset($categories)) {
             foreach($categories as $cat) {
-                $this->add_to_category($cat);
+                $this->addTo(new category($cat));
             }
         }
 
@@ -223,7 +227,9 @@ class photo extends zophTable {
         }
         
         if (!empty($vars["_remove_person$suffix"])) {
-            $this->remove_from_person($vars["_remove_person$suffix"]);
+            foreach((array) $vars["_remove_person$ysuffix"] as $pers) {
+                $this->removeFrom(new person($pers));
+            }
         }
 
         if(isset($this->_person_id)) {
@@ -233,7 +239,7 @@ class photo extends zophTable {
         
         if(isset($people)) {
             foreach($people as $person) {
-                $this->add_to_person($person);
+                $this->addTo(new person($person));
             }
         } 
     }
@@ -275,109 +281,12 @@ class photo extends zophTable {
         return (int) $result["pos"];
     }
 
-    function add_to_album($album_id, $user=null) {
-        // This is only done when either $user has write permissions to the
-        // album, when the user is admin or when $user = null, this is to
-        // retain compatibility with calls from import, which checks user
-        // permissions before calling this function and bulk edit, which is
-        // only accessible for admin users.
-       $sql =
-           "insert into " . DB_PREFIX . "photo_albums " .
-           "(photo_id, album_id) values ('" .
-            escape_string($this->get("photo_id")) . "', '" .
-            escape_string($album_id) . "')";
-        
-        if($user) {
-            $album_permissions=$user->get_album_permissions($album_id);
-
-            if($user->is_admin() || $album_permissions->get("writable")) {
-                query($sql);
-            }
-        } else {
-            query($sql);
-        }
+    public function addTo(organizer $org) {
+        $org->addPhoto($this);
     }
 
-    function remove_from_album($album_ids) {
-        if (!is_array($album_ids)) {
-            $album_ids = array($album_ids);
-        }
-
-        foreach ($album_ids as $album_id) {
-            $sql =
-                "delete from " . DB_PREFIX . "photo_albums " .
-                "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
-                " and album_id = '" . escape_string($album_id) . "'";
-            query($sql);
-        }
-    }
-
-    function add_to_category($category_id) {
-        $sql =
-            "insert into " . DB_PREFIX . "photo_categories " .
-            "(photo_id, category_id) values ('" .
-            escape_string($this->get("photo_id")) . "', '" .
-            escape_string($category_id) . "')";
-        query($sql);
-    }
-
-    function remove_from_category($category_ids) {
-        if (!is_array($category_ids)) {
-            $category_ids = array($category_ids);
-        }
-
-        foreach ($category_ids as $category_id) {
-            $sql =
-                "delete from " . DB_PREFIX . "photo_categories " .
-                "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
-                " and category_id = '" . escape_string($category_id) . "'";
-            query($sql);
-        }
-    }
-
-    function add_to_person($person_id) {
-        if($person_id>0) {
-            $position=$this->getLastPersonPos();
-            $position++;
-
-            $sql =
-                "insert into " . DB_PREFIX . "photo_people " .
-                "(photo_id, person_id, position) " .
-                "values ('" . escape_string($this->get("photo_id")) . "', '" .
-                (int) $person_id . "', " . (int) $position . ")";
-            query($sql, "Failed to add person");
-        }
-    }
-
-    function remove_from_person($person_ids) {
-        if (!is_array($person_ids)) {
-            $person_ids = array($person_ids);
-        }
-
-        foreach ($person_ids as $person_id) {
-            // First, get the position for the person who is about to be removed
-            $sql =
-                "SELECT position FROM " . DB_PREFIX . "photo_people " .
-                "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "' " .
-                "AND person_id = '" . escape_string($person_id) . "'";
-            $result=fetch_array(query($sql));
-            $pos=$result["position"];
-
-            // Remove the victim
-            $sql =
-                "delete from " . DB_PREFIX . "photo_people " .
-                "where photo_id = '" . escape_string($this->get("photo_id")) . "'" .
-                " and person_id = '" . escape_string($person_id) . "'";
-            query($sql);
-
-            // Finally, lower the position for everyone with a higher position by one
-            $sql=
-                "UPDATE " . DB_PREFIX . "photo_people " .
-                "SET position=position-1 " .
-                "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "' " .
-                "AND position > " . escape_string($pos);
-            query($sql);
-        }
+    public function removeFrom(organizer $org) {
+        $org->removePhoto($this);
     }
 
     function lookup_albums($user = null) {
@@ -763,6 +672,32 @@ class photo extends zophTable {
 
         return $img_src;
     }
+
+    /**
+     * Get the location for this photo
+     */
+    public function getLocation() {
+        $this->lookup();
+        return $this->location;
+    }
+
+    /**
+     * Set the location for this photoa
+     * @param place location to set
+     */
+    public function setLocation(place $loc) {
+        $this->set("location_id", (int) $loc->getId());
+        $this->lookupLocation();
+    }
+
+    /**
+     * Unset the location for this photo
+     */
+    public function unsetLocation() {
+        $this->set("location_id", 0);
+        $this->lookupLocation();
+    }
+
 
     function thumbnail($force=true) {
         $path=conf::get("path.images") . "/" . $this->get("path") . "/";
