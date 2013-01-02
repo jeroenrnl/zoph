@@ -97,6 +97,13 @@ class photo extends zophTable {
     }
 
     /**
+     * Get the id of this photo
+     */
+    public function getId() {
+        return (int) $this->get("photo_id");
+    }
+
+    /**
      * Lookup a photo, considering access rights
      */
     public function lookup() {

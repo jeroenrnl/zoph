@@ -31,7 +31,7 @@
  * @author Jeroen Roos
  * @package Zoph
  */
-class person extends zophTable {
+class person extends zophTable implements Organizer {
     /** @var location Home address of this person */
     public $home;
     /** @var location Work address of this person */
@@ -238,6 +238,10 @@ class person extends zophTable {
         return "person";
     }
 
+    /**
+     * Return the number of photos this person appears on
+     * @return int count
+     */
     public function getPhotoCount() {
         $user=user::getCurrent();
         
@@ -247,7 +251,21 @@ class person extends zophTable {
         );
         return get_photos($vars, 0, 1, $ignore, $user);
     }
+
+    /**
+     * Return the number of photos this person appears on.
+     * Wrapper around getPhotoCount() because there is no
+     * concept of sub-persons.
+     * @return int count
+     */
+    public function getTotalPhotoCount() {
+        return $this->getPhotoCount();
+    }
     
+    /**
+     * Return the number of photos this person has taken 
+     * @return int count
+     */
     public function getPhotographerCount() {
         $user=user::getCurrent();
         
