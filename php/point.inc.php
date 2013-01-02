@@ -24,6 +24,9 @@
 
 /**
  * This class describes a point, which is a GPS position + timestamp
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class point extends zophTable {
     /**

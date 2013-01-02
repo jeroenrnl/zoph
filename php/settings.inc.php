@@ -23,6 +23,9 @@
 
 /**
  * This class takes care of loading and processing settings
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class settings {
 

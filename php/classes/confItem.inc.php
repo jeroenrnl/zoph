@@ -23,6 +23,8 @@
 
 /**
  * Configuration item
+ * @package Zoph
+ * @author Jeroen Roos
  */
 abstract class confItem extends zophTable {
     /** @var string Label to display */

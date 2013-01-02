@@ -91,7 +91,10 @@
  *    re-build the message.
  *
  * @author  Richard Heyes <richard@phpguru.org>
+ * @author Jeroen Roos
  * @version 1.13
+ *
+ * @package Zoph
  */
 
 class mailMimePart {

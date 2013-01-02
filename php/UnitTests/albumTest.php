@@ -22,7 +22,9 @@
  */
 
 /**
- * Test class that runs several ungrouped tests
+ * Test class that tests the album class
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class albumTest extends ZophDataBaseTestCase {
     

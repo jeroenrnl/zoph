@@ -23,6 +23,8 @@
 
 /**
  * An Organizer is an item that can be used to organize photos
+ * @package Zoph
+ * @author Jeroen Roos
  */
 interface Organizer {
     public function addPhoto(photo $photo);

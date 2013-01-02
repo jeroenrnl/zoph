@@ -23,6 +23,9 @@ require_once("exif.inc.php");
 /**
  * This class holds the generalized functions importing images
  * to Zoph.
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 abstract class Import {
     

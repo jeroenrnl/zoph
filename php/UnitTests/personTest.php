@@ -23,6 +23,9 @@
 
 /**
  * Test class for person class
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class personTest extends ZophDataBaseTestCase {
     /**

@@ -24,6 +24,15 @@
  * @author Richard P. Childs
  */
 
+/**
+ * A class representing an annotated photo
+ * An annotated photo is a photo with information about the 
+ * photo added to the image
+ *
+ * @package Zoph
+ * @author Jeroen Roos
+ * @author Richard P. Childs
+ */
 class annotatedPhoto extends photo {
 
     /** The vars that are going to be displayed on the photo */

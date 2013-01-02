@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * A class representing an anonymous user of Zoph.
  * An anonymous user is a user that is not logged in
  * it is currently used for the 'share this photo' feature.
@@ -35,6 +35,16 @@ require_once("classes/zophTable.inc.php");
 require_once("user.inc.php");
 require_once("prefs.inc.php");
 
+/**
+ * A class representing an anonymous user of Zoph.
+ * An anonymous user is a user that is not logged in
+ * it is currently used for the 'share this photo' feature.
+ * This is basicly a wrapper around the user object returning
+ * null or false to prevent an anonymous user to gain extra
+ *
+ * @package Zoph
+ * @author Jeroen Roos
+ */
 final class anonymousUser extends user {
 
     /**

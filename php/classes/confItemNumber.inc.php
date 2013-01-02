@@ -21,6 +21,12 @@
  * @author Jeroen Roos
  */
 
+/**
+ * A confItemNumber defines a configuration item that is defined using a user-specified number
+ *
+ * @package Zoph
+ * @author Jeroen Roos
+ */
 class confItemNumber extends confItemString {
     
     protected $regex="[0-9]+";

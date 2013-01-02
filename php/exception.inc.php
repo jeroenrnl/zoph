@@ -23,18 +23,69 @@
 
 /**
  * This class is a general exception class for Zoph
+ * @author Jeroen Roos
+ * @package ZophException
  */
 class ZophException extends Exception {}
 
+/**
+ * Exception class for configuration-related exceptions
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class ConfigurationException extends ZophException {}
 
 
+/**
+ * Exception class for Import-related exceptions
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class ImportException extends ZophException {}
+
+/**
+ * Exception class for Import-auto-rotate exceptions
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class ImportAutorotException extends ImportException {}
+
+/**
+ * Exception thrown when file is not in the import path
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class ImportFileNotInPathException extends ImportException {}
+
+/**
+ * Exception thrown when file is not found
+ * @todo merge with FileNotFoundException ?
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class ImportFileNotFoundException extends ImportException {}
+
+/**
+ * Exception thrown when ID is not numeric 
+ * @todo migrate to a more general exception
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class ImportIdIsNotNumericException extends ImportException {}
+
+/**
+ * Exception thrown when multiple files have been found 
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class ImportMultipleMatchesException extends ImportException {}
+
+/**
+ * Exception thrown when a file is tried to be imported that
+ * for some reason can not be imported
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class ImportFileNotImportableException extends ImportException {}
 
 class FileException extends ZophException {}

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This class creates images to use as photos in Zoph's unittests 
  *
  * This file is part of Zoph.
@@ -21,6 +21,12 @@
  * @author Jeroen Roos
  */
 
+/**
+ * This class creates images to use as photos in Zoph's unittests 
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
+ */
 class testImage {
 
     private $name="";

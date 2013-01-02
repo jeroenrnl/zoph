@@ -24,6 +24,9 @@
 
 /**
  * This is a class to generate the admin page
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 class admin {
     public $name;

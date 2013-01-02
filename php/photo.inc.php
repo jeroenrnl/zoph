@@ -24,6 +24,10 @@
 
 /**
  * A class corresponding to the photos table.
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class photo extends zophTable {
     /** @var photographer */

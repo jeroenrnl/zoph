@@ -23,6 +23,9 @@
 
 /**
  * This class takes care of logging and debug
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class log {
     

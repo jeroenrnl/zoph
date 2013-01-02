@@ -22,6 +22,9 @@
 /**
  * This class holds all the functions for uploading and importing images
  * to Zoph via the web interface.
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class WebImport extends Import {
 

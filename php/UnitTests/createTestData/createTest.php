@@ -42,6 +42,9 @@ $lang=new language("en");
 createTestData::run();
 /**
  * Fill the database with data, so tests can be run.
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class createTestData {
 

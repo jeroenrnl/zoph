@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A class corresponding to the color_shemes table.
+ * A class corresponding to the color_themes table.
  *
  * This file is part of Zoph.
  *
@@ -18,6 +18,14 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ */
+
+/**
+ * A class corresponding to the color_themes table.
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos

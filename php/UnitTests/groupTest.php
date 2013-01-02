@@ -23,6 +23,9 @@
 
 /**
  * Test the group class
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class groupTest extends ZophDataBaseTestCase {
 

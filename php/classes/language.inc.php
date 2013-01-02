@@ -19,6 +19,8 @@
  *
  * This file is based on the rtplang class written by Eric Seigne.
  *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
 /**

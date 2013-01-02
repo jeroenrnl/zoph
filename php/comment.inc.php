@@ -1,7 +1,6 @@
 <?php
-
-/*
- * A class corresponding to the color_shemes table.
+/**
+ * A class corresponding to the comments table.
  *
  * This file is part of Zoph.
  *
@@ -17,6 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ */
+
+/**
+ * A class corresponding to the comments table.
+ * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 class comment extends zophTable {
 

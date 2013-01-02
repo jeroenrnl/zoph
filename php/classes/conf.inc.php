@@ -29,6 +29,9 @@ require_once("photo.inc.php");
 /**
  * conf is the main object for access to Zoph's configuration
  * in the database
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 class conf {
 

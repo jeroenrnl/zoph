@@ -25,6 +25,10 @@
 
 /**
  * Photo album
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @auther Jeroen Roos
  */
 class album extends zophTreeTable implements Organizer {
 

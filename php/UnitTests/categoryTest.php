@@ -23,6 +23,9 @@
 
 /**
  * Test the category class
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class categoryTest extends ZophDataBaseTestCase {
     /**

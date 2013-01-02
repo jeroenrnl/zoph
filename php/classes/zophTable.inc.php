@@ -19,7 +19,8 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @author Jason Geiger, Jeroen Roos
+ * @author Jason Geiger
+ * @author Jeroen Roos
  * @package Zoph
  */
 
@@ -27,6 +28,10 @@
  * A generic table class.  Is is meant to be subclassed by particular
  * table classes.  A table is represented by a name, an array of
  * primary keys, and an array mapping field names to values.
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @package Zoph
  */
 abstract class zophTable {
     /** @var string The name of the database table */

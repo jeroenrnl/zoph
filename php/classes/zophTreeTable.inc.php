@@ -1,5 +1,7 @@
 <?php
 /**
+ * zophTreeTable represents a hierarchical table.  
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,12 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 
 /**
  * zophTreeTable represents a hierarchical table.  Since the album
  * and category tables are identical in structure, some of the methods
  * those classes share are abstracted and placed here.
+ * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 abstract class zophTreeTable extends zophTable {
 

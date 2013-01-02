@@ -25,6 +25,10 @@
 
 /**
  * A class corresponding to the places table.
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 class place extends zophTreeTable implements Organizer {
 

@@ -19,6 +19,12 @@
  * @package Zoph
  */
 
+/**
+ * A track is a collection of points, which are used for geotagging
+ *
+ * @author Jeroen Roos
+ * @package Zoph
+ */
 class track extends zophTable {
     private $points=array();
 

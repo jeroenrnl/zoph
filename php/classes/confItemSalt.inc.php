@@ -25,6 +25,8 @@
 /**
  * A confItemSalt is a special kind of confItemString, which allows auto generation
  * of a secure salt string.
+ * @package Zoph
+ * @author Jeroen Roos
  */
 class confItemSalt extends confItemString {
     

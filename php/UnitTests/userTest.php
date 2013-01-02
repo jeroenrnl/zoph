@@ -24,6 +24,9 @@
 require_once("testSetup.php");
 /**
  * Test class for user.
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class userTest extends ZophDatabaseTestCase {
     /**

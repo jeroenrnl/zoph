@@ -21,6 +21,12 @@
  * @author Jeroen Roos
  */
 
+/**
+ * Testdata for Zoph Unit tests
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
+ */
 class testData {
     
     

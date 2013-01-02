@@ -23,7 +23,9 @@
 
 /**
  * Test photo import
- * @todo: fix
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class importTest extends ZophDataBaseTestCase {
 

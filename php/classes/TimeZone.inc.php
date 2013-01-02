@@ -24,6 +24,9 @@
 
 /**
  * TimeZone class, extension of the standard PHP DateTimeZone class
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class TimeZone extends DateTimeZone {
     /**

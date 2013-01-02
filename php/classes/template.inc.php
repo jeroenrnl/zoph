@@ -23,6 +23,9 @@
 
 /**
  * This class takes care of displaying templates
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class template {
     public $js=array();

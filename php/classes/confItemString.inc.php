@@ -21,6 +21,12 @@
  * @author Jeroen Roos
  */
 
+/**
+ * A confItemString defines a configuration item that is defined using a user-specified string
+ *
+ * @package Zoph
+ * @author Jeroen Roos
+ */
 class confItemString extends confItem {
     
     protected $regex=".+";

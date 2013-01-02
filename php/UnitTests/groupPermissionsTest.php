@@ -23,6 +23,9 @@
 
 /**
  * Test group_permissions class.
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class groupPermissionsTest extends ZophDataBaseTestCase {
 

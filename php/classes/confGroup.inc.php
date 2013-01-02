@@ -23,6 +23,8 @@
 
 /**
  * Group of @see confItem objects
+ * @package Zoph
+ * @author Jeroen Roos
  */
 class confGroup implements ArrayAccess, IteratorAggregate {
     /** @var string Name of group */

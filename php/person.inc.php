@@ -26,6 +26,10 @@
 
 /**
  * Person class
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class person extends zophTable {
     /** @var location Home address of this person */

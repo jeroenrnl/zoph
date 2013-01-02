@@ -23,6 +23,9 @@
 
 /**
  * Test the place class
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class placeTest extends ZophDataBaseTestCase {
 
