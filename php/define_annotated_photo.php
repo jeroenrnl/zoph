@@ -115,7 +115,7 @@
 <?php
         //}
         $people_string = "";
-        $people = $photo->lookup_people();
+        $people = $photo->getPeople();
         if ($people) {
             $count = 0;
             foreach ($people as $person) {

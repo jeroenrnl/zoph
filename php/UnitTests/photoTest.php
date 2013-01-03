@@ -65,7 +65,7 @@ class photoTest extends ZophDataBaseTestCase {
         foreach($newalbums as $alb) {
             $photo->addTo(new album($alb));
         }
-        $albums=$photo->lookup_albums();
+        $albums=$photo->getAlbums();
         foreach($albums as $album) {
             $ids[]=$album->getId();
             $this->assertInstanceOf("album", $album);
@@ -85,7 +85,7 @@ class photoTest extends ZophDataBaseTestCase {
         foreach($newcats as $cat) {
             $photo->addTo(new category($cat));
         }
-        $cats=$photo->lookup_categories();
+        $cats=$photo->getCategories();
         foreach($cats as $cat) {
             $ids[]=$cat->getId();
             $this->assertInstanceOf("category", $cat);
@@ -105,7 +105,7 @@ class photoTest extends ZophDataBaseTestCase {
         foreach($newpers as $pers) {
             $photo->addTo(new person($pers));
         }
-        $peo=$photo->lookup_people();
+        $peo=$photo->getPeople();
         foreach($peo as $per) {
             $ids[]=$per->getId();
             $this->assertInstanceOf("person", $per);

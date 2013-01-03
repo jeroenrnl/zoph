@@ -206,7 +206,7 @@
 <?php
         } else {
 ?>
-            <?php echo $photo->get_midsize_img() ?>
+            <?php echo $photo->getMidsizeImg() ?>
 <?php
         }
 ?>

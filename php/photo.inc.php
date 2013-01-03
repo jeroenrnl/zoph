@@ -169,8 +169,10 @@ class photo extends zophTable {
 
     /** 
      * Update photo relations, such as albums, categories, etc.
+     * @var array array of variables to update
+     * @var string suffix for varnames
      */
-    public function updateRelations($vars, $suffix = "", user $user=null) {
+    public function updateRelations(array $vars, $suffix = "") {
         $albums=array();
         $categories=array();
         $people=array();
@@ -259,7 +261,7 @@ class photo extends zophTable {
      * Updates the photo's dimensions and filesize
      */
     public function updateSize() {
-        $file=$this->get_file_path();
+        $file=$this->getFilePath();
         list($width, $height)=getimagesize($file);
         $size=filesize($file);
         $this->set("size", $size);
@@ -272,7 +274,7 @@ class photo extends zophTable {
      * Rereads EXIF information from file and updates
      */
     public function updateEXIF() {
-        $file=$this->get_file_path();
+        $file=$this->getFilePath();
         $exif=process_exif($file);
         if($exif) {
             $this->setFields($exif);
@@ -292,19 +294,37 @@ class photo extends zophTable {
         return (int) $result["pos"];
     }
 
+    /**
+     * Add this photo to album, category, person or location
+     * @param organizer album, category, person or location
+     */
     public function addTo(organizer $org) {
         $org->addPhoto($this);
     }
 
+    /**
+     * Remove this photo from album, category, person or location
+     * @param organizer album, category, person or location
+     */
     public function removeFrom(organizer $org) {
         $org->removePhoto($this);
     }
 
-    function lookup_albums($user = null) {
+    /**
+     * Get a list of albums for this photo
+     * @return array of albums
+     */
+    public function getAlbums() {
+        $user=user::getCurrent();
 
-        if ($user && !$user->is_admin()) {
-            $sql =
-                "SELECT al.album_id, al.parent_album_id, al.album FROM " .
+        if ($user->is_admin()) {
+            $sql = "SELECT al.album_id, al.parent_album_id, al.album FROM " .
+                DB_PREFIX . "photo_albums AS pa, " .
+                DB_PREFIX . "albums AS al " .
+                "WHERE pa.photo_id = '" . (int) $this->getId() . "'" .
+                " AND pa.album_id = al.album_id ORDER BY al.album";
+        } else {
+            $sql = "SELECT al.album_id, al.parent_album_id, al.album FROM " .
                 DB_PREFIX . "albums AS al JOIN " .
                 DB_PREFIX . "photo_albums AS pa " .
                 "ON al.album_id = pa.album_id JOIN " .
@@ -312,50 +332,45 @@ class photo extends zophTable {
                 "ON pa.album_id = gp.album_id JOIN " .
                 DB_PREFIX . "groups_users as gu " .
                 "ON gp.group_id = gu.group_id " .
-                "WHERE pa.photo_id = '" .
-                escape_string($this->get("photo_id")) . "'" .
-                " AND gu.user_id = '" .
-                escape_string($user->get("user_id")) . "' " .
+                "WHERE pa.photo_id = '" . (int) $this->getId() . "'" .
+                " AND gu.user_id = '" . (int) $user->getId() . "' " .
                 " AND gp.access_level >= " .
-                escape_string($this->get("level")) .
+                (int) $this->get("level") .
                 " ORDER BY al.album";
-        }
-        else {
-            $sql =
-                "select al.album_id, al.parent_album_id, al.album from " .
-                DB_PREFIX . "photo_albums as pa, " .
-                DB_PREFIX . "albums as al " .
-                "where pa.photo_id = '" .
-                escape_string($this->get("photo_id")) . "'" .
-                " and pa.album_id = al.album_id order by al.album";
         }
 
         return album::getRecordsFromQuery("album", $sql);
     }
 
-    function lookup_categories($user = null) {
-        $sql =
-            "select cat.category_id, cat.parent_category_id, cat.category from " .
-            DB_PREFIX . "photo_categories as pc, " .
-            DB_PREFIX . "categories as cat " .
-            "where pc.photo_id = '" . escape_string($this->get("photo_id")) . "'" .
-            " and pc.category_id = cat.category_id order by cat.category";
+    /**
+     * Get a list of categories for this photo
+     * @return array of categories
+     */
+    public function getCategories() {
+        $sql = "SELECT cat.category_id, cat.parent_category_id, cat.category FROM " .
+            DB_PREFIX . "photo_categories AS pc, " .
+            DB_PREFIX . "categories AS cat " .
+            "WHERE pc.photo_id = '" . (int) $this->getId() . "'" .
+            " AND pc.category_id = cat.category_id ORDER BY cat.category";
 
         return album::getRecordsFromQuery("category", $sql);
     }
 
-    function lookup_people() {
-        $sql =
-            "select psn.person_id, psn.last_name, " .
-            "psn.first_name, psn.called from " .
-            DB_PREFIX . "photo_people as pp, " .
-            DB_PREFIX . "people as psn " .
-            "where pp.photo_id = '" .
-            escape_string($this->get("photo_id")) . "'" .
-            " and pp.person_id = psn.person_id order by pp.position";
+    /**
+     * Get a list of people on this photo
+     * @return array of people
+     */
+    function getPeople() {
+        $sql = "SELECT p.person_id, p.last_name, " .
+            "p.first_name, p.called FROM " .
+            DB_PREFIX . "photo_people AS pp, " .
+            DB_PREFIX . "people AS p " .
+            "WHERE pp.photo_id = '" . (int) $this->getId() . "'" .
+            " AND pp.person_id = p.person_id ORDER BY pp.position";
 
         return album::getRecordsFromQuery("person", $sql);
     }
+
     /**
      * Import a file into the database
      *
@@ -363,7 +378,7 @@ class photo extends zophTable {
      *
      * @param file The file to be imported
      */
-    function import($file) {
+    function import(file $file) {
         $this->set("name", $file->getName());
         
         $newPath=$this->get("path") . "/";
@@ -442,22 +457,49 @@ class photo extends zophTable {
         $this->set("path", cleanup_path($newPath));
     }
 
-    function get_file_path() {
-        return conf::get("path.images") . "/" . $this->get("path") . "/" . $this->get("name");
+    /**
+     * Return the full path to the file on disk
+     * @param string type of image to return (thumb, mid, or empty for full)
+     * @return string full path.
+     */
+    public function getFilePath($type=null) {
+        $image_path = conf::get("path.images") . DIRECTORY_SEPARATOR . $this->get("path") . DIRECTORY_SEPARATOR;
+
+        if ($type==THUMB_PREFIX || $type==MID_PREFIX) {
+            $image_path .= $type . DIRECTORY_SEPARATOR . $type . "_";
+        }
+        return $image_path . $this->get("name");
     }
 
-    function get_midsize_img() {
-        return $this->get_image_tag(MID_PREFIX);
+    /**
+     * Create an img tag for midsize image
+     * @return string HTML code for img tag
+     * @todo returns HTML
+     */
+    public function getMidsizeImg() {
+        return $this->getImageTag(MID_PREFIX);
     }
 
-    function get_thumbnail_link($link = null) {
+    /**
+     * Get an thumbnail image that links to this photo
+     * @todo contains HTML
+     * @param string optional link instead of the default link to the photo page
+     * @return string HTML code
+     */
+    public function getThumbnailLink($link = null) {
         if (!$link) {
             $link = "photo.php?photo_id=" . $this->get("photo_id");
         }
-        return "            <a href=\"$link\">" . $this->get_image_tag(THUMB_PREFIX) . "</a>";
+        return "            <a href=\"$link\">" . $this->getImageTag(THUMB_PREFIX) . "</a>";
     }
 
-    function get_fullsize_link($title) {
+    /**
+     * Get a link to the fullsize version of this image
+     * @todo contains HTML
+     * @param string What (text or image) to display
+     * @return string HTML code
+     */
+    public function getFullsizeLink($title) {
         $user=user::getCurrent();
         $image = $this->getURL();
         $newwin = ($user->prefs->get("fullsize_new_win") ? "target=\"_blank\"" : "");
@@ -482,11 +524,13 @@ class photo extends zophTable {
         return $url;
     }
 
-    public function getDirectLink() {
-        
-    }
-
-    function get_image_tag($type = null) {
+    /**
+     * Create an img tag for this photo
+     * 
+     * @return string HTML code for img tag
+     * @todo returns HTML
+     */
+    public function getImageTag($type = null) {
 
         $image_href = $this->getURL($type);
 
@@ -494,39 +538,14 @@ class photo extends zophTable {
             return "";
         }
 
-        $size_string = "";
+        $file=$this->getFilePath($type);
 
-        $width = $this->get("width");
-        $height = $this->get("height");
+        list($width, $height, $filetype, $size)=getimagesize($file);
 
-        if ($type) {
-            if ($type == THUMB_PREFIX) {
-                $max_side = THUMB_SIZE;
-            }
-            else if ($type == MID_PREFIX) {
-                $max_side = MID_SIZE;
-            }
 
-            if ($max_side) {
-                if (!$width || !$height) {
-                    // pick some reasonable values
-                    $width = $max_side;
-                    $height = (int)round(0.75 * $width);
-                }
-                else if ($width >= $height) {
-                    $height = (int)round(($max_side/$width) * $height);
-                    $width = $max_side;
-                }
-                else {
-                    $width = (int)round(($max_side/$height) * $width);
-                    $height = $max_side;
-                }
-            }
-        }
 
-        $size_string = " width=\"$width\" height=\"$height\"";
         $alt = escape_string($this->get("title"));
-        return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size_string . " alt=\"$alt\"" . ">";
+        return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size . " alt=\"$alt\"" . ">";
     }
 
     function get_rating($user) {
@@ -664,7 +683,7 @@ class photo extends zophTable {
     }
 
     function get_image_resource() {
-        $file = $this->get_file_path();
+        $file = $this->getFilePath();
         $img_src = null;
         $image_info = getimagesize($file);
         switch ($image_info[2]) {
@@ -733,7 +752,7 @@ class photo extends zophTable {
     function create_thumbnail($prefix, $size) {
         $img_src = $this->get_image_resource();
         
-        $image_info = getimagesize($this->get_file_path());
+        $image_info = getimagesize($this->getFilePath());
         $width = $image_info[0];
         $height = $image_info[1];
 
@@ -1110,8 +1129,8 @@ class photo extends zophTable {
     }    
     
     function exif_to_html() {
-        if (exif_imagetype($this->get_file_path())==IMAGETYPE_JPEG) {
-            $exif=read_exif_data($this->get_file_path());
+        if (exif_imagetype($this->getFilePath())==IMAGETYPE_JPEG) {
+            $exif=read_exif_data($this->getFilePath());
             if ($exif) {
                 $return="<dl class='allexif'>\n";
 
@@ -1150,7 +1169,7 @@ class photo extends zophTable {
         } else {
             $html="<h2>" . e($file) . "<\/h2>";
         }    
-        $html.=$this->get_thumbnail_link() .
+        $html.=$this->getThumbnailLink() .
           "<p><small>" . 
           $this->get("date") . " " . $this->get("time") . "<br>";
         if($this->photographer) {
@@ -1233,7 +1252,7 @@ class photo extends zophTable {
     }
 
     public function getHashFromFile() {
-        $file=$this->get_file_path();
+        $file=$this->getFilePath();
         if(file_exists($file)) {
             return sha1_file($file);
         } else {

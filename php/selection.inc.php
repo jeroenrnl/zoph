@@ -74,7 +74,7 @@ foreach ($_SESSION["selected_photo"] as $selected_photo_id) {
     <div class="thumbnail">
 <?php   
         echo create_actionlinks($selection_actionlinks);
-        echo $selected_photo->get_image_tag("thumb");
+        echo $selected_photo->getImageTag(THUMB_PREFIX);
 ?>
     </div>
 <?php

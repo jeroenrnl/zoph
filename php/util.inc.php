@@ -579,13 +579,12 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
         $zip=new ZipArchive();
         $tempfile="/tmp/zoph_" . $user->get("user_id") . "_" . $filename ."_" . $filenum . ".zip";
         @unlink($tempfile);
-        // ZIPARCHIVE::CREATE is not available in PHP4, but resolves to 1
-        if ($zip->open($tempfile, 1)!==TRUE) {
+        if ($zip->open($tempfile, ZIPARCHIVE::CREATE)!==TRUE) {
             die("cannot open $tempfile\n");
         }
         $count=sizeof($photos);
         foreach($photos as $key => $photo) {
-            if($data=@file_get_contents($photo->get_file_path())) {
+            if($data=@file_get_contents($photo->getFilePath())) {
                 $size=strlen($data);
                 $zipsize=$zipsize+$size;
                 if($zipsize>=$maxsize) {
@@ -595,7 +594,7 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
                 $zip->addFromString($photo->get("name"),$data);
             
             } else {
-                echo sprintf(translate("Could not read %s."), $photo->get_file_path()) . "<br>\n";
+                echo sprintf(translate("Could not read %s."), $photo->getFilePath()) . "<br>\n";
             }
         }
         $zip->close() or die ("Zipfile creation failed");

@@ -215,7 +215,7 @@
         unset($actionlinks["edit"]);
 
         $photo->setFields($request_vars);
-        $photo->updateRelations($request_vars,"_id",$user); // pass again for add people, cats, etc
+        $photo->updateRelations($request_vars,"_id"); // pass again for add people, cats, etc
         $photo->update();
         $action = "update";
         if(!empty($_qs)) {
@@ -343,7 +343,7 @@ require_once("header.inc.php");
 <?php
         }
 ?>
-            <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
+            <?php echo $photo->getFullsizeLink($photo->get("name")) ?> :
             <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
             <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
         </div>    
@@ -367,7 +367,7 @@ require_once("header.inc.php");
         }
 ?>
         </ul>
-            <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
+            <?php echo $photo->getFullsizeLink($photo->getMidsizeImg()) ?>
 <?php
         if (($user->is_admin() || $user->get("browse_people")) && $people_links = get_photo_person_links($photo)) {
 ?>
@@ -408,14 +408,14 @@ require_once("header.inc.php");
 ?>
 <?php
         }
-        if ($album_links = template::createLinkList($photo->lookup_albums($user))) {
+        if ($album_links = template::createLinkList($photo->getAlbums($user))) {
 ?>
 <dt><?php echo translate("albums") ?></dt>
 <dd><?php echo $album_links ?></dd>
 <?php
         }
 
-        if ($category_links = template::createLinkList($photo->lookup_categories())) {
+        if ($category_links = template::createLinkList($photo->getCategories())) {
 ?>
           <dt><?php echo translate("categories") ?></dt>
           <dd><?php echo $category_links ?></dd>
@@ -469,7 +469,7 @@ require_once("header.inc.php");
                             $rel_photo->get("photo_id") . "\">edit</a>";
                         echo "</span>";
                     }
-                    echo $rel_photo->get_thumbnail_link() . "<br>";
+                    echo $rel_photo->getThumbnailLink() . "<br>";
                     echo $photo->get_relation_desc($rel_photo->get("photo_id"));
                     echo "</div>";
                     $i++;
@@ -500,7 +500,7 @@ require_once("header.inc.php");
 <?php
         echo create_actionlinks($actionlinks);
         echo sprintf(translate("Confirm deletion of '%s'"), $photo->get("name"));
-        echo $photo->get_midsize_img();
+        echo $photo->getMidsizeImg();
     }
     else {
         require_once("edit_photo.inc.php");

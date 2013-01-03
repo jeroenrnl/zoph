@@ -448,7 +448,7 @@ class album extends zophTreeTable implements Organizer {
 
         if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
-            return $coverphoto->get_image_tag(THUMB_PREFIX);
+            return $coverphoto->getImageTag(THUMB_PREFIX);
         } else if (!$children) {
             // No photos found in this album... let's look again, but now 
             // also in sub-albums...

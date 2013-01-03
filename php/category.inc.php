@@ -296,7 +296,7 @@ class category extends zophTreeTable implements Organizer {
 
         if (isset($coverphoto) && $coverphoto instanceof photo) {
             $coverphoto->lookup();
-            return $coverphoto->get_image_tag(THUMB_PREFIX);
+            return $coverphoto->getImageTag(THUMB_PREFIX);
         } else if (!$children) {
             // No photos found in this cat... let's look again, but now 
             // also in subcat...

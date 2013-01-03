@@ -177,9 +177,9 @@
 
 <?php
             if (getvar("_random")) {
-                echo $thumbnails[$i]->get_thumbnail_link("photo.php?photo_id=" . $thumbnails[$i]->get("photo_id")) . "\n";
+                echo $thumbnails[$i]->getThumbnailLink("photo.php?photo_id=" . $thumbnails[$i]->get("photo_id")) . "\n";
             } else {
-                echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n"; 
+                echo $thumbnails[$i]->getThumbnailLink("photo.php?" . update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n"; 
             }
 
             if (!empty($lightbox)) {

@@ -80,7 +80,7 @@
 
                 <div class="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
                 <div class="photohdr">
-                  <?php echo $photo->get_fullsize_link($photo->get("name")) ?> :
+                  <?php echo $photo->getFullsizeLink($photo->get("name")) ?> :
                   <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
                   <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
                 </div>
@@ -105,7 +105,7 @@
 ?>
         </ul>
 
-            <?php echo $photo->get_fullsize_link($photo->get_midsize_img()) ?>
+            <?php echo $photo->getFullsizeLink($photo->getMidsizeImg()) ?>
 <?php
     }
 ?>
@@ -163,7 +163,7 @@
           </label>
           <fieldset class="multiple">
 <?php
-        $people = $photo->lookup_people();
+        $people = $photo->getPeople();
         if ($people) {
             foreach ($people as $person) {
 ?>
@@ -183,7 +183,7 @@
           <label for="albums"><?php echo translate("albums") ?></label>
           <fieldset class="albums multiple">
 <?php
-        $albums = $photo->lookup_albums($user);
+        $albums = $photo->getAlbums($user);
         if ($albums) {
             foreach ($albums as $album) {
 ?>
@@ -202,7 +202,7 @@
           <label for="categories"><?php echo translate("categories") ?></label>
           <fieldset class="categories multiple">
 <?php
-        $categories = $photo->lookup_categories($user);
+        $categories = $photo->getCategories($user);
         if ($categories) {
             foreach ($categories as $category) {
 ?>

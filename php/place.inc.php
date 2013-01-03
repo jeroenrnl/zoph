@@ -387,7 +387,7 @@ class place extends zophTreeTable implements Organizer {
 
         if (!empty($coverphoto)) {
             $coverphoto->lookup();
-            return $coverphoto->get_image_tag(THUMB_PREFIX);
+            return $coverphoto->getImageTag(THUMB_PREFIX);
         } else if (!$children) {
             // No photos found in this place... let's look again, but now 
             // also in sub-places...

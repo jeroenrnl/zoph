@@ -280,7 +280,7 @@
 ?>
                 </div>
                 <div class="thumbnail">
-                  <?php echo $photo->get_thumbnail_link("photo.php?photo_id=$photo_id") . "\n" ?><br>
+                  <?php echo $photo->getThumbnailLink("photo.php?photo_id=$photo_id") . "\n" ?><br>
 <?php
                 if ($can_edit && conf::get("rotate.enable") &&
                     ($user->is_admin() || $permissions->get("writable"))) {
@@ -334,7 +334,7 @@
                       <label for="album__<?php echo $photo_id?>"><?php echo translate("albums") ?></label>
                       <fieldset class="checkboxlist">
 <?php
-                $albums = $photo->lookup_albums($user);
+                $albums = $photo->getAlbums($user);
                 if ($albums) {
                     $append = "";
                     foreach ($albums as $album) {
@@ -355,7 +355,7 @@
                       <label for="category__<?php echo $photo_id?>"><?php echo translate("categories") ?></label>
                       <fieldset class="checkboxlist">
 <?php
-                $categories = $photo->lookup_categories($user);
+                $categories = $photo->getCategories($user);
                 if ($categories) {
                     $append = "";
                     foreach ($categories as $category) {
@@ -376,7 +376,7 @@
                       <label for="person_0__<?php echo $photo_id ?>"><?php echo translate("people") ?></label>
                       <fieldset class="checkboxlist multiple">
 <?php
-                $people = $photo->lookup_people();
+                $people = $photo->getPeople();
                 if ($people) {
                     $append = "";
                     foreach ($people as $person) {

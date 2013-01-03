@@ -323,7 +323,7 @@ class person extends zophTable implements Organizer {
 
         if (isset($coverphoto)) {
             $coverphoto->lookup();
-            return $coverphoto->get_image_tag(THUMB_PREFIX);
+            return $coverphoto->getImageTag(THUMB_PREFIX);
         }
     }
 
@@ -660,7 +660,7 @@ function get_photo_person_links($photo) {
 
     $links = "";
     if (!$photo) { return $links; }
-    $people = $photo->lookup_people();
+    $people = $photo->getPeople();
     if ($people) {
         foreach ($people as $person) {
             if ($links) { $links .= ", "; }

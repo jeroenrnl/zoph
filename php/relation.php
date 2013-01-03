@@ -93,11 +93,11 @@
               <br>
               <div id="relation">
                   <div class="thumbnail">
-                      <?php echo $photo_1->get_image_tag("thumb") ?><br>
+                      <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
                       <?php echo $desc_1 ?>
                   </div>
                   <div class="thumbnail">
-                      <?php echo $photo_2->get_image_tag("thumb") ?>
+                      <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?>
                       <?php echo $desc_2 ?>
                   </div>
               </div>
@@ -121,11 +121,11 @@
           <br>
           <div id="relation">
               <div class="thumbnail">
-                  <?php echo $photo_1->get_image_tag("thumb") ?><br>
+                  <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
                   <?php echo $desc_1 ?>
               </div>
               <div class="thumbnail">
-                  <?php echo $photo_2->get_image_tag("thumb") ?><br>
+                  <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?><br>
                   <?php echo $desc_2 ?>
               </div>
           </div>
@@ -143,11 +143,11 @@
     <br>
        <div id="relation">
           <div class="thumbnail">
-              <?php echo $photo_1->get_image_tag("thumb") ?><br>
+              <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
               <?php echo $photo_1->get("name"); ?>
           </div>
           <div class="thumbnail">
-              <?php echo $photo_2->get_image_tag("thumb") ?>
+              <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?>
               <?php echo $photo_2->get("name"); ?>
           </div>
        </div>

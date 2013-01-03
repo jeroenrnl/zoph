@@ -34,7 +34,7 @@
         <div class="thumbnail" id="random">
 <?php
     if (sizeof($thumbnails) == 1) {
-        echo $thumbnails[0]->get_thumbnail_link();
+        echo $thumbnails[0]->getThumbnailLink();
     }
 
     $album = album::getRoot();
