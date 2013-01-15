@@ -97,13 +97,6 @@ class photo extends zophTable {
     }
 
     /**
-     * Get the id of this photo
-     */
-    public function getId() {
-        return (int) $this->get("photo_id");
-    }
-
-    /**
      * Lookup a photo, considering access rights
      */
     public function lookup() {
@@ -164,7 +157,7 @@ class photo extends zophTable {
      * does not delete the photo on disk
      */
     public function delete() {
-        parent::delete(array("photo_people", "photo_categories", "photo_albums"));
+        parent::delete(array("photo_people", "photo_categories", "photo_albums", "photo_ratings", "photo_comments"));
     }
 
     /** 
@@ -548,138 +541,29 @@ class photo extends zophTable {
         return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size . " alt=\"$alt\"" . ">";
     }
 
-    function get_rating($user) {
-
-        $photo_id = $this->get("photo_id");
-        $user_id=$user->get("user_id");
-
-        if ($user->get("allow_multirating")) {
-            // This user is allowed to rate the same photoe  multiple 
-            // times, however we will allow only one from the same IP
-            $where = " and ipaddress = '" . 
-                escape_string($_SERVER["REMOTE_ADDR"])."' ";
-        } else {
-            $where="";
-        }
-
-        $query =
-            "select rating from " . DB_PREFIX . "photo_ratings " .
-            "where user_id = '" . escape_string($user_id) . "'" .
-            " and photo_id = '". escape_string($this->get("photo_id")) . "'" .
-            $where;
-
-        $result = query($query, "Rating lookup failed");
-
-        $rating = null;
-        if ($row = fetch_array($result)) {
-            $rating = $row[0];
-        }
-
-        return $rating;
-    }
-
     /**
      * Stores the rating of a photo for a user and updates the
      * average rating.
      *
      * This function from Jan Miczaika
      */
-    function rate($user, $rating) {
-        $where="";
-        if (!$user || !$rating) {
-            return null;
-        }
-        $user_id=$user->get("user_id");
-        if(!($user->is_admin() || $user->get("allow_rating"))) {
-            return;
-        }
-
-        $photo_id = $this->get("photo_id");
-
-        if ($user->get("allow_multirating")) {
-            // This user is allowed to rate the same photoe  multiple 
-            // times, however we will allow only one from the same IP
-            $where = " and ipaddress = '" . 
-                escape_string($_SERVER["REMOTE_ADDR"])."' ";
-        }
-
-        $query =
-            "select * from " . DB_PREFIX . "photo_ratings " .
-            "where user_id = '" . escape_string($user_id) . "'" .
-            " and photo_id = '". escape_string($photo_id) . "'" .
-            $where;
-
-        $result = query($query, "Rating lookup failed");
-
-        //if the user has already voted, update the vote, else insert a new one
-
-        if (num_rows($result) > 0) {
-            $query =
-                "update " . DB_PREFIX . "photo_ratings " .
-                "set rating = '" . escape_string($rating) . "', " .
-                " ipaddress = '" . escape_string($_SERVER["REMOTE_ADDR"])."' " .
-                "where user_id = '" . escape_string($user_id) . "'" .
-                " and photo_id = '". escape_string($photo_id) . "'" .
-                $where . " LIMIT 1";
-                // The limit makes sure only 1 vote is updated, this is 
-                // needed if you ever change the allow_multirating to
-                // 'no' and there already have been multiple votes
-                // by this user. It will, however, simply update the first
-                // vote it encounters...
-        }
-        else {
-            $query =
-                "insert into " . DB_PREFIX . "photo_ratings " .
-                "(photo_id, user_id, ipaddress, rating) values " .
-                " ('" . escape_string($photo_id) . "', '" .
-                escape_string($user_id) . "', '" .
-                escape_string($_SERVER["REMOTE_ADDR"])."', '" .
-                escape_string($rating) . "')";
-        }
-
-        $result = query($query, "Rating input failed");
-
-        //now recalculate the average, and input it in the photo table
-        $this->recalculate_rating();
+    public function rate($rating) {
+        rating::setRating((int) $rating, $this);
     }
 
-    /**
-     * Recalculate the rating for this photo
-     * @todo Should update the object, not the database
-     */
-    function recalculate_rating() {
-        $photo_id = $this->get("photo_id");
-        $query = "select avg(rating) from " . DB_PREFIX . "photo_ratings ".
-            " where photo_id = '" . escape_string($photo_id) . "'";
-
-
-        $result = query($query, "Rating recalculation failed");
-
-        $row = fetch_array($result);
-
-        $avg = (round(100 * $row[0])) / 100.0;
-        
-        if($avg == 0) {
-            $avg = "null";
-        }
-      
-        $query = "update " . DB_PREFIX . "photos set rating = $avg" .
-            " where photo_id = '" . escape_string($photo_id) . "'";
-
-        $result = query($query, "Inserting average rating failed");
-
-        return $avg;
+    public function getRating() {
+        return rating::getAverage($this);
     }
 
-    function delete_rating($rating_id) {
-        if(!is_numeric($rating_id)) { 
-            die("<b>rating_id</b> must be numeric!"); 
+    public function getRatingForUser(user $user) {
+        $rating=array_pop(rating::getRatings($this, $user));
+        if($rating instanceof rating) {
+            return $rating->get("rating");
         }
-        $sql = "DELETE FROM " . DB_PREFIX . "photo_ratings WHERE " .
-            "rating_id = " . escape_string($rating_id);
-        query($sql);
-        $this->recalculate_rating();
-        return;
+    }
+
+    public function getRatingDetails() {
+        return rating::getDetails($this);
     }
 
     function get_image_resource() {
@@ -1027,32 +911,6 @@ class photo extends zophTable {
         return $tpl;
     }
 
-    function get_rating_details() {
-        $rating=$this->get("rating");
-
-        $sql="SELECT rating_id, user_id, rating, ipaddress, timestamp FROM " .
-            DB_PREFIX . "photo_ratings WHERE photo_id=" .
-            escape_string($this->get("photo_id"));
-
-        $result=query($sql); 
-        $ratings=array();
-        while($row=fetch_assoc($result)) {
-            $this_user=new user($row["user_id"]);
-            $this_user->lookup();
-            $row["user_name"]=$this_user->getName();
-            $row["user_url"]=$this_user->getURL();
-            $ratings[]=$row;
-        }
-        
-        $tpl=new block("rating_details",array(
-            "rating" => $rating,
-            "ratings" => $ratings,
-            "photo_id" => $this->get("photo_id")
-        ));
-
-
-        return $tpl;
-    }
     function get_comments() {
         $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .
             " photo_id = " .  $this->get("photo_id");
@@ -1568,64 +1426,6 @@ function get_filesize($photos, $human=false) {
     } else {
         return $bytes;
     }
-}
-function createRatingGraph() {
-    $user=user::getCurrent();
-
-    $ratings=array();
-    $value_array=array();
-    $html="";
-
-    if ($user->is_admin()) {
-        $sql = "SELECT FLOOR(rating+0.5), COUNT(*) FROM " . DB_PREFIX . "photos " .
-            "GROUP BY FLOOR(rating+0.5) ORDER BY FLOOR(rating+0.5)";
-    } else {
-        $sql = "SELECT FLOOR(ph.rating+0.5), " . 
-            "COUNT(DISTINCT ph.photo_id) AS COUNT FROM " .
-            DB_PREFIX . "photos AS ph JOIN " .
-            DB_PREFIX . "photo_albums AS pa " .
-            "ON ph.photo_id = pa.photo_id JOIN " .
-            DB_PREFIX . "group_permissions AS gp " .
-            "ON pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users AS gu " .
-            "ON gp.group_id = gu.group_id " .
-            "WHERE gu.user_id = '" . 
-            escape_string($user->get("user_id")) .
-            "' AND gp.access_level >= ph.level " .
-            "GROUP BY floor(rating+0.5) ORDER BY floor(rating+0.5)";
-    }
-
-    $result = query($sql, "Rating grouping failed");
-
-    while ($row = fetch_array($result)) {
-    	$ratings[($row[0] ? $row[0] : translate("Not rated"))]=$row[1];
-	}
-    if(!empty($ratings)) {
-        $html="<h3>" . translate("photo ratings") . "</h3>";
-        $legend=array(translate("rating"),translate("count"));
-        while (list($range, $count) = each($ratings)) {
-            if($range>0) {
-                $min_rating=$range-0.5;
-                $max_rating=$range+0.5;
-                $link =
-                  "search.php?rating%5B0%5D=" . $min_rating . 
-                  "&amp;_rating_op%5B0%5D=%3E%3D" .
-                  "&amp;rating%5B1%5D=" . $max_rating . 
-                  "&amp;_rating_op%5B1%5D=%3C&amp;_action=" . translate("search");
-            } else {
-            $link = "photos.php?rating=null";
-        }  
-            $row=array($range, $link, $count);
-            $value_array[]=$row;
-        }
-    }
-    if(!empty($value_array)) {
-        $html.=create_bar_graph($legend, $value_array, 150);
-    } else {
-        $html.=translate("No photo was found.") . "\n";
-    }
-    
-    return $html;
 }
 
 /*

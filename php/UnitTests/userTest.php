@@ -280,7 +280,7 @@ class userTest extends ZophDatabaseTestCase {
           'can rate the same photo multiple times' => 'No',
           'can share photos' => 'No',
         );
-        $this->assertEquals($da, $expected);
+        $this->assertEquals($expected, $da);
     }
     
     /**
@@ -330,19 +330,22 @@ class userTest extends ZophDatabaseTestCase {
     }
     
     /**
-     * Test get_rating_graph() method.
-     * @dataProvider getRatingGraphForUser
-     * @todo only checks the type of the return data, not the actual data
-     *       this should change once get_rating_graph return something
-     *       else then a pile of HTML.
+     * Test getRatingGraph() method.
+     * Tests only 1 user with no ratings
+     * full testing is done in the rating object
      */
-    public function test_get_rating_graph($user, $graph) {
-        $obj=new user($user);
+    public function testgetRatingGraph() {
+        $user=new user(1);
+        $graph=$user->getRatingGraph();
+        $this->assertInternalType("array", $graph);
 
-        if(is_null($graph)) {
-            $this->assertNull($obj->get_rating_graph());
-        } else {
-            $this->assertInternalType("string", $obj->get_rating_graph());
+        // Check if all keys are present
+        for($i=1; $i<=10; $i++) {
+            $this->assertArrayHasKey($i, $graph);
+        }
+
+        foreach($graph as $rating=>$array) {
+            $this->assertEquals($array, array("count" => 0, "width" => 0.0, "value" => $rating));
         }
     }
 
@@ -425,16 +428,6 @@ class userTest extends ZophDatabaseTestCase {
             array(False)
         );
      }
-
-     public function getRatingGraphForUser() {
-        return array(
-            array(1, null),
-            array(2, ""),
-            array(3, ""),
-            array(6, "")
-        );
-     }
-
 
 }
 ?>

@@ -1645,7 +1645,6 @@
 		<field name="photographer_id">2</field>
 		<field name="location_id">3</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">7.50</field>
 		<field name="description" xsi:nil="true" />
 		<field name="date">2012-12-29</field>
 		<field name="time">12:50:59</field>
@@ -1680,7 +1679,6 @@
 		<field name="photographer_id">2</field>
 		<field name="location_id">4</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">4.25</field>
 		<field name="description" xsi:nil="true" />
 		<field name="date">2012-12-29</field>
 		<field name="time">12:50:59</field>
@@ -1715,7 +1713,6 @@
 		<field name="photographer_id">2</field>
 		<field name="location_id">4</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">5.00</field>
 		<field name="description" xsi:nil="true" />
 		<field name="date">2012-12-29</field>
 		<field name="time">12:50:59</field>
@@ -1750,7 +1747,6 @@
 		<field name="photographer_id">3</field>
 		<field name="location_id">5</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">6.50</field>
 		<field name="description" xsi:nil="true" />
 		<field name="date">2012-12-29</field>
 		<field name="time">12:50:59</field>
@@ -1785,7 +1781,6 @@
 		<field name="photographer_id">3</field>
 		<field name="location_id">5</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">9.50</field>
 		<field name="description" xsi:nil="true" />
 		<field name="date">2012-12-29</field>
 		<field name="time">12:50:59</field>
@@ -1820,7 +1815,6 @@
 		<field name="photographer_id">3</field>
 		<field name="location_id">6</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">6.00</field>
 		<field name="description" xsi:nil="true" />
 		<field name="date">2012-12-29</field>
 		<field name="time">12:51:00</field>
@@ -1855,7 +1849,6 @@
 		<field name="photographer_id">3</field>
 		<field name="location_id">7</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
 		<field name="date">2012-12-29</field>
 		<field name="time">12:51:00</field>
@@ -1890,7 +1883,6 @@
 		<field name="photographer_id">4</field>
 		<field name="location_id">10</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">6.00</field>
 		<field name="description" xsi:nil="true" />
 		<field name="date">2012-12-29</field>
 		<field name="time">12:51:00</field>
@@ -1925,7 +1917,6 @@
 		<field name="photographer_id">5</field>
 		<field name="location_id">13</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
 		<field name="date">2012-12-29</field>
 		<field name="time">12:51:00</field>
@@ -1960,7 +1951,6 @@
 		<field name="photographer_id">6</field>
 		<field name="location_id">14</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">5.50</field>
 		<field name="description" xsi:nil="true" />
 		<field name="date">2012-12-29</field>
 		<field name="time">12:51:00</field>

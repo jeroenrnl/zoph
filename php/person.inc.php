@@ -143,6 +143,7 @@ class person extends zophTable implements Organizer {
         return $person;
     }
 
+
     function getFather() {
         return person::getFromId($this->get("father_id"));
     }
@@ -155,11 +156,18 @@ class person extends zophTable implements Organizer {
         return person::getFromId($this->get("spouse_id"));
     }
 
+    /** @todo I don't think this function is ever called */
     function getChildren() {
         $constraints["father_id"] = $this->get("person_id");
         $constraints["mother_id"] = $this->get("person_id");
         return get_people($constraints, "or");
     }
+
+    /** @todo I don't think this function is ever called */
+    function getChildrenForUser() {
+        return $this->getChildren();
+    }
+
 
     function getName() {
         if ($this->get("called")) {
@@ -291,7 +299,9 @@ class person extends zophTable implements Organizer {
             if ($user->is_admin()) {
                 $sql =
                     "SELECT DISTINCT p.photo_id FROM " .
-                    DB_PREFIX . "photos AS p JOIN " .
+                    DB_PREFIX . "photos AS p LEFT JOIN " .
+                    DB_PREFIX . "view_photo_avg_rating ar" .
+                    " ON p.photo_id = ar.photo_id JOIN " .
                     DB_PREFIX . "photo_people AS pp" .
                     " ON pp.photo_id = p.photo_id " .
                     " WHERE pp.person_id = " . 
@@ -300,7 +310,9 @@ class person extends zophTable implements Organizer {
             } else {
                 $sql=
                     "SELECT DISTINCT p.photo_id FROM " .
-                    DB_PREFIX . "photos AS p JOIN " .
+                    DB_PREFIX . "photos AS p LEFT JOIN " .
+                    DB_PREFIX . "view_photo_avg_rating ar" .
+                    " ON p.photo_id = ar.photo_id JOIN " .
                     DB_PREFIX . "photo_albums AS pa " .
                     "ON pa.photo_id = p.photo_id JOIN " .
                     DB_PREFIX . "group_permissions AS gp " .
@@ -385,10 +397,12 @@ class person extends zophTable implements Organizer {
                 "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ph.rating),1) AS lowest, " .
-                "ROUND(MAX(ph.rating),1) AS highest, " . 
-                "ROUND(AVG(ph.rating),2) AS average FROM " . 
-                DB_PREFIX . "photos ph " .
+                "ROUND(MIN(ar.rating),1) AS lowest, " .
+                "ROUND(MAX(ar.rating),1) AS highest, " . 
+                "ROUND(AVG(ar.rating),2) AS average FROM " . 
+                DB_PREFIX . "photos ph LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON ph.photo_id = ar.photo_id " .
                 "WHERE ph.photographer_id=" . escape_string($id) .
                 " GROUP BY ph.photographer_id";
         } else {
@@ -398,12 +412,14 @@ class person extends zophTable implements Organizer {
                 "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ph.rating),1) AS lowest, " .
-                "ROUND(MAX(ph.rating),1) AS highest, " . 
-                "ROUND(AVG(ph.rating),2) AS average FROM " . 
+                "ROUND(MIN(ar.rating),1) AS lowest, " .
+                "ROUND(MAX(ar.rating),1) AS highest, " . 
+                "ROUND(AVG(ar.rating),2) AS average FROM " . 
                 DB_PREFIX . "photo_albums pa JOIN " .
                 DB_PREFIX . "photos ph " .
                 "ON ph.photo_id=pa.photo_id LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON ph.photo_id = ar.photo_id LEFT JOIN " .
                 DB_PREFIX . "group_permissions gp " .
                 "ON pa.album_id=gp.album_id LEFT JOIN " . 
                 DB_PREFIX . "groups_users gu " .

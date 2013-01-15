@@ -33,7 +33,7 @@
           </h1>
       <div class="main">
 <?php
-    $color_schemes = color_schemes::getRecords("color_scheme", "name");
+    $color_schemes = color_scheme::getRecords("color_scheme", "name");
 
     if ($color_schemes) {
         foreach($color_schemes as $cs) {

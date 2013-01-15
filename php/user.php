@@ -96,7 +96,14 @@
 <input class="bigbutton" type="submit" name="_button" value="<?php echo translate("Notify User", 0) ?>">
 </form><br>
 <?php
-        echo $this_user->get_rating_graph();
+        $tpl = new block("graph_bar", array(
+            "title"     => translate("photo ratings"),
+            "class"     => "ratings",
+            "value_label" => translate("rating", 0),
+            "count_label" => translate("count", 0),
+            "rows"      => $this_user->getRatingGraph()
+        ));
+        echo $tpl;
 
         $comments=$this_user->get_comments();
         if(!empty($comments)) {

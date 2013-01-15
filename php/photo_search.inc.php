@@ -324,6 +324,10 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                     $where .= "(ph.photo_id not in ($ids))";
                 }
             }
+        } else if ( $key=="rating" ) {
+            if ($where) { $where .= " AND "; }
+            $from["vpr"]="view_photo_avg_rating";
+            $where .= " vpr.rating  $op $val ";
         } else if ( $key=="lat" || $key=="lon") {
 
             $latlon[$key]=$val;

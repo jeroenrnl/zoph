@@ -33,3 +33,10 @@ CREATE TABLE zoph_conf (
 	) ENGINE=MyISAM;
 
 ALTER TABLE zoph_prefs DROP COLUMN desc_thumbnails;
+
+CREATE INDEX photo_id ON zoph_photo_ratings(photo_id);
+
+CREATE VIEW zoph_view_photo_avg_rating AS 
+	SELECT p.photo_id, avg(pr.rating) AS rating FROM zoph_photos AS p 
+	LEFT JOIN zoph_photo_ratings AS pr ON p.photo_id = pr.photo_id 
+	GROUP BY p.photo_id;

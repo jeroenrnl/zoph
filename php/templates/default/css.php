@@ -694,10 +694,56 @@ p.intro {
     
 /* ratings and reports are used on the reports page */
 
-table.ratings   {
+div.ratings   {
     margin-left: auto; /* To center the page */
     margin-right: auto;
     padding: 10px 5px 20px 5px;
+    width: 50%;
+    }
+
+.graph > table {
+    width: 100%;
+    border-collapse: collapse;
+    }
+
+.graph > table tr td:first-child { 
+    width: 20%; 
+    text-align: right;
+    padding-right: 15px;
+    border-right: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    }
+
+.graph.bar div.bar   {
+    float: left;
+    width: 100%;
+    height: 100%;
+    }
+
+
+/* This is the bar that shows the number of photos for each rating */
+.graph.bar div.fill   {
+    float: left;
+    border: none;
+    background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
+    border-radius: 0 3px 3px 0;
+
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
+    -o-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
+    -ms-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
+    z-index: 3;
+    
+    }
+
+.graph.bar div.count   {
+    font-size: small;
+    position: relative;
+    float: left;
+    left: 20px;
+    top: 2px;
+    margin: 0 -10px 0 -10px;
+    padding: 0;
     }
 
 table.reports {
@@ -730,13 +776,6 @@ div.smileys img {
     float: left;
     margin: 2px;
     margin-right: 4px;
-    }
-
-/* This is the bar that shows the number of photos for each rating */
-div.ratings   {
-    float: left;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
     }
 
 table#search td {

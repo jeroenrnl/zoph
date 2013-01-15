@@ -81,8 +81,7 @@ class category extends zophTreeTable implements Organizer {
         return $this->get("category");
     }
 
-    function getChildren($order=null) {
-        $user=user::getCurrent();
+    public function getChildren($order=null) {
         $order_fields="";
         if($order && $order!="name") {
             $order_fields=get_sql_for_order($order);
@@ -105,14 +104,13 @@ class category extends zophTreeTable implements Organizer {
             "WHERE parent_category_id=" . $id .
             " GROUP BY c.category_id " .
             $order;
-        $this->children=category::getRecordsFromQuery("category", $sql);
-         
-        if(!$user->is_admin()) {
-            return(remove_empty($this->children));
-        } else {
-            return $this->children;
-        }
-    }    
+        return category::getRecordsFromQuery("category", $sql);
+    }
+
+    public function getChildrenForUser($order=null) {
+        $children=$this->getChildren($order);
+        return remove_empty($this->getChildren);
+    }
     
     function getPhotoCount() {
         $user=user::getCurrent();
@@ -268,14 +266,18 @@ class category extends zophTreeTable implements Organizer {
             if ($user->is_admin()) {
                 $sql =
                     "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p JOIN " .
+                    DB_PREFIX . "photos as p LEFT JOIN " .
+                    DB_PREFIX . "view_photo_avg_rating ar" .
+                    " ON p.photo_id = ar.photo_id JOIN " .
                     DB_PREFIX . "photo_categories as pc ON" .
                     " pc.photo_id = p.photo_id" .
                     $cat_where . " " . $order;
             } else {
                 $sql=
                     "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p JOIN " .
+                    DB_PREFIX . "photos as p LEFT JOIN " .
+                    DB_PREFIX . "view_photo_avg_rating ar" .
+                    " ON p.photo_id = ar.photo_id JOIN " .
                     DB_PREFIX . "photo_albums as pa " .
                     "ON pa.photo_id = p.photo_id JOIN " .
                     DB_PREFIX . "group_permissions as gp " .
@@ -334,12 +336,14 @@ class category extends zophTreeTable implements Organizer {
                 "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ph.rating),1) AS lowest, " .
-                "ROUND(MAX(ph.rating),1) AS highest, " . 
-                "ROUND(AVG(ph.rating),2) AS average FROM " . 
+                "ROUND(MIN(ar.rating),1) AS lowest, " .
+                "ROUND(MAX(ar.rating),1) AS highest, " . 
+                "ROUND(AVG(ar.rating),2) AS average FROM " . 
                 DB_PREFIX . "photo_categories pc JOIN " .
                 DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pc.photo_id " .
+                "ON ph.photo_id=pc.photo_id LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON ph.photo_id = ar.photo_id " .
                 "WHERE pc.category_id=" . escape_string($id) .
                 " GROUP BY pc.category_id";
         } else {
@@ -349,12 +353,14 @@ class category extends zophTreeTable implements Organizer {
                 "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ph.rating),1) AS lowest, " .
-                "ROUND(MAX(ph.rating),1) AS highest, " . 
-                "ROUND(AVG(ph.rating),2) AS average FROM " . 
+                "ROUND(MIN(ar.rating),1) AS lowest, " .
+                "ROUND(MAX(ar.rating),1) AS highest, " . 
+                "ROUND(AVG(ar.rating),2) AS average FROM " . 
                 DB_PREFIX . "photo_categories pc JOIN " .
                 DB_PREFIX . "photos ph " .
                 "ON ph.photo_id=pc.photo_id LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON ph.photo_id = ar.photo_id LEFT JOIN " .
                 DB_PREFIX . "photo_albums pa " .
                 "ON ph.photo_id=pa.photo_id LEFT JOIN " .
                 DB_PREFIX . "group_permissions gp " .

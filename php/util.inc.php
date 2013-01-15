@@ -334,6 +334,10 @@ function create_form($vars, $ignore = array()) {
     return $form;
 }
 
+/**
+ * Add Session_id to url
+ * @todo phase out
+ */
 function add_sid($url) {
     if (SID) {
         if (strpos($url, "?") > 0) {
@@ -568,7 +572,7 @@ function get_autothumb_order($autothumb) {
         break;
     default:
     case "highest":
-        $order="ORDER BY p.rating DESC LIMIT 1";
+        $order="ORDER BY ar.rating DESC LIMIT 1";
         break;
     }
     return $order;
@@ -694,10 +698,11 @@ function check_js($user) {
     }
 }
 
-function remove_empty($children, $user) {
+function remove_empty($children) {
+    $user=user::getCurrent();
     $clean=array();
     // If user is not admin, remove any children that do not have photos
-    if($user && !$user->is_admin()) {
+    if(!$user->is_admin()) {
         foreach($children as $child) {
             $count=$child->getTotalPhotoCount();
             if($count>0) {

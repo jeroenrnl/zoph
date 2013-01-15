@@ -58,6 +58,7 @@ class user extends zophTable {
     }
 
     function is_admin() {
+        $this->lookup();
         return $this->get("user_class") == 0;
     }
 
@@ -263,31 +264,11 @@ class user extends zophTable {
         }
     }
 
-    function get_rating_graph() {
-        $value_array=array();
-        $sql = "SELECT ROUND(rating), count(*) FROM " . 
-            DB_PREFIX . "photo_ratings " .
-            "WHERE user_id=" . escape_string($this->get("user_id")) .
-            " GROUP BY ROUND(rating) ORDER BY ROUND(rating) ";
-
-        $result = query($sql, "Rating grouping failed");
-
-        $legend=array(translate("rating"), translate("count"));
-
-
-        while($row = fetch_row($result)) {
-            $link="search.php?_action=" . translate("search") . 
-                "&userrating=$row[0]" .
-                "&_userrating_user=" . escape_string($this->get("user_id"));
-            $value=$row[0];
-            $count=$row[1];
-
-            $value_array[]=array($value, $link, $count);
-        }
-        if(!empty($value_array)) {
-            return "<h3>" . translate("photo ratings") . "</h3>" .
-                create_bar_graph($legend, $value_array, 150);
-        }
+    /**
+     * Create a graph of the ratings this user has made
+     */
+    public function getRatingGraph() {
+        return rating::getGraphArrayForUser($this);
     }
 
     function get_comments() {

@@ -118,7 +118,7 @@
     } else if ($_action == "rate") {
         if (conf::get("feature.rating") && ($user->is_admin() || $user->get("allow_rating"))) {
             $rating = getvar("rating");
-            $photo->rate($user, $rating);
+            $photo->rate($rating);
             $link = strip_href($user->get_last_crumb());
             if (!$link) { $link = "zoph.php"; }
             redirect(add_sid($link));
@@ -126,12 +126,15 @@
         $action = "display";
     } else if ($_action == "delrate" && $user->is_admin()) {
         $rating_id=getvar("_rating_id");
-        $photo->delete_rating($rating_id);
+        $rating=new rating( (int) $rating_id);
+        $rating->delete();
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = "zoph.php"; }
         redirect(add_sid($link));
     }
-    if ($user->is_admin() || $permissions->get("writable")) {
+
+    if ($user->is_admin() || 
+            ($permissions instanceof photo_permissions && $permissions->get("writable"))) {
         $_deg = getvar("_deg");
         $_thumbnail = getvar("_thumbnail");
         if ($_deg && $_deg != 0) {
@@ -380,18 +383,20 @@ require_once("header.inc.php");
 <dl class="photo">
 <?php echo create_field_html($photo->getDisplayArray()) ?>
 <?php
-        if ((conf::get("feature.rating")  && ($user->is_admin() || $user->get("allow_rating"))) || $photo->get("rating")) {
-            $rating=$photo->get("rating") != 0 ? $photo->get("rating") . 
-            " / 10" : "";
+        if ((conf::get("feature.rating")  && 
+            ($user->is_admin() || $user->get("allow_rating"))) 
+            || $photo->getRating()) {
+
+            $rating = $photo->getRating();
 ?>
           <dt><?php echo translate("rating") ?></dt>
           <dd>
 <?php
                 if($rating) {
                     if($user->is_admin()) {
-                        echo $photo->get_rating_details();
+                        echo $photo->getRatingDetails();
                     } else {
-                        echo $rating;
+                        echo $rating . "<br>";
                     }
                 }
             if (conf::get("feature.rating") && ($user->is_admin() || $user->get("allow_rating"))) {
@@ -399,7 +404,7 @@ require_once("header.inc.php");
 <form id="ratingform" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
         <input type="hidden" name="_action" value="rate">
         <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
-        <?php echo create_rating_pulldown($photo->get_rating($user)); ?>
+        <?php echo create_rating_pulldown($photo->getRatingForUser($user)); ?>
         <input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
 </form>
         </dd>

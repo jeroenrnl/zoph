@@ -141,26 +141,6 @@ class photoTest extends ZophDataBaseTestCase {
         $this->assertEquals($obj->get_photo()->get("photo_id"), $photo->get("photo_id"));
     }
 
-    /**
-     * Test adding ratings
-     * @dataProvider getRatings
-     */
-    public function testAddRating($photo_id, $rating, $user_id, $avg) {
-        global $_SERVER;
-        global $user;
-        $user = new user($user_id);
-        $user->lookup();
-
-        $photo=new photo($photo_id);
-        $photo->lookup();
-
-        $_SERVER["REMOTE_ADDR"]=$user->getName() . ".zoph.org";
-        $photo->rate($user, $rating);
-
-        $photo->lookup();
-        $this->assertEquals($photo->get("rating"), $avg);
-    }
-
     public function getLocation() {
         return array(
             array(1, 5),

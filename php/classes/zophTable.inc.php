@@ -75,6 +75,20 @@ abstract class zophTable {
     }
 
     /**
+     * Get ID
+     * @return int id
+     * @throws ZophException
+     */
+    public function getId() {
+        if(sizeof($this->primary_keys)==1) {
+            return (int) $this->get($this->primary_keys[0]);
+        } else {
+            var_dump($this);
+            throw new ZophException("This class (" . get_class($this) . ") requires a specific getId() implementation, please report a bug");
+        }
+    }
+
+    /**
      * Sets the value of a field.
      * @param string Name of the field to set
      * @param string Value to set it to
