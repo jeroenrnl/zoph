@@ -524,6 +524,7 @@ class photo extends zophTable {
      * @todo returns HTML
      */
     public function getImageTag($type = null) {
+        $this->lookup();
 
         $image_href = $this->getURL($type);
 
@@ -918,74 +919,23 @@ class photo extends zophTable {
         return $comments;
     }
 
-    function get_related() {
-        $sql = "select photo_id_1 as photo_id from " . 
-            DB_PREFIX . "photo_relations where" .
-            " photo_id_2 = " .  $this->get("photo_id") .
-            " union select photo_id_2 as photo_id from " . 
-            DB_PREFIX . "photo_relations where" .
-            " photo_id_1 = " .  $this->get("photo_id");
-        $related=photo::getRecordsFromQuery("photo", $sql);
-        return $related;
+    /**
+     * Get Related photos
+     * @return array related photos
+     */
+    public function getRelated() {
+        return photoRelation::getRelated($this);
     }
 
-    function check_related($photo_id) {
-        $related=$this->get_related();
-        foreach($related as $rel_photo) {
-            if ($rel_photo->get("photo_id") == $photo_id) {
-                return true;
-            }
-        }
-        return false;
+    /**
+     * Get description for a specific related photo
+     * @param photo photo to get relation for
+     * @return string description
+     */
+    public function getRelationDesc(photo $photo) {
+        return photoRelation::getDescForPhotos($this, $photo);
     }
-    function get_relation_desc($photo_id_2) {
-        $sql = "select desc_1 from " . DB_PREFIX . "photo_relations where" .
-            " photo_id_2 = " . escape_string($this->get("photo_id")) . " and " .
-            " photo_id_1 = " . escape_string($photo_id_2) . 
-            " union select desc_2 from " . DB_PREFIX . "photo_relations where" .
-            " photo_id_1 = " . escape_string($this->get("photo_id")) . " and " .
-            " photo_id_2 = " . escape_string($photo_id_2) . " limit 1";
-        $result=query($sql, "Could not get description for related photo:");
-        $result=fetch_row($result);
-        return $result[0];
-    }
-    
-    function create_relation($photo_id_2, $desc_1 = null, $desc_2 = null) {
-        $sql = "insert into " . DB_PREFIX . "photo_relations values (" .
-            escape_string($this->get("photo_id")) . "," .
-            escape_string($photo_id_2) . "," .
-            "\"" . escape_string($desc_1) . "\"," .
-            "\"" . escape_string($desc_2) . "\")";
-        $result=query($sql, "Could not create relation");
-        }
-        
-    function update_relation($photo_id_2, $desc_1 = null, $desc_2 = null) {
-        $photo_id_1=escape_string($this->get("photo_id"));
-        $photo_id_2=escape_string($photo_id_2);
-        $sql = "update " . DB_PREFIX . "photo_relations set" .
-            " desc_1=\"" . escape_string($desc_1) . "\"," .
-            " desc_2=\"" . escape_string($desc_2) . "\"" .
-            " where photo_id_1=" . $photo_id_1 .
-            " and photo_id_2=" . $photo_id_2;
-        query($sql, "Could not update relation:");
-        // A relation may be the other way around...
-        $sql = "update " . DB_PREFIX . "photo_relations set" .
-            " desc_2=\"" . escape_string($desc_1) . "\"," .
-            " desc_1=\"" . escape_string($desc_2) . "\"" .
-            " where photo_id_2=" . $photo_id_1 .
-            " and photo_id_1=" . $photo_id_2;
-        query($sql, "Could not update relation:");
-    }
-    
-    function delete_relation($photo_id_2) {
-        $ids="(" . escape_string($this->get("photo_id")) . "," .
-            escape_string($photo_id_2) . ")"; 
-        $sql = "delete from " . DB_PREFIX . "photo_relations" .
-            " where photo_id_1 in " . $ids .
-            " and photo_id_2 in " . $ids;
-        $result=query($sql, "Could not delete relation:");
-    }    
-    
+
     function exif_to_html() {
         if (exif_imagetype($this->getFilePath())==IMAGETYPE_JPEG) {
             $exif=read_exif_data($this->getFilePath());

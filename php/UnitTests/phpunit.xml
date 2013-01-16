@@ -25,7 +25,8 @@
       <file>personTest.php</file> 
       <file>photoTest.php</file> 
       <file>placeTest.php</file>
-      <file>ratingTest.php</file> 
+      <file>ratingTest.php</file>
+      <file>relationTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>

@@ -199,6 +199,7 @@ class createTestData {
         $photographer=testData::getPhotographer();
         $comments=testData::getComments();
         $ratings=testData::getRatings();
+        $relations=testData::getRelations(); 
 
         $files=array();
         foreach($photos as $id=>$photo) {
@@ -240,6 +241,17 @@ class createTestData {
                     $photo->addTo(new person ($pers));
                 }
             }
+            if(isset($relations[$id])) {
+                foreach($relations[$id] as $related => $rel_desc) {
+                    photoRelation::defineRelation(
+                        $photo,
+                        new photo($related),
+                        $rel_desc[0],
+                        $rel_desc[1]);
+                }
+            }
+
+            // WARNING, below this line other users log in!
             if(isset($comments[$id])) {
                 foreach($comments[$id] as $user_id => $comment) {
                     $obj = new comment();
@@ -258,6 +270,7 @@ class createTestData {
                     $obj->add_comment_to_photo($photo->get("photo_id"));
                 }
             }
+
             if(isset($ratings[$id])) {
                 $total=0;
                 $count=0;
@@ -278,6 +291,7 @@ class createTestData {
                 $avg=$total/$count;
                 $photo->lookup();
             }
+
         }
     }
 

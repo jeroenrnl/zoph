@@ -101,9 +101,40 @@ class FileCopyFailedException extends FileException {}
 class FileRenameException extends FileException {}
 class FileSymlinkProblemException extends FileException {}
 
+/**
+ * Exception thrown when something is wrong with a photo 
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class PhotoException extends ZophException {}
+
+/**
+ * Exception thrown when thumbnail can not be created
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class PhotoThumbCreationFailedException extends PhotoException {}
+
+/**
+ * Exception thrown when a photo can not be found
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class PhotoNotFoundException extends PhotoException {}
 
+/**
+ * Exception thrown when a file is tried to be imported that
+ * for some reason can not be imported
+ * @author Jeroen Roos
+ * @package ZophException
+ */
 class MailException extends ZophException {}
+
+/**
+ * Exception thrown when something goes wrong with 
+ * relation between photos
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class RelationException extends ZophException {}
 ?>

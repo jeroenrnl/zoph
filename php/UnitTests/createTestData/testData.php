@@ -245,6 +245,21 @@ class testData {
         );
     }
 
+    public static function getRelations() {
+        return array(
+            1 => array(
+                    2 => array("first photo", "second photo"),
+                    3 => array("first photo", "third photo"),
+                    4 => array("first photo", "fourth photo")),
+            2 => array(
+                    3 => array("second photo", "third photo")),
+            5 => array(
+                    4 => array("fifth photo", "fourth photo")),
+            6 => array(
+                    5 => array("sixth photo", "fifth photo"))
+        );
+    }
+
     public static function getComments() {
         return array(
             1 => array(

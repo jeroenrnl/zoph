@@ -456,32 +456,16 @@ require_once("header.inc.php");
                 echo $allexif;
             }
         }
-        $related=$photo->get_related();
+        $actionlinks=array();
+        $related=$photo->getRelated();
 
         if ($related) {
-            $header="<h2>" . translate("related photos") . "</h2>";
-            $i=0;
-            foreach($related as $rel_photo) {
-                $rel_photo->lookup();
-                if ($user->get_permissions_for_photo($rel_photo->get("photo_id")) || $user->is_admin()) {
-                    echo $header;   // Makes sure that header is only
-                    unset($header); // displayed when there are photos
-                    echo "<div class=\"thumbnail\">";
-                    if($user->is_admin()) {
-                        echo "<span class=\"actionlink\">";
-                        echo "<a href=\"relation.php?photo_id_1=" .
-                            $photo->get("photo_id") . "&amp;" . "photo_id_2=" .
-                            $rel_photo->get("photo_id") . "\">edit</a>";
-                        echo "</span>";
-                    }
-                    echo $rel_photo->getThumbnailLink() . "<br>";
-                    echo $photo->get_relation_desc($rel_photo->get("photo_id"));
-                    echo "</div>";
-                    $i++;
-                    if($i>=5) { echo "<br>"; $i=0; }
-               }
-          }
-          echo "<br>";
+            $tpl=new block("related_photos", array(
+                "photo"     => $photo,
+                "related"   => $related,
+                "admin"     => (bool) $user->is_admin()
+            ));
+            echo $tpl;
         }
         if (conf::get("feature.comments")) {
             $comments=$photo->get_comments();
