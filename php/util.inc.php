@@ -698,7 +698,7 @@ function check_js($user) {
     }
 }
 
-function remove_empty($children) {
+function remove_empty(array $children) {
     $user=user::getCurrent();
     $clean=array();
     // If user is not admin, remove any children that do not have photos

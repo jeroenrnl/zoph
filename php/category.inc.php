@@ -96,20 +96,17 @@ class category extends zophTreeTable implements Organizer {
         $sql =
             "SELECT c.*, category as name " .
             $order_fields . " FROM " .
-            DB_PREFIX . "categories as c LEFT JOIN " .
-            DB_PREFIX . "photo_categories as pc " .
-            "ON c.category_id=pc.category_id LEFT JOIN " .
-            DB_PREFIX . "photos as ph " .
-            "ON pc.photo_id=ph.photo_id " .
+            DB_PREFIX . "categories as c " .
             "WHERE parent_category_id=" . $id .
             " GROUP BY c.category_id " .
             $order;
-        return category::getRecordsFromQuery("category", $sql);
+
+        $this->children=category::getRecordsFromQuery("category", $sql);
+        return $this->children;
     }
 
     public function getChildrenForUser($order=null) {
-        $children=$this->getChildren($order);
-        return remove_empty($this->getChildren);
+        return remove_empty($this->getChildren($order));
     }
     
     function getPhotoCount() {
@@ -180,7 +177,6 @@ class category extends zophTreeTable implements Organizer {
                 $sql .= " AND $id_constraint";
             }
         }
-
 
         return category::getCountFromQuery($sql);
     }
@@ -331,7 +327,7 @@ class category extends zophTreeTable implements Organizer {
 
         if ($user->is_admin()) {
             $sql = "SELECT ".
-                "COUNT(ph.photo_id) AS count, " .
+                "COUNT(DISTINCT ph.photo_id) AS count, " .
                 "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
                 "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
@@ -348,7 +344,7 @@ class category extends zophTreeTable implements Organizer {
                 " GROUP BY pc.category_id";
         } else {
             $sql = "SELECT " .
-                "COUNT(ph.photo_id) AS count, " .
+                "COUNT(DISTINCT ph.photo_id) AS count, " .
                 "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
                 "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .

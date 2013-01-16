@@ -37,7 +37,7 @@
     $obj=&$category;
     $ancestors = $category->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
-    $children = $category->getChildren($order);
+    $children = $category->getChildrenForUser($order);
 
     $photoCount = $category->getPhotoCount();
     $totalPhotoCount = $category->getTotalPhotoCount();

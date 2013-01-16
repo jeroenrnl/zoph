@@ -334,7 +334,7 @@ class userTest extends ZophDatabaseTestCase {
      * Tests only 1 user with no ratings
      * full testing is done in the rating object
      */
-    public function testgetRatingGraph() {
+    public function testGetRatingGraph() {
         $user=new user(1);
         $graph=$user->getRatingGraph();
         $this->assertInternalType("array", $graph);

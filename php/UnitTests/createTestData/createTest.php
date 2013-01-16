@@ -39,6 +39,7 @@ require_once("../../cli/cliimport.inc.php");
 
 $lang=new language("en");
 
+user::setCurrent(new user(1));
 createTestData::run();
 /**
  * Fill the database with data, so tests can be run.
@@ -189,6 +190,7 @@ class createTestData {
     }
 
     private static function importTestImages() {
+
         $photos=testData::getPhotos();
         $photoLocation=testData::getPhotoLocation();
         $photoAlbums=testData::getPhotoAlbums();
@@ -208,6 +210,10 @@ class createTestData {
 
         $imported=cliimport::photos($files, array());
         foreach($imported as $photo) {
+            $user=new user(1);
+            $user->lookup();
+            user::setCurrent($user);
+
             $id=$photo->get("photo_id");
             if(isset($photoLocation[$id])) {
                 $photo->set("location_id",$photoLocation[$id]);
@@ -239,6 +245,7 @@ class createTestData {
                     $obj = new comment();
                     $user = new user($user_id);
                     $user->lookup();
+                    user::setCurrent($user);
 
                     $subj="Comment by " . $user->getName();
 
@@ -257,10 +264,12 @@ class createTestData {
                 foreach($ratings[$id] as $user_id => $rating) {
                     $user = new user($user_id);
                     $user->lookup();
+                    user::setCurrent($user);
+
                     // Set fake remote IP address:
                     $_SERVER["REMOTE_ADDR"]=$user->getName() . ".zoph.org";
 
-                    $photo->rate($user, $rating);
+                    $photo->rate($rating);
                     $photo->update();
                     $total+=$rating;
                     $count++;

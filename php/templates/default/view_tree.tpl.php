@@ -38,7 +38,7 @@ if(!ZOPH) { die("Illegal call"); }
 
 <ul class="tree" id="<?php echo $tpl_id ?>">
 <?php foreach ($tpl_items as $item): ?>
-    <?php $children=$item->getChildren(); ?>
+    <?php $children=$item->getChildrenForUser(); ?>
     <li class="collapsed">
         <?php if($children): ?>
             <div class="toggle" onclick="thumbview.toggle(this.parentNode)"></div>

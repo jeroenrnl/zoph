@@ -116,6 +116,7 @@ abstract class zophTreeTable extends zophTable {
         $id_array[] = $this->get($key);
 
         $this->getChildren();
+
         if ($this->children) {
             foreach($this->children as $c) {
                 $c->getBranchIdArray($id_array);
@@ -156,7 +157,7 @@ abstract class zophTreeTable extends zophTable {
             $newchild->appendChild($newchildtitle);
        }
        $order = $user->prefs->get("child_sortorder");
-       $children=$this->getChildren($order);
+       $children=$this->getChildrenForUser($order);
         if($children) {
             $childset=$xml->createElement($rootname);
             foreach($children as $child) {
@@ -179,7 +180,7 @@ abstract class zophTreeTable extends zophTable {
         if(!isset($details)) {
             $details=$this->getDetails();
         }
-        $children=$this->getChildren();
+        $children=$this->getChildrenForUser();
         if(is_array($children)) {
             $details["children"]=count($children);
         }
@@ -205,7 +206,7 @@ function create_tree_select_array($name, $user = null, $rec = null,
     } else {
         $order="name";
     }
-    $children = $rec->getChildren($order);
+    $children = $rec->getChildrenForUser($order);
     if ($children) {
         foreach ($children as $child) {
             $select_array = create_tree_select_array($name, $user, $child,

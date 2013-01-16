@@ -128,24 +128,19 @@ class place extends zophTreeTable implements Organizer {
         }
         
         $sql =
-            "SELECT pl.*, pl.title as name " .
+            "SELECT *, title as name " .
             $order_fields . " FROM " .
-            DB_PREFIX . "places as pl LEFT JOIN " .
-            DB_PREFIX . "photos as ph " .
-            "ON pl.place_id = ph.location_id " .
+            DB_PREFIX . "places as pl " .
             "WHERE pl.parent_place_id=" . (int) $this->getId() .
             " GROUP BY pl.place_id " .
             $order; 
-
-        return place::getRecordsFromQuery("place", $sql);
+        $this->children=place::getRecordsFromQuery("place", $sql);
+        return $this->children;
     }    
    
     public function getChildrenForUser($order=null) {
-        $children=$this->getChildren($order);
-        return remove_empty($this->getChildren);
+        return remove_empty($this->getChildren($order));
     }
-    
-
     
     public function tzid_to_timezone() {
         $tzkey=$this->get("timezone_id");
@@ -264,28 +259,25 @@ class place extends zophTreeTable implements Organizer {
     public function getPhotoCount() {
         $user=user::getCurrent();
 
-        $id = $this->get("place_id");
-
         if ($user->is_admin()) {
             $sql =
-                "select count(*) from " .
+                "SELECT COUNT(*) FROM " .
                 DB_PREFIX . "photos " .
-                "where location_id = '" .  escape_string($id) . "'";
+                "WHERE location_id = " . (int) $this->getId();
         } else {
             $sql =
-                "select count(*) from " .
-                DB_PREFIX . "photos as p JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
+                "SELECT COUNT(DISTINCT p.photo_id) FROM " .
+                DB_PREFIX . "photos AS p JOIN " .
+                DB_PREFIX . "photo_albums AS pa " .
                 "ON p.photo_id = pa.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
+                DB_PREFIX . "group_permissions AS gp " .
                 "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
+                DB_PREFIX . "groups_users AS gu " .
                 "ON gp.group_id = gu.group_id " .
-                "WHERE p.location_id = " . escape_string($id) .
-                " AND gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= p.level";
+                "WHERE p.location_id = " . (int) $this->getId() .
+                " AND gu.user_id = " . (int) $user->getId() .
+                " AND gp.access_level >= p.level";
         }
-
         return photo::getCountFromQuery($sql);
     }
 
@@ -295,13 +287,9 @@ class place extends zophTreeTable implements Organizer {
      */
     public function getTotalPhotoCount() {
         $user=user::getCurrent();
-        if ($this->get("parent_place_id")) {
-            $id_list = $this->getBranchIds();
-            $id_constraint = "p.location_id in ($id_list)";
-        }
-        else {
-            $id_constraint = "";
-        }
+
+        $id_list = $this->getBranchIds();
+        $id_constraint = "p.location_id in ($id_list)";
 
         if ($user->is_admin()) {
             $sql =
@@ -328,7 +316,6 @@ class place extends zophTreeTable implements Organizer {
                 $sql .= " AND $id_constraint";
             }
         }
-
         return zophTable::getCountFromQuery($sql);
     }
 
@@ -418,7 +405,7 @@ class place extends zophTreeTable implements Organizer {
 
         if ($user->is_admin()) {
             $sql = "SELECT ".
-                "COUNT(ph.photo_id) AS count, " .
+                "COUNT(DISTINCT ph.photo_id) AS count, " .
                 "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
                 "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
@@ -433,7 +420,7 @@ class place extends zophTreeTable implements Organizer {
                 " GROUP BY ph.location_id";
         } else {
             $sql = "SELECT " .
-                "COUNT(ph.photo_id) AS count, " .
+                "COUNT(DISTINCT ph.photo_id) AS count, " .
                 "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
                 "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .

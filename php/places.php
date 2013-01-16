@@ -41,8 +41,7 @@
     $obj=&$place;
     $ancestors = $place->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
-    $children = $place->getChildren($order);
- 
+    $children = $place->getChildrenForUser($order);
     $totalPhotoCount = $place->getTotalPhotoCount();
     $photoCount = $place->getPhotoCount();
 
@@ -171,7 +170,6 @@
                 <a href="photos.php?location_id=<?php echo $place->get("place_id") ?>"><?php echo translate("view photos")?></a>
             </span>
 <?php
-
             if ($photoCount > 1) {
                 echo sprintf(translate("There are %s photos"), $photoCount);
                 echo " $fragment.<br>\n";

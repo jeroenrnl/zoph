@@ -45,7 +45,7 @@ class testData {
             3 => array(2,"indianRed1"),
             4 => array(2,"DarkRed"),
             5 => array(1,"blue"),
-            6 => array(6,"LightBlue"),
+            6 => array(5,"LightBlue"),
             7 => array(6,"DarkBlue"),
             8 => array(1,"Yellow"),
             9 => array(1,"white"),

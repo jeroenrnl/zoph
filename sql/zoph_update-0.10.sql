@@ -34,6 +34,8 @@ CREATE TABLE zoph_conf (
 
 ALTER TABLE zoph_prefs DROP COLUMN desc_thumbnails;
 
+ALTER TABLE zoph_photos DROP COLUMN rating;
+
 CREATE INDEX photo_id ON zoph_photo_ratings(photo_id);
 
 CREATE VIEW zoph_view_photo_avg_rating AS 
