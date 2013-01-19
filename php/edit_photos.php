@@ -26,8 +26,8 @@
         die("Illegal characters in _order");
     }
 
-    if (!$_cols) { $_cols = $user->prefs->get("num_rows"); }
-    if (!$_rows) { $_rows = $user->prefs->get("num_cols"); }
+    if (!$_cols) { $_cols = $user->prefs->get("num_cols"); }
+    if (!$_rows) { $_rows = $user->prefs->get("num_rows"); }
     if (!$_off)  { $_off = 0; }
 
     if (!$_order) { $_order = conf::get("interface.sort.order"); }

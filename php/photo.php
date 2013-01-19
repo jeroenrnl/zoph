@@ -16,7 +16,6 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
     require_once("include.inc.php");
     $photo_id = getvar("photo_id");
     $_off = getvar("_off");
@@ -91,8 +90,8 @@
         $_rows = (int) getvar("_rows");
         $_off = (int) getvar("_off");
 
-        if (!$_cols) { $_cols = $user->prefs->get("num_rows"); }
-        if (!$_rows) { $_rows = $user->prefs->get("num_cols"); }
+        if (!$_cols) { $_cols = $user->prefs->get("num_cols"); }
+        if (!$_rows) { $_rows = $user->prefs->get("num_rows"); }
         if (!$_off)  { $_off = 0; }
 
         $cells = $_cols * $_rows;
