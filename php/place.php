@@ -70,7 +70,7 @@ require_once("edit_place.inc.php");
         if($marker instanceof marker) {
             $map->addMarker($marker);
         }
-        if($_action == "edit") {
+        if($_action == "edit" || $_action == "new") {
             $map->setEditable();
         }
         echo $map;
