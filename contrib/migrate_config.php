@@ -85,16 +85,21 @@ $convert = array(
     "date.timeformat" => "TIME_FORMAT"
 );
 
+?>
+<h1>Migrate config</h1>
 
+<?php
 foreach ($convert as $newname => $oldname) {
-    $oldconfig=constant($oldname);
     $newconfig=conf::getItemByName($newname);
+    if(defined($oldname)) {
+        $oldconfig=constant($oldname);
 
-    if($newconfig->checkValue($oldconfig)) {
-        $newconfig->setValue($oldconfig);
-        echo $oldname . " --> " . $newname . "<br>\n";
-    } else {
-        echo "<b>" . $oldname . " could not be converted, " . e($oldconfig) . " is not a valid value for " . $newname . "</b>, default (" . $newconfig->getDefault() . ") has been used<br>\n";
+        if($newconfig->checkValue($oldconfig)) {
+            $newconfig->setValue($oldconfig);
+            echo $oldname . " --> " . $newname . "<br>\n";
+        } else {
+            echo "<b>" . $oldname . " could not be converted, " . e($oldconfig) . " is not a valid value for " . $newname . "</b>, default (" . $newconfig->getDefault() . ") has been used<br>\n";
+        }
     }
     $newconfig->update();
 }
@@ -107,23 +112,24 @@ $convert = array(
 );
 
 foreach ($convert as $newname => $oldname) {
-    $oldconfig="0" . decoct(constant($oldname));
-
     $newconfig=conf::getItemByName($newname);
+    if(defined($oldname)) {
+        $oldconfig="0" . decoct(constant($oldname));
 
-    if($newconfig->checkValue($oldconfig)) {
-        $newconfig->setValue($oldconfig);
-        echo $oldname . " --> " . $newname . "<br>\n";
-    } else {
-        echo "<b>" . $oldname . " could not be converted, " . e($oldconfig) . " is not a valid value for " . $newname . "</b>, default (" . $newconfig->getDefault() . ") has been used<br>\n";
+        if($newconfig->checkValue($oldconfig)) {
+            $newconfig->setValue($oldconfig);
+            echo $oldname . " --> " . $newname . "<br>\n";
+        } else {
+            echo "<b>" . $oldname . " could not be converted, " . e($oldconfig) . " is not a valid value for " . $newname . "</b>, default (" . $newconfig->getDefault() . ") has been used<br>\n";
+        }
     }
     $newconfig->update();
 }
 
 $ssl_force=conf::getItemByName("ssl.force");
-if(FORCE_SSL_LOGIN) {
+if(defined(FORCE_SSL_LOGIN) && FORCE_SSL_LOGIN) {
     $ssl_force->setValue("login");
-} else if (FORCE_SSL) {
+} else if (defined(FORCE_SSL) && FORCE_SSL) {
     $ssl_force->setValue("always");
 } else {
     $ssl_force->setValue("never");
@@ -148,5 +154,5 @@ foreach ($convert as $newname => $oldname) {
     }
     $newconfig->update();
 }
-
-
+?>
+<p style="font-size: large"><b>You should delete <tt>migrate_config.php</tt> now.</b></p>
