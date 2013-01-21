@@ -329,7 +329,7 @@ abstract class zophTable {
             
             if (substr($name,0,7)=="parent_") {
                 $children=array();
-                $this->get_branch_id_array($children);
+                $this->getBranchIdArray($children);
                 if(in_array($value, $children)) {
                     die("You cannot set the parent to a child of the current selection!");
                 } 
@@ -599,8 +599,21 @@ abstract class zophTable {
         }
         return self::getRecordsFromQuery($class, $sql);
     }
+    
 
-    /*
+    public static function getFromVars(array $vars, $suffix="") {
+        $class=get_called_class();
+        $return=array();
+        
+        $key="_" . $class . $suffix;
+        if(isset($vars[$key])) {
+            $return=(array) $vars[$key];
+        }
+
+        return $return;
+    }
+
+    /**
      * Stores the results the the given query in an array of objects of
      * this given type.
      * @todo the $class can be removed when PHP5.3 is min version

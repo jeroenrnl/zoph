@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+require_once("testSetup.php");
+
 /**
  * Test photo class
  *
@@ -140,6 +142,204 @@ class photoTest extends ZophDataBaseTestCase {
         $this->assertInstanceOf("comment", $obj);
         $this->assertEquals($obj->get_photo()->get("photo_id"), $photo->get("photo_id"));
     }
+
+    /**
+     * Test getTime function
+     */
+    private function setupTime() {
+        ini_set("date.timezone", "Europe/Amsterdam");
+        $photo=new photo(9);
+        $photo->lookup();
+
+        $photo->set("date", "2013-01-01");
+        $photo->set("time", "4:00:00");
+        $photo->update();
+
+        // Camera's timezone is UTC
+        $conf=conf::set("date.tz", "UTC");
+        $conf->update();
+        
+        $conf=conf::set("date.format", "d-m-Y");
+        $conf->update();
+
+        $conf=conf::set("date.timeformat", "H:i:s T");
+        $conf->update();
+        
+        $location=$photo->location;
+        
+        // Timezone for New York, where photo was taken.
+        $location->set("timezone", "America/New_York");
+        $location->update();
+
+    }
+
+
+    /**
+     * Test getTime function
+     */
+    public function testGetTime() {
+        $this->setupTime();
+        
+        $photo=new photo(9);
+        $photo->lookup();
+        
+        $datetime=$photo->getTime();
+
+        $expected=new Time("31-12-2012 23:00:00 America/New_York");
+
+        $this->assertEquals($expected, $datetime);
+    }
+
+    /**
+     * test getFormattedDateTime
+     */
+    public function testGetFormattedDateTime() {
+        $this->setupTime();
+        
+        $photo=new photo(9);
+        $photo->lookup();
+        // First test:
+        // camera timezone is UTC
+        // place timezone is America/New York
+        // The time should be -5 hrs from 1/1/13 4:00, New York timezone (EST)
+        $datetime=$photo->getFormattedDateTime();
+        $this->assertEquals("31-12-2012", $datetime[0]);
+        $this->assertEquals("23:00:00 EST", $datetime[1]);
+
+        // Second test:
+        // camera timezone is Moscow
+        // place timezone is Invalid
+        // The time should be 1/1/13 4:00, Moscow timezone (MSK)
+        $conf=conf::set("date.tz", "Europe/Moscow");
+        $conf->update();
+        $location=$photo->location;
+        $location->set("timezone", "Nonsense/Timezone");
+        $location->update();
+
+        $datetime=$photo->getFormattedDateTime();
+        $this->assertEquals("01-01-2013", $datetime[0]);
+        $this->assertEquals("04:00:00 MSK", $datetime[1]);
+
+        // Third test:
+        // camera timezone is empty (local time)
+        // place timezone is Invalid
+        // The time should be 1/1/13 4:00, Default timezone (php.ini) (CET)
+        $conf=conf::set("date.tz", "");
+        $conf->update();
+        $datetime=$photo->getFormattedDateTime();
+        $this->assertEquals("01-01-2013", $datetime[0]);
+        $this->assertEquals("04:00:00 CET", $datetime[1]);
+
+        // Fourth test:
+        // camera timezone is empty (local time)
+        // place timezone is New York
+        // The time should be 1/1/13 4:00, EST
+        $location->set("timezone", "America/New_York");
+        $location->update();
+        
+        $datetime=$photo->getFormattedDateTime();
+        $this->assertEquals("01-01-2013", $datetime[0]);
+        $this->assertEquals("04:00:00 EST", $datetime[1]);
+        
+        // Fifth Test
+        // camera timezone is Australia (+8)
+        // place timezone is Los Angeles (-8)
+        // this makes the time 31/12/12 12:00
+        // however, with an extra correction of -1 minute, it becomes 11:59
+        $conf=conf::set("date.tz", "Australia/Perth");
+        $conf->update();
+        $location->set("timezone", "America/Los_Angeles");
+        $location->update();
+
+        $photo->set("time_corr", "-1");
+        $photo->update();
+
+        $datetime=$photo->getFormattedDateTime();
+        $this->assertEquals("31-12-2012", $datetime[0]);
+        $this->assertEquals("11:59:00 PST", $datetime[1]);
+
+    }
+
+    /**
+     * test getReverseDate
+     */
+    public function testGetReverseDate() {
+        $this->setupTime();
+        
+        $photo=new photo(9);
+        $photo->lookup();
+        
+        $date=$photo->getReverseDate();
+        $this->assertEquals("2012-12-31", $date);
+    }
+        
+        
+
+    /**
+     * Test getUTCtime function
+     */
+    public function testGetUTCtime() {
+        $this->setupTime();
+        
+        conf::set("date.tz", "Europe/Amsterdam");
+        
+        $photo=new photo(9);
+        $photo->lookup();
+        
+        $datetime=$photo->getUTCtime();
+
+        $this->assertEquals("01-01-2013", $datetime[0]);
+        $this->assertEquals("03:00:00 UTC", $datetime[1]);
+    }
+
+    /**
+     * Test getSubset function
+     */
+     public function testGetSubset() {
+        $photos=array();
+        $first=array();
+        $last=array();
+
+        for($i=1; $i<=50; $i++) {
+            if($i<=5) {
+                $first[$i]=new photo($i);
+            }
+            $photos[]=new photo($i);
+            if($i>45) {
+                $last[$i]=new photo($i);
+            }
+
+        }
+        $firstlast=$first + $last;
+
+        $subset=photo::getSubset($photos, array("first", "last"), 5);
+        $this->assertEquals($firstlast, $subset);
+
+
+        $subset=photo::getSubset($photos, array("random"), 5);
+
+        $this->assertCount(5, $subset);
+
+        $subset=photo::getSubset($photos, array("first", "random", "last"), 5);
+        $this->assertCount(15, $subset);
+
+        $photos=array();
+        
+        for($i=1; $i<=4; $i++) {
+            $photos[]=new photo($i);
+        }
+        $subset=photo::getSubset($photos, array("first", "random", "last"), 5);
+        
+        $photos=array();
+        for($i=1; $i<=8; $i++) {
+            $photos[]=new photo($i);
+        }
+        $subset=photo::getSubset($photos, array("first", "random"), 5);
+
+
+    }
+
+    //================== DATA PROVIDERS =======================
 
     public function getLocation() {
         return array(

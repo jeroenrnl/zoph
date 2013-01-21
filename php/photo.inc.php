@@ -166,20 +166,12 @@ class photo extends zophTable {
      * @var string suffix for varnames
      */
     public function updateRelations(array $vars, $suffix = "") {
-        $albums=array();
-        $categories=array();
-        $people=array();
         
-
+        $albums=album::getFromVars($vars, $suffix);
+        $categories=category::getFromVars($vars, $suffix);
+        $people=person::getFromVars($vars, $suffix);
+        
         // Albums
-        if(isset($vars["_album" . $suffix])) {
-            if(is_array($vars["_album" . $suffix])) {
-                $albums=$vars["_album" . $suffix];
-            } else {
-                $albums[]=$vars["_album" . $suffix];
-            }
-        }
-
         if (!empty($vars["_remove_album$suffix"])) {
             foreach((array) $vars["_remove_album$suffix"] as $alb) {
                 $this->removeFrom(new album($alb));
@@ -191,21 +183,11 @@ class photo extends zophTable {
             unset($this->_album_id);
         }
         
-        if(isset($albums)) {
-            foreach($albums as $album) {
-                $this->addTo(new album($album));
-            }
+        foreach($albums as $album) {
+            $this->addTo(new album($album));
         }
 
         // Categories
-        if(isset($vars["_category" . $suffix])) {
-            if(is_array($vars["_category" . $suffix])) {
-                $categories=$vars["_category" . $suffix];
-            } else {
-                $categories[]=$vars["_category" . $suffix];
-            }
-        }
-
         if (!empty($vars["_remove_category$suffix"])) {
             foreach((array) $vars["_remove_category$suffix"] as $cat) {
                 $this->removeFrom(new category($cat));
@@ -217,21 +199,11 @@ class photo extends zophTable {
             unset($this->_category_id);
         }
 
-        if(isset($categories)) {
-            foreach($categories as $cat) {
-                $this->addTo(new category($cat));
-            }
+        foreach($categories as $cat) {
+            $this->addTo(new category($cat));
         }
 
         // People
-        if(isset($vars["_person" . $suffix])) {
-            if(is_array($vars["_person" . $suffix])) {
-                $people=$vars["_person" . $suffix];
-            } else {
-                $people[]=$vars["_person" . $suffix];
-            }
-        }
-        
         if (!empty($vars["_remove_person$suffix"])) {
             foreach((array) $vars["_remove_person$ysuffix"] as $pers) {
                 $this->removeFrom(new person($pers));
@@ -243,11 +215,9 @@ class photo extends zophTable {
             unset($this->_person_id);
         }
         
-        if(isset($people)) {
-            foreach($people as $person) {
-                $this->addTo(new person($person));
-            }
-        } 
+        foreach($people as $person) {
+            $this->addTo(new person($person));
+        }
     }
     
     /**
@@ -777,15 +747,15 @@ class photo extends zophTable {
     }
 
     function getDisplayArray() {
-        $datetime=$this->get_time(null, "Y-m-d");
+        $date=$this->getReverseDate();
 
         return array(
             translate("title") => $this->get("title"),
             translate("location") => $this->location
                 ? $this->location->getLink() : "",
             translate("view") => $this->get("view"),
-            translate("date") => create_date_link($datetime[0]),
-            translate("time") => $this->get_time_details(),
+            translate("date") => create_date_link($date),
+            translate("time") => $this->getTimeDetails(),
             translate("photographer") => $this->photographer
                 ? $this->photographer->getLink() : ""
         );
@@ -833,27 +803,18 @@ class photo extends zophTable {
             "Level" => create_text_input("level", $this->level, 4, 2));
     }
 
-    function get_time($timezone=null, $date_format = null, $time_format = null) { 
-        if(is_null($date_format)) {
-            $date_format=conf::get("date.format");
-        }
-        if(is_null($time_format)) {
-            $time_format=conf::get("date.timeformat");
-        }
+    public function getTime() { 
+        $this->lookup();
+        $loc=$this->location;
+        $loc->lookup();
 
-        if(TimeZone::validate($timezone)) {
-            $place_tz=new TimeZone($timezone);
-        } else { 
-            $this->lookup();
-            $loc=$this->location;
-            if($loc && TimeZone::validate($loc->get("timezone"))) {
-                $place_tz=new TimeZone($loc->get("timezone"));
-            } 
+        if($loc && TimeZone::validate($loc->get("timezone"))) {
+            $place_tz=new TimeZone($loc->get("timezone"));
         }
         if(TimeZone::validate(conf::get("date.tz"))) {
             $camera_tz=new TimeZone(conf::get("date.tz"));
-        }    
-            
+        }
+
         if(!isset($place_tz) && isset($camera_tz)) {
             // Camera timezone is known, place timezone is not.
             $place_tz=$camera_tz;
@@ -861,28 +822,76 @@ class photo extends zophTable {
             // Place timezone is known, camera timezone is not.
             $camera_tz=$place_tz;
         } else if (!isset($place_tz) && !isset($camera_tz)) {
-            // Neither are set
-            $camera_tz=new TimeZone(date_default_timezone_get());
-            $place_tz=$camera_tz;
+            $default_tz=new TimeZone(date_default_timezone_get());
+
+            $place_tz=$default_tz;
+            $camera_tz=$default_tz;
         }
+        $place_time=$this->getCorrectedTime($camera_tz, $place_tz);
         
-        $camera_time=new Time(
-            $this->get("date") . " " .
-            $this->get("time"),
-            $camera_tz);
-        $place_time=$camera_time;
-        $place_time->setTimezone($place_tz);
-        $corr=$this->get("time_corr");
-        if($corr) {
-            $place_time->modify($corr . " minutes");
+        return $place_time;
+    }
+
+    public function getFormattedDateTime() {
+        $date_format=conf::get("date.format");
+        $time_format=conf::get("date.timeformat");
+
+        $place_time=$this->getTime();
+
+        $date=$place_time->format($date_format);
+        $time=$place_time->format($time_format);
+        return array($date,$time);
+    }
+
+    public function getUTCtime() {
+        $date_format=conf::get("date.format");
+        $time_format=conf::get("date.timeformat");
+
+        $default_tz=new TimeZone(date_default_timezone_get());
+
+        $place_tz=new TimeZone("UTC");
+        $camera_tz=$default_tz;
+
+        if(TimeZone::validate(conf::get("date.tz"))) {
+            $camera_tz=new TimeZone(conf::get("date.tz"));
         }
+
+        $place_time=$this->getCorrectedTime($camera_tz, $place_tz);
         
         $date=$place_time->format($date_format);
         $time=$place_time->format($time_format);
         return array($date,$time);
     }
 
-    function get_time_details() {
+    /**
+     * Returns the date in reverse, so it can be used for sorting
+     */
+    public function getReverseDate() {
+        $date_format=("Y-m-d");
+
+        $place_time=$this->getTime();
+
+        $date=$place_time->format($date_format);
+        return $date;
+    }
+
+    public function getCorrectedTime(TimeZone $camera_tz, TimeZone $place_tz) {
+        $camera_time=new Time(
+            $this->get("date") . " " .
+            $this->get("time"),
+            $camera_tz);
+
+        $place_time=$camera_time;
+        $place_time->setTimezone($place_tz);
+        $corr=$this->get("time_corr");
+        if($corr) {
+            $place_time->modify($corr . " minutes");
+        }
+
+        return $place_time;
+    }
+
+    function getTimeDetails() {
         $tz=null;
         if(TimeZone::validate(conf::get("date.tz"))) {
             $tz=conf::get("date.tz");
@@ -897,7 +906,7 @@ class photo extends zophTable {
             $location=$place->get("title");
         }
        
-        $datetime=$this->get_time();
+        $datetime=$this->getFormattedDateTime();
 
         $tpl=new block("time_details", array(
             "photo_date" => $this->get("date"),
@@ -1119,7 +1128,7 @@ class photo extends zophTable {
             $int_maxdist=5, $entity="km", $int_maxtime=600) {
 
         date_default_timezone_set("UTC");
-        $datetime=$this->get_time("UTC");
+        $datetime=$this->getUTCTime();
         $utc=strtotime($datetime[0] . " " . $datetime[1]);
         
         $mintime=$utc-$max_time;
@@ -1201,19 +1210,16 @@ class photo extends zophTable {
 
         if(in_array("random", $subset) && ($max > 0)) {
             $center=array_slice($photos,$begin,$end);
+            
             $max=count($center);
 
             if($max!=0) {
                 if($count>$max) {
                     $count=$max;
                 }
-                $random_keys=array_rand($center, $count);
-                if(is_array($random_keys)) {
-                    foreach($random_keys as $key) {
-                        $random[]=$center[$key];
-                    }
-                } else {
-                    $random[]=$center[$random_keys];
+                $random_keys=(array) array_rand($center, $count);
+                foreach($random_keys as $key) {
+                    $random[]=$center[$key];
                 }
             }
         }
@@ -1228,6 +1234,8 @@ class photo extends zophTable {
         return $clean_subset;
     }
         
+
+
     /**
      * Take an array of photos and remove photos with no valid timezone
      *
