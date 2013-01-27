@@ -543,25 +543,25 @@ class photo extends zophTable {
         return rating::getDetails($this);
     }
 
-    function get_image_resource() {
+    function getImageResource() {
         $file = $this->getFilePath();
-        $img_src = null;
+        $resource = null;
         $image_info = getimagesize($file);
         switch ($image_info[2]) {
-            case 1:
-                $img_src = imagecreatefromgif($file);
+            case IMAGETYPE_GIF:
+                $resource = imagecreatefromgif($file);
                 break;
-            case 2:
-                $img_src = imagecreatefromjpeg($file);
+            case IMAGETYPE_JPEG:
+                $resource = imagecreatefromjpeg($file);
                 break;
-            case 3:
-                $img_src = imagecreatefrompng($file);
+            case IMAGETYPE_PNG:
+                $resource = imagecreatefrompng($file);
                 break;
             default:
                 break;
         }
 
-        return $img_src;
+        return $resource;
     }
 
     /**
@@ -589,8 +589,11 @@ class photo extends zophTable {
         $this->lookupLocation();
     }
 
-
-    function thumbnail($force=true) {
+    /**
+     * Create thumbsize and midsize image
+     * @param bool force (re)create resized image even if it already exist
+     */
+    public function thumbnail($force=true) {
         $path=conf::get("path.images") . "/" . $this->get("path") . "/";
 
         $name=$this->get("name");
@@ -598,20 +601,21 @@ class photo extends zophTable {
         $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $name;
         
         if(!file_exists($path . $midname) || $force===true) {
-            if(!$this->create_thumbnail(MID_PREFIX, MID_SIZE)) {
-                throw new PhotoThumbCreationFailedException("Could not create " . MID_PREFIX . " image");
-            }
+            $this->createThumbnail(MID_PREFIX, MID_SIZE); 
         }
         if(!file_exists($path . $thumbname) || $force===true) {
-            if(!$this->create_thumbnail(THUMB_PREFIX, THUMB_SIZE)) {
-                throw new PhotoThumbCreationFailedException("Could not create " . THUMB_PREFIX . " image");
-            }
+            $this->createThumbnail(THUMB_PREFIX, THUMB_SIZE); 
         }
         return true;
     }
 
-    function create_thumbnail($prefix, $size) {
-        $img_src = $this->get_image_resource();
+    /**
+     * Create resized image
+     * @param string prefix for newly created image
+     * @param int size for largest size of width/height
+     */
+    private function createThumbnail($prefix, $size) {
+        $img_src = $this->getImageResource();
         
         $image_info = getimagesize($this->getFilePath());
         $width = $image_info[0];
@@ -644,21 +648,12 @@ class photo extends zophTable {
             throw new FileDirNotWritableException("Directory not writable: " . $dir);
         }
 
-        $image_type = get_image_type($new_image);
-
-        // a little fast a loose but usually ok
-        $func = "image" . substr($image_type, strpos($image_type, '/') + 1);
-
-        $return = 1;
-        if (!$func($img_dst, $new_image)) {
-            $return = 0;
+        if (!imagejpeg($img_dst, $new_image)) {
+            throw new PhotoThumbCreationFailedException("Could not create " . $prefix . " image");
         }
 
         imagedestroy($img_dst);
-
         imagedestroy($img_src);
-
-        return $return;
     }
 
     /**
