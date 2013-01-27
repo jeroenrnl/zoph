@@ -27,7 +27,7 @@
     }
 
     if (!$user->is_admin() && !$user->get("browse_people")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $_l = getvar("_l");

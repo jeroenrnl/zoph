@@ -334,24 +334,6 @@ function create_form($vars, $ignore = array()) {
     return $form;
 }
 
-/**
- * Add Session_id to url
- * @todo phase out
- */
-function add_sid($url) {
-    if (SID) {
-        if (strpos($url, "?") > 0) {
-            $url .= "&";
-        }
-        else {
-            $url .= "?";
-        }
-
-        $url .= SID;
-    }
-    return $url;
-}
-
 function minimum_version($vercheck) {
     $minver = (int)str_replace('.', '', $vercheck);
     $curver = (int)str_replace('.', '', phpversion());

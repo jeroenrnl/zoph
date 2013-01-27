@@ -33,7 +33,7 @@
     }
     require_once("actions.inc.php");
     if (!$user->is_admin() || $action == "display") {
-        redirect(add_sid("places.php?parent_place_id=" . $place->get("place_id")), "Redirect");
+        redirect("places.php?parent_place_id=" . $place->get("place_id"), "Redirect");
     }
     if ($action != "insert") {
         $place->lookup();

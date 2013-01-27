@@ -32,7 +32,7 @@ if (!$user->is_admin()) {
     if($user->get("browse_tracks")) {
         $_action="display";
     } else {
-        header("Location: " . add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 } else {
     $vars=clean_request_vars($request_vars);

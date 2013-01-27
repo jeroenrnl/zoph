@@ -18,7 +18,7 @@
     require_once("include.inc.php");
 
     if (!$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $user_id = getvar("user_id");

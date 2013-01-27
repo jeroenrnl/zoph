@@ -18,7 +18,7 @@
     require_once("include.inc.php");
 
     if (!conf::get("feature.comments")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     require_once("header.inc.php");

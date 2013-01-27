@@ -21,7 +21,7 @@
 
 require_once("include.inc.php");
 if ((!conf::get("import.enable")) || (!$user->is_admin() && !$user->get("import"))) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
 }
 
 // Detect upload larger than upload_max_filesize.

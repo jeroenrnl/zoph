@@ -28,8 +28,7 @@
         $search->lookup();
         if (!($search->get("owner") == $user->get("user_id") || 
             $user->is_admin())) {
-            redirect(add_sid("zoph.php"));
-            die("You are not allowed to do that!");
+            redirect("zoph.php", "You're not allowed to do that!");
         }
     }
     
@@ -84,10 +83,9 @@
     } else if ($_action=="update" || 
                $_action=="confirm" || 
                $_action=="insert") {
-        $redirect = "search.php";
         $obj = &$search;
         require_once("actions.inc.php");
-        redirect(add_sid($redirect), "Redirect");
+        redirect("search.php", "Redirect");
     } else if ($_action=="delete") {
         $search_id=getvar("search_id");
         $search=new search($search_id);

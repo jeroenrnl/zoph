@@ -20,12 +20,12 @@
     $title=translate("Configuration");
 
     if (!$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     // Configuration setting depends on POST
     if(!empty($_GET)) {
-        redirect(add_sid("config.php"));
+        redirect("config.php");
     }
 
     $_action=getvar("_action");

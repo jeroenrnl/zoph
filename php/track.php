@@ -27,7 +27,7 @@ $mapping_js="";
 if (!$user->is_admin()) {
     $_action="display";
     if (!$user->get("browse_tracks")) {
-        header("Location: " . add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 }
 
@@ -40,10 +40,10 @@ if($track_id) {
             $title=translate("Track");
         }
     } else {
-        header("Location: " . add_sid("tracks.php"));
+        redirect("tracks.php");
     }
 } else {
-    header("Location: " . add_sid("tracks.php"));
+    redirect("tracks.php");
 }
     
 $obj = &$track;

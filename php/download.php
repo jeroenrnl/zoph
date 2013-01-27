@@ -20,7 +20,7 @@
 
     $_action=getvar("_action");
     if(!conf::get("feature.download") || (!$user->get("download") && !$user->is_admin())) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
     if($_action=="getfile" || $_action=="download") {
         $filename=getvar("_filename");

@@ -18,7 +18,7 @@
     require_once("include.inc.php");
 
     if (!conf::get("feature.comments")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $comment_id = getvar("comment_id");
@@ -34,7 +34,7 @@
     }
 
     if(!$user->is_admin() && !$user->get("leave_comments") && ($_action=="new" || $_action=="insert")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $photo=$comment->get_photo();
@@ -42,7 +42,7 @@
     if ($photo) {
        $photo_id=$photo->get("photo_id");
        if(!$user->get_permissions_for_photo($photo_id) && !$user->is_admin()) {
-           redirect(add_sid("zoph.php"));
+           redirect("zoph.php");
        }
     } else {
        $photo_id = getvar("photo_id");

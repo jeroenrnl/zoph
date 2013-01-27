@@ -29,7 +29,7 @@
     require_once("include.inc.php");
 
     if (!conf::get("feature.annotate")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $title = translate("Annotate Photo");

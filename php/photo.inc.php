@@ -472,9 +472,6 @@ class photo extends zophTable {
             $url .= "&amp;type=" . $type;
         }
 
-        if (SID) {
-            $url .= "&amp;" . SID;
-        }
         return $url;
     }
 

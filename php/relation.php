@@ -18,7 +18,7 @@
     require_once("include.inc.php");
 
     if (!$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $photo_id_1=getvar("photo_id_1");

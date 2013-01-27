@@ -121,7 +121,7 @@
             $photo->rate($rating);
             $link = strip_href($user->get_last_crumb());
             if (!$link) { $link = "zoph.php"; }
-            redirect(add_sid($link));
+            redirect($link);
         }
         $action = "display";
     } else if ($_action == "delrate" && $user->is_admin()) {
@@ -130,7 +130,7 @@
         $rating->delete();
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = "zoph.php"; }
-        redirect(add_sid($link));
+        redirect($link);
     }
 
     if ($user->is_admin() || 
@@ -159,12 +159,12 @@
             $_action == "delete" || $_action == "confirm") {
             // only an admin can do these
             $_action = "display"; // in case redirect fails
-            redirect(add_sid("zoph.php"));
+            redirect("zoph.php");
         }
 
         if (!$permissions) {
             $photo = new photo(-1); // in case redirect fails
-            redirect(add_sid("zoph.php"));
+            redirect("zoph.php");
         }
         else if ($permissions->get("writable") == 0) {
             $_action = "display";
@@ -251,7 +251,7 @@
         //}
         $link = strip_href($user->get_last_crumb());
         if (!$link) { $link = "zoph.php"; }
-        redirect(add_sid($link), "Go back");
+        redirect($link, "Go back");
     } else if ($_action == "select") {
         $sel_key=false;
         if(is_array($_SESSION["selected_photo"])) {
