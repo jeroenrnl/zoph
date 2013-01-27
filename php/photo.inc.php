@@ -77,19 +77,19 @@ class photo extends zophTable {
         //   (should work for all modern browsers and proxy caches)
         if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) &&
             $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
-              header("HTTP/1.1 304 Not Modified");
-              exit;
+              $header["http_status"]="HTTP/1.1 304 Not Modified";
+              $jpeg=null;
+        } else {
+            $image_type = get_image_type($image_path);
+            if ($image_type) {
+                $header["Content-Length"] = $filesize;
+                $header["Content-Disposition"]="inline; filename=" . $name;
+                $header["Last-Modified"]=$gmt_mtime;
+                $header["Content-type"]=$image_type;
+                $jpeg=file_get_contents($image_path);
+            }
         }
-
-        $image_type = get_image_type($image_path);
-        if ($image_type) {
-            $header["Content-Length"] = $filesize;
-            $header["Content-Disposition"]="inline; filename=" . $name;
-            $header["Last-Modified"]=$gmt_mtime;
-            $header["Content-type"]=$image_type;
-            $jpeg=file_get_contents($image_path);
-            return array($header, $jpeg);
-         }
+        return array($header, $jpeg);
 
         /**
          * @todo error handling
@@ -205,7 +205,7 @@ class photo extends zophTable {
 
         // People
         if (!empty($vars["_remove_person$suffix"])) {
-            foreach((array) $vars["_remove_person$ysuffix"] as $pers) {
+            foreach((array) $vars["_remove_person$suffix"] as $pers) {
                 $this->removeFrom(new person($pers));
             }
         }
@@ -655,7 +655,11 @@ class photo extends zophTable {
         return $return;
     }
 
-    function rotate($deg) {
+    /**
+     * Rotate image
+     * @param int degrees (90, 180, 270)
+     */
+    public function rotate($deg) {
         if (!conf::get("rotate.enable") || !$this->get('name')) {
             return;
         }
@@ -681,37 +685,15 @@ class photo extends zophTable {
             // overwritten by future rotations and the original file
             // is always preserved.
             if (!file_exists($dir . $backup_name)) {
-                if (!copy($dir . $name, $dir . $backup_name)) {
+                if (!@copy($dir . $name, $dir . $backup_name)) {
                     throw new FileCopyFailedException(
                         sprintf(translate("Could not copy %s to %s."), $name, $backup_name));
-                    return;
                 }
             }
         }
 
         // make a system call to convert or jpegtran to do the rotation.
-        // in the future, use PHP's imagerotate() function,
-        // but it only appears >= 4.3.0 (and is buggy at the moment)
         while (list($file, $tmp_file) = each($images)) {
-
-            /*
-              From Michael Hanke:
-              This is buggy, because non-quadratic images are truncated
-              The function goodrotate checks if images are nonquadratic
-
-              This is not being used because, as Michael says,
-
-              "I haven't found a reasonable way to preserve the exif-data
-               stored in the original jpeg file. imagejpeg() (the gd
-               function) doesn't write it into the exported image file.
-               ... I propose to stick to 'convert' which keeps the exif
-               metadata as it is."
-
-              $imrot = @imagecreatefromjpeg($file);
-              $new_image = $this->goodrotate($imrot, $deg);
-              imagejpeg($new_image, $tmp_file, 95);
-            */
-
             switch(conf::get("rotate.command")) {
             case "jpegtran":
                 $cmd = 'jpegtran -copy all -rotate ' .  escapeshellarg($deg) .
@@ -726,18 +708,13 @@ class photo extends zophTable {
 
             $cmd .= ' 2>&1';
 
-            //echo "$cmd<br>\n";
             $output = system($cmd);
 
             if ($output) { // error
                 throw new ZophException(translate("An error occurred. ") . $output);
             }
 
-            if (!rename($tmp_file, $file)) {
-                throw new FileRenameException(
-                    sprintf(translate("Could not rename %s to %s."), $tmp_file, $file));
-            }
-
+            rename($tmp_file, $file);
         }
 
         // update the size and dimensions
@@ -1384,47 +1361,6 @@ function get_filesize($photos, $human=false) {
     } else {
         return $bytes;
     }
-}
-
-/*
- * Rotates (non-quadratic) images correctly using imagerotate().
- * It is currently not being used because it apparently does not
- * preserve exif info.
- *
- * This function provided by Michael Hanke, who found it on php.net.
- *
- *
- * (c) 2002 php at laer dot nu
- * Function to rotate an image
- */
-function goodrotate($src_img, $degrees = 90) {
-    // angles = 0deg
-    $degrees %= 360;
-    if($degrees == 0) {
-        $dst_img = $src_image;
-    } else if ($degrees == 180) {
-        $dst_img = imagerotate($src_img, $degrees, 0);
-    } else {
-        $width = imagesx($src_img);
-        $height = imagesy($src_img);
-        if ($width > $height) {
-           $size = $width;
-        } Else {
-           $size = $height;
-        }
-        $dst_img = imagecreatetruecolor($size, $size);
-        imagecopy($dst_img, $src_img, 0, 0, 0, 0, $width, $height);
-        $dst_img = imagerotate($dst_img, $degrees, 0);
-        $src_img = $dst_img;
-        $dst_img = imagecreatetruecolor($height, $width);
-        if ((($degrees == 90) && ($width > $height)) || (($degrees == 270) && ($width < $height))) {
-            imagecopy($dst_img, $src_img, 0, 0, 0, 0, $size, $size);
-        }
-        if ((($degrees == 270) && ($width > $height)) || (($degrees == 90) && ($width < $height))) {
-            imagecopy($dst_img, $src_img, 0, 0, $size - $height, $size - $width, $size, $size);
-        }
-    }
-    return $dst_img;
 }
 
 ?>

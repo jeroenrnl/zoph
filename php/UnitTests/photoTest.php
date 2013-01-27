@@ -31,6 +31,145 @@ require_once("testSetup.php");
  */
 class photoTest extends ZophDataBaseTestCase {
     
+
+    /**
+     * test display() method
+     */
+    public function testDisplay() {
+
+        $photo=new photo(5);
+        $photo->lookup();
+
+        list($header, $ph) = $photo->display();
+
+        $image = imagecreatefromstring($ph);
+        
+        // Compare dimensions to stored size
+        $this->assertEquals($photo->get("width"), imagesx($image));
+
+        $modified=gmdate("D, d M Y H:i:s", filemtime($photo->getFilePath())) . " GMT";
+        $exp_header=array(
+            "Content-Length" => strlen($ph),
+            "Content-Disposition" => "inline; filename=" . $photo->get("name"),
+            "Last-Modified" => $modified,
+            "Content-type" => "image/jpeg"
+        );
+
+        $this->assertEquals($exp_header, $header);
+        
+        // test midsize image
+        list($header, $ph) = $photo->display(MID_PREFIX);
+
+        $image = imagecreatefromstring($ph);
+        $this->assertEquals(MID_SIZE, imagesx($image));
+        
+        $_SERVER['HTTP_IF_MODIFIED_SINCE'] = $modified;
+
+        list($header, $ph) = $photo->display();
+
+        $exp_header=array(
+            "http_status" => "HTTP/1.1 304 Not Modified"
+        );
+
+        $this->assertEquals($exp_header, $header);
+        $this->assertNull($ph);
+
+    }
+
+    /**
+     * test updateRelations function
+     */
+    public function testUpdateRelations() {
+        $photo=new photo(1);
+        $photo->lookup();
+
+        $photo->_album_id=array(4);
+        $photo->_category_id=array(5);
+        $photo->_person_id=array(3,6);
+
+        $vars=array(
+            "_album_id" => 5,
+            "_category_id" => array(8, 9),
+            "_person_id" => 4,
+            "_remove_album_id" => 2,
+            "_remove_category_id" => array(2,3),
+            "_remove_person_id" => 7
+        );
+
+        $photo->updateRelations($vars, "_id");
+
+        $albums=$photo->getAlbums();
+        $cats=$photo->getCategories();
+        $people=$photo->getPeople();
+
+        $album_ids=array();
+        $cat_ids=array();
+        $people_ids=array();
+
+        foreach($albums as $album) {
+            $album_ids[]=$album->getId();
+        }
+
+        foreach($cats as $cat) {
+            $cat_ids[]=$cat->getId();
+        }
+
+        foreach($people as $person) {
+            $people_ids[]=$person->getId();
+        }
+
+        array_multisort($album_ids);
+        array_multisort($cat_ids);
+        array_multisort($people_ids);
+
+        $this->assertEquals(array(3,4,5), $album_ids);
+        $this->assertEquals(array(5,8,9), $cat_ids);
+        $this->assertEquals(array(2,3,4,5,6,9), $people_ids);
+    }
+
+    public function testUpdateEXIF() {
+        $photo=new photo(2);
+        $photo->lookup();
+       
+        $data=array(
+            "ISO"       => "100", 
+            "Make"      => "Zoph", 
+            "Model"     => "Zoph Digital 2000",
+            "ApertureValue" => "2.8",
+            "ExposureTime" => "1/200", 
+            "ExposureProgram#"  => "3",
+            "EXIF:Flash#"    => "16",
+            "FocalLength"   => "1200",
+            "GPSLatitude"   => "150,0,0",
+            "GPSLatitudeRef#"   => "E",
+            "GPSLongitude"  => "80,0,0", 
+            "GPSLongitudeRef#"  => "N"
+            );
+         
+        self::writeEXIFdata($photo->getFilePath(), $data);
+
+        $photo->updateEXIF();
+        
+        $display=$photo->get_camera_display_array();
+
+        $expected=array(
+            "camera make"   => "Zoph",
+            "camera model"  => "Zoph Digital 2000",
+            "flash used"    => "No",
+            "focal length"  => "1200.0mm",
+            "exposure"      => "0.005 s  (1/200) [aperture priority (semi-auto)]",
+            "aperture"      => "f/2.8",
+            "compression"   => "",
+            "iso equiv"     => "100",
+            "metering mode" => "",
+            "focus distance" => "",
+            "ccd width"     => "",
+            "comment"       => ""
+        );
+
+        $this->assertEquals($expected, $display);
+
+    }
     /**
      * Test setting of location
      * @dataProvider getLocation
@@ -59,7 +198,7 @@ class photoTest extends ZophDataBaseTestCase {
 
     /**
      * Test adding to albums
-     * @dataProvider getAlbums
+     * @dataProvider getNewAlbums
      */
     public function testAddToAlbum($photo, array $newalbums) {
         $ids=array();
@@ -75,6 +214,28 @@ class photoTest extends ZophDataBaseTestCase {
         foreach($newalbums as $album_id) {
             $this->assertContains($album_id, $ids);
         }
+    }
+
+    /**
+     * Test getting album list
+     * @dataProvider getAlbums
+     */
+    public function testGetAlbums($photo_id, $user_id, array $exp_albums) {
+        user::setCurrent(new user($user_id));
+        $photo=new photo($photo_id);
+
+        $photo->lookup();
+
+        $albums=$photo->getAlbums();
+        $act_albums=array();
+        foreach($albums as $album) {
+            $act_albums[]=$album->getId();
+        }
+
+        $this->assertEquals($exp_albums, $act_albums);
+
+        user::setCurrent(new user(1));
+
     }
 
     /**
@@ -293,6 +454,64 @@ class photoTest extends ZophDataBaseTestCase {
     }
 
     /**
+     * Test importing images
+     * @dataProvider getImages
+     * @todo should also test adding albums, categories, etc.
+     */
+
+    public function testImportImages($id, $name, $bg, $fg, $exif) {
+        user::setCurrent(new user(1));
+        if(file_exists(conf::get("path.images") . "/" . $name)) {
+            unlink(conf::get("path.images") . "/" . $name);        
+        }
+        self::createTestImage($name, $bg, $fg, $exif);
+        $photos[]=new file("/tmp/" . $name);
+        conf::set("import.cli.thumbs", true);
+        conf::set("import.cli.size", true);
+
+
+        $imported=cliimport::photos($photos, array());
+        foreach($imported as $photo) {
+            $this->assertInstanceOf("photo", $photo);
+            $this->assertEquals($name, $photo->get("name"));
+
+            $this->assertEquals($id, $photo->get("photo_id"));
+            $this->assertFileExists(conf::get("path.images") . "/" . $name);
+        }
+    }
+
+    /**
+     * Test importing images with dateddirs
+     * @dataProvider getImages
+     * @todo should also test adding albums, categories, etc.
+     */
+
+    public function testImportImagesDated($id, $name, $bg, $fg, $exif) {
+        user::setCurrent(new user(1));
+        if(file_exists(conf::get("path.images") . "/" . $name)) {
+            unlink(conf::get("path.images") . "/" . $name);        
+        }
+        self::createTestImage($name, $bg, $fg, $exif);
+        $photos[]=new file("/tmp/" . $name);
+        conf::set("import.cli.thumbs", true);
+        conf::set("import.cli.size", true);
+        conf::set("import.dated", true);
+
+
+        $imported=cliimport::photos($photos, array());
+        foreach($imported as $photo) {
+            $this->assertInstanceOf("photo", $photo);
+            $this->assertEquals($name, $photo->get("name"));
+
+            $this->assertEquals($id, $photo->get("photo_id"));
+            $date=str_replace("-", ".", $photo->get("date"));
+            $this->assertFileExists(conf::get("path.images") . "/" . $date . "/" . $name);
+        }
+        unlink(conf::get("path.images") . "/" . $date . "/" . $name);        
+    }
+
+
+    /**
      * Test getSubset function
      */
      public function testGetSubset() {
@@ -338,6 +557,140 @@ class photoTest extends ZophDataBaseTestCase {
 
 
     }
+    /**
+     * Check that rotate indeed does not touch the file
+     * when rotating is not allowed by comparing hashes
+     */
+    public function testRotateNotAllowed() {
+        conf::set("rotate.enable", false);
+
+        $photo=new photo(5);
+        $photo->lookup();
+
+        $hash=$photo->getHashFromFile();
+
+        $photo->rotate(90);
+
+        $newhash=$photo->getHashFromFile();
+
+        $this->assertEquals($hash, $newhash);
+    }
+    /**
+     * Test rotating a photo
+     * @dataProvider getRotateCmds
+     */
+    public function testRotate($cmd) {
+        conf::set("rotate.command", $cmd);
+        conf::set("rotate.enable", true);
+
+        $photo=new photo(5);
+        $photo->lookup();
+
+        list($width, $height)=getimagesize($photo->getFilePath());
+        list($mwidth, $mheight)=getimagesize($photo->getFilePath(MID_PREFIX));
+        list($twidth, $theight)=getimagesize($photo->getFilePath(THUMB_PREFIX));
+
+        $photo->rotate(90);
+
+        list($rwidth, $rheight)=getimagesize($photo->getFilePath());
+        list($rmwidth, $rmheight)=getimagesize($photo->getFilePath(MID_PREFIX));
+        list($rtwidth, $rtheight)=getimagesize($photo->getFilePath(THUMB_PREFIX));
+
+        // Check if image is rotated by checking whether width and height have been swapped
+        $this->assertEquals($width, $rheight);
+        $this->assertEquals($height, $rwidth);
+        $this->assertEquals($mwidth, $rmheight);
+        $this->assertEquals($mheight, $rmwidth);
+        $this->assertEquals($twidth, $rtheight);
+        $this->assertEquals($theight, $rtwidth);
+
+        $this->assertEquals($width, $photo->get("height"));
+        $this->assertEquals($height, $photo->get("width"));
+
+        // Now move back the original so it's available for the next test
+        $dir = conf::get("path.images") . "/" . $photo->get("path") . "/";
+        $name=$dir . $photo->get("name");
+        $backupname=$dir . conf::get("rotate.backup.prefix") . $photo->get("name");
+
+        unlink($name);
+        rename($backupname, $name);
+
+        $photo->updateSize();
+        $photo->thumbnail(true);
+    }
+
+    /**
+     * Test rotating with invalid files
+     * @expectedException ZophException
+     */
+    public function testRotateConvertError() {
+        conf::set("rotate.command", "convert");
+        conf::set("rotate.enable", true);
+
+        $photo=new photo();
+        $photo->set("name", "invalid.jpg");
+        
+        $dir = conf::get("path.images") . "/";
+
+        $ph=$dir .  $photo->get("name");
+        $backup=$dir .  conf::get("rotate.backup.prefix") . $photo->get("name");
+
+        touch($ph);
+        touch($backup);
+        $photo->rotate(90);
+        unlink($ph);
+        unlink($backup);
+    }
+
+    /**
+     * Test rotating with failed backup creation.
+     * @expectedException FileCopyFailedException
+     */
+    public function testRotateFailedBackup() {
+        conf::set("rotate.enable", true);
+
+        $photo=new photo(5);
+        $photo->lookup();
+        
+        // Mess up by changing imagedir
+        $imagedir=conf::get("path.images");
+        conf::set("path.images", "/tmp");
+        $photo->rotate(90);
+        conf::set("path.images", $imagedir);
+    }
+    //================= HELPER FUNCTIONS ======================
+
+    private static function createTestImage($name, $bg, $fg, $exif) {
+        $bgcolour=new ImagickPixel();
+        $bgcolour->setColor($bg);
+        
+        $text=new ImagickDraw();
+        $text->setFillColor($fg);
+        $text->setFontsize(60);
+
+        $image=new Imagick();
+        $image->newImage(600,400, $bgcolour);
+
+        $image->annotateImage($text, 200, 200, 0, $name);
+
+        $image->writeImage("/tmp/" . $name);
+
+        self::writeEXIFdata("/tmp/" . $name, $exif);
+
+        $image->destroy();
+        unset($image);
+    }
+
+    private static function writeEXIFdata($file, array $data) {
+
+        $cmd="exiftool ";
+        foreach ($data as $label => $value) {
+            $cmd.=" -" . $label . "=\"" . $value . "\"";
+        }
+
+        $cmd .=" " . escapeshellarg($file);
+        exec($cmd);
+    }
 
     //================== DATA PROVIDERS =======================
 
@@ -359,7 +712,18 @@ class photoTest extends ZophDataBaseTestCase {
          );
     }
 
-    public function getAlbums() {
+    public function getImages() {
+        return array(
+            array(11, "FILE_0001.JPG", "blue", "yellow", 
+                array("DateTimeOriginal" => "2013-01-01 13:00:00")),
+            array(11, "FILE_0002.JPG", "red", "yellow",
+                array("DateTimeOriginal" => "2012-12-31 15:00:00")),
+            array(11, "FILE_0003.JPG", "yellow", "blue", 
+                array("DateTimeOriginal" => "2013-01-01 14:00:00"))
+         );
+    }
+
+    public function getNewAlbums() {
         return array(
             array(1, array(2,3,4)),
             array(2, array(1,5,6)),
@@ -395,6 +759,17 @@ class photoTest extends ZophDataBaseTestCase {
          );
     }
 
+    public function getAlbums() {
+        // photo_id, user_id, albums
+        return array(
+            array(1, 3, array(2)),
+            array(7, 3, array(2)),
+            array(1, 1, array(2, 3)),
+            array(8, 4, array(3))
+        );
+
+
+    }
     public function getRatings() {
         return array(
             array(1, 10, 3, 8),
@@ -403,5 +778,12 @@ class photoTest extends ZophDataBaseTestCase {
             array(2, 3, 4, 4),
             array(2, 7, 5, 5.25)
          );
+    }
+
+    public function getRotateCmds() {   
+        return array(
+            array("jpegtran"), 
+            array("convert")
+        );
     }
 }

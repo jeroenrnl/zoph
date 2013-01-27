@@ -91,9 +91,17 @@
         list($headers, $image)=$photo->display($type);
 
         foreach($headers as $label=>$value) {
-            header($label . ": " . $value);
+            if($label=="http_status") {
+                // http status codes do not have a label
+                header($value);
+            } else {
+                header($label . ": " . $value);
+            }
         }
-        echo $image;
+
+        if(!is_null($image)) {
+            echo $image;
+        }
         exit;
     }
     require_once("header.inc.php");
