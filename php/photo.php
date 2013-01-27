@@ -370,7 +370,7 @@ require_once("header.inc.php");
         }
 ?>
         </ul>
-            <?php echo $photo->getFullsizeLink($photo->getMidsizeImg()) ?>
+            <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX)) ?>
 <?php
         if (($user->is_admin() || $user->get("browse_people")) && $people_links = get_photo_person_links($photo)) {
 ?>
@@ -489,7 +489,7 @@ require_once("header.inc.php");
 <?php
         echo create_actionlinks($actionlinks);
         echo sprintf(translate("Confirm deletion of '%s'"), $photo->get("name"));
-        echo $photo->getMidsizeImg();
+        echo $photo->getImageTag(MID_PREFIX);
     }
     else {
         require_once("edit_photo.inc.php");

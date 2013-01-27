@@ -435,15 +435,6 @@ class photo extends zophTable {
     }
 
     /**
-     * Create an img tag for midsize image
-     * @return string HTML code for img tag
-     * @todo returns HTML
-     */
-    public function getMidsizeImg() {
-        return $this->getImageTag(MID_PREFIX);
-    }
-
-    /**
      * Get an thumbnail image that links to this photo
      * @todo contains HTML
      * @param string optional link instead of the default link to the photo page
@@ -489,9 +480,7 @@ class photo extends zophTable {
 
     /**
      * Create an img tag for this photo
-     * 
-     * @return string HTML code for img tag
-     * @todo returns HTML
+     * @return block template block for image tag
      */
     public function getImageTag($type = null) {
         $this->lookup();
@@ -506,10 +495,14 @@ class photo extends zophTable {
 
         list($width, $height, $filetype, $size)=getimagesize($file);
 
-
-
         $alt = escape_string($this->get("title"));
-        return "<img src=\"$image_href\" class=\"" . $type . "\" " . $size . " alt=\"$alt\"" . ">";
+
+        return new block("img", array(
+            "src"   => $image_href,
+            "class" => $type,
+            "size"  => $size,
+            "alt"   => $alt
+        ));
     }
 
     /**

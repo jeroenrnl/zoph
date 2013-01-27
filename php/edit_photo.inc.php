@@ -105,7 +105,7 @@
 ?>
         </ul>
 
-            <?php echo $photo->getFullsizeLink($photo->getMidsizeImg()) ?>
+            <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX)) ?>
 <?php
     }
 ?>

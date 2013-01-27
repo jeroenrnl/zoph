@@ -104,7 +104,7 @@ if ($action == "confirm") {
       <div class="main">
       <br>
 <?php
-    echo $photo->getMidsizeImg();
+    echo $photo->getImageTag(MID_PREFIX);
 ?>
 <br>
 <dl class "comment">
@@ -122,7 +122,7 @@ if ($action == "confirm") {
     <div class="main">
     <br>
 <?php
-    echo $photo->getMidsizeImg();
+    echo $photo->getImageTag(MID_PREFIX);
 ?>
     <br>
 

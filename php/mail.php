@@ -206,7 +206,7 @@
 <?php
         } else {
 ?>
-            <?php echo $photo->getMidsizeImg() ?>
+            <?php echo $photo->getImageTag(MID_PREFIX) ?>
 <?php
         }
 ?>

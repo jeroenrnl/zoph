@@ -112,7 +112,7 @@ if (!$_pause) {
             <?php echo $photo->get("size") ?> <?php echo translate("bytes")?>
         </div>    
         <div class="next">&nbsp;</div>
-        <?php echo $photo->getFullsizeLink($photo->getMidsizeImg())?>
+        <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX))?>
         <?php
         if ($people_links = get_photo_person_links($photo)) {
 ?>	
