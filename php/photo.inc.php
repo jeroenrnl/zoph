@@ -436,28 +436,34 @@ class photo extends zophTable {
 
     /**
      * Get an thumbnail image that links to this photo
-     * @todo contains HTML
      * @param string optional link instead of the default link to the photo page
-     * @return string HTML code
+     * @return block to display link
      */
-    public function getThumbnailLink($link = null) {
-        if (!$link) {
-            $link = "photo.php?photo_id=" . $this->get("photo_id");
+    public function getThumbnailLink($href = null) {
+        if (!$href) {
+            $href = "photo.php?photo_id=" . (int) $this->getId();
         }
-        return "            <a href=\"$link\">" . $this->getImageTag(THUMB_PREFIX) . "</a>";
+        return new block("link", array(
+            "href" => $href,
+            "link" => $this->getImageTag(THUMB_PREFIX),
+            "target"    => ""
+        ));
     }
 
     /**
      * Get a link to the fullsize version of this image
-     * @todo contains HTML
      * @param string What (text or image) to display
-     * @return string HTML code
+     * @return block to display link
      */
     public function getFullsizeLink($title) {
         $user=user::getCurrent();
         $image = $this->getURL();
-        $newwin = ($user->prefs->get("fullsize_new_win") ? "target=\"_blank\"" : "");
-        return "<a href=\"$image\" $newwin>$title</a>";
+
+        return new block("link", array(
+            "href" => $this->getURL(),
+            "link" => $title,
+            "target" => ($user->prefs->get("fullsize_new_win") ? "_blank" : "")
+        ));
     }
     
     /**
@@ -467,7 +473,7 @@ class photo extends zophTable {
      */
     public function getURL($type = null) {
 
-        $url = "image.php?photo_id=" . $this->get("photo_id");
+        $url = "image.php?photo_id=" . (int) $this->getId();
         if ($type) {
             $url .= "&amp;type=" . $type;
         }
@@ -503,19 +509,26 @@ class photo extends zophTable {
     }
 
     /**
-     * Stores the rating of a photo for a user and updates the
-     * average rating.
-     *
-     * This function from Jan Miczaika
+     * Stores the rating of a photo for a user 
+     * @param int rating
      */
     public function rate($rating) {
         rating::setRating((int) $rating, $this);
     }
 
+    /**
+     * Get average rating for this photo
+     * @return float rating
+     */
     public function getRating() {
         return rating::getAverage($this);
     }
 
+    /**
+     * Get rating for a specific user
+     * @param user user
+     * @return int rating
+     */
     public function getRatingForUser(user $user) {
         $rating=array_pop(rating::getRatings($this, $user));
         if($rating instanceof rating) {
@@ -523,6 +536,9 @@ class photo extends zophTable {
         }
     }
 
+    /**
+     * Get details about ratings
+     */
     public function getRatingDetails() {
         return rating::getDetails($this);
     }

@@ -280,7 +280,7 @@
 ?>
                 </div>
                 <div class="thumbnail">
-                  <?php echo $photo->getThumbnailLink("photo.php?photo_id=$photo_id") . "\n" ?><br>
+                  <?php echo $photo->getThumbnailLink() . "\n" ?><br>
 <?php
                 if ($can_edit && conf::get("rotate.enable") &&
                     ($user->is_admin() || $permissions->get("writable"))) {
@@ -323,7 +323,7 @@
 <?php
     $rating = $photo->get('rating');
     if (conf::get("feature.rating")) {
-        $rating = $photo->get_rating($user);
+        $rating = $photo->getRatingForUser($user);
     }
 ?>
                       <?php echo create_rating_pulldown($rating, "_rating__$photo_id") ?>

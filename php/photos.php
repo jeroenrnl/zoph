@@ -177,7 +177,7 @@
 
 <?php
             if (getvar("_random")) {
-                echo $thumbnails[$i]->getThumbnailLink("photo.php?photo_id=" . $thumbnails[$i]->get("photo_id")) . "\n";
+                echo $thumbnails[$i]->getThumbnailLink() . "\n";
             } else {
                 echo $thumbnails[$i]->getThumbnailLink("photo.php?" . update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n"; 
             }
