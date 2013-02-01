@@ -577,14 +577,6 @@ class place extends zophTreeTable implements Organizer {
     }
 
     /**
-     * Gets the total count of records in the table
-     * @todo Can be removed when minimum PHP version is 5.3 
-     */
-    public static function getCount($dummy=null) {
-        return parent::getCount("place");
-    }
-
-    /**
      * Get Top N people
      */
     public static function getTopN() {

@@ -502,27 +502,18 @@ abstract class zophTable {
         return $xml->saveXML();
     }
 
-
-        
-
     /**
      * Gets the total count of records in the table for the given class.
-     * @param string Classname
      * @return int count
-     * @todo Once the mimimum PHP version is 5.3, the $class param should
-     *       be removed and replaced by get_called_class()
+     * @todo The 'new' construction needs to be replaced by a static var
      */
-    public static function getCount($class) {
-        if (class_exists($class)) {
-            $obj = new $class;
-            $table = $obj->table_name;
-        } else {
-            $table = DB_PREFIX . $class;
-        }
+    public static function getCount() {
+        $obj = new static;
+        $table = $obj->table_name;
 
         $sql = "select count(*) from $table";
 
-        return $obj::getCountFromQuery($sql);
+        return static::getCountFromQuery($sql);
     }
 
     /**

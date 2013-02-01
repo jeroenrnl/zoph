@@ -466,14 +466,6 @@ class person extends zophTable implements Organizer {
     }
 
     /**
-     * Gets the total count of records in the table
-     * @todo Can be removed when minimum PHP version is 5.3 
-     */
-    public static function getCount($dummy=null) {
-        return parent::getCount("person");
-    }
-
-    /**
      * Get Top N people
      */
     public static function getTopN() {

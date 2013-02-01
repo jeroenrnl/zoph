@@ -1259,14 +1259,6 @@ class photo extends zophTable {
     }
 
     /**
-     * Gets the total count of records in the table
-     * @todo Can be removed when minimum PHP version is 5.3 
-     */
-    public static function getCount($dummy=null) {
-        return parent::getCount("photo");
-    }
-    
-    /**
      * Find a photo from a SHA1-hashed string
      * @param string hash
      * @return photo found photo
