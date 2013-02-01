@@ -490,10 +490,6 @@ class photo extends zophTable {
 
         $image_href = $this->getURL($type);
 
-        if (!$image_href) {
-            return "";
-        }
-
         $file=$this->getFilePath($type);
 
         list($width, $height, $filetype, $size)=getimagesize($file);
@@ -829,7 +825,7 @@ class photo extends zophTable {
 
         $place_tz=new TimeZone("UTC");
         $camera_tz=$default_tz;
-
+        
         if(TimeZone::validate(conf::get("date.tz"))) {
             $camera_tz=new TimeZone(conf::get("date.tz"));
         }
@@ -858,7 +854,6 @@ class photo extends zophTable {
             $this->get("date") . " " .
             $this->get("time"),
             $camera_tz);
-
         $place_time=$camera_time;
         $place_time->setTimezone($place_tz);
         $corr=$this->get("time_corr");
@@ -964,7 +959,7 @@ class photo extends zophTable {
         } else {
             $html="<h2>" . e($file) . "<\/h2>";
         }    
-        $html.=$this->getThumbnailLink() .
+        $html.=$this->getThumbnailLink()->toStringNoEnter() .
           "<p><small>" . 
           $this->get("date") . " " . $this->get("time") . "<br>";
         if($this->photographer) {
@@ -1341,27 +1336,19 @@ class photo extends zophTable {
         );
     }
 
-        
-}
-
-function get_photo_sizes_sum() {
-    $sql = "select sum(size) from " . DB_PREFIX . "photos";
-    return photo::getCountFromQuery($sql);
-}
-
-function get_filesize($photos, $human=false) {
-    $bytes=0;
-    foreach($photos as $photo) {
-//    var_dump($photo);   #->get("size");
-        $photo->lookup();
-        $bytes+=$photo->get("size");
+    public static function getTotalSize() {
+        $sql = "select sum(size) from " . DB_PREFIX . "photos";
+        return photo::getCountFromQuery($sql);
     }
 
-    if($human) {
-        return get_human($bytes);
-    } else {
+    public static function getFilesize($photos) {
+        $bytes=0;
+        foreach($photos as $photo) {
+            $photo->lookup();
+            $bytes+=$photo->get("size");
+        }
+
         return $bytes;
     }
 }
-
 ?>

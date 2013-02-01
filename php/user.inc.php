@@ -304,6 +304,9 @@ class user extends zophTable {
      * @param user user object
      */
     public static function setCurrent(user $user) {
+        $user->lookup();
+        $user->lookup_prefs();
+        $user->lookup_person();
         self::$current=$user;
     }
 

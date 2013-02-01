@@ -118,6 +118,10 @@ class template {
         return sprintf("%s", $this);
     }
 
+    public function toStringNoEnter() {
+        return str_replace("\n", "", sprintf("%s", $this));
+    }
+
     /**
      * Return the header section of the page
      *

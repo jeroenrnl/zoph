@@ -119,7 +119,7 @@ if(empty($_action)) {
 
         $body=new template("uploadprogressbar", array(
             "name" => $file["name"],
-            "size" => get_human($file["size"]),
+            "size" => getHuman($file["size"]),
             "upload_num" => $upload_num,
             "complete" => 100,
             "width" => 300));

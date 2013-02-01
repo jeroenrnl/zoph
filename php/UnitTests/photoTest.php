@@ -170,17 +170,105 @@ class photoTest extends ZophDataBaseTestCase {
         $this->assertEquals($expected, $display);
 
     }
+
+    /**
+     * Test thumbnail link
+     */
+    public function testGetThumbnailLink() {
+        $photo=new photo(3);
+        $photo->lookup();
+
+        $block=$photo->getThumbnailLink();
+
+        $this->assertInstanceOf("block", $block);
+        $this->assertEquals("templates/default/blocks/link.tpl.php", $block->template);
+        $this->assertEquals("photo.php?photo_id=3", $block->vars["href"]);
+        $this->assertInstanceOf("block", $block->vars["link"]);
+        $this->assertEquals("templates/default/blocks/img.tpl.php", $block->vars["link"]->template);
+        $this->assertEquals("", $block->vars["target"]);
+        
+        $block=$photo->getThumbnailLink("http://test");
+
+        $this->assertInstanceOf("block", $block);
+        $this->assertEquals("http://test", $block->vars["href"]);
+        $this->assertInstanceOf("block", $block->vars["link"]);
+        $this->assertEquals("", $block->vars["target"]);
+    }
+
+    /**
+     * Test fullsize link
+     */
+    public function testGetFullsizeLink() {
+        $photo=new photo(3);
+        $photo->lookup();
+
+        $block=$photo->getFullsizeLink("photo");
+
+        $this->assertInstanceOf("block", $block);
+        $this->assertEquals("templates/default/blocks/link.tpl.php", $block->template);
+        $this->assertEquals("image.php?photo_id=3", $block->vars["href"]);
+        $this->assertEquals("photo", $block->vars["link"]);
+        $this->assertEquals("", $block->vars["target"]);
+        
+        $user=user::getCurrent();
+        $user->prefs->set("fullsize_new_win",true);
+        $block=$photo->getFullsizeLink("photo");
+        $this->assertEquals("_blank", $block->vars["target"]);
+    }
+
+    /**
+     * Test getURL() function
+     */
+    public function testGetURL() {
+        $photo=new photo(3);
+        $photo->lookup();
+        
+        $url=$photo->getURL();
+        $this->assertEquals("image.php?photo_id=3", $url);
+
+        $url=$photo->getURL("mid");
+        $this->assertEquals("image.php?photo_id=3&amp;type=mid",$url);
+    }
+
+    /**
+     * test getImageTag() function
+     */
+    public function testGetImageTag() {
+        $photo=new photo(3);
+        $photo->lookup();
+
+        $photo->set("title", "Nothing");
+        $photo->update();
+
+        $block=$photo->getImageTag();
+
+        $this->assertInstanceOf("block", $block);
+        $this->assertEquals("image.php?photo_id=3", $block->vars["src"]);
+        $this->assertEquals("", $block->vars["class"]);
+        $this->assertEquals("width=\"600\" height=\"400\"", $block->vars["size"]);
+        $this->assertEquals("Nothing", $block->vars["alt"]);
+        
+        $block=$photo->getImageTag("mid");
+        $this->assertInstanceOf("block", $block);
+        $this->assertEquals("image.php?photo_id=3&amp;type=mid", $block->vars["src"]);
+        $this->assertEquals("mid", $block->vars["class"]);
+        $this->assertEquals("width=\"480\" height=\"320\"", $block->vars["size"]);
+        $this->assertEquals("Nothing", $block->vars["alt"]);
+    }
+
     /**
      * Test setting of location
      * @dataProvider getLocation
      */
     public function testSetLocation($photo, $loc) {
         $photo=new photo($photo);
-        $photo->set("location_id",$loc);
+        $place=new place($loc);
+
+        $photo->setLocation($place);
         $photo->update();
         $photo->lookup();
-        $this->assertInstanceOf("place", $photo->location);
-        $this->assertEquals($photo->location->getId(), $loc);
+        $this->assertInstanceOf("place", $photo->getLocation());
+        $this->assertEquals($loc, $photo->getLocation()->getId());
     }
 
     /**
@@ -458,7 +546,6 @@ class photoTest extends ZophDataBaseTestCase {
      * @dataProvider getImages
      * @todo should also test adding albums, categories, etc.
      */
-
     public function testImportImages($id, $name, $bg, $fg, $exif) {
         user::setCurrent(new user(1));
         if(file_exists(conf::get("path.images") . "/" . $name)) {
@@ -510,11 +597,89 @@ class photoTest extends ZophDataBaseTestCase {
         unlink(conf::get("path.images") . "/" . $date . "/" . $name);        
     }
 
+    /**
+     * Create a track to test geotagging functions
+     * creates a line north-south in western europe.
+     */
+    private function buildTrack() {
+        conf::set("maps.provider", "googlev3")->update();
+        query("truncate zoph_point");
+        $track=new track();
+
+        $track->set("name", "Test Track");
+
+        for($x=0; $x<500; $x++) {
+            $point=new point();
+            $point->set("lat", round(52 - ($x/100),2));
+            $point->set("lon", 5);
+            $hour=floor($x/60);
+            $minute=$x % 60;
+            $datetime="2013-01-01 " . $hour . ":" . $minute . ":00";
+            $point->set("datetime", $datetime);
+            $track->addPoint($point);
+        }
+        $track->insert();
+        return $track;
+    }
+
+    /**
+     * Test getLatLon() function
+     */
+    public function testGetLatLon() {
+        conf::set("date.tz", "UTC")->update();
+        $track=$this->buildTrack();
+
+        $lat=array(
+            2   => 51.8,
+            3   => 51.7,
+            4   => 51.6,
+            5   => 51.5
+        );
+
+        $photos=array();
+        for($i=1; $i<=5; $i++) {
+            $photo=new photo($i);
+            $photo->lookup();
+
+            $photo->set("date", "2013-01-01");
+            $photo->set("time", "00:" . $i . "0:00");
+
+            $photo->update();
+            $photos[]=$photo;
+        }
+
+        foreach(array(4,5) as $i) {
+            $place=new place($i);
+            $place->set("timezone", "UTC");
+            $place->update();
+        }
+
+        $this->assertEquals(5, sizeof($photos));
+        $photos=photo::removePhotosWithNoValidTz($photos);
+        $this->assertEquals(4, sizeof($photos));
+        $ph=photo::removePhotosWithLatLon($photos);
+        $this->assertEquals(4, sizeof($ph));
+
+        $photosLatLon=array();
+        foreach($photos as $photo) {
+            $point=$photo->getLatLon($track, 300, true);
+            $photo->setLatLon($point);
+            $photo->update();
+            $this->assertEquals(5, $photo->get("lon"));
+            // This is rounded because floats sometimes vary by 0.0000001
+            $this->assertEquals($lat[$photo->getId()], round($photo->get("lat"),4));
+        }
+
+        $this->assertEquals(4, sizeof($photos));
+        $ph=photo::removePhotosWithLatLon($photos);
+        $this->assertEquals(0, sizeof($ph));
+    }
 
     /**
      * Test getSubset function
      */
      public function testGetSubset() {
+
         $photos=array();
         $first=array();
         $last=array();

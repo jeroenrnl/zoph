@@ -39,7 +39,7 @@ class report {
         $album= album::getRoot();
         $category = category::getRoot();
 
-        $size=get_human(get_photo_sizes_sum());
+        $size=getHuman(photo::getTotalSize());
         return array(
             translate("number of photos") => photo::getCount(),
             translate("size of photos") => "$size",

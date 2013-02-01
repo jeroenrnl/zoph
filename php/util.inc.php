@@ -591,10 +591,14 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
     }
 }
 
-function get_human($bytes) {
-    // transforms a size in bytes into a human readable format using 
-    // Ki Mi Gi, etc. prefixes
-    // Give me a call if your database grows bigger than 1024 Yobbibytes. :-)
+/**
+ * transforms a size in bytes into a human readable format using 
+ * Ki Mi Gi, etc. prefixes
+ * Give me a call if your database grows bigger than 1024 Yobbibytes. :-)
+ * @param int bytes number of bytes
+ * @return string human readable filesize
+ */
+function getHuman($bytes) {
     if($bytes==0) {
         // prevents div by 0
         return "0B";

@@ -135,7 +135,7 @@
 ?>
             <form class="download">
                 <p> 
-                    <?php printf(translate("You have requested the download of %s photos, with a total size of  %s."), $num_photos, get_filesize($photos, true)); ?>
+                    <?php printf(translate("You have requested the download of %s photos, with a total size of  %s."), $num_photos, getHuman(photo::getFilesize($photos))); ?>
                 </p>
                 <p>
                     <?php echo create_form($vars, array("_off", "_action")) ?>
