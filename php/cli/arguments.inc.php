@@ -426,6 +426,7 @@ class arguments {
                     }
                     break;
                 case "photographer":
+                    $name=$arg;
                     if(self::$command=="new" || (conf::get("import.cli.add.auto") && !person::getByName($name))) {
                         $vars["_new_photographer"][]=$name;
                     } else {
