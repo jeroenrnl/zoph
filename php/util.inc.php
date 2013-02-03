@@ -834,7 +834,7 @@ function get_filetype($mime) {
 function create_dir($directory) {
     if (file_exists($directory) == false) {
         if (@mkdir($directory, octdec(conf::get("import.dirmode")))) {
-            if(!defined("CLI") || settings::$importVerbose>=1) {
+            if(!defined("CLI") || conf::get("import.cli.verbose")>=1) {
                 log::msg(translate("Created directory") . ": $directory", log::NONE, log::GENERAL);
             }
             return true;
