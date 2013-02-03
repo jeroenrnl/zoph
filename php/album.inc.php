@@ -32,6 +32,17 @@
  */
 class album extends zophTreeTable implements Organizer {
 
+    /** @var string The name of the database table */
+    protected static $table_name="albums";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("album_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("album");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="albums.php?parent_album_id=";
+
     /** @var Cache the count of photos */
     private $photoCount;
 
@@ -42,7 +53,6 @@ class album extends zophTreeTable implements Organizer {
      */
     function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("album_id must be numeric"); }
-        parent::__construct("albums", array("album_id"), array("album"));
         $this->set("album_id", $id);
     }
 
@@ -112,7 +122,7 @@ class album extends zophTreeTable implements Organizer {
      */
     public function delete() {
         parent::delete(array("photo_albums", "group_permissions"));
-        $users = user::getRecords("user", "user_id", array("lightbox_id" => $this->get("album_id")));
+        $users = user::getRecords("user_id", array("lightbox_id" => $this->get("album_id")));
         if ($users) {
           foreach ($users as $user) {
             $user->setFields(array("lightbox_id" => "null"));
@@ -158,7 +168,7 @@ class album extends zophTreeTable implements Organizer {
             " GROUP BY album_id " .
             escape_string($sql_order);
 
-        $this->children=album::getRecordsFromQuery("album", $sql);
+        $this->children=album::getRecordsFromQuery($sql);
         return $this->children;
     }
 
@@ -193,7 +203,7 @@ class album extends zophTreeTable implements Organizer {
             " GROUP BY album_id" .
             escape_string($sql_order);
 
-        $this->children=album::getRecordsFromQuery("album", $sql);
+        $this->children=album::getRecordsFromQuery($sql);
         return $this->children;
     }
 
@@ -462,7 +472,7 @@ class album extends zophTreeTable implements Organizer {
                     " and gp.access_level >= p.level " .
                     $order;
             }
-            $coverphotos=photo::getRecordsFromQuery("photo", $sql);
+            $coverphotos=photo::getRecordsFromQuery($sql);
             $coverphoto=array_shift($coverphotos);
         }
 
@@ -498,7 +508,7 @@ class album extends zophTreeTable implements Organizer {
 
         $query = "select album_id from " . DB_PREFIX . "albums where $where";
 
-        return album::getRecordsFromQuery("album", $query);
+        return album::getRecordsFromQuery($query);
     }
 
     /**
@@ -543,7 +553,7 @@ class album extends zophTreeTable implements Organizer {
                 "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
 
-        return parent::getTopNfromSQL("album", $sql);
+        return parent::getTopNfromSQL($sql);
 
     }
 
@@ -566,7 +576,7 @@ function get_albums($user = null) {
         $sql = "select * from " . DB_PREFIX . "albums order by album";
     }
 
-    return album::getRecordsFromQuery("album", $sql);
+    return album::getRecordsFromQuery($sql);
 }
 
 function get_newer_albums($user_id, $date = null) {
@@ -579,7 +589,7 @@ function get_newer_albums($user_id, $date = null) {
         "' AND gp.changedate > '" . escape_string($date) . "' " .
         "ORDER BY a.album_id";
 
-    return album::getRecordsFromQuery("album", $sql);
+    return album::getRecordsFromQuery($sql);
 }
 
 function get_album_count($user = null) {

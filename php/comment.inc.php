@@ -31,9 +31,19 @@
  */
 class comment extends zophTable {
 
+    /** @var string The name of the database table */
+    protected static $table_name="comments";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("comment_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("subject");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="comment.php?comment_id=";
+
     function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("comment_id must be numeric"); }
-        parent::__construct("comments", array("comment_id"), array("subject"));
         $this->set("comment_id", $id);
     }
 
@@ -95,7 +105,7 @@ class comment extends zophTable {
         $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
             " where comment_id=" . escape_string($this->get("comment_id")) .
             " limit 1";
-        $result=photo::getRecordsFromQuery("photo", $sql);
+        $result=photo::getRecordsFromQuery($sql);
         if($result[0]) { 
             $result[0]->lookup();
             return $result[0];
@@ -163,7 +173,7 @@ class comment extends zophTable {
 }
 
 function get_all_comments() {
-   return comment::getRecordsFromQuery("comment", "select comment_id from " . DB_PREFIX . "comments");
+   return comment::getRecordsFromQuery("SELECT comment_id FROM " . DB_PREFIX . "comments");
    }
 
 function format_comments($user, $comments) {

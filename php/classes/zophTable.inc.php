@@ -35,30 +35,19 @@
  */
 abstract class zophTable {
     /** @var string The name of the database table */
-    public $table_name;
+    protected static $table_name;
     /** @var array List of primary keys */
-    public $primary_keys;
-    /** @var array Contains the values of attributes that will be stored in the db */
-    public $fields;
+    protected static $primary_keys=array();
     /** @var array Fields that may not be empty */
-    public $not_null; 
+    protected static $not_null=array();
     /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
-    protected $keepKeys = false;
-    
-    /**
-     * This construnctor should be called from the constructor
-     * of a subclass.
-     * @param string Name of the db table
-     * @param array List of primary keys
-     * @param array List of fields that may not be NULL
-     */
-    public function __construct($table_name, array $primary_keys, array $not_null) {
-        $this->table_name = DB_PREFIX . $table_name;
-        $this->primary_keys = $primary_keys;
-        $this->not_null = $not_null;
-        $this->fields = array();
-    }
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url;
 
+    /** @var array Contains the values of attributes that will be stored in the db */
+    public $fields=array();
+    
     /**
      * Returns the value of a field
      * @param string name of field to get
@@ -80,8 +69,8 @@ abstract class zophTable {
      * @throws ZophException
      */
     public function getId() {
-        if(sizeof($this->primary_keys)==1) {
-            return (int) $this->get($this->primary_keys[0]);
+        if(sizeof(static::$primary_keys)==1) {
+            return (int) $this->get(static::$primary_keys[0]);
         } else {
             var_dump($this);
             throw new ZophException("This class (" . get_class($this) . ") requires a specific getId() implementation, please report a bug");
@@ -114,9 +103,9 @@ abstract class zophTable {
             // ignore empty keys or values unless the field must be set.
 
             if ($null) {
-                if ((!in_array($key, $this->not_null)) && (empty($key) )) { continue; }
+                if ((!in_array($key, static::$not_null)) && (empty($key) )) { continue; }
             } else {
-                if ((!in_array($key, $this->not_null)) && (empty($key) || $val == "")) { continue; }
+                if ((!in_array($key, static::$not_null)) && (empty($key) || $val == "")) { continue; }
             }
 
 
@@ -155,8 +144,7 @@ abstract class zophTable {
      * @return bool Whether or not field is listed
      */
     public function isKey($name) {
-        $keys = $this->primary_keys; 
-        return in_array($name, $keys);
+        return in_array($name, static::$primary_keys);
     }
 
     /**
@@ -165,12 +153,6 @@ abstract class zophTable {
      * @todo Should return something more sensible
      */
     public function lookup() {
-
-        if (!$this->table_name || !$this->primary_keys || !$this->fields) {
-            log::msg("Missing data", log::ERROR, log::GENERAL);
-            return;
-        }
-
         $constraint = $this->createConstraints();
 
         if (!$constraint) {
@@ -178,7 +160,7 @@ abstract class zophTable {
             return;
         }
 
-        $sql = "select * from $this->table_name where $constraint";
+        $sql = "SELECT * FROM " . DB_PREFIX . static::$table_name . " WHERE $constraint";
 
         return $this->lookupFromSQL($sql);
     }
@@ -213,15 +195,10 @@ abstract class zophTable {
      *       @see group_permissions class.
      */
     public function insert() {
-
-        if (!$this->table_name || !$this->fields) {
-            log::msg("Missing data", log::ERROR, log::GENERAL);
-            return;
-        }
         $names=null;
         $values=null;
         while (list($name, $value) = each($this->fields)) {
-            if ($this->primary_keys && !$this->keepKeys && $this->isKey($name)) {
+            if (!static::$keepKeys && $this->isKey($name)) {
                 continue;
             }
 
@@ -238,7 +215,7 @@ abstract class zophTable {
             else if ($value == "now()") {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
                 $values .=  $value ;
-            } else if ($value =="" && in_array($name, $this->not_null)) {
+            } else if ($value =="" && in_array($name, static::$not_null)) {
 	    	    die("<p class='error'><b>$name</b> may not be empty</p>");
 	        } else if ($value !== "") {
                 $values .= "'" . escape_string($value) . "'";
@@ -248,14 +225,14 @@ abstract class zophTable {
 
         }
 
-        $sql = "insert into $this->table_name ($names) values ($values)";
+        $sql = "INSERT INTO " . DB_PREFIX . static::$table_name . "(" . $names . ") VALUES (" . $values . ")";
 
         query($sql, "Insert failed:");
 
         $id = insert_id();
 
-        if ($this->primary_keys && count($this->primary_keys) == 1) {
-            $this->fields[$this->primary_keys[0]] = $id;
+        if (count(static::$primary_keys) == 1) {
+            $this->fields[static::$primary_keys[0]] = $id;
         }
 
         return $id;
@@ -275,12 +252,7 @@ abstract class zophTable {
         } else {
             $extra_tables = null;
         }
-        $keys = $this->primary_keys;
-
-        if (!$this->table_name || !$keys || !$this->fields) {
-            log::msg("Missing data", log::ERROR, log::GENERAL);
-            return;
-        }
+        $keys = static::$primary_keys;
 
         $constraints = $this->createConstraints();
 
@@ -289,15 +261,14 @@ abstract class zophTable {
             return;
         }
 
-        $sql = "delete from $this->table_name where $constraints";
+        $sql = "DELETE FROM " . DB_PREFIX . static::$table_name . " WHERE " . $constraints;
 
         query($sql, "Delete failed:");
 
         if ($extra_tables) {
             foreach ($extra_tables as $table) {
-                $table = DB_PREFIX . $table;
-                $sql = "delete from $table where $constraints";
-                query($sql, "Delete from $table failed:");
+                $sql = "DELETE FROM " . DB_PREFIX . $table . " WHERE " . $constraints;
+                query($sql, "Delete from " . DB_PREFIX . " $table failed:");
             }
         }
     }
@@ -306,19 +277,10 @@ abstract class zophTable {
      * Updates a record.
      */
     public function update() {
-        $keys = $this->primary_keys; 
-
-        if (!$this->table_name || !$keys || !$this->fields) {
-            log::msg("Missing data", log::ERROR, log::GENERAL);
-            return;
-        }
+        $keys = static::$primary_keys;
 
         $constraints = $this->createConstraints();
 
-        if (!$constraints) {
-            log::msg("No constraint found", log::NOTIFY, log::GENERAL);
-            return;
-        }
         reset($this->fields);
         $values=null;
         $names=null;
@@ -339,7 +301,7 @@ abstract class zophTable {
                 $values .= "$name = password('" . escape_string($value) . "')";
             } else if ($value == "now()" ) {
                 $values .= "$name = " . $value . "";
-            } else if ($value == "" && in_array($name, $this->not_null)) {
+            } else if ($value == "" && in_array($name, static::$not_null)) {
 	    	    die("<p class='error'><b>$name</b> may not be empty</p>");
 	        } else if ($value !== "" && !is_null($value)) {
                 $values .= "$name = '" . escape_string($value) . "'";
@@ -350,7 +312,7 @@ abstract class zophTable {
 
         if (!$values) { return; }
 
-        $sql = "update $this->table_name set $values where $constraints";
+        $sql = "UPDATE " . DB_PREFIX . static::$table_name ." SET " . $values . " WHERE " . $constraints;
 
         query($sql, "Update failed:");
 
@@ -384,7 +346,7 @@ abstract class zophTable {
     public function getEditArray() {
         if (!$this->fields) { return; }
 
-        $field_lengths = get_field_lengths($this->table_name);
+        $field_lengths = get_field_lengths(static::$table_name);
 
         $keys = array_keys($field_lengths);
         sort($keys);
@@ -505,13 +467,9 @@ abstract class zophTable {
     /**
      * Gets the total count of records in the table for the given class.
      * @return int count
-     * @todo The 'new' construction needs to be replaced by a static var
      */
     public static function getCount() {
-        $obj = new static;
-        $table = $obj->table_name;
-
-        $sql = "select count(*) from $table";
+        $sql = "SELECT COUNT(*) FROM " . DB_PREFIX . static::$table_name;
 
         return static::getCountFromQuery($sql);
     }
@@ -523,12 +481,10 @@ abstract class zophTable {
      * @param string classname
      * @param string query SQL query to use
      * @return array Table of Top N most popular $class
-     * @todo Once minimum PHP version is 5.3, the $class can be replaced by
-     *       get_called_class()
      */
-    protected static function getTopNfromSQL($class, $query) {
+    protected static function getTopNfromSQL($query) {
         $pop_array=array();
-        $records = $class::getRecordsFromQuery($class, $query);
+        $records = static::getRecordsFromQuery($query);
         foreach ($records as $rec) {
             $pop_array[$rec->getLink()] = $rec->get("count");
         }
@@ -549,18 +505,14 @@ abstract class zophTable {
      * and storing the results in classes of the given type.
      * @todo the $class can be removed when PHP5.3 is min version
      */
-    public static function getRecords($class, $order = null, $constraints = null,
-        $conj = "and", $ops = null) {
-        
-
-        $obj = new $class;
-        $sql = "select * from $obj->table_name";
+    public static function getRecords($order = null, $constraints = null, $conj = "and", $ops = null) {
+        $sql = "SELECT * FROM " . DB_PREFIX . static::$table_name;
         if ($constraints) {
             while (list($name, $value) = each($constraints)) {
                 if (!empty($constraint_string)) {
                     $constraint_string .= " $conj ";
                 } else {
-                    $constraint_string =  " where ";
+                    $constraint_string =  " WHERE ";
                 }
 
                 $op = "=";
@@ -575,8 +527,7 @@ abstract class zophTable {
 
                 if ($value == "null" || $value == "''") {
                     // ok
-                }
-                else {
+                } else {
                     $value = "'" . escape_string($value) . "'";
                 }
 
@@ -586,12 +537,17 @@ abstract class zophTable {
         }
 
         if ($order) {
-            $sql .= " order by $order";
+            $sql .= " ORDER BY $order";
         }
-        return self::getRecordsFromQuery($class, $sql);
+        return static::getRecordsFromQuery($sql);
     }
     
-
+    /**
+     * Extract a specific class from vars
+     * @param array vars (like $_GET or $_POST)
+     * @param string suffix to add to var key (e.g. _id)
+     * @return array vars for specific class.
+     */
     public static function getFromVars(array $vars, $suffix="") {
         $class=get_called_class();
         $return=array();
@@ -607,10 +563,9 @@ abstract class zophTable {
     /**
      * Stores the results the the given query in an array of objects of
      * this given type.
-     * @todo the $class can be removed when PHP5.3 is min version
      */
-    public static function getRecordsFromQuery($class, $sql, $min = 0, $num = 0) {
-
+    public static function getRecordsFromQuery($sql, $min = 0, $num = 0) {
+        $class=get_called_class();
         $result = query($sql, "Unable to get records");
 
         if ($min) {
@@ -624,22 +579,16 @@ abstract class zophTable {
         }
 
         $objs = array();
-        if ($class != null) {
-            while ((!$limit || $num-- > 0) && $row = fetch_assoc($result)) {
-                $obj = new $class;
-                $obj->setFields($row);
-                $objs[] = $obj;
-            }
-        } else {
-            // use to grab ids, for example
-            while ((!$limit || $num-- > 0) && $row = fetch_row($result)) {
-                $objs[] = $row[0];
-            }
+        while ((!$limit || $num-- > 0) && $row = fetch_assoc($result)) {
+            $obj = new $class;
+            $obj->setFields($row);
+            $objs[] = $obj;
         }
 
         free_result($result);
         return $objs;
     }
+
 
     /**
      * Creates a constraint clause based on the given keys
@@ -647,7 +596,7 @@ abstract class zophTable {
      */
     private function createConstraints() {
         $constraints=null;
-        foreach ($this->primary_keys as $key) {
+        foreach (static::$primary_keys as $key) {
             $value = $this->fields[$key];
             if (!$value) { continue; }
             if (!empty($constraints)) { $constraints .= " and "; }
@@ -655,99 +604,99 @@ abstract class zophTable {
         }
         return $constraints;
     }
-}
 
-/**
- * Get XML from a database table
- * This is a wrapper around several objects which will call a method from 
- * those objects
- * @param string Name of the class to be used
- * @param string Search string
- * @param user Only return records that can be seen by this user
- * @todo This should be replaced by a proper OO construction
- */
-function get_xml($class, $search,$user=null) {
-    $search=strtolower($search);
-    if($class=="location" || $class=="home" || $class=="work") {
-        $class="place";
-    } else if ($class=="photographer") {
-        $class="person";
-        $subclass="photographer";
-    } else if ($class=="father" || $class=="mother" || $class=="spouse") {
-        $class="person";
-    }
-
-
-    if($class=="person") {
-        $tree=false;
-    } else {
-        $tree=true;
-    }
-
-    if($class=="timezone") {
-        $tz=new TimeZone("UTC");
-        return $tz->get_xml($search);
-    } else if($class=="import_progress") {
-        $import=new WebImport($search);
-        return $import->get_xml();
-    } else if($class=="import_thumbs") {
-        return WebImport::getThumbsXML();
-    } else if (class_exists($class)) {
-        $obj=new $class;
-        $rootname=$obj->xml_rootname();
-        $nodename=$obj->xml_nodename();
-        $idname=$obj->primary_keys[0];
-
-        $xml = new DOMDocument('1.0','UTF-8');
-        $rootnode=$xml->createElement($obj->xml_rootname());
-        $newchild=$xml->createElement($obj->xml_nodename());
-        $key=$xml->createElement("key");
-        $title=$xml->createElement("title");
-        $key->appendChild($xml->createTextNode("null"));
-        $title->appendChild($xml->createTextNode("&nbsp;"));
-        $newchild->appendChild($key);
-        $newchild->appendChild($title);
-        $rootnode->appendChild($newchild);
-
-        if ($tree) {
-            $obj = $class::getRoot();
-            $obj->lookup();
-            $tree=$obj->get_xml_tree($xml, $search, $user);
-            $rootnode->appendChild($tree);
-        } else {
-            if($class=="person") {
-                if($search=="") {
-                    $search=null;
-                }
-                if($user->is_admin()) {
-                   $records=get_all_people($user,$search, true);
-                } else {
-                    if($subclass=="photographer") {
-                        $records=get_photographers($user,$search,true);
-                    } else {
-                        $records=get_photographed_people($user,$search,true);
-                    }
-                }
-            } else {
-                $records=get_records($class, $order, $constraints, $conj, $ops);
-            } 
-           
-            foreach($records as $record) {
-                $newchild=$xml->createElement($nodename);
-                $key=$xml->createElement("key");
-                $title=$xml->createElement("title");
-                $key->appendChild($xml->createTextNode($record->get($idname)));
-                $title->appendChild($xml->createTextNode($record->getName()));
-                $newchild->appendChild($key);
-                $newchild->appendChild($title);
-                $rootnode->appendChild($newchild);
-             }
+    /**
+     * Get XML from a database table
+     * This is a wrapper around several objects which will call a method from 
+     * those objects
+     * @param string Name of the class to be used
+     * @param string Search string
+     * @param user Only return records that can be seen by this user
+     * @todo This should be replaced by a proper OO construction
+     */
+    public static function getXML($class, $search,$user=null) {
+        $seach=strtolower($search);
+        if($class=="location" || $class=="home" || $class=="work") {
+            $class="place";
+        } else if ($class=="photographer") {
+            $class="person";
+            $subclass="photographer";
+        } else if ($class=="father" || $class=="mother" || $class=="spouse") {
+            $class="person";
         }
-    } else {
-        die("illegal class $class");
-    }
-    $xml->appendChild($rootnode);
-    return $xml->saveXML();
-}
 
+
+        $search=strtolower($search);
+        if($class=="person") {
+            $tree=false;
+        } else {
+            $tree=true;
+        }
+
+        if($class=="timezone") {
+            $tz=new TimeZone("UTC");
+            return $tz->get_xml($search);
+        } else if($class=="import_progress") {
+            $import=new WebImport($search);
+            return $import->get_xml();
+        } else if($class=="import_thumbs") {
+            return WebImport::getThumbsXML();
+        } else if (class_exists($class)) {
+            $obj=new $class;
+            $rootname=$obj->xml_rootname();
+            $nodename=$obj->xml_nodename();
+            $idname=$obj::$primary_keys[0];
+
+            $xml = new DOMDocument('1.0','UTF-8');
+            $rootnode=$xml->createElement($obj->xml_rootname());
+            $newchild=$xml->createElement($obj->xml_nodename());
+            $key=$xml->createElement("key");
+            $title=$xml->createElement("title");
+            $key->appendChild($xml->createTextNode("null"));
+            $title->appendChild($xml->createTextNode("&nbsp;"));
+            $newchild->appendChild($key);
+            $newchild->appendChild($title);
+            $rootnode->appendChild($newchild);
+
+            if ($tree) {
+                $obj = $class::getRoot();
+                $obj->lookup();
+                $tree=$obj->get_xml_tree($xml, $search, $user);
+                $rootnode->appendChild($tree);
+            } else {
+                if($class=="person") {
+                    if($search=="") {
+                        $search=null;
+                    }
+                    if($user->is_admin()) {
+                       $records=get_all_people($user,$search, true);
+                    } else {
+                        if($subclass=="photographer") {
+                            $records=get_photographers($user,$search,true);
+                        } else {
+                            $records=get_photographed_people($user,$search,true);
+                        }
+                    }
+                } else {
+                    $records=get_records($class, $order, $constraints, $conj, $ops);
+                } 
+               
+                foreach($records as $record) {
+                    $newchild=$xml->createElement($nodename);
+                    $key=$xml->createElement("key");
+                    $title=$xml->createElement("title");
+                    $key->appendChild($xml->createTextNode($record->get($idname)));
+                    $title->appendChild($xml->createTextNode($record->getName()));
+                    $newchild->appendChild($key);
+                    $newchild->appendChild($title);
+                    $rootnode->appendChild($newchild);
+                 }
+            }
+        } else {
+            die("illegal class $class");
+        }
+        $xml->appendChild($rootnode);
+        return $xml->saveXML();
+}
+}
 ?>

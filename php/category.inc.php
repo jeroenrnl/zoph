@@ -32,11 +32,21 @@
  */
 class category extends zophTreeTable implements Organizer {
 
+    /** @var string The name of the database table */
+    protected static $table_name="categories";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("category_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("category");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="categories.php?parent_category_id=";
+
     var $photoCount;
 
     function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("category_id must be numeric"); }
-        parent::__construct("categories", array("category_id"), array("category"));
         $this->set("category_id", $id);
     }
 
@@ -101,7 +111,7 @@ class category extends zophTreeTable implements Organizer {
             " GROUP BY c.category_id " .
             $order;
 
-        $this->children=category::getRecordsFromQuery("category", $sql);
+        $this->children=category::getRecordsFromQuery($sql);
         return $this->children;
     }
 
@@ -288,7 +298,7 @@ class category extends zophTreeTable implements Organizer {
                     " AND gp.access_level >= p.level " .
                     $order;
             }
-            $coverphotos=photo::getRecordsFromQuery("photo", $sql);
+            $coverphotos=photo::getRecordsFromQuery($sql);
             $coverphoto=array_shift($coverphotos);
         }
 
@@ -401,7 +411,7 @@ class category extends zophTreeTable implements Organizer {
 
         $query = "select category_id from " . DB_PREFIX . "categories where $where";
 
-        return category::getRecordsFromQuery("category", $query);
+        return category::getRecordsFromQuery($query);
     }
 
     /**
@@ -448,7 +458,7 @@ class category extends zophTreeTable implements Organizer {
                 "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
 
-        return parent::getTopNfromSQL("category", $sql);
+        return parent::getTopNfromSQL($sql);
 
     }
 }
@@ -489,7 +499,7 @@ function get_category_count($user) {
         $sql =
             "SELECT category_id, parent_category_id  FROM " .
             DB_PREFIX . "categories as c";
-        $cats=category::getRecordsFromQuery("category", $sql);
+        $cats=category::getRecordsFromQuery($sql);
         $cat_clean=remove_empty($cats);
         return count($cat_clean);
     } else {

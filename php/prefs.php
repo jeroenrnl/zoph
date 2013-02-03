@@ -151,7 +151,7 @@
 ?>
           </dt>
           <dd>
-<?php echo create_pulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), template::createSelectArray(color_scheme::getRecords("color_scheme", "name"), array("name"))) ?>
+<?php echo create_pulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), template::createSelectArray(color_scheme::getRecords("name"), array("name"))) ?>
           </dd>
 <?php
     $langs = language::getAll();

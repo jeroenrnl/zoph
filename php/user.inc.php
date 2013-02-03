@@ -19,6 +19,17 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 class user extends zophTable {
+    /** @var string The name of the database table */
+    protected static $table_name="users";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("user_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("user_name");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="user.php?user_id=";
+
 
     private static $current; 
 
@@ -29,7 +40,6 @@ class user extends zophTable {
 
     public function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("user_id must be numeric"); }
-        parent::__construct("users", array("user_id"), array("user_name"));
         $this->set("user_id", $id);
     }
 
@@ -92,7 +102,7 @@ class user extends zophTable {
             DB_PREFIX . "groups_users " .
             "WHERE user_id=" . escape_string($this->get("user_id"));
 
-        return group::getRecordsFromQuery("group", $sql);
+        return group::getRecordsFromQuery($sql);
     }
 
 
@@ -115,7 +125,7 @@ class user extends zophTable {
                 "ORDER BY access_level DESC, writable DESC, " . 
                 "watermark_level DESC " .
                 "LIMIT 0, 1";
-            $aps=group_permissions::getRecordsFromQuery("group_permissions", $sql);
+            $aps=group_permissions::getRecordsFromQuery($sql);
             if ($aps && sizeof($aps) >= 1) {
                 return $aps[0];
             }
@@ -144,7 +154,7 @@ class user extends zophTable {
             "watermark_level DESC " .
             "LIMIT 0, 1";
 
-        $gps = group_permissions::getRecordsFromQuery("group_permissions", $sql);
+        $gps = group_permissions::getRecordsFromQuery($sql);
         if ($gps && sizeof($gps) >= 1) {
             return $gps[0];
         }
@@ -274,7 +284,7 @@ class user extends zophTable {
     function get_comments() {
         $sql = "select comment_id from " . DB_PREFIX . "comments where" .
             " user_id = " .  $this->get("user_id") . " order by comment_date";
-        $comments=comment::getRecordsFromQuery("comment", $sql);
+        $comments=comment::getRecordsFromQuery($sql);
         return $comments;
     }
 
@@ -286,7 +296,7 @@ class user extends zophTable {
     public static function getByName($name) {
         $sql = "select user_id from " . DB_PREFIX . "users where" .
             " user_name = '" .  escape_string($name) ."'";
-        $users=user::getRecordsFromQuery("user", $sql);
+        $users=user::getRecordsFromQuery($sql);
         return $users[0];
     } 
 
@@ -296,7 +306,7 @@ class user extends zophTable {
      * @return array Array of all users
      */
     public static function getAll($order = "user_name") {
-        return self::getRecords("user", $order);
+        return self::getRecords($order);
     }
 
     /**

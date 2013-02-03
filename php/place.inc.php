@@ -31,10 +31,20 @@
  * @author Jeroen Roos
  */
 class place extends zophTreeTable implements Organizer {
+    /** @var string The name of the database table */
+    protected static $table_name="places";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("place_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("title");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="place.php?place_id=";
+
 
     function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("place_id must be numeric"); }
-        parent::__construct("places", array("place_id"), array("title"));
         $this->set("place_id", $id);
     }
     
@@ -134,7 +144,7 @@ class place extends zophTreeTable implements Organizer {
             "WHERE pl.parent_place_id=" . (int) $this->getId() .
             " GROUP BY pl.place_id " .
             $order; 
-        $this->children=place::getRecordsFromQuery("place", $sql);
+        $this->children=place::getRecordsFromQuery($sql);
         return $this->children;
     }    
    
@@ -249,7 +259,7 @@ class place extends zophTreeTable implements Organizer {
                 "' AND gp.access_level >= p.level";
         }
 
-        return photo::getRecordsFromQuery("photo", $sql);
+        return photo::getRecordsFromQuery($sql);
     }
 
     /**
@@ -369,7 +379,7 @@ class place extends zophTreeTable implements Organizer {
                     " AND gp.access_level >= p.level " .
                     $order;
             }
-            $coverphotos=photo::getRecordsFromQuery("photo", $sql);
+            $coverphotos=photo::getRecordsFromQuery($sql);
             $coverphoto=array_shift($coverphotos);
         }
 
@@ -488,7 +498,7 @@ class place extends zophTreeTable implements Organizer {
                 "having distance <= " . $distance . 
                 " order by distance" . $lim;
 
-            $near=place::getRecordsFromQuery("place", $sql);
+            $near=place::getRecordsFromQuery($sql);
             return $near;
         } else {
             return null;
@@ -565,7 +575,7 @@ class place extends zophTreeTable implements Organizer {
         $sql="SELECT place_id from " . DB_PREFIX . "places WHERE " .
             " LOWER(title) = \"" . $title . "\";";
 
-        return place::getRecordsFromQuery("place", $sql);
+        return place::getRecordsFromQuery($sql);
     }
 
     /**
@@ -611,14 +621,14 @@ class place extends zophTreeTable implements Organizer {
                 "LIMIT 0, " . (int) $user->prefs->get("reports_top_n");
         }
 
-        return parent::getTopNfromSQL("place", $sql);
+        return parent::getTopNfromSQL($sql);
 
     }
 }
 
 function get_places($constraints = null, $conj = "and", $ops = null,
     $order = "city, title, address") {
-    return place::getRecords("place", $order, $constraints, $conj, $ops);
+    return place::getRecords($order, $constraints, $conj, $ops);
 }
 
 function get_photographed_places($user = null) {
@@ -649,7 +659,7 @@ function get_photographed_places($user = null) {
             "order by plc.city, plc.title";
     }
 
-    return place::getRecordsFromQuery("place", $sql);
+    return place::getRecordsFromQuery($sql);
 }
 
 function get_places_count($user) {

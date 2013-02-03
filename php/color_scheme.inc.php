@@ -32,6 +32,17 @@
  */
 class color_scheme extends zophTable {
 
+    /** @var string The name of the database table */
+    protected static $table_name="color_schemes";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("color_scheme_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("name");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="color_schemes.php?color_scheme_id=";
+
     private static $current=null;
     
     /**
@@ -40,7 +51,6 @@ class color_scheme extends zophTable {
      */
     public function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("color_scheme_id must be numeric"); }
-        parent::__construct("color_schemes", array("color_scheme_id"), array("name"));
         $this->set("color_scheme_id", $id);
     }
 

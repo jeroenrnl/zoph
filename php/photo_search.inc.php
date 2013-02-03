@@ -126,7 +126,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $query = "select person_id from " . DB_PREFIX . "people where 
                         lower(concat(first_name, \" \", last_name)) like \"$val\"";
 
-            $people = person::getRecordsFromQuery("person", $query); 
+            $people = person::getRecordsFromQuery($query); 
 
 
             $key .= "_id";
@@ -317,8 +317,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $no_rate_sql="SELECT DISTINCT(photo_id) FROM " .
                     DB_PREFIX . "photo_ratings AS pr " .
                     "WHERE pr.user_id=" . escape_string($ratinguser_id);
-                    
-                $ids = implode(',', zophTable::getRecordsFromQuery(null, $no_rate_sql));
+                $ids = implode(',', getArrayFromQuery($no_rate_sql));
 
                 if ($ids) {
                     $where .= "(ph.photo_id not in ($ids))";
@@ -445,7 +444,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 "limit $offset, $rows";
         }
 
-        $thumbnails = photo::getRecordsFromQuery("photo", $query);
+        $thumbnails = photo::getRecordsFromQuery($query);
 
     }
 
@@ -496,8 +495,7 @@ function generate_excluded_albums_clause($excluded_albums, $from, $where) {
         if ($where) {
             $photo_id_query .= " and $where";
         }
-
-        $ids = implode(',', zophTable::getRecordsFromQuery(null, $photo_id_query));
+        $ids = implode(',', getArrayFromQuery($photo_id_query));
 
         if ($ids) {
             if ($album_constraints || $where) {
@@ -529,7 +527,7 @@ function generate_excluded_categories_clause($excluded_categories, $from, $where
             $photo_id_query .= " and $where";
         }
 
-        $ids = implode(',', zophTable::getRecordsFromQuery(null, $photo_id_query));
+        $ids = implode(',', getArrayFromQuery($photo_id_query));
 
         if ($ids) {
             if ($cat_constraints || $where) {
@@ -560,8 +558,7 @@ function generate_excluded_people_clause($excluded_people, $from, $where) {
         if ($where) {
             $photo_id_query .= " and $where";
         }
-
-        $ids = implode(',', zophTable::getRecordsFromQuery(null, $photo_id_query));
+        $ids = implode(',', getArrayFromQuery($photo_id_query));
 
         if ($ids) {
             if ($person_constraints || $where) {

@@ -32,6 +32,17 @@
  * @package Zoph
  */
 class person extends zophTable implements Organizer {
+    /** @var string The name of the database table */
+    protected static $table_name="people";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("person_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("first_name");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="person.php?person_id=";
+
     /** @var location Home address of this person */
     public $home;
     /** @var location Work address of this person */
@@ -39,7 +50,6 @@ class person extends zophTable implements Organizer {
 
     function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("person_id must be numeric"); }
-        parent::__construct("people", array("person_id"), array("first_name"));
         $this->set("person_id", $id);
     }
 
@@ -328,7 +338,7 @@ class person extends zophTable implements Organizer {
                     " AND gp.access_level >= p.level " .
                     $order;
             }
-            $coverphotos=photo::getRecordsFromQuery("photo", $sql);
+            $coverphotos=photo::getRecordsFromQuery($sql);
             $coverphoto=array_shift($coverphotos);
 
         }
@@ -462,7 +472,7 @@ class person extends zophTable implements Organizer {
         $sql = "SELECT person_id FROM " . DB_PREFIX . "people WHERE " .
             "CONCAT_WS(\" \", lower(first_name), lower(last_name))=" .
             "lower(\"" . escape_string($name) . "\")";
-        return person::getRecordsFromQuery("person", $sql);
+        return person::getRecordsFromQuery($sql);
     }
 
     /**
@@ -502,14 +512,14 @@ class person extends zophTable implements Organizer {
                 "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
         }
 
-        return parent::getTopNfromSQL("person", $sql);
+        return static::getTopNfromSQL($sql);
 
     }
 }
 
 function get_people($constraints = null, $conj = "and", $ops = null,
     $order = "last_name, first_name", $user=null) {
-    return person::getRecords("person", $order, $constraints, $conj, $ops);
+    return person::getRecords($order, $constraints, $conj, $ops);
 }
 
 function get_people_count($user = null, $search = null) {
@@ -560,7 +570,7 @@ function get_all_people($user = null, $search = null, $search_first = false) {
     $sql="SELECT * FROM " . DB_PREFIX . "people AS ppl " . $where .
         " ORDER BY last_name, called, first_name";
 
-    return person::getRecordsFromQuery("person", $sql);
+    return person::getRecordsFromQuery($sql);
 }
 
 function get_photographed_people($user = null, $search=null, $search_first = false) {
@@ -593,7 +603,7 @@ function get_photographed_people($user = null, $search=null, $search_first = fal
             " order by ppl.last_name, ppl.called, ppl.first_name";
     }
 
-    return person::getRecordsFromQuery("person", $sql);
+    return person::getRecordsFromQuery($sql);
 }
 
 function get_photographers($user = null, $search = null, $search_first = null) {
@@ -626,7 +636,7 @@ function get_photographers($user = null, $search = null, $search_first = null) {
             "order by ppl.last_name, ppl.called, ppl.first_name";
     }
 
-    return person::getRecordsFromQuery("person", $sql);
+    return person::getRecordsFromQuery($sql);
 }
 
 function get_where_for_search($conj, $search, $search_first) {

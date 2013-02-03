@@ -31,6 +31,6 @@ if($obj_array[0]=="details") {
 
     echo $obj->getDetailsXML();
 } else {
-    echo get_xml($object, $search, $user);
+    echo zophTable::getXML($object, $search, $user);
 }
 ?>

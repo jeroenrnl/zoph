@@ -256,7 +256,7 @@ class template {
 
         foreach ($records as $rec) {
             // this only makes sense when there is one key
-            $id = $rec->get($rec->primary_keys[0]);
+            $id = $rec->getId();
 
             $name = "";
             foreach ($name_fields as $n) {

@@ -30,6 +30,17 @@
  * @package Zoph
  */
 class photo extends zophTable {
+    /** @var string The name of the database table */
+    protected static $table_name="photos";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("photo_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array();
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="photo.php?photo_id=";
+
     /** @var photographer */
     public $photographer;
     /** @var location */
@@ -47,7 +58,6 @@ class photo extends zophTable {
      */
     public function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("photo_id must be numeric"); }
-        parent::__construct("photos", array("photo_id"), array(""));
         $this->set("photo_id",$id);
     }
 
@@ -302,7 +312,7 @@ class photo extends zophTable {
                 " ORDER BY al.album";
         }
 
-        return album::getRecordsFromQuery("album", $sql);
+        return album::getRecordsFromQuery($sql);
     }
 
     /**
@@ -316,7 +326,7 @@ class photo extends zophTable {
             "WHERE pc.photo_id = '" . (int) $this->getId() . "'" .
             " AND pc.category_id = cat.category_id ORDER BY cat.category";
 
-        return album::getRecordsFromQuery("category", $sql);
+        return category::getRecordsFromQuery($sql);
     }
 
     /**
@@ -331,7 +341,7 @@ class photo extends zophTable {
             "WHERE pp.photo_id = '" . (int) $this->getId() . "'" .
             " AND pp.person_id = p.person_id ORDER BY pp.position";
 
-        return album::getRecordsFromQuery("person", $sql);
+        return person::getRecordsFromQuery($sql);
     }
 
     /**
@@ -897,7 +907,7 @@ class photo extends zophTable {
     function get_comments() {
         $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .
             " photo_id = " .  $this->get("photo_id");
-        $comments=comment::getRecordsFromQuery("comment", $sql);
+        $comments=comment::getRecordsFromQuery($sql);
         return $comments;
     }
 
@@ -1025,7 +1035,7 @@ class photo extends zophTable {
                 "having distance <= " . $distance . 
                 " order by distance" . $lim;
 
-            $near=photo::getRecordsFromQuery("photo", $sql);
+            $near=photo::getRecordsFromQuery($sql);
             return $near;
         } else {
             return null;
@@ -1038,7 +1048,7 @@ class photo extends zophTable {
         if(!empty($path)) {
             $sql .= " AND path='" . escape_string($path) ."'";
         }
-        return photo::getRecordsFromQuery("photo", $sql);
+        return photo::getRecordsFromQuery($sql);
     }
 
     public function getHashFromFile() {
@@ -1121,7 +1131,7 @@ class photo extends zophTable {
             " ORDER BY abs(timediff(datetime,\"" . date("Y-m-d H:i:s", $utc) . "\")) ASC" .
             " LIMIT 1";
 
-        $points=point::getRecordsFromQuery("point", $sql);
+        $points=point::getRecordsFromQuery($sql);
         if(sizeof($points) > 0 && $points[0] instanceof point) {
             $point=$points[0];
             $pointtime=strtotime($point->get("datetime"));
@@ -1290,7 +1300,7 @@ class photo extends zophTable {
 
         $sql="SELECT * FROM " . DB_PREFIX . "photos " . $where;
 
-        $photos=photo::getRecordsFromQuery("photo", $sql);
+        $photos=photo::getRecordsFromQuery($sql);
         if(is_array($photos) && sizeof($photos) > 0) {
             return $photos[0];
         } else {

@@ -65,20 +65,19 @@ abstract class zophTreeTable extends zophTable {
     function getChildren($order = null) {
 
         if ($this->children) { return $this->children; }
-        if (!$this->primary_keys) { return; }
-        $key = $this->primary_keys[0];
-        $id = $this->get($key);
+        $key = static::$primary_keys[0];
+        $id = (int) $this->getId();
         if (!$id) { return; }
 
         $sql =
-            "select * from $this->table_name " .
-            "where parent_$key = '" . escape_string($id) . "'";
+            "SELECT * FROM " . static::$table_name .
+            " WHERE parent_ " . $key . "=" . $id;
 
         if ($order) {
-            $sql .= " order by $order";
+            $sql .= " ORDER BY $order";
         }
 
-        $this->children = zophTreeTable::getRecordsFromQuery(get_class($this), $sql);
+        $this->children = static::getRecordsFromQuery($sql);
         return $this->children;
 
     }
@@ -87,9 +86,8 @@ abstract class zophTreeTable extends zophTable {
      * Gets the ancestors of this record.
      */
     function get_ancestors($anc = array()) {
-        if (!$this->primary_keys) { return $anc; }
-        $key = $this->primary_keys[0];
-        $pid = $this->get("parent_$key");
+        $key = static::$primary_keys[0];
+        $pid = $this->get("parent_" . $key);
         // root of tree
         if ($pid == 0) {
             $this->ancestors = $anc;
@@ -112,8 +110,7 @@ abstract class zophTreeTable extends zophTable {
      * all of its descendants.
      */
     function getBranchIdArray(&$id_array) {
-        $key = $this->primary_keys[0];
-        $id_array[] = $this->get($key);
+        $id_array[] = (int) $this->getId();
 
         $this->getChildren();
 
@@ -139,7 +136,7 @@ abstract class zophTreeTable extends zophTable {
     function get_xml_tree($xml, $search, $user=null) {
         $rootname=$this->xml_rootname();
         $nodename=$this->xml_nodename();
-        $idname=$this->primary_keys[0];
+        $idname=static::$primary_keys[0];
 
         $newchild=$xml->createElement($nodename);
 

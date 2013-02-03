@@ -23,14 +23,23 @@
  */
 
 class group_permissions extends zophTable {
+    /** @var string The name of the database table */
+    protected static $table_name="group_permissions";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("group_id", "album_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array();
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = true;
+    /** @var string URL for this class */
+    protected static $url="group.php?group_id=";
+
 
     function __construct($gid = -1, $aid = -1) {
         if($gid && !is_numeric($gid)) { die("group_id must be numeric"); }
         if($aid && !is_numeric($aid)) { die("album_id must be numeric"); }
-        parent::__construct("group_permissions", array("group_id", "album_id"), array(""));
         $this->set("group_id", $gid);
         $this->set("album_id", $aid);
-        $this->keepKeys=true;
     }
 
     function insert() {

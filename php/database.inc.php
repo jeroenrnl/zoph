@@ -123,4 +123,14 @@
         }
     }
 
+    /**
+     * Run a query and return result as an array
+     * @param string SQL query
+     */
+    function getArrayFromQuery($sql) {
+        while ($row = fetch_row($result)) {
+            $objs[] = $row[0];
+        }
+    }
+        
 ?>

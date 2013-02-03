@@ -28,6 +28,17 @@
  */
 class rating extends zophTable {
 
+    /** @var string The name of the database table */
+    protected static $table_name="photo_ratings";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("rating_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("photo_id", "rating", "user_id");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="photo.php?rating_id=";
+
 
     /**
      * Create new rating object
@@ -36,7 +47,6 @@ class rating extends zophTable {
      */
     public function __construct($id = 0) {
          if($id && !is_numeric($id)) { die("rating_id must be numeric"); }
-         parent::__construct("photo_ratings", array("rating_id"), array("photo_id", "rating", "user_id"));
          $this->set("rating_id", $id);
 
      }
@@ -63,7 +73,7 @@ class rating extends zophTable {
             }
         }
 
-        return self::getRecords("rating", null, $constraints);
+        return self::getRecords(null, $constraints);
      }
 
     /**

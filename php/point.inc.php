@@ -29,12 +29,22 @@
  * @package Zoph
  */
 class point extends zophTable {
+    /** @var string The name of the database table */
+    protected static $table_name="point";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("point_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array();
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url;
+
     /**
      * Create a point object
      */
     public function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("point_id must be numeric"); }
-        parent::__construct("point", array("point_id"), array());
         $this->set("point_id", $id);
     }
 
@@ -86,7 +96,7 @@ class point extends zophTable {
             " track_id = " . escape_string($this->get("track_id")) . " AND " .
             " datetime>\"" . escape_string($this->get("datetime")) . "\"" .
             " ORDER BY datetime LIMIT 1";
-        $points=point::getRecordsFromQuery("point", $sql);
+        $points=point::getRecordsFromQuery($sql);
         if(is_array($points) && sizeof($points) > 0) {
             return $points[0];
         } else {
@@ -102,7 +112,7 @@ class point extends zophTable {
             " track_id = " . escape_string($this->get("track_id")) . " AND " .
             " datetime<\"" . escape_string($this->get("datetime")) . "\"" .
             " ORDER BY datetime DESC LIMIT 1";
-        $points=point::getRecordsFromQuery("point", $sql);
+        $points=point::getRecordsFromQuery($sql);
         if(is_array($points) && sizeof($points) > 0) {
             return $points[0];
         } else {
@@ -125,7 +135,7 @@ class point extends zophTable {
     public static function getAll($constraints = null, $conj = "and", 
         $ops = null, $order = "name") {
     
-        return point::getRecords("point", $order, $constraints, $conj, $ops);
+        return point::getRecords($order, $constraints, $conj, $ops);
     }
 
     /**

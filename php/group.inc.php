@@ -19,10 +19,20 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 class group extends zophTable {
+    /** @var string The name of the database table */
+    protected static $table_name="groups";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("group_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("group_name");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="group.php?group_id=";
 
-    function group($id = 0) {
+
+    function __construct($id = 0) {
         if($id && !is_numeric($id)) { die("user_id must be numeric"); }
-        parent::__construct("groups", array("group_id"), array("group_name"));
         $this->set("group_id", $id);
     }
 
@@ -55,7 +65,7 @@ class group extends zophTable {
         $sql="SELECT album_id FROM " .
             DB_PREFIX . "group_permissions " .
             "WHERE group_id=" . escape_string($this->get("group_id"));
-        return album::getRecordsFromQuery("album", $sql);
+        return album::getRecordsFromQuery($sql);
     }
 
     function getDisplayArray() {
@@ -74,7 +84,7 @@ class group extends zophTable {
             DB_PREFIX . "groups_users " .
             "WHERE group_id=" . escape_string($this->get("group_id"));
 
-        return user::getRecordsFromQuery("user", $sql);
+        return user::getRecordsFromQuery($sql);
     }
 
     function add_member($member_id) {
@@ -150,7 +160,7 @@ class group extends zophTable {
 }
 
 function get_groups($order = "group_name") {
-    return group::getRecords("group", $order);
+    return group::getRecords($order);
 }
 
 ?>
