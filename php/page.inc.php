@@ -30,11 +30,6 @@ class page extends zophTable {
     /** @var string URL for this class */
     protected static $url="page.php?page_id=";
 
-    function __construct($id = 0) {
-         if($id && !is_numeric($id)) { die("page_id must be numeric"); }
-        $this->set("page_id", $id);
-    }
-    
     function insert() {
         $this->set("date","now()");
         parent::insert();

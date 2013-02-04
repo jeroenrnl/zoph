@@ -38,15 +38,6 @@ class user extends zophTable {
     var $crumbs;
     var $lang; // holds translations
 
-    public function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("user_id must be numeric"); }
-        $this->set("user_id", $id);
-    }
-
-    public function getId() {
-        return $this->get("user_id");
-    }
-
     function insert() {
         parent::insert();
         $this->prefs = new prefs($this->get("user_id"));

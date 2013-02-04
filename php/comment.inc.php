@@ -42,11 +42,6 @@ class comment extends zophTable {
     /** @var string URL for this class */
     protected static $url="comment.php?comment_id=";
 
-    function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("comment_id must be numeric"); }
-        $this->set("comment_id", $id);
-    }
-
     function insert() {
         $this->set("comment_date", "now()");
         $this->set("ipaddr", $_SERVER['REMOTE_ADDR']);
@@ -95,7 +90,7 @@ class comment extends zophTable {
         $user_name = $comment_user->get("user_name");
         $comment_user->lookup_person();
         $comment_person = $comment_user->person->getName();
-        $comment_person_id = $comment_user->person->get("person_id");
+        $comment_person_id = (int) $comment_user->person->getId();
         $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> (<a href=person.php?person_id=%s>%s</a>)", $this->get("user_id"), $user_name, $comment_person_id, $comment_person);
         return $return; 
     }
@@ -103,7 +98,7 @@ class comment extends zophTable {
     function get_photo() {
         if(!$this->get("comment_id")) { return; }
         $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
-            " where comment_id=" . escape_string($this->get("comment_id")) .
+            " where comment_id=" . (int) $this->getId() .
             " limit 1";
         $result=photo::getRecordsFromQuery($sql);
         if($result[0]) { 
@@ -114,17 +109,16 @@ class comment extends zophTable {
         }
     }
 
-    function add_comment_to_photo($photo_id) {
-        if (!$photo_id) { return; }
+    function addToPhoto(photo $photo) {
         $sql = "insert into " . DB_PREFIX . "photo_comments values" . 
-            "(" . escape_string($photo_id) . ", " . escape_string($this->get("comment_id")) . ")";
+            "(" . (int) $photo->getId() . ", " . (int) $this->getId() . ")";
 
       
         query($sql, "Failed to add comment:");
     }
  
     function is_owner($user) {
-        if($user->get(user_id)==$this->get("user_id")) {
+        if($user->getId()==$this->get("user_id")) {
             return true;
         } else {
             return false;

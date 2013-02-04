@@ -47,6 +47,16 @@ abstract class zophTable {
 
     /** @var array Contains the values of attributes that will be stored in the db */
     public $fields=array();
+
+    /**
+     * Create new object
+     * @param int object id
+     */
+    public function __construct($id=0) {
+        if($id && !is_numeric($id)) { die("id for " . get_called_class() . " must be numeric"); }
+        $this->set(static::$primary_keys[0],$id);
+    }
+        
     
     /**
      * Returns the value of a field

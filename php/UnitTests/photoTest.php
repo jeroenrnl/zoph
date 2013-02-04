@@ -386,10 +386,10 @@ class photoTest extends ZophDataBaseTestCase {
         $obj->set("user_id", $user_id);
         $_SERVER["REMOTE_ADDR"]=$user->getName() . ".zoph.org";
         $obj->insert();
-        $obj->add_comment_to_photo($photo->get("photo_id"));
+        $obj->addToPhoto($photo);
         
         $this->assertInstanceOf("comment", $obj);
-        $this->assertEquals($obj->get_photo()->get("photo_id"), $photo->get("photo_id"));
+        $this->assertEquals($obj->get_photo()->getId(), $photo->getId());
     }
 
     /**

@@ -46,15 +46,6 @@ class color_scheme extends zophTable {
     private static $current=null;
     
     /**
-     * Create a color_scheme object
-     * @param int color_scheme id
-     */
-    public function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("color_scheme_id must be numeric"); }
-        $this->set("color_scheme_id", $id);
-    }
-
-    /**
      * Get color from current color scheme
      * or fall back to default
      * @param string Name of color to retrieve

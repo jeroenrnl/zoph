@@ -41,14 +41,6 @@ class point extends zophTable {
     protected static $url;
 
     /**
-     * Create a point object
-     */
-    public function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("point_id must be numeric"); }
-        $this->set("point_id", $id);
-    }
-
-    /**
      * Create object from XML-snippet
      * @param string snippet of XML-code
      */

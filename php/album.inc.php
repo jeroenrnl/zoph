@@ -46,23 +46,6 @@ class album extends zophTreeTable implements Organizer {
     /** @var Cache the count of photos */
     private $photoCount;
 
-    /**
-     * Create an album object
-     * @param int id
-     * @return album created object
-     */
-    function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("album_id must be numeric"); }
-        $this->set("album_id", $id);
-    }
-
-   /**
-    * Get the Id
-    */
-    public function getId() {
-        return (int) $this->get("album_id");
-    }
-
     public function lookup() {
         $user=user::getCurrent();
         $id = $this->get("album_id");

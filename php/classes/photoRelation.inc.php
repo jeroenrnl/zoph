@@ -56,6 +56,17 @@ class photoRelation extends zophTable {
     }
 
     /**
+     * Get id
+     * @return array ids
+     */
+    public function getId() {
+        return array(
+            "photo_id_1" => (int) $this->get("photo_id_1"), 
+            "photo_id_2" => (int) $this->get("photo_id_2")
+        );
+    }
+
+    /**
      * Lookup in database.
      * Tries to look up in the database, first (photo_1, photo_2), then (photo_2, photo_1)
      * @return bool success or not

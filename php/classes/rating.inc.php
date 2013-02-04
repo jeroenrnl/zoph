@@ -39,18 +39,6 @@ class rating extends zophTable {
     /** @var string URL for this class */
     protected static $url="photo.php?rating_id=";
 
-
-    /**
-     * Create new rating object
-     * @param int id
-     * @return rating rating object
-     */
-    public function __construct($id = 0) {
-         if($id && !is_numeric($id)) { die("rating_id must be numeric"); }
-         $this->set("rating_id", $id);
-
-     }
-
     /**
      * Retrieve ratings from the database
      * @param photo photo to get ratings for

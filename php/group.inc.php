@@ -30,12 +30,6 @@ class group extends zophTable {
     /** @var string URL for this class */
     protected static $url="group.php?group_id=";
 
-
-    function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("user_id must be numeric"); }
-        $this->set("group_id", $id);
-    }
-
     function updateMembers($vars = null) {
         parent::update();
         if($vars["_member"]) {

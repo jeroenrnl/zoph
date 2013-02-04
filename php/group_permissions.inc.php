@@ -42,6 +42,13 @@ class group_permissions extends zophTable {
         $this->set("album_id", $aid);
     }
 
+    public function getId() {
+        return array(
+            "group_id" => (int) $this->get("group_id"),
+            "album_id" => (int) $this->get("album_id")
+            );
+    }
+
     function insert() {
         // check if this entry already exists
         if ($this->lookup()) {

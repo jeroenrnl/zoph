@@ -30,8 +30,7 @@ class pageset extends zophTable {
     protected static $url="pageset.php?pageset_id=";
 
     function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("pageset_id must be numeric"); }
-        $this->set("pageset_id", $id);
+        parent::__construct($id);
         $this->set("date","now()");
     }
 

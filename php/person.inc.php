@@ -48,11 +48,6 @@ class person extends zophTable implements Organizer {
     /** @var location Work address of this person */
     public $work;
 
-    function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("person_id must be numeric"); }
-        $this->set("person_id", $id);
-    }
-
     /**
      * Add this person to a photo.
      * This records in the database that this person appears on the photo
@@ -93,11 +88,6 @@ class person extends zophTable implements Organizer {
             "WHERE photo_id = '" . (int) $photo->getId() . "' " .
             "AND position > " . (int) $pos;
         query($sql);
-    }
-
-        
-    public function getId() {
-        return $this->get("person_id");
     }
 
     function lookup() {

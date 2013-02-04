@@ -46,10 +46,6 @@ class track extends zophTable {
      * the id will make it possible to lookup an existing track from the db
      * @see lookup
      */
-    public function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("track_id must be numeric"); }
-        $this->set("track_id", $id);
-    }
 
     /**
      * Insert a track into the database
@@ -69,16 +65,6 @@ class track extends zophTable {
         $result=parent::lookup();
         $this->points=$this->getPoints();
         return $result;
-    }
-
-    /**
-     * Return the ID of the current object
-     *
-     * @todo Once the refactoring of the Zoph objects has been done, this
-     *       method should be in the zophTable object
-     */
-    public function getId() {
-        return $this->get("track_id");
     }
 
     /**

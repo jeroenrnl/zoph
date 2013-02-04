@@ -42,12 +42,6 @@ class place extends zophTreeTable implements Organizer {
     /** @var string URL for this class */
     protected static $url="place.php?place_id=";
 
-
-    function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("place_id must be numeric"); }
-        $this->set("place_id", $id);
-    }
-    
     /**
      * Add a photo to this place
      * @param photo photo to add
@@ -65,13 +59,6 @@ class place extends zophTreeTable implements Organizer {
         if($photo->getLocation == $this) {
             $photo->unsetLocation();
         }
-    }
-
-    /**
-     * Get the Id of this place
-     */
-    public function getId() {
-        return (int) $this->get("place_id");
     }
 
     /**

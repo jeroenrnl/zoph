@@ -31,13 +31,6 @@ class search extends zophTable {
     /** @var string URL for this class */
     protected static $url="search.php?search_id=";
 
-
-    function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("search_id must be numeric"); }
-        $this->set("search_id", $id);
-
-    }
-    
     public function lookup() {
         $user=user::getCurrent();
         if($user->is_admin()) {

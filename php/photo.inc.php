@@ -56,10 +56,6 @@ class photo extends zophTable {
      * Create a new photo object
      * @param int photo_id
      */
-    public function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("photo_id must be numeric"); }
-        $this->set("photo_id",$id);
-    }
 
     /**
     * Display the image

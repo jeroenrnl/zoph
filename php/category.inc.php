@@ -45,11 +45,6 @@ class category extends zophTreeTable implements Organizer {
 
     var $photoCount;
 
-    function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("category_id must be numeric"); }
-        $this->set("category_id", $id);
-    }
-
     /**
      * Add a photo to this album
      * @param photo Photo to add
@@ -73,14 +68,6 @@ class category extends zophTreeTable implements Organizer {
             "WHERE photo_id = '" . escape_string($photo->getId()) . "'" .
             " AND category_id = '" . escape_string($this->getId()) . "'";
         query($sql);
-    }
-
-    /**
-     * Get the key of this category
-     * @return int id
-     */
-    public function getId() {
-        return (int) $this->get("category_id");
     }
 
     function delete() {

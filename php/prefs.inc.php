@@ -35,11 +35,6 @@ class prefs extends zophTable {
 
     private $color_scheme;
 
-    function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("user_id must be numeric"); }
-        $this->set("user_id", $id);
-    }
-
     function lookup_color_scheme($force = 0) {
 
         // avoid unnecessary lookups

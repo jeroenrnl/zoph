@@ -62,7 +62,7 @@
     require_once("actions.inc.php");
 
     if($_action == "insert") {
-	$comment->add_comment_to_photo($photo_id);
+        $comment->addToPhoto($photo);
     }
     
     if ($_action != "new") {
