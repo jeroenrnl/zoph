@@ -27,9 +27,6 @@
 
 define("TEST", true);
 
-global $INSTANCE;
-$INSTANCE="zophtest";
-
 require_once("testData.php");
 require_once("testImage.php");
 

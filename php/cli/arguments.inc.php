@@ -38,20 +38,14 @@ class arguments {
      * Create a new instance of the class.
      * This construct also takes care of interpreting and looking up of the
      * values
+     * @param array CLI arguments
      */
-    public function __construct() {
-        global $argv;
-
-        if(is_array($argv)) {
-            // We don't care about the name of the script
-            array_shift($argv);
-            $this->arguments=$argv;
-            if(count($this->arguments)===0) {
-                $this->arguments[]="--help";
-            }
-        } else {
-            echo "Could not read argument list";
-            exit(cli::EXIT_CANNOT_ACCESS_ARGUMENTS);
+    public function __construct(array $argv) {
+        // We don't care about the name of the script
+        array_shift($argv);
+        $this->arguments=$argv;
+        if(count($this->arguments)===0) {
+            $this->arguments[]="--help";
         }
         $this->process();
         $this->lookup();
@@ -426,6 +420,7 @@ class arguments {
                     }
                     break;
                 case "photographer":
+                    $name=$arg;
                     if(self::$command=="new" || (conf::get("import.cli.add.auto") && !person::getByName($name))) {
                         $vars["_new_photographer"][]=$name;
                     } else {

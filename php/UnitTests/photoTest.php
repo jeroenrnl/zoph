@@ -146,7 +146,7 @@ class photoTest extends ZophDataBaseTestCase {
             "GPSLongitudeRef#"  => "N"
             );
          
-        self::writeEXIFdata($photo->getFilePath(), $data);
+        helpers::writeEXIFdata($photo->getFilePath(), $data);
 
         $photo->updateEXIF();
         
@@ -551,7 +551,7 @@ class photoTest extends ZophDataBaseTestCase {
         if(file_exists(conf::get("path.images") . "/" . $name)) {
             unlink(conf::get("path.images") . "/" . $name);        
         }
-        self::createTestImage($name, $bg, $fg, $exif);
+        helpers::createTestImage($name, $bg, $fg, $exif);
         $photos[]=new file("/tmp/" . $name);
         conf::set("import.cli.thumbs", true);
         conf::set("import.cli.size", true);
@@ -578,7 +578,7 @@ class photoTest extends ZophDataBaseTestCase {
         if(file_exists(conf::get("path.images") . "/" . $name)) {
             unlink(conf::get("path.images") . "/" . $name);        
         }
-        self::createTestImage($name, $bg, $fg, $exif);
+        helpers::createTestImage($name, $bg, $fg, $exif);
         $photos[]=new file("/tmp/" . $name);
         conf::set("import.cli.thumbs", true);
         conf::set("import.cli.size", true);
@@ -820,41 +820,12 @@ class photoTest extends ZophDataBaseTestCase {
         // Mess up by changing imagedir
         $imagedir=conf::get("path.images");
         conf::set("path.images", "/tmp");
-        $photo->rotate(90);
-        conf::set("path.images", $imagedir);
-    }
-    //================= HELPER FUNCTIONS ======================
-
-    private static function createTestImage($name, $bg, $fg, $exif) {
-        $bgcolour=new ImagickPixel();
-        $bgcolour->setColor($bg);
-        
-        $text=new ImagickDraw();
-        $text->setFillColor($fg);
-        $text->setFontsize(60);
-
-        $image=new Imagick();
-        $image->newImage(600,400, $bgcolour);
-
-        $image->annotateImage($text, 200, 200, 0, $name);
-
-        $image->writeImage("/tmp/" . $name);
-
-        self::writeEXIFdata("/tmp/" . $name, $exif);
-
-        $image->destroy();
-        unset($image);
-    }
-
-    private static function writeEXIFdata($file, array $data) {
-
-        $cmd="exiftool ";
-        foreach ($data as $label => $value) {
-            $cmd.=" -" . $label . "=\"" . $value . "\"";
+        try {
+            $photo->rotate(90);
+        } catch (FileCopyFailedException $e) {
+            conf::set("path.images", $imagedir);
+            throw $e;
         }
-
-        $cmd .=" " . escapeshellarg($file);
-        exec($cmd);
     }
 
     //================== DATA PROVIDERS =======================

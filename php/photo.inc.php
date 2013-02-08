@@ -567,6 +567,14 @@ class photo extends zophTable {
     }
 
     /**
+     * Get the photographer for this photo
+     */
+    public function getPhotographer() {
+        $this->lookup();
+        return $this->photographer;
+    }
+
+    /**
      * Get the location for this photo
      */
     public function getLocation() {

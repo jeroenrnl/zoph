@@ -74,7 +74,11 @@ class cli {
      * @param int API version of the executable script. This is used to check if the executable 
      *            script is compatible with the scripts in php directory
      */
-    public function __construct($user, $api) {
+    public function __construct($user, $api, $args=null) {
+        global $argv;
+        if(is_null($args)) {
+            $args=$argv;
+        }
         if($api != self::API) {
             echo "This Zoph installation is not compatible with the Zoph executable you are running.\n";
             exit(self::EXIT_API_NOT_COMPATIBLE);
@@ -87,7 +91,7 @@ class cli {
         }
         $user->prefs->load();
         $lang=$user->load_language();
-        $this->args=new arguments;
+        $this->args=new arguments($args);
     }
 
     /**

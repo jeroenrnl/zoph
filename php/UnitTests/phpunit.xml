@@ -10,7 +10,7 @@
     </blacklist>
   </filter>
   <php>
-    <var name="INSTANCE" value="zophtest" />
+    <const name="INSTANCE" value="zophtest" />
     <const name="IMAGE_DIR" value="/data/images" />
   </php>
   <testsuites>
@@ -23,6 +23,7 @@
       <file>groupPermissionsTest.php</file> 
       <file>personTest.php</file> 
       <file>photoTest.php</file> 
+      <file>cliTest.php</file> 
       <file>placeTest.php</file>
       <file>ratingTest.php</file>
       <file>relationTest.php</file>

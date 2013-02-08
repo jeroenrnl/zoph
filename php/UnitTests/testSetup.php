@@ -56,6 +56,7 @@ require_once("PHPUnit/Extensions/Database/DataSet/DefaultTable.php");
 require_once("PHPUnit/Extensions/Database/DataSet/ITableIterator.php");
 require_once("PHPUnit/Extensions/Database/DataSet/DefaultTableIterator.php");
 require_once("databaseTest.inc.php");
+require_once("helpers.inc.php");
 
 user::setCurrent(new user(1));
 conf::set("path.images", IMAGE_DIR);

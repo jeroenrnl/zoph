@@ -115,7 +115,7 @@ if(!defined("CLI")) {
     if(defined("TEST")) {
         /* unittest code cannot use autodetection of PHP location
            because the code is executed from PHPUnit context */
-        $i=settings::loadINI($GLOBALS["INSTANCE"]);
+        $i=settings::loadINI(INSTANCE);
         set_include_path(get_include_path() . PATH_SEPARATOR . $i["php_location"]);
     } else {
         $i=settings::loadINI();
