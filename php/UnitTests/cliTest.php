@@ -100,9 +100,6 @@ class cliTest extends ZophDataBaseTestCase {
             $this->assertEquals(3, $place->getId());
         }
 
-
-
-
         // cleanup
         foreach(array(
             "2013.02.01" => "PHOTO-01.JPG", 
@@ -110,6 +107,71 @@ class cliTest extends ZophDataBaseTestCase {
             "2013.02.03" => "PHOTO-03.JPG") as $dir=>$file) {
                 $this->checkFilesExistAndCleanFiles($dir, $file);
         }
+    }
+
+    public function testDatedDirs() {
+        $testdata=$this->getFilenames();
+        foreach($testdata as $testimg) {
+            helpers::createTestImage($testimg[0], $testimg[1], $testimg[2], $testimg[3]);
+        }
+        
+        $cli="zoph --instance " . INSTANCE . 
+            " --datedDirs --nohier " .
+            " /tmp/PHOTO-01.JPG ";
+            
+        $this->runCLI($cli);
+
+        $cli="zoph --instance " . INSTANCE . 
+            " --no-dateddirs " .
+            " /tmp/PHOTO-02.JPG ";
+            
+        $this->runCLI($cli);
+
+        $cli="zoph --instance " . INSTANCE . 
+            " -H " .
+            " /tmp/PHOTO-03.JPG ";
+            
+        $this->runCLI($cli);
+        // cleanup
+        foreach(array(
+            "2013.02.01" => "PHOTO-01.JPG", 
+            "" => "PHOTO-02.JPG", 
+            "2013/02/03" => "PHOTO-03.JPG") as $dir=>$file) {
+                $this->checkFilesExistAndCleanFiles($dir, $file);
+        }
+    }
+
+    /**
+     * Test Create Album with no --parent
+     * @expectedException CliNoParentException
+     */
+    public function testCreateAlbumNoParent() {
+        $cli="zoph --instance " . INSTANCE . 
+            " --new --album Test_new_album ";
+            
+        $this->runCLI($cli);
+    }
+
+    /**
+     * Test Create Category with no --parent
+     * @expectedException CliNoParentException
+     */
+    public function testCreateCategoryNoParent() {
+        $cli="zoph --instance " . INSTANCE . 
+            " --new --category Test_new_category ";
+            
+        $this->runCLI($cli);
+    }
+
+    /**
+     * Test Create Place with no --parent
+     * @expectedException CliNoParentException
+     */
+    public function testCreatePlaceNoParent() {
+        $cli="zoph --instance " . INSTANCE . 
+            " --new --place Test_new_place ";
+            
+        $this->runCLI($cli);
     }
 
     private function checkFilesExistAndCleanFiles($dir, $file) {
@@ -128,10 +190,10 @@ class cliTest extends ZophDataBaseTestCase {
             $this->assertFileExists($filename);
             unlink($filename);
             if(!empty($prefix)) {
-                rmdir(IMAGE_DIR . "/" . $dir . "/" . $prefix);
+                @rmdir(IMAGE_DIR . "/" . $dir . "/" . $prefix);
             }
         }
-        rmdir(IMAGE_DIR . "/" . $dir);
+        @rmdir(IMAGE_DIR . "/" . $dir);
     }
 
     private function runCLI($cli) {
@@ -141,7 +203,7 @@ class cliTest extends ZophDataBaseTestCase {
         $admin->lookup();
         $admin->lookup_person();
         $admin->lookup_prefs();
-        $cli=new cli($admin, 2, $args);
+        $cli=new cli($admin, 3, $args);
         $cli->run();
     }        
 

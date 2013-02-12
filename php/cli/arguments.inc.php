@@ -253,13 +253,13 @@ class arguments {
                 case "--datedDirs":
                 case "--dated":
                 case "-d":
-                    conf::set("import.cli.dated", true);
+                    conf::set("import.dated", true);
                     break;
                 case "--hierarchical":
                 case "--hier":
                 case "-H":
-                    conf::set("import.cli.dated", true);
-                    conf::set("import.cli.dated.hier", true);
+                    conf::set("import.dated", true);
+                    conf::set("import.dated.hier", true);
                     break;
                 case "--no-dateddirs":
                 case "--no-datedDirs":
@@ -267,13 +267,13 @@ class arguments {
                 case "--nodateddirs":
                 case "--nodatedDirs":
                 case "--nodated":
-                    conf::set("import.cli.dated", false);
+                    conf::set("import.dated", false);
                     break;
                 case "--no-hierarchical":
                 case "--no-hier":
                 case "--nohierarchical":
                 case "--nohier":
-                    conf::set("import.cli.dated.hier", false);
+                    conf::set("import.dated.hier", false);
                     break;
                 case "-D":
                 case "--path":
@@ -343,16 +343,14 @@ class arguments {
                                 if(conf::get("import.cli.add.always")) {
                                     $parent_id=album::getRoot()->getId();
                                 } else {
-                                    echo "No parent for album $name\n";
-                                    exit(cli::EXIT_NO_PARENT);
+                                    throw new CliNoParentException("No parent for album " . $name);;
                                 }
                             } else {
                                 $palbum=album::getByName($parent);
                                 if($palbum) {
                                     $parent_id=$palbum[0]->getId();
                                 } else {
-                                    echo "Album not found: $parent\n";
-                                    exit(cli::EXIT_ALBUM_NOT_FOUND);
+                                    throw new AlbumNotFoundException("Album not found: $parent");
                                 }
                             }
                             $vars["_new_album"][]=array("parent" => $parent_id, "name" => $name);
@@ -362,8 +360,7 @@ class arguments {
                                 $album_id=$album[0]->getId();
                                 $vars["_album_id"][]=$album_id;
                             } else {
-                                echo "Album not found: $name\n";
-                                exit(cli::EXIT_ALBUM_NOT_FOUND);
+                                throw new AlbumNotFoundException("Album not found: $parent");
                             }
                         }
                     }
@@ -378,16 +375,14 @@ class arguments {
                                 if(conf::get("import.cli.add.always")) {
                                     $parent_id=category::getRoot()->getId();
                                 } else {
-                                    echo "No parent for category $name\n";
-                                    exit(cli::EXIT_NO_PARENT);
+                                    throw new CliNoParentException("No parent for category " . $name);;
                                 }
                             } else {
                                 $pcat=category::getByName($parent);
                                 if($pcat) {
                                     $parent_id=$pcat[0]->getId();
                                 } else {
-                                    echo "Category not found: $parent\n";
-                                    exit(cli::EXIT_CAT_NOT_FOUND);
+                                    throw new CategoryNotFoundException("Category not found: $parent");
                                 }
                             }
                             $vars["_new_cat"][]=array("parent" => $parent_id, "name" => $name);
@@ -397,8 +392,7 @@ class arguments {
                                 $cat_id=$cat[0]->getId();
                                 $vars["_category_id"][]=$cat_id;
                             } else {
-                                echo "Category not found: $name\n";
-                                exit(cli::EXIT_CAT_NOT_FOUND);
+                                throw new CategoryNotFoundException("Category not found: $parent");
                             }
                         }
                     }
@@ -413,8 +407,7 @@ class arguments {
                                 $person_id=$person[0]->getId();
                                 $vars["_person_id"][]=$person_id;
                             } else {
-                                echo "Person not found: $name\n";
-                                exit(cli::EXIT_PERSON_NOT_FOUND);
+                                throw new PersonNotFoundException("Person not found: $name");
                             }
                         }
                     }
@@ -429,8 +422,7 @@ class arguments {
                             $person_id=$person[0]->getId();
                             $vars["photographer_id"]=$person_id;
                         } else {
-                            echo "Person not found: $name\n";
-                            exit(cli::EXIT_PERSON_NOT_FOUND);
+                            throw new PersonNotFoundException("Person not found: $name");
                         }
                     }
                     break;
@@ -444,27 +436,25 @@ class arguments {
                                 if(conf::get("import.cli.add.always")) {
                                     $parent_id=place::getRoot()->getId();
                                 } else {
-                                    echo "No parent for location $name\n";
-                                    exit(cli::EXIT_NO_PARENT);
+                                    throw new CliNoParentException("No parent for location " . $name);;
                                 }
                             } else {
                                 $pplace=place::getByName($parent);
                                 if($pplace) {
                                     $parent_id=$pplace[0]->getId();
                                 } else {
-                                    echo "Location not found: $parent\n";
-                                    exit(cli::EXIT_PLACE_NOT_FOUND);
+                                    throw new PlaceNotFoundException("Location not found: $parent");
                                 }
                             }
                             $vars["_new_place"][]=array("parent" => $parent_id, "name" => $name);
                         } else {
-                            $place=place::getByName($arg[0]);
+                            $name=$arg[0];
+                            $place=place::getByName($name);
                             if($place) {
                                 $place_id=$place[0]->getId();
                                 $vars["location_id"]=$place_id;
                             } else {
-                                echo "Place not found: $arg[0]\n";
-                                exit(cli::EXIT_PLACE_NOT_FOUND); 
+                                throw new PlaceNotFoundException("Location not found: $name");
                             }
                         }
                     }
@@ -474,8 +464,7 @@ class arguments {
                     break;
                 case "dirpattern":
                     if(!preg_match("/^[aclpDP]+$/", $arg)) {
-                        echo "Illegal characters in --dirpattern, allowed are: aclpDP\n";
-                        exit(cli::EXIT_ILLEGAL_DIRPATTERN);
+                        throw new CliIllegalDirpatternException("Illegal characters in --dirpattern, allowed are: aclpDP");
                     } else {
                         $vars["_dirpattern"]=$arg;
                     }

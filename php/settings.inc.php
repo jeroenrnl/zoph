@@ -52,8 +52,7 @@ class settings {
                 $ini=parse_ini_file(INI_FILE, true);
                 if(!empty($instance)) {
                     if(!isset($ini[$instance])) {
-                        echo "Instance " . $instance . " not found in " . INI_FILE;
-                        exit(EXIT_INSTANCE_NOT_FOUND);
+                        throw new CliInstanceNotFoundException("Instance " . $instance . " not found in " . INI_FILE);
                     }
                 } else {
                     // No instance given, autodetect 
@@ -61,7 +60,7 @@ class settings {
                 }
                 return $ini[$instance];
             } else {
-                log::msg(INI_FILE . " not found.", log::FATAL, log::GENERAL);
+                throw new CliININotFoundException (INI_FILE . " not found.");
             }
         }
     }
