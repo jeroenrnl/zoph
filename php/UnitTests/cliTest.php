@@ -174,6 +174,113 @@ class cliTest extends ZophDataBaseTestCase {
         $this->runCLI($cli);
     }
 
+    /**
+     * Test Create Album with non-existent --parent
+     * @expectedException AlbumNotFoundException
+     */
+    public function testCreateAlbumNonExistentParent() {
+        $cli="zoph --instance " . INSTANCE . 
+            " --new --parent NonExistent --album Test_new_album ";
+            
+        $this->runCLI($cli);
+    }
+
+    /**
+     * Test Create Category with non-existent --parent
+     * @expectedException CategoryNotFoundException
+     */
+    public function testCreateCategoryNonExistentParent() {
+        $cli="zoph --instance " . INSTANCE . 
+            " --new --parent NonExistent --category Test_new_category ";
+            
+        $this->runCLI($cli);
+    }
+
+    /**
+     * Test Create Place with non-existent --parent
+     * @expectedException PlaceNotFoundException
+     */
+    public function testCreatePlaceNonExistentParent() {
+        $cli="zoph --instance " . INSTANCE . 
+            " --new --parent NonExistent --place Test_new_place ";
+            
+        $this->runCLI($cli);
+    }
+
+    /**
+     * Test Create Album 
+     */
+    public function testCreateAlbum() {
+        $cli="zoph --instance " . INSTANCE . 
+            " --new --parent Album_1 --album Test_new_album ";
+            
+        $this->runCLI($cli);
+        
+        $albums=album::getByName("Test new album");
+        $album=array_shift($albums);
+        $album->lookup();
+        $this->assertInstanceOf("album", $album);
+        $parent=$album->get("parent_album_id");
+        $this->assertEquals(2, $parent);
+    }
+
+    /**
+     * Test Create Category 
+     */
+    public function testCreateCategory() {
+        $cli="zoph --instance " . INSTANCE . 
+            " --new --parent Blue --category Test_new_category ";
+            
+        $this->runCLI($cli);
+        
+        $cats=category::getByName("Test new category");
+        $cat=array_shift($cats);
+        $cat->lookup();
+        $this->assertInstanceOf("category", $cat);
+        $parent=$cat->get("parent_category_id");
+        $this->assertEquals(5, $parent);
+    }
+
+    /**
+     * Test Create Place
+     */
+    public function testCreatePlace() {
+        $cli="zoph --instance " . INSTANCE . 
+            " --new --parent Netherlands --place Test_new_place ";
+        $this->runCLI($cli);
+
+        $places=place::getByName("Test new place");
+        $place=array_shift($places);
+        $place->lookup();
+        $this->assertInstanceOf("place", $place);
+        $parent=$place->get("parent_place_id");
+        $this->assertEquals(3, $parent);
+    }
+
+    /**
+     * Test calling with --help argument
+     */
+    public function testHelp() {
+        $cli="zoph --instance " . INSTANCE . " --help";
+
+        ob_start();
+            $this->runCLI($cli);
+        $output=ob_get_clean();
+        $this->assertRegExp("/zoph.+\nUsage:.+\nOPTIONS:\n.+/", $output);
+    }
+
+    /**
+     * Test calling with --version argument
+     */
+    public function testVersion() {
+        $cli="zoph --instance " . INSTANCE . " --version";
+
+        ob_start();
+            $this->runCLI($cli);
+        $output=ob_get_clean();
+        $this->assertRegExp("/Zoph v.+, released [0-9]{1,2}-[0-9]{1,2}-[0-9]{2,4}/", $output);
+    }
+
     private function checkFilesExistAndCleanFiles($dir, $file) {
         $prefixes=array(
             "", 
@@ -197,7 +304,7 @@ class cliTest extends ZophDataBaseTestCase {
     }
 
     private function runCLI($cli) {
-        $cli_array=explode(" ", $cli);
+        $cli_array=explode(" ", trim($cli));
         $args=str_replace("_", " ", $cli_array);
         $admin=new user(1);
         $admin->lookup();

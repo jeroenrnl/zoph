@@ -71,95 +71,26 @@ class cli {
         $this->processFiles();
         switch(arguments::$command) {
         case "import":
-            $vars=$this->args->getVars();
-            if(conf::get("import.cli.add.auto")) {
-                $vars=$this->addNew();
-            }
-            if(is_array($this->files) && sizeof($this->files)>0) {
-                if(!isset($vars["_dirpattern"])) {
-                    $photos=array();
-                    foreach($this->files as $file) {
-                        $photo=new photo();
-                        $photo->file["orig"]=$file;
-                        $photos[]=$photo;
-                    }
-                } else {
-                    $photos=$this->processDirpattern();
-                }
-                CliImport::photos($photos, $vars);
-            } else {
-                throw new CliNoFilesException("Nothing to do, exiting");
-            }
-
-
+            $this->doImport();
             break;
         case "update":
-            if(is_array($this->photos) && sizeof($this->photos)>0) {
-                $total=sizeof($this->photos);
-                $cur=0;
-                foreach($this->photos as $photo) {
-                    cliimport::progress($cur, $total);
-                    $cur++;
-                    $photo->lookup();
-                    $photo->setFields($this->args->getVars());
-                    $photo->update();
-                    $photo->updateRelations($this->args->getVars(), "_id");
-                    if(conf::get("import.cli.thumbs")===true) {
-                        $photo->thumbnail(true);
-                    }
-                    if(conf::get("import.cli.exif")===true) {
-                        $photo->updateEXIF();
-                    }
-                    if(conf::get("import.cli.size")===true) {
-                        $photo->updateSize();
-                    }
-                    if(conf::get("import.cli.hash")===true) {
-                        $photo->getHash();
-                    }
-                }
-            } else {
-                throw new CliNoFilesException("Nothing to do, exiting");
-            }
+            $this->doUpdate();
             break;
         case "new":
             $this->addNew();
             break;
         case "config":
-            $vars=$this->args->getVars();
-            $name=$vars["_configitem"];
-            $default=isset($vars["_configdefault"]);
-            $item=conf::getItemByName($name);
-
-            if($default) {
-                $value=$item->getDefault();
-            } else {
-                $value=$vars["_configvalue"];
-            }
-
-            if(conf::get("import.cli.verbose") > 0) {
-                echo "Setting config \"$name\" to \"$value\""  . ( $default ? " (default)" : "" ) . "\n";
-            }
-
-
-            $item->setValue($value);
-            $item->update();
- 
-            
+            $this->doConfig(); 
             break;
         case "dumpconfig":
-            $conf=conf::getAll();
-            foreach ($conf as $name=>$item) {
-                foreach ($item as $citem) {
-                    if($citem instanceof confItemBool) {
-                        $value=( $citem->getValue() ? "true": "false" );
-                    } else {
-                        $value=$citem->getValue();
-                    }
-                    echo $citem->getName() . ": " . $value . "\n";
-                }
-            }
+            $this->doDumpCondig();
             break;
-
+        case "version":
+            self::showVersion();
+            break;
+        case "help":
+            self::showHelp();
+            break;
         default:
             throw new CliUnknownErrorException("Unknown command, please file a bug");
         }
@@ -171,7 +102,6 @@ class cli {
      */
     private function processFiles() {
         $files=$this->args->getFiles();
-
         foreach($files as $filename) {
             try {
                 if(arguments::$command=="import") {
@@ -273,7 +203,63 @@ class cli {
             throw new ImportMultipleMatchesException("Multiple files named " . $file ." found.\n");
         }
     }
-    
+
+    /**
+     * Process --import
+     */
+    private function doImport() {
+        $vars=$this->args->getVars();
+        if(conf::get("import.cli.add.auto")) {
+            $vars=$this->addNew();
+        }
+        if(is_array($this->files) && sizeof($this->files)>0) {
+            if(!isset($vars["_dirpattern"])) {
+                $photos=array();
+                foreach($this->files as $file) {
+                    $photo=new photo();
+                    $photo->file["orig"]=$file;
+                    $photos[]=$photo;
+                }
+            } else {
+                $photos=$this->processDirpattern();
+            }
+            CliImport::photos($photos, $vars);
+        } else {
+            throw new CliNoFilesException("Nothing to do, exiting");
+        }
+    }
+
+    /**
+     * Process --update
+     */
+    private function doUpdate() {
+        if(is_array($this->photos) && sizeof($this->photos)>0) {
+            $total=sizeof($this->photos);
+            $cur=0;
+            foreach($this->photos as $photo) {
+                cliimport::progress($cur, $total);
+                $cur++;
+                $photo->lookup();
+                $photo->setFields($this->args->getVars());
+                $photo->update();
+                $photo->updateRelations($this->args->getVars(), "_id");
+                if(conf::get("import.cli.thumbs")===true) {
+                    $photo->thumbnail(true);
+                }
+                if(conf::get("import.cli.exif")===true) {
+                    $photo->updateEXIF();
+                }
+                if(conf::get("import.cli.size")===true) {
+                    $photo->updateSize();
+                }
+                if(conf::get("import.cli.hash")===true) {
+                    $photo->getHash();
+                }
+            }
+        } else {
+            throw new CliNoFilesException("Nothing to do, exiting");
+        }
+    }
     /**
      * Add albums, categories, places, people that should be added because of --new or --autoadd
      * if $vars is given, 
@@ -313,6 +299,7 @@ class cli {
                     $place->insert();
                     $newvars["location_id"]=$place->getId();
                 }
+
                 break;
             case "_new_person":
                 $newvars["_person_id"]=array();
@@ -341,6 +328,47 @@ class cli {
             $return_vars[$name]=$array;
         }
         return($return_vars);
+    }
+
+    /**
+     * Process --config
+     */
+    private function doConfig() {
+        $vars=$this->args->getVars();
+        $name=$vars["_configitem"];
+        $default=isset($vars["_configdefault"]);
+        $item=conf::getItemByName($name);
+
+        if($default) {
+            $value=$item->getDefault();
+        } else {
+            $value=$vars["_configvalue"];
+        }
+
+        if(conf::get("import.cli.verbose") > 0) {
+            echo "Setting config \"$name\" to \"$value\""  . ( $default ? " (default)" : "" ) . "\n";
+        }
+
+
+        $item->setValue($value);
+        $item->update();
+    }
+    
+    /**
+     * Process --dump-config
+     */
+    private function doDumpConfig() {
+        $conf=conf::getAll();
+        foreach ($conf as $name=>$item) {
+            foreach ($item as $citem) {
+                if($citem instanceof confItemBool) {
+                    $value=( $citem->getValue() ? "true": "false" );
+                } else {
+                    $value=$citem->getValue();
+                }
+                echo $citem->getName() . ": " . $value . "\n";
+            }
+        }
     }
 
     /**
@@ -481,7 +509,7 @@ END;
      * Tells user which Zoph version is being used
      */
     private static function showVersion() {
-        echo "Zoph v" . VERSION . ".\n";
+        echo "Zoph v" . VERSION . ", released " . RELEASEDATE . "\n";
     }
 }
 ?>
