@@ -60,7 +60,7 @@
 <?php
     }
     if ($user->is_admin() || $user->get("browse_places")) {
-        $place_count = get_places_count($user);
+        $place_count = place::getCount();
 ?>
                 <li><?php echo $place_count ?> <a href="places.php"><?php echo $place_count == 1 ? translate("place", 0) : translate("places", 0) ?></a></li>
 <?php

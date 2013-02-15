@@ -77,7 +77,7 @@
     <div class="main">
         <form class="viewsettings" method="get" action="places.php">
 <?php
-            echo create_pulldown("parent_place_id", 0, get_places_select_array($user), "onChange='form.submit()'");
+            echo create_pulldown("parent_place_id", 0, place::getSelectArray($user), "onChange='form.submit()'");
 ?>
             <?php echo create_form($request_vars, array ("_view", "_autothumb",
 "_button")) ?>

@@ -115,7 +115,7 @@
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
           <label for="_location_id"><?php echo translate("location") ?></label>
 <?php
-            echo create_place_pulldown("location_id", $photo->get("location_id"), $user);
+            echo place::createPulldown("location_id", $photo->get("location_id"), $user);
 ?>
           <br>
           <fieldset class="map">
@@ -125,7 +125,7 @@
             <label for="lat"><?php echo translate("longitude") ?></label>
             <?php echo create_text_input("lon", $photo->get("lon"), 10, 10) ?><br>
             <label for="mapzoom"><?php echo translate("zoom level") ?></label>
-            <?php echo create_zoom_pulldown($photo->get("mapzoom")) ?><br>
+            <?php echo place::createZoomPulldown($photo->get("mapzoom")) ?><br>
           </fieldset>
           <label for="date"><?php echo translate("date") ?></label>
           <?php echo create_text_input("date", $photo->get("date"), 12, 10, "date") ?>

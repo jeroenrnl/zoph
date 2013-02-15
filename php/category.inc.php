@@ -450,14 +450,9 @@ class category extends zophTreeTable implements Organizer {
     }
 }
 
-function get_categories_select_array($user = null, $search = 0) {
-    return create_tree_select_array("category", $user, null, "", null, $search);
+function get_categories_select_array($user = null) {
+    return create_tree_select_array("category", $user);
 }
-
-function get_categories_search_array($user = null) {
-    return get_categories_select_array($user, 1);
-}
-
 
 function create_cat_pulldown($name, $value=null, $user, $sa=null) {
     $text="";

@@ -53,9 +53,9 @@
           <?php echo create_text_input("email", $person->get("email"), 32, 64) ?>
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
           <label for="home_id"><?php echo translate("home") ?></label>
-<?php echo create_place_pulldown("home_id", $person->get("home_id"), $user) ?><br>
+<?php echo place::createPulldown("home_id", $person->get("home_id"), $user) ?><br>
           <label for="work_id"><?php echo translate("work") ?></label>
-<?php echo create_place_pulldown("work_id", $person->get("work_id"), $user) ?><br>
+<?php echo place::createPulldown("work_id", $person->get("work_id"), $user) ?><br>
           <label for="mother_id"><?php echo translate("mother") ?></label>
 <?php echo create_person_pulldown("mother_id", $person->get("mother_id"), $user) ?><br>
           <label for="father_id"><?php echo translate("father") ?></label>

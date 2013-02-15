@@ -313,7 +313,7 @@ class place extends zophTreeTable implements Organizer {
                 $sql .= " AND $id_constraint";
             }
         }
-        return zophTable::getCountFromQuery($sql);
+        return self::getCountFromQuery($sql);
     }
 
     function xml_rootname() {
@@ -611,105 +611,131 @@ class place extends zophTreeTable implements Organizer {
         return parent::getTopNfromSQL($sql);
 
     }
-}
-
-function get_places($constraints = null, $conj = "and", $ops = null,
-    $order = "city, title, address") {
-    return place::getRecords($order, $constraints, $conj, $ops);
-}
-
-function get_photographed_places($user = null) {
-
-    if ($user && !$user->is_admin()) {
-        $sql =
-            "SELECT DISTINCT plc.* FROM " .
-            DB_PREFIX . "photos AS ph JOIN " .
-            DB_PREFIX . "places AS plc " .
-            "ON ph.location_id = plc.place_id JOIN " .
-            DB_PREFIX . "photo_albums AS pa " .
-            "ON pa.photo_id = ph.photo_id JOIN " .
-            DB_PREFIX . "group_permissions AS gp " .
-            "ON pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users AS gu " .
-            "ON gp.group_id = gu.group_id " .
-            "where gu.user_id = '" . 
-            escape_string($user->get("user_id")) .
-            "' AND gp.access_level >= ph.level " .
-            "ORDER BY plc.city, plc.title";
-    }
-    else {
-        $sql =
-            "select distinct plc.* from " .
-            DB_PREFIX . "places as plc, " .
-            DB_PREFIX . "photos as ph " .
-            "where plc.place_id = ph.location_id " .
-            "order by plc.city, plc.title";
+    
+    public static function getCount() {
+        $user=user::getCurrent();
+        if($user->is_admin()) {
+            return parent::getCount();
+        } else {
+            $places=place::getPhotographed($user);
+            return count($places);
+        }
     }
 
-    return place::getRecordsFromQuery($sql);
-}
-
-function get_places_count($user) {
-    if($user && !$user->is_admin()) {
-        $places=get_photographed_places($user);
-        return count($places);
-    } else {
-        return place::getCount();
+    /**
+     * Get all places
+     * @param array constraints, conditions that should be matched
+     * @param string conjunctions, and/or
+     * @param array ops, operators: =, !=, etc.
+     * @param string sort order
+     * @return array places
+     * @todo it seems this function not used at all
+     * @todo should be moved into zophTable
+     */
+    public static function getAll($constraints = null, $conj = "and", $ops = null,
+        $order = "city, title, address") {
+        return place::getRecords($order, $constraints, $conj, $ops);
     }
-}
 
-function get_places_select_array($user = null, $search = 0) {
-    return create_tree_select_array("place", $user, null, "", null, $search);
-}
+    /**
+     * Get places that appear on a photo
+     * @param user user
+     * @return array places
+     */
+    private static function getPhotographed($user = null) {
+        if ($user && !$user->is_admin()) {
+            $sql =
+                "SELECT DISTINCT plc.* FROM " .
+                DB_PREFIX . "photos AS ph JOIN " .
+                DB_PREFIX . "places AS plc " .
+                "ON ph.location_id = plc.place_id JOIN " .
+                DB_PREFIX . "photo_albums AS pa " .
+                "ON pa.photo_id = ph.photo_id JOIN " .
+                DB_PREFIX . "group_permissions AS gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users AS gu " .
+                "ON gp.group_id = gu.group_id " .
+                "where gu.user_id = '" . 
+                escape_string($user->get("user_id")) .
+                "' AND gp.access_level >= ph.level " .
+                "ORDER BY plc.city, plc.title";
+        }
+        else {
+            $sql =
+                "select distinct plc.* from " .
+                DB_PREFIX . "places as plc, " .
+                DB_PREFIX . "photos as ph " .
+                "where plc.place_id = ph.location_id " .
+                "order by plc.city, plc.title";
+        }
 
-function get_places_search_array($user = null) {
-    return get_places_select_array($user, 1);
-}
-
-
-function create_place_pulldown($name, $value=null, $user=null) {
-    $text="";
-
-    $id=preg_replace("/^_+/", "", $name);
-    if($value) {
-        $place=new place($value);
-        $place->lookup();
-        $text=$place->get("title");
+        return place::getRecordsFromQuery($sql);
     }
-    if($user->prefs->get("autocomp_places") && conf::get("interface.autocomplete")) {
-        $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
-            " value='" . e($value) . "'>";
-        $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 
-            "'" . " value='" . e($text) . "' class='autocomplete'>";
-    } else {
-        $html=create_pulldown($name, $value, get_places_search_array($user));
+
+    /**
+     * Get an array of places that can be used to feed a selector box
+     * @param user user
+     * @return array places
+     */
+    public static function getSelectArray($user = null) {
+        return create_tree_select_array("place", $user);
     }
-    return $html;
-}
 
-function create_zoom_pulldown($val = "", $name = "mapzoom") {
-    $zoom_array = array(
-        "0" => translate("0 - world", 0),
-        "1" => translate("1",0),
-        "2" => translate("2 - continent",0),
-        "3" => translate("3",0),
-        "4" => translate("4",0),
-        "5" => translate("5",0),
-        "6" => translate("6 - country",0),
-        "7" => translate("7",0),
-        "8" => translate("8",0),
-        "9" => translate("9 - city",0),
-        "10" => translate("10",0),
-        "11" => translate("11",0),
-        "12" => translate("12 - neighborhood",0),
-        "13" => translate("13",0),
-        "14" => translate("14",0),
-        "15" => translate("15",0),
-        "16" => translate("16 - street",0),
-        "17" => translate("17",0),
-        "18" => translate("18 - house",0));
+    /**
+     * Create pulldown for place selection
+     * @param string name for pulldown, also base for id
+     * @param string current value
+     * @param user user
+     */
+    public static function createPulldown($name, $value=null, $user=null) {
+        $text="";
 
-    return create_pulldown($name, $val, $zoom_array);
+        $id=preg_replace("/^_+/", "", $name);
+        if($value) {
+            $place=new place($value);
+            $place->lookup();
+            $text=$place->get("title");
+        }
+        if($user->prefs->get("autocomp_places") && conf::get("interface.autocomplete")) {
+            $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
+                " value='" . e($value) . "'>";
+            $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 
+                "'" . " value='" . e($text) . "' class='autocomplete'>";
+        } else {
+            $html=create_pulldown($name, $value, place::getSelectArray($user));
+        }
+        return $html;
+    }
+
+    /**
+     * Create pulldown for zoom
+     * @param int current value
+     * @param name name for select box
+     */
+    public static function createZoomPulldown($val = "", $name = "mapzoom") {
+        $zoom_array = array(
+            "0" => translate("0 - world", 0),
+            "1" => translate("1",0),
+            "2" => translate("2 - continent",0),
+            "3" => translate("3",0),
+            "4" => translate("4",0),
+            "5" => translate("5",0),
+            "6" => translate("6 - country",0),
+            "7" => translate("7",0),
+            "8" => translate("8",0),
+            "9" => translate("9 - city",0),
+            "10" => translate("10",0),
+            "11" => translate("11",0),
+            "12" => translate("12 - neighborhood",0),
+            "13" => translate("13",0),
+            "14" => translate("14",0),
+            "15" => translate("15",0),
+            "16" => translate("16 - street",0),
+            "17" => translate("17",0),
+            "18" => translate("18 - house",0));
+
+        return create_pulldown($name, $val, $zoom_array);
+    }
 }
 
 ?>

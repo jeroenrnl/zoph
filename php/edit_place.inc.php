@@ -80,7 +80,7 @@
             <label for="lat"><?php echo translate("longitude") ?></label>
             <?php echo create_text_input("lon", $place->get("lon"), 10, 10) ?><br>
             <label for="mapzoom"><?php echo translate("zoom level") ?></label>
-            <?php echo create_zoom_pulldown($place->get("mapzoom")) ?><br>
+            <?php echo place::createZoomPulldown($place->get("mapzoom")) ?><br>
         <?php if(conf::get("maps.geocode")): ?>
             <div class="geocode">
                 <input id="geocode" class="geocode" type="button" value="<?php echo translate("search", false) ?>">

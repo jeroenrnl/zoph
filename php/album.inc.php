@@ -592,14 +592,9 @@ function get_album_count($user = null) {
     return album::getCountFromQuery($sql);
 }
 
-function get_albums_select_array($user = null, $search = 0) {
-    return create_tree_select_array("album", $user, null, "", null, $search);
+function get_albums_select_array($user = null) {
+    return create_tree_select_array("album", $user);
 }
-
-function get_albums_search_array($user = null) {
-    return get_albums_select_array($user, 1);
-}
-
 
 function create_album_pulldown($name, $value=null, user $user=null, $sa=null) {
     $text="";

@@ -91,7 +91,7 @@ if(!ZOPH) { die("Illegal call"); }
                 <?php echo create_text_input("title", "", 40, 64) ?>
                 <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
                 <label for="location"><?php echo translate("location") ?></label>
-                <?php echo create_place_pulldown("location_id", "", $tpl_user) ?><br>
+                <?php echo place::createPulldown("location_id", "", $tpl_user) ?><br>
                 <label for="view"><?php echo translate("view") ?></label>
                 <?php echo create_text_input("view", "", 40, 64) ?>
                 <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>

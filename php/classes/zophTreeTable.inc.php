@@ -186,7 +186,7 @@ abstract class zophTreeTable extends zophTable {
 }
 
 function create_tree_select_array($name, $user = null, $rec = null,
-    $level = "", $select_array = null, $search = 0) {
+    $level = "", $select_array = null) {
     if (!$rec) {
         $rec = $name::getRoot();
         $rec->lookup();
@@ -207,7 +207,7 @@ function create_tree_select_array($name, $user = null, $rec = null,
     if ($children) {
         foreach ($children as $child) {
             $select_array = create_tree_select_array($name, $user, $child,
-                "$level&nbsp;&nbsp;&nbsp;", $select_array, $search);
+                "$level&nbsp;&nbsp;&nbsp;", $select_array);
         }
     }
     return $select_array;

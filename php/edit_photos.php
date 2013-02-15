@@ -112,7 +112,7 @@
                 $album_select_array = get_albums_select_array($user);
             }
             if(!$user->prefs->get("autocomp_places")) {
-                $places_select_array = get_places_select_array($user);
+                $places_select_array = place::getSelectArray($user);
             }
             if(!$user->prefs->get("autocomp_people")) {
                 $people_select_array = get_people_select_array($user);
@@ -140,7 +140,7 @@
                   <?php echo create_text_input("__time__all", "", 10, 8, "time") ?>
                   <span class="inputhint">HH:MM:SS</span><br>
                   <label for="location_id__all"><?php echo translate("location") ?></label>
-                  <?php echo create_place_pulldown("__location_id__all", null, $user, $places_select_array) ?><br>
+                  <?php echo place::createPulldown("__location_id__all", null, $user, $places_select_array) ?><br>
                   <label for="photographer_id__all"><?php echo translate("photographer") ?></label>
                   <?php echo create_person_pulldown("__photographer_id__all", null, $user, $people_select_array) ?><br>
                   <label for="rating__all"><?php echo translate("rating") ?></label>
@@ -316,7 +316,7 @@
                       <?php echo create_text_input("__time__$photo_id", $photo->get("time"), 10, 8, "time") ?>
                       <span class="inputhint">HH:MM:SS</span><br>
                       <label for="location_id__<?php echo $photo_id ?>"><?php echo translate("location") ?></label>
-                      <?php echo create_place_pulldown("__location_id__$photo_id", $photo->get("location_id"), $user, $places_select_array) ?><br>
+                      <?php echo place::createPulldown("__location_id__$photo_id", $photo->get("location_id"), $user, $places_select_array) ?><br>
                       <label for="photographer_id__<?php echo $photo_id?>"><?php echo translate("photographer") ?></label>
                       <?php echo create_person_pulldown("__photographer_id__$photo_id", $photo->get("photographer_id"), $user, $people_select_array) ?><br>
                       <label for="rating__<?php echo $photo_id?>"><?php echo translate("rating") ?></label>
