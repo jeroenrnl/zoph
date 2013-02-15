@@ -272,7 +272,7 @@ class user extends zophTable {
         return rating::getGraphArrayForUser($this);
     }
 
-    function get_comments() {
+    function getComments() {
         $sql = "select comment_id from " . DB_PREFIX . "comments where" .
             " user_id = " .  $this->get("user_id") . " order by comment_date";
         $comments=comment::getRecordsFromQuery($sql);

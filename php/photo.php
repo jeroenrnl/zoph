@@ -437,13 +437,13 @@ require_once("header.inc.php");
 ?>
 <?php
         if ($user->prefs->get("camera_info")) {
-            echo create_field_html($photo->get_camera_display_array());
+            echo create_field_html($photo->getCameraDisplayArray());
         }
 ?>
 </dl><br>
 <?php
         if ($user->prefs->get("allexif")) {
-            $allexif=$photo->exif_to_html();
+            $allexif=$photo->exifToHTML();
 
             if($allexif) {
 ?>
@@ -468,7 +468,7 @@ require_once("header.inc.php");
             echo $tpl;
         }
         if (conf::get("feature.comments")) {
-            $comments=$photo->get_comments();
+            $comments=$photo->getComments();
 
             if($comments) {
                 echo "<h2>" . translate("comments") . "</h2>\n";
@@ -505,7 +505,7 @@ require_once("header.inc.php");
             $map->setCenterAndZoomFromObj($photo);
             $map->addMarkers(array($photo), $user);
         } else {
-            $photos=$photo->get_near(100);
+            $photos=$photo->getNear(100);
             $photos[]=$photo;
             $map->addMarkers($photos, $user);
         }

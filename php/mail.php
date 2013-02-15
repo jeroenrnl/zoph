@@ -161,7 +161,7 @@
         $body="";
 
         $subject = sprintf(translate("A Photo from %s"), conf::get("interface.title")) . ": " . $photo->get("name");
-        $ea = $photo->get_email_array();
+        $ea = $photo->getEmailArray();
 
         if ($ea) {
             while (list($name, $value) = each($ea)) {

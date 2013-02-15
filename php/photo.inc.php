@@ -41,13 +41,13 @@ class photo extends zophTable {
     /** @var string URL for this class */
     protected static $url="photo.php?photo_id=";
 
-    /** @var photographer */
+    /** @var photographer Photographer of this photo*/
     public $photographer;
-    /** @var location */
+    /** @var location Location where this photo was taken */
     public $location;
 
     /**
-     * @var For now this is only used during import, however, in the future, the photo object
+     * @var array For now this is only used during import, however, in the future, the photo object
      * will be split in a photo object, referencing one or more file objects.
      */
     public $file=array();
@@ -168,8 +168,8 @@ class photo extends zophTable {
 
     /** 
      * Update photo relations, such as albums, categories, etc.
-     * @var array array of variables to update
-     * @var string suffix for varnames
+     * @param array array of variables to update
+     * @param string suffix for varnames
      */
     public function updateRelations(array $vars, $suffix = "") {
         
@@ -489,6 +489,7 @@ class photo extends zophTable {
 
     /**
      * Create an img tag for this photo
+     * @param type type of image (thumb, mid or null for full)
      * @return block template block for image tag
      */
     public function getImageTag($type = null) {
@@ -545,7 +546,10 @@ class photo extends zophTable {
         return rating::getDetails($this);
     }
 
-    function getImageResource() {
+    /**
+     * Get a GD image resource for this image
+     */
+    private function getImageResource() {
         $file = $this->getFilePath();
         $resource = null;
         $image_info = getimagesize($file);
@@ -734,7 +738,11 @@ class photo extends zophTable {
         $this->updateSize();
     }
 
-    function getDisplayArray() {
+    /**
+     * Get an array of properties for this object, to display this info
+     * @return array photo properties
+     */
+    public function getDisplayArray() {
         $date=$this->getReverseDate();
 
         return array(
@@ -748,8 +756,13 @@ class photo extends zophTable {
                 ? $this->photographer->getLink() : ""
         );
     }
-
-    function get_email_array() {
+    
+    /**
+     * Get array of properties of this object, used to build mail message
+     * @return array photo properties
+     * @todo should probably be merged with getDisplayArray
+     */
+    public function getEmailArray() {
         return array(
             translate("title") => $this->get("title"),
             translate("location") => $this->location
@@ -763,7 +776,11 @@ class photo extends zophTable {
         );
     }
 
-    function get_camera_display_array() {
+    /**
+     * Get array of (EXIF) camera data for this photo
+     * @return array of EXIF data
+     */
+    public function getCameraDisplayArray() {
         return array(
             translate("camera make") => $this->get("camera_make"),
             translate("camera model") => $this->get("camera_model"),
@@ -779,6 +796,10 @@ class photo extends zophTable {
             translate("comment") => $this->get("comment"));
     }
 
+    /**
+     * Get array of form fields to edit this photo
+     * @return array of form fields
+     */
     public function getEditArray() {
         return array(
             "Title" => create_text_input("title", $this->title),
@@ -791,6 +812,10 @@ class photo extends zophTable {
             "Level" => create_text_input("level", $this->level, 4, 2));
     }
 
+    /**
+     * Get time this photo was taken, corrected with timezone information
+     * @return string time
+     */
     public function getTime() { 
         $this->lookup();
         $loc=$this->location;
@@ -820,6 +845,10 @@ class photo extends zophTable {
         return $place_time;
     }
 
+    /**
+     * Get date/time formatted as configured
+     * @return array date, time
+     */
     public function getFormattedDateTime() {
         $date_format=conf::get("date.format");
         $time_format=conf::get("date.timeformat");
@@ -831,6 +860,10 @@ class photo extends zophTable {
         return array($date,$time);
     }
 
+    /**
+     * get time in UTC timezone
+     * @return array date, time
+     */
     public function getUTCtime() {
         $date_format=conf::get("date.format");
         $time_format=conf::get("date.timeformat");
@@ -863,7 +896,14 @@ class photo extends zophTable {
         return $date;
     }
 
-    public function getCorrectedTime(TimeZone $camera_tz, TimeZone $place_tz) {
+    /**
+     * Get corrected time, for given timezone.
+     * Converts the time stored in the database from the 'camera timzone' to the place timezone
+     * @param TimeZone camera timezone, the timezone the camera was set to when this photo was taken
+     * @param TimeZone place timezone, the timezone of the location where this photo was taken
+     * @return Time calculated time
+     */
+    private function getCorrectedTime(TimeZone $camera_tz, TimeZone $place_tz) {
         $camera_time=new Time(
             $this->get("date") . " " .
             $this->get("time"),
@@ -878,7 +918,12 @@ class photo extends zophTable {
         return $place_time;
     }
 
-    function getTimeDetails() {
+    /**
+     * Get an overview of the time details.
+     * Shows the time of this photo and the timezones it uses
+     * @return block template block.
+     */
+    private function getTimeDetails() {
         $tz=null;
         if(TimeZone::validate(conf::get("date.tz"))) {
             $tz=conf::get("date.tz");
@@ -908,7 +953,11 @@ class photo extends zophTable {
         return $tpl;
     }
 
-    function get_comments() {
+    /**
+     * Get comments for this photo
+     * @return array of comments
+     */
+    public function getComments() {
         $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .
             " photo_id = " .  $this->get("photo_id");
         $comments=comment::getRecordsFromQuery($sql);
@@ -931,8 +980,13 @@ class photo extends zophTable {
     public function getRelationDesc(photo $photo) {
         return photoRelation::getDescForPhotos($this, $photo);
     }
-
-    function exif_to_html() {
+    /**
+     * Returns full EXIF information in a definitionlist
+     * @return string HTML
+     * @todo contains lots of HTML
+     * @todo is a mess
+     */
+    function exifToHTML() {
         if (exif_imagetype($this->getFilePath())==IMAGETYPE_JPEG) {
             $exif=read_exif_data($this->getFilePath());
             if ($exif) {
@@ -964,7 +1018,13 @@ class photo extends zophTable {
         return $return;
     }
 
-    function getQuicklook() {
+    /**
+     * Get a short overview of this photo.
+     * Used in popup-boxes on the map
+     * @return string HTML
+     * @todo contains HTML
+     */
+    public function getQuicklook() {
         $title=e($this->get("title"));
         $file=$this->get("name");
 
@@ -1002,8 +1062,11 @@ class photo extends zophTable {
 
     /**
      * Get photos taken near this photo
+     * @param int distance in km or miles
+     * @param int limit maxiumum number of photos to return
+     * @param string entity (km or miles)
      */
-    public function get_near($distance, $limit=100, $entity="km") { 
+    public function getNear($distance, $limit=100, $entity="km") { 
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         if($lat && $lon) {
@@ -1013,6 +1076,11 @@ class photo extends zophTable {
 
     /**
      * Get photos taken near a lat/lon location
+     * @param float latitude
+     * @param float longitude
+     * @param int distance
+     * @param int limit maxiumum number of photos to return
+     * @param string entity (km or miles)
      */
     public static function getPhotosNear($lat, $lon, $distance, 
             $limit, $entity="km") { 
@@ -1046,6 +1114,12 @@ class photo extends zophTable {
         }
     }
 
+    /**
+     * Get photos from filename
+     * @param string filename
+     * @param string path
+     * @return array photo(s)
+     */
     public static function getByName($file, $path=null) {
         $sql="SELECT photo_id FROM " . DB_PREFIX . "photos " .
             "WHERE name=\"" . escape_string($file) ."\"";
@@ -1054,8 +1128,12 @@ class photo extends zophTable {
         }
         return photo::getRecordsFromQuery($sql);
     }
-
-    public function getHashFromFile() {
+    
+    /**
+     * Calculate SHA1 hash for a file
+     * @return string SHA1 hash
+     */
+    private function getHashFromFile() {
         $file=$this->getFilePath();
         if(file_exists($file)) {
             return sha1_file($file);
@@ -1064,6 +1142,12 @@ class photo extends zophTable {
         }
     }
 
+    /**
+     * Get hash for photo.
+     * Returns the hash for a photo, either the file hash, or a salted hash that can be used to share photos
+     * @param string type file, full or mid
+     * @return string hash
+     */
     public function getHash($type="file") {
         $hash=$this->get("hash");
         if(empty($hash)) {
@@ -1093,7 +1177,6 @@ class photo extends zophTable {
 
     /**
      * Set photo's lat/lon from a point object
-     *
      * @param point
      */
     public function setLatLon(point $point) {
@@ -1103,7 +1186,6 @@ class photo extends zophTable {
 
     /**
      * Try to determine the lat/lon position this photo was taken from one or all tracks;
-     *
      * @param track track to use or null to use all tracks
      * @param int maximum time the time can be off
      * @param bool Whether to interpolate between 2 found times/positions
@@ -1252,7 +1334,7 @@ class photo extends zophTable {
     
     /**
      * Take an array of photos and remove photos that already have lat/lon 
-     * information set
+     * information set.
      *
      * This function is needed for geotagging, so photos that have lat/lon 
      * manually set will not be overwritten
@@ -1275,6 +1357,7 @@ class photo extends zophTable {
     /**
      * Find a photo from a SHA1-hashed string
      * @param string hash
+     * @param type of hash: file = filehash, full/mid salted has for sharing of photos
      * @return photo found photo
      */
 
@@ -1342,12 +1425,21 @@ class photo extends zophTable {
         );
     }
 
+    /**
+     * Get accumulated disk size for all photos, as used on the info page
+     * @return int size in bytes
+     */
     public static function getTotalSize() {
         $sql = "select sum(size) from " . DB_PREFIX . "photos";
         return photo::getCountFromQuery($sql);
     }
 
-    public static function getFilesize($photos) {
+    /**
+     * Get filesize for a set of photos
+     * @param array Array of photos
+     * @return int size in bytes
+     */ 
+    public static function getFilesize(array $photos) {
         $bytes=0;
         foreach($photos as $photo) {
             $photo->lookup();

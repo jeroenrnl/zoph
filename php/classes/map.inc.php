@@ -29,15 +29,22 @@
  */
 class map extends block {
 
+    /** @var div id for map */
     private $map = "map";
 
+    /** @var center lattitude */
     protected $clat;
+    /** @var center longitude */
     protected $clon;
+    /** @var zoom level */
     protected $zoom;
 
+    /** @var array of tracks to display on this map */
     private $tracks=array();
+    /** @var array of markers to display on this map */
     private $markers=array();
 
+    /** @var whether or not this map can be changed. i.e. used to add a marker */
     protected $edit=false;
 
     /**

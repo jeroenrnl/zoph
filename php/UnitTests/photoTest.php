@@ -150,7 +150,7 @@ class photoTest extends ZophDataBaseTestCase {
 
         $photo->updateEXIF();
         
-        $display=$photo->get_camera_display_array();
+        $display=$photo->getCameraDisplayArray();
 
         $expected=array(
             "camera make"   => "Zoph",
@@ -732,11 +732,11 @@ class photoTest extends ZophDataBaseTestCase {
         $photo=new photo(5);
         $photo->lookup();
 
-        $hash=$photo->getHashFromFile();
+        $hash=$photo->getHash();
 
         $photo->rotate(90);
 
-        $newhash=$photo->getHashFromFile();
+        $newhash=$photo->getHash();
 
         $this->assertEquals($hash, $newhash);
     }

@@ -80,7 +80,7 @@ class conf {
 
     /**
      * Read configuration from submitted form
-     * @param array $_GET or $_POST variables
+     * @param array of $_GET or $_POST variables
      */
     public static function loadFromRequestVars(array $vars) {
         self::getDefault();
@@ -168,6 +168,7 @@ class conf {
     /**
      * Create a new confGroup and add it to the list
      * @param string name
+     * @param string label
      * @param string description
      */
     public static function addGroup($name, $label, $desc = "") {

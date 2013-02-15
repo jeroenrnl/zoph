@@ -105,7 +105,7 @@
         ));
         echo $tpl;
 
-        $comments=$this_user->get_comments();
+        $comments=$this_user->getComments();
         if(!empty($comments)) {
 ?>
 <h3><?php echo translate("comments by this user") ?></h3>

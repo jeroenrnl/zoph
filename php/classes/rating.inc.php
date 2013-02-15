@@ -191,11 +191,10 @@ class rating extends zophTable {
         return $ratings;
     }
 
-
-
     /**
      * Get array that shows the distribution of ratings
      * as given by a specific user
+     * @param user the user to get count for
      * @return array array of rating => count pairs;
      */
     public static function getPhotoCountForUser(user $user) {
