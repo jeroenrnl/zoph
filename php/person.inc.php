@@ -284,58 +284,59 @@ class person extends zophTable implements Organizer {
         return get_photos($vars, 0, 1, $ignore, $user);
     }
 
-
-    function getCoverphoto($autothumb=null) {
+    /**
+     * Get coverphoto for this person.
+     * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
+     * @return photo coverphoto
+     */
+    public function getAutoCover($autocover=null) {
         $user=user::getCurrent();
 
-        if ($this->get("coverphoto")) {
-            $coverphoto=new photo($this->get("coverphoto"));
-            if(!$coverphoto->lookup()) {
-                unset($coverphoto);
-            }
-        } 
-        if (!is_null($autothumb) && !isset($coverphoto)) {
-            $order=get_autothumb_order($autothumb);
-            if ($user->is_admin()) {
-                $sql =
-                    "SELECT DISTINCT p.photo_id FROM " .
-                    DB_PREFIX . "photos AS p LEFT JOIN " .
-                    DB_PREFIX . "view_photo_avg_rating ar" .
-                    " ON p.photo_id = ar.photo_id JOIN " .
-                    DB_PREFIX . "photo_people AS pp" .
-                    " ON pp.photo_id = p.photo_id " .
-                    " WHERE pp.person_id = " . 
-                    escape_string($this->get("person_id")) .
-                    " " . $order;
-            } else {
-                $sql=
-                    "SELECT DISTINCT p.photo_id FROM " .
-                    DB_PREFIX . "photos AS p LEFT JOIN " .
-                    DB_PREFIX . "view_photo_avg_rating ar" .
-                    " ON p.photo_id = ar.photo_id JOIN " .
-                    DB_PREFIX . "photo_albums AS pa " .
-                    "ON pa.photo_id = p.photo_id JOIN " .
-                    DB_PREFIX . "group_permissions AS gp " .
-                    "ON pa.album_id = gp.album_id JOIN " .
-                    DB_PREFIX . "groups_users AS gu " .
-                    "ON gp.group_id = gu.group_id JOIN " .
-                    DB_PREFIX . "photo_people AS pp " .
-                    "ON pp.photo_id = p.photo_id " .
-                    "WHERE pp.person_id = " . 
-                    escape_string($this->get("person_id")) .
-                    " AND gu.user_id =" .
-                    " '" . escape_string($user->get("user_id")) . "'" .
-                    " AND gp.access_level >= p.level " .
-                    $order;
-            }
-            $coverphotos=photo::getRecordsFromQuery($sql);
-            $coverphoto=array_shift($coverphotos);
-
+        $coverphoto=$this->getCoverphoto();
+        if($coverphoto instanceof photo) {
+            return $coverphoto;
         }
+        
+        $order=self::getAutoCoverOrder($autocover);
+        if ($user->is_admin()) {
+            $sql =
+                "SELECT DISTINCT p.photo_id FROM " .
+                DB_PREFIX . "photos AS p LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON p.photo_id = ar.photo_id JOIN " .
+                DB_PREFIX . "photo_people AS pp" .
+                " ON pp.photo_id = p.photo_id " .
+                " WHERE pp.person_id = " . 
+                escape_string($this->get("person_id")) .
+                " " . $order;
+        } else {
+            $sql=
+                "SELECT DISTINCT p.photo_id FROM " .
+                DB_PREFIX . "photos AS p LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON p.photo_id = ar.photo_id JOIN " .
+                DB_PREFIX . "photo_albums AS pa " .
+                "ON pa.photo_id = p.photo_id JOIN " .
+                DB_PREFIX . "group_permissions AS gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users AS gu " .
+                "ON gp.group_id = gu.group_id JOIN " .
+                DB_PREFIX . "photo_people AS pp " .
+                "ON pp.photo_id = p.photo_id " .
+                "WHERE pp.person_id = " . 
+                escape_string($this->get("person_id")) .
+                " AND gu.user_id =" .
+                " '" . escape_string($user->get("user_id")) . "'" .
+                " AND gp.access_level >= p.level " .
+                $order;
+        }
+        $coverphotos=photo::getRecordsFromQuery($sql);
+        $coverphoto=array_shift($coverphotos);
 
-        if (isset($coverphoto)) {
+
+        if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
-            return $coverphoto->getImageTag(THUMB_PREFIX);
+            return $coverphoto;
         }
     }
 

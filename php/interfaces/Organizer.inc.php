@@ -30,6 +30,9 @@ interface Organizer {
     public function addPhoto(photo $photo);
     public function delete();
     public function getCoverphoto();
+    public function getAutoCover();
+    public function displayCoverphoto();
+    public function displayAutoCover();
     public function getDetails();
     public function getDetailsXML(array $details);
     public function getPhotoCount();

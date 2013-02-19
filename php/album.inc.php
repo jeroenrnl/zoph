@@ -409,65 +409,68 @@ class album extends zophTreeTable implements Organizer {
         return "album";
     }
 
-    function getCoverphoto($autothumb=null,$children=null) {
+    /**
+     * Get coverphoto for this album.
+     * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
+     * @param bool choose autocover from this album AND children
+     * @return photo coverphoto
+     */
+    public function getAutoCover($autocover=null, $children=false) {
         $user=user::getCurrent();
-        $coverphoto=null;
-        $cover=false;
-        if ($this->get("coverphoto")) {
-            $coverphoto=new photo($this->get("coverphoto"));
-            if($coverphoto->lookup()) {
-                $cover=TRUE;
-            }
+
+        $coverphoto=$this->getCoverphoto();
+        if($coverphoto instanceof photo) {
+            return $coverphoto;
         }
-        if ($autothumb && !$cover) {
-            $order=get_autothumb_order($autothumb);
-            if($children) {
-                $album_where=" WHERE pa.album_id in (" . $this->getBranchIds() .")";
-            } else {
-                $album_where=" WHERE pa.album_id =" .$this->get("album_id");
-            }
-            if ($user->is_admin()) {
-                $sql =
-                    "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p LEFT JOIN " .
-                    DB_PREFIX . "view_photo_avg_rating ar" .
-                    " ON p.photo_id = ar.photo_id JOIN " .
-                    DB_PREFIX . "photo_albums pa ON" .
-                    " pa.photo_id = p.photo_id" .
-                    $album_where .
-                    " " . $order;
-            } else {
-                $sql=
-                    "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p LEFT JOIN " .
-                    DB_PREFIX . "view_photo_avg_rating ar" .
-                    " ON p.photo_id = ar.photo_id JOIN " .
-                    DB_PREFIX . "photo_albums as pa" .
-                    " ON pa.photo_id = p.photo_id JOIN " .
-                    DB_PREFIX . "group_permissions as gp ON " .
-                    "pa.album_id = gp.album_id JOIN " .
-                    DB_PREFIX . "groups_users AS gu ON " .
-                    "gp.group_id = gu.group_id " .
-                    $album_where .
-                    " AND gu.user_id =" . 
-                    " '" . escape_string($user->get("user_id")) . "'" .
-                    " and pa.photo_id = p.photo_id " .
-                    " and gp.access_level >= p.level " .
-                    $order;
-            }
-            $coverphotos=photo::getRecordsFromQuery($sql);
-            $coverphoto=array_shift($coverphotos);
+
+        $order=self::getAutoCoverOrder($autocover);
+        if($children) {
+            $album_where=" WHERE pa.album_id in (" . $this->getBranchIds() .")";
+        } else {
+            $album_where=" WHERE pa.album_id =" .$this->get("album_id");
         }
+        if ($user->is_admin()) {
+            $sql =
+                "select distinct p.photo_id from " .
+                DB_PREFIX . "photos as p LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON p.photo_id = ar.photo_id JOIN " .
+                DB_PREFIX . "photo_albums pa ON" .
+                " pa.photo_id = p.photo_id" .
+                $album_where .
+                " " . $order;
+        } else {
+            $sql=
+                "select distinct p.photo_id from " .
+                DB_PREFIX . "photos as p LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON p.photo_id = ar.photo_id JOIN " .
+                DB_PREFIX . "photo_albums as pa" .
+                " ON pa.photo_id = p.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp ON " .
+                "pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users AS gu ON " .
+                "gp.group_id = gu.group_id " .
+                $album_where .
+                " AND gu.user_id =" . 
+                " '" . escape_string($user->get("user_id")) . "'" .
+                " and pa.photo_id = p.photo_id " .
+                " and gp.access_level >= p.level " .
+                $order;
+        }
+        $coverphotos=photo::getRecordsFromQuery($sql);
+        $coverphoto=array_shift($coverphotos);
 
         if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
-            return $coverphoto->getImageTag(THUMB_PREFIX);
+            return $coverphoto;
         } else if (!$children) {
             // No photos found in this album... let's look again, but now 
             // also in sub-albums...
-            return $this->getCoverphoto($autothumb, true);
+            return $this->getAutoCover($autocover, true);
         }
     }
+
     function is_root() {
         // At this moment the root album is always 1, but this may
         // change in the future, so to be safe we'll make a function for

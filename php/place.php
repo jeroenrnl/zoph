@@ -27,7 +27,7 @@
     if($_action=="settzchildren") {
         if($user->is_admin()) {
             $place->lookup();
-            $place->set_tz_children($place->get("timezone"));
+            $place->setTzForChildren();
         }
         $action="display";
     }

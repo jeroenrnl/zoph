@@ -155,6 +155,8 @@ class photo extends zophTable {
         if ($this->get("location_id") > 0) {
             $this->location = new place($this->get("location_id"));
             $this->location->lookup();
+        } else {
+            $this->location=null;
         }
     }
 
@@ -592,6 +594,7 @@ class photo extends zophTable {
      */
     public function setLocation(place $loc) {
         $this->set("location_id", (int) $loc->getId());
+        $this->update();
         $this->lookupLocation();
     }
 
@@ -600,6 +603,7 @@ class photo extends zophTable {
      */
     public function unsetLocation() {
         $this->set("location_id", 0);
+        $this->update();
         $this->lookupLocation();
     }
 

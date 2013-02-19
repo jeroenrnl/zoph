@@ -102,7 +102,7 @@
         <p>
 <?php
     }
-    echo $category->getCoverphoto();
+    echo $category->displayCoverphoto();
 ?>
         </p>
 <?php

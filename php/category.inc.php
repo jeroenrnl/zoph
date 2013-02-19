@@ -240,62 +240,65 @@ class category extends zophTreeTable implements Organizer {
         return "category";
     }
 
-    function getCoverphoto($autothumb=null,$children=null) {
+   /**
+     * Get coverphoto for this category.
+     * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
+     * @param bool choose autocover from this album AND children
+     * @return photo coverphoto
+     */
+    public function getAutoCover($autocover=null,$children=false) {
         $user=user::getCurrent();
-        if ($this->get("coverphoto")) {
-            $coverphoto=new photo($this->get("coverphoto"));
-            if (!$coverphoto->lookup()) {
-                unset($coverphoto);
-            }
-        }
-        if (isset($autothumb) && !isset($coverphoto)) {
-            $order=get_autothumb_order($autothumb);
-            if($children) {
-                $cat_where=" WHERE pc.category_id in (" . $this->getBranchIds() .")";
-            } else {
-                $cat_where=" WHERE pc.category_id =" .$this->get("category_id");
-            }
-
-            if ($user->is_admin()) {
-                $sql =
-                    "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p LEFT JOIN " .
-                    DB_PREFIX . "view_photo_avg_rating ar" .
-                    " ON p.photo_id = ar.photo_id JOIN " .
-                    DB_PREFIX . "photo_categories as pc ON" .
-                    " pc.photo_id = p.photo_id" .
-                    $cat_where . " " . $order;
-            } else {
-                $sql=
-                    "select distinct p.photo_id from " .
-                    DB_PREFIX . "photos as p LEFT JOIN " .
-                    DB_PREFIX . "view_photo_avg_rating ar" .
-                    " ON p.photo_id = ar.photo_id JOIN " .
-                    DB_PREFIX . "photo_albums as pa " .
-                    "ON pa.photo_id = p.photo_id JOIN " .
-                    DB_PREFIX . "group_permissions as gp " .
-                    "ON pa.album_id = gp.album_id JOIN " .
-                    DB_PREFIX . "groups_users as gu " .
-                    "ON gp.group_id = gu.group_id JOIN " .
-                    DB_PREFIX . "photo_categories as pc " .
-                    "ON pc.photo_id = p.photo_id " .
-                    $cat_where .
-                    " AND gu.user_id =" .
-                    " '" . escape_string($user->get("user_id")) . "'" .
-                    " AND gp.access_level >= p.level " .
-                    $order;
-            }
-            $coverphotos=photo::getRecordsFromQuery($sql);
-            $coverphoto=array_shift($coverphotos);
+        $coverphoto=$this->getCoverphoto();
+        if($coverphoto instanceof photo) {
+            return $coverphoto;
         }
 
-        if (isset($coverphoto) && $coverphoto instanceof photo) {
+        $order=self::getAutoCoverOrder($autocover);
+        if($children) {
+            $cat_where=" WHERE pc.category_id in (" . $this->getBranchIds() .")";
+        } else {
+            $cat_where=" WHERE pc.category_id =" .$this->get("category_id");
+        }
+
+        if ($user->is_admin()) {
+            $sql =
+                "select distinct p.photo_id from " .
+                DB_PREFIX . "photos as p LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON p.photo_id = ar.photo_id JOIN " .
+                DB_PREFIX . "photo_categories as pc ON" .
+                " pc.photo_id = p.photo_id" .
+                $cat_where . " " . $order;
+        } else {
+            $sql=
+                "select distinct p.photo_id from " .
+                DB_PREFIX . "photos as p LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON p.photo_id = ar.photo_id JOIN " .
+                DB_PREFIX . "photo_albums as pa " .
+                "ON pa.photo_id = p.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id JOIN " .
+                DB_PREFIX . "photo_categories as pc " .
+                "ON pc.photo_id = p.photo_id " .
+                $cat_where .
+                " AND gu.user_id =" .
+                " '" . escape_string($user->get("user_id")) . "'" .
+                " AND gp.access_level >= p.level " .
+                $order;
+        }
+        $coverphotos=photo::getRecordsFromQuery($sql);
+        $coverphoto=array_shift($coverphotos);
+
+        if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
-            return $coverphoto->getImageTag(THUMB_PREFIX);
+            return $coverphoto;
         } else if (!$children) {
             // No photos found in this cat... let's look again, but now 
             // also in subcat...
-            return $this->getCoverphoto($autothumb, true);
+            return $this->getAutoCover($autocover, true);
 
         }
     }

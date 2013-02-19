@@ -26,7 +26,7 @@ if(!ZOPH) { die("Illegal call"); }
         <li class="popup" id="thumb_<?php echo get_class($item);?>_<?php echo $item->getId(); ?>" >
             <div class="coverphoto">
                 <a href="<?php echo $item->getURL() ?>">
-                    <?php echo $item->getCoverphoto($tpl_autothumb); ?>
+                    <?php echo $item->displayAutoCover($tpl_autothumb); ?>
                 </a>
             </div>
             <div class="name">

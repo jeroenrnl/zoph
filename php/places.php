@@ -118,7 +118,7 @@
         <p>
 <?php
     }
-    echo $place->getCoverphoto();
+    echo $place->displayCoverphoto();
 ?>
         </p>
 <?php

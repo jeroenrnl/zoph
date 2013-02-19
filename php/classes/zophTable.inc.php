@@ -619,6 +619,70 @@ abstract class zophTable {
     }
 
     /**
+     * Get coverphoto.
+     * @return photo coverphoto
+     */
+    public function getCoverphoto() {
+        $user=user::getCurrent();
+        if ($this->get("coverphoto")) {
+            $coverphoto=new photo($this->get("coverphoto"));
+            if($coverphoto->lookup()) {
+                return $coverphoto;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Lookup an autocover and create template to display
+     * @param how to select the autocover (olders, newest, first, last, random, highest [default])
+     * @return block thumb img
+     */
+    public function displayAutoCover($autocover=null) {
+        $cover=$this->getAutoCover($autocover);
+        if($cover instanceof photo) {
+            return $cover->getImageTag(THUMB_PREFIX);
+        }
+    }
+
+    /**
+     * Lookup cover and create template to display
+     * @return block thumb img
+     */
+    public function displayCoverPhoto() {
+        $cover=$this->getCoverphoto();
+        if($cover instanceof photo) {
+            return $cover->getImageTag(THUMB_PREFIX);
+        }
+    }
+
+    public static function getAutocoverOrder($autocover) {
+        switch ($autocover) {
+        case "oldest":
+            $order="ORDER BY p.date, p.time DESC LIMIT 1";
+            break;
+        case "newest":
+            $order="ORDER BY p.date DESC, p.time DESC LIMIT 1";
+            break;
+        case "first":
+            $order="ORDER BY p.timestamp LIMIT 1";
+            break;
+        case "last":
+            $order="ORDER BY p.timestamp DESC LIMIT 1";
+            break;
+        case "random":
+            $order="ORDER BY rand() LIMIT 1";
+            break;
+        default:
+        case "highest":
+            $order="ORDER BY ar.rating DESC LIMIT 1";
+            break;
+        }
+        return $order;
+    }
+
+
+    /**
      * Get XML from a database table
      * This is a wrapper around several objects which will call a method from 
      * those objects

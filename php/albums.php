@@ -101,7 +101,7 @@
         <p>
 <?php
     }
-    echo $album->getCoverphoto();
+    echo $album->displayCoverPhoto();
 ?>
         </p>
 <?php

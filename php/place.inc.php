@@ -56,7 +56,7 @@ class place extends zophTreeTable implements Organizer {
      * @param photo photo to remove
      */
     public function removePhoto(photo $photo) {
-        if($photo->getLocation == $this) {
+        if($photo->getLocation() == $this) {
             $photo->unsetLocation();
         }
     }
@@ -324,61 +324,63 @@ class place extends zophTreeTable implements Organizer {
         return "place";
     }
 
-    public function getCoverphoto($autothumb=null,$children=null) {
+    /**
+     * Get coverphoto for this place.
+     * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
+     * @param bool choose autocover from this place AND children
+     * @return photo coverphoto
+     */
+    public function getAutoCover($autocover=null,$children=false) {
         $user=user::getCurrent();
-        $cover=false;
-        if ($this->get("coverphoto")) {
-            $coverphoto=new photo($this->get("coverphoto"));
-            if($coverphoto->lookup()) {
-                $cover=true;
-            }
-        } 
-        if ($autothumb && !$cover) {
-            $order=get_autothumb_order($autothumb);
-            if($children) {
-                $place_where=" WHERE p.location_id in (" . $this->getBranchIds() .")";
-            } else {
-                $place_where=" WHERE p.location_id =" .$this->get("place_id");
-            }
-
-            if ($user->is_admin()) {
-                $sql =
-                    "SELECT DISTINCT p.photo_id FROM " .
-                    DB_PREFIX . "photos AS p LEFT JOIN " .
-                    DB_PREFIX . "view_photo_avg_rating ar" .
-                    " ON p.photo_id = ar.photo_id " .
-                    $place_where . " " . $order;
-            } else {
-                $sql=
-                    "SELECT DISTINCT p.photo_id FROM " .
-                    DB_PREFIX . "photos AS p LEFT JOIN " .
-                    DB_PREFIX . "view_photo_avg_rating ar" .
-                    " ON p.photo_id = ar.photo_id JOIN " .
-                    DB_PREFIX . "photo_albums AS pa" .
-                    " ON pa.photo_id = p.photo_id JOIN " .
-                    DB_PREFIX . "group_permissions AS gp " .
-                    "ON pa.album_id = gp.album_id JOIN " .
-                    DB_PREFIX . "groups_users AS gu " .
-                    "ON gp.group_id = gu.group_id " .
-                    $place_where .
-                    " AND gu.user_id =" .
-                    " '" . escape_string($user->get("user_id")) . "'" .
-                    " AND gp.access_level >= p.level " .
-                    $order;
-            }
-            $coverphotos=photo::getRecordsFromQuery($sql);
-            $coverphoto=array_shift($coverphotos);
+        $coverphoto=$this->getCoverphoto();
+        if($coverphoto instanceof photo) {
+            return $coverphoto;
         }
 
-        if (!empty($coverphoto)) {
+        $order=self::getAutoCoverOrder($autocover);
+
+        if($children) {
+            $place_where=" WHERE p.location_id in (" . $this->getBranchIds() .")";
+        } else {
+            $place_where=" WHERE p.location_id =" .$this->get("place_id");
+        }
+
+        if ($user->is_admin()) {
+            $sql =
+                "SELECT DISTINCT p.photo_id FROM " .
+                DB_PREFIX . "photos AS p LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON p.photo_id = ar.photo_id " .
+                $place_where . " " . $order;
+        } else {
+            $sql=
+                "SELECT DISTINCT p.photo_id FROM " .
+                DB_PREFIX . "photos AS p LEFT JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar" .
+                " ON p.photo_id = ar.photo_id JOIN " .
+                DB_PREFIX . "photo_albums AS pa" .
+                " ON pa.photo_id = p.photo_id JOIN " .
+                DB_PREFIX . "group_permissions AS gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users AS gu " .
+                "ON gp.group_id = gu.group_id " .
+                $place_where .
+                " AND gu.user_id =" .
+                " '" . escape_string($user->get("user_id")) . "'" .
+                " AND gp.access_level >= p.level " .
+                $order;
+        }
+        $coverphotos=photo::getRecordsFromQuery($sql);
+        $coverphoto=array_shift($coverphotos);
+
+        if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
-            return $coverphoto->getImageTag(THUMB_PREFIX);
+            return $coverphoto;
         } else if (!$children) {
             // No photos found in this place... let's look again, but now 
             // also in sub-places...
-            return $this->getCoverphoto($autothumb, true);
+            return $this->getAutoCover($autothumb, true);
         }
-
     }
 
     /**
@@ -495,7 +497,7 @@ class place extends zophTreeTable implements Organizer {
     function getQuicklook() {
         $html="<h2>" . $this->getLink() . "<\/h2>";
         $html.="<small>" . $this->get_address() . "<\/small><br>";
-        $html.=$this->getCoverphoto(user::getCurrent()->prefs->get("autothumb"));
+        $html.=$this->getCoverphoto(user::getCurrent()->prefs->get("autothumb"))->getImageTag(THUMB_PREFIX);
         $count=$this->getPhotoCount();
         $totalcount=$this->getTotalPhotoCount();
         $html.="<br><small>" . 
@@ -521,26 +523,25 @@ class place extends zophTreeTable implements Organizer {
         }
     }
         
-
-    function guess_tz() {
+    /**
+     * Guess the timezone based on lat/lon information
+     */
+    public function guessTZ() {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         $timezone=$this->get("timezone");
         if((!$timezone && $lat && $lon)) {
             $tz=TimeZone::guess($lat, $lon);
-            if($tz) {
-                $html="<span class='actionlink'>" .
-                    "<a href=place.php?_action=update&place_id=" .
-                    e($this->get("place_id")) . "&timezone=" . e($tz) .
-                    ">" . e($tz) . "</a></span>";
-            }
-            return $html;
+            return $tz;
         }
         return null;
     }
 
-    function set_tz_children($tz) {
-        $places;
+    /**
+     * Set the timezone for all places under this place to the same timezone
+     */
+    public function setTzForChildren() {
+        $tz=$this->get("timezone");
         $places=$this->getBranchIdArray($places);
         if($places) {
             foreach ($places as $place_id) {

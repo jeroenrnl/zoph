@@ -40,8 +40,7 @@
             echo translate("places");
         } else {
 ?>
-        <?php echo create_place_pulldown("parent_place_id",
-            $place->get("parent_place_id"), $user) ?>
+        <?php echo place::createPulldown("parent_place_id", $place->get("parent_place_id"), $user) ?>
 <?php
         }
 ?>
@@ -97,7 +96,14 @@
          </fieldset>
 <?php
         if(conf::get("date.guesstz")) {
-            echo $place->guess_tz();
+            $tz=e($place->guessTZ());
+            if(!empty($tz)) {
+?>
+            <ul class="actionlink">
+                <li><a href="place.php?_action=update&place_id=<?php echo (int) $place->getId() ?>&timezone=<?php echo $tz ?>"><?php echo $tz ?></a></li>
+            </ul>
+<?php
+            } 
         }
         if($place->get("timezone")) {
 ?>

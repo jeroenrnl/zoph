@@ -94,7 +94,7 @@
           </h2>
           <p>
 <?php
-    echo $person->getCoverphoto();
+    echo $person->displayCoverphoto();
 ?>
           </p>
           <dl>

@@ -535,31 +535,6 @@ function running_on_windows() {
     }
 }
 
-function get_autothumb_order($autothumb) {
-    switch ($autothumb) {
-    case "oldest":
-        $order="ORDER BY p.date, p.time DESC LIMIT 1";
-        break;
-    case "newest":
-        $order="ORDER BY p.date DESC, p.time DESC LIMIT 1";
-        break;
-    case "first":
-        $order="ORDER BY p.timestamp LIMIT 1";
-        break;
-    case "last":
-        $order="ORDER BY p.timestamp DESC LIMIT 1";
-        break;
-    case "random":    
-        $order="ORDER BY rand() LIMIT 1";
-        break;
-    default:
-    case "highest":
-        $order="ORDER BY ar.rating DESC LIMIT 1";
-        break;
-    }
-    return $order;
-}
-
 function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
     if(class_exists(ZipArchive)) {
         $zip=new ZipArchive();
