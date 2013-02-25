@@ -189,7 +189,7 @@ class person extends zophTable implements Organizer {
        return $email;
     }
 
-    function to_html() {
+    function toHTML() {
         return getName();
     }
 

@@ -135,10 +135,16 @@ class place extends zophTreeTable implements Organizer {
         return $this->children;
     }    
    
+   /**
+    * Get this place's children, taking into account permissions for a specific user
+    */
     public function getChildrenForUser($order=null) {
         return remove_empty($this->getChildren($order));
     }
     
+    /**
+     * Converts timezone id for this place into a named timezone
+     */
     public function tzid_to_timezone() {
         $tzkey=$this->get("timezone_id");
         if($tzkey>0) {
@@ -156,39 +162,56 @@ class place extends zophTreeTable implements Organizer {
      * @return string name of this place
      */
     public function getName() {
-        if ($this->get("title")) { return $this->get("title"); }
-
-        if ($this->get("address")) { $name = $this->get("address"); }
-        if ($this->get("city")) { $name .= ", " . $this->get("city"); }
-        return $name;
+        return $this->get("title"); 
     }
 
-    function get_address() {
-        $html = "";
+    /**
+     * Get address as template block
+     */
+    public function getAddress() {
+        $address = array();
         if ($this->get("address"))  {
-            $html .= e($this->get("address")) . "<br>";
+            $address[]= e($this->get("address"));
         }
         if ($this->get("address2")) {
-            $html .= e($this->get("address2")) . "<br>";
-        }
-        if ($this->get("city")) { $html .= e($this->get("city")); }
-        if ($this->get("city") && $this->get("state")) { $html .= ", "; }
-        if ($this->get("state")) { $html .= e($this->get("state")); }
-        if ($this->get("zip")) { $html .= " " . e($this->get("zip")); }
-        if ($this->get("country")) {
-            $html .= "<br>" . e($this->get("country"));
+            $address[]= e($this->get("address2"));
         }
 
-        return $html;
+        $city="";
+        if ($this->get("city")) { 
+            $city=e($this->get("city"));
+            if ($this->get("state")) { 
+                $city .= ", " . e($this->get("state"));
+            }
+        } else if ($this->get("state")) { 
+            $city .= e($this->get("state")); 
+        }
+        if ($this->get("zip")) { 
+            $city.=" " . e($this->get("zip")); 
+        }
+        $address[]=$city;
+
+        if ($this->get("country")) {
+            $address[]=e($this->get("country"));
+        }
+        $tpl=new block("multiline", array(
+            "class" => "address",
+            "lines" => $address
+        ));
+        return $tpl;
     }
 
-    function to_html() {
+    /**
+     * Display this place's data
+     * @todo returns HTML
+     */
+    public function toHTML() {
 
         $html = "";
         if ($this->get("title"))    {
             $html .= "<h2>" . e($this->get("title")) . "</h2>\n";
         }
-        $html .= $this->get_address();
+        $html .= $this->getAddress();
         if($this->get("url")) {
             $html .= "<br><br>\n";
             $html .= "<a href=\"" . e($this->get("url")) . "\">";
@@ -198,17 +221,9 @@ class place extends zophTreeTable implements Organizer {
         return $html;
     }
 
-    function getLink() {
-        $link = "<a href=\"" . $this->getURL() . "\">" . e($this->getName()) . "</a>";
-
-        return $link;
-    }
-
-    public function getURL() {
-        return "places.php?parent_place_id=" . $this->getId();
-    }
-
-
+    /**
+     * Return an array with this place's data
+     */
     function getDisplayArray() {
         return array(
             translate("address") => $this->get("address"),
@@ -221,6 +236,9 @@ class place extends zophTreeTable implements Organizer {
             translate("timezone") => $this->get("timezone"));
     }
     
+    /**
+     * Get photos in this place
+     */
     public function getPhotos() {
         $user=user::getCurrent();
 
@@ -379,7 +397,7 @@ class place extends zophTreeTable implements Organizer {
         } else if (!$children) {
             // No photos found in this place... let's look again, but now 
             // also in sub-places...
-            return $this->getAutoCover($autothumb, true);
+            return $this->getAutoCover($autocover, true);
         }
     }
 
@@ -462,7 +480,29 @@ class place extends zophTreeTable implements Organizer {
         return parent::getDetailsXML($details);
     }
 
-    public static function getNear($lat, $lon, $distance, 
+    /**
+     * Get places near this place
+     * @param int distance in km or miles
+     * @param int limit maxiumum number of photos to return
+     * @param string entity (km or miles)
+     */
+    public function getNear($distance, $limit=100, $entity="km") {
+        $lat=$this->get("lat");
+        $lon=$this->get("lon");
+        if($lat && $lon) {
+            return self::getPlacesNear((float) $lat, (float) $lon, (float) $distance, (int) $limit, $entity);
+        }
+    }
+
+    /**
+     * Get places near certain lat/lon
+     * @param float latitude
+     * @param float longitude
+     * @param int distance
+     * @param string entity: km|miles
+     * @return array places
+     */
+    public static function getPlacesNear($lat, $lon, $distance, 
             $limit, $entity="km") { 
             
         // If lat and lon are not set, don't bother trying to find
@@ -494,10 +534,20 @@ class place extends zophTreeTable implements Organizer {
         }
     }
 
-    function getQuicklook() {
-        $html="<h2>" . $this->getLink() . "<\/h2>";
-        $html.="<small>" . $this->get_address() . "<\/small><br>";
-        $html.=$this->getCoverphoto(user::getCurrent()->prefs->get("autothumb"))->getImageTag(THUMB_PREFIX);
+    /**
+     * Get Quick preview as used on the map display
+     * @todo Outputs HTML
+     */
+    public function getQuicklook() {
+        $cover="";
+        $autocover=$this->getAutoCover(user::getCurrent()->prefs->get("autothumb"));
+        if($autocover instanceof photo) {
+            $cover=$autocover->getImageTag(THUMB_PREFIX);
+        }
+
+        $html="<h2><a href=\"" . $this->getURL() . "\">" . $this->getName() . "</a><\/h2>";
+        $html.="<small>" . $this->getAddress() . "<\/small><br>";
+        $html.=$cover;
         $count=$this->getPhotoCount();
         $totalcount=$this->getTotalPhotoCount();
         $html.="<br><small>" . 
@@ -508,7 +558,8 @@ class place extends zophTreeTable implements Organizer {
             " " . translate("in this place") . " " . translate("or its children")) . "<br>";
         }
         $html.="<\/small>";
-        return $html;
+
+        return str_replace("\n", "", $html);
     }
 
     function is_root() {

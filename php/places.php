@@ -109,7 +109,7 @@
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
 ?>
-            <?php echo $parent->getLink() ?> &gt;
+            <a href="<?php echo $parent->getURL() ?>"><?php echo $parent->getName() ?></a> &gt;
 <?php
         }
     }
@@ -123,7 +123,7 @@
         </p>
 <?php
     if ($user->get("detailed_places") || $user->is_admin()) {
-        echo $place->to_html();
+        echo $place->toHTML();
         if ($place->get("notes")) {
             echo "<p>";
             echo e($place->get("notes"));

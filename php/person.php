@@ -115,7 +115,7 @@ if ($user->get("detailed_people") || $user->is_admin()) {
           <dd>
           <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("home_id") ?>"><?php echo translate("view") ?></a></span>
           <?php echo $person->home->get("title") ? $person->home->get("title") . "<br>" : "" ?>
-          <?php echo $person->home->get_address() ?></dd>
+          <?php echo $person->home->getAddress() ?></dd>
 <?php
         }
 
@@ -125,7 +125,7 @@ if ($user->get("detailed_people") || $user->is_admin()) {
           <dd>
           <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("work_id") ?>"><?php echo translate("view") ?></a></span>
              <?php echo $person->work->get("title") ? $person->work->get("title") . "<br>" : "" ?>
-             <?php echo $person->work->get_address() ?>
+             <?php echo $person->work->getAddress() ?>
           </dd>
 <?php
         }

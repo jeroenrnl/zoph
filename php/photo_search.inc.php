@@ -348,7 +348,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                     }
                 }
                 if(getvar("_latlon_places")) {
-                    $places=place::getNear($lat, $lon, $distance, null);
+                    $places=place::getPlacesNear($lat, $lon, $distance, null);
                     foreach($places as $place) {
                         $photos=$place->getPhotos($user);
                         foreach($photos as $photo) {

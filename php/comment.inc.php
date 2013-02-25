@@ -125,7 +125,7 @@ class comment extends zophTable {
         }
     }
 
-    function to_html($user, $thumbnail=null) {
+    function toHTML($user, $thumbnail=null) {
         $this->lookup();
         $photo=$this->get_photo();
 
@@ -174,7 +174,7 @@ function format_comments($user, $comments) {
     $html=null;
     foreach ($comments as $comment) {
         $comment->lookup();
-        $html.=$comment->to_html($user, true);
+        $html.=$comment->toHTML($user, true);
     }
     return $html;
 }

@@ -473,7 +473,7 @@ require_once("header.inc.php");
             if($comments) {
                 echo "<h2>" . translate("comments") . "</h2>\n";
                 foreach($comments as $comment) {
-                    echo $comment->to_html($user) . "\n";
+                    echo $comment->toHTML($user) . "\n";
                 }
             echo "<br>&nbsp;\n";
             }

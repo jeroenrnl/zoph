@@ -17,123 +17,55 @@
  */
     require_once("include.inc.php");
 
-    $title = translate("Reports");
-    require_once("header.inc.php");
-?>
-    <h1><?php echo translate("reports") ?></h1>
-      <div class="main">
-<?php
+    $tpl=new template("main", array(
+        "title" => translate("Reports")
+    ));
+
     $top_albums = album::getTopN();
     if ($top_albums) {
-?>
-            <table class="reports">
-              <tr>
-                <th colspan="3"><h3><?php echo translate("Most Populated Albums") ?></h3></th>
-              </tr>
-<?php
-        while (list($album, $count) = each($top_albums)) {
-?>
-              <tr>
-                <td><?php echo $album ?></td>
-                <td>&nbsp;</td>
-                <td><?php echo $count ?></td>
-              </tr>
-<?php
-        }
-?>
-            </table>
-<?php
+        $block_albums=new block("report", array(
+            "title"     => translate("Most Populated Albums"),
+            "lines"     => $top_albums
+        ));
+        $tpl->addBlock($block_albums);
     }
-    else {
-        echo "&nbsp;\n";
-    }
-?>
-<?php
+    
     $top_categories = category::getTopN();
     if ($top_categories) {
-?>
-            <table class="reports">
-              <tr>
-                <th colspan="3"><h3><?php echo translate("Most Populated Categories") ?></h3></th>
-              </tr>
-<?php
-        while (list($category, $count) = each($top_categories)) {
-?>
-              <tr>
-                <td><?php echo $category ?></td>
-                <td>&nbsp;</td>
-                <td><?php echo $count ?></td>
-              </tr>
-<?php
-        }
-?>
-            </table>
-<?php
+        $block_categories=new block("report", array(
+            "title"     => translate("Most Populated Categories"),
+            "lines"     => $top_categories
+        ));
+        $tpl->addBlock($block_categories);
     }
-    else {
-        echo "&nbsp;\n";
-    }
+
     $top_people = person::getTopN();
     if ($top_people) {
-?>
-            <table class="reports">
-              <tr>
-                <th colspan="3"><h3><?php echo translate("Most Photographed People") ?></h3></th>
-              </tr>
-<?php
-        while (list($person, $count) = each($top_people)) {
-?>
-              <tr>
-                <td><?php echo $person ?></td>
-                <td>&nbsp;</td>
-                <td><?php echo $count ?></td>
-              </tr>
-<?php
-        }
-?>
-            </table>
-<?php
-    }
-    else {
-        echo "&nbsp;\n";
+        $block_people=new block("report", array(
+            "title"     => translate("Most Photographed People"),
+            "lines"     => $top_people
+        ));
+        $tpl->addBlock($block_people);
+
     }
     $top_places = place::getTopN();
     if ($top_places) {
-?>
-            <table class="reports">
-              <tr>
-                <th colspan="3"><h3><?php echo translate("Most Photographed Places") ?></h3></th>
-              </tr>
-<?php
-        while (list($place, $count) = each($top_places)) {
-?>
-              <tr>
-                <td><?php echo $place ?></td>
-                <td>&nbsp;</td>
-                <td><?php echo $count ?></td>
-              </tr>
-<?php
-        }
-?>
-            </table>
-<?php
+        $block_places=new block("report", array(
+            "title"     => translate("Most Photographed Places"),
+            "lines"     => $top_places
+        ));
+        $tpl->addBlock($block_places);
     }
-    else {
-        echo "&nbsp;\n";
-    }
-?>
-<br>
-<?php
-    $tpl=new block("graph_bar", array(
+    
+    $graph=new block("graph_bar", array(
         "title"     => translate("photo ratings", 0),
         "class"     => "ratings",
         "value_label" => translate("rating",0 ),
         "count_label" => translate("count",0 ),
         "rows"      => rating::getGraphArray()
     ));
+
+    $tpl->addBlock($graph);
+
     echo $tpl;
-?>
-</div>
-<?php
-    require_once("footer.inc.php");
 ?>

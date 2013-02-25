@@ -108,7 +108,6 @@ class photo extends zophTable {
     public function lookup() {
         $user=user::getCurrent();
         if (!$this->get("photo_id")) { return; }
-
         if ($user->is_admin()) {
             $sql = "SELECT * FROM " . DB_PREFIX . "photos " .
                 "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "'";
@@ -129,7 +128,7 @@ class photo extends zophTable {
         }
 
         $success = $this->lookupFromSQL($sql);
-
+        
         if ($success) {
             $this->lookupPhotographer();
             $this->lookupLocation();
@@ -973,7 +972,21 @@ class photo extends zophTable {
      * @return array related photos
      */
     public function getRelated() {
-        return photoRelation::getRelated($this);
+        $user=user::getCurrent();
+
+        $allrelated=photoRelation::getRelated($this);
+
+        if($user->is_admin()) {
+            return $allrelated;
+        } else {
+            $related=array();
+            foreach($allrelated as $photo) {
+                if($user->get_permissions_for_photo($photo->getId())) {
+                    $related[]=$photo;
+                }
+            }
+            return $related;
+        }
     }
 
     /**

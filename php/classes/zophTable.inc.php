@@ -370,6 +370,10 @@ abstract class zophTable {
         return $ea;
     }
 
+    public function getURL() {
+        return static::$url . $this->getId();
+    }
+
     /**
      * Turn the array from @see getDetails() into XML
      * @param array Don't fetch details, but use the given array
@@ -491,7 +495,12 @@ abstract class zophTable {
         $pop_array=array();
         $records = static::getRecordsFromQuery($query);
         foreach ($records as $rec) {
-            $pop_array[$rec->getLink()] = $rec->get("count");
+            $pop_array[] = array(
+                "id"    => $rec->getId(),
+                "url"   => $rec->getURL(),
+                "count" => $rec->get("count"),
+                "title" => $rec->getName()
+            );
         }
         return $pop_array;
     }

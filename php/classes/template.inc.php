@@ -29,6 +29,7 @@
  */
 class template {
     public $js=array();
+    public $vars=array();
     public $style="";
     public $script="";
     public $css=array();

@@ -33,6 +33,7 @@ class relationTest extends ZophDataBaseTestCase {
      * Test defining a relation
      */
     public function testDefineRelation() {
+        user::setCurrent(new user(1));
         photoRelation::defineRelation(new photo(9), new photo(10), "ninth photo", "tenth photo");
 
         $photo=new photo(9);

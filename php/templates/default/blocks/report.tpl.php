@@ -1,6 +1,6 @@
 <?php
-/*
- * This file is part of Zoph.
+/**
+ * Template to display a TopN list on the reports page.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,29 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package ZophTemplates
+ * @author Jeroen Roos
  */
-    require_once("include.inc.php");
 
-    if (!conf::get("feature.comments")) {
-        redirect("zoph.php");
-    }
-
-    require_once("header.inc.php");
+if(!ZOPH) { die("Illegal call"); }
 ?>
-          <h1>
-<?php echo translate("Comments") ?>
-          </h1>
-      <div class="main">
-      <br>
-<?php
-    $comments=get_all_comments();
-    foreach ($comments as $comment) {
-       $photo=$comment->get_photo();
-       if($user->get_permissions_for_photo($photo->get("photo_id")) || $user->is_admin()) {
-	   echo $comment->toHTML($user, 1);
-       }
-    }
-?>
-<?php
-    require_once("footer.inc.php");
-?>
+<table class="reports">
+    <tr>
+        <th colspan="3"><h3><?php echo $tpl_title ?></h3></th>
+    </tr>
+    <?php foreach($tpl_lines as $line): ?>
+    <tr>
+        <td>
+            <a href="<?php echo $line["url"] ?>">
+                <?php echo $line["title"] ?>
+            </a>
+        </td>
+        <td>
+            <?php echo $line["count"] ?>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</table>
