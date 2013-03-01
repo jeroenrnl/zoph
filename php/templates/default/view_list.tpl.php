@@ -31,7 +31,7 @@ if(!ZOPH) { die("Illegal call"); }
                 if($item instanceof zophTreeTable): 
                     $count2=$item->getTotalPhotoCount();
                 elseif ($item instanceof person):
-                    $count2=$item->getPhotographerCount();
+                    $count2=$item->getPhotographer()->getPhotoCount();
                 else:
                     $count2=0;
                 endif;

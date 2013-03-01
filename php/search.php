@@ -506,7 +506,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php 
-            echo create_photographer_pulldown("photographer_id[$i]", $photographer_id[$i], $user);
+            echo photographer::createPulldown("photographer_id[$i]", $photographer_id[$i]);
 ?>
           </td>
         </tr>

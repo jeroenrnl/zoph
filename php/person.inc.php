@@ -106,6 +106,12 @@ class person extends zophTable implements Organizer {
         }
     }
 
+    public function getPhotographer() {
+        $photographer=new photographer($this->getId());
+        $photographer->lookup();
+        return $photographer;
+    }
+
     function delete() {
         $id=escape_string($this->get("person_id"));
         if (!is_numeric($id)) { die("person_id is not numeric"); }
@@ -270,20 +276,6 @@ class person extends zophTable implements Organizer {
         return $this->getPhotoCount();
     }
     
-    /**
-     * Return the number of photos this person has taken 
-     * @return int count
-     */
-    public function getPhotographerCount() {
-        $user=user::getCurrent();
-        
-        $ignore=null;
-        $vars=array(
-            "photographer_id" => $this->getId()
-        );
-        return get_photos($vars, 0, 1, $ignore, $user);
-    }
-
     /**
      * Get coverphoto for this person.
      * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
@@ -517,7 +509,7 @@ function get_people_count($user = null, $search = null) {
     if($user && !$user->is_admin()) {
         $allowed=array();
         $people=get_photographed_people($user, $search);
-        $photographers=get_photographers($user, $search);
+        $photographers=photographer::getAll($search);
         foreach($people as $person) {
             $allowed[]=$person->get("person_id");
         }
@@ -538,7 +530,7 @@ function get_all_people($user = null, $search = null, $search_first = false) {
 
     if($user && !$user->is_admin()) {
         $people=get_photographed_people($user, $search, $search_first);
-        $photographers=get_photographers($user, $search, $search_first);
+        $photographers=photographer::getAll($search, $search_first);
         foreach($people as $person) {
             $allowed[]=$person->get("person_id");
         }
@@ -592,39 +584,6 @@ function get_photographed_people($user = null, $search=null, $search_first = fal
             DB_PREFIX . "photo_people as pp " .
             "where ppl.person_id = pp.person_id " . $where .
             " order by ppl.last_name, ppl.called, ppl.first_name";
-    }
-
-    return person::getRecordsFromQuery($sql);
-}
-
-function get_photographers($user = null, $search = null, $search_first = null) {
-    $where=get_where_for_search(" and ", $search, $search_first);
-    if ($user && !$user->is_admin()) {
-        $sql =
-            "select distinct ppl.* from " .
-            DB_PREFIX . "people as ppl " .
-            "WHERE person_id in " .
-            "(SELECT photographer_id FROM " .
-            DB_PREFIX . "photos as ph JOIN " .
-            DB_PREFIX . "photo_albums as pa " .
-            "ON pa.photo_id = ph.photo_id JOIN " .
-            DB_PREFIX . "group_permissions AS gp " .
-            "ON pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users as gu " .
-            "ON gp.group_id = gu.group_id " .
-            "WHERE gu.user_id = '" . 
-            escape_string($user->get("user_id")) . "' " .
-            $where .
-            " AND gp.access_level >= ph.level)" .
-            " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
-    }
-    else {
-        $sql =
-            "select distinct ppl.* from " .
-            DB_PREFIX . "people as ppl, " .
-            DB_PREFIX . "photos as ph " .
-            "where ppl.person_id = ph.photographer_id " . $where . 
-            "order by ppl.last_name, ppl.called, ppl.first_name";
     }
 
     return person::getRecordsFromQuery($sql);
@@ -700,26 +659,6 @@ function create_person_pulldown($name, $value=null, user $user, $sa=null) {
             $sa=get_people_select_array($user);
         }
         $html=create_pulldown($name, $value, $sa);
-    }
-    return $html;
-}
-
-function create_photographer_pulldown($name, $value=null, $user) {
-    $text="";
-
-    $id=preg_replace("/^_+/", "", $name);
-    if($value) {
-        $person=new person($value);
-        $person->lookup();
-        $text=$person->getName();
-    }
-    if($user->prefs->get("autocomp_photographer") && conf::get("interface.autocomplete")) {
-        $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
-            " value='" . e($value) . "'>";
-        $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .
-            " value='" . e($text) . "' class='autocomplete'>";
-    } else {
-        $html=create_pulldown($name, $value, get_people_select_array($user));
     }
     return $html;
 }

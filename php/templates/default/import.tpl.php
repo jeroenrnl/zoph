@@ -106,7 +106,7 @@ if(!ZOPH) { die("Illegal call"); }
                     <?php echo create_person_pulldown("_person_id[0]", "", $tpl_user) ?>
                 </fieldset>
                 <label for="photographer"><?php echo translate("photographer") ?></label>
-                <?php echo create_photographer_pulldown("photographer_id", "", $tpl_user) ?><br>
+                <?php echo photographer::createPulldown("photographer_id") ?><br>
                 <label for="level"><?php echo translate("level") ?></label>
                 <?php echo create_text_input("level", "", 4, 2) ?>
                 <span class="inputhint">1 - 10</span><br>

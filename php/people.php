@@ -95,7 +95,7 @@
             "autothumb" => $_autothumb,
             "links" => array(
                 translate("photos of") => "photos.php?person_id=",
-                translate("photos by") => "photos.php?photogapher_id="
+                translate("photos by") => "photos.php?photographer_id="
             )
         ));
         echo $tpl;

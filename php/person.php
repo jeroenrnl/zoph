@@ -51,7 +51,7 @@
     require_once("header.inc.php");
     if ($action == "display") {
         $photos_of = $person->getPhotoCount();
-        $photos_by = $person->getPhotographerCount();
+        $photos_by = $person->getPhotographer()->getPhotoCount();
 ?>
       <h1>
 <?php

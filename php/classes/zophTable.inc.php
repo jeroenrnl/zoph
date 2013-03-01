@@ -758,7 +758,7 @@ abstract class zophTable {
                        $records=get_all_people($user,$search, true);
                     } else {
                         if($subclass=="photographer") {
-                            $records=get_photographers($user,$search,true);
+                            $records=photographer::getAll($search,true);
                         } else {
                             $records=get_photographed_people($user,$search,true);
                         }

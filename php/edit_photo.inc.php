@@ -141,7 +141,7 @@
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
           <label for="_photographer_id"><?php echo translate("photographer") ?></label>
 <?php 
-            echo create_photographer_pulldown("photographer_id", $photo->get("photographer_id"), $user);
+            echo photographer::createPulldown("photographer_id", $photo->get("photographer_id"));
 ?>
         <br>
 <?php

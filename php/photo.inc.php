@@ -142,7 +142,7 @@ class photo extends zophTable {
      */
     private function lookupPhotographer() {
         if ($this->get("photographer_id") > 0) {
-            $this->photographer = new person($this->get("photographer_id"));
+            $this->photographer = new photographer($this->get("photographer_id"));
             $this->photographer->lookup();
         }
     }
@@ -748,15 +748,31 @@ class photo extends zophTable {
     public function getDisplayArray() {
         $date=$this->getReverseDate();
 
+        $loclink="";
+        if($this->location instanceof place) {
+            $loclink =new block("link", array(
+                "href" => $this->location->getURL(),
+                "link" => $this->location->getName(),
+                "target" => ""
+            ));
+        }
+
+        $pglink="";
+        if($this->photographer instanceof photographer) {
+            $pglink =new block("link", array(
+                "href" => $this->photographer->getURL(),
+                "link" => $this->photographer->getName(),
+                "target" => ""
+            ));
+        }
+
         return array(
             translate("title") => $this->get("title"),
-            translate("location") => $this->location
-                ? $this->location->getLink() : "",
+            translate("location") => $loclink, 
             translate("view") => $this->get("view"),
             translate("date") => create_date_link($date),
             translate("time") => $this->getTimeDetails(),
-            translate("photographer") => $this->photographer
-                ? $this->photographer->getLink() : ""
+            translate("photographer") => $pglink
         );
     }
     
