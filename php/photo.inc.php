@@ -144,6 +144,8 @@ class photo extends zophTable {
         if ($this->get("photographer_id") > 0) {
             $this->photographer = new photographer($this->get("photographer_id"));
             $this->photographer->lookup();
+        } else {
+            $this->photographer=null;
         }
     }
 
@@ -577,6 +579,24 @@ class photo extends zophTable {
     public function getPhotographer() {
         $this->lookup();
         return $this->photographer;
+    }
+
+    /**
+     * Set photographer for this photo
+     */
+    public function setPhotographer(photographer $pg) {
+        $this->set("photographer_id", (int) $pg->getId());
+        $this->lookupPhotographer();
+        $this->update();
+    }
+
+    /**
+     * Remove photographer
+     */
+    public function unsetPhotographer() {
+        $this->set("photographer_id", 0);
+        $this->update();
+        $this->lookupPhotographer();
     }
 
     /**

@@ -590,6 +590,7 @@ function get_photographed_people($user = null, $search=null, $search_first = fal
 }
 
 function get_where_for_search($conj, $search, $search_first) {
+    $where="";
     if($search!==null) {
         if($search==="") {
             $where=$conj . " (ppl.last_name='' or ppl.last_name is null)";

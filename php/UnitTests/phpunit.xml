@@ -21,7 +21,8 @@
       <file>categoryTest.php</file> 
       <file>groupTest.php</file> 
       <file>groupPermissionsTest.php</file> 
-      <file>personTest.php</file> 
+      <file>personTest.php</file>
+      <file>photographerTest.php</file>
       <file>photoTest.php</file> 
       <file>cliTest.php</file> 
       <file>placeTest.php</file>

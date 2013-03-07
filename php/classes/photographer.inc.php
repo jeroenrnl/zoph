@@ -46,7 +46,7 @@ class photographer extends person implements Organizer {
      * @param photo photo to remove the person from
      */
     public function removePhoto(photo $photo) {
-        if($photo->getPhotographer() == $this) {
+        if($photo->getPhotographer()->getId() == $this->getId()) {
             $photo->unsetPhotographer();
         }
 
