@@ -702,6 +702,7 @@ abstract class zophTable {
      */
     public static function getXML($class, $search,$user=null) {
         $seach=strtolower($search);
+        $subclass="";
         if($class=="location" || $class=="home" || $class=="work") {
             $class="place";
         } else if ($class=="photographer") {

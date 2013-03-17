@@ -15,6 +15,7 @@
   </php>
   <testsuites>
     <testsuite name="Zoph">
+      <file>php/UnitTests/XMLdataTest.php</file>
       <file>php/UnitTests/userTest.php</file>
       <file>php/UnitTests/anonymousUserTest.php</file> 
       <file>php/UnitTests/albumTest.php</file> 
