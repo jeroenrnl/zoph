@@ -20,8 +20,7 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-require_once("testSetup.php");
-
+require_once("php/UnitTests/testSetup.php");
 /**
  * Test class for anonymousUser.
  * @package ZophUnitTest

@@ -289,18 +289,18 @@ class cliTest extends ZophDataBaseTestCase {
         );
         foreach($prefixes as $prefix) {
             if(!empty($prefix)) {
-                $filename=IMAGE_DIR . "/" . $dir . "/" . $prefix . "/" . $prefix . "_" . $file;
+                $filename=conf::get("path.images") . "/" . $dir . "/" . $prefix . "/" . $prefix . "_" . $file;
             } else {
-                $filename=IMAGE_DIR . "/" . $dir . "/" . $file;
+                $filename=conf::get("path.images") . "/" . $dir . "/" . $file;
             }
 
             $this->assertFileExists($filename);
             unlink($filename);
             if(!empty($prefix)) {
-                @rmdir(IMAGE_DIR . "/" . $dir . "/" . $prefix);
+                @rmdir(conf::get("path.images") . "/" . $dir . "/" . $prefix);
             }
         }
-        @rmdir(IMAGE_DIR . "/" . $dir);
+        @rmdir(conf::get("path.images") . "/" . $dir);
     }
 
     private function runCLI($cli) {
