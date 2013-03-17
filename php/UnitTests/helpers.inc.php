@@ -27,6 +27,9 @@
 class helpers {
 
     public static function createTestImage($name, $bg, $fg, $exif) {
+        if(file_exists("/tmp/" . $name)) {
+            unlink("/tmp/" . $name);
+        }
         $bgcolour=new ImagickPixel();
         $bgcolour->setColor($bg);
 

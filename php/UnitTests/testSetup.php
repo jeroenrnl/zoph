@@ -23,8 +23,8 @@
 
 define("TEST", true);
 
-require_once("../settings.inc.php");
-require_once("../include.inc.php");
+//require_once("php/settings.inc.php");
+require_once("php/include.inc.php");
 require_once("PHPUnit/Extensions/Database/TestCase.php");
 require_once("PHPUnit/Extensions/Database/ITester.php");
 require_once("PHPUnit/Extensions/Database/AbstractTester.php");
@@ -57,7 +57,6 @@ require_once("PHPUnit/Extensions/Database/DataSet/ITableIterator.php");
 require_once("PHPUnit/Extensions/Database/DataSet/DefaultTableIterator.php");
 require_once("databaseTest.inc.php");
 require_once("helpers.inc.php");
-
 user::setCurrent(new user(1));
-conf::set("path.images", IMAGE_DIR);
+conf::set("path.images", getcwd() . "/.images");
 ?>
