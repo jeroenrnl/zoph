@@ -31,6 +31,19 @@ if($obj_array[0]=="details") {
 
     echo $obj->getDetailsXML();
 } else {
-    echo zophTable::getXML($object, $search, $user);
+    if($object=="location" || $object=="home" || $object=="work") {
+        $object="place";
+    } else if ($object=="father" || $object=="mother" || $object=="spouse") {
+        $object="person";
+    } else if ($object=="timezone") {
+        $object="TimeZone";
+    } else if ($object=="import_progress") {
+        $object="WebImport";
+    } else if ($object=="import_thumbs") {
+        $object="WebImport";
+        $search="thumbs";
+    } 
+
+    echo $object::getXML($search, $user)->SaveXML();
 }
 ?>

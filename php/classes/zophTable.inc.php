@@ -695,95 +695,24 @@ abstract class zophTable {
      * Get XML from a database table
      * This is a wrapper around several objects which will call a method from 
      * those objects
-     * @param string Name of the class to be used
      * @param string Search string
      * @param user Only return records that can be seen by this user
-     * @todo This should be replaced by a proper OO construction
      */
-    public static function getXML($class, $search,$user=null) {
-        $seach=strtolower($search);
-        $subclass="";
-        if($class=="location" || $class=="home" || $class=="work") {
-            $class="place";
-        } else if ($class=="photographer") {
-            $class="person";
-            $subclass="photographer";
-        } else if ($class=="father" || $class=="mother" || $class=="spouse") {
-            $class="person";
-        }
-
-
+    public static function getXML($search,$user=null) {
         $search=strtolower($search);
-        if($class=="person") {
-            $tree=false;
-        } else {
-            $tree=true;
-        }
 
-        if($class=="timezone") {
-            $tz=new TimeZone("UTC");
-            return $tz->get_xml($search);
-        } else if($class=="import_progress") {
-            $import=new WebImport($search);
-            return $import->get_xml();
-        } else if($class=="import_thumbs") {
-            return WebImport::getThumbsXML();
-        } else if (class_exists($class)) {
-            $obj=new $class;
-            $rootname=$obj->xml_rootname();
-            $nodename=$obj->xml_nodename();
-            $idname=$obj::$primary_keys[0];
+        $xml = new DOMDocument('1.0','UTF-8');
+        $rootnode=$xml->createElement(static::XMLROOT);
+        $newchild=$xml->createElement(static::XMLNODE);
+        $key=$xml->createElement("key");
+        $title=$xml->createElement("title");
+        $key->appendChild($xml->createTextNode("null"));
+        $title->appendChild($xml->createTextNode("&nbsp;"));
+        $newchild->appendChild($key);
+        $newchild->appendChild($title);
+        $rootnode->appendChild($newchild);
 
-            $xml = new DOMDocument('1.0','UTF-8');
-            $rootnode=$xml->createElement($obj->xml_rootname());
-            $newchild=$xml->createElement($obj->xml_nodename());
-            $key=$xml->createElement("key");
-            $title=$xml->createElement("title");
-            $key->appendChild($xml->createTextNode("null"));
-            $title->appendChild($xml->createTextNode("&nbsp;"));
-            $newchild->appendChild($key);
-            $newchild->appendChild($title);
-            $rootnode->appendChild($newchild);
-
-            if ($tree) {
-                $obj = $class::getRoot();
-                $obj->lookup();
-                $tree=$obj->get_xml_tree($xml, $search, $user);
-                $rootnode->appendChild($tree);
-            } else {
-                if($class=="person") {
-                    if($search=="") {
-                        $search=null;
-                    }
-                    if($user->is_admin()) {
-                       $records=get_all_people($user,$search, true);
-                    } else {
-                        if($subclass=="photographer") {
-                            $records=photographer::getAll($search,true);
-                        } else {
-                            $records=get_photographed_people($user,$search,true);
-                        }
-                    }
-                } else {
-                    $records=get_records($class, $order, $constraints, $conj, $ops);
-                } 
-               
-                foreach($records as $record) {
-                    $newchild=$xml->createElement($nodename);
-                    $key=$xml->createElement("key");
-                    $title=$xml->createElement("title");
-                    $key->appendChild($xml->createTextNode($record->get($idname)));
-                    $title->appendChild($xml->createTextNode($record->getName()));
-                    $newchild->appendChild($key);
-                    $newchild->appendChild($title);
-                    $rootnode->appendChild($newchild);
-                 }
-            }
-        } else {
-            die("illegal class $class");
-        }
-        $xml->appendChild($rootnode);
-        return $xml->saveXML();
-}
+        return static::getXMLdata($search, $xml, $rootnode);
+    }
 }
 ?>

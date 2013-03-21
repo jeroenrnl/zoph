@@ -35,11 +35,11 @@ class TimeZone extends DateTimeZone {
      * @param string Partial timezone name to filter timezones
      * @return string XML document
      */
-    function get_xml($search) {
+    public static function getXML($search) {
         $xml = new DOMDocument('1.0','UTF-8');
         $rootnode=$xml->createElement("zones");
 
-        $zones=$this->listIdentifiers();
+        $zones=self::listIdentifiers();
         array_unshift($zones, "&nbsp;");
         $len=strlen($search);
         foreach($zones as $id => $tz) {
@@ -57,7 +57,7 @@ class TimeZone extends DateTimeZone {
             }
         }
         $xml->appendChild($rootnode);
-        return $xml->saveXML();
+        return $xml;
     }
 
     /**
@@ -125,7 +125,7 @@ class TimeZone extends DateTimeZone {
      */
     public static function validate($tz) {
         // Checks if $tz contains a valid timezone string
-        $tzones=DateTimeZone::listIdentifiers();
+        $tzones=self::listIdentifiers();
         return array_search($tz, $tzones);
     }
 

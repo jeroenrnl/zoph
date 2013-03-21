@@ -133,9 +133,9 @@ abstract class zophTreeTable extends zophTable {
         return implode(",", $id_array);
     }
 
-    function get_xml_tree($xml, $search, $user=null) {
-        $rootname=$this->xml_rootname();
-        $nodename=$this->xml_nodename();
+    private function getXMLtree(DOMDocument $xml, $search) {
+        $rootname=static::XMLROOT;
+        $nodename=static::XMLNODE;
         $idname=static::$primary_keys[0];
 
         $newchild=$xml->createElement($nodename);
@@ -153,12 +153,12 @@ abstract class zophTreeTable extends zophTable {
             $newchild->appendChild($newchildkey);
             $newchild->appendChild($newchildtitle);
        }
-       $order = $user->prefs->get("child_sortorder");
+       $order = user::getCurrent()->prefs->get("child_sortorder");
        $children=$this->getChildrenForUser($order);
         if($children) {
             $childset=$xml->createElement($rootname);
             foreach($children as $child) {
-                $newnode=$child->get_xml_tree($xml, $search,$user);
+                $newnode=$child->getXMLtree($xml, $search);
                 if (isset($newnode)) {
                     $childset->appendChild($newnode);
                 }
@@ -183,6 +183,16 @@ abstract class zophTreeTable extends zophTable {
         }
         return parent::getDetailsXML($details);
     }
+
+    public static function getXMLdata($search, DOMDocument $xml, DOMElement $rootnode) {
+        $obj = static::getRoot();
+        $obj->lookup();
+        $tree=$obj->getXMLtree($xml, $search);
+        $rootnode->appendChild($tree);
+        $xml->appendChild($rootnode);
+        return $xml;
+    }
+
 }
 
 function create_tree_select_array($name, $user = null, $rec = null,

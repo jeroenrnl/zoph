@@ -111,7 +111,7 @@ class photographerTest extends ZophDataBaseTestCase {
 
      public function getAllPhotographers() {
         return array(
-            array(1, array(2,3,4,5,6)),
+            array(1, array(1,2,3,4,5,6,7,8,9,10,11)),
             array(2, array(2,3)),
             array(4, array(2,3,4))
         );

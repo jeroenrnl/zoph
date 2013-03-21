@@ -20,7 +20,7 @@
  *
  * @package Zoph
  * @author Jason Geiger
- * @auther Jeroen Roos
+ * @author Jeroen Roos
  */
 
 /**
@@ -31,6 +31,11 @@
  * @auther Jeroen Roos
  */
 class album extends zophTreeTable implements Organizer {
+
+    /** @param Name of the root node in XML responses */
+    const XMLROOT="albums";
+    /** @param Name of the leaf nodes in XML responses */
+    const XMLNODE="album";
 
     /** @var string The name of the database table */
     protected static $table_name="albums";
@@ -399,14 +404,6 @@ class album extends zophTreeTable implements Organizer {
      */
     function getURL() {
         return "albums.php?parent_album_id=" . $this->getId();
-    }
-
-    function xml_rootname() {
-        return "albums";
-    }
-
-    function xml_nodename() {
-        return "album";
     }
 
     /**

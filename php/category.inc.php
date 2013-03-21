@@ -20,7 +20,7 @@
  *
  * @package Zoph
  * @author Jason Geiger
- * @auther Jeroen Roos
+ * @author Jeroen Roos
  */
 
 /**
@@ -28,9 +28,16 @@
  *
  * @package Zoph
  * @author Jason Geiger
- * @auther Jeroen Roos
+ * @author Jeroen Roos
  */
 class category extends zophTreeTable implements Organizer {
+
+    /** @param Name of the root node in XML responses */
+    const XMLROOT="categories";
+    /** @param Name of the leaf nodes in XML responses */
+    const XMLNODE="category";
+
+
 
     /** @var string The name of the database table */
     protected static $table_name="categories";
@@ -230,14 +237,6 @@ class category extends zophTreeTable implements Organizer {
 
     function getURL() {
         return "categories.php?parent_category_id=" . $this->getId();
-    }
-
-    function xml_rootname() {
-        return "categories";
-    }
-
-    function xml_nodename() {
-        return "category";
     }
 
    /**

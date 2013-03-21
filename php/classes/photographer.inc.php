@@ -32,6 +32,12 @@
  * @package Zoph
  */
 class photographer extends person implements Organizer {
+
+//    /** @param Name of the root node in XML responses */
+//    const XMLROOT="people";
+//    /** @param Name of the leaf nodes in XML responses */
+//    const XMLNODE="person";
+
     /**
      * Add this person to a photo.
      * This records in the database that this person appears on the photo
@@ -46,32 +52,12 @@ class photographer extends person implements Organizer {
      * @param photo photo to remove the person from
      */
     public function removePhoto(photo $photo) {
-        if($photo->getPhotographer()->getId() == $this->getId()) {
+        $current=$photo->getPhotographer();
+        if($current instanceof photographer && $current->getId() == $this->getId()) {
             $photo->unsetPhotographer();
         }
-
     }
    
-    /**
-     * Name of XML root tag
-     * @todo phase out in favour of class constant
-     */
-    public function xml_rootname() {
-        return "people";
-    }
-
-    /**
-     * Name of XML node tag
-     * @todo phase out in favour of class constant
-     */
-    public function xml_nodename() {
-    /**
-     * Name of XML root tag
-     * @todo phase out in favour of class constant
-     */
-        return "person";
-    }
-
     /**
      * Return the number of photos this person has taken 
      * @return int count
@@ -97,13 +83,15 @@ class photographer extends person implements Organizer {
         $user=user::getCurrent();
 
         $where=get_where_for_search(" and ", $search, $search_first);
+        if($where!="") {
+            $where="WHERE " . $where;
+        }
         if ($user->is_admin()) {
             $sql =
-                "SELECT DISTINCT ppl.* FROM " .
-                DB_PREFIX . "people AS ppl, " .
-                DB_PREFIX . "photos AS ph " .
-                "WHERE ppl.person_id = ph.photographer_id " . $where . 
-                "ORDER BY ppl.last_name, ppl.called, ppl.first_name";
+                "SELECT * FROM " .
+                DB_PREFIX . "people " .
+                $where . 
+                " ORDER BY last_name, called, first_name";
         } else {
             $sql =
                 "SELECT DISTINCT ppl.* FROM " .

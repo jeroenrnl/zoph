@@ -32,6 +32,13 @@
  * @package Zoph
  */
 class person extends zophTable implements Organizer {
+
+    /** @param Name of the root node in XML responses */
+    const XMLROOT="people";
+    /** @param Name of the leaf nodes in XML responses */
+    const XMLNODE="person";
+
+
     /** @var string The name of the database table */
     protected static $table_name="people";
     /** @var array List of primary keys */
@@ -166,7 +173,7 @@ class person extends zophTable implements Organizer {
     function getChildren() {
         $constraints["father_id"] = $this->get("person_id");
         $constraints["mother_id"] = $this->get("person_id");
-        return get_people($constraints, "or");
+        return person::getAll($constraints, "or");
     }
 
     /** @todo I don't think this function is ever called */
@@ -243,13 +250,6 @@ class person extends zophTable implements Organizer {
             $display[translate("spouse")] = $spouse->getLink();
         }
         return $display;
-    }
-    function xml_rootname() {
-        return "people";
-    }
-
-    function xml_nodename() {
-        return "person";
     }
 
     /**
@@ -498,17 +498,71 @@ class person extends zophTable implements Organizer {
         return static::getTopNfromSQL($sql);
 
     }
+    
+    public static function getAll($search=null, $search_first = false) {
+        $user=user::getCurrent();
+        $where=get_where_for_search(" and ", $search, $search_first);
+        if($where!="") {
+            $where="WHERE " . $where;
+        }
+        if ($user->is_admin()) {
+            $sql =
+                "SELECT * FROM " .
+                DB_PREFIX . "people " .
+                $where .
+                " ORDER BY last_name, called, first_name";
+                echo $sql;
+        } else {
+            $sql =
+                "SELECT DISTINCT ppl.* FROM " .
+                DB_PREFIX . "people AS ppl JOIN " .
+                DB_PREFIX . "photo_people AS pp " .
+                "ON ppl.person_id = pp.person_id JOIN " . 
+                DB_PREFIX . "photos AS ph " .
+                "ON ph.photo_id = pp.photo_id JOIN " .
+                DB_PREFIX . "photo_albums AS pa " .
+                "ON pa.photo_id = ph.photo_id JOIN " .
+                DB_PREFIX . "group_permissions as gp " .
+                "ON pa.album_id = gp.album_id JOIN " .
+                DB_PREFIX . "groups_users as gu " .
+                "ON gp.group_id = gu.group_id " .
+                "WHERE gu.user_id = " . (int) $user->getId() .
+                " AND gp.access_level >= ph.level" . $where .
+                " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
+        }
+
+        return person::getRecordsFromQuery($sql);
+    }
+
+    public static function getXMLdata($search, DOMDocument $xml, DOMElement $rootnode) {
+        if($search=="") {
+            $search=null;
+        }
+        $records=static::getAll($search,true);
+        $idname=static::$primary_keys[0];
+
+        foreach($records as $record) {
+            $newchild=$xml->createElement(static::XMLNODE);
+            $key=$xml->createElement("key");
+            $title=$xml->createElement("title");
+            $key->appendChild($xml->createTextNode($record->get($idname)));
+            $title->appendChild($xml->createTextNode($record->getName()));
+            $newchild->appendChild($key);
+            $newchild->appendChild($title);
+            $rootnode->appendChild($newchild);
+        }
+        $xml->appendChild($rootnode);
+        return $xml;
+    }
+ 
+
 }
 
-function get_people($constraints = null, $conj = "and", $ops = null,
-    $order = "last_name, first_name", $user=null) {
-    return person::getRecords($order, $constraints, $conj, $ops);
-}
 
 function get_people_count($user = null, $search = null) {
     if($user && !$user->is_admin()) {
         $allowed=array();
-        $people=get_photographed_people($user, $search);
+        $people=person::getAll($search);
         $photographers=photographer::getAll($search);
         foreach($people as $person) {
             $allowed[]=$person->get("person_id");
@@ -529,7 +583,7 @@ function get_all_people($user = null, $search = null, $search_first = false) {
     $allowed=array();
 
     if($user && !$user->is_admin()) {
-        $people=get_photographed_people($user, $search, $search_first);
+        $people=person::getAll($search, $search_first);
         $photographers=photographer::getAll($search, $search_first);
         foreach($people as $person) {
             $allowed[]=$person->get("person_id");
@@ -556,39 +610,6 @@ function get_all_people($user = null, $search = null, $search_first = false) {
     return person::getRecordsFromQuery($sql);
 }
 
-function get_photographed_people($user = null, $search=null, $search_first = false) {
-    $where=get_where_for_search(" and ", $search, $search_first);
-    if ($user && !$user->is_admin()) {
-        $sql =
-            "select distinct ppl.* from " .
-            DB_PREFIX . "people AS ppl JOIN " .
-            DB_PREFIX . "photo_people AS pp " .
-            "ON ppl.person_id = pp.person_id JOIN " . 
-            DB_PREFIX . "photos AS ph " .
-            "ON ph.photo_id = pp.photo_id JOIN " .
-            DB_PREFIX . "photo_albums AS pa " .
-            "ON pa.photo_id = ph.photo_id JOIN " .
-            DB_PREFIX . "group_permissions as gp " .
-            "ON pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users as gu " .
-            "ON gp.group_id = gu.group_id " .
-            "WHERE gu.user_id = '" . 
-            escape_string($user->get("user_id")) . "' " .
-            " AND gp.access_level >= ph.level" . $where .
-            " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
-    }
-    else {
-        $sql =
-            "select distinct ppl.* from " .
-            DB_PREFIX . "people as ppl, " .
-            DB_PREFIX . "photo_people as pp " .
-            "where ppl.person_id = pp.person_id " . $where .
-            " order by ppl.last_name, ppl.called, ppl.first_name";
-    }
-
-    return person::getRecordsFromQuery($sql);
-}
-
 function get_where_for_search($conj, $search, $search_first) {
     $where="";
     if($search!==null) {
@@ -611,7 +632,7 @@ function get_people_select_array(user $user = null, array $people_array = null) 
     $ppl[""] = "";
 
     if (!$people_array) {
-        $people_array = get_people(null,null,null,"last_name, first_name",$user);
+        $people_array = person::getAll(null,null,null,"last_name, first_name");
     }
     if ($people_array) {
         foreach ($people_array as $person) {

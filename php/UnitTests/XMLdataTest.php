@@ -36,8 +36,9 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
      * @dataProvider getXMLtestdata
      */
     public function testGetXML($object, $search, $xml) {
+        user::setCurrent(new user(1));
         $actual = new DOMDocument;
-        $actual->loadXML(zophTable::getXML($object, $search, user::getCurrent()));
+        $actual->loadXML($object::getXML($search, user::getCurrent())->saveXML());
         $expected=new DOMDocument();
         $expected->loadXML($xml);
 
@@ -53,7 +54,7 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         user::setCurrent(new user(2));
 
         $actual = new DOMDocument;
-        $actual->loadXML(zophTable::getXML($object, $search, user::getCurrent()));
+        $actual->loadXML($object::getXML($search, user::getCurrent())->saveXML());
         $expected=new DOMDocument();
         $expected->loadXML($xml);
 
@@ -68,12 +69,8 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
             array("album", "", $this->getAllAlbumsXML()),
             array("category", "", $this->getAllCategoriesXML()),
             array("place", "", $this->getAllPlacesXML()),
-            array("home", "", $this->getAllPlacesXML()),
             array("person", "", $this->getAllPeopleXML()),
             array("photographer", "", $this->getAllPeopleXML()),
-            array("spouse", "", $this->getAllPeopleXML()),
-            array("father", "", $this->getAllPeopleXML()),
-            array("mother", "", $this->getAllPeopleXML()),
             array("album", "Album", $this->getAllAlbumsXML()),
             array("album", "Album 2", $this->getAllAlbumsXMLSearch2())
         );

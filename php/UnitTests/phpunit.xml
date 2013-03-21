@@ -7,11 +7,11 @@
     <blacklist>
         <directory>/usr/share</directory>
         <directory>php/UnitTests</directory>
+	<file>testHelpers.inc.php</file>
     </blacklist>
   </filter>
   <php>
     <const name="INSTANCE" value="zophgit" />
-    <const name="IMAGE_DIR" value="/data/images" />
   </php>
   <testsuites>
     <testsuite name="Zoph">

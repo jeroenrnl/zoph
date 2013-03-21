@@ -31,6 +31,12 @@
  * @author Jeroen Roos
  */
 class place extends zophTreeTable implements Organizer {
+    /** @param Name of the root node in XML responses */
+    const XMLROOT="places";
+    /** @param Name of the leaf nodes in XML responses */
+    const XMLNODE="place";
+
+
     /** @var string The name of the database table */
     protected static $table_name="places";
     /** @var array List of primary keys */
@@ -332,14 +338,6 @@ class place extends zophTreeTable implements Organizer {
             }
         }
         return self::getCountFromQuery($sql);
-    }
-
-    function xml_rootname() {
-        return "places";
-    }
-
-    function xml_nodename() {
-        return "place";
     }
 
     /**
