@@ -175,7 +175,7 @@
 <input type="hidden" name="photo_id" value="<?php echo $photo_id ?>">
 <input type="hidden" name="annotate" value="<?php echo $annotate ?>">
        <label for="html"><?php echo translate("send as html") ?></label>
-       <?php echo create_pulldown("html", "1", array("1" => translate("Yes",0), "0" => translate("No",0))) ?><br>
+       <?php echo template::createYesNoPulldown("html", "1") ?><br>
        <label for="toname"><?php echo translate("to (name)") ?></label>
        <?php echo create_text_input("to_name", $to_name, 24, 32) ?><br>
        <label for="toemail"><?php echo translate("to (email)") ?></label>
@@ -190,9 +190,9 @@
         if (!$annotate) {
 ?>
            <label for="size"><?php echo translate("send fullsize") ?></label>
-           <?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
+           <?php echo template::createPulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
            <label for="includeurl"><?php echo translate("include URL") ?></label>
-           <?php echo create_pulldown("includeurl", "1", array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?><br>
+           <?php echo template::createYesNoPulldown("includeurl", "1") ?><br>
 <?php
         }
 ?>

@@ -42,7 +42,7 @@
           <?php echo create_text_input("called", $person->get("called"), 16, 16) ?>
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "16") ?></span><br>
           <label for="gender"><?php echo translate("gender") ?></label>
-<?php echo create_pulldown("gender", $person->get("gender"), array("1" => translate("male",0), "2" => translate("female",0))) ?><br>
+<?php echo template::createPulldown("gender", $person->get("gender"), array("1" => translate("male",0), "2" => translate("female",0))) ?><br>
           <label for="dob"><?php echo translate("date of birth") ?></label>
           <?php echo create_text_input("dob", $person->get("dob"), 12, 10) ?>
           <span class="inputhint">YYYY-MM-DD</span><br>
@@ -53,17 +53,17 @@
           <?php echo create_text_input("email", $person->get("email"), 32, 64) ?>
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
           <label for="home_id"><?php echo translate("home") ?></label>
-<?php echo place::createPulldown("home_id", $person->get("home_id"), $user) ?><br>
+<?php echo place::createPulldown("home_id", $person->get("home_id")) ?><br>
           <label for="work_id"><?php echo translate("work") ?></label>
-<?php echo place::createPulldown("work_id", $person->get("work_id"), $user) ?><br>
+<?php echo place::createPulldown("work_id", $person->get("work_id")) ?><br>
           <label for="mother_id"><?php echo translate("mother") ?></label>
-<?php echo create_person_pulldown("mother_id", $person->get("mother_id"), $user) ?><br>
+<?php echo person::createPulldown("mother_id", $person->get("mother_id")) ?><br>
           <label for="father_id"><?php echo translate("father") ?></label>
-<?php echo create_person_pulldown("father_id", $person->get("father_id"), $user) ?><br>
+<?php echo person::createPulldown("father_id", $person->get("father_id")) ?><br>
           <label for="spouse"><?php echo translate("spouse") ?></label>
-<?php echo create_person_pulldown("spouse_id", $person->get("spouse_id"), $user) ?><br>
+<?php echo person::createPulldown("spouse_id", $person->get("spouse_id")) ?><br>
           <label for="pageset"><?php echo translate("pageset") ?></label>
-<?php echo create_pulldown("pageset", $person->get("pageset"), get_pageset_select_array()) ?><br>
+<?php echo template::createPulldown("pageset", $person->get("pageset"), get_pageset_select_array()) ?><br>
           <label for="notes"><?php echo translate("notes") ?></label>
           <textarea name="notes" cols="40" rows="4"><?php echo $person->get("notes") ?></textarea><br>
           <input type="submit" value="<?php echo translate($action, 0) ?>">

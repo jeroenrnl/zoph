@@ -186,7 +186,6 @@ class category extends zophTreeTable implements Organizer {
     }
 
     public function getEditArray() {
-        $user=user::getCurrent();
         if($this->is_root()) {
             $parent=array(
                 translate("parent category"),
@@ -194,9 +193,8 @@ class category extends zophTreeTable implements Organizer {
         } else {
             $parent=array(
                 translate("parent category"),
-                create_cat_pulldown("parent_category_id",
-                    $this->get("parent_category_id"),
-                    $user));
+                self::createPulldown("parent_category_id", $this->get("parent_category_id"))
+            );
         }
         return array(
             "category" =>
@@ -212,7 +210,7 @@ class category extends zophTreeTable implements Organizer {
             "pageset" =>
                 array(
                     translate("pageset"),
-                    create_pulldown("pageset", $this->get("pageset"), get_pageset_select_array())),
+                    template::createPulldown("pageset", $this->get("pageset"), get_pageset_select_array())),
             "sortname" =>
                 array(
                     translate("sort name"),
@@ -221,7 +219,7 @@ class category extends zophTreeTable implements Organizer {
             "sortorder" =>
                 array(
                     translate("category sort order"),
-                    create_photo_field_pulldown("sortorder", $this->get("sortorder")))
+                    template::createPhotoFieldPulldown("sortorder", $this->get("sortorder")))
         );
     }
 
@@ -301,6 +299,12 @@ class category extends zophTreeTable implements Organizer {
 
         }
     }
+
+    public static function getAutocompPref() {
+        $user=user::getCurrent();
+        return ($user->prefs->get("autocomp_categories") && conf::get("interface.autocomplete"));
+    }
+
 
     function is_root() {
         // At this moment the root cat is always 1, but this may
@@ -450,32 +454,6 @@ class category extends zophTreeTable implements Organizer {
         return parent::getTopNfromSQL($sql);
 
     }
-}
-
-function get_categories_select_array($user = null) {
-    return create_tree_select_array("category", $user);
-}
-
-function create_cat_pulldown($name, $value=null, $user, $sa=null) {
-    $text="";
-    $id=preg_replace("/^_+/", "", $name);
-    if($value) {
-        $cat=new category($value);
-        $cat->lookup();
-        $text=$cat->get("category");
-    }
-    if($user->prefs->get("autocomp_categories") && conf::get("interface.autocomplete")) {
-        $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
-            " value='" . e($value) . "'>";
-        $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 
-            "'" .  " value='" . e($text) . "' class='autocomplete'>";
-    } else {
-        if(!isset($sa)) {
-            $sa=get_categories_select_array($user);
-        }
-        $html=create_pulldown($name, $value, $sa);
-    }
-    return $html;
 }
 
 function get_category_count($user) {

@@ -193,34 +193,32 @@ abstract class zophTreeTable extends zophTable {
         return $xml;
     }
 
-}
-
-function create_tree_select_array($name, $user = null, $rec = null,
-    $level = "", $select_array = null) {
-    if (!$rec) {
-        $rec = $name::getRoot();
-        $rec->lookup();
-        $select_array[""] = "";
+    public static function getSelectArray() { 
+        return static::getTreeSelectArray();
     }
-    $key = $rec->get($name . "_id");
-    $descname=$name;
-    if($descname=="place"){ $descname="title"; }
 
-    $select_array[$key] = $level . e($rec->get($descname));
-    if($user) {
+    public static function getTreeSelectArray($rec = null, $select_array = null, $depth=0) {
+        $user=user::getCurrent();
         $user->lookup_prefs();
         $order = $user->prefs->get("child_sortorder");
-    } else {
-        $order="name";
-    }
-    $children = $rec->getChildrenForUser($order);
-    if ($children) {
-        foreach ($children as $child) {
-            $select_array = create_tree_select_array($name, $user, $child,
-                "$level&nbsp;&nbsp;&nbsp;", $select_array);
+
+        if (!$rec) {
+            $rec = static::getRoot();
+            $rec->lookup();
+            $select_array[""] = "";
         }
+
+        $select_array[$rec->getId()] = str_repeat("&nbsp;", $depth * 3) . e($rec->getName());
+        
+        $children = $rec->getChildrenForUser($order);
+        if ($children) {
+            foreach ($children as $child) {
+                $select_array = static::getTreeSelectArray($child, $select_array, ++$depth);
+            }
+        }
+        return $select_array;
     }
-    return $select_array;
 }
+
 
 ?>

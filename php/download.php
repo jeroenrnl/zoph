@@ -150,7 +150,7 @@
                     <label for="maxfiles">
                         <?php echo translate("Maximum number of files per zipfile") ?>
                     </label>
-                    <?php echo create_pulldown("_maxfiles", "100", array(
+                    <?php echo template::createPulldown("_maxfiles", "100", array(
                             10 => 10,
                             25 => 25,
                             50 => 50, 
@@ -164,7 +164,7 @@
                     <label for="maxsize">
                         <?php echo translate("Maximum size per zipfile") ?>
                     </label>
-                    <?php echo create_pulldown("_maxsize", "50000000", 
+                    <?php echo template::createPulldown("_maxsize", "50000000", 
                         array(
                             "5000000" => "5MiB", 
                             "10000000" => "10MiB", 

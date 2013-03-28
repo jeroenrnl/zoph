@@ -709,8 +709,7 @@ class place extends zophTreeTable implements Organizer {
                 escape_string($user->get("user_id")) .
                 "' AND gp.access_level >= ph.level " .
                 "ORDER BY plc.city, plc.title";
-        }
-        else {
+        } else {
             $sql =
                 "select distinct plc.* from " .
                 DB_PREFIX . "places as plc, " .
@@ -722,40 +721,11 @@ class place extends zophTreeTable implements Organizer {
         return place::getRecordsFromQuery($sql);
     }
 
-    /**
-     * Get an array of places that can be used to feed a selector box
-     * @param user user
-     * @return array places
-     */
-    public static function getSelectArray($user = null) {
-        return create_tree_select_array("place", $user);
+    public static function getAutocompPref() {
+        $user=user::getCurrent();
+        return ($user->prefs->get("autocomp_people") && conf::get("interface.autocomplete"));
     }
 
-    /**
-     * Create pulldown for place selection
-     * @param string name for pulldown, also base for id
-     * @param string current value
-     * @param user user
-     */
-    public static function createPulldown($name, $value=null, $user=null) {
-        $text="";
-
-        $id=preg_replace("/^_+/", "", $name);
-        if($value) {
-            $place=new place($value);
-            $place->lookup();
-            $text=$place->get("title");
-        }
-        if($user->prefs->get("autocomp_places") && conf::get("interface.autocomplete")) {
-            $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
-                " value='" . e($value) . "'>";
-            $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 
-                "'" . " value='" . e($text) . "' class='autocomplete'>";
-        } else {
-            $html=create_pulldown($name, $value, place::getSelectArray($user));
-        }
-        return $html;
-    }
 
     /**
      * Create pulldown for zoom
@@ -784,7 +754,7 @@ class place extends zophTreeTable implements Organizer {
             "17" => translate("17",0),
             "18" => translate("18 - house",0));
 
-        return create_pulldown($name, $val, $zoom_array);
+        return template::createPulldown($name, $val, $zoom_array);
     }
 }
 

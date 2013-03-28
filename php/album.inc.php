@@ -354,8 +354,7 @@ class album extends zophTreeTable implements Organizer {
         } else {
             $parent=array (
                 translate("parent album"),
-                create_album_pulldown("parent_album_id",
-                $this->get("parent_album_id"), $user));
+                album::createPulldown("parent_album_id", $this->get("parent_album_id")));
         }
         return array(
             "album" => 
@@ -371,7 +370,7 @@ class album extends zophTreeTable implements Organizer {
             "pageset" =>
                 array(
                     translate("pageset"),
-                    create_pulldown("pageset", $this->get("pageset"), get_pageset_select_array())),
+                    template::createPulldown("pageset", $this->get("pageset"), get_pageset_select_array())),
             "sortname" =>
                 array(
                     translate("sort name"),
@@ -380,7 +379,7 @@ class album extends zophTreeTable implements Organizer {
             "sortorder" =>
                 array(
                     translate("album sort order"),
-                    create_photo_field_pulldown("sortorder", $this->get("sortorder")))
+                    template::createPhotoFieldPulldown("sortorder", $this->get("sortorder")))
         );
     }
 
@@ -540,6 +539,12 @@ class album extends zophTreeTable implements Organizer {
 
     }
 
+    public static function getAutocompPref() {
+        $user=user::getCurrent();
+        return ($user->prefs->get("autocomp_albums") && conf::get("interface.autocomplete")); 
+    }
+
+
 }
 
 
@@ -592,31 +597,5 @@ function get_album_count($user = null) {
     return album::getCountFromQuery($sql);
 }
 
-function get_albums_select_array($user = null) {
-    return create_tree_select_array("album", $user);
-}
 
-function create_album_pulldown($name, $value=null, user $user=null, $sa=null) {
-    $text="";
-
-    $id=preg_replace("/^_+/", "", $name);
-    if($value) {
-        $album=new album($value);
-        $album->lookup();
-        $text=$album->get("album");
-    } 
-    
-    if($user->prefs->get("autocomp_albums") && conf::get("interface.autocomplete")) {
-        $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
-            " value='" . e($value) . "'>";
-        $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . 
-            "'" .  " value='" . e($text) . "' class='autocomplete'>";
-    } else {
-        if(!isset($sa)) {
-            $sa=get_albums_select_array($user);
-        }
-        $html=create_pulldown($name, $value, $sa);
-    }
-    return $html;
-}
 ?>

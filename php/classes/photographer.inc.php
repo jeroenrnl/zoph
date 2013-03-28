@@ -33,11 +33,6 @@
  */
 class photographer extends person implements Organizer {
 
-//    /** @param Name of the root node in XML responses */
-//    const XMLROOT="people";
-//    /** @param Name of the leaf nodes in XML responses */
-//    const XMLNODE="person";
-
     /**
      * Add this person to a photo.
      * This records in the database that this person appears on the photo
@@ -112,34 +107,6 @@ class photographer extends person implements Organizer {
         }
 
         return static::getRecordsFromQuery($sql);
-    }
-
-    /**
-     * Create a pulldown for photographers
-     * @param string name (and adapted from that, id) for the input tag
-     * @param string current value
-     * @return string HTML
-     * @todo returns HTML
-     */
-    public static function createPulldown($name, $value=null) {
-        $user=user::getCurrent();
-        $text="";
-
-        $id=preg_replace("/^_+/", "", $name);
-        if($value) {
-            $person=new person($value);
-            $person->lookup();
-            $text=$person->getName();
-        }
-        if($user->prefs->get("autocomp_photographer") && conf::get("interface.autocomplete")) {
-            $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
-                " value='" . e($value) . "'>";
-            $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .
-                " value='" . e($text) . "' class='autocomplete'>";
-        } else {
-            $html=create_pulldown($name, $value, get_people_select_array($user));
-        }
-        return $html;
     }
 }
 ?>

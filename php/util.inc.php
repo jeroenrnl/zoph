@@ -61,24 +61,11 @@ function create_text_input($name, $value, $size = 20, $max = 32, $type="text") {
     return "<input type=\"$type\" $step name=\"$name\" id=\"$id\" value=\"" . e($value) ."\" size=\"$size\" maxlength=\"$max\">\n";
 }
 
-function create_pulldown($name, $value, $value_array, $extraopt = null) {
-    $id=preg_replace("/^_+/", "", $name);
-
-    $html = "<select name=\"$name\" id=\"$id\" $extraopt>\n";
-    while (list($val, $label) = each($value_array)) {
-        if ($val == $value) { $selected = " selected"; }
-        else { $selected  = ""; }
-        $html .= "  <option value=\"$val\"$selected >" . ($label?$label:"&nbsp;") ."</option>\n";
-    }
-    $html .= "</select>\n";
-    return $html;
-}
-
 function create_integer_pulldown($name, $value, $min, $max) {
     for ($i = $min; $i <= $max; $i++) {
         $integer_array["$i"] = $i;
     }
-    return create_pulldown($name, $value, $integer_array);
+    return template::createPulldown($name, $value, $integer_array);
 }
 
 function create_rating_pulldown($val = "", $name = "rating") {
@@ -100,16 +87,16 @@ function create_rating_pulldown($val = "", $name = "rating") {
         $rating_array = array_reverse($tmp_array, true);
     }
 
-    return create_pulldown($name, $val, $rating_array);
+    return template::createPulldown($name, $val, $rating_array);
 }
 
 function create_conjunction_pulldown($var, $val = "") {
-    return create_pulldown($var, $val,
+    return template::createPulldown($var, $val,
         array("" => "", "and" => translate("and",0), "or" => translate("or",0)));
 }
 
 function create_operator_pulldown($var, $op = "=") {
-    return create_pulldown($var, $op,
+    return template::createPulldown($var, $op,
         array(
             "=" => "=", "!=" => "!=",
             ">" => ">", ">=" => ">=",
@@ -118,30 +105,22 @@ function create_operator_pulldown($var, $op = "=") {
 }
 
 function create_binary_operator_pulldown($var, $op = "=") {
-    return create_pulldown($var, $op,
+    return template::createPulldown($var, $op,
         array("=" => "=", "!=" => "!="));
 }
 
 function create_present_operator_pulldown($var, $op = "=") {
-    return create_pulldown($var, $op,
+    return template::createPulldown($var, $op,
         array("=" => translate("is in photo",0), "!=" => translate("is not in photo",0)));
 }
 
 function create_inequality_operator_pulldown($var, $op = ">") {
-    return create_pulldown($var, $op,
+    return template::createPulldown($var, $op,
         array(">" => translate("less than"), "<" => translate("more than")));
 }
 
-/**
- * This function is now only a wrapper around the static function in the photo class
- * @todo get rid of it
- */
-function create_photo_field_pulldown($var, $name = null) {
-    return create_pulldown($var, $name, translate(photo::getFields(),0));
-}
-
 function create_photo_text_pulldown($var, $name = null) {
-    return create_pulldown($var, $name, array(
+    return template::createPulldown($var, $name, array(
         "" => "",
         "album" => translate("album",0),
         "category" => translate("category",0),
@@ -149,22 +128,6 @@ function create_photo_text_pulldown($var, $name = null) {
         "photographer" => translate("photographer",0)));
 }
 
-function create_view_pulldown($name, $value, $extraopt=null) {
-    return create_pulldown($name, $value, array(
-        "list" => translate("List",0), 
-        "tree" => translate("Tree",0), 
-        "thumbs" => translate("Thumbnails",0)), $extraopt);
-}
-
-function create_autothumb_pulldown($name, $value, $extraopt=null) {
-    return  create_pulldown($name, $value, array(
-        "oldest" => translate("Oldest photo",0), 
-        "newest" => translate("Newest photo",0), 
-        "first" => translate("Changed least recently",0), 
-        "last" => translate("Changed most recently",0), 
-        "highest" => translate("Highest ranked",0), 
-        "random" => translate("Random",0)), $extraopt);
-}
 function get_sort_array() {
     return array(
         "name" => translate("Name",0),

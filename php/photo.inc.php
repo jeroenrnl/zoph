@@ -223,7 +223,6 @@ class photo extends zophTable {
             $people=array_merge($people,$this->_person_id);
             unset($this->_person_id);
         }
-        
         foreach($people as $person) {
             $this->addTo(new person($person));
         }

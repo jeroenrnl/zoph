@@ -135,7 +135,7 @@
             <th><?php echo translate("writable") ?></th>
             </tr>
 <?php
-            $albums = get_albums_select_array();
+            $albums = album::getSelectArray();
          foreach ($albums as $id=>$name) {
             if (!$id || $id == 1) { continue; }
                 $permissions = $group->get_group_permissions($id);
@@ -240,7 +240,7 @@ require_once("edit_group.inc.php");
             }
 ?>
                     <td>
-                            <?php echo create_pulldown("writable_all", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
+                            <?php echo template::createYesNoPulldown("writable_all", "0") ?>
                     </td>
                     </tr>
                     <tr>
@@ -248,7 +248,7 @@ require_once("edit_group.inc.php");
                     </td>
                     <td>
                             <input type="hidden" name="group_id_new" value="<?php echo $group->get("group_id") ?>">
-                            <?php echo create_pulldown("album_id_new", "", get_albums_select_array()) ?>
+                            <?php echo template::createPulldown("album_id_new", "", album::getSelectArray()) ?>
                     </td>
                     <td>
                             <?php echo create_text_input("access_level_new", "5", 4, 2) ?>
@@ -263,7 +263,7 @@ require_once("edit_group.inc.php");
             } 
 ?>
                         <td>
-                            <?php echo create_pulldown("writable_new", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?>
+                            <?php echo template::createYesNoPulldown("writable_new", "0") ?>
                     </td>
                     </tr>
                     <tr>
@@ -272,7 +272,7 @@ require_once("edit_group.inc.php");
                         </td>
                     </tr>
 <?php
-            $albums = get_albums_select_array();
+            $albums = album::getSelectArray();
          foreach ($albums as $id=>$name) {
             if (!$id || $id == 1) { continue; }
                 $permissions = $group->get_group_permissions($id);
@@ -301,7 +301,7 @@ require_once("edit_group.inc.php");
                         }
 ?>
                     <td>
-                            <?php echo create_pulldown("writable__$id", $permissions->get("writable"), array("0" => translate("No",0), "1" => translate("Yes",0))) ?>
+                            <?php echo template::createYesNoPulldown("writable__$id", $permissions->get("writable")) ?>
                     </td>
                 </tr>
 <?php

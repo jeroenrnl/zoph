@@ -245,6 +245,19 @@ abstract class zophTable {
         return $id;
 
     }
+    
+   /**
+    * Retrieving a the searcharray can take a long time in some cases
+    * pages that use it multiple times can cache it, so it only needs
+    * to be retrieved once per page request.
+    * @param array searchArray;
+    */
+    public static function setSAcache(array $sa=null) {
+        if(!$sa) {
+            $sa=static::getSearchArray();
+        }
+        static::$sacache=$sa;
+    }
 
     /**
      * Deletes a record.  If extra tables are specified, entries from
@@ -475,6 +488,20 @@ abstract class zophTable {
     }
 
     /**
+     * Return object from Id
+     * @param int id
+     * @return mixed object
+     */
+    public static function getFromId($id) {
+        if(!is_null($id) && $id!=0) {
+            $class=get_called_class();
+            $obj=new $class($id);
+            $obj->lookup();
+            return $obj;
+        }
+    }
+
+    /**
      * Gets the total count of records in the table for the given class.
      * @return int count
      */
@@ -573,7 +600,7 @@ abstract class zophTable {
         $return=array();
         
         $key="_" . $class . $suffix;
-        if(isset($vars[$key])) {
+        if(isset($vars[$key]) && $key!=0) {
             $return=(array) $vars[$key];
         }
 
@@ -714,5 +741,38 @@ abstract class zophTable {
 
         return static::getXMLdata($search, $xml, $rootnode);
     }
+
+   /**
+    * Create a pulldown menu for this object
+    * @param string name for this pulldown
+    * @param int|string id of value
+    */
+    public static function createPulldown($name, $value=null) {
+        if(static::getAutocompPref()) {
+            return static::createAutoCompPulldown($name, $value);
+        } else {
+            return template::createPulldown($name, $value, static::getSelectArray());
+        }
+    }
+
+    public static function createAutoCompPulldown($name, $value=null) {
+        $id=preg_replace("/^_+/", "", $name);
+        $text="";
+        if($value) {
+            $obj=static::getFromId($value);
+            $obj->lookup;
+            $text=$obj->getName();
+        }
+
+        $tpl=new block("autocomplete", array(
+            "id"    => $id,
+            "name"  => $name,
+            "value" => $value,
+            "text"  => $text
+        ));
+        return $tpl;
+    }
+
+   
 }
 ?>

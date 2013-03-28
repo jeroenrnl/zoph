@@ -147,7 +147,7 @@
             <div id="sortorder">
 <?php echo create_form($vars, array ("_rows", "_cols", "_order", "_button")) ?>
                 <?php echo translate("order by", 0) . "\n" ?>
-                <?php echo create_photo_field_pulldown("_order", $_order) ?>
+                <?php echo template::createPhotoFieldPulldown("_order", $_order) ?>
             </div>
             <div id="updown">
                 <a href="photos.php?<?php echo update_query_string($vars, "_dir", "asc") ?>"><img class="up" alt="sort ascending" src="<?php echo $up ?>"></a>

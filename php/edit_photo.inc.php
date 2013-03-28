@@ -177,7 +177,7 @@
               <?php echo translate("No people have been added to this photo.") ?><br>
 <?php
         }
-        echo create_person_pulldown("_person_id[0]", null, $user);
+        echo person::createPulldown("_person_id[0]");
 ?>
           </fieldset>
           <label for="albums"><?php echo translate("albums") ?></label>
@@ -196,7 +196,7 @@
             echo translate("This photo is not in any albums.");
             echo "<br>\n";
         }
-        echo create_album_pulldown("_album_id[0]", "", $user);
+        echo album::createPulldown("_album_id[0]");
         ?>
         </fieldset>
           <label for="categories"><?php echo translate("categories") ?></label>
@@ -216,7 +216,7 @@
               <?php echo translate("This photo is not in any categories.") ?><br>
 <?php
         }
-        echo create_cat_pulldown("_category_id[0]", "", $user);
+        echo category::createPulldown("_category_id[0]", "");
 ?>
       </fieldset>
       <br>
@@ -237,7 +237,7 @@
           <label for="camera_model"><?php echo translate("camera model") ?></label>
           <?php echo create_text_input("camera_model", $photo->get("camera_model"), 32, 32) ?><br>
           <label for="flash_used"><?php echo translate("flash used") ?></label>
-          <?php echo create_pulldown("flash_used", $photo->get("flash_used"), array("" => "", "Y" => translate("Yes",0), "N" => translate("No",0))) ?><br>
+          <?php echo template::createPulldown("flash_used", $photo->get("flash_used"), array("" => "", "Y" => translate("Yes",0), "N" => translate("No",0))) ?><br>
           <label for="focal_length"><?php echo translate("focal length") ?></label>
           <?php echo create_text_input("focal_length", $photo->get("focal_length"), 10, 64) ?><br>
           <label for="exposure"><?php echo translate("exposure") ?></label>

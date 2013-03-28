@@ -137,7 +137,7 @@ class group extends zophTable {
             $nm->lookup();
             $value_array[$nm->get("user_id")]=$nm->get("user_name");
         }
-        return create_pulldown($name, null, $value_array);
+        return template::createPulldown($name, null, $value_array);
     }
 
     function get_members_links($separator="&nbsp;") {

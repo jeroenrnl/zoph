@@ -50,6 +50,9 @@ class person extends zophTable implements Organizer {
     /** @var string URL for this class */
     protected static $url="person.php?person_id=";
 
+    /** @var array Cached Search Array */
+    protected static $sacache;
+
     /** @var location Home address of this person */
     public $home;
     /** @var location Work address of this person */
@@ -147,16 +150,6 @@ class person extends zophTable implements Organizer {
         return;
     }
 
-    public static function getFromId($person_id) {
-        $person=null;
-        if(!is_null($person_id) && $person_id!=0) {
-            $person=new person($person_id);
-            $person->lookup();
-        }
-        return $person;
-    }
-
-
     function getFather() {
         return person::getFromId($this->get("father_id"));
     }
@@ -185,8 +178,7 @@ class person extends zophTable implements Organizer {
     function getName() {
         if ($this->get("called")) {
             $name = $this->get("called");
-        }
-        else {
+        } else {
             $name = $this->get("first_name");
         }
 
@@ -511,7 +503,6 @@ class person extends zophTable implements Organizer {
                 DB_PREFIX . "people " .
                 $where .
                 " ORDER BY last_name, called, first_name";
-                echo $sql;
         } else {
             $sql =
                 "SELECT DISTINCT ppl.* FROM " .
@@ -554,7 +545,28 @@ class person extends zophTable implements Organizer {
         $xml->appendChild($rootnode);
         return $xml;
     }
- 
+
+    public static function getAutocompPref() {
+        $user=user::getCurrent();
+        return ($user->prefs->get("autocomp_people") && conf::get("interface.autocomplete"));
+    }
+
+    public static function getSelectArray() {
+        if(isset(static::$sacache)) {
+            return static::$sacache;
+        }
+        $ppl[""] = "";
+
+        $people_array = person::getAll();
+        foreach ($people_array as $person) {
+            $ppl[$person->get("person_id")] =
+                 ($person->get("last_name") ? $person->get("last_name") .  ", " : "") .
+                 ($person->get("called") ? $person->get("called") : $person->get("first_name"));
+        }
+
+        return $ppl;
+    }
+
 
 }
 
@@ -628,23 +640,6 @@ function get_where_for_search($conj, $search, $search_first) {
     return $where;
 }
 
-function get_people_select_array(user $user = null, array $people_array = null) {
-    $ppl[""] = "";
-
-    if (!$people_array) {
-        $people_array = person::getAll(null,null,null,"last_name, first_name");
-    }
-    if ($people_array) {
-        foreach ($people_array as $person) {
-            $ppl[$person->get("person_id")] =
-                 ($person->get("last_name") ? $person->get("last_name") .  ", " : "") .
-                 ($person->get("called") ? $person->get("called") : $person->get("first_name"));
-        }
-    }
-
-    return $ppl;
-}
-
 
 function get_photo_person_links($photo) {
 
@@ -661,28 +656,5 @@ function get_photo_person_links($photo) {
     return $links;
 }
 
-
-function create_person_pulldown($name, $value=null, user $user, $sa=null) {
-    $id=preg_replace("/^_+/", "", $name);
-    if($value) {
-        $person=new person($value);
-        $person->lookup();
-        $text=$person->getName();
-    } else {
-        $text = "";
-    }
-    if($user->prefs->get("autocomp_people") && conf::get("interface.autocomplete")) {
-        $html="<input type=hidden id='" . e($id) . "' name='" . e($name) . "'" .
-            " value='" . e($value) . "'>";
-        $html.="<input type=text id='_" . e($id) . "' name='_" . e($name) . "'" .
-            " value='" . e($text) . "' class='autocomplete'>";
-    } else {
-        if(!isset($sa)) {
-            $sa=get_people_select_array($user);
-        }
-        $html=create_pulldown($name, $value, $sa);
-    }
-    return $html;
-}
 
 ?>

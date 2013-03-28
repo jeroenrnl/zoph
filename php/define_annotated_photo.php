@@ -55,7 +55,7 @@
             <img src="<?php echo $photo->getURL("mid")?>" class="mid" ALT="<?php $photo->get("title") ?>">
           <br>
           <label for="size"><?php echo translate("send fullsize") ?></label>
-          <?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
+          <?php echo template::createPulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
           <input type="checkbox" name="photo_title_cb">
           <label for="photo_title"><?php echo translate("title") ?></label>
 <?php echo create_text_input("photo_title", $photo->get("title"), 35, 50) ?><br>

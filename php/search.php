@@ -168,7 +168,7 @@
 <?php echo create_inequality_operator_pulldown("_date_op[$i]", $_date_op[$i]) ?>
           </td>
           <td colspan="2">
-<?php echo create_pulldown("date[$i]", $date[$i], get_date_select_array($today, conf::get("interface.max.days"))) ?>
+<?php echo template::createPulldown("date[$i]", $date[$i], get_date_select_array($today, conf::get("interface.max.days"))) ?>
 <?php echo translate("days ago") ?>
           </td>
         </tr>
@@ -208,7 +208,7 @@ for ($i = 0; $i <= $count; $i++) {
 <?php echo create_inequality_operator_pulldown("_timestamp_op[$i]", $_timestamp_op[$i]) ?>
           </td>
           <td colspan="2">
-<?php echo create_pulldown("timestamp[$i]", $timestamp[$i], get_date_select_array($today, conf::get("interface.max.days"))) ?>
+<?php echo template::createPulldown("timestamp[$i]", $timestamp[$i], get_date_select_array($today, conf::get("interface.max.days"))) ?>
 <?php echo translate("days ago") ?>
           </td>
         </tr>
@@ -265,7 +265,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php
-            echo create_album_pulldown("album_id[$i]", $album_id[$i], $user);
+            echo album::createPulldown("album_id[$i]", $album_id[$i]);
 ?>
           <br><input type="checkbox" name="_album_id_children[<?php echo $i ?>]" value="yes" <?php echo $checked ?>><label for="_album_id_children[<?php echo $i ?>]"><?php echo translate("include sub-albums") ?></label>
           </td>
@@ -323,7 +323,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php
-            echo create_cat_pulldown("category_id[$i]", $category_id[$i], $user);
+            echo category::createPulldown("category_id[$i]", $category_id[$i]);
 ?>
           <br><input type="checkbox" name="_category_id_children[<?php echo $i ?>]" value="yes" <?php echo $checked ?>><label for="_category_id_children[<?php echo $i ?>]"><?php echo translate("include sub-categories") ?></label>
           </td>
@@ -464,7 +464,7 @@ for ($i = 0; $i <= $count; $i++) {
           </td>
           <td colspan="2">
 <?php
-            echo create_person_pulldown("person_id[$i]", $person_id[$i], $user);
+            echo person::createPulldown("person_id[$i]", $person_id[$i]);
 ?>
           </td>
         </tr>
@@ -543,7 +543,7 @@ for ($i = 0; $i <= $count; $i++) {
 <?php echo create_conjunction_pulldown("_field_conj[$i]", $_field_conj[$i]) ?>
           </td>
           <td>
-<?php echo create_photo_field_pulldown("_field[$i]", $_field[$i]) ?>
+<?php echo template::createPhotoFieldPulldown("_field[$i]", $_field[$i]) ?>
           </td>
           <td>
 <?php echo create_operator_pulldown("_field_op[$i]", $_field_op[$i]) ?>
@@ -619,7 +619,7 @@ for ($i = 0; $i <= $count; $i++) {
                 &lt; <?php echo create_text_input("_latlon_distance", $distance, 5, 5) ?>
             </td>
             <td>
-                <?php echo create_pulldown("_latlon_entity", $entity, array("km" => "km", "miles" => "miles")) ?>
+                <?php echo template::createPulldown("_latlon_entity", $entity, array("km" => "km", "miles" => "miles")) ?>
                 <?php echo translate("from"); ?>
             </td>
             </tr>

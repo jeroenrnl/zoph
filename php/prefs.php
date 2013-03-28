@@ -62,7 +62,7 @@
             <?php echo translate("show breadcrumbs") ?>
         </dt>
         <dd>
-            <?php echo create_pulldown("show_breadcrumbs", $user->prefs->get("show_breadcrumbs"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo template::createYesNoPulldown("show_breadcrumbs", $user->prefs->get("show_breadcrumbs")) ?>
         </dd>
         <dt>
             <?php echo translate("number of breadcrumbs to show") ?>
@@ -116,25 +116,25 @@
             <?php echo translate("open fullsize photo in new window") ?>
         </dt>
         <dd>
-            <?php echo create_pulldown("fullsize_new_win", $user->prefs->get("fullsize_new_win"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo template::createYesNoPulldown("fullsize_new_win", $user->prefs->get("fullsize_new_win")) ?>
         </dd>
         <dt>
             <?php echo translate("display camera info") ?>
         </dt>
         <dd>
-            <?php echo create_pulldown("camera_info", $user->prefs->get("camera_info"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo template::createYesNoPulldown("camera_info", $user->prefs->get("camera_info")) ?>
         </dd>
         <dt>
             <?php echo translate("display all EXIF info") ?>
         </dt>
         <dd>
-            <?php echo create_pulldown("allexif", $user->prefs->get("allexif"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo template::createYesNoPulldown("allexif", $user->prefs->get("allexif")) ?>
         </dd>
         <dt>
             <?php echo translate("automatically edit photos") ?>
         </dt>
         <dd>
-            <?php echo create_pulldown("auto_edit", $user->prefs->get("auto_edit"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo template::createYesNoPulldown("auto_edit", $user->prefs->get("auto_edit")) ?>
         </dd>
         <dt>
 <?php
@@ -151,7 +151,7 @@
 ?>
           </dt>
           <dd>
-<?php echo create_pulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), template::createSelectArray(color_scheme::getRecords("name"), array("name"))) ?>
+<?php echo template::createPulldown("color_scheme_id", $user->prefs->get("color_scheme_id"), template::createSelectArray(color_scheme::getRecords("name"), array("name"))) ?>
           </dd>
 <?php
     $langs = language::getAll();
@@ -163,24 +163,24 @@
         <dt><?php echo translate("language") ?>
         </dt>
         <dd>
-<?php echo create_pulldown("language", $user->prefs->get("language"), $lang_select_array) ?>
+            <?php echo template::createPulldown("language", $user->prefs->get("language"), $lang_select_array) ?>
         </dd>
         <dt>
             <?php echo translate("Default view") ?>
         </dt>
         <dd>
-            <?php echo create_view_pulldown("view", $user->prefs->get("view")) ?>
+            <?php echo template::createViewPulldown("view", $user->prefs->get("view")) ?>
         </dd>
         <dt>
             <?php echo translate("Automatic coverphoto") ?>
         </dt>
         <dd>
-            <?php echo create_autothumb_pulldown("autothumb", $user->prefs->get("autothumb")) ?>
+            <?php echo template::createAutothumbPulldown("autothumb", $user->prefs->get("autothumb")) ?>
 
         </dd>
         <dt><?php echo translate("Sort order for subalbums and categories") ?></dt>
         <dd>
-            <?php echo create_pulldown("child_sortorder", $user->prefs->get("child_sortorder"), get_sort_array()); ?>
+            <?php echo template::createPulldown("child_sortorder", $user->prefs->get("child_sortorder"), get_sort_array()); ?>
         </dd>
     </dl>
 <?php
@@ -190,23 +190,23 @@
     <dl class="prefs">
         <dt><?php echo translate("albums") ?></dt>
         <dd>
-            <?php echo create_pulldown("autocomp_albums", $user->prefs->get("autocomp_albums"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo template::createYesNoPulldown("autocomp_albums", $user->prefs->get("autocomp_albums")) ?>
         </dd>
         <dt><?php echo translate("categories") ?></dt>
         <dd>
-            <?php echo create_pulldown("autocomp_categories", $user->prefs->get("autocomp_categories"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo template::createYesNoPulldown("autocomp_categories", $user->prefs->get("autocomp_categories")) ?>
         </dd>
         <dt><?php echo translate("people") ?></dt>
         <dd>
-            <?php echo create_pulldown("autocomp_people", $user->prefs->get("autocomp_people"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo template::createYesNoPulldown("autocomp_people", $user->prefs->get("autocomp_people")) ?>
         </dd>
         <dt><?php echo translate("places") ?></dt>
         <dd>
-            <?php echo create_pulldown("autocomp_places", $user->prefs->get("autocomp_places"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo template::createYesNoPulldown("autocomp_places", $user->prefs->get("autocomp_places")) ?>
         </dd>
         <dt><?php echo translate("photographer") ?></dt>
         <dd>
-            <?php echo create_pulldown("autocomp_photographer", $user->prefs->get("autocomp_photographer"), array("1" => translate("Yes",0), "0" => translate("No",0)) ) ?>
+            <?php echo template::createYesNoPulldown("autocomp_photographer", $user->prefs->get("autocomp_photographer")) ?>
         </dd>
      </dl>
 <?php

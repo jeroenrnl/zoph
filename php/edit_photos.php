@@ -106,16 +106,16 @@
         // create once
         if(!conf::get("interface.autocomplete")) {
             if(!$user->prefs->get("autocomp_categories")) {
-                $category_select_array = get_categories_select_array($user);
+                category::setSAcache();
             }
             if(!$user->prefs->get("autocomp_albums")) {
-                $album_select_array = get_albums_select_array($user);
+                album::setSAcache();
             }
             if(!$user->prefs->get("autocomp_places")) {
-                $places_select_array = place::getSelectArray($user);
+                place::setSAcache();
             }
             if(!$user->prefs->get("autocomp_people")) {
-                $people_select_array = get_people_select_array($user);
+                person::setSAcache();
             }
         }
 	
@@ -132,7 +132,7 @@
                 <legend><?php echo translate("All photos")?></legend>
                   <input type="hidden" name="_action" value="update">
                   <label for="overwrite"><?php echo translate("overwrite values below", 0) ?></label>
-                  <?php echo create_pulldown("_overwrite", "0", array("0" => translate("No"), "1" => translate("Yes"))) ?><br>
+                  <?php echo template::createYesNoPulldown("_overwrite", "0") ?><br>
                   <label for="date__all"><?php echo translate("date") ?></label>
                   <?php echo create_text_input("__date__all", "" , 12, 10, "date") ?>
                   <span class="inputhint">YYYY-MM-DD</span><br>
@@ -142,16 +142,16 @@
                   <label for="location_id__all"><?php echo translate("location") ?></label>
                   <?php echo place::createPulldown("__location_id__all", null, $user, $places_select_array) ?><br>
                   <label for="photographer_id__all"><?php echo translate("photographer") ?></label>
-                  <?php echo create_person_pulldown("__photographer_id__all", null, $user, $people_select_array) ?><br>
+                  <?php echo person::createPulldown("__photographer_id__all") ?><br>
                   <label for="rating__all"><?php echo translate("rating") ?></label>
                   <?php echo create_rating_pulldown(null, "_rating__all") ?><br>
                   <label for="album__all"><?php echo translate("albums") ?></label>
                   <fieldset class="multiple">
-                      <?php echo create_album_pulldown("_album__all[0]", null, $user, $album_select_array) ?>
+                      <?php echo album::createPulldown("_album__all[0]") ?>
                   </fieldset><br>
                   <label for="category__all"><?php echo translate("categories") ?></label>
                   <fieldset class="multiple">
-                      <?php echo create_cat_pulldown("_category__all[0]", null, $user, $category_select_array) ?>
+                      <?php echo category::createPulldown("_category__all[0]") ?>
                   </fieldset><br>
                 </fieldset>
 <?php
@@ -200,8 +200,7 @@
                     if ($request_vars["_rating__all"]) {
                         $rating = $request_vars["_rating__all"];
                     }
-                }
-                else { // reverse order
+                } else { // reverse order
                     $photo->setFields($request_vars, '__', '__all');
                     $photo->setFields($request_vars, '__', "__$photo_id", false);
 
@@ -210,10 +209,9 @@
                         $rating = $request_vars["_rating__$photo_id"];
                     }
                 }
-
-                if ($rating != null) {
+                if ($rating != "0") {
                     if (conf::get("feature.rating")) {
-                        $photo->rate($user, $rating);
+                        $photo->rate($rating);
                     }
                 }
 
@@ -235,8 +233,7 @@
                         die;
                     }
                 }
-            }
-            else if ($can_edit && $action == 'delete') {
+            } else if ($can_edit && $action == 'delete') {
                 $photo->delete();
                 continue;
             }
@@ -318,16 +315,17 @@
                       <label for="location_id__<?php echo $photo_id ?>"><?php echo translate("location") ?></label>
                       <?php echo place::createPulldown("__location_id__$photo_id", $photo->get("location_id"), $user, $places_select_array) ?><br>
                       <label for="photographer_id__<?php echo $photo_id?>"><?php echo translate("photographer") ?></label>
-                      <?php echo create_person_pulldown("__photographer_id__$photo_id", $photo->get("photographer_id"), $user, $people_select_array) ?><br>
-                      <label for="rating__<?php echo $photo_id?>"><?php echo translate("rating") ?></label>
+                      <?php echo photographer::createPulldown("__photographer_id__$photo_id", $photo->get("photographer_id")) ?><br>
 <?php
-    $rating = $photo->get('rating');
     if (conf::get("feature.rating")) {
         $rating = $photo->getRatingForUser($user);
-    }
 ?>
+                      <label for="rating__<?php echo $photo_id?>"><?php echo translate("rating") ?></label>
                       <?php echo create_rating_pulldown($rating, "_rating__$photo_id") ?>
                       <br>
+<?php
+    }
+?>
                       <label for="description__<?php echo $photo_id?>"><?php echo translate("description") ?></label>
                       <textarea name="__description__<?php echo $photo_id ?>" id="description__<?php echo $photo_id?>" class="desc" cols="50" rows="3"><?php echo $photo->get("description") ?></textarea>
                       <br>
@@ -349,7 +347,7 @@
                 }
 ?>
                       <fieldset class="multiple">
-                        <?php echo create_album_pulldown("_album__" . $photo_id . "[0]", null, $user, $album_select_array) ?>
+                        <?php echo album::createPulldown("_album__" . $photo_id . "[0]") ?>
                       </fieldset><br>
                   </fieldset><br>
                       <label for="category__<?php echo $photo_id?>"><?php echo translate("categories") ?></label>
@@ -369,12 +367,12 @@
                     echo "<br>\n";
                 }
 ?>
-                          <fieldset class="multiple">
-                            <?php echo create_cat_pulldown("_category__" . $photo_id . "[0]", null, $user, $category_select_array) ?>
-                          </fieldset><br>
+                      <fieldset class="multiple">
+                        <?php echo category::createPulldown("_category__" . $photo_id . "[0]") ?>
                       </fieldset><br>
-                      <label for="person_0__<?php echo $photo_id ?>"><?php echo translate("people") ?></label>
-                      <fieldset class="checkboxlist multiple">
+                  </fieldset><br>
+                  <label for="person_0__<?php echo $photo_id ?>"><?php echo translate("people") ?></label>
+                  <fieldset class="checkboxlist multiple">
 <?php
                 $people = $photo->getPeople();
                 if ($people) {
@@ -390,7 +388,7 @@
                     echo "<br>\n";
                 }
 ?>
-                   <?php echo create_person_pulldown("_person__" . $photo_id . "[0]", "", $user, $people_select_array) ?>
+                   <?php echo person::createPulldown("_person__" . $photo_id . "[0]") ?>
                       </fieldset><br>
                      <br>
                   </fieldset>
@@ -412,7 +410,7 @@
             $pager_vars[$key] = $val;
         }
         $request_vars = $pager_vars;
-        echo pager($offset, $num_photos, $num_pages, $cells, $user->prefs->get("max_pageer_size"), $request_vars, "_off");
+        echo pager($offset, $num_photos, $num_pages, $cells, $user->prefs->get("max_pager_size"), $request_vars, "_off");
     } // if photos
 ?>
 <br>

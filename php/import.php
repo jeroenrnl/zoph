@@ -69,10 +69,10 @@ if(empty($_action)) {
         "parallel=" . (int) conf::get("import.parallel")  . ";\n";
 
     $tpl=new template("import", array(
-                "upload_id" => $upload_id,
-                "num" => $num,
-                "javascript" => $javascript,
-                "user" => $user));
+        "upload_id" => $upload_id,
+        "num" => $num,
+        "javascript" => $javascript,
+    ));
     $tpl->js=array("js/util.js", "js/xml.js", "js/import.js");
     echo $tpl;
     include("footer.inc.php");
