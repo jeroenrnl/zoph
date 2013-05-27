@@ -19,7 +19,7 @@
  * @package Zoph
  */
 
-require_once("include.inc.php");
+require_once "include.inc.php";
 if ((!conf::get("import.enable")) || (!$user->is_admin() && !$user->get("import"))) {
         redirect("zoph.php");
 }
@@ -34,7 +34,7 @@ $_action=getvar("_action");
 $title = translate("Import");
 
 if (empty($_action)) {
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 }
 
 session_write_close();
@@ -75,7 +75,7 @@ if(empty($_action)) {
     ));
     $tpl->js=array("js/util.js", "js/xml.js", "js/import.js");
     echo $tpl;
-    include("footer.inc.php");
+    include "footer.inc.php";
 } else if ($_action=="browse") {
     if(conf::get("import.upload")) {
         $upload_num = $upload_id . "_" . $num;

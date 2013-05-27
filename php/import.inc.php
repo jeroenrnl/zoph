@@ -18,7 +18,7 @@
  * @author Jeroen Roos
  * @package Zoph
  */
-require_once("exif.inc.php");
+require_once "exif.inc.php";
 
 /**
  * This class holds the generalized functions importing images

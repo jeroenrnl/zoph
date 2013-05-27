@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-require_once("include.inc.php");
+require_once "include.inc.php";
 $title=translate("Pages");
-require_once("header.inc.php");
+require_once "header.inc.php";
 ?>
     <h1>
 <?php
@@ -38,5 +38,5 @@ require_once("header.inc.php");
     <br>
     </div>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

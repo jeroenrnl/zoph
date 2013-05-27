@@ -21,74 +21,74 @@
      */
 
     function zophAutoloadClass($class) {
-            @include_once("classes/" . $class . ".inc.php");
+            @include_once "classes/" . $class . ".inc.php";
     }
 
     function zophAutoloadInterface($interface) {
-            @include_once("interfaces/" . $interface . ".inc.php");
+            @include_once "interfaces/" . $interface . ".inc.php";
     }
     spl_autoload_register("zophAutoloadClass");
     spl_autoload_register("zophAutoloadInterface");
 
-    require_once("exception.inc.php");
-    require_once("variables.inc.php");
-    require_once("log.inc.php");
+    require_once "exception.inc.php";
+    require_once "variables.inc.php";
+    require_once "log.inc.php";
 
-    require_once("config.inc.php");
-    require_once("settings.inc.php");
-    require_once("requirements.inc.php");
-    require_once("util.inc.php");
+    require_once "config.inc.php";
+    require_once "settings.inc.php";
+    require_once "requirements.inc.php";
+    require_once "util.inc.php";
 
-    require_once("validator.inc.php");
+    require_once "validator.inc.php";
 
-    require_once("zoph_calendar.inc.php");
+    require_once "zoph_calendar.inc.php";
 
     /**
      * @todo remove once all global functions have been removed
      */
-    require_once("classes/zophTable.inc.php");
-    require_once("classes/zophTreeTable.inc.php");
+    require_once "classes/zophTable.inc.php";
+    require_once "classes/zophTreeTable.inc.php";
 
-    require_once("place.inc.php");
-    require_once("track.inc.php");
-    require_once("point.inc.php");
+    require_once "place.inc.php";
+    require_once "track.inc.php";
+    require_once "point.inc.php";
 
-    require_once("person.inc.php");
+    require_once "person.inc.php";
 
-    require_once("group_permissions.inc.php");
-    require_once("color_scheme.inc.php");
-    require_once("prefs.inc.php");
-    require_once("user.inc.php");
-    require_once("group.inc.php");
+    require_once "group_permissions.inc.php";
+    require_once "color_scheme.inc.php";
+    require_once "prefs.inc.php";
+    require_once "user.inc.php";
+    require_once "group.inc.php";
 
-    require_once("database.inc.php");
+    require_once "database.inc.php";
 
     if(!defined("LOGON")) {
         if(!defined("TEST")) {
-            require_once("auth.inc.php");
+            require_once "auth.inc.php";
         }
 
-        require_once("album.inc.php");
-        require_once("category.inc.php");
-        require_once("code.inc.php");
-        require_once("comment.inc.php");
+        require_once "album.inc.php";
+        require_once "category.inc.php";
+        require_once "code.inc.php";
+        require_once "comment.inc.php";
 
-        require_once("page.inc.php");
-        require_once("pageset.inc.php");
+        require_once "page.inc.php";
+        require_once "pageset.inc.php";
 
-        require_once("file.inc.php");
+        require_once "file.inc.php";
 
-        require_once("photo.inc.php");
-        require_once("saved_search.inc.php");
-        require_once("photo_search.inc.php");
+        require_once "photo.inc.php";
+        require_once "saved_search.inc.php";
+        require_once "photo_search.inc.php";
 
-        require_once("import.inc.php");
+        require_once "import.inc.php";
         if(defined("CLI") || defined("TEST")) {
-            require_once("cli/cli.inc.php");
-            require_once("cli/arguments.inc.php");
-            require_once("cli/cliimport.inc.php");
+            require_once "cli/cli.inc.php";
+            require_once "cli/arguments.inc.php";
+            require_once "cli/cliimport.inc.php";
         } else {
-            require_once("webimport.inc.php");
+            require_once "webimport.inc.php";
         }
     }
     ?>

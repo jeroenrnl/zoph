@@ -14,7 +14,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if ($_action == "edit") {
         $action = "update";
@@ -34,7 +34,7 @@
 
     $title = translate("Preferences");
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
           <h1>
             <span class="actionlink"><a href="password.php"><?php echo translate("change password") ?></a></span>
@@ -217,4 +217,4 @@
   </form>
 </div>
 
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

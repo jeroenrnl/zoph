@@ -26,14 +26,14 @@
    * Copyright 2003 Nixon P. Childs
    * **************************************************************************/
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!conf::get("feature.annotate")) {
         redirect("zoph.php");
     }
 
     $title = translate("Annotate Photo");
-    require_once("header.inc.php");
+    require_once "header.inc.php";
     $photo_id = getvar("photo_id");
     $photo = new photo($photo_id);
     $found = $photo->lookup();
@@ -254,4 +254,4 @@
     
   <br>
 </div>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

@@ -185,5 +185,5 @@
 ?>
     </ul>
 <?php
-require_once("breadcrumbs.inc.php");
+require_once "breadcrumbs.inc.php";
 ?>

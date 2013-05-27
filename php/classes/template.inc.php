@@ -102,7 +102,7 @@ class template {
         }
         try {
             ob_start();
-                include($this->template);
+                include $this->template;
            return ob_get_clean();
         } catch(Exception $e) {
             echo $e->getMessage();

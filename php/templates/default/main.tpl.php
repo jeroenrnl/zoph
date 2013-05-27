@@ -21,7 +21,7 @@
  */
 
 if(!ZOPH) { die("Illegal call"); }
-require_once("header.inc.php");
+require_once "header.inc.php";
 ?>
     <h1>
         <?php echo $this->getActionlinks(); ?>
@@ -38,4 +38,4 @@ require_once("header.inc.php");
         mapstraction.autoCenterAndZoom();
     </script>
     <?php endif; ?>
-    <?php require_once("footer.inc.php"); ?>
+    <?php require_once "footer.inc.php"; ?>

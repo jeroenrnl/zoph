@@ -29,7 +29,7 @@
           </h1>
 <?php
           echo check_js($user);
-          require_once("selection.inc.php");
+          require_once "selection.inc.php";
 ?>
               
       <div class="main">

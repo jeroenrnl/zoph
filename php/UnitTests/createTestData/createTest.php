@@ -27,12 +27,12 @@
 
 define("TEST", true);
 
-require_once("testData.php");
-require_once("testImage.php");
+require_once "testData.php";
+require_once "testImage.php";
 
-require_once("../../settings.inc.php");
-require_once("../../include.inc.php");
-require_once("../../cli/cliimport.inc.php");
+require_once "../../settings.inc.php";
+require_once "../../include.inc.php";
+require_once "../../cli/cliimport.inc.php";
 
 $lang=new language("en");
 

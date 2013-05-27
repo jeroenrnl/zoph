@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     $title = translate("E-Mail Photo");
 
@@ -134,7 +134,7 @@
     $from_name = $user->person->getName();
     $from_email = $user->person->get_email();
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
 
           <h1>
@@ -218,5 +218,5 @@
 </form>
 
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

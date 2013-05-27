@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $title=translate("search",0);
     if ($_action=="insert") {
         $search=new search();
@@ -34,7 +34,7 @@
     
     if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         $request_vars = clean_request_vars($request_vars);
-        require_once("photos.php");
+        require_once "photos.php";
     } else if ($_action=="new" || $_action=="edit") {
         if($_action=="new") {
             $action="insert";
@@ -62,7 +62,7 @@
             $search->lookup();
             $url=$search->get("search");
         }   
-        require_once("header.inc.php");
+        require_once "header.inc.php";
 ?>
     <h1><?php echo translate("Save search")?></h1>
     <div class="main">
@@ -76,7 +76,7 @@
     </form>
     <div>
 <?php
-        require_once("footer.inc.php");
+        require_once "footer.inc.php";
         end;
     
     
@@ -84,7 +84,7 @@
                $_action=="confirm" || 
                $_action=="insert") {
         $obj = &$search;
-        require_once("actions.inc.php");
+        require_once "actions.inc.php";
         redirect("search.php", "Redirect");
     } else if ($_action=="delete") {
         $search_id=getvar("search_id");
@@ -92,7 +92,7 @@
         $search->lookup();
         $url="search.php?search_id=" . $search->get("search_id") . 
             "&_action=confirm";
-        require_once("header.inc.php");
+        require_once "header.inc.php";
 ?>
     <h1><?php echo translate("Delete saved search")?></h1>
     <div class="main">
@@ -104,13 +104,13 @@
         <br>
      </div>
 <?php
-        require_once("footer.inc.php");
+        require_once "footer.inc.php";
         end;
     } else {
 
         $today = date("Y-m-d");
 
-        require_once("header.inc.php");
+        require_once "header.inc.php";
 
 /*
   Each search item is stored in a set of arrays. The increment button increases the size of the array.
@@ -651,7 +651,7 @@ if(conf::get("maps.provider")) {
     $map->setCenterAndZoom(0,0,2);
     echo $map;
 }
-require_once("footer.inc.php");
+require_once "footer.inc.php";
 
 }
 ?>

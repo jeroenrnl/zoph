@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $title = translate("Home");
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 
     // get one random photo
     $vars["_random"] = 1;
@@ -94,5 +94,5 @@
         </p>
     </div>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

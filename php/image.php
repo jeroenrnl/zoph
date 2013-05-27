@@ -21,11 +21,11 @@
  * @author Alan Shutko
  */
     session_cache_limiter("public");
-    require_once("variables.inc.php");
+    require_once "variables.inc.php";
     $hash = getvar("hash");
     $annotated = getvar('annotated');
     define("IMAGE_PHP", 1);
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     $photo_id = getvar("photo_id");
     $type = getvar("type");
@@ -104,7 +104,7 @@
         }
         exit;
     }
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
           <h1>
             <?php echo translate("error") ?>
@@ -113,5 +113,5 @@
             <?php echo translate("The image you requested could not be displayed.") ?>
 </div>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

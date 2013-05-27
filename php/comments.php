@@ -15,13 +15,13 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!conf::get("feature.comments")) {
         redirect("zoph.php");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
           <h1>
 <?php echo translate("Comments") ?>
@@ -38,5 +38,5 @@
     }
 ?>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

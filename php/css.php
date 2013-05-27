@@ -23,12 +23,12 @@ if(isset($_GET['logged_on'])) {
 } else {
     echo "/* This is the customized CSS, user is logged on */";
 }
-require_once("include.inc.php");
+require_once "include.inc.php";
 $tpl=conf::get("interface.template");
 $css="templates/" . $tpl . "/css.php";
 if(!file_exists($css)) {
     $css="templates/default/css.php";
 }
-require_once($css);
+require_once $css;
 
 ?>

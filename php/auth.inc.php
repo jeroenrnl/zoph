@@ -67,7 +67,7 @@
     } else if (empty($user)) {
         $hash=getvar("hash");
         if(defined("IMAGE_PHP") && conf::get("share.enable") && !empty($hash)) {
-            require_once("classes/anonymousUser.inc.php");
+            require_once "classes/anonymousUser.inc.php";
             $user = new anonymousUser();
         } else {
             $uname = getvar("uname");

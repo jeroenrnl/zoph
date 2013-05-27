@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-require_once("include.inc.php");
+require_once "include.inc.php";
 
 header("Content-Type: text/xml");
 session_write_close();

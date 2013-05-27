@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
 
     $place_id = getvar("place_id");
@@ -31,7 +31,7 @@
         }
         $action="display";
     }
-    require_once("actions.inc.php");
+    require_once "actions.inc.php";
     if (!$user->is_admin() || $action == "display") {
         redirect("places.php?parent_place_id=" . $place->get("place_id"), "Redirect");
     }
@@ -43,7 +43,7 @@
         $title = translate("New Place");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
 <?php
     if ($action == "confirm") {
@@ -58,7 +58,7 @@
 
 <?php
     } else {
-require_once("edit_place.inc.php");
+require_once "edit_place.inc.php";
     }
 ?>
 </div>
@@ -78,4 +78,4 @@ require_once("edit_place.inc.php");
 
 
 ?>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

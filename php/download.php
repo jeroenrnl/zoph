@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $vars=clean_request_vars($request_vars);
 
     $_action=getvar("_action");
@@ -48,7 +48,7 @@
         flush();
         exit;
     }
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
     <h1>
         <?php echo translate("Download zipfile") . "\n" ?>
@@ -118,7 +118,7 @@
             <br>
             </div>
 <?
-            require_once("footer.inc.php");
+            require_once "footer.inc.php";
         } else {
             echo translate("No photos were found matching your search criteria.") . "\n";
         }
@@ -188,6 +188,6 @@
         </div>
         <br>
 <?php
-            require_once("footer.inc.php");
+            require_once "footer.inc.php";
     }
 ?>

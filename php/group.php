@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
         redirect("zoph.php");
@@ -85,7 +85,7 @@
     } else {
         $obj = &$group;
         $redirect = "groups.php";
-        require_once("actions.inc.php");
+        require_once "actions.inc.php";
     }
 
     // edit after insert to add album permissions
@@ -100,7 +100,7 @@
         $title = translate("New Group");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
 <?php
     if ($action == "display") {
@@ -175,7 +175,7 @@
          <?php echo sprintf(translate("Confirm deletion of '%s'"), $group->get("group_name")) ?>
 <?php
    } else {
-require_once("edit_group.inc.php");
+require_once "edit_group.inc.php";
 ?>
         <form action="group.php" method="post" class="grouppermissions">
             <table class="permissions">
@@ -316,4 +316,4 @@ require_once("edit_group.inc.php");
         } // edit
 ?>
         </div>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

@@ -15,7 +15,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
         redirect("zoph.php");
@@ -28,7 +28,7 @@
 
     $obj = &$this_user;
     $redirect = "users.php";
-    require_once("actions.inc.php");
+    require_once "actions.inc.php";
 
     if ($_action == "update" &&
         $user->get("user_id") == $this_user->get("user_id")) {
@@ -47,7 +47,7 @@
         $title = translate("New User");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
 <?php
     if ($action == "display") {
@@ -129,8 +129,8 @@
 <?php
     }
     else {
-        require_once("edit_user.inc.php");
+        require_once "edit_user.inc.php";
     } 
 ?>
 </div>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

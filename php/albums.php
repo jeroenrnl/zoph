@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     $_view=getvar("_view");
     if(empty($_view)) {
@@ -44,7 +44,7 @@
 
     $title = $album->get("parent_album_id") ? $album->get("album") : translate("Albums");
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
     <h1>
 <?php
@@ -58,9 +58,9 @@
     </h1>
 <?php
     if($user->is_admin()) {
-        include("selection.inc.php");
+        include "selection.inc.php";
     }
-    include("show_page.inc.php");
+    include "show_page.inc.php";
     if($show_orig) {
 ?>
     <div class="main">
@@ -173,5 +173,5 @@
 <?php
     } // if show_orig
     echo $page_html;
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

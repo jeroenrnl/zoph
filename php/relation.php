@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
         redirect("zoph.php");
@@ -46,7 +46,7 @@
     } 
 
     $obj = &$relation;
-    require_once("actions.inc.php");
+    require_once "actions.inc.php";
 
     
     if($action=="display") {
@@ -55,7 +55,7 @@
         $title=translate($action . " relationship");    
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 
     if ($action == "confirm") {
 ?>
@@ -143,5 +143,5 @@
 
 <?php
   }
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

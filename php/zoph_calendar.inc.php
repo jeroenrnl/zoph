@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-require_once("calendar.inc.php");
+require_once "calendar.inc.php";
 
 /*
  * An extension to the calendar class with a couple Zoph-specific

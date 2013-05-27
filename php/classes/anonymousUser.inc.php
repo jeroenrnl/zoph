@@ -29,11 +29,11 @@
 /**
  * @todo These requires should be removed once all classes can be autoloaded
  */
-require_once("util.inc.php");
-require_once("variables.inc.php");
-require_once("classes/zophTable.inc.php");
-require_once("user.inc.php");
-require_once("prefs.inc.php");
+require_once "util.inc.php";
+require_once "variables.inc.php";
+require_once "classes/zophTable.inc.php";
+require_once "user.inc.php";
+require_once "prefs.inc.php";
 
 /**
  * A class representing an anonymous user of Zoph.

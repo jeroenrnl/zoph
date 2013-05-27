@@ -20,7 +20,7 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-require_once("testSetup.php");
+require_once "testSetup.php";
 /**
  * Test relation class
  *

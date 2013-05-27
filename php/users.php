@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
         redirect("zoph.php");
     }
 
     $title = translate("Users");
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
         <h1>
           <span class="actionlink">
@@ -68,5 +68,5 @@
       </table>
     </div>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

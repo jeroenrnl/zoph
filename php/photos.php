@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     
     $_cols = (int) getvar("_cols");
@@ -83,7 +83,7 @@
             $extrastyle = "body	{ width: " . $width . "px; }\n"; 
         }
     }
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
     <h1>
         <span class="actionlink">
@@ -221,4 +221,4 @@
         echo $map;
     }
 ?>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

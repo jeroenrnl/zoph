@@ -20,7 +20,7 @@
  * @package Zoph
  * @author Jeroen Roos
  */
-require_once("include.inc.php");
+require_once "include.inc.php";
 
 $title=translate("Geotag");
 

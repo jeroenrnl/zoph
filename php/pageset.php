@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     $pageset_id = getvar("pageset_id");
     $pageset = new pageset($pageset_id);
@@ -45,14 +45,14 @@
     }
     $obj = &$pageset;
 
-    require_once("actions.inc.php");
+    require_once "actions.inc.php";
 
     if ($_action != "new") {
         $title = $pageset->get("title");
     } else {
         $title = translate("Create new pageset");
     }
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
 <?php
 if ($action == "confirm") {
@@ -125,5 +125,5 @@ if ($action == "confirm") {
 
 <?php
 }
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

@@ -18,7 +18,7 @@
  * @author Jeroen Roos
  * @package Zoph
  */
-require_once("include.inc.php");
+require_once "include.inc.php";
 
 $title="Zoph";
 $content="";
@@ -48,7 +48,7 @@ if($track_id) {
     
 $obj = &$track;
 
-require_once("actions.inc.php");
+require_once "actions.inc.php";
 
 $tpl=new template("main", array(
     "title"     => $title

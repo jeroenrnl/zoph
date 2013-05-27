@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $_off = getvar("_off");
     $_pause = getvar("_pause");
     $_random = getvar("_random");
@@ -137,4 +137,4 @@ if (!$_pause) {
       </dl>
       <br>
 </div>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

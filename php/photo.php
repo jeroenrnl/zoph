@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $photo_id = getvar("photo_id");
     $_off = getvar("_off");
 
@@ -285,7 +285,7 @@
     } else {
         $title = translate("New Photo");
     }
-require_once("header.inc.php");
+require_once "header.inc.php";
     // no photo was found and this isn't a new record
     if ($action != "insert" && !$found) {
 ?>
@@ -314,7 +314,7 @@ require_once("header.inc.php");
           <?php echo $title_bar ?>
           </h1>
 <?php
-    require_once("selection.inc.php");
+    require_once "selection.inc.php";
 ?>
     <div class="main">
 
@@ -492,7 +492,7 @@ require_once("header.inc.php");
         echo $photo->getImageTag(MID_PREFIX);
     }
     else {
-        require_once("edit_photo.inc.php");
+        require_once "edit_photo.inc.php";
     }
 ?>
 </div>
@@ -514,4 +514,4 @@ require_once("header.inc.php");
       }
 ?>
 
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

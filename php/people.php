@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */   
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $_view=getvar("_view");
     if(empty($_view)) {
         $_view=$user->prefs->get("view");
@@ -36,7 +36,7 @@
         $_l = "all";
     }
     $title = translate("People");
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
           <h1>
 <?php
@@ -109,5 +109,5 @@
 
 </div>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>
