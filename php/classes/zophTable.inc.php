@@ -600,10 +600,9 @@ abstract class zophTable {
         $return=array();
         
         $key="_" . $class . $suffix;
-        if(isset($vars[$key]) && $key!=0) {
+        if(isset($vars[$key])) {
             $return=(array) $vars[$key];
-        }
-
+        } 
         return $return;
     }
 
