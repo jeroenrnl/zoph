@@ -237,7 +237,7 @@ class track extends zophTable {
     public static function getAll($constraints = null, $conj = "and", 
         $ops = null, $order = "name") {
 
-        return track::getRecords($order, $constraints, $conj, $ops);
+        return self::getRecords($order, $constraints, $conj, $ops);
     }
 
 }

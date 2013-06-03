@@ -137,7 +137,7 @@ class place extends zophTreeTable implements Organizer {
             "WHERE pl.parent_place_id=" . (int) $this->getId() .
             " GROUP BY pl.place_id " .
             $order; 
-        $this->children=place::getRecordsFromQuery($sql);
+        $this->children=self::getRecordsFromQuery($sql);
         return $this->children;
     }    
    
@@ -525,7 +525,7 @@ class place extends zophTreeTable implements Organizer {
                 "having distance <= " . $distance . 
                 " order by distance" . $lim;
 
-            $near=place::getRecordsFromQuery($sql);
+            $near=self::getRecordsFromQuery($sql);
             return $near;
         } else {
             return null;
@@ -564,7 +564,7 @@ class place extends zophTreeTable implements Organizer {
         // At this moment the root place is always 1, but this may
         // change in the future, so to be safe we'll make a function for
         // this
-        $root_place=place::getRoot();
+        $root_place=self::getRoot();
         if($this->get("place_id") == $root_place->get("place_id")) {
             return true;
         } else {
@@ -612,7 +612,7 @@ class place extends zophTreeTable implements Organizer {
         $sql="SELECT place_id from " . DB_PREFIX . "places WHERE " .
             " LOWER(title) = \"" . $title . "\";";
 
-        return place::getRecordsFromQuery($sql);
+        return self::getRecordsFromQuery($sql);
     }
 
     /**
@@ -667,7 +667,7 @@ class place extends zophTreeTable implements Organizer {
         if($user->is_admin()) {
             return parent::getCount();
         } else {
-            $places=place::getPhotographed($user);
+            $places=self::getPhotographed($user);
             return count($places);
         }
     }
@@ -684,7 +684,7 @@ class place extends zophTreeTable implements Organizer {
      */
     public static function getAll($constraints = null, $conj = "and", $ops = null,
         $order = "city, title, address") {
-        return place::getRecords($order, $constraints, $conj, $ops);
+        return self::getRecords($order, $constraints, $conj, $ops);
     }
 
     /**
@@ -718,7 +718,7 @@ class place extends zophTreeTable implements Organizer {
                 "order by plc.city, plc.title";
         }
 
-        return place::getRecordsFromQuery($sql);
+        return self::getRecordsFromQuery($sql);
     }
 
     public static function getAutocompPref() {

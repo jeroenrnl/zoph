@@ -287,7 +287,7 @@ class user extends zophTable {
     public static function getByName($name) {
         $sql = "select user_id from " . DB_PREFIX . "users where" .
             " user_name = '" .  escape_string($name) ."'";
-        $users=user::getRecordsFromQuery($sql);
+        $users=self::getRecordsFromQuery($sql);
         return $users[0];
     } 
 

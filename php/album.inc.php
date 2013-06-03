@@ -156,7 +156,7 @@ class album extends zophTreeTable implements Organizer {
             " GROUP BY album_id " .
             escape_string($sql_order);
 
-        $this->children=album::getRecordsFromQuery($sql);
+        $this->children=self::getRecordsFromQuery($sql);
         return $this->children;
     }
 
@@ -191,7 +191,7 @@ class album extends zophTreeTable implements Organizer {
             " GROUP BY album_id" .
             escape_string($sql_order);
 
-        $this->children=album::getRecordsFromQuery($sql);
+        $this->children=self::getRecordsFromQuery($sql);
         return $this->children;
     }
 
@@ -296,7 +296,7 @@ class album extends zophTreeTable implements Organizer {
                 "' AND gp.access_level >= p.level";
         }
 
-        return album::getCountFromQuery($sql);
+        return self::getCountFromQuery($sql);
     }
 
     /**
@@ -338,7 +338,7 @@ class album extends zophTreeTable implements Organizer {
             }
         }
 
-        return album::getCountFromQuery($sql);
+        return self::getCountFromQuery($sql);
     }
 
     /**
@@ -354,7 +354,7 @@ class album extends zophTreeTable implements Organizer {
         } else {
             $parent=array (
                 translate("parent album"),
-                album::createPulldown("parent_album_id", $this->get("parent_album_id")));
+                self::createPulldown("parent_album_id", $this->get("parent_album_id")));
         }
         return array(
             "album" => 
@@ -471,7 +471,7 @@ class album extends zophTreeTable implements Organizer {
         // At this moment the root album is always 1, but this may
         // change in the future, so to be safe we'll make a function for
         // this
-        $root_album=album::getRoot();
+        $root_album=self::getRoot();
         if($this->get("album_id") == $root_album->get("album_id")) {
             return true;
         } else {
@@ -490,7 +490,7 @@ class album extends zophTreeTable implements Organizer {
 
         $query = "select album_id from " . DB_PREFIX . "albums where $where";
 
-        return album::getRecordsFromQuery($query);
+        return self::getRecordsFromQuery($query);
     }
 
     /**

@@ -190,9 +190,9 @@ class language {
         } else {
             log::msg("Cannot read language dir!", log::WARN, log::LANG);
         }    
-        $base_lang=new language(language::$base);
-        $base_lang->name=language::$base_name;
-        $langs[language::$base]=$base_lang;
+        $base_lang=new language(self::$base);
+        $base_lang->name=self::$base_name;
+        $langs[self::$base]=$base_lang;
         ksort($langs);
         return $langs;
     }
@@ -217,16 +217,16 @@ class language {
      * @return language language object
      */
     public static function load($langs) {
-        array_push($langs, conf::get("interface.language"), language::$base);
+        array_push($langs, conf::get("interface.language"), self::$base);
         foreach ($langs as $l) {
             log::msg("Trying to load language: <b>" . $l . "</b>", log::DEBUG, log::LANG);
-            if(language::exists($l)) {
+            if(self::exists($l)) {
                 $lang=new language($l);
                 if($lang->readHeader() && $lang->read()) {
                     log::msg("Loaded language: <b>" . $l . "</b><br>", log::DEBUG, log::LANG);
                     return $lang;
                 }
-            } else if ($l==language::$base) {
+            } else if ($l==self::$base) {
                 # If it is the base language, no file needs to exist
                 log::msg("Using base language: <b>" . $l . "</b>", log::NOTIFY, log::LANG);
 
@@ -236,8 +236,8 @@ class language {
 
         }
         log::msg("No languages found, falling back to default: <b>" .
-            language::$base . "</b>", log::NOTIFY, log::LANG);
-        return new language(language::$base);
+            self::$base . "</b>", log::NOTIFY, log::LANG);
+        return new language(self::$base);
     }
    
     /**

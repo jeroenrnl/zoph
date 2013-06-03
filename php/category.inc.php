@@ -105,7 +105,7 @@ class category extends zophTreeTable implements Organizer {
             " GROUP BY c.category_id " .
             $order;
 
-        $this->children=category::getRecordsFromQuery($sql);
+        $this->children=self::getRecordsFromQuery($sql);
         return $this->children;
     }
 
@@ -142,7 +142,7 @@ class category extends zophTreeTable implements Organizer {
                 "' AND gp.access_level >= p.level";
         }
 
-        return category::getCountFromQuery($sql);
+        return self::getCountFromQuery($sql);
     }
 
     function getTotalPhotoCount() {
@@ -182,7 +182,7 @@ class category extends zophTreeTable implements Organizer {
             }
         }
 
-        return category::getCountFromQuery($sql);
+        return self::getCountFromQuery($sql);
     }
 
     public function getEditArray() {
@@ -310,7 +310,7 @@ class category extends zophTreeTable implements Organizer {
         // At this moment the root cat is always 1, but this may
         // change in the future, so to be safe we'll make a function for
         // this
-        $root_cat=category::getRoot();
+        $root_cat=self::getRoot();
         if($this->get("category_id") == $root_cat->get("category_id")) {
             return true;
         } else {
@@ -404,7 +404,7 @@ class category extends zophTreeTable implements Organizer {
 
         $query = "select category_id from " . DB_PREFIX . "categories where $where";
 
-        return category::getRecordsFromQuery($query);
+        return self::getRecordsFromQuery($query);
     }
 
     /**
@@ -461,7 +461,7 @@ function get_category_count($user) {
         $sql =
             "SELECT category_id, parent_category_id  FROM " .
             DB_PREFIX . "categories as c";
-        $cats=category::getRecordsFromQuery($sql);
+        $cats=self::getRecordsFromQuery($sql);
         $cat_clean=remove_empty($cats);
         return count($cat_clean);
     } else {

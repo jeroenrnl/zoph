@@ -78,7 +78,7 @@ class pageset extends zophTable {
     function get_pagecount() {
         $sql = "select count(page_id) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id = " . $this->get("pageset_id");
-        return pageset::getCountFromQuery($sql);
+        return self::getCountFromQuery($sql);
     }
 
     function addpage($page_id) {

@@ -151,22 +151,22 @@ class person extends zophTable implements Organizer {
     }
 
     function getFather() {
-        return person::getFromId($this->get("father_id"));
+        return self::getFromId($this->get("father_id"));
     }
 
     function getMother() {
-        return person::getFromId($this->get("mother_id"));
+        return self::getFromId($this->get("mother_id"));
     }
 
     function getSpouse() {
-        return person::getFromId($this->get("spouse_id"));
+        return self::getFromId($this->get("spouse_id"));
     }
 
     /** @todo I don't think this function is ever called */
     function getChildren() {
         $constraints["father_id"] = $this->get("person_id");
         $constraints["mother_id"] = $this->get("person_id");
-        return person::getAll($constraints, "or");
+        return self::getAll($constraints, "or");
     }
 
     /** @todo I don't think this function is ever called */
@@ -447,7 +447,7 @@ class person extends zophTable implements Organizer {
         $sql = "SELECT person_id FROM " . DB_PREFIX . "people WHERE " .
             "CONCAT_WS(\" \", lower(first_name), lower(last_name))=" .
             "lower(\"" . escape_string($name) . "\")";
-        return person::getRecordsFromQuery($sql);
+        return self::getRecordsFromQuery($sql);
     }
 
     /**
@@ -522,7 +522,7 @@ class person extends zophTable implements Organizer {
                 " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
         }
 
-        return person::getRecordsFromQuery($sql);
+        return self::getRecordsFromQuery($sql);
     }
 
     public static function getXMLdata($search, DOMDocument $xml, DOMElement $rootnode) {
@@ -557,7 +557,7 @@ class person extends zophTable implements Organizer {
         }
         $ppl[""] = "";
 
-        $people_array = person::getAll();
+        $people_array = self::getAll();
         foreach ($people_array as $person) {
             $ppl[$person->get("person_id")] =
                  ($person->get("last_name") ? $person->get("last_name") .  ", " : "") .

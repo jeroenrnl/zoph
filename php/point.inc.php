@@ -88,7 +88,7 @@ class point extends zophTable {
             " track_id = " . escape_string($this->get("track_id")) . " AND " .
             " datetime>\"" . escape_string($this->get("datetime")) . "\"" .
             " ORDER BY datetime LIMIT 1";
-        $points=point::getRecordsFromQuery($sql);
+        $points=self::getRecordsFromQuery($sql);
         if(is_array($points) && sizeof($points) > 0) {
             return $points[0];
         } else {
@@ -104,7 +104,7 @@ class point extends zophTable {
             " track_id = " . escape_string($this->get("track_id")) . " AND " .
             " datetime<\"" . escape_string($this->get("datetime")) . "\"" .
             " ORDER BY datetime DESC LIMIT 1";
-        $points=point::getRecordsFromQuery($sql);
+        $points=self::getRecordsFromQuery($sql);
         if(is_array($points) && sizeof($points) > 0) {
             return $points[0];
         } else {
@@ -127,7 +127,7 @@ class point extends zophTable {
     public static function getAll($constraints = null, $conj = "and", 
         $ops = null, $order = "name") {
     
-        return point::getRecords($order, $constraints, $conj, $ops);
+        return self::getRecords($order, $constraints, $conj, $ops);
     }
 
     /**

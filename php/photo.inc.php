@@ -1159,7 +1159,7 @@ class photo extends zophTable {
                 "having distance <= " . $distance . 
                 " order by distance" . $lim;
 
-            $near=photo::getRecordsFromQuery($sql);
+            $near=self::getRecordsFromQuery($sql);
             return $near;
         } else {
             return null;
@@ -1178,7 +1178,7 @@ class photo extends zophTable {
         if(!empty($path)) {
             $sql .= " AND path='" . escape_string($path) ."'";
         }
-        return photo::getRecordsFromQuery($sql);
+        return self::getRecordsFromQuery($sql);
     }
     
     /**
@@ -1439,7 +1439,7 @@ class photo extends zophTable {
 
         $sql="SELECT * FROM " . DB_PREFIX . "photos " . $where;
 
-        $photos=photo::getRecordsFromQuery($sql);
+        $photos=self::getRecordsFromQuery($sql);
         if(is_array($photos) && sizeof($photos) > 0) {
             return $photos[0];
         } else {
@@ -1483,7 +1483,7 @@ class photo extends zophTable {
      */
     public static function getTotalSize() {
         $sql = "select sum(size) from " . DB_PREFIX . "photos";
-        return photo::getCountFromQuery($sql);
+        return self::getCountFromQuery($sql);
     }
 
     /**

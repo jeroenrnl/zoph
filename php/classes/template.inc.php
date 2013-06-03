@@ -308,7 +308,7 @@ class template {
     * @param bool autosubmit form after making a change
     */
     public static function createAutothumbPulldown($name, $value, $autosubmit=false) {
-        return  template::createPulldown($name, $value, array(
+        return  self::createPulldown($name, $value, array(
             "oldest" => translate("Oldest photo",0),
             "newest" => translate("Newest photo",0),
             "first" => translate("Changed least recently",0),
@@ -324,7 +324,7 @@ class template {
     * @param string current value
     */
     public static function createPhotoFieldPulldown($name, $value) {
-        return  template::createPulldown($name, $value, translate(photo::getFields(),0)); 
+        return  self::createPulldown($name, $value, translate(photo::getFields(),0)); 
     }  
 
    /**
@@ -333,7 +333,7 @@ class template {
     * @param string current value
     */
     public static function createYesNoPulldown($name, $value) {
-        return  template::createPulldown($name, $value,array(
+        return  self::createPulldown($name, $value,array(
             "0" => translate("No",0), 
             "1" => translate("Yes",0)
         )); 
