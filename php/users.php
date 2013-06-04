@@ -50,7 +50,7 @@
           <td>
           <span class="actionlink">
 <?php
-            if ((count(get_newer_albums($u->get("user_id"), $u->get_lastnotify())) > 0)) {
+            if ((count(album::getNewer($u, $u->get_lastnotify())) > 0)) {
 ?>
             <a href="notify.php?_action=notify&amp;user_id=<?php echo $u->get("user_id") ?>&amp;shownewalbums=1"><?php echo translate("Notify User", 0) ?></a> |
 <?php

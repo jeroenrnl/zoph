@@ -51,6 +51,9 @@ class album extends zophTreeTable implements Organizer {
     /** @var Cache the count of photos */
     private $photoCount;
 
+    /**
+     * lookup this album in the db
+     */
     public function lookup() {
         $user=user::getCurrent();
         $id = $this->get("album_id");
@@ -126,11 +129,6 @@ class album extends zophTreeTable implements Organizer {
         return $this->get("album");
     }
 
-    function get_indented_name() {
-        $indent=str_repeat("&nbsp;&nbsp;&nbsp;", count($this->get_ancestors()));
-        return $indent . $this->getName();
-    }
-
     /**
      * Get the subalbums of this album
      * @param string optional order
@@ -160,6 +158,11 @@ class album extends zophTreeTable implements Organizer {
         return $this->children;
     }
 
+    /**
+     * Get the subalbums of this album, for the current user
+     * @param string optional order
+     * @return array of albums
+     */
     public function getChildrenForUser($order=null) {
         $user=user::getCurrent();
 
@@ -272,7 +275,7 @@ class album extends zophTreeTable implements Organizer {
     public function getPhotoCount() {
         $user=user::getCurrent();
 
-        if ($this->photoCount) { return $photoCount; }
+        if ($this->photoCount) { return $this->photoCount; }
 
         $id = $this->get("album_id");
 
@@ -346,8 +349,7 @@ class album extends zophTreeTable implements Organizer {
      * @return array fields/values
      */
     public function getEditArray() {
-        $user=user::getCurrent();
-        if($this->is_root()) {
+        if($this->isRoot()) {
             $parent=array (
                 translate("parent album"),
                 translate("Albums"));
@@ -383,7 +385,12 @@ class album extends zophTreeTable implements Organizer {
         );
     }
 
-    function getLink() {
+    /**
+     * Get a link to this album
+     * @return link to this album
+     * @todo returns HTML, should be phased out in favour of getURL()
+     */
+    public function getLink() {
         if ($this->get("parent_album_id")) {
             $name = $this->get("album");
         }
@@ -401,7 +408,7 @@ class album extends zophTreeTable implements Organizer {
      * @todo PHP 5.3 -> move into zophTable
      * @return string URL
      */
-    function getURL() {
+    public function getURL() {
         return "albums.php?parent_album_id=" . $this->getId();
     }
 
@@ -467,17 +474,6 @@ class album extends zophTreeTable implements Organizer {
         }
     }
 
-    function is_root() {
-        // At this moment the root album is always 1, but this may
-        // change in the future, so to be safe we'll make a function for
-        // this
-        $root_album=self::getRoot();
-        if($this->get("album_id") == $root_album->get("album_id")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
    /**
     * Lookup album by name;
     */
@@ -543,59 +539,63 @@ class album extends zophTreeTable implements Organizer {
         $user=user::getCurrent();
         return ($user->prefs->get("autocomp_albums") && conf::get("interface.autocomplete")); 
     }
+    /**
+     * Return all albums
+     */
+    public static function getAll() {
+        $user=user::getCurrent();
 
+        if ($user && $user->is_admin()) {
+            $sql = "select * from " . DB_PREFIX . "albums order by album";
+        } else {
+            $sql =
+                 "select a.* from " .
+                 DB_PREFIX . "albums as a JOIN " .
+                 DB_PREFIX . "group_permissions AS gp " .
+                 "ON gp.album_id = a.album_id JOIN " .
+                 DB_PREFIX . "groups_users as gu " .
+                 "where gu.user_id = '" . escape_string($user->get("user_id")) .
+                 "order by a.album";
+        }
 
-}
-
-
-function get_albums($user = null) {
-
-    if ($user && !$user->is_admin()) {
-        $sql =
-             "select a.* from " .
-             DB_PREFIX . "albums as a JOIN " .
-             DB_PREFIX . "group_permissions AS gp " .
-             "ON gp.album_id = a.album_id JOIN " .
-             DB_PREFIX . "groups_users as gu " .
-             "where gu.user_id = '" . escape_string($user->get("user_id")) .
-             "order by a.album";
+        return self::getRecordsFromQuery($sql);
     }
-    else {
-        $sql = "select * from " . DB_PREFIX . "albums order by album";
-    }
+    /**
+     * Get albums newer than a certain date
+     * @param user get albums for this user
+     * @param string date
+     */
+    public static function getNewer(user $user, $date) {
+        $sql = "SELECT a.* FROM " .
+            DB_PREFIX . "albums AS a JOIN " .
+            DB_PREFIX . "group_permissions AS gp " .
+            "ON a.album_id = gp.album_id JOIN " .
+            DB_PREFIX . "groups_users AS gu " .
+            "WHERE gu.user_id = '" . escape_string($user->getId()) .
+            "' AND gp.changedate > '" . escape_string($date) . "' " .
+            "ORDER BY a.album_id";
 
-    return album::getRecordsFromQuery($sql);
-}
-
-function get_newer_albums($user_id, $date = null) {
-    $sql = "select a.* from " .
-        DB_PREFIX . "albums as a JOIN " .
-        DB_PREFIX . "group_permissions as gp " .
-        "ON a.album_id = gp.album_id JOIN " .
-        DB_PREFIX . "groups_users as gu " .
-        "WHERE gu.user_id = '" . escape_string($user_id) .
-        "' AND gp.changedate > '" . escape_string($date) . "' " .
-        "ORDER BY a.album_id";
-
-    return album::getRecordsFromQuery($sql);
-}
-
-function get_album_count($user = null) {
-
-    if ($user && !$user->is_admin()) {
-        $sql =
-            "SELECT COUNT(DISTINCT album_id) FROM " . 
-            DB_PREFIX . "group_permissions AS gp JOIN " .
-            DB_PREFIX . "groups_users AS gu ON " .
-            "gp.group_id = gu.group_id " .
-            "where gu.user_id = '" . escape_string($user->get("user_id")) . "'";
-    }
-    else {
-        $sql = "select count(*) from " . DB_PREFIX . "albums";
+        return self::getRecordsFromQuery($sql);
     }
 
-    return album::getCountFromQuery($sql);
-}
+    /**
+     * Get number of albums for the currently logged on user
+     */
+    public static function getCount() {
+        $user=user::getCurrent();
+        if ($user && $user->is_admin()) {
+            $sql = "SELECT COUNT(*) FROM " . DB_PREFIX . "albums";
+        } else {
+            $sql =
+                "SELECT COUNT(DISTINCT album_id) FROM " . 
+                DB_PREFIX . "group_permissions AS gp JOIN " .
+                DB_PREFIX . "groups_users AS gu ON " .
+                "gp.group_id = gu.group_id " .
+                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) . "'";
+        }
 
+        return self::getCountFromQuery($sql);
+    }
+}
 
 ?>

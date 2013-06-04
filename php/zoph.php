@@ -38,7 +38,7 @@
     }
 
     $album = album::getRoot();
-    $album_count = get_album_count($user);
+    $album_count = album::getCount();
     $album_photoCount = $album->getTotalPhotoCount();
     $category = category::getRoot();
     $category_count = get_category_count($user);

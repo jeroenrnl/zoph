@@ -31,7 +31,7 @@
         $_access_level_all_checkbox = getvar("_access_level_all_checkbox");
 
         if($_access_level_all_checkbox) {
-            $albums = get_albums();
+            $albums = album::getAll();
             if ($albums) {
                 foreach ($albums as $alb) {
                     $permissions = new group_permissions(

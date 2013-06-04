@@ -59,6 +59,18 @@ abstract class zophTreeTable extends zophTable {
         parent::delete($extra_tables);
     }
 
+    /**
+     * Check whether this organizer is the root of the tree
+     * At this moment the root always has id 1 but this may
+     * change in the future, so to be safe we'll make a function for
+     * this
+     * @return bool
+     */
+    public function isRoot() {
+        $root=self::getRoot();
+        return ($this->getId() == $root->getId());
+    }
+
     /*
      * Gets the children of this record.
      */

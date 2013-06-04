@@ -36,7 +36,7 @@
         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
         <label for="parent_place_id"><?php echo translate("parent location") ?></label>
 <?php
-        if($place->is_root()) {
+        if($place->isRoot()) {
             echo translate("places");
         } else {
 ?>

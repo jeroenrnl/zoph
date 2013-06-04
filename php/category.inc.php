@@ -186,7 +186,7 @@ class category extends zophTreeTable implements Organizer {
     }
 
     public function getEditArray() {
-        if($this->is_root()) {
+        if($this->isRoot()) {
             $parent=array(
                 translate("parent category"),
                 translate("Categories"));
@@ -303,19 +303,6 @@ class category extends zophTreeTable implements Organizer {
     public static function getAutocompPref() {
         $user=user::getCurrent();
         return ($user->prefs->get("autocomp_categories") && conf::get("interface.autocomplete"));
-    }
-
-
-    function is_root() {
-        // At this moment the root cat is always 1, but this may
-        // change in the future, so to be safe we'll make a function for
-        // this
-        $root_cat=self::getRoot();
-        if($this->get("category_id") == $root_cat->get("category_id")) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
