@@ -67,9 +67,10 @@ abstract class zophTreeTable extends zophTable {
      * @return bool
      */
     public function isRoot() {
-        $root=self::getRoot();
+        $root=static::getRoot();
         return ($this->getId() == $root->getId());
     }
+
 
     /*
      * Gets the children of this record.
@@ -194,6 +195,14 @@ abstract class zophTreeTable extends zophTable {
             $details["children"]=count($children);
         }
         return parent::getDetailsXML($details);
+    }
+
+    /**
+     * Return the root of the tree
+     * @return album|category|place
+     */
+    public static function getRoot() {
+        return new static(1);
     }
 
     public static function getXMLdata($search, DOMDocument $xml, DOMElement $rootnode) {

@@ -490,14 +490,6 @@ class album extends zophTreeTable implements Organizer {
     }
 
     /**
-     * Get the root album
-     * @todo Once the minimum PHP version is 5.3 this could move to zoph_tree_table
-     */
-    public static function getRoot() {
-        return new album(1);
-    }
-
-    /**
      * Get Top N albums
      */
     public static function getTopN() {

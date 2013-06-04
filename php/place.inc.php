@@ -604,14 +604,6 @@ class place extends zophTreeTable implements Organizer {
     }
 
     /**
-     * Get the root place
-     * @todo Once the minimum PHP version is 5.3 this could move to zoph_tree_table
-     */
-    public static function getRoot() {
-        return new place(1);
-    }
-
-    /**
      * Get Top N people
      */
     public static function getTopN() {

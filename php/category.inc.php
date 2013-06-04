@@ -395,14 +395,6 @@ class category extends zophTreeTable implements Organizer {
     }
 
     /**
-     * Get the root category
-     * @todo Once the minimum PHP version is 5.3 this could move to zoph_tree_table
-     */
-    public static function getRoot() {
-        return new category(1);
-    }
-    
-    /**
      * Get Top N categories
      */
     public static function getTopN() {
