@@ -41,7 +41,7 @@
     $album_count = album::getCount();
     $album_photoCount = $album->getTotalPhotoCount();
     $category = category::getRoot();
-    $category_count = get_category_count($user);
+    $category_count = category::getCountForUser();
     $category_photoCount = $category->getTotalPhotoCount();
     echo "\n";
 ?>
