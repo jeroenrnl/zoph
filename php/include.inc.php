@@ -20,12 +20,20 @@
      * @todo return false should change into an exception
      */
 
+    function zophAutoload($file) {
+        if(is_readable($file)) {
+            require_once $file;
+        }
+    }
+
     function zophAutoloadClass($class) {
-            @include_once "classes/" . $class . ".inc.php";
+        $file="classes/" . $class . ".inc.php";
+        zophAutoload($file);
     }
 
     function zophAutoloadInterface($interface) {
-            @include_once "interfaces/" . $interface . ".inc.php";
+        $file="interfaces/" . $interface . ".inc.php";
+        zophAutoload($file);
     }
     spl_autoload_register("zophAutoloadClass");
     spl_autoload_register("zophAutoloadInterface");
