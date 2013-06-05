@@ -17,24 +17,27 @@
  */
     /**
      * Autoload classes
-     * @todo return false should change into an exception
      */
 
-    function zophAutoload($file) {
-        if(is_readable($file)) {
+    function zophAutoload($file) {  
+        if(is_readable(settings::$php_loc . "/" . $file)) {
             require_once $file;
+        } else {
+            return false;
         }
+
     }
 
     function zophAutoloadClass($class) {
         $file="classes/" . $class . ".inc.php";
-        zophAutoload($file);
+        return zophAutoload($file);
     }
 
     function zophAutoloadInterface($interface) {
         $file="interfaces/" . $interface . ".inc.php";
-        zophAutoload($file);
+        return zophAutoload($file);
     }
+
     spl_autoload_register("zophAutoloadClass");
     spl_autoload_register("zophAutoloadInterface");
 
