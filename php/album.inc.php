@@ -305,7 +305,7 @@ class album extends zophTreeTable implements Organizer {
     /**
      * Return the amount of photos in this album and it's children
      */
-    function getTotalPhotoCount() {
+    public function getTotalPhotoCount() {
         $user=user::getCurrent();
         // Without the lookup, parent_album_id is not available!
         $this->lookup();
@@ -476,6 +476,7 @@ class album extends zophTreeTable implements Organizer {
 
    /**
     * Lookup album by name;
+    * @param string name
     */
     public static function getByName($name) {
         if(empty($name)) {
@@ -527,6 +528,9 @@ class album extends zophTreeTable implements Organizer {
 
     }
 
+    /**
+     * Get autocomplete preference for albums for the current user
+     */
     public static function getAutocompPref() {
         $user=user::getCurrent();
         return ($user->prefs->get("autocomp_albums") && conf::get("interface.autocomplete")); 

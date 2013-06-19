@@ -72,7 +72,7 @@ class place extends zophTreeTable implements Organizer {
      */
     public function insert() {
         if($this->get("timezone_id")) {
-            $this->tzid_to_timezone();
+            $this->TZidToTimezone();
         }
         unset($this->fields["timezone_id"]);
         parent::insert();
@@ -83,7 +83,7 @@ class place extends zophTreeTable implements Organizer {
      */
     public function update() {
         if($this->get("timezone_id")) {
-            $this->tzid_to_timezone();
+            $this->TZidToTimezone();
         }
         unset($this->fields["timezone_id"]);
         parent::update();
@@ -143,6 +143,7 @@ class place extends zophTreeTable implements Organizer {
    
    /**
     * Get this place's children, taking into account permissions for a specific user
+    * @param string sort order
     */
     public function getChildrenForUser($order=null) {
         return remove_empty($this->getChildren($order));
@@ -151,7 +152,7 @@ class place extends zophTreeTable implements Organizer {
     /**
      * Converts timezone id for this place into a named timezone
      */
-    public function tzid_to_timezone() {
+    private function TZidToTimezone() {
         $tzkey=$this->get("timezone_id");
         if($tzkey>0) {
             $tzarray=TimeZone::getSelectArray();
@@ -230,7 +231,7 @@ class place extends zophTreeTable implements Organizer {
     /**
      * Return an array with this place's data
      */
-    function getDisplayArray() {
+    public function getDisplayArray() {
         return array(
             translate("address") => $this->get("address"),
             translate("address") . "2" => $this->get("address2"),
@@ -410,7 +411,6 @@ class place extends zophTreeTable implements Organizer {
 
     /**
      * Get details (statistics) about this place from db
-     * @param user Only show albums this user is allowed to see
      * @return array Array with statistics
      */
     public function getDetails() {
@@ -467,7 +467,6 @@ class place extends zophTreeTable implements Organizer {
 
     /**
      * Turn the array from @see getDetails() into XML
-     * @param user Show only info about photos this user can see
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
@@ -497,6 +496,7 @@ class place extends zophTreeTable implements Organizer {
      * @param float latitude
      * @param float longitude
      * @param int distance
+     * @param int limit number of returned places
      * @param string entity: km|miles
      * @return array places
      */
@@ -591,6 +591,7 @@ class place extends zophTreeTable implements Organizer {
 
    /**
     * Lookup place by name;
+    * @param string name
     */
     public static function getByName($name) {
         if(empty($name)) {
@@ -642,6 +643,9 @@ class place extends zophTreeTable implements Organizer {
 
     }
     
+    /**
+     * Get count of places
+     */
     public static function getCount() {
         $user=user::getCurrent();
         if($user->is_admin()) {
@@ -701,6 +705,9 @@ class place extends zophTreeTable implements Organizer {
         return self::getRecordsFromQuery($sql);
     }
 
+    /**
+     * Get autocomplete preferences for people for this user
+     */
     public static function getAutocompPref() {
         $user=user::getCurrent();
         return ($user->prefs->get("autocomp_people") && conf::get("interface.autocomplete"));

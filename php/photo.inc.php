@@ -343,6 +343,21 @@ class photo extends zophTable {
     }
 
     /**
+     * Get links to the people appearing on this photo
+     * @return string
+     */
+    public function getPeopleLinks() {
+        $people = $this->getPeople();
+        $links=array();
+        if ($people) {
+            foreach ($people as $person) {
+                $links[]=$person->getLink(0);
+            }
+        }
+        return implode(", ", $links);
+    }
+
+    /**
      * Import a file into the database
      *
      * This function takes a file object and imports it inot the database as a new photo
@@ -582,6 +597,7 @@ class photo extends zophTable {
 
     /**
      * Set photographer for this photo
+     * @param photographer the photographer to assign to this photo
      */
     public function setPhotographer(photographer $pg) {
         $this->set("photographer_id", (int) $pg->getId());
@@ -857,7 +873,9 @@ class photo extends zophTable {
     public function getTime() { 
         $this->lookup();
         $loc=$this->location;
-        $loc->lookup();
+        if($loc instanceof place) {
+            $loc->lookup();
+        }
 
         if($loc && TimeZone::validate($loc->get("timezone"))) {
             $place_tz=new TimeZone($loc->get("timezone"));

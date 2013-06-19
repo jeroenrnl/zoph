@@ -114,7 +114,7 @@ if (!$_pause) {
         <div class="next">&nbsp;</div>
         <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX))?>
         <?php
-        if ($people_links = get_photo_person_links($photo)) {
+        if ($people_links = $photo->getPeopleLinks()) {
 ?>	
             <div id="personlink"><?php echo $people_links ?></div>
 <?php

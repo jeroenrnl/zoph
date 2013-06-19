@@ -82,7 +82,7 @@
     } else {
         $first_letter = $_l;
     }
-    $ppl = get_all_people($user, $first_letter);
+    $ppl = person::getAllPeopleAndPhotographers($first_letter);
     if ($ppl) {
         if ($_view=="thumbs") {
             $template="view_thumbs";

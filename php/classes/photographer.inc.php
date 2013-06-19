@@ -77,7 +77,7 @@ class photographer extends person implements Organizer {
     public static function getAll($search = null, $search_first = null) {
         $user=user::getCurrent();
 
-        $where=get_where_for_search(" and ", $search, $search_first);
+        $where=self::getWhereForSearch(" and ", $search, $search_first);
         if($where!="") {
             $where="WHERE " . $where;
         }

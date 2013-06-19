@@ -100,12 +100,18 @@ class person extends zophTable implements Organizer {
         query($sql);
     }
 
-    function lookup() {
+    /**
+     * Lookup from database
+     */
+    public function lookup() {
         parent::lookup();
-        $this->lookup_places();
+        $this->lookupPlaces();
     }
 
-    function lookup_places() {
+    /**
+     * Lookup home and work for this person
+     */
+    private function lookupPlaces() {
         if ($this->get("home_id") > 0) {
             $this->home = new place($this->get("home_id"));
             $this->home->lookup();
@@ -116,14 +122,22 @@ class person extends zophTable implements Organizer {
         }
     }
 
+    /**
+     * Returns a photographer object for this person
+     * @return photographer
+     */
     public function getPhotographer() {
         $photographer=new photographer($this->getId());
         $photographer->lookup();
         return $photographer;
     }
 
-    function delete() {
-        $id=escape_string($this->get("person_id"));
+    /**
+     * Delete this person
+     * @todo calls 'die'
+     */
+    public function delete() {
+        $id=(int) $this->getId();
         if (!is_numeric($id)) { die("person_id is not numeric"); }
         $sql="update " . DB_PREFIX . "people set father_id=null " .
             "where father_id=" .  $id;
@@ -144,38 +158,65 @@ class person extends zophTable implements Organizer {
         parent::delete(array("photo_people"));
     }
 
-    function get_gender() {
+    /**
+     * Get gender
+     * @return string "male|female"
+     */
+    private function getGender() {
         if ($this->get("gender") == 1) { return translate("male"); }
         if ($this->get("gender") == 2) { return translate("female"); }
         return;
     }
 
-    function getFather() {
+    /**
+     * Get father of this person
+     * @return person father
+     */
+    private function getFather() {
         return self::getFromId($this->get("father_id"));
     }
 
-    function getMother() {
+    /**
+     * Get mother of this person
+     * @return person mother
+     */
+    private function getMother() {
         return self::getFromId($this->get("mother_id"));
     }
 
-    function getSpouse() {
+    /**
+     * Get spouse of this person
+     * @return person spouse
+     */
+    private function getSpouse() {
         return self::getFromId($this->get("spouse_id"));
     }
 
-    /** @todo I don't think this function is ever called */
-    function getChildren() {
+    /**
+     * Get children for this person
+     * @todo This function is currently not used  
+     */
+    public function getChildren() {
         $constraints["father_id"] = $this->get("person_id");
         $constraints["mother_id"] = $this->get("person_id");
         return self::getAll($constraints, "or");
     }
 
-    /** @todo I don't think this function is ever called */
-    function getChildrenForUser() {
+    /**
+     * Get only children this user can see
+     * @todo This function is currently not used  
+     * @todo This function currently does not filter out persons 
+     *       this user cannot see
+     */
+    public function getChildrenForUser() {
         return $this->getChildren();
     }
 
-
-    function getName() {
+    /**
+     * Get name for this person
+     * @return string name
+     */
+    public function getName() {
         if ($this->get("called")) {
             $name = $this->get("called");
         } else {
@@ -189,20 +230,30 @@ class person extends zophTable implements Organizer {
         return $name;
     }
 
-    function get_email() {
-       $email = $this->get("email");
-       return $email;
+    /**
+     * Get mail address for this person
+     * @return string mailaddress
+     */
+    public function getEmail() {
+       return $this->get("email");
     }
 
-    function toHTML() {
+    /**
+     * HTML display of this person
+     * Returns only name for this person
+     * @return string name
+     */
+    public function toHTML() {
         return getName();
     }
 
     /**
      * Get a link to this person
      * @todo Not proper OO, parent function does not have parameter
+     * @todo returns HTML
+     * @param int|bool show last name in link
      */
-    function getLink($show_last_name = 1) {
+    public function getLink($show_last_name = 1) {
         if ($show_last_name) {
             $name = $this->getName();
         }
@@ -218,11 +269,15 @@ class person extends zophTable implements Organizer {
      * Get URL to this person
      */
 
-    function getURL() {
+    public function getURL() {
         return "person.php?person_id=" . $this->getId();
     }
 
-    function getDisplayArray() {
+    /**
+     * Get an array of the properties of this person object, for display
+     * @return array
+     */
+    public function getDisplayArray() {
         $mother=$this->getMother();
         $father=$this->getFather();
         $spouse=$this->getSpouse();
@@ -231,7 +286,7 @@ class person extends zophTable implements Organizer {
             translate("called") => e($this->get("called")),
             translate("date of birth") => create_date_link(e($this->get("dob"))),
             translate("date of death") => create_date_link(e($this->get("dod"))),
-            translate("gender") => e($this->get_gender()));
+            translate("gender") => e($this->getGender()));
         if($mother instanceof person) {
             $display[translate("mother")] = $mother->getLink();
         }
@@ -328,8 +383,8 @@ class person extends zophTable implements Organizer {
      * Set first, middle, last and called name from single string
      * "first", "first last", "first middle last last last"
      * or "first:middle:last:called"
+     * @param string name
      */
-
     public function setName($name) {
         if(strpos($name, ":")!==false) {
             $name_array=array_pad(explode(":", $name),4,null);
@@ -424,7 +479,6 @@ class person extends zophTable implements Organizer {
 
     /**
      * Turn the array from @see getDetails() into XML
-     * @param user Show only info about photos this user can see
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
@@ -435,9 +489,9 @@ class person extends zophTable implements Organizer {
         return parent::getDetailsXML($details);
     }
 
-
    /**
     * Lookup person by name;
+    * @param string name
     */
     public static function getByName($name) {
        if(empty($name)) {
@@ -491,9 +545,14 @@ class person extends zophTable implements Organizer {
 
     }
     
+    /**
+     * Get all people
+     * @param string part of name to search for
+     * @param bool Search for first name
+     */
     public static function getAll($search=null, $search_first = false) {
         $user=user::getCurrent();
-        $where=get_where_for_search(" and ", $search, $search_first);
+        $where=self::getWhereForSearch(" and ", $search, $search_first);
         if($where!="") {
             $where="WHERE " . $where;
         }
@@ -525,6 +584,13 @@ class person extends zophTable implements Organizer {
         return self::getRecordsFromQuery($sql);
     }
 
+    /**
+     * Get XML tree of people
+     * @param string string to search for
+     * @param DOMDocument XML document to add children too
+     * @param DOMElement root node
+     * @return DOMDocument XML Document
+     */
     public static function getXMLdata($search, DOMDocument $xml, DOMElement $rootnode) {
         if($search=="") {
             $search=null;
@@ -546,11 +612,19 @@ class person extends zophTable implements Organizer {
         return $xml;
     }
 
+    /**
+     * Get autocomplete preference for people for the current user
+     * @return bool whether or not to autocomplete
+     */
     public static function getAutocompPref() {
         $user=user::getCurrent();
         return ($user->prefs->get("autocomp_people") && conf::get("interface.autocomplete"));
     }
 
+    /**
+     * Get array to build select box
+     * @return array
+     */
     public static function getSelectArray() {
         if(isset(static::$sacache)) {
             return static::$sacache;
@@ -565,96 +639,93 @@ class person extends zophTable implements Organizer {
         }
 
         return $ppl;
-    }
+    }   
 
-
-}
-
-
-function get_people_count($user = null, $search = null) {
-    if($user && !$user->is_admin()) {
-        $allowed=array();
-        $people=person::getAll($search);
-        $photographers=photographer::getAll($search);
-        foreach($people as $person) {
-            $allowed[]=$person->get("person_id");
-        }
-        foreach($photographers as $photographer) {
-            $allowed[]=$photographer->get("person_id");
-        }
-
-        $allowed=array_unique($allowed);
-
-        return count($allowed);
-    } else {
-        return person::getCount();
-    }
-}
-
-function get_all_people($user = null, $search = null, $search_first = false) {
-    $allowed=array();
-
-    if($user && !$user->is_admin()) {
-        $people=person::getAll($search, $search_first);
-        $photographers=photographer::getAll($search, $search_first);
-        foreach($people as $person) {
-            $allowed[]=$person->get("person_id");
-        }
-        foreach($photographers as $photographer) {
-            $allowed[]=$photographer->get("person_id");
-        }
-
-        $allowed=array_unique($allowed);
-        if(count($allowed)==0) {
-            return null;
-        }
-        $keys=implode(",", $allowed);
-        $where=" WHERE person_id IN (" .$keys . ")";
-    } else if ($search!==null) {
-        $where=get_where_for_search(" WHERE ", $search, $search_first);
-    } else {
-        $where="";
-    }
-
-    $sql="SELECT * FROM " . DB_PREFIX . "people AS ppl " . $where .
-        " ORDER BY last_name, called, first_name";
-
-    return person::getRecordsFromQuery($sql);
-}
-
-function get_where_for_search($conj, $search, $search_first) {
-    $where="";
-    if($search!==null) {
-        if($search==="") {
-            $where=$conj . " (ppl.last_name='' or ppl.last_name is null)";
+    /**
+     * Get number of people for a specific user
+     * @return int count
+     */
+    public static function getCountForUser() {
+        $user=user::getCurrent();
+        if($user && !$user->is_admin()) {
+            return self::getCount();
         } else {
-            $search=escape_string($search);
-            $where=$conj . " (ppl.last_name like lower('" . $search . "%')";
-            if ($search_first) {
-                $where.="or ppl.first_name like lower('" . $search . "%'))";
+            $allowed=array();
+            $people=self::getAll();
+            $photographers=photographer::getAll();
+            foreach($people as $person) {
+                $allowed[]=$person->get("person_id");
+            }
+            foreach($photographers as $photographer) {
+                $allowed[]=$photographer->get("person_id");
+            }
+
+            $allowed=array_unique($allowed);
+
+            return count($allowed);
+        }
+    }
+
+    /**
+     * Get all people and all photographers for the current logged on user
+     * @param string only return people whose name starts with this string
+     * @return int count
+     */
+    public static function getAllPeopleAndPhotographers($search = null) {
+        $user==user::getCurrent();
+        $allowed=array();
+
+        if($user && !$user->is_admin()) {
+            $people=self::getAll($search);
+            $photographers=photographer::getAll($search);
+            foreach($people as $person) {
+                $allowed[]=$person->get("person_id");
+            }
+            foreach($photographers as $photographer) {
+                $allowed[]=$photographer->get("person_id");
+            }
+
+            $allowed=array_unique($allowed);
+            if(count($allowed)==0) {
+                return null;
+            }
+            $keys=implode(",", $allowed);
+            $where=" WHERE person_id IN (" .$keys . ")";
+        } else if ($search!==null) {
+            $where=self::getWhereForSearch(" WHERE ", $search);
+        } else {
+            $where="";
+        }
+
+        $sql="SELECT * FROM " . DB_PREFIX . "people AS ppl " . $where .
+            " ORDER BY last_name, called, first_name";
+
+        return self::getRecordsFromQuery($sql);
+    }
+
+    /**
+     * Get SQL WHERE statement to search for users
+     * @param string [and|or]
+     * @param string search string
+     * @param bool search for first name
+     */
+    public static function getWhereForSearch($conj, $search, $search_first) {
+        $where="";
+        if($search!==null) {
+            if($search==="") {
+                $where=$conj . " (ppl.last_name='' or ppl.last_name is null)";
             } else {
-                $where.=")";
+                $search=escape_string($search);
+                $where=$conj . " (ppl.last_name like lower('" . $search . "%')";
+                if ($search_first) {
+                    $where.="or ppl.first_name like lower('" . $search . "%'))";
+                } else {
+                    $where.=")";
+                }
             }
         }
+        return $where;
     }
-    return $where;
 }
-
-
-function get_photo_person_links($photo) {
-
-    $links = "";
-    if (!$photo) { return $links; }
-    $people = $photo->getPeople();
-    if ($people) {
-        foreach ($people as $person) {
-            if ($links) { $links .= ", "; }
-            $links .= $person->getLink(0);
-        }
-    }
-
-    return $links;
-}
-
 
 ?>

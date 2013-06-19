@@ -372,7 +372,7 @@ require_once "header.inc.php";
         </ul>
             <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX)) ?>
 <?php
-        if (($user->is_admin() || $user->get("browse_people")) && $people_links = get_photo_person_links($photo)) {
+        if (($user->is_admin() || $user->get("browse_people")) && $people_links = $photo->getPeopleLinks()) {
 ?>
           <div id="personlink">
             <?php echo $people_links ?>

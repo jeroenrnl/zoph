@@ -103,7 +103,7 @@ if ($user->get("detailed_people") || $user->is_admin()) {
 ?>
 <?php echo create_field_html($person->getDisplayArray()) ?>
 <?php
-        if ($person->get_email()) {
+        if ($person->getEmail()) {
 ?>
           <dt><?php echo translate("email") ?></dt>
           <dd><a href="mailto:<?php echo e($person->get_email()) ?>"><?php echo e($person->get_email()) ?></a></dd>

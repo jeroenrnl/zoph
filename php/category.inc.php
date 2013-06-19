@@ -49,8 +49,8 @@ class category extends zophTreeTable implements Organizer {
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="categories.php?parent_category_id=";
-
-    var $photoCount;
+    /** @var int cached photocount */
+    protected $photoCount;
 
     /**
      * Add a photo to this album
@@ -76,15 +76,26 @@ class category extends zophTreeTable implements Organizer {
             " AND category_id = '" . escape_string($this->getId()) . "'";
         query($sql);
     }
-
-    function delete() {
+    
+    /**
+     * Delete category
+     */
+    public function delete() {
         parent::delete(array("photo_categories"));
     }
 
-    function getName() {
+    /**
+     * Get the name of this category
+     * @todo can be moved into zophTable?
+     */
+    public function getName() {
         return $this->get("category");
     }
 
+    /**
+     * Get sub-categories
+     * @param string order
+     */
     public function getChildren($order=null) {
         $order_fields="";
         if($order && $order!="name") {
@@ -108,12 +119,20 @@ class category extends zophTreeTable implements Organizer {
         $this->children=self::getRecordsFromQuery($sql);
         return $this->children;
     }
-
+    
+    /**
+     * Get children of this category, with categories this user cannot see, filtered out.
+     * @param string sort order.
+     * @return array category tree
+     */
     public function getChildrenForUser($order=null) {
         return remove_empty($this->getChildren($order));
     }
     
-    function getPhotoCount() {
+    /**
+     * Get count of photos in this album
+     */
+    public function getPhotoCount() {
         $user=user::getCurrent();
 
         if ($this->photoCount) { return $photoCount; }
@@ -145,7 +164,10 @@ class category extends zophTreeTable implements Organizer {
         return self::getCountFromQuery($sql);
     }
 
-    function getTotalPhotoCount() {
+    /**
+     * Get count of photos for this category and all subcategories
+     */
+    public function getTotalPhotoCount() {
         $user=user::getCurrent();
         if ($this->get("parent_category_id")) {
             $id_list = $this->getBranchIds();
@@ -185,6 +207,9 @@ class category extends zophTreeTable implements Organizer {
         return self::getCountFromQuery($sql);
     }
 
+    /**
+     * Get array that can be used to create an edit form
+     */
     public function getEditArray() {
         if($this->isRoot()) {
             $parent=array(
@@ -223,7 +248,11 @@ class category extends zophTreeTable implements Organizer {
         );
     }
 
-    function getLink() {
+    /**
+     * Create a link to this category
+     * @todo returns HTML, needs to be replaced by getURL()
+     */
+    public function getLink() {
         if ($this->get("parent_category_id")) {
             $name = $this->get("category");
         }
@@ -233,7 +262,11 @@ class category extends zophTreeTable implements Organizer {
         return "<a href=\"" . $this->getURL() . "\">$name</a>";
     }
 
-    function getURL() {
+    /**
+     * Return an URL for this category
+     * @todo Can be moved into zophTable
+     */
+    public function getURL() {
         return "categories.php?parent_category_id=" . $this->getId();
     }
 
@@ -300,6 +333,9 @@ class category extends zophTreeTable implements Organizer {
         }
     }
 
+    /**
+     * Get autocomplete preference for categories, for the current user
+     */
     public static function getAutocompPref() {
         $user=user::getCurrent();
         return ($user->prefs->get("autocomp_categories") && conf::get("interface.autocomplete"));
@@ -307,7 +343,6 @@ class category extends zophTreeTable implements Organizer {
 
     /**
      * Get details (statistics) about this category from db
-     * @param user Only show albums this user is allowed to see
      * @return array Array with statistics
      */
     public function getDetails() {
@@ -368,7 +403,6 @@ class category extends zophTreeTable implements Organizer {
 
     /**
      * Turn the array from @see getDetails() into XML
-     * @param user Show only info about photos this user can see
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
@@ -381,6 +415,7 @@ class category extends zophTreeTable implements Organizer {
 
    /**
     * Lookup category by name
+    * @param string name
     */
     public static function getByName($name) {
         if(empty($name)) {
@@ -434,6 +469,9 @@ class category extends zophTreeTable implements Organizer {
 
     }
 
+    /**
+     * Get number of categories for the currently logged on user
+     */
     public static function getCountForUser() {
         $user=user::getCurrent();
 
