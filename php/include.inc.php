@@ -54,17 +54,9 @@
 
     require_once "zoph_calendar.inc.php";
 
-    /**
-     * @todo remove once all global functions have been removed
-     */
-    require_once "classes/zophTable.inc.php";
-    require_once "classes/zophTreeTable.inc.php";
-
-    require_once "place.inc.php";
     require_once "track.inc.php";
     require_once "point.inc.php";
 
-    require_once "person.inc.php";
 
     require_once "group_permissions.inc.php";
     require_once "color_scheme.inc.php";
@@ -79,8 +71,6 @@
             require_once "auth.inc.php";
         }
 
-        require_once "album.inc.php";
-        require_once "category.inc.php";
         require_once "code.inc.php";
         require_once "comment.inc.php";
 

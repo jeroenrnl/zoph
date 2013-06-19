@@ -31,7 +31,6 @@
  */
 require_once "util.inc.php";
 require_once "variables.inc.php";
-require_once "classes/zophTable.inc.php";
 require_once "user.inc.php";
 require_once "prefs.inc.php";
 
