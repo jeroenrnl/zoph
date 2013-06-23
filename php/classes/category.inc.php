@@ -135,7 +135,7 @@ class category extends zophTreeTable implements Organizer {
     public function getPhotoCount() {
         $user=user::getCurrent();
 
-        if ($this->photoCount) { return $photoCount; }
+        if ($this->photoCount) { return $this->photoCount; }
 
         $id = $this->get("category_id");
 
