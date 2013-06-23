@@ -78,7 +78,7 @@ class person extends zophTable implements Organizer {
      * @param photo photo to remove the person from
      */
     public function removePhoto(photo $photo) {
-       // First, get the position for the person who is about to be removed
+        // First, get the position for the person who is about to be removed
         $sql = "SELECT position FROM " . DB_PREFIX . "photo_people " .
             "WHERE photo_id = '" . (int) $photo->getId() . "' " .
             "AND person_id = '" . (int) $this->getId() . "'";
@@ -165,7 +165,6 @@ class person extends zophTable implements Organizer {
     private function getGender() {
         if ($this->get("gender") == 1) { return translate("male"); }
         if ($this->get("gender") == 2) { return translate("female"); }
-        return;
     }
 
     /**
@@ -235,7 +234,7 @@ class person extends zophTable implements Organizer {
      * @return string mailaddress
      */
     public function getEmail() {
-       return $this->get("email");
+        return $this->get("email");
     }
 
     /**

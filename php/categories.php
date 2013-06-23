@@ -52,7 +52,7 @@
 ?>
         <span class="actionlink"><a href="category.php?_action=new&amp;parent_category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("new") ?></a></span>
           <?php 
-	  }
+      }
      echo "\n" . translate("categories") . "\n" ?>
     </h1>
 <?php

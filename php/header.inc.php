@@ -177,8 +177,8 @@
         if ($page == $self) {
             $class = "class=\"selected\"";
         } else {
-	$class="";
-	}
+    $class="";
+    }
 ?><li <?php echo $class ?>><a href="<?php echo $page ?>"><?php echo $label ?></a></li><?php
     }
     echo "\n";

@@ -104,7 +104,7 @@ if (!$_pause) {
     else {
         $photo = $thumbnails[0];
         $photo->lookup();
-	?>
+    ?>
         <div class="prev">&nbsp;</div>
         <div class="photohdr">
             <?php echo $photo->getFullsizeLink($photo->get("name"))?>: 
@@ -115,7 +115,7 @@ if (!$_pause) {
         <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX))?>
         <?php
         if ($people_links = $photo->getPeopleLinks()) {
-?>	
+?>  
             <div id="personlink"><?php echo $people_links ?></div>
 <?php
         }

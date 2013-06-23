@@ -33,7 +33,7 @@
     foreach ($comments as $comment) {
        $photo=$comment->get_photo();
        if($user->get_permissions_for_photo($photo->get("photo_id")) || $user->is_admin()) {
-	   echo $comment->toHTML($user, 1);
+       echo $comment->toHTML($user, 1);
        }
     }
 ?>

@@ -25,8 +25,8 @@
     $comment = new comment($comment_id);
     if ($comment_id) {
         $comment->lookup();
-	$comment_user=new user($comment->get("user_id"));
-	$comment_user->lookup();
+    $comment_user=new user($comment->get("user_id"));
+    $comment_user->lookup();
     }
 
     if(!$user->is_admin() && (!$comment->is_owner($user)) && ($_action!="new") && $_action!="insert") {

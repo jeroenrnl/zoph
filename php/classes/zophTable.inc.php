@@ -223,8 +223,8 @@ abstract class zophTable {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
                 $values .=  $value ;
             } else if ($value =="" && in_array($name, static::$not_null)) {
-	    	    die("<p class='error'><b>$name</b> may not be empty</p>");
-	        } else if ($value !== "") {
+                die("<p class='error'><b>$name</b> may not be empty</p>");
+            } else if ($value !== "") {
                 $values .= "'" . escape_string($value) . "'";
             } else {
                 $values .= "null";
@@ -322,8 +322,8 @@ abstract class zophTable {
             } else if ($value == "now()" ) {
                 $values .= "$name = " . $value . "";
             } else if ($value == "" && in_array($name, static::$not_null)) {
-	    	    die("<p class='error'><b>$name</b> may not be empty</p>");
-	        } else if ($value !== "" && !is_null($value)) {
+                die("<p class='error'><b>$name</b> may not be empty</p>");
+            } else if ($value !== "" && !is_null($value)) {
                 $values .= "$name = '" . escape_string($value) . "'";
             } else {
                 $values .= "$name = null";

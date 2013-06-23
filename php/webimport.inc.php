@@ -125,12 +125,12 @@ class WebImport extends Import {
         if($dir === false) {
             log::msg(conf::get("path.images") . "/" .conf::get("path.upload") . " does not exist, creating...", log::WARN, log::IMPORT);
             try {
-	        create_dir_recursive(conf::get("path.images") . "/" .conf::get("path.upload"));
-	    } catch (FileDirCreationFailedException $e) {
+            create_dir_recursive(conf::get("path.images") . "/" .conf::get("path.upload"));
+        } catch (FileDirCreationFailedException $e) {
                 log::msg(conf::get("path.images") . "/" .conf::get("path.upload") . " does not exist, and I can not create it. (" . $e->getMessage() . ")", log::FATAL, log::IMPORT);
-		die();
+        die();
             }
-	    // doublecheck if path really has been correctly created.
+        // doublecheck if path really has been correctly created.
             $dir=realpath(conf::get("path.images") . "/" .conf::get("path.upload"));
             if($dir === false) {
                 log::msg(conf::get("path.images") . "/" .conf::get("path.upload") . " does not exist, and I can not create it.", log::WARN, log::FATAL);
