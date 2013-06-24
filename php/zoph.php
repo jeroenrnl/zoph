@@ -16,9 +16,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $title = translate("Home");
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 
     // get one random photo
     $vars["_random"] = 1;
@@ -34,15 +34,15 @@
         <div class="thumbnail" id="random">
 <?php
     if (sizeof($thumbnails) == 1) {
-        echo $thumbnails[0]->get_thumbnail_link();
+        echo $thumbnails[0]->getThumbnailLink();
     }
 
     $album = album::getRoot();
-    $album_count = get_album_count($user);
-    $album_photoCount = $album->getTotalPhotoCount($user);
+    $album_count = album::getCount();
+    $album_photoCount = $album->getTotalPhotoCount();
     $category = category::getRoot();
-    $category_count = get_category_count($user);
-    $category_photoCount = $category->getTotalPhotoCount($user);
+    $category_count = category::getCountForUser();
+    $category_photoCount = $category->getTotalPhotoCount();
     echo "\n";
 ?>
         </div>
@@ -54,13 +54,13 @@
                 <li><?php echo sprintf(translate("%s photos in %s"), $category_photoCount, $category_count) ?> <a href="categories.php"><?php echo $category_count == 1 ? translate("category") : translate("categories") ?></a></li>
 <?php
     if ($user->is_admin() || $user->get("browse_people")) {
-        $person_count = get_people_count($user);
+        $person_count = person::getCountForUser();
 ?>
                 <li><?php echo $person_count ?> <a href="people.php"><?php echo $person_count == 1 ? translate("person", 0) : translate("people", 0) ?></a></li>
 <?php
     }
     if ($user->is_admin() || $user->get("browse_places")) {
-        $place_count = get_places_count($user);
+        $place_count = place::getCount();
 ?>
                 <li><?php echo $place_count ?> <a href="places.php"><?php echo $place_count == 1 ? translate("place", 0) : translate("places", 0) ?></a></li>
 <?php
@@ -94,5 +94,5 @@
         </p>
     </div>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

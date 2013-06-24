@@ -15,10 +15,10 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $album_id = getvar("album_id");
@@ -35,11 +35,11 @@
         $obj->update();
         $action = "display";
     } else {
-        require_once("actions.inc.php");
+        require_once "actions.inc.php";
     }
 
     if ($action == "display") {
-        redirect(add_sid("albums.php?parent_album_id=" . $album->get("album_id")), "Redirect");
+        redirect("albums.php?parent_album_id=" . $album->get("album_id"), "Redirect");
     }
 
     if ($action != "insert") {
@@ -50,7 +50,7 @@
         $title = translate("New Album");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
 <?php
     if ($action == "confirm") {
@@ -78,7 +78,7 @@
       <form action="album.php">
         <input type="hidden" name="_action" value="<?php echo $action ?>">
         <input type="hidden" name="album_id" value="<?php echo $album->get("album_id") ?>">
-        <?php echo create_edit_fields($album->getEditArray($user)) ?>
+        <?php echo create_edit_fields($album->getEditArray()) ?>
         <input type="submit" value="<?php echo translate($action, 0) ?>">
 
       </form>
@@ -88,5 +88,5 @@
 ?>
 
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

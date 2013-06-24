@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     $_view=getvar("_view");
     if(empty($_view)) {
@@ -37,14 +37,14 @@
     $obj=&$category;
     $ancestors = $category->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
-    $children = $category->getChildren($user, $order);
+    $children = $category->getChildrenForUser($order);
 
-    $photoCount = $category->getPhotoCount($user);
-    $totalPhotoCount = $category->getTotalPhotoCount($user);
+    $photoCount = $category->getPhotoCount();
+    $totalPhotoCount = $category->getTotalPhotoCount();
 
     $title = $category->get("parent_category_id") ? $category->get("category") : translate("Categories");
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
     <h1>
 <?php
@@ -52,14 +52,14 @@
 ?>
         <span class="actionlink"><a href="category.php?_action=new&amp;parent_category_id=<?php echo $category->get("category_id") ?>"><?php echo translate("new") ?></a></span>
           <?php 
-	  }
+      }
      echo "\n" . translate("categories") . "\n" ?>
     </h1>
 <?php
     if($user->is_admin()) {
-        include("selection.inc.php");
+        include "selection.inc.php";
     }
-    include("show_page.inc.php");
+    include "show_page.inc.php";
     if($show_orig) {
 ?>
     <div class="main">
@@ -67,9 +67,9 @@
             <?php echo create_form($request_vars, array ("_view", "_autothumb",
 "_button")) ?>
             <?php echo translate("Category view", 0) . "\n" ?>
-            <?php echo create_view_pulldown("_view", $_view,"onChange='form.submit()'") ?>
+            <?php echo template::createViewPulldown("_view", $_view, true) ?>
             <?php echo translate("Automatic thumbnail", 0) . "\n" ?>
-            <?php echo create_autothumb_pulldown("_autothumb", $_autothumb,"onChange='form.submit()'") ?>
+            <?php echo template::createAutothumbPulldown("_autothumb", $_autothumb, true) ?>
         </form>
         <br>
         <h2>
@@ -102,7 +102,7 @@
         <p>
 <?php
     }
-    echo $category->get_coverphoto($user);
+    echo $category->displayCoverphoto();
 ?>
         </p>
 <?php
@@ -128,7 +128,7 @@ if ($category->get("category_description")) {
         if ($totalPhotoCount > $photoCount && $children) {
 ?>
             <span class="actionlink">
-                <a href="photos.php?category_id=<?php echo $category->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
+                <a href="photos.php?category_id=<?php echo $category->getBranchIds() . $sort ?>"><?php echo translate("view photos") ?></a>
             </span>
 <?php
             if (!$category->get("parent_category_id")) {
@@ -172,7 +172,6 @@ if ($category->get("category_description")) {
         $tpl=new template("view_" . $_view, array(
             "id" => $_view . "view",
             "items" => $children,
-            "user" => $user,
             "autothumb" => $_autothumb,
             "topnode" => true,
             "links" => array(
@@ -186,5 +185,5 @@ if ($category->get("category_description")) {
 <?php
     } // if show_orig
     echo $page_html;
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

@@ -16,16 +16,16 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $title=translate("Configuration");
 
     if (!$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     // Configuration setting depends on POST
     if(!empty($_GET)) {
-        redirect(add_sid("config.php"));
+        redirect("config.php");
     }
 
     $_action=getvar("_action");

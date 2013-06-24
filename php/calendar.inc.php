@@ -46,7 +46,7 @@ From David Baldwin:
   source file => date_utils.php."
 */
 
-require_once("date_utils.php");
+require_once "date_utils.php";
 
 class Calendar
 {

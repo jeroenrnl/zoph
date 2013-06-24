@@ -54,7 +54,7 @@
                     <legend><?php echo translate("Tracks"); ?></legend>
                     <input type="radio" name="_tracks" id="tracks" value="all" checked><?php echo translate("All tracks"); ?><br>
                     <input type="radio" name="_tracks" id="tracks2" value="specific"><?php echo translate("Specific track") . ": " ?>
-                    <?php echo create_pulldown("_track", "", template::createSelectArray(track::getRecords("track", "track_id"), array("name"))) ?>
+                    <?php echo template::createPulldown("_track", "", template::createSelectArray(track::getRecords("track_id"), array("name"))) ?>
                 </fieldset>
             </fieldset>
             <fieldset class="geotag">
@@ -71,7 +71,7 @@
                     <?php echo translate("Maximum distance") ?>
                 </label>
                 <input type="text" name="_int_maxdist" id="intmaxdist" value="1">
-                <?php echo create_pulldown("_entity","km", array("km" => "km", "miles" => "miles")) ?>
+                <?php echo template::createPulldown("_entity","km", array("km" => "km", "miles" => "miles")) ?>
                 <div class="inputhint">
                     <?php echo translate("Do not interpolate if distance between points is more than this"); ?>
                 </div><br>

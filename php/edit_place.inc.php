@@ -36,12 +36,11 @@
         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
         <label for="parent_place_id"><?php echo translate("parent location") ?></label>
 <?php
-        if($place->is_root()) {
+        if($place->isRoot()) {
             echo translate("places");
         } else {
 ?>
-        <?php echo create_place_pulldown("parent_place_id",
-            $place->get("parent_place_id"), $user) ?>
+        <?php echo place::createPulldown("parent_place_id", $place->get("parent_place_id"), $user) ?>
 <?php
         }
 ?>
@@ -72,7 +71,7 @@
          <?php echo create_text_input("urldesc", $place->get("urldesc"), 32, 32) ?>
          <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
          <label for="pageset"><?php echo translate("pageset") ?></label>
-         <?php echo create_pulldown("pageset", $place->get("pageset"), get_pageset_select_array()) ?><br>
+         <?php echo template::createPulldown("pageset", $place->get("pageset"), get_pageset_select_array()) ?><br>
          <fieldset class="map">
             <legend><?php echo translate("map") ?></legend>
             <label for="lat"><?php echo translate("latitude") ?></label>
@@ -80,7 +79,7 @@
             <label for="lat"><?php echo translate("longitude") ?></label>
             <?php echo create_text_input("lon", $place->get("lon"), 10, 10) ?><br>
             <label for="mapzoom"><?php echo translate("zoom level") ?></label>
-            <?php echo create_zoom_pulldown($place->get("mapzoom")) ?><br>
+            <?php echo place::createZoomPulldown($place->get("mapzoom")) ?><br>
         <?php if(conf::get("maps.geocode")): ?>
             <div class="geocode">
                 <input id="geocode" class="geocode" type="button" value="<?php echo translate("search", false) ?>">
@@ -97,7 +96,14 @@
          </fieldset>
 <?php
         if(conf::get("date.guesstz")) {
-            echo $place->guess_tz();
+            $tz=e($place->guessTZ());
+            if(!empty($tz)) {
+?>
+            <ul class="actionlink">
+                <li><a href="place.php?_action=update&place_id=<?php echo (int) $place->getId() ?>&timezone=<?php echo $tz ?>"><?php echo $tz ?></a></li>
+            </ul>
+<?php
+            } 
         }
         if($place->get("timezone")) {
 ?>

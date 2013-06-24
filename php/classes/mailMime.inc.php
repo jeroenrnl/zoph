@@ -37,13 +37,21 @@
  * @author Tomas V.V.Cox <cox@idecnet.com> (port to PEAR)
  * 
  * @author Jeroen Roos
-*
-* @package Zoph
-*/
+ *
+ * @package Zoph
+ */
 
 /**
  * Mime mail composer class. Can handle: text and html bodies, embedded html
  * images and attachments.
+ * @author Tobias Ratschiller <tobias@dnet.it> and
+ * @author Sascha Schumann <sascha@schumann.cx>
+ * @author Richard Heyes <richard@phpguru.org>                           
+ * @author Tomas V.V.Cox <cox@idecnet.com> (port to PEAR)
+ * 
+ * @author Jeroen Roos
+ *
+ * @package Zoph
  */
 class MailMime {
     /** @var string Contains the plain text part of the email */

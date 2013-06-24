@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
     define("LOGON", true);
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if(isset($_GET["redirect"])) {
         $redirect = urlencode($_GET["redirect"]);

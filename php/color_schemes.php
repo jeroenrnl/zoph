@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $title = translate("Color Schemes");
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
           <h1>
           <span class="actionlink">
@@ -33,7 +33,7 @@
           </h1>
       <div class="main">
 <?php
-    $color_schemes = color_schemes::getRecords("color_scheme", "name");
+    $color_schemes = color_scheme::getRecords("name");
 
     if ($color_schemes) {
         foreach($color_schemes as $cs) {
@@ -51,5 +51,5 @@
 ?>
 </div>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

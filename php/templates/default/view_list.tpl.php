@@ -27,11 +27,11 @@ if(!ZOPH) { die("Illegal call"); }
         <a href="<?php echo $item->getURL() ?>"><?php echo $item->getName() ?></a>
         <span class="photocount">
             <?php
-                $count=$item->getPhotoCount($tpl_user);
+                $count=$item->getPhotoCount();
                 if($item instanceof zophTreeTable): 
-                    $count2=$item->getTotalPhotoCount($tpl_user);
+                    $count2=$item->getTotalPhotoCount();
                 elseif ($item instanceof person):
-                    $count2=$item->getPhotographerCount($tpl_user);
+                    $count2=$item->getPhotographer()->getPhotoCount();
                 else:
                     $count2=0;
                 endif;

@@ -15,10 +15,10 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     $title = translate("About");
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
           <h1><?php echo translate("about") ?></h1>
          <div class="main">
@@ -44,14 +44,14 @@
 ?>
 </table>
 <p>
-<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, "18-10-2012") ?>
+<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, RELEASEDATE) ?>
 </p>
 <p>
 <?php echo translate("Originally written by Jason Geiger, now maintained by Jeroen Roos with thanks to the following for their contributions:", 0) ?>
 </p>
-<?php include('credits.html'); ?>
+<?php include "credits.html"; ?>
 </div>
 
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

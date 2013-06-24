@@ -27,32 +27,7 @@ class cli {
      * Defines the API version between the /bin/zoph binary and the files in the webroot
      * these must be equal.
      */
-    const API=2;
-
-    const EXIT_NO_PROBLEM       = 0;
-    const EXIT_NO_ARGUMENTS     = 1;
-    const EXIT_NO_FILES         = 2;
-    
-    const EXIT_IMAGE_NOT_FOUND  = 10;
-    const EXIT_PERSON_NOT_FOUND = 20;
-    const EXIT_PLACE_NOT_FOUND  = 30;
-    const EXIT_ALBUM_NOT_FOUND  = 40;
-    const EXIT_CAT_NOT_FOUND    = 50;
-    const EXIT_NOT_IN_CWD       = 61;
-    const EXIT_ILLEGAL_DIRPATTERN = 62;
-    const EXIT_NO_PARENT        = 80;
-
-    // 90 - 97  are also defined in /bin/zoph, as global constants.
-    const EXIT_INI_NOT_FOUND    = 90;
-    const EXIT_INSTANCE_NOT_FOUND    = 91;
-
-    const EXIT_CLI_USER_NOT_ADMIN    = 95;
-    const EXIT_CLI_USER_NOT_VALID    = 96;
-
-    const EXIT_API_NOT_COMPATIBLE    = 99;
-
-    const EXIT_CANNOT_ACCESS_ARGUMENTS    = 250;
-    const EXIT_UNKNOWN_ERROR    = 254;
+    const API=3;
 
     /**
      * @var The user that is doing the import
@@ -73,21 +48,20 @@ class cli {
      * @param User user doing the import
      * @param int API version of the executable script. This is used to check if the executable 
      *            script is compatible with the scripts in php directory
+     * @param $args array of CLI arguments
      */
-    public function __construct($user, $api) {
+    public function __construct(user $user, $api, array $args) {
         if($api != self::API) {
-            echo "This Zoph installation is not compatible with the Zoph executable you are running.\n";
-            exit(self::EXIT_API_NOT_COMPATIBLE);
+            throw new CliAPINotCompatibleException("This Zoph installation is not compatible with the Zoph executable you are running.");
         }
         $this->user=$user;
 
         if(!$user->is_admin()) {
-            echo "CLI_USER must be an admin user\n";
-            exit(self::EXIT_CLI_USER_NOT_ADMIN);
+            throw new CliUserNotAdminException("CLI_USER must be an admin user");
         }
         $user->prefs->load();
         $lang=$user->load_language();
-        $this->args=new arguments;
+        $this->args=new arguments($args);
     }
 
     /**
@@ -97,100 +71,28 @@ class cli {
         $this->processFiles();
         switch(arguments::$command) {
         case "import":
-            $vars=$this->args->getVars();
-            if(conf::get("import.cli.add.auto")) {
-                $vars=$this->addNew();
-            }
-            if(is_array($this->files) && sizeof($this->files)>0) {
-                if(!isset($vars["_dirpattern"])) {
-                    $photos=array();
-                    foreach($this->files as $file) {
-                        $photo=new photo();
-                        $photo->file["orig"]=$file;
-                        $photos[]=$photo;
-                    }
-                } else {
-                    $photos=$this->processDirpattern();
-                }
-                CliImport::photos($photos, $vars);
-            } else {
-                echo "Nothing to do, exiting\n";
-                exit(self::EXIT_NO_FILES);
-            }
-
-
+            $this->doImport();
             break;
         case "update":
-            if(is_array($this->photos) && sizeof($this->photos)>0) {
-                $total=sizeof($this->photos);
-                $cur=0;
-                foreach($this->photos as $photo) {
-                    cliimport::progress($cur, $total);
-                    $cur++;
-                    $photo->lookup();
-                    $photo->setFields($this->args->getVars());
-                    $photo->update();
-                    $photo->updateRelations($this->args->getVars(), "_id");
-                    if(conf::get("import.cli.thumbs")===true) {
-                        $photo->thumbnail(true);
-                    }
-                    if(conf::get("import.cli.exif")===true) {
-                        $photo->updateEXIF();
-                    }
-                    if(conf::get("import.cli.size")===true) {
-                        $photo->updateSize();
-                    }
-                    if(conf::get("import.cli.hash")===true) {
-                        $photo->getHash();
-                    }
-                }
-            } else {
-                echo "Nothing to do, exiting\n";
-                exit(self::EXIT_NO_FILES);
-            }
+            $this->doUpdate();
             break;
         case "new":
             $this->addNew();
             break;
         case "config":
-            $vars=$this->args->getVars();
-            $name=$vars["_configitem"];
-            $default=isset($vars["_configdefault"]);
-            $item=conf::getItemByName($name);
-
-            if($default) {
-                $value=$item->getDefault();
-            } else {
-                $value=$vars["_configvalue"];
-            }
-
-            if(conf::get("import.cli.verbose") > 0) {
-                echo "Setting config \"$name\" to \"$value\""  . ( $default ? " (default)" : "" ) . "\n";
-            }
-
-
-            $item->setValue($value);
-            $item->update();
- 
-            
+            $this->doConfig(); 
             break;
         case "dumpconfig":
-            $conf=conf::getAll();
-            foreach ($conf as $name=>$item) {
-                foreach ($item as $citem) {
-                    if($citem instanceof confItemBool) {
-                        $value=( $citem->getValue() ? "true": "false" );
-                    } else {
-                        $value=$citem->getValue();
-                    }
-                    echo $citem->getName() . ": " . $value . "\n";
-                }
-            }
+            $this->doDumpCondig();
             break;
-
+        case "version":
+            self::showVersion();
+            break;
+        case "help":
+            self::showHelp();
+            break;
         default:
-            echo "Unknown command, please file a bug\n";
-            exit(self::EXIT_UNKNOWN_ERROR);
+            throw new CliUnknownErrorException("Unknown command, please file a bug");
         }
 
     }
@@ -200,7 +102,6 @@ class cli {
      */
     private function processFiles() {
         $files=$this->args->getFiles();
-
         foreach($files as $filename) {
             try {
                 if(arguments::$command=="import") {
@@ -302,7 +203,63 @@ class cli {
             throw new ImportMultipleMatchesException("Multiple files named " . $file ." found.\n");
         }
     }
-    
+
+    /**
+     * Process --import
+     */
+    private function doImport() {
+        $vars=$this->args->getVars();
+        if(conf::get("import.cli.add.auto")) {
+            $vars=$this->addNew();
+        }
+        if(is_array($this->files) && sizeof($this->files)>0) {
+            if(!isset($vars["_dirpattern"])) {
+                $photos=array();
+                foreach($this->files as $file) {
+                    $photo=new photo();
+                    $photo->file["orig"]=$file;
+                    $photos[]=$photo;
+                }
+            } else {
+                $photos=$this->processDirpattern();
+            }
+            CliImport::photos($photos, $vars);
+        } else {
+            throw new CliNoFilesException("Nothing to do, exiting");
+        }
+    }
+
+    /**
+     * Process --update
+     */
+    private function doUpdate() {
+        if(is_array($this->photos) && sizeof($this->photos)>0) {
+            $total=sizeof($this->photos);
+            $cur=0;
+            foreach($this->photos as $photo) {
+                cliimport::progress($cur, $total);
+                $cur++;
+                $photo->lookup();
+                $photo->setFields($this->args->getVars());
+                $photo->update();
+                $photo->updateRelations($this->args->getVars(), "_id");
+                if(conf::get("import.cli.thumbs")===true) {
+                    $photo->thumbnail(true);
+                }
+                if(conf::get("import.cli.exif")===true) {
+                    $photo->updateEXIF();
+                }
+                if(conf::get("import.cli.size")===true) {
+                    $photo->updateSize();
+                }
+                if(conf::get("import.cli.hash")===true) {
+                    $photo->getHash();
+                }
+            }
+        } else {
+            throw new CliNoFilesException("Nothing to do, exiting");
+        }
+    }
     /**
      * Add albums, categories, places, people that should be added because of --new or --autoadd
      * if $vars is given, 
@@ -342,6 +299,7 @@ class cli {
                     $place->insert();
                     $newvars["location_id"]=$place->getId();
                 }
+
                 break;
             case "_new_person":
                 $newvars["_person_id"]=array();
@@ -373,6 +331,47 @@ class cli {
     }
 
     /**
+     * Process --config
+     */
+    private function doConfig() {
+        $vars=$this->args->getVars();
+        $name=$vars["_configitem"];
+        $default=isset($vars["_configdefault"]);
+        $item=conf::getItemByName($name);
+
+        if($default) {
+            $value=$item->getDefault();
+        } else {
+            $value=$vars["_configvalue"];
+        }
+
+        if(conf::get("import.cli.verbose") > 0) {
+            echo "Setting config \"$name\" to \"$value\""  . ( $default ? " (default)" : "" ) . "\n";
+        }
+
+
+        $item->setValue($value);
+        $item->update();
+    }
+    
+    /**
+     * Process --dump-config
+     */
+    private function doDumpConfig() {
+        $conf=conf::getAll();
+        foreach ($conf as $name=>$item) {
+            foreach ($item as $citem) {
+                if($citem instanceof confItemBool) {
+                    $value=( $citem->getValue() ? "true": "false" );
+                } else {
+                    $value=$citem->getValue();
+                }
+                echo $citem->getName() . ": " . $value . "\n";
+            }
+        }
+    }
+
+    /**
      * Process the --dirpattern setting
      */
     public function processDirpattern() {
@@ -385,9 +384,7 @@ class cli {
         $files=array();
         foreach($this->files as $file) {
             if(substr($file, 0, $curlen) != $cur) {
-                echo "Sorry, --dirpattern can only be used when importing files under the current dir\n";
-                echo "i.e. do not use absolute paths or '../' when specifying --dirpattern.\n";
-                die(self::EXIT_PATH_NOT_IN_CWD);
+                throw new CliNotInCWDException("Sorry, --dirpattern can only be used when importing files under the current dir. i.e. do not use absolute paths or '../' when specifying --dirpattern.");
             }
             $filename=substr($file, $curlen + 1);
             $dirs=explode("/", $filename);
@@ -409,8 +406,7 @@ class cli {
                             }
                             $photo->_album_id[]=$album[0]->getId();
                         } else {
-                            echo "Album not found: " . $dir . "\n";
-                            die(self::EXIT_ALBUM_NOT_FOUND);
+                            throw new AlbumNotFoundException("Album not found: " . $dir);
                         }
                         break;
                     case "c":
@@ -422,8 +418,7 @@ class cli {
                             }
                             $photo->_category_id[]=$cat[0]->getId();
                         } else {
-                            echo "Category not found: " . $dir . "\n";
-                            die(self::EXIT_CAT_NOT_FOUND);
+                            throw new CategoryNotFoundException("Category not found: " . $dir);
                         }
                         break;
                     case "l":
@@ -432,8 +427,7 @@ class cli {
                         if ($place[0] instanceof place) {
                            $photo->set("location_id", $place[0]->getId());
                         } else {
-                            echo "Place not found: " . $dir . "\n";
-                            die(self::EXIT_PLACE_NOT_FOUND);
+                            throw new PlaceNotFoundException("Place not found: " . $dir);
                         }
                         break;
                     case "p":
@@ -445,8 +439,7 @@ class cli {
                             }
                             $photo->_person_id[]=$person[0]->getId();
                         } else {
-                            echo "Person not found: " . $dir . "\n";
-                            die(self::EXIT_PERSON_NOT_FOUND);
+                            throw new PersonNotFoundException("Person not found: " . $dir);
                         }
                         break;
                     case "D":
@@ -463,13 +456,12 @@ class cli {
                         if($person[0] instanceof person) {
                             $photo->set("photographer_id", $person[0]->getId());
                         } else {
-                            echo "Person not found: " . $dir . "\n";
-                            die(self::EXIT_PERSON_NOT_FOUND);
+                            throw new PersonNotFoundException("Person not found: " . $dir);
                         }
                         break;
                     default:
                         // should never happen...
-                        die(self::EXIT_UNKNOWN_ERROR);
+                        throw new CliUnknownErrorException("Unknown error");
                     }
                 }
                 $counter++;
@@ -511,15 +503,13 @@ OPTIONS:
     --path
 
 END;
-        exit(self::EXIT_NO_PROBLEM);
     }
 
     /**
      * Tells user which Zoph version is being used
      */
     private static function showVersion() {
-        echo "Zoph v" . VERSION . ".\n";
-        exit(self::EXIT_NO_PROBLEM);
+        echo "Zoph v" . VERSION . ", released " . RELEASEDATE . "\n";
     }
 }
 ?>

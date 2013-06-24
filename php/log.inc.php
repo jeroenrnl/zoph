@@ -23,6 +23,9 @@
 
 /**
  * This class takes care of logging and debug
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class log {
     
@@ -73,7 +76,7 @@ class log {
      * @param bool echo the message or return the contents
      */
     public static function msg($msg, 
-        $severity = log::NOTIFY, $subj = log::GENERAL, $print = true) {
+        $severity = self::NOTIFY, $subj = self::GENERAL, $print = true) {
 
         /** 
          * There are 3 settings in config.ing.php that are important;
@@ -100,7 +103,7 @@ class log {
             }
         }
 
-        if($severity == log::FATAL && self::$stopOnFatal) {
+        if($severity == self::FATAL && self::$stopOnFatal) {
             die("fatal error");
         }
     }

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Group test
  *
  * This file is part of Zoph.
@@ -23,6 +23,9 @@
 
 /**
  * Test the group class
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class groupTest extends ZophDataBaseTestCase {
 

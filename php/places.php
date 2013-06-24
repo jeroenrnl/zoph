@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     $_view=getvar("_view");
     if(empty($_view)) {
@@ -28,7 +28,7 @@
     }
 
     if (!$user->is_admin() && !$user->get("browse_places")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
     $parent_place_id = getvar("parent_place_id");
     if (!$parent_place_id) {
@@ -41,14 +41,13 @@
     $obj=&$place;
     $ancestors = $place->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
-    $children = $place->getChildren($user, $order);
- 
-    $totalPhotoCount = $place->getTotalPhotoCount($user);
-    $photoCount = $place->getPhotoCount($user);
+    $children = $place->getChildrenForUser($order);
+    $totalPhotoCount = $place->getTotalPhotoCount();
+    $photoCount = $place->getPhotoCount();
 
     $title = $place->get("parent_place_id") ? $place->get("title") : translate("Places");
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
     <h1>
 
@@ -69,23 +68,23 @@
     </h1>
 <?php
     if ($user->is_admin()) {
-        include("selection.inc.php");
+        include "selection.inc.php";
     }
     $page_html="";
-    include("show_page.inc.php");
+    include "show_page.inc.php";
     if($show_orig) {
 ?>
     <div class="main">
         <form class="viewsettings" method="get" action="places.php">
 <?php
-            echo create_pulldown("parent_place_id", 0, get_places_select_array($user), "onChange='form.submit()'");
+            echo template::createPulldown("parent_place_id", 0, place::getSelectArray($user), true);
 ?>
             <?php echo create_form($request_vars, array ("_view", "_autothumb",
 "_button")) ?>
             <?php echo translate("Category view", 0) . "\n" ?>
-            <?php echo create_view_pulldown("_view", $_view, "onChange='form.submit()'") ?>
+            <?php echo template::createViewPulldown("_view", $_view, true) ?>
             <?php echo translate("Automatic thumbnail", 0) . "\n" ?>
-            <?php echo create_autothumb_pulldown("_autothumb", $_autothumb, "onChange='form.submit()'") ?>
+            <?php echo template::createAutothumbPulldown("_autothumb", $_autothumb, true) ?>
 
         </form>
      <br>
@@ -110,7 +109,7 @@
     if ($ancestors) {
         while ($parent = array_pop($ancestors)) {
 ?>
-            <?php echo $parent->getLink() ?> &gt;
+            <a href="<?php echo $parent->getURL() ?>"><?php echo $parent->getName() ?></a> &gt;
 <?php
         }
     }
@@ -119,12 +118,12 @@
         <p>
 <?php
     }
-    echo $place->get_coverphoto($user);
+    echo $place->displayCoverphoto();
 ?>
         </p>
 <?php
     if ($user->get("detailed_places") || $user->is_admin()) {
-        echo $place->to_html();
+        echo $place->toHTML();
         if ($place->get("notes")) {
             echo "<p>";
             echo e($place->get("notes"));
@@ -148,7 +147,7 @@
         if ($totalPhotoCount > $photoCount && $children) {
 ?>
         <span class="actionlink">
-            <a href="photos.php?location_id=<?php echo $place->get_branch_ids($user) ?>"><?php echo translate("view photos") ?></a>
+            <a href="photos.php?location_id=<?php echo $place->getBranchIds() ?>"><?php echo translate("view photos") ?></a>
         </span>
 <?php   
             $fragment .= " " . translate("or its children");
@@ -171,7 +170,6 @@
                 <a href="photos.php?location_id=<?php echo $place->get("place_id") ?>"><?php echo translate("view photos")?></a>
             </span>
 <?php
-
             if ($photoCount > 1) {
                 echo sprintf(translate("There are %s photos"), $photoCount);
                 echo " $fragment.<br>\n";
@@ -190,7 +188,6 @@
         $tpl=new template("view_" . $_view, array(
             "id" => $_view . "view",
             "items" => $children,
-            "user" => $user,
             "autothumb" => $_autothumb,
             "topnode" => true,
             "links" => array(
@@ -206,11 +203,11 @@
         if(conf::get("maps.provider")) {
             $map=new map();
             $map->setCenterAndZoomFromObj($place);
-            $marker=$place->getMarker($user);
+            $marker=$place->getMarker();
             if($marker instanceof marker) {
                 $map->addMarker($marker);
             }
-            $map->addMarkers($children, $user);
+            $map->addMarkers($children);
             echo $map;
         }
        
@@ -218,5 +215,5 @@
 
     } // if show_orig
     echo $page_html;
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

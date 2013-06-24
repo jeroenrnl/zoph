@@ -17,7 +17,6 @@
  *
  * @package ZophTemplates
  * @author Jeroen Roos
- * @todo A rating class should be created and the array replaced by an object
  */
 
 if(!ZOPH) { die("Illegal call"); }
@@ -37,16 +36,16 @@ if(!ZOPH) { die("Illegal call"); }
             <?php foreach($tpl_ratings as $rating): ?>
                 <tr>
                     <td>
-                        <a href="<?php echo $rating["user_url"]; ?>">
-                            <?php echo $rating["user_name"] ?>
+                        <a href="<?php echo $rating->getUser()->getURL() ?>">
+                            <?php echo $rating->getUser()->getName() ?>
                         </a>
                     </td>
-                    <td><?php echo $rating["rating"]?></td>
-                    <td><?php echo $rating["ipaddress"]?></td>
-                    <td><?php echo $rating["timestamp"]?></td>
+                    <td><?php echo $rating->get("rating") ?></td>
+                    <td><?php echo $rating->get("ipaddress") ?></td>
+                    <td><?php echo $rating->get("timestamp") ?></td>
                     <td>
                         <ul class="actionlink">
-                            <li><a href="photo.php?_action=delrate&photo_id=<?php echo $tpl_photo_id; ?>&_rating_id=<?php echo $rating["rating_id"]; ?>"><?php echo translate("delete") ?></a></li>
+                            <li><a href="photo.php?_action=delrate&photo_id=<?php echo $tpl_photo_id; ?>&_rating_id=<?php echo $rating->get("rating_id"); ?>"><?php echo translate("delete") ?></a></li>
                         </ul>
                     </td>
                 </tr>

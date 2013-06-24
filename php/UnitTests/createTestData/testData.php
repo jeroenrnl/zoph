@@ -21,6 +21,12 @@
  * @author Jeroen Roos
  */
 
+/**
+ * Testdata for Zoph Unit tests
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
+ */
 class testData {
     
     
@@ -39,7 +45,7 @@ class testData {
             3 => array(2,"indianRed1"),
             4 => array(2,"DarkRed"),
             5 => array(1,"blue"),
-            6 => array(6,"LightBlue"),
+            6 => array(5,"LightBlue"),
             7 => array(6,"DarkBlue"),
             8 => array(1,"Yellow"),
             9 => array(1,"white"),
@@ -144,6 +150,7 @@ class testData {
     }
 
     public static function getPhotoAlbums() {
+        // photo => albums
         return array(
             1 => array(2,3),
             2 => array(3,4),
@@ -159,9 +166,10 @@ class testData {
     }
 
     public static function getGroupPermissions() {
+        // group => albums
         return array(
             1 => array(1,2),
-            2 => array(1,3),
+            2 => array(1,3), // !!! album 2 is added because it's the parent of 3 !!!
             4 => array(2)
         );
     }
@@ -236,6 +244,21 @@ class testData {
             6 => array(3=>7, 2=>5),
             8 => array(4=>9, 6=>3),
             10 => array(6=>10, 4=>1)
+        );
+    }
+
+    public static function getRelations() {
+        return array(
+            1 => array(
+                    2 => array("first photo", "second photo"),
+                    3 => array("first photo", "third photo"),
+                    4 => array("first photo", "fourth photo")),
+            2 => array(
+                    3 => array("second photo", "third photo")),
+            5 => array(
+                    4 => array("fifth photo", "fourth photo")),
+            6 => array(
+                    5 => array("sixth photo", "fifth photo"))
         );
     }
 

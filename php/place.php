@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
 
     $place_id = getvar("place_id");
@@ -27,13 +27,13 @@
     if($_action=="settzchildren") {
         if($user->is_admin()) {
             $place->lookup();
-            $place->set_tz_children($place->get("timezone"));
+            $place->setTzForChildren();
         }
         $action="display";
     }
-    require_once("actions.inc.php");
+    require_once "actions.inc.php";
     if (!$user->is_admin() || $action == "display") {
-        redirect(add_sid("places.php?parent_place_id=" . $place->get("place_id")), "Redirect");
+        redirect("places.php?parent_place_id=" . $place->get("place_id"), "Redirect");
     }
     if ($action != "insert") {
         $place->lookup();
@@ -43,7 +43,7 @@
         $title = translate("New Place");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
 <?php
     if ($action == "confirm") {
@@ -58,14 +58,14 @@
 
 <?php
     } else {
-require_once("edit_place.inc.php");
+require_once "edit_place.inc.php";
     }
 ?>
 </div>
 <?php
     if(conf::get("maps.provider")) {
         $map=new map();
-        $marker=$place->getMarker($user);
+        $marker=$place->getMarker();
         $map->setCenterAndZoomFromObj($place);
         if($marker instanceof marker) {
             $map->addMarker($marker);
@@ -78,4 +78,4 @@ require_once("edit_place.inc.php");
 
 
 ?>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

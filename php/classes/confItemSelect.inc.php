@@ -23,6 +23,9 @@
 
 /**
  * A confItemSelect defines a configuration item that is defined using a selectbox
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 class confItemSelect extends confItem {
     /** @var array list of options */

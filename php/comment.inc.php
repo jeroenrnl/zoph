@@ -1,7 +1,6 @@
 <?php
-
-/*
- * A class corresponding to the color_shemes table.
+/**
+ * A class corresponding to the comments table.
  *
  * This file is part of Zoph.
  *
@@ -17,14 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ */
+
+/**
+ * A class corresponding to the comments table.
+ * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 class comment extends zophTable {
 
-    function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("comment_id must be numeric"); }
-        parent::__construct("comments", array("comment_id"), array("subject"));
-        $this->set("comment_id", $id);
-    }
+    /** @var string The name of the database table */
+    protected static $table_name="comments";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("comment_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("subject");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="comment.php?comment_id=";
 
     function insert() {
         $this->set("comment_date", "now()");
@@ -74,7 +90,7 @@ class comment extends zophTable {
         $user_name = $comment_user->get("user_name");
         $comment_user->lookup_person();
         $comment_person = $comment_user->person->getName();
-        $comment_person_id = $comment_user->person->get("person_id");
+        $comment_person_id = (int) $comment_user->person->getId();
         $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> (<a href=person.php?person_id=%s>%s</a>)", $this->get("user_id"), $user_name, $comment_person_id, $comment_person);
         return $return; 
     }
@@ -82,9 +98,9 @@ class comment extends zophTable {
     function get_photo() {
         if(!$this->get("comment_id")) { return; }
         $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
-            " where comment_id=" . escape_string($this->get("comment_id")) .
+            " where comment_id=" . (int) $this->getId() .
             " limit 1";
-        $result=photo::getRecordsFromQuery("photo", $sql);
+        $result=photo::getRecordsFromQuery($sql);
         if($result[0]) { 
             $result[0]->lookup();
             return $result[0];
@@ -93,24 +109,23 @@ class comment extends zophTable {
         }
     }
 
-    function add_comment_to_photo($photo_id) {
-        if (!$photo_id) { return; }
+    function addToPhoto(photo $photo) {
         $sql = "insert into " . DB_PREFIX . "photo_comments values" . 
-            "(" . escape_string($photo_id) . ", " . escape_string($this->get("comment_id")) . ")";
+            "(" . (int) $photo->getId() . ", " . (int) $this->getId() . ")";
 
       
         query($sql, "Failed to add comment:");
     }
  
     function is_owner($user) {
-        if($user->get(user_id)==$this->get("user_id")) {
+        if($user->getId()==$this->get("user_id")) {
             return true;
         } else {
             return false;
         }
     }
 
-    function to_html($user, $thumbnail=null) {
+    function toHTML($user, $thumbnail=null) {
         $this->lookup();
         $photo=$this->get_photo();
 
@@ -140,7 +155,7 @@ class comment extends zophTable {
 
         if ($thumbnail) {
             $html .= "<div class=\"thumbnail\">\n";
-            $html .= $photo->get_thumbnail_link();
+            $html .= $photo->getThumbnailLink();
             $html .= "</div>\n";
         }
         
@@ -152,14 +167,14 @@ class comment extends zophTable {
 }
 
 function get_all_comments() {
-   return comment::getRecordsFromQuery("comment", "select comment_id from " . DB_PREFIX . "comments");
+   return comment::getRecordsFromQuery("SELECT comment_id FROM " . DB_PREFIX . "comments");
    }
 
 function format_comments($user, $comments) {
     $html=null;
     foreach ($comments as $comment) {
         $comment->lookup();
-        $html.=$comment->to_html($user, true);
+        $html.=$comment->toHTML($user, true);
     }
     return $html;
 }

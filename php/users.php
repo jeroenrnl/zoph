@@ -16,14 +16,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $title = translate("Users");
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
         <h1>
           <span class="actionlink">
@@ -50,7 +50,7 @@
           <td>
           <span class="actionlink">
 <?php
-            if ((count(get_newer_albums($u->get("user_id"), $u->get_lastnotify())) > 0)) {
+            if ((count(album::getNewer($u, $u->get_lastnotify())) > 0)) {
 ?>
             <a href="notify.php?_action=notify&amp;user_id=<?php echo $u->get("user_id") ?>&amp;shownewalbums=1"><?php echo translate("Notify User", 0) ?></a> |
 <?php
@@ -68,5 +68,5 @@
       </table>
     </div>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

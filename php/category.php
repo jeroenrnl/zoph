@@ -15,10 +15,10 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $category_id = getvar("category_id");
@@ -35,11 +35,11 @@
         $obj->update();
         $action = "display";
     } else {
-        require_once("actions.inc.php");
+        require_once "actions.inc.php";
     }
 
     if ($action == "display") {
-        redirect(add_sid("categories.php?parent_category_id=" . $category->get("category_id")), "Redirect");
+        redirect("categories.php?parent_category_id=" . $category->get("category_id"), "Redirect");
     }
 
     if ($action != "insert") {
@@ -50,7 +50,7 @@
         $title = translate("New Category");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
     <h1>
 <?php
@@ -78,7 +78,7 @@
         <form action="category.php">
           <input type="hidden" name="_action" value="<?php echo $action ?>">
           <input type="hidden" name="category_id" value="<?php echo $category->get("category_id") ?>">
-          <?php echo create_edit_fields($category->getEditArray($user)) ?>
+          <?php echo create_edit_fields($category->getEditArray()) ?>
           <input type="submit" value="<?php echo translate($action, 0) ?>">
         </form>
 <?php
@@ -87,5 +87,5 @@
 </div>
 
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

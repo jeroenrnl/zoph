@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
         $_action = "display";
@@ -35,7 +35,7 @@
     }
     $obj = &$color_scheme;
     $redirect = "color_schemes.php";
-    require_once("actions.inc.php");
+    require_once "actions.inc.php";
 
     if ($_action == "update") {
         $user->prefs->load();
@@ -49,7 +49,7 @@
         $title = translate("New Color Scheme");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
 <?php
     if ($action == "display") {
@@ -140,4 +140,4 @@
 <br>
 </div>
 
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

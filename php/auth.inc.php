@@ -49,9 +49,7 @@
             $username=$_SERVER["USER"];
             $user=user::getByName($username);
             if(!$user) {
-                log::$stopOnFatal=false;
-                log::msg("$username is not a valid user", log::FATAL, log::LOGIN);
-                exit(EXIT_CLI_USER_NOT_VALID);
+                throw new CliUserNotValidException($username . " is not a valid user");
             }    
         }
         $user->lookup();
@@ -69,7 +67,7 @@
     } else if (empty($user)) {
         $hash=getvar("hash");
         if(defined("IMAGE_PHP") && conf::get("share.enable") && !empty($hash)) {
-            require_once("classes/anonymousUser.inc.php");
+            require_once "classes/anonymousUser.inc.php";
             $user = new anonymousUser();
         } else {
             $uname = getvar("uname");

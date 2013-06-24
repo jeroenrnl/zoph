@@ -196,7 +196,7 @@
 	</row>
 	<row>
 		<field name="category_id">6</field>
-		<field name="parent_category_id">6</field>
+		<field name="parent_category_id">5</field>
 		<field name="category">LightBlue</field>
 		<field name="category_description" xsi:nil="true" />
 		<field name="sortname" xsi:nil="true" />
@@ -400,128 +400,430 @@
 	<row>
 		<field name="comment_id">1</field>
 		<field name="user_id">2</field>
-		<field name="comment_date">2012-07-08 12:47:37</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by brian</field>
 		<field name="comment">I love that Special Red :-)</field>
-		<field name="timestamp">2012-07-08 10:47:37</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">brian.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">2</field>
 		<field name="user_id">5</field>
-		<field name="comment_date">2012-07-08 12:47:37</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by freddie</field>
 		<field name="comment">Beautiful!</field>
-		<field name="timestamp">2012-07-08 10:47:37</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">freddie.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">3</field>
 		<field name="user_id">7</field>
-		<field name="comment_date">2012-07-08 12:47:37</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by roger</field>
 		<field name="comment">Nice</field>
-		<field name="timestamp">2012-07-08 10:47:37</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">roger.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">4</field>
 		<field name="user_id">2</field>
-		<field name="comment_date">2012-07-08 12:47:37</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by brian</field>
 		<field name="comment">The letters are all distorted!</field>
-		<field name="timestamp">2012-07-08 10:47:37</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">brian.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">5</field>
 		<field name="user_id">5</field>
-		<field name="comment_date">2012-07-08 12:47:37</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by freddie</field>
 		<field name="comment">Crap :-(</field>
-		<field name="timestamp">2012-07-08 10:47:37</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">freddie.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">6</field>
 		<field name="user_id">3</field>
-		<field name="comment_date">2012-07-08 12:47:38</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by jimi</field>
 		<field name="comment">Self portrait!</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">jimi.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">7</field>
 		<field name="user_id">3</field>
-		<field name="comment_date">2012-07-08 12:47:38</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by jimi</field>
 		<field name="comment">Me and [b]Brian[/b]!</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">jimi.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">8</field>
 		<field name="user_id">2</field>
-		<field name="comment_date">2012-07-08 12:47:38</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by brian</field>
 		<field name="comment">:-)</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">brian.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">9</field>
 		<field name="user_id">4</field>
-		<field name="comment_date">2012-07-08 12:47:38</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by paul</field>
 		<field name="comment">Just beautiful</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">paul.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">10</field>
 		<field name="user_id">6</field>
-		<field name="comment_date">2012-07-08 12:47:38</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by phil</field>
 		<field name="comment">That &lt;span style=&quot;background: grey&quot;&gt;grey&lt;/span&gt; is annoying me so badly, I'm illegally using HTML in this comment!</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">phil.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">11</field>
 		<field name="user_id">1</field>
-		<field name="comment_date">2012-07-08 12:47:38</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by admin</field>
 		<field name="comment">Can you guys stop this, or I am [b]revoking[/b] your accounts!</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">admin.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">12</field>
 		<field name="user_id">6</field>
-		<field name="comment_date">2012-07-08 12:47:38</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by phil</field>
 		<field name="comment">Love this picture!</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">phil.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">13</field>
 		<field name="user_id">4</field>
-		<field name="comment_date">2012-07-08 12:47:38</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by paul</field>
 		<field name="comment">Can't [i]you[/i] [b]see[/b] it isn't even [u]sharp[/u] on the right side, Phil? :mrgreen:</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">paul.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">14</field>
 		<field name="user_id">1</field>
-		<field name="comment_date">2012-07-08 12:47:38</field>
+		<field name="comment_date">2013-01-16 21:32:32</field>
 		<field name="subject">Comment by admin</field>
 		<field name="comment">Really, I am going to [b]revoke[/b] your accounts! :mad:</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="ipaddr">admin.zoph.org</field>
+	</row>
+	</table_data>
+	<table_data name="zoph_conf">
+	<row>
+		<field name="conf_id">interface.title</field>
+		<field name="value">Zoph UnitTest</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">interface.width</field>
+		<field name="value">600px</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">interface.template</field>
+		<field name="value">default</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">interface.autocomplete</field>
+		<field name="value">1</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">interface.language</field>
+		<field name="value">en</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">interface.user.default</field>
+		<field name="value">0</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">interface.user.cli</field>
+		<field name="value">0</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">interface.max.days</field>
+		<field name="value">30</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">interface.sort.order</field>
+		<field name="value">date</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">interface.sort.dir</field>
+		<field name="value">asc</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">ssl.force</field>
+		<field name="value">never</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">url.http</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">url.https</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">path.images</field>
+		<field name="value">/data/images/</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">path.upload</field>
+		<field name="value">upload</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">path.magic</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">path.unzip</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">path.untar</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">path.ungz</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">path.unbz</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">maps.provider</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">maps.geocode</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">maps.key.cloudmade</field>
+		<field name="value">f3b46b04edd64ea79066b7e6921205df</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.enable</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.upload</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.maxupload</field>
+		<field name="value">10000000</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.parallel</field>
+		<field name="value">1</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.rotate</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.resize</field>
+		<field name="value">resample</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.dated</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.dated.hier</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.filemode</field>
+		<field name="value">0644</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.dirmode</field>
+		<field name="value">0755</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.cli.thumbs</field>
+		<field name="value">1</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.cli.exif</field>
+		<field name="value">1</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.cli.size</field>
+		<field name="value">1</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.cli.hash</field>
+		<field name="value">1</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">import.cli.copy</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">watermark.enable</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">watermark.file</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">watermark.pos.x</field>
+		<field name="value">center</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">watermark.pos.y</field>
+		<field name="value">center</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">watermark.transparency</field>
+		<field name="value">50</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">rotate.enable</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">rotate.command</field>
+		<field name="value">convert</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">rotate.backup</field>
+		<field name="value">1</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">rotate.backup.prefix</field>
+		<field name="value">orig_</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">share.enable</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">share.salt.full</field>
+		<field name="value">904328704a1cd39a27e1ee865b7f7ad56547f974</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">share.salt.mid</field>
+		<field name="value">214fd0b4b714ee6faf932820fa2c0349b166f0e6</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">feature.download</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">feature.comments</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">feature.mail</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">feature.mail.bcc</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">feature.annotate</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">feature.rating</field>
+		<field name="value">1</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">date.tz</field>
+		<field name="value" xsi:nil="true" />
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">date.guesstz</field>
+		<field name="value"></field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">date.format</field>
+		<field name="value">d-m-Y</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
+	</row>
+	<row>
+		<field name="conf_id">date.timeformat</field>
+		<field name="value">H:i:s T</field>
+		<field name="timestamp">2013-01-16 09:38:30</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_group_permissions">
@@ -531,7 +833,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
@@ -539,7 +841,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
@@ -547,7 +849,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
@@ -555,7 +857,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
@@ -563,7 +865,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
@@ -571,7 +873,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
@@ -579,7 +881,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_groups">
@@ -608,47 +910,47 @@
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">2</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">5</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">7</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">9</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
 		<field name="user_id">8</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
 		<field name="user_id">4</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">3</field>
 		<field name="user_id">6</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
 		<field name="user_id">2</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
 		<field name="user_id">3</field>
-		<field name="changedate">2012-07-08 10:47:36</field>
+		<field name="changedate">2013-01-16 20:32:31</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_pages">
@@ -1182,7 +1484,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">8</field>
 		<field name="ipaddress">brian.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:37</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">2</field>
@@ -1190,7 +1492,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">freddie.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:37</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">3</field>
@@ -1198,7 +1500,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">8</field>
 		<field name="ipaddress">roger.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:37</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">4</field>
@@ -1206,7 +1508,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">johnd.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:37</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">5</field>
@@ -1214,7 +1516,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">5</field>
 		<field name="ipaddress">brian.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">6</field>
@@ -1222,7 +1524,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">3</field>
 		<field name="ipaddress">freddie.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">7</field>
@@ -1230,7 +1532,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">6</field>
 		<field name="ipaddress">roger.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">8</field>
@@ -1238,7 +1540,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">3</field>
 		<field name="ipaddress">johnd.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">9</field>
@@ -1246,7 +1548,7 @@
 		<field name="photo_id">3</field>
 		<field name="rating">5</field>
 		<field name="ipaddress">jimi.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">10</field>
@@ -1254,7 +1556,7 @@
 		<field name="photo_id">4</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">paul.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">11</field>
@@ -1262,7 +1564,7 @@
 		<field name="photo_id">4</field>
 		<field name="rating">6</field>
 		<field name="ipaddress">johnl.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">12</field>
@@ -1270,7 +1572,7 @@
 		<field name="photo_id">5</field>
 		<field name="rating">10</field>
 		<field name="ipaddress">phil.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">13</field>
@@ -1278,7 +1580,7 @@
 		<field name="photo_id">5</field>
 		<field name="rating">9</field>
 		<field name="ipaddress">jimi.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">14</field>
@@ -1286,7 +1588,7 @@
 		<field name="photo_id">6</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">jimi.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">15</field>
@@ -1294,7 +1596,7 @@
 		<field name="photo_id">6</field>
 		<field name="rating">5</field>
 		<field name="ipaddress">brian.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">16</field>
@@ -1302,7 +1604,7 @@
 		<field name="photo_id">8</field>
 		<field name="rating">9</field>
 		<field name="ipaddress">paul.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">17</field>
@@ -1310,7 +1612,7 @@
 		<field name="photo_id">8</field>
 		<field name="rating">3</field>
 		<field name="ipaddress">phil.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">18</field>
@@ -1318,7 +1620,7 @@
 		<field name="photo_id">10</field>
 		<field name="rating">10</field>
 		<field name="ipaddress">phil.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	<row>
 		<field name="rating_id">19</field>
@@ -1326,10 +1628,46 @@
 		<field name="photo_id">10</field>
 		<field name="rating">1</field>
 		<field name="ipaddress">paul.zoph.org</field>
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_photo_relations">
+	<row>
+		<field name="photo_id_1">2</field>
+		<field name="photo_id_2">1</field>
+		<field name="desc_1">second photo</field>
+		<field name="desc_2">first photo</field>
+	</row>
+	<row>
+		<field name="photo_id_1">3</field>
+		<field name="photo_id_2">1</field>
+		<field name="desc_1">third photo</field>
+		<field name="desc_2">first photo</field>
+	</row>
+	<row>
+		<field name="photo_id_1">4</field>
+		<field name="photo_id_2">1</field>
+		<field name="desc_1">fourth photo</field>
+		<field name="desc_2">first photo</field>
+	</row>
+	<row>
+		<field name="photo_id_1">3</field>
+		<field name="photo_id_2">2</field>
+		<field name="desc_1">third photo</field>
+		<field name="desc_2">second photo</field>
+	</row>
+	<row>
+		<field name="photo_id_1">4</field>
+		<field name="photo_id_2">5</field>
+		<field name="desc_1">fourth photo</field>
+		<field name="desc_2">fifth photo</field>
+	</row>
+	<row>
+		<field name="photo_id_1">5</field>
+		<field name="photo_id_2">6</field>
+		<field name="desc_1">fifth photo</field>
+		<field name="desc_2">sixth photo</field>
+	</row>
 	</table_data>
 	<table_data name="zoph_photos">
 	<row>
@@ -1343,10 +1681,10 @@
 		<field name="photographer_id">2</field>
 		<field name="location_id">3</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">7.50</field>
+		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
-		<field name="date">2012-07-06</field>
-		<field name="time">15:55:44</field>
+		<field name="date">2013-01-16</field>
+		<field name="time">21:32:31</field>
 		<field name="time_corr">0</field>
 		<field name="camera_make" xsi:nil="true" />
 		<field name="camera_model" xsi:nil="true" />
@@ -1361,7 +1699,7 @@
 		<field name="focus_dist" xsi:nil="true" />
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
-		<field name="timestamp">2012-07-08 10:47:37</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="lat" xsi:nil="true" />
 		<field name="lon" xsi:nil="true" />
 		<field name="mapzoom" xsi:nil="true" />
@@ -1378,10 +1716,10 @@
 		<field name="photographer_id">2</field>
 		<field name="location_id">4</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">4.25</field>
+		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
-		<field name="date">2012-07-06</field>
-		<field name="time">15:55:44</field>
+		<field name="date">2013-01-16</field>
+		<field name="time">21:32:31</field>
 		<field name="time_corr">0</field>
 		<field name="camera_make" xsi:nil="true" />
 		<field name="camera_model" xsi:nil="true" />
@@ -1396,7 +1734,7 @@
 		<field name="focus_dist" xsi:nil="true" />
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="lat" xsi:nil="true" />
 		<field name="lon" xsi:nil="true" />
 		<field name="mapzoom" xsi:nil="true" />
@@ -1413,10 +1751,10 @@
 		<field name="photographer_id">2</field>
 		<field name="location_id">4</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">5.00</field>
+		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
-		<field name="date">2012-07-06</field>
-		<field name="time">15:55:44</field>
+		<field name="date">2013-01-16</field>
+		<field name="time">21:32:31</field>
 		<field name="time_corr">0</field>
 		<field name="camera_make" xsi:nil="true" />
 		<field name="camera_model" xsi:nil="true" />
@@ -1431,7 +1769,7 @@
 		<field name="focus_dist" xsi:nil="true" />
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="lat" xsi:nil="true" />
 		<field name="lon" xsi:nil="true" />
 		<field name="mapzoom" xsi:nil="true" />
@@ -1448,10 +1786,10 @@
 		<field name="photographer_id">3</field>
 		<field name="location_id">5</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">6.50</field>
+		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
-		<field name="date">2012-07-06</field>
-		<field name="time">15:55:44</field>
+		<field name="date">2013-01-16</field>
+		<field name="time">21:32:31</field>
 		<field name="time_corr">0</field>
 		<field name="camera_make" xsi:nil="true" />
 		<field name="camera_model" xsi:nil="true" />
@@ -1466,7 +1804,7 @@
 		<field name="focus_dist" xsi:nil="true" />
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="lat" xsi:nil="true" />
 		<field name="lon" xsi:nil="true" />
 		<field name="mapzoom" xsi:nil="true" />
@@ -1483,10 +1821,10 @@
 		<field name="photographer_id">3</field>
 		<field name="location_id">5</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">9.50</field>
+		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
-		<field name="date">2012-07-06</field>
-		<field name="time">15:55:44</field>
+		<field name="date">2013-01-16</field>
+		<field name="time">21:32:31</field>
 		<field name="time_corr">0</field>
 		<field name="camera_make" xsi:nil="true" />
 		<field name="camera_model" xsi:nil="true" />
@@ -1501,7 +1839,7 @@
 		<field name="focus_dist" xsi:nil="true" />
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="lat" xsi:nil="true" />
 		<field name="lon" xsi:nil="true" />
 		<field name="mapzoom" xsi:nil="true" />
@@ -1513,15 +1851,15 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">18310</field>
+		<field name="size">18939</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">3</field>
 		<field name="location_id">6</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">6.00</field>
+		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
-		<field name="date">2012-07-06</field>
-		<field name="time">15:55:45</field>
+		<field name="date">2013-01-16</field>
+		<field name="time">21:32:31</field>
 		<field name="time_corr">0</field>
 		<field name="camera_make" xsi:nil="true" />
 		<field name="camera_model" xsi:nil="true" />
@@ -1536,11 +1874,11 @@
 		<field name="focus_dist" xsi:nil="true" />
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="lat" xsi:nil="true" />
 		<field name="lon" xsi:nil="true" />
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">186f84024d91ac1e2548f8cd810d18bf265aa5d8</field>
+		<field name="hash">8efd8d7baaec41d636f1b2cfcd5ebaba5c968f1f</field>
 	</row>
 	<row>
 		<field name="photo_id">7</field>
@@ -1548,15 +1886,15 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">18434</field>
+		<field name="size">19161</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">3</field>
 		<field name="location_id">7</field>
 		<field name="view" xsi:nil="true" />
 		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
-		<field name="date">2012-07-06</field>
-		<field name="time">15:55:45</field>
+		<field name="date">2013-01-16</field>
+		<field name="time">21:32:31</field>
 		<field name="time_corr">0</field>
 		<field name="camera_make" xsi:nil="true" />
 		<field name="camera_model" xsi:nil="true" />
@@ -1571,11 +1909,11 @@
 		<field name="focus_dist" xsi:nil="true" />
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="lat" xsi:nil="true" />
 		<field name="lon" xsi:nil="true" />
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">3283d2bb340cce5d64216fc86e422bfefc1e9b9c</field>
+		<field name="hash">ecc7f02f5549a8b98828f7aa0d58676f0a20204a</field>
 	</row>
 	<row>
 		<field name="photo_id">8</field>
@@ -1583,15 +1921,15 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">13581</field>
+		<field name="size">14245</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">4</field>
 		<field name="location_id">10</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">6.00</field>
+		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
-		<field name="date">2012-07-06</field>
-		<field name="time">15:55:45</field>
+		<field name="date">2013-01-16</field>
+		<field name="time">21:32:31</field>
 		<field name="time_corr">0</field>
 		<field name="camera_make" xsi:nil="true" />
 		<field name="camera_model" xsi:nil="true" />
@@ -1606,11 +1944,11 @@
 		<field name="focus_dist" xsi:nil="true" />
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="lat" xsi:nil="true" />
 		<field name="lon" xsi:nil="true" />
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">6844cbbf7d64c2cbff68b2ecfdab398018f7fc3e</field>
+		<field name="hash">18f3653695c64b960b301dab954ef4c3542d20e8</field>
 	</row>
 	<row>
 		<field name="photo_id">9</field>
@@ -1618,15 +1956,15 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">14614</field>
+		<field name="size">15279</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">5</field>
 		<field name="location_id">13</field>
 		<field name="view" xsi:nil="true" />
 		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
-		<field name="date">2012-07-06</field>
-		<field name="time">15:55:45</field>
+		<field name="date">2013-01-16</field>
+		<field name="time">21:32:31</field>
 		<field name="time_corr">0</field>
 		<field name="camera_make" xsi:nil="true" />
 		<field name="camera_model" xsi:nil="true" />
@@ -1641,11 +1979,11 @@
 		<field name="focus_dist" xsi:nil="true" />
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="lat" xsi:nil="true" />
 		<field name="lon" xsi:nil="true" />
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">41627df49383f1247f8808af1edb0cd7475f1dc6</field>
+		<field name="hash">2cf16033aaf215510ddeb0e87296269434470ab6</field>
 	</row>
 	<row>
 		<field name="photo_id">10</field>
@@ -1658,10 +1996,10 @@
 		<field name="photographer_id">6</field>
 		<field name="location_id">14</field>
 		<field name="view" xsi:nil="true" />
-		<field name="rating">5.50</field>
+		<field name="rating" xsi:nil="true" />
 		<field name="description" xsi:nil="true" />
-		<field name="date">2012-07-06</field>
-		<field name="time">15:55:45</field>
+		<field name="date">2013-01-16</field>
+		<field name="time">21:32:32</field>
 		<field name="time_corr">0</field>
 		<field name="camera_make" xsi:nil="true" />
 		<field name="camera_model" xsi:nil="true" />
@@ -1676,7 +2014,7 @@
 		<field name="focus_dist" xsi:nil="true" />
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
-		<field name="timestamp">2012-07-08 10:47:38</field>
+		<field name="timestamp">2013-01-16 20:32:32</field>
 		<field name="lat" xsi:nil="true" />
 		<field name="lon" xsi:nil="true" />
 		<field name="mapzoom" xsi:nil="true" />
@@ -2066,7 +2404,6 @@
 		<field name="autocomp_categories">1</field>
 		<field name="autocomp_photographer">1</field>
 		<field name="autocomp_people">1</field>
-		<field name="desc_thumbnails">0</field>
 		<field name="fullsize_new_win">0</field>
 		<field name="view">list</field>
 		<field name="autothumb">highest</field>
@@ -2093,7 +2430,6 @@
 		<field name="autocomp_categories">1</field>
 		<field name="autocomp_photographer">1</field>
 		<field name="autocomp_people">1</field>
-		<field name="desc_thumbnails">0</field>
 		<field name="fullsize_new_win">0</field>
 		<field name="view">list</field>
 		<field name="autothumb">highest</field>
@@ -2120,7 +2456,6 @@
 		<field name="autocomp_categories">1</field>
 		<field name="autocomp_photographer">1</field>
 		<field name="autocomp_people">1</field>
-		<field name="desc_thumbnails">0</field>
 		<field name="fullsize_new_win">0</field>
 		<field name="view">list</field>
 		<field name="autothumb">highest</field>
@@ -2147,7 +2482,6 @@
 		<field name="autocomp_categories">1</field>
 		<field name="autocomp_photographer">1</field>
 		<field name="autocomp_people">1</field>
-		<field name="desc_thumbnails">0</field>
 		<field name="fullsize_new_win">0</field>
 		<field name="view">list</field>
 		<field name="autothumb">highest</field>
@@ -2174,7 +2508,6 @@
 		<field name="autocomp_categories">1</field>
 		<field name="autocomp_photographer">1</field>
 		<field name="autocomp_people">1</field>
-		<field name="desc_thumbnails">0</field>
 		<field name="fullsize_new_win">0</field>
 		<field name="view">list</field>
 		<field name="autothumb">highest</field>
@@ -2201,7 +2534,6 @@
 		<field name="autocomp_categories">1</field>
 		<field name="autocomp_photographer">1</field>
 		<field name="autocomp_people">1</field>
-		<field name="desc_thumbnails">0</field>
 		<field name="fullsize_new_win">0</field>
 		<field name="view">list</field>
 		<field name="autothumb">highest</field>
@@ -2228,7 +2560,6 @@
 		<field name="autocomp_categories">1</field>
 		<field name="autocomp_photographer">1</field>
 		<field name="autocomp_people">1</field>
-		<field name="desc_thumbnails">0</field>
 		<field name="fullsize_new_win">0</field>
 		<field name="view">list</field>
 		<field name="autothumb">highest</field>
@@ -2255,7 +2586,6 @@
 		<field name="autocomp_categories">1</field>
 		<field name="autocomp_photographer">1</field>
 		<field name="autocomp_people">1</field>
-		<field name="desc_thumbnails">0</field>
 		<field name="fullsize_new_win">0</field>
 		<field name="view">list</field>
 		<field name="autothumb">highest</field>
@@ -2282,7 +2612,6 @@
 		<field name="autocomp_categories">1</field>
 		<field name="autocomp_photographer">1</field>
 		<field name="autocomp_people">1</field>
-		<field name="desc_thumbnails">0</field>
 		<field name="fullsize_new_win">0</field>
 		<field name="view">list</field>
 		<field name="autothumb">highest</field>

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * A Unit Test for the anonymousUser object.
  *
  * This file is part of Zoph.
@@ -20,16 +20,14 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-require_once("testSetup.php");
-
+require_once "php/UnitTests/testSetup.php";
 /**
  * Test class for anonymousUser.
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
-class anonymousUserTest extends zophDatabaseTestCase
-{
-    /**
-     * @var anonymousUser
-     */
+class anonymousUserTest extends zophDatabaseTestCase {
+    /** @var anonymousUser */
     protected $object;
 
     /**

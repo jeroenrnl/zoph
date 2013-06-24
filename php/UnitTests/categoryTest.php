@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Category test
  *
  * This file is part of Zoph.
@@ -23,6 +23,9 @@
 
 /**
  * Test the category class
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class categoryTest extends ZophDataBaseTestCase {
     /**

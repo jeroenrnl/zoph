@@ -61,24 +61,11 @@ function create_text_input($name, $value, $size = 20, $max = 32, $type="text") {
     return "<input type=\"$type\" $step name=\"$name\" id=\"$id\" value=\"" . e($value) ."\" size=\"$size\" maxlength=\"$max\">\n";
 }
 
-function create_pulldown($name, $value, $value_array, $extraopt = null) {
-    $id=preg_replace("/^_+/", "", $name);
-
-    $html = "<select name=\"$name\" id=\"$id\" $extraopt>\n";
-    while (list($val, $label) = each($value_array)) {
-        if ($val == $value) { $selected = " selected"; }
-        else { $selected  = ""; }
-        $html .= "  <option value=\"$val\"$selected >" . ($label?$label:"&nbsp;") ."</option>\n";
-    }
-    $html .= "</select>\n";
-    return $html;
-}
-
 function create_integer_pulldown($name, $value, $min, $max) {
     for ($i = $min; $i <= $max; $i++) {
         $integer_array["$i"] = $i;
     }
-    return create_pulldown($name, $value, $integer_array);
+    return template::createPulldown($name, $value, $integer_array);
 }
 
 function create_rating_pulldown($val = "", $name = "rating") {
@@ -100,16 +87,16 @@ function create_rating_pulldown($val = "", $name = "rating") {
         $rating_array = array_reverse($tmp_array, true);
     }
 
-    return create_pulldown($name, $val, $rating_array);
+    return template::createPulldown($name, $val, $rating_array);
 }
 
 function create_conjunction_pulldown($var, $val = "") {
-    return create_pulldown($var, $val,
+    return template::createPulldown($var, $val,
         array("" => "", "and" => translate("and",0), "or" => translate("or",0)));
 }
 
 function create_operator_pulldown($var, $op = "=") {
-    return create_pulldown($var, $op,
+    return template::createPulldown($var, $op,
         array(
             "=" => "=", "!=" => "!=",
             ">" => ">", ">=" => ">=",
@@ -118,30 +105,22 @@ function create_operator_pulldown($var, $op = "=") {
 }
 
 function create_binary_operator_pulldown($var, $op = "=") {
-    return create_pulldown($var, $op,
+    return template::createPulldown($var, $op,
         array("=" => "=", "!=" => "!="));
 }
 
 function create_present_operator_pulldown($var, $op = "=") {
-    return create_pulldown($var, $op,
+    return template::createPulldown($var, $op,
         array("=" => translate("is in photo",0), "!=" => translate("is not in photo",0)));
 }
 
 function create_inequality_operator_pulldown($var, $op = ">") {
-    return create_pulldown($var, $op,
+    return template::createPulldown($var, $op,
         array(">" => translate("less than"), "<" => translate("more than")));
 }
 
-/**
- * This function is now only a wrapper around the static function in the photo class
- * @todo get rid of it
- */
-function create_photo_field_pulldown($var, $name = null) {
-    return create_pulldown($var, $name, translate(photo::getFields(),0));
-}
-
 function create_photo_text_pulldown($var, $name = null) {
-    return create_pulldown($var, $name, array(
+    return template::createPulldown($var, $name, array(
         "" => "",
         "album" => translate("album",0),
         "category" => translate("category",0),
@@ -149,22 +128,6 @@ function create_photo_text_pulldown($var, $name = null) {
         "photographer" => translate("photographer",0)));
 }
 
-function create_view_pulldown($name, $value, $extraopt=null) {
-    return create_pulldown($name, $value, array(
-        "list" => translate("List",0), 
-        "tree" => translate("Tree",0), 
-        "thumbs" => translate("Thumbnails",0)), $extraopt);
-}
-
-function create_autothumb_pulldown($name, $value, $extraopt=null) {
-    return  create_pulldown($name, $value, array(
-        "oldest" => translate("Oldest photo",0), 
-        "newest" => translate("Newest photo",0), 
-        "first" => translate("Changed least recently",0), 
-        "last" => translate("Changed most recently",0), 
-        "highest" => translate("Highest ranked",0), 
-        "random" => translate("Random",0)), $extraopt);
-}
 function get_sort_array() {
     return array(
         "name" => translate("Name",0),
@@ -332,20 +295,6 @@ function create_form($vars, $ignore = array()) {
     }
 
     return $form;
-}
-
-function add_sid($url) {
-    if (SID) {
-        if (strpos($url, "?") > 0) {
-            $url .= "&";
-        }
-        else {
-            $url .= "?";
-        }
-
-        $url .= SID;
-    }
-    return $url;
 }
 
 function minimum_version($vercheck) {
@@ -549,43 +498,17 @@ function running_on_windows() {
     }
 }
 
-function get_autothumb_order($autothumb) {
-    switch ($autothumb) {
-    case "oldest":
-        $order="ORDER BY p.date, p.time DESC LIMIT 1";
-        break;
-    case "newest":
-        $order="ORDER BY p.date DESC, p.time DESC LIMIT 1";
-        break;
-    case "first":
-        $order="ORDER BY p.timestamp LIMIT 1";
-        break;
-    case "last":
-        $order="ORDER BY p.timestamp DESC LIMIT 1";
-        break;
-    case "random":    
-        $order="ORDER BY rand() LIMIT 1";
-        break;
-    default:
-    case "highest":
-        $order="ORDER BY p.rating DESC LIMIT 1";
-        break;
-    }
-    return $order;
-}
-
 function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
     if(class_exists(ZipArchive)) {
         $zip=new ZipArchive();
         $tempfile="/tmp/zoph_" . $user->get("user_id") . "_" . $filename ."_" . $filenum . ".zip";
         @unlink($tempfile);
-        // ZIPARCHIVE::CREATE is not available in PHP4, but resolves to 1
-        if ($zip->open($tempfile, 1)!==TRUE) {
+        if ($zip->open($tempfile, ZIPARCHIVE::CREATE)!==TRUE) {
             die("cannot open $tempfile\n");
         }
         $count=sizeof($photos);
         foreach($photos as $key => $photo) {
-            if($data=@file_get_contents($photo->get_file_path())) {
+            if($data=@file_get_contents($photo->getFilePath())) {
                 $size=strlen($data);
                 $zipsize=$zipsize+$size;
                 if($zipsize>=$maxsize) {
@@ -595,7 +518,7 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
                 $zip->addFromString($photo->get("name"),$data);
             
             } else {
-                echo sprintf(translate("Could not read %s."), $photo->get_file_path()) . "<br>\n";
+                echo sprintf(translate("Could not read %s."), $photo->getFilePath()) . "<br>\n";
             }
         }
         $zip->close() or die ("Zipfile creation failed");
@@ -606,10 +529,14 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
     }
 }
 
-function get_human($bytes) {
-    // transforms a size in bytes into a human readable format using 
-    // Ki Mi Gi, etc. prefixes
-    // Give me a call if your database grows bigger than 1024 Yobbibytes. :-)
+/**
+ * transforms a size in bytes into a human readable format using 
+ * Ki Mi Gi, etc. prefixes
+ * Give me a call if your database grows bigger than 1024 Yobbibytes. :-)
+ * @param int bytes number of bytes
+ * @return string human readable filesize
+ */
+function getHuman($bytes) {
     if($bytes==0) {
         // prevents div by 0
         return "0B";
@@ -695,12 +622,13 @@ function check_js($user) {
     }
 }
 
-function remove_empty($children, $user) {
+function remove_empty(array $children) {
+    $user=user::getCurrent();
     $clean=array();
     // If user is not admin, remove any children that do not have photos
-    if($user && !$user->is_admin()) {
+    if(!$user->is_admin()) {
         foreach($children as $child) {
-            $count=$child->getTotalPhotoCount($user);
+            $count=$child->getTotalPhotoCount();
             if($count>0) {
                 $clean[]=$child;
             }

@@ -1,8 +1,6 @@
 <?php
 /**
  * A class representing a watermarked photo
- * This is a photo with a "watermark" superimposed over it
- * usually to prevent unauthorized use the photo
  *
  * This file is part of Zoph.
  *
@@ -23,6 +21,14 @@
  * @author Jeroen Roos
  */
 
+/**
+ * A class representing a watermarked photo
+ * This is a photo with a "watermark" superimposed over it
+ * usually to prevent unauthorized use the photo
+ *
+ * @package Zoph
+ * @author Jeroen Roos
+ */
 class watermarkedPhoto extends photo {
     /**
      * Display the watermarked image

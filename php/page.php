@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-require_once("include.inc.php");
+require_once "include.inc.php";
 
 $zophpage_id = getvar("page_id");
 $zophpage = new page($zophpage_id);
@@ -30,7 +30,7 @@ if ($zophpage_id) {
     $title = translate("Create new page");
 } else if ($_action != "insert") {
     // no id given and action is not new or insert
-    redirect(add_sid("zoph.php"), "No page id given!");
+    redirect("zoph.php", "No page id given!");
 }
     
 if(!$user->is_admin()) {
@@ -39,8 +39,8 @@ if(!$user->is_admin()) {
 
 $obj = &$zophpage;
 
-require_once("actions.inc.php");
-require_once("header.inc.php");
+require_once "actions.inc.php";
+require_once "header.inc.php";
 
 if ($action == "confirm") {
 ?>
@@ -106,5 +106,5 @@ if ($action == "confirm") {
 
 <?php
 }
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

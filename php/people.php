@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */   
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $_view=getvar("_view");
     if(empty($_view)) {
         $_view=$user->prefs->get("view");
@@ -27,7 +27,7 @@
     }
 
     if (!$user->is_admin() && !$user->get("browse_people")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $_l = getvar("_l");
@@ -36,7 +36,7 @@
         $_l = "all";
     }
     $title = translate("People");
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
           <h1>
 <?php
@@ -68,9 +68,9 @@
                 <?php echo create_form($request_vars, array ("_view", "_autothumb",
 "_button")) ?>
                 <?php echo translate("Category view", 0) . "\n" ?>
-                <?php echo create_view_pulldown("_view", $_view, "onChange='form.submit()'") ?>
+                <?php echo template::createViewPulldown("_view", $_view, true) ?>
                 <?php echo translate("Automatic thumbnail", 0) . "\n" ?>
-                <?php echo create_autothumb_pulldown("_autothumb", $_autothumb, "onChange='form.submit()'") ?>
+                <?php echo template::createAutothumbPulldown("_autothumb", $_autothumb, true) ?>
 
             </form>
             <br>
@@ -82,7 +82,7 @@
     } else {
         $first_letter = $_l;
     }
-    $ppl = get_all_people($user, $first_letter);
+    $ppl = person::getAllPeopleAndPhotographers($first_letter);
     if ($ppl) {
         if ($_view=="thumbs") {
             $template="view_thumbs";
@@ -92,11 +92,10 @@
         $tpl=new template($template, array(
             "id" => $_view . "view",
             "items" => $ppl,
-            "user" => $user,
             "autothumb" => $_autothumb,
             "links" => array(
                 translate("photos of") => "photos.php?person_id=",
-                translate("photos by") => "photos.php?photogapher_id="
+                translate("photos by") => "photos.php?photographer_id="
             )
         ));
         echo $tpl;
@@ -110,5 +109,5 @@
 
 </div>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

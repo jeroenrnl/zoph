@@ -38,20 +38,14 @@ class arguments {
      * Create a new instance of the class.
      * This construct also takes care of interpreting and looking up of the
      * values
+     * @param array CLI arguments
      */
-    public function __construct() {
-        global $argv;
-
-        if(is_array($argv)) {
-            // We don't care about the name of the script
-            array_shift($argv);
-            $this->arguments=$argv;
-            if(count($this->arguments)===0) {
-                $this->arguments[]="--help";
-            }
-        } else {
-            echo "Could not read argument list";
-            exit(cli::EXIT_CANNOT_ACCESS_ARGUMENTS);
+    public function __construct(array $argv) {
+        // We don't care about the name of the script
+        array_shift($argv);
+        $this->arguments=$argv;
+        if(count($this->arguments)===0) {
+            $this->arguments[]="--help";
         }
         $this->process();
         $this->lookup();
@@ -91,226 +85,226 @@ class arguments {
 
         for($i=0; $i<sizeof($argv); $i++) {
             switch($argv[$i]) {
-                case "--instance":
-                case "-i":
-                    $args["instance"]=$argv[++$i];
-                    break;
+            case "--instance":
+            case "-i":
+                $args["instance"]=$argv[++$i];
+                break;
 
 
-                case "--albums":
-                case "--album":
-                case "-a":
-                    $albums=explode(",",$argv[++$i]);
-                    foreach($albums as $album) {
-                        $args["albums"][]=trim($album);
-                        if(isset($parent)) {
-                            $args["palbum"][]=trim($parent);
-                        }
+            case "--albums":
+            case "--album":
+            case "-a":
+                $albums=explode(",",$argv[++$i]);
+                foreach($albums as $album) {
+                    $args["albums"][]=trim($album);
+                    if(isset($parent)) {
+                        $args["palbum"][]=trim($parent);
                     }
-                    $parent=0;
-                    break;
+                }
+                $parent=0;
+                break;
 
-                case "--category":
-                case "--categories":
-                case "-c":
-                    $cats=explode(",",$argv[++$i]);
-                    foreach($cats as $cat) {
-                        $args["categories"][]=trim($cat);
-                        if(isset($parent)) {
-                            $args["pcat"][]=trim($parent);
-                        }
+            case "--category":
+            case "--categories":
+            case "-c":
+                $cats=explode(",",$argv[++$i]);
+                foreach($cats as $cat) {
+                    $args["categories"][]=trim($cat);
+                    if(isset($parent)) {
+                        $args["pcat"][]=trim($parent);
                     }
-                    $parent=0;
-                    break;
+                }
+                $parent=0;
+                break;
 
-                case "--config":
-                case "-C":
-                    self::$command="config";
-                    $args["_configitem"]=$argv[++$i];
-                    if(isset($argv[$i+1])) {
-                        $args["_configvalue"]=$argv[++$i];
-                    } else {
-                        $args["_configdefault"]=true;
+            case "--config":
+            case "-C":
+                self::$command="config";
+                $args["_configitem"]=$argv[++$i];
+                if(isset($argv[$i+1])) {
+                    $args["_configvalue"]=$argv[++$i];
+                } else {
+                    $args["_configdefault"]=true;
+                }
+                break;
+            case "--dumpconfig":
+                self::$command="dumpconfig";
+                break;
+            case "--fields":
+            case "--field":
+            case "-f":
+                $args["fields"][]=$argv[++$i];
+                break;
+            case "--import":
+                self::$command="import";
+                break;
+            case "--place":
+            case "--location":
+            case "-l":
+                // Multiple locations are possible when using --new
+                $locs=explode(",",$argv[++$i]);
+                foreach($locs as $loc) {
+                    $args["location"][]=trim($loc);
+                    if(isset($parent)) {
+                        $args["pplace"][]=trim($parent);
                     }
-                    break;
-                case "--dumpconfig":
-                    self::$command="dumpconfig";
-                    break;
-                case "--fields":
-                case "--field":
-                case "-f":
-                    $args["fields"][]=$argv[++$i];
-                    break;
-                case "--import":
-                    self::$command="import";
-                    break;
-                case "--place":
-                case "--location":
-                case "-l":
-                    // Multiple locations are possible when using --new
-                    $locs=explode(",",$argv[++$i]);
-                    foreach($locs as $loc) {
-                        $args["location"][]=trim($loc);
-                        if(isset($parent)) {
-                            $args["pplace"][]=trim($parent);
-                        }
-                    }
-                    $parent=0;
-                    break;
-                case "--people":
-                case "--persons":
-                case "--person":
-                case "-p":
-                    $people=explode(",",$argv[++$i]);
-                    foreach($people as $person) {
-                        $args["people"][]=trim($person);
-                    }
-                    break;
-                case "--photographer":
-                case "-P":
-                    $args["photographer"]=$argv[++$i];
-                    break;
+                }
+                $parent=0;
+                break;
+            case "--people":
+            case "--persons":
+            case "--person":
+            case "-p":
+                $people=explode(",",$argv[++$i]);
+                foreach($people as $person) {
+                    $args["people"][]=trim($person);
+                }
+                break;
+            case "--photographer":
+            case "-P":
+                $args["photographer"]=$argv[++$i];
+                break;
 
-                case "--parent":
-                    $parent=$argv[++$i];
-                    break;
+            case "--parent":
+                $parent=$argv[++$i];
+                break;
 
-                case "--thumbs":
-                case "-t":
-                    conf::set("import.cli.thumbs", true);
-                    break;
-                case "--nothumbs":
-                case "--no-thumbs":
-                case "-n":
-                    conf::set("import.cli.thumbs", false);
-                    break;
-                case "--exif":
-                case "--EXIF":
-                    conf::set("import.cli.exif", true);
-                    break;
-                case "--no-exif":
-                case "--noEXIF":
-                case "--noexif":
-                case "--no-EXIF":
-                    conf::set("import.cli.exif", false);
-                    break;
-                case "--size":
-                    conf::set("import.cli.size", true);
-                    break;
-                case "--nosize":
-                case "--no-size":
-                    conf::set("import.cli.size", false);
-                    break;
-                case "--hash":
-                    conf::set("import.cli.hash", true);
-                    break;
-                case "--no-hash":
-                    conf::set("import.cli.hash", false);
-                    break;
+            case "--thumbs":
+            case "-t":
+                conf::set("import.cli.thumbs", true);
+                break;
+            case "--nothumbs":
+            case "--no-thumbs":
+            case "-n":
+                conf::set("import.cli.thumbs", false);
+                break;
+            case "--exif":
+            case "--EXIF":
+                conf::set("import.cli.exif", true);
+                break;
+            case "--no-exif":
+            case "--noEXIF":
+            case "--noexif":
+            case "--no-EXIF":
+                conf::set("import.cli.exif", false);
+                break;
+            case "--size":
+                conf::set("import.cli.size", true);
+                break;
+            case "--nosize":
+            case "--no-size":
+                conf::set("import.cli.size", false);
+                break;
+            case "--hash":
+                conf::set("import.cli.hash", true);
+                break;
+            case "--no-hash":
+                conf::set("import.cli.hash", false);
+                break;
 
 
-                case "--update":
-                case "-u":
-                    self::$command="update";
-                    break;
-                case "--import":
-                case "-I":
-                    self::$command="import";
-                    break;
-                case "--new":
-                case "-N":
-                    self::$command="new";
-                    break;
+            case "--update":
+            case "-u":
+                self::$command="update";
+                break;
+            case "--import":
+            case "-I":
+                self::$command="import";
+                break;
+            case "--new":
+            case "-N":
+                self::$command="new";
+                break;
 
-                case "--useIds":
-                case "--useids":
-                case "--use-ids":
-                case "--useid":
-                case "--use-id":
-                    conf::set("import.cli.useids", true);
-                    break;
+            case "--useIds":
+            case "--useids":
+            case "--use-ids":
+            case "--useid":
+            case "--use-id":
+                conf::set("import.cli.useids", true);
+                break;
 
-                case "--copy":
-                    conf::set("import.cli.copy", true);
-                    break;
-                case "--move":
-                    conf::set("import.cli.copy", false);
-                    break;
-                
-                case "-A":
-                case "--autoadd":
-                case "--auto-add":
-                    conf::set("import.cli.add.auto", true);
-                    break;
+            case "--copy":
+                conf::set("import.cli.copy", true);
+                break;
+            case "--move":
+                conf::set("import.cli.copy", false);
+                break;
+            
+            case "-A":
+            case "--autoadd":
+            case "--auto-add":
+                conf::set("import.cli.add.auto", true);
+                break;
 
-                case "-w":
-                case "--add-always":
-                case "--addalways":
-                    conf::set("import.cli.add.always", true);
-                    break;
-                
-                case "-r":
-                case "--recursive":
-                    conf::set("import.cli.recursive", true);
-                    break;
+            case "-w":
+            case "--add-always":
+            case "--addalways":
+                conf::set("import.cli.add.always", true);
+                break;
+            
+            case "-r":
+            case "--recursive":
+                conf::set("import.cli.recursive", true);
+                break;
 
-                
-                case "--dateddirs":
-                case "--datedDirs":
-                case "--dated":
-                case "-d":
-                    conf::set("import.cli.dated", true);
-                    break;
-                case "--hierarchical":
-                case "--hier":
-                case "-H":
-                    conf::set("import.cli.dated", true);
-                    conf::set("import.cli.dated.hier", true);
-                    break;
-                case "--no-dateddirs":
-                case "--no-datedDirs":
-                case "--no-dated":
-                case "--nodateddirs":
-                case "--nodatedDirs":
-                case "--nodated":
-                    conf::set("import.cli.dated", false);
-                    break;
-                case "--no-hierarchical":
-                case "--no-hier":
-                case "--nohierarchical":
-                case "--nohier":
-                    conf::set("import.cli.dated.hier", false);
-                    break;
-                case "-D":
-                case "--path":
-                    $args["path"]=$argv[++$i];
-                    break;
+            
+            case "--dateddirs":
+            case "--datedDirs":
+            case "--dated":
+            case "-d":
+                conf::set("import.dated", true);
+                break;
+            case "--hierarchical":
+            case "--hier":
+            case "-H":
+                conf::set("import.dated", true);
+                conf::set("import.dated.hier", true);
+                break;
+            case "--no-dateddirs":
+            case "--no-datedDirs":
+            case "--no-dated":
+            case "--nodateddirs":
+            case "--nodatedDirs":
+            case "--nodated":
+                conf::set("import.dated", false);
+                break;
+            case "--no-hierarchical":
+            case "--no-hier":
+            case "--nohierarchical":
+            case "--nohier":
+                conf::set("import.dated.hier", false);
+                break;
+            case "-D":
+            case "--path":
+                $args["path"]=$argv[++$i];
+                break;
 
-                case "--dirpattern":
-                    $args["dirpattern"]=$argv[++$i];
-                    break;
+            case "--dirpattern":
+                $args["dirpattern"]=$argv[++$i];
+                break;
 
-                case "-V":
-                case "--version":
-                    self::$command="version";
-                    break;
-                case "-h":
-                case "--help":
-                    self::$command="help";
-                    break;
-                case "-v":
-                case "--verbose":
-                    $verbose=conf::get("import.cli.verbose");
-                    conf::set("import.cli.verbose", ++$verbose);
-                    break;
-                default:
-                    if(substr($argv[$i],0,1)=="-") {
-                        echo "unknown argument: " . $argv[$i] . "\n";
-                        exit(1);
-                    } else {
-                        $args["files"][]=$argv[$i];
-                    }
-                    break;
+            case "-V":
+            case "--version":
+                self::$command="version";
+                break;
+            case "-h":
+            case "--help":
+                self::$command="help";
+                break;
+            case "-v":
+            case "--verbose":
+                $verbose=conf::get("import.cli.verbose");
+                conf::set("import.cli.verbose", ++$verbose);
+                break;
+            default:
+                if(substr($argv[$i],0,1)=="-") {
+                    echo "unknown argument: " . $argv[$i] . "\n";
+                    exit(1);
+                } else {
+                    $args["files"][]=$argv[$i];
+                }
+                break;
             }
         }
         if(isset($args["fields"])) {
@@ -339,165 +333,154 @@ class arguments {
 
             log::msg($type . "\t->\t" . implode(",", (array) $arg), log::DEBUG, log::IMPORT);
             switch($type) {
-                case "albums":
-                    foreach($arg as $name) {
-                        if(self::$command=="new" || (conf::get("import.cli.add.auto") && !album::getByName($name))) {
-                            $parent=array_shift($args["palbum"]);
-                            // this is a string comparison because the trim() in process() changes
-                            // everything into a string...
-                            if($parent==="0") {
-                                if(conf::get("import.cli.add.always")) {
-                                    $parent_id=album::getRoot()->getId();
-                                } else {
-                                    echo "No parent for album $name\n";
-                                    exit(cli::EXIT_NO_PARENT);
-                                }
+            case "albums":
+                foreach($arg as $name) {
+                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && !album::getByName($name))) {
+                        $parent=array_shift($args["palbum"]);
+                        // this is a string comparison because the trim() in process() changes
+                        // everything into a string...
+                        if($parent==="0") {
+                            if(conf::get("import.cli.add.always")) {
+                                $parent_id=album::getRoot()->getId();
                             } else {
-                                $palbum=album::getByName($parent);
-                                if($palbum) {
-                                    $parent_id=$palbum[0]->getId();
-                                } else {
-                                    echo "Album not found: $parent\n";
-                                    exit(cli::EXIT_ALBUM_NOT_FOUND);
-                                }
+                                throw new CliNoParentException("No parent for album " . $name);;
                             }
-                            $vars["_new_album"][]=array("parent" => $parent_id, "name" => $name);
                         } else {
-                            $album=album::getByName($name);
-                            if($album) {
-                                $album_id=$album[0]->getId();
-                                $vars["_album_id"][]=$album_id;
+                            $palbum=album::getByName($parent);
+                            if($palbum) {
+                                $parent_id=$palbum[0]->getId();
                             } else {
-                                echo "Album not found: $name\n";
-                                exit(cli::EXIT_ALBUM_NOT_FOUND);
+                                throw new AlbumNotFoundException("Album not found: $parent");
                             }
                         }
-                    }
-                    break;
-                case "categories":
-                    foreach($arg as $name) {
-                        if(self::$command=="new" || (conf::get("import.cli.add.auto") && !category::getByName($name))) {
-                            $parent=array_shift($args["pcat"]);
-                            // this is a string comparison because the trim() in process() changes
-                            // everything into a string...
-                            if($parent==="0") {
-                                if(conf::get("import.cli.add.always")) {
-                                    $parent_id=category::getRoot()->getId();
-                                } else {
-                                    echo "No parent for category $name\n";
-                                    exit(cli::EXIT_NO_PARENT);
-                                }
-                            } else {
-                                $pcat=category::getByName($parent);
-                                if($pcat) {
-                                    $parent_id=$pcat[0]->getId();
-                                } else {
-                                    echo "Category not found: $parent\n";
-                                    exit(cli::EXIT_CAT_NOT_FOUND);
-                                }
-                            }
-                            $vars["_new_cat"][]=array("parent" => $parent_id, "name" => $name);
+                        $vars["_new_album"][]=array("parent" => $parent_id, "name" => $name);
+                    } else {
+                        $album=album::getByName($name);
+                        if($album) {
+                            $album_id=$album[0]->getId();
+                            $vars["_album_id"][]=$album_id;
                         } else {
-                            $cat=category::getByName($name);
-                            if($cat) {
-                                $cat_id=$cat[0]->getId();
-                                $vars["_category_id"][]=$cat_id;
-                            } else {
-                                echo "Category not found: $name\n";
-                                exit(cli::EXIT_CAT_NOT_FOUND);
-                            }
+                            throw new AlbumNotFoundException("Album not found: $parent");
                         }
                     }
-                    break;
-                case "people":
-                    foreach($arg as $name) {
-                        if(self::$command=="new" || (conf::get("import.cli.add.auto") && !person::getByName($name))) {
-                            $vars["_new_person"][]=$name;
-                        } else {
-                            $person=person::getByName($name);
-                            if($person) {
-                                $person_id=$person[0]->getId();
-                                $vars["_person_id"][]=$person_id;
+                }
+                break;
+            case "categories":
+                foreach($arg as $name) {
+                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && !category::getByName($name))) {
+                        $parent=array_shift($args["pcat"]);
+                        // this is a string comparison because the trim() in process() changes
+                        // everything into a string...
+                        if($parent==="0") {
+                            if(conf::get("import.cli.add.always")) {
+                                $parent_id=category::getRoot()->getId();
                             } else {
-                                echo "Person not found: $name\n";
-                                exit(cli::EXIT_PERSON_NOT_FOUND);
+                                throw new CliNoParentException("No parent for category " . $name);;
+                            }
+                        } else {
+                            $pcat=category::getByName($parent);
+                            if($pcat) {
+                                $parent_id=$pcat[0]->getId();
+                            } else {
+                                throw new CategoryNotFoundException("Category not found: $parent");
                             }
                         }
+                        $vars["_new_cat"][]=array("parent" => $parent_id, "name" => $name);
+                    } else {
+                        $cat=category::getByName($name);
+                        if($cat) {
+                            $cat_id=$cat[0]->getId();
+                            $vars["_category_id"][]=$cat_id;
+                        } else {
+                            throw new CategoryNotFoundException("Category not found: $parent");
+                        }
                     }
-                    break;
-                case "photographer":
-                    $name=$arg;
+                }
+                break;
+            case "people":
+                foreach($arg as $name) {
                     if(self::$command=="new" || (conf::get("import.cli.add.auto") && !person::getByName($name))) {
-                        $vars["_new_photographer"][]=$name;
+                        $vars["_new_person"][]=$name;
                     } else {
                         $person=person::getByName($name);
                         if($person) {
                             $person_id=$person[0]->getId();
-                            $vars["photographer_id"]=$person_id;
+                            $vars["_person_id"][]=$person_id;
                         } else {
-                            echo "Person not found: $name\n";
-                            exit(cli::EXIT_PERSON_NOT_FOUND);
+                            throw new PersonNotFoundException("Person not found: $name");
                         }
                     }
-                    break;
-                case "location":
-                    foreach($arg as $name) {
-                        if(self::$command=="new" || (conf::get("import.cli.add.auto") && !place::getByName($name))) {
-                            $parent=array_shift($args["pplace"]);
-                            // this is a string comparison because the trim() in process() changes
-                            // everything into a string...
-                            if($parent==="0") {
-                                if(conf::get("import.cli.add.always")) {
-                                    $parent_id=place::getRoot()->getId();
-                                } else {
-                                    echo "No parent for location $name\n";
-                                    exit(cli::EXIT_NO_PARENT);
-                                }
-                            } else {
-                                $pplace=place::getByName($parent);
-                                if($pplace) {
-                                    $parent_id=$pplace[0]->getId();
-                                } else {
-                                    echo "Location not found: $parent\n";
-                                    exit(cli::EXIT_PLACE_NOT_FOUND);
-                                }
-                            }
-                            $vars["_new_place"][]=array("parent" => $parent_id, "name" => $name);
-                        } else {
-                            $place=place::getByName($arg[0]);
-                            if($place) {
-                                $place_id=$place[0]->getId();
-                                $vars["location_id"]=$place_id;
-                            } else {
-                                echo "Place not found: $arg[0]\n";
-                                exit(cli::EXIT_PLACE_NOT_FOUND); 
-                            }
-                        }
-                    }
-                    break;
-                case "path":
-                    $vars["_path"]=$arg;
-                    break;
-                case "dirpattern":
-                    if(!preg_match("/^[aclpDP]+$/", $arg)) {
-                        echo "Illegal characters in --dirpattern, allowed are: aclpDP\n";
-                        exit(cli::EXIT_ILLEGAL_DIRPATTERN);
+                }
+                break;
+            case "photographer":
+                $name=$arg;
+                if(self::$command=="new" || 
+                  (conf::get("import.cli.add.auto") && !person::getByName($name))) {
+                    $vars["_new_photographer"][]=$name;
+                } else {
+                    $person=person::getByName($name);
+                    if($person) {
+                        $person_id=$person[0]->getId();
+                        $vars["photographer_id"]=$person_id;
                     } else {
-                        $vars["_dirpattern"]=$arg;
+                        throw new PersonNotFoundException("Person not found: $name");
                     }
-                    break;
+                }
+                break;
+            case "location":
+                foreach($arg as $name) {
+                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && !place::getByName($name))) {
+                        $parent=array_shift($args["pplace"]);
+                        // this is a string comparison because the trim() in process() changes
+                        // everything into a string...
+                        if($parent==="0") {
+                            if(conf::get("import.cli.add.always")) {
+                                $parent_id=place::getRoot()->getId();
+                            } else {
+                                throw new CliNoParentException("No parent for location " . $name);;
+                            }
+                        } else {
+                            $pplace=place::getByName($parent);
+                            if($pplace) {
+                                $parent_id=$pplace[0]->getId();
+                            } else {
+                                throw new PlaceNotFoundException("Location not found: $parent");
+                            }
+                        }
+                        $vars["_new_place"][]=array("parent" => $parent_id, "name" => $name);
+                    } else {
+                        $name=$arg[0];
+                        $place=place::getByName($name);
+                        if($place) {
+                            $place_id=$place[0]->getId();
+                            $vars["location_id"]=$place_id;
+                        } else {
+                            throw new PlaceNotFoundException("Location not found: $name");
+                        }
+                    }
+                }
+                break;
+            case "path":
+                $vars["_path"]=$arg;
+                break;
+            case "dirpattern":
+                if(!preg_match("/^[aclpDP]+$/", $arg)) {
+                    throw new CliIllegalDirpatternException("Illegal characters in --dirpattern, allowed are: aclpDP");
+                } else {
+                    $vars["_dirpattern"]=$arg;
+                }
+                break;
 
-                case "fields":
-                    foreach($arg as $field=>$value) {
-                        $vars[$field]=$value;
-                    }
-                    break;
-                case "_configitem":
-                case "_configvalue":
-                case "_configdefault":
-                    $vars[$type]=$arg;
-                    break;
-                
+            case "fields":
+                foreach($arg as $field=>$value) {
+                    $vars[$field]=$value;
+                }
+                break;
+            case "_configitem":
+            case "_configvalue":
+            case "_configdefault":
+                $vars[$type]=$arg;
+                break;
             }
         }
     }
@@ -514,6 +497,6 @@ class arguments {
     public function getVars() {
         return $this->vars;
     }
-    
+
 }
 ?>

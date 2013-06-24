@@ -81,17 +81,17 @@ if(!ZOPH) { die("Illegal call"); }
                 <br>
                 <label for="album"><?php echo translate("albums") ?></label>
                 <fieldset class="multiple">
-                    <?php echo create_album_pulldown("_album_id[0]", "", $tpl_user) ?>
+                    <?php echo album::createPulldown("_album_id[0]") ?>
                 </fieldset>
                 <label for="category"><?php echo translate("categories") ?></label>
                 <fieldset class="multiple">
-                    <?php echo create_cat_pulldown("_category_id[0]", "", $tpl_user) ?>
+                    <?php echo category::createPulldown("_category_id[0]") ?>
                 </fieldset>
                 <label for="title"><?php echo translate("title") ?></label>
                 <?php echo create_text_input("title", "", 40, 64) ?>
                 <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
                 <label for="location"><?php echo translate("location") ?></label>
-                <?php echo create_place_pulldown("location_id", "", $tpl_user) ?><br>
+                <?php echo place::createPulldown("location_id") ?><br>
                 <label for="view"><?php echo translate("view") ?></label>
                 <?php echo create_text_input("view", "", 40, 64) ?>
                 <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
@@ -103,10 +103,10 @@ if(!ZOPH) { die("Illegal call"); }
                 <span class="inputhint">1 - 10</span><br>
                 <label for="people"><?php echo translate("people") ?></label>
                 <fieldset class="multiple">
-                    <?php echo create_person_pulldown("_person_id[0]", "", $tpl_user) ?>
+                    <?php echo person::createPulldown("_person_id[0]") ?>
                 </fieldset>
                 <label for="photographer"><?php echo translate("photographer") ?></label>
-                <?php echo create_photographer_pulldown("photographer_id", "", $tpl_user) ?><br>
+                <?php echo photographer::createPulldown("photographer_id") ?><br>
                 <label for="level"><?php echo translate("level") ?></label>
                 <?php echo create_text_input("level", "", 4, 2) ?>
                 <span class="inputhint">1 - 10</span><br>

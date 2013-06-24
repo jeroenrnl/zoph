@@ -20,23 +20,20 @@
  */
 
 class search extends zophTable {
+    /** @var string The name of the database table */
+    protected static $table_name="saved_search";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("search_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array("name");
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = false;
+    /** @var string URL for this class */
+    protected static $url="search.php?search_id=";
 
-    function __construct($id = 0) {
-        if($id && !is_numeric($id)) { die("search_id must be numeric"); }
-        parent::__construct("saved_search", array("search_id"), array("name"));
-        $this->set("search_id", $id);
-
-    }
-    
     public function lookup() {
-        $sql="SELECT * FROM " . DB_PREFIX . "saved_search WHERE " .
-            "search_id=" . escape_string($this->get("search_id"));
-        return $this->lookupFromSQL($sql);
-    }
-
-    public function lookupForUser(user $user) {
-        
-        if(!$user->is_admin()) {
+        $user=user::getCurrent();
+        if($user->is_admin()) {
             $where= "(owner=" . escape_string($user->get("user_id")) . 
             " OR " . "public=TRUE) AND "; 
         }
@@ -56,7 +53,8 @@ class search extends zophTable {
         // This should be created some time, but might slow down too much
     }
 
-    public function getEditArray(user $user = null) {
+    public function getEditArray() {
+        $user=user::getCurrent();
         $edit_array=array();
 
 
@@ -64,13 +62,13 @@ class search extends zophTable {
             translate("Name"),  
             create_text_input("name", $this->get("name"),40,64));
 
-        if($user instanceof user && $user->is_admin()) {
+        if($user->is_admin()) {
             $edit_array[]=array (
                 translate("Owner"),
-                create_pulldown("owner", $this->get("owner"), template::createSelectArray(user::getRecords("user", "user_name"), array("user_name"))));
+                template::createPulldown("owner", $this->get("owner"), template::createSelectArray(user::getRecords("user_name"), array("user_name"))));
             $edit_array[]=array(
                 translate("Public"),
-                create_pulldown("public", $this->get("public"), array("0" => translate("No",0), "1" => translate("Yes",0))) );
+                template::createYesNoPulldown("public", $this->get("public")));
 
         }
         return $edit_array;
@@ -100,7 +98,7 @@ function get_saved_searches($user) {
         $sql.=" WHERE (owner=" . escape_string($user->get("user_id")) . 
             " OR " .  "public=TRUE)"; 
     }
-    return search::getRecordsFromQuery("search", $sql);
+    return search::getRecordsFromQuery($sql);
 }
 
 function get_list_of_saved_searches($user) {

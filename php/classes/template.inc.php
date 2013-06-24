@@ -23,9 +23,13 @@
 
 /**
  * This class takes care of displaying templates
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class template {
     public $js=array();
+    public $vars=array();
     public $style="";
     public $script="";
     public $css=array();
@@ -98,7 +102,7 @@ class template {
         }
         try {
             ob_start();
-                include($this->template);
+                include $this->template;
            return ob_get_clean();
         } catch(Exception $e) {
             echo $e->getMessage();
@@ -113,6 +117,10 @@ class template {
      */
     public function toString() {
         return sprintf("%s", $this);
+    }
+
+    public function toStringNoEnter() {
+        return str_replace("\n", "", sprintf("%s", $this));
     }
 
     /**
@@ -237,19 +245,19 @@ class template {
     }
 
     /**
-     * Creates an array to be used in the create_pulldown methods.  The
+     * Creates an array to be used in the createPulldown methods.  The
      * values of the fields in the name_fields parameter are concatentated
      * together to construnct the titles of the selections.
      * @param array Records to be processed
      * @param array fields to use to contruct title
-     * @return array Array that can be fed to the create_pulldown methods.
+     * @return array Array that can be fed to the createPulldown methods.
      */
     public static function createSelectArray(array $records, array $name_fields) {
         if (!$records || !$name_fields) { return; }
 
         foreach ($records as $rec) {
             // this only makes sense when there is one key
-            $id = $rec->get($rec->primary_keys[0]);
+            $id = $rec->getId();
 
             $name = "";
             foreach ($name_fields as $n) {
@@ -262,6 +270,74 @@ class template {
 
         return $sa;
     }
+
+   /**
+    * Create pulldown (select) 
+    * @param string name for select box
+    * @param string current value
+    *
+    * @param bool autosubmit form after making a change
+    */
+    public static function createPulldown($name, $value, $selectArray, $autosubmit=false) {
+        return new block("select", array(
+            "name"  => $name,
+            "id"    => preg_replace("/^_+/", "", $name),
+            "options" => $selectArray,
+            "value" => $value,
+            "autosubmit"    => (bool) $autosubmit
+        ));
+    }
+ 
+   /**
+    * Create pulldown (select) to change the view
+    * @param string name for select box
+    * @param string current value
+    * @param bool autosubmit form after making a change
+    */
+    public static function createViewPulldown($name, $value, $autosubmit=false) {
+        return self::createPulldown($name, $value, array(
+            "list" => translate("List",0),
+            "tree" => translate("Tree",0),
+            "thumbs" => translate("Thumbnails",0)), (bool) $autosubmit);
+    } 
+ 
+   /**
+    * Create pulldown (select) to determine how the automatic thumbnail is selected
+    * @param string name for select box
+    * @param string current value
+    * @param bool autosubmit form after making a change
+    */
+    public static function createAutothumbPulldown($name, $value, $autosubmit=false) {
+        return  self::createPulldown($name, $value, array(
+            "oldest" => translate("Oldest photo",0),
+            "newest" => translate("Newest photo",0),
+            "first" => translate("Changed least recently",0),
+            "last" => translate("Changed most recently",0), 
+            "highest" => translate("Highest ranked",0), 
+            "random" => translate("Random",0)), 
+        (bool)$autosubmit);
+    }  
+
+   /**
+    * Create pulldown (select) that lists all photo fields
+    * @param string name for select box
+    * @param string current value
+    */
+    public static function createPhotoFieldPulldown($name, $value) {
+        return  self::createPulldown($name, $value, translate(photo::getFields(),0)); 
+    }  
+
+   /**
+    * Create pulldown (select) with options "yes" and "no" (translated)
+    * @param string name for select box
+    * @param string current value
+    */
+    public static function createYesNoPulldown($name, $value) {
+        return  self::createPulldown($name, $value,array(
+            "0" => translate("No",0), 
+            "1" => translate("Yes",0)
+        )); 
+    }  
 
     /**
      * Get all templates

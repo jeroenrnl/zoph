@@ -23,6 +23,8 @@
 
 /**
  * A confItemBool defines a configuration item that can be true or false
+ * @package Zoph
+ * @author Jeroen Roos
  */
 class confItemBool extends confItem {
 

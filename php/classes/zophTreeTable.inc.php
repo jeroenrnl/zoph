@@ -1,5 +1,7 @@
 <?php
 /**
+ * zophTreeTable represents a hierarchical table.  
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,12 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 
 /**
  * zophTreeTable represents a hierarchical table.  Since the album
  * and category tables are identical in structure, some of the methods
  * those classes share are abstracted and placed here.
+ * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 abstract class zophTreeTable extends zophTable {
 
@@ -49,26 +59,38 @@ abstract class zophTreeTable extends zophTable {
         parent::delete($extra_tables);
     }
 
+    /**
+     * Check whether this organizer is the root of the tree
+     * At this moment the root always has id 1 but this may
+     * change in the future, so to be safe we'll make a function for
+     * this
+     * @return bool
+     */
+    public function isRoot() {
+        $root=static::getRoot();
+        return ($this->getId() == $root->getId());
+    }
+
+
     /*
      * Gets the children of this record.
      */
-    function getChildren($user = null, $order = null) {
+    function getChildren($order = null) {
 
         if ($this->children) { return $this->children; }
-        if (!$this->primary_keys) { return; }
-        $key = $this->primary_keys[0];
-        $id = $this->get($key);
+        $key = static::$primary_keys[0];
+        $id = (int) $this->getId();
         if (!$id) { return; }
 
         $sql =
-            "select * from $this->table_name " .
-            "where parent_$key = '" . escape_string($id) . "'";
+            "SELECT * FROM " . static::$table_name .
+            " WHERE parent_ " . $key . "=" . $id;
 
         if ($order) {
-            $sql .= " order by $order";
+            $sql .= " ORDER BY $order";
         }
 
-        $this->children = zophTreeTable::getRecordsFromQuery(get_class($this), $sql);
+        $this->children = static::getRecordsFromQuery($sql);
         return $this->children;
 
     }
@@ -77,9 +99,8 @@ abstract class zophTreeTable extends zophTable {
      * Gets the ancestors of this record.
      */
     function get_ancestors($anc = array()) {
-        if (!$this->primary_keys) { return $anc; }
-        $key = $this->primary_keys[0];
-        $pid = $this->get("parent_$key");
+        $key = static::$primary_keys[0];
+        $pid = $this->get("parent_" . $key);
         // root of tree
         if ($pid == 0) {
             $this->ancestors = $anc;
@@ -101,14 +122,14 @@ abstract class zophTreeTable extends zophTable {
      * Gets a list of the id of this record along with the ids of
      * all of its descendants.
      */
-    function get_branch_id_array(&$id_array, $user = null) {
-        $key = $this->primary_keys[0];
-        $id_array[] = $this->get($key);
+    function getBranchIdArray(&$id_array) {
+        $id_array[] = (int) $this->getId();
 
         $this->getChildren();
+
         if ($this->children) {
             foreach($this->children as $c) {
-                $c->get_branch_id_array($id_array, $user);
+                $c->getBranchIdArray($id_array);
             }
         }
         return $id_array;
@@ -119,16 +140,16 @@ abstract class zophTreeTable extends zophTable {
      * all of its descendant's ids.  Useful to make "record_id in
      * (id_list)" clauses.
      */
-    function get_branch_ids($user = null) {
+    function getBranchIds() {
         $id_array;
-        $this->get_branch_id_array($id_array, $user);
+        $this->getBranchIdArray($id_array);
         return implode(",", $id_array);
     }
 
-    function get_xml_tree($xml, $search, $user=null) {
-        $rootname=$this->xml_rootname();
-        $nodename=$this->xml_nodename();
-        $idname=$this->primary_keys[0];
+    private function getXMLtree(DOMDocument $xml, $search) {
+        $rootname=static::XMLROOT;
+        $nodename=static::XMLNODE;
+        $idname=static::$primary_keys[0];
 
         $newchild=$xml->createElement($nodename);
 
@@ -145,12 +166,12 @@ abstract class zophTreeTable extends zophTable {
             $newchild->appendChild($newchildkey);
             $newchild->appendChild($newchildtitle);
        }
-       $order = $user->prefs->get("child_sortorder");
-       $children=$this->getChildren($user, $order);
+       $order = user::getCurrent()->prefs->get("child_sortorder");
+       $children=$this->getChildrenForUser($order);
         if($children) {
             $childset=$xml->createElement($rootname);
             foreach($children as $child) {
-                $newnode=$child->get_xml_tree($xml, $search,$user);
+                $newnode=$child->getXMLtree($xml, $search);
                 if (isset($newnode)) {
                     $childset->appendChild($newnode);
                 }
@@ -163,47 +184,62 @@ abstract class zophTreeTable extends zophTable {
     
     /**
      * Turn the array from @see getDetails() into XML
-     * @param user Show only info about photos this user can see
      * @param array Don't fetch details, but use the given array
      */
-    public function getDetailsXML(user $user, array $details=null) {
+    public function getDetailsXML(array $details=null) {
         if(!isset($details)) {
-            $details=$this->getDetails($user);
+            $details=$this->getDetails();
         }
-        $children=$this->getChildren($user);
+        $children=$this->getChildrenForUser();
         if(is_array($children)) {
             $details["children"]=count($children);
         }
-        return parent::getDetailsXML($user, $details);
+        return parent::getDetailsXML($details);
     }
-}
 
-function create_tree_select_array($name, $user = null, $rec = null,
-    $level = "", $select_array = null, $search = 0) {
-    if (!$rec) {
-        $rec = $name::getRoot();
-        $rec->lookup();
-        $select_array[""] = "";
+    /**
+     * Return the root of the tree
+     * @return album|category|place
+     */
+    public static function getRoot() {
+        return new static(1);
     }
-    $key = $rec->get($name . "_id");
-    $descname=$name;
-    if($descname=="place"){ $descname="title"; }
 
-    $select_array[$key] = $level . e($rec->get($descname));
-    if($user) {
+    public static function getXMLdata($search, DOMDocument $xml, DOMElement $rootnode) {
+        $obj = static::getRoot();
+        $obj->lookup();
+        $tree=$obj->getXMLtree($xml, $search);
+        $rootnode->appendChild($tree);
+        $xml->appendChild($rootnode);
+        return $xml;
+    }
+
+    public static function getSelectArray() { 
+        return static::getTreeSelectArray();
+    }
+
+    public static function getTreeSelectArray($rec = null, $select_array = null, $depth=0) {
+        $user=user::getCurrent();
         $user->lookup_prefs();
         $order = $user->prefs->get("child_sortorder");
-    } else {
-        $order="name";
-    }
-    $children = $rec->getChildren($user, $order);
-    if ($children) {
-        foreach ($children as $child) {
-            $select_array = create_tree_select_array($name, $user, $child,
-                "$level&nbsp;&nbsp;&nbsp;", $select_array, $search);
+
+        if (!$rec) {
+            $rec = static::getRoot();
+            $rec->lookup();
+            $select_array[""] = "";
         }
+
+        $select_array[$rec->getId()] = str_repeat("&nbsp;", $depth * 3) . e($rec->getName());
+        
+        $children = $rec->getChildrenForUser($order);
+        if ($children) {
+            foreach ($children as $child) {
+                $select_array = static::getTreeSelectArray($child, $select_array, ++$depth);
+            }
+        }
+        return $select_array;
     }
-    return $select_array;
 }
+
 
 ?>

@@ -18,11 +18,14 @@
  * @author Jeroen Roos
  * @package Zoph
  */
-require_once("exif.inc.php");
+require_once "exif.inc.php";
 
 /**
  * This class holds the generalized functions importing images
  * to Zoph.
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 abstract class Import {
     
@@ -110,7 +113,7 @@ abstract class Import {
                 $photo->import($file);
             } catch (FileException $e) {
                 echo $e->getMessage();
-                die();
+                throw $e;
             }
            
             if(conf::get("import.cli.thumbs")===true) {

@@ -22,8 +22,16 @@
 /**
  * This class holds all the functions for uploading and importing images
  * to Zoph via the web interface.
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class WebImport extends Import {
+
+    /** @param Name of the root node in XML responses */
+    const XMLROOT="importprogress";
+    /** @param Name of the leaf nodes in XML responses */
+    const XMLNODE="import";
 
     private $upload_id;
 
@@ -117,12 +125,12 @@ class WebImport extends Import {
         if($dir === false) {
             log::msg(conf::get("path.images") . "/" .conf::get("path.upload") . " does not exist, creating...", log::WARN, log::IMPORT);
             try {
-	        create_dir_recursive(conf::get("path.images") . "/" .conf::get("path.upload"));
-	    } catch (FileDirCreationFailedException $e) {
+            create_dir_recursive(conf::get("path.images") . "/" .conf::get("path.upload"));
+        } catch (FileDirCreationFailedException $e) {
                 log::msg(conf::get("path.images") . "/" .conf::get("path.upload") . " does not exist, and I can not create it. (" . $e->getMessage() . ")", log::FATAL, log::IMPORT);
-		die();
+        die();
             }
-	    // doublecheck if path really has been correctly created.
+        // doublecheck if path really has been correctly created.
             $dir=realpath(conf::get("path.images") . "/" .conf::get("path.upload"));
             if($dir === false) {
                 log::msg(conf::get("path.images") . "/" .conf::get("path.upload") . " does not exist, and I can not create it.", log::WARN, log::FATAL);
@@ -302,19 +310,33 @@ class WebImport extends Import {
         echo $log;
     }
 
+   /**
+    * Get XML for Import
+    * @todo This is a temporary function to distinguish between the two XML responses
+    *       this class can give. Eventually, both functions should be called directly
+    */
+
+    public static function getXML($search) {
+        if($search=="thumbs") {
+            return self::getThumbsXML();
+        } else {
+            return self::getProgressXML($search);
+        }
+    }
+            
     /**
      * Get XML indicating progress of a certain upload
      * This requires the APC PHP extension.
      * If it is not available, it will always return 0 / unknown
      */
-    function get_xml() {
+    public static function getProgressXML($uploadId) {
         $xml = new DOMDocument('1.0','UTF-8');
-        $rootnode=$xml->createElement($this->xml_rootname());
-        $node=$xml->createElement($this->xml_nodename());
+        $rootnode=$xml->createElement(self::XMLROOT);
+        $node=$xml->createElement(self::XMLNODE);
             
 
         if(function_exists("apc_fetch")) {
-            $progress=apc_fetch("upload_" . $this->upload_id);
+            $progress=apc_fetch("upload_" . $uploadId);
             if($progress===false) {
                 $progress['current']=0;
                 $progress['total']=0;
@@ -336,7 +358,7 @@ class WebImport extends Import {
         $total=$xml->createElement("total");
         $filename=$xml->createElement("filename");
         
-        $id->appendChild($xml->createTextNode($this->upload_id));
+        $id->appendChild($xml->createTextNode($uploadId));
         $current->appendChild($xml->createTextNode($progress['current']));
         $total->appendChild($xml->createTextNode($progress['total']));
         $filename->appendChild($xml->createTextNode($progress['filename']));
@@ -348,30 +370,9 @@ class WebImport extends Import {
 
         $rootnode->appendChild($node);
         $xml->appendChild($rootnode);
-        return $xml->saveXML();
+        return $xml;
     }
     
-    /**
-     * XML Root element
-     *
-     * Returns the name of the root element of an XML-file for this
-     * object.
-     * @todo should be changed into a static const.
-     */
-    public function xml_rootname() {
-        return "importprogress";
-    }
-
-    /**
-     * XML Node name
-     *
-     * Returns the name of a node in an XML-file for this object.
-     * @param:
-     * @todo should be changed into a static const.
-     */
-    public function xml_nodename() {
-        return "import";
-    }
 
     /**
      * Generate an XML file with thumbs in the import dir
@@ -431,7 +432,7 @@ class WebImport extends Import {
             $root->appendChild($xmlfile);
         }
         $xml->appendChild($root);
-        echo $xml->saveXML();
+        return $xml;
     }
 
     /**

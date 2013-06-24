@@ -24,6 +24,9 @@
 
 /**
  * Time class, extension of the standard PHP DateTime class
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class Time extends DateTime {
     /**

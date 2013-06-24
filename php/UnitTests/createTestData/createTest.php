@@ -27,21 +27,22 @@
 
 define("TEST", true);
 
-global $INSTANCE;
-$INSTANCE="zophtest";
+require_once "testData.php";
+require_once "testImage.php";
 
-require_once("testData.php");
-require_once("testImage.php");
-
-require_once("../../settings.inc.php");
-require_once("../../include.inc.php");
-require_once("../../cli/cliimport.inc.php");
+require_once "../../settings.inc.php";
+require_once "../../include.inc.php";
+require_once "../../cli/cliimport.inc.php";
 
 $lang=new language("en");
 
+user::setCurrent(new user(1));
 createTestData::run();
 /**
  * Fill the database with data, so tests can be run.
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class createTestData {
 
@@ -186,6 +187,7 @@ class createTestData {
     }
 
     private static function importTestImages() {
+
         $photos=testData::getPhotos();
         $photoLocation=testData::getPhotoLocation();
         $photoAlbums=testData::getPhotoAlbums();
@@ -194,48 +196,65 @@ class createTestData {
         $photographer=testData::getPhotographer();
         $comments=testData::getComments();
         $ratings=testData::getRatings();
+        $relations=testData::getRelations(); 
 
         $files=array();
         foreach($photos as $id=>$photo) {
-            $files[]=new file(IMAGE_DIR . "/" . $photo);
+            $files[]=new file(conf::get("path.images") . "/" . $photo);
         }
-        settings::$importThumbs=true;
-        settings::$importSize=true;
+        conf::set("import.cli.thumbs", true);
+        conf::set("import.cli.size", true);
 
 
         $imported=cliimport::photos($files, array());
         foreach($imported as $photo) {
+            $user=new user(1);
+            $user->lookup();
+            user::setCurrent($user);
+
             $id=$photo->get("photo_id");
             if(isset($photoLocation[$id])) {
                 $photo->set("location_id",$photoLocation[$id]);
                 $photo->update();
-                $photo->lookup_location();
+                $photo->lookup();
             }
             if(isset($photographer[$id])) {
                 $photo->set("photographer_id",$photographer[$id]);
                 $photo->update();
-                $photo->lookup_photographer();
+                $photo->lookup();
             }
             if(is_array($photoAlbums[$id])) {
                 foreach($photoAlbums[$id] as $alb) {
-                    $photo->add_to_album($alb);
+                    $photo->addTo(new album($alb));
                 }
             }
             if(is_array($photoCategories[$id])) {
                 foreach($photoCategories[$id] as $cat) {
-                    $photo->add_to_category($cat);
+                    $photo->addTo(new category($cat));
                 }
             }
             if(is_array($photoPeople[$id])) {
                 foreach($photoPeople[$id] as $pers) {
-                    $photo->add_to_person($pers);
+                    $photo->addTo(new person ($pers));
                 }
             }
+            if(isset($relations[$id])) {
+                foreach($relations[$id] as $related => $rel_desc) {
+                    photoRelation::defineRelation(
+                        $photo,
+                        new photo($related),
+                        $rel_desc[0],
+                        $rel_desc[1]);
+                }
+            }
+
+            // WARNING, below this line other users log in!
             if(isset($comments[$id])) {
                 foreach($comments[$id] as $user_id => $comment) {
                     $obj = new comment();
                     $user = new user($user_id);
                     $user->lookup();
+                    user::setCurrent($user);
 
                     $subj="Comment by " . $user->getName();
 
@@ -248,16 +267,19 @@ class createTestData {
                     $obj->add_comment_to_photo($photo->get("photo_id"));
                 }
             }
+
             if(isset($ratings[$id])) {
                 $total=0;
                 $count=0;
                 foreach($ratings[$id] as $user_id => $rating) {
                     $user = new user($user_id);
                     $user->lookup();
+                    user::setCurrent($user);
+
                     // Set fake remote IP address:
                     $_SERVER["REMOTE_ADDR"]=$user->getName() . ".zoph.org";
 
-                    $photo->rate($user, $rating);
+                    $photo->rate($rating);
                     $photo->update();
                     $total+=$rating;
                     $count++;
@@ -266,6 +288,7 @@ class createTestData {
                 $avg=$total/$count;
                 $photo->lookup();
             }
+
         }
     }
 

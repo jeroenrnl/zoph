@@ -1,1 +1,3 @@
 /php/UnitTests/output/
+.sonar
+.images

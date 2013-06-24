@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file checks if all the PHP requirements are available.
  *
  * This file is part of Zoph.
@@ -17,10 +17,6 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- */
-
-/**
- * Check if all requirements are met...
  * @author Jeroen Roos
  * @package Zoph
  */
@@ -42,11 +38,10 @@ if(!ini_get("date.timezone")) {
     date_default_timezone_set($tz);
 }
 
-if (ini_get('magic_quotes_sybase')) {
-    log::msg("magic_quotes_sybase is on, switch off in php.ini", log::FATAL, log::VARS);
-} else if (get_magic_quotes_runtime()) {
-    log::msg("magic_quotes_runtime is on, switch off in php.ini", log::FATAL, log::VARS);
-} else if (get_magic_quotes_gpc()) {
-    log::msg("magic_quotes_gpc is on, switch off in php.ini", log::FATAL, log::VARS);
-}
+ini_set("magic_quotes_sybase", false);
+ini_set("magic_quotes_runtime", false);
+ini_set("magic_quotes_gpc", false);
+ini_set("session.use_only_cookies", true);
+
+
 

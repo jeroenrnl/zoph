@@ -16,13 +16,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
     $title=translate("Adminpage");
-    require_once("admin.inc.php");
+    require_once "admin.inc.php";
     $adminpages=admin::getArray();
 
     $tpl=new template("admin", array(

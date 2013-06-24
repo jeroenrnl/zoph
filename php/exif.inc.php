@@ -111,7 +111,7 @@ function process_exif($image) {
             $exifdata["focal_length"] = sprintf("%.1fmm", $a / $b);
         }
     }
-
+    $exifdata["exposure"]="";
     if (isset($exif["ExposureTime"])) {
         list($a, $b) = explode('/', $exif["ExposureTime"]);
         if($b>0) {
@@ -147,13 +147,13 @@ function process_exif($image) {
     else if (isset($exif["ApertureValue"])) {
         list($a, $b) = explode('/', $exif["ApertureValue"]);
         if($b>0) {
-            $exifdata["aperture"] = sprintf("f/%.1f", $a / $b * log(2) * 0.5);
+            $exifdata["aperture"] = sprintf("f/%.1f", pow(2,($a / $b)/2));
         }
     }
     else if (isset($exif["MaxApertureValue"])) {
         list($a, $b) = explode('/', $exif["MaxApertureValue"]);
         if($b>0) {
-            $exifdata["aperture"] = sprintf("f/%.1f", $a / $b * log(2) * 0.5);
+            $exifdata["aperture"] = sprintf("f/%.1f", pow(2,($a / $b)/2));
         }
     }
 

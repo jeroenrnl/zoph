@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Group Permissions Test
  *
  * This file is part of Zoph.
@@ -23,6 +23,9 @@
 
 /**
  * Test group_permissions class.
+ *
+ * @package ZophUnitTest
+ * @author Jeroen Roos
  */
 class groupPermissionsTest extends ZophDataBaseTestCase {
 

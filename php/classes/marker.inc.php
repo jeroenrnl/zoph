@@ -23,6 +23,8 @@
 
 /**
  * Class to display markers on a map
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class marker {
 

@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     
     $_cols = (int) getvar("_cols");
@@ -44,7 +44,7 @@
     $photo_id = getvar("_photo_id");
     if ($user->get("lightbox_id") && $photo_id) {
         $photo = new photo($photo_id);
-        $photo->remove_from_album($user->get("lightbox_id"));
+        $photo->removeFrom(new album($user->get("lightbox_id")));
     }
 
     $album_id = getvar("album_id");
@@ -83,7 +83,7 @@
             $extrastyle = "body	{ width: " . $width . "px; }\n"; 
         }
     }
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
     <h1>
         <span class="actionlink">
@@ -147,7 +147,7 @@
             <div id="sortorder">
 <?php echo create_form($vars, array ("_rows", "_cols", "_order", "_button")) ?>
                 <?php echo translate("order by", 0) . "\n" ?>
-                <?php echo create_photo_field_pulldown("_order", $_order) ?>
+                <?php echo template::createPhotoFieldPulldown("_order", $_order) ?>
             </div>
             <div id="updown">
                 <a href="photos.php?<?php echo update_query_string($vars, "_dir", "asc") ?>"><img class="up" alt="sort ascending" src="<?php echo $up ?>"></a>
@@ -177,9 +177,9 @@
 
 <?php
             if (getvar("_random")) {
-                echo $thumbnails[$i]->get_thumbnail_link("photo.php?photo_id=" . $thumbnails[$i]->get("photo_id")) . "\n";
+                echo $thumbnails[$i]->getThumbnailLink() . "\n";
             } else {
-                echo $thumbnails[$i]->get_thumbnail_link("photo.php?" . update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n"; 
+                echo $thumbnails[$i]->getThumbnailLink("photo.php?" . update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n"; 
             }
 
             if (!empty($lightbox)) {
@@ -213,7 +213,7 @@
         $map=new map();
         foreach($thumbnails as $thumbnail) {
             $thumbnail->lookup();
-            $marker=$thumbnail->getMarker($user);
+            $marker=$thumbnail->getMarker();
             if($marker instanceof marker) {
                 $map->addMarker($marker);
             }
@@ -221,4 +221,4 @@
         echo $map;
     }
 ?>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

@@ -22,13 +22,16 @@
  * @author Jeroen Roos
  */
 
-require_once("database.inc.php");
-require_once("user.inc.php");
-require_once("photo.inc.php");
+require_once "database.inc.php";
+require_once "user.inc.php";
+require_once "photo.inc.php";
 
 /**
  * conf is the main object for access to Zoph's configuration
  * in the database
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 class conf {
 
@@ -54,7 +57,7 @@ class conf {
             $key=$row[0];
             $value=$row[1];
             try {
-                $item=conf::getItemByName($key);
+                $item=self::getItemByName($key);
             } catch (ConfigurationException $e) {
                 /* An unknown item will automatically be deleted from the
                    database, so we can remove items without leaving a mess */
@@ -77,7 +80,7 @@ class conf {
 
     /**
      * Read configuration from submitted form
-     * @param array $_GET or $_POST variables
+     * @param array of $_GET or $_POST variables
      */
     public static function loadFromRequestVars(array $vars) {
         self::getDefault();
@@ -85,7 +88,7 @@ class conf {
             if(substr($key,0,1) == "_") {
                 if(substr($key,0,7) == "_reset_") {
                     $key=substr(str_replace("_", ".", $key),7);
-                    $item=conf::getItemByName($key);
+                    $item=self::getItemByName($key);
                     $item->delete();
                 } 
                 continue;
@@ -93,7 +96,7 @@ class conf {
             $key=str_replace("_", ".", $key);
             try {
                 if(!isset($vars["_reset_" . $key])) {
-                    $item=conf::getItemByName($key);
+                    $item=self::getItemByName($key);
                     $item->setValue($value);
                     $item->update();
                 }
@@ -130,7 +133,7 @@ class conf {
         if(!self::$loaded) {
             self::loadFromDB();
         }
-        $item=conf::getItemByName($key);
+        $item=self::getItemByName($key);
         return $item->getValue();
             
     }
@@ -146,7 +149,7 @@ class conf {
      * @return confItem the item that has been updated
      */
     public static function set($key, $value) {
-        $item=conf::getItemByName($key);
+        $item=self::getItemByName($key);
         $item->setValue($value);
         return $item;
     }
@@ -165,6 +168,7 @@ class conf {
     /**
      * Create a new confGroup and add it to the list
      * @param string name
+     * @param string label
      * @param string description
      */
     public static function addGroup($name, $label, $desc = "") {

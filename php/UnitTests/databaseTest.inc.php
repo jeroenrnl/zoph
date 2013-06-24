@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Create test database from XML-MySQL Dump
  *
  * This file is part of Zoph.
@@ -20,6 +20,12 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
+
+/**
+ * Create test database from XML-MySQL Dump
+ * @package ZophUnitTest
+ * @author Jeroen Roos
+ */
 abstract class ZophDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase {
     static private $pdo = null;
     private $conn = null;
@@ -35,7 +41,7 @@ abstract class ZophDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
     }
     
     final public function getDataSet() {
-        return $this->createMySQLXMLDataSet('db.xml');
+        return $this->createMySQLXMLDataSet('php/UnitTests/db.xml');
     }
 }
 ?>

@@ -20,7 +20,7 @@
  */
 
 if(!ZOPH) { die("Illegal call"); }
-require_once("header.inc.php");
+require_once "header.inc.php";
 ?>
     <h1>
         <?php echo $tpl_title; ?>
@@ -33,4 +33,4 @@ require_once("header.inc.php");
         </form>
     </div>
 
-    <?php require_once("footer.inc.php"); ?>
+    <?php require_once "footer.inc.php"; ?>

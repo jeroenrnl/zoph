@@ -26,7 +26,7 @@ if(!ZOPH) { die("Illegal call"); }
         <li class="popup" id="thumb_<?php echo get_class($item);?>_<?php echo $item->getId(); ?>" >
             <div class="coverphoto">
                 <a href="<?php echo $item->getURL() ?>">
-                    <?php echo $item->get_coverphoto($tpl_user, $tpl_autothumb); ?>
+                    <?php echo $item->displayAutoCover($tpl_autothumb); ?>
                 </a>
             </div>
             <div class="name">
@@ -34,11 +34,11 @@ if(!ZOPH) { die("Illegal call"); }
                     <?php echo $item->getName() ?>
                     <span class="photocount">
                         <?php
-                            $count=$item->getPhotoCount($tpl_user);
+                            $count=$item->getPhotoCount();
                             if($item instanceof zophTreeTable): 
-                                $count2=$item->getTotalPhotoCount($tpl_user);
+                                $count2=$item->getTotalPhotoCount();
                             elseif ($item instanceof person):
-                                $count2=$item->getPhotographerCount($tpl_user);
+                                $count2=$item->getPhotographer()->getPhotoCount();
                             else:
                                 $count2=0;
                             endif;

@@ -29,6 +29,8 @@
  * Replace problematic code in zophcode with escaped code
  *
  * @todo: this can possibly be integrated in the zophcode class
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class replace {
     public $find;
@@ -74,6 +76,8 @@ class replace {
 
 /**
  * Create smileys
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class smiley {
     public $smiley;
@@ -181,6 +185,8 @@ class smiley {
 
 /**
  * zophcode tags
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class tag {
     public $find;
@@ -288,6 +294,8 @@ class tag {
  * This class can be used to create a block of 'zophcode'
  * 
  * zophcode is very similar to bbcode
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class zophcode {
     private $message;

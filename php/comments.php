@@ -15,13 +15,13 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!conf::get("feature.comments")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
           <h1>
 <?php echo translate("Comments") ?>
@@ -33,10 +33,10 @@
     foreach ($comments as $comment) {
        $photo=$comment->get_photo();
        if($user->get_permissions_for_photo($photo->get("photo_id")) || $user->is_admin()) {
-	   echo $comment->to_html($user, 1);
+       echo $comment->toHTML($user, 1);
        }
     }
 ?>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

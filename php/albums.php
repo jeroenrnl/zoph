@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     $_view=getvar("_view");
     if(empty($_view)) {
@@ -34,17 +34,17 @@
     else {
         $album = new album($parent_album_id);
     }
-    $album->lookupForUser($user);
+    $album->lookup();
     $obj=&$album;
     $ancestors = $album->get_ancestors();
     $order = $user->prefs->get("child_sortorder");
-    $children = $album->getChildren($user, $order);
-    $totalPhotoCount = $album->getTotalPhotoCount($user);
-    $photoCount = $album->getPhotoCount($user);
+    $children = $album->getChildrenForUser($order);
+    $totalPhotoCount = $album->getTotalPhotoCount();
+    $photoCount = $album->getPhotoCount();
 
     $title = $album->get("parent_album_id") ? $album->get("album") : translate("Albums");
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
     <h1>
 <?php
@@ -58,18 +58,18 @@
     </h1>
 <?php
     if($user->is_admin()) {
-        include("selection.inc.php");
+        include "selection.inc.php";
     }
-    include("show_page.inc.php");
+    include "show_page.inc.php";
     if($show_orig) {
 ?>
     <div class="main">
         <form class="viewsettings" method="get" action="albums.php">
             <?php echo create_form($request_vars, array ("_view", "_autothumb", "_button")) ?>
             <?php echo translate("Album view", 0) . "\n" ?>
-            <?php echo create_view_pulldown("_view", $_view, "onChange='form.submit()'") ?>
+            <?php echo template::createViewPulldown("_view", $_view, true) ?>
             <?php echo translate("Automatic thumbnail", 0) . "\n" ?>
-            <?php echo create_autothumb_pulldown("_autothumb", $_autothumb, "onChange='form.submit()'") ?>
+            <?php echo template::createAutothumbPulldown("_autothumb", $_autothumb, true) ?>
         </form>
         <br>
         <h2>
@@ -101,7 +101,7 @@
         <p>
 <?php
     }
-    echo $album->get_coverphoto($user);
+    echo $album->displayCoverPhoto();
 ?>
         </p>
 <?php
@@ -124,7 +124,7 @@
         if ($totalPhotoCount > $photoCount && $children) {
 ?>
             <span class="actionlink">
-                <a href="photos.php?album_id=<?php echo $album->get_branch_ids($user) . $sort ?>"><?php echo translate("view photos") ?></a>
+                <a href="photos.php?album_id=<?php echo $album->getBranchIds() . $sort ?>"><?php echo translate("view photos") ?></a>
             </span>
 <?php
             $fragment .= " " . translate("or its children");
@@ -160,7 +160,6 @@
         $tpl=new template("view_" . $_view, array(
             "id" => $_view . "view",
             "items" => $children,
-            "user" => $user,
             "autothumb" => $_autothumb,
             "topnode" => true,
             "links" => array(
@@ -174,5 +173,5 @@
 <?php
     } // if show_orig
     echo $page_html;
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

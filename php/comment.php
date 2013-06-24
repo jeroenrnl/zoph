@@ -15,18 +15,18 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!conf::get("feature.comments")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $comment_id = getvar("comment_id");
     $comment = new comment($comment_id);
     if ($comment_id) {
         $comment->lookup();
-	$comment_user=new user($comment->get("user_id"));
-	$comment_user->lookup();
+    $comment_user=new user($comment->get("user_id"));
+    $comment_user->lookup();
     }
 
     if(!$user->is_admin() && (!$comment->is_owner($user)) && ($_action!="new") && $_action!="insert") {
@@ -34,7 +34,7 @@
     }
 
     if(!$user->is_admin() && !$user->get("leave_comments") && ($_action=="new" || $_action=="insert")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $photo=$comment->get_photo();
@@ -42,7 +42,7 @@
     if ($photo) {
        $photo_id=$photo->get("photo_id");
        if(!$user->get_permissions_for_photo($photo_id) && !$user->is_admin()) {
-           redirect(add_sid("zoph.php"));
+           redirect("zoph.php");
        }
     } else {
        $photo_id = getvar("photo_id");
@@ -59,10 +59,10 @@
     
     $obj = &$comment;
 
-    require_once("actions.inc.php");
+    require_once "actions.inc.php";
 
     if($_action == "insert") {
-	$comment->add_comment_to_photo($photo_id);
+        $comment->addToPhoto($photo);
     }
     
     if ($_action != "new") {
@@ -70,7 +70,7 @@
     } else {
         $title = translate("Add comment");
     }
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
 <?php
 if ($action == "confirm") {
@@ -104,7 +104,7 @@ if ($action == "confirm") {
       <div class="main">
       <br>
 <?php
-    echo $photo->get_midsize_img();
+    echo $photo->getImageTag(MID_PREFIX);
 ?>
 <br>
 <dl class "comment">
@@ -122,7 +122,7 @@ if ($action == "confirm") {
     <div class="main">
     <br>
 <?php
-    echo $photo->get_midsize_img();
+    echo $photo->getImageTag(MID_PREFIX);
 ?>
     <br>
 
@@ -142,5 +142,5 @@ if ($action == "confirm") {
 
 <?php
 }
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

@@ -27,6 +27,9 @@
 
 /**
  * This class takes care of displaying blocks
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class block extends template {
     /**

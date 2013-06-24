@@ -21,11 +21,11 @@
  * @author Alan Shutko
  */
     session_cache_limiter("public");
-    require_once("variables.inc.php");
+    require_once "variables.inc.php";
     $hash = getvar("hash");
     $annotated = getvar('annotated');
     define("IMAGE_PHP", 1);
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     $photo_id = getvar("photo_id");
     $type = getvar("type");
@@ -62,14 +62,14 @@
         }
     } else if (conf::get("feature.annotate") && $annotated) {
         $photo = new annotatedPhoto($photo_id);
-        $found = $photo->lookupForUser($user);
+        $found = $photo->lookup();
         $photo->setVars($request_vars);
         if(getvar("_size")=="mid") {
             $type=MID_PREFIX;
         }
     } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {
         $photo = new photo($photo_id);
-        $found = $photo->lookupForUser($user);
+        $found = $photo->lookup();
     } else {
         die("Illegal type");
     }
@@ -91,12 +91,20 @@
         list($headers, $image)=$photo->display($type);
 
         foreach($headers as $label=>$value) {
-            header($label . ": " . $value);
+            if($label=="http_status") {
+                // http status codes do not have a label
+                header($value);
+            } else {
+                header($label . ": " . $value);
+            }
         }
-        echo $image;
+
+        if(!is_null($image)) {
+            echo $image;
+        }
         exit;
     }
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
           <h1>
             <?php echo translate("error") ?>
@@ -105,5 +113,5 @@
             <?php echo translate("The image you requested could not be displayed.") ?>
 </div>
 <?php
-    require_once("footer.inc.php");
+    require_once "footer.inc.php";
 ?>

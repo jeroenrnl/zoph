@@ -17,24 +17,34 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @author Jason Geiger, Jeroen Roos
+ * @author Jeroen Roos
  * @package Zoph
  */
 
 /**
  * Mapping class.
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class map extends block {
 
+    /** @var div id for map */
     private $map = "map";
 
+    /** @var center lattitude */
     protected $clat;
+    /** @var center longitude */
     protected $clon;
+    /** @var zoom level */
     protected $zoom;
 
+    /** @var array of tracks to display on this map */
     private $tracks=array();
+    /** @var array of markers to display on this map */
     private $markers=array();
 
+    /** @var whether or not this map can be changed. i.e. used to add a marker */
     protected $edit=false;
 
     /**
@@ -68,12 +78,11 @@ class map extends block {
     /**
      * Add multiple markers from objects
      * @param array Array of objects to get markers from
-     * @param user Only get markers this user can see
      */
-    public function addMarkers(array $objs, user $user) {
+    public function addMarkers(array $objs) {
         $markers=array();
         foreach($objs as $obj) {
-            $marker=$obj->getMarker($user);
+            $marker=$obj->getMarker();
             if($marker instanceof marker) {
                 $this->addMarker($marker);
             }
@@ -83,18 +92,17 @@ class map extends block {
     /**
      * Get marker from object
      * @param photo|place Object to get marker from
-     * @param user User, needed to generate quicklook
      * @param string Icon to use
      * @return marker created marker.
      * @todo A "mapable" interface should be created to make sure
              only certain objects can get passed to this function.
      */
-    public static function getMarkerFromObj($obj, user $user, $icon) {
+    public static function getMarkerFromObj($obj, $icon) {
         $lat=$obj->get("lat");
         $lon=$obj->get("lon");
         if($lat && $lon) {
             $title=$obj->get("title");
-            $quicklook=$obj->get_quicklook($user);
+            $quicklook=$obj->getQuicklook();
             return new marker($lat, $lon, $icon, $title, $quicklook);
         } else {
             return null;

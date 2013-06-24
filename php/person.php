@@ -15,13 +15,13 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
         $_action = "display";
     }
     if (!$user->get("browse_people") && !$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
     $name = getvar("person");
     if ($name) {
@@ -39,7 +39,7 @@
 
     $obj = &$person;
     $redirect = "people.php";
-    require_once("actions.inc.php");
+    require_once "actions.inc.php";
     if ($action != "insert") {
         $person->lookup();
         $title = e($person->getName());
@@ -48,10 +48,10 @@
         $title = translate("New Person");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
     if ($action == "display") {
-        $photos_of = $person->getPhotoCount($user);
-        $photos_by = $person->getPhotographerCount($user);
+        $photos_of = $person->getPhotoCount();
+        $photos_by = $person->getPhotographer()->getPhotoCount();
 ?>
       <h1>
 <?php
@@ -77,9 +77,9 @@
      </h1>
 <?php
     if($user->is_admin()) {
-        include("selection.inc.php");
+        include "selection.inc.php";
     }
-    include("show_page.inc.php");
+    include "show_page.inc.php";
     if($show_orig) {
 ?>
       <div class="main">
@@ -94,7 +94,7 @@
           </h2>
           <p>
 <?php
-    echo $person->get_coverphoto($user);
+    echo $person->displayCoverphoto();
 ?>
           </p>
           <dl>
@@ -103,7 +103,7 @@ if ($user->get("detailed_people") || $user->is_admin()) {
 ?>
 <?php echo create_field_html($person->getDisplayArray()) ?>
 <?php
-        if ($person->get_email()) {
+        if ($person->getEmail()) {
 ?>
           <dt><?php echo translate("email") ?></dt>
           <dd><a href="mailto:<?php echo e($person->get_email()) ?>"><?php echo e($person->get_email()) ?></a></dd>
@@ -115,7 +115,7 @@ if ($user->get("detailed_people") || $user->is_admin()) {
           <dd>
           <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("home_id") ?>"><?php echo translate("view") ?></a></span>
           <?php echo $person->home->get("title") ? $person->home->get("title") . "<br>" : "" ?>
-          <?php echo $person->home->get_address() ?></dd>
+          <?php echo $person->home->getAddress() ?></dd>
 <?php
         }
 
@@ -125,7 +125,7 @@ if ($user->get("detailed_people") || $user->is_admin()) {
           <dd>
           <span class="actionlink"><a href="place.php?place_id=<?php echo $person->get("work_id") ?>"><?php echo translate("view") ?></a></span>
              <?php echo $person->work->get("title") ? $person->work->get("title") . "<br>" : "" ?>
-             <?php echo $person->work->get_address() ?>
+             <?php echo $person->work->getAddress() ?>
           </dd>
 <?php
         }
@@ -165,8 +165,8 @@ if ($user->get("detailed_people") || $user->is_admin()) {
 <?php
     }
     else {
-require_once("edit_person.inc.php");
+require_once "edit_person.inc.php";
     }
 ?>
 
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

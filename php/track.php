@@ -18,7 +18,7 @@
  * @author Jeroen Roos
  * @package Zoph
  */
-require_once("include.inc.php");
+require_once "include.inc.php";
 
 $title="Zoph";
 $content="";
@@ -27,7 +27,7 @@ $mapping_js="";
 if (!$user->is_admin()) {
     $_action="display";
     if (!$user->get("browse_tracks")) {
-        header("Location: " . add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 }
 
@@ -40,15 +40,15 @@ if($track_id) {
             $title=translate("Track");
         }
     } else {
-        header("Location: " . add_sid("tracks.php"));
+        redirect("tracks.php");
     }
 } else {
-    header("Location: " . add_sid("tracks.php"));
+    redirect("tracks.php");
 }
     
 $obj = &$track;
 
-require_once("actions.inc.php");
+require_once "actions.inc.php";
 
 $tpl=new template("main", array(
     "title"     => $title

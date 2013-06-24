@@ -101,7 +101,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $object=explode("_", $key);
             if($object[0]=="location") { $object[0] = "place"; } 
             $obj=new $object[0]($val);
-            $val_with_children=$obj->get_branch_ids();
+            $val_with_children=$obj->getBranchIds();
             $val=$val_with_children;
         }
 
@@ -126,7 +126,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $query = "select person_id from " . DB_PREFIX . "people where 
                         lower(concat(first_name, \" \", last_name)) like \"$val\"";
 
-            $people = person::getRecordsFromQuery("person", $query); 
+            $people = person::getRecordsFromQuery($query); 
 
 
             $key .= "_id";
@@ -317,13 +317,16 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $no_rate_sql="SELECT DISTINCT(photo_id) FROM " .
                     DB_PREFIX . "photo_ratings AS pr " .
                     "WHERE pr.user_id=" . escape_string($ratinguser_id);
-                    
-                $ids = implode(',', zophTable::getRecordsFromQuery(null, $no_rate_sql));
+                $ids = implode(',', getArrayFromQuery($no_rate_sql));
 
                 if ($ids) {
                     $where .= "(ph.photo_id not in ($ids))";
                 }
             }
+        } else if ( $key=="rating" ) {
+            if ($where) { $where .= " AND "; }
+            $from["vpr"]="view_photo_avg_rating";
+            $where .= " vpr.rating  $op $val ";
         } else if ( $key=="lat" || $key=="lon") {
 
             $latlon[$key]=$val;
@@ -345,7 +348,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                     }
                 }
                 if(getvar("_latlon_places")) {
-                    $places=place::getNear($lat, $lon, $distance, null);
+                    $places=place::getPlacesNear($lat, $lon, $distance, null);
                     foreach($places as $place) {
                         $photos=$place->getPhotos($user);
                         foreach($photos as $photo) {
@@ -441,7 +444,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 "limit $offset, $rows";
         }
 
-        $thumbnails = photo::getRecordsFromQuery("photo", $query);
+        $thumbnails = photo::getRecordsFromQuery($query);
 
     }
 
@@ -492,8 +495,7 @@ function generate_excluded_albums_clause($excluded_albums, $from, $where) {
         if ($where) {
             $photo_id_query .= " and $where";
         }
-
-        $ids = implode(',', zophTable::getRecordsFromQuery(null, $photo_id_query));
+        $ids = implode(',', getArrayFromQuery($photo_id_query));
 
         if ($ids) {
             if ($album_constraints || $where) {
@@ -525,7 +527,7 @@ function generate_excluded_categories_clause($excluded_categories, $from, $where
             $photo_id_query .= " and $where";
         }
 
-        $ids = implode(',', zophTable::getRecordsFromQuery(null, $photo_id_query));
+        $ids = implode(',', getArrayFromQuery($photo_id_query));
 
         if ($ids) {
             if ($cat_constraints || $where) {
@@ -556,8 +558,7 @@ function generate_excluded_people_clause($excluded_people, $from, $where) {
         if ($where) {
             $photo_id_query .= " and $where";
         }
-
-        $ids = implode(',', zophTable::getRecordsFromQuery(null, $photo_id_query));
+        $ids = implode(',', getArrayFromQuery($photo_id_query));
 
         if ($ids) {
             if ($person_constraints || $where) {

@@ -15,10 +15,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!$user->is_admin()) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $user_id = getvar("user_id");
@@ -28,7 +28,7 @@
 
     $obj = &$this_user;
     $redirect = "users.php";
-    require_once("actions.inc.php");
+    require_once "actions.inc.php";
 
     if ($_action == "update" &&
         $user->get("user_id") == $this_user->get("user_id")) {
@@ -47,7 +47,7 @@
         $title = translate("New User");
     }
 
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
 <?php
     if ($action == "display") {
@@ -96,9 +96,16 @@
 <input class="bigbutton" type="submit" name="_button" value="<?php echo translate("Notify User", 0) ?>">
 </form><br>
 <?php
-        echo $this_user->get_rating_graph();
+        $tpl = new block("graph_bar", array(
+            "title"     => translate("photo ratings"),
+            "class"     => "ratings",
+            "value_label" => translate("rating", 0),
+            "count_label" => translate("count", 0),
+            "rows"      => $this_user->getRatingGraph()
+        ));
+        echo $tpl;
 
-        $comments=$this_user->get_comments();
+        $comments=$this_user->getComments();
         if(!empty($comments)) {
 ?>
 <h3><?php echo translate("comments by this user") ?></h3>
@@ -122,8 +129,8 @@
 <?php
     }
     else {
-        require_once("edit_user.inc.php");
+        require_once "edit_user.inc.php";
     } 
 ?>
 </div>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $_off = getvar("_off");
     $_pause = getvar("_pause");
     $_random = getvar("_random");
@@ -39,7 +39,7 @@
         }
     }
     else {
-        redirect(html_entity_decode(add_sid("photos.php?" . update_query_string($clean_vars, "_off", 0))), "No photos");
+        redirect(html_entity_decode("photos.php?" . update_query_string($clean_vars, "_off", 0)), "No photos");
     }
 
     $newoffset = $offset + 1;
@@ -104,18 +104,18 @@ if (!$_pause) {
     else {
         $photo = $thumbnails[0];
         $photo->lookup();
-	?>
+    ?>
         <div class="prev">&nbsp;</div>
         <div class="photohdr">
-            <?php echo $photo->get_fullsize_link($photo->get("name"))?>: 
+            <?php echo $photo->getFullsizeLink($photo->get("name"))?>: 
             <?php echo $photo->get("width") ?> x <?php echo $photo->get("height")?>,
             <?php echo $photo->get("size") ?> <?php echo translate("bytes")?>
         </div>    
         <div class="next">&nbsp;</div>
-        <?php echo $photo->get_fullsize_link($photo->get_midsize_img())?>
+        <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX))?>
         <?php
-        if ($people_links = get_photo_person_links($photo)) {
-?>	
+        if ($people_links = $photo->getPeopleLinks()) {
+?>  
             <div id="personlink"><?php echo $people_links ?></div>
 <?php
         }
@@ -137,4 +137,4 @@ if (!$_pause) {
       </dl>
       <br>
 </div>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

@@ -23,8 +23,22 @@
 
 /**
  * Configuration item
+ * @package Zoph
+ * @author Jeroen Roos
  */
 abstract class confItem extends zophTable {
+    /** @var string The name of the database table */
+    protected static $table_name="conf";
+    /** @var array List of primary keys */
+    protected static $primary_keys=array("conf_id");
+    /** @var array Fields that may not be empty */
+    protected static $not_null=array();
+    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    protected static $keepKeys = true;
+    /** @var string URL for this class */
+    protected static $url="config.php#";
+    
+    
     /** @var string Label to display */
     protected $label;
     /** @var string Longer description of item */
@@ -37,8 +51,6 @@ abstract class confItem extends zophTable {
     protected $required=false;
     /** @var bool internal, internal settings can not be changed from webinterface */
     protected $internal=false;
-    /** @var array fields for database */
-    public $fields=array();
 
     /**
      * Create confItem object
@@ -46,11 +58,8 @@ abstract class confItem extends zophTable {
      * @retrun confItem new object
      */
     public function __construct($id = 0) {
-        $this->keepKeys=true;
         if($id === 0 || preg_match("/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/", $id)) {
-            parent::__construct("conf", array("conf_id"), array(""));
             $this->set("conf_id", $id);
-
         } else {
             log::msg("Illegal configuration id", log::FATAL, log::VARS);
         }

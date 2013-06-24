@@ -15,12 +15,12 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once("include.inc.php");
+    require_once "include.inc.php";
     $vars=clean_request_vars($request_vars);
 
     $_action=getvar("_action");
     if(!conf::get("feature.download") || (!$user->get("download") && !$user->is_admin())) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
     if($_action=="getfile" || $_action=="download") {
         $filename=getvar("_filename");
@@ -48,7 +48,7 @@
         flush();
         exit;
     }
-    require_once("header.inc.php");
+    require_once "header.inc.php";
 ?>
     <h1>
         <?php echo translate("Download zipfile") . "\n" ?>
@@ -118,7 +118,7 @@
             <br>
             </div>
 <?
-            require_once("footer.inc.php");
+            require_once "footer.inc.php";
         } else {
             echo translate("No photos were found matching your search criteria.") . "\n";
         }
@@ -135,7 +135,7 @@
 ?>
             <form class="download">
                 <p> 
-                    <?php printf(translate("You have requested the download of %s photos, with a total size of  %s."), $num_photos, get_filesize($photos, true)); ?>
+                    <?php printf(translate("You have requested the download of %s photos, with a total size of  %s."), $num_photos, getHuman(photo::getFilesize($photos))); ?>
                 </p>
                 <p>
                     <?php echo create_form($vars, array("_off", "_action")) ?>
@@ -150,7 +150,7 @@
                     <label for="maxfiles">
                         <?php echo translate("Maximum number of files per zipfile") ?>
                     </label>
-                    <?php echo create_pulldown("_maxfiles", "100", array(
+                    <?php echo template::createPulldown("_maxfiles", "100", array(
                             10 => 10,
                             25 => 25,
                             50 => 50, 
@@ -164,7 +164,7 @@
                     <label for="maxsize">
                         <?php echo translate("Maximum size per zipfile") ?>
                     </label>
-                    <?php echo create_pulldown("_maxsize", "50000000", 
+                    <?php echo template::createPulldown("_maxsize", "50000000", 
                         array(
                             "5000000" => "5MiB", 
                             "10000000" => "10MiB", 
@@ -188,6 +188,6 @@
         </div>
         <br>
 <?php
-            require_once("footer.inc.php");
+            require_once "footer.inc.php";
     }
 ?>

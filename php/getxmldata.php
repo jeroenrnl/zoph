@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-require_once("include.inc.php");
+require_once "include.inc.php";
 
 header("Content-Type: text/xml");
 session_write_close();
@@ -29,8 +29,21 @@ if($obj_array[0]=="details") {
     $obj_name=$obj_array[1];
     $obj=new $obj_name((int) $obj_array[2]);
 
-    echo $obj->getDetailsXML($user);
+    echo $obj->getDetailsXML();
 } else {
-    echo get_xml($object, $search, $user);
+    if($object=="location" || $object=="home" || $object=="work") {
+        $object="place";
+    } else if ($object=="father" || $object=="mother" || $object=="spouse") {
+        $object="person";
+    } else if ($object=="timezone") {
+        $object="TimeZone";
+    } else if ($object=="import_progress") {
+        $object="WebImport";
+    } else if ($object=="import_thumbs") {
+        $object="WebImport";
+        $search="thumbs";
+    } 
+
+    echo $object::getXML($search, $user)->SaveXML();
 }
 ?>

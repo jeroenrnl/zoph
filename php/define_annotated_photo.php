@@ -26,17 +26,17 @@
    * Copyright 2003 Nixon P. Childs
    * **************************************************************************/
 
-    require_once("include.inc.php");
+    require_once "include.inc.php";
 
     if (!conf::get("feature.annotate")) {
-        redirect(add_sid("zoph.php"));
+        redirect("zoph.php");
     }
 
     $title = translate("Annotate Photo");
-    require_once("header.inc.php");
+    require_once "header.inc.php";
     $photo_id = getvar("photo_id");
     $photo = new photo($photo_id);
-    $found = $photo->lookupForUser($user);
+    $found = $photo->lookup();
 ?>
           <h1><?php echo strtolower($title) ?></h1>
       <div class="main">
@@ -55,7 +55,7 @@
             <img src="<?php echo $photo->getURL("mid")?>" class="mid" ALT="<?php $photo->get("title") ?>">
           <br>
           <label for="size"><?php echo translate("send fullsize") ?></label>
-          <?php echo create_pulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
+          <?php echo template::createPulldown("_size", "mid", array("full" => translate("Yes",0), "mid" => translate("No",0)) ) ?><br>
           <input type="checkbox" name="photo_title_cb">
           <label for="photo_title"><?php echo translate("title") ?></label>
 <?php echo create_text_input("photo_title", $photo->get("title"), 35, 50) ?><br>
@@ -115,7 +115,7 @@
 <?php
         //}
         $people_string = "";
-        $people = $photo->lookup_people();
+        $people = $photo->getPeople();
         if ($people) {
             $count = 0;
             foreach ($people as $person) {
@@ -254,4 +254,4 @@
     
   <br>
 </div>
-<?php require_once("footer.inc.php"); ?>
+<?php require_once "footer.inc.php"; ?>

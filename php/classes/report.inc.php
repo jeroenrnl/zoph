@@ -17,12 +17,17 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @author Jason Geiger, Jeroen Roos
+ * @author Jason Geiger
+ * @author Jeroen Roos
  * @package Zoph
  */
 
 /**
  * Report class. Eventually everything report-related will move here.
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class report {
     
@@ -34,7 +39,7 @@ class report {
         $album= album::getRoot();
         $category = category::getRoot();
 
-        $size=get_human(get_photo_sizes_sum());
+        $size=getHuman(photo::getTotalSize());
         return array(
             translate("number of photos") => photo::getCount(),
             translate("size of photos") => "$size",
