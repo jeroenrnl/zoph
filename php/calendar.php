@@ -22,15 +22,14 @@
     $month = getvar("month");
     $search_field = getvar("search_field");
 
-    $cal = new zoph_calendar($search_field);
+    $cal = new calendar();
+    $cal->setSearchField($search_field);
 
     if ($year && $month) {
         // ok
-    }
-    else if ($date) {
+    } else if ($date) {
         list($year, $month, $day) = explode("-", $date);
-    }
-    else {
+    } else {
         $date = getdate();
         $year = $date["year"];
         $month = $date["mon"];

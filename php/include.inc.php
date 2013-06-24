@@ -52,8 +52,6 @@
 
     require_once "validator.inc.php";
 
-    require_once "zoph_calendar.inc.php";
-
     require_once "track.inc.php";
     require_once "point.inc.php";
 
