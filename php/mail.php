@@ -132,7 +132,7 @@
     }
 
     $from_name = $user->person->getName();
-    $from_email = $user->person->get_email();
+    $from_email = $user->person->getEmail();
 
     require_once "header.inc.php";
 ?>
