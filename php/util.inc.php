@@ -300,9 +300,7 @@ function create_form($vars, $ignore = array()) {
 function minimum_version($vercheck) {
     $minver = (int)str_replace('.', '', $vercheck);
     $curver = (int)str_replace('.', '', phpversion());
-    if($curver >= $minver)
-        return true;
-    return false;
+    return ($curver >= $minver);
 }
 
 
@@ -740,23 +738,24 @@ function get_filetype($mime) {
     case "image/jpeg":
     case "image/png":
     case "image/gif":
-        return "image";
+        $type="image";
         break;
     case "application/x-bzip2":
     case "application/x-gzip":
     case "application/x-tar":
     case "application/zip":
-        return "archive";
+        $type="archive";
         break;
     case "application/xml":
-        return "xml";
+        $type="xml";
         break;
     case "directory":
-        return "directory";
+        $type="directory";
         break;
     default:
-        return false;
+        $type=false;
     }
+    return $type;
 }
 
 function create_dir($directory) {
