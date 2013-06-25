@@ -24,7 +24,8 @@ class pageset extends zophTable {
     protected static $primary_keys=array("pageset_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("title");
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set 
+     *  by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="pageset.php?pageset_id=";
@@ -81,6 +82,13 @@ class pageset extends zophTable {
         return self::getCountFromQuery($sql);
     }
 
+    /**
+     * Add a page to this set
+     * @todo If the page already exists in this pageset, it fails silently
+     *       because, at this moment a page cannot be more than once in a pageset
+     *       Someday, this should either give a nice error or this limitation 
+     *       should be removed.
+     */
     function addpage($page_id) {
         $page=new page($page_id);
         if (!$page->get_order($this->get("pageset_id"))) {
@@ -89,11 +97,6 @@ class pageset extends zophTable {
                 escape_string($page_id) . ", " .
                 ($this->get_maxorder() + 1) . ")";
             query($sql, "Could not add page to pageset");
-        } else {
-            // The page already exists in this pageset.
-            // at this moment a page cannot be more than once in a pagest
-            // Someday, this should either give a nice error or this
-            // limitation should be removed.
         }
     }
     
@@ -168,7 +171,8 @@ class pageset extends zophTable {
         $pagesetuser->lookup_person();
         $pagesetperson = $pagesetuser->person->getName();
         $pagesetperson_id = $pagesetuser->person->get("person_id");
-        $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> (<a href=person.php?person_id=%s>%s</a>)", $this->get("user"), $user_name, $pagesetperson_id, $pagesetperson);
+        $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> (<a href=person.php?person_id=%s>%s</a>)", 
+            $this->get("user"), $user_name, $pagesetperson_id, $pagesetperson);
         return $return;
     }
 

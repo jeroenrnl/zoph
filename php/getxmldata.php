@@ -44,6 +44,6 @@ if($obj_array[0]=="details") {
         $search="thumbs";
     } 
 
-    echo $object::getXML($search, $user)->SaveXML();
+    echo $object::getXML($search)->SaveXML();
 }
 ?>

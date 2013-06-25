@@ -38,7 +38,7 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
     public function testGetXML($object, $search, $xml) {
         user::setCurrent(new user(1));
         $actual = new DOMDocument;
-        $actual->loadXML($object::getXML($search, user::getCurrent())->saveXML());
+        $actual->loadXML($object::getXML($search)->saveXML());
         $expected=new DOMDocument();
         $expected->loadXML($xml);
 
@@ -54,7 +54,7 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         user::setCurrent(new user(2));
 
         $actual = new DOMDocument;
-        $actual->loadXML($object::getXML($search, user::getCurrent())->saveXML());
+        $actual->loadXML($object::getXML($search)->saveXML());
         $expected=new DOMDocument();
         $expected->loadXML($xml);
 
