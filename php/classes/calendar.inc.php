@@ -62,20 +62,6 @@ class Calendar {
     private $dayNames = array("S", "M", "T", "W", "T", "F", "S");
 
     /**
-     * @var array The labels to display for the months of the year. The first entry in this array
-     * represents January.
-     */
-    private $monthNames = array("January", "February", "March", "April", "May", "June",
-                            "July", "August", "September", "October", "November", "December");
-
-
-    /**
-     * @var array The number of days in each month. You're unlikely to want to change this...
-     * The first entry in this array represents January.
-     */
-    private $daysInMonth = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-
-    /**
      * @var string the field to search on when linking back to photos.php
      * (date or timestamp)
      */
@@ -105,22 +91,6 @@ class Calendar {
      */
     public function setDayNames($names) {
         $this->dayNames = $names;
-    }
-
-    /**
-     * Get the array of strings used to label the months of the year. This array contains twelve
-     * elements, one for each month of the year. The first entry in this array represents January.
-     */
-    public function getMonthNames() {
-        return $this->monthNames;
-    }
-
-    /**
-      * Set the array of strings used to label the months of the year. This array must contain twelve
-      * elements, one for each month of the year. The first entry in this array represents January.
-      */
-    public function setMonthNames($names) {
-        $this->monthNames = $names;
     }
 
     /**
@@ -159,21 +129,18 @@ class Calendar {
     /**
      * Return the URL to link to in order to display a calendar for a given month/year.
      */
-    public function getCalendarLink($month, $year) {
+    public function getCalendarLink(Time $date) {
         $script = getenv('SCRIPT_NAME');
+        $month=$date->format("m");
+        $year=$date->format("Y");
         return "$script?month=$month&amp;year=$year";
     }
 
     /**
      * Return the URL to link to  for a given date.
      */
-    public function getDateLink($day, $month, $year) {
-        if (strlen($month) < 2 && $month < 10) { $month = "0$month"; }
-        if (strlen($day) < 2 && $day < 10) { $day = "0$day"; }
-
-        if ("$year$month$day" > $this->today) {
-            return "";
-        }
+    public function getDateLink(Time $date) {
+        if($date > new Time) { return; }
 
         if ($this->searchField == "timestamp") {
 
@@ -182,204 +149,76 @@ class Calendar {
             // Or we could trim the date within Mysql:
             // substring(timestamp, 0, 8) = today
 
-            $today = "$year$month$day" . "000000";
-            $tomorrow = date("YmdHms", mktime(0, 0, 0, $month, $day + 1, $year));
+            $today = $date->format("Ymd000000");
+            $date_tomorrow = clone $date;
+            $date_tomorrow->add(new DateInterval("P1D"));
+            $tomorrow = $date_tomorrow->format("Ymd000000");
+            
 
             $qs =
                 rawurlencode("timestamp#1") . "=" . "$today&" .
                 rawurlencode("_timestamp-op#1") . "=" . rawurlencode(">=") . "&" .
                 rawurlencode("timestamp#2") . "=" . "$tomorrow&" .
                 rawurlencode("_timestamp-op#2") . "=" . rawurlencode("<");
-        }
-        else {
-            $qs = "date=$year-$month-$day";
+        } else {
+            $today=$date->format("Y-m-d");
+            $qs = "date=$today";
         }
 
         return "photos.php?$qs";
     }
 
     /**
-     *   Return the HTML for the current month
-     */
-    public function getCurrentMonthView() {
-        $d = getdate(time());
-        return $this->getMonthView($d["mon"], $d["year"]);
-    }
-
-
-    /**
-     * Return the HTML for the current year
-     */
-    public function getCurrentYearView() {
-        $d = getdate(time());
-        return $this->getYearView($d["year"]);
-    }
-
-
-    /**
      * Return the HTML for a specified month
+     * @todo Day names are hardcoded and not localized
      */
-    public function getMonthView($month, $year, $day) {
-        return $this->getMonthHTML($month, $year, 1, $day);
-    }
+    public function getMonthView(Time $date) {
+        $prev_date=clone $date;
+        $prev = $prev_date->sub(new DateInterval("P1M"));
+        $next_date=clone $date;
+        $next = $next_date->add(new DateInterval("P1M"));
 
+        $daysInMonth=$date->format("t");
+        $firstDay=$date->format("w");
+        $today=new Time();
+        $today->setTime(0,0,0);
+        $header=$date->format("F Y");
 
-    /**
-     * Return the HTML for a specified year
-     */
-    public function getYearView($year) {
-        return $this->getYearHTML($year);
-    }
+        $days=array();
 
-    /**
-     * Generate the HTML for a given month
-     */
-    private function getMonthHTML($m, $y, $showYear = 1, $day = 0) {
-        $s = "";
+        $titles=array("S", "M", "T", "W", "T", "F", "S");
 
-        list($month, $year) = $this->adjustDate($m, $y);
-
-        $date=mktime(12,0,0,$month,1,$year);
-        
-        $daysInMonth = date("t", $date);
-        $first = date("w", $date);
-        
-        $monthName = $this->monthNames[$month - 1];
-
-        $prev = $this->adjustDate($month - 1, $year);
-        $next = $this->adjustDate($month + 1, $year);
-
-        if ($showYear == 1) {
-            $prevMonth = $this->getCalendarLink($prev[0], $prev[1]);
-            $nextMonth = $this->getCalendarLink($next[0], $next[1]);
-        } else {
-            $prevMonth = "";
-            $nextMonth = "";
+        for($i=0; $i < $firstDay; $i++) {
+            $days[]=array(
+                "date"  => "",
+                "link"  => "",
+                "class" => "calendar",
+            );
         }
 
-        $header = $monthName . (($showYear > 0) ? " " . $year : "");
-
-        $s .= "<table class=\"calendar\">\n";
-        $s .= "<tr>\n";
-        $s .= "<td class=\"prev\">" . (($prevMonth == "") ? "&nbsp;" : "<a href=\"$prevMonth\">&lt;&lt;</a>")  . "</td>\n";
-        $s .= "<td colspan=\"5\"><h2>$header</h2></td>\n";
-        $s .= "<td class=\"next\">" . (($nextMonth == "") ? "&nbsp;" : "<a href=\"$nextMonth\">&gt;&gt;</a>")  . "</td>\n";
-        $s .= "</tr>\n";
-
-        $s .= "<tr>\n";
-        $s .= "<td class=\"calendarHeader\">" . $this->dayNames[($this->startDay)%7] . "</td>\n";
-        $s .= "<td class=\"calendarHeader\">" . $this->dayNames[($this->startDay+1)%7] . "</td>\n";
-        $s .= "<td class=\"calendarHeader\">" . $this->dayNames[($this->startDay+2)%7] . "</td>\n";
-        $s .= "<td class=\"calendarHeader\">" . $this->dayNames[($this->startDay+3)%7] . "</td>\n";
-        $s .= "<td class=\"calendarHeader\">" . $this->dayNames[($this->startDay+4)%7] . "</td>\n";
-        $s .= "<td class=\"calendarHeader\">" . $this->dayNames[($this->startDay+5)%7] . "</td>\n";
-        $s .= "<td class=\"calendarHeader\">" . $this->dayNames[($this->startDay+6)%7] . "</td>\n";
-        $s .= "</tr>\n";
-
-        // We need to work out what date to start at so that the first appears in the correct column
-        $d = $this->startDay + 1 - $first;
-        while ($d > 1)
-        {
-            $d -= 7;
+        for($day=1; $day<=$daysInMonth; $day++) {
+            $classes="calendar day";
+            if($date == $today) { $classes .= " today"; }
+            $days[]=array(
+                "date"  => $day,
+                "link"  => $this->getDateLink($date),
+                "class" => $classes
+            );
+            $date->add(new dateInterval("P1D"));
         }
+            
 
-        // Make sure we know when today is, so that we can use a different CSS style
-        $today = getdate(time());
 
-        while ($d <= $daysInMonth) {
-            $s .= "<tr>\n";
+        $tpl=new block("calendar", array(
+            "prev"      => $this->getCalendarLink($prev),
+            "next"      => $this->getCalendarLink($next),
+            "header"    => $header,
+            "titles"    => $titles,
+            "days"      => $days
+        ));
 
-            for ($i = 0; $i < 7; $i++) {
-                if ($year == $today["year"] && $month == $today["mon"] && $d == $today["mday"]) {
-                    $class = "calendarToday";
-                }
-                else if ($day && $d == $day) {
-                    $class = "calendarDay";
-                } else {
-                    $class = "calendar";
-                }
-
-                $s .= "<td class=\"$class\">";
-                if ($d > 0 && $d <= $daysInMonth) {
-                    $link = $this->getDateLink($d, $month, $year);
-                    $s .= (($link == "") ? $d : "<a href=\"$link\">$d</a>");
-                } else {
-                    $s .= "&nbsp;";
-                }
-                $s .= "</td>\n";
-                $d++;
-            }
-            $s .= "</tr>\n";
-        }
-
-        $s .= "</table>\n";
-
-        return $s;
+        return $tpl;
     }
-
-
-    /**
-     * Generate the HTML for a given year
-     */
-    private function getYearHTML($year) {
-        $s = "";
-        $prev = $this->getCalendarLink(0, $year - 1);
-        $next = $this->getCalendarLink(0, $year + 1);
-
-        $s .= "<table class=\"calendar\">\n";
-        $s .= "<tr>";
-        $s .= "<td class=\"prev\">" . (($prev == "") ? "&nbsp;" : "<a href=\"$prev\">&lt;&lt;</a>")  . "</td>\n";
-        $s .= "<td class=\"calendarHeader\"" . (($this->startMonth > 1) ? $year . " - " . ($year + 1) : $year) ."</td>\n";
-        $s .= "<td class=\"next\">" . (($next == "") ? "&nbsp;" : "<a href=\"$next\">&gt;&gt;</a>")  . "</td>\n";
-        $s .= "</tr>\n";
-        $s .= "<tr>";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(0 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(1 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(2 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "</tr>\n";
-        $s .= "<tr>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(3 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(4 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(5 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "</tr>\n";
-        $s .= "<tr>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(6 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(7 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(8 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "</tr>\n";
-        $s .= "<tr>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(9 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(10 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "<td class=\"calendar\">" . $this->getMonthHTML(11 + $this->startMonth, $year, 0) ."</td>\n";
-        $s .= "</tr>\n";
-        $s .= "</table>\n";
-
-        return $s;
-    }
-
-    /**
-     * Adjust dates to allow months > 12 and < 0. Just adjust the years appropriately.
-     * e.g. Month 14 of the year 2001 is actually month 2 of year 2002.
-     */
-    private function adjustDate($month, $year) {
-        $a = array();
-        $a[0] = $month;
-        $a[1] = $year;
-
-        while ($a[0] > 12) {
-            $a[0] -= 12;
-            $a[1]++;
-        }
-
-        while ($a[0] <= 0)
-        {
-            $a[0] += 12;
-            $a[1]--;
-        }
-
-        return $a;
-    }
-
 }
 
 ?>

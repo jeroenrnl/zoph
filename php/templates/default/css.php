@@ -32,20 +32,20 @@ body    {
     margin-right: auto;
     padding: 0px;
     border-collapse: collapse;
-    }
+}
 
 /* Links */
 
 a   {
     color: <?php echo color_scheme::getColor("link_color") ?>;
     background: transparent;
-    }
+}
 
 /* Images that are links */
 
 a IMG   {
     border: none;
-    }
+}
 
 h1  {
     background: <?php echo color_scheme::getColor("title_bg_color") ?>;
@@ -59,7 +59,7 @@ h1  {
     display: block;
     padding: 2px 10px 2px 10px;
     margin: 0;
-    }
+}
 
 /* Secondary title such as album title */
 h2  {
@@ -68,11 +68,11 @@ h2  {
     margin: 0;
     margin-top: 10px;
     margin-bottom: 10px;
-    }
+}
 
 h2.logon {
     margin-bottom: 30px;
-    }
+}
 
 /* Level 3 title */
 h3  {
@@ -80,19 +80,19 @@ h3  {
     font-size: medium;
     font-weight: bold;
     margin: 0px;
-    }
+}
 
 /* Unordered list */
 ul  {
     padding-left: 1em;
     margin: 0.5em 1em 1em 1em;
-    }
+}
 
 ul.thumbs {
     clear: both;
     list-style: none;
     padding-bottom: 80px;
-    }
+}
 
 ul.thumbs > li {
     background: <?php echo color_scheme::getColor("title_bg_color") ?>;
@@ -117,7 +117,7 @@ ul.thumbs > li {
 
 ul.thumbs > li dl.extradata {
     display: none;
-    }
+}
 
 div.details {
     display: block;
@@ -140,7 +140,7 @@ div.details {
     -webkit-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
     -o-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
     -ms-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-    }
+}
 
 div.details > h3 {
     margin: -20px -20px 0 -20px;
@@ -199,11 +199,11 @@ ul.thumbs li img {
 ul.list {
     clear: both;
     list-style: none;
-    }
+}
 
 ul.list > li:nth-child(2n) {
     background-color: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    }
+}
 
 ul.tree {
     clear: both;
@@ -242,11 +242,11 @@ div.collapsed > div.ratingdetail {
 ul.thumbs a {
     text-align: center;
     text-decoration: none; 
-    }
+}
 
 ul.admin {
     list-style: none;
-    }
+}
 
 ul.admin li {
     width: 110px;
@@ -256,7 +256,7 @@ ul.admin li {
     float: left;
     clear: none;
     text-align: center;
-    }
+}
 
 ul.admin a {
     text-decoration: none;
@@ -264,29 +264,29 @@ ul.admin a {
     width: 100px;
     height: 100px;
     display: block;
-    }
+}
 
 ul.admin a:hover {
     background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
     border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
-    }
+}
 
 /* Form properties */
 form    {
     margin: 0 0 0 0;
     width: 100%;
-    }
+}
 
 form.viewsettings {
     clear: both;
     width: auto;
     margin: 0;
     padding: 0;
-    }
+}
 
 form.viewsettings select {
     margin-right: 15px;
-    }
+}
 
 
 form.viewsettings select#parent_place_id {
@@ -294,28 +294,28 @@ form.viewsettings select#parent_place_id {
     clear: none;
     margin-right: 0;
     width: 10em;
-    }
+}
 
 form#ratingform input, form#ratingform select {
     margin: 0;
     float: left;
-    }
+}
 
 form#ratingform select {
     margin-top: 4px;
     margin-right: 5px;
-    }
+}
 
 /* Form to add a page to a pageset */
 form.addpage {
     width: auto;
     text-align: right;
-    }
+}
 form.addpage input[type="submit"]   {
     display: inline;
     margin: 15px;
     vertical-align: middle;
-    }
+}
 form.addpage select {
     display: inline;
     vertical-align: middle;
@@ -338,13 +338,13 @@ form.editgroup {
  */
 :invalid {
     background: rgba(255,0,0,0.1);
-    }
+}
 
 div.generate input {
     display: block;
     margin: 0;
     float: left;
-    }
+}
 
 ul.autocompdropdown {
     position: relative;
@@ -356,12 +356,12 @@ ul.autocompdropdown {
     margin: 0;
     padding: 0;
     z-index: 5;
-    }
+}
 
 ul.autocompdropdown ul {
     margin: 0 0 0 1em;
     padding-left: 0em;
-    }
+}
 
 ul.autocompdropdown li {
     list-style: none;
@@ -375,7 +375,7 @@ input[type=text].autocompinput {
     background-position: 99% center;
     margin-right: 6px;
 
-    }
+}
 
 ul.autocompdropdown li:hover,
 ul.autocompdropdown li#selected {
@@ -389,7 +389,7 @@ ul.menu {
     margin-left: 4px;
     padding: 0 0 0 10px; 
     display: inline;
-    }
+}
 
 ul.menu li  {
     padding: 1px;
@@ -402,7 +402,7 @@ ul.menu li  {
     background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
     color: <?php echo color_scheme::getColor("tab_font_color") ?>;
     font-size: small;
-    }
+}
 
 ul.menu li:hover {
     position: relative;
@@ -410,19 +410,19 @@ ul.menu li:hover {
     border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     border-bottom: none;
     padding: 2px 0 2px 0;
-    }
+}
 
 ul.menu li.selected {
     background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
     color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>;
-    }
+}
                                 
 /* since the A element does not inherit font colors from it's parents, we set it explicetly here. Also underlining is removed from links in menu, unless it is hovered */
 
 ul.menu li a { 
     color: <?php echo color_scheme::getColor("tab_font_color") ?>; 
     text-decoration: none; 
-    }
+}
     
 ul.menu li > a:hover { text-decoration: underline; }
 ul.menu li.selected > a { color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>; }
@@ -444,7 +444,7 @@ div.breadcrumb {
 div.breadcrumb ul {
     margin: 0;
     padding: 0;
-    }
+}
     
 div.breadcrumb li {
     margin-left: 1px;
@@ -453,19 +453,19 @@ div.breadcrumb li {
     border: none;
     list-style: none;
     display: inline;
-    }
+}
 
 div.breadcrumb li:before {
     content: "\0020 \0020 \0020 \00BB \0020";
-    }
+}
     
 div.breadcrumb li.first:before {
     content: " ";
-    }
+}
 
 div.breadcrumb li.firstdots:before {
     content: "... \00BB \0020 ";
-    }
+}
 
 /* Main page */
 .main, .info, .letter, .page, div.map, div#selection, .warning   {
@@ -495,20 +495,20 @@ div.warning img.icon {
 
 div.map {
     height: 450px;
-    }
+}
 
 div.map small {
     display: block;
     /* used in infoBubble */
     font-size: x-small;
-    }
+}
 
 div.minimap {
     float: right;
     right: 10px;
     width: 50%;
     height: 300px;
-    }
+}
 
 /* explanation of the config item on the config page */
 div.main#config .desc {
@@ -549,7 +549,7 @@ div.main#config input[type="checkbox"] {
 
 div.main#config input.reset {
     float: right;
-    }
+}
     
 div.main#config input.reset + span {
     margin-top: 2px;
@@ -576,14 +576,14 @@ div.main#config input.reset:checked + span {
     bottom: 1em !important;
     display: block;
     left: 10px;
-    }
+}
 
 div.geocode {
     position: absolute;
     top: -10px;
     right: 0px;
     width: 150px;
-    }
+}
 
 div#geocoderesults {
     width: 144px;
@@ -591,17 +591,17 @@ div#geocoderesults {
     color: #666666;
     text-align: center;
     font-size: small;
-    }
+}
 
 div.geocode input[type="button"] {
     width: 140px;
     margin: 2px;
     float: left;
-    }
+}
 
 input.geo_disabled {
     background: #aaaaaa !important;
-    }
+}
 
 input.leftright {
     width: 68px !important;
@@ -618,15 +618,15 @@ div.timedetail, div.ratingdetail {
     border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     background: white;
     width: 100%;
-    }
+}
 
 div.timedetail dd {
     width: 40%;
-    }
+}
 
 div.timedetail dt {
     width: 40%;
-    }
+}
 
 div.timedetail h3 {
     background: <?php echo color_scheme::getColor("title_bg_color") ?>;
@@ -666,31 +666,31 @@ table.tracks tr:nth-child(odd) {
     
 p.main, p.info {
     padding: 4px;
-    }
+}
 
 /* The short introduction on zoph.php */
 .intro  {
     padding: 5px;
     text-align: left;
-    }
+}
 
 div.intro {
     margin-left: 15px;
     float: left;
     clear: right;
-    }
+}
 
 div.intro ul {
     margin: 5px;
     padding-bottom: 0px;
-    }
+}
     
 
 p.intro {
     clear: both;
     margin-top: 2px;
     margin-bottom: 2px;
-    }
+}
     
 /* ratings and reports are used on the reports page */
 
@@ -699,25 +699,25 @@ div.ratings   {
     margin-right: auto;
     padding: 10px 5px 20px 5px;
     width: 50%;
-    }
+}
 
 .graph > table {
     width: 100%;
     border-collapse: collapse;
-    }
+}
 
 .graph > table tr td:first-child { 
     width: 20%; 
     text-align: right;
     padding-right: 15px;
     border-right: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
-    }
+}
 
 .graph.bar div.bar   {
     float: left;
     width: 100%;
     height: 100%;
-    }
+}
 
 
 /* This is the bar that shows the number of photos for each rating */
@@ -734,7 +734,7 @@ div.ratings   {
     -ms-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
     z-index: 3;
     
-    }
+}
 
 .graph.bar div.count   {
     font-size: small;
@@ -744,7 +744,7 @@ div.ratings   {
     top: 2px;
     margin: 0 -10px 0 -10px;
     padding: 0;
-    }
+}
 
 table.reports {
     width: 50%;
@@ -754,12 +754,12 @@ table.reports {
 
 table.pages, table.pagesets {
     width: 100%;
-    }
+}
 
 div.smileys {
     border: 1px solid black;
     clear: right;
-    }
+}
     
 div.smileys div {
     float: left;
@@ -770,21 +770,21 @@ div.smileys div {
 div.smileys span {
     font-size: 8pt;
     vertical-align: middle;
-    }
+}
 
 div.smileys img {
     float: left;
     margin: 2px;
     margin-right: 4px;
-    }
+}
 
 table#search td {
     vertical-align: top;
-    }
+}
 
 table#search input[type="checkbox"] {
     float: none;
-    }
+}
 
 table#search input[type="checkbox"] + label {
     float: none;
@@ -797,7 +797,7 @@ table#search input[type="checkbox"] + label {
     top: 3px;
     width: auto;
     clear: none;
-    }
+}
 
 /* Links that appear on the right hand side of the title bar or page */
 
@@ -808,19 +808,19 @@ span.actionlink, div.actionlink {
     font-size: x-small;
     float: right;
     font-weight: normal;
-    }
+}
 
 span.photocount {
     font-size: x-small;
-    }
+}
 
 span.actionlink:before, div.letter:before {
     content: "[ ";
-    }
+}
 
 span.actionlink:after, div.letter:after {
     content: " ]";
-    }
+}
 
 /* New, semantic way to do actionlinks */
 
@@ -833,12 +833,12 @@ ul.actionlink {
     float: right;
     font-weight: normal;
     clear: right;
-    }
+}
 
 ul.actionlink li:before {
     content: ' | ';
     color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    }
+}
 
 ul.actionlink li:first-child:before {
     content: ' [ '; 
@@ -848,45 +848,45 @@ ul.actionlink li:first-child:before {
 ul.actionlink li:last-child:after {
     content: ' ] ';
     color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    }
+}
 
 ul.actionlink li { 
     display: inline; 
-    }
+}
 
 ul.actionlink a {
     text-decoration: none;
-    }
+}
 
 ul.actionlink a:hover {
     text-decoration: underline;
-    }
+}
 
 img.actionlink {
     float: right;
     position: relative;
     top: 3px;
     border: none;
-    }
+}
 
 /* Text next to 'remove' tickbox */
 .remove {
     text-align: left;
     font-size: small;
     vertical-align: top;
-    }
+}
 
 
 /* Letter in an alphabetic select list */
 .letter {
     text-align: center;
     font-size: small;
-    }
+}
 
 /* The letter that is currently active */
 .letter .selected   {
     font-weight: bold;
-    }
+}
 
 /* Description of an album, category, etc. */
 .description    {
@@ -900,21 +900,21 @@ img.actionlink {
     font-size: small;
     background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     clear: both;
-    }
+}
 /* The description of a photo in thumbnail view */
 .thumbdesc  {
     font-size: small;
-    }
+}
     
 /* Rotate links above a photo */
 .rotate {
     font-size: small;
     text-align: center;
-    }
+}
 
 .rotate select {
     float: none;
-    }
+}
 
 /* Color scheme */
 
@@ -922,12 +922,12 @@ div.colordef {
     margin-left: 1em;
     float: left;
     width: 10em;
-    }
+}
 
 div.color {
     float: left;
     width: 60px;
-    }
+}
 
 /* Tables for the permissions */
 
@@ -943,18 +943,18 @@ table.permissions   {
 table.permissions td, table.permissions th  {
     background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
-    }
+}
 
 table.permissions col {
     text-align: center; 
     padding: 0px;
-    }
+}
 
 table.permissions > col.col1 { 
     padding-left: 15px; 
     text-align: left; 
     width: 5%;
-    }
+}
     
 table.permissions > col.col2 { width: 55%; text-align: left; }
 table.permissions > col.col3 { width: 20%; text-align: center; }
@@ -966,7 +966,7 @@ table.permissions td.permremove {
     font-size: x-small;
     text-align: left;
     vertical-align: bottom;
-    }
+}
 
 /* Previous and next links above a photo */
 div.prev, div.next, div.pagelink, div.photohdr  {
@@ -974,28 +974,28 @@ div.prev, div.next, div.pagelink, div.photohdr  {
     margin-top: 30px;
     font-size: small;
     float: left;
-    }
+}
 
 div.prev a, div.next a, div.pagelink a {
     text-decoration: none;
-    }
+}
 
 div.prev a:hover, div.next a:hover, div.pagelink a:hover {
     text-decoration: underline;
-    }
+}
 
 div.prev    { 
     width: 20%;
     float: left; 
     text-align: left 
-    }
+}
     
 div.next    {
     width: 20%;
     float: right;
     text-align: right;
     clear: right;
-    }
+}
 
 
 /* Page links */
@@ -1003,19 +1003,19 @@ div.pagelink,
 div.photohdr {
     text-align: center;
     width: 60%;
-    }
+}
     
 .currentpage    {
     color: red;
     font-weight: bold;
-    }
+}
 
 /* up and down arrows for sort order */
 .up, .down  {
     margin: 0px;
     padding: 0px;
     display: block; /* needed to make the arrows exactly connect */
-    }
+}
 
 /* Form on top of each photopage to determine sortorder, asc or desc and
    number of photos displayes */
@@ -1028,17 +1028,17 @@ form.viewsettings select {
 div#sortorder {
     float: left;
     margin-bottom: 15px;
-    }
+}
 
 div#updown {
     float: left;
     margin: 5px 0px 15px 0px;
-    }
+}
 
 div#rowscols {
     float: right;
     margin-bottom: 15px;
-    }
+}
 
 img.<?php echo MID_PREFIX ?> {
     margin-left: auto;
@@ -1047,7 +1047,7 @@ img.<?php echo MID_PREFIX ?> {
     text-align: center;
     display: block;
     padding: 10px;
-    }
+}
 
 img.busy,
 img.waiting {
@@ -1056,11 +1056,11 @@ img.waiting {
     clear: both;
     text-align: center;
     display: block;
-    }
+}
 
 span.md5 {
     display: none;
-    }
+}
 
 div#rotate {
     margin-left: auto;
@@ -1069,7 +1069,7 @@ div#rotate {
     margin-bottom: 15px;
     text-align: center;
     clear: right;
-    }
+}
 
 /* Links to persons under a photo */
 div#personlink  {
@@ -1077,7 +1077,7 @@ div#personlink  {
     font-size: small;
     width: 100%;
     margin: 0 0 15px 0;
-    }
+}
 
 /* Text next to an input field, suggesting what to put there, such as "64 chars max" */
 .inputhint  {
@@ -1085,12 +1085,12 @@ div#personlink  {
     padding-left: 4px;
     padding-right: 4px;
     font-weight: normal;
-    }
+}
 
 span.inputhint  {
     padding-left: 30px;
     text-align: right;
-    }
+}
 
 div.inputhint {
     margin: -2px 0 15px 180px;
@@ -1106,7 +1106,7 @@ div.formtext {
 
 .checkbox   {
     text-align: right;
-    }
+}
 
 div.editchoice  {
     vertical-align: top;
@@ -1116,7 +1116,7 @@ div.editchoice  {
     margin-right: -10em;
     float: left;
     width: 10em;
-    }
+}
 
 /* Thumbnail photo */
 div.thumbnail   {
@@ -1127,7 +1127,7 @@ div.thumbnail   {
     float:left;
     margin: 2px;
     padding: 5px;
-    }
+}
 
 div.comment {
     border: 1px solid <?PHP echo color_scheme::getColor("table_border_color") ?>;
@@ -1136,7 +1136,7 @@ div.comment {
     min-height: 5em;
     padding-bottom: 5px;
     margin-bottom: 5px;
-    }
+}
 
 div.comment h3 {
     width: 100%;
@@ -1144,7 +1144,7 @@ div.comment h3 {
     color: <?php echo color_scheme::getColor("title_font_color") ?>;
     border-bottom: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>; 
     text-align: left;
-    }
+}
 
 div.commentinfo {
     border-bottom: 1px dashed <?PHP echo color_scheme::getColor("table_border_color") ?>;
@@ -1153,19 +1153,19 @@ div.commentinfo {
     font-style: italic;
     margin: 0 0 0.5em 0;
     padding: 0;
-    }
+}
 
 span.searchinfo {
     font-size: x-small;
-    }
+}
 
 br  {
     clear: both;
-    }
+}
 
 br.noclear {
     clear: none;
-    }
+}
 
 /* The random thumnail on the first page */
 #random.thumbnail   {
@@ -1175,7 +1175,7 @@ br.noclear {
     padding-top: 10px;
     padding-left: 0px;
     float: left;
-    }
+}
 
 /* Person / place in the list of persons / places */
 .person, .place, .showattr {
@@ -1183,12 +1183,12 @@ br.noclear {
     font-size: medium;
     clear: left;
     display: block;
-    }
+}
 
 /* hr */
 .wide   {
     width: 90%
-    }
+}
 
 dl.color_scheme,
 dl.comment,
@@ -1202,7 +1202,7 @@ dl.track {
     margin-bottom: 30px;
     /* Workaround for Firefox bug */
     border: 1px solid transparent;
-    }
+}
 
 label,     
 dl.color_scheme dt,
@@ -1226,7 +1226,7 @@ dl.track dd {
     padding-right: 4px;
     min-height: 1.3em;
     margin: 4px 0px;
-    }
+}
 
 dl.color_scheme dd,
 dl.comment dd,
@@ -1239,7 +1239,7 @@ dl.track dd {
     float: left;
     width: 55%;
     margin: 5px;
-    }
+}
 
 dl.color_scheme dt,
 dl.comment dt,
@@ -1256,28 +1256,28 @@ dl.track dt {
     text-align: right;
     margin-top: 5px;
     margin-bottom: 5px;
-    }
+}
 
 dl.allexif {
     display: none;
     width: 100%;
-    }
+}
 
 dl.allexif dl {
     width: 100%
-    }
+}
 
 dl.groups dt {
     margin-top: 0;
     margin-bottom: 10px;
     width: 20%;
-    }
+}
 
 dl.groups dd {
     margin-top: 2px;
     width: 40%;
     font-size: small;
-    }
+}
     
 label, table.credits th {
     text-align: right;
@@ -1289,11 +1289,11 @@ label, table.credits th {
     display: block;
     float: left;
     clear: none;
-    }
+}
 
 label {
     clear: left;
-    }
+}
 
 /* This is to get the labels in a nice column, even if there's a checkbox
 next to it, like on the Annotate photo page */
@@ -1301,7 +1301,7 @@ next to it, like on the Annotate photo page */
 input[type="checkbox"] + label {
     clear: none;
     width: 9em;
-    }
+}
 
 fieldset  {
     margin: 0;
@@ -1312,7 +1312,7 @@ fieldset  {
     overflow: hidden;
     display: block;
     float: left;
-    }
+}
 
 fieldset.editphotos, 
 fieldset.map, 
@@ -1322,7 +1322,7 @@ fieldset.geotag  {
     margin-bottom: 5px;
     padding-bottom: 20px;
     border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
-    }
+}
 
 fieldset.addusers {
     width: 15em;
@@ -1332,17 +1332,17 @@ fieldset.addusers {
     margin-bottom: 5px;
     padding-bottom: 20px;
     border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
-    }
+}
 
 
 // The map is inside a table on the search page
 table fieldset.map {
     width: 95%;
-    }
+}
 
 fieldset.map {
     position: relative;
-    }
+}
 
 fieldset.editphotos legend, 
 fieldset.map legend, 
@@ -1356,7 +1356,7 @@ fieldset.addusers legend {
         font-weight: bold;
     border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
     background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    }
+}
 
 fieldset.editphotos div.thumbnail {
     vertical-align: top;
@@ -1365,7 +1365,7 @@ fieldset.editphotos div.thumbnail {
     margin: 0px;
     margin-left: -10em;
     float: right;
-    }
+}
 
 fieldset.editphotos-fields {
     margin: 0 0 0 20px;
@@ -1373,7 +1373,7 @@ fieldset.editphotos-fields {
     clear: none;
     width: 90%;
     padding-top: 10px;
-    }
+}
 
 /* These are the lists on the bulk edit page, such as the list of albums + the remove checkbox. This is a bit of a hack, needed to make opera and MSIE behave. */
 
@@ -1402,33 +1402,33 @@ input[type="reset"] {
     margin-left: auto;
     margin-right: 15px;
     display: block;
-    }
+}
 
 input[disabled] {
     background: #aaaaaa;
-    }
+}
 
 div#rowscols input[type="submit"] {
     display: inline;
     margin: 0px 15px 0px 15px;
-    }
+}
 
 input[type="submit"].updatebutton {
     clear: right;
     margin-right: 15px;
     margin-left: auto;
     display: block;
-    }
+}
 
 input[type="submit"].increment {
     margin: 0px;
     width: auto;
     height: auto;
-    }
+}
 
 input[type="submit"].bigbutton {
     width: 200px !important;
-    }
+}
 
 textarea {
     margin: 2px;
@@ -1441,7 +1441,7 @@ textarea.email {
     margin-left: 5%;
     margin-right: 5%;
     width: 90%;
-    }
+}
     
 textarea.desc {
     display: block;
@@ -1452,15 +1452,15 @@ textarea.desc {
 
 input, select {
     margin: 2px;
-    }
+}
 
 input[type="checkbox"] {
     float: left;
-    }
+}
 
 input[type="checkbox"].remove {
     clear: left;
-    }
+}
 
 div#logon input[type="text"],
 div#logon input[type="password"],
@@ -1468,7 +1468,7 @@ div#passwordchange input[type="text"],
 div#passwordchange input[type="password"]   {
     margin-bottom: 10px;
     margin-left: 5px;
-    }
+}
 
 select,
 input[type="text"],
@@ -1502,44 +1502,44 @@ form.geotag fieldset.checkboxlist select {
 table#users,
 table.credits {
     width: 100%;
-    }
+}
 
 table#users td, 
 table.credits td { 
     margin: 2px;
-    }
+}
 
 table#zophinfo {
     width: 60%;
     margin-left: auto;
     margin-right: auto;
-    }
+}
 
 table#zophinfo th {
     width: 80%;
-    }
+}
 
 table#zophinfo td {
     width: 20%;
-    }
+}
     
 div#rowscols select,
 div#rowscols input,
 div#rotate select,
 div#rotate input {
     margin: 0;
-    }
+}
 
 div#relation {
     margin-left: auto;
     margin-right: auto;
     width: 50%;
-    }
+}
 
 div#rotate input[type="submit"] {
     margin-left: auto;
     margin-right: auto;
-    }
+}
 
 div.page-preview {
     border: 1px solid black;
@@ -1553,7 +1553,7 @@ div.page-preview {
     padding: 10px;
     border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     clear: both;
-    }
+}
 
 div.page h1, div.page-preview h1 {
     position: relative;
@@ -1566,35 +1566,35 @@ div.page h1, div.page-preview h1 {
     font-size: large;
     text-align: center;
 
-   }
+}
 
 div.page h2, div.page-preview h2 {
     text-align: center;
     border-bottom: 1px solid black;
-    }
+}
 
 div.page h3, div.page-preview h3 {
     text-align: left;
-    }
+}
 
 div.page div.background {
     margin: -10px;
     padding: 10px;
     width: 100%;
-    }
+}
 
 /* Styles for the import page */
 html.iframe_upload {
     width: 100%;
     clear: both;
     border: none;
-    }
+}
 
 html.iframe_upload body {
     background: transparent;
     width: 100%;
     clear: both;
-    }
+}
 
 html.iframe_upload input {
     margin: 5px;
@@ -1611,39 +1611,39 @@ div.import_details {
     border: none;
     margin: 10px;
     width: 95%;
-    }
+}
 
 div.import_details,
 div.import_thumbs {
     display: none;
-    }
+}
 
 div.import_thumbs div.thumbnail {
     height: <?php echo THUMB_SIZE + 30 ?>px;
-    }
+}
 
 div.import_thumbs img {
     clear: both;
     display: block;
     margin: auto;
-    }
+}
 
 div.import textarea {
     width: 60%;
-    }
+}
 
 iframe.upload {
     border: none;
     width: 100%;
     margin-bottom: 3px;
     height: 100px;
-    }
+}
 
 div.uploadprogress {
     display: none;
     float: right;
     width: 350px;
-    }
+}
 
 div.import_details,
 div.import {
@@ -1652,7 +1652,7 @@ div.import {
 
 div.import_details div {
     padding: 1em;
-    }
+}
 
 div.import_thumbs h2,
 div.import_uploads h2,
@@ -1678,7 +1678,7 @@ div.import_details h2 {
     width:      100%;
     height:     80px;
     border: none;
-    }
+}
 
 .progressbar {
     margin: auto;
@@ -1702,13 +1702,13 @@ div.import_details h2 {
     color: white;
     font-weight: bold;
     overflow: hidden;
-    }
+}
 
 span.filename {
     display: block;
     clear: left;
     font-size: 70%;
-    }
+}
 
 .fn_upload {
     font-size: 70%;
@@ -1731,11 +1731,11 @@ span.filename {
 
 form.import {
     padding: 1.5em 0em 2em 0em;
-    }
+}
 
 form.import fieldset#import_checkboxes {
     display: none;
-    }
+}
 
 fieldset.multiple {
     background: transparent;
@@ -1758,7 +1758,7 @@ div.preview {
     margin: 10px;
     left: 0;
     top: 0;
-    }
+}
 
 
 /* tabs on the right side of the photo, for now only used for
@@ -1816,13 +1816,13 @@ ul.tabs div.tab {
     -webkit-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
     -ms-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
     z-index: 3;
-    }
+}
 
 ul.tabs div.contents > h1 {
     border: none;
     height: 25px;
     padding: 10px 20px;
-    }
+}
 
 ul.tabs div.contents {
     display: block;
@@ -1854,17 +1854,17 @@ ul.tabs div.contents {
 
 ul.tabs li:hover {
     width: 550px;
-    }
+}
 
 li.share div.contents ul {
     list-style: none;
-    }
+}
 
 li.share div.contents > ul > li {
     overflow: hidden;
     background-repeat: no-repeat;
     padding-left: 25px;
-    }
+}
 
 li.share li.direct_link {
     background-image: url("<?php echo template::getImage("icons/link.png") ?>");
@@ -1877,37 +1877,41 @@ li.share li.html {
 li.share input {
     border: 1px solid black;
     width: 30em;
-    }
+}
     
 li.share textarea {
     border: 1px solid black;
     width: 30em;
-    }
+}
     
 /* Styles for calendar */
 .calendar { 
-    font-size: small; 
     text-align: center;
     vertical-align: top;
     margin-left: auto; /* To center the page */
     margin-right: auto;
-    }
+}
 
-.calendarToday { font-weight: bold; }
+table.calendar .today,
+table.calendar th {
+    font-weight: bold;
+}
 
-.calendarHeader { font-weight: bold; }
 
-.calendar .next, .calendar .prev { font-size: x-small; }
+.calendar .next, 
+.calendar .prev { 
+    font-size: x-small; 
+}
 
 /* Error message */
 .error  {
     text-align: center;
-    }
+}
     
 /* The copyright statement at the bottom of the page */
 .version    {
     text-align: center;
     font-size: small;
     margin-bottom: 2px;
-    }
+}
 
