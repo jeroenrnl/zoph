@@ -128,9 +128,12 @@
      * @param string SQL query
      */
     function getArrayFromQuery($sql) {
+        $objs=array();
+        query($sql);
         while ($row = fetch_row($result)) {
             $objs[] = $row[0];
         }
+        return $objs;
     }
         
 ?>
