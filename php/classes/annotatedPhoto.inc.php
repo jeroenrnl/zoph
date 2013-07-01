@@ -133,7 +133,6 @@ class annotatedPhoto extends photo {
         }
 
         $noted_image = ImageCreateTrueColor (ImageSX($orig_image), ImageSY($orig_image) + ((ImageFontHeight($font) + $padding) * $count));
-        $white = ImageColorAllocate($noted_image, 255,255, 255);
 
         /* Use a light grey background to hide the jpeg artifacts caused by the sharp edges in text. */
 

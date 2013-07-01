@@ -69,7 +69,6 @@ class comment extends zophTable {
     function getDisplayArray($user = null) {
         $date=$this->get("comment_date");
         $changed=$this->get("timestamp");
-        if($changed != $date) { $updated=$changed; }
 
         $zophcode = new zophcode($this->get("comment"), array("b","i", "u"));
         $comment="<div>" . $zophcode . "</div>";

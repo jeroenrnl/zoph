@@ -256,13 +256,14 @@ function process_exif($image) {
             $lon = $lon * -1;
         }
         $exifdata["lon"]=$lon;
-
+        /*
+        // No alt in db yet
         if(isset($exif["GPSAltitude"])) {
             $altarray=explode("/", $exif["GPSAltitude"]);
             $alt=$altarray[0] / $altarray[1];
-            // No alt in db yet
-        //    $exifdata["alt"]=$alt;
+            $exifdata["alt"]=$alt;
         }
+        */
     } 
 
     return $exifdata;

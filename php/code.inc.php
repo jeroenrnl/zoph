@@ -170,7 +170,7 @@ class smiley {
      * @todo contains HTML
      */
     public static function getOverview() {
-        $smileys=self::getArray();
+        self::getArray();
         $html="<div class=\"smileys\">";
         foreach (self::$smileys as $smiley) {
             $html.="<div>";
@@ -272,7 +272,7 @@ class tag {
      */
     function checkparam($value) {
         if(!empty($this->regexp)) {
-            return preg_match($regexp, $value);
+            return preg_match($this->regexp, $value);
         } else {
             return true;
         }

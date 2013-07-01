@@ -504,7 +504,6 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
         if ($zip->open($tempfile, ZIPARCHIVE::CREATE)!==TRUE) {
             die("cannot open $tempfile\n");
         }
-        $count=sizeof($photos);
         foreach($photos as $key => $photo) {
             if($data=@file_get_contents($photo->getFilePath())) {
                 $size=strlen($data);

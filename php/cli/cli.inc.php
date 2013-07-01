@@ -60,7 +60,7 @@ class cli {
             throw new CliUserNotAdminException("CLI_USER must be an admin user");
         }
         $user->prefs->load();
-        $lang=$user->load_language();
+        $user->load_language();
         $this->args=new arguments($args);
     }
 
@@ -109,7 +109,7 @@ class cli {
                     $file=new file($filename);
                     $file->check();
 
-                    $mime=$file->getMime();
+                    $file->getMime();
                     if($file->type=="directory" && conf::get("import.cli.recursive")) {
                         $this->files=array_merge($this->files, file::getFromDir($file, true));
                     } else if($file->type!="image") {
@@ -359,7 +359,7 @@ class cli {
      */
     private function doDumpConfig() {
         $conf=conf::getAll();
-        foreach ($conf as $name=>$item) {
+        foreach ($conf as $item) {
             foreach ($item as $citem) {
                 if($citem instanceof confItemBool) {
                     $value=( $citem->getValue() ? "true": "false" );
@@ -381,7 +381,6 @@ class cli {
 
         $cur=getcwd();
         $curlen=strlen($cur);
-        $files=array();
         foreach($this->files as $file) {
             if(substr($file, 0, $curlen) != $cur) {
                 throw new CliNotInCWDException("Sorry, --dirpattern can only be used when importing files under the current dir. i.e. do not use absolute paths or '../' when specifying --dirpattern.");

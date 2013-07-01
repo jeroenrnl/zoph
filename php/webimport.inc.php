@@ -475,7 +475,6 @@ class WebImport extends Import {
      * @param Array $vars
      */
     public static function getFileList(Array $import) {
-        $loaded=0;
         foreach($import as $md5) {
             $file=file::getFromMD5(conf::get("path.images") . "/" . conf::get("path.upload"), $md5);
             if(!empty($file)) {

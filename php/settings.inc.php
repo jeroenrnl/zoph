@@ -92,6 +92,7 @@ class settings {
     */
     public static function parseINI($i) {
         if(!isset($i["php_location"])) {
+            $php_loc=dirname($_SERVER['SCRIPT_FILENAME']);
             log::msg("No php_location setting in " . INI_FILE . " found that matches " . $php_loc, log::FATAL, log::GENERAL);
         } else {
             self::$php_loc=$i["php_location"];

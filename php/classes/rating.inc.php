@@ -106,7 +106,6 @@ class rating extends zophTable {
         $user=user::getCurrent();
         $user->lookup();
 
-        $where="";
         if(!($user->is_admin() || $user->get("allow_rating"))) {
             return;
         }

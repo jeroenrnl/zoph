@@ -261,8 +261,8 @@ class ratingTest extends ZophDataBaseTestCase {
         $rating->lookup();
         $photo=new photo($rating->get("photo_id"));
 
-        $tmp_avg=rating::getAverage($photo);
-        $tmp_rating=$rating->get("rating");
+        /*$tmp_avg=rating::getAverage($photo);
+        $tmp_rating=$rating->get("rating");*/
         $photo->lookup();
 
         $rating->delete();

@@ -66,7 +66,7 @@ class photo extends zophTable {
     * @todo only supports JPEG currently, should support more filetypes
     */
     public function display($type=null) {
-        $headers=array();
+        $header=array();
         $name = $this->get("name");
         $image_path = conf::get("path.images") . "/" . $this->get("path") . "/";
 
@@ -480,8 +480,6 @@ class photo extends zophTable {
      */
     public function getFullsizeLink($title) {
         $user=user::getCurrent();
-        $image = $this->getURL();
-
         return new block("link", array(
             "href" => $this->getURL(),
             "link" => $title,

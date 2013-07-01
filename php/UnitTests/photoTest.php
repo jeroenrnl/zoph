@@ -660,7 +660,6 @@ class photoTest extends ZophDataBaseTestCase {
         $ph=photo::removePhotosWithLatLon($photos);
         $this->assertEquals(4, sizeof($ph));
 
-        $photosLatLon=array();
         foreach($photos as $photo) {
             $point=$photo->getLatLon($track, 300, true);
             $photo->setLatLon($point);
