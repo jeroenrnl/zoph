@@ -204,7 +204,7 @@ class mailMimePart {
             $this->headers['Content-Type'] .= ';' . PHP_EOL . "\t" . 'boundary="' . $boundary . '"';
 
             // Add body parts to $subparts
-            $count=count($this->subparts)
+            $count=count($this->subparts);
             for ($i = 0; $i < $count; $i++) {
                 $headers = array();
                 $tmp = $this->subparts[$i]->encode();
