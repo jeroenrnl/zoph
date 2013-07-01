@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of Zoph.
  *
@@ -15,13 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- * 
- * @author David Wilkinson
- * @author Jeroen Roos
- * @url http://www.cascade.org.uk/software/php/calendar
- * @copyright David Wilkinson 2000 - 2001
- * @package Zoph
  *
  * This code is heavily based on: 
  * PHP Calendar Class Version 1.4 (5th March 2001)
@@ -40,6 +32,12 @@
  *
  * URL:   http://www.cascade.org.uk/software/php/calendar/
  * Email: davidw@cascade.org.uk
+ * 
+ * @author David Wilkinson
+ * @author Jeroen Roos
+ * @url http://www.cascade.org.uk/software/php/calendar
+ * @copyright David Wilkinson 2000 - 2001
+ * @package Zoph
  */
 
 class Calendar {
