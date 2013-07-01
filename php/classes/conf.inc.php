@@ -188,8 +188,26 @@ class conf {
      * This is used to define all configurable items in Zoph
      */
     private static function getDefault() {
+        self::getConfigInterface();
+        self::getConfigSSL();
+        self::getConfigURL();
+        self::getConfigPath();
+        self::getConfigMaps();
+        $import=self::getConfigImport();
+        $import=self::getConfigImportFileMode($import);
+        self::getConfigImportCLI($import);
+        self::getConfigWatermark();
+        self::getConfigRotate();
+        self::getConfigShare();
+        self::getConfigFeature();
+        self::getConfigDate();
+    }
 
-        /************************** INTERFACE **************************/
+    /**
+     * Get config group for interface settings
+     */
+    private static function getConfigInterface() {
+
         $interface = self::addGroup("interface", "Interface settings", "Settings that define how Zoph looks");
 
         $int_title = new confItemString();
@@ -287,8 +305,12 @@ class conf {
         $int_sort_dir->addOption("desc", "Descending");
         $int_sort_dir->setDefault("asc");
         $interface[]=$int_sort_dir;
+    }
 
-        /************************** SSL **************************/
+    /**
+     * Get config group for SSL settings
+     */
+    private static function getConfigSSL() {
         $ssl = self::addGroup("ssl", "SSL", "Protect your site against eavesdropping by using https. You will need to configure this in your webserver as well.");
 
         $ssl_force = new confItemSelect();
@@ -300,8 +322,12 @@ class conf {
         $ssl_force->addOption("login", "Login only");
         $ssl_force->setDefault("never");
         $ssl[]=$ssl_force;
+    }
 
-        /************************** URL **************************/
+    /**
+     * Get config group for url settings
+     */
+    private static function getConfigURL() {
         $url = self::addGroup("url", "URLs", "Define the URLs that are used to access Zoph. Only configure this if Zoph cannot determine it automatically.");
 
         $url_http = new confItemString();
@@ -319,8 +345,12 @@ class conf {
         $url_https->setDefault("");
         $url_https->setRegex("(^$|^https:\/\/[^\s\/$.?#].[^\s]*$)"); // Stolen from http://mathiasbynens.be/demo/url-regex, @stephenhay
         $url[]=$url_https;
+    }
 
-        /************************** PATH **************************/
+    /**
+     * Get config group for Path settings
+     */
+    private static function getConfigPath() {
         $path = self::addGroup("path", "Paths", "File and directory locations");
         
 
@@ -396,8 +426,12 @@ class conf {
         $path_unbz->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
         $path_unbz->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$path_unbz;
+    }
 
-        /************************** MAPS **************************/
+    /**
+     * Get config group for maps settings
+     */
+    private static function getConfigMaps() {
         $maps = self::addGroup("maps", "Mapping support", "Add maps to Zoph using various different mapping providers.");
 
         $maps_provider = new confItemSelect();
@@ -428,8 +462,12 @@ class conf {
         $maps_key_cloudmade->setRegex("(^$|[a-z0-9]{32})"); 
         $maps_key_cloudmade->setDefault("f3b46b04edd64ea79066b7e6921205df");
         $maps[]=$maps_key_cloudmade;
+    }
 
-        /************************** IMPORT **************************/
+    /**
+     * Get config group for import settings
+     */
+    private static function getConfigImport() {
         $import = self::addGroup("import", "Import", "Importing and uploading photos");
 
         $import_enable = new confItemBool();
@@ -493,6 +531,13 @@ class conf {
         $import_dated_hier->setDesc("Automatically place photos in a dated directory tree (\"2012/10/16/\") during import. Ignored unless \"Dated dirs\" is also enabled");
         $import_dated_hier->setDefault(false);
         $import[]=$import_dated_hier;
+        return $import;
+    }
+
+    /**
+     * Get config group for import file/dir mode settings
+     */
+    private static function getConfigImportFileMode(confGroup $import) {
 
         /**
          * @todo This requires octdec to be run before using it so use octdec(conf::get("import.filemode")) or you will get "funny" results
@@ -529,13 +574,19 @@ class conf {
         ));
         $import_dirmode->setDefault("0755");
         $import[]=$import_dirmode;
+        return $import;
+    }
 
+    /**
+     * Get config group for import CLI settings
+     */
+    private static function getConfigImportCLI(confGroup $import) {
         $import_cli_verbose=new confItemNumber();
         $import_cli_verbose->setName("import.cli.verbose");
         $import_cli_verbose->setLabel("CLI verbose");
         $import_cli_verbose->setDesc("Set CLI verbosity, can be overriden with --verbose");
         $import_cli_verbose->setDefault("0");
-        $import_parallel->setBounds(1,99,1);
+        $import_cli_verbose->setBounds(1,99,1);
         $import_cli_verbose->setInternal();
         $import[]=$import_cli_verbose;
 
@@ -605,8 +656,12 @@ class conf {
         $import_cli_recursive->setDefault(false);
         $import_cli_recursive->setInternal();
         $import[]=$import_cli_recursive;
+    }
 
-        /************************** WATERMARK **************************/
+    /**
+     * Get config group for watermark settings
+     */
+    private static function getConfigWatermark() {
         $wm = self::addGroup("watermark", "Watermarking", "Watermarking can display a (copyright) watermark over your full-size images.");
 
         $wm_enable = new confItemBool();
@@ -658,10 +713,12 @@ class conf {
         $wm_trans->setRegex("^(100|[0-9]{1,2})$");
         $wm_trans->setBounds(0, 100,1);
         $wm[]=$wm_trans;
+    }
 
-
-        /*********************** ROTATIONS ************************/
-
+    /**
+     * Get config group for rotation settings
+     */
+    private static function getConfigRotate() {
         $rt = self::addGroup("rotate", "Rotation", "Rotate images");
 
         $rt_enable = new confItemBool();
@@ -697,9 +754,12 @@ class conf {
         $rt_backup_prefix->setRegex("^[a-zA-Z0-9_\-]+$");
         $rt_backup_prefix->setRequired();
         $rt[]=$rt_backup_prefix;
+    }
 
-        /*********************** SHARING ************************/
-
+    /**
+     * Get config group for share settings
+     */
+    private static function getConfigShare() {
         $share = self::addGroup("share", "Sharing", "Sharing photos with non-logged on users");
 
         $share_enable = new confItemBool();
@@ -724,9 +784,12 @@ class conf {
         $share_salt_mid->setDefault("Modify this");
         $share_salt_mid->setRequired();
         $share[]=$share_salt_mid;
+    }
 
-        /*********************** FEATURES *************************/
-
+    /**
+     * Get config group for feature settings
+     */
+    private static function getConfigFeature() {
         $ft = self::addGroup("feature", "Features", "Various features");
 
         $ft_download = new confItemBool();
@@ -773,9 +836,12 @@ class conf {
         $ft_rating->setDesc("Allow users to rate photos. Before a non-admin user can actually rate, you should also give the user these rights through the edit user screen.");
         $ft_rating->setDefault(true);
         $ft[]=$ft_rating;
+    }
 
-
-        /************************** DATE **************************/
+    /**
+     * Get config group for date settings
+     */
+    private static function getConfigDate() {
         $date = self::addGroup("date", "Date and time", "Date and time related settings");
 
         $date_tz = new confItemSelect();
