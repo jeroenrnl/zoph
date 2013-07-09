@@ -21,13 +21,13 @@
  */
 class validator {
 
-    var $username;
-    var $password;
+    private $username;
+    private $password;
 
     /*
      * The constructor.
      */
-    function validator($username, $password) {
+    public function __construct($username, $password) {
         $this->username = $username;
         $this->password = $password;
     }

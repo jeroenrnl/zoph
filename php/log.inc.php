@@ -29,9 +29,9 @@
  */
 class log {
     
-    static $stopOnFatal=true;
+    public static $stopOnFatal=true;
 
-    static $sev = array(
+    public static $sev = array(
         60 => "Debug",
         50 => "Debug",
         40 => "Notification",

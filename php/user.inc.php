@@ -34,10 +34,10 @@ class user extends zophTable {
 
     private static $current; 
 
-    var $person;
-    var $prefs;
-    var $crumbs;
-    var $lang; // holds translations
+    public $person;
+    public $prefs;
+    public $crumbs;
+    public $lang; // holds translations
 
     function insert() {
         parent::insert();
