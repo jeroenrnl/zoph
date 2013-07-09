@@ -20,7 +20,6 @@
  * @todo This is a very simple form, it should be replaces by a generic
  *       form template, at this moment this is not possible because Zoph
  *       has not fully switched to a template-based system
- * @todo This template is duplicate, should be investigated
  */
 if(!ZOPH) { die("Illegal call"); }
 ?>
