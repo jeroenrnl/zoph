@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * Process variables
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,13 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- */
-
-/*
-    David Baldwin kindly provided most of this code to help transition to
-    PHP 4.2.x.
-
-    14 August 2002
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @author David Baldwin
+ * @author Jeroen Roos
  */
 
 function getvar($var) {
@@ -60,7 +60,9 @@ function e($var) {
         $return=htmlspecialchars($var);
         # Extra escape for a few chars that may cause troubles but are
         # not escaped by htmlspecialchars.
-        $return=str_replace(array("<", ">", "\"", "(", ")", "'", "[",  "]", "{", "}", "~", "`"), array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;", "&#39;","&#91;", "&#93;", "&#123;", "&#125;", "&#126;", "&#96;"), $return);
+        $return=str_replace(array("<", ">", "\"", "(", ")", "'", "[",  "]", "{", "}", "~", "`"), 
+            array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;", "&#39;","&#91;", "&#93;", "&#123;", 
+              "&#125;", "&#126;", "&#96;"), $return);
     }
     return $return;
 }

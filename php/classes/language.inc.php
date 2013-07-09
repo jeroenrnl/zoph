@@ -182,10 +182,12 @@ class language {
                             $langs[$iso]=$lang;
                         }
                     } else {
-                        log::msg("Language files should have lowercase names, cannot open <b>" . $filename . "</b>", log::WARN, log::LANG);
+                        log::msg("Language files should have lowercase names, cannot open <b>" . 
+                            $filename . "</b>", log::WARN, log::LANG);
                     }
                 } else {
-                    log::msg("Cannot read <b>" . $filename . "</b>, skipping. ", log::ERROR, log::LANG);
+                    log::msg("Cannot read <b>" . $filename . "</b>, skipping. ", 
+                        log::ERROR, log::LANG);
                 }
             }
         } else {
@@ -269,8 +271,10 @@ class language {
             }
             
             $return=array_unique(array_merge($langs, $genlangs));
-            log::msg("<b>Client accepts language(s):</b>: " . $_SERVER["HTTP_ACCEPT_LANGUAGE"], log::DEBUG, log::LANG);
-            log::msg("<b>Zoph's interpretation</b>: " . implode(", ", $return), log::DEBUG, log::LANG);
+            log::msg("<b>Client accepts language(s):</b>: " . 
+                $_SERVER["HTTP_ACCEPT_LANGUAGE"], log::DEBUG, log::LANG);
+            log::msg("<b>Zoph's interpretation</b>: " . implode(", ", $return), 
+                log::DEBUG, log::LANG);
         }
         return $return;
     }

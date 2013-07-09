@@ -326,7 +326,8 @@ class cliTest extends ZophDataBaseTestCase {
 
             foreach($prefixes as $prefix) {
                 if(!empty($prefix)) {
-                    $filename=conf::get("path.images") . "/" . $dir . $prefix . "/" . $prefix . "_" . $file;
+                    $filename=conf::get("path.images") . "/" . $dir . $prefix . "/" . 
+                        $prefix . "_" . $file;
                 } else {
                     $filename=conf::get("path.images") . "/" . $dir . $file;
                 }

@@ -33,8 +33,8 @@
  */
 abstract class zophTreeTable extends zophTable {
 
-    var $children;
-    var $ancestors;
+    protected $children;
+    protected $ancestors;
 
     /**
      * Deletes a record along with all of its descendants.

@@ -144,8 +144,7 @@ if ($num_thumbnails <= 0) {
               <?php echo create_text_input("__time__all", "", 10, 8, "time") ?>
               <span class="inputhint">HH:MM:SS</span><br>
               <label for="location_id__all"><?php echo translate("location") ?></label>
-              <?php echo place::createPulldown("__location_id__all", null, $user, 
-                $places_select_array) ?>
+              <?php echo place::createPulldown("__location_id__all") ?>
               <br>
               <label for="photographer_id__all"><?php echo translate("photographer") ?></label>
               <?php echo person::createPulldown("__photographer_id__all") ?><br>
@@ -333,7 +332,7 @@ if ($num_thumbnails <= 0) {
                     <?php echo translate("location") ?>
                   </label>
                   <?php echo place::createPulldown("__location_id__$photo_id", 
-                    $photo->get("location_id"), $user, $places_select_array) ?><br>
+                    $photo->get("location_id")) ?><br>
                   <label for="photographer_id__<?php echo $photo_id?>">
                     <?php echo translate("photographer") ?>
                   </label>

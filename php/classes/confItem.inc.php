@@ -33,7 +33,8 @@ abstract class confItem extends zophTable {
     protected static $primary_keys=array("conf_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array();
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set by 
+                  the db with auto_increment */
     protected static $keepKeys = true;
     /** @var string URL for this class */
     protected static $url="config.php#";
@@ -133,7 +134,8 @@ abstract class confItem extends zophTable {
         if($this->checkValue($value)) {
             $this->fields["value"]=$value;
         } else {
-            throw new ConfigurationException("Configuration value for " . $this->getName() . " is illegal");
+            throw new ConfigurationException("Configuration value for " . 
+                $this->getName() . " is illegal");
         }
     }
     

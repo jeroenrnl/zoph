@@ -34,7 +34,8 @@ class point extends zophTable {
     protected static $primary_keys=array("point_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array();
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set by 
+                  the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url;

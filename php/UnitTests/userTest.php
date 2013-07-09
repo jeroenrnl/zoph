@@ -322,7 +322,8 @@ class userTest extends ZophDatabaseTestCase {
 
         $this->assertEquals($obj->get_last_crumb(),"<a href=\"test4.html?_crumb=4\">test4</a>");
         $obj->eat_crumb(2);
-        $this->assertEquals($obj->get_last_crumb(),"<a href=\"test2.html?_crumb=2&what=ever\">test2</a>");
+        $this->assertEquals($obj->get_last_crumb(),
+            "<a href=\"test2.html?_crumb=2&what=ever\">test2</a>");
         $obj->eat_crumb(1);
         $this->assertEquals($obj->get_last_crumb(),"<a href=\"test1.html?_crumb=1\">test</a>");
         $obj->eat_crumb();

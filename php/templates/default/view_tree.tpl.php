@@ -59,7 +59,11 @@ if(!ZOPH) { die("Illegal call"); }
         <?php if(isset($tpl_links)): ?>
             <ul class="actionlink">
                 <?php foreach($tpl_links as $link => $url): ?>
-                    <li><a href="<?php echo $url; ?><?php echo $item->getId(); ?>"><?php echo $link; ?></a></li>
+                    <li>
+                      <a href="<?php echo $url; ?><?php echo $item->getId(); ?>">
+                        <?php echo $link; ?>
+                      </a>
+                    </li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>

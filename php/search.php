@@ -343,7 +343,12 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <?php
         echo category::createPulldown("category_id[$i]", $category_id[$i]);
         ?>
-          <br><input type="checkbox" name="_category_id_children[<?php echo $i ?>]" value="yes" <?php echo $checked ?>><label for="_category_id_children[<?php echo $i ?>]"><?php echo translate("include sub-categories") ?></label>
+          <br>
+            <input type="checkbox" name="_category_id_children[<?php echo $i ?>]" 
+              value="yes" <?php echo $checked ?>>
+            <label for="_category_id_children[<?php echo $i ?>]">
+              <?php echo translate("include sub-categories") ?>
+            </label>
           </td>
         </tr>
     <?php
@@ -401,7 +406,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
                 $_location_id_op[$i]) ?>
           </td>
           <td colspan="2">
-            <?php echo place::createPulldown("location_id[$i]", $location_id[$i], $user); ?>
+            <?php echo place::createPulldown("location_id[$i]", $location_id[$i]); ?>
             <br>
             <input type="checkbox" name="_location_id_children[<?php echo $i ?>]" 
                 value="yes" <?php echo $checked ?>>

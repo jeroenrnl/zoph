@@ -32,7 +32,8 @@ class track extends zophTable {
     protected static $primary_keys=array("track_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("name");
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set by 
+                  the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="track.php?track_id=";
@@ -156,7 +157,8 @@ class track extends zophTable {
                 } else if ($xml->nodeType==XMLReader::END_ELEMENT) {
                     $element=array_pop($stack);
                     if($element!=$xml->name) {
-                        die("GPX not well formed: expected &lt;$element&gt;, found &lt;$xml->name&gt;");
+                        die("GPX not well formed: expected &lt;$element&gt;, " .
+                            "found &lt;$xml->name&gt;");
                     }
                 }
             }
@@ -168,7 +170,8 @@ class track extends zophTable {
      * Get all points for this track
      */
     public function getPoints() {
-        return point::getAll(array("track_id" => $this->get("track_id")),null,array("="), "datetime");
+        return point::getAll(array("track_id" => $this->get("track_id")),null,array("="), 
+            "datetime");
     }
 
     /**

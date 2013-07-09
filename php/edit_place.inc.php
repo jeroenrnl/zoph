@@ -43,7 +43,7 @@
 if($place->isRoot()) {
     echo translate("places");
 } else {
-    echo place::createPulldown("parent_place_id", $place->get("parent_place_id"), $user);
+    echo place::createPulldown("parent_place_id", $place->get("parent_place_id"));
 }
 ?>
 <br>
@@ -73,7 +73,8 @@ if($place->isRoot()) {
 <?php echo create_text_input("urldesc", $place->get("urldesc"), 32, 32) ?>
 <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
 <label for="pageset"><?php echo translate("pageset") ?></label>
-<?php echo template::createPulldown("pageset", $place->get("pageset"), get_pageset_select_array()) ?><br>
+<?php echo template::createPulldown("pageset", $place->get("pageset"), 
+    get_pageset_select_array()) ?><br>
 <fieldset class="map">
   <legend><?php echo translate("map") ?></legend>
   <label for="lat"><?php echo translate("latitude") ?></label>
@@ -125,7 +126,7 @@ if($place->get("timezone")) {
 ?>
 
     <label for="timezone_id"><?php echo translate("timezone") ?></label>
-    <?php echo TimeZone::createPulldown("timezone_id", $place->get("timezone"), $user); ?>
+    <?php echo TimeZone::createPulldown("timezone_id", $place->get("timezone")); ?>
 
     <label for="notes"><?php echo translate("notes") ?></label>
     <textarea name="notes" cols="40" rows="4"><?php echo $place->get("notes") ?></textarea>

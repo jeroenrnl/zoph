@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This class stores relations between 2 photos.
  * This could be used store an original and a changed copy
@@ -38,7 +37,8 @@ class photoRelation extends zophTable {
     protected static $primary_keys=array("photo_id_1", "photo_id_2");
     /** @var array Fields that may not be empty */
     protected static $not_null=array();
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set by the 
+                  db with auto_increment */
     protected static $keepKeys = true;
     /** @var string URL for this class */
     protected static $url="photo.php?photo_id=";

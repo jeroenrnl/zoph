@@ -396,16 +396,16 @@ class MailMime {
 
         case !$text AND !$html AND $attachments:
             $message = $this->addMixedPart();
-            for ($i = 0; $i < count($this->parts); $i++) {
-                $this->addAttachmentPart($message, $this->parts[$i]);
+            foreach($this->parts as $part) {
+                $this->addAttachmentPart($message, $part);
             }
             break;
 
         case $text AND $attachments:
             $message = $this->addMixedPart();
             $this->addTextPart($message, $this->txtbody);
-            for ($i = 0; $i < count($this->parts); $i++) {
-                $this->addAttachmentPart($message, $this->parts[$i]);
+            foreach($this->parts as $part) {
+                $this->addAttachmentPart($message, $part);
             }
             break;
 
@@ -429,8 +429,8 @@ class MailMime {
                 $related = $message;
             }
             $this->addHtmlPart($related);
-            for ($i = 0; $i < count($this->html_images); $i++) {
-                $this->addHtmlImagePart($related, $this->html_images[$i]);
+            foreach ($this->html_images as $img) {
+                $this->addHtmlImagePart($related, $img);
             }
             break;
 
@@ -443,8 +443,8 @@ class MailMime {
             } else {
                 $this->addHtmlPart($message);
             }
-            for ($i = 0; $i < count($this->parts); $i++) {
-                $this->addAttachmentPart($message, $this->parts[$i]);
+            foreach ($this->parts as $part) {
+                $this->addAttachmentPart($message, $part);
             }
             break;
 
@@ -458,11 +458,11 @@ class MailMime {
                 $rel = $this->addRelatedPart($message);
             }
             $this->addHtmlPart($rel);
-            for ($i = 0; $i < count($this->html_images); $i++) {
-                $this->addHtmlImagePart($rel, $this->html_images[$i]);
+            foreach ($this->html_images as $img) {
+                $this->addHtmlImagePart($rel, $img);
             }
-            for ($i = 0; $i < count($this->parts); $i++) {
-                $this->addAttachmentPart($message, $this->parts[$i]);
+            foreach ($this->parts as $part) {
+                $this->addAttachmentPart($message, $part);
             }
             break;
 

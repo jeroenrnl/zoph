@@ -94,13 +94,15 @@ abstract class Import {
             
             if(strlen(trim($photo->get("date")))==0) {
                 $date=date("Y-m-d", filemtime($file));
-                log::msg("Photo has no date set, using filedate (" . $date . ").", log::NOTIFY, log::IMPORT);
+                log::msg("Photo has no date set, using filedate (" . $date . ").", 
+                    log::NOTIFY, log::IMPORT);
                 $photo->set("date", $date);
             }
 
             if(strlen(trim($photo->get("time")))==0) {
                 $time=date("H:i:s", filemtime($file));
-                log::msg("Photo has no time set, using time from filedate (" . $time . ").", log::NOTIFY, log::IMPORT);
+                log::msg("Photo has no time set, using time from filedate (" . $time . ").", 
+                    log::NOTIFY, log::IMPORT);
                 $photo->set("time", $time);
             }
             if(isset($photo->_path)) {
@@ -147,9 +149,9 @@ abstract class Import {
     /**
      * Displays a progressbar
      * 
-     * This is a bit of a hack because PHP 5.2 and before do not support late static binding. For now, 
-     * this  method figures out whether it's in the CLI or not and then call the cliImport method. 
-     * This is a bit dirty, but it works
+     * This is a bit of a hack because PHP 5.2 and before do not support late static binding. 
+     * For now, this  method figures out whether it's in the CLI or not and then call the 
+     * cliImport method. This is a bit dirty, but it works
      *
      * @todo as soon as anything before PHP 5.3 is deprecated, this should be replaced by late 
      * static binding.

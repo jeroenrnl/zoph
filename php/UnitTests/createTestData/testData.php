@@ -282,12 +282,14 @@ class testData {
                 ),
             8 => array(
                 4 => "Just beautiful",
-                6 => "That <span style=\"background: grey\">grey</span> is annoying me so badly, I'm illegally using HTML in this comment!",
+                6 => "That <span style=\"background: grey\">grey</span> is annoying me so badly, " .
+                    "I'm illegally using HTML in this comment!",
                 1 => "Can you guys stop this, or I am [b]revoking[/b] your accounts!"
                 ),
             10 => array(
                 6 => "Love this picture!",
-                4 => "Can't [i]you[/i] [b]see[/b] it isn't even [u]sharp[/u] on the right side, Phil? :mrgreen:",
+                4 => "Can't [i]you[/i] [b]see[/b] it isn't even [u]sharp[/u] on the right side, " .
+                    "Phil? :mrgreen:",
                 1 => "Really, I am going to [b]revoke[/b] your accounts! :mad:"
                 )
         );

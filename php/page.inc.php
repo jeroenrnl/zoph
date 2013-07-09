@@ -95,7 +95,7 @@ class page extends zophTable {
             " page_id=" . $this->get("page_id") . " limit 1";
         $result=query($sql, "Could not get current order");
         if(num_rows($result)) {
-            return intval(result($result, 0, 0));
+            return intval(result($result, 0));
         } else {
             return false;
         }

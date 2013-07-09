@@ -55,7 +55,8 @@ class template {
     public function __construct($template, $vars=null) {
         $tpl=conf::get("interface.template");
         $this->vars=$vars;
-        if(preg_match("/^[A-Za-z0-9_\-]+$/", $tpl) && preg_match("/^[A-Za-z0-9_\-]+$/", $template)) {
+        if(preg_match("/^[A-Za-z0-9_\-]+$/", $tpl) && 
+                preg_match("/^[A-Za-z0-9_\-]+$/", $template)) {
             $file="templates/" . $tpl . "/" . $template . ".tpl.php";
             if(!file_exists($file)) {
                 $file="templates/default/" . $template . ".tpl.php";

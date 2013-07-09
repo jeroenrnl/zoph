@@ -24,14 +24,14 @@
 if(!ZOPH) { die("Illegal call"); }
 ?>
 
-        <br>
-        <form method="post" action="track.php">
-            <p>
-                <input type="hidden" name="_action" value="<?php echo $tpl_action ?>">
-                <input type="hidden" name="track_id" value="<?php echo $tpl_track_id ?>">
-                <label for="name"><?php echo translate("name") ?></label>
-                <input id="name" name="name" maxlength=32 size=20 value="<?php echo $tpl_name; ?>"><br>
-                <input type="submit" value="<?php echo translate($tpl_action, 0) ?>">
-            </p>
-        </form>
+   <br>
+   <form method="post" action="track.php">
+       <p>
+           <input type="hidden" name="_action" value="<?php echo $tpl_action ?>">
+           <input type="hidden" name="track_id" value="<?php echo $tpl_track_id ?>">
+           <label for="name"><?php echo translate("name") ?></label>
+           <input id="name" name="name" maxlength=32 size=20 value="<?php echo $tpl_name; ?>"><br>
+           <input type="submit" value="<?php echo translate($tpl_action, 0) ?>">
+       </p>
+   </form>
 

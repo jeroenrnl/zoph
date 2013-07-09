@@ -117,7 +117,9 @@ abstract class zophTable {
             if ($null) {
                 if ((!in_array($key, static::$not_null)) && (empty($key) )) { continue; }
             } else {
-                if ((!in_array($key, static::$not_null)) && (empty($key) || $val == "")) { continue; }
+                if ((!in_array($key, static::$not_null)) && (empty($key) || $val == "")) { 
+                    continue; 
+                }
             }
 
 
@@ -233,7 +235,8 @@ abstract class zophTable {
 
         }
 
-        $sql = "INSERT INTO " . DB_PREFIX . static::$table_name . "(" . $names . ") VALUES (" . $values . ")";
+        $sql = "INSERT INTO " . DB_PREFIX . static::$table_name . 
+            "(" . $names . ") VALUES (" . $values . ")";
 
         query($sql, "Insert failed:");
 
@@ -427,7 +430,8 @@ abstract class zophTable {
             if(isset($details["lowest"]) && 
                 isset($details["highest"]) && 
                 isset($details["average"])) {
-                $display["rated"]=sprintf(translate("rated between %s and %s and an average of %s",false), 
+                $display["rated"]=sprintf(
+                    translate("rated between %s and %s and an average of %s",false), 
                     $details["lowest"], $details["highest"], $details["average"]);
             } else {
                 $display["rated"]=translate("no rating", false);
@@ -555,7 +559,8 @@ abstract class zophTable {
      * @param array Operators =, !=, >, <, >= or <=
      * @return array records
      */
-    public static function getRecords($order = null, $constraints = null, $conj = "and", $ops = null) {
+    public static function getRecords($order = null, $constraints = null, 
+            $conj = "and", $ops = null) {
         $sql = "SELECT * FROM " . DB_PREFIX . static::$table_name;
         if ($constraints) {
             while (list($name, $value) = each($constraints)) {
@@ -601,9 +606,19 @@ abstract class zophTable {
         $return=array();
         
         $key="_" . $class . $suffix;
+    
         if(isset($vars[$key])) {
-            $return=(array) $vars[$key];
-        } 
+            if(is_array($vars[$key])) {
+                foreach($vars[$key] as $id=>$var) {
+                    if(!empty($var)) {
+                        $return[$id]=$var;
+                    }
+                }
+            } else {
+                $return=(array) $vars[$key];
+            }
+        }
+        
         return $return;
     }
 

@@ -82,8 +82,8 @@ class arguments {
         /*
           Used short arguments: A C D H I N P V a c d f h i l n p r t u v w
         */
-
-        for($i=0; $i<sizeof($argv); $i++) {
+        $size=sizeof($argv);
+        for($i=0; $i<$size; $i++) {
             switch($argv[$i]) {
             case "--instance":
             case "-i":

@@ -107,11 +107,15 @@ if ($action == "display") {
     ?>
     <h1>
         <span class="actionlink">
-            <a href="groups.php"><?php echo translate("return") ?></a> | 
-            <a href="group.php?_action=edit&amp;group_id=<?php echo $group->get("group_id") ?>"><?php echo translate("edit") ?></a> |
-        <a href="group.php?_action=delete&amp;group_id=<?php echo $group->get("group_id") ?>"><?php echo translate("delete") ?></a> |
-        <a href="group.php?_action=new"><?php echo translate("new") ?></a>
-     </span>
+          <a href="groups.php"><?php echo translate("return") ?></a> | 
+          <a href="group.php?_action=edit&amp;group_id=<?php echo $group->get("group_id") ?>">
+            <?php echo translate("edit") ?>
+          </a> |
+          <a href="group.php?_action=delete&amp;group_id=<?php echo $group->get("group_id") ?>">
+            <?php echo translate("delete") ?>
+          </a> |
+          <a href="group.php?_action=new"><?php echo translate("new") ?></a>
+        </span>
       <?php echo translate("group") ?>
     </h1>
     <div class="main">
@@ -166,14 +170,20 @@ if ($action == "display") {
     ?>
     <h1>
       <span class="actionlink">
-        <a href="group.php?_action=display&amp;group_id=<?php echo $group->get("group_id") ?>"><?php echo translate("cancel") ?></a>
+        <a href="group.php?_action=display&amp;group_id=<?php echo $group->get("group_id") ?>">
+          <?php echo translate("cancel") ?>
+        </a>
       </span>
       <?php echo translate("delete group") ?>
     </h1>
     <div class="main">
       <span class="actionlink">
-        <a href="group.php?_action=confirm&amp;group_id=<?php echo $group->get("group_id") ?>"><?php echo translate("delete") ?></a> |
-        <a href="group.php?_action=display&amp;group_id=<?php echo $group->get("group_id") ?>"><?php echo translate("cancel") ?></a>
+        <a href="group.php?_action=confirm&amp;group_id=<?php echo $group->get("group_id") ?>">
+          <?php echo translate("delete") ?>
+        </a> |
+        <a href="group.php?_action=display&amp;group_id=<?php echo $group->get("group_id") ?>">
+          <?php echo translate("cancel") ?>
+        </a>
       </span>
       <?php echo sprintf(translate("Confirm deletion of '%s'"), $group->get("group_name")) ?>
       <?php
@@ -203,9 +213,12 @@ if ($action == "display") {
             <tr>
               <td colspan="4">
         <?php
-        echo translate("Granting access to an album will also grant access to that album's ancestors if required. Granting access to all albums will not overwrite previously granted permissions.");
+        echo translate("Granting access to an album will also grant access to that album's " .
+            "ancestors if required. Granting access to all albums will not overwrite " .
+            "previously granted permissions.");
         if (conf::get("watermark.enable")) { 
-            echo "<br>\n" . translate("A photo will be watermarked if the photo level is higher than the watermark level.");
+            echo "<br>\n" . translate("A photo will be watermarked if the photo level is " .
+                "higher than the watermark level.");
         }
         ?>
               </td>

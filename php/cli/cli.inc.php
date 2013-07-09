@@ -52,7 +52,8 @@ class cli {
      */
     public function __construct(user $user, $api, array $args) {
         if($api != self::API) {
-            throw new CliAPINotCompatibleException("This Zoph installation is not compatible with the Zoph executable you are running.");
+            throw new CliAPINotCompatibleException("This Zoph installation is not compatible " . 
+                "with the Zoph executable you are running.");
         }
         $this->user=$user;
 
@@ -132,7 +133,8 @@ class cli {
                                 }
                              }
                         } else {
-                            throw new ImportIdIsNotNumericException("$file is not numeric, but --useids is set.\n");
+                            throw new ImportIdIsNotNumericException(
+                                "$file is not numeric, but --useids is set.\n");
                         }
                     } else {
                         $this->photos[]=$this->lookupFile($filename);
@@ -155,7 +157,8 @@ class cli {
         } else if ($count==0) {
             throw new ImportFileNotFoundException("No photo with id $id was found\n");
         } else {
-            throw new ImportMultipleMatchesException("Multiple photos with id $id were found. This is probably a bug");
+            throw new ImportMultipleMatchesException(
+                "Multiple photos with id $id were found. This is probably a bug");
         }
     }
         
@@ -183,7 +186,8 @@ class cli {
             
             // check if path is in conf::get("path.images")
             if(substr($path, 0, strlen(conf::get("path.images")))!=conf::get("path.images")) {
-                throw new ImportFileNotInPathException($file ." is not in the images path (" . conf::get("path.images") . "), skipping.\n");
+                throw new ImportFileNotInPathException($file ." is not in the images path (" . 
+                    conf::get("path.images") . "), skipping.\n");
             } else {
                 $path=substr($path, strlen(conf::get("path.images")));
                 if($path[0]=="/") {
@@ -346,7 +350,8 @@ class cli {
         }
 
         if(conf::get("import.cli.verbose") > 0) {
-            echo "Setting config \"$name\" to \"$value\""  . ( $default ? " (default)" : "" ) . "\n";
+            echo "Setting config \"$name\" to \"$value\""  . 
+                ( $default ? " (default)" : "" ) . "\n";
         }
 
 
@@ -383,7 +388,9 @@ class cli {
         $curlen=strlen($cur);
         foreach($this->files as $file) {
             if(substr($file, 0, $curlen) != $cur) {
-                throw new CliNotInCWDException("Sorry, --dirpattern can only be used when importing files under the current dir. i.e. do not use absolute paths or '../' when specifying --dirpattern.");
+                throw new CliNotInCWDException("Sorry, --dirpattern can only be used when " . 
+                    "importing files under the current dir. i.e. do not use absolute paths " .
+                    "or '../' when specifying --dirpattern.");
             }
             $filename=substr($file, $curlen + 1);
             $dirs=explode("/", $filename);

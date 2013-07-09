@@ -22,4 +22,6 @@
 if(!ZOPH) { die("Illegal call"); }
 ?>
 <!-- Do not insert enter between the two inputs because the Javascript chokes on that! //-->
-<input type=hidden id="<?php echo $tpl_id ?>" name="<?php echo $tpl_name ?>" value="<?php echo $tpl_value ?>"><input type=text id="_<?php echo $tpl_id ?>" name="_<?php echo $tpl_name ?>" value="<?php echo $tpl_text ?>" class="autocomplete">
+<input type=hidden id="<?php echo $tpl_id ?>" name="<?php echo $tpl_name ?>" 
+value="<?php echo $tpl_value ?>"><input type=text id="_<?php echo $tpl_id ?>" 
+name="_<?php echo $tpl_name ?>" value="<?php echo $tpl_text ?>" class="autocomplete">

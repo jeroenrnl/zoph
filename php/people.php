@@ -48,7 +48,11 @@ require_once "header.inc.php";
 <?php
 if ($user->is_admin()) {
     ?>
-    <span class="actionlink"><a href="person.php?_action=new"><?php echo translate("new") ?></a></span>
+    <span class="actionlink">
+      <a href="person.php?_action=new">
+        <?php echo translate("new") ?>
+      </a>
+    </span>
     <?php
     }
 ?>
