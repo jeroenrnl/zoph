@@ -90,6 +90,10 @@ class relationTest extends ZophDataBaseTestCase {
         $desc=$photo_1->getRelationDesc($photo_2);
 
         $this->assertEquals($desc_2, $desc);
+        
+        $desc=$photo_2->getRelationDesc($photo_1);
+
+        $this->assertEquals($desc_1, $desc);
     }
 
     /**
