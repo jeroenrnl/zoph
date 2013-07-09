@@ -58,7 +58,8 @@ function create_text_input($name, $value, $size = 20, $max = 32, $type="text") {
         $step="";
     }
     $id=preg_replace("/^_+/", "", $name);
-    return "<input type=\"$type\" $step name=\"$name\" id=\"$id\" value=\"" . e($value) ."\" size=\"$size\" maxlength=\"$max\">\n";
+    return "<input type=\"$type\" $step name=\"$name\" id=\"$id\" value=\"" . e($value) ."\" 
+        size=\"$size\" maxlength=\"$max\">\n";
 }
 
 function create_integer_pulldown($name, $value, $min, $max) {
@@ -152,11 +153,10 @@ function clean_request_vars($vars) {
     $clean_vars = array();
     $interim_vars = array();
 
-/* 
-  First pass through vars will flatten out any arrays in the list.
-  arrays were used in search.php to make the form extensible. -RB
-*/
-
+    /* 
+      First pass through vars will flatten out any arrays in the list.
+      arrays were used in search.php to make the form extensible. -RB
+    */
     while (list($key, $val) = each($vars)) {
         // trim empty values
         if (empty($val)) { continue; }
@@ -193,13 +193,13 @@ function clean_request_vars($vars) {
         }
     }
 
-/*
-  Second pass through will get rid of ops and conjs without fields
-  and fix the keys for compatability with the rest of zoph.  It will also remove
-  "field" entries without a corresponding "_field" type and vice versa.
-  A hyphen is not valid as part of a variable name in php so underscore was used
-  while processing the form in search.php  -RB
-*/
+    /*
+      Second pass through will get rid of ops and conjs without fields
+      and fix the keys for compatability with the rest of zoph.  It will also remove
+      "field" entries without a corresponding "_field" type and vice versa.
+      A hyphen is not valid as part of a variable name in php so underscore was used
+      while processing the form in search.php  -RB
+    */
 
     while (list($key, $val) = each($interim_vars)) {
         // process _var variables
@@ -234,9 +234,10 @@ function clean_request_vars($vars) {
             }
 
             //process "_field" type variables
-            if (substr($field, 0, 5) == "field" && (empty($interim_vars[$field]) && empty($interim_vars["_$field"]))) { continue; }
+            if (substr($field, 0, 5) == "field" && 
+                (empty($interim_vars[$field]) && 
+                empty($interim_vars["_$field"]))) { continue; }
         } else {
-
             //process "field" type variables
             if (substr($key, 0, 5) == "field" && empty($interim_vars["_$key"])) { continue; }
         }
@@ -335,7 +336,8 @@ function create_date_link($date, $search_field = "date") {
  */
 function format_timestamp($ts) {
     $dt=new Time($ts);
-    return create_date_link($dt->format("Y-m-d"), "timestamp") . ' ' . $dt->format(conf::get("date.timeformat"));
+    return create_date_link($dt->format("Y-m-d"), "timestamp") . ' ' . 
+        $dt->format(conf::get("date.timeformat"));
 }
 
 function get_date_select_array($date, $days) {
@@ -447,32 +449,35 @@ function valid_image($name) {
     return false;
 }
 
-/* based on urlencode_array
-   By linus at flowingcreativity dot net
-   from: http://www.php.net/manual/en/function.urlencode.php
-*/
-function rawurlencode_array(
-   $var,                // the array value
-   $varName,            // variable name to be used in the query string
-   $separator = '&'    // what separating character to use in the query string
-) {
-   $toImplode = array();
-   foreach ($var as $key => $value) {
-       if (is_array($value)) {
-           $toImplode[] = rawurlencode_array($value, "{$varName}[{$key}]", $separator);
-       } else {
-           $toImplode[] = "{$varName}[{$key}]=".rawurlencode($value);
-       }
-   }
-   return implode($separator, $toImplode);
+/**
+ * Encode URL raw
+ * based on urlencode_array
+ * By linus at flowingcreativity dot net
+ * from: http://www.php.net/manual/en/function.urlencode.php
+ * @param array the array value
+ * @param string variable name to be used in the query string
+ * @param string what separating character to use in the query string
+ */
+function rawurlencode_array($var, $varName, $separator = '&') {
+    $toImplode = array();
+    foreach ($var as $key => $value) {
+        if (is_array($value)) {
+            $toImplode[] = rawurlencode_array($value, "{$varName}[{$key}]", $separator);
+        } else {
+            $toImplode[] = "{$varName}[{$key}]=".rawurlencode($value);
+        }
+    }
+    return implode($separator, $toImplode);
 }
 
+/**
+ * Cleans up a path, by removing all double slashes, "/./",
+ * leading and trailing slashes.
+ */
 function cleanup_path($path) {
-   // Cleans up a path, by removing all double slashes, "/./",
-   // leading and trailing slashes.
-   $search = array ( "/(\/+)/", "/(\/\.\/)/", "/(\/$)/", "/(^\/)/" );
-   $replace = array ( "/", "/", "", "" );
-   return preg_replace($search,$replace, $path);
+    $search = array ( "/(\/+)/", "/(\/\.\/)/", "/(\/$)/", "/(^\/)/" );
+    $replace = array ( "/", "/", "", "" );
+    return preg_replace($search,$replace, $path);
 }
 
 function create_actionlinks($actionlinks) {
@@ -497,7 +502,7 @@ function running_on_windows() {
 }
 
 function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
-    if(class_exists(ZipArchive)) {
+    if(class_exists("ZipArchive")) {
         $zip=new ZipArchive();
         $tempfile="/tmp/zoph_" . $user->get("user_id") . "_" . $filename ."_" . $filenum . ".zip";
         @unlink($tempfile);
@@ -615,7 +620,12 @@ function check_js($user) {
         ($user->prefs->get("autocomp_photographer")) &&
         conf::get("interface.autocomplete")) {
         
-        return "<noscript><div class='warning'><img class='icon' src='" . template::getImage("icons/warning.png") . "'>" . translate("You have enabled autocompletion for one or more dropdown boxes on this page, however, you do not seem to have Javascript support. You should either enable javascript or turn autocompletion off, or this page will not work as expected!") . "</div></noscript>";
+        return "<noscript><div class='warning'><img class='icon' src='" . 
+            template::getImage("icons/warning.png") . "'>" . 
+            translate("You have enabled autocompletion for one or more dropdown " .
+                "boxes on this page, however, you do not seem to have Javascript " .
+                "support. You should either enable javascript or turn autocompletion " .
+                "off, or this page will not work as expected!") . "</div></noscript>";
     }
 }
 
@@ -765,7 +775,8 @@ function create_dir($directory) {
             }
             return true;
         } else {
-            throw new FileDirCreationFailedException(translate("Could not create directory") . ": $directory<br>\n");
+            throw new FileDirCreationFailedException(
+                translate("Could not create directory") . ": $directory<br>\n");
         }
     }
     return 0;

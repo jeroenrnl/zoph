@@ -69,7 +69,7 @@ class rating extends zophTable {
      * @param photo photo to get rating for
      * @return float average rating
      */
-     public static function getAverage(photo $photo) {
+    public static function getAverage(photo $photo) {
         $sql = "SELECT AVG(rating) FROM " . DB_PREFIX . "photo_ratings ".
             " WHERE photo_id = '" . (int) $photo->getId() . "'";
         
@@ -91,7 +91,7 @@ class rating extends zophTable {
      * Get the user who made this rating
      * @return user user
      */
-     public function getUser() {
+    public function getUser() {
         $user=new user($this->get("user_id"));
         $user->lookup();
         return $user;
@@ -151,7 +151,7 @@ class rating extends zophTable {
      * Get array that shows the distribution of ratings
      * @return array array of rating => count pairs;
      */
-      public static function getPhotoCount() {
+    public static function getPhotoCount() {
         $user=user::getCurrent();
 
         if ($user->is_admin()) {

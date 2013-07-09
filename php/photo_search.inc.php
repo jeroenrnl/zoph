@@ -1,5 +1,9 @@
 <?php
-/*
+/**
+ * Get photos based on criteria
+ *
+ * This file really is the core of Zoph. Make changes to it very carefully!
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,14 +18,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @todo This should be replaced by a proper OO based construction
  */
 function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
-    $good_ops = array ( "=", "!=", "less than", "more than", ">", ">=", "<", "<=", "like", "not like", "is in photo", "is not in photo" );
+    $good_ops = array ( "=", "!=", "less than", "more than", ">", ">=", 
+        "<", "<=", "like", "not like", "is in photo", "is not in photo" );
 
     $good_conj = array ( "and", "or" );
 
-    $good_fields= array ( "location_id", "rating", "photographer_id", "date", "time", "timestamp", "name", "path", "title", "view", "description", "width", "height", "size", "aperture", "camera_make", "camera_model", "compression", "exposure", "flash_used", "focal_length", "iso_equiv", "metering_mode" );
+    $good_fields= array ( "location_id", "rating", "photographer_id", 
+        "date", "time", "timestamp", "name", "path", "title", "view", "description", 
+        "width", "height", "size", "aperture", "camera_make", "camera_model", 
+        "compression", "exposure", "flash_used", "focal_length", "iso_equiv", "metering_mode" );
     $good_text= array ( "album", "category", "person", "photographer" );
 
     $select = "distinct ph.photo_id, ph.name, ph.path, ph.width, ph.height";
@@ -152,7 +165,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $album_name = $val;
             $val = "-1";
             if (strpos($album_name, "/")) { 
-               $hiersearch=true;
+                $hiersearch=true;
             }
             $search_string=explode("/", $album_name);
 
@@ -188,7 +201,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $cat_name = $val;
             $val = "-1";
             if (strpos($cat_name, "/")) { 
-               $hiersearch=true;
+                $hiersearch=true;
             }
             $search_string=explode("/", $cat_name);
 
@@ -245,8 +258,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $excluded_albums["$pa"] = $val;
                 $excluded_albums["${pa}-conj"] = $conj;
             }
-        }
-        else if ($key == "category_id") {
+        } else if ($key == "category_id") {
             $pc = "pc" . substr($suffix, 1);
             if ($op == "=") {
                 if ($where) { $where .= " $conj "; }
@@ -259,28 +271,25 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $where .=
                     "(${pc}.category_id $op (" . escape_string($val) . ")" .
                     " and ${pc}.photo_id = ph.photo_id)";
-            }
-            else { // assume "not in"
+            } else { // assume "not in"
                 // a simple join won't work for the "not in" case
                 $excluded_categories["$pc"] = $val;
                 $excluded_categories["${pc}-conj"] = $conj;
             }
-        }
-        else if ($key == "location_id") {
-                if ($where) { $where .= " $conj "; }
-                if(preg_match("/[a-zA-Z]+/", $val)) { die("No letters allowed in $key"); }
+        } else if ($key == "location_id") {
+            if ($where) { $where .= " $conj "; }
+            if(preg_match("/[a-zA-Z]+/", $val)) { die("No letters allowed in $key"); }
 
-                if ($op == "=") {
-                    $op = "in";
-                    $add = "";
-                } else {
-                    $op = "not in";
-                    $add = " or ph.location_id is null";
-                }
-                $where .=
-                    "(ph.location_id $op (" . escape_string($val) . ")$add)";
+            if ($op == "=") {
+                $op = "in";
+                $add = "";
+            } else {
+                $op = "not in";
+                $add = " or ph.location_id is null";
             }
-        else if ($key == "person_id") {
+            $where .=
+                "(ph.location_id $op (" . escape_string($val) . ")$add)";
+        } else if ($key == "person_id") {
             $ppl = "ppl" . substr($suffix, 1);
             if ($op == "=") {
                 if ($where) { $where .= " $conj "; }
@@ -291,7 +300,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 // the regexp matches a list of numbers, separated by comma's.
                 // "1" matches, "1," not, "1,2" matches "1,333" matches
                 // "1, a" not, etc.
-                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) { die("$key must be numeric"); }
+                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) { 
+                    die("$key must be numeric"); 
+                }
                 $where .=
                     "(${ppl}.person_id $op (" . escape_string($val) . ")" .
                     " and ${ppl}.photo_id = ph.photo_id)";
@@ -457,10 +468,8 @@ function generate_from_clause($from_array) {
     $joinClause = "";
     if ($from_array) {
         while (list($abbrev, $table) = each($from_array)) {
-//            if ($fromClause) {
-                $fromClause .= " JOIN ";
-                $joinClause = " on ${abbrev}.photo_id = ph.photo_id";
-//            }
+            $fromClause .= " JOIN ";
+            $joinClause = " on ${abbrev}.photo_id = ph.photo_id";
                 
             $fromClause .= DB_PREFIX . "$table as $abbrev" . $joinClause;
         }

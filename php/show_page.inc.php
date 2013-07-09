@@ -18,7 +18,7 @@
 
 $page=array_reverse(explode("/", $_SERVER["PHP_SELF"]));
 if($page[0]=="show_page.inc.php") {
-   redirect("zoph.php");
+    redirect("zoph.php");
 }
 
 // If no page is set, we always show original.

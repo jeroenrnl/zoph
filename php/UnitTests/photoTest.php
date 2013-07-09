@@ -677,7 +677,7 @@ class photoTest extends ZophDataBaseTestCase {
     /**
      * Test getSubset function
      */
-     public function testGetSubset() {
+    public function testGetSubset() {
 
         $photos=array();
         $first=array();

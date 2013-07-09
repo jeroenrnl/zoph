@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * Display color schemes
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,42 +16,55 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 
-    require_once "include.inc.php";
+require_once "include.inc.php";
 
-    if (!$user->is_admin()) {
-        redirect("zoph.php");
-    }
+if (!$user->is_admin()) {
+    redirect("zoph.php");
+}
 
-    $title = translate("Color Schemes");
-    require_once "header.inc.php";
+$title = translate("Color Schemes");
+require_once "header.inc.php";
 ?>
-          <h1>
-          <span class="actionlink">
-            <a href="color_scheme.php?_action=new"><?php echo translate("new") ?></a>
-          </span>
-          <?php echo translate("color schemes") ?>
-          </h1>
-      <div class="main">
+      <h1>
+      <span class="actionlink">
+        <a href="color_scheme.php?_action=new"><?php echo translate("new") ?></a>
+      </span>
+      <?php echo translate("color schemes") ?>
+      </h1>
+  <div class="main">
 <?php
-    $color_schemes = color_scheme::getRecords("name");
+$color_schemes = color_scheme::getRecords("name");
 
-    if ($color_schemes) {
-        foreach($color_schemes as $cs) {
-?>
-          <span class="actionlink">
-            <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php echo $cs->get("color_scheme_id") ?>"><?php echo translate("delete") ?></a> |
-            <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php echo $cs->get("color_scheme_id") ?>"><?php echo translate("edit") ?></a> |
-            <a href="color_scheme.php?_action=copy&amp;color_scheme_id=<?php echo $cs->get("color_scheme_id") ?>"><?php echo translate("copy") ?></a>
-          </span> 
-            <?php echo $cs->get("name") ?>
-          <br>
-<?php
-        }
+if ($color_schemes) {
+    foreach($color_schemes as $cs) {
+        ?>
+        <span class="actionlink">
+          <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php 
+              echo $cs->get("color_scheme_id") ?>">
+            <?php echo translate("delete") ?>
+          </a> |
+          <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php 
+               echo $cs->get("color_scheme_id") ?>">
+             <?php echo translate("edit") ?>
+          </a> |
+          <a href="color_scheme.php?_action=copy&amp;color_scheme_id=<?php 
+              echo $cs->get("color_scheme_id") ?>">
+            <?php echo translate("copy") ?>
+          </a>
+        </span> 
+        <?php echo $cs->get("name") ?>
+        <br>
+        <?php
     }
+}
 ?>
 </div>
 <?php
-    require_once "footer.inc.php";
+require_once "footer.inc.php";
 ?>

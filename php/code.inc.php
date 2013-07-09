@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file contains 4 classes: replace, smiley, tag and zophcode. The class zophcode is 
  * a parser for zophcode, a bbcode like markup language. The other classes are helper classes
@@ -225,9 +224,9 @@ class tag {
         return self::$tags;
     }
 
-   /**   
-    * Fill static $tags
-    */
+    /**   
+     * Fill static $tags
+     */
     private static function createArray() {
         self::$tags=array(
             new tag("b", "b"),

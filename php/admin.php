@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * Show admin page
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,20 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 
-    require_once "include.inc.php";
+require_once "include.inc.php";
 
-    if (!$user->is_admin()) {
-        redirect("zoph.php");
-    }
-    $title=translate("Adminpage");
-    require_once "admin.inc.php";
-    $adminpages=admin::getArray();
+if (!$user->is_admin()) {
+    redirect("zoph.php");
+}
+$title=translate("Adminpage");
+require_once "admin.inc.php";
+$adminpages=admin::getArray();
 
-    $tpl=new template("admin", array(
-        "title" => $title,
-        "adminpages" => $adminpages
-    ));
-    echo $tpl;
+$tpl=new template("admin", array(
+    "title" => $title,
+    "adminpages" => $adminpages
+));
+echo $tpl;
 ?>

@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * Modify configuration
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,36 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 
-    require_once "include.inc.php";
-    $title=translate("Configuration");
+require_once "include.inc.php";
+$title=translate("Configuration");
 
-    if (!$user->is_admin()) {
-        redirect("zoph.php");
-    }
+if (!$user->is_admin()) {
+    redirect("zoph.php");
+}
 
-    // Configuration setting depends on POST
-    if(!empty($_GET)) {
-        redirect("config.php");
-    }
+// Configuration setting depends on POST
+if(!empty($_GET)) {
+    redirect("config.php");
+}
 
-    $_action=getvar("_action");
-    if($_action == "setconfig") {
-        conf::loadFromRequestVars($request_vars);
-    }
-    conf::loadFromDB();
+$_action=getvar("_action");
+if($_action == "setconfig") {
+    conf::loadFromRequestVars($request_vars);
+}
+conf::loadFromDB();
 
-    $tpl=new template("config", array(
-        "title" => $title,
-    ));
+$tpl=new template("config", array(
+    "title" => $title,
+));
 
-    // this doesn't work yet, because the page is not fully template-generated
-    // it is also included in header.inc.php, but header.inc.php should be
-    // phased out soon.
-    $tpl->js[]="js/conf.js";
-    foreach(conf::getAll() as $name=>$item) {
-        $tpl->addBlock($item->display());
-    }
-    echo $tpl;
+// this doesn't work yet, because the page is not fully template-generated
+// it is also included in header.inc.php, but header.inc.php should be
+// phased out soon.
+$tpl->js[]="js/conf.js";
+foreach(conf::getAll() as $name=>$item) {
+    $tpl->addBlock($item->display());
+}
+echo $tpl;
 ?>

@@ -18,7 +18,7 @@
  * @author Jeroen Roos
  * @package ZophTemplates
  */
-    if(!ZOPH) { die("Illegal call"); }
+if(!ZOPH) { die("Illegal call"); }
 ?>
         <?php if($tpl_test==true): ?>
             <?php echo $this->getActionlinks($tpl_actionlinks); ?>

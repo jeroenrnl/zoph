@@ -83,8 +83,6 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
             array("place", "", $this->getAllPlacesXMLForUser()),
             array("person", "", $this->getAllPeopleXMLForUser()),
             array("photographer", "", $this->getAllPhotographersXMLForUser())
-/*            array("album", "Album", $this->getAllAlbumsXML()),
-            array("album", "Album 2", $this->getAllAlbumsXMLSearch2())*/
         );
     }
     

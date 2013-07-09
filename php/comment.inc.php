@@ -166,8 +166,8 @@ class comment extends zophTable {
 }
 
 function get_all_comments() {
-   return comment::getRecordsFromQuery("SELECT comment_id FROM " . DB_PREFIX . "comments");
-   }
+    return comment::getRecordsFromQuery("SELECT comment_id FROM " . DB_PREFIX . "comments");
+}
 
 function format_comments($user, $comments) {
     $html=null;

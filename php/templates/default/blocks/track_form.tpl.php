@@ -21,7 +21,7 @@
  *       form template, at this moment this is not possible because Zoph
  *       has not fully switched to a template-based system
  */
-    if(!ZOPH) { die("Illegal call"); }
+if(!ZOPH) { die("Illegal call"); }
 ?>
 
         <br>

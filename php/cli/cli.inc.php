@@ -424,7 +424,7 @@ class cli {
                         // location
                         $place=place::getByName($dir);
                         if ($place[0] instanceof place) {
-                           $photo->set("location_id", $place[0]->getId());
+                            $photo->set("location_id", $place[0]->getId());
                         } else {
                             throw new PlaceNotFoundException("Place not found: " . $dir);
                         }

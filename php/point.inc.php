@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A point is a GPS position + time, used for Geotagging
  *
@@ -188,7 +187,7 @@ class point extends zophTable {
         }
         if($maxtime) {
             if(abs($t1 - $t2) > $maxtime) {
-               return false; 
+                return false; 
             }
         }
 

@@ -30,11 +30,11 @@
 class settings {
 
     public static $php_loc;
-   /**
-    * Load ini file, as defined in the INI_FILE constant
-    * Check if these settings are still made in config.inc.php
-    * and figure out which of the settings should be used.
-    */
+    /**
+     * Load ini file, as defined in the INI_FILE constant
+     * Check if these settings are still made in config.inc.php
+     * and figure out which of the settings should be used.
+     */
     public static function loadINI($instance="") {
         if(!defined("INI_FILE")) {
             define("INI_FILE", "/etc/zoph.ini");
@@ -85,11 +85,11 @@ class settings {
         log::msg("No php_location setting in " . INI_FILE . " found that matches " . $php_loc, log::FATAL, log::GENERAL);
     }
 
-   /**
-    * Parse values from ini file.
-    * @param array section from ini file
-    * @todo get rid of constants.
-    */
+    /**
+     * Parse values from ini file.
+     * @param array section from ini file
+     * @todo get rid of constants.
+     */
     public static function parseINI($i) {
         if(!isset($i["php_location"])) {
             $php_loc=dirname($_SERVER['SCRIPT_FILENAME']);

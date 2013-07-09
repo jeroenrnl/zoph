@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A class corresponding to the places table.
  *
@@ -43,7 +42,8 @@ class place extends zophTreeTable implements Organizer {
     protected static $primary_keys=array("place_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("title");
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set 
+                  by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="place.php?place_id=";
@@ -141,10 +141,10 @@ class place extends zophTreeTable implements Organizer {
         return $this->children;
     }    
    
-   /**
-    * Get this place's children, taking into account permissions for a specific user
-    * @param string sort order
-    */
+    /**
+     * Get this place's children, taking into account permissions for a specific user
+     * @param string sort order
+     */
     public function getChildrenForUser($order=null) {
         return remove_empty($this->getChildren($order));
     }
@@ -421,8 +421,10 @@ class place extends zophTreeTable implements Organizer {
         if ($user->is_admin()) {
             $sql = "SELECT ".
                 "COUNT(DISTINCT ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
@@ -436,8 +438,10 @@ class place extends zophTreeTable implements Organizer {
         } else {
             $sql = "SELECT " .
                 "COUNT(DISTINCT ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
@@ -487,7 +491,8 @@ class place extends zophTreeTable implements Organizer {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         if($lat && $lon) {
-            return self::getPlacesNear((float) $lat, (float) $lon, (float) $distance, (int) $limit, $entity);
+            return self::getPlacesNear((float) $lat, (float) $lon, 
+                (float) $distance, (int) $limit, $entity);
         }
     }
 
@@ -589,10 +594,10 @@ class place extends zophTreeTable implements Organizer {
         }
     }
 
-   /**
-    * Lookup place by name;
-    * @param string name
-    */
+    /**
+     * Lookup place by name;
+     * @param string name
+     */
     public static function getByName($name) {
         if(empty($name)) {
             return false;

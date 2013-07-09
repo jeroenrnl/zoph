@@ -122,7 +122,7 @@ class ratingTest extends ZophDataBaseTestCase {
     /**
      * Test rating when user is not allowed to rate
      */
-     public function testDenyRating() {
+    public function testDenyRating() {
         $user=new user(5);
 
         $user->set("allow_rating", false);

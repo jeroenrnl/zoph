@@ -17,6 +17,8 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
 /**
@@ -24,8 +26,6 @@
  * For now, this is only used in the import module of Zoph
  * in the future the photo class will be split into a "file" and "photo"
  * part, which will make things more flexible.
- * @author Jeroen Roos
- * @package Zoph
  */
 class file {
 
@@ -50,7 +50,8 @@ class file {
 
         if(is_link($filename)) {
             if(@!stat($filename)) {
-                throw new FileSymlinkProblemException("There's something wrong with symlink $filename\n");
+                throw new FileSymlinkProblemException(
+                    "There's something wrong with symlink $filename\n");
             }
         } else if (is_dir($filename) && !conf::get("import.cli.recursive")) {
             throw new FileDirectoryNotSupportedException("$filename is a directory\n");
@@ -150,7 +151,8 @@ class file {
                 if(!is_dir($this) && is_writable($this)) {
                     unlink($this);
                 } else {
-                    log::msg(sprintf(translate("Could not delete %s."), $this), log::ERROR, log::IMPORT);
+                    log::msg(sprintf(translate("Could not delete %s."), $this), 
+                        log::ERROR, log::IMPORT);
                     return false;
                 }
             }
@@ -206,7 +208,8 @@ class file {
               $this->destPath);
         }
         if(file_exists($this->destPath . $this->destName)) {
-            throw new FileExistsException("File already exists: " . $this->destPath . $this->destName);
+            throw new FileExistsException("File already exists: " . 
+                $this->destPath . $this->destName);
         }
         return true;
     }
@@ -273,7 +276,8 @@ class file {
             $mode=octdec(conf::get("import.filemode"));
         }
         if(!chmod($this, $mode)) {
-            log::msg("Could not change permissions for <b>" . $this . "</b>", LOG::ERROR, LOG::IMPORT);
+            log::msg("Could not change permissions for <b>" . $this . "</b>", 
+                LOG::ERROR, LOG::IMPORT);
         }
     }
 

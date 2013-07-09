@@ -42,10 +42,10 @@ class Time extends DateTime {
             } else {
                 parent::__construct($datetime);
             }
-       } catch (Exception $e){
+        } catch (Exception $e){
             echo "<b>Invalid time</b><br>";
             log::msg("<pre>" . $e->getMessage() . "</pre>", log::DEBUG, log::GENERAL);
-       }
+        }
     }
 }
 

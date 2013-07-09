@@ -81,33 +81,33 @@ if(empty($_action)) {
         $upload_num = $upload_id . "_" . $num;
 
         $body=new template("uploadform", array(
-                    "action" => "import.php?upload=1",
-                    "onsubmit" => "zImport.startUpload(this, upload_id, num); return true",
-                    "num" => $num,
-                    "upload_num" => $upload_num));
+            "action" => "import.php?upload=1",
+            "onsubmit" => "zImport.startUpload(this, upload_id, num); return true",
+            "num" => $num,
+            "upload_num" => $upload_num));
 
         $tpl=new template("html", array(
-                    "html_class" => "iframe_upload",
-                    "body" => $body));
-                $tpl->js=array("js/import.js", "js/xml.js");
-                $tpl->script="upload_id='" . $upload_id . "';" .
-                "num='" . $num . "';";
+            "html_class" => "iframe_upload",
+            "body" => $body));
+        $tpl->js=array("js/import.js", "js/xml.js");
+        $tpl->script="upload_id='" . $upload_id . "';" .
+            "num='" . $num . "';";
 
-                echo $tpl;
-                $tpl=new template("uploadprogressbar", array(
-                        "name" => "",
-                        "size" => 0,
-                        "upload_num" => $upload_num,
-                        "complete"  => 0,
-                        "width" => 300));
-                echo $tpl;
-                } else {
-                echo translate("Uploading photos has been disabled in configuration.");
-                }
-                ?>
-                </body>
-                </html>
-                <?php
+        echo $tpl;
+        $tpl=new template("uploadprogressbar", array(
+            "name" => "",
+            "size" => 0,
+            "upload_num" => $upload_num,
+            "complete"  => 0,
+            "width" => 300));
+        echo $tpl;
+    } else {
+        echo translate("Uploading photos has been disabled in configuration.");
+    }
+    ?>
+      </body>
+    </html>
+    <?php
 } else if ($_action=="upload") {
     if(conf::get("import.upload")) {
         if($_FILES["file"]) {

@@ -1,5 +1,8 @@
 <?php
-/* This file is part of Zoph.
+/**
+ * Display and modify breadcrumbs
+ * 
+ * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,18 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 
-    // This is needed because this file is sometimes included from 
-    // global context and sometimes from class context. 
-    // This is temporary until Zoph has moved to templating entirely
-    // or the global $user has been completely phased out.
-    if(!isset($user)) {
-        $user=user::getCurrent();
-    }
-    global $_qs;
-    
-    if ($user->prefs->get("show_breadcrumbs")) {
+// This is needed because this file is sometimes included from 
+// global context and sometimes from class context. 
+// This is temporary until Zoph has moved to templating entirely
+// or the global $user has been completely phased out.
+if(!isset($user)) {
+    $user=user::getCurrent();
+}
+global $_qs;
+
+if ($user->prefs->get("show_breadcrumbs")) {
 
     $_clear_crumbs = getvar("_clear_crumbs");
     $_crumb = getvar("_crumb");
@@ -39,8 +46,7 @@
     if(strpos($clear_url, "clear_crumbs") == 0) {
         if (strpos($clear_url, "?") > 0) {
             $clear_url .= "&amp;";
-        }
-        else {
+        } else {
             $clear_url .= "?";
         }
 
@@ -49,8 +55,7 @@
 
     if ($_clear_crumbs) {
         $user->eat_crumb(0);
-    }
-    else if ($_crumb) {
+    } else if ($_crumb) {
         $user->eat_crumb($_crumb);
     }
     if(!empty($tpl_title)) {
@@ -69,24 +74,23 @@
         $_action != "delrate" && $page == "photo.php")))) {
         $user->add_crumb($title, htmlentities($_SERVER["REQUEST_URI"]));
     }
-    
+
     $max_crumbs=$user->prefs->get("num_breadcrumbs");
     if (!$user->crumbs) {
         $crumb_string = "&nbsp;";
     } else if (($num_crumbs = count($user->crumbs)) > $max_crumbs) {
         $crumb_string = "<li class=\"firstdots\">" .  implode(" <li>",
             array_slice($user->crumbs, $num_crumbs - $max_crumbs));
-    }
-    else {
+    } else {
         $crumb_string = "<li class=\"first\">" . implode("<li>", $user->crumbs);
     }
-?>
+    ?>
     <div class="breadcrumb">
         <span class="actionlink"><a href="<?php echo $clear_url ?>">x</a></span>
         <ul>
             <?php echo $crumb_string . "\n" ?>
         </ul>
     </div>
-<?php
-    }
+    <?php
+}
 ?>

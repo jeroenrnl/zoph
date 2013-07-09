@@ -422,7 +422,7 @@ class userTest extends ZophDatabaseTestCase {
     /**
      * Return true and false to test settings
      */
-     public function getTrueFalse() {
+    public function getTrueFalse() {
         return array(
             array(True),
             array(False)

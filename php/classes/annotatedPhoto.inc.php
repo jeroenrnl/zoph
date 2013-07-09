@@ -38,17 +38,17 @@ class annotatedPhoto extends photo {
     /** The vars that are going to be displayed on the photo */
     private $vars=array();
 
-   /**
-    * Creates a jpeg photo with
-    * text annotation at the bottom.
-    *
-    * Copyright 2003, Nixon P. Childs
-    * @param string type of image to display mid, thumb or null for full-sized
-    * @return array Return an array that contains:
-    *               array headers: the headers
-    *               string jpeg: the jpeg file
-    * @throws photoException
-    */
+    /**
+     * Creates a jpeg photo with
+     * text annotation at the bottom.
+     *
+     * Copyright 2003, Nixon P. Childs
+     * @param string type of image to display mid, thumb or null for full-sized
+     * @return array Return an array that contains:
+     *               array headers: the headers
+     *               string jpeg: the jpeg file
+     * @throws photoException
+     */
     public function display($type=null) {
         if($type=="full") {
             $type=null;
@@ -83,18 +83,18 @@ class annotatedPhoto extends photo {
 
         $image_info = getimagesize($image_path);
         switch ($image_info[2]) {
-            case 1:
-                $orig_image = imagecreatefromgif($image_path);
-                break;
-            case 2:
-                $orig_image = imagecreatefromjpeg($image_path);
-                break;
-            case 3:
-                $orig_image = imagecreatefrompng($image_path);
-                break;
-            default:
-                log::msg("Unsupported image type.", log::ERROR, log::IMG);
-                return '';
+        case 1:
+            $orig_image = imagecreatefromgif($image_path);
+            break;
+        case 2:
+            $orig_image = imagecreatefromjpeg($image_path);
+            break;
+        case 3:
+            $orig_image = imagecreatefrompng($image_path);
+            break;
+        default:
+            log::msg("Unsupported image type.", log::ERROR, log::IMG);
+            return '';
         }
 
         $row = ImageSY($orig_image) + ($padding/2);
@@ -197,10 +197,9 @@ class annotatedPhoto extends photo {
                  * *****************************************/
 
                 if ($real_key == "photo_title") {
-                   $real_key = "title";
-                }
-                else if ($real_key == "extra") {
-                   $real_key = $vars["extra_name"];
+                    $real_key = "title";
+                } else if ($real_key == "extra") {
+                    $real_key = $vars["extra_name"];
                 }
 
                 $this->vars[$real_key] = translate($real_key, 0) . ": " .  $real_val;

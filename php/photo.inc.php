@@ -36,7 +36,8 @@ class photo extends zophTable {
     protected static $primary_keys=array("photo_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array();
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set by the 
+             db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="photo.php?photo_id=";
@@ -166,7 +167,13 @@ class photo extends zophTable {
      * does not delete the photo on disk
      */
     public function delete() {
-        parent::delete(array("photo_people", "photo_categories", "photo_albums", "photo_ratings", "photo_comments"));
+        parent::delete(array(
+            "photo_people", 
+            "photo_categories", 
+            "photo_albums", 
+            "photo_ratings", 
+            "photo_comments")
+        );
     }
 
     /** 
@@ -449,7 +456,8 @@ class photo extends zophTable {
      * @return string full path.
      */
     public function getFilePath($type=null) {
-        $image_path = conf::get("path.images") . DIRECTORY_SEPARATOR . $this->get("path") . DIRECTORY_SEPARATOR;
+        $image_path = conf::get("path.images") . DIRECTORY_SEPARATOR . 
+            $this->get("path") . DIRECTORY_SEPARATOR;
 
         if ($type==THUMB_PREFIX || $type==MID_PREFIX) {
             $image_path .= $type . DIRECTORY_SEPARATOR . $type . "_";
@@ -569,17 +577,17 @@ class photo extends zophTable {
         $resource = null;
         $image_info = getimagesize($file);
         switch ($image_info[2]) {
-            case IMAGETYPE_GIF:
-                $resource = imagecreatefromgif($file);
-                break;
-            case IMAGETYPE_JPEG:
-                $resource = imagecreatefromjpeg($file);
-                break;
-            case IMAGETYPE_PNG:
-                $resource = imagecreatefrompng($file);
-                break;
-            default:
-                break;
+        case IMAGETYPE_GIF:
+            $resource = imagecreatefromgif($file);
+            break;
+        case IMAGETYPE_JPEG:
+            $resource = imagecreatefromjpeg($file);
+            break;
+        case IMAGETYPE_PNG:
+            $resource = imagecreatefrompng($file);
+            break;
+        default:
+            break;
         }
 
         return $resource;
@@ -1063,14 +1071,18 @@ class photo extends zophTable {
                 foreach($exif as $key => $value) {
                     if(!is_array($value)) {
                         $return .="    <dt>$key</dt>\n" .
-                                  "    <dd>" . preg_replace("/[^[:print:]]/", "", $value) . "</dd>\n";
+                                  "    <dd>" . 
+                                          preg_replace("/[^[:print:]]/", "", $value) . 
+                                  "    </dd>\n";
                     } else {
                         $return .="    <dt>$key</dt>\n" .
                                   "    <dd>\n" .
                                   "        <dl>\n";
                         foreach ($value as $subkey => $subval) {
-                            $return .= "            <dt>$subkey</dt>\n" .
-                                       "            <dd>" . preg_replace("/[^[:print:]]/", "", $subval) . "</dd>\n";
+                            $return .= "     <dt>$subkey</dt>\n" .
+                                       "     <dd>" . 
+                                               preg_replace("/[^[:print:]]/", "", $subval) . 
+                                       "     </dd>\n";
                         }
                         $return .= "         </dl>\n" .
                                    "    </dd>\n";
@@ -1138,7 +1150,13 @@ class photo extends zophTable {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         if($lat && $lon) {
-            return self::getPhotosNear((float) $lat, (float) $lon, (float) $distance, (int) $limit, $entity);
+            return self::getPhotosNear(
+                (float) $lat, 
+                (float) $lon, 
+                (float) $distance, 
+                (int) $limit, 
+                $entity
+            );
         }
     }
 
@@ -1212,7 +1230,8 @@ class photo extends zophTable {
 
     /**
      * Get hash for photo.
-     * Returns the hash for a photo, either the file hash, or a salted hash that can be used to share photos
+     * Returns the hash for a photo, either the file hash, or a salted hash that 
+     * can be used to share photos
      * @param string type file, full or mid
      * @return string hash
      */
@@ -1228,19 +1247,20 @@ class photo extends zophTable {
             }
         }
         switch($type) {
-            case "file":
-                return $hash;
-                break;
-            case "full":
-                return sha1(conf::get("share.salt.full") . $hash);
-                break;
-            case "mid":
-                return sha1(conf::get("share.salt.mid") . $hash);
-                break;
-            default:
-                die("Unsupported hash type");
-                break;
+        case "file":
+            $return=$hash;
+            break;
+        case "full":
+            $return=sha1(conf::get("share.salt.full") . $hash);
+            break;
+        case "mid":
+            $return=sha1(conf::get("share.salt.mid") . $hash);
+            break;
+        default:
+            die("Unsupported hash type");
+            break;
         }
+        return $return;
     }
 
     /**
@@ -1248,8 +1268,8 @@ class photo extends zophTable {
      * @param point
      */
     public function setLatLon(point $point) {
-       $this->set("lat", $point->get("lat"));
-       $this->set("lon", $point->get("lon"));
+        $this->set("lat", $point->get("lat"));
+        $this->set("lon", $point->get("lon"));
     }
 
     /**
@@ -1257,7 +1277,8 @@ class photo extends zophTable {
      * @param track track to use or null to use all tracks
      * @param int maximum time the time can be off
      * @param bool Whether to interpolate between 2 found times/positions
-     * @param int Interpolation max_distance: what is the maximum distance between two points to still interpolate
+     * @param int Interpolation max_distance: what is the maximum distance between two 
+     *            points to still interpolate
      * @param string km / miles entity in which max_distance is measured
      * @param int Interpolation maxtime Maximum time between to point to still interpolate
      */
@@ -1317,7 +1338,8 @@ class photo extends zophTable {
      * Takes an array of photos and returns a subset
      *
      * @param array photos to return a subset from
-     * @param array Array should contain first and/or last and/or random to determine which subset(s)
+     * @param array Array should contain first and/or last and/or random to determine 
+     *                           which subset(s)
      * @param int count Number of each to return
      * @return array subset of photos
      */
@@ -1376,15 +1398,16 @@ class photo extends zophTable {
     /**
      * Take an array of photos and remove photos with no valid timezone
      *
-     * This function is needed for geotagging: for photos without a valid timezone it is not possible to
-     * determine the UTC time, needed for geotagging.
+     * This function is needed for geotagging: for photos without a valid 
+     * timezone it is not possible to determine the UTC time, needed for geotagging.
      * @param array Array of photos
      * @return array Array of photos with a valid timezone
      */
     public static function removePhotosWithNoValidTZ(array $photos) {
 
         $gphotos=array();
-        log::msg("Number of photos before valid timezone check: " . count($photos), log::DEBUG, log::GEOTAG);
+        log::msg("Number of photos before valid timezone check: " . 
+            count($photos), log::DEBUG, log::GEOTAG);
 
         foreach($photos as $photo) {
             $photo->lookup();
@@ -1396,7 +1419,8 @@ class photo extends zophTable {
                 }
             }
         }
-        log::msg("Number of photos after valid timezone check: " . count($gphotos), log::DEBUG, log::GEOTAG);
+        log::msg("Number of photos after valid timezone check: " . count($gphotos), 
+            log::DEBUG, log::GEOTAG);
         return $gphotos;
     }
     
@@ -1411,14 +1435,16 @@ class photo extends zophTable {
      */
     public static function removePhotosWithLatLon($photos) {
         $gphotos=array();
-        log::msg("Number of photos before overwrite check: " . count($photos), log::DEBUG, log::GEOTAG);
+        log::msg("Number of photos before overwrite check: " . count($photos), 
+            log::DEBUG, log::GEOTAG);
         foreach($photos as $photo) {
             $photo->lookup();
             if(!($photo->get("lat") or $photo->get("lon"))) {
                 $gphotos[]=$photo;
             }
         }
-        log::msg("Number of photos after overwrite check: " . count($gphotos), log::DEBUG, log::GEOTAG);
+        log::msg("Number of photos after overwrite check: " . count($gphotos), 
+            log::DEBUG, log::GEOTAG);
         return $gphotos;
     }
 
@@ -1434,22 +1460,22 @@ class photo extends zophTable {
             die("Illegal characters in hash");
         }
         switch($type) {
-            case "file":
-                $where="WHERE hash=\"" . escape_string($hash) . "\";";
-                break;
-            case "full":
-                $salt=conf::get("share.salt.full");
-                $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
-                   "\"" . escape_string($hash) . "\";";
-                break;
-            case "mid":
-                $salt=conf::get("share.salt.mid");
-                $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
-                   "\"" . escape_string($hash) . "\";";
-                break;
-            default:
-                die("Unsupported hash type");
-                break;
+        case "file":
+            $where="WHERE hash=\"" . escape_string($hash) . "\";";
+            break;
+        case "full":
+            $salt=conf::get("share.salt.full");
+            $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
+               "\"" . escape_string($hash) . "\";";
+            break;
+        case "mid":
+            $salt=conf::get("share.salt.mid");
+            $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
+               "\"" . escape_string($hash) . "\";";
+            break;
+        default:
+            die("Unsupported hash type");
+            break;
         }
 
 
