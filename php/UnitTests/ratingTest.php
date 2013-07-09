@@ -33,7 +33,7 @@ class ratingTest extends ZophDataBaseTestCase {
      * Test retrieving ratings from database
      * @dataProvider getRatings
      */
-    public function testGetRating($photo_id, $user_id, $rating, $avg) {
+    public function testGetRating($photo_id, $user_id, $rating, $ip) {
         global $user;
         $user = new user($user_id);
         $user->lookup();
@@ -51,6 +51,9 @@ class ratingTest extends ZophDataBaseTestCase {
         $rate=$obj->get("rating");
 
         $this->assertEquals($rate, $rating);
+
+        $ipaddr=$obj->get("ipaddress");
+        $this->assertEquals($ip, $ipaddr);
 
     }
     
