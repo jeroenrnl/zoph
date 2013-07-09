@@ -113,7 +113,8 @@ class TimeZone extends DateTimeZone {
             $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
                 " value='" . $text . "' class='autocomplete'>";
         } else {
-            $html=template::createPulldown("timezone_id", self::getKey($value), self::getSelectArray());
+            $html=template::createPulldown("timezone_id", self::getKey($value), 
+                self::getSelectArray());
         }
         return $html;
     }

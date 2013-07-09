@@ -132,16 +132,20 @@ class annotatedPhoto extends photo {
             }
         }
 
-        $noted_image = ImageCreateTrueColor (ImageSX($orig_image), ImageSY($orig_image) + ((ImageFontHeight($font) + $padding) * $count));
+        $noted_image = ImageCreateTrueColor (ImageSX($orig_image), 
+            ImageSY($orig_image) + ((ImageFontHeight($font) + $padding) * $count));
 
-        /* Use a light grey background to hide the jpeg artifacts caused by the sharp edges in text. */
+        /* Use a light grey background to hide the jpeg artifacts caused by 
+         * the sharp edges in text. 
+         */
 
         $offwhite = ImageColorAllocate($noted_image, 240,240, 240);
         ImageFill($noted_image, 0, ImageSY($orig_image) +1, $offwhite);
         $black = ImageColorAllocate($noted_image, 0, 0, 0);
         ImageColorTransparent($noted_image, $black);
 
-        ImageCopy($noted_image, $orig_image, 0, 0, 0, 0, ImageSX($orig_image), ImageSY($orig_image));
+        ImageCopy($noted_image, $orig_image, 0, 0, 0, 0, 
+            ImageSX($orig_image), ImageSY($orig_image));
 
         if ($final_array) {
             while (list($key, $val) = each($final_array)) {

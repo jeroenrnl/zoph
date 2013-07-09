@@ -147,7 +147,9 @@ if ($action == "confirm") {
         <label for="subject"><?php echo translate("subject") ?></label>
         <?php echo create_text_input("subject", $comment->get("subject")) ?><br>
         <label for="comment"><?php echo translate("comment") ?></label> 
-        <textarea name="comment" rows="8" cols="80"><?php echo $comment->get("comment") ?></textarea><br>
+        <textarea name="comment" rows="8" cols="80">
+          <?php echo $comment->get("comment") ?>
+        </textarea><br>
         <input type="submit" value="<?php echo translate($action, 0) ?>">
         <h2><?php echo translate("smileys you can use"); ?></h2>
         <?php echo smiley::getOverview(); ?>

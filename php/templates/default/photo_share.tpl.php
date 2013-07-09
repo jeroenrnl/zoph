@@ -22,15 +22,22 @@
 if(!ZOPH) { die("Illegal call"); }
 ?>
 <li class="share">
-    <div class="tab"><img src="<?php echo template::getImage("icons/share-icon-24x24.png") ?>"></div>
+    <div class="tab">
+      <img src="<?php echo template::getImage("icons/share-icon-24x24.png") ?>">
+    </div>
     <div class="contents">
         <h1><?echo translate("share this photo", 0) ?></h1>
         <ul class="share">
             <?php if(!empty($tpl_hash)): ?>
-                <li class="direct_link"><input type="text" value="<?php echo $tpl_full_link; ?>"></li>
-                <li class="html"><textarea><img src="<?php echo $tpl_mid_link ?>"></textarea></li>
+                <li class="direct_link">
+                  <input type="text" value="<?php echo $tpl_full_link; ?>">
+                </li>
+                <li class="html">
+                  <textarea><img src="<?php echo $tpl_mid_link ?>"></textarea>
+                </li>
             <?php else: ?>
-                <?php echo translate("This feature is not available because the photo was not found.",0); ?>
+                <?php echo translate("This feature is not available because the " .
+                    "photo was not found.",0); ?>
             <?php endif; ?>
          </ul>
     </div>

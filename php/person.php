@@ -78,7 +78,8 @@ if ($action == "display") {
         if($person->get("coverphoto")) {
             ?>
             |
-            <a href="person.php?_action=update&amp;person_id=<?php echo $person->getId() ?>&amp;coverphoto=NULL">
+            <a href="person.php?_action=update&amp;person_id=<?php 
+                echo $person->getId() ?>&amp;coverphoto=NULL">
               <?php echo translate("unset coverphoto") ?>
             </a>
             <?php

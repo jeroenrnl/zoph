@@ -1,6 +1,7 @@
 <?php
-
-/*
+/**
+ * Show and modify photos
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -15,6 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 
 require_once "include.inc.php";
@@ -65,15 +70,18 @@ if ($photo_id) { // would be passed for edit or delete
 
         if ($offset > 0) {
             $newoffset = $offset - 1;
-            $prev_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Prev") . "</a>";
+            $prev_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act . 
+                htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . 
+                translate("Prev") . "</a>";
         }
 
         if ($offset + 1 < $num_photos) {
             $newoffset = $offset + 1;
-            $next_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act . htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . translate("Next") . "</a>";
+            $next_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act . 
+                htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . 
+                translate("Next") . "</a>";
         }
-    }
-    else {
+    } else {
         $photo = new photo();
     }
 }
@@ -192,10 +200,12 @@ if (!$user->prefs->get("auto_edit") && $_action=="edit" ) {
 
 if ($user->is_admin() && $_action!="delete") {
     $actionlinks["select"]="photo.php?_action=select&amp;" . $qs;
-    $actionlinks["delete"]="photo.php?_action=delete&amp;photo_id=" . $photo->get("photo_id") . "&amp;_qs=" . $encoded_qs;
+    $actionlinks["delete"]="photo.php?_action=delete&amp;photo_id=" . $photo->get("photo_id") . 
+        "&amp;_qs=" . $encoded_qs;
 } else if ($_action=="delete") {    
     unset($actionlinks);
-    $actionlinks["delete"]="photo.php?_action=confirm&amp;photo_id=" . $photo->get("photo_id") . "&amp;_qs=" . $encoded_qs;
+    $actionlinks["delete"]="photo.php?_action=confirm&amp;photo_id=" . $photo->get("photo_id") . 
+        "&amp;_qs=" . $encoded_qs;
     $actionlinks["cancel"]="photo.php?" . $_qs;
 }
 
@@ -211,8 +221,7 @@ if ($_action == "edit") {
     unset($actionlinks["cancel"]);
     unset($actionlinks["edit"]);
     $action = "update";
-}
-else if ($_action == "update") {
+} else if ($_action == "update") {
     $actionlinks["return"]="photo.php?_action=display&amp;" . $return_qs;
     unset($actionlinks["cancel"]);
     unset($actionlinks["edit"]);
@@ -224,13 +233,11 @@ else if ($_action == "update") {
     if(!empty($_qs)) {
         redirect("photo.php?" . $_qs, "Update done");
     }
-}
-else if ($_action == "new") {
+} else if ($_action == "new") {
     unset($actionlinks);
     $actionlinks["cancel"]="photos.php?" . $_qs;
     $action = "insert";
-}
-else if ($_action == "insert") {
+} else if ($_action == "insert") {
     $photo->setFields($request_vars);
     $photo->insert();
     $action = "update";
@@ -240,11 +247,9 @@ else if ($_action == "insert") {
     unset($actionlinks["add comment"]);
     unset($actionlinks["select"]);
     unset($actionlinks["delete"]);
-}
-else if ($_action == "delete") {
+} else if ($_action == "delete") {
     $action = "confirm";
-}
-else if ($_action == "confirm") {
+} else if ($_action == "confirm") {
     $photo->delete();
     //if (!$user->prefs->get("auto_edit")) {
         $user->eat_crumb();
@@ -313,13 +318,15 @@ if ($action != "insert" && !$found) {
         <div id="rotate">
             <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
                 <p>
-                    <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
+                    <input type="hidden" name="photo_id" 
+                        value="<?php echo $photo->get("photo_id") ?>">
                     <select name="_deg">
                         <option>90</option>
                         <option>180</option>
                         <option>270</option>
                     </select>
-                    <input type="submit" name="_button" value="<?php echo translate("rotate", 0) ?>">
+                    <input type="submit" name="_button" 
+                        value="<?php echo translate("rotate", 0) ?>">
                 </p>
             </form>
         </div>
@@ -360,7 +367,8 @@ if ($action != "insert" && !$found) {
     </ul>
     <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX)) ?>
     <?php
-    if (($user->is_admin() || $user->get("browse_people")) && $people_links = $photo->getPeopleLinks()) {
+    if (($user->is_admin() || $user->get("browse_people")) && 
+        $people_links = $photo->getPeopleLinks()) {
         ?>
           <div id="personlink">
         <?php echo $people_links ?>
@@ -387,14 +395,15 @@ if ($action != "insert" && !$found) {
                 echo $rating . "<br>";
             }
         }
-        if (conf::get("feature.rating") && ($user->is_admin() || $user->get("allow_rating"))) {
+        if (conf::get("feature.rating") && 
+            ($user->is_admin() || $user->get("allow_rating"))) {
             ?>
-                <form id="ratingform" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
-                    <input type="hidden" name="_action" value="rate">
-                    <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
-                    <?php echo create_rating_pulldown($photo->getRatingForUser($user)); ?>
-                    <input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
-                </form>
+              <form id="ratingform" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
+                <input type="hidden" name="_action" value="rate">
+                <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
+                <?php echo create_rating_pulldown($photo->getRatingForUser($user)); ?>
+                <input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
+              </form>
             </dd>
             <?php
         }
@@ -432,8 +441,12 @@ if ($action != "insert" && !$found) {
             ?>
             <h2><?php echo translate("Full EXIF details",0)?></h2>
             <span class="actionlink">
-                <a href="#" onclick="document.getElementById('allexif').style.display='block'"><?php echo translate("display",0) ?></a> | 
-                <a href="#" onclick="document.getElementById('allexif').style.display='none'"><?php echo translate("hide",0) ?></a>
+                <a href="#" onclick="document.getElementById('allexif').style.display='block'">
+                  <?php echo translate("display",0) ?>
+                </a> | 
+                <a href="#" onclick="document.getElementById('allexif').style.display='none'">
+                  <?php echo translate("hide",0) ?>
+                </a>
             </span>
             <?php
             echo $allexif;

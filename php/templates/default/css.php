@@ -417,7 +417,8 @@ ul.menu li.selected {
     color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>;
 }
                                 
-/* since the A element does not inherit font colors from it's parents, we set it explicetly here. Also underlining is removed from links in menu, unless it is hovered */
+/* since the A element does not inherit font colors from it's parents, we set it 
+ * explicetly here. Also underlining is removed from links in menu, unless it is hovered */
 
 ul.menu li a { 
     color: <?php echo color_scheme::getColor("tab_font_color") ?>; 
@@ -1375,7 +1376,8 @@ fieldset.editphotos-fields {
     padding-top: 10px;
 }
 
-/* These are the lists on the bulk edit page, such as the list of albums + the remove checkbox. This is a bit of a hack, needed to make opera and MSIE behave. */
+/* These are the lists on the bulk edit page, such as the list of albums + the remove checkbox. 
+ * This is a bit of a hack, needed to make opera and MSIE behave. */
 
 fieldset.checkboxlist { 
     display: block;

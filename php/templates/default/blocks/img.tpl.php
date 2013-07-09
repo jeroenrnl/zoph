@@ -22,5 +22,6 @@
 if(!ZOPH) { die("Illegal call"); }
 ?>
 
-<img src="<?php echo $tpl_src ?>" class="<?php echo $tpl_class ?>" <?php echo $tpl_size ?> alt="<?php echo $tpl_alt ?>">
+<img src="<?php echo $tpl_src ?>" class="<?php echo $tpl_class ?>" 
+    <?php echo $tpl_size ?> alt="<?php echo $tpl_alt ?>">
             

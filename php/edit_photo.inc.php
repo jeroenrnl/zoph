@@ -151,7 +151,9 @@ if ($user->is_admin()) {
 }
 ?>
 <label><?php echo translate("description") ?></label>
-<textarea name="description" cols="60" rows="4"><?php echo $photo->get("description") ?></textarea><br>
+<textarea name="description" cols="60" rows="4">
+  <?php echo $photo->get("description") ?>
+</textarea><br>
 <?php
 if ($action != "insert") {
     ?>
@@ -164,7 +166,8 @@ if ($action != "insert") {
     if ($people) {
         foreach ($people as $person) {
             ?>
-            <input class="remove" type="checkbox" name="_remove_person_id[]" value="<?php echo $person->get("person_id")?>">
+            <input class="remove" type="checkbox" name="_remove_person_id[]" 
+                value="<?php echo $person->get("person_id")?>">
             <?php
             echo $person->getLink() . "<br>\n";
         }
@@ -183,7 +186,8 @@ if ($action != "insert") {
     if ($albums) {
         foreach ($albums as $album) {
             ?>
-            <input type="checkbox" name="_remove_album_id[]" value="<?php echo $album->get("album_id")?>">
+            <input type="checkbox" name="_remove_album_id[]" 
+                value="<?php echo $album->get("album_id")?>">
             <?php echo $album->getLink() ?><br>
             <?php
         }
@@ -201,7 +205,8 @@ if ($action != "insert") {
     if ($categories) {
         foreach ($categories as $category) {
             ?>
-            <input type="checkbox" name="_remove_category_id[]" value="<?php echo $category->get("category_id")?>">
+            <input type="checkbox" name="_remove_category_id[]" 
+                value="<?php echo $category->get("category_id")?>">
             <?php echo $category->getLink() ?><br>
             <?php
         }
@@ -231,7 +236,8 @@ if ($action != "insert") {
         <label for="camera_model"><?php echo translate("camera model") ?></label>
         <?php echo create_text_input("camera_model", $photo->get("camera_model"), 32, 32) ?><br>
         <label for="flash_used"><?php echo translate("flash used") ?></label>
-        <?php echo template::createPulldown("flash_used", $photo->get("flash_used"), array("" => "", "Y" => translate("Yes",0), "N" => translate("No",0))) ?><br>
+        <?php echo template::createPulldown("flash_used", $photo->get("flash_used"), 
+            array("" => "", "Y" => translate("Yes",0), "N" => translate("No",0))) ?><br>
         <label for="focal_length"><?php echo translate("focal length") ?></label>
         <?php echo create_text_input("focal_length", $photo->get("focal_length"), 10, 64) ?><br>
         <label for="exposure"><?php echo translate("exposure") ?></label>
@@ -254,7 +260,10 @@ if ($action != "insert") {
     } // additional atts
     if (!$_show) {
         ?>
-        <a href="photo.php?_action=edit&amp;photo_id=<?php echo $photo->get("photo_id") ?>&amp;_show=all"><?php echo translate("show additional attributes") ?></a>
+        <a href="photo.php?_action=edit&amp;photo_id=<?php 
+            echo $photo->get("photo_id") ?>&amp;_show=all">
+          <?php echo translate("show additional attributes") ?>
+        </a>
         <?php
     }
     ?>

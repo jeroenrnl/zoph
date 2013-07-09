@@ -43,7 +43,8 @@ if  ($num_thumbnails) {
         $title = sprintf(translate("photo %s of %s"),  ($offset + 1) , $num_photos);
     }
 } else {
-    redirect(html_entity_decode("photos.php?" . update_query_string($clean_vars, "_off", 0)), "No photos");
+    redirect(html_entity_decode("photos.php?" . update_query_string($clean_vars, "_off", 0)), 
+        "No photos");
 }
 
 $newoffset = $offset + 1;

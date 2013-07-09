@@ -37,7 +37,8 @@ class comment extends zophTable {
     protected static $primary_keys=array("comment_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("subject");
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set by the 
+                  db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="comment.php?comment_id=";
@@ -77,7 +78,8 @@ class comment extends zophTable {
             translate("subject") => $this->get("subject"),
             translate("date") => $date,
             translate("user") => $this->lookup_user(),
-            translate("IP address") => $user->is_admin() ? $this->get("ipaddr") : "<i>" . translate("only visible for admin users") . "</i>",
+            translate("IP address") => $user->is_admin() ? $this->get("ipaddr") : "<i>" . 
+                translate("only visible for admin users") . "</i>",
             translate("comment") => $comment,
             translate("updated") => $changed
         );
@@ -90,7 +92,9 @@ class comment extends zophTable {
         $comment_user->lookup_person();
         $comment_person = $comment_user->person->getName();
         $comment_person_id = (int) $comment_user->person->getId();
-        $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> (<a href=person.php?person_id=%s>%s</a>)", $this->get("user_id"), $user_name, $comment_person_id, $comment_person);
+        $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> " . 
+            "(<a href=person.php?person_id=%s>%s</a>)", $this->get("user_id"), 
+            $user_name, $comment_person_id, $comment_person);
         return $return; 
     }
 

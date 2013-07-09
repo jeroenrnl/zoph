@@ -45,14 +45,16 @@ class settings {
            defined("DB_PASS") || 
            defined("DB_PREFIX")) {
 
-            log::msg("Remove DB_ settings from config.inc.php and define them in " . INI_FILE, log::FATAL, log::GENERAL);
+            log::msg("Remove DB_ settings from config.inc.php and define them in " . 
+                INI_FILE, log::FATAL, log::GENERAL);
         } else {
 
             if(file_exists(INI_FILE)) {
                 $ini=parse_ini_file(INI_FILE, true);
                 if(!empty($instance)) {
                     if(!isset($ini[$instance])) {
-                        throw new CliInstanceNotFoundException("Instance " . $instance . " not found in " . INI_FILE);
+                        throw new CliInstanceNotFoundException("Instance " . $instance . 
+                            " not found in " . INI_FILE);
                     }
                 } else {
                     // No instance given, autodetect 
@@ -76,13 +78,15 @@ class settings {
         $php_loc=dirname($_SERVER['SCRIPT_FILENAME']);
         foreach($ini as $instance=>$i) {
             if(!isset($i["php_location"])) {
-                log::msg("php_location setting missing from " . $instance . " in " . INI_FILE, log::FATAL, log::GENERAL);
+                log::msg("php_location setting missing from " . $instance . " in " . 
+                    INI_FILE, log::FATAL, log::GENERAL);
             } else if($php_loc==$i["php_location"]) {
                 return $instance;
             }
         }
         // No corresponding settings found.
-        log::msg("No php_location setting in " . INI_FILE . " found that matches " . $php_loc, log::FATAL, log::GENERAL);
+        log::msg("No php_location setting in " . INI_FILE . " found that matches " . $php_loc, 
+            log::FATAL, log::GENERAL);
     }
 
     /**
@@ -93,14 +97,16 @@ class settings {
     public static function parseINI($i) {
         if(!isset($i["php_location"])) {
             $php_loc=dirname($_SERVER['SCRIPT_FILENAME']);
-            log::msg("No php_location setting in " . INI_FILE . " found that matches " . $php_loc, log::FATAL, log::GENERAL);
+            log::msg("No php_location setting in " . INI_FILE . " found that matches " . 
+                $php_loc, log::FATAL, log::GENERAL);
         } else {
             self::$php_loc=$i["php_location"];
         }
         if(!isset($i["db_host"]) || !isset($i["db_name"]) ||
           !isset($i["db_user"]) || !isset($i["db_pass"]) ||
           !isset($i["db_prefix"])) {
-            log::msg("db_host, db_name, db_user, db_pass or db_prefix setting missing from " . INI_FILE, log::FATAL, log::GENERAL);
+            log::msg("db_host, db_name, db_user, db_pass or db_prefix setting missing from " . 
+                INI_FILE, log::FATAL, log::GENERAL);
         } else {
             define("DB_HOST", $i["db_host"]);
             define("DB_NAME", $i["db_name"]);

@@ -33,7 +33,8 @@ abstract class ZophDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
     final public function getConnection() {
         if ($this->conn === null) {
             if (self::$pdo == null) {
-                self::$pdo = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USER, DB_PASS);
+                self::$pdo = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, 
+                    DB_USER, DB_PASS);
             }
             $this->conn = $this->createDefaultDBConnection(self::$pdo, DB_NAME);
         }

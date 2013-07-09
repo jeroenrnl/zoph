@@ -171,7 +171,8 @@ class pageset extends zophTable {
         $pagesetuser->lookup_person();
         $pagesetperson = $pagesetuser->person->getName();
         $pagesetperson_id = $pagesetuser->person->get("person_id");
-        $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> (<a href=person.php?person_id=%s>%s</a>)", 
+        $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> " .
+            "(<a href=person.php?person_id=%s>%s</a>)", 
             $this->get("user"), $user_name, $pagesetperson_id, $pagesetperson);
         return $return;
     }

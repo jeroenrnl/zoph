@@ -53,20 +53,23 @@ echo "\n";
 ?>
     </div>
     <div class="intro" id="first">
-        <?php echo sprintf(translate("Welcome %s. %s currently contains"), 
-            $user->person->getLink(), 
-            conf::get("interface.title")) . "\n"; ?>
-        <ul class="intro">
-          <li>
-            <?php echo sprintf(translate("%s photos in %s"), $album_photoCount, $album_count) ?>
-            <a href="albums.php">
-              <?php echo $album_count == 1 ? translate("album") : translate("albums") ?>
+      <?php echo sprintf(translate("Welcome %s. %s currently contains"), 
+          $user->person->getLink(), 
+          conf::get("interface.title")) . "\n"; ?>
+      <ul class="intro">
+        <li>
+          <?php echo sprintf(translate("%s photos in %s"), $album_photoCount, $album_count) ?>
+          <a href="albums.php">
+            <?php echo $album_count == 1 ? translate("album") : translate("albums") ?>
+          </a>
+        </li>
+        <li>
+          <?php echo sprintf(translate("%s photos in %s"), $category_photoCount, 
+              $category_count) ?>
+            <a href="categories.php">
+              <?php echo $category_count == 1 ? translate("category") : translate("categories") ?>
             </a>
           </li>
-          <li>
-            <?php echo sprintf(translate("%s photos in %s"), $category_photoCount, 
-                $category_count) ?>
-            <a href="categories.php"><?php echo $category_count == 1 ? translate("category") : translate("categories") ?></a></li>
 <?php
 if ($user->is_admin() || $user->get("browse_people")) {
     $person_count = person::getCountForUser();

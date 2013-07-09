@@ -106,7 +106,8 @@ if($_action=="" || $_action=="display") {
         }
 
         foreach($photos as $photo) {
-            $point=$photo->getLatLon($track, $maxtime, $interpolate, $int_maxdist, $entity, $int_maxtime);
+            $point=$photo->getLatLon($track, $maxtime, $interpolate, $int_maxdist, 
+                $entity, $int_maxtime);
             if($point instanceof point) {
                 $photo->setLatLon($point);
                 if(!is_array($test)) {

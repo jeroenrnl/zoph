@@ -28,13 +28,15 @@ if(!is_callable("finfo_file")) {
 }
 
 if(!file_exists(conf::get("path.magic")) && strlen(conf::get("path.magic"))>0) {
-    log::msg(conf::get("path.magic") . " does not exist. Set the location of your magic file in admin -> config to your MIME magic file.", log::FATAL);
+    log::msg(conf::get("path.magic") . " does not exist. Set the location of your " .
+        "magic file in admin -> config to your MIME magic file.", log::FATAL);
     die();
 }
 
 if(!ini_get("date.timezone")) {
     @$tz=date("e");
-    log::msg("You should set your timezone in php.ini, guessing it should be $tz", log::WARN, log::GENERAL);
+    log::msg("You should set your timezone in php.ini, guessing it should be $tz", 
+        log::WARN, log::GENERAL);
     date_default_timezone_set($tz);
 }
 

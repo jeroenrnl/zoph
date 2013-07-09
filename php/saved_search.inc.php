@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * Object for storing & retrieving searches
  *
  * This file is part of Zoph.
@@ -17,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 
 class search extends zophTable {
@@ -26,7 +28,8 @@ class search extends zophTable {
     protected static $primary_keys=array("search_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("name");
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set 
+                  by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="search.php?search_id=";
@@ -65,7 +68,9 @@ class search extends zophTable {
         if($user->is_admin()) {
             $edit_array[]=array (
                 translate("Owner"),
-                template::createPulldown("owner", $this->get("owner"), template::createSelectArray(user::getRecords("user_name"), array("user_name"))));
+                template::createPulldown("owner", $this->get("owner"), 
+                    template::createSelectArray(user::getRecords("user_name"), 
+                    array("user_name"))));
             $edit_array[]=array(
                 translate("Public"),
                 template::createYesNoPulldown("public", $this->get("public")));

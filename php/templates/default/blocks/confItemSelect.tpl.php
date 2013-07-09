@@ -29,7 +29,9 @@ if(!ZOPH) { die("Illegal call"); }
             <?php else: ?>
                 <?php $selected=""; ?>
             <?php endif ?>    
-            <option <?php echo $selected; ?> value="<?php echo $option ?>"><?php echo $label ?></option>
+            <option <?php echo $selected; ?> value="<?php echo $option ?>">
+              <?php echo $label ?>
+            </option>
         <?php endforeach ?>
     </select>
     <input class="reset" type="checkbox" name="_reset_<?php echo $tpl_name ?>">

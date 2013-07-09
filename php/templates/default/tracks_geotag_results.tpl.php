@@ -20,17 +20,22 @@
  */
 if(!ZOPH) { die("Illegal call"); }
 ?>
-        <?php if($tpl_test==true): ?>
-            <?php echo $this->getActionlinks($tpl_actionlinks); ?>
-            <?php if($tpl_tagged_count==0): ?>
-                <?php printf(translate("The location of none of the photos in the test set could be determined. This does not necessarily mean that none of the photos can be geotagged, since only a subset was tried. You can try to geotag %s photos by clicking 'geotag'."), $tpl_total_count); ?>
-            <?php else: ?>
-                <?php printf(translate("The location of %s photos has been determined. You can check the results below. Click 'geotag' to geotag all %s photos."), $tpl_tagged_count, $tpl_total_count); ?>
-            <?php endif; ?>
-        <?php else: ?>
-            <?php if($tpl_tagged_count==0): ?>
-                <?php echo translate("No photos were found matching your search criteria."); ?>
-            <?php else: ?>
-                <?php printf(translate("%s photos were geotagged"), $tpl_tagged_count); ?>
-            <?php endif; ?>
-        <?php endif; ?>
+<?php if($tpl_test==true): ?>
+    <?php echo $this->getActionlinks($tpl_actionlinks); ?>
+    <?php if($tpl_tagged_count==0): ?>
+        <?php printf(translate("The location of none of the photos in the test set " .
+            "could be determined. This does not necessarily mean that none of the " .
+            "photos can be geotagged, since only a subset was tried. You can try to " .
+            "geotag %s photos by clicking 'geotag'."), $tpl_total_count); ?>
+    <?php else: ?>
+        <?php printf(translate("The location of %s photos has been determined. You can " .
+            "check the results below. Click 'geotag' to geotag all %s photos."), 
+            $tpl_tagged_count, $tpl_total_count); ?>
+    <?php endif; ?>
+<?php else: ?>
+    <?php if($tpl_tagged_count==0): ?>
+        <?php echo translate("No photos were found matching your search criteria."); ?>
+    <?php else: ?>
+        <?php printf(translate("%s photos were geotagged"), $tpl_tagged_count); ?>
+    <?php endif; ?>
+<?php endif; ?>

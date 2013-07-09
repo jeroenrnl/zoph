@@ -28,7 +28,13 @@ if(!ZOPH) { die("Illegal call"); }
         <div class="thumbnail">
             <?php if($tpl_admin): ?>
                 <ul class="actionlink">
-                    <li><a href="relation.php?photo_id_1=<?php echo (int) $tpl_photo->getId() ?>&photo_id_2=<?php echo (int) $related->getId() ?>"><?php echo translate("edit") ?></a>
+                    <li>
+                      <a href="relation.php?photo_id_1=<?php 
+                        echo (int) $tpl_photo->getId() ?>&photo_id_2=<?php 
+                        echo (int) $related->getId() ?>">
+                        <?php echo translate("edit") ?>
+                      </a>
+                    </li>
                  </ul>
             <?php endif; ?>
             <?php echo $related->getThumbnailLink() ?>

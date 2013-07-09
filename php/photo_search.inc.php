@@ -246,7 +246,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 // the regexp matches a list of numbers, separated by comma's.
                 // "1" matches, "1," not, "1,2" matches "1,333" matches
                 // "1, a" not, etc.
-                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) { die("$key must be numeric"); }
+                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) { 
+                    die("$key must be numeric"); 
+                }
 
                 $op = "in";
                 $where .=

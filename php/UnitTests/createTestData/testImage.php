@@ -94,7 +94,8 @@ class testImage {
             $colourright->setColor($categories[$this->categories[1]][1]);
             $text[]="Categories:";
             foreach($this->categories as $i=>$cat) {
-                $text[]="   " . $this->categories[$i] . ": " . $categories[$this->categories[$i]][1];
+                $text[]="   " . $this->categories[$i] . ": " . 
+                    $categories[$this->categories[$i]][1];
             }
         } else {
             $colour->setColor("white");

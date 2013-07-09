@@ -47,7 +47,8 @@ class watermarkedPhoto extends photo {
                 $name = $this->get("name");
                 $image_path = conf::get("path.images") . "/" . $this->get("path") . "/" . $name;
                 $image=imagecreatefromjpeg($image_path);
-                $image=$this->watermark($image, $watermark_file, conf::get("watermark.pos.x"), conf::get("watermark.pos.y"), conf::get("watermark.transparency"));
+                $image=$this->watermark($image, $watermark_file, conf::get("watermark.pos.x"), 
+                    conf::get("watermark.pos.y"), conf::get("watermark.transparency"));
                 ob_start();
                     imagejpeg($image);
                     imagedestroy($image);
@@ -75,7 +76,8 @@ class watermarkedPhoto extends photo {
      * @param int transparency (0 = invisible, 100 = no transparency)
      * @return imageresource watermarked photo
      */
-    private function watermark($orig, $watermark, $positionX = "center", $positionY = "center", $transparency = 50) {
+    private function watermark($orig, $watermark, $positionX = "center", 
+      $positionY = "center", $transparency = 50) {
 
         $wm=imagecreatefromgif($watermark);
         

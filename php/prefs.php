@@ -112,7 +112,7 @@ if ($user->get("user_id") == conf::get("interface.user.default")) {
         <?php echo translate("number of results to display on reports page") ?>
     </dt>
     <dd>
-        <?php echo create_integer_pulldown("reports_top_n", i
+        <?php echo create_integer_pulldown("reports_top_n", 
             $user->prefs->get("reports_top_n"), 1, 20) ?>
     </dd>
     <dt>
@@ -233,7 +233,8 @@ if (conf::get("interface.autocomplete")) {
       </dd>
       <dt><?php echo translate("photographer") ?></dt>
       <dd>
-        <?php echo template::createYesNoPulldown("autocomp_photographer", $user->prefs->get("autocomp_photographer")) ?>
+        <?php echo template::createYesNoPulldown("autocomp_photographer", 
+            $user->prefs->get("autocomp_photographer")) ?>
       </dd>
     </dl>
     <?php

@@ -44,9 +44,15 @@ if(!ZOPH) { die("Illegal call"); }
                     <td><?php echo $rating->get("ipaddress") ?></td>
                     <td><?php echo $rating->get("timestamp") ?></td>
                     <td>
-                        <ul class="actionlink">
-                            <li><a href="photo.php?_action=delrate&photo_id=<?php echo $tpl_photo_id; ?>&_rating_id=<?php echo $rating->get("rating_id"); ?>"><?php echo translate("delete") ?></a></li>
-                        </ul>
+                      <ul class="actionlink">
+                        <li>
+                          <a href="photo.php?_action=delrate&photo_id=<?php 
+                            echo $tpl_photo_id; ?>&_rating_id=<?php 
+                            echo $rating->get("rating_id"); ?>">
+                            <?php echo translate("delete") ?>
+                          </a>
+                        </li>
+                      </ul>
                     </td>
                 </tr>
             <?php endforeach; ?>
