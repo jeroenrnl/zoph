@@ -140,7 +140,7 @@ class pageset extends zophTable {
         $sql = "select max(page_order) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id=" . $this->get("pageset_id");
         $result=query($sql, "Could not get max order");
-        return intval(result($result, 0, 0));
+        return intval(result($result, 0));
     }
     
     function get_nextorder($order) {
@@ -152,7 +152,7 @@ class pageset extends zophTable {
             " where pageset_id=" . $this->get("pageset_id") .
             " and page_order>" . $order;
         $result=query($sql, "Could not get max order");
-        return intval(result($result, 0, 0));
+        return intval(result($result, 0));
     }
 
     function get_prevorder($order) {
@@ -160,7 +160,7 @@ class pageset extends zophTable {
             " where pageset_id=" . $this->get("pageset_id") .
             " and page_order<" . $order;
         $result=query($sql, "Could not get max order");
-        return intval(result($result, 0, 0));
+        return intval(result($result, 0));
     }
 
 

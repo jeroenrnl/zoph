@@ -97,7 +97,7 @@ function insert_id() {
     return mysql_insert_id();
 }
 
-function result($result, $row, $field = null) {
+function result($result, $row) {
     return mysql_result($result, $row);
 }
 
