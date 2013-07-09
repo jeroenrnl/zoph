@@ -43,7 +43,7 @@
 if($place->isRoot()) {
     echo translate("places");
 } else {
-    echo place::createPulldown("parent_place_id", $place->get("parent_place_id"), $user);
+    echo place::createPulldown("parent_place_id", $place->get("parent_place_id"));
 }
 ?>
 <br>
@@ -126,7 +126,7 @@ if($place->get("timezone")) {
 ?>
 
     <label for="timezone_id"><?php echo translate("timezone") ?></label>
-    <?php echo TimeZone::createPulldown("timezone_id", $place->get("timezone"), $user); ?>
+    <?php echo TimeZone::createPulldown("timezone_id", $place->get("timezone")); ?>
 
     <label for="notes"><?php echo translate("notes") ?></label>
     <textarea name="notes" cols="40" rows="4"><?php echo $place->get("notes") ?></textarea>

@@ -113,7 +113,7 @@ if ($action == "insert") {
 <?php echo create_text_input("title", $photo->get("title"), 40, 64) ?>
 <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
 <label for="_location_id"><?php echo translate("location") ?></label>
-<?php echo place::createPulldown("location_id", $photo->get("location_id"), $user); ?>
+<?php echo place::createPulldown("location_id", $photo->get("location_id")); ?>
 <br>
 <fieldset class="map">
     <legend><?php echo translate("map") ?></legend>

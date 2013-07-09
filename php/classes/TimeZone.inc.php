@@ -94,12 +94,10 @@ class TimeZone extends DateTimeZone {
      * Create Pulldown menu for timezone selection
      * @param string name for the html document
      * @param string current value
-     * @param user not used, for compatibility with createPulldown functions
-     *             in other objects
      * @return string HTML code to display pulldown
      * @todo Returns HTML!
      */
-    public static function createPulldown($name, $value=null, $user=null) {
+    public static function createPulldown($name, $value=null) {
         $id=preg_replace("/^_+/", "", $name);
         if($value) {
             $text=$value;
