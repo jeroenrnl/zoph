@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * Define or modify relations between photos
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,134 +16,145 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
-    require_once "include.inc.php";
+require_once "include.inc.php";
 
-    if (!$user->is_admin()) {
-        redirect("zoph.php");
-    }
+if (!$user->is_admin()) {
+    redirect("zoph.php");
+}
 
-    $photo_id_1=getvar("photo_id_1");
-    $photo_id_2=getvar("photo_id_2");
+$photo_id_1=getvar("photo_id_1");
+$photo_id_2=getvar("photo_id_2");
+
+$desc_1=getvar("desc_1");
+$desc_2=getvar("desc_2");
+
+$photo_1=new photo($photo_id_1);
+$photo_2=new photo($photo_id_2);
+
+$photo_1->lookup();
+$photo_2->lookup();
     
-    $desc_1=getvar("desc_1");
-    $desc_2=getvar("desc_2");
-
-    $photo_1=new photo($photo_id_1);
-    $photo_2=new photo($photo_id_2);
+$relation=new photoRelation($photo_1, $photo_2);
+$exists=$relation->lookup();
     
-    $photo_1->lookup();
-    $photo_2->lookup();
-        
-    $relation=new photoRelation($photo_1, $photo_2);
-    $exists=$relation->lookup();
-    
-    if(($_action == "insert" || $_action == "new") && $exists) {
-        $_action="edit";
-    }
-    
-    if($_action != "insert" && $_action != "new" && $_action != "update") {
-        $desc_1 = $relation->getDesc($photo_1);
-        $desc_2 = $relation->getDesc($photo_2);
-    } 
+if(($_action == "insert" || $_action == "new") && $exists) {
+    $_action="edit";
+}
 
-    $obj = &$relation;
-    require_once "actions.inc.php";
+if($_action != "insert" && $_action != "new" && $_action != "update") {
+    $desc_1 = $relation->getDesc($photo_1);
+    $desc_2 = $relation->getDesc($photo_2);
+} 
 
-    
-    if($action=="display") {
-        $title=translate("relationship");
-    } else {
-        $title=translate($action . " relationship");    
-    }
+$obj = &$relation;
+require_once "actions.inc.php";
 
-    require_once "header.inc.php";
 
-    if ($action == "confirm") {
-?>
-          <h1><?php echo translate("delete relationship") ?></h1>
-          <div class="main">
-              <span class="actionlink">
-                  <a href="relation.php?_action=confirm&amp;photo_id_1=<?php echo $photo_id_1 ?>&photo_id_2=<?php echo $photo_id_2 ?>"><?php echo translate("delete") ?></a> |
-                  <a href="relation.php?_action=edit&amp;photo_id_1=<?php echo $photo_id_1 ?>&photo_id_2=<?php echo $photo_id_2 ?>"><?php echo translate("cancel") ?></a> 
-              </span>
-              <?php echo translate("Confirm deletion of this relationship") ?>
-              <br>
-              <div id="relation">
-                  <div class="thumbnail">
-                      <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
-                      <?php echo $desc_1 ?>
-                  </div>
-                  <div class="thumbnail">
-                      <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?>
-                      <?php echo $desc_2 ?>
-                  </div>
-              </div>
-              <br>
+if($action=="display") {
+    $title=translate("relationship");
+} else {
+    $title=translate($action . " relationship");    
+}
+
+require_once "header.inc.php";
+
+if ($action == "confirm") {
+    ?>
+    <h1><?php echo translate("delete relationship") ?></h1>
+    <div class="main">
+      <span class="actionlink">
+        <a href="relation.php?_action=confirm&amp;photo_id_1=<?php 
+            echo $photo_id_1 ?>&photo_id_2=<?php echo $photo_id_2 ?>">
+          <?php echo translate("delete") ?>
+        </a> |
+        <a href="relation.php?_action=edit&amp;photo_id_1=<?php 
+            echo $photo_id_1 ?>&photo_id_2=<?php echo $photo_id_2 ?>">
+          <?php echo translate("cancel") ?>
+        </a> 
+        </span>
+        <?php echo translate("Confirm deletion of this relationship") ?>
+        <br>
+        <div id="relation">
+          <div class="thumbnail">
+            <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
+            <?php echo $desc_1 ?>
           </div>
-<?php
-    }
-    else if ($action == "display") {
-?>
-          <h1>
-            <span class="actionlink">
-              <a href="photo.php?photo_id=<?php echo $photo_id_1 ?>"><?php echo translate("return") ?></a> |
-              <a href="relation.php?_action=edit&amp;photo_id_1=<?php echo $photo_id_1 ?>&amp;photo_id_2=<?php echo $photo_id_2 ?>"><?php echo translate("edit") ?></a> |
-              <a href="relation.php?_action=delete&amp;photo_id_1=<?php echo $photo_id_1 ?>&amp;photo_id_2=<?php echo $photo_id_2 ?>"><?php echo translate("delete") ?></a>
-            </span>
-<?php
-     echo $title;
-?>
-          </h1>
-      <div class="main">
-          <br>
-          <div id="relation">
-              <div class="thumbnail">
-                  <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
-                  <?php echo $desc_1 ?>
-              </div>
-              <div class="thumbnail">
-                  <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?><br>
-                  <?php echo $desc_2 ?>
-              </div>
+          <div class="thumbnail">
+            <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?>
+            <?php echo $desc_2 ?>
           </div>
-          <br>
-
+        </div>
+        <br>
       </div>
-<?php
-    }
-   else {
-?>
+    <?php
+} else if ($action == "display") {
+    ?>
+      <h1>
+        <span class="actionlink">
+          <a href="photo.php?photo_id=<?php echo $photo_id_1 ?>">
+            <?php echo translate("return") ?>
+          </a> |
+          <a href="relation.php?_action=edit&amp;photo_id_1=<?php 
+            echo $photo_id_1 ?>&amp;photo_id_2=<?php echo $photo_id_2 ?>">i
+            <?php echo translate("edit") ?>
+          </a> |
+          <a href="relation.php?_action=delete&amp;photo_id_1=<?php 
+            echo $photo_id_1 ?>&amp;photo_id_2=<?php echo $photo_id_2 ?>">
+            <?php echo translate("delete") ?>
+          </a>
+        </span>
+        <?php echo $title; ?>
+      </h1>
+      <div class="main">
+        <br>
+        <div id="relation">
+          <div class="thumbnail">
+            <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
+            <?php echo $desc_1 ?>
+          </div>
+          <div class="thumbnail">
+            <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?><br>
+            <?php echo $desc_2 ?>
+          </div>
+      </div>
+      <br>
+
+    </div>
+    <?php
+} else {
+    ?>
     <h1>
-        <?php echo $title ?>
+      <?php echo $title ?>
     </h1>
     <div class="main">
-    <br>
-       <div id="relation">
+      <br>
+        <div id="relation">
           <div class="thumbnail">
-              <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
-              <?php echo $photo_1->get("name"); ?>
+            <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
+            <?php echo $photo_1->get("name"); ?>
           </div>
           <div class="thumbnail">
-              <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?>
-              <?php echo $photo_2->get("name"); ?>
+            <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?>
+            <?php echo $photo_2->get("name"); ?>
           </div>
-       </div>
-    <br>
-
+        </div>
+        <br>
         <form action="relation.php">
-            <input type="hidden" name="_action" value="<?php echo $action ?>">
-            <input type="hidden" name="photo_id_1" value="<?php echo $photo_id_1 ?>">
-            <input type="hidden" name="photo_id_2" value="<?php echo $photo_id_2 ?>">
-            <label for="desc_1"><?php echo translate("Description for first photo") ?></label>
-            <?php echo create_text_input("desc_1", $desc_1) ?><br>
-            <label for="desc_2"><?php echo translate("Description for second photo") ?></label>
-            <?php echo create_text_input("desc_2", $desc_2) ?><br>
-            <input type="submit" value="<?php echo translate($action, 0) ?>">
+          <input type="hidden" name="_action" value="<?php echo $action ?>">
+          <input type="hidden" name="photo_id_1" value="<?php echo $photo_id_1 ?>">
+          <input type="hidden" name="photo_id_2" value="<?php echo $photo_id_2 ?>">
+          <label for="desc_1"><?php echo translate("Description for first photo") ?></label>
+          <?php echo create_text_input("desc_1", $desc_1) ?><br>
+          <label for="desc_2"><?php echo translate("Description for second photo") ?></label>
+          <?php echo create_text_input("desc_2", $desc_2) ?><br>
+          <input type="submit" value="<?php echo translate($action, 0) ?>">
         </form>
-    </div>
-
-<?php
-  }
-    require_once "footer.inc.php";
+      </div>
+    <?php
+}
+require_once "footer.inc.php";
 ?>

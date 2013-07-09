@@ -103,7 +103,7 @@ class template {
         try {
             ob_start();
                 include $this->template;
-           return ob_get_clean();
+            return ob_get_clean();
         } catch(Exception $e) {
             echo $e->getMessage();
             die();
@@ -271,13 +271,13 @@ class template {
         return $sa;
     }
 
-   /**
-    * Create pulldown (select) 
-    * @param string name for select box
-    * @param string current value
-    *
-    * @param bool autosubmit form after making a change
-    */
+    /**
+     * Create pulldown (select) 
+     * @param string name for select box
+     * @param string current value
+     *
+     * @param bool autosubmit form after making a change
+     */
     public static function createPulldown($name, $value, $selectArray, $autosubmit=false) {
         return new block("select", array(
             "name"  => $name,
@@ -288,12 +288,12 @@ class template {
         ));
     }
  
-   /**
-    * Create pulldown (select) to change the view
-    * @param string name for select box
-    * @param string current value
-    * @param bool autosubmit form after making a change
-    */
+    /**
+     * Create pulldown (select) to change the view
+     * @param string name for select box
+     * @param string current value
+     * @param bool autosubmit form after making a change
+     */
     public static function createViewPulldown($name, $value, $autosubmit=false) {
         return self::createPulldown($name, $value, array(
             "list" => translate("List",0),
@@ -301,12 +301,12 @@ class template {
             "thumbs" => translate("Thumbnails",0)), (bool) $autosubmit);
     } 
  
-   /**
-    * Create pulldown (select) to determine how the automatic thumbnail is selected
-    * @param string name for select box
-    * @param string current value
-    * @param bool autosubmit form after making a change
-    */
+    /**
+     * Create pulldown (select) to determine how the automatic thumbnail is selected
+     * @param string name for select box
+     * @param string current value
+     * @param bool autosubmit form after making a change
+     */
     public static function createAutothumbPulldown($name, $value, $autosubmit=false) {
         return  self::createPulldown($name, $value, array(
             "oldest" => translate("Oldest photo",0),
@@ -318,20 +318,20 @@ class template {
         (bool)$autosubmit);
     }  
 
-   /**
-    * Create pulldown (select) that lists all photo fields
-    * @param string name for select box
-    * @param string current value
-    */
+    /**
+     * Create pulldown (select) that lists all photo fields
+     * @param string name for select box
+     * @param string current value
+     */
     public static function createPhotoFieldPulldown($name, $value) {
         return  self::createPulldown($name, $value, translate(photo::getFields(),0)); 
     }  
 
-   /**
-    * Create pulldown (select) with options "yes" and "no" (translated)
-    * @param string name for select box
-    * @param string current value
-    */
+    /**
+     * Create pulldown (select) with options "yes" and "no" (translated)
+     * @param string name for select box
+     * @param string current value
+     */
     public static function createYesNoPulldown($name, $value) {
         return  self::createPulldown($name, $value,array(
             "0" => translate("No",0), 

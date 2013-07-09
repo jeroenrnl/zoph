@@ -15,39 +15,36 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-    require_once "include.inc.php";
+require_once "include.inc.php";
 
-    $date = getvar("date");
-    $year = getvar("year");
-    $month = getvar("month");
-    $search_field = getvar("search_field");
+$date = getvar("date");
+$year = (int) getvar("year");
+$month = (int) getvar("month");
+$search_field = getvar("search_field");
 
-    $cal = new zoph_calendar($search_field);
+$cal = new calendar();
+$cal->setSearchField($search_field);
 
-    if ($year && $month) {
-        // ok
-    }
-    else if ($date) {
-        list($year, $month, $day) = explode("-", $date);
-    }
-    else {
-        $date = getdate();
-        $year = $date["year"];
-        $month = $date["mon"];
-        $day = 0; // so that the today style will be used
-    }
+if ($year && $month) {
+    $date=new Time($year . "-" . $month . "-01");
+} else if ($date) {
+    list($year, $month, $day) = explode("-", $date);
+    $date=new Time($year . "-" . $month . "-01");
+} else {
+    $date=new Time("first day of this month");
 
-    $month_array = $cal->getMonthNames();
-    $monthName = $month_array[$month-1];
+}
 
-    $title = "$monthName $year";
+$title=$date->format("F Y");
+$header=translate("calendar");
 
-    require_once "header.inc.php";
-?>
-          <h1><?php echo translate("calendar") ?></h1>
-      <div class="main">
-<?php echo $cal->getMonthView($month, $year, $day) ?>
-      </div>
+$calendar=$cal->getMonthView($date);
 
-</body>
-</html>
+$tpl=new template("calendar", array(
+    "title"     => $title,
+    "header"    => $header
+));
+
+$tpl->addBlock($calendar);
+
+echo $tpl;

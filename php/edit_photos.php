@@ -1,5 +1,8 @@
 <?php
-/* This file is part of Zoph.
+/**
+ * Edit multiple photos at once
+ *
+ * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,6 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 require_once "include.inc.php";
 
@@ -68,35 +75,32 @@ if  ($num_thumbnails) {
     $num = min($cells, $num_thumbnails);
 
     $title = sprintf(translate("Edit Photos (Page %s/%s)", 0), $page_num, $num_pages);
-    $title_bar = sprintf(translate("edit photos %s to %s of %s"), ($offset + 1), ($offset + $num), $num_photos);
-}
-else {
+    $title_bar = sprintf(translate("edit photos %s to %s of %s"), 
+        ($offset + 1), ($offset + $num), $num_photos);
+} else {
     $title = translate("No Photos Found");
     $title_bar = translate("edit photos");
 }
 
 require_once "header.inc.php";
 ?>
-    <h1>
+  <h1>
 <?php
 echo create_actionlinks($actionlinks);
 echo $title_bar
 ?>
-    </h1>
-
-
+  </h1>
   <div class="main">
-  <form action="edit_photos.php" method="POST">
-    <p>
+    <form action="edit_photos.php" method="POST">
+      <p>
 <?php
 if ($num_thumbnails <= 0) {
-?>
-      <div class="error">
-   <?php echo translate("No photos were found matching your search criteria.") ?>
-      </div>
-<?php
-}
-else {
+    ?>
+       <div class="error">
+    <?php echo translate("No photos were found matching your search criteria.") ?>
+       </div>
+    <?php
+} else {
     $category_select_array = null;
     $album_select_array = null;
     $places_select_array = null;
@@ -126,7 +130,7 @@ else {
     $queryIgnoreArray[] = '_rating__all';
     $queryIgnoreArray[] = '_album__all';
     $queryIgnoreArray[] = '_category__all';
-?>
+    ?>
         <input type="submit" value="<?php echo translate("update", 0) ?>">
         <fieldset class="editphotos">
             <legend><?php echo translate("All photos")?></legend>
@@ -140,7 +144,9 @@ else {
               <?php echo create_text_input("__time__all", "", 10, 8, "time") ?>
               <span class="inputhint">HH:MM:SS</span><br>
               <label for="location_id__all"><?php echo translate("location") ?></label>
-              <?php echo place::createPulldown("__location_id__all", null, $user, $places_select_array) ?><br>
+              <?php echo place::createPulldown("__location_id__all", null, $user, 
+                $places_select_array) ?>
+              <br>
               <label for="photographer_id__all"><?php echo translate("photographer") ?></label>
               <?php echo person::createPulldown("__photographer_id__all") ?><br>
               <label for="rating__all"><?php echo translate("rating") ?></label>
@@ -154,7 +160,7 @@ else {
                   <?php echo category::createPulldown("_category__all[0]") ?>
               </fieldset><br>
             </fieldset>
-<?php
+    <?php
     // These are used by the autocomplete script
     // to store the real name of location/album/category/person
     // other parts of Zoph discard them because of the _ prefix,
@@ -258,30 +264,33 @@ else {
         $queryIgnoreArray[] = "_person__" . $photo_id;
         $queryIgnoreArray[] = "_deg__$photo_id";
         $queryIgnoreArray[] = "_action__$photo_id";
-?>
+        ?>
         <fieldset class="editphotos">
             <legend><?php echo $photo->get('name')?></legend>
             <div class="editchoice">
-<?php
+        <?php
         if ($can_edit) {
-?>
-              <input type="hidden" name="__photo_id__<?php echo $photo_id ?>" value="<?php echo $photo_id ?>">
-              <input type="radio" name="_action__<?php echo $photo_id ?>" value="update" checked><?php echo translate("edit", 0) ?><br>
-              <input type="radio" name="_action__<?php echo $photo_id ?>" value=""><?php echo translate("skip", 0) ?><br>
-              <input type="radio" name="_action__<?php echo $photo_id ?>" value="delete"><?php echo translate("delete", 0) ?>
-<?php
-        }
-        else {
+            ?>
+              <input type="hidden" name="__photo_id__<?php echo $photo_id ?>" 
+                value="<?php echo $photo_id ?>">
+              <input type="radio" name="_action__<?php echo $photo_id ?>" 
+                value="update" checked><?php echo translate("edit", 0) ?><br>
+              <input type="radio" name="_action__<?php echo $photo_id ?>" 
+                value=""><?php echo translate("skip", 0) ?><br>
+              <input type="radio" name="_action__<?php echo $photo_id ?>" 
+                value="delete"><?php echo translate("delete", 0) ?>
+            <?php
+        } else {
             echo "&nbsp;";
         }
-?>
+        ?>
             </div>
             <div class="thumbnail">
               <?php echo $photo->getThumbnailLink() . "\n" ?><br>
-<?php
-            if ($can_edit && conf::get("rotate.enable") &&
-                ($user->is_admin() || $permissions->get("writable"))) {
-?>
+        <?php
+        if ($can_edit && conf::get("rotate.enable") &&
+            ($user->is_admin() || $permissions->get("writable"))) {
+            ?>
               <?php echo translate("rotate", 0) ?>
               <select name="_deg__<?php echo $photo_id ?>">
                 <option>&nbsp;</option>
@@ -289,128 +298,160 @@ else {
                 <option>180</option>
                 <option>270</option>
               </select>
-<?php
-            }
-?>
+            <?php
+        }
+        ?>
             </div>
-<?php
+        <?php
         if (!$can_edit) {
-?>
+            ?>
             <?php echo $photo->get('name') ?>:<br>
             <?php echo translate("Insufficient permissions to edit photo", 0)?>.
-<?php
-        }
-        else {
-?>
+            <?php
+        } else {
+            ?>
                 <fieldset class="editphotos-fields">
-                  <label for="title__<?php echo $photo_id?>"><?php echo translate("title") ?></label>
-                  <?php echo create_text_input("__title__$photo_id", $photo->get("title"), 30, 64) ?>
+                  <label for="title__<?php echo $photo_id?>">
+                    <?php echo translate("title") ?><
+                  /label>
+                  <?php echo create_text_input("__title__$photo_id", 
+                    $photo->get("title"), 30, 64) ?>
                   <br>
-                  <label for="date__<?php echo $photo_id ?>"><?php echo translate("date") ?></label>
-                  <?php echo create_text_input("__date__$photo_id", $photo->get("date") , 12, 10, "date") ?>
+                  <label for="date__<?php echo $photo_id ?>">
+                    <?php echo translate("date") ?>
+                  </label>
+                  <?php echo create_text_input("__date__$photo_id", 
+                    $photo->get("date") , 12, 10, "date") ?>
                   <span class="inputhint">YYYY-MM-DD</span><br>
-                  <label for="time__<?php echo $photo_id ?>"><?php echo translate("time") ?></label>
-                  <?php echo create_text_input("__time__$photo_id", $photo->get("time"), 10, 8, "time") ?>
+                  <label for="time__<?php echo $photo_id ?>">
+                    <?php echo translate("time") ?>
+                  </label>
+                  <?php echo create_text_input("__time__$photo_id", 
+                    $photo->get("time"), 10, 8, "time") ?>
                   <span class="inputhint">HH:MM:SS</span><br>
-                  <label for="location_id__<?php echo $photo_id ?>"><?php echo translate("location") ?></label>
-                  <?php echo place::createPulldown("__location_id__$photo_id", $photo->get("location_id"), $user, $places_select_array) ?><br>
-                  <label for="photographer_id__<?php echo $photo_id?>"><?php echo translate("photographer") ?></label>
-                  <?php echo photographer::createPulldown("__photographer_id__$photo_id", $photo->get("photographer_id")) ?><br>
-<?php
-if (conf::get("feature.rating")) {
-    $rating = $photo->getRatingForUser($user);
-?>
-                  <label for="rating__<?php echo $photo_id?>"><?php echo translate("rating") ?></label>
+                  <label for="location_id__<?php echo $photo_id ?>">
+                    <?php echo translate("location") ?>
+                  </label>
+                  <?php echo place::createPulldown("__location_id__$photo_id", 
+                    $photo->get("location_id"), $user, $places_select_array) ?><br>
+                  <label for="photographer_id__<?php echo $photo_id?>">
+                    <?php echo translate("photographer") ?>
+                  </label>
+                  <?php echo photographer::createPulldown("__photographer_id__$photo_id", 
+                    $photo->get("photographer_id")) ?><br>
+            <?php
+            if (conf::get("feature.rating")) {
+                $rating = $photo->getRatingForUser($user);
+                ?>
+                  <label for="rating__<?php echo $photo_id?>">
+                    <?php echo translate("rating") ?>
+                  </label>
                   <?php echo create_rating_pulldown($rating, "_rating__$photo_id") ?>
                   <br>
-<?php
-}
-?>
-                  <label for="description__<?php echo $photo_id?>"><?php echo translate("description") ?></label>
-                  <textarea name="__description__<?php echo $photo_id ?>" id="description__<?php echo $photo_id?>" class="desc" cols="50" rows="3"><?php echo $photo->get("description") ?></textarea>
+                <?php
+            }
+            ?>
+                  <label for="description__<?php echo $photo_id?>">
+                    <?php echo translate("description") ?>
+                  </label>
+                  <textarea name="__description__<?php echo $photo_id ?>" 
+                    id="description__<?php echo $photo_id?>" class="desc" 
+                    cols="50" rows="3">
+                    <?php echo $photo->get("description") ?>
+                  </textarea>
                   <br>
-                  <label for="album__<?php echo $photo_id?>"><?php echo translate("albums") ?></label>
+                  <label for="album__<?php echo $photo_id?>">
+                    <?php echo translate("albums") ?>
+                  </label>
                   <fieldset class="checkboxlist">
-<?php
+            <?php
             $albums = $photo->getAlbums($user);
             if ($albums) {
                 $append = "";
                 foreach ($albums as $album) {
-?>
-                   <?php echo $append ?>
-                   <input type="checkbox" name="_remove_album__<?php echo $photo_id ?>[]" value="<?php echo $album->get("album_id") ?>">
-                   <?php echo $album->getLink() ?>
-<?php
+                    ?>
+                    <?php echo $append ?>
+                    <input type="checkbox" name="_remove_album__<?php echo $photo_id ?>[]" 
+                    value="<?php echo $album->get("album_id") ?>">
+                    <?php echo $album->getLink() ?>
+                    <?php
                     $append = "<br>";
                 }
                 echo "<br>\n";
             }
-?>
+            ?>
                   <fieldset class="multiple">
                     <?php echo album::createPulldown("_album__" . $photo_id . "[0]") ?>
                   </fieldset><br>
               </fieldset><br>
-                  <label for="category__<?php echo $photo_id?>"><?php echo translate("categories") ?></label>
+                  <label for="category__<?php echo $photo_id?>">
+                    <?php echo translate("categories") ?>
+                   </label>
                   <fieldset class="checkboxlist">
-<?php
+            <?php
             $categories = $photo->getCategories($user);
             if ($categories) {
                 $append = "";
                 foreach ($categories as $category) {
-?>
-                   <?php echo $append ?>
-                   <input type="checkbox" name="_remove_category__<?php echo $photo_id ?>[]" value="<?php echo $category->get("category_id") ?>">
-                   <?php echo $category->getLink() ?>
-<?php
+                    ?>
+                    <?php echo $append ?>
+                    <input type="checkbox" name="_remove_category__<?php echo $photo_id ?>[]" 
+                        value="<?php echo $category->get("category_id") ?>">
+                    <?php 
+                    echo $category->getLink();
                     $append = "<br>\n";
                 }
                 echo "<br>\n";
             }
-?>
+            ?>
                   <fieldset class="multiple">
                     <?php echo category::createPulldown("_category__" . $photo_id . "[0]") ?>
                   </fieldset><br>
               </fieldset><br>
-              <label for="person_0__<?php echo $photo_id ?>"><?php echo translate("people") ?></label>
+              <label for="person_0__<?php echo $photo_id ?>">
+                <?php echo translate("people") ?>
+              </label>
               <fieldset class="checkboxlist multiple">
-<?php
+            <?php
             $people = $photo->getPeople();
             if ($people) {
                 $append = "";
                 foreach ($people as $person) {
-?>
-                   <?php echo $append ?>
-                   <input type="checkbox" name="_remove_person__<?php echo $photo_id ?>[]" value="<?php echo $person->get("person_id") ?>">
-                   <?php echo $person->getLink() ?>
-<?php
+                    ?>
+                    <?php echo $append ?>
+                    <input type="checkbox" name="_remove_person__<?php echo $photo_id ?>[]" 
+                        value="<?php echo $person->get("person_id") ?>">
+                    <?php echo $person->getLink() ?>
+                    <?php
                     $append = "<br>\n";
                 }
                 echo "<br>\n";
             }
-?>
+            ?>
                <?php echo person::createPulldown("_person__" . $photo_id . "[0]") ?>
                   </fieldset><br>
                  <br>
               </fieldset>
               </fieldset>
-<?php
+        <?php
         }
     }
-?>
-<?php echo create_form($clean_vars, $queryIgnoreArray) ?>
+    ?>
+    <?php echo create_form($clean_vars, $queryIgnoreArray) ?>
               <input type="submit" value="<?php echo translate("update", 0) ?>">
               </p>
               </form>
 
-<?php
-// Here we clean out $request_vars, so the pager links will not contain
-// all the edits made on this page.
+    <?php
+    // Here we clean out $request_vars, so the pager links will not contain
+    // all the edits made on this page.
     while (list($key, $val) = each($clean_vars)) {
         if (in_array($key, $queryIgnoreArray)) { continue; }
         $pager_vars[$key] = $val;
     }
     $request_vars = $pager_vars;
-    echo pager($offset, $num_photos, $num_pages, $cells, $user->prefs->get("max_pager_size"), $request_vars, "_off");
+    echo pager($offset, $num_photos, $num_pages, $cells, 
+        $user->prefs->get("max_pager_size"), $request_vars, "_off");
 } // if photos
 ?>
 <br>

@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * Show overview of comments
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,29 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
-    require_once "include.inc.php";
+require_once "include.inc.php";
 
-    if (!conf::get("feature.comments")) {
-        redirect("zoph.php");
-    }
+if (!conf::get("feature.comments")) {
+    redirect("zoph.php");
+}
 
-    require_once "header.inc.php";
+require_once "header.inc.php";
 ?>
-          <h1>
-<?php echo translate("Comments") ?>
-          </h1>
-      <div class="main">
-      <br>
+<h1>
+  <?php echo translate("Comments") ?>
+</h1>
+<div class="main">
+  <br>
 <?php
-    $comments=get_all_comments();
-    foreach ($comments as $comment) {
-       $photo=$comment->get_photo();
-       if($user->get_permissions_for_photo($photo->get("photo_id")) || $user->is_admin()) {
-       echo $comment->toHTML($user, 1);
-       }
+$comments=get_all_comments();
+foreach ($comments as $comment) {
+    $photo=$comment->get_photo();
+    if($user->get_permissions_for_photo($photo->get("photo_id")) || $user->is_admin()) {
+        echo $comment->toHTML($user, 1);
     }
-?>
-<?php
-    require_once "footer.inc.php";
+}
+require_once "footer.inc.php";
 ?>

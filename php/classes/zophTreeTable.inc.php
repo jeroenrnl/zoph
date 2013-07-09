@@ -165,9 +165,9 @@ abstract class zophTreeTable extends zophTable {
 
             $newchild->appendChild($newchildkey);
             $newchild->appendChild($newchildtitle);
-       }
-       $order = user::getCurrent()->prefs->get("child_sortorder");
-       $children=$this->getChildrenForUser($order);
+        }
+        $order = user::getCurrent()->prefs->get("child_sortorder");
+        $children=$this->getChildrenForUser($order);
         if($children) {
             $childset=$xml->createElement($rootname);
             foreach($children as $child) {

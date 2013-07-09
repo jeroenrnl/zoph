@@ -1,8 +1,6 @@
 <?php
 /**
- * Show admin page
- *
- * This file is part of Zoph.
+ * Template for pages.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +15,18 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package Zoph
  * @author Jeroen Roos
+ * @package ZophTemplates
+ * @todo This is a temporary template until the entire zoph page is generated from a template
  */
 
-require_once "include.inc.php";
-
-if (!$user->is_admin()) {
-    redirect("zoph.php");
-}
-$title=translate("Adminpage");
-require_once "admin.inc.php";
-$adminpages=admin::getArray();
-
-$tpl=new template("admin", array(
-    "title" => $title,
-    "adminpages" => $adminpages
-));
-echo $tpl;
+if(!ZOPH) { die("Illegal call"); }
+require_once "header.inc.php";
 ?>
+    <h1>
+        <?php echo $tpl_header; ?>
+    </h1>
+    <div class="main">
+        <?php echo $this->displayBlocks(); ?>
+    </div>
+    <?php require_once "footer.inc.php"; ?>

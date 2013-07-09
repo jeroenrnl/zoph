@@ -99,19 +99,18 @@
 
 class mailMimePart {
 
-   /** @var string The encoding type of this part */
+    /** @var string The encoding type of this part */
     private $encoding;
-   /** @var array An array of subparts */
+    /** @var array An array of subparts */
     private $subparts;
 
-   /** @var string The output of this part after being built */
+    /** @var string The output of this part after being built */
     private $encoded;
 
-   /** @var array Headers for this part */
+    /** @var array Headers for this part */
     private $headers;
 
-   /** @var string The body of this part (not encoded)
-    */
+    /** @var string The body of this part (not encoded) */
     private $body;
 
     /**
@@ -132,42 +131,44 @@ class mailMimePart {
     public function __construct($body = '', $params = array()) {
         foreach ($params as $key => $value) {
             switch ($key) {
-                case 'content_type':
-                    $headers['Content-Type'] = $value . (isset($charset) ? '; charset="' . $charset . '"' : '');
-                    break;
+            case 'content_type':
+                $headers['Content-Type'] = $value . 
+                    (isset($charset) ? '; charset="' . $charset . '"' : '');
+                break;
 
-                case 'encoding':
-                    $this->encoding = $value;
-                    $headers['Content-Transfer-Encoding'] = $value;
-                    break;
+            case 'encoding':
+                $this->encoding = $value;
+                $headers['Content-Transfer-Encoding'] = $value;
+                break;
 
-                case 'cid':
-                    $headers['Content-ID'] = '<' . $value . '>';
-                    break;
+            case 'cid':
+                $headers['Content-ID'] = '<' . $value . '>';
+                break;
 
-                case 'disposition':
-                    $headers['Content-Disposition'] = $value . (isset($dfilename) ? '; filename="' . $dfilename . '"' : '');
-                    break;
+            case 'disposition':
+                $headers['Content-Disposition'] = $value . 
+                    (isset($dfilename) ? '; filename="' . $dfilename . '"' : '');
+                break;
 
-                case 'dfilename':
-                    if (isset($headers['Content-Disposition'])) {
-                        $headers['Content-Disposition'] .= '; filename="' . $value . '"';
-                    } else {
-                        $dfilename = $value;
-                    }
-                    break;
+            case 'dfilename':
+                if (isset($headers['Content-Disposition'])) {
+                    $headers['Content-Disposition'] .= '; filename="' . $value . '"';
+                } else {
+                    $dfilename = $value;
+                }
+                break;
 
-                case 'description':
-                    $headers['Content-Description'] = $value;
-                    break;
+            case 'description':
+                $headers['Content-Description'] = $value;
+                break;
 
-                case 'charset':
-                    if (isset($headers['Content-Type'])) {
-                        $headers['Content-Type'] .= '; charset="' . $value . '"';
-                    } else {
-                        $charset = $value;
-                    }
-                    break;
+            case 'charset':
+                if (isset($headers['Content-Type'])) {
+                    $headers['Content-Type'] .= '; charset="' . $value . '"';
+                } else {
+                    $charset = $value;
+                }
+                break;
             }
         }
 
@@ -203,7 +204,8 @@ class mailMimePart {
             $this->headers['Content-Type'] .= ';' . PHP_EOL . "\t" . 'boundary="' . $boundary . '"';
 
             // Add body parts to $subparts
-            for ($i = 0; $i < count($this->subparts); $i++) {
+            $count=count($this->subparts);
+            for ($i = 0; $i < $count; $i++) {
                 $headers = array();
                 $tmp = $this->subparts[$i]->encode();
                 foreach ($tmp['headers'] as $key => $value) {
@@ -247,22 +249,12 @@ class mailMimePart {
      * @param string The encoding type to use, 7bit, base64, or quoted-printable.
      */
     private function getEncodedData($data, $encoding) {
-        switch ($encoding) {
-            case '8bit':
-            case '7bit':
-                return $data;
-                break;
-
-            case 'quoted-printable':
-                return $this->quotedPrintableEncode($data);
-                break;
-
-            case 'base64':
-                return rtrim(chunk_split(base64_encode($data), 76, PHP_EOL));
-                break;
-
-            default:
-                return $data;
+        if($encoding=="quoted-printable") {
+            return $this->quotedPrintableEncode($data);
+        } else if ($encoding=="base64") {
+            return rtrim(chunk_split(base64_encode($data), 76, PHP_EOL));
+        } else {
+            return $data;
         }
     }
 
@@ -298,8 +290,10 @@ class mailMimePart {
                     $char = $escape . strtoupper(sprintf('%02s', dechex($dec)));
                 }
 
-                if ((strlen($newline) + strlen($char)) >= $line_max) {        // PHP_EOL is not counted
-                    $output  .= $newline . $escape . $eol;                    // soft line break; " =\r\n" is okay
+                if ((strlen($newline) + strlen($char)) >= $line_max) {        
+                    // PHP_EOL is not counted
+                    $output  .= $newline . $escape . $eol;
+                    // soft line break; " =\r\n" is okay
                     $newline  = '';
                 }
                 $newline .= $char;

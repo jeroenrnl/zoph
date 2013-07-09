@@ -18,7 +18,7 @@
  * @author Jeroen Roos
  * @package ZophTemplates
  */
-    if(!ZOPH) { die("Illegal call"); }
+if(!ZOPH) { die("Illegal call"); }
 ?>
         <br>
         <?php if(is_array($tpl_tracks)): ?>

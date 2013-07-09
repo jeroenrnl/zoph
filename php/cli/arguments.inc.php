@@ -335,7 +335,8 @@ class arguments {
             switch($type) {
             case "albums":
                 foreach($arg as $name) {
-                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && !album::getByName($name))) {
+                    if(self::$command=="new" || 
+                      (conf::get("import.cli.add.auto") && !album::getByName($name))) {
                         $parent=array_shift($args["palbum"]);
                         // this is a string comparison because the trim() in process() changes
                         // everything into a string...
@@ -343,7 +344,7 @@ class arguments {
                             if(conf::get("import.cli.add.always")) {
                                 $parent_id=album::getRoot()->getId();
                             } else {
-                                throw new CliNoParentException("No parent for album " . $name);;
+                                throw new CliNoParentException("No parent for album " . $name);
                             }
                         } else {
                             $palbum=album::getByName($parent);
@@ -367,7 +368,8 @@ class arguments {
                 break;
             case "categories":
                 foreach($arg as $name) {
-                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && !category::getByName($name))) {
+                    if(self::$command=="new" || 
+                      (conf::get("import.cli.add.auto") && !category::getByName($name))) {
                         $parent=array_shift($args["pcat"]);
                         // this is a string comparison because the trim() in process() changes
                         // everything into a string...
@@ -375,7 +377,7 @@ class arguments {
                             if(conf::get("import.cli.add.always")) {
                                 $parent_id=category::getRoot()->getId();
                             } else {
-                                throw new CliNoParentException("No parent for category " . $name);;
+                                throw new CliNoParentException("No parent for category " . $name);
                             }
                         } else {
                             $pcat=category::getByName($parent);
@@ -399,7 +401,8 @@ class arguments {
                 break;
             case "people":
                 foreach($arg as $name) {
-                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && !person::getByName($name))) {
+                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && 
+                      !person::getByName($name))) {
                         $vars["_new_person"][]=$name;
                     } else {
                         $person=person::getByName($name);
@@ -429,7 +432,8 @@ class arguments {
                 break;
             case "location":
                 foreach($arg as $name) {
-                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && !place::getByName($name))) {
+                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && 
+                      !place::getByName($name))) {
                         $parent=array_shift($args["pplace"]);
                         // this is a string comparison because the trim() in process() changes
                         // everything into a string...
@@ -437,7 +441,7 @@ class arguments {
                             if(conf::get("import.cli.add.always")) {
                                 $parent_id=place::getRoot()->getId();
                             } else {
-                                throw new CliNoParentException("No parent for location " . $name);;
+                                throw new CliNoParentException("No parent for location " . $name);
                             }
                         } else {
                             $pplace=place::getByName($parent);
@@ -465,7 +469,8 @@ class arguments {
                 break;
             case "dirpattern":
                 if(!preg_match("/^[aclpDP]+$/", $arg)) {
-                    throw new CliIllegalDirpatternException("Illegal characters in --dirpattern, allowed are: aclpDP");
+                    throw new CliIllegalDirpatternException("Illegal characters in " .
+                        "--dirpattern, allowed are: aclpDP");
                 } else {
                     $vars["_dirpattern"]=$arg;
                 }

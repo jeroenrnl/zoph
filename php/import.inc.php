@@ -36,12 +36,12 @@ abstract class Import {
      * @param string Filename
      */
     protected static function autorotate($file) {
-         $cmd = "jhead -autorot " . escapeshellarg($file);
-         exec($cmd, $output, $return);
-         if($return > 0) {
+        $cmd = "jhead -autorot " . escapeshellarg($file);
+        exec($cmd, $output, $return);
+        if($return > 0) {
             $msg=implode($output, "<br>");
             throw new ImportAutorotException($msg);
-         }
+        }
     }
 
     /**
@@ -187,11 +187,11 @@ abstract class Import {
             throw ImportFileNotImportableException(basename($file) . " is not a known XML file.");
         } else {
             switch($name) {
-                case "gpx 1.0":
-                case "gpx 1.1":
-                    $track=track::getFromGPX($file);
-                    $track->insert();
-                    $file->delete();
+            case "gpx 1.0":
+            case "gpx 1.1":
+                $track=track::getFromGPX($file);
+                $track->insert();
+                $file->delete();
                 break;
             }
         }

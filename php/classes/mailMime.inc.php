@@ -58,10 +58,6 @@ class MailMime {
     private $txtbody;
     /** @var string Contains the html part of the email */
     private $htmlbody;
-    /** @var string contains the mime encoded text */
-    private $mime;
-    /** @var string contains the multipart content */
-    private $multipart;
     /** @var array list of the attached images */
     private $html_images = array();
     /** @var array list of the attachments */
@@ -92,8 +88,10 @@ class MailMime {
      * html should show.
      *
      * @param  string  Either a string or the file name with the contents
-     * @param  bool If true the first param should be treated as a file name, else as a string (default)
-     * @param  bool If true the text or file is appended to the existing body, else the old body is overwritten
+     * @param  bool If true the first param should be treated as a file name, 
+     *              else as a string (default)
+     * @param  bool If true the text or file is appended to the existing body, 
+     *              else the old body is overwritten
      * @return bool true on success
      */
     public function setTXTBody($data, $isfile = false, $append = false) {
@@ -118,7 +116,8 @@ class MailMime {
      * Adds a html part to the mail
      *
      * @param  string Either a string or the file name with the contents
-     * @param  bool If true the first param should be treated as a file name, else as a string (default)
+     * @param  bool If true the first param should be treated as a file name, 
+     *              else as a string (default)
      * @return bool true on succes
      */
     public function setHTMLBody($data, $isfile = false) {
@@ -140,7 +139,8 @@ class MailMime {
      * @param string The content type
      * @return bool true 
      */
-    public function addHTMLImageFromString($filedata, $filename, $c_type='application/octet-stream') {
+    public function addHTMLImageFromString($filedata, $filename, 
+            $c_type='application/octet-stream') {
         $filename = basename($filename);
         $this->html_images[] = array(
             'body'   => $filedata,
@@ -158,13 +158,15 @@ class MailMime {
      * @param string The content type
      * @param string encoding.
      */
-    public function addHTMLImageFromFile($file, $c_type='application/octet-stream') {
+    public function addHTMLImageFromFile($file, 
+            $c_type='application/octet-stream') {
         $filedata = $this->file2str($file);
         return $this->addHTMLImageFromString($filedata, $file, $c_type);
     }
 
     /**
-     * Adds a file to the list of attachments. The source is a string containing the contents of the file.
+     * Adds a file to the list of attachments. The source is a string containing the 
+     * contents of the file.
      *
      * @param string The file data to use as attachment
      * @param string The content type
@@ -172,7 +174,8 @@ class MailMime {
      * @param string encoding.
      * @throws MailException
      */
-    public function addAttachmentFromString($filedata, $filename, $c_type = 'application/octet-stream', $encoding = 'base64') {
+    public function addAttachmentFromString($filedata, $filename, 
+            $c_type = 'application/octet-stream', $encoding = 'base64') {
         if (empty($filename)) {
             throw new MailException("The supplied filename for the attachment can\'t be empty");
         }
@@ -192,7 +195,8 @@ class MailMime {
      * @param string The content type
      * @param string encoding.
      */
-    public function addAttachmentFromFile($file, $c_type = 'application/octet-stream', $encoding = 'base64') {
+    public function addAttachmentFromFile($file, 
+            $c_type = 'application/octet-stream', $encoding = 'base64') {
         $filedata=$this->file2str($file);
         $this->addAttachmentFromString($filedata, $file, $c_type, $encoding);
     }
@@ -370,8 +374,8 @@ class MailMime {
 
         if (!empty($this->html_images) AND isset($this->htmlbody)) {
             foreach ($this->html_images as $value) {
-                $regex = '#(\s)((?i)src|background|href(?-i))\s*=\s*(["\']?)' . preg_quote($value['name'], '#') .
-                         '\3#';
+                $regex = '#(\s)((?i)src|background|href(?-i))\s*=\s*(["\']?)' . 
+                    preg_quote($value['name'], '#') .  '\3#';
                 $rep = '\1\2=\3cid:' . $value['cid'] .'\3';
                 $this->htmlbody = preg_replace($regex, $rep,
                                        $this->htmlbody

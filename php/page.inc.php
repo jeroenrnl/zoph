@@ -25,7 +25,8 @@ class page extends zophTable {
     protected static $primary_keys=array("page_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("title");
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set 
+      * by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="page.php?page_id=";
@@ -73,13 +74,16 @@ class page extends zophTable {
         $html.="<td>" . $this->get("date") . "</td>";
         $html.="<td>" . $this->get("timestamp") . "</td>";
         if(isset($pageset_id)) {
-            $html.="<td><span class='actionlink'><a href='pageset.php?_action=moveup&pageset_id=" . $pageset_id . "&page_id=". $this->get("page_id") . "'>";
+            $html.="<td><span class='actionlink'>";
+            $html.="<a href='pageset.php?_action=moveup&pageset_id=" . 
+                $pageset_id . "&page_id=". $this->get("page_id") . "'>";
             $html.=translate("move up") . "</a> | ";
-            $html.="<a href='pageset.php?_action=movedown&pageset_id=" . $pageset_id . "&page_id=". $this->get("page_id") . "'>";
+            $html.="<a href='pageset.php?_action=movedown&pageset_id=" . 
+                $pageset_id . "&page_id=". $this->get("page_id") . "'>";
             $html.=translate("move down") . "</a> | ";
-            $html.="<a href='pageset.php?_action=delpage&pageset_id=" . $pageset_id . "&page_id=". $this->get("page_id") . "'>";
+            $html.="<a href='pageset.php?_action=delpage&pageset_id=" . 
+                $pageset_id . "&page_id=". $this->get("page_id") . "'>";
             $html.=translate("remove") . "</a></span></td>";
-        } else {
         }    
         $html.="</tr>";
         return $html;

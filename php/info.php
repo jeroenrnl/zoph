@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * General info about Zoph and the database
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,44 +16,50 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
-    require_once "include.inc.php";
+require_once "include.inc.php";
 
-    $title = translate("About");
-    require_once "header.inc.php";
+$title = translate("About");
+require_once "header.inc.php";
 ?>
-          <h1><?php echo translate("about") ?></h1>
-         <div class="main">
-	 <h2>zoph</h2>
-<p>
-<?php echo translate("Zoph stands for <strong>z</strong>oph <strong>o</strong>rganizes <strong>ph</strong>otos.", 0) ?>
-
-<?php echo translate("Zoph is free software.", 0) ?>
-</p>
-<p>
-<?php echo sprintf(translate("Releases and documentation can be found at %s.", 0), "<a href=\"http://www.zoph.org/\">http://www.zoph.org/</a>") ?>
-
-<?php echo sprintf(translate("Send feedback to %s.", 0), "<img src=\"" . template::getImage("mailaddr.png") . "\">") ?>
-</p>
+<h1><?php echo translate("about") ?></h1>
+<div class="main">
+  <h2>zoph</h2>
+  <p>
+    <?php echo translate("Zoph stands for <strong>z</strong>oph <strong>o</strong>rganizes " .
+        "<strong>ph</strong>otos.", 0) ?>
+    <?php echo translate("Zoph is free software.", 0) ?>
+  </p>
+  <p>
+    <?php echo sprintf(translate("Releases and documentation can be found at %s.", 0), 
+      "<a href=\"http://www.zoph.org/\">http://www.zoph.org/</a>") ?>
+    <?php echo sprintf(translate("Send feedback to %s.", 0), "<img src=\"" . 
+      template::getImage("mailaddr.png") . "\">") ?>
+  </p>
 <?php
-    if ($user->is_admin()) {
-?>
-<br>
-<table id="zophinfo">
-<?php echo create_field_html_table(report::getInfoArray()) ?>
-<?php
-    }
+if ($user->is_admin()) {
+    ?>
+    <br>
+    <table id="zophinfo">
+      <?php echo create_field_html_table(report::getInfoArray()) ?>
+    <?php
+}
 ?>
 </table>
 <p>
 <?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, RELEASEDATE) ?>
 </p>
 <p>
-<?php echo translate("Originally written by Jason Geiger, now maintained by Jeroen Roos with thanks to the following for their contributions:", 0) ?>
+<?php echo translate("Originally written by Jason Geiger, now maintained by Jeroen Roos " .
+    "with thanks to the following for their contributions:", 0) ?>
 </p>
 <?php include "credits.html"; ?>
 </div>
 
 <?php
-    require_once "footer.inc.php";
+require_once "footer.inc.php";
 ?>

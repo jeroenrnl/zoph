@@ -40,7 +40,8 @@ abstract class zophTable {
     protected static $primary_keys=array();
     /** @var array Fields that may not be empty */
     protected static $not_null=array();
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set 
+     *   by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url;
@@ -83,7 +84,8 @@ abstract class zophTable {
             return (int) $this->get(static::$primary_keys[0]);
         } else {
             var_dump($this);
-            throw new ZophException("This class (" . get_class($this) . ") requires a specific getId() implementation, please report a bug");
+            throw new ZophException("This class (" . get_class($this) . ") " . 
+              "requires a specific getId() implementation, please report a bug");
         }
     }
 
@@ -134,8 +136,7 @@ abstract class zophTable {
                 $pos = strpos($key, $suffix);
                 if (($pos > 0) && (preg_match("/".$suffix."$/", $key))) {
                     $key = substr($key, 0, $pos);
-                }
-                else {
+                } else {
                     continue;
                 }
             }
@@ -246,12 +247,12 @@ abstract class zophTable {
 
     }
     
-   /**
-    * Retrieving a the searcharray can take a long time in some cases
-    * pages that use it multiple times can cache it, so it only needs
-    * to be retrieved once per page request.
-    * @param array searchArray;
-    */
+    /**
+     * Retrieving a the searcharray can take a long time in some cases
+     * pages that use it multiple times can cache it, so it only needs
+     * to be retrieved once per page request.
+     * @param array searchArray;
+     */
     public static function setSAcache(array $sa=null) {
         if(!$sa) {
             $sa=static::getSearchArray();
@@ -272,7 +273,6 @@ abstract class zophTable {
         } else {
             $extra_tables = null;
         }
-        $keys = static::$primary_keys;
 
         $constraints = $this->createConstraints();
 
@@ -297,13 +297,10 @@ abstract class zophTable {
      * Updates a record.
      */
     public function update() {
-        $keys = static::$primary_keys;
-
         $constraints = $this->createConstraints();
 
         reset($this->fields);
         $values=null;
-        $names=null;
         while (list($name, $value) = each($this->fields)) {
             if ($this->isKey($name)) { continue; }
 
@@ -332,7 +329,8 @@ abstract class zophTable {
 
         if (!$values) { return; }
 
-        $sql = "UPDATE " . DB_PREFIX . static::$table_name ." SET " . $values . " WHERE " . $constraints;
+        $sql = "UPDATE " . DB_PREFIX . static::$table_name .
+            " SET " . $values . " WHERE " . $constraints;
 
         query($sql, "Update failed:");
 
@@ -419,13 +417,18 @@ abstract class zophTable {
             $disp_first=$first->format($format);
             
             $last=new Time($details["last"]);
-            $disp_last=$newest->format($format);
+            $disp_last=$last->format($format);
             
             $display["count"]=$details["count"] . " " . translate("photos");
-            $display["taken"]=sprintf(translate("taken between %s and %s",false), $disp_oldest, $disp_newest);
-            $display["modified"]=sprintf(translate("last changed from %s to %s",false), $disp_first, $disp_last);
-            if(isset($details["lowest"]) && isset($details["highest"]) && isset($details["average"])) {
-                $display["rated"]=sprintf(translate("rated between %s and %s and an average of %s",false), $details["lowest"], $details["highest"], $details["average"]);
+            $display["taken"]=sprintf(translate("taken between %s and %s",false), 
+                $disp_oldest, $disp_newest);
+            $display["modified"]=sprintf(translate("last changed from %s to %s",false), 
+                $disp_first, $disp_last);
+            if(isset($details["lowest"]) && 
+                isset($details["highest"]) && 
+                isset($details["average"])) {
+                $display["rated"]=sprintf(translate("rated between %s and %s and an average of %s",false), 
+                    $details["lowest"], $details["highest"], $details["average"]);
             } else {
                 $display["rated"]=translate("no rating", false);
             }
@@ -572,9 +575,7 @@ abstract class zophTable {
                     $name = substr($name, 0, $n);
                 }
 
-                if ($value == "null" || $value == "''") {
-                    // ok
-                } else {
+                if ($value != "null" && $value != "''") {
                     $value = "'" . escape_string($value) . "'";
                 }
 
@@ -658,7 +659,6 @@ abstract class zophTable {
      * @return photo coverphoto
      */
     public function getCoverphoto() {
-        $user=user::getCurrent();
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
             if($coverphoto->lookup()) {
@@ -722,9 +722,8 @@ abstract class zophTable {
      * This is a wrapper around several objects which will call a method from 
      * those objects
      * @param string Search string
-     * @param user Only return records that can be seen by this user
      */
-    public static function getXML($search,$user=null) {
+    public static function getXML($search) {
         $search=strtolower($search);
 
         $xml = new DOMDocument('1.0','UTF-8');
@@ -741,11 +740,11 @@ abstract class zophTable {
         return static::getXMLdata($search, $xml, $rootnode);
     }
 
-   /**
-    * Create a pulldown menu for this object
-    * @param string name for this pulldown
-    * @param int|string id of value
-    */
+    /**
+     * Create a pulldown menu for this object
+     * @param string name for this pulldown
+     * @param int|string id of value
+     */
     public static function createPulldown($name, $value=null) {
         if(static::getAutocompPref()) {
             return static::createAutoCompPulldown($name, $value);

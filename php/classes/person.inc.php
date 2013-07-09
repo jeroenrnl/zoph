@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A class corresponding to the people table.
  *
@@ -45,7 +44,8 @@ class person extends zophTable implements Organizer {
     protected static $primary_keys=array("person_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("first_name");
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set 
+                  by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="person.php?person_id=";
@@ -432,8 +432,10 @@ class person extends zophTable implements Organizer {
         if ($user->is_admin()) {
             $sql = "SELECT ".
                 "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
@@ -447,8 +449,10 @@ class person extends zophTable implements Organizer {
         } else {
             $sql = "SELECT " .
                 "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
@@ -488,14 +492,14 @@ class person extends zophTable implements Organizer {
         return parent::getDetailsXML($details);
     }
 
-   /**
-    * Lookup person by name;
-    * @param string name
-    */
+    /**
+     * Lookup person by name;
+     * @param string name
+     */
     public static function getByName($name) {
-       if(empty($name)) {
-           return false;
-       }
+        if(empty($name)) {
+            return false;
+        }
 
         $sql = "SELECT person_id FROM " . DB_PREFIX . "people WHERE " .
             "CONCAT_WS(\" \", lower(first_name), lower(last_name))=" .

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A category class corresponding to the category table.
  *
@@ -45,7 +44,8 @@ class category extends zophTreeTable implements Organizer {
     protected static $primary_keys=array("category_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("category");
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys are set 
+                  by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="categories.php?parent_category_id=";
@@ -235,7 +235,8 @@ class category extends zophTreeTable implements Organizer {
             "pageset" =>
                 array(
                     translate("pageset"),
-                    template::createPulldown("pageset", $this->get("pageset"), get_pageset_select_array())),
+                    template::createPulldown("pageset", $this->get("pageset"), 
+                        get_pageset_select_array())),
             "sortname" =>
                 array(
                     translate("sort name"),
@@ -270,7 +271,7 @@ class category extends zophTreeTable implements Organizer {
         return "categories.php?parent_category_id=" . $this->getId();
     }
 
-   /**
+    /**
      * Get coverphoto for this category.
      * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
      * @param bool choose autocover from this album AND children
@@ -353,8 +354,10 @@ class category extends zophTreeTable implements Organizer {
         if ($user->is_admin()) {
             $sql = "SELECT ".
                 "COUNT(DISTINCT ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " . 
+                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
@@ -370,8 +373,10 @@ class category extends zophTreeTable implements Organizer {
         } else {
             $sql = "SELECT " .
                 "COUNT(DISTINCT ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
@@ -413,10 +418,10 @@ class category extends zophTreeTable implements Organizer {
         return parent::getDetailsXML($details);
     }
 
-   /**
-    * Lookup category by name
-    * @param string name
-    */
+    /**
+     * Lookup category by name
+     * @param string name
+     */
     public static function getByName($name) {
         if(empty($name)) {
             return false;

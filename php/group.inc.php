@@ -63,8 +63,6 @@ class group extends zophTable {
     }
 
     function getDisplayArray() {
-        $members=$this->get_members();
-
         $da = array(
             translate("group") => $this->get("group_name"),
             translate("description") => $this->get("description"),

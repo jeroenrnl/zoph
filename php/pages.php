@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * Display an overview of pages
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,29 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 
 require_once "include.inc.php";
 $title=translate("Pages");
 require_once "header.inc.php";
 ?>
-    <h1>
+  <h1>
 <?php
-        if ($user->is_admin()) {
+if ($user->is_admin()) {
+    ?>
+    <span class="actionlink">
+      <a href="page.php?_action=new"><?php echo translate("new") ?></a>
+    </span>
+    <?php
+}
 ?>
-            <span class="actionlink">
-                <a href="page.php?_action=new"><?php echo translate("new") ?></a>
-            </span>
-<?php
-        }
-?>
-        <?php echo $title ?>
-    </h1>
-    <div class="main">
+    <?php echo $title ?>
+  </h1>
+  <div class="main">
     <br>
-<?php echo get_all_pages() ?>
+    <?php echo get_all_pages() ?>
     <br>
-    </div>
+  </div>
 <?php
-    require_once "footer.inc.php";
+require_once "footer.inc.php";
 ?>

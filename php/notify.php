@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * Notify users of e.g. new albums
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,6 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
 require_once "include.inc.php";
 
@@ -129,7 +135,9 @@ if ($_action == "notify") {
 
         $url = getZophURL() . "login.php";
 
-        $body .= "\n" . translate("For accessing these Albums you have to use this URL:",0) . " " . $url . "\n";
+        $body .= "\n" . 
+        $body .= translate("For accessing these Albums you have to use this URL:",0);
+        $body .= " " . $url . "\n";
     }
 
     if ($showusername) {
@@ -149,15 +157,15 @@ if ($_action == "notify") {
 }
 
 if ($_action != "mail") {
-?>
+    ?>
     <input type="hidden" name="_action" value="mail">
-<?php
+    <?php
     if ($shownewalbums) {
-?>
+        ?>
         <input type="hidden" name="setlastmodified" value="1">
-<?php
+        <?php
     }
-?>
+    ?>
         <input type="hidden" name="user_id" value="<?php echo e($user_id) ?>">
         <label for="to_name"><?php echo translate("to (name)") ?>:</label>
         <?php echo create_text_input("to_name", e($to_name), 24, 32) ?><br>
@@ -171,10 +179,13 @@ if ($_action != "mail") {
         <?php echo create_text_input("subject", e($subject), 48, 64) ?><br>
         
         <label for="message"><?php echo translate("message:") ?></label><br>
-        <textarea name="message" class="email" cols="70" rows="15"><?php echo e($message) ?></textarea><br>
+        <textarea name="message" class="email" cols="70" rows="15">
+            <?php echo e($message) ?>
+        </textarea>
+        <br>
         <input type="submit" name="_button" value="<?php echo translate("email", 0); ?>">
         <br>
-<?php
+    <?php
 }
 ?>
     </form>

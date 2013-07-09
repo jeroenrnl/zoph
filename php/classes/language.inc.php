@@ -92,7 +92,8 @@ class language {
         $header=fgets($file);
         $zoph_header="# zoph language file - ";
         if(strtolower(substr($header,0,23))!=$zoph_header) {
-            log::msg("Incorrect language header in <b>" . $this->filename . "</b>", log::ERROR, log::LANG);
+            log::msg("Incorrect language header in <b>" . 
+                $this->filename . "</b>", log::ERROR, log::LANG);
             log::msg("<pre>" . $header. "</pre>", log::DEBUG, log::LANG);
             return false;
         } else {

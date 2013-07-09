@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A photo album class corresponding to the album table.
  *
@@ -43,7 +42,8 @@ class album extends zophTreeTable implements Organizer {
     protected static $primary_keys=array("album_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("album");
-    /** @var bool keep keys with insert. In most cases the keys are set by the db with auto_increment */
+    /** @var bool keep keys with insert. In most cases the keys 
+                  are set by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="albums.php?parent_album_id=";
@@ -85,7 +85,9 @@ class album extends zophTreeTable implements Organizer {
      */
     public function addPhoto(photo $photo) {
         $user=user::getCurrent();
-        if($user->is_admin() || $user->get_album_permissions($this->get("album_id"))->get("writable")) {
+        if($user->is_admin() || $user
+                ->get_album_permissions($this->get("album_id"))
+                ->get("writable")) {
             $sql = "INSERT INTO " . DB_PREFIX . "photo_albums " .
                 "(photo_id, album_id) values ('" .
                 escape_string($photo->get("photo_id")) . "', '" .
@@ -100,7 +102,8 @@ class album extends zophTreeTable implements Organizer {
      */
     public function removePhoto(photo $photo) {
         $user=user::getCurrent();
-        if($user->is_admin() || $user->get_album_permissions($this->get("album_id"))->get("writable")) {
+        if($user->is_admin() || $user->get_album_permissions($this->get("album_id"))
+            ->get("writable")) {
             $sql = "DELETE FROM " . DB_PREFIX . "photo_albums " .
                 "WHERE photo_id = '" . escape_string($photo->get("photo_id")) . "'" .
                 " AND album_id = '" . escape_string($this->get("album_id")) . "'";
@@ -115,10 +118,10 @@ class album extends zophTreeTable implements Organizer {
         parent::delete(array("photo_albums", "group_permissions"));
         $users = user::getRecords("user_id", array("lightbox_id" => $this->get("album_id")));
         if ($users) {
-          foreach ($users as $user) {
-            $user->setFields(array("lightbox_id" => "null"));
-            $user->update();
-          }
+            foreach ($users as $user) {
+                $user->setFields(array("lightbox_id" => "null"));
+                $user->update();
+            }
         }
     }
 
@@ -210,8 +213,10 @@ class album extends zophTreeTable implements Organizer {
         if (!$user->is_admin()) {
             $sql = "SELECT " .
                 "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
@@ -234,8 +239,10 @@ class album extends zophTreeTable implements Organizer {
             $sql = "SELECT ".
                 "'" . translate("In this album:", false) . "' AS title, " .
                 "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
+                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
+                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
+                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
@@ -372,7 +379,8 @@ class album extends zophTreeTable implements Organizer {
             "pageset" =>
                 array(
                     translate("pageset"),
-                    template::createPulldown("pageset", $this->get("pageset"), get_pageset_select_array())),
+                    template::createPulldown("pageset", $this->get("pageset"), 
+                        get_pageset_select_array())),
             "sortname" =>
                 array(
                     translate("sort name"),
@@ -474,10 +482,10 @@ class album extends zophTreeTable implements Organizer {
         }
     }
 
-   /**
-    * Lookup album by name;
-    * @param string name
-    */
+    /**
+     * Lookup album by name;
+     * @param string name
+     */
     public static function getByName($name) {
         if(empty($name)) {
             return false;

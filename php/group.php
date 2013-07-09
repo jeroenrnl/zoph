@@ -151,7 +151,10 @@ if ($action == "display") {
                 <?php 
             } 
             ?>
-              <td><?php echo $permissions->get("writable") == "1" ? translate("Yes") : translate("No") ?></td>
+              <td>
+                <?php echo $permissions->get("writable") == "1" 
+                    ? translate("Yes") : translate("No") ?>
+              </td>
             </tr>
             <?php
         }
@@ -188,7 +191,8 @@ if ($action == "display") {
         ?>
             <tr>
               <td colspan="4">
-                <?php echo translate("After this group is created it can be given access to albums.") ?>
+                <?php echo translate("After this group is created it can be " .
+                    "given access to albums.") ?>
               </td>
             </tr>
           </table>
@@ -247,7 +251,8 @@ if ($action == "display") {
                <td>
                </td>
              <td>
-                <input type="hidden" name="group_id_new" value="<?php echo $group->get("group_id") ?>">
+                <input type="hidden" name="group_id_new" 
+                    value="<?php echo $group->get("group_id") ?>">
                 <?php echo template::createPulldown("album_id_new", "", album::getSelectArray()) ?>
              </td>
              <td>
@@ -280,27 +285,33 @@ if ($action == "display") {
                 ?>
                 <tr>
                   <td>
-                    <input type="checkbox" name="_remove_permission_album__<?php echo $id ?>" value="1">
+                    <input type="checkbox" name="_remove_permission_album__<?php echo $id ?>" 
+                        value="1">
                   </td>
                   <td>
                     <?php echo $name ?>
                   </td>
                   <td>
-                    <input type="hidden" name="album_id__<?php echo $id ?>" value="<?php echo $id ?>">
-                    <input type="hidden" name="group_id__<?php echo $id ?>" value="<?php echo $group_id ?>">
-                    <?php echo create_text_input("access_level__$id", $permissions->get("access_level"), 4, 2) ?>
+                    <input type="hidden" name="album_id__<?php echo $id ?>" 
+                      value="<?php echo $id ?>">
+                    <input type="hidden" name="group_id__<?php echo $id ?>" 
+                      value="<?php echo $group_id ?>">
+                    <?php echo create_text_input("access_level__$id", 
+                        $permissions->get("access_level"), 4, 2) ?>
                   </td>
                 <?php 
                 if (conf::get("watermark.enable")) { 
                     ?>
                       <td>
-                        <?php echo create_text_input("watermark_level__$id", $permissions->get("watermark_level"), 4, 2) ?>
+                        <?php echo create_text_input("watermark_level__$id", 
+                            $permissions->get("watermark_level"), 4, 2) ?>
                       </td>
                     <?php
                 }
                 ?>
                   <td>
-                    <?php echo template::createYesNoPulldown("writable__$id", $permissions->get("writable")) ?>
+                    <?php echo template::createYesNoPulldown("writable__$id", 
+                        $permissions->get("writable")) ?>
                   </td>
                 </tr>
                 <?php

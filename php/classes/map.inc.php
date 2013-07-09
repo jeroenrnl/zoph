@@ -80,7 +80,6 @@ class map extends block {
      * @param array Array of objects to get markers from
      */
     public function addMarkers(array $objs) {
-        $markers=array();
         foreach($objs as $obj) {
             $marker=$obj->getMarker();
             if($marker instanceof marker) {
