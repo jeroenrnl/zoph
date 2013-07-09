@@ -133,7 +133,7 @@ function db_min_version($version) {
 function getArrayFromQuery($sql) {
     $objs=array();
     query($sql);
-    while ($row = fetch_row($result)) {
+    while ($row = fetch_row()) {
         $objs[] = $row[0];
     }
     return $objs;

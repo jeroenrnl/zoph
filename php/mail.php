@@ -111,7 +111,7 @@ else {
                 $mail->setTXTBody($message);
             } else {
                 if($includeurl) {
-                    $message .= "\n"
+                    $message .= "\n";
                     $message .= sprintf(translate("See this photo in %s"), 
                         conf::get("interface.title"));
                     $message .= ": " . getZophURL() . "/photo.php?photo_id=" . $photo_id;

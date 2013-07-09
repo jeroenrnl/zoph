@@ -93,18 +93,16 @@ class testImage {
             $colourleft->setColor($categories[$this->categories[0]][1]);
             $colourright->setColor($categories[$this->categories[1]][1]);
             $text[]="Categories:";
-            foreach($this->categories as $i=>$cat) {
+            foreach(array_keys($this->categories) as $i) {
                 $text[]="   " . $this->categories[$i] . ": " . 
                     $categories[$this->categories[$i]][1];
             }
-        } else {
-            $colour->setColor("white");
         }
         
         if($this->getAlbumCount() > 0) {
             $text[]="";
             $text[]="Albums:";
-            foreach($this->albums as $i=>$alb) {
+            foreach(array_keys($this->albums) as $i) {
                 $text[]="   " . $this->albums[$i] . ": " . $albums[$this->albums[$i]][1];
             }
         }
@@ -116,7 +114,7 @@ class testImage {
         if($this->getPersonCount() > 0) {
             $rtext[]="";
             $rtext[]="People:";
-            foreach($this->people as $i=>$person) {
+            foreach(array_keys($this->people) as $i) {
                 $rtext[]="   " . $this->people[$i] . ": " . $people[$this->people[$i]];
             }
         }

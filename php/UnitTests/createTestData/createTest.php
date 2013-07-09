@@ -62,7 +62,7 @@ class createTestData {
      */
     private static function createAlbums() {
         $albums=testData::getAlbums();
-        foreach ($albums as $id=>$alb) {
+        foreach ($albums as $alb) {
             $parent=$alb[0];
             $name=$alb[1];
             $album=new album();
@@ -77,7 +77,7 @@ class createTestData {
      */
     private static function createCategories() {
         $categories=testData::getCategories();
-        foreach ($categories as $id=>$cat) {
+        foreach ($categories as $cat) {
             $parent=$cat[0];
             $name=$cat[1];
             $category=new category();
@@ -91,7 +91,7 @@ class createTestData {
      */
     private static function createLocations() {
         $locations=testData::getLocations();
-        foreach ($locations as $id=>$loc) {
+        foreach ($locations as $loc) {
             $parent=$loc[0];
             $name=$loc[1];
             $place=new place();
@@ -155,7 +155,7 @@ class createTestData {
     private static function createGroups() {
         $groups=testData::getGroups();
 
-        foreach ($groups as $id=>$arr_group) {
+        foreach ($groups as $arr_group) {
             $group=new group();
             $group->set("group_name", $arr_group[0]);
             $group->insert();
@@ -180,7 +180,7 @@ class createTestData {
                 $prm->set("writable", 0);
                 $prm->insert();
 
-                $perm=$gr->get_group_permissions($alb);
+                $gr->get_group_permissions($alb);
            }
 
         }
@@ -285,7 +285,6 @@ class createTestData {
                     $count++;
 
                 }
-                $avg=$total/$count;
                 $photo->lookup();
             }
 
@@ -299,8 +298,6 @@ class createTestData {
         $photoCategories=testData::getPhotoCategories();
         $photoPeople=testData::getPhotoPeople();
         $photographer=testData::getPhotographer();
-        $comments=testData::getComments();
-        $ratings=testData::getRatings();
         foreach($photos as $num=>$name) {
             $image=new testImage();
             $image->setName($name);

@@ -121,19 +121,19 @@ class annotatedPhoto extends photo {
          *  the line separation string.
          * **********************************************/
 
-        $count = 0;
         $final_array=array();
         if ($vars) {
-            while (list($key, $val) = each($vars)) {
-                $tmp_array = explode("\n", wordwrap($val, $maxWidthChars, "\n   "));
-                while (list($key1, $val1) = each($tmp_array)) {
-                    $final_array[$count++] = $val1;
+            foreach($vars as $var) {
+                $tmp_array = explode("\n", wordwrap($var, $maxWidthChars, "\n   "));
+                foreach($tmp_array as $val) {
+                    $final_array[] = str_replace("\r", "", $val);
                 }
             }
+
         }
 
         $noted_image = ImageCreateTrueColor (ImageSX($orig_image), 
-            ImageSY($orig_image) + ((ImageFontHeight($font) + $padding) * $count));
+            ImageSY($orig_image) + ((ImageFontHeight($font) + $padding) * sizeof($final_array)));
 
         /* Use a light grey background to hide the jpeg artifacts caused by 
          * the sharp edges in text. 
@@ -148,7 +148,7 @@ class annotatedPhoto extends photo {
             ImageSX($orig_image), ImageSY($orig_image));
 
         if ($final_array) {
-            while (list($key, $val) = each($final_array)) {
+            foreach($final_array as $val) {
                 ImageString ($noted_image, $font, $indent, $row, $val, $black);
                 $row += ImageFontHeight($font) + $padding;
             }
