@@ -606,9 +606,19 @@ abstract class zophTable {
         $return=array();
         
         $key="_" . $class . $suffix;
+    
         if(isset($vars[$key])) {
-            $return=(array) $vars[$key];
-        } 
+            if(is_array($vars[$key])) {
+                foreach($vars[$key] as $id=>$var) {
+                    if(!empty($var)) {
+                        $return[$id]=$var;
+                    }
+                }
+            } else {
+                $return=(array) $vars[$key];
+            }
+        }
+        
         return $return;
     }
 
