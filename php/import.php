@@ -26,7 +26,7 @@ if ((!conf::get("import.enable")) || (!$user->is_admin() && !$user->get("import"
 
 // Detect upload larger than upload_max_filesize.
 if(isset($_GET["upload"]) && $_GET["upload"]==1 && $_POST==null) {
-    echo webImport::handleUploadErrors(UPLOAD_ERR_INI_SIZE);
+    echo WebImport::handleUploadErrors(UPLOAD_ERR_INI_SIZE);
     die();
 }
 $_action=getvar("_action");
@@ -80,10 +80,11 @@ if(empty($_action)) {
     if(conf::get("import.upload")) {
         $upload_num = $upload_id . "_" . $num;
 
-        $body=new template("uploadform", array(
-            "action" => "import.php?upload=1",
-            "onsubmit" => "zImport.startUpload(this, upload_id, num); return true",
-            "num" => $num,
+        $body=new block("uploadform", array(
+            "progress"  => WebImport::getProgressName(),
+            "action"    => "import.php?upload=1",
+            "onsubmit"  => "zImport.startUpload(this, upload_id, num); return true",
+            "num"       => $num,
             "upload_num" => $upload_num));
 
         $tpl=new template("html", array(
@@ -113,9 +114,9 @@ if(empty($_action)) {
         if($_FILES["file"]) {
             $file=$_FILES["file"];
         }
-        $upload_num=getvar("APC_UPLOAD_PROGRESS");
+        $upload_num=getvar(WebImport::getProgressName());
 
-        webImport::processUpload($file);
+        WebImport::processUpload($file);
 
         $body=new template("uploadprogressbar", array(
             "name" => $file["name"],

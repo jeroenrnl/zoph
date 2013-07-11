@@ -27,7 +27,7 @@ if(!ZOPH) {
 ?>
     <form enctype="multipart/form-data" action="<?php echo $tpl_action; ?>" method="POST" 
         onSubmit="<?php echo $tpl_onsubmit; ?>">
-        <input type="hidden" name="APC_UPLOAD_PROGRESS"
+        <input type="hidden" name="<?php echo $tpl_progress ?>"
             id="upload_<?php echo $tpl_num; ?>"
             value="<?php echo $tpl_upload_num ?>">
         <input type="hidden" name="_action" value="upload">
