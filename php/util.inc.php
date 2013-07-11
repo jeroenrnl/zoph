@@ -298,13 +298,6 @@ function create_form($vars, $ignore = array()) {
     return $form;
 }
 
-function minimum_version($vercheck) {
-    $minver = (int)str_replace('.', '', $vercheck);
-    $curver = (int)str_replace('.', '', phpversion());
-    return ($curver >= $minver);
-}
-
-
 function make_title($string) {
     $string = str_replace("_", " ", $string);
     $string = preg_replace("/\b(\w)/e", "strtoupper('\\1')", $string);
