@@ -79,8 +79,8 @@ Some language files are missing a few translations. Many, but not all,
 are shown in italics and preceded by [vo]. To fix this simply open the
 correct language file in the lang/ directory and add a transltions of
 the missing string (the English string should already be present in
-the file). If you make an additions please send me an email
-(zoph@zoph.org). 
+the file). Please share your changes, through an issue or fork + pull 
+request.
 
 ### Why do I see a bunch of code when I try to access Zoph? ###
 
