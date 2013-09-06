@@ -556,7 +556,8 @@ class photo extends zophTable {
      * @return int rating
      */
     public function getRatingForUser(user $user) {
-        $rating=array_pop(rating::getRatings($this, $user));
+        $ratings=rating::getRatings($this, $user);
+        $rating=array_pop($ratings);
         if($rating instanceof rating) {
             return $rating->get("rating");
         }
