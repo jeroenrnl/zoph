@@ -49,7 +49,7 @@ if ($action == "insert") {
          <label for="personid"><?php echo translate("person") ?></label>
          <?php echo template::createPulldown("person_id", 
             $action == "insert" ? "1" : $this_user->get("person_id"), 
-            get_people_select_array()) ?>
+            person::getSelectArray()) ?>
          <br>
 <?php 
 if($_action=="new") { 
