@@ -338,19 +338,17 @@ class person extends zophTable implements Organizer {
         $order=self::getAutoCoverOrder($autocover);
         if ($user->is_admin()) {
             $sql =
-                "SELECT DISTINCT p.photo_id FROM " .
-                DB_PREFIX . "photos AS p LEFT JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id JOIN " .
+                "SELECT DISTINCT ar.photo_id FROM " .
+                DB_PREFIX . "view_photo_avg_rating ar JOIN " .
                 DB_PREFIX . "photo_people AS pp" .
-                " ON pp.photo_id = p.photo_id " .
+                " ON pp.photo_id = ar.photo_id " .
                 " WHERE pp.person_id = " . 
                 escape_string($this->get("person_id")) .
                 " " . $order;
         } else {
             $sql=
                 "SELECT DISTINCT p.photo_id FROM " .
-                DB_PREFIX . "photos AS p LEFT JOIN " .
+                DB_PREFIX . "photos AS p JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON p.photo_id = ar.photo_id JOIN " .
                 DB_PREFIX . "photo_albums AS pa " .
@@ -441,7 +439,7 @@ class person extends zophTable implements Organizer {
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
                 "ROUND(MAX(ar.rating),1) AS highest, " . 
                 "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photos ph LEFT JOIN " .
+                DB_PREFIX . "photos ph JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON ph.photo_id = ar.photo_id " .
                 "WHERE ph.photographer_id=" . escape_string($id) .
@@ -460,7 +458,7 @@ class person extends zophTable implements Organizer {
                 "ROUND(AVG(ar.rating),2) AS average FROM " . 
                 DB_PREFIX . "photo_albums pa JOIN " .
                 DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pa.photo_id LEFT JOIN " .
+                "ON ph.photo_id=pa.photo_id JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON ph.photo_id = ar.photo_id LEFT JOIN " .
                 DB_PREFIX . "group_permissions gp " .
