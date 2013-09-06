@@ -179,7 +179,7 @@ if (!$user->is_admin()) {
     }
 }
 
-
+$actionlinks=array();
 if (conf::get("feature.mail")) {
     $actionlinks["email"]="mail.php?_action=compose&amp;photo_id=" . $photo->get("photo_id");
 }
