@@ -675,7 +675,7 @@ class person extends zophTable implements Organizer {
      * @return int count
      */
     public static function getAllPeopleAndPhotographers($search = null) {
-        $user==user::getCurrent();
+        $user=user::getCurrent();
         $allowed=array();
 
         if($user && !$user->is_admin()) {

@@ -144,7 +144,9 @@ class album extends zophTreeTable implements Organizer {
             $sql_order=" ORDER BY " . $order . ", name ";
         } else if ($order=="name") {
             $sql_order=" ORDER BY name ";
-        }
+        } else {
+	    $sql_order="";
+	}
         $sql =
             "SELECT a.*, album as name " .
             $order_fields . " FROM " .
