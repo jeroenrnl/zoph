@@ -361,7 +361,7 @@ class arguments {
                             $album_id=$album[0]->getId();
                             $vars["_album_id"][]=$album_id;
                         } else {
-                            throw new AlbumNotFoundException("Album not found: $parent");
+                            throw new AlbumNotFoundException("Album not found: $name");
                         }
                     }
                 }
