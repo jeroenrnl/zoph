@@ -553,17 +553,20 @@ class person extends zophTable implements Organizer {
      */
     public static function getAll($search=null, $search_first = false) {
         $user=user::getCurrent();
-        $where=self::getWhereForSearch(" and ", $search, $search_first);
-        if($where!="") {
-            $where="WHERE " . $where;
-        }
+        $where=self::getWhereForSearch("", $search, $search_first);
         if ($user->is_admin()) {
+            if($where!="") {
+                $where="WHERE " . $where;
+            }
             $sql =
                 "SELECT * FROM " .
                 DB_PREFIX . "people " .
                 $where .
                 " ORDER BY last_name, called, first_name";
         } else {
+            if($where!="") {
+                $where="AND " . $where;
+            }
             $sql =
                 "SELECT DISTINCT ppl.* FROM " .
                 DB_PREFIX . "people AS ppl JOIN " .
@@ -705,7 +708,7 @@ class person extends zophTable implements Organizer {
     }
 
     /**
-     * Get SQL WHERE statement to search for users
+     * Get SQL WHERE statement to search for people
      * @param string [and|or]
      * @param string search string
      * @param bool search for first name
