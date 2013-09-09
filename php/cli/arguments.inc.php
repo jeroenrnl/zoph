@@ -394,7 +394,7 @@ class arguments {
                             $cat_id=$cat[0]->getId();
                             $vars["_category_id"][]=$cat_id;
                         } else {
-                            throw new CategoryNotFoundException("Category not found: $parent");
+                            throw new CategoryNotFoundException("Category not found: $name");
                         }
                     }
                 }
