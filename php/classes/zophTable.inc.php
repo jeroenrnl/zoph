@@ -773,7 +773,7 @@ abstract class zophTable {
         $text="";
         if($value) {
             $obj=static::getFromId($value);
-            $obj->lookup;
+            $obj->lookup();
             $text=$obj->getName();
         }
 
