@@ -311,8 +311,8 @@ if ($num_thumbnails <= 0) {
             ?>
                 <fieldset class="editphotos-fields">
                   <label for="title__<?php echo $photo_id?>">
-                    <?php echo translate("title") ?><
-                  /label>
+                    <?php echo translate("title") ?>
+                  </label>
                   <?php echo create_text_input("__title__$photo_id", 
                     $photo->get("title"), 30, 64) ?>
                   <br>
