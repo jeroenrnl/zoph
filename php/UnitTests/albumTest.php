@@ -41,10 +41,15 @@ class albumTest extends ZophDataBaseTestCase {
         $this->assertEquals($album->getId(), $id);
     }
     
+    public function testSAcache() {
+        album::setSAcache();
+    }
+
     public function getAlbums() {
         return array(
             array(15, "TestAlbum1", 2),
             array(15, "TestAlbum2", 3)
         );
     }
+
 }
