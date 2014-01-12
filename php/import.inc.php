@@ -138,7 +138,9 @@ abstract class Import {
                 }
                 $photo->update();
                 $photo->updateRelations($vars, "_id");
-                $photo->rate($rating);
+                if(isset($rating)) {
+                    $photo->rate($rating);
+                }
                 if(conf::get("import.cli.hash")===true) {
                     try {
                         $photo->getHash();
