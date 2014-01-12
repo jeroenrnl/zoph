@@ -36,11 +36,11 @@ Change zoph into zophutf8 if you are working on the temporary database.
 
 Changes this script makes:
 
-    Remove the people_slots setting from the user preferences table (0.8.4)
-    Add a hash to the photos table (0.8.4)
-    Add a setting to control whether or not the user is allowed to use the sharing feature in the users table (0.8.4)
-    Added tables and preferences for geotagging support (0.8.3).
-    Make the language field in the prefs table longer so languages like en-ca can be stored (0.8.1)
+* Remove the people_slots setting from the user preferences table (0.8.4)
+* Add a hash to the photos table (0.8.4)
+* Add a setting to control whether or not the user is allowed to use the sharing feature in the users table (0.8.4)
+* Added tables and preferences for geotagging support (0.8.3).
+* Make the language field in the prefs table longer so languages like en-ca can be stored (0.8.1)
 
 Configuration updates
 =====================
@@ -50,35 +50,35 @@ In Zoph 0.8.2, .zophrc and a part of config.inc.php were replaced by zoph.ini. Y
 New options
 -----------
 
-LOG_ALWAYS 
+* LOG_ALWAYS 
     Control how much debug information is showed for all subjects. (0.8.1)
-LOG SEVERITY 
+* LOG SEVERITY 
     Configure how much debug information is showed, for the subjects defined in LOG_SUBJECT (0.8.1)
-LOG_SUBJECT 
+* LOG_SUBJECT 
     Configure on which subject you would like to see logging. 0.8.1)
-CLI_USER 
+* CLI_USER 
     User id that the CLI client uses to connect to Zoph. Must be admin. Change this into '0' to let Zoph lookup the user from the Unix user that is running Zoph. (0.8.2)
-IMPORT
+* IMPORT
     Enable ('1') or disable ('0') webimport (0.8.2)
-UPLOAD
+* UPLOAD
     Enable ('1') or disable ('0') uploading photos through the browser (0.8.2)
-IMPORT_DIR
+* IMPORT_DIR
     Directory, relative to IMAGE_DIR, that will store uploaded photos until they have been imported in Zoph. (0.8.2)
-IMPORT_PARALLEL
+* IMPORT_PARALLEL
     Number of photos to resize concurrently. (0.8.2)
-MAGIC_FILE
+* MAGIC_FILE
     MIME Magic file. Zoph needs this to determine the file type of an imported file. (0.8.2)
-FILE_MODE
+* FILE_MODE
     File permissions for files imported in Zoph. (0.8.2)
-UNGZ_CMD
+* UNGZ_CMD
     Command to be used to decompress .gz files. (0.8.2)
-UNBZ_CMD
+* UNBZ_CMD
     Command to be used to decompress .bzip files. (0.8.2)
-SHARE 
+* SHARE 
     Enable the possibility to share a photo by using a URL that can be used without logging in to Zoph. Once enabled, you can determine per user whether or not this user is allowed to see these URLs. (0.8.4)
-SHARE_SALT_FULL 
+* SHARE_SALT_FULL 
     When using the SHARE feature, Zoph uses a hash to identify a photo. Because you do not want people who have access to you full size photos (via Zoph or otherwise) to be able to generate these hashes, you should give Zoph a secret salt so only authorized users of your Zoph installation can generate them. This one is used for fullsize photos (0.8.4)
-SHARE_SALT_FULL 
+* SHARE_SALT_FULL 
     When using the SHARE feature, Zoph uses a hash to identify a photo. Because you do not want people who have access to you full size photos (via Zoph or otherwise) to be able to generate these hashes, you should give Zoph a secret salt so only authorized users of your Zoph installation can generate them. This one is used for midsize photos (0.8.4)
 
 Removed options
@@ -86,33 +86,33 @@ Removed options
 
 The following configuration options no longer exist, you should remove them from you config.inc.php:
 
-DB_HOST 
+* DB_HOST 
     Moved to zoph.ini (0.8.2)
-DB_NAME 
+* DB_NAME 
     Moved to zoph.ini (0.8.2)
-DB_USER 
+* DB_USER 
     Moved to zoph.ini (0.8.2)
-DB_PASS 
+* DB_PASS 
     Moved to zoph.ini (0.8.2)
-CLIENT_WEB_IMPORT 
+* CLIENT_WEB_IMPORT 
     Replaced by UPLOAD (0.8.2)
-SERVER_WEB_IMPORT 
+* SERVER_WEB_IMPORT 
     Replaced by IMPORT (0.8.2)
-DEFAULT_DESTINATION_PATH 
+* DEFAULT_DESTINATION_PATH 
     Due to introduction of IMPORT_DIR no longer necessary (0.8.2)
-SHOW_DESTINATION_PATH 
+* SHOW_DESTINATION_PATH 
     Due to introduction of IMPORT_DIR no longer necessary (0.8.2)
-REMOVE_ARCHIVE 
+* REMOVE_ARCHIVE 
     As of Zoph 0.8.2, Zoph always removes an archive after a successful decompress (0.8.2)
-IMPORT_MOVE 
+* IMPORT_MOVE 
     Due to introduction of IMPORT_DIR, Zoph always moves files (0.8.2)
-IMPORT_UMASK 
+* IMPORT_UMASK 
     Replaced by FILE_MODE (0.8.2)
-USE_IMAGE_SERVICE 
+* USE_IMAGE_SERVICE 
     The Image Service is now always on. If you were previously using define('USE_IMAGE_SERVICE', 0), you should move your images out of your webroot, and update IMAGE_DIR accordingly. (0.8.4)
-WEB_IMAGE_DIR 
+* WEB_IMAGE_DIR 
     This was only needed when USE_IMAGE_SERVICE was enabled. (0.8.4)
-MAX_PEOPLE_SLOTS 
+* MAX_PEOPLE_SLOTS 
     The people slots feature, that allowed multiple 'add people' dropdowns on the edit photo and bulk edit photo pages has been replaced by a Javascript that automatically adds a new dropdown whenever a new person is added, allowing a virtually unlimited amount of people to be added in one edit. (0.8.4)
 
 For upgrade instruction for older releases, please see http://en.wikibooks.org/wiki/Zoph/Upgrading/Archive
