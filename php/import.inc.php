@@ -85,6 +85,14 @@ abstract class Import {
                     $photo->setFields($exif);
                 }
             }
+            if(isset($vars["rating"])) {
+                $rating=$vars["rating"];
+                if(!(is_numeric($rating) && (1 <= $rating) && ($rating <= 10))) {
+                    unset($rating);
+                }
+                unset($vars["rating"]);
+            }
+
             if ($vars) {
                 $photo->setFields($vars);
             }
@@ -108,6 +116,7 @@ abstract class Import {
             } else {
                 $photo->set("path", $path);
             }
+
             try {
                 $photo->import($file);
             } catch (FileException $e) {
@@ -129,6 +138,7 @@ abstract class Import {
                 }
                 $photo->update();
                 $photo->updateRelations($vars, "_id");
+                $photo->rate($rating);
                 if(conf::get("import.cli.hash")===true) {
                     try {
                         $photo->getHash();
