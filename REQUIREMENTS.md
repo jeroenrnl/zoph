@@ -15,21 +15,21 @@ Other versions may work as well, see below for more details. How to install thes
 * Current versions of Zoph are developped on Apache 2.2.x
 
 ##PHP##
-* Current versions of Zoph are developped on PHP 5.4
-** PHP 5.2 and older are no longer supported
-** PHP 5.3 should still work
+Current versions of Zoph are developped on PHP 5.4
+* PHP 5.2 and older are no longer supported
+* PHP 5.3 should still work
 
 ###Required features###
-* The following features (extensions) to PHP are required for Zoph. Not all distributions automatically install all of them.
-** session
-** mysql
-** pcre
-** gd2
-** exif
-** xml
-** pear (if you want to use the e-mail features)
-** APC
-** FileInfo
+The following features (extensions) to PHP are required for Zoph. Not all distributions automatically install all of them.
+* session
+* mysql
+* pcre
+* gd2
+* exif
+* xml
+* pear (if you want to use the e-mail features)
+* APC
+* FileInfo
 
 ##php.ini settings##
 
@@ -69,7 +69,7 @@ apc.rfc1867_name="APC_UPLOAD_PROGRESS"
 
 ##Jhead##
 * Jhead 2.8x
-** Other versions probably work as well
+    * Other versions probably work as well
 
 Jhead is a handy little program that extracts the information stored in the Exif headers that are added by most digital cameras. Exif stores date and time plus a bunch of other info about a photo. Zoph uses Jhead to parse the header so you'll need to install it. You can download it from http://www.sentex.net/~mwandel/jhead/.
 
@@ -77,8 +77,8 @@ Jhead is a handy little program that extracts the information stored in the Exif
 In order to be able to use Zoph, you will need a browser.
 * Zoph is being developped and thoroughly tested with Firefox 24.x
 * Zoph should work with all recent browser versions
-** Please report a bug if it doesn't.
+    * Please report a bug if it doesn't.
 * Older versions usually work, but layout may not be 100% ok.
 * Some features require Javascript support
-** You can turn off Javascript support in Zoph with the JAVASCRIPT configuration setting. Obviously features that require it will be disabled as well.
-** Zoph should work when Javascript is turned off in the browser, except if the Autocomplete feature is enabled, however, Zoph will detect this and warn the user to turn Autocompletion off (or Javascript on).
+    * You can turn off Javascript support in Zoph with the JAVASCRIPT configuration setting. Obviously features that require it will be disabled as well.
+    * Zoph should work when Javascript is turned off in the browser, except if the Autocomplete feature is enabled, however, Zoph will detect this and warn the user to turn Autocompletion off (or Javascript on).
