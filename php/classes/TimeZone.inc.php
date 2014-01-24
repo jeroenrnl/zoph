@@ -139,7 +139,7 @@ class TimeZone extends DateTimeZone {
         if(class_exists("XMLReader")) {
             $failed=false;
             $xml=new XMLReader();
-            @$xml->open("http://ws.geonames.org/timezone?lat=" . 
+            @$xml->open("http://api.geonames.org/timezone?username=zoph&lat=" . 
                 $lat . "&lng=" . $lon) or $failed=true;
             
             if (!$failed) {
