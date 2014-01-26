@@ -233,8 +233,9 @@ abstract class zophTreeTable extends zophTable {
         
         $children = $rec->getChildrenForUser($order);
         if ($children) {
+            $depth++;
             foreach ($children as $child) {
-                $select_array = static::getTreeSelectArray($child, $select_array, ++$depth);
+                $select_array = static::getTreeSelectArray($child, $select_array, $depth);
             }
         }
         return $select_array;
