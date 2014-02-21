@@ -29,14 +29,14 @@ Changes this script makes:
 Migrating the configuration
 ---------------------------
 As of Zoph 0.9.1, configuration is mainly controlled from the GUI and no longer from config.inc.php. This means that you either must migrate your configuration or make all configuration changes by hand.
-1. Log in to your Zoph installation with an admin user
-   You may get some errors about because Zoph cannot find your photos in the default location, don't worry, we'll fix that next.
-2. Copy migrate_config.php from the contrib directory into your Zoph directory
-3. In your browser, replace zoph.php with migrate_config.php
-4. Zoph will try to migrate your config to the new, database-based configuration.
-5. Delete migrate_config.php
-6. There are a few configuration-items left in config.inc.php, in most cases you'll want to leave those on default, so instead of 
-   manually removing all the no longer existing configuration-items, you may as well just overwrite your config file with the one included with Zoph.
+   1. Log in to your Zoph installation with an admin user
+      You may get some errors about because Zoph cannot find your photos in the default location, don't worry, we'll fix that next.
+   2. Copy migrate_config.php from the contrib directory into your Zoph directory
+   3. In your browser, replace zoph.php with migrate_config.php
+   4. Zoph will try to migrate your config to the new, database-based configuration.
+   5. Delete migrate_config.php
+   6. There are a few configuration-items left in config.inc.php, in most cases you'll want to leave those on default, so instead of 
+      manually removing all the no longer existing configuration-items, you may as well just overwrite your config file with the one included with Zoph.
 
 
 Zoph 0.8 to 0.9
