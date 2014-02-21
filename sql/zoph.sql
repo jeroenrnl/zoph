@@ -111,6 +111,13 @@ CREATE TABLE zoph_comments (
   PRIMARY KEY  (comment_id)
 ) ENGINE=MyISAM;
 
+CREATE TABLE zoph_conf (
+  conf_id char(64) NOT NULL,
+  value varchar(128) default NULL,
+  timestamp timestamp,
+  PRIMARY kEY (conf_id)
+) ENGINE=MyISAM;
+
 CREATE TABLE zoph_groups (
         group_id int(11) NOT NULL auto_increment,
         group_name varchar(32),
@@ -257,7 +264,6 @@ CREATE TABLE zoph_photos (
   photographer_id int(11) default NULL,
   location_id int(11) default NULL,
   view varchar(64) default NULL,
-  rating float(4,2) unsigned default NULL,
   description text,
   date varchar(10) default NULL,
   time varchar(8) default NULL,
@@ -283,7 +289,6 @@ CREATE TABLE zoph_photos (
   PRIMARY KEY  (photo_id),
   KEY photo_photog_id (photographer_id),
   KEY photo_loc_id (location_id),
-  KEY photo_rating (rating),
   KEY photo_level (level)
 ) ENGINE=MyISAM;
 
@@ -355,7 +360,6 @@ CREATE TABLE zoph_prefs (
   autocomp_categories char(1) default '1',
   autocomp_photographer char(1) default '1',
   autocomp_people char(1) default '1',
-  desc_thumbnails char(1) NOT NULL default '0',
   fullsize_new_win char(1) NOT NULL default '0',
   view enum('list','tree','thumbs') default 'list' NOT NULL,
   autothumb enum('oldest','newest','first','last','highest','random') 
@@ -370,7 +374,7 @@ CREATE TABLE zoph_prefs (
 --
 
 
-INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0','1','1','1','1','1','0','0','list','highest','sortname');
+INSERT INTO zoph_prefs VALUES (1,'1',8,3,4,10,0,5,1,5,NULL,7,'0','1','0','1','1','1','1','1','0','list','highest','sortname');
 
 --
 -- Table structure for table 'zoph_photo_ratings'
@@ -387,6 +391,8 @@ CREATE TABLE zoph_photo_ratings (
 ) ENGINE=MyISAM;
 
 CREATE INDEX user_photo ON zoph_photo_ratings (user_id,photo_id);
+CREATE INDEX photo_id ON zoph_photo_ratings(photo_id);
+
 
 
 --
@@ -484,4 +490,8 @@ CREATE TABLE zoph_point (
   PRIMARY KEY  (point_id)
 ) ENGINE=MyISAM;
 
+CREATE VIEW zoph_view_photo_avg_rating AS
+  SELECT p.photo_id, avg(pr.rating) AS rating FROM zoph_photos AS p
+    LEFT JOIN zoph_photo_ratings AS pr ON p.photo_id = pr.photo_id
+    GROUP BY p.photo_id;
 
