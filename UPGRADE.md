@@ -1,3 +1,122 @@
+
+Zoph 0.9 to 0.9.1
+=================
+* You can use these instructions as well to upgrade from v0.8.4 or 0.9pre1 or 0.9pre2
+* If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.
+
+Copy files
+----------
+Copy the contents of the php directory, including all subdirs, into your webroot and copy the lang directory into the webroot as well. You should make a backup copy of config.inc.php to prevent overwriting it.
+
+     cp config.inc.php config.local.php
+     cp -a php/* /var/www/html/zoph
+     cp -a lang /var/www/html/zoph
+
+Database changes
+----------------
+* Execute zoph-update-0.10.sql:
+
+    mysql -u zoph_admin -p zoph < sql/zoph_update-0.10.sql
+
+Changes this script makes:
+
+* Adding a database table to store configuration
+* Removing a field from preferences table for a removed preference
+* Removing the rating field from the photos table
+* Adding a view on the photos and rating table to get the average rating
+* Adding an index on the rating table
+
+Migrating the configuration
+---------------------------
+As of Zoph 0.9.1, configuration is mainly controlled from the GUI and no longer from config.inc.php. This means that you either must migrate your configuration or make all configuration changes by hand.
+   1. Log in to your Zoph installation with an admin user.
+      * You may get some errors about because Zoph cannot find your photos in the default location, don't worry, we'll fix that next.
+   2. Copy migrate_config.php from the contrib directory into your Zoph directory
+   3. In your browser, replace zoph.php with migrate_config.php
+   4. Zoph will try to migrate your config to the new, database-based configuration.
+   5. Delete migrate_config.php
+   6. There are a few configuration-items left in config.inc.php, in most cases you'll want to leave those on default, so instead of 
+      manually removing all the no longer existing configuration-items, you may as well just overwrite your config file with the one included with Zoph.
+
+Removed Configuration options
+-----------------------------
+Since the configuration is now controlled from the Web GUI, most of the configuration options are now deprecated:
+* ZOPH_TITLE
+* MAX_CRUMBS
+* MAX_DAYS_PAST
+* ZOPH_URL
+* ZOPH_SECURE_URL
+* DEFAULT_TABLE_WIDTH
+* CSS_SHEET
+* ICONSET
+* LANG_DIR
+* DEFAULT_LANG
+* DEFAULT_ORDER
+* DEFAULT_DIRECTION
+* $VALIDATOR
+* FORCE_SSL
+* FORCE_SSL_LOGIN
+* THUMB_SIZE
+* MID_SIZE
+* THUMB_PREFIX
+* MID_PREFIX
+* MIXED_THUMBNAILS
+* THUMB_EXTENSION
+* ALLOW_ROTATIONS
+* ROTATE_CMD
+* BACKUP_ORIGINAL
+* BACKUP_PREFIX
+* IMAGE_DIR
+* CLI_USER
+* IMPORT
+* UPLOAD
+* IMPORT_DIR
+* IMPORT_PARALLEL
+* MAGIC_FILE
+* TAR_CMD
+* UNZIP_CMD
+* UNGZ_CMD
+* UNBZ_CMD
+* MAX_UPLOAD
+* USE_DATED_DIRS
+* HIER_DATED_DIRS
+* DIR_MODE
+* FILE_MODE
+* JAVASCRIPT
+* EMAIL_PHOTOS
+* WATERMARKING
+* WATERMARK
+* WM_POSX
+* WM_POSY
+* WM_TRANS
+* ALLOW_COMMENTS
+* AUTOCOMPLETE
+* DOWNLOAD
+* MAPS
+* GOOGLE_KEY
+* CAMERA_TZ
+* DATE_FORMAT
+* TIME_FORMAT
+* GUESS_TZ
+* SHARE
+* SHARE_SALT_FULL
+* SHARE_SALT_MID
+
+Configuration options in config.inc.php
+---------------------------------------
+There are only a few options left that can be set in `config.inc.php`. Normally you will not need to change them:
+* VERSION: Controls the version displayed in Zoph's GUI, only change this if you're a Zoph developper.
+* RELEASEDATE: Controls the release date displayed in Zoph's GUI, only change this if you're a Zoph developper.
+* INI_FILE: Location of zoph.ini
+* THUMB_SIZE: Size of thumbnail files (you shouldn't change this)
+* MID_SIZE: Size of mid size files (you shouldn't change this)
+* THUMB_PREFIX: Size of thumbnail files (you shouldn't change this)
+* MID_PREFIX: Size of mid size files (you shouldn't change this)
+* LOG_ALWAYS: Control debugging level
+* LOG_SEVERITY: Control debugging level
+* LOG_SUBJECT: Control debugging level
+
+
 Zoph 0.8 to 0.9
 ===============
 

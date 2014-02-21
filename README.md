@@ -1,4 +1,4 @@
-# Zoph 0.9.0.1 Readme #
+# Zoph 0.9.1 Readme #
 
 ## Introduction ##
 
@@ -24,8 +24,8 @@ your photos, search them, or control access to them, take a look at Zoph.
 
 ## Installation ##
 
-Read the REQUIREMENTS, INSTALL docs.  If you are upgrading
-skip to the UPGRADE document.
+Read the REQUIREMENTS.md, INSTALL.md docs.  If you are upgrading
+skip to the UPGRADE.md document.
 
 More documentation can be found on http://en.wikibooks.org/wiki/zoph
 
