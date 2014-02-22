@@ -77,17 +77,20 @@ class photographer extends person implements Organizer {
     public static function getAll($search = null, $search_first = null) {
         $user=user::getCurrent();
 
-        $where=self::getWhereForSearch(" and ", $search, $search_first);
-        if($where!="") {
-            $where="WHERE " . $where;
-        }
+        $where=self::getWhereForSearch("", $search, $search_first);
         if ($user->is_admin()) {
+            if($where!="") {
+                $where="WHERE " . $where;
+            }
             $sql =
                 "SELECT * FROM " .
-                DB_PREFIX . "people " .
+                DB_PREFIX . "people AS ppl " .
                 $where . 
                 " ORDER BY last_name, called, first_name";
         } else {
+            if($where!="") {
+                $where="AND " . $where;
+            }
             $sql =
                 "SELECT DISTINCT ppl.* FROM " .
                 DB_PREFIX . "people AS ppl " .

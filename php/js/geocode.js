@@ -78,7 +78,7 @@ var zGeocode=function() {
     
         divResult.innerHTML="searching for...<br>" + query;
 
-        var url="http://ws.geonames.org/search?q=" + encodeURI(query) + "&style=SHORT";
+        var url="http://api.geonames.org/search?username=zoph&q=" + encodeURI(query) + "&style=SHORT";
         var http=new XMLHttpRequest();
         http.open("GET", url, true);
 

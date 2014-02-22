@@ -21,12 +21,12 @@
  */
 
 // This file should contain the following settings:
-// VERSION, INI_FILE, THUMB_SIZE, MID_SIZE, THUMB_PREFIX, MID_PREFIX, LOG_ALWAYS
+// VERSION, RELEASEDATE, INI_FILE, THUMB_SIZE, MID_SIZE, THUMB_PREFIX, MID_PREFIX, LOG_ALWAYS
 // LOG_SEVERITY, LOG_SUBJECT.
 // All other settings are now made from the webinterface
 
-define('VERSION', '0.9.1pre');
-define('RELEASEDATE', '14-2-2013');
+define('VERSION', '0.9.1');
+define('RELEASEDATE', '21-2-2014');
 // DB_HOST, DB_NAME, DB_USER, DB_PASS and DB_PREFIX have been moved to
 // zoph.ini. The location can be set by the next config item:
 

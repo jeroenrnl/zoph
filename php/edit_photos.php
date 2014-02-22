@@ -33,8 +33,8 @@ if(!preg_match("/^[a-zA-Z_]*$/", $_order)) {
     die("Illegal characters in _order");
 }
 
-if (!$_cols) { $_cols = $user->prefs->get("num_rows"); }
-if (!$_rows) { $_rows = $user->prefs->get("num_cols"); }
+if (!$_cols) { $_cols = $user->prefs->get("num_cols"); }
+if (!$_rows) { $_rows = $user->prefs->get("num_rows"); }
 if (!$_off)  { $_off = 0; }
 
 if (!$_order) { $_order = conf::get("interface.sort.order"); }
@@ -311,8 +311,8 @@ if ($num_thumbnails <= 0) {
             ?>
                 <fieldset class="editphotos-fields">
                   <label for="title__<?php echo $photo_id?>">
-                    <?php echo translate("title") ?><
-                  /label>
+                    <?php echo translate("title") ?>
+                  </label>
                   <?php echo create_text_input("__title__$photo_id", 
                     $photo->get("title"), 30, 64) ?>
                   <br>

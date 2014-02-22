@@ -361,7 +361,7 @@ class arguments {
                             $album_id=$album[0]->getId();
                             $vars["_album_id"][]=$album_id;
                         } else {
-                            throw new AlbumNotFoundException("Album not found: $parent");
+                            throw new AlbumNotFoundException("Album not found: $name");
                         }
                     }
                 }
@@ -394,7 +394,7 @@ class arguments {
                             $cat_id=$cat[0]->getId();
                             $vars["_category_id"][]=$cat_id;
                         } else {
-                            throw new CategoryNotFoundException("Category not found: $parent");
+                            throw new CategoryNotFoundException("Category not found: $name");
                         }
                     }
                 }

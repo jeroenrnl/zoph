@@ -112,6 +112,7 @@ var XML=function() {
         if(form.tagName=="FORM") {
             inputs=form.getElementsByTagName("input");
             selects=form.getElementsByTagName("select");
+            textareas=form.getElementsByTagName("textarea");
             if(url.indexOf("?")) {
                 url += "&";
             } else {
@@ -124,7 +125,12 @@ var XML=function() {
             }
             for(i=0; i<selects.length; i++) {
                 if(selects[i].value) {
-                    url += selects[i].name + "=" + selects[i].value + "&";
+                    url += escape(selects[i].name) + "=" + escape(selects[i].value) + "&";
+                }
+            }
+            for(i=0; i<textareas.length; i++) {
+                if(textareas[i].value) {
+                    url += escape(textareas[i].name) + "=" + escape(textareas[i].value) + "&";
                 }
             }
             var http=new XMLHttpRequest();

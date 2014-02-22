@@ -174,7 +174,7 @@ class WebImport extends Import {
 
         $dir=conf::get("path.images") . "/" . conf::get("path.upload") . "/";
         $file=file::getFromMD5($dir, $md5);
-        
+
         if($file instanceof file) {
             $mime=$file->getMime();
             $type=$file->type;
@@ -346,24 +346,42 @@ class WebImport extends Import {
         $node=$xml->createElement(self::XMLNODE);
             
 
-        if(function_exists("apc_fetch")) {
-            $progress=apc_fetch("upload_" . $uploadId);
-            if($progress===false) {
+        if(PHP_VERSION_ID < 50400) {
+            if(function_exists("apc_fetch")) {
+                $progress=apc_fetch("upload_" . $uploadId);
+                if($progress===false) {
+                    $progress['current']=0;
+                    $progress['total']=0;
+                    // probably something wrong with APC settings
+                    if(ini_get("apc.enabled")==false) {
+                        $progress['filename']="Enable apc.enabled in php.ini";
+                    } else if(ini_get("apc.rfc1867")==false) {
+                        $progress['filename']="Enable apc.rfc1867 in php.ini";
+                    }
+                }
+            } else {
+                // APC extension not available
                 $progress['current']=0;
                 $progress['total']=0;
-                // probably something wrong with APC settings
-                if(ini_get("apc.enabled")==false) {
-                    $progress['filename']="Enable apc.enabled in PHP.ini";
-                } else if(ini_get("apc.rfc1867")==false) {
-                    $progress['filename']="Enable apc.rfc1867 in PHP.ini";
-                }
-            }     
+                $progress['filename']="APC extension not available";
+            }
         } else {
-            // APC extension not available
-            $progress['current']=0;
-            $progress['total']=0;
-            $progress['filename']="APC extension not available";
+            if (ini_get("session.upload_progress.enabled")==true) {
+                $upl_prog=$_SESSION[ini_get("session.upload_progress.prefix") . $uploadId];
+                $progress['current']=$upl_prog["bytes_processed"];
+                $progress['total']=$upl_prog["content_length"];
+                // for now we take the first file as multiple uploads
+                // are not yet supported
+                $progress['filename']=$upl_prog["files"][0]["name"];
+            } else {
+                // session.upload_progress not enables extension not available
+                $progress['current']=0;
+                $progress['total']=0;
+                $progress['filename']="Enable session.upload_progress.enabled in php.ini";
+            }
+
         }
+
         $id=$xml->createElement("id");
         $current=$xml->createElement("current");
         $total=$xml->createElement("total");
@@ -406,7 +424,7 @@ class WebImport extends Import {
             case "image":
                 $thumb=THUMB_PREFIX . DIRECTORY_SEPARATOR . THUMB_PREFIX . "_" . $file->getName();
                 $mid=MID_PREFIX . DIRECTORY_SEPARATOR . MID_PREFIX . "_" . $file->getName();
-                if(file_exists($dir . $thumb) &&
+                if(file_exists($dir . DIRECTORY_SEPARATOR . $thumb) &&
                   file_exists($dir . DIRECTORY_SEPARATOR . $mid)) {
                     $status="done";
                 } else {
@@ -499,6 +517,19 @@ class WebImport extends Import {
         } else {
             log::msg("No files specified", log::FATAL, log::IMPORT);
             return false;
+        }
+    }
+
+    /**
+     * Get the name of the progress hidden input field
+     * The name of this field differs based on the way progress is checked
+     * APC (PHP5.3) or session.import_progress (PHP>=5.4)
+     */
+    public static function getProgressName() {
+        if(PHP_VERSION_ID < 50400) {
+            return "APC_UPLOAD_PROGRESS";
+        } else {
+            return ini_get("session.upload_progress.name");
         }
     }
 }

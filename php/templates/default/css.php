@@ -336,7 +336,7 @@ form.editgroup {
 /*
  For form validation
  */
-:invalid {
+input:invalid {
     background: rgba(255,0,0,0.1);
 }
 

@@ -144,6 +144,8 @@ class album extends zophTreeTable implements Organizer {
             $sql_order=" ORDER BY " . $order . ", name ";
         } else if ($order=="name") {
             $sql_order=" ORDER BY name ";
+        } else {
+            $sql_order="";
         }
         $sql =
             "SELECT a.*, album as name " .
@@ -224,7 +226,7 @@ class album extends zophTreeTable implements Organizer {
                 "ROUND(AVG(ar.rating),2) AS average FROM " . 
                 DB_PREFIX . "photo_albums pa JOIN " .
                 DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pa.photo_id LEFT JOIN " .
+                "ON ph.photo_id=pa.photo_id JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON ph.photo_id = ar.photo_id LEFT JOIN " .
                 DB_PREFIX . "group_permissions gp " .
@@ -250,7 +252,7 @@ class album extends zophTreeTable implements Organizer {
                 "ROUND(AVG(ar.rating),2) AS average FROM " . 
                 DB_PREFIX . "photo_albums pa JOIN " .
                 DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pa.photo_id LEFT JOIN " .
+                "ON ph.photo_id=pa.photo_id JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON ph.photo_id = ar.photo_id " .
                 "WHERE pa.album_id=" . escape_string($id) .
@@ -442,31 +444,29 @@ class album extends zophTreeTable implements Organizer {
         }
         if ($user->is_admin()) {
             $sql =
-                "select distinct p.photo_id from " .
-                DB_PREFIX . "photos as p LEFT JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id JOIN " .
+                "select distinct ar.photo_id from " .
+                DB_PREFIX . "view_photo_avg_rating ar JOIN " .
                 DB_PREFIX . "photo_albums pa ON" .
-                " pa.photo_id = p.photo_id" .
+                " pa.photo_id = ar.photo_id" .
                 $album_where .
                 " " . $order;
         } else {
             $sql=
                 "select distinct p.photo_id from " .
-                DB_PREFIX . "photos as p LEFT JOIN " .
+                DB_PREFIX . "photos AS p JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums as pa" .
+                DB_PREFIX . "photo_albums AS pa" .
                 " ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp ON " .
+                DB_PREFIX . "group_permissions AS gp ON " .
                 "pa.album_id = gp.album_id JOIN " .
                 DB_PREFIX . "groups_users AS gu ON " .
                 "gp.group_id = gu.group_id " .
                 $album_where .
                 " AND gu.user_id =" . 
                 " '" . escape_string($user->get("user_id")) . "'" .
-                " and pa.photo_id = p.photo_id " .
-                " and gp.access_level >= p.level " .
+                " AND pa.photo_id = p.photo_id " .
+                " AND gp.access_level >= p.level " .
                 $order;
         }
         $coverphotos=photo::getRecordsFromQuery($sql);

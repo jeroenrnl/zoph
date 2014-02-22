@@ -78,7 +78,7 @@ if(conf::get("maps.provider")) {
     if($marker instanceof marker) {
         $map->addMarker($marker);
     }
-    if($_action == "edit") {
+    if($_action == "edit" || $_action == "new") {
         $map->setEditable();
     }
     echo $map;

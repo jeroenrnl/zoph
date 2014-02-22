@@ -85,11 +85,16 @@ abstract class Import {
                     $photo->setFields($exif);
                 }
             }
+            if(isset($vars["rating"])) {
+                $rating=$vars["rating"];
+                if(!(is_numeric($rating) && (1 <= $rating) && ($rating <= 10))) {
+                    unset($rating);
+                }
+                unset($vars["rating"]);
+            }
+
             if ($vars) {
                 $photo->setFields($vars);
-                if($photo->get("rating")==0) {
-                    $photo->set("rating", null);
-                }
             }
             
             if(strlen(trim($photo->get("date")))==0) {
@@ -111,6 +116,7 @@ abstract class Import {
             } else {
                 $photo->set("path", $path);
             }
+
             try {
                 $photo->import($file);
             } catch (FileException $e) {
@@ -132,6 +138,9 @@ abstract class Import {
                 }
                 $photo->update();
                 $photo->updateRelations($vars, "_id");
+                if(isset($rating)) {
+                    $photo->rate($rating);
+                }
                 if(conf::get("import.cli.hash")===true) {
                     try {
                         $photo->getHash();

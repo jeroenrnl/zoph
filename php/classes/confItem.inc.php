@@ -74,13 +74,15 @@ abstract class confItem extends zophTable {
      * if it does not.
      */
     final public function update() {
-        $sql="SELECT COUNT(conf_id) FROM " . DB_PREFIX . "conf WHERE conf_id=";
-        $sql.="\"" . escape_string($this->fields["conf_id"]) . "\"";
+        if($this->checkValue($this->get("value"))) {
+            $sql="SELECT COUNT(conf_id) FROM " . DB_PREFIX . "conf WHERE conf_id=";
+            $sql.="\"" . escape_string($this->fields["conf_id"]) . "\"";
 
-        if(self::getCountFromQuery($sql) > 0) {
-            parent::update();
-        } else {
-            parent::insert();
+            if(self::getCountFromQuery($sql) > 0) {
+                parent::update();
+            } else {
+                parent::insert();
+            }
         }
     }
     

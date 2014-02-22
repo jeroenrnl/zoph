@@ -99,8 +99,8 @@ if (isset($offset)) {
     $_rows = (int) getvar("_rows");
     $_off = (int) getvar("_off");
 
-    if (!$_cols) { $_cols = $user->prefs->get("num_rows"); }
-    if (!$_rows) { $_rows = $user->prefs->get("num_cols"); }
+    if (!$_cols) { $_cols = $user->prefs->get("num_cols"); }
+    if (!$_rows) { $_rows = $user->prefs->get("num_rows"); }
     if (!$_off)  { $_off = 0; }
 
     $cells = $_cols * $_rows;
@@ -179,7 +179,7 @@ if (!$user->is_admin()) {
     }
 }
 
-
+$actionlinks=array();
 if (conf::get("feature.mail")) {
     $actionlinks["email"]="mail.php?_action=compose&amp;photo_id=" . $photo->get("photo_id");
 }
@@ -251,9 +251,7 @@ if ($_action == "edit") {
     $action = "confirm";
 } else if ($_action == "confirm") {
     $photo->delete();
-    //if (!$user->prefs->get("auto_edit")) {
-        $user->eat_crumb();
-    //}
+    $user->eat_crumb();
     $link = strip_href($user->get_last_crumb());
     if (!$link) { $link = "zoph.php"; }
     redirect($link, "Go back");

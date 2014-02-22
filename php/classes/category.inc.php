@@ -293,17 +293,15 @@ class category extends zophTreeTable implements Organizer {
 
         if ($user->is_admin()) {
             $sql =
-                "select distinct p.photo_id from " .
-                DB_PREFIX . "photos as p LEFT JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id JOIN " .
+                "select distinct ar.photo_id from " .
+                DB_PREFIX . "view_photo_avg_rating ar JOIN " .
                 DB_PREFIX . "photo_categories as pc ON" .
-                " pc.photo_id = p.photo_id" .
+                " pc.photo_id = ar.photo_id" .
                 $cat_where . " " . $order;
         } else {
             $sql=
                 "select distinct p.photo_id from " .
-                DB_PREFIX . "photos as p LEFT JOIN " .
+                DB_PREFIX . "photos as p JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON p.photo_id = ar.photo_id JOIN " .
                 DB_PREFIX . "photo_albums as pa " .
@@ -365,7 +363,7 @@ class category extends zophTreeTable implements Organizer {
                 "ROUND(AVG(ar.rating),2) AS average FROM " . 
                 DB_PREFIX . "photo_categories pc JOIN " .
                 DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pc.photo_id LEFT JOIN " .
+                "ON ph.photo_id=pc.photo_id JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON ph.photo_id = ar.photo_id " .
                 "WHERE pc.category_id=" . escape_string($id) .
@@ -384,7 +382,7 @@ class category extends zophTreeTable implements Organizer {
                 "ROUND(AVG(ar.rating),2) AS average FROM " . 
                 DB_PREFIX . "photo_categories pc JOIN " .
                 DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pc.photo_id LEFT JOIN " .
+                "ON ph.photo_id=pc.photo_id JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON ph.photo_id = ar.photo_id LEFT JOIN " .
                 DB_PREFIX . "photo_albums pa " .

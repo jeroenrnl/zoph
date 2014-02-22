@@ -49,6 +49,9 @@ abstract class zophTable {
     /** @var array Contains the values of attributes that will be stored in the db */
     public $fields=array();
 
+    /** @var array Contains the selectArray cache */
+    protected static $sacache;
+
     /**
      * Create new object
      * @param int object id
@@ -251,14 +254,14 @@ abstract class zophTable {
     }
     
     /**
-     * Retrieving a the searcharray can take a long time in some cases
+     * Retrieving a the selectarray can take a long time in some cases
      * pages that use it multiple times can cache it, so it only needs
      * to be retrieved once per page request.
-     * @param array searchArray;
+     * @param array selectArray;
      */
     public static function setSAcache(array $sa=null) {
         if(!$sa) {
-            $sa=static::getSearchArray();
+            $sa=static::getSelectArray();
         }
         static::$sacache=$sa;
     }
@@ -764,7 +767,12 @@ abstract class zophTable {
         if(static::getAutocompPref()) {
             return static::createAutoCompPulldown($name, $value);
         } else {
-            return template::createPulldown($name, $value, static::getSelectArray());
+            if(isset(static::$sacache)) {
+                $sa=static::$sacache;
+            } else {
+                $sa=static::getSelectArray();
+            }
+            return template::createPulldown($name, $value, $sa);
         }
     }
 
@@ -773,7 +781,7 @@ abstract class zophTable {
         $text="";
         if($value) {
             $obj=static::getFromId($value);
-            $obj->lookup;
+            $obj->lookup();
             $text=$obj->getName();
         }
 
