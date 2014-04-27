@@ -49,7 +49,10 @@ class db {
      */
     private function __construct($dsn, $dbuser, $dbpass) {
         self::$connection=new PDO($dsn,$dbuser,$dbpass); 
-        self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        self::$connection->setAttribute(array(
+            PDO::ATTR_ERRMODE           => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_EMULATE_PREPARES  => false
+        ));
     }
 
     /**
