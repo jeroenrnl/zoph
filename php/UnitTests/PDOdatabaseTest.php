@@ -55,6 +55,37 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $this->assertInstanceOf("PDOStatement", $result);
     }
 
+    public function testQueryWithClause() {
+        
+        $qry=new query("photos");
+        $where=new clause("photo_id > :minid", array(":minid", 5));
+
+        $qry->where($where);
+
+        $sql=(string) $qry;
+        $exp_sql="SELECT * FROM zoph_photos WHERE (photo_id > :minid);";
+
+        $this->assertEquals($exp_sql, $sql);
+
+        unset($qry);
+        unset($clause);
+
+        $qry=new query("photos");
+        $where=new clause("photo_id > :minid", array(":minid", 5));
+        $where=$where->addAnd(new clause("photo_id < :maxid", array(":maxid", 10)));
+
+        $qry->where($where);
+
+        $sql=(string) $qry;
+        $exp_sql="SELECT * FROM zoph_photos WHERE (photo_id > :minid) AND (photo_id < :maxid);";
+
+        $this->assertEquals($exp_sql, $sql);
+        
+        unset($qry);
+        unset($clause);
+
+    }
+
     public function getQueries() {
         return array(
             array("photos", array("photo_id"), "SELECT zoph_photos.photo_id FROM zoph_photos;"),

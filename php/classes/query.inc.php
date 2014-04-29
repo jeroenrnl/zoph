@@ -31,6 +31,8 @@ class query {
 
     private $table;
     private $fields=null;
+    private $params=null;
+    private $clause=null;
 
     public function __construct($table, array $fields=null) {
         $table=db::getPrefix() . $table;
@@ -43,6 +45,14 @@ class query {
 
     }
 
+    public function addParam($param, $value) {
+        $this->params[$param]=$value;
+    }
+
+    public function where(clause $clause) {
+        $this->clause=$clause;
+    }
+
     public function __toString() {
         $sql = "SELECT ";
 
@@ -53,6 +63,10 @@ class query {
         }
 
         $sql .= " FROM " . $this->table;
+
+        if($this->clause instanceof clause) {
+            $sql .= " WHERE " . $this->clause;
+        }
 
         return $sql . ";";
     }
