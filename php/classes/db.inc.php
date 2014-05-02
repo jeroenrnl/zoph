@@ -32,13 +32,18 @@
  * @author Jeroen Roos
  */
 class db {
-
+    /** @var holds connection */
     private static $connection=false;
 
+    /** @var database host */
     private static $dbhost;
+    /** @var database name */
     private static $dbname;
+    /** @var database user */
     private static $dbuser;
+    /** @var database password */
     private static $dbpass;
+    /** @var table prefix */
     private static $dbprefix;
 
     /**
@@ -91,6 +96,7 @@ class db {
 
     /**
      * Connect to database
+     * @param string PDO DSN
      */
     private static function connect($dsn=null) {
         if(!$dsn) {
@@ -111,6 +117,10 @@ class db {
         return $dsn;
     }
 
+    /**
+     * Run a query
+     * @param query Query to run
+     */
     public static function query(query $query) {
         $db=self::getHandle();
         return $db->query($query);

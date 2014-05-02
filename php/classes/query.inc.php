@@ -29,11 +29,20 @@
  */
 class query {
 
+    /** @var string db table to query */
     private $table;
+    /** @var array fields to query */
     private $fields=null;
+    /** @var array parameters for prepared queries */
     private $params=null;
+    /** @var string WHERE clause */
     private $clause=null;
 
+    /**
+     * Create new query
+     * @param string Table to query
+     * @param array Fields to query
+     */
     public function __construct($table, array $fields=null) {
         $table=db::getPrefix() . $table;
         if(is_array($fields)) {
@@ -45,14 +54,27 @@ class query {
 
     }
 
+    /**
+     * Add a parameter for a prepared query
+     * @param string Parameter name
+     * @param string Parameter value
+     */
     public function addParam($param, $value) {
         $this->params[$param]=$value;
     }
 
+    /**
+     * Add a WHERE clause to the query
+     * @param clause WHERE clause
+     */
     public function where(clause $clause) {
         $this->clause=$clause;
     }
 
+    /**
+     * Create query
+     * @return string SQL query
+     */
     public function __toString() {
         $sql = "SELECT ";
 

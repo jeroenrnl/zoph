@@ -30,6 +30,9 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     /**
      * Create queries
      * @dataProvider getQueries();
+     * @param string Table to run query on
+     * @param array Fields to query
+     * @param string Expected SQL query
      */
     public function testCreateQuery($table, $fields, $exp_sql) {
         if(is_array($fields)) {
@@ -43,6 +46,9 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     /**
      * Run queries
      * @dataProvider getQueries();
+     * @param string Table to run query on
+     * @param array Fields to query
+     * @param string Expected SQL query
      */
     public function testRunQuery($table, $fields, $exp_sql) {
         // not used
@@ -55,6 +61,9 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $this->assertInstanceOf("PDOStatement", $result);
     }
 
+    /**
+     * Test a query with a WHERE clause
+     */
     public function testQueryWithClause() {
         
         $qry=new query("photos");
@@ -86,6 +95,9 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
 
     }
 
+    /**
+     * Provide queries to use as test input
+     */
     public function getQueries() {
         return array(
             array("photos", array("photo_id"), "SELECT zoph_photos.photo_id FROM zoph_photos;"),
