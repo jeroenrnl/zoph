@@ -1131,7 +1131,7 @@ div.thumbnail   {
 }
 
 div.comment {
-    border: 1px solid <?PHP echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     background: transparent;
     font-size: small;
     min-height: 5em;
@@ -1148,7 +1148,7 @@ div.comment h3 {
 }
 
 div.commentinfo {
-    border-bottom: 1px dashed <?PHP echo color_scheme::getColor("table_border_color") ?>;
+    border-bottom: 1px dashed <?php echo color_scheme::getColor("table_border_color") ?>;
     width: 100%;
     font-size: x-small;
     font-style: italic;
