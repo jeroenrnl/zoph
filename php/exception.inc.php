@@ -297,4 +297,13 @@ class CliAPINotCompatibleException extends CliException {}
  * @package ZophException
  */
 class CliUnknownErrorException extends CliException {}
+
+
+/**
+ * Database Exception
+ *
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class DatabaseException extends ZophException {}
 ?>

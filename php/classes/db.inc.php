@@ -113,8 +113,7 @@ class db {
     private static function getDSN() {
         $db="mysql";
         
-        $dsn=sprintf("%s:host=%s;dbname=%s", $db, self::$dbhost, self::$dbname);
-        return $dsn;
+        return sprintf("%s:host=%s;dbname=%s", $db, self::$dbhost, self::$dbname);
     }
 
     /**

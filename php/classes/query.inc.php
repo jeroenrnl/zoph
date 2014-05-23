@@ -35,6 +35,8 @@ class query {
     private $fields=null;
     /** @var array parameters for prepared queries */
     private $params=null;
+    /** @var array JOIN statements to add to this query */
+    private $joins=null;
     /** @var string WHERE clause */
     private $clause=null;
 
@@ -66,9 +68,32 @@ class query {
     /**
      * Add a WHERE clause to the query
      * @param clause WHERE clause
+     * @return query return the query to enable chaining
      */
     public function where(clause $clause) {
         $this->clause=$clause;
+        return $this;
+    }
+
+    /**
+     * Add a JOIN clause to the query
+     * @param array fields to add to the query
+     * @param string table to join
+     * @param string ON clause
+     * @param string join type
+     * @return query return the query to enable chaining
+     */
+    public function join(array $fields, $table, $on, $jointype="INNER") {
+        $table=db::getPrefix() . $table;
+        
+        if (!in_array($jointype, array("INNER", "LEFT", "RIGHT"))) {
+            throw new DatabaseException("Unknown JOIN type");
+        }
+        $this->joins[]=$jointype . " JOIN " . $table . " ON " . $on;
+        foreach ($fields as $field) {
+            $this->fields[]=$table . "." . $field;
+        }
+        return $this;
     }
 
     /**
@@ -85,6 +110,10 @@ class query {
         }
 
         $sql .= " FROM " . $this->table;
+
+        if(is_array($this->joins)) {
+            $sql.=" " . implode(" ", $this->joins);
+        }
 
         if($this->clause instanceof clause) {
             $sql .= " WHERE " . $this->clause;

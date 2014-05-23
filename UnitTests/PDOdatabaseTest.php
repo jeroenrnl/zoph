@@ -96,6 +96,26 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     }
 
     /**
+     * Test a query with a JOIN clause
+     */
+    public function testQueryWithJoin() {
+        $qry=new query("photos", array("name"));
+        $where=new clause("zoph_photos.photo_id = :photoid", array(":photoid", 5));
+        $qry->join(array(), "photo_albums","zoph_photos.photo_id=zoph_photo_albums.photo_id")
+            ->join(array("album"), "albums","zoph_photo_albums.album_id=zoph_albums.album_id")
+            ->where($where);
+        $sql=(string) $qry;
+        $exp_sql="SELECT zoph_photos.name, zoph_albums.album FROM zoph_photos " .
+                 "INNER JOIN zoph_photo_albums " .
+                 "ON zoph_photos.photo_id=zoph_photo_albums.photo_id " .
+                 "INNER JOIN zoph_albums " .
+                 "ON zoph_photo_albums.album_id=zoph_albums.album_id " .
+                 "WHERE (zoph_photos.photo_id = :photoid);";
+
+        $this->assertEquals($exp_sql, $sql);
+    }
+
+    /**
      * Provide queries to use as test input
      */
     public function getQueries() {
