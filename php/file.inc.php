@@ -49,7 +49,7 @@ class file {
         }
 
         if(is_link($filename)) {
-            if(@!stat($filename)) {
+            if(!@stat($filename)) {
                 throw new FileSymlinkProblemException(
                     "There's something wrong with symlink $filename\n");
             }
