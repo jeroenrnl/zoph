@@ -42,7 +42,7 @@ abstract class ZophDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
     }
     
     final public function getDataSet() {
-        return $this->createMySQLXMLDataSet('php/UnitTests/db.xml');
+        return $this->createMySQLXMLDataSet('UnitTests/db.xml');
     }
 }
 ?>

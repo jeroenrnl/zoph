@@ -1,0 +1,34 @@
+<phpunit>
+  <logging>
+    <log type="coverage-html" target="./output" yui="true" />
+    <log type="junit" target="./output/junit.xml" />
+    <log type="coverage-clover" target="./output/coverage.xml"/>
+  </logging>
+  <filter>
+    <blacklist>
+        <directory>/usr/share</directory>
+    </blacklist>
+  </filter>
+  <php>
+    <const name="INSTANCE" value="zophgit" />
+  </php>
+  <testsuites>
+    <testsuite name="Zoph">
+      <file>UnitTests/XMLdataTest.php</file>
+      <file>UnitTests/PDOdatabaseTest.php</file>
+      <file>UnitTests/userTest.php</file>
+      <file>UnitTests/anonymousUserTest.php</file> 
+      <file>UnitTests/albumTest.php</file> 
+      <file>UnitTests/categoryTest.php</file> 
+      <file>UnitTests/groupTest.php</file> 
+      <file>UnitTests/groupPermissionsTest.php</file> 
+      <file>UnitTests/personTest.php</file>
+      <file>UnitTests/photographerTest.php</file>
+      <file>UnitTests/photoTest.php</file> 
+      <file>UnitTests/cliTest.php</file> 
+      <file>UnitTests/placeTest.php</file>
+      <file>UnitTests/ratingTest.php</file>
+      <file>UnitTests/relationTest.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>
