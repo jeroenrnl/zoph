@@ -25,7 +25,6 @@
 /**
  * Autoload classes
  */
-
 function zophAutoload($file) {  
     if(is_readable(settings::$php_loc . "/" . $file)) {
         require_once $file;
