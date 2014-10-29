@@ -26,18 +26,27 @@
  */
 
 define("TEST", true);
-
+define("INSTANCE", "zophtest");
 require_once "testData.php";
 require_once "testImage.php";
+set_include_path(get_include_path() . PATH_SEPARATOR . getcwd() . "/../php");
+set_include_path(get_include_path() . PATH_SEPARATOR . getcwd() . "/../php/classes");
+echo getcwd();
+require_once "db.inc.php";
+require_once "settings.inc.php";
+settings::$php_loc=getcwd() . "/../php";
 
-require_once "../../settings.inc.php";
-require_once "../../include.inc.php";
-require_once "../../cli/cliimport.inc.php";
+require_once "include.inc.php";
+require_once "cli/cliimport.inc.php";
 
 $lang=new language("en");
 
 user::setCurrent(new user(1));
+
+$path=conf::set("path.images", getcwd() . "/../.images");
+
 createTestData::run();
+
 /**
  * Fill the database with data, so tests can be run.
  *
@@ -189,6 +198,7 @@ class createTestData {
     private static function importTestImages() {
 
         $photos=testData::getPhotos();
+        $photoData=testData::getPhotoData();
         $photoLocation=testData::getPhotoLocation();
         $photoAlbums=testData::getPhotoAlbums();
         $photoCategories=testData::getPhotoCategories();
@@ -200,7 +210,7 @@ class createTestData {
 
         $files=array();
         foreach($photos as $id=>$photo) {
-            $files[]=new file(conf::get("path.images") . "/" . $photo);
+            $files[]=new file("/tmp/" . $photo);
         }
         conf::set("import.cli.thumbs", true);
         conf::set("import.cli.size", true);
@@ -248,6 +258,13 @@ class createTestData {
                 }
             }
 
+            if(isset($photoData[$id])) {
+                $photo->set("date", $photoData[$id][0]);
+                $photo->set("time", $photoData[$id][1]);
+                $photo->set("timestamp", $photoData[$id][2]);
+                $photo->update();
+            }
+
             // WARNING, below this line other users log in!
             if(isset($comments[$id])) {
                 foreach($comments[$id] as $user_id => $comment) {
@@ -264,7 +281,7 @@ class createTestData {
                     // Set fake remote IP address:
                     $_SERVER["REMOTE_ADDR"]=$user->getName() . ".zoph.org";
                     $obj->insert();
-                    $obj->add_comment_to_photo($photo->get("photo_id"));
+                    $obj->addToPhoto($photo);
                 }
             }
 

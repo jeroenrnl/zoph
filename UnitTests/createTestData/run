@@ -12,8 +12,8 @@ mysql -u root -p -e "CREATE DATABASE zophtest CHARACTER SET utf8 COLLATE utf8_ge
 echo "Grant permissions:"
 mysql -u root -p -e "grant all on zophtest.* to zoph@'%' identified by \"password\""
 echo "Import default SQL data:"
-mysql -u root -p zophtest < zoph.sql
+mysql -u root -p zophtest < ../sql/zoph.sql
 echo "Create test database:"
-./createTest/php
+./createTestData/createTest.php
 echo "Dump data to XML file:"
 mysqldump -t -u root -p --xml zophtest > db.xml

@@ -86,7 +86,6 @@ abstract class zophTable {
         if(sizeof(static::$primary_keys)==1) {
             return (int) $this->get(static::$primary_keys[0]);
         } else {
-            var_dump($this);
             throw new ZophException("This class (" . get_class($this) . ") " . 
               "requires a specific getId() implementation, please report a bug");
         }
@@ -210,6 +209,7 @@ abstract class zophTable {
     public function insert() {
         $names=null;
         $values=null;
+        reset($this->fields);
         while (list($name, $value) = each($this->fields)) {
             if (!static::$keepKeys && $this->isKey($name)) {
                 continue;
@@ -240,12 +240,12 @@ abstract class zophTable {
 
         $sql = "INSERT INTO " . DB_PREFIX . static::$table_name . 
             "(" . $names . ") VALUES (" . $values . ")";
-
+        
         query($sql, "Insert failed:");
 
         $id = insert_id();
 
-        if (count(static::$primary_keys) == 1) {
+        if (count(static::$primary_keys) == 1 && !static::$keepKeys) {
             $this->fields[static::$primary_keys[0]] = $id;
         }
 

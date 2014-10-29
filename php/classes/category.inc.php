@@ -209,6 +209,7 @@ class category extends zophTreeTable implements Organizer {
 
     /**
      * Get array that can be used to create an edit form
+     * @todo Returns HTML, move into template
      */
     public function getEditArray() {
         if($this->isRoot()) {
@@ -293,24 +294,26 @@ class category extends zophTreeTable implements Organizer {
 
         if ($user->is_admin()) {
             $sql =
-                "select distinct ar.photo_id from " .
-                DB_PREFIX . "view_photo_avg_rating ar JOIN " .
-                DB_PREFIX . "photo_categories as pc ON" .
+                "SELECT DISTINCT ar.photo_id FROM " .
+                DB_PREFIX . "photos AS p JOIN " .
+                DB_PREFIX . "view_photo_avg_rating AS ar " .
+                " ON p.photo_id = ar.photo_id JOIN " .
+                DB_PREFIX . "photo_categories AS pc ON" .
                 " pc.photo_id = ar.photo_id" .
                 $cat_where . " " . $order;
         } else {
             $sql=
-                "select distinct p.photo_id from " .
+                "SELECT DISTINCT p.photo_id FROM " .
                 DB_PREFIX . "photos as p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
+                DB_PREFIX . "view_photo_avg_rating AS ar" .
                 " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
+                DB_PREFIX . "photo_albums AS pa " .
                 "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
+                DB_PREFIX . "group_permissions AS gp " .
                 "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
+                DB_PREFIX . "groups_users AS gu " .
                 "ON gp.group_id = gu.group_id JOIN " .
-                DB_PREFIX . "photo_categories as pc " .
+                DB_PREFIX . "photo_categories AS pc " .
                 "ON pc.photo_id = p.photo_id " .
                 $cat_where .
                 " AND gu.user_id =" .

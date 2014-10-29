@@ -45,6 +45,13 @@ class conf {
     private static $loaded=false;
 
     /**
+     * Get the Id of the conf item
+     */
+    public static function  getId() {
+        return $this->get("conf_id");
+    }
+
+    /**
      * Read configuration from database
      */
     public static function loadFromDB() {
@@ -203,6 +210,7 @@ class conf {
         self::getConfigShare();
         self::getConfigFeature();
         self::getConfigDate();
+
     }
 
     /**

@@ -148,7 +148,7 @@ class testImage {
         }
             
             
-        $image->writeImage(conf::get("path.images") . "/" . $this->getName());
+        $image->writeImage("/tmp/" . $this->getName());
         $image->destroy();
         unset($image);
     }
