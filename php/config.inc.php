@@ -42,7 +42,7 @@ define('THUMB_PREFIX', 'thumb');
 define('MID_PREFIX', 'mid');
 
 // LOG_ALWAYS and LOG_SEVERITY can have the following values:
-// log::DEBUG, log::NOTIFY, log::WARN, log::ERROR, log::FATAL, log::NONE
+// log::DEBUG, log::NOTIFY, log::WARN, log::ERROR, log::FATAL, log::MSG, log::NONE
 
 // Always show fatal errors
 define('LOG_ALWAYS', log::FATAL);

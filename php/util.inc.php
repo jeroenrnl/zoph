@@ -764,7 +764,7 @@ function create_dir($directory) {
     if (file_exists($directory) == false) {
         if (@mkdir($directory, octdec(conf::get("import.dirmode")))) {
             if(!defined("CLI") || conf::get("import.cli.verbose")>=1) {
-                log::msg(translate("Created directory") . ": $directory", log::NONE, log::GENERAL);
+                log::msg(translate("Created directory") . ": $directory", log::NOTIFY, log::GENERAL);
             }
             return true;
         } else {
