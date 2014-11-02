@@ -754,6 +754,9 @@ class photo extends zophTable {
 
         // make a system call to convert or jpegtran to do the rotation.
         while (list($file, $tmp_file) = each($images)) {
+            if(!file_exists($file)) {
+                throw new FileNotFoundException("Could not find " . $file);
+            }
             switch(conf::get("rotate.command")) {
             case "jpegtran":
                 $cmd = 'jpegtran -copy all -rotate ' .  escapeshellarg($deg) .
