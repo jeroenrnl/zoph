@@ -33,13 +33,25 @@ class clause {
     private $params;
     private $subclauses;
 
-    public function __construct($clause, array $params) {
+    public function __construct($clause, array $params=null) {
         $this->clause=$clause;
-        $this->params=$params;
+        if(is_array($params)) {
+            $this->params=$params;
+        }
     }
 
     public function addParam($param, $value) {
         $this->params[$param]=$value;
+    }
+
+    public function getParams() {
+        $params=(array) $this->params;
+        if(is_array($this->subclauses)) {
+            foreach($this->subclauses as $subclause) {
+                $params=array_merge($params, (array) $subclause["subc"]->getParams());
+            }
+        }
+        return $params;
     }
 
     public function addAnd(clause $clause) {
