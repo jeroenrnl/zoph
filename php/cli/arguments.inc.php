@@ -85,6 +85,8 @@ class arguments {
         $size=sizeof($argv);
         for($i=0; $i<$size; $i++) {
             switch($argv[$i]) {
+            case "":
+                break;
             case "--instance":
             case "-i":
                 $args["instance"]=$argv[++$i];
