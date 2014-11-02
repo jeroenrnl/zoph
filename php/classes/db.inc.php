@@ -122,7 +122,18 @@ class db {
      */
     public static function query(query $query) {
         $db=self::getHandle();
-        return $db->query($query);
+
+        try {
+            $stmt=$db->prepare($query);
+            $stmt->execute($query->getParams());
+        } catch (PDOException $e) {
+            echo $e->getMessage() . "\n";
+            var_dump($query);
+            echo "\n" . $query . "\n";
+            die("SQL failed");
+        }
+
+        return $stmt;
     }
 }
 
