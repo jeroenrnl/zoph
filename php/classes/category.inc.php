@@ -133,35 +133,29 @@ class category extends zophTreeTable implements Organizer {
      * Get count of photos in this album
      */
     public function getPhotoCount() {
+        $db=db::getHandle();
         $user=user::getCurrent();
 
         if ($this->photoCount) { return $this->photoCount; }
 
-        $id = $this->get("category_id");
-
+        $id = $this->getId();
+        $qry=new query(array("pc" => "photo_categories")); 
+        $where=new clause("category_id = :cat_id", array(":cat_id" => $id));
+        
         if ($user->is_admin()) {
-            $sql =
-                "select count(photo_id) from " .
-                DB_PREFIX . "photo_categories " .
-                "where category_id = '" .  escape_string($id) . "'";
+            $qry->addFunction(array("count" => "count(photo_id)"));
         } else {
-            $sql =
-                "select count(distinct pc.photo_id) from " .
-                DB_PREFIX . "photo_categories as pc JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON pc.photo_id = pa.photo_id JOIN " .
-                DB_PREFIX . "photos as p " .
-                "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE pc.category_id = '" .  escape_string($id) . "' " .
-                "AND gu.user_id = '" . escape_string($user->get("user_id")) . 
-                "' AND gp.access_level >= p.level";
+            $qry=new query(array("pc" => "photo_categories")); 
+            $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
+            $qry->join(array(), array("pa" => "photo_albums"), "pc.photo_id = pa.photo_id")      
+                ->join(array(), array("p" => "photos"), "pa.photo_id = p.photo_id")
+                ->join(array(), array("gp" => "group_permissions"), "pa.album_id = gp.album_id")
+                ->join(array(), array("gu" => "groups_users"), "gp.group_id = gu.group_id");
+            $where->addAnd(new clause("gu.user_id = :user_id", array(":user_id" => $user->getId())))
+                  ->addAnd(new clause("gp.access_level >= p.level"));
         }
-
-        return self::getCountFromQuery($sql);
+        $qry->where($where);
+        return self::getCountFromQuery($qry);
     }
 
     /**
