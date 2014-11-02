@@ -41,12 +41,20 @@ function query($sql, $error = false) {
     // goes wrong, or nothing at all if $error is false
 
     log::msg($sql, log::NOTIFY, log::SQL);
-    if (!$error) {
-        $result=mysql_query($sql);
+    
+    // New DB
+    if($sql instanceof query) {
+        $result=db::query($sql);
+        return $result;
     } else {
-        $result=mysql_query($sql) or die_with_db_error($error, $sql);
+
+        if (!$error) {
+            $result=mysql_query($sql);
+        } else {
+            $result=mysql_query($sql) or die_with_db_error($error, $sql);
+        }
+        return $result;
     }
-    return $result;
 }
 
 function die_with_db_error($msg, $sql = "") {
@@ -98,6 +106,10 @@ function insert_id() {
 }
 
 function result($result, $row) {
+    // $row is never used
+    if($result instanceof PDOStatement) {
+        return $result->fetch(PDO::FETCH_BOTH)[0];
+    }
     return mysql_result($result, $row);
 }
 
