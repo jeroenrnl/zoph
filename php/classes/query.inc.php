@@ -31,6 +31,8 @@ class query {
 
     /** @var string db table to query */
     private $table;
+    /** @var string alias of db table to query */
+    private $alias;
     /** @var array fields to query */
     private $fields=null;
     /** @var array parameters for prepared queries */
@@ -46,6 +48,11 @@ class query {
      * @param array Fields to query
      */
     public function __construct($table, array $fields=null) {
+        if(is_array($table)) {
+            $tbl=reset($table);
+            $this->alias=key($table);
+            $table=$tbl;
+        }
         $table=db::getPrefix() . $table;
         if(is_array($fields)) {
             foreach ($fields as $field) {
@@ -54,6 +61,12 @@ class query {
         }
         $this->table=$table;
 
+    }
+
+    public function addFunction(array $functions) {
+        foreach($functions as $alias => $function) {
+            $this->fields[]=$function . " AS " . $alias;
+        }
     }
 
     /**
@@ -66,12 +79,20 @@ class query {
     }
 
     /**
+     * Get array of params
+     */
+    public function getParams() {
+        return $this->params;
+    }
+
+    /**
      * Add a WHERE clause to the query
      * @param clause WHERE clause
      * @return query return the query to enable chaining
      */
     public function where(clause $clause) {
         $this->clause=$clause;
+        $this->params=array_merge( (array) $this->params, (array) $clause->getParams());
         return $this;
     }
 
@@ -84,6 +105,12 @@ class query {
      * @return query return the query to enable chaining
      */
     public function join(array $fields, $table, $on, $jointype="INNER") {
+        if(is_array($table)) {
+            $tbl=reset($table);
+            $as=key($table);
+            $table=$tbl . " AS " . $as;
+        }
+
         $table=db::getPrefix() . $table;
         
         if (!in_array($jointype, array("INNER", "LEFT", "RIGHT"))) {
@@ -110,6 +137,10 @@ class query {
         }
 
         $sql .= " FROM " . $this->table;
+
+        if(isset($this->alias)) {
+            $sql.=" AS " . $this->alias;
+        }
 
         if(is_array($this->joins)) {
             $sql.=" " . implode(" ", $this->joins);
