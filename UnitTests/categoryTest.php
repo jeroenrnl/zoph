@@ -66,7 +66,7 @@ class categoryTest extends ZophDataBaseTestCase {
         $category=new category($category);
         $category->lookup();
         $count=$category->getPhotocount();
-        $this->assertEquals($count, $pc);
+        $this->assertEquals($pc, $count);
         user::setCurrent(new user(1));
     }
 
