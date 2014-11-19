@@ -74,15 +74,15 @@ class query {
      * @param string Parameter name
      * @param string Parameter value
      */
-    public function addParam($param, $value) {
-        $this->params[$param]=$value;
+    public function addParam(param $param) {
+        $this->params[]=$param;
     }
 
     /**
      * Get array of params
      */
     public function getParams() {
-        return $this->params;
+        return (array) $this->params;
     }
 
     /**

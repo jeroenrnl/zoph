@@ -67,7 +67,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     public function testQueryWithClause() {
         
         $qry=new query("photos");
-        $where=new clause("photo_id > :minid", array(":minid" => 5));
+        $where=new clause("photo_id > :minid", array(new param(":minid", 5, PDO::PARAM_INT)));
 
         $qry->where($where);
 
@@ -80,8 +80,8 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         unset($clause);
 
         $qry=new query("photos");
-        $where=new clause("photo_id > :minid", array(":minid" => 5));
-        $where=$where->addAnd(new clause("photo_id < :maxid", array(":maxid" => 10)));
+        $where=new clause("photo_id > :minid", array(new param(":minid", 5, PDO::PARAM_INT)));
+        $where=$where->addAnd(new clause("photo_id < :maxid", array(new param(":maxid", 10, PDO::PARAM_INT))));
 
         $qry->where($where);
 
@@ -100,7 +100,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
      */
     public function testQueryWithJoin() {
         $qry=new query("photos", array("name"));
-        $where=new clause("zoph_photos.photo_id = :photoid", array(":photoid" => 5));
+        $where=new clause("zoph_photos.photo_id = :photoid", array(new param(":photoid", 5, PDO::PARAM_INT)));
         $qry->join(array(), "photo_albums","zoph_photos.photo_id=zoph_photo_albums.photo_id")
             ->join(array("album"), "albums","zoph_photo_albums.album_id=zoph_albums.album_id")
             ->where($where);

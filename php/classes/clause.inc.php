@@ -40,8 +40,8 @@ class clause {
         }
     }
 
-    public function addParam($param, $value) {
-        $this->params[$param]=$value;
+    public function addParam(param $param) {
+        $this->params[]=$param;
     }
 
     public function getParams() {

@@ -125,7 +125,12 @@ class db {
 
         try {
             $stmt=$db->prepare($query);
-            $stmt->execute($query->getParams());
+            foreach($query->getParams() as $param) {
+                if($param instanceof param) {
+                    $stmt->bindValue($param->getName(), $param->getValue(), $param->getType());
+                }
+            }
+            $stmt->execute();
         } catch (PDOException $e) {
             echo $e->getMessage() . "\n";
             var_dump($query);

@@ -140,7 +140,7 @@ class category extends zophTreeTable implements Organizer {
 
         $id = $this->getId();
         $qry=new query(array("pc" => "photo_categories")); 
-        $where=new clause("category_id = :cat_id", array(":cat_id" => $id));
+        $where=new clause("category_id = :cat_id", array(new param(":cat_id", $id, PDO::PARAM_INT)));
         
         if ($user->is_admin()) {
             $qry->addFunction(array("count" => "count(photo_id)"));
@@ -151,7 +151,7 @@ class category extends zophTreeTable implements Organizer {
                 ->join(array(), array("p" => "photos"), "pa.photo_id = p.photo_id")
                 ->join(array(), array("gp" => "group_permissions"), "pa.album_id = gp.album_id")
                 ->join(array(), array("gu" => "groups_users"), "gp.group_id = gu.group_id");
-            $where->addAnd(new clause("gu.user_id = :user_id", array(":user_id" => $user->getId())))
+            $where->addAnd(new clause("gu.user_id = :user_id", array(new param(":user_id", $user->getId(), PDO::PARAM_INT))))
                   ->addAnd(new clause("gp.access_level >= p.level"));
         }
         $qry->where($where);
