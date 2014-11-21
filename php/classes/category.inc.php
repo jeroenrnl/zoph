@@ -51,6 +51,8 @@ class category extends zophTreeTable implements Organizer {
     protected static $url="categories.php?parent_category_id=";
     /** @var int cached photocount */
     protected $photoCount;
+    /** @var int cached photoTotalCount */
+    protected $photoTotalCount;
 
     /**
      * Add a photo to this album
@@ -136,7 +138,9 @@ class category extends zophTreeTable implements Organizer {
         $db=db::getHandle();
         $user=user::getCurrent();
 
-        if ($this->photoCount) { return $this->photoCount; }
+        if ($this->photoCount) { 
+            return $this->photoCount; 
+        }
 
         $id = $this->getId();
         $qry=new query(array("pc" => "photo_categories")); 
@@ -168,9 +172,10 @@ class category extends zophTreeTable implements Organizer {
         $db=db::getHandle();
         $user=user::getCurrent();
 
-        #if ($this->photoCount) { return $this->photoCount; }
+        if ($this->photoTotalCount) { 
+            return $this->photoTotalCount; 
+        }
 
-        $id = $this->getId();
         $qry=new query(array("pc" => "photo_categories")); 
         $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
         
@@ -201,7 +206,9 @@ class category extends zophTreeTable implements Organizer {
             $qry->where($where);
         }
 
-        return self::getCountFromQuery($qry);
+        $count=self::getCountFromQuery($qry);
+        $this->photoTotalCount=$count;
+        return $count;
     }
 
     /**

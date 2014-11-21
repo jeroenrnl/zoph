@@ -82,7 +82,29 @@ class query {
      * Get array of params
      */
     public function getParams() {
-        return (array) $this->params;
+        $params=array();
+
+        if(!is_array($this->params)) {
+            return $params;
+        }
+
+        foreach($this->params as $param) {
+            if(!$param instanceof param) {
+                continue;
+            }
+            $value=$param->getValue();
+
+            if(is_array($value)) {
+                $name=$param->getName();
+                $type=$param->getType();
+                for($n=0; $n<sizeof($value); $n++) {
+                    $params[]=new param($name[$n], $value[$n], $type);
+                }
+            } else {
+                $params[]=$param;
+            }
+        } 
+        return $params;
     }
 
     /**
