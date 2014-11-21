@@ -155,50 +155,53 @@ class category extends zophTreeTable implements Organizer {
                   ->addAnd(new clause("gp.access_level >= p.level"));
         }
         $qry->where($where);
-        return self::getCountFromQuery($qry);
+        $count=self::getCountFromQuery($qry);
+        $this->photoCount=$count;
+        return $count;
     }
 
     /**
      * Get count of photos for this category and all subcategories
      */
     public function getTotalPhotoCount() {
+        $where=null;
+        $db=db::getHandle();
         $user=user::getCurrent();
+
+        #if ($this->photoCount) { return $this->photoCount; }
+
+        $id = $this->getId();
+        $qry=new query(array("pc" => "photo_categories")); 
+        $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
+        
+        $user=user::getCurrent();
+        if (!$user->is_admin()) {
+            $qry->join(array(), array("pa" => "photo_albums"), "pc.photo_id = pa.photo_id")      
+                ->join(array(), array("p" => "photos"), "pa.photo_id = p.photo_id")
+                ->join(array(), array("gp" => "group_permissions"), "pa.album_id = gp.album_id")
+                ->join(array(), array("gu" => "groups_users"), "gp.group_id = gu.group_id");
+            $where=new clause("gu.user_id = :user_id", array(new param(":user_id", $user->getId(), PDO::PARAM_INT)));
+            $where->addAnd(new clause("gp.access_level >= p.level"));
+        }
+
         if ($this->get("parent_category_id")) {
-            $id_list = $this->getBranchIds();
-            $id_constraint = "pc.category_id in ($id_list)";
-        } else {
-            $id_constraint = "";
-        }
+            $id_list=null;
+            $this->getBranchIdArray($id_list);
+            $ids=new param(":cat_id", $id_list, PDO::PARAM_INT);
 
-
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT COUNT(DISTINCT pc.photo_id) FROM " .
-                DB_PREFIX . "photo_categories AS pc";
-            if ($id_constraint) {
-                $sql .= " WHERE $id_constraint";
-            }
-        } else {
-            $sql =
-                "SELECT COUNT(DISTINCT pc.photo_id) FROM " .
-                DB_PREFIX . "photo_categories AS pc JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pc.photo_id = pa.photo_id JOIN " .
-                DB_PREFIX . "photos as p " .
-                "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= p.level";
-
-            if ($id_constraint) {
-                $sql .= " AND $id_constraint";
+            $catids=new clause("category_id IN (" . implode(", ", $ids->getName()) .")", array($ids));
+            if($where instanceof clause) {
+                $where->addAnd($catids);
+            } else { 
+                $where=$catids;
             }
         }
 
-        return self::getCountFromQuery($sql);
+        if($where instanceof clause) {
+            $qry->where($where);
+        }
+
+        return self::getCountFromQuery($qry);
     }
 
     /**

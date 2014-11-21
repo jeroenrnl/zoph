@@ -51,7 +51,14 @@ class param {
      * @param int type
      */
     public function __construct($name, $value, $type=null) {
-        $this->name=$name;
+        if(is_array($value)) {
+            $this->name=array();
+            for($n=0; $n<sizeof($value); $n++) {
+                $this->name[]=$name . "_" . $n;
+            }
+        } else {
+            $this->name=$name;
+        }
         $this->value=$value;
         $this->type=$type;
     }
@@ -79,5 +86,6 @@ class param {
     public function getType() {
         return $this->type;
     }
+
 }
 

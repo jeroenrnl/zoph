@@ -127,7 +127,17 @@ class db {
             $stmt=$db->prepare($query);
             foreach($query->getParams() as $param) {
                 if($param instanceof param) {
-                    $stmt->bindValue($param->getName(), $param->getValue(), $param->getType());
+                    $value=$param->getValue();
+                    $name=$param->getName();
+                    $type=$param->getType();
+
+                    if(is_array($value)) {
+                        for($n=0; $n<sizeof($value); $n++) {
+                            $stmt->bindValue($name[$n], $value[$n], $type);
+                        }
+                    } else {
+                        $stmt->bindValue($name, $value, $type);
+                    }
                 }
             }
             $stmt->execute();
