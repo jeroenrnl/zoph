@@ -116,6 +116,45 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     }
 
     /**
+     * Test a query with LIMIT
+     * @dataProvider getLimits();
+     */
+    public function testQueryWithLimit($count, $offset) {
+        $qry=new query("photos");
+        $qry->addLimit($count, $offset);
+        $sql=(string) $qry;
+        $exp_sql="SELECT * FROM zoph_photos";
+        if(!is_null($offset)) {
+            if(is_null($count)) {
+                $exp_sql .= " LIMIT " . (int) $offset . ", 999999999999";
+            } else {
+                $exp_sql .= " LIMIT " . (int) $offset . ", " . (int) $count;
+            }
+        } else {
+            if(!is_null($count)) {
+                $exp_sql .= " LIMIT " . (int) $count;
+            }
+        }
+        $exp_sql .= ";";
+        $this->assertEquals($exp_sql, $sql);
+    }        
+                
+    /**
+     * Test a query with ORDER BY
+     * @dataProvider getOrders();
+     */
+    public function testQueryWithOrder(array $orders) {
+        $qry=new query("photos");
+        foreach($orders as $order) {
+            $qry->addOrder($order);
+        }
+        $sql=(string) $qry;
+        $exp_sql="SELECT * FROM zoph_photos ORDER BY " . implode(", ", $orders);
+        $exp_sql .= ";";
+        $this->assertEquals($exp_sql, $sql);
+    }        
+                
+    /**
      * Provide queries to use as test input
      */
     public function getQueries() {
@@ -124,6 +163,30 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
             array("photos", null, "SELECT * FROM zoph_photos;"),
             array("photos", array("photo_id", "name"), 
                 "SELECT zoph_photos.photo_id, zoph_photos.name FROM zoph_photos;")
+        );
+    }
+
+    /**
+     * Provide limits to test LIMIT queries
+     */
+    public function getLimits() {
+        return array(
+            array(null, null), // No no, no no, no no, there's no limit
+            array(5, null),
+            array(5, 1),
+            array(null, 5)
+        );
+    }
+
+    /**
+     * Provide ORDER clauses
+     */
+    public function getOrders() {
+        return array(
+            array(array("name")),
+            array(array("name DESC")),
+            array(array("name", "photo_id")),
+            array(array("name" , "photo_id DESC"))
         );
     }
 

@@ -41,6 +41,12 @@ class query {
     private $joins=null;
     /** @var string WHERE clause */
     private $clause=null;
+    /** @var array ORDER clause */
+    private $order=array();
+    /** @var array count for LIMIT clause */
+    private $count=null;
+    /** @var array offset for LIMIT clause */
+    private $offset=null;
 
     /**
      * Create new query
@@ -63,6 +69,9 @@ class query {
 
     }
 
+    /**
+     * Add one or more fields to a query that is calculated using an SQL function
+     */
     public function addFunction(array $functions) {
         foreach($functions as $alias => $function) {
             $this->fields[]=$function . " AS " . $alias;
@@ -145,6 +154,66 @@ class query {
         return $this;
     }
 
+    /** 
+     * Add ORDER BY clause to query
+     * @param string order to add
+     * @example $qry->addOrder("name DESC");
+     * @return query return the query to enable chaining
+     */
+    public function addOrder($order) {
+        $this->order[]=$order;
+        return $this;
+    }
+
+    /** 
+     * Get ORDER BY for query
+     * @return string ORDER clause
+     */
+    public function getOrder() {
+        $order=$this->order;
+        if(is_array($order) && sizeof($order) > 0) {
+            return " ORDER BY " . implode(", ", $order);
+        }
+        return "";
+    }
+
+    /** 
+     * Add LIMIT clause to query
+     * Be warned that count and offset are reversed compared to how they appear
+     * in the query!
+     * @param int count 
+     * @param int offset
+     * @example $qry->addLimit(1,3);
+     * @return query return the query to enable chaining
+     */
+    public function addLimit($count, $offset=null) {
+        $this->count=$count;
+        $this->offset=$offset;
+        return $this;
+    }
+
+    /** 
+     * Get LIMIT clause for query
+     * @return string LIMIT clause
+     */
+    public function getLimit() {
+        if(!is_null($this->offset)) {
+            $limit=" LIMIT " . (int) $this->offset;
+            if (is_null($this->count)) {
+                $limit.= ", " . 999999999999;
+            } else {
+                $limit.=", " . (int) $this->count;
+            }
+        } else {
+            if (!is_null($this->count)) {
+                $limit=" LIMIT " . (int) $this->count;
+            } else {
+                $limit="";
+            }
+        }
+        return $limit;
+    }        
+
     /**
      * Create query
      * @return string SQL query
@@ -170,6 +239,16 @@ class query {
 
         if($this->clause instanceof clause) {
             $sql .= " WHERE " . $this->clause;
+        }
+       
+        $order=trim($this->getOrder());
+        if(!empty($order)) {
+            $sql .= " " . $order;
+        }
+
+        $limit=trim($this->getLimit());
+        if(!empty($limit)) {
+            $sql .= " " . $limit;
         }
 
         return $sql . ";";
