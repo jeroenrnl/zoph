@@ -775,6 +775,31 @@ abstract class zophTable {
     }
 
     /**
+     * Add JOINs and WHERE clauses to a query to restrict it to the photos the current user can see
+     * Many queries have to be joined with the same tables in order to filter out the photos
+     * a non-admin user is not allowed to see, this function expands an existing query with the needed
+     * JOINs and WHERE clauses.
+     */
+    protected function expandQueryForUser(query $qry, clause $where=null) {
+        $user=user::getCurrent();
+
+        $qry->join(array(), array("pa" => "photo_albums"), "pa.photo_id = p.photo_id")
+            ->join(array(), array("gp" => "group_permissions"), "pa.album_id = gp.album_id")
+            ->join(array(), array("gu" => "groups_users"), "gp.group_id = gu.group_id");
+
+        $clause=new clause("gu.user_id=:userid", array(new param(":userid", $user->getId(), PDO::PARAM_INT)));
+        
+        if(is_null($where)) {
+            $where=$clause;
+        } else {
+            $where->addAnd($clause);
+        }
+        $where->addAnd(new clause("gp.access_level >= p.level"));
+        
+        return array($qry, $where);
+     } 
+
+    /**
      * Get XML from a database table
      * This is a wrapper around several objects which will call a method from 
      * those objects
