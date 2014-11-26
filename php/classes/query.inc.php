@@ -41,6 +41,8 @@ class query {
     private $joins=null;
     /** @var string WHERE clause */
     private $clause=null;
+    /** @var array GROUP BY clause */
+    private $groupby=array();
     /** @var array ORDER clause */
     private $order=array();
     /** @var array count for LIMIT clause */
@@ -155,6 +157,28 @@ class query {
     }
 
     /** 
+     * Add GROUP BY clause to query
+     * @param string GRPUP BY to add
+     * @return query return the query to enable chaining
+     */
+    public function addGroupBy($group) {
+        $this->groupby[]=$group;
+        return $this;
+    }
+
+    /** 
+     * Get GROUP BY for query
+     * @return string GROUP clause
+     */
+    private function getGroupBy() {
+        $groupby=$this->groupby;
+        if(is_array($groupby) && sizeof($groupby) > 0) {
+            return " GROUP BY " . implode(", ", $groupby);
+        }
+        return "";
+    }
+
+    /** 
      * Add ORDER BY clause to query
      * @param string order to add
      * @example $qry->addOrder("name DESC");
@@ -169,7 +193,7 @@ class query {
      * Get ORDER BY for query
      * @return string ORDER clause
      */
-    public function getOrder() {
+    private function getOrder() {
         $order=$this->order;
         if(is_array($order) && sizeof($order) > 0) {
             return " ORDER BY " . implode(", ", $order);
@@ -196,7 +220,7 @@ class query {
      * Get LIMIT clause for query
      * @return string LIMIT clause
      */
-    public function getLimit() {
+    private function getLimit() {
         if(!is_null($this->offset)) {
             $limit=" LIMIT " . (int) $this->offset;
             if (is_null($this->count)) {
@@ -241,6 +265,11 @@ class query {
             $sql .= " WHERE " . $this->clause;
         }
        
+        $groupby=trim($this->getGroupBy());
+        if(!empty($groupby)) {
+            $sql .= " " . $groupby;
+        }
+
         $order=trim($this->getOrder());
         if(!empty($order)) {
             $sql .= " " . $order;
