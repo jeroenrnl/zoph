@@ -289,43 +289,30 @@ class category extends zophTreeTable implements Organizer {
             return $coverphoto;
         }
 
-        $order=self::getAutoCoverOrder($autocover);
+        $qry=new query(array("p" => "photos"));
+        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id")); 
+        $qry->join(array(), array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")      
+            ->join(array(), array("pc" => "photo_categories"), "pc.photo_id = ar.photo_id");
+
         if($children) {
-            $cat_where=" WHERE pc.category_id in (" . $this->getBranchIds() .")";
+            $ids=new param(":ids",$this->getBranchIdArray(), PDO::PARAM_INT);
+            $where=new clause("pc.category_id IN (" . implode(", ", $ids->getName()) . ")", array($ids));
         } else {
-            $cat_where=" WHERE pc.category_id =" .$this->get("category_id");
+            $where=new clause("pc.category_id=:id", array(new param(":id", $this->getId(), PDO::PARAM_INT)));
+        }
+       
+        if (!$user->is_admin()) {
+            $qry->join(array(), array("pa" => "photo_albums"), "pa.photo_id = p.photo_id")      
+                ->join(array(), array("gp" => "group_permissions"), "pa.album_id = gp.album_id")
+                ->join(array(), array("gu" => "groups_users"), "gp.group_id = gu.group_id");
+
+            $where->addAnd(new clause("gu.user_id=:userid", array(new param(":userid", $user->getId(), PDO::PARAM_INT))));
+            $where->addAnd(new clause("gp.access_level >= p.level"));
         }
 
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT DISTINCT ar.photo_id FROM " .
-                DB_PREFIX . "photos AS p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating AS ar " .
-                " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_categories AS pc ON" .
-                " pc.photo_id = ar.photo_id" .
-                $cat_where . " " . $order;
-        } else {
-            $sql=
-                "SELECT DISTINCT p.photo_id FROM " .
-                DB_PREFIX . "photos as p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating AS ar" .
-                " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id JOIN " .
-                DB_PREFIX . "photo_categories AS pc " .
-                "ON pc.photo_id = p.photo_id " .
-                $cat_where .
-                " AND gu.user_id =" .
-                " '" . escape_string($user->get("user_id")) . "'" .
-                " AND gp.access_level >= p.level " .
-                $order;
-        }
-        $coverphotos=photo::getRecordsFromQuery($sql);
+        $qry=self::getAutoCoverOrderNew($qry, $autocover);
+        $qry->where($where);
+        $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
 
         if ($coverphoto instanceof photo) {

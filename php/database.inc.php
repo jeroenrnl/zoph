@@ -44,8 +44,7 @@ function query($sql, $error = false) {
     
     // New DB
     if($sql instanceof query) {
-        $result=db::query($sql);
-        return $result;
+        return db::query($sql);
     } else {
 
         if (!$error) {
@@ -93,11 +92,18 @@ function fetch_array($result) {
 }
 
 function fetch_assoc($result) {
+    if($result instanceof PDOStatement) {
+        $return=$result->fetch(PDO::FETCH_ASSOC);
+        return $return;
+    }
     return mysql_fetch_assoc($result);
 }
 
 
 function free_result($result) {
+    if($result instanceof PDOStatement) {
+        return $result->closeCursor();
+    }
     return mysql_free_result($result);
 }
 

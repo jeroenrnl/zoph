@@ -647,6 +647,7 @@ abstract class zophTable {
         }
 
         $objs = array();
+
         while ((!$limit || $num-- > 0) && $row = fetch_assoc($result)) {
             $obj = new $class;
             $obj->setFields($row);
@@ -709,6 +710,11 @@ abstract class zophTable {
         }
     }
 
+    /**
+     * Get the ORDER BY and LIMIT statements to pick an autocover
+     * @param string [oldest|newest|first|last|random|highest]
+     * @return string SQL Query snippet
+     */
     public static function getAutocoverOrder($autocover) {
         switch ($autocover) {
         case "oldest":
@@ -726,14 +732,47 @@ abstract class zophTable {
         case "random":
             $order="ORDER BY rand() LIMIT 1";
             break;
-        default:
         case "highest":
+        default:
             $order="ORDER BY ar.rating DESC LIMIT 1";
             break;
         }
         return $order;
     }
 
+    /**
+     * Get the ORDER BY and LIMIT statements to pick an autocover
+     * This is a temporary function until all old SQL has been phased out
+     * @param query Query to add the ORDER BY and LIMIT statements to
+     * @param string [oldest|newest|first|last|random|highest]
+     * @return query Modified query
+     * @todo Merge this function with @see getAutoCoverOrder() once all classes have
+     *       moved to the new db syntax.
+     */
+    public static function getAutocoverOrderNew(query $query, $autocover="highest") {
+        switch ($autocover) {
+        case "oldest":
+            $qry=$query->addOrder("p.date")->addOrder("p.time")->addLimit(1);
+            break;
+        case "newest":
+            $qry=$query->addOrder("p.date DESC")->addOrder("p.time DESC")->addLimit(1);
+            break;
+        case "first":
+            $qry=$query->addOrder("p.timestamp")->addLimit(1);
+            break;
+        case "last":
+            $qry=$query->addOrder("p.timestamp DESC")->addLimit(1);
+            break;
+        case "random":
+            $qry=$query->addOrder("rand()")->addLimit(1);
+            break;
+        case "highest":
+        default:
+            $qry=$query->addOrder("ar.rating DESC")->addLimit(1);
+            break;
+        }
+        return $qry;
+    }
 
     /**
      * Get XML from a database table

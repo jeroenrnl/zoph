@@ -121,8 +121,13 @@ abstract class zophTreeTable extends zophTable {
     /*
      * Gets a list of the id of this record along with the ids of
      * all of its descendants.
+     * @param array id_array add values to this array
+     * @todo refactor the pass by reference out
      */
-    function getBranchIdArray(&$id_array) {
+    public function getBranchIdArray(array &$id_array=null) {
+        if(!is_array($id_array)) {
+            $id_array=array();
+        }
         $id_array[] = (int) $this->getId();
 
         $this->getChildren();
