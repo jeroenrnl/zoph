@@ -58,13 +58,21 @@ class query {
     public function __construct($table, array $fields=null) {
         if(is_array($table)) {
             $tbl=reset($table);
-            $this->alias=key($table);
+            $alias=key($table);
+            if(!is_numeric($alias)) {
+                $this->alias=$alias;
+            }
             $table=$tbl;
         }
         $table=db::getPrefix() . $table;
         if(is_array($fields)) {
             foreach ($fields as $field) {
-                $this->fields[]=$table . "." . $field;
+                if(!isset($this->alias)) {
+                    $this->fields[]=$table . "." . $field;
+                } else {
+                    $this->fields[]=$this->alias . "." . $field;
+                }
+                    
             }
         }
         $this->table=$table;

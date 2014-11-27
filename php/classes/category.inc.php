@@ -376,12 +376,10 @@ class category extends zophTreeTable implements Organizer {
         if(empty($name)) {
             return false;
         }
-        $where =
-            "lower(category)='" . escape_string(strtolower($name)) . "'";
+        $qry=new query(array("c" => "categories"), array("category_id"));
+        $qry->where(new clause("lower(category)=:name", array(new param(":name", strtolower($name), PDO::PARAM_STR))));
 
-        $query = "select category_id from " . DB_PREFIX . "categories where $where";
-
-        return self::getRecordsFromQuery($query);
+        return self::getRecordsFromQuery($qry);
     }
 
     /**
