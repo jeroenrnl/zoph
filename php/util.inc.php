@@ -638,7 +638,11 @@ function remove_empty(array $children) {
         return $children;
     } 
 }
-
+/**
+ * @todo This function has been replaced by zophTable::addOrderToQuery()
+ * since not all classes have moved to the new db code, this function remains
+ * in place until that is done
+ */
 function get_sql_for_order($order) {
     switch ($order) {
     case "oldest":

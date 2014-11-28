@@ -66,12 +66,16 @@ class query {
         }
         $table=db::getPrefix() . $table;
         if(is_array($fields)) {
-            foreach ($fields as $field) {
+            foreach ($fields as $alias => $field) {
                 if(!isset($this->alias)) {
-                    $this->fields[]=$table . "." . $field;
+                    $field=$table . "." . $field;
                 } else {
-                    $this->fields[]=$this->alias . "." . $field;
+                    $field=$this->alias . "." . $field;
                 }
+                if(!is_numeric($alias)) {
+                    $field .= " AS " . $alias;
+                }
+                $this->fields[]=$field;
                     
             }
         }

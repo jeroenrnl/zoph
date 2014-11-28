@@ -797,7 +797,46 @@ abstract class zophTable {
         $where->addAnd(new clause("gp.access_level >= p.level"));
         
         return array($qry, $where);
-     } 
+     }
+
+    /**
+     * Add modify query to ORDER BY a calculated field
+     * @param query SQL query to modify
+     * @param string [oldest|newest|first|last|lowest|highest|average|random]
+     * @return query modified query
+     */
+    protected static function addOrderToQuery(query $qry, $order) {
+        switch ($order) {
+        case "oldest":
+            $qry->addFunction(array("oldest" => "min(p.date)"));
+            break;
+        case "newest":
+            $qry->addFunction(array("newest" => "max(p.date)"));
+            break;
+        case "first":
+            $qry->addFunction(array("first" => "min(p.timestamp)"));
+            break;
+        case "last":
+            $qry->addFunction(array("last" => "max(p.timestamp)"));
+            break;
+        case "lowest":
+            $qry->addFunction(array("lowest" => "min(rating)"));
+            break;
+        case "highest":
+            $qry->addFunction(array("highest" => "max(rating)"));
+            break;
+        case "average":
+            $qry->addFunction(array("average" => "avg(rating)"));
+            break;
+        case "random":
+            $qry->addFunction(array("random" => "rand()"));
+            break;
+        }
+
+        $qry->addOrder($order);
+        return $qry;
+    }
+
 
     /**
      * Get XML from a database table

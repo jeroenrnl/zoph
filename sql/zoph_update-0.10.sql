@@ -42,3 +42,10 @@ CREATE VIEW zoph_view_photo_avg_rating AS
 	SELECT p.photo_id, avg(pr.rating) AS rating FROM zoph_photos AS p 
 	LEFT JOIN zoph_photo_ratings AS pr ON p.photo_id = pr.photo_id 
 	GROUP BY p.photo_id;
+
+#
+# Changes for 0.9.2
+#
+ALTER TABLE zoph_prefs MODIFY COLUMN child_sortorder enum('name', 'sortname', 'oldest', 'newest',
+        'first', 'last', 'lowest', 'highest', 'average', 'random') default 'sortname' NOT NULL;
+

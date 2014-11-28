@@ -55,6 +55,26 @@ class categoryTest extends ZophDataBaseTestCase {
         $this->assertEquals(0, $retry->lookup());
     }
 
+    /**
+     * test getChildren() function including sortorder
+     * @dataProvider getChildren();
+     */
+     public function testGetChildren($id, array $exp_children, $order=null) {
+        $category=new category($id);
+        $cat_children=$category->getChildren($order);
+        $children=array();
+        foreach($cat_children as $child) {
+            $children[]=$child->getId();
+        }
+
+        if($order=="random") {
+            // Of course, we cannot check the order for random, therefore we sort them.
+            // Thus we only check if all the expected categories are present, not the order
+            sort($children);
+        }
+        $this->assertEquals($exp_children, $children);
+     }
+
         
     /**
      * Test getPhotoCount() function
@@ -257,6 +277,25 @@ class categoryTest extends ZophDataBaseTestCase {
         return array(
             array(14, "Testcat1", 2),
             array(14, "Testcat2", 3)
+        );
+    }
+
+    /**
+     * dataProvider function
+     * @return array category_id, array(children), order
+     */
+    public function getChildren() {
+        return array(
+            array(1, array(2,5,8,9), "oldest"),
+            array(1, array(2,8,9,5), "newest"),
+            array(1, array(2,5,8,9), "first"),
+            array(1, array(2,8,9,5), "last"),
+            array(1, array(2,5,9,8), "lowest"),
+            array(1, array(5,9,2,8), "highest"),
+            array(1, array(5,2,9,8), "average"),
+            array(1, array(5,2,9,8), "name"),
+            array(1, array(5,2,9,8), "sortname"),
+            array(1, array(2,5,8,9), "random")
         );
     }
 

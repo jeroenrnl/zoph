@@ -365,7 +365,7 @@ CREATE TABLE zoph_prefs (
   autothumb enum('oldest','newest','first','last','highest','random') 
   	default 'highest' NOT NULL,
   child_sortorder enum('name', 'sortname', 'oldest', 'newest', 
-	'first', 'last', 'lowest', 'highest', 'average') default 'sortname',
+	'first', 'last', 'lowest', 'highest', 'average', 'random') default 'sortname' NOT NULL
   PRIMARY KEY  (user_id)
 ) ENGINE=MyISAM;
 

@@ -98,27 +98,23 @@ class category extends zophTreeTable implements Organizer {
      * Get sub-categories
      * @param string order
      */
-    public function getChildren($order=null) {
-        $order_fields="";
-        if($order && $order!="name") {
-            $order_fields=get_sql_for_order($order);
-            $order=" ORDER BY " . $order . ", name ";
-        } else if ($order=="name") {
-            $order=" ORDER BY name ";
+    public function getChildren($order="name") {
+        if(!in_array($order, 
+            array("name", "sortname", "oldest", "newest", "first", "last", "lowest", "highest", "average", "random"))) {
+            $order="name";
         }
-
-        $id = $this->get("category_id");
-        if (!$id) { return; }
-
-        $sql =
-            "SELECT c.*, category as name " .
-            $order_fields . " FROM " .
-            DB_PREFIX . "categories as c " .
-            "WHERE parent_category_id=" . $id .
-            " GROUP BY c.category_id " .
-            $order;
-
-        $this->children=self::getRecordsFromQuery($sql);
+        $qry=new query(array("c" => "categories"), array("*", "name" => "category"));
+        $qry->where(new clause("parent_category_id=:catid", array(
+                new param(":catid", (int) $this->getId(), PDO::PARAM_INT)
+            )));
+        $qry->addGroupBy("c.category_id");
+        
+        $qry=self::addOrderToQuery($qry, $order);
+        
+        if($order!="name") {
+            $qry->addOrder("name");
+        }
+        $this->children=self::getRecordsFromQuery($qry);
         return $this->children;
     }
     
@@ -127,7 +123,7 @@ class category extends zophTreeTable implements Organizer {
      * @param string sort order.
      * @return array category tree
      */
-    public function getChildrenForUser($order=null) {
+    public function getChildrenForUser($order="name") {
         return remove_empty($this->getChildren($order));
     }
     
@@ -314,6 +310,22 @@ class category extends zophTreeTable implements Organizer {
         $user=user::getCurrent();
         return ($user->prefs->get("autocomp_categories") && conf::get("interface.autocomplete"));
     }
+
+    protected static function addOrderToQuery(query $qry, $order) {
+        $qry=parent::addOrderToQuery($qry, $order);
+
+        if(in_array($order, array("oldest", "newest", "first", "last"))) {
+            $qry->join(array(), array("pc" => "photo_categories"), "pc.category_id=c.category_id")
+                ->join(array(), array("p" => "photos"), "pc.photo_id = p.photo_id");
+        }
+
+        if(in_array($order, array("lowest", "highest", "average"))) {
+            $qry->join(array(), array("pc" => "photo_categories"), "pc.category_id=c.category_id")
+                ->join(array(), array("ar" => "view_photo_avg_rating"), "ar.photo_id = pc.photo_id");
+        }
+        return $qry;
+    }
+        
 
     /**
      * Get details (statistics) about this category from db
