@@ -743,13 +743,13 @@ abstract class zophTable {
     /**
      * Get the ORDER BY and LIMIT statements to pick an autocover
      * This is a temporary function until all old SQL has been phased out
-     * @param query Query to add the ORDER BY and LIMIT statements to
+     * @param select Query to add the ORDER BY and LIMIT statements to
      * @param string [oldest|newest|first|last|random|highest]
-     * @return query Modified query
+     * @return select Modified query
      * @todo Merge this function with @see getAutoCoverOrder() once all classes have
      *       moved to the new db syntax.
      */
-    public static function getAutocoverOrderNew(query $query, $autocover="highest") {
+    public static function getAutocoverOrderNew(select $query, $autocover="highest") {
         switch ($autocover) {
         case "oldest":
             $qry=$query->addOrder("p.date")->addOrder("p.time")->addLimit(1);
@@ -780,14 +780,15 @@ abstract class zophTable {
      * a non-admin user is not allowed to see, this function expands an existing query with the needed
      * JOINs and WHERE clauses.
      */
-    protected function expandQueryForUser(query $qry, clause $where=null) {
+    protected function expandQueryForUser(select $qry, clause $where=null) {
         $user=user::getCurrent();
 
         $qry->join(array(), array("pa" => "photo_albums"), "pa.photo_id = p.photo_id")
             ->join(array(), array("gp" => "group_permissions"), "pa.album_id = gp.album_id")
             ->join(array(), array("gu" => "groups_users"), "gp.group_id = gu.group_id");
 
-        $clause=new clause("gu.user_id=:userid", array(new param(":userid", $user->getId(), PDO::PARAM_INT)));
+        $clause=new clause("gu.user_id=:userid");
+        $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
         
         if(is_null($where)) {
             $where=$clause;
@@ -801,11 +802,11 @@ abstract class zophTable {
 
     /**
      * Add modify query to ORDER BY a calculated field
-     * @param query SQL query to modify
+     * @param select SQL query to modify
      * @param string [oldest|newest|first|last|lowest|highest|average|random]
      * @return query modified query
      */
-    protected static function addOrderToQuery(query $qry, $order) {
+    protected static function addOrderToQuery(select $qry, $order) {
         switch ($order) {
         case "oldest":
             $qry->addFunction(array("oldest" => "min(p.date)"));

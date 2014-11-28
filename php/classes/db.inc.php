@@ -24,7 +24,7 @@
 /**
  * The db object is used to connect to the database
  * Example code:
- * $qry=new query("photos", array("photo_id", "name"));
+ * $qry=new select("photos");
  * var_dump(db::query($qry));
 
  *

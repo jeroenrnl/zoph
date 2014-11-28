@@ -28,46 +28,31 @@
  */
 class PDOdatabaseTest extends ZophDataBaseTestCase {
     /**
-     * Create queries
+     * Create SELECT queries
      * @dataProvider getQueries();
      * @param string Table to run query on
      * @param array Fields to query
      * @param string Expected SQL query
      */
     public function testCreateQuery($table, $fields, $exp_sql) {
+        $qry=new select($table);
         if(is_array($fields)) {
-            $sql=(string) new query($table, $fields);
-        } else {
-            $sql=(string) new query($table);
+            $qry->addFields($fields);
         }
-        $this->assertEquals($exp_sql, $sql);
-    }
+        $this->assertEquals($exp_sql, (string) $qry);
 
-    /**
-     * Run queries
-     * @dataProvider getQueries();
-     * @param string Table to run query on
-     * @param array Fields to query
-     * @param string Expected SQL query
-     */
-    public function testRunQuery($table, $fields, $exp_sql) {
-        // not used
-        $exp_sql=null;
-        if(is_array($fields)) {
-            $result=db::query(new query($table, $fields));
-        } else {
-            $result=db::query(new query($table));
-        }
+        $result=db::query($qry);
         $this->assertInstanceOf("PDOStatement", $result);
     }
 
     /**
-     * Test a query with a WHERE clause
+     * Test a SELECT query with a WHERE clause
      */
     public function testQueryWithClause() {
         
-        $qry=new query("photos");
-        $where=new clause("photo_id > :minid", array(new param(":minid", 5, PDO::PARAM_INT)));
+        $qry=new select("photos");
+        $where=new clause("photo_id > :minid");
+        $qry->addParam(new param(":minid", 5, PDO::PARAM_INT));
 
         $qry->where($where);
 
@@ -79,9 +64,13 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         unset($qry);
         unset($clause);
 
-        $qry=new query("photos");
-        $where=new clause("photo_id > :minid", array(new param(":minid", 5, PDO::PARAM_INT)));
-        $where=$where->addAnd(new clause("photo_id < :maxid", array(new param(":maxid", 10, PDO::PARAM_INT))));
+        $qry=new select("photos");
+        $where=new clause("photo_id > :minid");
+        $where->addAnd(new clause("photo_id < :maxid"));
+        $qry->addParams(array(
+            new param(":maxid", 10, PDO::PARAM_INT),
+            new param(":minid", 5, PDO::PARAM_INT)
+        ));
 
         $qry->where($where);
 
@@ -96,11 +85,13 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     }
 
     /**
-     * Test a query with a JOIN clause
+     * Test a SELECT query with a JOIN clause
      */
     public function testQueryWithJoin() {
-        $qry=new query("photos", array("name"));
-        $where=new clause("zoph_photos.photo_id = :photoid", array(new param(":photoid", 5, PDO::PARAM_INT)));
+        $qry=new select("photos");
+        $qry->addFields(array("name"));
+        $where=new clause("zoph_photos.photo_id = :photoid");
+        $qry->addParam(new param(":photoid", 5, PDO::PARAM_INT));
         $qry->join(array(), "photo_albums","zoph_photos.photo_id=zoph_photo_albums.photo_id")
             ->join(array("album"), "albums","zoph_photo_albums.album_id=zoph_albums.album_id")
             ->where($where);
@@ -120,7 +111,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
      * @dataProvider getLimits();
      */
     public function testQueryWithLimit($count, $offset) {
-        $qry=new query("photos");
+        $qry=new select("photos");
         $qry->addLimit($count, $offset);
         $sql=(string) $qry;
         $exp_sql="SELECT * FROM zoph_photos";
@@ -144,7 +135,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
      * @dataProvider getOrders();
      */
     public function testQueryWithOrder(array $orders) {
-        $qry=new query("photos");
+        $qry=new select("photos");
         foreach($orders as $order) {
             $qry->addOrder($order);
         }

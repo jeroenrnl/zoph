@@ -30,28 +30,10 @@
 class clause {
 
     private $clause;
-    private $params;
     private $subclauses;
 
-    public function __construct($clause, array $params=null) {
+    public function __construct($clause) {
         $this->clause=$clause;
-        if(is_array($params)) {
-            $this->params=$params;
-        }
-    }
-
-    public function addParam(param $param) {
-        $this->params[]=$param;
-    }
-
-    public function getParams() {
-        $params=(array) $this->params;
-        if(is_array($this->subclauses)) {
-            foreach($this->subclauses as $subclause) {
-                $params=array_merge($params, (array) $subclause["subc"]->getParams());
-            }
-        }
-        return $params;
     }
 
     public function addAnd(clause $clause) {
@@ -80,9 +62,13 @@ class clause {
         return $this;
     }
 
-    public function addIn(clause $clause, query $query) {
-
-        return $this;
+    /**
+     * Create a WHERE ... IN ( ..., ..., ...) clause
+     * @param string variable
+     * @param param parameters
+     */
+    public static function InClause($var, param $param) {
+        return new self($var . " IN (" . implode(", ", $param->getName()) . ")");
     }
 
     public function __toString() {

@@ -27,35 +27,30 @@
  * @package Zoph
  * @author Jeroen Roos
  */
-class query {
+abstract class query {
 
     /** @var string db table to query */
-    private $table;
+    protected $table;
     /** @var string alias of db table to query */
-    private $alias;
+    protected $alias;
     /** @var array fields to query */
-    private $fields=null;
+    protected $fields=null;
     /** @var array parameters for prepared queries */
-    private $params=null;
-    /** @var array JOIN statements to add to this query */
-    private $joins=null;
+    protected $params=null;
     /** @var string WHERE clause */
-    private $clause=null;
-    /** @var array GROUP BY clause */
-    private $groupby=array();
+    protected $clause=null;
     /** @var array ORDER clause */
-    private $order=array();
+    protected $order=array();
     /** @var array count for LIMIT clause */
-    private $count=null;
+    protected $count=null;
     /** @var array offset for LIMIT clause */
-    private $offset=null;
+    protected $offset=null;
 
     /**
      * Create new query
      * @param string Table to query
-     * @param array Fields to query
      */
-    public function __construct($table, array $fields=null) {
+    public function __construct($table) {
         if(is_array($table)) {
             $tbl=reset($table);
             $alias=key($table);
@@ -65,22 +60,28 @@ class query {
             $table=$tbl;
         }
         $table=db::getPrefix() . $table;
-        if(is_array($fields)) {
-            foreach ($fields as $alias => $field) {
-                if(!isset($this->alias)) {
-                    $field=$table . "." . $field;
-                } else {
-                    $field=$this->alias . "." . $field;
-                }
-                if(!is_numeric($alias)) {
-                    $field .= " AS " . $alias;
-                }
-                $this->fields[]=$field;
-                    
-            }
-        }
         $this->table=$table;
+    }
 
+    /**
+     * Add one or more fields to a query
+     * @param array list of fields [ "alias" => "field"]
+     * @return query 
+     */
+    public function addFields(array $fields) {
+        $table=$this->table;
+        foreach ($fields as $alias => $field) {
+            if(!isset($this->alias)) {
+                $field=$table . "." . $field;
+            } else {
+                $field=$this->alias . "." . $field;
+            }
+            if(!is_numeric($alias)) {
+                $field .= " AS " . $alias;
+            }
+            $this->fields[]=$field;
+                
+        }
     }
 
     /**
@@ -94,11 +95,20 @@ class query {
 
     /**
      * Add a parameter for a prepared query
-     * @param string Parameter name
-     * @param string Parameter value
+     * @param param parameter object
      */
     public function addParam(param $param) {
         $this->params[]=$param;
+    }
+
+    /**
+     * Add parameters for a prepared query
+     * @param array parameters
+     */
+    public function addParams(array $params) {
+        foreach($params as $param) {
+            $this->addParam($param);
+        }
     }
 
     /**
@@ -137,57 +147,7 @@ class query {
      */
     public function where(clause $clause) {
         $this->clause=$clause;
-        $this->params=array_merge( (array) $this->params, (array) $clause->getParams());
         return $this;
-    }
-
-    /**
-     * Add a JOIN clause to the query
-     * @param array fields to add to the query
-     * @param string table to join
-     * @param string ON clause
-     * @param string join type
-     * @return query return the query to enable chaining
-     */
-    public function join(array $fields, $table, $on, $jointype="INNER") {
-        if(is_array($table)) {
-            $tbl=reset($table);
-            $as=key($table);
-            $table=$tbl . " AS " . $as;
-        }
-
-        $table=db::getPrefix() . $table;
-        
-        if (!in_array($jointype, array("INNER", "LEFT", "RIGHT"))) {
-            throw new DatabaseException("Unknown JOIN type");
-        }
-        $this->joins[]=$jointype . " JOIN " . $table . " ON " . $on;
-        foreach ($fields as $field) {
-            $this->fields[]=$table . "." . $field;
-        }
-        return $this;
-    }
-
-    /** 
-     * Add GROUP BY clause to query
-     * @param string GRPUP BY to add
-     * @return query return the query to enable chaining
-     */
-    public function addGroupBy($group) {
-        $this->groupby[]=$group;
-        return $this;
-    }
-
-    /** 
-     * Get GROUP BY for query
-     * @return string GROUP clause
-     */
-    private function getGroupBy() {
-        $groupby=$this->groupby;
-        if(is_array($groupby) && sizeof($groupby) > 0) {
-            return " GROUP BY " . implode(", ", $groupby);
-        }
-        return "";
     }
 
     /** 
@@ -205,7 +165,7 @@ class query {
      * Get ORDER BY for query
      * @return string ORDER clause
      */
-    private function getOrder() {
+    protected function getOrder() {
         $order=$this->order;
         if(is_array($order) && sizeof($order) > 0) {
             return " ORDER BY " . implode(", ", $order);
@@ -232,7 +192,7 @@ class query {
      * Get LIMIT clause for query
      * @return string LIMIT clause
      */
-    private function getLimit() {
+    protected function getLimit() {
         if(!is_null($this->offset)) {
             $limit=" LIMIT " . (int) $this->offset;
             if (is_null($this->count)) {
@@ -249,50 +209,12 @@ class query {
         }
         return $limit;
     }        
-
+    
     /**
-     * Create query
+     * The __toString() magic function creates the query to be fed to the db
+     * each inheritance of this class will have to implement it.
      * @return string SQL query
      */
-    public function __toString() {
-        $sql = "SELECT ";
-
-        if(is_array($this->fields)) {
-            $sql.=implode(", ", $this->fields);
-        } else {
-            $sql.="*";
-        }
-
-        $sql .= " FROM " . $this->table;
-
-        if(isset($this->alias)) {
-            $sql.=" AS " . $this->alias;
-        }
-
-        if(is_array($this->joins)) {
-            $sql.=" " . implode(" ", $this->joins);
-        }
-
-        if($this->clause instanceof clause) {
-            $sql .= " WHERE " . $this->clause;
-        }
-       
-        $groupby=trim($this->getGroupBy());
-        if(!empty($groupby)) {
-            $sql .= " " . $groupby;
-        }
-
-        $order=trim($this->getOrder());
-        if(!empty($order)) {
-            $sql .= " " . $order;
-        }
-
-        $limit=trim($this->getLimit());
-        if(!empty($limit)) {
-            $sql .= " " . $limit;
-        }
-
-        return $sql . ";";
-    }
+    abstract public function __toString();
 }
 
