@@ -780,7 +780,7 @@ abstract class zophTable {
      * a non-admin user is not allowed to see, this function expands an existing query with the needed
      * JOINs and WHERE clauses.
      */
-    protected function expandQueryForUser(select $qry, clause $where=null) {
+    protected static function expandQueryForUser(select $qry, clause $where=null) {
         $user=user::getCurrent();
 
         $qry->join(array(), array("pa" => "photo_albums"), "pa.photo_id = p.photo_id")

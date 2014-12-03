@@ -146,7 +146,7 @@ class category extends zophTreeTable implements Organizer {
         $qry->addParam(new param(":cat_id", $id, PDO::PARAM_INT));
         
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = $this->expandQueryForUser($qry, $where);
+            list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
@@ -171,7 +171,7 @@ class category extends zophTreeTable implements Organizer {
         $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
         
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = $this->expandQueryForUser($qry, $where);
+            list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
 
         if ($this->get("parent_category_id")) {
@@ -288,7 +288,7 @@ class category extends zophTreeTable implements Organizer {
         }
        
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = $this->expandQueryForUser($qry, $where);
+            list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
 
         $qry=self::getAutoCoverOrderNew($qry, $autocover);
@@ -364,7 +364,7 @@ class category extends zophTreeTable implements Organizer {
         $qry->addParam(new param(":catid", $this->getId(), PDO::PARAM_INT));
         
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = $this->expandQueryForUser($qry, $where);
+            list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
@@ -398,7 +398,8 @@ class category extends zophTreeTable implements Organizer {
         if(empty($name)) {
             return false;
         }
-        $qry=new select(array("c" => "categories"), array("category_id"));
+        $qry=new select(array("c" => "categories"));
+        $qry->addFields(array("category_id"));
         $qry->where(new clause("lower(category)=:name"));
         $qry->addParam(new param(":name", strtolower($name), PDO::PARAM_STR));
 
@@ -410,38 +411,20 @@ class category extends zophTreeTable implements Organizer {
      */
     public static function getTopN() {
         $user=user::getCurrent();
-        if ($user->is_admin()) {
-            $sql =
-                "select cat.*, count(*) as count from " .
-                DB_PREFIX . "categories as cat, " .
-                DB_PREFIX . "photo_categories as pc " .
-                "where pc.category_id = cat.category_id " .
-                "group by cat.category_id " .
-                "order by count desc, cat.category " .
-                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
-        } else {
-            $sql =
-                "select cat.*, count(distinct ph.photo_id) as count from " .
-                DB_PREFIX . "categories as cat JOIN " .
-                DB_PREFIX . "photo_categories as pc ON " .
-                "pc.category_id = cat.category_id JOIN " .
-                DB_PREFIX . "photos as ph ON " .
-                " pc.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "photo_albums as pa ON " .
-                " pa.photo_id = pc.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp ON " .
-                "pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu ON " .
-                "gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . 
-                escape_string($user->get("user_id")) . "'" .
-                "AND gp.access_level >= ph.level " .
-                "GROUP BY cat.category_id " .
-                "ORDER BY count desc, cat.category " .
-                "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
-        }
 
-        return parent::getTopNfromSQL($sql);
+        $qry=new select(array("c" => "categories"));
+        $qry->addFields(array("category_id", "category"));
+        $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
+        $qry->join(array(), array("pc" => "photo_categories"), "pc.category_id=c.category_id");
+        $qry->addGroupBy("c.category_id");
+        $qry->addOrder("count DESC")->addOrder("c.category");
+        $qry->addLimit((int) $user->prefs->get("reports_top_n"));
+        if (!$user->is_admin()) {
+            $qry->join(array(), array("p" => "photos"), "pc.photo_id=p.photo_id");
+            list($qry, $where) = self::expandQueryForUser($qry);
+            $qry->where($where);
+        }
+        return parent::getTopNfromSQL($qry);
 
     }
 
