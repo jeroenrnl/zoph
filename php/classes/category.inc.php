@@ -437,10 +437,9 @@ class category extends zophTreeTable implements Organizer {
         if($user && $user->is_admin()) {
             return self::getCount();
         } else {
-            $sql =
-                "SELECT category_id, parent_category_id  FROM " .
-                DB_PREFIX . "categories as c";
-            $cats=self::getRecordsFromQuery($sql);
+            $qry=new select(array("c" => "categories"));
+            $qry->addFields(array("category_id", "parent_category_id"));
+            $cats=self::getRecordsFromQuery($qry);
             $cat_clean=remove_empty($cats);
             return count($cat_clean);
         }
