@@ -315,6 +315,11 @@ class category extends zophTreeTable implements Organizer {
         return ($user->prefs->get("autocomp_categories") && conf::get("interface.autocomplete"));
     }
 
+    /**
+     * Add ORDER BY statement to query
+     * @param select SELECT query
+     * @param string order
+     */
     protected static function addOrderToQuery(select $qry, $order) {
         $qry=parent::addOrderToQuery($qry, $order);
 
