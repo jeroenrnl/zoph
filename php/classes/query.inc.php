@@ -208,7 +208,14 @@ abstract class query {
             }
         }
         return $limit;
-    }        
+    }
+
+    /**
+     * Execute a query
+     */
+    public function execute() { 
+        return db::query($this);
+    }
     
     /**
      * The __toString() magic function creates the query to be fed to the db

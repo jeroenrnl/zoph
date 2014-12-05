@@ -143,7 +143,41 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $exp_sql="SELECT * FROM zoph_photos ORDER BY " . implode(", ", $orders);
         $exp_sql .= ";";
         $this->assertEquals($exp_sql, $sql);
-    }        
+    }
+
+    /**
+     * test INSERT query
+     * @dataProvider getInserts();
+     */
+    public function testInsert($table, array $values) {
+        $qry=new insert(array($table));
+        foreach($values as $field => $value) {
+            $param=new param(":" . $field, $value, PDO::PARAM_STR);
+            $qry->addParam(new param(":" . $field, $value, PDO::PARAM_STR));
+        }
+
+        $qry->execute();
+
+        $qry=new select(array($table));
+        $qry->addFields(array_keys($values));
+        
+        $where=null;
+        foreach($values as $field => $value) {
+            $clause=new clause($field . "=:" . $field);
+            if($where instanceof clause) {
+                $where->addAnd($clause);
+            } else {
+                $where=$clause;
+            }
+            
+            $qry->addParam(new param(":" . $field, $value, PDO::PARAM_STR));
+        }
+        $qry->where($where);
+        $result=$qry->execute()->fetchAll();
+        
+        $this->assertEquals(1, count($result));
+    }
+
                 
     /**
      * Provide queries to use as test input
@@ -179,6 +213,32 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
             array(array("name", "photo_id")),
             array(array("name" , "photo_id DESC"))
         );
+    }
+
+    /**
+     * Provide data for INSERT queries 
+     */
+    public function getInserts() {
+        return array(
+            array("photos", array(
+                "name" => "testname 1",
+                "title" => "testtitle 1")),
+            array("photos", array(
+                "name" => "testname 2",
+                "title" => "testtitle 2")),
+            array("photos", array(
+                "name" => "testname 3",
+                "title" => "testtitle 3")),
+            array("photo_categories", array(
+                "photo_id" => 999, 
+                "category_id" => 1)),
+            array("photo_categories", array(
+                "photo_id" => 998, 
+                "category_id" => 2)),
+            array("photo_categories", array(
+                "photo_id" => 997, 
+                "category_id" => 3)),
+            );
     }
 
 }
