@@ -85,6 +85,13 @@ class select extends query {
     }
 
     /**
+     * Execute query
+     */
+    public function execute() { 
+        return db::query($this);
+    }
+
+    /**
      * Create SELECT query
      * @return string SQL query
      */

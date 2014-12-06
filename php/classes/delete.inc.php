@@ -1,6 +1,6 @@
 <?php
 /**
- * Database query class for INSERT queries
+ * Database query class for DELETE queries
  *
  * This file is part of Zoph.
  *
@@ -22,29 +22,31 @@
  */
 
 /**
- * The insert object is used to create INSERT queries
+ * The delete object is used to create DELETE queries
  *
  * @package Zoph
  * @author Jeroen Roos
  */
-class insert extends query {
+class delete extends query {
+    /** @var bool Set to true to allow DELETE query without WHERE
+             this will delete all data from the table 
+             There currently is no way of setting this, because it 
+             is a protection against accidently running a query like
+             this during development or due to a bug */
+    private $deleteAll=false;
 
     /**
-     * Create INSERT query
+     * Create DELETE query
      * @return string SQL query
      */
     public function __toString() {
-        $sql = "INSERT INTO " . $this->table;
-        
-        $fields=array();
-
-        foreach($this->getParams() as $param) {
-            $fields[]=substr($param->getName(),1);
+        $sql = "DELETE FROM " . $this->table;
+        if($this->clause instanceof clause) {
+            $sql .= " WHERE " . $this->clause;
+        } else if ($this->deleteAll=false) {
+            throw new DatabaseException("DELETE query without WHERE");
         }
-
-        $sql.=" (" . implode(", ", $fields) . ")";
-        $sql.=" VALUES(:" . implode(", :", $fields) . ") ";
-
+        
         return $sql . ";";
     }
 

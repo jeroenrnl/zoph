@@ -152,7 +152,6 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     public function testInsert($table, array $values) {
         $qry=new insert(array($table));
         foreach($values as $field => $value) {
-            $param=new param(":" . $field, $value, PDO::PARAM_STR);
             $qry->addParam(new param(":" . $field, $value, PDO::PARAM_STR));
         }
 
@@ -178,6 +177,43 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $this->assertEquals(1, count($result));
     }
 
+    /**
+     * test DELETE query
+     */
+    public function testDelete() {
+        $db=db::getHandle();
+
+        $ids=array();
+
+        // First insert a few rows in photo table;
+        for($i=0; $i<3; $i++) {
+            $qry=new insert(array("photos"));
+            $qry->addParam(new param(":name", "test123", PDO::PARAM_STR));
+            $qry->execute();
+            $ids[]=$db->lastInsertId();
+        }
+
+        // Check if this succeeded
+        $this->assertEquals(3, sizeof($ids));
+
+        // Now delete them
+        foreach($ids as $id) {
+            $qry=new delete(array("photos"));
+            $qry->where(new clause("photo_id=:photoid"));
+            $qry->addParam(new param(":photoid", $id, PDO::PARAM_INT));
+            $qry->execute();
+        }
+        
+        // And check if they're gone
+        foreach($ids as $id) {
+            $qry=new select(array("photos"));
+            $qry->where(new clause("photo_id=:photoid"));
+            $qry->addParam(new param(":photoid", $id, PDO::PARAM_INT));
+            $result=$qry->execute()->fetchAll();
+        
+            $this->assertEquals(0, count($result));
+        }
+    }
                 
     /**
      * Provide queries to use as test input

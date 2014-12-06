@@ -213,8 +213,15 @@ abstract class query {
     /**
      * Execute a query
      */
-    public function execute() { 
-        return db::query($this);
+    public function execute() {
+        $db=db::getHandle();
+        $stmt=$db->prepare($this);
+
+        $values=array();
+        foreach($this->getParams() as $param) {
+            $values[$param->getName()]=$param->getValue();
+        }
+        $stmt->execute($values);
     }
     
     /**
