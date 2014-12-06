@@ -36,10 +36,6 @@ class insert extends query {
     public function __toString() {
         $sql = "INSERT INTO " . $this->table;
         
-        if(isset($this->alias)) {
-            $sql.=" AS " . $this->alias;
-        }
-
         $fields=array();
 
         foreach($this->getParams() as $param) {

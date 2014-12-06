@@ -60,11 +60,10 @@ class category extends zophTreeTable implements Organizer {
      * @todo Permissions are currently not checked, this should be done before calling this function
      */
     public function addPhoto(photo $photo) {
-        $sql = "INSERT INTO " . DB_PREFIX . "photo_categories " .
-            "(photo_id, category_id) VALUES ('" .
-            escape_string($photo->getId()) . "', '" .
-            escape_string($this->getId()) . "')";
-        query($sql);
+        $qry=new insert(array("photo_categories"));
+        $qry->addParam(new param(":photo_id", $photo->getId(), PDO::PARAM_INT));
+        $qry->addParam(new param(":category_id", $this->getId(), PDO::PARAM_INT));
+        $qry->execute();
     }
 
     /**
