@@ -72,10 +72,17 @@ class category extends zophTreeTable implements Organizer {
      * @todo Permissions are currently not checked, this should be done before calling this function
      */
     public function removePhoto(photo $photo) {
-        $sql = "DELETE FROM " . DB_PREFIX . "photo_categories " .
-            "WHERE photo_id = '" . escape_string($photo->getId()) . "'" .
-            " AND category_id = '" . escape_string($this->getId()) . "'";
-        query($sql);
+        $qry=new delete(array("photo_categories"));
+        $where=new clause("photo_id=:photoid");
+        $where->addAnd(new clause("category_id=:catid"));
+        $qry->where($where);
+
+        $qry->addParams(array(
+            new param(":photoid", $photo->getId(), PDO::PARAM_INT),
+            new param(":catid", $this->getId(), PDO::PARAM_INT)
+        ));
+
+        $qry->execute();
     }
     
     /**
