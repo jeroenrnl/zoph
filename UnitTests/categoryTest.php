@@ -181,11 +181,11 @@ class categoryTest extends ZophDataBaseTestCase {
         $disp_last=$last->format($format);
 
 
-        $expectedXML="<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+        $expectedXML=sprintf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                       <details>
                         <request>
                           <class>category</class>
-                          <id>" . $cat_id . "</id>
+                          <id>%s</id>
                         </request>
                         <response>
                           <detail>
@@ -194,26 +194,27 @@ class categoryTest extends ZophDataBaseTestCase {
                           </detail>
                           <detail>
                             <subject>count</subject>
-                            <data>" . $exp_details["count"] . " photos</data>
+                            <data>%s photos</data>
                           </detail>
                           <detail>
                             <subject>taken</subject>
-                            <data>taken between " . $disp_oldest . " and " . $disp_newest . "</data>
+                            <data>taken between %s and %s</data>
                           </detail>
                           <detail>
                             <subject>modified</subject>
-                            <data>last changed from "  . $disp_first . " to " . $disp_last . "</data>
+                            <data>last changed from %s to %s</data>
                           </detail>
                           <detail>
                             <subject>rated</subject>
-                            <data>rated between " . $exp_details["lowest"] . " and " .  $exp_details["highest"] . " and an average of " . $exp_details["average"] . "</data>
+                            <data>rated between %s and %s and an average of %s</data>
                           </detail>
                           <detail>
                           <subject>children</subject>
-                            <data>" . $subcat . " sub-categories</data>
+                            <data>%s sub-categories</data>
                           </detail>
                         </response>
-                       </details>";
+                      </details>", 
+                       $cat_id, $exp_details["count"],$disp_oldest, $disp_newest, $disp_first, $disp_last,  $exp_details["lowest"], $exp_details["highest"], $exp_details["average"],$subcat);
 
         $this->assertXmlStringEqualsXmlString($expectedXML, $details);
 
