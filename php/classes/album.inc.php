@@ -66,7 +66,7 @@ class album extends zophTreeTable implements Organizer {
                 "where album_id = " . escape_string($id);
         } else {
             $sql =
-                 "select a.* from "  .
+                 "select distinct a.* from "  .
                  DB_PREFIX . "albums as a JOIN " .
                  DB_PREFIX . "group_permissions as gp ON " .
                  "gp.album_id = a.album_id JOIN " .
@@ -175,6 +175,8 @@ class album extends zophTreeTable implements Organizer {
             return $this->getChildren($order);
         }
 
+        $sql_order="";
+
         $order_fields="";
         if($order && $order!="name") {
             $order_fields=get_sql_for_order($order);
@@ -198,7 +200,6 @@ class album extends zophTreeTable implements Organizer {
             " AND parent_album_id=" . (int) $this->getId() .
             " GROUP BY album_id" .
             escape_string($sql_order);
-
         $this->children=self::getRecordsFromQuery($sql);
         return $this->children;
     }
@@ -239,7 +240,6 @@ class album extends zophTreeTable implements Organizer {
                 " GROUP BY pa.album_id";
         } else {
             $sql = "SELECT ".
-                "'" . translate("In this album:", false) . "' AS title, " .
                 "COUNT(ph.photo_id) AS count, " .
                 "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
                 "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
@@ -318,12 +318,13 @@ class album extends zophTreeTable implements Organizer {
         $user=user::getCurrent();
         // Without the lookup, parent_album_id is not available!
         $this->lookup();
-        if ($this->get("parent_album_id")) {
+        if ($this->get("parent_album_id")>0) {
             $id_list = $this->getBranchIds();
             $id_constraint = "pa.album_id in ($id_list)";
-        }
-        else {
-            $id_constraint = "";
+        } else if ($this->get("parent_album_id")==="0") {
+            $id_constraint="";
+        } else {
+            return 0;
         }
         if ($user->is_admin()) {
             $sql = "SELECT COUNT(distinct pa.photo_id) FROM " .
@@ -445,7 +446,9 @@ class album extends zophTreeTable implements Organizer {
         if ($user->is_admin()) {
             $sql =
                 "select distinct ar.photo_id from " .
-                DB_PREFIX . "view_photo_avg_rating ar JOIN " .
+                DB_PREFIX . "photos AS p JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar " .
+                "ON ar.photo_id=p.photo_id JOIN " .
                 DB_PREFIX . "photo_albums pa ON" .
                 " pa.photo_id = ar.photo_id" .
                 $album_where .
@@ -553,12 +556,12 @@ class album extends zophTreeTable implements Organizer {
             $sql = "select * from " . DB_PREFIX . "albums order by album";
         } else {
             $sql =
-                 "select a.* from " .
+                 "select distinct(a.album_id) from " .
                  DB_PREFIX . "albums as a JOIN " .
                  DB_PREFIX . "group_permissions AS gp " .
                  "ON gp.album_id = a.album_id JOIN " .
                  DB_PREFIX . "groups_users as gu " .
-                 "where gu.user_id = '" . escape_string($user->get("user_id")) .
+                 "where gu.user_id = '" . escape_string($user->get("user_id")) . "' " .
                  "order by a.album";
         }
 
@@ -570,7 +573,7 @@ class album extends zophTreeTable implements Organizer {
      * @param string date
      */
     public static function getNewer(user $user, $date) {
-        $sql = "SELECT a.* FROM " .
+        $sql = "SELECT distinct(a.album_id) FROM " .
             DB_PREFIX . "albums AS a JOIN " .
             DB_PREFIX . "group_permissions AS gp " .
             "ON a.album_id = gp.album_id JOIN " .
