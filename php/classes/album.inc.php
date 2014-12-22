@@ -100,12 +100,16 @@ class album extends zophTreeTable implements Organizer {
      */
     public function removePhoto(photo $photo) {
         $user=user::getCurrent();
-        if($user->is_admin() || $user->get_album_permissions($this->get("album_id"))
-            ->get("writable")) {
-            $sql = "DELETE FROM " . DB_PREFIX . "photo_albums " .
-                "WHERE photo_id = '" . escape_string($photo->get("photo_id")) . "'" .
-                " AND album_id = '" . escape_string($this->get("album_id")) . "'";
-            query($sql);
+        if($user->is_admin() || $user->get_album_permissions($this->getId())->get("writable")) {
+            $qry=new delete("photo_albums");
+            $where=new clause("photo_id=:photo_id");
+            $where->addAnd(new clause("album_id=:album_id"));
+            $qry->where($where);
+            $qry->addParams(array(
+                new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT),
+                new param(":album_id", (int) $this->getId(), PDO::PARAM_INT)
+            ));
+            $qry->execute();
         }
     }
 
@@ -136,28 +140,23 @@ class album extends zophTreeTable implements Organizer {
      * @return array of albums
      */
     public function getChildren($order=null) {
-        $order_fields="";
-        if($order && $order!="name") {
-            $order_fields=get_sql_for_order($order);
-            $sql_order=" ORDER BY " . $order . ", name ";
-        } else if ($order=="name") {
-            $sql_order=" ORDER BY name ";
-        } else {
-            $sql_order="";
-        }
-        $sql =
-            "SELECT a.*, album as name " .
-            $order_fields . " FROM " .
-            DB_PREFIX . "albums as a LEFT JOIN " .
-            DB_PREFIX . "photo_albums as pa " .
-            "ON a.album_id=pa.album_id LEFT JOIN " .
-            DB_PREFIX . "photos as ph " .
-            "ON pa.photo_id=ph.photo_id " .
-            "WHERE parent_album_id=" . (int) $this->getId() .
-            " GROUP BY album_id " .
-            escape_string($sql_order);
+        $qry=new select(array("a" => "albums"));
+        $qry->addFields(array("*", "name"=>"album"));
+        $qry->join(array(), array("pa" => "photo_albums"), "a.album_id=pa.album_id", "LEFT")
+            ->join(array(), array("p"  => "photos"      ), "pa.photo_id=p.photo_id", "LEFT");
 
-        $this->children=self::getRecordsFromQuery($sql);
+        $qry->where(new clause("parent_album_id=:album_id"));
+        $qry->addGroupBy("a.album_id");
+
+        $qry->addParam(new param(":album_id", (int) $this->getId(), PDO::PARAM_INT));
+
+        $qry=self::addOrderToQuery($qry, $order);
+        
+        if($order!="name") {
+            $qry->addOrder("name");
+        }
+
+        $this->children=self::getRecordsFromQuery($qry);
         return $this->children;
     }
 

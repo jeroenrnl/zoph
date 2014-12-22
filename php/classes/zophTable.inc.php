@@ -844,7 +844,9 @@ abstract class zophTable {
             break;
         }
 
-        $qry->addOrder($order);
+        if(!empty($order)) {
+            $qry->addOrder($order);
+        }
         return $qry;
     }
 
