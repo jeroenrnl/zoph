@@ -68,17 +68,24 @@ abstract class query {
      * @param array list of fields [ "alias" => "field"]
      * @return query 
      */
-    public function addFields(array $fields) {
+    public function addFields(array $fields, $distinct=false) {
         $table=$this->table;
         foreach ($fields as $alias => $field) {
+
             if(!isset($this->alias)) {
                 $field=$table . "." . $field;
             } else {
                 $field=$this->alias . "." . $field;
             }
+
+            if($distinct) {
+                $field="DISTINCT " . $field;
+            }
+
             if(!is_numeric($alias)) {
                 $field .= " AS " . $alias;
             }
+
             $this->fields[]=$field;
                 
         }

@@ -93,8 +93,7 @@ function fetch_array($result) {
 
 function fetch_assoc($result) {
     if($result instanceof PDOStatement) {
-        $return=$result->fetch(PDO::FETCH_ASSOC);
-        return $return;
+        return $result->fetch(PDO::FETCH_ASSOC);
     }
     return mysql_fetch_assoc($result);
 }

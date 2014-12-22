@@ -860,7 +860,7 @@ class photoTest extends ZophDataBaseTestCase {
 
     public function getNewAlbums() {
         return array(
-            array(1, array(2,3,4)),
+            array(1, array(4,5,6)),
             array(2, array(1,5,6)),
             array(3, array(7)),
             array(4, array(8,9))

@@ -56,27 +56,28 @@ class album extends zophTreeTable implements Organizer {
      */
     public function lookup() {
         $user=user::getCurrent();
-        $id = $this->get("album_id");
-        if(!is_numeric($id)) { die("album_id must be numeric"); }
-        if (!$id) { return; }
-
-        if ($user->is_admin()) {
-            $sql =
-                "select * from " . DB_PREFIX . "albums " .
-                "where album_id = " . escape_string($id);
-        } else {
-            $sql =
-                 "select distinct a.* from "  .
-                 DB_PREFIX . "albums as a JOIN " .
-                 DB_PREFIX . "group_permissions as gp ON " .
-                 "gp.album_id = a.album_id JOIN " .
-                 DB_PREFIX . "groups_users gu ON " .
-                 "gp.group_id = gu.group_id " .
-                 "where gp.album_id = '" . escape_string($id) . "'" .
-                 " and gu.user_id = '" . 
-                 escape_string($user->get("user_id"))."'";
+        $id = $this->getId();
+        if(!is_numeric($id)) { 
+            die("album_id must be numeric"); 
         }
-        return $this->lookupFromSQL($sql);
+        if (!$id) { 
+            return; 
+        }
+
+        $qry=new select(array("a" => "albums"));
+        $distinct=true;
+        $qry->addFields(array("*"), $distinct);
+        $where=new clause("a.album_id=:albumid");
+        $qry->addParam(new param(":albumid", (int) $this->getId(), PDO::PARAM_INT));
+
+        if (!$user->is_admin()) {
+            $qry->join(array(), array("gp" => "group_permissions"), "a.album_id=gp.album_id")
+                ->join(array(), array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+            $where->addAnd(new clause("gu.user_id=:userid"));
+            $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
+        }
+        $qry->where($where);
+        return $this->lookupFromSQL($qry);
     }
     
     /**
@@ -85,14 +86,11 @@ class album extends zophTreeTable implements Organizer {
      */
     public function addPhoto(photo $photo) {
         $user=user::getCurrent();
-        if($user->is_admin() || $user
-                ->get_album_permissions($this->get("album_id"))
-                ->get("writable")) {
-            $sql = "INSERT INTO " . DB_PREFIX . "photo_albums " .
-                "(photo_id, album_id) values ('" .
-                escape_string($photo->get("photo_id")) . "', '" .
-                escape_string($this->get("album_id")) . "')";
-            query($sql);
+        if($user->is_admin() || $user->get_album_permissions($this->getId())->get("writable")) {
+            $qry=new insert(array("photo_albums"));
+            $qry->addParam(new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT));
+            $qry->addParam(new param(":album_id", (int) $this->getId(), PDO::PARAM_INT));
+            $qry->execute();
         }
     }
 
