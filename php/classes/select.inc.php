@@ -33,7 +33,6 @@ class select extends query {
     private $joins=null;
     /** @var array GROUP BY clause */
     private $groupby=array();
-    /** @var array ORDER clause */
 
     /**
      * Add a JOIN clause to the query
@@ -48,6 +47,9 @@ class select extends query {
             $tbl=reset($table);
             $as=key($table);
             $table=$tbl . " AS " . $as;
+            $this->tables[$as]=$tbl;
+        } else {
+            $this->tables[$table]=$table;
         }
 
         $table=db::getPrefix() . $table;
@@ -83,6 +85,7 @@ class select extends query {
         }
         return "";
     }
+
 
     /**
      * Execute query

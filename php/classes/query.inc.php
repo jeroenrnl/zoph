@@ -31,6 +31,8 @@ abstract class query {
 
     /** @var string db table to query */
     protected $table;
+    /** @var tables in this query */
+    protected $tables=array();
     /** @var string alias of db table to query */
     protected $alias;
     /** @var array fields to query */
@@ -58,6 +60,10 @@ abstract class query {
                 $this->alias=$alias;
             }
             $table=$tbl;
+
+            $this->tables[$alias]=$tbl;
+        } else {
+            $this->tables[$table]=$table;
         }
         $table=db::getPrefix() . $table;
         $this->table=$table;
@@ -215,6 +221,14 @@ abstract class query {
             }
         }
         return $limit;
+    }
+
+    /**
+     * Check if a table is already included in this query
+     * @param string query;
+     */
+    public function hasTable($table) {
+        return in_array($table, $this->tables);
     }
 
     /**

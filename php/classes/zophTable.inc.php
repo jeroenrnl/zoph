@@ -793,9 +793,22 @@ abstract class zophTable {
     protected static function expandQueryForUser(select $qry, clause $where=null) {
         $user=user::getCurrent();
 
-        $qry->join(array(), array("pa" => "photo_albums"), "pa.photo_id = p.photo_id")
-            ->join(array(), array("gp" => "group_permissions"), "pa.album_id = gp.album_id")
-            ->join(array(), array("gu" => "groups_users"), "gp.group_id = gu.group_id");
+
+        if(!$qry->hasTable("photo_albums")) {
+            $qry->join(array(), array("pa" => "photo_albums"), "pa.photo_id = p.photo_id");
+        }
+
+        if(!$qry->hasTable("group_permissions")) {
+            $qry->join(array(), array("gp" => "group_permissions"), "pa.album_id = gp.album_id");
+        }
+
+        if(!$qry->hasTable("photos")) {
+            $qry->join(array(), array("p" => "photos"), "p.photo_id = pa.photo_id");
+        }
+
+        if(!$qry->hasTable("groups_users")) {
+            $qry->join(array(), array("gu" => "groups_users"), "gp.group_id = gu.group_id");
+        }
 
         $clause=new clause("gu.user_id=:userid");
         $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));

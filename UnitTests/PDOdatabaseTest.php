@@ -145,6 +145,35 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $this->assertEquals($exp_sql, $sql);
     }
 
+    public function testHasTable() {
+        $qry=new select("photos");
+
+        $this->assertTrue($qry->hasTable("photos"));
+        $this->assertFalse($qry->hasTable("albums"));
+
+        $qry->join(array(), "photo_albums", "photos.photo_id=photo_albums.photo_id");
+        
+        $this->assertTrue($qry->hasTable("photos"));
+        $this->assertTrue($qry->hasTable("photo_albums"));
+        $this->assertFalse($qry->hasTable("albums"));
+
+        $qry->join(array(), "albums", "photo_albums.album_id=albums.album_id");
+
+        $this->assertTrue($qry->hasTable("photos"));
+        $this->assertTrue($qry->hasTable("photo_albums"));
+        
+        $qry=new select(array("p" => "photos"));
+
+        $this->assertTrue($qry->hasTable("photos"));
+        $this->assertFalse($qry->hasTable("albums"));
+
+        $qry->join(array(), array("pa" => "photo_albums"), "p.photo_id=pa.photo_id");
+        
+        $this->assertTrue($qry->hasTable("photos"));
+        $this->assertTrue($qry->hasTable("photo_albums"));
+        $this->assertFalse($qry->hasTable("albums"));
+    }
+
     /**
      * test INSERT query
      * @dataProvider getInserts();

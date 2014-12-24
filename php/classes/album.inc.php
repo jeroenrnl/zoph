@@ -315,40 +315,29 @@ class album extends zophTreeTable implements Organizer {
         $user=user::getCurrent();
         // Without the lookup, parent_album_id is not available!
         $this->lookup();
+
+        $qry=new select(array("pa" => "photo_albums"));
+        $qry->addFunction(array("count" => "COUNT(DISTINCT pa.photo_id)"));
+
+        $where=null;
+
         if ($this->get("parent_album_id")>0) {
-            $id_list = $this->getBranchIds();
-            $id_constraint = "pa.album_id in ($id_list)";
-        } else if ($this->get("parent_album_id")==="0") {
-            $id_constraint="";
-        } else {
+            $id_list=null;
+            $this->getBranchIdArray($id_list);
+            $ids=new param(":alb_id", $id_list, PDO::PARAM_INT);
+            $qry->addParam($ids);
+            $where=clause::InClause("pa.album_id", $ids);
+        } else if ($this->get("parent_album_id")!=="0") {
             return 0;
         }
-        if ($user->is_admin()) {
-            $sql = "SELECT COUNT(distinct pa.photo_id) FROM " .
-                DB_PREFIX . "photo_albums pa ";
 
-            if ($id_constraint) {
-                $sql .= " WHERE $id_constraint";
-            }
-        } else {
-            $sql =
-                "SELECT COUNT(distinct pa.photo_id) FROM " .
-                DB_PREFIX . "photo_albums as pa JOIN " .
-                DB_PREFIX . "photos as p ON " .
-                "pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp ON " .
-                "pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu ON " .
-                "gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= p.level";
-
-            if ($id_constraint) {
-                $sql .= " and $id_constraint";
-            }
+        if (!$user->is_admin()) {
+            list($qry,$where)=self::expandQueryForUser($qry, $where);
         }
-
-        return self::getCountFromQuery($sql);
+        if($where instanceof clause) {
+            $qry->where($where);
+        }
+        return self::getCountFromQuery($qry);
     }
 
     /**
