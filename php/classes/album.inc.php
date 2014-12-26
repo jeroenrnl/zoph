@@ -140,12 +140,15 @@ class album extends zophTreeTable implements Organizer {
      * @return array of albums
      */
     public function getChildren($order=null) {
+        $user=user::getCurrent();
+
         $qry=new select(array("a" => "albums"));
         $qry->addFields(array("*", "name"=>"album"));
         $qry->join(array(), array("pa" => "photo_albums"), "a.album_id=pa.album_id", "LEFT")
             ->join(array(), array("p"  => "photos"      ), "pa.photo_id=p.photo_id", "LEFT");
 
-        $qry->where(new clause("parent_album_id=:album_id"));
+        $where=new clause("parent_album_id=:album_id");
+
         $qry->addGroupBy("a.album_id");
 
         $qry->addParam(new param(":album_id", (int) $this->getId(), PDO::PARAM_INT));
@@ -154,6 +157,14 @@ class album extends zophTreeTable implements Organizer {
         
         if($order!="name") {
             $qry->addOrder("name");
+        }
+
+        if (!$user->is_admin()) {
+            list($qry,$where)=self::expandQueryForUser($qry, $where);
+        }
+
+        if($where instanceof clause) {
+            $qry->where($where);
         }
 
         $this->children=self::getRecordsFromQuery($qry);
@@ -166,39 +177,7 @@ class album extends zophTreeTable implements Organizer {
      * @return array of albums
      */
     public function getChildrenForUser($order=null) {
-        $user=user::getCurrent();
-
-        if ($user->is_admin()) {
-            return $this->getChildren($order);
-        }
-
-        $sql_order="";
-
-        $order_fields="";
-        if($order && $order!="name") {
-            $order_fields=get_sql_for_order($order);
-            $sql_order=" ORDER BY " . $order . ", name ";
-        } else if ($order=="name") {
-            $sql_order=" ORDER BY name ";
-        }
-
-        $sql = "SELECT a.*, album as name " .
-            $order_fields . " FROM " .
-            DB_PREFIX . "albums as a LEFT JOIN " .
-            DB_PREFIX . "photo_albums as pa " .
-            "ON a.album_id=pa.album_id LEFT JOIN " .
-            DB_PREFIX . "photos as ph " .
-            "ON pa.photo_id=ph.photo_id LEFT JOIN " .
-            DB_PREFIX . "group_permissions AS gp " .
-            "ON a.album_id=gp.album_id JOIN " .
-            DB_PREFIX . "groups_users AS gu ON " .
-            "gp.group_id = gu.group_id " .
-            "WHERE gu.user_id=" . (int) $user->getId() .
-            " AND parent_album_id=" . (int) $this->getId() .
-            " GROUP BY album_id" .
-            escape_string($sql_order);
-        $this->children=self::getRecordsFromQuery($sql);
-        return $this->children;
+        return $this->getChildren($order);
     }
 
     /**

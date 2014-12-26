@@ -793,17 +793,16 @@ abstract class zophTable {
     protected static function expandQueryForUser(select $qry, clause $where=null) {
         $user=user::getCurrent();
 
-
+        if(!$qry->hasTable("photos")) {
+            $qry=self::addPhotoTableToQuery($qry);
+        }
+                
         if(!$qry->hasTable("photo_albums")) {
             $qry->join(array(), array("pa" => "photo_albums"), "pa.photo_id = p.photo_id");
         }
 
         if(!$qry->hasTable("group_permissions")) {
             $qry->join(array(), array("gp" => "group_permissions"), "pa.album_id = gp.album_id");
-        }
-
-        if(!$qry->hasTable("photos")) {
-            $qry->join(array(), array("p" => "photos"), "p.photo_id = pa.photo_id");
         }
 
         if(!$qry->hasTable("groups_users")) {
@@ -822,6 +821,33 @@ abstract class zophTable {
         
         return array($qry, $where);
      }
+
+    /**
+     * This function tries to figure out how to JOIN the current query with the photo table
+     * @param select query
+     * @return select modified query
+     */
+
+    protected static function addPhotoTableToQuery($qry) {
+        if($qry->hasTable("albums") && !$qry->hasTable("photo_albums")) {
+            $qry->join(array(), array("pa" => "photo_albums"), "pa.album_id = a.album_id");
+        } else if($qry->hasTable("categories") && !$qry->hasTable("photo_categories")) {
+            $qry->join(array(), array("pc" => "photo_categories"), "pc.category_id = c.category_id");
+        } else if($qry->hasTable("places")) {
+            $qry->join(array(), array("p" => "photos"), "p.location_id = pl.place_id");
+            return $qry;
+        }
+
+        if($qry->hasTable("photo_albums")) {
+            $qry->join(array(), array("p" => "photos"), "pa.photo_id = p.photo_id");
+        } else if($qry->hasTable("photo_categories")) {
+            $qry->join(array(), array("p" => "photos"), "pc.photo_id = p.photo_id");
+        } else {
+            throw new DatabaseException("JOIN failed");
+        }
+
+        return $qry;
+   }
 
     /**
      * Add modify query to ORDER BY a calculated field
