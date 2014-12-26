@@ -55,7 +55,7 @@ class category extends zophTreeTable implements Organizer {
     protected $photoTotalCount;
 
     /**
-     * Add a photo to this album
+     * Add a photo to this category
      * @param photo Photo to add
      * @todo Permissions are currently not checked, this should be done before calling this function
      */
@@ -67,7 +67,7 @@ class category extends zophTreeTable implements Organizer {
     }
 
     /**
-     * Remove a photo from this album
+     * Remove a photo from this category
      * @param photo Photo to remove
      * @todo Permissions are currently not checked, this should be done before calling this function
      */
@@ -135,7 +135,8 @@ class category extends zophTreeTable implements Organizer {
     }
     
     /**
-     * Get count of photos in this album
+     * Get count of photos in this category 
+     * @todo This function is very similar to album::getPhotoCount, should be merged
      */
     public function getPhotoCount() {
         $db=db::getHandle();
@@ -144,12 +145,11 @@ class category extends zophTreeTable implements Organizer {
             return $this->photoCount; 
         }
 
-        $id = $this->getId();
         $qry=new select(array("pc" => "photo_categories"));
         $qry->join(array(), array("p" => "photos"), "pc.photo_id = p.photo_id");
         $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
         $where=new clause("category_id = :cat_id");
-        $qry->addParam(new param(":cat_id", $id, PDO::PARAM_INT));
+        $qry->addParam(new param(":cat_id", $this->getId(), PDO::PARAM_INT));
         
         if (!user::getCurrent()->is_admin()) {
             list($qry, $where) = self::expandQueryForUser($qry, $where);
@@ -345,12 +345,9 @@ class category extends zophTreeTable implements Organizer {
     /**
      * Get details (statistics) about this category from db
      * @return array Array with statistics
+     * @todo This function is almost equal to album::getDetails() these should be merged
      */
     public function getDetails() {
-        $user=user::getCurrent();
-        $user_id = (int) $user->getId();
-        $id = (int) $this->getId();
-
         $qry=new select(array("pc" => "photo_categories"));
         $qry->addFunction(array(
             "count"     => "COUNT(DISTINCT p.photo_id)",

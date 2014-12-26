@@ -390,7 +390,7 @@ class albumTest extends ZophDataBaseTestCase {
     public function getDetails() {
         return array(
             array(2,2,"no", array(
-                "count"     => "4",
+                "count"     => "2",
                 "oldest"    => "2014-01-01 00:01:00",
                 "newest"    => "2014-01-07 00:01:00",
                 "first"     => "2013-12-31 23:01:00",
@@ -426,7 +426,7 @@ class albumTest extends ZophDataBaseTestCase {
         return array(
             array(1,2,2),
             array(1,6,3),
-            array(2,2,4),
+            array(2,2,2),
             array(4,3,3)
         );
     }

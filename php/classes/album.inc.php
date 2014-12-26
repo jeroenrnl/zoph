@@ -183,58 +183,35 @@ class album extends zophTreeTable implements Organizer {
     /**
      * Get details (statistics) about this album from db
      * @return array Array with statistics
+     * @todo this function is almost equal to category::getDetails() they should be merged
      */
     public function getDetails() {
-        $id = (int) $this->getId();
-        $user=user::getCurrent();
-        $user_id = (int) $user->getId();
+        $qry=new select(array("pa" => "photo_albums"));
+        $qry->addFunction(array(
+            "count"     => "COUNT(DISTINCT p.photo_id)",
+            "oldest"    => "MIN(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "newest"    => "MAX(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "first"     => "MIN(p.timestamp)",
+            "last"      => "MAX(p.timestamp)",
+            "lowest"    => "ROUND(MIN(ar.rating),1)",
+            "highest"   => "ROUND(MAX(ar.rating),1)",
+            "average"   => "ROUND(AVG(ar.rating),2)"));
+        $qry->join(array(), array("p" => "photos"), "pa.photo_id = p.photo_id")      
+            ->join(array(), array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
-        if (!$user->is_admin()) {
-            $sql = "SELECT " .
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photo_albums pa JOIN " .
-                DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pa.photo_id JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id LEFT JOIN " .
-                DB_PREFIX . "group_permissions gp " .
-                "ON pa.album_id=gp.album_id LEFT JOIN " . 
-                DB_PREFIX . "groups_users gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE ph.level<gp.access_level AND " .
-                "gu.user_id=" . escape_string($user_id) . " AND " .
-                "pa.album_id=" . escape_string($id) .
-                " GROUP BY pa.album_id";
-        } else {
-            $sql = "SELECT ".
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photo_albums pa JOIN " .
-                DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pa.photo_id JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id " .
-                "WHERE pa.album_id=" . escape_string($id) .
-                " GROUP BY pa.album_id";
-        }   
-        $result=query($sql);
+        $qry->addGroupBy("pa.album_id");
+
+        $where=new clause("pa.album_id=:albid");
+        $qry->addParam(new param(":albid", $this->getId(), PDO::PARAM_INT));
+        
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = self::expandQueryForUser($qry, $where);
+        }
+
+        $qry->where($where);
+
+
+        $result=query($qry);
         if($result) {
             return fetch_assoc($result);
         } else {
@@ -255,36 +232,28 @@ class album extends zophTreeTable implements Organizer {
     }
 
     /**
-     * Return the amount of photos in this album
+     * Get count of photos in this album
+     * @todo This function is very similar to album::getPhotoCount, should be merged
      */
     public function getPhotoCount() {
-        $user=user::getCurrent();
-
-        if ($this->photoCount) { return $this->photoCount; }
-
-        $id = $this->get("album_id");
-
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT COUNT(*) FROM " .
-                DB_PREFIX . "photo_albums " .
-                "WHERE album_id = '" .  escape_string($id) . "'";
-        } else {
-            $sql =
-                "SELECT COUNT(*) FROM " .
-                DB_PREFIX . "photo_albums AS pa JOIN " .
-                DB_PREFIX . "photos AS p ON " .
-                "pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp ON " .
-                "gp.album_id = pa.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu ON " .
-                "gp.group_id = gu.group_id " .
-                "WHERE pa.album_id = " . escape_string($id) .
-                " AND gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= p.level";
+        if ($this->photoCount) { 
+            return $this->photoCount; 
         }
 
-        return self::getCountFromQuery($sql);
+        $qry=new select(array("pa" => "photo_albums"));
+        $qry->join(array(), array("p" => "photos"), "pa.photo_id = p.photo_id");
+        $qry->addFunction(array("count" => "count(distinct pa.photo_id)"));
+        $where=new clause("pa.album_id = :alb_id");
+        $qry->addParam(new param(":alb_id", $this->getId(), PDO::PARAM_INT));
+        
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = self::expandQueryForUser($qry, $where);
+        }
+
+        $qry->where($where);
+        $count=self::getCountFromQuery($qry);
+        $this->photoCount=$count;
+        return $count;
     }
 
     /**
