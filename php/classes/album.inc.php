@@ -425,35 +425,18 @@ class album extends zophTreeTable implements Organizer {
     public static function getTopN() {
         $user=user::getCurrent();
 
-        if ($user->is_admin()) {
-            $sql =
-                "select al.*, count(*) as count from " .
-                DB_PREFIX . "albums as al, " .
-                DB_PREFIX . "photo_albums as pa " .
-                "where pa.album_id = al.album_id " .
-                "group by al.album_id " .
-                "order by count desc, al.album " .
-                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
-        } else {
-            $sql =
-                "SELECT al.*, count(distinct ph.photo_id) AS count FROM " .
-                DB_PREFIX . "albums AS al JOIN " .
-                DB_PREFIX . "photo_albums AS pa ON " .
-                " al.album_id = pa.album_id JOIN " .
-                DB_PREFIX . "photos AS ph ON " .
-                "pa.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp ON " .
-                "pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu ON " .
-                "gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . escape_string($user->get("user_id")). "'" .
-                " AND gp.access_level >= ph.level " .
-                "GROUP BY al.album_id " .
-                "ORDER BY count desc, al.album " .
-                "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
+        $qry=new select(array("a" => "albums"));
+        $qry->addFields(array("album_id", "album"));
+        $qry->addFunction(array("count" => "count(distinct pa.photo_id)"));
+        $qry->join(array(), array("pa" => "photo_albums"), "pa.album_id=a.album_id");
+        $qry->addGroupBy("a.album_id");
+        $qry->addOrder("count DESC")->addOrder("a.album");
+        $qry->addLimit((int) $user->prefs->get("reports_top_n"));
+        if (!$user->is_admin()) {
+            list($qry, $where) = self::expandQueryForUser($qry);
+            $qry->where($where);
         }
-
-        return parent::getTopNfromSQL($sql);
+        return parent::getTopNfromSQL($qry);
 
     }
 
@@ -470,20 +453,19 @@ class album extends zophTreeTable implements Organizer {
     public static function getAll() {
         $user=user::getCurrent();
 
-        if ($user && $user->is_admin()) {
-            $sql = "select * from " . DB_PREFIX . "albums order by album";
-        } else {
-            $sql =
-                 "select distinct(a.album_id) from " .
-                 DB_PREFIX . "albums as a JOIN " .
-                 DB_PREFIX . "group_permissions AS gp " .
-                 "ON gp.album_id = a.album_id JOIN " .
-                 DB_PREFIX . "groups_users as gu " .
-                 "where gu.user_id = '" . escape_string($user->get("user_id")) . "' " .
-                 "order by a.album";
+        $qry=new select(array("a" => "albums"));
+        $qry->addFields(array("album_id"), true);
+        $qry->addOrder("album");
+
+        if (!$user->is_admin()) {
+            $qry->join(array(), array("gp" => "group_permissions"), "gp.album_id = a.album_id");
+            $qry->join(array(), array("gu" => "groups_users"), "gp.group_id = gu.group_id");
+            $qry->where(new clause("gu.user_id=:userid"));
+            $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
         }
 
-        return self::getRecordsFromQuery($sql);
+        
+        return self::getRecordsFromQuery($qry);
     }
     /**
      * Get albums newer than a certain date
@@ -491,16 +473,19 @@ class album extends zophTreeTable implements Organizer {
      * @param string date
      */
     public static function getNewer(user $user, $date) {
-        $sql = "SELECT distinct(a.album_id) FROM " .
-            DB_PREFIX . "albums AS a JOIN " .
-            DB_PREFIX . "group_permissions AS gp " .
-            "ON a.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users AS gu " .
-            "WHERE gu.user_id = '" . escape_string($user->getId()) .
-            "' AND gp.changedate > '" . escape_string($date) . "' " .
-            "ORDER BY a.album_id";
+        $qry=new select(array("a" => "albums"));
+        $qry->addFields(array("album_id"), true);
+        $qry->join(array(), array("gp" => "group_permissions"), "a.album_id=gp.album_id")
+            ->join(array(), array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+        $where=new clause("user_id=:userid");
+        $where->addAnd(new clause("gp.changedate>:changedate"));
 
-        return self::getRecordsFromQuery($sql);
+        $qry->addParams(array(
+                new param(":userid", $user->getId(), PDO::PARAM_INT),
+                new param(":changedate", $date, PDO::PARAM_STR)));
+        $qry->where($where)
+            ->addOrder("a.album_id");
+        return self::getRecordsFromQuery($qry);
     }
 
     /**

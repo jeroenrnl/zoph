@@ -323,7 +323,7 @@ class albumTest extends ZophDataBaseTestCase {
         foreach($newer as $album) {
             $albids[]=$album->getId();
         }
-        $this->assertEquals([1,2,3], $albids);
+        $this->assertEquals([1,2], $albids);
     }
 
     /**
@@ -497,7 +497,7 @@ class albumTest extends ZophDataBaseTestCase {
     public function getAllData() {
         return array(
             array(1,array(2,3,4,5,6,7,9,10,8,11,12,13,14,1)),
-            array(2,array(2,3,1)),
+            array(2,array(2,1)),
             array(4,array(2,3,1))
         );
     }
