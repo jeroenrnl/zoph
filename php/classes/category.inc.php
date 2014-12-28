@@ -143,7 +143,7 @@ class category extends zophTreeTable implements Organizer {
         }
 
         $qry=new select(array("pc" => "photo_categories"));
-        $qry->join(array(), array("p" => "photos"), "pc.photo_id = p.photo_id");
+        $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
         $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
         $where=new clause("category_id = :cat_id");
         $qry->addParam(new param(":cat_id", $this->getId(), PDO::PARAM_INT));
@@ -170,7 +170,7 @@ class category extends zophTreeTable implements Organizer {
         }
 
         $qry=new select(array("pc" => "photo_categories")); 
-        $qry->join(array(), array("p" => "photos"), "pc.photo_id = p.photo_id");
+        $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
         $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
         
         if (!user::getCurrent()->is_admin()) {
@@ -279,8 +279,8 @@ class category extends zophTreeTable implements Organizer {
 
         $qry=new select(array("p" => "photos"));
         $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id")); 
-        $qry->join(array(), array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")      
-            ->join(array(), array("pc" => "photo_categories"), "pc.photo_id = ar.photo_id");
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")      
+            ->join(array("pc" => "photo_categories"), "pc.photo_id = ar.photo_id");
 
         if($children) {
             $ids=new param(":ids",$this->getBranchIdArray(), PDO::PARAM_INT);
@@ -335,8 +335,8 @@ class category extends zophTreeTable implements Organizer {
             "lowest"    => "ROUND(MIN(ar.rating),1)",
             "highest"   => "ROUND(MAX(ar.rating),1)",
             "average"   => "ROUND(AVG(ar.rating),2)"));
-        $qry->join(array(), array("p" => "photos"), "pc.photo_id = p.photo_id")      
-            ->join(array(), array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
+        $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id")      
+            ->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
         $qry->addGroupBy("pc.category_id");
 
@@ -396,12 +396,12 @@ class category extends zophTreeTable implements Organizer {
         $qry=new select(array("c" => "categories"));
         $qry->addFields(array("category_id", "category"));
         $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
-        $qry->join(array(), array("pc" => "photo_categories"), "pc.category_id=c.category_id");
+        $qry->join(array("pc" => "photo_categories"), "pc.category_id=c.category_id");
         $qry->addGroupBy("c.category_id");
         $qry->addOrder("count DESC")->addOrder("c.category");
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
         if (!$user->is_admin()) {
-            $qry->join(array(), array("p" => "photos"), "pc.photo_id=p.photo_id");
+            $qry->join(array("p" => "photos"), "pc.photo_id=p.photo_id");
             list($qry, $where) = self::expandQueryForUser($qry);
             $qry->where($where);
         }

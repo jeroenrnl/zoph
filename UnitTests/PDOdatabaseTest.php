@@ -92,11 +92,11 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $qry->addFields(array("name"));
         $where=new clause("zoph_photos.photo_id = :photoid");
         $qry->addParam(new param(":photoid", 5, PDO::PARAM_INT));
-        $qry->join(array(), "photo_albums","zoph_photos.photo_id=zoph_photo_albums.photo_id")
-            ->join(array("album"), "albums","zoph_photo_albums.album_id=zoph_albums.album_id")
+        $qry->join("photo_albums","zoph_photos.photo_id=zoph_photo_albums.photo_id")
+            ->join("albums","zoph_photo_albums.album_id=zoph_albums.album_id")
             ->where($where);
         $sql=(string) $qry;
-        $exp_sql="SELECT zoph_photos.name, zoph_albums.album FROM zoph_photos " .
+        $exp_sql="SELECT zoph_photos.name FROM zoph_photos " .
                  "INNER JOIN zoph_photo_albums " .
                  "ON zoph_photos.photo_id=zoph_photo_albums.photo_id " .
                  "INNER JOIN zoph_albums " .
@@ -151,13 +151,13 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertFalse($qry->hasTable("albums"));
 
-        $qry->join(array(), "photo_albums", "photos.photo_id=photo_albums.photo_id");
+        $qry->join("photo_albums", "photos.photo_id=photo_albums.photo_id");
         
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertTrue($qry->hasTable("photo_albums"));
         $this->assertFalse($qry->hasTable("albums"));
 
-        $qry->join(array(), "albums", "photo_albums.album_id=albums.album_id");
+        $qry->join("albums", "photo_albums.album_id=albums.album_id");
 
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertTrue($qry->hasTable("photo_albums"));
@@ -167,7 +167,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertFalse($qry->hasTable("albums"));
 
-        $qry->join(array(), array("pa" => "photo_albums"), "p.photo_id=pa.photo_id");
+        $qry->join(array("pa" => "photo_albums"), "p.photo_id=pa.photo_id");
         
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertTrue($qry->hasTable("photo_albums"));

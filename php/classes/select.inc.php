@@ -36,13 +36,12 @@ class select extends query {
 
     /**
      * Add a JOIN clause to the query
-     * @param array fields to add to the query
      * @param string table to join
      * @param string ON clause
      * @param string join type
      * @return query return the query to enable chaining
      */
-    public function join(array $fields, $table, $on, $jointype="INNER") {
+    public function join($table, $on, $jointype="INNER") {
         if(is_array($table)) {
             $tbl=reset($table);
             $as=key($table);
@@ -58,9 +57,6 @@ class select extends query {
             throw new DatabaseException("Unknown JOIN type");
         }
         $this->joins[]=$jointype . " JOIN " . $table . " ON " . $on;
-        foreach ($fields as $field) {
-            $this->fields[]=$table . "." . $field;
-        }
         return $this;
     }
 

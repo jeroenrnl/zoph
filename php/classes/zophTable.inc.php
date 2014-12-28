@@ -797,15 +797,15 @@ abstract class zophTable {
         }
                 
         if(!$qry->hasTable("photo_albums")) {
-            $qry->join(array(), array("pa" => "photo_albums"), "pa.photo_id = p.photo_id");
+            $qry->join(array("pa" => "photo_albums"), "pa.photo_id = p.photo_id");
         }
 
         if(!$qry->hasTable("group_permissions")) {
-            $qry->join(array(), array("gp" => "group_permissions"), "pa.album_id = gp.album_id");
+            $qry->join(array("gp" => "group_permissions"), "pa.album_id = gp.album_id");
         }
 
         if(!$qry->hasTable("groups_users")) {
-            $qry->join(array(), array("gu" => "groups_users"), "gp.group_id = gu.group_id");
+            $qry->join(array("gu" => "groups_users"), "gp.group_id = gu.group_id");
         }
 
         $clause=new clause("gu.user_id=:userid");
@@ -829,18 +829,18 @@ abstract class zophTable {
 
     protected static function addPhotoTableToQuery($qry) {
         if($qry->hasTable("albums") && !$qry->hasTable("photo_albums")) {
-            $qry->join(array(), array("pa" => "photo_albums"), "pa.album_id = a.album_id");
+            $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
         } else if($qry->hasTable("categories") && !$qry->hasTable("photo_categories")) {
-            $qry->join(array(), array("pc" => "photo_categories"), "pc.category_id = c.category_id");
+            $qry->join(array("pc" => "photo_categories"), "pc.category_id = c.category_id");
         } else if($qry->hasTable("places")) {
-            $qry->join(array(), array("p" => "photos"), "p.location_id = pl.place_id");
+            $qry->join(array("p" => "photos"), "p.location_id = pl.place_id");
             return $qry;
         }
 
         if($qry->hasTable("photo_albums")) {
-            $qry->join(array(), array("p" => "photos"), "pa.photo_id = p.photo_id");
+            $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id");
         } else if($qry->hasTable("photo_categories")) {
-            $qry->join(array(), array("p" => "photos"), "pc.photo_id = p.photo_id");
+            $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
         } else {
             throw new DatabaseException("JOIN failed");
         }
@@ -863,7 +863,7 @@ abstract class zophTable {
 
         if(!$qry->hasTable("view_photo_avg_rating") && 
                 in_array($order, array("lowest", "highest", "average"))) {
-            $qry->join(array(), array("ar" => "view_photo_avg_rating"), "ar.photo_id = p.photo_id");
+            $qry->join(array("ar" => "view_photo_avg_rating"), "ar.photo_id = p.photo_id");
         }
 
         switch ($order) {
