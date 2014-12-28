@@ -493,18 +493,17 @@ class album extends zophTreeTable implements Organizer {
      */
     public static function getCount() {
         $user=user::getCurrent();
-        if ($user && $user->is_admin()) {
-            $sql = "SELECT COUNT(*) FROM " . DB_PREFIX . "albums";
-        } else {
-            $sql =
-                "SELECT COUNT(DISTINCT album_id) FROM " . 
-                DB_PREFIX . "group_permissions AS gp JOIN " .
-                DB_PREFIX . "groups_users AS gu ON " .
-                "gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) . "'";
-        }
+        $qry=new select(array("a" => "albums"));
+        $qry->addFunction(array("count" => "COUNT(DISTINCT a.album_id)"));
 
-        return self::getCountFromQuery($sql);
+        if(!$user->is_admin()) {
+            $qry->join(array(), array("gp" => "group_permissions"), "a.album_id=gp.album_id")
+                ->join(array(), array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+            $where=new clause("user_id=:userid");
+            $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
+            $qry->where($where);
+        }
+        return self::getCountFromQuery($qry);
     }
 }
 
