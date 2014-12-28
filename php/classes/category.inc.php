@@ -30,13 +30,10 @@
  * @author Jeroen Roos
  */
 class category extends zophTreeTable implements Organizer {
-
     /** @param Name of the root node in XML responses */
     const XMLROOT="categories";
     /** @param Name of the leaf nodes in XML responses */
     const XMLNODE="category";
-
-
 
     /** @var string The name of the database table */
     protected static $table_name="categories";
@@ -99,7 +96,7 @@ class category extends zophTreeTable implements Organizer {
     public function getName() {
         return $this->get("category");
     }
-
+   
     /**
      * Get sub-categories
      * @param string order
@@ -124,7 +121,7 @@ class category extends zophTreeTable implements Organizer {
         $this->children=self::getRecordsFromQuery($qry);
         return $this->children;
     }
-    
+
     /**
      * Get children of this category, with categories this user cannot see, filtered out.
      * @param string sort order.
@@ -270,8 +267,9 @@ class category extends zophTreeTable implements Organizer {
     /**
      * Get coverphoto for this category.
      * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
-     * @param bool choose autocover from this album AND children
+     * @param bool choose autocover from this category AND children
      * @return photo coverphoto
+     * @todo This function is almost equal to album::getAutoCover(), should be merged
      */
     public function getAutoCover($autocover=null,$children=false) {
         $coverphoto=$this->getCoverphoto();
@@ -320,27 +318,6 @@ class category extends zophTreeTable implements Organizer {
         $user=user::getCurrent();
         return ($user->prefs->get("autocomp_categories") && conf::get("interface.autocomplete"));
     }
-
-    /**
-     * Add ORDER BY statement to query
-     * @param select SELECT query
-     * @param string order
-     */
-    protected static function addOrderToQuery(select $qry, $order) {
-        $qry=parent::addOrderToQuery($qry, $order);
-
-        if(in_array($order, array("oldest", "newest", "first", "last"))) {
-            $qry->join(array(), array("pc" => "photo_categories"), "pc.category_id=c.category_id")
-                ->join(array(), array("p" => "photos"), "pc.photo_id = p.photo_id");
-        }
-
-        if(in_array($order, array("lowest", "highest", "average"))) {
-            $qry->join(array(), array("pc" => "photo_categories"), "pc.category_id=c.category_id")
-                ->join(array(), array("ar" => "view_photo_avg_rating"), "ar.photo_id = pc.photo_id");
-        }
-        return $qry;
-    }
-        
 
     /**
      * Get details (statistics) about this category from db
@@ -396,6 +373,7 @@ class category extends zophTreeTable implements Organizer {
     /**
      * Lookup category by name
      * @param string name
+     * @todo This function is almost equal to category::getByName() these should be merged
      */
     public static function getByName($name) {
         if(empty($name)) {

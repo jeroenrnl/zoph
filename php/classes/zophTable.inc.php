@@ -61,7 +61,6 @@ abstract class zophTable {
         $this->set(static::$primary_keys[0],$id);
     }
         
-    
     /**
      * Returns the value of a field
      * @param string name of field to get
@@ -856,6 +855,17 @@ abstract class zophTable {
      * @return query modified query
      */
     protected static function addOrderToQuery(select $qry, $order) {
+        if(!$qry->hasTable("photos") && 
+                in_array($order, array("oldest", "newest", "first", "last",
+                    "lowest", "highest", "average"))) {
+            $qry=self::addPhotoTableToQuery($qry);
+        }
+
+        if(!$qry->hasTable("view_photo_avg_rating") && 
+                in_array($order, array("lowest", "highest", "average"))) {
+            $qry->join(array(), array("ar" => "view_photo_avg_rating"), "ar.photo_id = p.photo_id");
+        }
+
         switch ($order) {
         case "oldest":
             $qry->addFunction(array("oldest" => "min(p.date)"));
