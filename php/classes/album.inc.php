@@ -268,15 +268,11 @@ class album extends zophTreeTable implements Organizer {
 
         $where=null;
 
-        if ($this->get("parent_album_id")>0) {
-            $id_list=null;
-            $this->getBranchIdArray($id_list);
-            $ids=new param(":alb_id", $id_list, PDO::PARAM_INT);
-            $qry->addParam($ids);
-            $where=clause::InClause("pa.album_id", $ids);
-        } else if ($this->get("parent_album_id")!=="0") {
-            return 0;
-        }
+        $id_list=null;
+        $this->getBranchIdArray($id_list);
+        $ids=new param(":alb_id", $id_list, PDO::PARAM_INT);
+        $qry->addParam($ids);
+        $where=clause::InClause("pa.album_id", $ids);
 
         if (!$user->is_admin()) {
             list($qry,$where)=self::expandQueryForUser($qry, $where);
