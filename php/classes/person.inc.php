@@ -338,8 +338,10 @@ class person extends zophTable implements Organizer {
         $order=self::getAutoCoverOrder($autocover);
         if ($user->is_admin()) {
             $sql =
-                "SELECT DISTINCT ar.photo_id FROM " .
-                DB_PREFIX . "view_photo_avg_rating ar JOIN " .
+                "SELECT DISTINCT p.photo_id FROM " .
+                DB_PREFIX . "photos AS p JOIN " .
+                DB_PREFIX . "view_photo_avg_rating ar " .
+                " ON p.photo_id = ar.photo_id JOIN " .
                 DB_PREFIX . "photo_people AS pp" .
                 " ON pp.photo_id = ar.photo_id " .
                 " WHERE pp.person_id = " . 
@@ -581,7 +583,7 @@ class person extends zophTable implements Organizer {
                 DB_PREFIX . "groups_users as gu " .
                 "ON gp.group_id = gu.group_id " .
                 "WHERE gu.user_id = " . (int) $user->getId() .
-                " AND gp.access_level >= ph.level" . $where .
+                " AND gp.access_level >= ph.level " . $where .
                 " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
         }
 
@@ -713,7 +715,7 @@ class person extends zophTable implements Organizer {
      * @param string search string
      * @param bool search for first name
      */
-    public static function getWhereForSearch($conj, $search, $search_first) {
+    public static function getWhereForSearch($conj, $search, $search_first=false) {
         $where="";
         if($search!==null) {
             if($search==="") {

@@ -211,6 +211,172 @@ class personTest extends ZophDataBaseTestCase {
         $this->assertEquals($exp, $person->getDisplayArray());
     }
 
+    /**
+     * Test getAutoCover function for a manual cover
+     */
+    public function testGetAutoCoverManual() {
+        $person=new person(2);
+        $person->set("coverphoto", 1);
+        $person->update();
+
+        $cover=$person->getAutoCover();
+        $this->assertInstanceOf("photo", $cover);
+
+        $this->assertEquals(1, $cover->getId());
+    }
+
+
+    /**
+     * Test getAutoCover function
+     / @dataProvider getCovers();
+     */
+    public function testGetAutoCover($user,$type,$alb_id,$photo) {
+        user::setCurrent(new user($user));
+        $person=new person($alb_id);
+        $person->lookup();
+
+        $cover=$person->getAutoCover($type);
+        $this->assertInstanceOf("photo", $cover);
+
+        $this->assertEquals($photo, $cover->getId());
+        user::setCurrent(new user(1));
+    }
+
+
+    /**
+     * Test getAutoCover function with children
+     / @dataProvider getCoversChildren();
+     */
+    public function testGetAutoCoverChildren($user,$type,$alb_id,$photo) {
+        user::setCurrent(new user($user));
+        $person=new person($alb_id);
+        $person->lookup();
+
+        $cover=$person->getAutoCover($type, true);
+        $this->assertInstanceOf("photo", $cover);
+
+        $this->assertEquals($photo, $cover->getId());
+        user::setCurrent(new user(1));
+    }
+    
+    /**
+     * Test getDetails()
+     / @dataProvider getDetails();
+     */
+    public function testGetDetails($user,$person_id, array $exp_details) {
+        user::setCurrent(new user($user));
+        $person=new person($person_id);
+        $person->lookup();
+
+        $details=$person->getDetails();
+        $this->assertEquals($exp_details, $details);
+
+        user::setCurrent(new user(1));
+    }
+
+
+
+    /**
+     * Test getDetailsXML()
+     / @dataProvider getDetails();
+     */
+    public function testGetDetailsXML($user,$person_id, array $exp_details) {
+        user::setCurrent(new user($user));
+        $person=new person($person_id);
+        $person->lookup();
+        $details=$person->getDetailsXML();
+
+        $timezone=array("e", "I", "O", "P", "T", "Z");
+        $timeformat=str_replace($timezone, "", conf::get("date.timeformat"));
+        $timeformat=trim(preg_replace("/\s\s+/", "", $timeformat));
+        $format=conf::get("date.format") . " " . $timeformat;
+
+        $oldest=new Time($exp_details["oldest"]);
+        $disp_oldest=$oldest->format($format);
+
+        $newest=new Time($exp_details["newest"]);
+        $disp_newest=$newest->format($format);
+
+        $first=new Time($exp_details["first"]);
+        $disp_first=$first->format($format);
+
+        $last=new Time($exp_details["last"]);
+        $disp_last=$last->format($format);
+
+        $expectedXML=sprintf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+                      <details>
+                        <request>
+                          <class>person</class>
+                          <id>%s</id>
+                        </request>
+                        <response>
+                          <detail>
+                            <subject>title</subject>
+                            <data>Photos taken by this person:</data>
+                          </detail>
+                          <detail>
+                            <subject>count</subject>
+                            <data>%s photos</data>
+                          </detail>
+                          <detail>
+                            <subject>taken</subject>
+                            <data>taken between %s and %s</data>
+                          </detail>
+                          <detail>
+                            <subject>modified</subject>
+                            <data>last changed from %s to %s</data>
+                          </detail>
+                          <detail>
+                            <subject>rated</subject>
+                            <data>rated between %s and %s and an average of %s</data>
+                          </detail>
+                        </response>
+                      </details>", 
+                       $person_id, $exp_details["count"],$disp_oldest, $disp_newest, $disp_first, $disp_last,  $exp_details["lowest"], $exp_details["highest"], $exp_details["average"]);
+
+        $this->assertXmlStringEqualsXmlString($expectedXML, $details);
+
+        user::setCurrent(new user(1));
+    }
+
+    /**
+     * Test getTopN() function
+     * @dataProvider getTopNData();
+     */
+    public function testGetTopN($user, $expected) {
+        user::setCurrent(new user($user));
+        $personids=array();
+        $topN=person::getTopN();
+
+        foreach($topN as $person) {
+            $personids[]=$person["id"];
+        }
+        $this->assertEquals($expected, $personids);
+        user::setCurrent(new user(1));
+    }
+
+    /** 
+     * Test getAllPeopleAndPhotographers() function
+     * @dataProvider getAll();
+     */
+    public function testGetAllPeopleAndPhotographers($user, $expected, $search=null) {
+        user::setCurrent(new user($user));
+        $personids=array();
+        $all=person::getAllPeopleAndPhotographers($search);
+
+        foreach($all as $person) {
+            $personids[]=$person->getId();
+        }
+        $this->assertEquals($expected, $personids);
+        user::setCurrent(new user(1));
+    }
+
+
+
+
+    /*****************************************************************************
+     * DataProviders
+     *****************************************************************************/
 
     public function getPeople() {
         return array(
@@ -232,6 +398,103 @@ class personTest extends ZophDataBaseTestCase {
             array(1,2,3),
             array(2,1,1),
             array(8,3,6)
+        );
+    }
+    /**
+     * dataProvider function
+     * @return array user,type of autocover, person_id, cover photo
+     */
+    public function getCovers() {
+        return array(
+            array(1,"oldest", 2, 1),
+            array(1,"newest", 2, 7),
+            array(1,"first", 2, 1),
+            array(1,"last", 4, 4),
+            array(1,"newest", 5, 7),
+            array(2,"oldest", 2, 1),
+            array(2,"newest", 2, 7),
+            array(3,"first", 2, 1),
+            array(4,"last", 2, 7),
+        );
+    }
+
+    /**
+     * dataProvider function
+     * @return array user,type of autocover, person_id, cover photo
+     */
+    public function getCoversChildren() {
+        return array(
+            array(1,"oldest", 2, 1),
+            array(1,"newest", 2, 7),
+            array(1,"first", 3, 5),
+            array(1,"last", 4, 4),
+            array(1,"newest", 4, 4),
+            array(2,"oldest", 2, 1),
+            array(2,"newest", 2, 7),
+            array(2,"first", 2, 1),
+            array(4,"last", 2, 7),
+        );
+    }
+    
+    /**
+     * dataProvider function
+     * @return user, person, array(count, oldest, newest, first, last, highest, average)
+     */
+    public function getDetails() {
+        return array(
+            array(2,2, array(
+                "count"     => "2",
+                "oldest"    => "2014-01-01 00:01:00",
+                "newest"    => "2014-01-01 00:01:00",
+                "first"     => "2013-12-31 23:01:00",
+                "last"      => "2013-12-31 23:01:00",
+                "lowest"    => "7.5",
+                "highest"   => "7.5",
+                "average"   => "7.50"
+            )),
+            array(4,4, array(
+                "count"     => "1",
+                "oldest"    => "2014-01-08 00:01:00",
+                "newest"    => "2014-01-08 00:01:00",
+                "first"     => "2014-01-09 23:04:00",
+                "last"      => "2014-01-09 23:04:00",
+                "lowest"    => "6.0",
+                "highest"   => "6.0",
+                "average"   => "6.00",
+            )),
+            array(1,6,array(
+                "count"     => "1",
+                "oldest"    => "2014-01-10 00:01:00",
+                "newest"    => "2014-01-10 00:01:00",
+                "first"     => "2014-01-09 23:02:00",
+                "last"      => "2014-01-09 23:02:00",
+                "lowest"    => "5.5",
+                "highest"   => "5.5",
+                "average"   => "5.50",
+            )),
+        );
+    }
+    
+    /**
+     * dataProvider function
+     * @return array userid, topN
+     */
+    public function getTopNData() {
+        return array(
+            array(1,array(2,3,5,9,8)),
+            array(2,array(2,5,9,3,7)),
+            array(4,array(2,5,9,7,3))
+        );
+    }
+
+    public function getAll() {
+        return array(
+            array(1,array(6,9,3,8,2,4,5,1,10,7)),
+            array(2,array(9,3,2,5,7)),
+            array(4,array(9,3,2,4,5,7)),
+            array(1,array(2,4,5), "M"),
+            array(2,array(9), "D"),
+            array(4,array(7), "T")
         );
     }
 }    
