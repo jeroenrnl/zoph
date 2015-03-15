@@ -491,7 +491,7 @@ CREATE TABLE zoph_point (
 ) ENGINE=MyISAM;
 
 CREATE VIEW zoph_view_photo_avg_rating AS
-  SELECT p.photo_id, avg(pr.rating) AS rating FROM zoph_photos AS p
+  SELECT p.photo_id, p.date, p.time, p.timestamp, avg(pr.rating) AS rating FROM zoph_photos AS p
     LEFT JOIN zoph_photo_ratings AS pr ON p.photo_id = pr.photo_id
     GROUP BY p.photo_id;
 

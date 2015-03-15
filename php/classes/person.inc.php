@@ -713,7 +713,7 @@ class person extends zophTable implements Organizer {
      * @param string search string
      * @param bool search for first name
      */
-    public static function getWhereForSearch($conj, $search, $search_first) {
+    public static function getWhereForSearch($conj, $search, $search_first = null) {
         $where="";
         if($search!==null) {
             if($search==="") {
