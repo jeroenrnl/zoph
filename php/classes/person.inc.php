@@ -158,22 +158,39 @@ class person extends zophTable implements Organizer {
     public function delete() {
         $id=(int) $this->getId();
         if (!is_numeric($id)) { die("person_id is not numeric"); }
-        $sql="update " . DB_PREFIX . "people set father_id=null " .
-            "where father_id=" .  $id;
-        query($sql, "Could not remove references:");
+        
+        $params=array(
+            new param(":id", (int) $id, PDO::PARAM_INT)
+        );
 
-        $sql="update " . DB_PREFIX . "people set mother_id=null " . 
-            "where mother_id=" .  $id;
-        query($sql, "Could not remove references:");
-        
-        $sql="update " . DB_PREFIX . "people set spouse_id=null " .
-            "where spouse_id=" .  $id;
-        query($sql, "Could not remove references:");
-        
-        $sql="update " . DB_PREFIX . "photos set photographer_id=null where " .
-            "photographer_id=" .  $id;
-        query($sql, "Could not remove references:");
-        
+        $qry=new update(array("people"));
+        $qry->addSetFunction("father_id=null");
+        $where=new clause("father_id=:id");
+        $qry->where($where);
+        $qry->addParams($params);
+        $qry->execute();
+
+        $qry=new update(array("people"));
+        $qry->addSetFunction("mother_id=null");
+        $where=new clause("mother_id=:id");
+        $qry->where($where);
+        $qry->addParams($params);
+        $qry->execute();
+
+        $qry=new update(array("people"));
+        $qry->addSetFunction("spouse_id=null");
+        $where=new clause("spouse_id=:id");
+        $qry->where($where);
+        $qry->addParams($params);
+        $qry->execute();
+
+        $qry=new update(array("photos"));
+        $qry->addSetFunction("photographer_id=null");
+        $where=new clause("photographer_id=:id");
+        $qry->where($where);
+        $qry->addParams($params);
+        $qry->execute();
+
         parent::delete(array("photo_people"));
     }
 
@@ -345,51 +362,30 @@ class person extends zophTable implements Organizer {
      * Get coverphoto for this person.
      * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
      * @return photo coverphoto
+     * @todo This function is almost equal to category::getAutoCover(), should be merged
      */
     public function getAutoCover($autocover=null) {
-        $user=user::getCurrent();
-
         $coverphoto=$this->getCoverphoto();
         if($coverphoto instanceof photo) {
             return $coverphoto;
         }
-        
-        $order=self::getAutoCoverOrder($autocover);
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT DISTINCT p.photo_id FROM " .
-                DB_PREFIX . "photos AS p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar " .
-                " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_people AS pp" .
-                " ON pp.photo_id = ar.photo_id " .
-                " WHERE pp.person_id = " . 
-                escape_string($this->get("person_id")) .
-                " " . $order;
-        } else {
-            $sql=
-                "SELECT DISTINCT p.photo_id FROM " .
-                DB_PREFIX . "photos AS p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id JOIN " .
-                DB_PREFIX . "photo_people AS pp " .
-                "ON pp.photo_id = p.photo_id " .
-                "WHERE pp.person_id = " . 
-                escape_string($this->get("person_id")) .
-                " AND gu.user_id =" .
-                " '" . escape_string($user->get("user_id")) . "'" .
-                " AND gp.access_level >= p.level " .
-                $order;
-        }
-        $coverphotos=photo::getRecordsFromQuery($sql);
-        $coverphoto=array_shift($coverphotos);
 
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id")); 
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")      
+            ->join(array("pp" => "photo_people"), "p.photo_id = pp.photo_id");
+
+        $where=new clause("pp.person_id=:id");
+        $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
+       
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = self::expandQueryForUser($qry, $where);
+        }
+
+        $qry=self::getAutoCoverOrderNew($qry, $autocover);
+        $qry->where($where);
+        $coverphotos=photo::getRecordsFromQuery($qry);
+        $coverphoto=array_shift($coverphotos);
 
         if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
