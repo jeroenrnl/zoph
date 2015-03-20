@@ -66,11 +66,14 @@ class person extends zophTable implements Organizer {
     public function addPhoto(photo $photo) {
         $pos = $photo->getLastPersonPos();
         $pos++;
-        $sql = "INSERT INTO " . DB_PREFIX . "photo_people " .
-            "(photo_id, person_id, position) " .
-            "values (" . (int) $photo->getId() . ", " .
-            (int) $this->getId() . ", " . (int) $pos . ")";
-        query($sql, "Failed to add person");
+
+        $qry=new insert(array("photo_people"));
+        $qry->addParams(array(
+            new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT),
+            new param(":person_id", (int) $this->getId() , PDO::PARAM_INT),
+            new param(":position", (int) $pos, PDO::PARAM_INT)
+        ));
+        $qry->execute();
     }
 
     /**
@@ -79,25 +82,41 @@ class person extends zophTable implements Organizer {
      */
     public function removePhoto(photo $photo) {
         // First, get the position for the person who is about to be removed
-        $sql = "SELECT position FROM " . DB_PREFIX . "photo_people " .
-            "WHERE photo_id = '" . (int) $photo->getId() . "' " .
-            "AND person_id = '" . (int) $this->getId() . "'";
-        $result=fetch_array(query($sql));
+        $qry=new select(array("photo_people"));
+        $where=new clause("photo_id=:photo_id");
+        $where->addAnd(new clause("person_id=:person_id"));
+
+        $params=array(
+            new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT),
+            new param(":person_id", (int) $this->getId(), PDO::PARAM_INT)
+        );
+
+        $qry->where($where);
+        $qry->addParams($params);
+
+        $result=fetch_array(query($qry));
         $pos=$result["position"];
 
-        // Remove the victim
-        $sql = "DELETE FROM " . DB_PREFIX . "photo_people " .
-            "WHERE photo_id = '" . (int) $photo->getId() . "'" .
-            " AND person_id = '" . (int) $this->getId() . "'";
-        query($sql);
+        $qry=new delete("photo_people");
+        $qry->where($where);
+        $qry->addParams($params);
+        $qry->execute();
 
-        // Finally, lower the position for everyone with a higher position by one
-        $sql=
-            "UPDATE " . DB_PREFIX . "photo_people " .
-            "SET position=position-1 " .
-            "WHERE photo_id = '" . (int) $photo->getId() . "' " .
-            "AND position > " . (int) $pos;
-        query($sql);
+        $qry=new update(array("photo_people"));
+
+        $where=new clause("photo_id=:photo_id");
+        $where->addAnd(new clause("position>:pos"));
+
+        $qry->addSetFunction("position=position-1");
+        
+        $params=array(
+            new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT),
+            new param(":pos", (int) $pos, PDO::PARAM_INT)
+        );
+        
+        $qry->addParams($params);
+        $qry->execute();
+
     }
 
     /**
