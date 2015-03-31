@@ -435,59 +435,33 @@ class person extends zophTable implements Organizer {
     /**
      * Get details (statistics) about this person from db
      * @return array Array with statistics
-     * @todo For now, this only tells about the photos this person
-     *       has taken. Details about the photos this person appears
-     *       should be added some time.
+     * @todo this function is almost equal to category::getDetails() they should be merged
      */
     public function getDetails() {
-        $user=user::getCurrent();
-        $user_id = (int) $user->getId();
-        $id = (int) $this->getId();
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array(
+            "count"     => "COUNT(DISTINCT p.photo_id)",
+            "oldest"    => "MIN(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "newest"    => "MAX(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "first"     => "MIN(p.timestamp)",
+            "last"      => "MAX(p.timestamp)",
+            "lowest"    => "ROUND(MIN(ar.rating),1)",
+            "highest"   => "ROUND(MAX(ar.rating),1)",
+            "average"   => "ROUND(AVG(ar.rating),2)"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
-        if ($user->is_admin()) {
-            $sql = "SELECT ".
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photos ph JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id " .
-                "WHERE ph.photographer_id=" . escape_string($id) .
-                " GROUP BY ph.photographer_id";
-        } else {
-            $sql = "SELECT " .
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photo_albums pa JOIN " .
-                DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pa.photo_id JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id LEFT JOIN " .
-                DB_PREFIX . "group_permissions gp " .
-                "ON pa.album_id=gp.album_id LEFT JOIN " . 
-                DB_PREFIX . "groups_users gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE ph.level<gp.access_level AND " .
-                "gu.user_id=" . escape_string($user_id) . " AND " .
-                "ph.photographer_id=" . escape_string($id) .
-                " GROUP BY ph.photographer_id";
+        $qry->addGroupBy("p.photographer_id");
+
+        $where=new clause("p.photographer_id=:photographerid");
+        $qry->addParam(new param(":photographerid", $this->getId(), PDO::PARAM_INT));
+        
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
-        $result=query($sql);
+
+        $qry->where($where);
+
+        $result=query($qry);
         if($result) {
             return fetch_assoc($result);
         } else {
@@ -528,38 +502,19 @@ class person extends zophTable implements Organizer {
     public static function getTopN() {
         $user=user::getCurrent();
 
-        if ($user->is_admin()) {
-            $sql =
-                "select ppl.*, count(*) as count from " .
-                DB_PREFIX . "people as ppl, " .
-                DB_PREFIX . "photo_people as pp " .
-                "where ppl.person_id = pp.person_id " .
-                "group by ppl.person_id " .
-                "order by count desc, ppl.last_name, ppl.first_name " .
-                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
-        } else {
-            $sql =
-                "SELECT ppl.*, COUNT(DISTINCT ph.photo_id) AS count FROM " .
-                DB_PREFIX . "people as ppl JOIN " .
-                DB_PREFIX . "photo_people as pp " .
-                "ON pp.person_id = ppl.person_id JOIN " .
-                DB_PREFIX . "photos as ph " .
-                "ON pp.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON pa.photo_id = pp.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . 
-                escape_string($user->get("user_id")) . "' " .
-                " AND gp.access_level >= ph.level " .
-                "GROUP BY ppl.person_id " .
-                "ORDER BY count DESC, ppl.last_name, ppl.first_name " .
-                "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
-        }
+        $qry=new select(array("ppl" => "people"));
+        $qry->addFields(array("person_id", "first_name", "last_name"));
+        $qry->addFunction(array("count" => "count(distinct pp.photo_id)"));
+        $qry->join(array("pp" => "photo_people"), "ppl.person_id=pp.person_id");
+        $qry->addGroupBy("ppl.person_id");
+        $qry->addOrder("count DESC")->addOrder("ppl.last_name")->addOrder("ppl.first_name");
 
-        return static::getTopNfromSQL($sql);
+        $qry->addLimit((int) $user->prefs->get("reports_top_n"));
+        if (!$user->is_admin()) {
+            list($qry, $where) = self::expandQueryForUser($qry);
+            $qry->where($where);
+        }
+        return parent::getTopNfromSQL($qry);
 
     }
     

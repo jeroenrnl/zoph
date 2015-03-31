@@ -822,25 +822,39 @@ abstract class zophTable {
      }
 
     /**
-     * This function tries to figure out how to JOIN the current query with the photo table
+     * This function adds a relation table to the query, in order to make it possible to
+     * JOIN with the photo table
      * @param select query
      * @return select modified query
      */
-
-    protected static function addPhotoTableToQuery($qry) {
+    protected static function addRelationTableToQuery($qry) {
         if($qry->hasTable("albums") && !$qry->hasTable("photo_albums")) {
             $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
         } else if($qry->hasTable("categories") && !$qry->hasTable("photo_categories")) {
             $qry->join(array("pc" => "photo_categories"), "pc.category_id = c.category_id");
-        } else if($qry->hasTable("places")) {
-            $qry->join(array("p" => "photos"), "p.location_id = pl.place_id");
-            return $qry;
+        } else if($qry->hasTable("people") && !$qry->hasTable("photo_people")) {
+            $qry->join(array("pp" => "photo_people"), "pp.people_id = ppl.people_id");
         }
+
+        return $qry;
+    }
+
+    /**
+     * This function tries to figure out how to JOIN the current query with the photo table
+     * @param select query
+     * @return select modified query
+     */
+    protected static function addPhotoTableToQuery($qry) {
+        $qry=static::addRelationTableToQuery($qry);
 
         if($qry->hasTable("photo_albums")) {
             $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id");
         } else if($qry->hasTable("photo_categories")) {
             $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
+        } else if($qry->hasTable("photo_people")) {
+            $qry->join(array("p" => "photos"), "pp.photo_id = p.photo_id");
+        } else if($qry->hasTable("places")) {
+            $qry->join(array("p" => "photos"), "p.location_id = pl.place_id");
         } else {
             throw new DatabaseException("JOIN failed");
         }

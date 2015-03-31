@@ -443,7 +443,7 @@ class personTest extends ZophDataBaseTestCase {
     public function getDetails() {
         return array(
             array(2,2, array(
-                "count"     => "2",
+                "count"     => "1",
                 "oldest"    => "2014-01-01 00:01:00",
                 "newest"    => "2014-01-01 00:01:00",
                 "first"     => "2013-12-31 23:01:00",
