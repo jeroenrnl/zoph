@@ -833,7 +833,7 @@ abstract class zophTable {
         } else if($qry->hasTable("categories") && !$qry->hasTable("photo_categories")) {
             $qry->join(array("pc" => "photo_categories"), "pc.category_id = c.category_id");
         } else if($qry->hasTable("people") && !$qry->hasTable("photo_people")) {
-            $qry->join(array("pp" => "photo_people"), "pp.people_id = ppl.people_id");
+            $qry->join(array("pp" => "photo_people"), "pp.person_id = ppl.person_id");
         }
 
         return $qry;

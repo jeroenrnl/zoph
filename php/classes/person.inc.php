@@ -524,40 +524,25 @@ class person extends zophTable implements Organizer {
      * @param bool Search for first name
      */
     public static function getAll($search=null, $search_first = false) {
-        $user=user::getCurrent();
-        $where=self::getWhereForSearch("", $search, $search_first);
-        if ($user->is_admin()) {
-            if($where!="") {
-                $where="WHERE " . $where;
-            }
-            $sql =
-                "SELECT * FROM " .
-                DB_PREFIX . "people " .
-                $where .
-                " ORDER BY last_name, called, first_name";
-        } else {
-            if($where!="") {
-                $where="AND " . $where;
-            }
-            $sql =
-                "SELECT DISTINCT ppl.* FROM " .
-                DB_PREFIX . "people AS ppl JOIN " .
-                DB_PREFIX . "photo_people AS pp " .
-                "ON ppl.person_id = pp.person_id JOIN " . 
-                DB_PREFIX . "photos AS ph " .
-                "ON ph.photo_id = pp.photo_id JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pa.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = " . (int) $user->getId() .
-                " AND gp.access_level >= ph.level " . $where .
-                " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
+        $where=null;
+
+        $qry=new select(array("ppl" => "people"));
+        $qry->addFunction(array("person_id" => "DISTINCT ppl.person_id"));
+        if(!is_null($search)) {
+            $where=self::getWhereForSearch($search, $search_first);
+            $qry->addParam(new param("search", $search, PDO::PARAM_STR));
         }
 
-        return self::getRecordsFromQuery($sql);
+        $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
+        
+        if(!user::getCurrent()->is_admin()) {
+            list($qry,$where)=self::expandQueryForUser($qry, $where);
+        }
+
+        if($where instanceof clause) {
+            $qry->where($where);
+        }
+        return self::getRecordsFromQuery($qry);
     }
 
     /**
@@ -651,52 +636,50 @@ class person extends zophTable implements Organizer {
         $user=user::getCurrent();
         $allowed=array();
 
+        $qry=new select(array("ppl" => "people"));
+        $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
+        
+
         if($user && !$user->is_admin()) {
-            $people=self::getAll($search);
-            $photographers=photographer::getAll($search);
+            $people=(array)self::getAll($search);
+            $photographers=(array)photographer::getAll($search);
             foreach($people as $person) {
+                $person->lookup();
                 $allowed[]=$person->get("person_id");
             }
             foreach($photographers as $photographer) {
+                $photographer->lookup();
                 $allowed[]=$photographer->get("person_id");
             }
-
             $allowed=array_unique($allowed);
             if(count($allowed)==0) {
                 return null;
             }
-            $keys=implode(",", $allowed);
-            $where=" WHERE person_id IN (" .$keys . ")";
+            $param=new param(":person_ids", $allowed, PDO::PARAM_INT);
+            $qry->where(clause::InClause("person_id", $param));
+            $qry->addParam($param);
         } else if ($search!==null) {
-            $where=self::getWhereForSearch(" WHERE ", $search);
-        } else {
-            $where="";
+            $qry->addParam(new param("search", $search, PDO::PARAM_STR));
+            $qry->where(self::getWhereForSearch($search));
         }
-
-        $sql="SELECT * FROM " . DB_PREFIX . "people AS ppl " . $where .
-            " ORDER BY last_name, called, first_name";
-
-        return self::getRecordsFromQuery($sql);
+        return self::getRecordsFromQuery($qry);
     }
 
     /**
-     * Get SQL WHERE statement to search for people
-     * @param string [and|or]
+     * Get SQL WHERE clause to search for people
      * @param string search string
      * @param bool search for first name
      */
-    public static function getWhereForSearch($conj, $search, $search_first=false) {
-        $where="";
+    public static function getWhereForSearch($search, $search_first=false) {
+        $where=null;
         if($search!==null) {
             if($search==="") {
-                $where=$conj . " (ppl.last_name='' or ppl.last_name is null)";
+                $where=new clause("ppl.last_name=''");
+                $where->addOr(new clause("ppl.last_name is null"));
             } else {
-                $search=escape_string($search);
-                $where=$conj . " (ppl.last_name like lower('" . $search . "%')";
+                $where=new clause("ppl.last_name like lower(concat(:search,'%'))");
                 if ($search_first) {
-                    $where.="or ppl.first_name like lower('" . $search . "%'))";
-                } else {
-                    $where.=")";
+                    $where->addOr("ppl.first_name like lower(concat(:search, '%'))");
                 }
             }
         }

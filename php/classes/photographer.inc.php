@@ -72,44 +72,52 @@ class photographer extends person implements Organizer {
      * @param string search for names that begin with this string
      * @param bool also search first name
      * @return array list of photographer objects
+     * @todo This code could be much simplified if we could use subqueries
      */
-
     public static function getAll($search = null, $search_first = null) {
-        $user=user::getCurrent();
-
-        $where=self::getWhereForSearch("", $search, $search_first);
-        if ($user->is_admin()) {
-            if($where!="") {
-                $where="WHERE " . $where;
-            }
-            $sql =
-                "SELECT * FROM " .
-                DB_PREFIX . "people AS ppl " .
-                $where . 
-                " ORDER BY last_name, called, first_name";
-        } else {
-            if($where!="") {
-                $where="AND " . $where;
-            }
-            $sql =
-                "SELECT DISTINCT ppl.* FROM " .
-                DB_PREFIX . "people AS ppl " .
-                "WHERE person_id in " .
-                "(SELECT photographer_id FROM " .
-                DB_PREFIX . "photos AS ph JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pa.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . (int) $user->getId() . "' " .
-                $where .
-                " AND gp.access_level >= ph.level)" .
-                " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
+        $where=null;
+        $qry=new select(array("ppl" => "people"));
+        if($search != null) {
+            $where=self::getWhereForSearch($search, $search_first);
         }
 
-        return static::getRecordsFromQuery($sql);
+        if(!user::getCurrent()->is_admin()) {
+            $ids=array();
+            $subqry = new select(array("p" => "photos"));
+            $subqry->addFunction(array("person_id" => "DISTINCT p.photographer_id"));
+            $subqry->join(array("ppl" => "people"), "p.photographer_id=ppl.person_id");
+            list($subqry,$where)=self::expandQueryForUser($subqry, $where);
+            if($where instanceof clause) {
+                $subqry->where($where);
+                if($search != null) {
+                    $subqry->addParam(new param("search", $search, PDO::PARAM_STR));
+                }
+                $where=null;
+            }
+
+            $photographers=self::getRecordsFromQuery($subqry);
+
+            if(sizeof($photographers) == 0) {
+                return null;
+            }
+
+            foreach($photographers as $photographer) {
+                $ids[]=$photographer->getId();
+            }
+
+            $param=new param(":person_ids", $ids, PDO::PARAM_INT);
+            $where=clause::InClause("person_id", $param);
+            $qry->addParam($param);
+        } else if($search != null) {
+            $qry->addParam(new param("search", $search, PDO::PARAM_STR));
+        }
+
+        if($where instanceof clause) {
+            $qry->where($where);
+        }
+
+        $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
+        return static::getRecordsFromQuery($qry);
     }
 }
 ?>
