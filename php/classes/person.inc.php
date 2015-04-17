@@ -489,11 +489,13 @@ class person extends zophTable implements Organizer {
         if(empty($name)) {
             return false;
         }
+        $qry=new select(array("ppl" => "people"));
+        $qry->addFields(array("person_id"));
+        $where=new clause("CONCAT_WS(\" \", lower(first_name), lower(last_name))=lower(:name)");
+        $qry->addParam(new param(":name", $name, PDO::PARAM_STR));
+        $qry->where($where);
 
-        $sql = "SELECT person_id FROM " . DB_PREFIX . "people WHERE " .
-            "CONCAT_WS(\" \", lower(first_name), lower(last_name))=" .
-            "lower(\"" . escape_string($name) . "\")";
-        return self::getRecordsFromQuery($sql);
+        return self::getRecordsFromQuery($qry);
     }
 
     /**
