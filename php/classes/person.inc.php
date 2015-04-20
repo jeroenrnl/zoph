@@ -208,7 +208,7 @@ class person extends zophTable implements Organizer {
      * @return person father
      */
     private function getFather() {
-        return self::getFromId($this->get("father_id"));
+        return static::getFromId($this->get("father_id"));
     }
 
     /**
@@ -216,7 +216,7 @@ class person extends zophTable implements Organizer {
      * @return person mother
      */
     private function getMother() {
-        return self::getFromId($this->get("mother_id"));
+        return static::getFromId($this->get("mother_id"));
     }
 
     /**
@@ -224,7 +224,7 @@ class person extends zophTable implements Organizer {
      * @return person spouse
      */
     private function getSpouse() {
-        return self::getFromId($this->get("spouse_id"));
+        return static::getFromId($this->get("spouse_id"));
     }
 
     /**
@@ -234,7 +234,7 @@ class person extends zophTable implements Organizer {
     public function getChildren() {
         $constraints["father_id"] = $this->get("person_id");
         $constraints["mother_id"] = $this->get("person_id");
-        return self::getAll($constraints, "or");
+        return static::getAll($constraints, "or");
     }
 
     /**
@@ -379,10 +379,10 @@ class person extends zophTable implements Organizer {
         $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
        
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = self::expandQueryForUser($qry, $where);
+            list($qry, $where) = static::expandQueryForUser($qry, $where);
         }
 
-        $qry=self::getAutoCoverOrderNew($qry, $autocover);
+        $qry=static::getAutoCoverOrderNew($qry, $autocover);
         $qry->where($where);
         $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
@@ -456,13 +456,13 @@ class person extends zophTable implements Organizer {
         $qry->addParam(new param(":photographerid", $this->getId(), PDO::PARAM_INT));
         
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = self::expandQueryForUser($qry, $where);
+            list($qry, $where) = static::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
 
         $result=query($qry);
-        if($result) {
+        if ($result) {
             return fetch_assoc($result);
         } else {
             return null;
@@ -495,7 +495,7 @@ class person extends zophTable implements Organizer {
         $qry->addParam(new param(":name", $name, PDO::PARAM_STR));
         $qry->where($where);
 
-        return self::getRecordsFromQuery($qry);
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
@@ -513,7 +513,7 @@ class person extends zophTable implements Organizer {
 
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
         if (!$user->is_admin()) {
-            list($qry, $where) = self::expandQueryForUser($qry);
+            list($qry, $where) = static::expandQueryForUser($qry);
             $qry->where($where);
         }
         return parent::getTopNfromSQL($qry);
@@ -531,20 +531,20 @@ class person extends zophTable implements Organizer {
         $qry=new select(array("ppl" => "people"));
         $qry->addFunction(array("person_id" => "DISTINCT ppl.person_id"));
         if(!is_null($search)) {
-            $where=self::getWhereForSearch($search, $search_first);
+            $where=static::getWhereForSearch($search, $search_first);
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
         }
 
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
         
         if(!user::getCurrent()->is_admin()) {
-            list($qry,$where)=self::expandQueryForUser($qry, $where);
+            list($qry,$where)=static::expandQueryForUser($qry, $where);
         }
 
         if($where instanceof clause) {
             $qry->where($where);
         }
-        return self::getRecordsFromQuery($qry);
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
@@ -594,7 +594,7 @@ class person extends zophTable implements Organizer {
         }
         $ppl[""] = "";
 
-        $people_array = self::getAll();
+        $people_array = static::getAll();
         foreach ($people_array as $person) {
             $ppl[$person->get("person_id")] =
                  ($person->get("last_name") ? $person->get("last_name") .  ", " : "") .
@@ -611,10 +611,10 @@ class person extends zophTable implements Organizer {
     public static function getCountForUser() {
         $user=user::getCurrent();
         if($user && !$user->is_admin()) {
-            return self::getCount();
+            return static::getCount();
         } else {
             $allowed=array();
-            $people=self::getAll();
+            $people=static::getAll();
             $photographers=photographer::getAll();
             foreach($people as $person) {
                 $allowed[]=$person->get("person_id");
@@ -643,7 +643,7 @@ class person extends zophTable implements Organizer {
         
 
         if($user && !$user->is_admin()) {
-            $people=(array)self::getAll($search);
+            $people=(array)static::getAll($search);
             $photographers=(array)photographer::getAll($search);
             foreach($people as $person) {
                 $person->lookup();
@@ -662,9 +662,9 @@ class person extends zophTable implements Organizer {
             $qry->addParam($param);
         } else if ($search!==null) {
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
-            $qry->where(self::getWhereForSearch($search));
+            $qry->where(static::getWhereForSearch($search));
         }
-        return self::getRecordsFromQuery($qry);
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
