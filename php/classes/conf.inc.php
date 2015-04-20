@@ -24,7 +24,6 @@
 
 require_once "database.inc.php";
 require_once "user.inc.php";
-require_once "photo.inc.php";
 
 /**
  * conf is the main object for access to Zoph's configuration
