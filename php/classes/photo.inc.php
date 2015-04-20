@@ -382,7 +382,7 @@ class photo extends zophTable {
             // no-one is playing tricks, such as setting the date to /etc/passwd or
             // something.
             $date=$this->get("date");
-            if (!preg_match("/^[0-9]{2, 4}-[0-9]{1, 2}-[0-9]{1, 2}$/", $date)) {
+            if (!preg_match("/^[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}$/", $date)) {
                 log::msg("Illegal date, using today's", log::ERROR, log::IMPORT);
                 $date=date("Y-m-d");
             }
@@ -1155,7 +1155,7 @@ class photo extends zophTable {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         if ($lat && $lon) {
-            return self::getPhotosNear(
+            return static::getPhotosNear(
                 (float) $lat,
                 (float) $lon,
                 (float) $distance,
@@ -1198,7 +1198,7 @@ class photo extends zophTable {
                 "having distance <= " . $distance .
                 " order by distance" . $lim;
 
-            $near=self::getRecordsFromQuery($sql);
+            $near=static::getRecordsFromQuery($sql);
             return $near;
         } else {
             return null;
@@ -1217,7 +1217,7 @@ class photo extends zophTable {
         if (!empty($path)) {
             $sql .= " AND path='" . escape_string($path) ."'";
         }
-        return self::getRecordsFromQuery($sql);
+        return static::getRecordsFromQuery($sql);
     }
 
     /**
@@ -1486,7 +1486,7 @@ class photo extends zophTable {
 
         $sql="SELECT * FROM " . DB_PREFIX . "photos " . $where;
 
-        $photos=self::getRecordsFromQuery($sql);
+        $photos=static::getRecordsFromQuery($sql);
         if (is_array($photos) && sizeof($photos) > 0) {
             return $photos[0];
         } else {
@@ -1530,7 +1530,7 @@ class photo extends zophTable {
      */
     public static function getTotalSize() {
         $sql = "select sum(size) from " . DB_PREFIX . "photos";
-        return self::getCountFromQuery($sql);
+        return static::getCountFromQuery($sql);
     }
 
     /**
