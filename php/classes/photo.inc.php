@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,7 +36,7 @@ class photo extends zophTable {
     protected static $primary_keys=array("photo_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array();
-    /** @var bool keep keys with insert. In most cases the keys are set by the 
+    /** @var bool keep keys with insert. In most cases the keys are set by the
              db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -129,7 +129,7 @@ class photo extends zophTable {
         }
 
         $success = $this->lookupFromSQL($sql);
-        
+
         if ($success) {
             $this->lookupPhotographer();
             $this->lookupLocation();
@@ -168,37 +168,37 @@ class photo extends zophTable {
      */
     public function delete() {
         parent::delete(array(
-            "photo_people", 
-            "photo_categories", 
-            "photo_albums", 
-            "photo_ratings", 
+            "photo_people",
+            "photo_categories",
+            "photo_albums",
+            "photo_ratings",
             "photo_comments")
         );
     }
 
-    /** 
+    /**
      * Update photo relations, such as albums, categories, etc.
      * @param array array of variables to update
      * @param string suffix for varnames
      */
     public function updateRelations(array $vars, $suffix = "") {
-        
+
         $albums=album::getFromVars($vars, $suffix);
         $categories=category::getFromVars($vars, $suffix);
         $people=person::getFromVars($vars, $suffix);
-        
+
         // Albums
         if (!empty($vars["_remove_album$suffix"])) {
             foreach((array) $vars["_remove_album$suffix"] as $alb) {
                 $this->removeFrom(new album($alb));
             }
         }
-        
+
         if(isset($this->_album_id)) {
             $albums=array_merge($albums,$this->_album_id);
             unset($this->_album_id);
         }
-        
+
         foreach($albums as $album) {
             $this->addTo(new album($album));
         }
@@ -234,7 +234,7 @@ class photo extends zophTable {
             $this->addTo(new person($person));
         }
     }
-    
+
     /**
      * Updates the photo's dimensions and filesize
      */
@@ -373,7 +373,7 @@ class photo extends zophTable {
      */
     function import(file $file) {
         $this->set("name", $file->getName());
-        
+
         $newPath=$this->get("path") . "/";
         if(conf::get("import.dated")) {
             // This is not really validating the date, just making sure
@@ -392,11 +392,11 @@ class photo extends zophTable {
             }
         }
         $toPath="/" . cleanup_path(conf::get("path.images") . "/" . $newPath) . "/";
-        
+
         $path=$file->getPath();
         create_dir_recursive($toPath . "/" . MID_PREFIX);
         create_dir_recursive($toPath . "/" . THUMB_PREFIX);
-        
+
         if($path ."/" != $toPath) {
             $file->setDestination($toPath);
             $files[]=$file;
@@ -405,7 +405,7 @@ class photo extends zophTable {
 
             $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $newname;
             $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $newname;
-            
+
             if(file_exists($path . "/". $thumbname)) {
                 $thumb=new file($path . "/" . $thumbname);
                 $thumb->setDestination($toPath . "/" . THUMB_PREFIX . "/");
@@ -416,7 +416,7 @@ class photo extends zophTable {
                 $mid->setDestination($toPath . "/" . MID_PREFIX . "/");
                 $files[]=$mid;
             }
-        
+
             try {
                 foreach($files as $file) {
                     if(conf::get("import.cli.copy")==false) {
@@ -429,7 +429,7 @@ class photo extends zophTable {
                 echo $e->getMessage() . "\n";
                 throw $e;
             }
-            // We run this loop twice, because we only want to move/copy the 
+            // We run this loop twice, because we only want to move/copy the
             // file if *all* files can be moved/copied.
             try {
                 foreach($files as $file) {
@@ -456,7 +456,7 @@ class photo extends zophTable {
      * @return string full path.
      */
     public function getFilePath($type=null) {
-        $image_path = conf::get("path.images") . DIRECTORY_SEPARATOR . 
+        $image_path = conf::get("path.images") . DIRECTORY_SEPARATOR .
             $this->get("path") . DIRECTORY_SEPARATOR;
 
         if ($type==THUMB_PREFIX || $type==MID_PREFIX) {
@@ -494,7 +494,7 @@ class photo extends zophTable {
             "target" => ($user->prefs->get("fullsize_new_win") ? "_blank" : "")
         ));
     }
-    
+
     /**
      * Get the URL to an image
      * @param string "mid" or "thumb"
@@ -535,7 +535,7 @@ class photo extends zophTable {
     }
 
     /**
-     * Stores the rating of a photo for a user 
+     * Stores the rating of a photo for a user
      * @param int rating
      */
     public function rate($rating) {
@@ -658,12 +658,12 @@ class photo extends zophTable {
         $name=$this->get("name");
         $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $name;
         $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $name;
-        
+
         if(!file_exists($path . $midname) || $force===true) {
-            $this->createThumbnail(MID_PREFIX, MID_SIZE); 
+            $this->createThumbnail(MID_PREFIX, MID_SIZE);
         }
         if(!file_exists($path . $thumbname) || $force===true) {
-            $this->createThumbnail(THUMB_PREFIX, THUMB_SIZE); 
+            $this->createThumbnail(THUMB_PREFIX, THUMB_SIZE);
         }
         return true;
     }
@@ -675,7 +675,7 @@ class photo extends zophTable {
      */
     private function createThumbnail($prefix, $size) {
         $img_src = $this->getImageResource();
-        
+
         $image_info = getimagesize($this->getFilePath());
         $width = $image_info[0];
         $height = $image_info[1];
@@ -727,9 +727,9 @@ class photo extends zophTable {
         $dir = conf::get("path.images") . "/" . $this->get("path") . "/";
         $name = $this->get('name');
 
-        $images[$dir . THUMB_PREFIX . '/' . THUMB_PREFIX . '_' . 
-            $name] = 
-            $dir . THUMB_PREFIX . '/rot_' . THUMB_PREFIX . '_' . 
+        $images[$dir . THUMB_PREFIX . '/' . THUMB_PREFIX . '_' .
+            $name] =
+            $dir . THUMB_PREFIX . '/rot_' . THUMB_PREFIX . '_' .
             $name;
 
         $images[$dir . MID_PREFIX . '/' . MID_PREFIX . '_' . $name] =
@@ -813,14 +813,14 @@ class photo extends zophTable {
 
         return array(
             translate("title") => $this->get("title"),
-            translate("location") => $loclink, 
+            translate("location") => $loclink,
             translate("view") => $this->get("view"),
             translate("date") => create_date_link($date),
             translate("time") => $this->getTimeDetails(),
             translate("photographer") => $pglink
         );
     }
-    
+
     /**
      * Get array of properties of this object, used to build mail message
      * @return array photo properties
@@ -880,7 +880,7 @@ class photo extends zophTable {
      * Get time this photo was taken, corrected with timezone information
      * @return string time
      */
-    public function getTime() { 
+    public function getTime() {
         $this->lookup();
         $loc=$this->location;
         if($loc instanceof place) {
@@ -907,7 +907,7 @@ class photo extends zophTable {
             $camera_tz=$default_tz;
         }
         $place_time=$this->getCorrectedTime($camera_tz, $place_tz);
-        
+
         return $place_time;
     }
 
@@ -938,13 +938,13 @@ class photo extends zophTable {
 
         $place_tz=new TimeZone("UTC");
         $camera_tz=$default_tz;
-        
+
         if(TimeZone::validate(conf::get("date.tz"))) {
             $camera_tz=new TimeZone(conf::get("date.tz"));
         }
 
         $place_time=$this->getCorrectedTime($camera_tz, $place_tz);
-        
+
         $date=$place_time->format($date_format);
         $time=$place_time->format($time_format);
         return array($date,$time);
@@ -994,7 +994,7 @@ class photo extends zophTable {
         if(TimeZone::validate(conf::get("date.tz"))) {
             $tz=conf::get("date.tz");
         }
-        
+
         $this->lookup();
         $place=$this->location;
         $place_tz=null;
@@ -1003,7 +1003,7 @@ class photo extends zophTable {
             $place_tz=$place->get("timezone");
             $location=$place->get("title");
         }
-       
+
         $datetime=$this->getFormattedDateTime();
 
         $tpl=new block("time_details", array(
@@ -1075,8 +1075,8 @@ class photo extends zophTable {
                 foreach($exif as $key => $value) {
                     if(!is_array($value)) {
                         $return .="    <dt>$key</dt>\n" .
-                                  "    <dd>" . 
-                                          preg_replace("/[^[:print:]]/", "", $value) . 
+                                  "    <dd>" .
+                                          preg_replace("/[^[:print:]]/", "", $value) .
                                   "    </dd>\n";
                     } else {
                         $return .="    <dt>$key</dt>\n" .
@@ -1084,8 +1084,8 @@ class photo extends zophTable {
                                   "        <dl>\n";
                         foreach ($value as $subkey => $subval) {
                             $return .= "     <dt>$subkey</dt>\n" .
-                                       "     <dd>" . 
-                                               preg_replace("/[^[:print:]]/", "", $subval) . 
+                                       "     <dd>" .
+                                               preg_replace("/[^[:print:]]/", "", $subval) .
                                        "     </dd>\n";
                         }
                         $return .= "         </dl>\n" .
@@ -1116,9 +1116,9 @@ class photo extends zophTable {
             $html="<h2>" . e($title) . "<\/h2><p>" . e($file) . "<\/p>";
         } else {
             $html="<h2>" . e($file) . "<\/h2>";
-        }    
+        }
         $html.=$this->getThumbnailLink()->toStringNoEnter() .
-          "<p><small>" . 
+          "<p><small>" .
           $this->get("date") . " " . $this->get("time") . "<br>";
         if($this->photographer) {
             $html.=translate("by",0) . " " . $this->photographer->getLink(1) . "<br>";
@@ -1133,11 +1133,11 @@ class photo extends zophTable {
      * @return marker instance of marker class
      */
     function getMarker($icon="geo-photo") {
-        $marker=map::getMarkerFromObj($this, $icon); 
+        $marker=map::getMarkerFromObj($this, $icon);
         if(!$marker instanceof marker) {
             $loc=$this->location;
             if($loc instanceof place) {
-                return $loc->getMarker(); 
+                return $loc->getMarker();
             }
         } else {
             return $marker;
@@ -1150,15 +1150,15 @@ class photo extends zophTable {
      * @param int limit maxiumum number of photos to return
      * @param string entity (km or miles)
      */
-    public function getNear($distance, $limit=100, $entity="km") { 
+    public function getNear($distance, $limit=100, $entity="km") {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         if($lat && $lon) {
             return self::getPhotosNear(
-                (float) $lat, 
-                (float) $lon, 
-                (float) $distance, 
-                (int) $limit, 
+                (float) $lat,
+                (float) $lon,
+                (float) $distance,
+                (int) $limit,
                 $entity
             );
         }
@@ -1172,9 +1172,9 @@ class photo extends zophTable {
      * @param int limit maxiumum number of photos to return
      * @param string entity (km or miles)
      */
-    public static function getPhotosNear($lat, $lon, $distance, 
-            $limit, $entity="km") { 
-            
+    public static function getPhotosNear($lat, $lon, $distance,
+            $limit, $entity="km") {
+
         // If lat and lon are not set, don't bother trying to find
         // near photos
         if($lat && $lon) {
@@ -1190,11 +1190,11 @@ class photo extends zophTable {
             $sql="select photo_id, (6371 * acos(" .
                 "cos(radians(" . $lat . ")) * " .
                 "cos(radians(lat) ) * cos(radians(lon) - " .
-                "radians(" . $lon . ")) +" . 
+                "radians(" . $lon . ")) +" .
                 "sin(radians(" . $lat . ")) * " .
                 "sin(radians(lat)))) AS distance from " .
                 DB_PREFIX . "photos " .
-                "having distance <= " . $distance . 
+                "having distance <= " . $distance .
                 " order by distance" . $lim;
 
             $near=self::getRecordsFromQuery($sql);
@@ -1218,7 +1218,7 @@ class photo extends zophTable {
         }
         return self::getRecordsFromQuery($sql);
     }
-    
+
     /**
      * Calculate SHA1 hash for a file
      * @return string SHA1 hash
@@ -1234,7 +1234,7 @@ class photo extends zophTable {
 
     /**
      * Get hash for photo.
-     * Returns the hash for a photo, either the file hash, or a salted hash that 
+     * Returns the hash for a photo, either the file hash, or a salted hash that
      * can be used to share photos
      * @param string type file, full or mid
      * @return string hash
@@ -1281,28 +1281,28 @@ class photo extends zophTable {
      * @param track track to use or null to use all tracks
      * @param int maximum time the time can be off
      * @param bool Whether to interpolate between 2 found times/positions
-     * @param int Interpolation max_distance: what is the maximum distance between two 
+     * @param int Interpolation max_distance: what is the maximum distance between two
      *            points to still interpolate
      * @param string km / miles entity in which max_distance is measured
      * @param int Interpolation maxtime Maximum time between to point to still interpolate
      */
-    public function getLatLon(track $track=null, $max_time=300, $interpolate=true, 
+    public function getLatLon(track $track=null, $max_time=300, $interpolate=true,
             $int_maxdist=5, $entity="km", $int_maxtime=600) {
 
         date_default_timezone_set("UTC");
         $datetime=$this->getUTCTime();
         $utc=strtotime($datetime[0] . " " . $datetime[1]);
-        
+
         $mintime=$utc-$max_time;
         $maxtime=$utc+$max_time;
-        
+
         if($track) {
             $track_id=$track->getId();
             $where=" AND track_id=" . escape_string($track_id);
         } else {
             $where="";
         }
-        
+
         $sql="SELECT * FROM " . DB_PREFIX . "point" .
             " WHERE datetime > \"" . date("Y-m-d H:i:s", $mintime) . "\" AND" .
             " datetime < \"" . date("Y-m-d H:i:s", $maxtime)  . "\"" .
@@ -1319,7 +1319,7 @@ class photo extends zophTable {
             $interpolate=false;
             $point=null;
         }
-        
+
         if($interpolate && ($pointtime != $utc)) {
             if($utc>$pointtime) {
                 $p1=$point;
@@ -1342,7 +1342,7 @@ class photo extends zophTable {
      * Takes an array of photos and returns a subset
      *
      * @param array photos to return a subset from
-     * @param array Array should contain first and/or last and/or random to determine 
+     * @param array Array should contain first and/or last and/or random to determine
      *                           which subset(s)
      * @param int count Number of each to return
      * @return array subset of photos
@@ -1353,9 +1353,9 @@ class photo extends zophTable {
         $random=array();
         $begin=0;
         $end=null;
-        
+
         $max=count($photos);
-        
+
         if($count>$max) {
             $count=$max;
         }
@@ -1373,7 +1373,7 @@ class photo extends zophTable {
 
         if(in_array("random", $subset) && ($max > 0)) {
             $center=array_slice($photos,$begin,$end);
-            
+
             $max=count($center);
 
             if($max!=0) {
@@ -1396,13 +1396,13 @@ class photo extends zophTable {
 
         return $clean_subset;
     }
-        
+
 
 
     /**
      * Take an array of photos and remove photos with no valid timezone
      *
-     * This function is needed for geotagging: for photos without a valid 
+     * This function is needed for geotagging: for photos without a valid
      * timezone it is not possible to determine the UTC time, needed for geotagging.
      * @param array Array of photos
      * @return array Array of photos with a valid timezone
@@ -1410,7 +1410,7 @@ class photo extends zophTable {
     public static function removePhotosWithNoValidTZ(array $photos) {
 
         $gphotos=array();
-        log::msg("Number of photos before valid timezone check: " . 
+        log::msg("Number of photos before valid timezone check: " .
             count($photos), log::DEBUG, log::GEOTAG);
 
         foreach($photos as $photo) {
@@ -1423,23 +1423,23 @@ class photo extends zophTable {
                 }
             }
         }
-        log::msg("Number of photos after valid timezone check: " . count($gphotos), 
+        log::msg("Number of photos after valid timezone check: " . count($gphotos),
             log::DEBUG, log::GEOTAG);
         return $gphotos;
     }
-    
+
     /**
-     * Take an array of photos and remove photos that already have lat/lon 
+     * Take an array of photos and remove photos that already have lat/lon
      * information set.
      *
-     * This function is needed for geotagging, so photos that have lat/lon 
+     * This function is needed for geotagging, so photos that have lat/lon
      * manually set will not be overwritten
      * @param array Array of photos
      * @return array Array of photos with no lat/lon info
      */
     public static function removePhotosWithLatLon($photos) {
         $gphotos=array();
-        log::msg("Number of photos before overwrite check: " . count($photos), 
+        log::msg("Number of photos before overwrite check: " . count($photos),
             log::DEBUG, log::GEOTAG);
         foreach($photos as $photo) {
             $photo->lookup();
@@ -1447,7 +1447,7 @@ class photo extends zophTable {
                 $gphotos[]=$photo;
             }
         }
-        log::msg("Number of photos after overwrite check: " . count($gphotos), 
+        log::msg("Number of photos after overwrite check: " . count($gphotos),
             log::DEBUG, log::GEOTAG);
         return $gphotos;
     }
@@ -1492,7 +1492,7 @@ class photo extends zophTable {
             throw new PhotoNotFoundException("Could not find photo from hash");
         }
     }
-    
+
     /**
      * Create a list of fields that can be used to sort photos on
      * @return array list of fields
@@ -1536,7 +1536,7 @@ class photo extends zophTable {
      * Get filesize for a set of photos
      * @param array Array of photos
      * @return int size in bytes
-     */ 
+     */
     public static function getFilesize(array $photos) {
         $bytes=0;
         foreach($photos as $photo) {
