@@ -54,11 +54,6 @@ class photo extends zophTable {
     public $file=array();
 
     /**
-     * Create a new photo object
-     * @param int photo_id
-     */
-
-    /**
     * Display the image
     * @param string type of image to display mid, thumb or null for full-sized
     * @return array Return an array that contains:
@@ -255,7 +250,7 @@ class photo extends zophTable {
      */
     public function updateEXIF() {
         $file=$this->getFilePath();
-        $exif=process_exif ($file);
+        $exif=process_exif($file);
         if ($exif) {
             $this->setFields($exif);
             $this->update();
@@ -373,7 +368,7 @@ class photo extends zophTable {
      *
      * @param file The file to be imported
      */
-    function import(file $file) {
+    public function import(file $file) {
         $this->set("name", $file->getName());
 
         $newPath=$this->get("path") . "/";
@@ -1067,7 +1062,7 @@ class photo extends zophTable {
      * @todo contains lots of HTML
      * @todo is a mess
      */
-    function exifToHTML() {
+    public function exifToHTML() {
         if (exif_imagetype($this->getFilePath())==IMAGETYPE_JPEG) {
             $exif=read_exif_data($this->getFilePath());
             if ($exif) {
@@ -1133,7 +1128,7 @@ class photo extends zophTable {
      * @param string icon to be used.
      * @return marker instance of marker class
      */
-    function getMarker($icon="geo-photo") {
+    public function getMarker($icon="geo-photo") {
         $marker=map::getMarkerFromObj($this, $icon);
         if (!$marker instanceof marker) {
             $loc=$this->location;
