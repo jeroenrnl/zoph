@@ -40,7 +40,7 @@ class ConfigurationException extends ZophException {}
  * @author Jeroen Roos
  * @package ZophException
  */
-class OrganizerException extends CliException {}
+class OrganizerException extends ZophException {}
 
 /**
  * Exceptions for person
