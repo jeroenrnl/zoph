@@ -235,35 +235,23 @@ class placeTest extends ZophDataBaseTestCase {
         $ams=new place(5);
         $ams->lookup();
 
-        $ams->set("lat", 52.37);
-        $ams->set("lon", 4.9);
-        $ams->update();
-
         $rot=new place(4);
         $rot->lookup();
         
-        $rot->set("lat", 52.92);
-        $rot->set("lon", 4.5);
-        $rot->update();
-
         $bln=new place(7);
         $bln->lookup();
         
-        $bln->set("lat", 52.52);
-        $bln->set("lon", 13.4);
-        $bln->update();
-
         $places=$ams->getNear(100);
         $place=$places[1];
         $place->lookup();
-        $this->assertEquals(2, count($places));
+        $this->assertEquals(3, count($places));
         $this->assertEquals($rot->getId(), $place->getId());
         
         
         $places=$rot->getNear(1000);
-        $place=$places[2];
+        $place=$places[5];
         $place->lookup();
-        $this->assertEquals(3, count($places));
+        $this->assertEquals(6, count($places));
         $this->assertEquals($bln->getId(), $place->getId());
     }
 
@@ -272,8 +260,8 @@ class placeTest extends ZophDataBaseTestCase {
      */
     public function getPlaces() {
         return array(
-            array(18, "City", 1),
-            array(18, "Town", 4)
+            array(19, "City", 1),
+            array(19, "Town", 4)
         );
     }
 
@@ -283,7 +271,7 @@ class placeTest extends ZophDataBaseTestCase {
     public function getPlaceCount() {
         // user_id, place_id, count, totalcount
         return array(
-            array(1, 1, 0, 10),
+            array(1, 1, 0, 12),
             array(1, 6, 1, 2),
             array(1, 7, 1, 1),
             array(1, 3, 1, 5),

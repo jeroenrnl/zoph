@@ -400,127 +400,127 @@
 	<row>
 		<field name="comment_id">1</field>
 		<field name="user_id">2</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:27</field>
 		<field name="subject">Comment by brian</field>
 		<field name="comment">I love that Special Red :-)</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 		<field name="ipaddr">brian.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">2</field>
 		<field name="user_id">5</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:27</field>
 		<field name="subject">Comment by freddie</field>
 		<field name="comment">Beautiful!</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 		<field name="ipaddr">freddie.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">3</field>
 		<field name="user_id">7</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:27</field>
 		<field name="subject">Comment by roger</field>
 		<field name="comment">Nice</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 		<field name="ipaddr">roger.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">4</field>
 		<field name="user_id">2</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:27</field>
 		<field name="subject">Comment by brian</field>
 		<field name="comment">The letters are all distorted!</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 		<field name="ipaddr">brian.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">5</field>
 		<field name="user_id">5</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:27</field>
 		<field name="subject">Comment by freddie</field>
 		<field name="comment">Crap :-(</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 		<field name="ipaddr">freddie.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">6</field>
 		<field name="user_id">3</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:28</field>
 		<field name="subject">Comment by jimi</field>
 		<field name="comment">Self portrait!</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 		<field name="ipaddr">jimi.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">7</field>
 		<field name="user_id">3</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:28</field>
 		<field name="subject">Comment by jimi</field>
 		<field name="comment">Me and [b]Brian[/b]!</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 		<field name="ipaddr">jimi.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">8</field>
 		<field name="user_id">2</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:28</field>
 		<field name="subject">Comment by brian</field>
 		<field name="comment">:-)</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 		<field name="ipaddr">brian.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">9</field>
 		<field name="user_id">4</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:28</field>
 		<field name="subject">Comment by paul</field>
 		<field name="comment">Just beautiful</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 		<field name="ipaddr">paul.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">10</field>
 		<field name="user_id">6</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:28</field>
 		<field name="subject">Comment by phil</field>
 		<field name="comment">That &lt;span style=&quot;background: grey&quot;&gt;grey&lt;/span&gt; is annoying me so badly, I'm illegally using HTML in this comment!</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 		<field name="ipaddr">phil.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">11</field>
 		<field name="user_id">1</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:28</field>
 		<field name="subject">Comment by admin</field>
 		<field name="comment">Can you guys stop this, or I am [b]revoking[/b] your accounts!</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 		<field name="ipaddr">admin.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">12</field>
 		<field name="user_id">6</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:28</field>
 		<field name="subject">Comment by phil</field>
 		<field name="comment">Love this picture!</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 		<field name="ipaddr">phil.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">13</field>
 		<field name="user_id">4</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:28</field>
 		<field name="subject">Comment by paul</field>
 		<field name="comment">Can't [i]you[/i] [b]see[/b] it isn't even [u]sharp[/u] on the right side, Phil? :mrgreen:</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 		<field name="ipaddr">paul.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">14</field>
 		<field name="user_id">1</field>
-		<field name="comment_date">2014-05-30 22:27:30</field>
+		<field name="comment_date">2015-06-17 11:26:28</field>
 		<field name="subject">Comment by admin</field>
 		<field name="comment">Really, I am going to [b]revoke[/b] your accounts! :mad:</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 		<field name="ipaddr">admin.zoph.org</field>
 	</row>
 	</table_data>
@@ -533,7 +533,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
@@ -541,7 +541,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
@@ -549,7 +549,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
@@ -557,7 +557,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
@@ -565,7 +565,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
@@ -573,7 +573,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
@@ -581,7 +581,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_groups">
@@ -610,47 +610,47 @@
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">2</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">5</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">7</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">9</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
 		<field name="user_id">8</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
 		<field name="user_id">4</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">3</field>
 		<field name="user_id">6</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
 		<field name="user_id">2</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
 		<field name="user_id">3</field>
-		<field name="changedate">2014-05-30 20:27:29</field>
+		<field name="changedate">2015-06-17 09:26:25</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_pages">
@@ -1184,7 +1184,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">8</field>
 		<field name="ipaddress">brian.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 	</row>
 	<row>
 		<field name="rating_id">2</field>
@@ -1192,7 +1192,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">freddie.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 	</row>
 	<row>
 		<field name="rating_id">3</field>
@@ -1200,7 +1200,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">8</field>
 		<field name="ipaddress">roger.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 	</row>
 	<row>
 		<field name="rating_id">4</field>
@@ -1208,7 +1208,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">johnd.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 	</row>
 	<row>
 		<field name="rating_id">5</field>
@@ -1216,7 +1216,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">5</field>
 		<field name="ipaddress">brian.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 	</row>
 	<row>
 		<field name="rating_id">6</field>
@@ -1224,7 +1224,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">3</field>
 		<field name="ipaddress">freddie.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 	</row>
 	<row>
 		<field name="rating_id">7</field>
@@ -1232,7 +1232,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">6</field>
 		<field name="ipaddress">roger.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 	</row>
 	<row>
 		<field name="rating_id">8</field>
@@ -1240,7 +1240,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">3</field>
 		<field name="ipaddress">johnd.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:27</field>
 	</row>
 	<row>
 		<field name="rating_id">9</field>
@@ -1248,7 +1248,7 @@
 		<field name="photo_id">3</field>
 		<field name="rating">5</field>
 		<field name="ipaddress">jimi.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	<row>
 		<field name="rating_id">10</field>
@@ -1256,7 +1256,7 @@
 		<field name="photo_id">4</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">paul.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	<row>
 		<field name="rating_id">11</field>
@@ -1264,7 +1264,7 @@
 		<field name="photo_id">4</field>
 		<field name="rating">6</field>
 		<field name="ipaddress">johnl.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	<row>
 		<field name="rating_id">12</field>
@@ -1272,7 +1272,7 @@
 		<field name="photo_id">5</field>
 		<field name="rating">10</field>
 		<field name="ipaddress">phil.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	<row>
 		<field name="rating_id">13</field>
@@ -1280,7 +1280,7 @@
 		<field name="photo_id">5</field>
 		<field name="rating">9</field>
 		<field name="ipaddress">jimi.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	<row>
 		<field name="rating_id">14</field>
@@ -1288,7 +1288,7 @@
 		<field name="photo_id">6</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">jimi.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	<row>
 		<field name="rating_id">15</field>
@@ -1296,7 +1296,7 @@
 		<field name="photo_id">6</field>
 		<field name="rating">5</field>
 		<field name="ipaddress">brian.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	<row>
 		<field name="rating_id">16</field>
@@ -1304,7 +1304,7 @@
 		<field name="photo_id">8</field>
 		<field name="rating">9</field>
 		<field name="ipaddress">paul.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	<row>
 		<field name="rating_id">17</field>
@@ -1312,7 +1312,7 @@
 		<field name="photo_id">8</field>
 		<field name="rating">3</field>
 		<field name="ipaddress">phil.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	<row>
 		<field name="rating_id">18</field>
@@ -1320,7 +1320,7 @@
 		<field name="photo_id">10</field>
 		<field name="rating">10</field>
 		<field name="ipaddress">phil.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	<row>
 		<field name="rating_id">19</field>
@@ -1328,7 +1328,7 @@
 		<field name="photo_id">10</field>
 		<field name="rating">1</field>
 		<field name="ipaddress">paul.zoph.org</field>
-		<field name="timestamp">2014-05-30 20:27:30</field>
+		<field name="timestamp">2015-06-17 09:26:28</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_photo_relations">
@@ -1376,7 +1376,7 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">28704</field>
+		<field name="size">28732</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">2</field>
 		<field name="location_id">3</field>
@@ -1399,10 +1399,10 @@
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
 		<field name="timestamp">2013-12-31 23:01:00</field>
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">52.250000</field>
+		<field name="lon">5.750000</field>
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">d3877e208ec99c0b0ad00d6d3efab444fad7e577</field>
+		<field name="hash">1c52decf9f59d43da618b757dee9afb5cfdd5b28</field>
 	</row>
 	<row>
 		<field name="photo_id">2</field>
@@ -1410,7 +1410,7 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">22958</field>
+		<field name="size">22949</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">2</field>
 		<field name="location_id">4</field>
@@ -1433,10 +1433,10 @@
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
 		<field name="timestamp">2014-01-01 23:01:00</field>
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">51.922501</field>
+		<field name="lon">4.479170</field>
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">87abd4f59a7a8d664ad0601c584aaf730fa116ee</field>
+		<field name="hash">5f7c25da127cc6ca3f9f23e93538c7076edd7a57</field>
 	</row>
 	<row>
 		<field name="photo_id">3</field>
@@ -1444,7 +1444,7 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">19456</field>
+		<field name="size">19459</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">2</field>
 		<field name="location_id">4</field>
@@ -1467,10 +1467,10 @@
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
 		<field name="timestamp">2014-01-02 23:01:00</field>
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">51.922501</field>
+		<field name="lon">4.479170</field>
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">b357699eb485d193043974426e82ff6efd946aab</field>
+		<field name="hash">6e1538a8ee2df86be7101f55a9e60a3384b7c545</field>
 	</row>
 	<row>
 		<field name="photo_id">4</field>
@@ -1478,7 +1478,7 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">24969</field>
+		<field name="size">24977</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">3</field>
 		<field name="location_id">5</field>
@@ -1501,10 +1501,10 @@
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
 		<field name="timestamp">2014-01-03 23:01:00</field>
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">52.374031</field>
+		<field name="lon">4.889690</field>
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">2c893b9bd8cb6253a81dec1cd6daf43ed6ac0019</field>
+		<field name="hash">0dfae93cebb4a00629d72558907ff883f181fb2a</field>
 	</row>
 	<row>
 		<field name="photo_id">5</field>
@@ -1512,7 +1512,7 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">20944</field>
+		<field name="size">20938</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">3</field>
 		<field name="location_id">5</field>
@@ -1535,10 +1535,10 @@
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
 		<field name="timestamp">2014-01-04 23:01:00</field>
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">52.374031</field>
+		<field name="lon">4.889690</field>
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">ed499e96250231925867acda9485d8d6aca36284</field>
+		<field name="hash">d29db344f854e34101dd1e04b56323d3e8124533</field>
 	</row>
 	<row>
 		<field name="photo_id">6</field>
@@ -1569,10 +1569,10 @@
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
 		<field name="timestamp">2014-01-05 23:01:00</field>
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">51.500000</field>
+		<field name="lon">10.500000</field>
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">a4dc1a4769ad5b879f649d7cfd4638518e2f0a74</field>
+		<field name="hash">3aa092c18f46afd9f58c40397b40401a08e7885c</field>
 	</row>
 	<row>
 		<field name="photo_id">7</field>
@@ -1580,7 +1580,7 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">17581</field>
+		<field name="size">17575</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">3</field>
 		<field name="location_id">7</field>
@@ -1603,10 +1603,10 @@
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
 		<field name="timestamp">2014-01-09 23:05:00</field>
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">52.524368</field>
+		<field name="lon">13.410530</field>
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">7570ad75f71c8f2168bc8bc1065d0c7a79139573</field>
+		<field name="hash">e2f14b5f7dd442032106e9a9af8cd7338ce3ee9d</field>
 	</row>
 	<row>
 		<field name="photo_id">8</field>
@@ -1614,7 +1614,7 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">13096</field>
+		<field name="size">13100</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">4</field>
 		<field name="location_id">10</field>
@@ -1637,10 +1637,10 @@
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
 		<field name="timestamp">2014-01-09 23:04:00</field>
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">43.700111</field>
+		<field name="lon">-79.416298</field>
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">7774ada1d8f90d251e2eff398e2366a2946981f9</field>
+		<field name="hash">331f518a100e1432de50a47d97e10fd18e8f4091</field>
 	</row>
 	<row>
 		<field name="photo_id">9</field>
@@ -1648,7 +1648,7 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">13972</field>
+		<field name="size">13947</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">5</field>
 		<field name="location_id">13</field>
@@ -1671,10 +1671,10 @@
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
 		<field name="timestamp">2014-01-09 23:03:00</field>
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">40.714272</field>
+		<field name="lon">-74.005966</field>
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">fa956167a30f3ec77c7a3fa2d7a0717054f892e1</field>
+		<field name="hash">8784a3a7a42a841dfac452daf720a12559aaf9b9</field>
 	</row>
 	<row>
 		<field name="photo_id">10</field>
@@ -1682,7 +1682,7 @@
 		<field name="path" xsi:nil="true" />
 		<field name="width">600</field>
 		<field name="height">400</field>
-		<field name="size">23106</field>
+		<field name="size">23093</field>
 		<field name="title" xsi:nil="true" />
 		<field name="photographer_id">6</field>
 		<field name="location_id">14</field>
@@ -1705,10 +1705,78 @@
 		<field name="ccd_width" xsi:nil="true" />
 		<field name="comment" xsi:nil="true" />
 		<field name="timestamp">2014-01-09 23:02:00</field>
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">38.895111</field>
+		<field name="lon">-77.036369</field>
 		<field name="mapzoom" xsi:nil="true" />
-		<field name="hash">db76b6a2ec50d469616fd0d76bd22c642761e56b</field>
+		<field name="hash">32fc138d6167c9763f2c27a4a0d7a443c7eb19a1</field>
+	</row>
+	<row>
+		<field name="photo_id">11</field>
+		<field name="name">TEST_0011.JPG</field>
+		<field name="path" xsi:nil="true" />
+		<field name="width">600</field>
+		<field name="height">400</field>
+		<field name="size">1098</field>
+		<field name="title" xsi:nil="true" />
+		<field name="photographer_id">7</field>
+		<field name="location_id">18</field>
+		<field name="view" xsi:nil="true" />
+		<field name="description" xsi:nil="true" />
+		<field name="date">2015-06-17</field>
+		<field name="time">00:01:00</field>
+		<field name="time_corr">0</field>
+		<field name="camera_make" xsi:nil="true" />
+		<field name="camera_model" xsi:nil="true" />
+		<field name="flash_used" xsi:nil="true" />
+		<field name="focal_length" xsi:nil="true" />
+		<field name="exposure" xsi:nil="true" />
+		<field name="compression" xsi:nil="true" />
+		<field name="aperture" xsi:nil="true" />
+		<field name="level">1</field>
+		<field name="iso_equiv" xsi:nil="true" />
+		<field name="metering_mode" xsi:nil="true" />
+		<field name="focus_dist" xsi:nil="true" />
+		<field name="ccd_width" xsi:nil="true" />
+		<field name="comment" xsi:nil="true" />
+		<field name="timestamp">2015-06-16 22:01:00</field>
+		<field name="lat">-25.000000</field>
+		<field name="lon">135.000000</field>
+		<field name="mapzoom" xsi:nil="true" />
+		<field name="hash">3d7ee2b16b3290060c314cf3ad6abb8833882244</field>
+	</row>
+	<row>
+		<field name="photo_id">12</field>
+		<field name="name">TEST_0012.JPG</field>
+		<field name="path" xsi:nil="true" />
+		<field name="width">600</field>
+		<field name="height">400</field>
+		<field name="size">1098</field>
+		<field name="title" xsi:nil="true" />
+		<field name="photographer_id">7</field>
+		<field name="location_id">18</field>
+		<field name="view" xsi:nil="true" />
+		<field name="description" xsi:nil="true" />
+		<field name="date">2015-06-17</field>
+		<field name="time">00:02:00</field>
+		<field name="time_corr">0</field>
+		<field name="camera_make" xsi:nil="true" />
+		<field name="camera_model" xsi:nil="true" />
+		<field name="flash_used" xsi:nil="true" />
+		<field name="focal_length" xsi:nil="true" />
+		<field name="exposure" xsi:nil="true" />
+		<field name="compression" xsi:nil="true" />
+		<field name="aperture" xsi:nil="true" />
+		<field name="level">1</field>
+		<field name="iso_equiv" xsi:nil="true" />
+		<field name="metering_mode" xsi:nil="true" />
+		<field name="focus_dist" xsi:nil="true" />
+		<field name="ccd_width" xsi:nil="true" />
+		<field name="comment" xsi:nil="true" />
+		<field name="timestamp">2015-06-16 22:02:00</field>
+		<field name="lat">-25.000000</field>
+		<field name="lon">135.000000</field>
+		<field name="mapzoom" xsi:nil="true" />
+		<field name="hash">3d7ee2b16b3290060c314cf3ad6abb8833882244</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_places">
@@ -1749,8 +1817,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">48.690960</field>
+		<field name="lon">9.140620</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1770,8 +1838,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">52.250000</field>
+		<field name="lon">5.750000</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1791,8 +1859,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">51.922501</field>
+		<field name="lon">4.479170</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1812,8 +1880,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">52.374031</field>
+		<field name="lon">4.889690</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1833,8 +1901,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">51.500000</field>
+		<field name="lon">10.500000</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1854,8 +1922,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">52.524368</field>
+		<field name="lon">13.410530</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1875,8 +1943,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">6.073230</field>
+		<field name="lon">-100.546883</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1896,8 +1964,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">60.108669</field>
+		<field name="lon">-113.642578</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1917,8 +1985,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">43.700111</field>
+		<field name="lon">-79.416298</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1938,8 +2006,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">39.759998</field>
+		<field name="lon">-98.500000</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1959,8 +2027,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">43.000351</field>
+		<field name="lon">-75.499901</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -1980,8 +2048,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">40.714272</field>
+		<field name="lon">-74.005966</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -2001,8 +2069,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">38.917061</field>
+		<field name="lon">-77.000252</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -2022,8 +2090,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">38.895111</field>
+		<field name="lon">-77.036369</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -2043,8 +2111,8 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">47.500118</field>
+		<field name="lon">-120.501472</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>
@@ -2064,8 +2132,29 @@
 		<field name="coverphoto" xsi:nil="true" />
 		<field name="pageset" xsi:nil="true" />
 		<field name="notes" xsi:nil="true" />
-		<field name="lat" xsi:nil="true" />
-		<field name="lon" xsi:nil="true" />
+		<field name="lat">47.606209</field>
+		<field name="lon">-122.332069</field>
+		<field name="mapzoom" xsi:nil="true" />
+		<field name="timezone" xsi:nil="true" />
+	</row>
+	<row>
+		<field name="place_id">18</field>
+		<field name="parent_place_id">1</field>
+		<field name="contact_type">0</field>
+		<field name="title">Australia</field>
+		<field name="address" xsi:nil="true" />
+		<field name="address2" xsi:nil="true" />
+		<field name="city" xsi:nil="true" />
+		<field name="state" xsi:nil="true" />
+		<field name="zip" xsi:nil="true" />
+		<field name="country" xsi:nil="true" />
+		<field name="url" xsi:nil="true" />
+		<field name="urldesc" xsi:nil="true" />
+		<field name="coverphoto" xsi:nil="true" />
+		<field name="pageset" xsi:nil="true" />
+		<field name="notes" xsi:nil="true" />
+		<field name="lat">-25.000000</field>
+		<field name="lon">135.000000</field>
 		<field name="mapzoom" xsi:nil="true" />
 		<field name="timezone" xsi:nil="true" />
 	</row>

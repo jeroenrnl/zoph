@@ -41,7 +41,6 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         $actual->loadXML($object::getXML($search)->saveXML());
         $expected=new DOMDocument();
         $expected->loadXML($xml);
-
         $this->assertEqualXMLStructure($expected->firstChild, $actual->firstChild, false);
 
     }
@@ -188,6 +187,8 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         $xml.="  </place>\n";
         $xml.="  <place><key/><title/>\n"; // root = 1
         $xml.="    <places>\n";
+        $xml.="      <place><key/><title/>\n"; // 18 
+        $xml.="      </place>\n";
         $xml.="      <place><key/><title/>\n"; // 2
         $xml.="        <places>\n";
         $xml.="          <place><key/><title/>\n"; // 6

@@ -103,9 +103,13 @@ class createTestData {
         foreach ($locations as $loc) {
             $parent=$loc[0];
             $name=$loc[1];
+            $lat=$loc[2];
+            $lon=$loc[3];
             $place=new place();
             $place->set("title",$name);
             $place->set("parent_place_id", $parent);
+            $place->set("lat", $lat);
+            $place->set("lon", $lon);
             $place->insert();
         }
     }
@@ -262,6 +266,8 @@ class createTestData {
                 $photo->set("date", $photoData[$id][0]);
                 $photo->set("time", $photoData[$id][1]);
                 $photo->set("timestamp", $photoData[$id][2]);
+                $photo->set("lat", $photoData[$id][3]);
+                $photo->set("lon", $photoData[$id][4]);
                 $photo->update();
             }
 

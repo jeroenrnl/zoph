@@ -635,14 +635,18 @@ class photoTest extends ZophDataBaseTestCase {
             4   => 51.6,
             5   => 51.5
         );
-
+        
+        // Set temporary testdata for time and lat/lon
         $photos=array();
+        
         for($i=1; $i<=5; $i++) {
             $photo=new photo($i);
             $photo->lookup();
 
             $photo->set("date", "2013-01-01");
             $photo->set("time", "00:" . $i . "0:00");
+            $photo->set("lat", null);
+            $photo->set("lon", null);
 
             $photo->update();
             $photos[]=$photo;
@@ -849,11 +853,11 @@ class photoTest extends ZophDataBaseTestCase {
 
     public function getImages() {
         return array(
-            array(11, "FILE_0001.JPG", "blue", "yellow", 
+            array(13, "FILE_0001.JPG", "blue", "yellow", 
                 array("DateTimeOriginal" => "2013-01-01 13:00:00")),
-            array(11, "FILE_0002.JPG", "red", "yellow",
+            array(13, "FILE_0002.JPG", "red", "yellow",
                 array("DateTimeOriginal" => "2012-12-31 15:00:00")),
-            array(11, "FILE_0003.JPG", "yellow", "blue", 
+            array(13, "FILE_0003.JPG", "yellow", "blue", 
                 array("DateTimeOriginal" => "2013-01-01 14:00:00"))
          );
     }
