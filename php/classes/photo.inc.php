@@ -1177,6 +1177,7 @@ class photo extends zophTable {
             $lat=(float) $lat;
             $lon=(float) $lon;
 
+            $lim="";
             if ($entity=="miles") {
                 $distance=(float) $distance * 1.609344;
             }

@@ -369,7 +369,7 @@ class photoTest extends ZophDataBaseTestCase {
 
     /**
      * Test adding comments
-     * @dataProvider getComments
+     * @dataProvider getCommentsToAdd
      */
     public function testAddComment($photo_id, $comment, $user_id) {
         $obj = new comment();
@@ -390,6 +390,24 @@ class photoTest extends ZophDataBaseTestCase {
         
         $this->assertInstanceOf("comment", $obj);
         $this->assertEquals($obj->get_photo()->getId(), $photo->getId());
+    }
+
+    /**
+     * Test getting comments
+     * @dataProvider getComments
+     */
+    public function testGetComments($photo_id, $expected) {
+        $photo=new photo($photo_id);
+
+        $comments=$photo->getComments();
+        $actual=array();
+        foreach($comments as $comment) {
+            $this->assertInstanceOf("comment", $comment);
+            $this->assertEquals($comment->get_photo()->getId(), $photo->getId());
+            $actual[]=$comment->getId();
+        }
+
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -595,6 +613,21 @@ class photoTest extends ZophDataBaseTestCase {
             $this->assertFileExists(conf::get("path.images") . "/" . $date . "/" . $name);
         }
         unlink(conf::get("path.images") . "/" . $date . "/" . $name);        
+    }
+
+    /**
+     * Test photo::getNear() function
+     * @dataProvider getNearData
+     */
+
+    public function testGetNear($photo, $distance, $limit, $entity, $exp_count) {
+        $photo=new photo($photo);
+        $photo->lookup();
+
+        $near=$photo->getNear($distance, $limit, $entity);
+
+        $this->assertEquals($exp_count, sizeof($near));
+
     }
 
     /**
@@ -889,13 +922,21 @@ class photoTest extends ZophDataBaseTestCase {
          );
     }
 
-    public function getComments() {
+    public function getCommentsToAdd() {
         return array(
             array(1, "Test Comment", 3),
             array(2, "Test comment [b]with bold[/b]", 4),
             array(3, "Test comment with [i]unclosed tag",5),
             array(4, "Test comment with <b>html</b>", 6)
          );
+    }
+
+    public function getComments() {
+        return array(
+            array(1, array(1,2,3)),
+            array(3, array()),
+            array(8, array(9,10,11))
+        );
     }
 
     public function getAlbums() {
@@ -925,4 +966,17 @@ class photoTest extends ZophDataBaseTestCase {
             array("convert")
         );
     }
+
+    public function getNearData() {
+        // $photo, $distance, $limit, $entity, $exp_count
+        return array(
+            array(2, 10, null, null, 2),
+            array(2, 100, null, null, 5),
+            array(7, 500, null, "miles", 7),
+            array(11, 2000, null, "km", 2),
+            array(8, 15000, 2, "km", 2)
+        );
+    }
+
+
 }
