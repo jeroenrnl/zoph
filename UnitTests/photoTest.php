@@ -864,6 +864,48 @@ class photoTest extends ZophDataBaseTestCase {
         }
     }
 
+    /**
+     * Test getByName function
+     * @dataProvider getGetByNameData
+     */
+    public function testGetByName($file, $path, $exp_id) {
+        // Set path, so lookup by path can be tested
+        if($file=="TEST_0003.JPG") {
+            $photo=new photo(3);
+            $photo->lookup();
+            $photo->set("path", "dir003/dir003");
+            $photo->update();
+            unset($photo);
+        }
+        $photos=photo::getByName($file, $path);
+        $this->assertEquals($exp_id, $photos[0]->getId());
+    }
+
+
+    /**
+     * Test hash functions
+     * @dataProvider getHashData
+     */
+    public function testGetFromHash($hash, $type, $exp_id) {
+        conf::set("share.salt.full", "TestSaltFull");
+        conf::set("share.salt.mid", "TestSaltMid");
+
+        if($type=="full") {
+            $hash=sha1("TestSaltFull" . $hash);
+        } else if ($type="mid") {
+            $hash=sha1("TestSaltMid" . $hash);
+        }
+
+        $photo=photo::getFromHash($hash, $type);
+
+        $this->assertEquals($exp_id, $photo->getId());
+        $this->assertEquals($photo->getHash($type), $hash);
+    }
+
+    public function testGetTotalSize() {
+        $this->assertEquals("204459", photo::getTotalSize());
+    }
+
     //================== DATA PROVIDERS =======================
 
     public function getLocation() {
@@ -978,5 +1020,23 @@ class photoTest extends ZophDataBaseTestCase {
         );
     }
 
+    public function getGetByNameData() {
+        // $file, $path, $exp_id
+        return array(
+            array("TEST_0001.JPG", null, 1),
+            array("TEST_0002.JPG", null, 2),
+            array("TEST_0003.JPG", "dir003/dir003", 3)
+        );
+    }
+
+    public function getHashData() {
+        return array(
+            array("1c52decf9f59d43da618b757dee9afb5cfdd5b28", "file", 1),
+            array("0dfae93cebb4a00629d72558907ff883f181fb2a", "full", 4),
+            array("e2f14b5f7dd442032106e9a9af8cd7338ce3ee9d", "mid", 7)
+        );
+    }
+
+        
 
 }
