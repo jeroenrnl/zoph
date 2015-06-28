@@ -103,36 +103,31 @@ class photo extends zophTable {
      */
     public function lookup() {
         $user=user::getCurrent();
-        if (!$this->get("photo_id")) { 
+        if (!$this->getId()) { 
             return; 
         }
-        if ($user->is_admin()) {
-            $sql = "SELECT * FROM " . DB_PREFIX . "photos " .
-                "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "'";
-        } else {
-            $sql =
-                "select p.* from " .
-                DB_PREFIX . "photos as p JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON p.photo_id = pa.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE p.photo_id = '" . escape_string($this->get("photo_id")) . "'" .
-                " AND gu.user_id = '" . escape_string($user->get("user_id")) . "'" .
-                " AND gp.access_level >= p.level " .
-                "LIMIT 0, 1";
+        $qry = new select(array("p" => "photos"));
+
+        $distinct=true;
+        $qry->addFields(array("*"), $distinct);
+
+        $where=new clause("p.photo_id=:photoid");
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+
+        if (!$user->is_admin()) {
+            list($qry,$where)=static::expandQueryForUser($qry, $where);
         }
 
-        $success = $this->lookupFromSQL($sql);
+        $qry->where($where);
 
-        if ($success) {
+        $photo = $this->lookupFromSQL($qry);
+
+        if ($photo) {
             $this->lookupPhotographer();
             $this->lookupLocation();
         }
 
-        return $success;
+        return $photo;
     }
 
     /**
@@ -262,10 +257,11 @@ class photo extends zophTable {
      * @return int position
      */
     public function getLastPersonPos() {
-        $sql =
-            "SELECT max(position) AS pos FROM " . DB_PREFIX . "photo_people " .
-            "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "';";
-        $result=fetch_array(query($sql));
+        $qry=new select(array("pp" => "photo_people"));
+        $qry->addFunction(array("pos" => "max(position)"));
+        $qry->where(new clause("photo_id=:photoid"));
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $result=fetch_array(query($qry));
         return (int) $result["pos"];
     }
 
@@ -292,29 +288,22 @@ class photo extends zophTable {
     public function getAlbums() {
         $user=user::getCurrent();
 
-        if ($user->is_admin()) {
-            $sql = "SELECT al.album_id, al.parent_album_id, al.album FROM " .
-                DB_PREFIX . "photo_albums AS pa, " .
-                DB_PREFIX . "albums AS al " .
-                "WHERE pa.photo_id = '" . (int) $this->getId() . "'" .
-                " AND pa.album_id = al.album_id ORDER BY al.album";
-        } else {
-            $sql = "SELECT al.album_id, al.parent_album_id, al.album FROM " .
-                DB_PREFIX . "albums AS al JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON al.album_id = pa.album_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE pa.photo_id = '" . (int) $this->getId() . "'" .
-                " AND gu.user_id = '" . (int) $user->getId() . "' " .
-                " AND gp.access_level >= " .
-                (int) $this->get("level") .
-                " ORDER BY al.album";
+        $qry=new select(array("a" => "albums"));
+        $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
+        $qry->addFields(array("album_id", "parent_album_id", "album"));
+
+        $where=new clause("pa.photo_id=:photoid");
+
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $qry->addOrder("a.album");
+
+        if (!$user->is_admin()) {
+            list($qry,$where)=static::expandQueryForUser($qry, $where);
         }
 
-        return album::getRecordsFromQuery($sql);
+        $qry->where($where);
+
+        return album::getRecordsFromQuery($qry);
     }
 
     /**
@@ -322,13 +311,19 @@ class photo extends zophTable {
      * @return array of categories
      */
     public function getCategories() {
-        $sql = "SELECT cat.category_id, cat.parent_category_id, cat.category FROM " .
-            DB_PREFIX . "photo_categories AS pc, " .
-            DB_PREFIX . "categories AS cat " .
-            "WHERE pc.photo_id = '" . (int) $this->getId() . "'" .
-            " AND pc.category_id = cat.category_id ORDER BY cat.category";
+        $qry=new select(array("c" => "categories"));
+        $qry->join(array("pc" => "photo_categories"), "c.category_id = pc.category_id");
+        $distinct=true;
+        $qry->addFields(array("category_id"), $distinct);
+        $qry->addFields(array("parent_category_id", "category"));
 
-        return category::getRecordsFromQuery($sql);
+        $where=new clause("pc.photo_id=:photoid");
+        
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $qry->addOrder("c.category");
+        $qry->where($where);
+
+        return category::getRecordsFromQuery($qry);
     }
 
     /**
