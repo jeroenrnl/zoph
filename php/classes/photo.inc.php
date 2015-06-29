@@ -103,8 +103,8 @@ class photo extends zophTable {
      */
     public function lookup() {
         $user=user::getCurrent();
-        if (!$this->getId()) { 
-            return; 
+        if (!$this->getId()) {
+            return;
         }
         $qry = new select(array("p" => "photos"));
 
@@ -318,7 +318,7 @@ class photo extends zophTable {
         $qry->addFields(array("parent_category_id", "category"));
 
         $where=new clause("pc.photo_id=:photoid");
-        
+
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
         $qry->addOrder("c.category");
         $qry->where($where);
@@ -330,15 +330,20 @@ class photo extends zophTable {
      * Get a list of people on this photo
      * @return array of people
      */
-    function getPeople() {
-        $sql = "SELECT p.person_id, p.last_name, " .
-            "p.first_name, p.called FROM " .
-            DB_PREFIX . "photo_people AS pp, " .
-            DB_PREFIX . "people AS p " .
-            "WHERE pp.photo_id = '" . (int) $this->getId() . "'" .
-            " AND pp.person_id = p.person_id ORDER BY pp.position";
+    public function getPeople() {
+        $qry=new select(array("p" => "people"));
+        $qry->join(array("pp" => "photo_people"), "pp.person_id = p.person_id");
+        $distinct=true;
+        $qry->addFields(array("person_id"), $distinct);
+        $qry->addFields(array("last_name", "first_name", "called"));
 
-        return person::getRecordsFromQuery($sql);
+        $where=new clause("pp.photo_id=:photoid");
+
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $qry->addOrder("pp.position");
+        $qry->where($where);
+
+        return person::getRecordsFromQuery($qry);
     }
 
     /**
@@ -1015,10 +1020,16 @@ class photo extends zophTable {
      * @return array of comments
      */
     public function getComments() {
-        $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .
-            " photo_id = " .  $this->get("photo_id");
-        $comments=comment::getRecordsFromQuery($sql);
-        return $comments;
+        $qry=new select(array("pcom" => "photo_comments"));
+        $distinct=true;
+        $qry->addFields(array("comment_id"), $distinct);
+
+        $where=new clause("pcom.photo_id=:photoid");
+
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $qry->where($where);
+
+        return comment::getRecordsFromQuery($qry);
     }
 
     /**

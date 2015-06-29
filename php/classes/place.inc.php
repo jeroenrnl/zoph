@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -42,7 +42,7 @@ class place extends zophTreeTable implements Organizer {
     protected static $primary_keys=array("place_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("title");
-    /** @var bool keep keys with insert. In most cases the keys are set 
+    /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -56,7 +56,7 @@ class place extends zophTreeTable implements Organizer {
         $photo->setLocation($this);
     }
 
-    
+
     /**
      * Remove a photo from this place
      * @param photo photo to remove
@@ -77,7 +77,7 @@ class place extends zophTreeTable implements Organizer {
         unset($this->fields["timezone_id"]);
         parent::insert();
     }
-    
+
     /**
      * Update existing place with new data
      */
@@ -107,7 +107,7 @@ class place extends zophTreeTable implements Organizer {
         $sql="update " . DB_PREFIX . "people set work_id=null where " .
             "work_id=" .  $id;
         query($sql, "Could not remove references:");
-        
+
         parent::delete();
     }
 
@@ -129,18 +129,18 @@ class place extends zophTreeTable implements Organizer {
         } else if ($order=="name") {
             $order=" ORDER BY name ";
         }
-        
+
         $sql =
             "SELECT *, title as name " .
             $order_fields . " FROM " .
             DB_PREFIX . "places as pl " .
             "WHERE pl.parent_place_id=" . (int) $this->getId() .
             " GROUP BY pl.place_id " .
-            $order; 
+            $order;
         $this->children=self::getRecordsFromQuery($sql);
         return $this->children;
-    }    
-   
+    }
+
     /**
      * Get this place's children, taking into account permissions for a specific user
      * @param string sort order
@@ -148,7 +148,7 @@ class place extends zophTreeTable implements Organizer {
     public function getChildrenForUser($order=null) {
         return remove_empty($this->getChildren($order));
     }
-    
+
     /**
      * Converts timezone id for this place into a named timezone
      */
@@ -169,7 +169,7 @@ class place extends zophTreeTable implements Organizer {
      * @return string name of this place
      */
     public function getName() {
-        return $this->get("title"); 
+        return $this->get("title");
     }
 
     /**
@@ -185,16 +185,16 @@ class place extends zophTreeTable implements Organizer {
         }
 
         $city="";
-        if ($this->get("city")) { 
+        if ($this->get("city")) {
             $city=e($this->get("city"));
-            if ($this->get("state")) { 
+            if ($this->get("state")) {
                 $city .= ", " . e($this->get("state"));
             }
-        } else if ($this->get("state")) { 
-            $city .= e($this->get("state")); 
+        } else if ($this->get("state")) {
+            $city .= e($this->get("state"));
         }
-        if ($this->get("zip")) { 
-            $city.=" " . e($this->get("zip")); 
+        if ($this->get("zip")) {
+            $city.=" " . e($this->get("zip"));
         }
         $address[]=$city;
 
@@ -242,7 +242,7 @@ class place extends zophTreeTable implements Organizer {
             translate("notes") => $this->get("notes"),
             translate("timezone") => $this->get("timezone"));
     }
-    
+
     /**
      * Get photos in this place
      */
@@ -394,7 +394,7 @@ class place extends zophTreeTable implements Organizer {
             $coverphoto->lookup();
             return $coverphoto;
         } else if (!$children) {
-            // No photos found in this place... let's look again, but now 
+            // No photos found in this place... let's look again, but now
             // also in sub-places...
             return $this->getAutoCover($autocover, true);
         }
@@ -428,8 +428,8 @@ class place extends zophTreeTable implements Organizer {
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
+                "ROUND(MAX(ar.rating),1) AS highest, " .
+                "ROUND(AVG(ar.rating),2) AS average FROM " .
                 DB_PREFIX . "photos ph JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON ph.photo_id = ar.photo_id " .
@@ -445,15 +445,15 @@ class place extends zophTreeTable implements Organizer {
                 "MIN(ph.timestamp) AS first, " .
                 "MAX(ph.timestamp) AS last, " .
                 "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
+                "ROUND(MAX(ar.rating),1) AS highest, " .
+                "ROUND(AVG(ar.rating),2) AS average FROM " .
                 DB_PREFIX . "photos ph JOIN " .
                 DB_PREFIX . "view_photo_avg_rating ar" .
                 " ON ph.photo_id = ar.photo_id JOIN " .
                 DB_PREFIX . "photo_albums pa " .
                 "ON ph.photo_id=pa.photo_id LEFT JOIN " .
                 DB_PREFIX . "group_permissions gp " .
-                "ON pa.album_id=gp.album_id LEFT JOIN " . 
+                "ON pa.album_id=gp.album_id LEFT JOIN " .
                 DB_PREFIX . "groups_users gu " .
                 "ON gp.group_id = gu.group_id " .
                 "WHERE ph.level<gp.access_level AND " .
@@ -491,7 +491,7 @@ class place extends zophTreeTable implements Organizer {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         if($lat && $lon) {
-            return self::getPlacesNear((float) $lat, (float) $lon, 
+            return self::getPlacesNear((float) $lat, (float) $lon,
                 (float) $distance, (int) $limit, $entity);
         }
     }
@@ -505,9 +505,9 @@ class place extends zophTreeTable implements Organizer {
      * @param string entity: km|miles
      * @return array places
      */
-    public static function getPlacesNear($lat, $lon, $distance, 
-            $limit, $entity="km") { 
-            
+    public static function getPlacesNear($lat, $lon, $distance,
+            $limit, $entity="km") {
+
         // If lat and lon are not set, don't bother trying to find
         // near locations
         if($lat && $lon) {
@@ -523,11 +523,11 @@ class place extends zophTreeTable implements Organizer {
             $sql="select place_id, (6371 * acos(" .
                 "cos(radians(" . $lat . ")) * " .
                 "cos(radians(lat) ) * cos(radians(lon) - " .
-                "radians(" . $lon . ")) +" . 
+                "radians(" . $lon . ")) +" .
                 "sin(radians(" . $lat . ")) * " .
                 "sin(radians(lat)))) AS distance from " .
                 DB_PREFIX . "places " .
-                "having distance <= " . $distance . 
+                "having distance <= " . $distance .
                 " order by distance" . $lim;
 
             $near=self::getRecordsFromQuery($sql);
@@ -553,11 +553,11 @@ class place extends zophTreeTable implements Organizer {
         $html.=$cover;
         $count=$this->getPhotoCount();
         $totalcount=$this->getTotalPhotoCount();
-        $html.="<br><small>" . 
+        $html.="<br><small>" .
             e(sprintf(translate("There are %s photos"), $count) .
            " " . translate("in this place")) . "<br>";
         if($count!=$totalcount) {
-            $html.=e(sprintf(translate("There are %s photos"),$totalcount) . 
+            $html.=e(sprintf(translate("There are %s photos"),$totalcount) .
             " " . translate("in this place") . " " . translate("or its children")) . "<br>";
         }
         $html.="<\/small>";
@@ -636,8 +636,8 @@ class place extends zophTreeTable implements Organizer {
                 "ON pa.album_id = gp.album_id JOIN " .
                 DB_PREFIX . "groups_users as gu " .
                 "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . 
-                escape_string($user->get("user_id")) . 
+                "WHERE gu.user_id = '" .
+                escape_string($user->get("user_id")) .
                 "' AND gp.access_level >= ph.level " .
                 "GROUP BY plc.place_id " .
                 "ORDER BY count desc, plc.title, plc.city " .
@@ -647,7 +647,7 @@ class place extends zophTreeTable implements Organizer {
         return parent::getTopNfromSQL($sql);
 
     }
-    
+
     /**
      * Get count of places
      */
@@ -694,7 +694,7 @@ class place extends zophTreeTable implements Organizer {
                 "ON pa.album_id = gp.album_id JOIN " .
                 DB_PREFIX . "groups_users AS gu " .
                 "ON gp.group_id = gu.group_id " .
-                "where gu.user_id = '" . 
+                "where gu.user_id = '" .
                 escape_string($user->get("user_id")) .
                 "' AND gp.access_level >= ph.level " .
                 "ORDER BY plc.city, plc.title";

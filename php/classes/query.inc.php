@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -72,7 +72,7 @@ abstract class query {
     /**
      * Add one or more fields to a query
      * @param array list of fields [ "alias" => "field"]
-     * @return query 
+     * @return query
      */
     public function addFields(array $fields, $distinct=false) {
         $table=$this->table;
@@ -93,7 +93,7 @@ abstract class query {
             }
 
             $this->fields[]=$field;
-                
+
         }
     }
 
@@ -150,7 +150,7 @@ abstract class query {
             } else {
                 $params[]=$param;
             }
-        } 
+        }
         return $params;
     }
 
@@ -164,7 +164,7 @@ abstract class query {
         return $this;
     }
 
-    /** 
+    /**
      * Add ORDER BY clause to query
      * @param string order to add
      * @example $qry->addOrder("name DESC");
@@ -175,7 +175,7 @@ abstract class query {
         return $this;
     }
 
-    /** 
+    /**
      * Get ORDER BY for query
      * @return string ORDER clause
      */
@@ -187,11 +187,11 @@ abstract class query {
         return "";
     }
 
-    /** 
+    /**
      * Add LIMIT clause to query
      * Be warned that count and offset are reversed compared to how they appear
      * in the query!
-     * @param int count 
+     * @param int count
      * @param int offset
      * @example $qry->addLimit(1,3);
      * @return query return the query to enable chaining
@@ -202,7 +202,7 @@ abstract class query {
         return $this;
     }
 
-    /** 
+    /**
      * Get LIMIT clause for query
      * @return string LIMIT clause
      */
@@ -245,7 +245,7 @@ abstract class query {
         }
         $stmt->execute($values);
     }
-    
+
     /**
      * The __toString() magic function creates the query to be fed to the db
      * each inheritance of this class will have to implement it.
