@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -52,7 +52,7 @@ class select extends query {
         }
 
         $table=db::getPrefix() . $table;
-        
+
         if (!in_array($jointype, array("INNER", "LEFT", "RIGHT"))) {
             throw new DatabaseException("Unknown JOIN type");
         }
@@ -60,7 +60,7 @@ class select extends query {
         return $this;
     }
 
-    /** 
+    /**
      * Add GROUP BY clause to query
      * @param string GRPUP BY to add
      * @return query return the query to enable chaining
@@ -70,7 +70,7 @@ class select extends query {
         return $this;
     }
 
-    /** 
+    /**
      * Get GROUP BY for query
      * @return string GROUP clause
      */
@@ -86,7 +86,7 @@ class select extends query {
     /**
      * Execute query
      */
-    public function execute() { 
+    public function execute() {
         return db::query($this);
     }
 
@@ -116,10 +116,14 @@ class select extends query {
         if($this->clause instanceof clause) {
             $sql .= " WHERE " . $this->clause;
         }
-       
+
         $groupby=trim($this->getGroupBy());
         if(!empty($groupby)) {
             $sql .= " " . $groupby;
+        }
+
+        if($this->having instanceof clause) {
+            $sql .= " HAVING " . $this->having;
         }
 
         $order=trim($this->getOrder());

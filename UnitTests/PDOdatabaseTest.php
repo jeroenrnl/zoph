@@ -85,6 +85,48 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     }
 
     /**
+     * Test a SELECT query with a GROUP BY and HAVING clause
+     */
+    public function testQueryWithGroupBy() {
+        
+        $qry=new select("photos");
+        $qry->addGroupBy("album");
+        $having=new clause("album_id > :albid");
+        $qry->addParam(new param(":albid", 5, PDO::PARAM_INT));
+
+        $qry->having($having);
+
+        $sql=(string) $qry;
+        $exp_sql="SELECT * FROM zoph_photos GROUP BY album HAVING (album_id > :albid);";
+
+        $this->assertEquals($exp_sql, $sql);
+
+        unset($qry);
+        unset($clause);
+
+        $qry=new select("photos");
+        $qry->addGroupBy("album");
+        $where=new clause("photo_id > :photoid");
+        $having=new clause("album_id > :albid");
+        $qry->addParams(array(
+            new param(":photoid", 10, PDO::PARAM_INT),
+            new param(":albid", 5, PDO::PARAM_INT)
+        ));
+
+        $qry->where($where);
+        $qry->having($having);
+
+        $sql=(string) $qry;
+        $exp_sql="SELECT * FROM zoph_photos WHERE (photo_id > :photoid) GROUP BY album HAVING (album_id > :albid);";
+
+        $this->assertEquals($exp_sql, $sql);
+        
+        unset($qry);
+        unset($clause);
+
+    }
+
+    /**
      * Test a SELECT query with a JOIN clause
      */
     public function testQueryWithJoin() {

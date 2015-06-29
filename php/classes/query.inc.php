@@ -41,6 +41,8 @@ abstract class query {
     protected $params=null;
     /** @var string WHERE clause */
     protected $clause=null;
+    /** @var string HAVING clause */
+    protected $having=null;
     /** @var array ORDER clause */
     protected $order=array();
     /** @var array count for LIMIT clause */
@@ -161,6 +163,16 @@ abstract class query {
      */
     public function where(clause $clause) {
         $this->clause=$clause;
+        return $this;
+    }
+
+    /**
+     * Add a HAVING clause to the query
+     * @param clause HAVING clause
+     * @return query return the query to enable chaining
+     */
+    public function having(clause $clause) {
+        $this->having=$clause;
         return $this;
     }
 
