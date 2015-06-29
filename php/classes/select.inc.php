@@ -42,7 +42,7 @@ class select extends query {
      * @return query return the query to enable chaining
      */
     public function join($table, $on, $jointype="INNER") {
-        if(is_array($table)) {
+        if (is_array($table)) {
             $tbl=reset($table);
             $as=key($table);
             $table=$tbl . " AS " . $as;
@@ -76,7 +76,7 @@ class select extends query {
      */
     private function getGroupBy() {
         $groupby=$this->groupby;
-        if(is_array($groupby) && sizeof($groupby) > 0) {
+        if (is_array($groupby) && sizeof($groupby) > 0) {
             return " GROUP BY " . implode(", ", $groupby);
         }
         return "";
@@ -97,7 +97,7 @@ class select extends query {
     public function __toString() {
         $sql = "SELECT ";
 
-        if(is_array($this->fields)) {
+        if (is_array($this->fields)) {
             $sql.=implode(", ", $this->fields);
         } else {
             $sql.="*";
@@ -105,34 +105,34 @@ class select extends query {
 
         $sql .= " FROM " . $this->table;
 
-        if(isset($this->alias)) {
+        if (isset($this->alias)) {
             $sql.=" AS " . $this->alias;
         }
 
-        if(is_array($this->joins)) {
+        if (is_array($this->joins)) {
             $sql.=" " . implode(" ", $this->joins);
         }
 
-        if($this->clause instanceof clause) {
+        if ($this->clause instanceof clause) {
             $sql .= " WHERE " . $this->clause;
         }
 
         $groupby=trim($this->getGroupBy());
-        if(!empty($groupby)) {
+        if (!empty($groupby)) {
             $sql .= " " . $groupby;
         }
 
-        if($this->having instanceof clause) {
+        if ($this->having instanceof clause) {
             $sql .= " HAVING " . $this->having;
         }
 
         $order=trim($this->getOrder());
-        if(!empty($order)) {
+        if (!empty($order)) {
             $sql .= " " . $order;
         }
 
         $limit=trim($this->getLimit());
-        if(!empty($limit)) {
+        if (!empty($limit)) {
             $sql .= " " . $limit;
         }
 

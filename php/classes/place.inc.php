@@ -62,7 +62,7 @@ class place extends zophTreeTable implements Organizer {
      * @param photo photo to remove
      */
     public function removePhoto(photo $photo) {
-        if($photo->getLocation() == $this) {
+        if ($photo->getLocation() == $this) {
             $photo->unsetLocation();
         }
     }
@@ -71,7 +71,7 @@ class place extends zophTreeTable implements Organizer {
      * Insert place into database
      */
     public function insert() {
-        if($this->get("timezone_id")) {
+        if ($this->get("timezone_id")) {
             $this->TZidToTimezone();
         }
         unset($this->fields["timezone_id"]);
@@ -82,7 +82,7 @@ class place extends zophTreeTable implements Organizer {
      * Update existing place with new data
      */
     public function update() {
-        if($this->get("timezone_id")) {
+        if ($this->get("timezone_id")) {
             $this->TZidToTimezone();
         }
         unset($this->fields["timezone_id"]);
@@ -94,7 +94,7 @@ class place extends zophTreeTable implements Organizer {
      */
     public function delete() {
         $id=escape_string($this->get("place_id"));
-        if(!is_numeric($id)) {die("place_id is not numeric"); }
+        if (!is_numeric($id)) {die("place_id is not numeric"); }
 
         $sql="update " . DB_PREFIX . "photos set location_id=null where " .
             "location_id=" . $id;
@@ -119,11 +119,11 @@ class place extends zophTreeTable implements Organizer {
     public function getChildren($order=null) {
         $order_fields="";
 
-        if($order=="sortname") {
+        if ($order=="sortname") {
             #places do not have a sortname
             $order="name";
         }
-        if($order && $order!="name") {
+        if ($order && $order!="name") {
             $order_fields=get_sql_for_order($order);
             $order=" ORDER BY " . $order . ", name ";
         } else if ($order=="name") {
@@ -154,7 +154,7 @@ class place extends zophTreeTable implements Organizer {
      */
     private function TZidToTimezone() {
         $tzkey=$this->get("timezone_id");
-        if($tzkey>0) {
+        if ($tzkey>0) {
             $tzarray=TimeZone::getSelectArray();
             $tz=$tzarray[$tzkey];
             $this->set("timezone", $tz);
@@ -219,7 +219,7 @@ class place extends zophTreeTable implements Organizer {
             $html .= "<h2>" . e($this->get("title")) . "</h2>\n";
         }
         $html .= $this->getAddress();
-        if($this->get("url")) {
+        if ($this->get("url")) {
             $html .= "<br><br>\n";
             $html .= "<a href=\"" . e($this->get("url")) . "\">";
             $html .= e($this->get("urldesc")) . "</a>";
@@ -350,13 +350,13 @@ class place extends zophTreeTable implements Organizer {
     public function getAutoCover($autocover=null,$children=false) {
         $user=user::getCurrent();
         $coverphoto=$this->getCoverphoto();
-        if($coverphoto instanceof photo) {
+        if ($coverphoto instanceof photo) {
             return $coverphoto;
         }
 
         $order=self::getAutoCoverOrder($autocover);
 
-        if($children) {
+        if ($children) {
             $place_where=" WHERE p.location_id in (" . $this->getBranchIds() .")";
         } else {
             $place_where=" WHERE p.location_id =" .$this->get("place_id");
@@ -462,7 +462,7 @@ class place extends zophTreeTable implements Organizer {
                 " GROUP BY ph.location_id";
         }
         $result=query($sql);
-        if($result) {
+        if ($result) {
             return fetch_assoc($result);
         } else {
             return null;
@@ -474,7 +474,7 @@ class place extends zophTreeTable implements Organizer {
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
-        if(!isset($details)) {
+        if (!isset($details)) {
             $details=$this->getDetails();
         }
         $details["title"]=translate("In this place:", false);
@@ -490,7 +490,7 @@ class place extends zophTreeTable implements Organizer {
     public function getNear($distance, $limit=100, $entity="km") {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
-        if($lat && $lon) {
+        if ($lat && $lon) {
             return self::getPlacesNear((float) $lat, (float) $lon,
                 (float) $distance, (int) $limit, $entity);
         }
@@ -510,28 +510,30 @@ class place extends zophTreeTable implements Organizer {
 
         // If lat and lon are not set, don't bother trying to find
         // near locations
-        if($lat && $lon) {
-            $lat=(float) $lat;
-            $lon=(float) $lon;
-
-            if($entity=="miles") {
+        if ($lat && $lon) {
+            if ($entity=="miles") {
                 $distance=(float) $distance * 1.609344;
             }
-            if($limit) {
-                $lim=" limit 0,". (int) $limit;
-            }
-            $sql="select place_id, (6371 * acos(" .
-                "cos(radians(" . $lat . ")) * " .
-                "cos(radians(lat) ) * cos(radians(lon) - " .
-                "radians(" . $lon . ")) +" .
-                "sin(radians(" . $lat . ")) * " .
-                "sin(radians(lat)))) AS distance from " .
-                DB_PREFIX . "places " .
-                "having distance <= " . $distance .
-                " order by distance" . $lim;
+            $qry=new select(array("pl" => "places"));
+            $qry->addFields(array("place_id"));
+            $qry->addFunction(array("distance" => "(6371 * acos(" .
+                "cos(radians(:lat)) * cos(radians(lat) ) * cos(radians(lon) - " .
+                "radians(:lon)) + sin(radians(:lat2)) * sin(radians(lat))))"));
+            $qry->having(new clause("distance <= :dist"));
 
-            $near=self::getRecordsFromQuery($sql);
-            return $near;
+
+            $qry->addParam(new param(":lat", (float) $lat, PDO::PARAM_STR));
+            $qry->addParam(new param(":lat2", (float) $lat, PDO::PARAM_STR));
+            $qry->addParam(new param(":lon", (float) $lon, PDO::PARAM_STR));
+            $qry->addParam(new param(":dist", (float) $distance, PDO::PARAM_STR));
+
+            if ($limit) {
+                $qry->addLimit((int) $limit);
+            }
+
+            $qry->addOrder("distance");
+
+            return static::getRecordsFromQuery($qry);
         } else {
             return null;
         }
@@ -544,7 +546,7 @@ class place extends zophTreeTable implements Organizer {
     public function getQuicklook() {
         $cover="";
         $autocover=$this->getAutoCover(user::getCurrent()->prefs->get("autothumb"));
-        if($autocover instanceof photo) {
+        if ($autocover instanceof photo) {
             $cover=$autocover->getImageTag(THUMB_PREFIX);
         }
 
@@ -556,7 +558,7 @@ class place extends zophTreeTable implements Organizer {
         $html.="<br><small>" .
             e(sprintf(translate("There are %s photos"), $count) .
            " " . translate("in this place")) . "<br>";
-        if($count!=$totalcount) {
+        if ($count!=$totalcount) {
             $html.=e(sprintf(translate("There are %s photos"),$totalcount) .
             " " . translate("in this place") . " " . translate("or its children")) . "<br>";
         }
@@ -572,7 +574,7 @@ class place extends zophTreeTable implements Organizer {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         $timezone=$this->get("timezone");
-        if((!$timezone && $lat && $lon)) {
+        if ((!$timezone && $lat && $lon)) {
             $tz=TimeZone::guess($lat, $lon);
             return $tz;
         }
@@ -585,7 +587,7 @@ class place extends zophTreeTable implements Organizer {
     public function setTzForChildren() {
         $tz=$this->get("timezone");
         $places=$this->getBranchIdArray($places);
-        if($places) {
+        if ($places) {
             foreach ($places as $place_id) {
                 $place=new place($place_id);
                 $place->set("timezone", $tz);
@@ -599,7 +601,7 @@ class place extends zophTreeTable implements Organizer {
      * @param string name
      */
     public static function getByName($name) {
-        if(empty($name)) {
+        if (empty($name)) {
             return false;
         }
         $title=strtolower(escape_string($name));
@@ -653,7 +655,7 @@ class place extends zophTreeTable implements Organizer {
      */
     public static function getCount() {
         $user=user::getCurrent();
-        if($user->is_admin()) {
+        if ($user->is_admin()) {
             return parent::getCount();
         } else {
             $places=self::getPhotographed($user);

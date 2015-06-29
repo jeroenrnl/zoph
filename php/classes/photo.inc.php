@@ -1180,28 +1180,29 @@ class photo extends zophTable {
         // If lat and lon are not set, don't bother trying to find
         // near photos
         if ($lat && $lon) {
-            $lat=(float) $lat;
-            $lon=(float) $lon;
-
-            $lim="";
             if ($entity=="miles") {
                 $distance=(float) $distance * 1.609344;
             }
-            if ($limit) {
-                $lim=" limit 0, ". (int) $limit;
-            }
-            $sql="select photo_id, (6371 * acos(" .
-                "cos(radians(" . $lat . ")) * " .
-                "cos(radians(lat) ) * cos(radians(lon) - " .
-                "radians(" . $lon . ")) +" .
-                "sin(radians(" . $lat . ")) * " .
-                "sin(radians(lat)))) AS distance from " .
-                DB_PREFIX . "photos " .
-                "having distance <= " . $distance .
-                " order by distance" . $lim;
+            $qry=new select(array("p" => "photos"));
+            $qry->addFields(array("photo_id"));
+            $qry->addFunction(array("distance" => "(6371 * acos(" .
+                "cos(radians(:lat)) * cos(radians(lat) ) * cos(radians(lon) - " .
+                "radians(:lon)) + sin(radians(:lat2)) * sin(radians(lat))))"));
+            $qry->having(new clause("distance <= :dist"));
 
-            $near=static::getRecordsFromQuery($sql);
-            return $near;
+
+            $qry->addParam(new param(":lat", (float) $lat, PDO::PARAM_STR));
+            $qry->addParam(new param(":lat2", (float) $lat, PDO::PARAM_STR));
+            $qry->addParam(new param(":lon", (float) $lon, PDO::PARAM_STR));
+            $qry->addParam(new param(":dist", (float) $distance, PDO::PARAM_STR));
+
+            if ($limit) {
+                $qry->addLimit((int) $limit);
+            }
+
+            $qry->addOrder("distance");
+
+            return static::getRecordsFromQuery($qry);
         } else {
             return null;
         }

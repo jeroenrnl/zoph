@@ -171,8 +171,8 @@ abstract class query {
      * @param clause HAVING clause
      * @return query return the query to enable chaining
      */
-    public function having(clause $clause) {
-        $this->having=$clause;
+    public function having(clause $hclause) {
+        $this->having=$hclause;
         return $this;
     }
 
