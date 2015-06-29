@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,7 +49,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
      * Test a SELECT query with a WHERE clause
      */
     public function testQueryWithClause() {
-        
+
         $qry=new select("photos");
         $where=new clause("photo_id > :minid");
         $qry->addParam(new param(":minid", 5, PDO::PARAM_INT));
@@ -78,7 +78,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $exp_sql="SELECT * FROM zoph_photos WHERE (photo_id > :minid) AND (photo_id < :maxid);";
 
         $this->assertEquals($exp_sql, $sql);
-        
+
         unset($qry);
         unset($clause);
 
@@ -88,7 +88,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
      * Test a SELECT query with a GROUP BY and HAVING clause
      */
     public function testQueryWithGroupBy() {
-        
+
         $qry=new select("photos");
         $qry->addGroupBy("album");
         $having=new clause("album_id > :albid");
@@ -120,7 +120,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $exp_sql="SELECT * FROM zoph_photos WHERE (photo_id > :photoid) GROUP BY album HAVING (album_id > :albid);";
 
         $this->assertEquals($exp_sql, $sql);
-        
+
         unset($qry);
         unset($clause);
 
@@ -170,8 +170,8 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         }
         $exp_sql .= ";";
         $this->assertEquals($exp_sql, $sql);
-    }        
-                
+    }
+
     /**
      * Test a query with ORDER BY
      * @dataProvider getOrders();
@@ -194,7 +194,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $this->assertFalse($qry->hasTable("albums"));
 
         $qry->join("photo_albums", "photos.photo_id=photo_albums.photo_id");
-        
+
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertTrue($qry->hasTable("photo_albums"));
         $this->assertFalse($qry->hasTable("albums"));
@@ -203,14 +203,14 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
 
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertTrue($qry->hasTable("photo_albums"));
-        
+
         $qry=new select(array("p" => "photos"));
 
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertFalse($qry->hasTable("albums"));
 
         $qry->join(array("pa" => "photo_albums"), "p.photo_id=pa.photo_id");
-        
+
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertTrue($qry->hasTable("photo_albums"));
         $this->assertFalse($qry->hasTable("albums"));
@@ -230,7 +230,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
 
         $qry=new select(array($table));
         $qry->addFields(array_keys($values));
-        
+
         $where=null;
         foreach($values as $field => $value) {
             $clause=new clause($field . "=:" . $field);
@@ -239,12 +239,12 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
             } else {
                 $where=$clause;
             }
-            
+
             $qry->addParam(new param(":" . $field, $value, PDO::PARAM_STR));
         }
         $qry->where($where);
         $result=$qry->execute()->fetchAll();
-        
+
         $this->assertEquals(1, count($result));
     }
 
@@ -274,18 +274,18 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
             $qry->addParam(new param(":photoid", $id, PDO::PARAM_INT));
             $qry->execute();
         }
-        
+
         // And check if they're gone
         foreach($ids as $id) {
             $qry=new select(array("photos"));
             $qry->where(new clause("photo_id=:photoid"));
             $qry->addParam(new param(":photoid", $id, PDO::PARAM_INT));
             $result=$qry->execute()->fetchAll();
-        
+
             $this->assertEquals(0, count($result));
         }
     }
-                
+
     /**
      * Provide queries to use as test input
      */
@@ -293,7 +293,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         return array(
             array("photos", array("photo_id"), "SELECT zoph_photos.photo_id FROM zoph_photos;"),
             array("photos", null, "SELECT * FROM zoph_photos;"),
-            array("photos", array("photo_id", "name"), 
+            array("photos", array("photo_id", "name"),
                 "SELECT zoph_photos.photo_id, zoph_photos.name FROM zoph_photos;")
         );
     }
@@ -323,7 +323,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     }
 
     /**
-     * Provide data for INSERT queries 
+     * Provide data for INSERT queries
      */
     public function getInserts() {
         return array(
@@ -337,13 +337,13 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
                 "name" => "testname 3",
                 "title" => "testtitle 3")),
             array("photo_categories", array(
-                "photo_id" => 999, 
+                "photo_id" => 999,
                 "category_id" => 1)),
             array("photo_categories", array(
-                "photo_id" => 998, 
+                "photo_id" => 998,
                 "category_id" => 2)),
             array("photo_categories", array(
-                "photo_id" => 997, 
+                "photo_id" => 997,
                 "category_id" => 3)),
             );
     }

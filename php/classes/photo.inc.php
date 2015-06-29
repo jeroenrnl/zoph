@@ -1215,12 +1215,20 @@ class photo extends zophTable {
      * @return array photo(s)
      */
     public static function getByName($file, $path=null) {
-        $sql="SELECT photo_id FROM " . DB_PREFIX . "photos " .
-            "WHERE name=\"" . escape_string($file) ."\"";
+        $qry=new select(array("p" => "photos"));
+        $qry->addFields(array("photo_id"));
+
+        $where=new clause("name = :file");
+        $qry->addParam(new param(":file", $file, PDO::PARAM_STR));
+
         if (!empty($path)) {
-            $sql .= " AND path='" . escape_string($path) ."'";
+            $where->addAnd(new clause("path = :path"));
+            $qry->addParam(new param(":path", $path, PDO::PARAM_STR));
         }
-        return static::getRecordsFromQuery($sql);
+
+        $qry->where($where);
+
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
@@ -1290,31 +1298,33 @@ class photo extends zophTable {
      * @param string km / miles entity in which max_distance is measured
      * @param int Interpolation maxtime Maximum time between to point to still interpolate
      */
-    public function getLatLon(track $track=null, $max_time=300, $interpolate=true,
+    public function getLatLon(track $track=null, $maxtime=300, $interpolate=true,
             $int_maxdist=5, $entity="km", $int_maxtime=600) {
 
         date_default_timezone_set("UTC");
         $datetime=$this->getUTCTime();
         $utc=strtotime($datetime[0] . " " . $datetime[1]);
 
-        $mintime=$utc-$max_time;
-        $maxtime=$utc+$max_time;
+        $qry=new select(array("pt" => "point"));
+
+        $where=new clause("datetime > :mintime");
+        $where->addAnd(new clause("datetime < :maxtime"));
+
+        $qry->addParam(new param(":mintime", date("Y-m-d H:i:s", $utc - $maxtime), PDO::PARAM_STR));
+        $qry->addParam(new param(":maxtime", date("Y-m-d H:i:s", $utc + $maxtime), PDO::PARAM_STR));
+        $qry->addParam(new param(":utc", date("Y-m-d H:i:s", $utc), PDO::PARAM_STR));
 
         if ($track) {
-            $track_id=$track->getId();
-            $where=" AND track_id=" . escape_string($track_id);
-        } else {
-            $where="";
+            $where->addAnd(new clause("track_id=:trackid"));
+            $qry->addParam(new param(":trackid", (int) $track->getId(), PDO::PARAM_INT));
         }
 
-        $sql="SELECT * FROM " . DB_PREFIX . "point" .
-            " WHERE datetime > \"" . date("Y-m-d H:i:s", $mintime) . "\" AND" .
-            " datetime < \"" . date("Y-m-d H:i:s", $maxtime)  . "\"" .
-            $where .
-            " ORDER BY abs(timediff(datetime,\"" . date("Y-m-d H:i:s", $utc) . "\")) ASC" .
-            " LIMIT 1";
+        $qry->addOrder("abs(timediff(datetime, :utc)) ASC");
+        $qry->addLimit(1);
 
-        $points=point::getRecordsFromQuery($sql);
+        $qry->where($where);
+
+        $points=point::getRecordsFromQuery($qry);
         if (sizeof($points) > 0 && $points[0] instanceof point) {
             $point=$points[0];
             $pointtime=strtotime($point->get("datetime"));
