@@ -1474,32 +1474,32 @@ class photo extends zophTable {
      */
 
     public static function getFromHash($hash, $type="file") {
+
+        $qry=new select(array("p" => "photos"));
+
         if (!preg_match("/^[A-Za-z0-9]+$/", $hash)) {
             die("Illegal characters in hash");
         }
         switch ($type) {
         case "file":
-            $where="WHERE hash=\"" . escape_string($hash) . "\";";
+            $where=new clause("hash=:hash");
             break;
         case "full":
-            $salt=conf::get("share.salt.full");
-            $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
-               "\"" . escape_string($hash) . "\";";
+            $qry->addParam(new param(":salt", conf::get("share.salt.full"), PDO::PARAM_STR));
+            $where=new clause("sha1(CONCAT(:salt, hash))=:hash");
             break;
         case "mid":
-            $salt=conf::get("share.salt.mid");
-            $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
-               "\"" . escape_string($hash) . "\";";
+            $qry->addParam(new param(":salt", conf::get("share.salt.mid"), PDO::PARAM_STR));
+            $where=new clause("sha1(CONCAT(:salt, hash))=:hash");
             break;
         default:
             die("Unsupported hash type");
             break;
         }
+        $qry->addParam(new param(":hash", $hash, PDO::PARAM_STR));
+        $qry->where($where);
 
-
-        $sql="SELECT * FROM " . DB_PREFIX . "photos " . $where;
-
-        $photos=static::getRecordsFromQuery($sql);
+        $photos=static::getRecordsFromQuery($qry);
         if (is_array($photos) && sizeof($photos) > 0) {
             return $photos[0];
         } else {
@@ -1542,8 +1542,9 @@ class photo extends zophTable {
      * @return int size in bytes
      */
     public static function getTotalSize() {
-        $sql = "select sum(size) from " . DB_PREFIX . "photos";
-        return static::getCountFromQuery($sql);
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array("total" => "sum(size)"));
+        return static::getCountFromQuery($qry);
     }
 
     /**
