@@ -682,6 +682,8 @@ class place extends zophTreeTable implements Organizer {
      * Get places that appear on a photo
      * @param user user
      * @return array places
+     * @todo remove useless code
+     * @todo possibly merge into getCount() ?
      */
     private static function getPhotographed($user = null) {
         if ($user && !$user->is_admin()) {
@@ -701,6 +703,7 @@ class place extends zophTreeTable implements Organizer {
                 "' AND gp.access_level >= ph.level " .
                 "ORDER BY plc.city, plc.title";
         } else {
+            // This piece of code is never called, remove when rewriting db
             $sql =
                 "select distinct plc.* from " .
                 DB_PREFIX . "places as plc, " .

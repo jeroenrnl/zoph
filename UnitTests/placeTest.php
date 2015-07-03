@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -73,6 +73,69 @@ class placeTest extends ZophDataBaseTestCase {
     }
 
     /**
+     * Test delete() function
+     */
+    public function testDelete() {
+        $photo_id=5;
+        $photo=new photo($photo_id);
+        $photo->lookup();
+
+
+        $place=new place();
+        $place->set("title", "TESTplace");
+        $place->set("parent_place_id", 1);
+        $place->insert();
+
+        $place_id=$place->getId();
+
+        $place->addPhoto($photo);
+
+        $loc=$photo->getLocation();
+        $this->assertEquals($place_id, $loc->getId());
+
+        $person=new person(5);
+        $person->lookup();
+        $person->set("home_id", $place_id);
+        $person->update();
+
+
+        $place->delete();
+        $this->assertEmpty(place::getByName("TESTplace"));
+
+        $loc=$photo->getLocation();
+        $this->assertNull($loc);
+
+        $person->lookup();
+
+        $this->assertEmpty($person->get("home"));
+
+    }
+
+    /**
+     * Test getChildren function
+     * @dataProvider getChildrenData
+     */
+    public function testGetChildren($id, $order, $expected) {
+        $place=new place($id);
+        $place->lookup();
+
+        $children=$place->getChildren($order);
+
+        $ids=array();
+        foreach($children as $child) {
+            $ids[]=$child->getId();
+        }
+
+        // We can't test order for random, so sort them first
+        if($order=="random") {
+            sort($ids);
+        }
+
+        $this->assertEquals($expected, $ids);
+    }
+
+
+    /**
      * Test getting the address for a place
      */
     public function testGetAddress() {
@@ -91,8 +154,8 @@ class placeTest extends ZophDataBaseTestCase {
         $this->assertEquals("Addressline 2", $address->vars["lines"][1]);
         $this->assertEquals("NL 1234", $address->vars["lines"][2]);
         $this->assertEquals("Netherlands", $address->vars["lines"][3]);
-        
-        
+
+
         $place->set("city", "City");
         $place->update();
         $address=$place->getAddress();
@@ -112,8 +175,127 @@ class placeTest extends ZophDataBaseTestCase {
     }
 
     /**
+     * Test getPhotos()
+     * @dataProvider getPhotosForPlace
+     */
+    public function testGetPhotos($user, $loc_id, $expected) {
+        user::setCurrent(new user($user));
+
+        $loc=new place($loc_id);
+        $photos=$loc->getPhotos();
+        
+        $ids=array();
+        foreach($photos as $photo) {
+            $ids[]=$photo->getId();
+        }
+
+        $this->assertEquals($expected, $ids);
+    }
+
+        
+    /**
+     * Test getDetails()
+     / @dataProvider getDetails();
+     */
+    public function testGetDetails($user,$place_id, $subplace, array $exp_details) {
+        user::setCurrent(new user($user));
+        $place=new place($place_id);
+        $place->lookup();
+
+        $details=$place->getDetails();
+        $this->assertEquals($exp_details, $details);
+
+        user::setCurrent(new user(1));
+    }
+
+    /**
+     * Test getDetailsXML()
+     / @dataProvider getDetails();
+     */
+    public function testGetDetailsXML($user,$place_id, $subplace, array $exp_details) {
+        user::setCurrent(new user($user));
+        $place=new place($place_id);
+        $place->lookup();
+        $details=$place->getDetailsXML();
+
+        $timezone=array("e", "I", "O", "P", "T", "Z");
+        $timeformat=str_replace($timezone, "", conf::get("date.timeformat"));
+        $timeformat=trim(preg_replace("/\s\s+/", "", $timeformat));
+        $format=conf::get("date.format") . " " . $timeformat;
+
+        $oldest=new Time($exp_details["oldest"]);
+        $disp_oldest=$oldest->format($format);
+
+        $newest=new Time($exp_details["newest"]);
+        $disp_newest=$newest->format($format);
+
+        $first=new Time($exp_details["first"]);
+        $disp_first=$first->format($format);
+
+        $last=new Time($exp_details["last"]);
+        $disp_last=$last->format($format);
+
+
+        $expectedXML=sprintf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+                      <details>
+                        <request>
+                          <class>place</class>
+                          <id>%s</id>
+                        </request>
+                        <response>
+                          <detail>
+                            <subject>title</subject>
+                            <data>In this place:</data>
+                          </detail>
+                          <detail>
+                            <subject>count</subject>
+                            <data>%s photos</data>
+                          </detail>
+                          <detail>
+                            <subject>taken</subject>
+                            <data>taken between %s and %s</data>
+                          </detail>
+                          <detail>
+                            <subject>modified</subject>
+                            <data>last changed from %s to %s</data>
+                          </detail>
+                          <detail>
+                            <subject>rated</subject>
+                            <data>rated between %s and %s and an average of %s</data>
+                          </detail>
+                          <detail>
+                          <subject>children</subject>
+                            <data>%s sub-places</data>
+                          </detail>
+                        </response>
+                      </details>", 
+                       $place_id, $exp_details["count"],$disp_oldest, $disp_newest, $disp_first, $disp_last,  $exp_details["lowest"], $exp_details["highest"], $exp_details["average"],$subplace);
+
+        $this->assertXmlStringEqualsXmlString($expectedXML, $details);
+
+        user::setCurrent(new user(1));
+    }
+
+    /**
+     * Test getTopN() function
+     * @dataProvider getTopNData();
+     */
+    public function testGetTopN($user, $expected) {
+        user::setCurrent(new user($user));
+        $pl_ids=array();
+        $topN=place::getTopN();
+
+        foreach($topN as $place) {
+            $pl_ids[]=$place["id"];
+        }
+        $this->assertEquals($expected, $pl_ids);
+        user::setCurrent(new user(1));
+    }
+
+
+    /**
      * Test getPhotoCount() & getTotalPhotoCount() functions
-     * @dataProvider getPlaceCount()
+     * @dataProvider getPhotoCount()
      * @param int user id
      * @param int place id
      * @param int expected count
@@ -129,6 +311,22 @@ class placeTest extends ZophDataBaseTestCase {
 
         $totalcount=$place->getTotalPhotoCount();
         $this->assertEquals($exp_totalcount, $totalcount);
+        user::setCurrent(new user(1));
+    }
+
+    /**
+     * Test getCount() static function
+     * @dataProvider getPlaceCount
+     */
+    public function testGetCount($user_id, $expected) {
+        user::setCurrent(new user($user_id));
+        
+        $count=place::getCount();
+
+        $this->assertEquals($expected, $count);
+
+
+        user::setCurrent(new user(1));
     }
 
     /**
@@ -140,7 +338,7 @@ class placeTest extends ZophDataBaseTestCase {
         $photo->lookup();
         $place=new place(4);
         $place->lookup();
-        
+
         $place->set("coverphoto", 2);
 
         $cover=$place->getCoverphoto();
@@ -237,17 +435,17 @@ class placeTest extends ZophDataBaseTestCase {
 
         $rot=new place(4);
         $rot->lookup();
-        
+
         $bln=new place(7);
         $bln->lookup();
-        
+
         $places=$ams->getNear(100);
         $place=$places[1];
         $place->lookup();
         $this->assertEquals(3, count($places));
         $this->assertEquals($rot->getId(), $place->getId());
-        
-        
+
+
         $places=$rot->getNear(1000);
         $place=$places[5];
         $place->lookup();
@@ -268,7 +466,7 @@ class placeTest extends ZophDataBaseTestCase {
     /**
      * Data provider for testGetPhotoCount
      */
-    public function getPlaceCount() {
+    public function getPhotoCount() {
         // user_id, place_id, count, totalcount
         return array(
             array(1, 1, 0, 12),
@@ -279,4 +477,91 @@ class placeTest extends ZophDataBaseTestCase {
             array(2, 2, 0, 2)
         );
     }
-}    
+
+    /**
+     * Data provider for testGetCount
+     */
+    public function getPlaceCount() {
+        // user_id, count
+        return array(
+            array(1, 18),
+            array(2, 2),
+            array(3, 2),
+            array(4, 4)
+        );
+    }
+
+    public function getChildrenData() {
+        return array(
+            array(3, null, array(4,5)),
+            // In the current code, there is a bug with these
+//            array(3, "oldest", array(4,5)),
+//            array(3, "newest", array(5,4)),
+//            array(11, "first", array(12)),
+//            array(8, "lowest", array(9,11))
+            array(11, "random", array(12, 14, 16))
+        );
+    }
+    
+    /**
+     * dataProvider function
+     * @return user, place, array(count, oldest, newest, first, last, highest, average)
+     */
+    public function getDetails() {
+        return array(
+            array(1,4,"no",array(
+                "count" 	=> "2",
+                "oldest" 	=> "2014-01-02 00:01:00",
+                "newest" 	=> "2014-01-03 00:01:00",
+                "first" 	=> "2014-01-01 23:01:00",
+                "last" 	    => "2014-01-02 23:01:00",
+                "lowest" 	=> "4.3",
+                "highest" 	=> "5.0",
+                "average" 	=> "4.63"
+            )),
+            array(1,3,2, array(
+                "count" 	=> "1",
+                "oldest" 	=> "2014-01-01 00:01:00",
+                "newest" 	=> "2014-01-01 00:01:00",
+                "first" 	=> "2013-12-31 23:01:00",
+                "last" 	    => "2013-12-31 23:01:00",
+                "lowest" 	=> "7.5",
+                "highest" 	=> "7.5",
+                "average" 	=> "7.50",
+            )),
+            array(2,3,"no",array(
+                "count" 	=> "1",
+                "oldest" 	=> "2014-01-01 00:01:00",
+                "newest" 	=> "2014-01-01 00:01:00",
+                "first" 	=> "2013-12-31 23:01:00",
+                "last" 	    => "2013-12-31 23:01:00",
+                "lowest" 	=> "7.5",
+                "highest" 	=> "7.5",
+                "average" 	=> "7.50",
+            )),
+        );
+    }
+
+    /**
+     * dataProvider function
+     * @return array userid, topN
+     */
+    public function getTopNData() {
+        return array(
+            array(1,array(5,18,4,7,14)),
+            array(2,array(7,3))
+        );
+    }
+
+    public function getPhotosForPlace() {
+        return array(
+            array(1, 4, array(2,3)),
+            array(1, 5, array(4,5)),
+            array(8, 4, array(2)),
+            array(3, 6, array()),
+            array(4, 4, array(2))
+        );
+    }   
+
+
+}
