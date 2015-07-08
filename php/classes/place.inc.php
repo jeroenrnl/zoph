@@ -93,20 +93,33 @@ class place extends zophTreeTable implements Organizer {
      * Delete this place from database
      */
     public function delete() {
-        $id=escape_string($this->get("place_id"));
-        if (!is_numeric($id)) {die("place_id is not numeric"); }
+        $locid=new param(":locid", (int) $this->getId(), PDO::PARAM_INT);
+        $locidNull=new param(":locidnull", null, PDO::PARAM_INT);
 
-        $sql="update " . DB_PREFIX . "photos set location_id=null where " .
-            "location_id=" . $id;
-        query($sql, "Could not remove references:");
 
-        $sql="update " . DB_PREFIX . "people set home_id=null where " .
-            "home_id=" .  $id;
-        query($sql, "Could not remove references:", $sql);
+        $qry=new update(array("p" => "photos"));
+        $qry->where(new clause("location_id=:locid"));
+        $qry->addSet("location_id", "locidnull");
+        $qry->addParam($locid);
+        $qry->addParam($locidNull);
 
-        $sql="update " . DB_PREFIX . "people set work_id=null where " .
-            "work_id=" .  $id;
-        query($sql, "Could not remove references:");
+        query($qry, "Could not remove references:");
+
+        $qry=new update(array("ppl" => "people"));
+        $qry->where(new clause("home_id=:locid"));
+        $qry->addSet("home_id", "locidnull");
+        $qry->addParam($locid);
+        $qry->addParam($locidNull);
+
+        query($qry, "Could not remove references:");
+
+        $qry=new update(array("ppl" => "people"));
+        $qry->where(new clause("work_id=:locid"));
+        $qry->addSet("work_id", "locidnull");
+        $qry->addParam($locid);
+        $qry->addParam($locidNull);
+
+        query($qry, "Could not remove references:");
 
         parent::delete();
     }
@@ -117,36 +130,36 @@ class place extends zophTreeTable implements Organizer {
      * @return array of places.
      */
     public function getChildren($order=null) {
-        $order_fields="";
+        $qry=new select(array("pl" => "places"));
+        $qry->addFields(array("*", "name"=>"title"));
+        $qry->join(array("p"  => "photos"), "pl.place_id=p.location_id", "LEFT");
+
+        $where=new clause("parent_place_id=:placeid");
+
+        $qry->addParam(new param(":placeid", (int) $this->getId(), PDO::PARAM_INT));
+
+        $qry->addGroupBy("pl.place_id");
 
         if ($order=="sortname") {
-            #places do not have a sortname
-            $order="name";
-        }
-        if ($order && $order!="name") {
-            $order_fields=get_sql_for_order($order);
-            $order=" ORDER BY " . $order . ", name ";
-        } else if ($order=="name") {
-            $order=" ORDER BY name ";
+            # places do not have a sortname
+            $order=null;
         }
 
-        $sql =
-            "SELECT *, title as name " .
-            $order_fields . " FROM " .
-            DB_PREFIX . "places as pl " .
-            "WHERE pl.parent_place_id=" . (int) $this->getId() .
-            " GROUP BY pl.place_id " .
-            $order;
-        $this->children=self::getRecordsFromQuery($sql);
-        return $this->children;
-    }
+        $qry=self::addOrderToQuery($qry, $order);
 
-    /**
-     * Get this place's children, taking into account permissions for a specific user
-     * @param string sort order
-     */
-    public function getChildrenForUser($order=null) {
-        return remove_empty($this->getChildren($order));
+        if($order!="name") {
+            $qry->addOrder("name");
+        }
+
+
+        $qry->where($where);
+
+        $this->children=self::getRecordsFromQuery($qry);
+        if (!user::getCurrent()->is_admin()) {
+            return remove_empty($this->children);
+        } else {
+            return $this->children;
+        }
     }
 
     /**

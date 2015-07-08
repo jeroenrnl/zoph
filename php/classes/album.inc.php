@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,7 +41,7 @@ class album extends zophTreeTable implements Organizer {
     protected static $primary_keys=array("album_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("album");
-    /** @var bool keep keys with insert. In most cases the keys 
+    /** @var bool keep keys with insert. In most cases the keys
                   are set by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -56,11 +56,11 @@ class album extends zophTreeTable implements Organizer {
     public function lookup() {
         $user=user::getCurrent();
         $id = $this->getId();
-        if(!is_numeric($id)) { 
-            die("album_id must be numeric"); 
+        if(!is_numeric($id)) {
+            die("album_id must be numeric");
         }
-        if (!$id) { 
-            return; 
+        if (!$id) {
+            return;
         }
 
         $qry=new select(array("a" => "albums"));
@@ -78,7 +78,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->where($where);
         return $this->lookupFromSQL($qry);
     }
-    
+
     /**
      * Add a photo to this album
      * @param photo Photo to add
@@ -153,7 +153,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addParam(new param(":album_id", (int) $this->getId(), PDO::PARAM_INT));
 
         $qry=self::addOrderToQuery($qry, $order);
-        
+
         if($order!="name") {
             $qry->addOrder("name");
         }
@@ -162,21 +162,10 @@ class album extends zophTreeTable implements Organizer {
             list($qry,$where)=self::expandQueryForUser($qry, $where);
         }
 
-        if($where instanceof clause) {
-            $qry->where($where);
-        }
+        $qry->where($where);
 
         $this->children=self::getRecordsFromQuery($qry);
         return $this->children;
-    }
-
-    /**
-     * Get the subalbums of this album, for the current user
-     * @param string optional order
-     * @return array of albums
-     */
-    public function getChildrenForUser($order=null) {
-        return $this->getChildren($order);
     }
 
     /**
@@ -195,14 +184,14 @@ class album extends zophTreeTable implements Organizer {
             "lowest"    => "ROUND(MIN(ar.rating),1)",
             "highest"   => "ROUND(MAX(ar.rating),1)",
             "average"   => "ROUND(AVG(ar.rating),2)"));
-        $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id")      
+        $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id")
             ->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
         $qry->addGroupBy("pa.album_id");
 
         $where=new clause("pa.album_id=:albid");
         $qry->addParam(new param(":albid", $this->getId(), PDO::PARAM_INT));
-        
+
         if (!user::getCurrent()->is_admin()) {
             list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
@@ -235,8 +224,8 @@ class album extends zophTreeTable implements Organizer {
      * @todo This function is very similar to album::getPhotoCount, should be merged
      */
     public function getPhotoCount() {
-        if ($this->photoCount) { 
-            return $this->photoCount; 
+        if ($this->photoCount) {
+            return $this->photoCount;
         }
 
         $qry=new select(array("pa" => "photo_albums"));
@@ -244,7 +233,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addFunction(array("count" => "count(distinct pa.photo_id)"));
         $where=new clause("pa.album_id = :alb_id");
         $qry->addParam(new param(":alb_id", $this->getId(), PDO::PARAM_INT));
-        
+
         if (!user::getCurrent()->is_admin()) {
             list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
@@ -298,9 +287,9 @@ class album extends zophTreeTable implements Organizer {
                 self::createPulldown("parent_album_id", $this->get("parent_album_id")));
         }
         return array(
-            "album" => 
+            "album" =>
                 array(
-                    translate("album name"),  
+                    translate("album name"),
                     create_text_input("album", $this->get("album"),40,64)),
             "parent_album_id" => $parent,
             "album_description" =>
@@ -311,7 +300,7 @@ class album extends zophTreeTable implements Organizer {
             "pageset" =>
                 array(
                     translate("pageset"),
-                    template::createPulldown("pageset", $this->get("pageset"), 
+                    template::createPulldown("pageset", $this->get("pageset"),
                         get_pageset_select_array())),
             "sortname" =>
                 array(
@@ -366,8 +355,8 @@ class album extends zophTreeTable implements Organizer {
         }
 
         $qry=new select(array("p" => "photos"));
-        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id")); 
-        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")      
+        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")
             ->join(array("pa" => "photo_albums"), "pa.photo_id = ar.photo_id");
 
         if($children) {
@@ -378,7 +367,7 @@ class album extends zophTreeTable implements Organizer {
             $where=new clause("pa.album_id=:id");
             $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
         }
-       
+
         if (!user::getCurrent()->is_admin()) {
             list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
@@ -392,7 +381,7 @@ class album extends zophTreeTable implements Organizer {
             $coverphoto->lookup();
             return $coverphoto;
         } else if (!$children) {
-            // No photos found in this album... let's look again, but now 
+            // No photos found in this album... let's look again, but now
             // also in subalbum...
             return $this->getAutoCover($autocover, true);
         }
@@ -441,7 +430,7 @@ class album extends zophTreeTable implements Organizer {
      */
     public static function getAutocompPref() {
         $user=user::getCurrent();
-        return ($user->prefs->get("autocomp_albums") && conf::get("interface.autocomplete")); 
+        return ($user->prefs->get("autocomp_albums") && conf::get("interface.autocomplete"));
     }
     /**
      * Return all albums
@@ -460,7 +449,7 @@ class album extends zophTreeTable implements Organizer {
             $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
         }
 
-        
+
         return self::getRecordsFromQuery($qry);
     }
     /**

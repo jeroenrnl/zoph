@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,7 +44,7 @@ class person extends zophTable implements Organizer {
     protected static $primary_keys=array("person_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("first_name");
-    /** @var bool keep keys with insert. In most cases the keys are set 
+    /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -108,12 +108,12 @@ class person extends zophTable implements Organizer {
         $where->addAnd(new clause("position>:pos"));
 
         $qry->addSetFunction("position=position-1");
-        
+
         $params=array(
             new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT),
             new param(":pos", (int) $pos, PDO::PARAM_INT)
         );
-        
+
         $qry->addParams($params);
         $qry->execute();
 
@@ -158,7 +158,7 @@ class person extends zophTable implements Organizer {
     public function delete() {
         $id=(int) $this->getId();
         if (!is_numeric($id)) { die("person_id is not numeric"); }
-        
+
         $params=array(
             new param(":id", (int) $id, PDO::PARAM_INT)
         );
@@ -229,22 +229,12 @@ class person extends zophTable implements Organizer {
 
     /**
      * Get children for this person
-     * @todo This function is currently not used  
+     * @todo This function is currently not used
      */
     public function getChildren() {
         $constraints["father_id"] = $this->get("person_id");
         $constraints["mother_id"] = $this->get("person_id");
         return static::getAll($constraints, "or");
-    }
-
-    /**
-     * Get only children this user can see
-     * @todo This function is currently not used  
-     * @todo This function currently does not filter out persons 
-     *       this user cannot see
-     */
-    public function getChildrenForUser() {
-        return $this->getChildren();
     }
 
     /**
@@ -340,7 +330,7 @@ class person extends zophTable implements Organizer {
      */
     public function getPhotoCount() {
         $user=user::getCurrent();
-        
+
         $ignore=null;
         $vars=array(
             "person_id" => $this->getId()
@@ -357,7 +347,7 @@ class person extends zophTable implements Organizer {
     public function getTotalPhotoCount() {
         return $this->getPhotoCount();
     }
-    
+
     /**
      * Get coverphoto for this person.
      * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
@@ -371,13 +361,13 @@ class person extends zophTable implements Organizer {
         }
 
         $qry=new select(array("p" => "photos"));
-        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id")); 
-        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")      
+        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")
             ->join(array("pp" => "photo_people"), "p.photo_id = pp.photo_id");
 
         $where=new clause("pp.person_id=:id");
         $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
-       
+
         if (!user::getCurrent()->is_admin()) {
             list($qry, $where) = static::expandQueryForUser($qry, $where);
         }
@@ -431,7 +421,7 @@ class person extends zophTable implements Organizer {
             }
         }
     }
-    
+
     /**
      * Get details (statistics) about this person from db
      * @return array Array with statistics
@@ -454,7 +444,7 @@ class person extends zophTable implements Organizer {
 
         $where=new clause("p.photographer_id=:photographerid");
         $qry->addParam(new param(":photographerid", $this->getId(), PDO::PARAM_INT));
-        
+
         if (!user::getCurrent()->is_admin()) {
             list($qry, $where) = static::expandQueryForUser($qry, $where);
         }
@@ -519,7 +509,7 @@ class person extends zophTable implements Organizer {
         return parent::getTopNfromSQL($qry);
 
     }
-    
+
     /**
      * Get all people
      * @param string part of name to search for
@@ -536,7 +526,7 @@ class person extends zophTable implements Organizer {
         }
 
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
-        
+
         if(!user::getCurrent()->is_admin()) {
             list($qry,$where)=static::expandQueryForUser($qry, $where);
         }
@@ -602,7 +592,7 @@ class person extends zophTable implements Organizer {
         }
 
         return $ppl;
-    }   
+    }
 
     /**
      * Get number of people for a specific user
@@ -640,7 +630,7 @@ class person extends zophTable implements Organizer {
 
         $qry=new select(array("ppl" => "people"));
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
-        
+
 
         if($user && !$user->is_admin()) {
             $people=(array)static::getAll($search);

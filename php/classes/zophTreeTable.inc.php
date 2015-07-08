@@ -1,6 +1,6 @@
 <?php
 /**
- * zophTreeTable represents a hierarchical table.  
+ * zophTreeTable represents a hierarchical table.
  *
  * This file is part of Zoph.
  *
@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -26,7 +26,7 @@
  * zophTreeTable represents a hierarchical table.  Since the album
  * and category tables are identical in structure, some of the methods
  * those classes share are abstracted and placed here.
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -172,7 +172,7 @@ abstract class zophTreeTable extends zophTable {
             $newchild->appendChild($newchildtitle);
         }
         $order = user::getCurrent()->prefs->get("child_sortorder");
-        $children=$this->getChildrenForUser($order);
+        $children=$this->getChildren($order);
         if($children) {
             $childset=$xml->createElement($rootname);
             foreach($children as $child) {
@@ -186,7 +186,7 @@ abstract class zophTreeTable extends zophTable {
         }
         return $newchild;
     }
-    
+
     /**
      * Turn the array from @see getDetails() into XML
      * @param array Don't fetch details, but use the given array
@@ -195,7 +195,7 @@ abstract class zophTreeTable extends zophTable {
         if(!isset($details)) {
             $details=$this->getDetails();
         }
-        $children=$this->getChildrenForUser();
+        $children=$this->getChildren();
         if(is_array($children)) {
             $details["children"]=count($children);
         }
@@ -219,7 +219,7 @@ abstract class zophTreeTable extends zophTable {
         return $xml;
     }
 
-    public static function getSelectArray() { 
+    public static function getSelectArray() {
         return static::getTreeSelectArray();
     }
 
@@ -235,8 +235,8 @@ abstract class zophTreeTable extends zophTable {
         }
 
         $select_array[$rec->getId()] = str_repeat("&nbsp;", $depth * 3) . e($rec->getName());
-        
-        $children = $rec->getChildrenForUser($order);
+
+        $children = $rec->getChildren($order);
         if ($children) {
             $depth++;
             foreach ($children as $child) {

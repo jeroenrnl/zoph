@@ -493,13 +493,12 @@ class placeTest extends ZophDataBaseTestCase {
 
     public function getChildrenData() {
         return array(
-            array(3, null, array(4,5)),
-            // In the current code, there is a bug with these
-//            array(3, "oldest", array(4,5)),
-//            array(3, "newest", array(5,4)),
-//            array(11, "first", array(12)),
-//            array(8, "lowest", array(9,11))
-            array(11, "random", array(12, 14, 16))
+            array(3, null, array(5,4)),
+            array(3, "oldest", array(4,5)),
+            array(3, "newest", array(4,5)),
+            array(11, "first", array(12,16,14)),
+            array(11, "lowest", array(14)),
+            array(11, "random", array(12,14,16))
         );
     }
     

@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,7 +41,7 @@ class category extends zophTreeTable implements Organizer {
     protected static $primary_keys=array("category_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("category");
-    /** @var bool keep keys with insert. In most cases the keys are set 
+    /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -81,7 +81,7 @@ class category extends zophTreeTable implements Organizer {
 
         $qry->execute();
     }
-    
+
     /**
      * Delete category
      */
@@ -96,50 +96,49 @@ class category extends zophTreeTable implements Organizer {
     public function getName() {
         return $this->get("category");
     }
-   
+
     /**
      * Get sub-categories
      * @param string order
      */
     public function getChildren($order="name") {
-        if(!in_array($order, 
+
+        if(!in_array($order,
             array("name", "sortname", "oldest", "newest", "first", "last", "lowest", "highest", "average", "random"))) {
             $order="name";
         }
         $qry=new select(array("c" => "categories"));
         $qry->addFields(array("*", "name" => "category"));
-        $qry->where(new clause("parent_category_id=:catid"));
-        
+        $where=new clause("parent_category_id=:catid");
+
         $qry->addParam(new param(":catid", (int) $this->getId(), PDO::PARAM_INT));
         $qry->addGroupBy("c.category_id");
-        
+
         $qry=self::addOrderToQuery($qry, $order);
-        
+
         if($order!="name") {
             $qry->addOrder("name");
         }
+
+        $qry->where($where);
+
         $this->children=self::getRecordsFromQuery($qry);
-        return $this->children;
+        if (!user::getCurrent()->is_admin()) {
+            return remove_empty($this->children);
+        } else {
+            return $this->children;
+        }
     }
 
     /**
-     * Get children of this category, with categories this user cannot see, filtered out.
-     * @param string sort order.
-     * @return array category tree
-     */
-    public function getChildrenForUser($order="name") {
-        return remove_empty($this->getChildren($order));
-    }
-    
-    /**
-     * Get count of photos in this category 
+     * Get count of photos in this category
      * @todo This function is very similar to album::getPhotoCount, should be merged
      */
     public function getPhotoCount() {
         $db=db::getHandle();
 
-        if ($this->photoCount) { 
-            return $this->photoCount; 
+        if ($this->photoCount) {
+            return $this->photoCount;
         }
 
         $qry=new select(array("pc" => "photo_categories"));
@@ -147,7 +146,7 @@ class category extends zophTreeTable implements Organizer {
         $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
         $where=new clause("category_id = :cat_id");
         $qry->addParam(new param(":cat_id", $this->getId(), PDO::PARAM_INT));
-        
+
         if (!user::getCurrent()->is_admin()) {
             list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
@@ -165,14 +164,14 @@ class category extends zophTreeTable implements Organizer {
         $where=null;
         $db=db::getHandle();
 
-        if ($this->photoTotalCount) { 
-            return $this->photoTotalCount; 
+        if ($this->photoTotalCount) {
+            return $this->photoTotalCount;
         }
 
-        $qry=new select(array("pc" => "photo_categories")); 
+        $qry=new select(array("pc" => "photo_categories"));
         $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
         $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
-        
+
         if (!user::getCurrent()->is_admin()) {
             list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
@@ -185,7 +184,7 @@ class category extends zophTreeTable implements Organizer {
             $catids=clause::InClause("category_id", $ids);
             if($where instanceof clause) {
                 $where->addAnd($catids);
-            } else { 
+            } else {
                 $where=$catids;
             }
         }
@@ -228,7 +227,7 @@ class category extends zophTreeTable implements Organizer {
             "pageset" =>
                 array(
                     translate("pageset"),
-                    template::createPulldown("pageset", $this->get("pageset"), 
+                    template::createPulldown("pageset", $this->get("pageset"),
                         get_pageset_select_array())),
             "sortname" =>
                 array(
@@ -278,8 +277,8 @@ class category extends zophTreeTable implements Organizer {
         }
 
         $qry=new select(array("p" => "photos"));
-        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id")); 
-        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")      
+        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")
             ->join(array("pc" => "photo_categories"), "pc.photo_id = ar.photo_id");
 
         if($children) {
@@ -290,7 +289,7 @@ class category extends zophTreeTable implements Organizer {
             $where=new clause("pc.category_id=:id");
             $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
         }
-       
+
         if (!user::getCurrent()->is_admin()) {
             list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
@@ -304,7 +303,7 @@ class category extends zophTreeTable implements Organizer {
             $coverphoto->lookup();
             return $coverphoto;
         } else if (!$children) {
-            // No photos found in this cat... let's look again, but now 
+            // No photos found in this cat... let's look again, but now
             // also in subcat...
             return $this->getAutoCover($autocover, true);
 
@@ -335,14 +334,14 @@ class category extends zophTreeTable implements Organizer {
             "lowest"    => "ROUND(MIN(ar.rating),1)",
             "highest"   => "ROUND(MAX(ar.rating),1)",
             "average"   => "ROUND(AVG(ar.rating),2)"));
-        $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id")      
+        $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id")
             ->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
         $qry->addGroupBy("pc.category_id");
 
         $where=new clause("pc.category_id=:catid");
         $qry->addParam(new param(":catid", $this->getId(), PDO::PARAM_INT));
-        
+
         if (!user::getCurrent()->is_admin()) {
             list($qry, $where) = self::expandQueryForUser($qry, $where);
         }
@@ -425,5 +424,5 @@ class category extends zophTreeTable implements Organizer {
             return count($cat_clean);
         }
     }
-}    
+}
 ?>
