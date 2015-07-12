@@ -56,7 +56,7 @@ class album extends zophTreeTable implements Organizer {
     public function lookup() {
         $user=user::getCurrent();
         $id = $this->getId();
-        if(!is_numeric($id)) {
+        if (!is_numeric($id)) {
             die("album_id must be numeric");
         }
         if (!$id) {
@@ -85,7 +85,7 @@ class album extends zophTreeTable implements Organizer {
      */
     public function addPhoto(photo $photo) {
         $user=user::getCurrent();
-        if($user->is_admin() || $user->get_album_permissions($this->getId())->get("writable")) {
+        if ($user->is_admin() || $user->get_album_permissions($this->getId())->get("writable")) {
             $qry=new insert(array("photo_albums"));
             $qry->addParam(new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT));
             $qry->addParam(new param(":album_id", (int) $this->getId(), PDO::PARAM_INT));
@@ -99,7 +99,7 @@ class album extends zophTreeTable implements Organizer {
      */
     public function removePhoto(photo $photo) {
         $user=user::getCurrent();
-        if($user->is_admin() || $user->get_album_permissions($this->getId())->get("writable")) {
+        if ($user->is_admin() || $user->get_album_permissions($this->getId())->get("writable")) {
             $qry=new delete("photo_albums");
             $where=new clause("photo_id=:photo_id");
             $where->addAnd(new clause("album_id=:album_id"));
@@ -154,7 +154,7 @@ class album extends zophTreeTable implements Organizer {
 
         $qry=static::addOrderToQuery($qry, $order);
 
-        if($order!="name") {
+        if ($order!="name") {
             $qry->addOrder("name");
         }
 
@@ -200,7 +200,7 @@ class album extends zophTreeTable implements Organizer {
 
 
         $result=query($qry);
-        if($result) {
+        if ($result) {
             return fetch_assoc($result);
         } else {
             return null;
@@ -212,7 +212,7 @@ class album extends zophTreeTable implements Organizer {
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
-        if(!isset($details)) {
+        if (!isset($details)) {
             $details=$this->getDetails();
         }
         $details["title"]=translate("In this album:", false);
@@ -273,7 +273,7 @@ class album extends zophTreeTable implements Organizer {
      * @return array fields/values
      */
     public function getEditArray() {
-        if($this->isRoot()) {
+        if ($this->isRoot()) {
             $parent=array (
                 translate("parent album"),
                 translate("Albums"));
@@ -346,7 +346,7 @@ class album extends zophTreeTable implements Organizer {
      */
     public function getAutoCover($autocover=null, $children=false) {
         $coverphoto=$this->getCoverphoto();
-        if($coverphoto instanceof photo) {
+        if ($coverphoto instanceof photo) {
             return $coverphoto;
         }
 
@@ -355,7 +355,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")
             ->join(array("pa" => "photo_albums"), "pa.photo_id = ar.photo_id");
 
-        if($children) {
+        if ($children) {
             $ids=new param(":ids",$this->getBranchIdArray(), PDO::PARAM_INT);
             $qry->addParam($ids);
             $where=clause::InClause("pa.album_id", $ids);
@@ -389,7 +389,7 @@ class album extends zophTreeTable implements Organizer {
      * @todo This function is almost equal to category::getByName(), should be merged
      */
     public static function getByName($name) {
-        if(empty($name)) {
+        if (empty($name)) {
             return false;
         }
         $qry=new select(array("a" => "albums"));
@@ -477,7 +477,7 @@ class album extends zophTreeTable implements Organizer {
         $qry=new select(array("a" => "albums"));
         $qry->addFunction(array("count" => "COUNT(DISTINCT a.album_id)"));
 
-        if(!$user->is_admin()) {
+        if (!$user->is_admin()) {
             $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $where=new clause("user_id=:userid");

@@ -147,7 +147,7 @@ class place extends zophTreeTable implements Organizer {
 
         $qry=static::addOrderToQuery($qry, $order);
 
-        if($order!="name") {
+        if ($order!="name") {
             $qry->addOrder("name");
         }
 
@@ -321,46 +321,31 @@ class place extends zophTreeTable implements Organizer {
      * @return photo coverphoto
      */
     public function getAutoCover($autocover=null,$children=false) {
-        $user=user::getCurrent();
         $coverphoto=$this->getCoverphoto();
         if ($coverphoto instanceof photo) {
             return $coverphoto;
         }
 
-        $order=static::getAutoCoverOrder($autocover);
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
         if ($children) {
-            $place_where=" WHERE p.location_id in (" . $this->getBranchIds() .")";
+            $ids=new param(":ids",$this->getBranchIdArray(), PDO::PARAM_INT);
+            $qry->addParam($ids);
+            $where=clause::InClause("p.location_id", $ids);
         } else {
-            $place_where=" WHERE p.location_id =" .$this->get("place_id");
+            $where=new clause("p.location_id=:id");
+            $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
         }
 
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT DISTINCT p.photo_id FROM " .
-                DB_PREFIX . "photos AS p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id " .
-                $place_where . " " . $order;
-        } else {
-            $sql=
-                "SELECT DISTINCT p.photo_id FROM " .
-                DB_PREFIX . "photos AS p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums AS pa" .
-                " ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id " .
-                $place_where .
-                " AND gu.user_id =" .
-                " '" . escape_string($user->get("user_id")) . "'" .
-                " AND gp.access_level >= p.level " .
-                $order;
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = static::expandQueryForUser($qry, $where);
         }
-        $coverphotos=photo::getRecordsFromQuery($sql);
+
+        $qry=static::getAutoCoverOrderNew($qry, $autocover);
+        $qry->where($where);
+        $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
 
         if ($coverphoto instanceof photo) {
@@ -368,8 +353,9 @@ class place extends zophTreeTable implements Organizer {
             return $coverphoto;
         } else if (!$children) {
             // No photos found in this place... let's look again, but now
-            // also in sub-places...
+            // also in subplaces...
             return $this->getAutoCover($autocover, true);
+
         }
     }
 
