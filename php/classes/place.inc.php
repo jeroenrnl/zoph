@@ -373,59 +373,40 @@ class place extends zophTreeTable implements Organizer {
      * @return array Array with statistics
      */
     public function getDetails() {
-        $id = (int) $this->getId();
-        $user=user::getCurrent();
-        $user_id = (int) $user->getId();
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array(
+            "count"     => "COUNT(DISTINCT p.photo_id)",
+            "oldest"    => "MIN(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "newest"    => "MAX(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "first"     => "MIN(p.timestamp)",
+            "last"      => "MAX(p.timestamp)",
+            "lowest"    => "ROUND(MIN(ar.rating),1)",
+            "highest"   => "ROUND(MAX(ar.rating),1)",
+            "average"   => "ROUND(AVG(ar.rating),2)"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
-        if ($user->is_admin()) {
-            $sql = "SELECT ".
-                "COUNT(DISTINCT ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " .
-                "ROUND(AVG(ar.rating),2) AS average FROM " .
-                DB_PREFIX . "photos ph JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id " .
-                "WHERE ph.location_id=" . escape_string($id) .
-                " GROUP BY ph.location_id";
-        } else {
-            $sql = "SELECT " .
-                "COUNT(DISTINCT ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " .
-                "ROUND(AVG(ar.rating),2) AS average FROM " .
-                DB_PREFIX . "photos ph JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums pa " .
-                "ON ph.photo_id=pa.photo_id LEFT JOIN " .
-                DB_PREFIX . "group_permissions gp " .
-                "ON pa.album_id=gp.album_id LEFT JOIN " .
-                DB_PREFIX . "groups_users gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE ph.level<gp.access_level AND " .
-                "gu.user_id=" . escape_string($user_id) . " AND " .
-                "ph.location_id=" . escape_string($id) .
-                " GROUP BY ph.location_id";
+
+        $qry->addGroupBy("p.location_id");
+
+        $where=new clause("p.location_id=:locid");
+        $qry->addParam(new param(":locid", $this->getId(), PDO::PARAM_INT));
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = static::expandQueryForUser($qry, $where);
         }
-        $result=query($sql);
+
+        $qry->where($where);
+
+
+        $result=query($qry);
         if ($result) {
             return fetch_assoc($result);
         } else {
             return null;
         }
+
+
+
     }
 
     /**
