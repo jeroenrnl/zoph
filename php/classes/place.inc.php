@@ -404,9 +404,6 @@ class place extends zophTreeTable implements Organizer {
         } else {
             return null;
         }
-
-
-
     }
 
     /**
@@ -544,11 +541,12 @@ class place extends zophTreeTable implements Organizer {
         if (empty($name)) {
             return false;
         }
-        $title=strtolower(escape_string($name));
-        $sql="SELECT place_id from " . DB_PREFIX . "places WHERE " .
-            " LOWER(title) = \"" . $title . "\";";
+        $qry=new select(array("pl" => "places"));
+        $qry->addFields(array("place_id"));
+        $qry->where(new clause("lower(title)=:name"));
+        $qry->addParam(new param(":name", strtolower($name), PDO::PARAM_STR));
 
-        return static::getRecordsFromQuery($sql);
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
@@ -556,50 +554,33 @@ class place extends zophTreeTable implements Organizer {
      */
     public static function getTopN() {
         $user=user::getCurrent();
-
-        if ($user->is_admin()) {
-            $sql =
-                "select plc.*, count(*) as count from " .
-                DB_PREFIX . "places as plc, " .
-                DB_PREFIX . "photos as ph " .
-                "where plc.place_id = ph.location_id " .
-                "group by plc.place_id " .
-                "order by count desc, plc.title, plc.city " .
-                "limit 0, " . (int) $user->prefs->get("reports_top_n");
-        } else {
-            $sql =
-                "SELECT plc.*, count(distinct ph.photo_id) AS count FROM " .
-                DB_PREFIX . "photos as ph JOIN " .
-                DB_PREFIX . "places as plc " .
-                "ON ph.location_id = plc.place_id JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON pa.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" .
-                escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= ph.level " .
-                "GROUP BY plc.place_id " .
-                "ORDER BY count desc, plc.title, plc.city " .
-                "LIMIT 0, " . (int) $user->prefs->get("reports_top_n");
+        $qry=new select(array("pl" => "places"));
+        $qry->addFields(array("place_id", "title"));
+        $qry->addFunction(array("count" => "count(distinct p.photo_id)"));
+        $qry->join(array("p" => "photos"), "pl.place_id=p.location_id");
+        $qry->addGroupBy("p.location_id");
+        $qry->addOrder("count DESC")->addOrder("pl.title");
+        $qry->addLimit((int) $user->prefs->get("reports_top_n"));
+        if (!$user->is_admin()) {
+            list($qry, $where) = static::expandQueryForUser($qry);
+            $qry->where($where);
         }
-
-        return parent::getTopNfromSQL($sql);
-
+        return parent::getTopNfromSQL($qry);
     }
 
     /**
      * Get count of places
      */
     public static function getCount() {
-        $user=user::getCurrent();
-        if ($user->is_admin()) {
+        if (user::getCurrent()->is_admin()) {
             return parent::getCount();
         } else {
-            $places=static::getPhotographed($user);
-            return count($places);
+            $qry=new select(array("p"=>"photos"));
+            $qry->addFunction(array("count" => "COUNT(DISTINCT location_id)"));
+            list($qry, $where)=static::expandQueryForUser($qry);
+            $qry->where($where);
+            return static::getCountFromQuery($qry);
+
         }
     }
 
@@ -616,43 +597,6 @@ class place extends zophTreeTable implements Organizer {
     public static function getAll($constraints = null, $conj = "and", $ops = null,
         $order = "city, title, address") {
         return static::getRecords($order, $constraints, $conj, $ops);
-    }
-
-    /**
-     * Get places that appear on a photo
-     * @param user user
-     * @return array places
-     * @todo remove useless code
-     * @todo possibly merge into getCount() ?
-     */
-    private static function getPhotographed($user = null) {
-        if ($user && !$user->is_admin()) {
-            $sql =
-                "SELECT DISTINCT plc.* FROM " .
-                DB_PREFIX . "photos AS ph JOIN " .
-                DB_PREFIX . "places AS plc " .
-                "ON ph.location_id = plc.place_id JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pa.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id " .
-                "where gu.user_id = '" .
-                escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= ph.level " .
-                "ORDER BY plc.city, plc.title";
-        } else {
-            // This piece of code is never called, remove when rewriting db
-            $sql =
-                "select distinct plc.* from " .
-                DB_PREFIX . "places as plc, " .
-                DB_PREFIX . "photos as ph " .
-                "where plc.place_id = ph.location_id " .
-                "order by plc.city, plc.title";
-        }
-
-        return static::getRecordsFromQuery($sql);
     }
 
     /**
