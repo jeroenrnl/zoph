@@ -15,6 +15,7 @@
   <testsuites>
     <testsuite name="Zoph">
       <file>XMLdataTest.php</file>
+      <file>configTest.php</file>
       <file>PDOdatabaseTest.php</file>
       <file>userTest.php</file>
       <file>anonymousUserTest.php</file> 

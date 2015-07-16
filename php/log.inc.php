@@ -60,7 +60,8 @@ class log {
     const DB = 128;
     const SQL = 256;
     const XML = 512;
-    /* 1024 and 2048, are free */
+    const CONF = 1024;
+    /* 2048, is free */
     const IMG = 4096;
     /* 8192, 16384 are free */
     const GENERAL = 32768;
