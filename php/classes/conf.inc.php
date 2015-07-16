@@ -55,11 +55,12 @@ class conf {
      */
     public static function loadFromDB() {
         confDefault::getConfig();
-        $sql="SELECT conf_id, value FROM " . DB_PREFIX . "conf";
+        $qry=new select(array("co" => "conf"));
+        $qry->addFields(array("conf_id", "value"));
 
-        $result=query($sql, "Cannot load configuration from database");
+        $result=query($qry, "Cannot load configuration from database");
 
-        while($row= fetch_row($result)) {
+        while($row = fetch_row($result)) {
             $key=$row[0];
             $value=$row[1];
             try {
@@ -74,9 +75,10 @@ class conf {
                 /* An unknown item will automatically be deleted from the
                    database, so we can remove items without leaving a mess */
                 log::msg($e->getMessage(), log::NOTIFY, log::CONF);
-                $sql="DELETE FROM " . DB_PREFIX . "conf WHERE " .
-                    "conf_id='" . escape_string($key) . "';";
-                query($sql);
+                $qry=new delete(array("co" => "conf"));
+                $qry->where(new clause("conf_id=:confid"));
+                $qry->addParam(new param(":confid", $key, PDO::PARAM_STR));
+                query($qry);
             }
 
         }

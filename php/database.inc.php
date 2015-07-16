@@ -43,7 +43,7 @@ function query($sql, $error = false) {
     log::msg($sql, log::NOTIFY, log::SQL);
     
     // New DB
-    if($sql instanceof query) {
+    if ($sql instanceof query) {
         return db::query($sql);
     } else {
 
@@ -84,18 +84,21 @@ function num_rows($result) {
 }
 
 function fetch_row($result) {
+    if ($result instanceof PDOStatement) {
+        return $result->fetch(PDO::FETCH_NUM);
+    }
     return mysql_fetch_row($result);
 }
 
 function fetch_array($result) {
-    if($result instanceof PDOStatement) {
+    if ($result instanceof PDOStatement) {
         return $result->fetch(PDO::FETCH_ASSOC);
     }
     return mysql_fetch_array($result);
 }
 
 function fetch_assoc($result) {
-    if($result instanceof PDOStatement) {
+    if ($result instanceof PDOStatement) {
         return $result->fetch(PDO::FETCH_ASSOC);
     }
     return mysql_fetch_assoc($result);
@@ -103,7 +106,7 @@ function fetch_assoc($result) {
 
 
 function free_result($result) {
-    if($result instanceof PDOStatement) {
+    if ($result instanceof PDOStatement) {
         return $result->closeCursor();
     }
     return mysql_free_result($result);
@@ -115,7 +118,7 @@ function insert_id() {
 
 function result($result, $row) {
     // $row is never used
-    if($result instanceof PDOStatement) {
+    if ($result instanceof PDOStatement) {
         return $result->fetch(PDO::FETCH_BOTH)[0];
     }
     return mysql_result($result, $row);
