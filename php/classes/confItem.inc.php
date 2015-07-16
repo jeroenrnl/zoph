@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,13 +33,13 @@ abstract class confItem extends zophTable {
     protected static $primary_keys=array("conf_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array();
-    /** @var bool keep keys with insert. In most cases the keys are set by 
+    /** @var bool keep keys with insert. In most cases the keys are set by
                   the db with auto_increment */
     protected static $keepKeys = true;
     /** @var string URL for this class */
     protected static $url="config.php#";
-    
-    
+
+
     /** @var string Label to display */
     protected $label;
     /** @var string Longer description of item */
@@ -59,7 +59,7 @@ abstract class confItem extends zophTable {
      * @retrun confItem new object
      */
     public function __construct($id = 0) {
-        if($id === 0 || preg_match("/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/", $id)) {
+        if ($id === 0 || preg_match("/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/", $id)) {
             $this->set("conf_id", $id);
         } else {
             log::msg("Illegal configuration id", log::FATAL, log::VARS);
@@ -74,18 +74,20 @@ abstract class confItem extends zophTable {
      * if it does not.
      */
     final public function update() {
-        if($this->checkValue($this->get("value"))) {
-            $sql="SELECT COUNT(conf_id) FROM " . DB_PREFIX . "conf WHERE conf_id=";
-            $sql.="\"" . escape_string($this->fields["conf_id"]) . "\"";
+        if ($this->checkValue($this->get("value"))) {
+            $qry=new select(array("co" => "conf"));
+            $qry->addFunction(array("count" => "COUNT(conf_id)"));
+            $qry->where(new clause("conf_id=:confid"));
+            $qry->addParam(new param(":confid", $this->fields["conf_id"], PDO::PARAM_STR));
 
-            if(self::getCountFromQuery($sql) > 0) {
+            if (static::getCountFromQuery($qry) > 0) {
                 parent::update();
             } else {
                 parent::insert();
             }
         }
     }
-    
+
     /**
      * Get name of item
      * @return string name
@@ -94,7 +96,7 @@ abstract class confItem extends zophTable {
         return $this->fields["conf_id"];
     }
 
-    
+
     /**
      * Get label for item
      * @return string label
@@ -118,27 +120,27 @@ abstract class confItem extends zophTable {
      * @return string value
      */
     final public function getValue() {
-        if(!isset($this->fields["value"]) || $this->fields["value"]===null) {
+        if (!isset($this->fields["value"]) || $this->fields["value"]===null) {
             return $this->getDefault();
         } else {
             return $this->fields["value"];
         }
     }
-    
+
     /**
      * Set value of item
      * @param string value
      * @throws ConfigurationException
      */
     public function setValue($value) {
-        if($this->checkValue($value)) {
+        if ($this->checkValue($value)) {
             $this->fields["value"]=$value;
         } else {
-            throw new ConfigurationException("Configuration value for " . 
+            throw new ConfigurationException("Configuration value for " .
                 $this->getName() . " is illegal");
         }
     }
-    
+
     /**
      * Get default value of item
      * @return string default value
@@ -146,7 +148,7 @@ abstract class confItem extends zophTable {
     final public function getDefault() {
         return $this->default;
     }
-    
+
     /**
      * Get hint for item
      * @return string hint
@@ -186,10 +188,10 @@ abstract class confItem extends zophTable {
     final public function setHint($hint) {
         $this->hint=$hint;
     }
-    
+
     /**
      * Set whether or not a field is required
-     * @param bool 
+     * @param bool
      */
     final public function setRequired($req=true) {
         $this->required=(bool) $req;
@@ -200,7 +202,7 @@ abstract class confItem extends zophTable {
      * an internal field is not exposed in the webinterface
      * and (at this moment) not stored in the database, although this is not enforced
      * as there may be a future use-case where this will change.
-     * @param bool 
+     * @param bool
      */
     final public function setInternal($int=true) {
         $this->internal=(bool) $int;
@@ -218,7 +220,7 @@ abstract class confItem extends zophTable {
      * Display the item
      */
     abstract public function display();
-    
+
     /**
      * Check whether value is legal
      * @param string value
