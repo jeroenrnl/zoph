@@ -33,6 +33,8 @@ class select extends query {
     private $joins=null;
     /** @var array GROUP BY clause */
     private $groupby=array();
+    /** @var array UNION clause */
+    protected $union=array();
 
     /**
      * Add a JOIN clause to the query
@@ -80,6 +82,18 @@ class select extends query {
             return " GROUP BY " . implode(", ", $groupby);
         }
         return "";
+    }
+
+    /**
+     * Add a UNION clause to the query
+     * @param select SELECT query to UNION with this one
+     * @return query return the query to enable chaining
+     */
+    public function union(select $qry) {
+        $this->union[]=$qry;
+
+        $this->addParams($qry->getParams());
+        return $this;
     }
 
 
@@ -134,6 +148,16 @@ class select extends query {
         $limit=trim($this->getLimit());
         if (!empty($limit)) {
             $sql .= " " . $limit;
+        }
+
+        // This does not cover all use cases for UNION queries
+        // it is, for example not possible to use ORDER or LIMIT statements
+        // on the combined query, but currently Zoph doesn't use those
+        if (sizeof($this->union) > 0) {
+            foreach ($this->union as $union) {
+                // We need to take off the ;
+                $sql .= " UNION (" . rtrim($union, ";") . ")";
+            }
         }
 
         return $sql . ";";

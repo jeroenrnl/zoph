@@ -55,10 +55,10 @@ abstract class query {
      * @param string Table to query
      */
     public function __construct($table) {
-        if(is_array($table)) {
+        if (is_array($table)) {
             $tbl=reset($table);
             $alias=key($table);
-            if(!is_numeric($alias)) {
+            if (!is_numeric($alias)) {
                 $this->alias=$alias;
             }
             $table=$tbl;
@@ -80,17 +80,17 @@ abstract class query {
         $table=$this->table;
         foreach ($fields as $alias => $field) {
 
-            if(!isset($this->alias)) {
+            if (!isset($this->alias)) {
                 $field=$table . "." . $field;
             } else {
                 $field=$this->alias . "." . $field;
             }
 
-            if($distinct) {
+            if ($distinct) {
                 $field="DISTINCT " . $field;
             }
 
-            if(!is_numeric($alias)) {
+            if (!is_numeric($alias)) {
                 $field .= " AS " . $alias;
             }
 
@@ -132,17 +132,17 @@ abstract class query {
     public function getParams() {
         $params=array();
 
-        if(!is_array($this->params)) {
+        if (!is_array($this->params)) {
             return $params;
         }
 
         foreach($this->params as $param) {
-            if(!$param instanceof param) {
+            if (!$param instanceof param) {
                 continue;
             }
             $value=$param->getValue();
 
-            if(is_array($value)) {
+            if (is_array($value)) {
                 $value=array_values($value);
                 $name=array_values($param->getName());
                 $type=$param->getType();
@@ -193,7 +193,7 @@ abstract class query {
      */
     protected function getOrder() {
         $order=$this->order;
-        if(is_array($order) && sizeof($order) > 0) {
+        if (is_array($order) && sizeof($order) > 0) {
             return " ORDER BY " . implode(", ", $order);
         }
         return "";
@@ -219,7 +219,7 @@ abstract class query {
      * @return string LIMIT clause
      */
     protected function getLimit() {
-        if(!is_null($this->offset)) {
+        if (!is_null($this->offset)) {
             $limit=" LIMIT " . (int) $this->offset;
             if (is_null($this->count)) {
                 $limit.= ", " . 999999999999;

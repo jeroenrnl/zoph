@@ -36,7 +36,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
      */
     public function testCreateQuery($table, $fields, $exp_sql) {
         $qry=new select($table);
-        if(is_array($fields)) {
+        if (is_array($fields)) {
             $qry->addFields($fields);
         }
         $this->assertEquals($exp_sql, (string) $qry);
@@ -157,14 +157,14 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $qry->addLimit($count, $offset);
         $sql=(string) $qry;
         $exp_sql="SELECT * FROM zoph_photos";
-        if(!is_null($offset)) {
-            if(is_null($count)) {
+        if (!is_null($offset)) {
+            if (is_null($count)) {
                 $exp_sql .= " LIMIT " . (int) $offset . ", 999999999999";
             } else {
                 $exp_sql .= " LIMIT " . (int) $offset . ", " . (int) $count;
             }
         } else {
-            if(!is_null($count)) {
+            if (!is_null($count)) {
                 $exp_sql .= " LIMIT " . (int) $count;
             }
         }
@@ -234,7 +234,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $where=null;
         foreach($values as $field => $value) {
             $clause=new clause($field . "=:" . $field);
-            if($where instanceof clause) {
+            if ($where instanceof clause) {
                 $where->addAnd($clause);
             } else {
                 $where=$clause;
@@ -285,6 +285,22 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
             $this->assertEquals(0, count($result));
         }
     }
+
+    public function testUnionQuery() {
+        // Yes, this is a pointless query
+        $qry=new select(array("p" => "photos"));
+        $qry->where(new clause("photo_id=3"));
+        $qry2=new select(array("p" => "photos"));
+        $qry2->where(new clause("photo_id=2"));
+        $qry->union($qry2);
+
+        $sql=(string) $qry;
+        $exp_sql="SELECT * FROM zoph_photos AS p WHERE (photo_id=3) " .
+                 "UNION " .
+                 "(SELECT * FROM zoph_photos AS p WHERE (photo_id=2));";
+        $this->assertEquals($exp_sql, $sql);
+   }
+
 
     /**
      * Provide queries to use as test input

@@ -147,13 +147,21 @@ class photoRelation extends zophTable {
      * @return array of photos
      */
     public static function getRelated(photo $photo) {
-        $sql = "SELECT photo_id_1 AS photo_id FROM " .
-            DB_PREFIX . "photo_relations WHERE" .
-            " photo_id_2 = " . (int) $photo->getId()  .
-            " UNION SELECT photo_id_2 AS photo_id FROM " .
-            DB_PREFIX . "photo_relations WHERE" .
-            " photo_id_1 = " .  (int) $photo->getId();
-        $related=photo::getRecordsFromQuery($sql);
+        $qry=new select(array("pr" => "photo_relations"));
+        $qry->addFunction(array("photo_id" => "photo_id_1"));
+        $where=new clause("photo_id_2=:photoid2");
+        $qry->addParam(new param(":photoid2", (int) $photo->getId(), PDO::PARAM_INT));
+        $qry->where($where);
+
+        $qry2=new select(array("pr" => "photo_relations"));
+        $qry2->addFunction(array("photo_id" => "photo_id_2"));
+        $where2=new clause("photo_id_1=:photoid1");
+        $qry2->addParam(new param(":photoid1", (int) $photo->getId(), PDO::PARAM_INT));
+        $qry2->where($where2);
+
+        $qry->union($qry2);
+
+        $related=photo::getRecordsFromQuery($qry);
         return $related;
     }
 
