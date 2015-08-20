@@ -71,6 +71,7 @@ class userTest extends ZophDatabaseTestCase {
     public function testCreateAndDelete() {
         $user = new user();
         $user->set("user_name", "Test User");
+        $user->set("password", "secret");
         $user->insert();
 
         $id = $user->getId();
@@ -83,6 +84,16 @@ class userTest extends ZophDatabaseTestCase {
         $row=mysql_fetch_row($result);
         $this->assertEquals($row[0], 1);
 
+        // Test Password
+
+        $validator=new validator("Test User", "secret");
+        $user=$validator->validate();
+        $user->lookup();
+
+        $this->assertEquals($user->getId(), $id);
+
+
+        // Delete user
 
         $new_user=new user($id);
         $new_user->lookup();
@@ -97,6 +108,22 @@ class userTest extends ZophDatabaseTestCase {
         $result=query($sql);
         $row=mysql_fetch_row($result);
         $this->assertEquals($row[0], 0);
+        
+    }
+
+    public function testSetPasswordOnUpdate() {
+        $user=new user(3);
+        $user->lookup();
+        $user->set("password", "secret");
+        $user->update();
+
+        unset($user);
+        
+        $validator=new validator("jimi", "secret");
+        $user=$validator->validate();
+        $user->lookup();
+
+        $this->assertEquals($user->getId(), 3);
     }
 
 

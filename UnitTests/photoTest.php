@@ -906,6 +906,22 @@ class photoTest extends ZophDataBaseTestCase {
         $this->assertEquals("204459", photo::getTotalSize());
     }
 
+    /**
+     * Test the getRecords function (in abstract zophTable class)
+     * @dataProvider getPhotoList
+     */
+    public function testGetRecords($order, $constraints, $conj, $ops, $exp) {
+        $photos = photo::getRecords($order, $constraints, $conj, $ops);
+
+        $act=array();
+        foreach($photos as $photo) {
+            $act[]=$photo->getId();
+        }
+
+        $this->assertEquals($exp, $act);
+    }
+
+
     //================== DATA PROVIDERS =======================
 
     public function getLocation() {
@@ -1034,6 +1050,47 @@ class photoTest extends ZophDataBaseTestCase {
             array("1c52decf9f59d43da618b757dee9afb5cfdd5b28", "file", 1),
             array("0dfae93cebb4a00629d72558907ff883f181fb2a", "full", 4),
             array("e2f14b5f7dd442032106e9a9af8cd7338ce3ee9d", "mid", 7)
+        );
+    }
+
+    public function getPhotoList() {
+        // order, constraints, conj, ops
+        return array(
+            array(
+                "name", 
+                array(
+                    "width" => "600",
+                    "height" => "400"
+                ),
+                "and",
+                null,
+                array(1,2,3,4,5,6,7,8,9,10,11,12)
+            ),
+            array(
+                "name",
+                array(
+                    "width" => "600"
+                ),
+                null,
+                array(
+                    "width" => ">"
+                ),
+                array()
+            ),
+            array(
+                "lat, photo_id", null, null, null,
+                 array(11,12,10,9,8,6,2,3,1,4,5,7)
+            ),
+            array(
+                "name",
+                array(
+                    "date#0" => "2015-06-17",
+                    "date#1" => "2014-01-06"
+                ),
+                "or",
+                null,
+                array(6,11,12)
+            )
         );
     }
 

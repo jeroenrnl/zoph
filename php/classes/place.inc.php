@@ -343,7 +343,7 @@ class place extends zophTreeTable implements Organizer {
             list($qry, $where) = static::expandQueryForUser($qry, $where);
         }
 
-        $qry=static::getAutoCoverOrderNew($qry, $autocover);
+        $qry=static::getAutoCoverOrder($qry, $autocover);
         $qry->where($where);
         $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
