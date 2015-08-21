@@ -167,16 +167,18 @@ abstract class zophTable {
      * @todo Should return something more sensible
      */
     public function lookup() {
-        $constraint = $this->createConstraints();
+        $qry=new select(array(static::$table_name));
 
-        if (!$constraint) {
+        list($qry, $where) = $this->addWhereForKeys($qry);
+
+        if (!($where instanceof clause)) {
             log::msg("No constraint found", log::NOTIFY, log::GENERAL);
             return;
         }
 
-        $sql = "SELECT * FROM " . DB_PREFIX . static::$table_name . " WHERE $constraint";
+        $qry->where($where);
 
-        return $this->lookupFromSQL($sql);
+        return $this->lookupFromSQL($qry);
     }
 
     /**
@@ -216,44 +218,29 @@ abstract class zophTable {
      * parameter causes these fields to be manually inserted.
      */
     public function insert() {
-        $names=null;
-        $values=null;
+        $qry=new insert(array(static::$table_name));
         reset($this->fields);
-        while (list($name, $value) = each($this->fields)) {
+
+        foreach($this->fields as $name => $value) {
             if (!static::$keepKeys && $this->isKey($name)) {
                 continue;
             }
-
-            if (!empty($names)) {
-                $names .= ", ";
-                $values .= ", ";
-            }
-
-            $names .= $name;
-
-            if ($name == "password") {
-                $values .= "password('" . escape_string($value) . "')";
-            }
-            else if ($value == "now()") {
+            if ($name === "password") {
+                $qry->addSet("password", "password(\"" . $value . "\")");
+            } else if ($value === "now()") {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
-                $values .=  $value ;
+                $qry->addSet($name, "now()");
             } else if ($value =="" && in_array($name, static::$not_null)) {
                 die("<p class='error'><b>$name</b> may not be empty</p>");
             } else if ($value !== "") {
-                $values .= "'" . escape_string($value) . "'";
+                $qry->addParam(new param(":" . $name, $value, PDO::PARAM_STR));
             } else {
-                $values .= "null";
+                $qry->addParam(new param(":" . $name, null, PDO::PARAM_STR));
             }
 
         }
 
-        $sql = "INSERT INTO " . DB_PREFIX . static::$table_name .
-            "(" . $names . ") VALUES (" . $values . ")";
-
-        query($sql, "Insert failed:");
-
-        $id = insert_id();
-
+        $id=$qry->execute();
         if (count(static::$primary_keys) == 1 && !static::$keepKeys) {
             $this->fields[static::$primary_keys[0]] = $id;
         }
@@ -658,6 +645,7 @@ abstract class zophTable {
 
     /**
      * Creates a constraint clause based on the given keys
+     * @todo This is going to be replaced by addWhereForKeys() (below)
      */
     private function createConstraints() {
         $constraints=null;
@@ -668,6 +656,27 @@ abstract class zophTable {
             $constraints .= "$key = '" . escape_string($value) . "'";
         }
         return $constraints;
+    }
+
+    /**
+     * Creates a constraint clause based on the given keys
+     */
+    private function addWhereForKeys(query $query, clause $where = null) {
+        foreach (static::$primary_keys as $key) {
+            $value = $this->fields[$key];
+            if (!$value) {
+                continue;
+            }
+            $clause = new clause($key . "=:" . $key);
+            $query->addParam(new param(":" . $key, $value, PDO::PARAM_INT));
+
+            if ($where instanceof clause) {
+                $where->addAnd($clause);
+            } else {
+                $where = $clause;
+            }
+        }
+        return array($query, $where);
     }
 
     /**
@@ -783,7 +792,7 @@ abstract class zophTable {
      * @param select query
      * @return select modified query
      */
-    protected static function addRelationTableToQuery($qry) {
+    protected static function addRelationTableToQuery(select $qry) {
         if($qry->hasTable("albums") && !$qry->hasTable("photo_albums")) {
             $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
         } else if($qry->hasTable("categories") && !$qry->hasTable("photo_categories")) {
@@ -800,7 +809,7 @@ abstract class zophTable {
      * @param select query
      * @return select modified query
      */
-    protected static function addPhotoTableToQuery($qry) {
+    protected static function addPhotoTableToQuery(select $qry) {
         $qry=static::addRelationTableToQuery($qry);
 
         if($qry->hasTable("photo_albums")) {

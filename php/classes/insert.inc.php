@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,6 +28,7 @@
  * @author Jeroen Roos
  */
 class insert extends query {
+    private $set=array();
 
     /**
      * Create INSERT query
@@ -35,17 +36,36 @@ class insert extends query {
      */
     public function __toString() {
         $sql = "INSERT INTO " . $this->table;
-        
+
         $fields=array();
+        $values=array();
 
         foreach($this->getParams() as $param) {
             $fields[]=substr($param->getName(),1);
+            $values[]=$param->getName();
+        }
+
+        foreach($this->set as $name => $value) {
+            $fields[]=$name;
+            $values[]=$value;
         }
 
         $sql.=" (" . implode(", ", $fields) . ")";
-        $sql.=" VALUES(:" . implode(", :", $fields) . ") ";
+        $sql.=" VALUES(" . implode(", ", $values) . ") ";
 
         return $sql . ";";
+    }
+
+    public function addSet($name, $value) {
+        $this->set[$name]=$value;
+    }
+
+    public function execute() {
+        parent::execute();
+        $db=db::getHandle();
+
+        $id=$db->lastInsertId();
+        return $id;
     }
 
 }
