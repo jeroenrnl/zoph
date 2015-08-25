@@ -57,7 +57,7 @@ abstract class zophTable {
      * @param int object id
      */
     public function __construct($id=0) {
-        if($id && !is_numeric($id)) { die("id for " . get_called_class() . " must be numeric"); }
+        if ($id && !is_numeric($id)) { die("id for " . get_called_class() . " must be numeric"); }
         $this->set(static::$primary_keys[0],$id);
     }
 
@@ -82,7 +82,7 @@ abstract class zophTable {
      * @throws ZophException
      */
     public function getId() {
-        if(sizeof(static::$primary_keys)==1) {
+        if (sizeof(static::$primary_keys)==1) {
             return (int) $this->get(static::$primary_keys[0]);
         } else {
             throw new ZophException("This class (" . get_class($this) . ") " .
@@ -187,14 +187,14 @@ abstract class zophTable {
      */
     public function lookupFromSQL($sql) {
         $result = query($sql, "Lookup failed:");
-        if($result instanceof PDOStatement) {
+        if ($result instanceof PDOStatement) {
             $results=$result->fetchAll(PDO::FETCH_ASSOC);
             $rows=count($results);
         } else {
             $rows=num_rows($result);
         }
-        if($rows == 1) {
-            if($result instanceof PDOStatement) {
+        if ($rows == 1) {
+            if ($result instanceof PDOStatement) {
                 $row=array_pop($results);
             } else {
                 $row = fetch_assoc($result);
@@ -256,7 +256,7 @@ abstract class zophTable {
      * @param array selectArray;
      */
     public static function setSAcache(array $sa=null) {
-        if(!$sa) {
+        if (!$sa) {
             $sa=static::getSelectArray();
         }
         static::$sacache=$sa;
@@ -270,27 +270,31 @@ abstract class zophTable {
     public function delete() {
 
         // simulate overloading
-        if(func_num_args()>=1) {
+        if (func_num_args()>=1) {
             $extra_tables = func_get_arg(0);
         } else {
             $extra_tables = null;
         }
 
-        $constraints = $this->createConstraints();
+        $qry=new delete(array(static::$table_name));
 
-        if (!$constraints) {
+        list($qry, $where) = $this->addWhereForKeys($qry);
+
+        if (!($where instanceof clause)) {
             log::msg("No constraint found", log::NOTIFY, log::GENERAL);
             return;
         }
 
-        $sql = "DELETE FROM " . DB_PREFIX . static::$table_name . " WHERE " . $constraints;
+        $qry->where($where);
 
-        query($sql, "Delete failed:");
+        query($qry, "Delete failed:");
 
         if ($extra_tables) {
             foreach ($extra_tables as $table) {
-                $sql = "DELETE FROM " . DB_PREFIX . $table . " WHERE " . $constraints;
-                query($sql, "Delete from " . DB_PREFIX . " $table failed:");
+                $qry=new delete(array($table));
+                list($qry, $where) = $this->addWhereForKeys($qry);
+                $qry->where($where);
+                query($qry, "Delete from " . $table . " failed:");
             }
         }
     }
@@ -299,42 +303,48 @@ abstract class zophTable {
      * Updates a record.
      */
     public function update() {
-        $constraints = $this->createConstraints();
+        $qry=new update(array(static::$table_name));
+
+        list($qry, $where) = $this->addWhereForKeys($qry);
 
         reset($this->fields);
-        $values=null;
-        while (list($name, $value) = each($this->fields)) {
-            if ($this->isKey($name)) { continue; }
-
-            if (!empty($values)) { $values .= ", "; }
+        foreach($this->fields as $name => $value) {
+            if ($this->isKey($name)) {
+                continue;
+            }
 
             if (substr($name,0,7)=="parent_") {
                 $children=array();
                 $this->getBranchIdArray($children);
-                if(in_array($value, $children)) {
+                if (in_array($value, $children)) {
                     die("You cannot set the parent to a child of the current selection!");
                 }
             }
 
-            if ($name == "password") {
-                $values .= "$name = password('" . escape_string($value) . "')";
-            } else if ($value == "now()" ) {
-                $values .= "$name = " . $value . "";
-            } else if ($value == "" && in_array($name, static::$not_null)) {
+            if ($name === "password") {
+                $qry->addSetFunction("password=password(\"" . $value . "\")");
+            } else if ($value === "now()") {
+                /* Lastnotify is normaly set to "now()" and should not be escaped */
+                $qry->addSetFunction($name . "=now()");
+            } else if ($value =="" && in_array($name, static::$not_null)) {
                 die("<p class='error'><b>$name</b> may not be empty</p>");
             } else if ($value !== "" && !is_null($value)) {
-                $values .= "$name = '" . escape_string($value) . "'";
+                $qry->addSet($name, $name);
+                $qry->addParam(new param(":" . $name, $value, PDO::PARAM_STR));
             } else {
-                $values .= "$name = null";
+                $qry->addSet($name, $name);
+                $qry->addParam(new param(":" . $name, null, PDO::PARAM_STR));
             }
+
         }
 
-        if (!$values) { return; }
+        if (sizeOf($qry->getParams()) === 0) {
+            return;
+        }
 
-        $sql = "UPDATE " . DB_PREFIX . static::$table_name .
-            " SET " . $values . " WHERE " . $constraints;
+        $qry->where($where);
 
-        query($sql, "Update failed:");
+        query($qry, "Update failed:");
 
     }
 
@@ -392,13 +402,13 @@ abstract class zophTable {
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
-        if(!isset($details)) {
+        if (!isset($details)) {
             $details=$this->getDetails();
         }
-        if(isset($details["title"])) {
+        if (isset($details["title"])) {
             $display["title"]=$details["title"];
         }
-        if(array_key_exists("count", $details) && $details["count"] > 0) {
+        if (array_key_exists("count", $details) && $details["count"] > 0) {
 
             // Remove timezone identifiers from time format
             // Because in the current way Zoph works, they do not make sense
@@ -426,7 +436,7 @@ abstract class zophTable {
                 $disp_oldest, $disp_newest);
             $display["modified"]=sprintf(translate("last changed from %s to %s",false),
                 $disp_first, $disp_last);
-            if(isset($details["lowest"]) &&
+            if (isset($details["lowest"]) &&
                 isset($details["highest"]) &&
                 isset($details["average"])) {
                 $display["rated"]=sprintf(
@@ -439,9 +449,9 @@ abstract class zophTable {
             $display["count"]=translate("no photos", false);
         }
 
-        if(isset($details["children"])) {
+        if (isset($details["children"])) {
             $count=$details["children"];
-            if($count==0) {
+            if ($count==0) {
                 $display["children"]="";
                 $no="no ";
             } else {
@@ -449,7 +459,7 @@ abstract class zophTable {
                 $no="";
             }
 
-            if($this instanceof album) {
+            if ($this instanceof album) {
                 $text=translate($no . "sub-albums", false);
             } else if ($this instanceof category) {
                 $text=translate($no . "sub-categories", false);
@@ -499,7 +509,7 @@ abstract class zophTable {
      * @return mixed object
      */
     public static function getFromId($id) {
-        if(!is_null($id) && $id!=0) {
+        if (!is_null($id) && $id!=0) {
             $class=get_called_class();
             $obj=new $class($id);
             $obj->lookup();
@@ -607,10 +617,10 @@ abstract class zophTable {
 
         $key="_" . $class . $suffix;
 
-        if(isset($vars[$key])) {
-            if(is_array($vars[$key])) {
+        if (isset($vars[$key])) {
+            if (is_array($vars[$key])) {
                 foreach($vars[$key] as $id=>$var) {
-                    if(!empty($var)) {
+                    if (!empty($var)) {
                         $return[$id]=$var;
                     }
                 }
@@ -642,22 +652,6 @@ abstract class zophTable {
         return $objs;
     }
 
-
-    /**
-     * Creates a constraint clause based on the given keys
-     * @todo This is going to be replaced by addWhereForKeys() (below)
-     */
-    private function createConstraints() {
-        $constraints=null;
-        foreach (static::$primary_keys as $key) {
-            $value = $this->fields[$key];
-            if (!$value) { continue; }
-            if (!empty($constraints)) { $constraints .= " and "; }
-            $constraints .= "$key = '" . escape_string($value) . "'";
-        }
-        return $constraints;
-    }
-
     /**
      * Creates a constraint clause based on the given keys
      */
@@ -686,7 +680,7 @@ abstract class zophTable {
     public function getCoverphoto() {
         if ($this->get("coverphoto")) {
             $coverphoto=new photo($this->get("coverphoto"));
-            if($coverphoto->lookup()) {
+            if ($coverphoto->lookup()) {
                 return $coverphoto;
             }
         }
@@ -700,7 +694,7 @@ abstract class zophTable {
      */
     public function displayAutoCover($autocover=null) {
         $cover=$this->getAutoCover($autocover);
-        if($cover instanceof photo) {
+        if ($cover instanceof photo) {
             return $cover->getImageTag(THUMB_PREFIX);
         }
     }
@@ -711,7 +705,7 @@ abstract class zophTable {
      */
     public function displayCoverPhoto() {
         $cover=$this->getCoverphoto();
-        if($cover instanceof photo) {
+        if ($cover instanceof photo) {
             return $cover->getImageTag(THUMB_PREFIX);
         }
     }
@@ -757,26 +751,26 @@ abstract class zophTable {
     protected static function expandQueryForUser(select $qry, clause $where=null) {
         $user=user::getCurrent();
 
-        if(!$qry->hasTable("photos")) {
+        if (!$qry->hasTable("photos")) {
             $qry=static::addPhotoTableToQuery($qry);
         }
 
-        if(!$qry->hasTable("photo_albums")) {
+        if (!$qry->hasTable("photo_albums")) {
             $qry->join(array("pa" => "photo_albums"), "pa.photo_id = p.photo_id");
         }
 
-        if(!$qry->hasTable("group_permissions")) {
+        if (!$qry->hasTable("group_permissions")) {
             $qry->join(array("gp" => "group_permissions"), "pa.album_id = gp.album_id");
         }
 
-        if(!$qry->hasTable("groups_users")) {
+        if (!$qry->hasTable("groups_users")) {
             $qry->join(array("gu" => "groups_users"), "gp.group_id = gu.group_id");
         }
 
         $clause=new clause("gu.user_id=:userid");
         $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
 
-        if(is_null($where)) {
+        if (is_null($where)) {
             $where=$clause;
         } else {
             $where->addAnd($clause);
@@ -793,11 +787,11 @@ abstract class zophTable {
      * @return select modified query
      */
     protected static function addRelationTableToQuery(select $qry) {
-        if($qry->hasTable("albums") && !$qry->hasTable("photo_albums")) {
+        if ($qry->hasTable("albums") && !$qry->hasTable("photo_albums")) {
             $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
-        } else if($qry->hasTable("categories") && !$qry->hasTable("photo_categories")) {
+        } else if ($qry->hasTable("categories") && !$qry->hasTable("photo_categories")) {
             $qry->join(array("pc" => "photo_categories"), "pc.category_id = c.category_id");
-        } else if($qry->hasTable("people") && !$qry->hasTable("photo_people")) {
+        } else if ($qry->hasTable("people") && !$qry->hasTable("photo_people")) {
             $qry->join(array("pp" => "photo_people"), "pp.person_id = ppl.person_id");
         }
 
@@ -812,13 +806,13 @@ abstract class zophTable {
     protected static function addPhotoTableToQuery(select $qry) {
         $qry=static::addRelationTableToQuery($qry);
 
-        if($qry->hasTable("photo_albums")) {
+        if ($qry->hasTable("photo_albums")) {
             $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id");
-        } else if($qry->hasTable("photo_categories")) {
+        } else if ($qry->hasTable("photo_categories")) {
             $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
-        } else if($qry->hasTable("photo_people")) {
+        } else if ($qry->hasTable("photo_people")) {
             $qry->join(array("p" => "photos"), "pp.photo_id = p.photo_id");
-        } else if($qry->hasTable("places")) {
+        } else if ($qry->hasTable("places")) {
             $qry->join(array("p" => "photos"), "p.location_id = pl.place_id");
         } else {
             throw new DatabaseException("JOIN failed");
@@ -834,13 +828,13 @@ abstract class zophTable {
      * @return query modified query
      */
     protected static function addOrderToQuery(select $qry, $order) {
-        if(!$qry->hasTable("photos") &&
+        if (!$qry->hasTable("photos") &&
                 in_array($order, array("oldest", "newest", "first", "last",
                     "lowest", "highest", "average"))) {
             $qry=static::addPhotoTableToQuery($qry);
         }
 
-        if(!$qry->hasTable("view_photo_avg_rating") &&
+        if (!$qry->hasTable("view_photo_avg_rating") &&
                 in_array($order, array("lowest", "highest", "average"))) {
             $qry->join(array("ar" => "view_photo_avg_rating"), "ar.photo_id = p.photo_id");
         }
@@ -872,7 +866,7 @@ abstract class zophTable {
             break;
         }
 
-        if(!empty($order)) {
+        if (!empty($order)) {
             $qry->addOrder($order);
         }
         return $qry;
@@ -908,10 +902,10 @@ abstract class zophTable {
      * @param int|string id of value
      */
     public static function createPulldown($name, $value=null) {
-        if(static::getAutocompPref()) {
+        if (static::getAutocompPref()) {
             return static::createAutoCompPulldown($name, $value);
         } else {
-            if(isset(static::$sacache)) {
+            if (isset(static::$sacache)) {
                 $sa=static::$sacache;
             } else {
                 $sa=static::getSelectArray();
@@ -923,7 +917,7 @@ abstract class zophTable {
     public static function createAutoCompPulldown($name, $value=null) {
         $id=preg_replace("/^_+/", "", $name);
         $text="";
-        if($value) {
+        if ($value) {
             $obj=static::getFromId($value);
             $obj->lookup();
             $text=$obj->getName();
