@@ -40,12 +40,12 @@ class insert extends query {
         $fields=array();
         $values=array();
 
-        foreach($this->getParams() as $param) {
+        foreach ($this->getParams() as $param) {
             $fields[]=substr($param->getName(),1);
             $values[]=$param->getName();
         }
 
-        foreach($this->set as $name => $value) {
+        foreach ($this->set as $name => $value) {
             $fields[]=$name;
             $values[]=$value;
         }
@@ -62,10 +62,7 @@ class insert extends query {
 
     public function execute() {
         parent::execute();
-        $db=db::getHandle();
-
-        $id=$db->lastInsertId();
-        return $id;
+        return db::getHandle()->lastInsertId();
     }
 
 }
