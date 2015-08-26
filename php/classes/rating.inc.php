@@ -71,14 +71,16 @@ class rating extends zophTable {
      * @return float average rating
      */
     public static function getAverage(photo $photo) {
-        $sql = "SELECT AVG(rating) FROM " . DB_PREFIX . "photo_ratings ".
-            " WHERE photo_id = '" . (int) $photo->getId() . "'";
-        
-        $result = query($sql, "Rating recalculation failed");
+        $qry=new select(array("pr" => "photo_ratings"));
+        $qry->addFunction(array("average"=>"AVG(rating)"));
+        $qry->where(new clause("photo_id=:photoid"));
+        $qry->addParam(new param(":photoid", (int) $photo->getId(), PDO::PARAM_INT));
+        $qry->addGroupBy("photo_id");
 
+        $result = query($qry, "Rating recalculation failed");
         $row = fetch_array($result);
 
-        $avg = (round(100 * $row[0])) / 100.0;
+        $avg = (round(100 * $row["average"])) / 100.0;
 
         if($avg == 0) {
             $avg = null;
