@@ -522,9 +522,9 @@ abstract class zophTable {
      * @return int count
      */
     public static function getCount() {
-        $sql = "SELECT COUNT(*) FROM " . DB_PREFIX . static::$table_name;
-
-        return static::getCountFromQuery($sql);
+        $qry=new select(array(static::$table_name));
+        $qry->addFunction(array("count" => "COUNT(*)"));
+        return static::getCountFromQuery($qry);
     }
 
     /**
