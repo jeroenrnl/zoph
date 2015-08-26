@@ -80,7 +80,9 @@ abstract class query {
         $table=$this->table;
         foreach ($fields as $alias => $field) {
 
-            if (!isset($this->alias)) {
+            if (!isset($this->table)) {
+                $field=$field;
+            } else if (!isset($this->alias)) {
                 $field=$table . "." . $field;
             } else {
                 $field=$this->alias . "." . $field;

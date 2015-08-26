@@ -35,7 +35,29 @@ class select extends query {
     private $groupby=array();
     /** @var array UNION clause */
     protected $union=array();
+    /** @var select subquery */
+    protected $subquery=null;
 
+    /**
+     * Create new query
+     * @param string Table to query
+     */
+    public function __construct($table) {
+        if (is_array($table)) {
+            $tbl = reset($table);
+        } else {
+            $tbl = $table;
+        }
+
+        if ($tbl instanceof select) {
+            $this->subquery=$table;
+            foreach ($tbl->getParams() as $param) {
+                $this->addParam($param);
+            }
+        } else {
+            return parent::__construct($table);
+        }
+    }
     /**
      * Add a JOIN clause to the query
      * @param string table to join
@@ -117,7 +139,21 @@ class select extends query {
             $sql.="*";
         }
 
-        $sql .= " FROM " . $this->table;
+        if (isset($this->table)) {
+            $sql .= " FROM " . $this->table;
+        } else if (isset($this->subquery)) {
+            if (is_array($this->subquery)) {
+                $subqry = (string) reset($this->subquery);
+                $alias = key($this->subquery);
+                // We need to take off the ;
+                $sql .= " FROM (" . rtrim($subqry, ";") . ") AS " . $alias;
+            } else {
+                // We need to take off the ;
+                $sql .= " FROM (" . (string) rtrim($this->subquery. ";") . ")";
+            }
+        } else {
+            die("No from clause in query");
+        }
 
         if (isset($this->alias)) {
             $sql.=" AS " . $this->alias;

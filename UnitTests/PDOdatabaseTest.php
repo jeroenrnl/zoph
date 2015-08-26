@@ -149,6 +149,35 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     }
 
     /**
+     * Test a SELECT query with a subquery in the FROM clause
+     */
+    public function testQueryWithFROMSubquery() {
+        $subqry=new select(array("pr" => "photo_ratings"));
+        $subqry->addFields(array("photo_id"));
+        $subqry->addFunction(array("rating" => "FLOOR(avg(pr.rating)+0.5)"));
+        $subqry->where(new clause("photo_id < :photoid"));
+        $param=new param(":photoid", 25, PDO::PARAM_INT);
+        $subqry->addParam($param);
+
+        $qry=new select(array("avg_rating" => $subqry));
+        $qry->addFields(array("rating"));
+        $qry->addFunction(array("count" => "COUNT(*)"));
+        $qry->addGroupBy("rating");
+
+        $sql=(string) $qry;
+        $exp_sql="SELECT rating, COUNT(*) AS count FROM " .
+                 "(SELECT pr.photo_id, FLOOR(avg(pr.rating)+0.5) AS rating " .
+                 "FROM zoph_photo_ratings AS pr " .
+                 "WHERE (photo_id < :photoid)) AS avg_rating " .
+                 "GROUP BY rating;";
+
+        $this->assertEquals($exp_sql, $sql);
+
+        $this->assertEquals(array($param), $qry->getParams());
+            
+    }
+
+    /**
      * Test a query with LIMIT
      * @dataProvider getLimits();
      */
@@ -178,7 +207,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
      */
     public function testQueryWithOrder(array $orders) {
         $qry=new select("photos");
-        foreach($orders as $order) {
+        foreach ($orders as $order) {
             $qry->addOrder($order);
         }
         $sql=(string) $qry;
@@ -222,7 +251,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
      */
     public function testInsert($table, array $values) {
         $qry=new insert(array($table));
-        foreach($values as $field => $value) {
+        foreach ($values as $field => $value) {
             $qry->addParam(new param(":" . $field, $value, PDO::PARAM_STR));
         }
 
@@ -232,7 +261,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $qry->addFields(array_keys($values));
 
         $where=null;
-        foreach($values as $field => $value) {
+        foreach ($values as $field => $value) {
             $clause=new clause($field . "=:" . $field);
             if ($where instanceof clause) {
                 $where->addAnd($clause);
@@ -268,7 +297,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $this->assertEquals(3, sizeof($ids));
 
         // Now delete them
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $qry=new delete(array("photos"));
             $qry->where(new clause("photo_id=:photoid"));
             $qry->addParam(new param(":photoid", $id, PDO::PARAM_INT));
@@ -276,7 +305,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         }
 
         // And check if they're gone
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $qry=new select(array("photos"));
             $qry->where(new clause("photo_id=:photoid"));
             $qry->addParam(new param(":photoid", $id, PDO::PARAM_INT));
