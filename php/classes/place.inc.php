@@ -594,7 +594,7 @@ class place extends zophTreeTable implements Organizer {
      * @todo it seems this function not used at all
      * @todo should be moved into zophTable
      */
-    public static function getAll($constraints = null, $conj = "and", $ops = null,
+    public static function getAll($constraints = null, $conj = "AND", $ops = null,
         $order = "city, title, address") {
         return static::getRecords($order, $constraints, $conj, $ops);
     }

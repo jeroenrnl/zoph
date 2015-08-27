@@ -569,16 +569,13 @@ abstract class zophTable {
      * @return array records
      */
     public static function getRecords($order = null, $constraints = null,
-            $conj = "and", $ops = null) {
-        $sql = "SELECT * FROM " . DB_PREFIX . static::$table_name;
+            $conj = "AND", $ops = null) {
+
+        $qry = new select(static::$table_name);
+        $where=null;
+
         if ($constraints) {
             while (list($name, $value) = each($constraints)) {
-                if (!empty($constraint_string)) {
-                    $constraint_string .= " $conj ";
-                } else {
-                    $constraint_string =  " WHERE ";
-                }
-
                 $op = "=";
                 if ($ops && !empty($ops["$name"])) {
                     $op = $ops["$name"];
@@ -586,23 +583,45 @@ abstract class zophTable {
 
                 $n = strpos($name, "#");
                 if ($n > 1) {
+                    $paramNumber=substr($name, $n + 1);
                     $name = substr($name, 0, $n);
+                    $paramName=":" . $name . "_" . $paramNumber;
+                } else {
+                    $paramName=":" . $name;
                 }
 
-                if ($value != "null" && $value != "''") {
-                    $value = "'" . escape_string($value) . "'";
+
+                if ($value == "null" || $value == "''") {
+                    $value = null;
                 }
 
-                $constraint_string .= "$name $op $value";
+                $clause=new clause($name . " " . $op . " " . $paramName);
+                $qry->addParam(new param($paramName, $value, PDO::PARAM_STR));
+
+                if ($where instanceof clause) {
+                    if ($conj == "AND") {
+                        $where->addAnd($clause);
+                    } else if ($conj == "OR") {
+                        $where->addOr($clause);
+                    } else {
+                        throw new zophException("Illegal conjunction (" . e($conj) . ") should be AND or OR, please file a bug");
+                    }
+                } else {
+                    $where = $clause;
+                }
+
             }
-            $sql .= $constraint_string;
+
+            if ($where instanceof clause) {
+                $qry->where($where);
+            }
         }
 
         if ($order) {
-            $sql .= " ORDER BY $order";
+            $qry->addOrder($order);
         }
 
-        return static::getRecordsFromQuery($sql);
+        return static::getRecordsFromQuery($qry);
     }
 
     /**

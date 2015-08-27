@@ -1062,7 +1062,7 @@ class photoTest extends ZophDataBaseTestCase {
                     "width" => "600",
                     "height" => "400"
                 ),
-                "and",
+                "AND",
                 null,
                 array(1,2,3,4,5,6,7,8,9,10,11,12)
             ),
@@ -1087,7 +1087,7 @@ class photoTest extends ZophDataBaseTestCase {
                     "date#0" => "2015-06-17",
                     "date#1" => "2014-01-06"
                 ),
-                "or",
+                "OR",
                 null,
                 array(6,11,12)
             )
