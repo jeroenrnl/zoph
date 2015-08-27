@@ -604,7 +604,8 @@ abstract class zophTable {
                     } else if ($conj == "OR") {
                         $where->addOr($clause);
                     } else {
-                        throw new zophException("Illegal conjunction (" . e($conj) . ") should be AND or OR, please file a bug");
+                        throw new zophException("Illegal conjunction (" . e($conj) . 
+                            ") should be AND or OR, please file a bug");
                     }
                 } else {
                     $where = $clause;
