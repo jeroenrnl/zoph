@@ -192,12 +192,18 @@ class rating extends zophTable {
      * @return array array of rating => count pairs;
      */
     public static function getPhotoCountForUser(user $user) {
-        $sql = "SELECT ROUND(rating) AS rating, count(*) AS count FROM " .
-            DB_PREFIX . "photo_ratings " .
-            "WHERE user_id=" . (int) $user->getId() .
-            " GROUP BY ROUND(rating) ORDER BY ROUND(rating) ";
+        $qry = new select(array("pr" => "photo_ratings"));
+        $qry->addFunction(array(
+            "rating"    => "ROUND(rating)",
+            "count"     => "COUNT(*)"
+        ));
 
-        $result = query($sql, "Rating grouping failed");
+        $qry->where(new clause("user_id=:userid"));
+        $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
+        $qry->addGroupBy("ROUND(rating)");
+        $qry->addOrder("ROUND(rating)");
+
+        $result = query($qry, "Rating grouping failed");
         $ratings=array_fill(1, 10, 0);
         while($row = fetch_array($result)) {
             $rating=(int) $row["rating"];
