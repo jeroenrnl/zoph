@@ -163,8 +163,8 @@ class select extends query {
             $sql.=" " . implode(" ", $this->joins);
         }
 
-        if ($this->clause instanceof clause) {
-            $sql .= " WHERE " . $this->clause;
+        if ($this->where instanceof clause) {
+            $sql .= " WHERE " . $this->where;
         }
 
         $groupby=trim($this->getGroupBy());

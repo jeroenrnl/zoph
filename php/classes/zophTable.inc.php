@@ -221,7 +221,7 @@ abstract class zophTable {
         $qry=new insert(array(static::$table_name));
         reset($this->fields);
 
-        foreach($this->fields as $name => $value) {
+        foreach ($this->fields as $name => $value) {
             if (!static::$keepKeys && $this->isKey($name)) {
                 continue;
             }
@@ -308,7 +308,7 @@ abstract class zophTable {
         list($qry, $where) = $this->addWhereForKeys($qry);
 
         reset($this->fields);
-        foreach($this->fields as $name => $value) {
+        foreach ($this->fields as $name => $value) {
             if ($this->isKey($name)) {
                 continue;
             }
@@ -488,7 +488,7 @@ abstract class zophTable {
 
         $response=$xml->createElement("response");
 
-        foreach($display as $subj => $data) {
+        foreach ($display as $subj => $data) {
             $detail=$xml->createElement("detail");
             $subject=$xml->createElement("subject");
             $subject->appendChild($xml->createTextNode($subj));
@@ -572,52 +572,9 @@ abstract class zophTable {
             $conj = "AND", $ops = null) {
 
         $qry = new select(static::$table_name);
-        $where=null;
-
-        if ($constraints) {
-            while (list($name, $value) = each($constraints)) {
-                $op = "=";
-                if ($ops && !empty($ops["$name"])) {
-                    $op = $ops["$name"];
-                }
-
-                $n = strpos($name, "#");
-                if ($n > 1) {
-                    $paramNumber=substr($name, $n + 1);
-                    $name = substr($name, 0, $n);
-                    $paramName=":" . $name . "_" . $paramNumber;
-                } else {
-                    $paramName=":" . $name;
-                }
-
-
-                if ($value == "null" || $value == "''") {
-                    $value = null;
-                }
-
-                $clause=new clause($name . " " . $op . " " . $paramName);
-                $qry->addParam(new param($paramName, $value, PDO::PARAM_STR));
-
-                if ($where instanceof clause) {
-                    if ($conj == "AND") {
-                        $where->addAnd($clause);
-                    } else if ($conj == "OR") {
-                        $where->addOr($clause);
-                    } else {
-                        throw new zophException("Illegal conjunction (" . e($conj) . 
-                            ") should be AND or OR, please file a bug");
-                    }
-                } else {
-                    $where = $clause;
-                }
-
-            }
-
-            if ($where instanceof clause) {
-                $qry->where($where);
-            }
+        if(is_array($constraints)) {
+            $qry->addWhereFromConstraints($constraints, $conj, $ops);
         }
-
         if ($order) {
             $qry->addOrder($order);
         }
@@ -639,7 +596,7 @@ abstract class zophTable {
 
         if (isset($vars[$key])) {
             if (is_array($vars[$key])) {
-                foreach($vars[$key] as $id=>$var) {
+                foreach ($vars[$key] as $id=>$var) {
                     if (!empty($var)) {
                         $return[$id]=$var;
                     }

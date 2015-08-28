@@ -40,7 +40,7 @@ abstract class query {
     /** @var array parameters for prepared queries */
     protected $params=null;
     /** @var string WHERE clause */
-    protected $clause=null;
+    protected $where=null;
     /** @var string HAVING clause */
     protected $having=null;
     /** @var array ORDER clause */
@@ -105,7 +105,7 @@ abstract class query {
      * Add one or more fields to a query that is calculated using an SQL function
      */
     public function addFunction(array $functions) {
-        foreach($functions as $alias => $function) {
+        foreach ($functions as $alias => $function) {
             $this->fields[]=$function . " AS " . $alias;
         }
     }
@@ -123,7 +123,7 @@ abstract class query {
      * @param array parameters
      */
     public function addParams(array $params) {
-        foreach($params as $param) {
+        foreach ($params as $param) {
             $this->addParam($param);
         }
     }
@@ -138,7 +138,7 @@ abstract class query {
             return $params;
         }
 
-        foreach($this->params as $param) {
+        foreach ($this->params as $param) {
             if (!$param instanceof param) {
                 continue;
             }
@@ -164,7 +164,7 @@ abstract class query {
      * @return query return the query to enable chaining
      */
     public function where(clause $clause) {
-        $this->clause=$clause;
+        $this->where=$clause;
         return $this;
     }
 
@@ -254,10 +254,62 @@ abstract class query {
         $stmt=$db->prepare($this);
 
         $values=array();
-        foreach($this->getParams() as $param) {
+        foreach ($this->getParams() as $param) {
             $values[$param->getName()]=$param->getValue();
         }
         $stmt->execute($values);
+    }
+
+    /**
+     * Add WHERE clause, by building it from a constraints array
+     * @param array Constraints, conditions that the records must comply to
+     * @param array Conjunctions, and/or
+     * @param array Operators =, !=, >, <, >= or <=
+     * @return query $this
+     */
+    public function addWhereFromConstraints(array $constraints, $conj = "AND", $ops = null) {
+        $where=null;
+        while (list($name, $value) = each($constraints)) {
+            $op = "=";
+            if ($ops && !empty($ops["$name"])) {
+                $op = $ops["$name"];
+            }
+
+            $n = strpos($name, "#");
+            if ($n > 1) {
+                $paramNumber=substr($name, $n + 1);
+                $name = substr($name, 0, $n);
+                $paramName=":" . $name . "_" . $paramNumber;
+            } else {
+                $paramName=":" . $name;
+            }
+
+
+            if ($value == "null" || $value == "''") {
+                $value = null;
+            }
+
+            $clause=new clause($name . " " . $op . " " . $paramName);
+            $this->addParam(new param($paramName, $value, PDO::PARAM_STR));
+
+            if ($where instanceof clause) {
+                if ($conj == "AND") {
+                    $where->addAnd($clause);
+                } else if ($conj == "OR") {
+                    $where->addOr($clause);
+                } else {
+                    throw new zophException("Illegal conjunction (" . e($conj) .
+                        ") should be AND or OR, please file a bug");
+                    }
+            } else {
+                $where = $clause;
+            }
+
+        }
+        if ($where instanceof clause) {
+            $this->where($where);
+        }
+        return $this;
     }
 
     /**

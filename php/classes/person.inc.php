@@ -115,6 +115,7 @@ class person extends zophTable implements Organizer {
         );
 
         $qry->addParams($params);
+        $qry->where($where);
         $qry->execute();
 
     }
@@ -312,13 +313,13 @@ class person extends zophTable implements Organizer {
             translate("date of birth") => create_date_link(e($this->get("dob"))),
             translate("date of death") => create_date_link(e($this->get("dod"))),
             translate("gender") => e($this->getGender()));
-        if($mother instanceof person) {
+        if ($mother instanceof person) {
             $display[translate("mother")] = $mother->getLink();
         }
-        if($father instanceof person) {
+        if ($father instanceof person) {
             $display[translate("father")] = $father->getLink();
         }
-        if($spouse instanceof person) {
+        if ($spouse instanceof person) {
             $display[translate("spouse")] = $spouse->getLink();
         }
         return $display;
@@ -356,7 +357,7 @@ class person extends zophTable implements Organizer {
      */
     public function getAutoCover($autocover=null) {
         $coverphoto=$this->getCoverphoto();
-        if($coverphoto instanceof photo) {
+        if ($coverphoto instanceof photo) {
             return $coverphoto;
         }
 
@@ -390,7 +391,7 @@ class person extends zophTable implements Organizer {
      * @param string name
      */
     public function setName($name) {
-        if(strpos($name, ":")!==false) {
+        if (strpos($name, ":")!==false) {
             $name_array=array_pad(explode(":", $name),4,null);
             $this->set("first_name", $name_array[0]);
             $this->set("middle_name", $name_array[1]);
@@ -464,7 +465,7 @@ class person extends zophTable implements Organizer {
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
-        if(!isset($details)) {
+        if (!isset($details)) {
             $details=$this->getDetails();
         }
         $details["title"]=translate("Photos taken by this person:", false);
@@ -476,7 +477,7 @@ class person extends zophTable implements Organizer {
      * @param string name
      */
     public static function getByName($name) {
-        if(empty($name)) {
+        if (empty($name)) {
             return false;
         }
         $qry=new select(array("ppl" => "people"));
@@ -520,18 +521,18 @@ class person extends zophTable implements Organizer {
 
         $qry=new select(array("ppl" => "people"));
         $qry->addFunction(array("person_id" => "DISTINCT ppl.person_id"));
-        if(!is_null($search)) {
+        if (!is_null($search)) {
             $where=static::getWhereForSearch($search, $search_first);
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
         }
 
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
 
-        if(!user::getCurrent()->is_admin()) {
+        if (!user::getCurrent()->is_admin()) {
             list($qry,$where)=static::expandQueryForUser($qry, $where);
         }
 
-        if($where instanceof clause) {
+        if ($where instanceof clause) {
             $qry->where($where);
         }
         return static::getRecordsFromQuery($qry);
@@ -545,13 +546,13 @@ class person extends zophTable implements Organizer {
      * @return DOMDocument XML Document
      */
     public static function getXMLdata($search, DOMDocument $xml, DOMElement $rootnode) {
-        if($search=="") {
+        if ($search=="") {
             $search=null;
         }
         $records=static::getAll($search,true);
         $idname=static::$primary_keys[0];
 
-        foreach($records as $record) {
+        foreach ($records as $record) {
             $newchild=$xml->createElement(static::XMLNODE);
             $key=$xml->createElement("key");
             $title=$xml->createElement("title");
@@ -579,7 +580,7 @@ class person extends zophTable implements Organizer {
      * @return array
      */
     public static function getSelectArray() {
-        if(isset(static::$sacache)) {
+        if (isset(static::$sacache)) {
             return static::$sacache;
         }
         $ppl[""] = "";
@@ -600,16 +601,16 @@ class person extends zophTable implements Organizer {
      */
     public static function getCountForUser() {
         $user=user::getCurrent();
-        if($user && !$user->is_admin()) {
+        if ($user && !$user->is_admin()) {
             return static::getCount();
         } else {
             $allowed=array();
             $people=static::getAll();
             $photographers=photographer::getAll();
-            foreach($people as $person) {
+            foreach ($people as $person) {
                 $allowed[]=$person->get("person_id");
             }
-            foreach($photographers as $photographer) {
+            foreach ($photographers as $photographer) {
                 $allowed[]=$photographer->get("person_id");
             }
 
@@ -632,19 +633,19 @@ class person extends zophTable implements Organizer {
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
 
 
-        if($user && !$user->is_admin()) {
+        if ($user && !$user->is_admin()) {
             $people=(array)static::getAll($search);
             $photographers=(array)photographer::getAll($search);
-            foreach($people as $person) {
+            foreach ($people as $person) {
                 $person->lookup();
                 $allowed[]=$person->get("person_id");
             }
-            foreach($photographers as $photographer) {
+            foreach ($photographers as $photographer) {
                 $photographer->lookup();
                 $allowed[]=$photographer->get("person_id");
             }
             $allowed=array_unique($allowed);
-            if(count($allowed)==0) {
+            if (count($allowed)==0) {
                 return null;
             }
             $param=new param(":person_ids", $allowed, PDO::PARAM_INT);
@@ -664,8 +665,8 @@ class person extends zophTable implements Organizer {
      */
     public static function getWhereForSearch($search, $search_first=false) {
         $where=null;
-        if($search!==null) {
-            if($search==="") {
+        if ($search!==null) {
+            if ($search==="") {
                 $where=new clause("ppl.last_name=''");
                 $where->addOr(new clause("ppl.last_name is null"));
             } else {
