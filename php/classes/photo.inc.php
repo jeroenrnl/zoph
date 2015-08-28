@@ -261,7 +261,7 @@ class photo extends zophTable {
         $qry->addFunction(array("pos" => "max(position)"));
         $qry->where(new clause("photo_id=:photoid"));
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
-        $result=fetch_array(query($qry));
+        $result=query($qry)->fetch(PDO::FETCH_ASSOC);
         return (int) $result["pos"];
     }
 

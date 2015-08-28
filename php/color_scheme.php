@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -64,10 +64,10 @@ if ($action == "display") {
     if ($user->is_admin()) {
         ?>
         <span class="actionlink">
-          <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php 
+          <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php
               echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("edit") ?>
           </a> |
-          <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php 
+          <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php
               echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("delete") ?>
           </a> |
           <a href="color_scheme.php?_action=new"><?php echo translate("new") ?></a>
@@ -82,7 +82,7 @@ if ($action == "display") {
         <dl class="color_scheme">
     <?php
     $colors = $color_scheme->getDisplayArray();
-    
+
     while (list($name, $value) = each($colors)) {
         if ($name == "Name") { continue; }
         ?>
@@ -92,16 +92,16 @@ if ($action == "display") {
           <div class="color" style="background: #<?php echo $value ?>;">&nbsp;</div>
         </dd>
         <?php
-    } 
+    }
     ?>
       </dl>
-    <?php    
+    <?php
 } else if ($action == "confirm") {
     ?>
       <h1><?php echo translate("delete color scheme") ?></h1>
       <div class="main">
         <span class="actionlink">
-          <a href="color_scheme.php?_action=confirm&amp;color_scheme_id=<?php 
+          <a href="color_scheme.php?_action=confirm&amp;color_scheme_id=<?php
             echo $color_scheme->get("color_scheme_id") ?>">
             <?php echo translate("delete") ?>
           </a> |
@@ -111,7 +111,7 @@ if ($action == "display") {
         <br>
     <?php
 } else {
-    $colors = $color_scheme->getEditArray();
+    $colors = $color_scheme->getAll();
     ?>
     <h1>
       <span class="actionlink">
@@ -122,12 +122,12 @@ if ($action == "display") {
     <div class="main">
       <form action="color_scheme.php">
        <input type="hidden" name="_action" value="<?php echo $action ?>">
-       <input type="hidden" name="color_scheme_id" value="<?php 
+       <input type="hidden" name="color_scheme_id" value="<?php
          echo $color_scheme->get("color_scheme_id") ?>">
        <label for="name">Name</label>
        <div class="colordef">
     <?php
-    if ($copy) {
+    if (isset($copy)) {
         echo create_text_input("name", "copy of " . $color_scheme->get("name"), 16, 64);
     } else {
         echo create_text_input("name", $color_scheme->get("name"), 16, 64);
@@ -136,15 +136,12 @@ if ($action == "display") {
         </div>
         <br>
     <?php
-    while (list($name, $value) = each($colors)) {
-        if ($name == "Name") { continue; }
-        $bg = preg_replace('/.*value="([^"]+)".*\n/', '$1', $value);
-        $id = strtolower(str_replace(" ", "_", $name));
+    foreach ($colors as $id => $value) {
+        $name=ucfirst(str_replace("_", " ", $id));
         ?>
         <label for="<?php echo $id ?>"><?php echo $name ?></label>
-        <div class="colordef"><?php echo $value ?></div>
-        <div class="color" style="<?php echo $action != "insert" ? 
-            " background: #$bg" : "" ?>">&nbsp;
+        <div class="colordef"><?php echo create_text_input($id, $value, 7, 7) ?></div>
+        <div class="color" style="background: #<?php echo $value ?>">&nbsp;
         </div><br>
         <?php
     }
@@ -153,9 +150,9 @@ if ($action == "display") {
     <?php
 }
 ?>
-<?php echo ( $action == "" || 
-    $action == "display" || 
-    $action == "delete" || 
+<?php echo ( $action == "" ||
+    $action == "display" ||
+    $action == "delete" ||
     $action == "confirm" ) ? "" : "</form>"; ?>
   <br>
 </div>

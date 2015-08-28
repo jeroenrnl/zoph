@@ -74,7 +74,7 @@ class configTest extends ZophDataBaseTestCase {
         $qry->where(new clause("conf_id=:conf_id"));
         $qry->addParam(new param(":conf_id", "test.unknown", PDO::PARAM_STR));
         $result=query($qry);
-        $records=fetch_assoc($result);
+        $records=$result->fetch(PDO::FETCH_ASSOC);
 
         $this->assertFalse($records);
 

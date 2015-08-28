@@ -60,7 +60,7 @@ class conf {
 
         $result=query($qry, "Cannot load configuration from database");
 
-        while($row = fetch_row($result)) {
+        while($row = $result->fetch(PDO::FETCH_NUM)) {
             $key=$row[0];
             $value=$row[1];
             try {
@@ -92,7 +92,7 @@ class conf {
      */
     public static function loadFromRequestVars(array $vars) {
         confDefault::getConfig();
-        foreach($vars as $key=>$value) {
+        foreach ($vars as $key=>$value) {
             if (substr($key,0,1) == "_") {
                 if (substr($key,0,7) == "_reset_") {
                     $key=substr(str_replace("_", ".", $key),7);

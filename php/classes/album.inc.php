@@ -201,7 +201,7 @@ class album extends zophTreeTable implements Organizer {
 
         $result=query($qry);
         if ($result) {
-            return fetch_assoc($result);
+            return $result->fetch(PDO::FETCH_ASSOC);
         } else {
             return null;
         }

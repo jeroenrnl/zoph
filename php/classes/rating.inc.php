@@ -78,7 +78,7 @@ class rating extends zophTable {
         $qry->addGroupBy("photo_id");
 
         $result = query($qry, "Rating recalculation failed");
-        $row = fetch_array($result);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
 
         $avg = (round(100 * $row["average"])) / 100.0;
 
@@ -178,7 +178,7 @@ class rating extends zophTable {
         $result = query($qry, "Rating grouping failed");
 
         $ratings=array_fill(0, 11, 0);
-        while($row = fetch_array($result)) {
+        while($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $rating=(int) $row["rating"];
             $ratings[$rating]=(int) $row["count"];
         }
@@ -205,7 +205,7 @@ class rating extends zophTable {
 
         $result = query($qry, "Rating grouping failed");
         $ratings=array_fill(1, 10, 0);
-        while($row = fetch_array($result)) {
+        while($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $rating=(int) $row["rating"];
             $ratings[$rating]=(int) $row["count"];
         }

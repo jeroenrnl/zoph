@@ -298,12 +298,6 @@ function create_form($vars, $ignore = array()) {
     return $form;
 }
 
-function make_title($string) {
-    $string = str_replace("_", " ", $string);
-    $string = preg_replace("/\b(\w)/e", "strtoupper('\\1')", $string);
-    return $string;
-}
-
 /**
  * Create a link to the calendar page
  * @param string Date in "yyyy-mm-dd" format

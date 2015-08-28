@@ -358,39 +358,14 @@ abstract class zophTable {
         $keys = array_keys($this->fields);
         sort($keys);
         reset($keys);
+        $da=array();
         foreach ($keys as $k) {
             if ($this->isKey($k)) { continue; }
-            $title = make_title($k);
+            $title = ucfirst(str_replace("_", " ", $k));
             $da[$title] = $this->fields[$k];
         }
 
         return $da;
-    }
-
-    /**
-     * Creates an alphabetized array of field names and text input blocks.
-     * @todo Returns HTML, should be moved to template
-     * @return array of field names and HTML text input fields
-     */
-    public function getEditArray() {
-        if (!$this->fields) { return; }
-
-        $field_lengths = get_field_lengths(static::$table_name);
-
-        $keys = array_keys($field_lengths);
-        sort($keys);
-        reset($keys);
-        foreach ($keys as $k) {
-            if ($this->isKey($k)) { continue; }
-            $title = make_title($k);
-
-            $len = $field_lengths[$k];
-            $size = min($len, 20);
-
-            $ea[$title] = create_text_input($k, $this->fields[$k], $size, $len);
-        }
-
-        return $ea;
     }
 
     public function getURL() {
@@ -555,7 +530,11 @@ abstract class zophTable {
      */
     public static function getCountFromQuery($sql) {
         $result = query($sql, "Unable to get count");
-        return result($result, 0, 0);
+        if ($result instanceof PDOStatement) {
+            return $result->fetch(PDO::FETCH_BOTH)[0];
+        } else {
+            return result($result, 0, 0);
+        }
     }
 
 
@@ -572,7 +551,7 @@ abstract class zophTable {
             $conj = "AND", $ops = null) {
 
         $qry = new select(static::$table_name);
-        if(is_array($constraints)) {
+        if (is_array($constraints)) {
             $qry->addWhereFromConstraints($constraints, $conj, $ops);
         }
         if ($order) {
@@ -617,15 +596,20 @@ abstract class zophTable {
     public static function getRecordsFromQuery($sql) {
         $class=get_called_class();
         $result = query($sql, "Unable to get records");
-
         $objs=array();
-        while ($row = fetch_assoc($result)) {
-            $obj = new $class;
-            $obj->setFields($row);
-            $objs[] = $obj;
+        if ($result instanceof PDOStatement) {
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                $obj = new $class;
+                $obj->setFields($row);
+                $objs[] = $obj;
+            }
+        } else {
+            while ($row = fetch_assoc($result)) {
+                $obj = new $class;
+                $obj->setFields($row);
+                $objs[] = $obj;
+            }
         }
-
-        free_result($result);
         return $objs;
     }
 
