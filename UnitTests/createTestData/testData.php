@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,8 +28,8 @@
  * @author Jeroen Roos
  */
 class testData {
-    
-    
+
+
     public static function getPhotos() {
         $photos=array();
         for($num=1; $num<=12; $num++) {
@@ -53,7 +53,7 @@ class testData {
             10 => array("2014-01-10", "00:01:00", "2014-01-10 00:02:00", 38.89511, -77.03637),
             11 => array("2015-06-17", "00:01:00", "2015-06-17 00:01:00", -25, 135),
             12 => array("2015-06-17", "00:02:00", "2015-06-17 00:02:00", -25, 135)
-       ); 
+       );
     }
 
     public static function getCategories() {
@@ -149,7 +149,7 @@ class testData {
     public static function getAdminUsers() {
         return array(2);
     }
-    
+
     public static function getLightboxAlbums() {
         return array(
             /* user => lb */

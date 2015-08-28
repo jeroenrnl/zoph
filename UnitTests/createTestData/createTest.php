@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 /*
- * This test fills the database with testdata 
+ * This test fills the database with testdata
  * You should normally not need to use this, as an XML-file with
  * testdata is included with the unittests. If you require to make
  * changes to that data, this script can be used.
@@ -12,7 +12,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -80,7 +80,7 @@ class createTestData {
             $album->insert();
         }
     }
-    
+
     /**
      * Create categories in the database
      */
@@ -113,7 +113,7 @@ class createTestData {
             $place->insert();
         }
     }
-    
+
     /**
      * Create Users in the database
      */
@@ -124,7 +124,7 @@ class createTestData {
             $user=new user();
             $user->set("user_name",$name);
             $user->insert();
-            if(array_key_exists($id, $adminUsers)) {
+            if (array_key_exists($id, $adminUsers)) {
                 $user->set("user_class", 0);
                 $user->update();
             } else {
@@ -133,7 +133,7 @@ class createTestData {
             }
         }
     }
-    
+
     /**
      * Create people in the database
      */
@@ -149,13 +149,13 @@ class createTestData {
             $person->set("first_name", $first);
             $person->set("last_name", $last);
             $person->insert();
-            if(array_key_exists($id, $users)) {
+            if (array_key_exists($id, $users)) {
                 $user=new user($id);
                 $user->lookup();
                 $user->set("person_id", $id);
                 $user->update();
             }
-            if(array_key_exists($id, $lightboxAlbums)) {
+            if (array_key_exists($id, $lightboxAlbums)) {
                 $user=new user($id);
                 $user->lookup();
                 $user->set("lightbox_id", $lightboxAlbums[$id]);
@@ -172,7 +172,7 @@ class createTestData {
             $group=new group();
             $group->set("group_name", $arr_group[0]);
             $group->insert();
-            foreach($arr_group[1] as $member) {
+            foreach ($arr_group[1] as $member) {
                 $user=user::getByName($member);
                 $group->add_member($user->getId());
             }
@@ -186,7 +186,7 @@ class createTestData {
         foreach ($groupPermissions as $group=>$albums) {
             $gr=new group($group);
             $gr->lookup();
-            foreach($albums as $alb) {
+            foreach ($albums as $alb) {
                 $prm=new group_permissions($group, $alb);
                 $prm->set("access_level", 5);
                 $prm->set("watermark_level", 3);
@@ -210,10 +210,10 @@ class createTestData {
         $photographer=testData::getPhotographer();
         $comments=testData::getComments();
         $ratings=testData::getRatings();
-        $relations=testData::getRelations(); 
+        $relations=testData::getRelations();
 
         $files=array();
-        foreach($photos as $id=>$photo) {
+        foreach ($photos as $id=>$photo) {
             $files[]=new file("/tmp/" . $photo);
         }
         conf::set("import.cli.thumbs", true);
@@ -221,39 +221,39 @@ class createTestData {
 
 
         $imported=cliimport::photos($files, array());
-        foreach($imported as $photo) {
+        foreach ($imported as $photo) {
             $user=new user(1);
             $user->lookup();
             user::setCurrent($user);
 
             $id=$photo->get("photo_id");
-            if(isset($photoLocation[$id])) {
+            if (isset($photoLocation[$id])) {
                 $photo->set("location_id",$photoLocation[$id]);
                 $photo->update();
                 $photo->lookup();
             }
-            if(isset($photographer[$id])) {
+            if (isset($photographer[$id])) {
                 $photo->set("photographer_id",$photographer[$id]);
                 $photo->update();
                 $photo->lookup();
             }
-            if(is_array($photoAlbums[$id])) {
-                foreach($photoAlbums[$id] as $alb) {
+            if (is_array($photoAlbums[$id])) {
+                foreach ($photoAlbums[$id] as $alb) {
                     $photo->addTo(new album($alb));
                 }
             }
-            if(is_array($photoCategories[$id])) {
-                foreach($photoCategories[$id] as $cat) {
+            if (is_array($photoCategories[$id])) {
+                foreach ($photoCategories[$id] as $cat) {
                     $photo->addTo(new category($cat));
                 }
             }
-            if(is_array($photoPeople[$id])) {
-                foreach($photoPeople[$id] as $pers) {
+            if (is_array($photoPeople[$id])) {
+                foreach ($photoPeople[$id] as $pers) {
                     $photo->addTo(new person ($pers));
                 }
             }
-            if(isset($relations[$id])) {
-                foreach($relations[$id] as $related => $rel_desc) {
+            if (isset($relations[$id])) {
+                foreach ($relations[$id] as $related => $rel_desc) {
                     photoRelation::defineRelation(
                         $photo,
                         new photo($related),
@@ -262,7 +262,7 @@ class createTestData {
                 }
             }
 
-            if(isset($photoData[$id])) {
+            if (isset($photoData[$id])) {
                 $photo->set("date", $photoData[$id][0]);
                 $photo->set("time", $photoData[$id][1]);
                 $photo->set("timestamp", $photoData[$id][2]);
@@ -272,8 +272,8 @@ class createTestData {
             }
 
             // WARNING, below this line other users log in!
-            if(isset($comments[$id])) {
-                foreach($comments[$id] as $user_id => $comment) {
+            if (isset($comments[$id])) {
+                foreach ($comments[$id] as $user_id => $comment) {
                     $obj = new comment();
                     $user = new user($user_id);
                     $user->lookup();
@@ -291,10 +291,10 @@ class createTestData {
                 }
             }
 
-            if(isset($ratings[$id])) {
+            if (isset($ratings[$id])) {
                 $total=0;
                 $count=0;
-                foreach($ratings[$id] as $user_id => $rating) {
+                foreach ($ratings[$id] as $user_id => $rating) {
                     $user = new user($user_id);
                     $user->lookup();
                     user::setCurrent($user);
@@ -321,21 +321,21 @@ class createTestData {
         $photoCategories=testData::getPhotoCategories();
         $photoPeople=testData::getPhotoPeople();
         $photographer=testData::getPhotographer();
-        foreach($photos as $num=>$name) {
+        foreach ($photos as $num=>$name) {
             $image=new testImage();
             $image->setName($name);
 
             $image->setLocation($photoLocation[$num]);
             $image->setPhotographer($photographer[$num]);
 
-            foreach($photoAlbums[$num] as $alb) {
+            foreach ($photoAlbums[$num] as $alb) {
                 $image->addToAlbum($alb);
             }
-            foreach($photoCategories[$num] as $cat) {
+            foreach ($photoCategories[$num] as $cat) {
                 $image->addToCategory($cat);
             }
 
-            foreach($photoPeople[$num] as $pers) {
+            foreach ($photoPeople[$num] as $pers) {
                 $image->addPerson($pers);
             }
 
