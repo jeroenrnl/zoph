@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -62,7 +62,7 @@ class userTest extends ZophDatabaseTestCase {
         $obj = new user(1);
         $id=$obj->getId();
         $this->assertEquals($id,1);
-        
+
         $obj = new user(3);
         $id=$obj->getId();
         $this->assertEquals($id,3);
@@ -77,7 +77,7 @@ class userTest extends ZophDatabaseTestCase {
         $id = $user->getId();
 
         unset($user);
-        
+
         $sql="SELECT count(user_id) as count FROM zoph_users WHERE user_id=" . $id;
 
         $result=query($sql);
@@ -108,7 +108,7 @@ class userTest extends ZophDatabaseTestCase {
         $result=query($sql);
         $row=mysql_fetch_row($result);
         $this->assertEquals($row[0], 0);
-        
+
     }
 
     public function testSetPasswordOnUpdate() {
@@ -118,7 +118,7 @@ class userTest extends ZophDatabaseTestCase {
         $user->update();
 
         unset($user);
-        
+
         $validator=new validator("jimi", "secret");
         $user=$validator->validate();
         $user->lookup();
@@ -137,7 +137,7 @@ class userTest extends ZophDatabaseTestCase {
         $this->assertInstanceOf("person", $obj->person);
         $name=$obj->person->getName();
         $this->assertEquals("Jimi Hendrix",$name);
-       
+
         unset($obj);
         $obj = new user(10);
         $obj->lookup();
@@ -203,7 +203,7 @@ class userTest extends ZophDatabaseTestCase {
         $obj->lookup();
         $name=$obj->getName();
         $this->assertEquals($name,"admin");
-        
+
     }
 
     /**
@@ -234,7 +234,7 @@ class userTest extends ZophDatabaseTestCase {
         $obj = new user(3);
         $obj->lookup();
         $ap=$obj->get_album_permissions($id);
-        if(is_null($perm)) {
+        if (is_null($perm)) {
             $this->assertEquals($ap,$perm);
         } else {
             $this->assertEquals($ap->get("group_id"), $perm);
@@ -259,8 +259,8 @@ class userTest extends ZophDatabaseTestCase {
     public function testGet_permissions_for_photo3($id, $perm) {
         $obj = new user(3);
         $pp=$obj->get_permissions_for_photo($id);
-        
-        if(is_null($perm)) {
+
+        if (is_null($perm)) {
             $this->assertNull($pp);
         } else {
             $this->assertInstanceOf("group_permissions", $pp);
@@ -286,7 +286,7 @@ class userTest extends ZophDatabaseTestCase {
             will simply reload the data prior to testing */
         $this->assertArrayHasKey("last login", $da);
         $this->assertArrayHasKey("last ip address", $da);
-        
+
         unset($da["last login"]);
         unset($da["last ip address"]);
 
@@ -309,7 +309,7 @@ class userTest extends ZophDatabaseTestCase {
         );
         $this->assertEquals($expected, $da);
     }
-    
+
     /**
      * Test getDisplayArray() method for a user with a lightbox Album
      */
@@ -334,7 +334,7 @@ class userTest extends ZophDatabaseTestCase {
 
         $obj->lookup_prefs();
         $obj->prefs->set("language", "nl");
-        
+
         $lang=$obj->load_language($force);
         $this->assertInstanceOf("language", $lang);
     }
@@ -356,7 +356,7 @@ class userTest extends ZophDatabaseTestCase {
         $obj->eat_crumb();
         $this->assertNull($obj->get_last_crumb());
     }
-    
+
     /**
      * Test getRatingGraph() method.
      * Tests only 1 user with no ratings
@@ -372,9 +372,27 @@ class userTest extends ZophDatabaseTestCase {
             $this->assertArrayHasKey($i, $graph);
         }
 
-        foreach($graph as $rating=>$array) {
+        foreach ($graph as $rating=>$array) {
             $this->assertEquals($array, array("count" => 0, "width" => 0.0, "value" => $rating));
         }
+    }
+
+    /**
+     * Test retrieving comments for a user
+     * @dataProvider getComments
+     */
+    public function testGetComments($user_id, array $exp) {
+        $user=new user($user_id);
+
+        $comments=$user->getComments();
+
+        $ids=array();
+        foreach ($comments as $comment) {
+            $ids[]=$comment->getId();
+        }
+
+        $this->assertEquals($exp, $ids);
+
     }
 
     /**
@@ -454,6 +472,17 @@ class userTest extends ZophDatabaseTestCase {
         return array(
             array(True),
             array(False)
+        );
+     }
+
+     /**
+      * Get comment ids for various users
+      */
+     public function getComments() {
+        return array(
+            array(1, array(11,14)),
+            array(2, array(1,4,8)),
+            array(3, array(6,7))
         );
      }
 
