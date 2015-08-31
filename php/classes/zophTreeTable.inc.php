@@ -149,7 +149,7 @@ abstract class zophTreeTable extends zophTable {
      * all of its descendant's ids.  Useful to make "record_id in
      * (id_list)" clauses.
      */
-    protected function getBranchIds() {
+    public function getBranchIds() {
         $id_array;
         $this->getBranchIdArray($id_array);
         return implode(",", $id_array);
