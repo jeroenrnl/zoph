@@ -9,7 +9,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,7 +25,7 @@ class group extends zophTable {
     protected static $primary_keys=array("group_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("group_name");
-    /** @var bool keep keys with insert. In most cases the keys are set by 
+    /** @var bool keep keys with insert. In most cases the keys are set by
                   the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -33,14 +33,14 @@ class group extends zophTable {
 
     function updateMembers($vars = null) {
         parent::update();
-        if($vars["_member"]) {
+        if ($vars["_member"]) {
             $this->add_member($vars["_member"]);
         }
 
-        if($vars["_remove_user"]) {
+        if ($vars["_remove_user"]) {
             $this->remove_members($vars["_remove_user"]);
         }
-            
+
     }
 
     function delete() {
@@ -81,21 +81,21 @@ class group extends zophTable {
     }
 
     function add_member($member_id) {
-        if(!is_numeric($member_id)) { die("member_id must be numeric"); }
+        if (!is_numeric($member_id)) { die("member_id must be numeric"); }
 
         $sql="INSERT INTO " . DB_PREFIX . "groups_users " .
             "VALUES (" . escape_string($this->get("group_id")) . "," .
             escape_string($member_id) . ", null)";
- 
+
         query($sql, "Failed to add member:");
     }
 
     function remove_members($user_ids) {
-        if(!is_array($user_ids)) {
+        if (!is_array($user_ids)) {
             $user_ids = array($user_ids);
         }
 
-        foreach($user_ids as $user_id) {
+        foreach ($user_ids as $user_id) {
             $sql =
                 "DELETE FROM " . DB_PREFIX . "groups_users " .
                 "WHERE group_id = '" . escape_string($this->get("group_id")) . "'" .
@@ -107,12 +107,12 @@ class group extends zophTable {
     function get_non_members() {
         $users=user::getAll();
         $members=$this->get_members();
-        
-        foreach($users as $u) {
+
+        foreach ($users as $u) {
             $user_ids[]=$u->get("user_id");
         }
-        if($members) {
-            foreach($members as $m) {
+        if ($members) {
+            foreach ($members as $m) {
                 $member_ids[]=$m->get("user_id");
             }
             $non_member_ids=array_diff($user_ids, $member_ids);
@@ -122,13 +122,13 @@ class group extends zophTable {
 
         $non_members=array();
 
-        foreach($non_member_ids as $n) {
+        foreach ($non_member_ids as $n) {
             $non_members[]=new user($n);
         }
         return $non_members;
-        
+
     }
-    
+
     function get_new_member_pulldown($name) {
         $new_members=$this->get_non_members();
         $value_array[0]=null;
@@ -142,7 +142,7 @@ class group extends zophTable {
     function get_members_links($separator="&nbsp;") {
         $html="";
         $members=$this->get_members();
-        if($members) {
+        if ($members) {
             foreach ($members as $member) {
                 $member->lookup();
                 $html.=$member->getLink() . $separator;
