@@ -57,10 +57,11 @@ class group extends zophTable {
     }
 
     function get_albums() {
-        $sql="SELECT album_id FROM " .
-            DB_PREFIX . "group_permissions " .
-            "WHERE group_id=" . escape_string($this->get("group_id"));
-        return album::getRecordsFromQuery($sql);
+        $qry=new select(array("gp" => "group_permissions"));
+        $qry->addFields(array("album_id"));
+        $qry->where(new clause("group_id=:groupid"));
+        $qry->addParam(new param(":groupid", (int) $this->getId(), PDO::PARAM_INT));
+        return album::getRecordsFromQuery($qry);
     }
 
     function getDisplayArray() {
@@ -73,35 +74,47 @@ class group extends zophTable {
     }
 
     function get_members() {
-        $sql="SELECT user_id FROM " .
-            DB_PREFIX . "groups_users " .
-            "WHERE group_id=" . escape_string($this->get("group_id"));
+        $qry=new select(array("gu" => "groups_users"));
+        $qry->addFields(array("user_id"));
+        $qry->where(new clause("group_id=:groupid"));
+        $qry->addParam(new param(":groupid", (int) $this->getId(), PDO::PARAM_INT));
 
-        return user::getRecordsFromQuery($sql);
+        return user::getRecordsFromQuery($qry);
     }
 
     function add_member($member_id) {
-        if (!is_numeric($member_id)) { die("member_id must be numeric"); }
+        if (!is_numeric($member_id)) {
+            die("member_id must be numeric");
+        }
+        $qry=new insert(array("gu" => "groups_users"));
+        $qry->addParams(array(
+            new param(":group_id", (int) $this->getId(), PDO::PARAM_INT),
+            new param(":user_id", (int) $member_id, PDO::PARAM_INT)
+        ));
 
-        $sql="INSERT INTO " . DB_PREFIX . "groups_users " .
-            "VALUES (" . escape_string($this->get("group_id")) . "," .
-            escape_string($member_id) . ", null)";
+        $qry->execute();
 
-        query($sql, "Failed to add member:");
     }
 
-    function remove_members($user_ids) {
-        if (!is_array($user_ids)) {
-            $user_ids = array($user_ids);
+    function remove_members($userIds) {
+        if (!is_array($userIds)) {
+            $userIds = array($userIds);
         }
+        $ids=new param(":userid", $userIds, PDO::PARAM_INT);
 
-        foreach ($user_ids as $user_id) {
-            $sql =
-                "DELETE FROM " . DB_PREFIX . "groups_users " .
-                "WHERE group_id = '" . escape_string($this->get("group_id")) . "'" .
-                " and user_id = '" . escape_string($user_id) . "'";
-            query($sql);
-        }
+        $qry=new delete(array("gu" => "groups_users"));
+
+        $where=new clause("group_id=:groupid");
+        $where->addAnd(clause::InClause("user_id", $ids));
+
+        $qry->addParams(array(
+            new param(":groupid", (int) $this->getId(), PDO::PARAM_INT),
+            $ids
+        ));
+
+        $qry->where($where);
+
+        $qry->execute();
     }
 
     function get_non_members() {
