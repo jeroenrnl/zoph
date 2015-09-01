@@ -17,6 +17,8 @@
       <file>XMLdataTest.php</file>
       <file>configTest.php</file>
       <file>PDOdatabaseTest.php</file>
+      <file>photoTest.php</file> 
+      <file>placeTest.php</file>
       <file>userTest.php</file>
       <file>anonymousUserTest.php</file> 
       <file>albumTest.php</file> 
@@ -25,11 +27,10 @@
       <file>groupPermissionsTest.php</file> 
       <file>personTest.php</file>
       <file>photographerTest.php</file>
-      <file>photoTest.php</file> 
       <file>cliTest.php</file> 
-      <file>placeTest.php</file>
       <file>ratingTest.php</file>
       <file>relationTest.php</file>
+      <file>pointTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>
