@@ -278,11 +278,8 @@ class user extends zophTable {
         return rating::getGraphArrayForUser($this);
     }
 
-    function getComments() {
-        $sql = "select comment_id from " . DB_PREFIX . "comments where" .
-            " user_id = " .  $this->get("user_id") . " order by comment_date";
-        $comments=comment::getRecordsFromQuery($sql);
-        return $comments;
+    public function getComments() {
+        return comment::getRecords("comment_date", array("user_id" => (int) $this->getId()));
     }
 
     /**
@@ -291,9 +288,7 @@ class user extends zophTable {
      * @return user user object
      */
     public static function getByName($name) {
-        $sql = "select user_id from " . DB_PREFIX . "users where" .
-            " user_name = '" .  escape_string($name) ."'";
-        $users=self::getRecordsFromQuery($sql);
+        $users=self::getRecords(null, array("user_name" => $name));
         return $users[0];
     }
 
