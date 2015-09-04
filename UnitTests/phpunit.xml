@@ -31,6 +31,7 @@
       <file>ratingTest.php</file>
       <file>relationTest.php</file>
       <file>pointTest.php</file>
+      <file>trackTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>

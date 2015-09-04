@@ -68,27 +68,8 @@ class pointTest extends ZophDataBaseTestCase {
      */
 
     public function testGetNextPrevious() {
-
-        $track=new track();
-        $track->set("name", "Test Track");
-
-        $points=array();
-        for ($x=0; $x<10; $x++) {
-            $point=new point();
-            $point->set("lat", round(52 - ($x/100),2));
-            $point->set("lon", 5);
-            $datetime="2013-01-01 0:" . $x . ":00";
-            $point->set("datetime", $datetime);
-            $points[]=$point;
-        }
-
-        // We shuffle the point, so the database keys do NOT represent the
-        // date/time order!
-        shuffle($points);
-        foreach ($points as $point) {
-            $track->addPoint($point);
-        }
-        $track->insert();
+        // Create a track with 10 randomized points
+        helpers::createTrack(10, true);
 
         // Take a random point from the database
         // repeat until the 'random' entry is not the first or the last.
