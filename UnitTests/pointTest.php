@@ -22,6 +22,8 @@
  * @author Jeroen Roos
  */
 
+require_once "testSetup.php";
+
 /**
  * Test the point class
  *
@@ -56,7 +58,7 @@ class pointTest extends ZophDataBaseTestCase {
         $point=new point(1);
         $point->lookup();
 
-        $points=point::getAll();
+        $points=point::getRecords();
         $this->assertCount(0,$points);
     }
 
@@ -69,11 +71,11 @@ class pointTest extends ZophDataBaseTestCase {
 
     public function testGetNextPrevious() {
         // Create a track with 10 randomized points
-        helpers::createTrack(10, true);
+        $track=helpers::createTrack(10, true);
 
         // Take a random point from the database
         // repeat until the 'random' entry is not the first or the last.
-        $points=point::getAll();
+        $points=$track->getPoints();
         $minute=0;
         while ($minute == 0 || $minute == 9) {
             shuffle($points);

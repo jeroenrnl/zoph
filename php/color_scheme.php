@@ -111,7 +111,7 @@ if ($action == "display") {
         <br>
     <?php
 } else {
-    $colors = $color_scheme->getAll();
+    $colors = $color_scheme->getColors();
     ?>
     <h1>
       <span class="actionlink">

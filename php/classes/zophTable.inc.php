@@ -546,6 +546,7 @@ abstract class zophTable {
      * @param array Conjunctions, and/or
      * @param array Operators =, !=, >, <, >= or <=
      * @return array records
+     * @todo This should be an internal (protected) function
      */
     public static function getRecords($order = null, $constraints = null,
             $conj = "AND", $ops = null) {
@@ -559,6 +560,14 @@ abstract class zophTable {
         }
 
         return static::getRecordsFromQuery($qry);
+    }
+
+    /**
+     * Return all
+     * @return array Array of objects
+     */
+    public static function getAll() {
+        return static::getRecords();
     }
 
     /**

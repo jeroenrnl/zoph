@@ -133,23 +133,6 @@ class point extends zophTable {
     }
 
     /**
-     * Get an array of all points
-     *
-     * @param array array of contraints
-     * @param array "and" or "or"
-     * @param array "=", ">" etc.
-     * @param string sort order
-     *
-     * @return array of points
-     * @todo useless wrapper around getRecords, should be removed
-     */
-    public static function getAll($constraints = null, $conj = "and",
-        $ops = null, $order = "name") {
-
-        return self::getRecords($order, $constraints, $conj, $ops);
-    }
-
-    /**
      * Calculate the distance to another point
      *
      * @param point Point to calculate distance to

@@ -60,7 +60,7 @@ class color_scheme extends zophTable {
         }
     }
 
-    public function getAll() {
+    public function getColors() {
         $this->lookup();
         $colors=array();
         foreach ($this->fields as $field => $value) {
@@ -71,8 +71,6 @@ class color_scheme extends zophTable {
         }
         return $colors;
     }
-
-
 
     /**
      * Define a default for each color

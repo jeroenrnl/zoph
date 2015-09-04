@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,10 +33,10 @@ if (!$user->is_admin()) {
 
 $track_id = getvar("track_id");
 $track = new track($track_id);
-if($track_id) {
-    if($track->lookup()) {
+if ($track_id) {
+    if ($track->lookup()) {
         $title = $track->get("name");
-        if(empty($title)) {
+        if (empty($title)) {
             $title=translate("Track");
         }
     } else {
@@ -45,7 +45,7 @@ if($track_id) {
 } else {
     redirect("tracks.php");
 }
-    
+
 $obj = &$track;
 
 require_once "actions.inc.php";
@@ -75,10 +75,11 @@ if ($action == "confirm") {
         "dl" => $track->getDisplayArray()
     ));
     $tpl->addBlock($dl);
-
-    $map=new map();
-    $map->addTrack($track);
-    $tpl->addBlock($map);
+    if (is_null(conf::get("maps.provider"))) {
+        $map=new map();
+        $map->addTrack($track);
+        $tpl->addBlock($map);
+    }
 } else {
     $form=new block("track_form", array(
         "action"    => $action,
