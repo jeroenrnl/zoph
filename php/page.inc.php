@@ -50,7 +50,7 @@ class page extends zophTable {
     
     
     function getDisplayArray() {
-        $zophcode = new zophcode($this->get("text"));
+        $zophcode = new zophCode\zophCode($this->get("text"));
         $text="<div class='page-preview'>" . $zophcode . "</div>";
 
         return array(
@@ -62,7 +62,7 @@ class page extends zophTable {
     }
 
     function display() {
-        $zophcode = new zophcode($this->get("text"));
+        $zophcode = new zophCode\zophCode($this->get("text"));
         return $zophcode;
     }
 
@@ -152,7 +152,7 @@ function get_page_table($pages_array, $pageset_id) {
 function get_pages($constraints = null, $conj = "and", $ops = null,
     $order = "title") {
 
-    return pageset::getRecords($order, $constraints, $conj, $ops);
+    return page::getRecords($order, $constraints, $conj, $ops);
 }
 
 function get_pages_select_array($pages_array = null) {

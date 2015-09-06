@@ -71,7 +71,7 @@ class comment extends zophTable {
         $date=$this->get("comment_date");
         $changed=$this->get("timestamp");
 
-        $zophcode = new zophcode($this->get("comment"), array("b","i", "u"));
+        $zophcode = new zophCode\zophCode($this->get("comment"), array("b","i", "u"));
         $comment="<div>" . $zophcode . "</div>";
 
         return array(
@@ -162,7 +162,7 @@ class comment extends zophTable {
             $html .= "</div>\n";
         }
 
-        $zophcode = new zophcode($this->get("comment"), array("b","i", "u"));
+        $zophcode = new zophCode\zophCode($this->get("comment"), array("b","i", "u"));
         $html .= $zophcode;
         $html .= "<br></div>\n";
         return $html;

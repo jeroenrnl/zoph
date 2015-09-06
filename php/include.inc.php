@@ -35,7 +35,7 @@ function zophAutoload($file) {
 }
 
 function zophAutoloadClass($class) {
-    $file="classes/" . $class . ".inc.php";
+    $file="classes/" . str_replace("\\", "/", $class) . ".inc.php";
     return zophAutoload($file);
 }
 
@@ -75,7 +75,6 @@ if(!defined("LOGON")) {
         require_once "auth.inc.php";
     }
 
-    require_once "code.inc.php";
     require_once "comment.inc.php";
 
     require_once "page.inc.php";

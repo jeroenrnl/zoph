@@ -152,7 +152,7 @@ if ($action == "confirm") {
         </textarea><br>
         <input type="submit" value="<?php echo translate($action, 0) ?>">
         <h2><?php echo translate("smileys you can use"); ?></h2>
-        <?php echo smiley::getOverview(); ?>
+        <?php echo zophCode\smiley::getOverview(); ?>
       </form>
     </div>
 
