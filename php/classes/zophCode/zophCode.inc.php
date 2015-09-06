@@ -42,31 +42,14 @@ class zophCode {
      *
      * @param string Zophcode to parse
      * @param array Allowed tags. This can be used to limit functionality.
-     * @param array Custom replaces
-     * @param array Custom smileys
-     * @param array Custom tags
      * @see replace
      * @see smiley
      * @see tag
      */
-    public function __construct($message, $allowed = null,
-        $replaces = null, $smileys = null, $tags = null) {
-        if (!$replaces) {
-            $this->replaces = replace::getArray();
-        } else {
-            $this->replaces = $replaces;
-        }
-
-        if (!$smileys) {
-            $this->smileys = smiley::getArray();
-        } else {
-            $this->smileys = $smileys;
-        }
-        if (!$tags) {
-            $this->tags = tag::getArray();
-        } else {
-            $this->tags = $tags;
-        }
+    public function __construct($message, $allowed = null) {
+        $this->replaces = replace::getArray();
+        $this->smileys = smiley::getArray();
+        $this->tags = tag::getArray();
         $this->allowed = $allowed;
         $this->message = $message;
     }

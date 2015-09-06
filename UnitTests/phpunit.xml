@@ -33,6 +33,10 @@
       <file>pointTest.php</file>
       <file>trackTest.php</file>
       <file>pageTest.php</file>
+      <file>zophCodeTest.php</file>
+      <file>smileyTest.php</file>
+      <file>tagTest.php</file>
+      <file>replaceTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>
