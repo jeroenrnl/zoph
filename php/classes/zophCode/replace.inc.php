@@ -10,7 +10,7 @@ namespace zophCode;
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -50,21 +50,22 @@ class replace {
      * Get an array of all replace objects
      */
     public static function getArray() {
-        if(empty(self::$replaces)) { 
-            self::createArray(); 
+        if (empty(static::$replaces)) {
+            static::createArray();
         }
-        return self::$replaces;
+        return static::$replaces;
     }
-   
+
     /**
      * Fill the static $replaces.
      */
     private static function createArray() {
         // Watch the order of these... putting &amp; at the end of the array
         // will make you end up with things like "&amp;lt;"...
-        self::$replaces=array(
-            new replace("&#40;", "("),  # Needed to revert anti
-            new replace("&#41;", ")"),  # SQL injection-code
+        static::$replaces=array(
+            // The first two are needed to revert anti SQL injection-code
+            new replace("&#40;", "("),
+            new replace("&#41;", ")"),
             new replace("&", "&amp;"),
             new replace("<", "&lt;"),
             new replace(">", "&gt;"),

@@ -1,5 +1,6 @@
 <?php
 namespace zophCode;
+
 /**
  * This class is a helper class for zophCode
  *
@@ -9,7 +10,7 @@ namespace zophCode;
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,7 +34,7 @@ class tag {
     public $regexp;
     public $param;
     public $close=true;
-    
+
     private static $tags=array();
 
     /**
@@ -46,7 +47,7 @@ class tag {
      * @param bool True if this tags needs closure, false if it does not
      * @todo regexp check of param not implemented
      */
-    public function __construct($find, $replace, $regexp = null, $param = null,$close=true) {
+    public function __construct($find, $replace, $regexp = null, $param = null, $close=true) {
         $this->find=$find;
         $this->replace=$replace;
         $this->regexp=$regexp;
@@ -58,17 +59,17 @@ class tag {
      * Get an array of defined tags
      */
     public static function getArray() {
-        if(empty(self::$tags)) { 
-            self::createArray(); 
+        if (empty(static::$tags)) {
+            static::createArray();
         }
-        return self::$tags;
+        return static::$tags;
     }
 
-    /**   
+    /**
      * Fill static $tags
      */
     private static function createArray() {
-        self::$tags=array(
+        static::$tags=array(
             new tag("b", "b"),
             new tag("i", "i"),
             new tag("u", "u"),
@@ -97,8 +98,8 @@ class tag {
      */
     public static function getFromName($name) {
         // Check if tag is a valid tag.
-        foreach(self::getArray() as $tag) {
-            if($tag->find == $name) {
+        foreach (static::getArray() as $tag) {
+            if ($tag->find == $name) {
                 return $tag;
             }
         }
@@ -110,7 +111,7 @@ class tag {
      * @return bool true: validates, false: does not validate
      */
     private function checkParam($value) {
-        if(!empty($this->regexp)) {
+        if (!empty($this->regexp)) {
             return preg_match($this->regexp, $value);
         } else {
             return true;

@@ -1,7 +1,8 @@
 <?php
 namespace zophCode;
+
 /**
- * The class zophCode is a parser for zophcode, a bbcode like markup language. 
+ * The class zophCode is a parser for zophcode, a bbcode like markup language.
  *
  * This file is part of Zoph.
  *
@@ -9,7 +10,7 @@ namespace zophCode;
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,7 +25,7 @@ namespace zophCode;
 
 /**
  * This class can be used to create a block of 'zophcode'
- * 
+ *
  * zophcode is very similar to bbcode
  * @author Jeroen Roos
  * @package Zoph
@@ -48,7 +49,7 @@ class zophCode {
      * @see smiley
      * @see tag
      */
-    public function __construct($message, $allowed = null, 
+    public function __construct($message, $allowed = null,
         $replaces = null, $smileys = null, $tags = null) {
         if (!$replaces) {
             $this->replaces = replace::getArray();
@@ -69,7 +70,7 @@ class zophCode {
         $this->allowed = $allowed;
         $this->message = $message;
     }
-    
+
     /**
      * Output zophcode parsed to HTML
      */
@@ -84,18 +85,18 @@ class zophCode {
         list($find, $replace) =$this->get_replace_array();
         $message = preg_replace($find, $replace, $message);
 
-        while(strlen($message)) {
+        while (strlen($message)) {
             $plaintext="";
             $replace_param="";
             $opentag = strpos($message, "[", 0);
-            
-            if($opentag === false) {
+
+            if ($opentag === false) {
                 $return .= $message;
                 $message = "";
-            } else if($opentag > 0) {
-                $plaintext=substr($message, 0,$opentag);
+            } else if ($opentag > 0) {
+                $plaintext=substr($message, 0, $opentag);
             }
-            if(($opentag + 1)<= strlen($message)) {
+            if (($opentag + 1)<= strlen($message)) {
                 // This prevents a PHP error when the last char
                 // of the message is a "["
                 $closetag = strpos($message, "]", $opentag + 1);
@@ -103,15 +104,15 @@ class zophCode {
                 $closetag=0;
             }
 
-            $tag = substr($message, $opentag + 1 , $closetag - $opentag - 1);
-            // Does the tag contain " " or another "["? 
-            // In that case something is probably wrong... 
+            $tag = substr($message, $opentag + 1, $closetag - $opentag - 1);
+            // Does the tag contain " " or another "["?
+            // In that case something is probably wrong...
             // (such as "[b This is bold[/b]")
-            
+
             $falseopen = (strpos($tag, "[") || strpos($tag, " "));
-            
+
             $tag = explode("=", $tag);
-            
+
 
             // Check if tag is a closing tag
             if (substr($tag[0], 0, 1) == "/") {
@@ -126,24 +127,24 @@ class zophCode {
                 // This is used for example to limit the number of options
                 // the user has while writing comments.
                 $foundtag=tag::getFromName($tag[0]);
-                if($foundtag && $endtag === true && $foundtag->close === false) {
+                if ($foundtag && $endtag === true && $foundtag->close === false) {
                     // This is an endcode for a tag that does not have an endcode
                     // such as [br]. We'll just ignore it.
                     $message = substr($message, $closetag + 1);
                     $return .=$plaintext;
-                } else if($foundtag && $foundtag->replace && !($falseopen)) {
-                    if($endtag === false) {
+                } else if ($foundtag && $foundtag->replace && !($falseopen)) {
+                    if ($endtag === false) {
                         // It is a valid tag.
-                        if($foundtag->close) {
+                        if ($foundtag->close) {
                             array_push($stack, $tag[0]);
                         }
                         if ($foundtag->param && $tag[1]) {
                             $replace_param = $foundtag->addParam($tag[1]);
                         }
-                        $return .= $plaintext . 
+                        $return .= $plaintext .
                             "<" . $foundtag->replace . $replace_param . ">";
                     } else if (end($stack) == $tag[0]) {
-                    
+
                         // It is a valid closing tag
                         // Check if the tag is open
                         array_pop($stack);
@@ -169,7 +170,7 @@ class zophCode {
                 $message=substr($message, $closetag + 1);
             }
         }
-        while($tag = array_pop($stack)) {
+        while ($tag = array_pop($stack)) {
             // Now close all tags that have not yet been closed.
             $foundtag=tag::getFromName($tag);
             $return .= "</" . $foundtag->replace . ">";

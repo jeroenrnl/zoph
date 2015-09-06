@@ -12,7 +12,7 @@ use template;
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -52,68 +52,68 @@ class smiley {
      * Get an array of all smiley objects
      */
     public static function getArray() {
-        if(empty(self::$smileys)) { 
-            self::createArray(); 
+        if (empty(static::$smileys)) {
+            static::createArray();
         }
-        return self::$smileys;
+        return static::$smileys;
     }
 
     /**
      * Fill the static $smileys.
      */
     private static function createArray() {
-        self::$smileys=array(
-            new smiley(":D", "icon_biggrin.gif","Very Happy"),
-            new smiley(":-D", "icon_biggrin.gif","Very Happy"),
-            new smiley(":grin:", "icon_biggrin.gif","Very Happy"),
-            new smiley(":)", "icon_smile.gif","Smile"),
-            new smiley(":-)", "icon_smile.gif","Smile"),
-            new smiley(":smile:", "icon_smile.gif","Smile"),
-            new smiley(":(", "icon_sad.gif","Sad"),
-            new smiley(":-(", "icon_sad.gif","Sad"),
-            new smiley(":sad:", "icon_sad.gif","Sad"),
-            new smiley(":o", "icon_surprised.gif","Surprised"),
-            new smiley(":-o", "icon_surprised.gif","Surprised"),
-            new smiley(":eek:", "icon_surprised.gif","Surprised"),
-            new smiley(":shock:", "icon_eek.gif","Shocked"),
-            new smiley(":?", "icon_confused.gif","Confused"),
-            new smiley(":-?", "icon_confused.gif","Confused"),
-            new smiley(":???:", "icon_confused.gif","Confused"),
-            new smiley("8)", "icon_cool.gif","Cool"),
-            new smiley("8-)", "icon_cool.gif","Cool"),
-            new smiley(":cool:", "icon_cool.gif","Cool"),
-            new smiley(":lol:", "icon_lol.gif","Laughing"),
-            new smiley(":x", "icon_mad.gif","Mad"),
-            new smiley(":-x", "icon_mad.gif","Mad"),
-            new smiley(":mad:", "icon_mad.gif","Mad"),
-            new smiley(":P", "icon_razz.gif","Razz"),
-            new smiley(":-P", "icon_razz.gif","Razz"),
-            new smiley(":razz:", "icon_razz.gif","Razz"),
-            new smiley(":oops:", "icon_redface.gif","Embarassed"),
-            new smiley(":cry:", "icon_cry.gif","Crying or Very sad"),
-            new smiley(":evil:", "icon_evil.gif","Evil or Very Mad"),
-            new smiley(":twisted:", "icon_twisted.gif","Twisted Evil"),
-            new smiley(":roll:", "icon_rolleyes.gif","Rolling Eyes"),
-            new smiley(":wink:", "icon_wink.gif","Wink"),
-            new smiley(";)", "icon_wink.gif","Wink"),
-            new smiley(";-)", "icon_wink.gif","Wink"),
-            new smiley(":!:", "icon_exclaim.gif","Exclamation"),
-            new smiley(":?:", "icon_question.gif","Question"),
-            new smiley(":idea:", "icon_idea.gif","Idea"),
-            new smiley(":arrow:", "icon_arrow.gif","Arrow"),
-            new smiley(":|", "icon_neutral.gif","Neutral"),
-            new smiley(":-|", "icon_neutral.gif","Neutral"),
-            new smiley(":neutral:", "icon_neutral.gif","Neutral"),
-            new smiley(":mrgreen:", "icon_mrgreen.gif","Mr. Green")
+        static::$smileys=array(
+            new smiley(":D", "icon_biggrin.gif", "Very Happy"),
+            new smiley(":-D", "icon_biggrin.gif", "Very Happy"),
+            new smiley(":grin:", "icon_biggrin.gif", "Very Happy"),
+            new smiley(":)", "icon_smile.gif", "Smile"),
+            new smiley(":-)", "icon_smile.gif", "Smile"),
+            new smiley(":smile:", "icon_smile.gif", "Smile"),
+            new smiley(":(", "icon_sad.gif", "Sad"),
+            new smiley(":-(", "icon_sad.gif", "Sad"),
+            new smiley(":sad:", "icon_sad.gif", "Sad"),
+            new smiley(":o", "icon_surprised.gif", "Surprised"),
+            new smiley(":-o", "icon_surprised.gif", "Surprised"),
+            new smiley(":eek:", "icon_surprised.gif", "Surprised"),
+            new smiley(":shock:", "icon_eek.gif", "Shocked"),
+            new smiley(":?", "icon_confused.gif", "Confused"),
+            new smiley(":-?", "icon_confused.gif", "Confused"),
+            new smiley(":???:", "icon_confused.gif", "Confused"),
+            new smiley("8)", "icon_cool.gif", "Cool"),
+            new smiley("8-)", "icon_cool.gif", "Cool"),
+            new smiley(":cool:", "icon_cool.gif", "Cool"),
+            new smiley(":lol:", "icon_lol.gif", "Laughing"),
+            new smiley(":x", "icon_mad.gif", "Mad"),
+            new smiley(":-x", "icon_mad.gif", "Mad"),
+            new smiley(":mad:", "icon_mad.gif", "Mad"),
+            new smiley(":P", "icon_razz.gif", "Razz"),
+            new smiley(":-P", "icon_razz.gif", "Razz"),
+            new smiley(":razz:", "icon_razz.gif", "Razz"),
+            new smiley(":oops:", "icon_redface.gif", "Embarassed"),
+            new smiley(":cry:", "icon_cry.gif", "Crying or Very sad"),
+            new smiley(":evil:", "icon_evil.gif", "Evil or Very Mad"),
+            new smiley(":twisted:", "icon_twisted.gif", "Twisted Evil"),
+            new smiley(":roll:", "icon_rolleyes.gif", "Rolling Eyes"),
+            new smiley(":wink:", "icon_wink.gif", "Wink"),
+            new smiley(";)", "icon_wink.gif", "Wink"),
+            new smiley(";-)", "icon_wink.gif", "Wink"),
+            new smiley(":!:", "icon_exclaim.gif", "Exclamation"),
+            new smiley(":?:", "icon_question.gif", "Question"),
+            new smiley(":idea:", "icon_idea.gif", "Idea"),
+            new smiley(":arrow:", "icon_arrow.gif", "Arrow"),
+            new smiley(":|", "icon_neutral.gif", "Neutral"),
+            new smiley(":-|", "icon_neutral.gif", "Neutral"),
+            new smiley(":neutral:", "icon_neutral.gif", "Neutral"),
+            new smiley(":mrgreen:", "icon_mrgreen.gif", "Mr. Green")
         );
-    }    
+    }
 
     /**
      * Get the smiley
      * @todo contains HTML
      */
     public function __toString() {
-        return "<img src=\"" . template::getImage("smileys/" . $this->file) . 
+        return "<img src=\"" . template::getImage("smileys/" . $this->file) .
             "\" alt=\"" . $this->description . "\">";
     }
 
@@ -122,9 +122,9 @@ class smiley {
      * @todo contains HTML
      */
     public static function getOverview() {
-        self::getArray();
+        static::getArray();
         $html="<div class=\"smileys\">";
-        foreach (self::$smileys as $smiley) {
+        foreach (static::$smileys as $smiley) {
             $html.="<div>";
             $html.=$smiley;
             $html.="<span>" . $smiley->smiley . "</span>";
