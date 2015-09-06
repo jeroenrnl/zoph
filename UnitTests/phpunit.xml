@@ -32,6 +32,7 @@
       <file>relationTest.php</file>
       <file>pointTest.php</file>
       <file>trackTest.php</file>
+      <file>pageTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>
