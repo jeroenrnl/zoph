@@ -25,7 +25,6 @@
 /**
  * Autoload classes
  */
-
 function zophAutoload($file) {  
     if(is_readable(settings::$php_loc . "/" . $file)) {
         require_once $file;
@@ -84,7 +83,6 @@ if(!defined("LOGON")) {
 
     require_once "file.inc.php";
 
-    require_once "photo.inc.php";
     require_once "saved_search.inc.php";
     require_once "photo_search.inc.php";
 

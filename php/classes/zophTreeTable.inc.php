@@ -1,6 +1,6 @@
 <?php
 /**
- * zophTreeTable represents a hierarchical table.  
+ * zophTreeTable represents a hierarchical table.
  *
  * This file is part of Zoph.
  *
@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -26,7 +26,7 @@
  * zophTreeTable represents a hierarchical table.  Since the album
  * and category tables are identical in structure, some of the methods
  * those classes share are abstracted and placed here.
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -43,7 +43,7 @@ abstract class zophTreeTable extends zophTable {
     public function delete() {
 
         // simulate overloading
-        if(func_num_args()>=1) {
+        if (func_num_args()>=1) {
             $extra_tables = func_get_arg(0);
         } else {
             $extra_tables = null;
@@ -75,19 +75,23 @@ abstract class zophTreeTable extends zophTable {
     /*
      * Gets the children of this record.
      */
-    function getChildren($order = null) {
+    public function getChildren($order = null) {
 
-        if ($this->children) { return $this->children; }
+        if ($this->children) {
+            return $this->children;
+        }
         $key = static::$primary_keys[0];
         $id = (int) $this->getId();
-        if (!$id) { return; }
+        if (!$id) {
+            return;
+        }
 
-        $sql =
-            "SELECT * FROM " . static::$table_name .
-            " WHERE parent_ " . $key . "=" . $id;
+        $qry = new select(static::$table_name);
+        $qry->where(new clause("parent_" . $key . "=:parent"));
+        $qry->addParam(new param(":parent", $key, PDO::PARAM_INT));
 
         if ($order) {
-            $sql .= " ORDER BY $order";
+            $qry->addOrder($order);
         }
 
         $this->children = static::getRecordsFromQuery($sql);
@@ -98,7 +102,7 @@ abstract class zophTreeTable extends zophTable {
     /*
      * Gets the ancestors of this record.
      */
-    function get_ancestors($anc = array()) {
+    public function get_ancestors($anc = array()) {
         $key = static::$primary_keys[0];
         $pid = $this->get("parent_" . $key);
         // root of tree
@@ -121,14 +125,19 @@ abstract class zophTreeTable extends zophTable {
     /*
      * Gets a list of the id of this record along with the ids of
      * all of its descendants.
+     * @param array id_array add values to this array
+     * @todo refactor the pass by reference out
      */
-    function getBranchIdArray(&$id_array) {
+    public function getBranchIdArray(array &$id_array=null) {
+        if (!is_array($id_array)) {
+            $id_array=array();
+        }
         $id_array[] = (int) $this->getId();
 
         $this->getChildren();
 
         if ($this->children) {
-            foreach($this->children as $c) {
+            foreach ($this->children as $c) {
                 $c->getBranchIdArray($id_array);
             }
         }
@@ -140,7 +149,7 @@ abstract class zophTreeTable extends zophTable {
      * all of its descendant's ids.  Useful to make "record_id in
      * (id_list)" clauses.
      */
-    function getBranchIds() {
+    public function getBranchIds() {
         $id_array;
         $this->getBranchIdArray($id_array);
         return implode(",", $id_array);
@@ -155,7 +164,7 @@ abstract class zophTreeTable extends zophTable {
 
         $title=$this->getName();
         $titleshort=strtolower(substr($title, 0, strlen($search)));
-        if($titleshort == strtolower($search)) {
+        if ($titleshort == strtolower($search)) {
             $key=$this->get($idname);
 
             $newchildkey=$xml->createElement("key");
@@ -167,10 +176,10 @@ abstract class zophTreeTable extends zophTable {
             $newchild->appendChild($newchildtitle);
         }
         $order = user::getCurrent()->prefs->get("child_sortorder");
-        $children=$this->getChildrenForUser($order);
-        if($children) {
+        $children=$this->getChildren($order);
+        if ($children) {
             $childset=$xml->createElement($rootname);
-            foreach($children as $child) {
+            foreach ($children as $child) {
                 $newnode=$child->getXMLtree($xml, $search);
                 if (isset($newnode)) {
                     $childset->appendChild($newnode);
@@ -181,17 +190,17 @@ abstract class zophTreeTable extends zophTable {
         }
         return $newchild;
     }
-    
+
     /**
      * Turn the array from @see getDetails() into XML
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
-        if(!isset($details)) {
+        if (!isset($details)) {
             $details=$this->getDetails();
         }
-        $children=$this->getChildrenForUser();
-        if(is_array($children)) {
+        $children=$this->getChildren();
+        if (is_array($children)) {
             $details["children"]=count($children);
         }
         return parent::getDetailsXML($details);
@@ -214,7 +223,7 @@ abstract class zophTreeTable extends zophTable {
         return $xml;
     }
 
-    public static function getSelectArray() { 
+    public static function getSelectArray() {
         return static::getTreeSelectArray();
     }
 
@@ -230,8 +239,8 @@ abstract class zophTreeTable extends zophTable {
         }
 
         $select_array[$rec->getId()] = str_repeat("&nbsp;", $depth * 3) . e($rec->getName());
-        
-        $children = $rec->getChildrenForUser($order);
+
+        $children = $rec->getChildren($order);
         if ($children) {
             $depth++;
             foreach ($children as $child) {

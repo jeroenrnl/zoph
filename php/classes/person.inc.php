@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,7 +44,7 @@ class person extends zophTable implements Organizer {
     protected static $primary_keys=array("person_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("first_name");
-    /** @var bool keep keys with insert. In most cases the keys are set 
+    /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -66,11 +66,14 @@ class person extends zophTable implements Organizer {
     public function addPhoto(photo $photo) {
         $pos = $photo->getLastPersonPos();
         $pos++;
-        $sql = "INSERT INTO " . DB_PREFIX . "photo_people " .
-            "(photo_id, person_id, position) " .
-            "values (" . (int) $photo->getId() . ", " .
-            (int) $this->getId() . ", " . (int) $pos . ")";
-        query($sql, "Failed to add person");
+
+        $qry=new insert(array("photo_people"));
+        $qry->addParams(array(
+            new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT),
+            new param(":person_id", (int) $this->getId() , PDO::PARAM_INT),
+            new param(":position", (int) $pos, PDO::PARAM_INT)
+        ));
+        $qry->execute();
     }
 
     /**
@@ -79,25 +82,42 @@ class person extends zophTable implements Organizer {
      */
     public function removePhoto(photo $photo) {
         // First, get the position for the person who is about to be removed
-        $sql = "SELECT position FROM " . DB_PREFIX . "photo_people " .
-            "WHERE photo_id = '" . (int) $photo->getId() . "' " .
-            "AND person_id = '" . (int) $this->getId() . "'";
-        $result=fetch_array(query($sql));
+        $qry=new select(array("photo_people"));
+        $where=new clause("photo_id=:photo_id");
+        $where->addAnd(new clause("person_id=:person_id"));
+
+        $params=array(
+            new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT),
+            new param(":person_id", (int) $this->getId(), PDO::PARAM_INT)
+        );
+
+        $qry->where($where);
+        $qry->addParams($params);
+
+        $result=query($qry)->fetch(PDO::FETCH_ASSOC);
         $pos=$result["position"];
 
-        // Remove the victim
-        $sql = "DELETE FROM " . DB_PREFIX . "photo_people " .
-            "WHERE photo_id = '" . (int) $photo->getId() . "'" .
-            " AND person_id = '" . (int) $this->getId() . "'";
-        query($sql);
+        $qry=new delete("photo_people");
+        $qry->where($where);
+        $qry->addParams($params);
+        $qry->execute();
 
-        // Finally, lower the position for everyone with a higher position by one
-        $sql=
-            "UPDATE " . DB_PREFIX . "photo_people " .
-            "SET position=position-1 " .
-            "WHERE photo_id = '" . (int) $photo->getId() . "' " .
-            "AND position > " . (int) $pos;
-        query($sql);
+        $qry=new update(array("photo_people"));
+
+        $where=new clause("photo_id=:photo_id");
+        $where->addAnd(new clause("position>:pos"));
+
+        $qry->addSetFunction("position=position-1");
+
+        $params=array(
+            new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT),
+            new param(":pos", (int) $pos, PDO::PARAM_INT)
+        );
+
+        $qry->addParams($params);
+        $qry->where($where);
+        $qry->execute();
+
     }
 
     /**
@@ -139,22 +159,39 @@ class person extends zophTable implements Organizer {
     public function delete() {
         $id=(int) $this->getId();
         if (!is_numeric($id)) { die("person_id is not numeric"); }
-        $sql="update " . DB_PREFIX . "people set father_id=null " .
-            "where father_id=" .  $id;
-        query($sql, "Could not remove references:");
 
-        $sql="update " . DB_PREFIX . "people set mother_id=null " . 
-            "where mother_id=" .  $id;
-        query($sql, "Could not remove references:");
-        
-        $sql="update " . DB_PREFIX . "people set spouse_id=null " .
-            "where spouse_id=" .  $id;
-        query($sql, "Could not remove references:");
-        
-        $sql="update " . DB_PREFIX . "photos set photographer_id=null where " .
-            "photographer_id=" .  $id;
-        query($sql, "Could not remove references:");
-        
+        $params=array(
+            new param(":id", (int) $id, PDO::PARAM_INT)
+        );
+
+        $qry=new update(array("people"));
+        $qry->addSetFunction("father_id=null");
+        $where=new clause("father_id=:id");
+        $qry->where($where);
+        $qry->addParams($params);
+        $qry->execute();
+
+        $qry=new update(array("people"));
+        $qry->addSetFunction("mother_id=null");
+        $where=new clause("mother_id=:id");
+        $qry->where($where);
+        $qry->addParams($params);
+        $qry->execute();
+
+        $qry=new update(array("people"));
+        $qry->addSetFunction("spouse_id=null");
+        $where=new clause("spouse_id=:id");
+        $qry->where($where);
+        $qry->addParams($params);
+        $qry->execute();
+
+        $qry=new update(array("photos"));
+        $qry->addSetFunction("photographer_id=null");
+        $where=new clause("photographer_id=:id");
+        $qry->where($where);
+        $qry->addParams($params);
+        $qry->execute();
+
         parent::delete(array("photo_people"));
     }
 
@@ -172,7 +209,7 @@ class person extends zophTable implements Organizer {
      * @return person father
      */
     private function getFather() {
-        return self::getFromId($this->get("father_id"));
+        return static::getFromId($this->get("father_id"));
     }
 
     /**
@@ -180,7 +217,7 @@ class person extends zophTable implements Organizer {
      * @return person mother
      */
     private function getMother() {
-        return self::getFromId($this->get("mother_id"));
+        return static::getFromId($this->get("mother_id"));
     }
 
     /**
@@ -188,27 +225,17 @@ class person extends zophTable implements Organizer {
      * @return person spouse
      */
     private function getSpouse() {
-        return self::getFromId($this->get("spouse_id"));
+        return static::getFromId($this->get("spouse_id"));
     }
 
     /**
      * Get children for this person
-     * @todo This function is currently not used  
+     * @todo This function is currently not used
      */
     public function getChildren() {
         $constraints["father_id"] = $this->get("person_id");
         $constraints["mother_id"] = $this->get("person_id");
-        return self::getAll($constraints, "or");
-    }
-
-    /**
-     * Get only children this user can see
-     * @todo This function is currently not used  
-     * @todo This function currently does not filter out persons 
-     *       this user cannot see
-     */
-    public function getChildrenForUser() {
-        return $this->getChildren();
+        return static::getAll($constraints, "or");
     }
 
     /**
@@ -286,13 +313,13 @@ class person extends zophTable implements Organizer {
             translate("date of birth") => create_date_link(e($this->get("dob"))),
             translate("date of death") => create_date_link(e($this->get("dod"))),
             translate("gender") => e($this->getGender()));
-        if($mother instanceof person) {
+        if ($mother instanceof person) {
             $display[translate("mother")] = $mother->getLink();
         }
-        if($father instanceof person) {
+        if ($father instanceof person) {
             $display[translate("father")] = $father->getLink();
         }
-        if($spouse instanceof person) {
+        if ($spouse instanceof person) {
             $display[translate("spouse")] = $spouse->getLink();
         }
         return $display;
@@ -304,7 +331,7 @@ class person extends zophTable implements Organizer {
      */
     public function getPhotoCount() {
         $user=user::getCurrent();
-        
+
         $ignore=null;
         $vars=array(
             "person_id" => $this->getId()
@@ -321,54 +348,35 @@ class person extends zophTable implements Organizer {
     public function getTotalPhotoCount() {
         return $this->getPhotoCount();
     }
-    
+
     /**
      * Get coverphoto for this person.
      * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
      * @return photo coverphoto
+     * @todo This function is almost equal to category::getAutoCover(), should be merged
      */
     public function getAutoCover($autocover=null) {
-        $user=user::getCurrent();
-
         $coverphoto=$this->getCoverphoto();
-        if($coverphoto instanceof photo) {
+        if ($coverphoto instanceof photo) {
             return $coverphoto;
         }
-        
-        $order=self::getAutoCoverOrder($autocover);
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT DISTINCT ar.photo_id FROM " .
-                DB_PREFIX . "view_photo_avg_rating ar JOIN " .
-                DB_PREFIX . "photo_people AS pp" .
-                " ON pp.photo_id = ar.photo_id " .
-                " WHERE pp.person_id = " . 
-                escape_string($this->get("person_id")) .
-                " " . $order;
-        } else {
-            $sql=
-                "SELECT DISTINCT p.photo_id FROM " .
-                DB_PREFIX . "photos AS p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id JOIN " .
-                DB_PREFIX . "photo_people AS pp " .
-                "ON pp.photo_id = p.photo_id " .
-                "WHERE pp.person_id = " . 
-                escape_string($this->get("person_id")) .
-                " AND gu.user_id =" .
-                " '" . escape_string($user->get("user_id")) . "'" .
-                " AND gp.access_level >= p.level " .
-                $order;
-        }
-        $coverphotos=photo::getRecordsFromQuery($sql);
-        $coverphoto=array_shift($coverphotos);
 
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")
+            ->join(array("pp" => "photo_people"), "p.photo_id = pp.photo_id");
+
+        $where=new clause("pp.person_id=:id");
+        $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = static::expandQueryForUser($qry, $where);
+        }
+
+        $qry=static::getAutoCoverOrder($qry, $autocover);
+        $qry->where($where);
+        $coverphotos=photo::getRecordsFromQuery($qry);
+        $coverphoto=array_shift($coverphotos);
 
         if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
@@ -383,7 +391,7 @@ class person extends zophTable implements Organizer {
      * @param string name
      */
     public function setName($name) {
-        if(strpos($name, ":")!==false) {
+        if (strpos($name, ":")!==false) {
             $name_array=array_pad(explode(":", $name),4,null);
             $this->set("first_name", $name_array[0]);
             $this->set("middle_name", $name_array[1]);
@@ -414,65 +422,39 @@ class person extends zophTable implements Organizer {
             }
         }
     }
-    
+
     /**
      * Get details (statistics) about this person from db
      * @return array Array with statistics
-     * @todo For now, this only tells about the photos this person
-     *       has taken. Details about the photos this person appears
-     *       should be added some time.
+     * @todo this function is almost equal to category::getDetails() they should be merged
      */
     public function getDetails() {
-        $user=user::getCurrent();
-        $user_id = (int) $user->getId();
-        $id = (int) $this->getId();
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array(
+            "count"     => "COUNT(DISTINCT p.photo_id)",
+            "oldest"    => "MIN(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "newest"    => "MAX(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "first"     => "MIN(p.timestamp)",
+            "last"      => "MAX(p.timestamp)",
+            "lowest"    => "ROUND(MIN(ar.rating),1)",
+            "highest"   => "ROUND(MAX(ar.rating),1)",
+            "average"   => "ROUND(AVG(ar.rating),2)"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
-        if ($user->is_admin()) {
-            $sql = "SELECT ".
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photos ph JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id " .
-                "WHERE ph.photographer_id=" . escape_string($id) .
-                " GROUP BY ph.photographer_id";
-        } else {
-            $sql = "SELECT " .
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photo_albums pa JOIN " .
-                DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pa.photo_id JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id LEFT JOIN " .
-                DB_PREFIX . "group_permissions gp " .
-                "ON pa.album_id=gp.album_id LEFT JOIN " . 
-                DB_PREFIX . "groups_users gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE ph.level<gp.access_level AND " .
-                "gu.user_id=" . escape_string($user_id) . " AND " .
-                "ph.photographer_id=" . escape_string($id) .
-                " GROUP BY ph.photographer_id";
+        $qry->addGroupBy("p.photographer_id");
+
+        $where=new clause("p.photographer_id=:photographerid");
+        $qry->addParam(new param(":photographerid", $this->getId(), PDO::PARAM_INT));
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = static::expandQueryForUser($qry, $where);
         }
-        $result=query($sql);
-        if($result) {
-            return fetch_assoc($result);
+
+        $qry->where($where);
+
+        $result=query($qry);
+        if ($result) {
+            return $result->fetch(PDO::FETCH_ASSOC);
         } else {
             return null;
         }
@@ -483,7 +465,7 @@ class person extends zophTable implements Organizer {
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
-        if(!isset($details)) {
+        if (!isset($details)) {
             $details=$this->getDetails();
         }
         $details["title"]=translate("Photos taken by this person:", false);
@@ -495,14 +477,16 @@ class person extends zophTable implements Organizer {
      * @param string name
      */
     public static function getByName($name) {
-        if(empty($name)) {
+        if (empty($name)) {
             return false;
         }
+        $qry=new select(array("ppl" => "people"));
+        $qry->addFields(array("person_id"));
+        $where=new clause("CONCAT_WS(\" \", lower(first_name), lower(last_name))=lower(:name)");
+        $qry->addParam(new param(":name", $name, PDO::PARAM_STR));
+        $qry->where($where);
 
-        $sql = "SELECT person_id FROM " . DB_PREFIX . "people WHERE " .
-            "CONCAT_WS(\" \", lower(first_name), lower(last_name))=" .
-            "lower(\"" . escape_string($name) . "\")";
-        return self::getRecordsFromQuery($sql);
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
@@ -511,81 +495,47 @@ class person extends zophTable implements Organizer {
     public static function getTopN() {
         $user=user::getCurrent();
 
-        if ($user->is_admin()) {
-            $sql =
-                "select ppl.*, count(*) as count from " .
-                DB_PREFIX . "people as ppl, " .
-                DB_PREFIX . "photo_people as pp " .
-                "where ppl.person_id = pp.person_id " .
-                "group by ppl.person_id " .
-                "order by count desc, ppl.last_name, ppl.first_name " .
-                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
-        } else {
-            $sql =
-                "SELECT ppl.*, COUNT(DISTINCT ph.photo_id) AS count FROM " .
-                DB_PREFIX . "people as ppl JOIN " .
-                DB_PREFIX . "photo_people as pp " .
-                "ON pp.person_id = ppl.person_id JOIN " .
-                DB_PREFIX . "photos as ph " .
-                "ON pp.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON pa.photo_id = pp.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . 
-                escape_string($user->get("user_id")) . "' " .
-                " AND gp.access_level >= ph.level " .
-                "GROUP BY ppl.person_id " .
-                "ORDER BY count DESC, ppl.last_name, ppl.first_name " .
-                "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
-        }
+        $qry=new select(array("ppl" => "people"));
+        $qry->addFields(array("person_id", "first_name", "last_name"));
+        $qry->addFunction(array("count" => "count(distinct pp.photo_id)"));
+        $qry->join(array("pp" => "photo_people"), "ppl.person_id=pp.person_id");
+        $qry->addGroupBy("ppl.person_id");
+        $qry->addOrder("count DESC")->addOrder("ppl.last_name")->addOrder("ppl.first_name");
 
-        return static::getTopNfromSQL($sql);
+        $qry->addLimit((int) $user->prefs->get("reports_top_n"));
+        if (!$user->is_admin()) {
+            list($qry, $where) = static::expandQueryForUser($qry);
+            $qry->where($where);
+        }
+        return parent::getTopNfromSQL($qry);
 
     }
-    
+
     /**
      * Get all people
      * @param string part of name to search for
      * @param bool Search for first name
      */
     public static function getAll($search=null, $search_first = false) {
-        $user=user::getCurrent();
-        $where=self::getWhereForSearch("", $search, $search_first);
-        if ($user->is_admin()) {
-            if($where!="") {
-                $where="WHERE " . $where;
-            }
-            $sql =
-                "SELECT * FROM " .
-                DB_PREFIX . "people " .
-                $where .
-                " ORDER BY last_name, called, first_name";
-        } else {
-            if($where!="") {
-                $where="AND " . $where;
-            }
-            $sql =
-                "SELECT DISTINCT ppl.* FROM " .
-                DB_PREFIX . "people AS ppl JOIN " .
-                DB_PREFIX . "photo_people AS pp " .
-                "ON ppl.person_id = pp.person_id JOIN " . 
-                DB_PREFIX . "photos AS ph " .
-                "ON ph.photo_id = pp.photo_id JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pa.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = " . (int) $user->getId() .
-                " AND gp.access_level >= ph.level" . $where .
-                " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
+        $where=null;
+
+        $qry=new select(array("ppl" => "people"));
+        $qry->addFunction(array("person_id" => "DISTINCT ppl.person_id"));
+        if (!is_null($search)) {
+            $where=static::getWhereForSearch($search, $search_first);
+            $qry->addParam(new param("search", $search, PDO::PARAM_STR));
         }
 
-        return self::getRecordsFromQuery($sql);
+        $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry,$where)=static::expandQueryForUser($qry, $where);
+        }
+
+        if ($where instanceof clause) {
+            $qry->where($where);
+        }
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
@@ -596,13 +546,13 @@ class person extends zophTable implements Organizer {
      * @return DOMDocument XML Document
      */
     public static function getXMLdata($search, DOMDocument $xml, DOMElement $rootnode) {
-        if($search=="") {
+        if ($search=="") {
             $search=null;
         }
         $records=static::getAll($search,true);
         $idname=static::$primary_keys[0];
 
-        foreach($records as $record) {
+        foreach ($records as $record) {
             $newchild=$xml->createElement(static::XMLNODE);
             $key=$xml->createElement("key");
             $title=$xml->createElement("title");
@@ -630,12 +580,12 @@ class person extends zophTable implements Organizer {
      * @return array
      */
     public static function getSelectArray() {
-        if(isset(static::$sacache)) {
+        if (isset(static::$sacache)) {
             return static::$sacache;
         }
         $ppl[""] = "";
 
-        $people_array = self::getAll();
+        $people_array = static::getAll();
         foreach ($people_array as $person) {
             $ppl[$person->get("person_id")] =
                  ($person->get("last_name") ? $person->get("last_name") .  ", " : "") .
@@ -643,7 +593,7 @@ class person extends zophTable implements Organizer {
         }
 
         return $ppl;
-    }   
+    }
 
     /**
      * Get number of people for a specific user
@@ -651,16 +601,16 @@ class person extends zophTable implements Organizer {
      */
     public static function getCountForUser() {
         $user=user::getCurrent();
-        if($user && !$user->is_admin()) {
-            return self::getCount();
+        if ($user && !$user->is_admin()) {
+            return static::getCount();
         } else {
             $allowed=array();
-            $people=self::getAll();
+            $people=static::getAll();
             $photographers=photographer::getAll();
-            foreach($people as $person) {
+            foreach ($people as $person) {
                 $allowed[]=$person->get("person_id");
             }
-            foreach($photographers as $photographer) {
+            foreach ($photographers as $photographer) {
                 $allowed[]=$photographer->get("person_id");
             }
 
@@ -679,52 +629,50 @@ class person extends zophTable implements Organizer {
         $user=user::getCurrent();
         $allowed=array();
 
-        if($user && !$user->is_admin()) {
-            $people=self::getAll($search);
-            $photographers=photographer::getAll($search);
-            foreach($people as $person) {
+        $qry=new select(array("ppl" => "people"));
+        $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
+
+
+        if ($user && !$user->is_admin()) {
+            $people=(array)static::getAll($search);
+            $photographers=(array)photographer::getAll($search);
+            foreach ($people as $person) {
+                $person->lookup();
                 $allowed[]=$person->get("person_id");
             }
-            foreach($photographers as $photographer) {
+            foreach ($photographers as $photographer) {
+                $photographer->lookup();
                 $allowed[]=$photographer->get("person_id");
             }
-
             $allowed=array_unique($allowed);
-            if(count($allowed)==0) {
+            if (count($allowed)==0) {
                 return null;
             }
-            $keys=implode(",", $allowed);
-            $where=" WHERE person_id IN (" .$keys . ")";
+            $param=new param(":person_ids", $allowed, PDO::PARAM_INT);
+            $qry->where(clause::InClause("person_id", $param));
+            $qry->addParam($param);
         } else if ($search!==null) {
-            $where=self::getWhereForSearch(" WHERE ", $search);
-        } else {
-            $where="";
+            $qry->addParam(new param("search", $search, PDO::PARAM_STR));
+            $qry->where(static::getWhereForSearch($search));
         }
-
-        $sql="SELECT * FROM " . DB_PREFIX . "people AS ppl " . $where .
-            " ORDER BY last_name, called, first_name";
-
-        return self::getRecordsFromQuery($sql);
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
-     * Get SQL WHERE statement to search for people
-     * @param string [and|or]
+     * Get SQL WHERE clause to search for people
      * @param string search string
      * @param bool search for first name
      */
-    public static function getWhereForSearch($conj, $search, $search_first) {
-        $where="";
-        if($search!==null) {
-            if($search==="") {
-                $where=$conj . " (ppl.last_name='' or ppl.last_name is null)";
+    public static function getWhereForSearch($search, $search_first=false) {
+        $where=null;
+        if ($search!==null) {
+            if ($search==="") {
+                $where=new clause("ppl.last_name=''");
+                $where->addOr(new clause("ppl.last_name is null"));
             } else {
-                $search=escape_string($search);
-                $where=$conj . " (ppl.last_name like lower('" . $search . "%')";
+                $where=new clause("ppl.last_name like lower(concat(:search,'%'))");
                 if ($search_first) {
-                    $where.="or ppl.first_name like lower('" . $search . "%'))";
-                } else {
-                    $where.=")";
+                    $where->addOr("ppl.first_name like lower(concat(:search, '%'))");
                 }
             }
         }

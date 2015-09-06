@@ -9,7 +9,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,14 +25,14 @@ class user extends zophTable {
     protected static $primary_keys=array("user_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("user_name");
-    /** @var bool keep keys with insert. In most cases the keys are set by 
+    /** @var bool keep keys with insert. In most cases the keys are set by
                   the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="user.php?user_id=";
 
 
-    private static $current; 
+    private static $current;
 
     public $person;
     public $prefs;
@@ -90,35 +90,44 @@ class user extends zophTable {
     }
 
     function get_groups() {
-        $sql="SELECT group_id FROM " .
-            DB_PREFIX . "groups_users " .
-            "WHERE user_id=" . escape_string($this->get("user_id"));
+        $qry = new select(array("gu" => "groups_users"));
+        $qry->addFields(array("group_id"));
+        $qry->where(new clause("user_id=:userid"));
+        $qry->addParam(new param(":userid", (int) $this->getId(), PDO::PARAM_INT));
 
-        return group::getRecordsFromQuery($sql);
+        return group::getRecordsFromQuery($qry);
     }
 
 
 
     function get_album_permissions($album_id) {
-        $group_id_array=array();
-        if(!is_numeric($album_id)) { die("album_id must be numeric"); }
-        if(!$album_id) { return; }
+        if (!is_numeric($album_id)) { die("album_id must be numeric"); }
+        if (!$album_id) { return; }
 
         $groups=$this->get_groups();
-        foreach($groups as $group) {
-            $group_id_array[]=$group->get("group_id");
+
+        $groupIds=array();
+        foreach ($groups as $group) {
+            $groupIds[]=(int) $group->getId();
         }
-        if($group_id_array) {
-            $group_ids=implode(",", $group_id_array);
-            $sql = "SELECT * FROM " .
-                DB_PREFIX . "group_permissions WHERE " .
-                "album_id=".escape_string($album_id) . " AND " .
-                "group_id IN (" . escape_string($group_ids) . ") " .
-                "ORDER BY access_level DESC, writable DESC, " . 
-                "watermark_level DESC " .
-                "LIMIT 0, 1";
-            $aps=group_permissions::getRecordsFromQuery($sql);
-            if ($aps && sizeof($aps) >= 1) {
+
+        if (is_array($groupIds) && sizeof($groupIds) > 0) {
+            $qry=new select(array("gp" => "group_permissions"));
+            $where = new clause("album_id=:albumid");
+            $groups=new param(":groupid", $groupIds, PDO::PARAM_INT);
+            $qry->addParams(array(
+                new param(":albumid", (int) $album_id, PDO::PARAM_INT),
+                $groups
+            ));
+            $where->addAnd(clause::InClause("gp.group_id", $groups));
+            $qry->where($where);
+            $qry->addOrder("access_level DESC")
+                ->addOrder("writable DESC")
+                ->addOrder("watermark_level DESC");
+            $qry->addLimit(1);
+
+            $aps=group_permissions::getRecordsFromQuery($qry);
+            if (is_array($aps) && sizeof($aps) >= 1) {
                 return $aps[0];
             }
         }
@@ -128,25 +137,21 @@ class user extends zophTable {
 
 
     function get_permissions_for_photo($photo_id) {
+        $qry=new select(array("p" => "photos"));
+        $qry->addFields(array("photo_id"));
 
+        $where=new clause("p.photo_id = :photoid");
+        $qry->addParam(new param(":photoid", (int) $photo_id, PDO::PARAM_INT));
+
+        list($qry, $where) = static::expandQueryForUser($qry, $where, $this);
+
+        $qry->addFields(array("gp.*"));
+        $qry->addLimit(1);
         // do ordering to grab entry with most permissions
-        $sql =
-            "select gp.* from " .
-            DB_PREFIX . "photos AS ph JOIN " .
-            DB_PREFIX . "photo_albums AS pa ON " .
-            "ph.photo_id = pa.photo_id JOIN " .
-            DB_PREFIX . "group_permissions as gp ON " .
-            "pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users as gu ON " .
-            "gp.group_id = gu.group_id " .
-            "WHERE gu.user_id = '" . escape_string($this->get("user_id")) . "'".
-            " AND ph.photo_id = '" . escape_string($photo_id) . "'" .
-            " AND gp.access_level >= ph.level " .
-            "ORDER BY gp.access_level DESC, writable DESC, " .
-            "watermark_level DESC " .
-            "LIMIT 0, 1";
+        $qry->addOrder("gp.access_level DESC")->addOrder("writable DESC")->addOrder("watermark_level DESC");
+        $qry->where($where);
 
-        $gps = group_permissions::getRecordsFromQuery($sql);
+        $gps = group_permissions::getRecordsFromQuery($qry);
         if ($gps && sizeof($gps) >= 1) {
             return $gps[0];
         }
@@ -273,11 +278,8 @@ class user extends zophTable {
         return rating::getGraphArrayForUser($this);
     }
 
-    function getComments() {
-        $sql = "select comment_id from " . DB_PREFIX . "comments where" .
-            " user_id = " .  $this->get("user_id") . " order by comment_date";
-        $comments=comment::getRecordsFromQuery($sql);
-        return $comments;
+    public function getComments() {
+        return comment::getRecords("comment_date", array("user_id" => (int) $this->getId()));
     }
 
     /**
@@ -286,11 +288,9 @@ class user extends zophTable {
      * @return user user object
      */
     public static function getByName($name) {
-        $sql = "select user_id from " . DB_PREFIX . "users where" .
-            " user_name = '" .  escape_string($name) ."'";
-        $users=self::getRecordsFromQuery($sql);
+        $users=self::getRecords(null, array("user_name" => $name));
         return $users[0];
-    } 
+    }
 
     /**
      * Get all users

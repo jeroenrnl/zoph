@@ -1,6 +1,6 @@
 <?php
 /**
- * Group test
+ * Create test database from XML-MySQL Dump
  *
  * This file is part of Zoph.
  *
@@ -22,33 +22,27 @@
  */
 
 /**
- * Test the group class
- *
+ * Create test database from XML-MySQL Dump
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class groupTest extends ZophDataBaseTestCase {
+abstract class ZophDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase {
+    static private $pdo = null;
+    private $conn = null;
 
-    /**
-     * Create groups in the db
-     * @dataProvider getGroups();
-     */
-    public function testCreateGroups($id, $name, array $members) {
-        $group=new group();
-        $group->set("group_name", $name);
-        $group->insert();
-        $this->assertEquals($group->get("group_id"), $id);
-        foreach($members as $member) {
-            $user=user::getByName($member);
-            $group->add_member($user->getId());
+    final public function getConnection() {
+        if ($this->conn === null) {
+            if (self::$pdo == null) {
+                self::$pdo = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, 
+                    DB_USER, DB_PASS);
+            }
+            $this->conn = $this->createDefaultDBConnection(self::$pdo, DB_NAME);
         }
-        $group->update();
+        return $this->conn;
     }
-
-    public function getGroups() {
-        return array(
-            array(5, "TestGroup", array("freddie", "johnd","brian","roger")),
-            array(5, "AnotherTestGroup", array("paul","jimi"))
-        );
+    
+    final public function getDataSet() {
+        return $this->createMySQLXMLDataSet('UnitTests/db.xml');
     }
 }
+?>

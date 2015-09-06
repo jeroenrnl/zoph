@@ -1,6 +1,7 @@
 <?php
 /**
- * Category test
+ * Page test
+ * Test the working of the page class
  *
  * This file is part of Zoph.
  *
@@ -8,7 +9,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,31 +21,36 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-
+require_once "testSetup.php";
 /**
- * Test the category class
+ * Test the page class
  *
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class categoryTest extends ZophDataBaseTestCase {
-    /**
-     * Create categories in the database
-     * @dataProvider getCategories();
-     */
-    public function testCreateCategories($id, $name, $parent) {
-        $category=new category();
-        $category->set("category",$name);
-        $category->set("parent_category_id", $parent);
-        $category->insert();
-        $this->assertInstanceOf("category", $category);
-        $this->assertEquals($category->getId(), $id);
-    }
+class pageTest extends ZophDataBaseTestCase {
 
-    public function getCategories() {
-        return array(
-            array(14, "Testcat1", 2),
-            array(14, "Testcat2", 3)
-        );
-    }
+    public function testCreateDelete() {
+        $page = new page();
+
+        $page->set("title", "Test Page");
+        $page->set("text", "[b]bold[/b], [i]italic[/i]");
+
+        $page->insert();
+
+        unset($page);
+
+        $pages = page::getRecords();
+
+        $page=$pages[0];
+
+        $this->assertInstanceOf("page", $page);
+        $this->assertEquals("Test Page", $page->get("title"));
+
+        $page->delete();
+
+        $pages = page::getRecords();
+
+        $this->assertCount(0, $pages);
+   }
 }

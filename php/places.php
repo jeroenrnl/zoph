@@ -47,7 +47,7 @@ $place->lookup();
 $obj=&$place;
 $ancestors = $place->get_ancestors();
 $order = $user->prefs->get("child_sortorder");
-$children = $place->getChildrenForUser($order);
+$children = $place->getChildren($order);
 $totalPhotoCount = $place->getTotalPhotoCount();
 $photoCount = $place->getPhotoCount();
 

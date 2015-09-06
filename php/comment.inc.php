@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -24,7 +24,7 @@
 
 /**
  * A class corresponding to the comments table.
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -37,7 +37,7 @@ class comment extends zophTable {
     protected static $primary_keys=array("comment_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("subject");
-    /** @var bool keep keys with insert. In most cases the keys are set by the 
+    /** @var bool keep keys with insert. In most cases the keys are set by the
                   db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -49,7 +49,7 @@ class comment extends zophTable {
         parent::insert();
         $this->lookup();
     }
-    
+
     function update() {
         $this->set("timestamp","now()");
         parent::update();
@@ -59,32 +59,32 @@ class comment extends zophTable {
     function delete() {
         if(!$this->get("comment_id")) { return; }
         parent::delete();
-        
+
         $sql = "delete from " . DB_PREFIX . "photo_comments where comment_id=";
         $sql .= escape_string($this->get("comment_id"));
-    
+
         query($sql, "Could not clean comment from photo");
     }
-    
-    
+
+
     function getDisplayArray($user = null) {
         $date=$this->get("comment_date");
         $changed=$this->get("timestamp");
 
         $zophcode = new zophcode($this->get("comment"), array("b","i", "u"));
         $comment="<div>" . $zophcode . "</div>";
-    
+
         return array(
             translate("subject") => $this->get("subject"),
             translate("date") => $date,
             translate("user") => $this->lookup_user(),
-            translate("IP address") => $user->is_admin() ? $this->get("ipaddr") : "<i>" . 
+            translate("IP address") => $user->is_admin() ? $this->get("ipaddr") : "<i>" .
                 translate("only visible for admin users") . "</i>",
             translate("comment") => $comment,
             translate("updated") => $changed
         );
     }
-    
+
     function lookup_user() {
         $comment_user = new user($this->get("user_id"));
         $comment_user->lookup();
@@ -92,10 +92,10 @@ class comment extends zophTable {
         $comment_user->lookup_person();
         $comment_person = $comment_user->person->getName();
         $comment_person_id = (int) $comment_user->person->getId();
-        $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> " . 
-            "(<a href=person.php?person_id=%s>%s</a>)", $this->get("user_id"), 
+        $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> " .
+            "(<a href=person.php?person_id=%s>%s</a>)", $this->get("user_id"),
             $user_name, $comment_person_id, $comment_person);
-        return $return; 
+        return $return;
     }
 
     function get_photo() {
@@ -104,7 +104,7 @@ class comment extends zophTable {
             " where comment_id=" . (int) $this->getId() .
             " limit 1";
         $result=photo::getRecordsFromQuery($sql);
-        if($result[0]) { 
+        if($result[0]) {
             $result[0]->lookup();
             return $result[0];
         } else {
@@ -113,13 +113,13 @@ class comment extends zophTable {
     }
 
     function addToPhoto(photo $photo) {
-        $sql = "insert into " . DB_PREFIX . "photo_comments values" . 
+        $sql = "insert into " . DB_PREFIX . "photo_comments values" .
             "(" . (int) $photo->getId() . ", " . (int) $this->getId() . ")";
 
-      
+
         query($sql, "Failed to add comment:");
     }
- 
+
     function is_owner($user) {
         if($user->getId()==$this->get("user_id")) {
             return true;
@@ -134,7 +134,7 @@ class comment extends zophTable {
 
         $html = "<div class=\"comment\">\n";
         $html .= "<h3>\n";
-        
+
         if ($user->is_admin() || $this->is_owner($user)) {
             $html .= "<span class=\"actionlink\">\n";
             $html .= "<a href=\"comment.php?_action=display&amp;comment_id=" .
@@ -149,7 +149,7 @@ class comment extends zophTable {
             $html .= translate("delete") . "</a>\n";
             $html .= "</span>\n";
         }
-                           
+
         $html .= $this->get("subject") . "</h3>\n";
         $html .= "<div class=\"commentinfo\">\n";
         $html .= $this->get("comment_date");
@@ -161,7 +161,7 @@ class comment extends zophTable {
             $html .= $photo->getThumbnailLink();
             $html .= "</div>\n";
         }
-        
+
         $zophcode = new zophcode($this->get("comment"), array("b","i", "u"));
         $html .= $zophcode;
         $html .= "<br></div>\n";

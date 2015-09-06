@@ -49,12 +49,12 @@ class file {
         }
 
         if(is_link($filename)) {
-            if(@!stat($filename)) {
+            if(!@stat($filename)) {
                 throw new FileSymlinkProblemException(
                     "There's something wrong with symlink $filename\n");
             }
         } else if (is_dir($filename) && !conf::get("import.cli.recursive")) {
-            throw new FileDirectoryNotSupportedException("$filename is a directory\n");
+            throw new FileDirectoryNotSupportedException($filename . " is a directory\n");
         } 
 
         $this->name=basename($filename);

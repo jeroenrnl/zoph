@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,7 @@ class search extends zophTable {
     protected static $primary_keys=array("search_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("name");
-    /** @var bool keep keys with insert. In most cases the keys are set 
+    /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -36,15 +36,18 @@ class search extends zophTable {
 
     public function lookup() {
         $user=user::getCurrent();
-        if($user->is_admin()) {
-            $where= "(owner=" . escape_string($user->get("user_id")) . 
-            " OR " . "public=TRUE) AND "; 
+        if ($user->is_admin()) {
+            $where= "(owner=" . escape_string($user->get("user_id")) .
+            " OR " . "public=TRUE) AND ";
         }
-        
+
         $sql="SELECT * FROM " . DB_PREFIX . "saved_search WHERE " .
             $where .
             "search_id=" . escape_string($this->get("search_id"));
-            
+        /** @todo Once this function has been changed to new db code,
+                  the fetch_assoc in zophTable::lookupFromSQL can
+                  be removed
+         */
         return $this->lookupFromSQL($sql);
     }
 
@@ -62,14 +65,14 @@ class search extends zophTable {
 
 
         $edit_array[]=array(
-            translate("Name"),  
+            translate("Name"),
             create_text_input("name", $this->get("name"),40,64));
 
-        if($user->is_admin()) {
+        if ($user->is_admin()) {
             $edit_array[]=array (
                 translate("Owner"),
-                template::createPulldown("owner", $this->get("owner"), 
-                    template::createSelectArray(user::getRecords("user_name"), 
+                template::createPulldown("owner", $this->get("owner"),
+                    template::createSelectArray(user::getRecords("user_name"),
                     array("user_name"))));
             $edit_array[]=array(
                 translate("Public"),
@@ -80,13 +83,13 @@ class search extends zophTable {
     }
 
     function display($user = null) {
-        if($user && ($this->get("owner") != $user->get("user_id"))) {
+        if ($user && ($this->get("owner") != $user->get("user_id"))) {
             $owner=new user($this->get("owner"));
             $owner->lookup();
             $ownertext="<span class='searchinfo'>(" . translate("by") . " " .
                 $owner->getLink() . ")</span>";
         }
-        return "<a href='" . $this->getLink() . "&_action=" . 
+        return "<a href='" . $this->getLink() . "&_action=" .
             translate("search") . "'>" . $this->getName() .
             "</a> " . $ownertext;
     }
@@ -100,15 +103,15 @@ function get_saved_searches($user) {
 
     $sql="SELECT * FROM " . DB_PREFIX . "saved_search";
     if (!$user->is_admin()) {
-        $sql.=" WHERE (owner=" . escape_string($user->get("user_id")) . 
-            " OR " .  "public=TRUE)"; 
+        $sql.=" WHERE (owner=" . escape_string($user->get("user_id")) .
+            " OR " .  "public=TRUE)";
     }
     return search::getRecordsFromQuery($sql);
 }
 
 function get_list_of_saved_searches($user) {
     $searches=get_saved_searches($user);
-    if($searches) {
+    if ($searches) {
         $html="<h2>" . translate("Saved searches") . "</h2>";
         $html.="<ul class='saved_search'>";
 
@@ -116,21 +119,21 @@ function get_list_of_saved_searches($user) {
             $html.="<span class='actionlink'>";
             $html.="<a href='" . $search->getLink() . "'>" .
                 translate("load") . "</a>";
-            if(($search->get("owner") == $user->get("user_id")) || 
+            if (($search->get("owner") == $user->get("user_id")) ||
                 $user->is_admin()) {
-                $html.=" | <a href='search.php?search_id=" . 
+                $html.=" | <a href='search.php?search_id=" .
                         $search->get("search_id") .
                         "&_action=edit'>" . translate("edit") . "</a>";
-                $html.=" | <a href='search.php?search_id=" . 
+                $html.=" | <a href='search.php?search_id=" .
                         $search->get("search_id") .
                         "&_action=delete'>" . translate("delete") . "</a>";
             }
             $html.="</span>";
             $html.="<li>" . $search->display($user) . "</li>\n";
-            
+
         }
         $html.="</ul>\n\n";
-    }   
+    }
     return $html;
 }
 

@@ -38,7 +38,8 @@ class log {
         30 => "Warning",
         20 => "Error",
         10 => "Fatal Error",
-        0 => "Message");
+        5 => "Message",
+        0 => "None");
    
     const MOREDEBUG = 60;
     const DEBUG = 50;
@@ -46,6 +47,7 @@ class log {
     const WARN = 30;
     const ERROR = 20;
     const FATAL = 10;
+    const MSG = 5;
     const NONE = 0;
 
     const VARS = 1;
@@ -58,7 +60,8 @@ class log {
     const DB = 128;
     const SQL = 256;
     const XML = 512;
-    /* 1024 and 2048, are free */
+    const CONF = 1024;
+    /* 2048, is free */
     const IMG = 4096;
     /* 8192, 16384 are free */
     const GENERAL = 32768;

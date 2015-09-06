@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,7 +34,7 @@ class point extends zophTable {
     protected static $primary_keys=array("point_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array();
-    /** @var bool keep keys with insert. In most cases the keys are set by 
+    /** @var bool keep keys with insert. In most cases the keys are set by
                   the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -52,7 +52,7 @@ class point extends zophTable {
         $point->set("lat", $xml->getAttribute("lat"));
         $point->set("lon", $xml->getAttribute("lon"));
         while ($xml->read()) {
-            if($xml->nodeType==XMLReader::ELEMENT) {
+            if ($xml->nodeType==XMLReader::ELEMENT) {
                 switch ($xml->name) {
                 case "name":
                     $xml->read();
@@ -80,54 +80,56 @@ class point extends zophTable {
         return $point;
     }
 
+    private function getNextPrevQry() {
+        $qry=new select(array("pt" => "point"));
+        $where=new clause("track_id=:trackid");
+
+        $qry->addParams(array(
+            new param(":trackid", (int) $this->get("track_id"), PDO::PARAM_INT),
+            new param(":datetime", $this->get("datetime"), PDO::PARAM_STR)
+        ));
+
+        $qry->addLimit(1);
+        return array($qry, $where);
+    }
+
     /**
      * Get the next (in time) point from a track
      */
     public function getNext() {
-        $sql="SELECT * FROM " . DB_PREFIX . "point WHERE" .
-            " track_id = " . escape_string($this->get("track_id")) . " AND " .
-            " datetime>\"" . escape_string($this->get("datetime")) . "\"" .
-            " ORDER BY datetime LIMIT 1";
-        $points=self::getRecordsFromQuery($sql);
-        if(is_array($points) && sizeof($points) > 0) {
+        list($qry, $where)=$this->getNextPrevQry();
+
+        $where->addAnd(new clause("datetime>:datetime"));
+        $qry->where($where);
+
+        $qry->addOrder("datetime");
+
+        $points=self::getRecordsFromQuery($qry);
+        if (is_array($points) && sizeof($points) > 0) {
             return $points[0];
         } else {
             return null;
         }
     }
-    
+
     /**
      * Get the  previous (in time) point from a track
      */
     public function getPrev() {
-        $sql="SELECT * FROM " . DB_PREFIX . "point WHERE" .
-            " track_id = " . escape_string($this->get("track_id")) . " AND " .
-            " datetime<\"" . escape_string($this->get("datetime")) . "\"" .
-            " ORDER BY datetime DESC LIMIT 1";
-        $points=self::getRecordsFromQuery($sql);
-        if(is_array($points) && sizeof($points) > 0) {
+        list($qry, $where)=$this->getNextPrevQry();
+
+        $where->addAnd(new clause("datetime<:datetime"));
+
+        $qry->where($where);
+
+        $qry->addOrder("datetime DESC");
+
+        $points=self::getRecordsFromQuery($qry);
+        if (is_array($points) && sizeof($points) > 0) {
             return $points[0];
         } else {
             return null;
         }
-        return $points[0];
-    }
-
-    /**
-     * Get an array of all points
-     *
-     * @param array array of contraints
-     * @param array "and" or "or"
-     * @param array "=", ">" etc.
-     * @param string sort order
-     *
-     * @return array of points
-     * @todo useless wrapper around getRecords, should be removed
-     */
-    public static function getAll($constraints = null, $conj = "and", 
-        $ops = null, $order = "name") {
-    
-        return self::getRecords($order, $constraints, $conj, $ops);
     }
 
     /**
@@ -145,13 +147,13 @@ class point extends zophTable {
         $lon2=$p2->get("lon");
 
         $distance=(6371 * acos(
-            cos(deg2rad($lat1)) *  
-            cos(deg2rad($lat2)) * 
+            cos(deg2rad($lat1)) *
+            cos(deg2rad($lat2)) *
             cos(deg2rad($lon2) - deg2rad($lon1)) +
             sin(deg2rad($lat1)) *
             sin(deg2rad($lat2))));
 
-        if($entity=="miles") {
+        if ($entity=="miles") {
             $distance=$distance / 1.609344;
         }
 
@@ -177,27 +179,27 @@ class point extends zophTable {
      * @param int maximum time between two points
      * @return point this function will return where you are at t3
      */
-    public static function interpolate(point $p1, point $p2, 
+    public static function interpolate(point $p1, point $p2,
         $t3, $maxdist=null, $entity="km", $maxtime=null) {
-        
+
         $t1 = strtotime($p1->get("datetime"));
         $t2 = strtotime($p2->get("datetime"));
-        
+
         if (!($t2 >= $t3 && $t3 >= $t1)) {
             return false;
         }
-        if($maxtime) {
-            if(abs($t1 - $t2) > $maxtime) {
-                return false; 
+        if ($maxtime) {
+            if (abs($t1 - $t2) > $maxtime) {
+                return false;
             }
         }
 
-        if($maxdist) {
+        if ($maxdist) {
             $dist=$p1->getDistanceTo($p2, $entity);
             if ($dist > $maxdist) {
                 return false;
             }
-        }    
+        }
         $lat1=$p1->get("lat");
         $lon1=$p1->get("lon");
 
@@ -212,7 +214,7 @@ class point extends zophTable {
 
         $lat3=$lat1 + (($dlat/$dt) * $dt3);
         $lon3=$lon1 + (($dlon/$dt) * $dt3);
-        
+
         $p3 = new point();
         $p3->set("lat", $lat3);
         $p3->set("lon", $lon3);

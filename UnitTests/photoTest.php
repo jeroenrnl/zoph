@@ -369,7 +369,7 @@ class photoTest extends ZophDataBaseTestCase {
 
     /**
      * Test adding comments
-     * @dataProvider getComments
+     * @dataProvider getCommentsToAdd
      */
     public function testAddComment($photo_id, $comment, $user_id) {
         $obj = new comment();
@@ -390,6 +390,24 @@ class photoTest extends ZophDataBaseTestCase {
         
         $this->assertInstanceOf("comment", $obj);
         $this->assertEquals($obj->get_photo()->getId(), $photo->getId());
+    }
+
+    /**
+     * Test getting comments
+     * @dataProvider getComments
+     */
+    public function testGetComments($photo_id, $expected) {
+        $photo=new photo($photo_id);
+
+        $comments=$photo->getComments();
+        $actual=array();
+        foreach($comments as $comment) {
+            $this->assertInstanceOf("comment", $comment);
+            $this->assertEquals($comment->get_photo()->getId(), $photo->getId());
+            $actual[]=$comment->getId();
+        }
+
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -598,6 +616,21 @@ class photoTest extends ZophDataBaseTestCase {
     }
 
     /**
+     * Test photo::getNear() function
+     * @dataProvider getNearData
+     */
+
+    public function testGetNear($photo, $distance, $limit, $entity, $exp_count) {
+        $photo=new photo($photo);
+        $photo->lookup();
+
+        $near=$photo->getNear($distance, $limit, $entity);
+
+        $this->assertEquals($exp_count, sizeof($near));
+
+    }
+
+    /**
      * Create a track to test geotagging functions
      * creates a line north-south in western europe.
      */
@@ -635,14 +668,18 @@ class photoTest extends ZophDataBaseTestCase {
             4   => 51.6,
             5   => 51.5
         );
-
+        
+        // Set temporary testdata for time and lat/lon
         $photos=array();
+        
         for($i=1; $i<=5; $i++) {
             $photo=new photo($i);
             $photo->lookup();
 
             $photo->set("date", "2013-01-01");
             $photo->set("time", "00:" . $i . "0:00");
+            $photo->set("lat", null);
+            $photo->set("lon", null);
 
             $photo->update();
             $photos[]=$photo;
@@ -827,6 +864,64 @@ class photoTest extends ZophDataBaseTestCase {
         }
     }
 
+    /**
+     * Test getByName function
+     * @dataProvider getGetByNameData
+     */
+    public function testGetByName($file, $path, $exp_id) {
+        // Set path, so lookup by path can be tested
+        if($file=="TEST_0003.JPG") {
+            $photo=new photo(3);
+            $photo->lookup();
+            $photo->set("path", "dir003/dir003");
+            $photo->update();
+            unset($photo);
+        }
+        $photos=photo::getByName($file, $path);
+        $this->assertEquals($exp_id, $photos[0]->getId());
+    }
+
+
+    /**
+     * Test hash functions
+     * @dataProvider getHashData
+     */
+    public function testGetFromHash($hash, $type, $exp_id) {
+        conf::set("share.salt.full", "TestSaltFull");
+        conf::set("share.salt.mid", "TestSaltMid");
+
+        if($type=="full") {
+            $hash=sha1("TestSaltFull" . $hash);
+        } else if ($type="mid") {
+            $hash=sha1("TestSaltMid" . $hash);
+        }
+
+        $photo=photo::getFromHash($hash, $type);
+
+        $this->assertEquals($exp_id, $photo->getId());
+        $this->assertEquals($photo->getHash($type), $hash);
+    }
+
+    public function testGetTotalSize() {
+        $this->assertEquals("204459", photo::getTotalSize());
+    }
+
+    /**
+     * Test the getRecords function (in abstract zophTable class)
+     * @dataProvider getPhotoList
+     */
+    public function testGetRecords($order, $constraints, $conj, $ops, $exp) {
+        $photos = photo::getRecords($order, $constraints, $conj, $ops);
+
+        $act=array();
+        foreach($photos as $photo) {
+            $act[]=$photo->getId();
+        }
+
+        $this->assertEquals($exp, $act);
+    }
+
+
     //================== DATA PROVIDERS =======================
 
     public function getLocation() {
@@ -849,18 +944,18 @@ class photoTest extends ZophDataBaseTestCase {
 
     public function getImages() {
         return array(
-            array(11, "FILE_0001.JPG", "blue", "yellow", 
+            array(13, "FILE_0001.JPG", "blue", "yellow", 
                 array("DateTimeOriginal" => "2013-01-01 13:00:00")),
-            array(11, "FILE_0002.JPG", "red", "yellow",
+            array(13, "FILE_0002.JPG", "red", "yellow",
                 array("DateTimeOriginal" => "2012-12-31 15:00:00")),
-            array(11, "FILE_0003.JPG", "yellow", "blue", 
+            array(13, "FILE_0003.JPG", "yellow", "blue", 
                 array("DateTimeOriginal" => "2013-01-01 14:00:00"))
          );
     }
 
     public function getNewAlbums() {
         return array(
-            array(1, array(2,3,4)),
+            array(1, array(4,5,6)),
             array(2, array(1,5,6)),
             array(3, array(7)),
             array(4, array(8,9))
@@ -869,7 +964,7 @@ class photoTest extends ZophDataBaseTestCase {
 
     public function getCategories() {
         return array(
-            array(1, array(2,3,4)),
+            array(1, array(4,5,6)),
             array(2, array(1,5,6)),
             array(3, array(7)),
             array(4, array(8,9))
@@ -885,13 +980,21 @@ class photoTest extends ZophDataBaseTestCase {
          );
     }
 
-    public function getComments() {
+    public function getCommentsToAdd() {
         return array(
             array(1, "Test Comment", 3),
             array(2, "Test comment [b]with bold[/b]", 4),
             array(3, "Test comment with [i]unclosed tag",5),
             array(4, "Test comment with <b>html</b>", 6)
          );
+    }
+
+    public function getComments() {
+        return array(
+            array(1, array(1,2,3)),
+            array(3, array()),
+            array(8, array(9,10,11))
+        );
     }
 
     public function getAlbums() {
@@ -921,4 +1024,76 @@ class photoTest extends ZophDataBaseTestCase {
             array("convert")
         );
     }
+
+    public function getNearData() {
+        // $photo, $distance, $limit, $entity, $exp_count
+        return array(
+            array(2, 10, null, null, 2),
+            array(2, 100, null, null, 5),
+            array(7, 500, null, "miles", 7),
+            array(11, 2000, null, "km", 2),
+            array(8, 15000, 2, "km", 2)
+        );
+    }
+
+    public function getGetByNameData() {
+        // $file, $path, $exp_id
+        return array(
+            array("TEST_0001.JPG", null, 1),
+            array("TEST_0002.JPG", null, 2),
+            array("TEST_0003.JPG", "dir003/dir003", 3)
+        );
+    }
+
+    public function getHashData() {
+        return array(
+            array("1c52decf9f59d43da618b757dee9afb5cfdd5b28", "file", 1),
+            array("0dfae93cebb4a00629d72558907ff883f181fb2a", "full", 4),
+            array("e2f14b5f7dd442032106e9a9af8cd7338ce3ee9d", "mid", 7)
+        );
+    }
+
+    public function getPhotoList() {
+        // order, constraints, conj, ops
+        return array(
+            array(
+                "name", 
+                array(
+                    "width" => "600",
+                    "height" => "400"
+                ),
+                "AND",
+                null,
+                array(1,2,3,4,5,6,7,8,9,10,11,12)
+            ),
+            array(
+                "name",
+                array(
+                    "width" => "600"
+                ),
+                null,
+                array(
+                    "width" => ">"
+                ),
+                array()
+            ),
+            array(
+                "lat, photo_id", null, null, null,
+                 array(11,12,10,9,8,6,2,3,1,4,5,7)
+            ),
+            array(
+                "name",
+                array(
+                    "date#0" => "2015-06-17",
+                    "date#1" => "2014-01-06"
+                ),
+                "OR",
+                null,
+                array(6,11,12)
+            )
+        );
+    }
+
+        
+
 }

@@ -113,6 +113,14 @@ class settings {
             define("DB_USER", $i["db_user"]);
             define("DB_PASS", $i["db_pass"]);
             define("DB_PREFIX", $i["db_prefix"]);
+
+            db::setLoginDetails(
+                $i["db_host"], 
+                $i["db_name"], 
+                $i["db_user"], 
+                $i["db_pass"], 
+                $i["db_prefix"]
+            );
             return true;
         }
     } 

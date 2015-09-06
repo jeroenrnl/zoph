@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,7 +30,6 @@
  * @auther Jeroen Roos
  */
 class album extends zophTreeTable implements Organizer {
-
     /** @param Name of the root node in XML responses */
     const XMLROOT="albums";
     /** @param Name of the leaf nodes in XML responses */
@@ -42,7 +41,7 @@ class album extends zophTreeTable implements Organizer {
     protected static $primary_keys=array("album_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("album");
-    /** @var bool keep keys with insert. In most cases the keys 
+    /** @var bool keep keys with insert. In most cases the keys
                   are set by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -56,43 +55,41 @@ class album extends zophTreeTable implements Organizer {
      */
     public function lookup() {
         $user=user::getCurrent();
-        $id = $this->get("album_id");
-        if(!is_numeric($id)) { die("album_id must be numeric"); }
-        if (!$id) { return; }
-
-        if ($user->is_admin()) {
-            $sql =
-                "select * from " . DB_PREFIX . "albums " .
-                "where album_id = " . escape_string($id);
-        } else {
-            $sql =
-                 "select a.* from "  .
-                 DB_PREFIX . "albums as a JOIN " .
-                 DB_PREFIX . "group_permissions as gp ON " .
-                 "gp.album_id = a.album_id JOIN " .
-                 DB_PREFIX . "groups_users gu ON " .
-                 "gp.group_id = gu.group_id " .
-                 "where gp.album_id = '" . escape_string($id) . "'" .
-                 " and gu.user_id = '" . 
-                 escape_string($user->get("user_id"))."'";
+        $id = $this->getId();
+        if (!is_numeric($id)) {
+            die("album_id must be numeric");
         }
-        return $this->lookupFromSQL($sql);
+        if (!$id) {
+            return;
+        }
+
+        $qry=new select(array("a" => "albums"));
+        $distinct=true;
+        $qry->addFields(array("*"), $distinct);
+        $where=new clause("a.album_id=:albumid");
+        $qry->addParam(new param(":albumid", (int) $this->getId(), PDO::PARAM_INT));
+
+        if (!$user->is_admin()) {
+            $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
+                ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+            $where->addAnd(new clause("gu.user_id=:userid"));
+            $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
+        }
+        $qry->where($where);
+        return $this->lookupFromSQL($qry);
     }
-    
+
     /**
      * Add a photo to this album
      * @param photo Photo to add
      */
     public function addPhoto(photo $photo) {
         $user=user::getCurrent();
-        if($user->is_admin() || $user
-                ->get_album_permissions($this->get("album_id"))
-                ->get("writable")) {
-            $sql = "INSERT INTO " . DB_PREFIX . "photo_albums " .
-                "(photo_id, album_id) values ('" .
-                escape_string($photo->get("photo_id")) . "', '" .
-                escape_string($this->get("album_id")) . "')";
-            query($sql);
+        if ($user->is_admin() || $user->get_album_permissions($this->getId())->get("writable")) {
+            $qry=new insert(array("photo_albums"));
+            $qry->addParam(new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT));
+            $qry->addParam(new param(":album_id", (int) $this->getId(), PDO::PARAM_INT));
+            $qry->execute();
         }
     }
 
@@ -102,12 +99,16 @@ class album extends zophTreeTable implements Organizer {
      */
     public function removePhoto(photo $photo) {
         $user=user::getCurrent();
-        if($user->is_admin() || $user->get_album_permissions($this->get("album_id"))
-            ->get("writable")) {
-            $sql = "DELETE FROM " . DB_PREFIX . "photo_albums " .
-                "WHERE photo_id = '" . escape_string($photo->get("photo_id")) . "'" .
-                " AND album_id = '" . escape_string($this->get("album_id")) . "'";
-            query($sql);
+        if ($user->is_admin() || $user->get_album_permissions($this->getId())->get("writable")) {
+            $qry=new delete("photo_albums");
+            $where=new clause("photo_id=:photo_id");
+            $where->addAnd(new clause("album_id=:album_id"));
+            $qry->where($where);
+            $qry->addParams(array(
+                new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT),
+                new param(":album_id", (int) $this->getId(), PDO::PARAM_INT)
+            ));
+            $qry->execute();
         }
     }
 
@@ -138,129 +139,69 @@ class album extends zophTreeTable implements Organizer {
      * @return array of albums
      */
     public function getChildren($order=null) {
-        $order_fields="";
-        if($order && $order!="name") {
-            $order_fields=get_sql_for_order($order);
-            $sql_order=" ORDER BY " . $order . ", name ";
-        } else if ($order=="name") {
-            $sql_order=" ORDER BY name ";
-        } else {
-            $sql_order="";
-        }
-        $sql =
-            "SELECT a.*, album as name " .
-            $order_fields . " FROM " .
-            DB_PREFIX . "albums as a LEFT JOIN " .
-            DB_PREFIX . "photo_albums as pa " .
-            "ON a.album_id=pa.album_id LEFT JOIN " .
-            DB_PREFIX . "photos as ph " .
-            "ON pa.photo_id=ph.photo_id " .
-            "WHERE parent_album_id=" . (int) $this->getId() .
-            " GROUP BY album_id " .
-            escape_string($sql_order);
-
-        $this->children=self::getRecordsFromQuery($sql);
-        return $this->children;
-    }
-
-    /**
-     * Get the subalbums of this album, for the current user
-     * @param string optional order
-     * @return array of albums
-     */
-    public function getChildrenForUser($order=null) {
         $user=user::getCurrent();
 
-        if ($user->is_admin()) {
-            return $this->getChildren($order);
+        $qry=new select(array("a" => "albums"));
+        $qry->addFields(array("*", "name"=>"album"));
+        $qry->join(array("pa" => "photo_albums"), "a.album_id=pa.album_id", "LEFT")
+            ->join(array("p"  => "photos"      ), "pa.photo_id=p.photo_id", "LEFT");
+
+        $where=new clause("parent_album_id=:album_id");
+
+        $qry->addGroupBy("a.album_id");
+
+        $qry->addParam(new param(":album_id", (int) $this->getId(), PDO::PARAM_INT));
+
+        $qry=static::addOrderToQuery($qry, $order);
+
+        if ($order!="name") {
+            $qry->addOrder("name");
         }
 
-        $order_fields="";
-        if($order && $order!="name") {
-            $order_fields=get_sql_for_order($order);
-            $sql_order=" ORDER BY " . $order . ", name ";
-        } else if ($order=="name") {
-            $sql_order=" ORDER BY name ";
+        if (!$user->is_admin()) {
+            list($qry,$where)=static::expandQueryForUser($qry, $where);
         }
 
-        $sql = "SELECT a.*, album as name " .
-            $order_fields . " FROM " .
-            DB_PREFIX . "albums as a LEFT JOIN " .
-            DB_PREFIX . "photo_albums as pa " .
-            "ON a.album_id=pa.album_id LEFT JOIN " .
-            DB_PREFIX . "photos as ph " .
-            "ON pa.photo_id=ph.photo_id LEFT JOIN " .
-            DB_PREFIX . "group_permissions AS gp " .
-            "ON a.album_id=gp.album_id JOIN " .
-            DB_PREFIX . "groups_users AS gu ON " .
-            "gp.group_id = gu.group_id " .
-            "WHERE gu.user_id=" . (int) $user->getId() .
-            " AND parent_album_id=" . (int) $this->getId() .
-            " GROUP BY album_id" .
-            escape_string($sql_order);
+        $qry->where($where);
 
-        $this->children=self::getRecordsFromQuery($sql);
+        $this->children=static::getRecordsFromQuery($qry);
         return $this->children;
     }
 
     /**
      * Get details (statistics) about this album from db
      * @return array Array with statistics
+     * @todo this function is almost equal to category::getDetails() they should be merged
      */
     public function getDetails() {
-        $id = (int) $this->getId();
-        $user=user::getCurrent();
-        $user_id = (int) $user->getId();
+        $qry=new select(array("pa" => "photo_albums"));
+        $qry->addFunction(array(
+            "count"     => "COUNT(DISTINCT p.photo_id)",
+            "oldest"    => "MIN(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "newest"    => "MAX(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "first"     => "MIN(p.timestamp)",
+            "last"      => "MAX(p.timestamp)",
+            "lowest"    => "ROUND(MIN(ar.rating),1)",
+            "highest"   => "ROUND(MAX(ar.rating),1)",
+            "average"   => "ROUND(AVG(ar.rating),2)"));
+        $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id")
+            ->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
-        if (!$user->is_admin()) {
-            $sql = "SELECT " .
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photo_albums pa JOIN " .
-                DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pa.photo_id JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id LEFT JOIN " .
-                DB_PREFIX . "group_permissions gp " .
-                "ON pa.album_id=gp.album_id LEFT JOIN " . 
-                DB_PREFIX . "groups_users gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE ph.level<gp.access_level AND " .
-                "gu.user_id=" . escape_string($user_id) . " AND " .
-                "pa.album_id=" . escape_string($id) .
-                " GROUP BY pa.album_id";
-        } else {
-            $sql = "SELECT ".
-                "'" . translate("In this album:", false) . "' AS title, " .
-                "COUNT(ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photo_albums pa JOIN " .
-                DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pa.photo_id JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id " .
-                "WHERE pa.album_id=" . escape_string($id) .
-                " GROUP BY pa.album_id";
-        }   
-        $result=query($sql);
-        if($result) {
-            return fetch_assoc($result);
+        $qry->addGroupBy("pa.album_id");
+
+        $where=new clause("pa.album_id=:albid");
+        $qry->addParam(new param(":albid", $this->getId(), PDO::PARAM_INT));
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = static::expandQueryForUser($qry, $where);
+        }
+
+        $qry->where($where);
+
+
+        $result=query($qry);
+        if ($result) {
+            return $result->fetch(PDO::FETCH_ASSOC);
         } else {
             return null;
         }
@@ -271,7 +212,7 @@ class album extends zophTreeTable implements Organizer {
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
-        if(!isset($details)) {
+        if (!isset($details)) {
             $details=$this->getDetails();
         }
         $details["title"]=translate("In this album:", false);
@@ -279,78 +220,52 @@ class album extends zophTreeTable implements Organizer {
     }
 
     /**
-     * Return the amount of photos in this album
+     * Get count of photos in this album
+     * @todo This function is very similar to album::getPhotoCount, should be merged
      */
     public function getPhotoCount() {
-        $user=user::getCurrent();
-
-        if ($this->photoCount) { return $this->photoCount; }
-
-        $id = $this->get("album_id");
-
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT COUNT(*) FROM " .
-                DB_PREFIX . "photo_albums " .
-                "WHERE album_id = '" .  escape_string($id) . "'";
-        } else {
-            $sql =
-                "SELECT COUNT(*) FROM " .
-                DB_PREFIX . "photo_albums AS pa JOIN " .
-                DB_PREFIX . "photos AS p ON " .
-                "pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp ON " .
-                "gp.album_id = pa.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu ON " .
-                "gp.group_id = gu.group_id " .
-                "WHERE pa.album_id = " . escape_string($id) .
-                " AND gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= p.level";
+        if ($this->photoCount) {
+            return $this->photoCount;
         }
 
-        return self::getCountFromQuery($sql);
+        $qry=new select(array("pa" => "photo_albums"));
+        $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id");
+        $qry->addFunction(array("count" => "count(distinct pa.photo_id)"));
+        $where=new clause("pa.album_id = :alb_id");
+        $qry->addParam(new param(":alb_id", $this->getId(), PDO::PARAM_INT));
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = static::expandQueryForUser($qry, $where);
+        }
+
+        $qry->where($where);
+        $count=static::getCountFromQuery($qry);
+        $this->photoCount=$count;
+        return $count;
     }
 
     /**
      * Return the amount of photos in this album and it's children
      */
     public function getTotalPhotoCount() {
-        $user=user::getCurrent();
         // Without the lookup, parent_album_id is not available!
         $this->lookup();
-        if ($this->get("parent_album_id")) {
-            $id_list = $this->getBranchIds();
-            $id_constraint = "pa.album_id in ($id_list)";
-        }
-        else {
-            $id_constraint = "";
-        }
-        if ($user->is_admin()) {
-            $sql = "SELECT COUNT(distinct pa.photo_id) FROM " .
-                DB_PREFIX . "photo_albums pa ";
 
-            if ($id_constraint) {
-                $sql .= " WHERE $id_constraint";
-            }
-        } else {
-            $sql =
-                "SELECT COUNT(distinct pa.photo_id) FROM " .
-                DB_PREFIX . "photo_albums as pa JOIN " .
-                DB_PREFIX . "photos as p ON " .
-                "pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp ON " .
-                "pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu ON " .
-                "gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= p.level";
+        $qry=new select(array("pa" => "photo_albums"));
+        $qry->addFunction(array("count" => "COUNT(DISTINCT pa.photo_id)"));
 
-            if ($id_constraint) {
-                $sql .= " and $id_constraint";
-            }
+        $id_list=null;
+        $this->getBranchIdArray($id_list);
+        $ids=new param(":alb_id", $id_list, PDO::PARAM_INT);
+        $qry->addParam($ids);
+        $where=clause::InClause("pa.album_id", $ids);
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry,$where)=static::expandQueryForUser($qry, $where);
         }
+        $qry->where($where);
 
-        return self::getCountFromQuery($sql);
+        return static::getCountFromQuery($qry);
     }
 
     /**
@@ -358,19 +273,19 @@ class album extends zophTreeTable implements Organizer {
      * @return array fields/values
      */
     public function getEditArray() {
-        if($this->isRoot()) {
+        if ($this->isRoot()) {
             $parent=array (
                 translate("parent album"),
                 translate("Albums"));
         } else {
             $parent=array (
                 translate("parent album"),
-                self::createPulldown("parent_album_id", $this->get("parent_album_id")));
+                static::createPulldown("parent_album_id", $this->get("parent_album_id")));
         }
         return array(
-            "album" => 
+            "album" =>
                 array(
-                    translate("album name"),  
+                    translate("album name"),
                     create_text_input("album", $this->get("album"),40,64)),
             "parent_album_id" => $parent,
             "album_description" =>
@@ -381,7 +296,7 @@ class album extends zophTreeTable implements Organizer {
             "pageset" =>
                 array(
                     translate("pageset"),
-                    template::createPulldown("pageset", $this->get("pageset"), 
+                    template::createPulldown("pageset", $this->get("pageset"),
                         get_pageset_select_array())),
             "sortname" =>
                 array(
@@ -427,75 +342,62 @@ class album extends zophTreeTable implements Organizer {
      * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
      * @param bool choose autocover from this album AND children
      * @return photo coverphoto
+     * @todo This function is almost equal to category::getAutoCover(), should be merged
      */
     public function getAutoCover($autocover=null, $children=false) {
-        $user=user::getCurrent();
-
         $coverphoto=$this->getCoverphoto();
-        if($coverphoto instanceof photo) {
+        if ($coverphoto instanceof photo) {
             return $coverphoto;
         }
 
-        $order=self::getAutoCoverOrder($autocover);
-        if($children) {
-            $album_where=" WHERE pa.album_id in (" . $this->getBranchIds() .")";
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")
+            ->join(array("pa" => "photo_albums"), "pa.photo_id = ar.photo_id");
+
+        if ($children) {
+            $ids=new param(":ids",$this->getBranchIdArray(), PDO::PARAM_INT);
+            $qry->addParam($ids);
+            $where=clause::InClause("pa.album_id", $ids);
         } else {
-            $album_where=" WHERE pa.album_id =" .$this->get("album_id");
+            $where=new clause("pa.album_id=:id");
+            $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
         }
-        if ($user->is_admin()) {
-            $sql =
-                "select distinct ar.photo_id from " .
-                DB_PREFIX . "view_photo_avg_rating ar JOIN " .
-                DB_PREFIX . "photo_albums pa ON" .
-                " pa.photo_id = ar.photo_id" .
-                $album_where .
-                " " . $order;
-        } else {
-            $sql=
-                "select distinct p.photo_id from " .
-                DB_PREFIX . "photos AS p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums AS pa" .
-                " ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp ON " .
-                "pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu ON " .
-                "gp.group_id = gu.group_id " .
-                $album_where .
-                " AND gu.user_id =" . 
-                " '" . escape_string($user->get("user_id")) . "'" .
-                " AND pa.photo_id = p.photo_id " .
-                " AND gp.access_level >= p.level " .
-                $order;
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = static::expandQueryForUser($qry, $where);
         }
-        $coverphotos=photo::getRecordsFromQuery($sql);
+
+        $qry=static::getAutoCoverOrder($qry, $autocover);
+        $qry->where($where);
+        $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
 
         if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
             return $coverphoto;
         } else if (!$children) {
-            // No photos found in this album... let's look again, but now 
-            // also in sub-albums...
+            // No photos found in this album... let's look again, but now
+            // also in subalbum...
             return $this->getAutoCover($autocover, true);
         }
     }
 
     /**
-     * Lookup album by name;
+     * Lookup album by name
      * @param string name
+     * @todo This function is almost equal to category::getByName(), should be merged
      */
     public static function getByName($name) {
-        if(empty($name)) {
+        if (empty($name)) {
             return false;
         }
-        $where =
-            "lower(album) ='" . escape_string(strtolower($name)) . "'";
+        $qry=new select(array("a" => "albums"));
+        $qry->addFields(array("album_id"));
+        $qry->where(new clause("lower(album)=:name"));
+        $qry->addParam(new param(":name", strtolower($name), PDO::PARAM_STR));
 
-        $query = "select album_id from " . DB_PREFIX . "albums where $where";
-
-        return self::getRecordsFromQuery($query);
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
@@ -504,35 +406,18 @@ class album extends zophTreeTable implements Organizer {
     public static function getTopN() {
         $user=user::getCurrent();
 
-        if ($user->is_admin()) {
-            $sql =
-                "select al.*, count(*) as count from " .
-                DB_PREFIX . "albums as al, " .
-                DB_PREFIX . "photo_albums as pa " .
-                "where pa.album_id = al.album_id " .
-                "group by al.album_id " .
-                "order by count desc, al.album " .
-                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
-        } else {
-            $sql =
-                "SELECT al.*, count(distinct ph.photo_id) AS count FROM " .
-                DB_PREFIX . "albums AS al JOIN " .
-                DB_PREFIX . "photo_albums AS pa ON " .
-                " al.album_id = pa.album_id JOIN " .
-                DB_PREFIX . "photos AS ph ON " .
-                "pa.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp ON " .
-                "pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu ON " .
-                "gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . escape_string($user->get("user_id")). "'" .
-                " AND gp.access_level >= ph.level " .
-                "GROUP BY al.album_id " .
-                "ORDER BY count desc, al.album " .
-                "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
+        $qry=new select(array("a" => "albums"));
+        $qry->addFields(array("album_id", "album"));
+        $qry->addFunction(array("count" => "count(distinct pa.photo_id)"));
+        $qry->join(array("pa" => "photo_albums"), "pa.album_id=a.album_id");
+        $qry->addGroupBy("a.album_id");
+        $qry->addOrder("count DESC")->addOrder("a.album");
+        $qry->addLimit((int) $user->prefs->get("reports_top_n"));
+        if (!$user->is_admin()) {
+            list($qry, $where) = static::expandQueryForUser($qry);
+            $qry->where($where);
         }
-
-        return parent::getTopNfromSQL($sql);
+        return parent::getTopNfromSQL($qry);
 
     }
 
@@ -541,7 +426,7 @@ class album extends zophTreeTable implements Organizer {
      */
     public static function getAutocompPref() {
         $user=user::getCurrent();
-        return ($user->prefs->get("autocomp_albums") && conf::get("interface.autocomplete")); 
+        return ($user->prefs->get("autocomp_albums") && conf::get("interface.autocomplete"));
     }
     /**
      * Return all albums
@@ -549,20 +434,19 @@ class album extends zophTreeTable implements Organizer {
     public static function getAll() {
         $user=user::getCurrent();
 
-        if ($user && $user->is_admin()) {
-            $sql = "select * from " . DB_PREFIX . "albums order by album";
-        } else {
-            $sql =
-                 "select a.* from " .
-                 DB_PREFIX . "albums as a JOIN " .
-                 DB_PREFIX . "group_permissions AS gp " .
-                 "ON gp.album_id = a.album_id JOIN " .
-                 DB_PREFIX . "groups_users as gu " .
-                 "where gu.user_id = '" . escape_string($user->get("user_id")) .
-                 "order by a.album";
+        $qry=new select(array("a" => "albums"));
+        $qry->addFields(array("album_id"), true);
+        $qry->addOrder("album");
+
+        if (!$user->is_admin()) {
+            $qry->join(array("gp" => "group_permissions"), "gp.album_id = a.album_id");
+            $qry->join(array("gu" => "groups_users"), "gp.group_id = gu.group_id");
+            $qry->where(new clause("gu.user_id=:userid"));
+            $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
         }
 
-        return self::getRecordsFromQuery($sql);
+
+        return static::getRecordsFromQuery($qry);
     }
     /**
      * Get albums newer than a certain date
@@ -570,16 +454,19 @@ class album extends zophTreeTable implements Organizer {
      * @param string date
      */
     public static function getNewer(user $user, $date) {
-        $sql = "SELECT a.* FROM " .
-            DB_PREFIX . "albums AS a JOIN " .
-            DB_PREFIX . "group_permissions AS gp " .
-            "ON a.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users AS gu " .
-            "WHERE gu.user_id = '" . escape_string($user->getId()) .
-            "' AND gp.changedate > '" . escape_string($date) . "' " .
-            "ORDER BY a.album_id";
+        $qry=new select(array("a" => "albums"));
+        $qry->addFields(array("album_id"), true);
+        $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
+            ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+        $where=new clause("user_id=:userid");
+        $where->addAnd(new clause("gp.changedate>:changedate"));
 
-        return self::getRecordsFromQuery($sql);
+        $qry->addParams(array(
+                new param(":userid", $user->getId(), PDO::PARAM_INT),
+                new param(":changedate", $date, PDO::PARAM_STR)));
+        $qry->where($where)
+            ->addOrder("a.album_id");
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
@@ -587,18 +474,17 @@ class album extends zophTreeTable implements Organizer {
      */
     public static function getCount() {
         $user=user::getCurrent();
-        if ($user && $user->is_admin()) {
-            $sql = "SELECT COUNT(*) FROM " . DB_PREFIX . "albums";
-        } else {
-            $sql =
-                "SELECT COUNT(DISTINCT album_id) FROM " . 
-                DB_PREFIX . "group_permissions AS gp JOIN " .
-                DB_PREFIX . "groups_users AS gu ON " .
-                "gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) . "'";
-        }
+        $qry=new select(array("a" => "albums"));
+        $qry->addFunction(array("count" => "COUNT(DISTINCT a.album_id)"));
 
-        return self::getCountFromQuery($sql);
+        if (!$user->is_admin()) {
+            $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
+                ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+            $where=new clause("user_id=:userid");
+            $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
+            $qry->where($where);
+        }
+        return static::getCountFromQuery($qry);
     }
 }
 

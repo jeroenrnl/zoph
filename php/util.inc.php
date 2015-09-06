@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -58,7 +58,7 @@ function create_text_input($name, $value, $size = 20, $max = 32, $type="text") {
         $step="";
     }
     $id=preg_replace("/^_+/", "", $name);
-    return "<input type=\"$type\" $step name=\"$name\" id=\"$id\" value=\"" . e($value) ."\" 
+    return "<input type=\"$type\" $step name=\"$name\" id=\"$id\" value=\"" . e($value) ."\"
         size=\"$size\" maxlength=\"$max\">\n";
 }
 
@@ -133,13 +133,13 @@ function get_sort_array() {
     return array(
         "name" => translate("Name",0),
         "sortname" => translate("Sort Name",0),
-        "oldest" => translate("Oldest photo",0), 
-        "newest" => translate("Newest photo",0), 
-        "first" => translate("Changed least recently",0), 
-        "last" => translate("Changed most recently",0), 
-        "lowest" => translate("Lowest ranked",0), 
-        "highest" => translate("Highest ranked",0), 
-        "average" => translate("Average ranking",0), 
+        "oldest" => translate("Oldest photo",0),
+        "newest" => translate("Newest photo",0),
+        "first" => translate("Changed least recently",0),
+        "last" => translate("Changed most recently",0),
+        "lowest" => translate("Lowest ranked",0),
+        "highest" => translate("Highest ranked",0),
+        "average" => translate("Average ranking",0),
         "random" => translate("Random",0)
     );
 }
@@ -153,7 +153,7 @@ function clean_request_vars($vars) {
     $clean_vars = array();
     $interim_vars = array();
 
-    /* 
+    /*
       First pass through vars will flatten out any arrays in the list.
       arrays were used in search.php to make the form extensible. -RB
     */
@@ -166,7 +166,7 @@ function clean_request_vars($vars) {
         // keep _action now that the pager links point back to search.php
         if ($key == "_button") { continue; }
 
-        if ( is_array($val) ) { 
+        if ( is_array($val) ) {
             while (list($subkey, $subval) = each($val)) {
                 if (empty($subval)) { continue; }
 
@@ -185,7 +185,7 @@ function clean_request_vars($vars) {
                 } else {
                     $newkey = $key . '#' . $subkey;
                 }
-        
+
                 $interim_vars[$newkey] = $subval;
             }
         } else {
@@ -215,7 +215,7 @@ function clean_request_vars($vars) {
 
                 //process _conj variables
             } elseif (substr($key, -5) == "_conj") {
-                // replace _conj with -conj to be compatable 
+                // replace _conj with -conj to be compatable
                 // with the rest of application
                 $key = substr_replace($key, '-', -5, -4);
                 // get rid of ops without fields
@@ -223,7 +223,7 @@ function clean_request_vars($vars) {
                 if (empty($interim_vars[$field]) && empty($interim_vars["_$field"])) { continue; }
                 //process _children variables
             } elseif (substr($key, -9) == "_children") {
-                // replace _children with -children to be compatable 
+                // replace _children with -children to be compatable
                 // with the rest of application
                 $key = substr_replace($key, '-', -9, -8);
                 // get rid of ops without fields
@@ -234,8 +234,8 @@ function clean_request_vars($vars) {
             }
 
             //process "_field" type variables
-            if (substr($field, 0, 5) == "field" && 
-                (empty($interim_vars[$field]) && 
+            if (substr($field, 0, 5) == "field" &&
+                (empty($interim_vars[$field]) &&
                 empty($interim_vars["_$field"]))) { continue; }
         } else {
             //process "field" type variables
@@ -298,12 +298,6 @@ function create_form($vars, $ignore = array()) {
     return $form;
 }
 
-function make_title($string) {
-    $string = str_replace("_", " ", $string);
-    $string = preg_replace("/\b(\w)/e", "strtoupper('\\1')", $string);
-    return $string;
-}
-
 /**
  * Create a link to the calendar page
  * @param string Date in "yyyy-mm-dd" format
@@ -314,7 +308,7 @@ function make_title($string) {
  */
 function create_date_link($date, $search_field = "date") {
     $dt = new Time($date);
-    
+
     if ($date) {
         $html="<a href=\"calendar.php?date=$date&amp;search_field=$search_field\">";
         $html.=$dt->format(conf::get("date.format"));
@@ -329,7 +323,7 @@ function create_date_link($date, $search_field = "date") {
  */
 function format_timestamp($ts) {
     $dt=new Time($ts);
-    return create_date_link($dt->format("Y-m-d"), "timestamp") . ' ' . 
+    return create_date_link($dt->format("Y-m-d"), "timestamp") . ' ' .
         $dt->format(conf::get("date.timeformat"));
 }
 
@@ -390,11 +384,11 @@ function getZophURL($proto=null) {
             die("illegal protocol");
         }
     }
-    
+
     $current_url=$_SERVER["SERVER_NAME"] . "/" . $_SERVER["PHP_SELF"];
     $new_url=substr($current_url, 0, strrpos($current_url, "/"));
     $url=$proto . "://" . preg_replace("/\/\//","/", $new_url);
-    
+
     if(conf::get("url.http") && $proto = "http") {
         $url=conf::get("url.http");
     }
@@ -511,7 +505,7 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
                 }
                 $currentfile=$key;
                 $zip->addFromString($photo->get("name"),$data);
-            
+
             } else {
                 echo sprintf(translate("Could not read %s."), $photo->getFilePath()) . "<br>\n";
             }
@@ -525,7 +519,7 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
 }
 
 /**
- * transforms a size in bytes into a human readable format using 
+ * transforms a size in bytes into a human readable format using
  * Ki Mi Gi, etc. prefixes
  * Give me a call if your database grows bigger than 1024 Yobbibytes. :-)
  * @param int bytes number of bytes
@@ -606,15 +600,15 @@ function pager($current, $total, $num_pages, $page_size, $max_size, $request_var
 }
 
 function check_js($user) {
-    if (($user->prefs->get("autocomp_albums")) || 
-        ($user->prefs->get("autocomp_categories")) || 
-        ($user->prefs->get("autocomp_places")) || 
-        ($user->prefs->get("autocomp_people")) ||  
+    if (($user->prefs->get("autocomp_albums")) ||
+        ($user->prefs->get("autocomp_categories")) ||
+        ($user->prefs->get("autocomp_places")) ||
+        ($user->prefs->get("autocomp_people")) ||
         ($user->prefs->get("autocomp_photographer")) &&
         conf::get("interface.autocomplete")) {
-        
-        return "<noscript><div class='warning'><img class='icon' src='" . 
-            template::getImage("icons/warning.png") . "'>" . 
+
+        return "<noscript><div class='warning'><img class='icon' src='" .
+            template::getImage("icons/warning.png") . "'>" .
             translate("You have enabled autocompletion for one or more dropdown " .
                 "boxes on this page, however, you do not seem to have Javascript " .
                 "support. You should either enable javascript or turn autocompletion " .
@@ -636,47 +630,13 @@ function remove_empty(array $children) {
         return $clean;
     } else {
         return $children;
-    } 
-}
-
-function get_sql_for_order($order) {
-    switch ($order) {
-    case "oldest":
-        $sql="min(ph.date) as oldest ";
-        break;
-    case "newest":
-        $sql="max(ph.date) as newest "; 
-        break;
-    case "first":
-        $sql="min(ph.timestamp) as first ";
-        break;
-    case "last":
-        $sql="max(ph.timestamp) as last ";
-        break;
-    case "lowest":
-        $sql="min(rating) as lowest "; 
-        break;
-    case "highest":
-        $sql="max(rating) as highest ";
-        break;
-    case "average":
-        $sql="avg(rating) as average ";
-        break;
-    case "random":
-        $sql="rand() as random ";
-        break;
-    }
-    if(isset($sql)) {
-        return ", " . $sql;
-    } else {
-        return null;
     }
 }
 
 function create_bar_graph($legend, $value_array, $scale) {
-    # $value_array is an array that contains an array for each line 
-    # of the graph. Each of those arrays contains 3 values: 
-    # value: The value we're graphing, 
+    # $value_array is an array that contains an array for each line
+    # of the graph. Each of those arrays contains 3 values:
+    # value: The value we're graphing,
     # link:  Where should it link to. (may be null)
     # count: Count of that value;
 
@@ -704,7 +664,7 @@ function create_bar_graph($legend, $value_array, $scale) {
         }
         $html.="    </td>\n";
         $html.="    <td>\n";
-        $html.="      <div class='ratings' style='width: " . 
+        $html.="      <div class='ratings' style='width: " .
             ceil($row[2]*$pixels) . "px'>";
         $html.="&nbsp;</div>&nbsp;";
         $html.=$row[2];
@@ -716,7 +676,7 @@ function create_bar_graph($legend, $value_array, $scale) {
 }
 
 function create_progress_bar($id = "progressbar", $w = 300, $complete = 0) {
-    $html = "<div id=\"" . $id . "_outer\" class=\"progressbar\" 
+    $html = "<div id=\"" . $id . "_outer\" class=\"progressbar\"
                 style=\"width: " . $w . "px\">\n";
     $html.= "   <div id=\"" . $id . "_inner\" class=\"progressfill\"";
 
@@ -764,7 +724,7 @@ function create_dir($directory) {
     if (file_exists($directory) == false) {
         if (@mkdir($directory, octdec(conf::get("import.dirmode")))) {
             if(!defined("CLI") || conf::get("import.cli.verbose")>=1) {
-                log::msg(translate("Created directory") . ": $directory", log::NONE, log::GENERAL);
+                log::msg(translate("Created directory") . ": $directory", log::NOTIFY, log::GENERAL);
             }
             return true;
         } else {
