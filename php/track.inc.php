@@ -72,17 +72,19 @@ class track extends zophTable {
      * Deletes a track
      *
      * Also deletes all point in the track
-     * @todo: maybe the deletion of points should be done via the point class?
      * @see point
      */
     public function delete() {
-        if (!$this->get("track_id")) { return; }
+        if (!$this->getId()) {
+            return;
+        }
         parent::delete();
 
-        $sql = "delete from " . DB_PREFIX . "point where track_id=";
-        $sql .= $this->get("track_id");
+        $qry=new delete(array("pt" => "point"));
+        $qry->where(new clause("track_id=:trackid"));
+        $qry->addParam(new param(":trackid", (int) $this->getId(), PDO::PARAM_INT));
 
-        query($sql, "Could not remove point from track: ");
+        $qry->execute();
     }
 
     /**
