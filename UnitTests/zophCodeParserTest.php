@@ -1,7 +1,7 @@
 <?php
 /**
- * zophCode test
- * Test the working of the zophCode class
+ * zophCode Parser test
+ * Test the working of the zophCode\parser class
  *
  * This file is part of Zoph.
  *
@@ -23,21 +23,21 @@
  */
 require_once "testSetup.php";
 
-use zophCode\zophCode as zophCode;
+use zophCode\parser as parser;
 
 /**
- * Test the zophCode class
+ * Test the zophCode parser class
  *
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class zophCodeTest extends PHPUnit_Framework_TestCase {
+class zophCodeParserTest extends PHPUnit_Framework_TestCase {
     /**
      * Test constructor class
      * @dataProvider getMsgs();
      */
     public function testCreate($msg, $allowed, $exp) {
-        $code = new zophCode($msg, $allowed);
+        $code = new parser($msg, $allowed);
         $this->assertEquals($exp, (string) $code);
     }
 

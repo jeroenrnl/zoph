@@ -1,6 +1,4 @@
 <?php
-namespace zophCode;
-
 /**
  * Replace is a helper class for zophCode
  *
@@ -23,17 +21,19 @@ namespace zophCode;
  * @package Zoph
  */
 
+namespace zophCode;
 
 /**
  * Replace problematic code in zophcode with escaped code
- *
- * @todo: this can possibly be integrated in the zophcode class
  * @author Jeroen Roos
  * @package Zoph
  */
 class replace {
+    /** @var string to replace */
     public $find;
+    /** @var string to replace with */
     public $replace;
+    /** @var array List of all replaces */
     private static $replaces=array();
 
     /**

@@ -1,8 +1,6 @@
 <?php
-namespace zophCode;
-
 /**
- * The class zophCode is a parser for zophcode, a bbcode like markup language.
+ * The class parser is the parser for zophcode, a bbcode like markup language.
  *
  * This file is part of Zoph.
  *
@@ -23,6 +21,8 @@ namespace zophCode;
  * @package Zoph
  */
 
+namespace zophCode;
+
 /**
  * This class can be used to create a block of 'zophcode'
  *
@@ -30,11 +30,16 @@ namespace zophCode;
  * @author Jeroen Roos
  * @package Zoph
  */
-class zophCode {
+class parser {
+    /** @var string the message to be parsed */
     private $message;
+    /** @var array Array of tags that can be used in this message */
     private $allowed = array();
+    /** @var array Array of replace objects, containing all known problematic strings */
     private $replaces = array();
+    /** @var array Array of smiley objects, containing all known smileys */
     private $smileys = array();
+    /** @var array Array of tag objects, containing all known tags */
     private $tags = array();
 
     /**
@@ -46,7 +51,7 @@ class zophCode {
      * @see smiley
      * @see tag
      */
-    public function __construct($message, $allowed = null) {
+    public function __construct($message, array $allowed = null) {
         $this->replaces = replace::getArray();
         $this->smileys = smiley::getArray();
         $this->tags = tag::getArray();

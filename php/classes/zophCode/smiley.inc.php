@@ -1,8 +1,4 @@
 <?php
-namespace zophCode;
-
-use template;
-
 /**
  * This class is a helper class for zophCode
  *
@@ -25,15 +21,23 @@ use template;
  * @package Zoph
  */
 
+namespace zophCode;
+
+use template;
+
 /**
  * Create smileys
  * @author Jeroen Roos
  * @package Zoph
  */
 class smiley {
+    /** @var string smiley (e.g. ":-)") */
     public $smiley;
+    /** @var string filename of smiley image */
     public $file;
+    /** @var string short description */
     public $description;
+    /** @var array containing all known smileys */
     private static $smileys=array();
 
     /**

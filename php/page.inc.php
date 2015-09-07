@@ -50,7 +50,7 @@ class page extends zophTable {
     
     
     function getDisplayArray() {
-        $zophcode = new zophCode\zophCode($this->get("text"));
+        $zophcode = new zophCode\parser($this->get("text"));
         $text="<div class='page-preview'>" . $zophcode . "</div>";
 
         return array(
@@ -62,7 +62,7 @@ class page extends zophTable {
     }
 
     function display() {
-        $zophcode = new zophCode\zophCode($this->get("text"));
+        $zophcode = new zophCode\parser($this->get("text"));
         return $zophcode;
     }
 

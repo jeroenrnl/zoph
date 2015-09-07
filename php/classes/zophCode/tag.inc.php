@@ -1,6 +1,4 @@
 <?php
-namespace zophCode;
-
 /**
  * This class is a helper class for zophCode
  *
@@ -23,18 +21,26 @@ namespace zophCode;
  * @package Zoph
  */
 
+namespace zophCode;
+
 /**
  * zophcode tags
  * @author Jeroen Roos
  * @package Zoph
  */
 class tag {
+    /** @var string The tag in zophCode, without [ ] */
     public $find;
+    /** @var string The tag in HTML without < > */
     public $replace;
+    /** @var string How to check the parameter */
     public $regexp;
+    /** @var string How to translate parameter */
     public $param;
+    /** @var bool True if this tags needs closure, false if it does not */
     public $close=true;
 
+    /** @var array List of known tags */
     private static $tags=array();
 
     /**
