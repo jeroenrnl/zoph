@@ -42,8 +42,9 @@ class smileyTest extends PHPUnit_Framework_TestCase {
         $counter = 0;
         foreach($smileys as $smile) {
             if($smile->smiley == $smiley) {
-                $html="<img src=\"templates/default/images/smileys/" . $file . "\" alt=\"" . $desc . "\">";
-                $this->assertEquals($html, (string) $smile);
+                $html = "<img src=\"templates/default/images/smileys/" . $file . "\" class=\"smiley\"\n" .
+                        "     alt=\"" . $desc . "\">";
+                $this->assertEquals($html, trim((string) $smile));
                 $counter++;
             }
         }

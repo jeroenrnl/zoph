@@ -47,9 +47,25 @@ class replace {
     }
 
     /**
+     * Run the replaces on a message
+     * @param string Message
+     * @return string Message with problematic code changed
+     */
+    public static function processMessage($msg) {
+        $find=array();
+        $replace=array();
+
+        foreach (static::getArray() as $repl) {
+            array_push($find, "/" . preg_quote($repl->find) . "/");
+            array_push($replace, $repl->replace);
+        }
+        return preg_replace($find, $replace, $msg);
+    }
+
+    /**
      * Get an array of all replace objects
      */
-    public static function getArray() {
+    private static function getArray() {
         if (empty(static::$replaces)) {
             static::createArray();
         }

@@ -36,11 +36,6 @@ class parser {
     /** @var array Array of tags that can be used in this message */
     private $allowed = array();
     /** @var array Array of replace objects, containing all known problematic strings */
-    private $replaces = array();
-    /** @var array Array of smiley objects, containing all known smileys */
-    private $smileys = array();
-    /** @var array Array of tag objects, containing all known tags */
-    private $tags = array();
 
     /**
      * Create a new zophcode object
@@ -52,9 +47,6 @@ class parser {
      * @see tag
      */
     public function __construct($message, array $allowed = null) {
-        $this->replaces = replace::getArray();
-        $this->smileys = smiley::getArray();
-        $this->tags = tag::getArray();
         $this->allowed = $allowed;
         $this->message = $message;
     }
@@ -69,13 +61,14 @@ class parser {
 
         $return="";
 
-        $stack=array(); // The stack is an array of currently open tags.
-        list($find, $replace) =$this->get_replace_array();
-        $message = preg_replace($find, $replace, $message);
+        // The stack is an array of currently open tags.
+        $stack=array();
+        $message=replace::processMessage($message);
+        $message=smiley::processMessage($message);
 
         while (strlen($message)) {
             $plaintext="";
-            $replace_param="";
+            $replaceParam="";
             $opentag = strpos($message, "[", 0);
 
             if ($opentag === false) {
@@ -127,10 +120,10 @@ class parser {
                             array_push($stack, $tag[0]);
                         }
                         if ($foundtag->param && $tag[1]) {
-                            $replace_param = $foundtag->addParam($tag[1]);
+                            $replaceParam = $foundtag->addParam($tag[1]);
                         }
                         $return .= $plaintext .
-                            "<" . $foundtag->replace . $replace_param . ">";
+                            "<" . $foundtag->replace . $replaceParam . ">";
                     } else if (end($stack) == $tag[0]) {
 
                         // It is a valid closing tag
@@ -167,22 +160,5 @@ class parser {
         return $return;
     }
 
-    /**
-     * This function takes an array of 'replace' objects and
-     * an array of 'smiley' objects and return 2 arrays that
-     * can be fed to preg_replace */
-    public function get_replace_array() {
-        $find=array();
-        $replace=array();
-        foreach ($this->replaces as $repl) {
-            array_push($find, "/" . preg_quote($repl->find) . "/");
-            array_push($replace, $repl->replace);
-        }
-        foreach ($this->smileys as $smiley) {
-            array_push($find, "/" . preg_quote($smiley->smiley) . "/");
-            array_push($replace, $smiley);
-        }
-        return array($find, $replace);
-    }
 }
 ?>

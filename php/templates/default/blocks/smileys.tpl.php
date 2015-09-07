@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for img
+ * Template for displaying an overview of all known smileys
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,15 @@
  * @package ZophTemplates
  * @author Jeroen Roos
  */
-if(!ZOPH) { die("Illegal call"); }
+
+if (!ZOPH) { die("Illegal call"); }
 ?>
-<img src="<?php echo $tpl_src ?>" class="<?php echo $tpl_class ?>"
-    <?php echo $tpl_size ?> alt="<?php echo $tpl_alt ?>">
+
+<div class="smileys">
+    <?php foreach ($tpl_smileys as $smiley): ?>
+        <div>
+            <?= $miley ?>
+            <span><?= $smiley->smiley ?></span>
+        </div>
+    <?php endforeach ?>
+</div>

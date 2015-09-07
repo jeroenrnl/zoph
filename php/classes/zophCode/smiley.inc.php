@@ -24,6 +24,7 @@
 namespace zophCode;
 
 use template;
+use block;
 
 /**
  * Create smileys
@@ -114,28 +115,38 @@ class smiley {
 
     /**
      * Get the smiley
-     * @todo contains HTML
      */
     public function __toString() {
-        return "<img src=\"" . template::getImage("smileys/" . $this->file) .
-            "\" alt=\"" . $this->description . "\">";
+        return (string) new block("img", array(
+            "src"  => template::getImage("smileys/" . $this->file),
+            "alt"   => $this->description,
+            "class" => "smiley",
+            "size"  => null
+        ));
+    }
+
+    /**
+     * Replace smileys in a message with image tags
+     * @param string Message
+     * @return string Message with image tags
+     */
+    public static function processMessage($msg) {
+        $find=array();
+        $replace=array();
+        foreach (static::$smileys as $smiley) {
+            array_push($find, "/" . preg_quote($smiley->smiley) . "/");
+            array_push($replace, (string) $smiley);
+        }
+        return preg_replace($find, $replace, $msg);
     }
 
     /**
      * Get an overview of all defined smileys
-     * @todo contains HTML
      */
     public static function getOverview() {
-        static::getArray();
-        $html="<div class=\"smileys\">";
-        foreach (static::$smileys as $smiley) {
-            $html.="<div>";
-            $html.=$smiley;
-            $html.="<span>" . $smiley->smiley . "</span>";
-            $html.="</div>";
-        }
-        $html.="<br></div>";
-        return $html;
+        return new block("smileys", array(
+            "smileys"  => static::getArray()
+        ));
     }
 }
 ?>

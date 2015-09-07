@@ -33,12 +33,11 @@ use zophCode\replace as replace;
  */
 class replaceTest extends PHPUnit_Framework_TestCase {
 
-    public function testGetArray() {
-        $replaces = replace::getArray();
+    public function testReplace() {
+        $msg="&#40;Between brackets&#41; & some of <html>\non two (2) lines";
+        $exp="(Between brackets) &amp; some of &lt;html&gt;<br>on two (2) lines";
 
-        $replace = $replaces[0];
-        $this->assertInstanceOf("zophCode\\replace", $replace);
-        $this->assertEquals($replace->find, "&#40;");
-        $this->assertEquals($replace->replace, "(");
+        $replace=replace::processMessage($msg);
+        $this->assertEquals($exp, $replace);
     }
 }
