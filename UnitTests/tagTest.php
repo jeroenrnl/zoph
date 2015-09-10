@@ -32,9 +32,9 @@ use zophCode\tag as tag;
  * @author Jeroen Roos
  */
 class tagTest extends PHPUnit_Framework_TestCase {
-    public function testGetFromName() {
-        $tag = tag::getFromName("b");
+    public function testGetFromString() {
+        $tag = tag::getFromString("[b]");
 
-        $this->assertEquals("b", $tag->find);
+        $this->assertEquals("<b>", (string) $tag);
     }
 }

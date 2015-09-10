@@ -53,6 +53,7 @@ class parser {
 
     /**
      * Output zophcode parsed to HTML
+     * @return string HTML-ized zophCode
      */
     public function __toString() {
         // This function parses a message using the replaces, smileys and tags
@@ -66,99 +67,78 @@ class parser {
         $message=replace::processMessage($message);
         $message=smiley::processMessage($message);
 
-        while (strlen($message)) {
-            $plaintext="";
-            $replaceParam="";
-            $opentag = strpos($message, "[", 0);
+        // The array $allowed can be used to prevent users from using
+        // certain tags in some positions.
+        // This is used for example to limit the number of options
+        // the user has while writing comments.
+        tag::setAllowed($this->allowed);
 
-            if ($opentag === false) {
-                $return .= $message;
-                $message = "";
-            } else if ($opentag > 0) {
-                $plaintext=substr($message, 0, $opentag);
-            }
-            if (($opentag + 1)<= strlen($message)) {
-                // This prevents a PHP error when the last char
-                // of the message is a "["
-                $closetag = strpos($message, "]", $opentag + 1);
-            } else {
-                $closetag=0;
-            }
+        $return="";
 
-            $tag = substr($message, $opentag + 1, $closetag - $opentag - 1);
-            // Does the tag contain " " or another "["?
-            // In that case something is probably wrong...
-            // (such as "[b This is bold[/b]")
-
-            $falseopen = (strpos($tag, "[") || strpos($tag, " "));
-
-            $tag = explode("=", $tag);
-
-
-            // Check if tag is a closing tag
-            if (substr($tag[0], 0, 1) == "/") {
-                $endtag = true;
-                $tag[0] = substr($tag[0], 1, strlen($tag[0]) - 1);
-            } else {
-                $endtag = false;
-            }
-            if (!$this->allowed || in_array($tag[0], $this->allowed)) {
-                // The array $allowed can be used to prevent users from using
-                // certain tags in some positions.
-                // This is used for example to limit the number of options
-                // the user has while writing comments.
-                $foundtag=tag::getFromName($tag[0]);
-                if ($foundtag && $endtag === true && $foundtag->close === false) {
-                    // This is an endcode for a tag that does not have an endcode
-                    // such as [br]. We'll just ignore it.
-                    $message = substr($message, $closetag + 1);
-                    $return .=$plaintext;
-                } else if ($foundtag && $foundtag->replace && !($falseopen)) {
-                    if ($endtag === false) {
-                        // It is a valid tag.
-                        if ($foundtag->close) {
-                            array_push($stack, $tag[0]);
-                        }
-                        if ($foundtag->param && $tag[1]) {
-                            $replaceParam = $foundtag->addParam($tag[1]);
-                        }
-                        $return .= $plaintext .
-                            "<" . $foundtag->replace . $replaceParam . ">";
-                    } else if (end($stack) == $tag[0]) {
-
-                        // It is a valid closing tag
-                        // Check if the tag is open
+        foreach (static::parseMessage($message) as $tag) {
+            if (!$tag instanceof tag) {
+                $return.=$tag;
+            } else if ($tag->isAllowed()) {
+                if (!$tag->isClosing() && $tag->needsClosing()) {
+                    array_push($stack, $tag);
+                } else if ($tag->isClosing()) {
+                    if (end($stack)->getFind() == $tag->getFind()) {
                         array_pop($stack);
-                        $return .= $plaintext . "</" . $foundtag->replace . ">";
                     } else {
                         // Tried to close a tag that wasn't open
                         // Ignore the tag and go on.
-                        $return .= $plaintext;
+                        continue;
                     }
-                    // Take the just evaluated tag from the message
-                    $message=substr($message, $closetag + 1);
-
-                } else {
-                    // Unknown tag, ignore and continue evaluating with the next character.
-                    $return .=$plaintext;
-                    $message=substr($message, $opentag + 1);
-
                 }
-            } else {
-                // User has specified a tag he is not allowed to use
-                // ignore it.
-                $return .=$plaintext;
-                $message=substr($message, $closetag + 1);
+
+                $return.=$tag;
             }
         }
         while ($tag = array_pop($stack)) {
             // Now close all tags that have not yet been closed.
-            $foundtag=tag::getFromName($tag);
-            $return .= "</" . $foundtag->replace . ">";
+            $tag->setClosing();
+            $return .= $tag;
         }
 
         return $return;
     }
 
+    /**
+     * Parse a zophCode message
+     * This parser will tokenize the message into an array of strings and tag objects
+     * @param string Message with zophCode
+     * @return array Array of tokenized zophCode
+     */
+    private static function parseMessage($msg) {
+        while (strlen($msg)) {
+            $opentag = strpos($msg, "[", 0);
+            if ($opentag === false) {
+                yield $msg;
+                $msg="";
+            } else if ($opentag > 0) {
+                yield substr($msg, 0, $opentag);
+            }
+
+            if (($opentag + 1)<= strlen($msg)) {
+                // This prevents a PHP error when the last char
+                // of the message is a "["
+                $closetag = strpos($msg, "]", $opentag + 1);
+            } else {
+                $closetag = 0;
+            }
+
+            $tag=substr($msg, $opentag, $closetag - $opentag + 1);
+
+            // Does the tag contain " " or another "["?
+            // In that case something is probably wrong...
+            // (such as "[b This is bold[/b]")
+
+            if (!strpos($tag, "[") || strpos($tag, " ")) {
+                yield tag::getFromString($tag);
+            }
+
+            $msg = substr($msg, $closetag + 1);
+        }
+    }
 }
 ?>

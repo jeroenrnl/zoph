@@ -25,7 +25,7 @@ if (!ZOPH) { die("Illegal call"); }
 <div class="smileys">
     <?php foreach ($tpl_smileys as $smiley): ?>
         <div>
-            <?= $miley ?>
+            <?= $smiley ?>
             <span><?= $smiley->smiley ?></span>
         </div>
     <?php endforeach ?>

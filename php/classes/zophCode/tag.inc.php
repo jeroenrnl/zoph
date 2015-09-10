@@ -30,15 +30,21 @@ namespace zophCode;
  */
 class tag {
     /** @var string The tag in zophCode, without [ ] */
-    public $find;
+    private $find;
     /** @var string The tag in HTML without < > */
-    public $replace;
+    private $replace;
     /** @var string How to check the parameter */
-    public $regexp;
+    private $regexp;
     /** @var string How to translate parameter */
-    public $param;
-    /** @var bool True if this tags needs closure, false if it does not */
-    public $close=true;
+    private $param;
+    /** @var bool True if this tags needs closing, false if it does not */
+    private $needsClosing=true;
+    /** @var bool Whether or not this is a closing tag */
+    private $isClosing=false;
+    /** @var array List of allowed tags */
+    private static $allowed=array();
+    /** @var string Value of the parameter */
+    private $paramValue=null;
 
     /** @var array List of known tags */
     private static $tags=array();
@@ -60,6 +66,46 @@ class tag {
         $this->param=$param;
         $this->close=$close;
     }
+
+    /**
+     * Determines whether this tag can be used
+     */
+    public function isAllowed() {
+        return in_array($this->find, static::$allowed);
+    }
+
+    /**
+     * Returns the "find" string
+     * This is the zophCode tag
+     */
+    public function getFind() {
+        return $this->find;
+    }
+
+    /**
+     * Returns the "replace" string
+     * This is the HTML tag
+     */
+    public function __toString() {
+        if ($this->isClosing()) {
+            return "</" . $this->replace . ">";
+        } else {
+            return "<" . $this->replace . $this->getParam() . ">";
+        }
+    }
+
+    public function needsClosing() {
+        return $this->needsClosing;
+    }
+
+    public function isClosing() {
+        return $this->isClosing;
+    }
+
+    public function setClosing($closing=true) {
+        $this->isClosing=$closing;
+    }
+
 
     /**
      * Get an array of defined tags
@@ -98,18 +144,68 @@ class tag {
     }
 
     /**
-     * Find a tag by name
-     * @param string name
+     * Fill the array of allowed tags
+     * @param array Array of allowed tags
+     */
+    public static function setAllowed(array $allowed=null) {
+        static::$allowed=array();
+        if ($allowed) {
+            static::$allowed=$allowed;
+        } else {
+            foreach (static::getArray() as $tag) {
+                static::$allowed[]=$tag->find;
+            }
+        }
+    }
+
+    /**
+     * Create tag object from a string
+     * @param string Tag [...], [/...], [...=...]
      * @return tag found tag
      */
-    public static function getFromName($name) {
+    public static function getFromString($string) {
+        // strip off the [ and ]
+        $string=substr($string, 1, -1);
+
+        $newtag = explode("=", $string);
+        $tag=$newtag[0];
+        if (isset($newtag[1])) {
+            $param=$newtag[1];
+        }
+
+        $closing=false;
+        if (substr($tag, 0, 1) == "/") {
+            $closing=true;
+            $tag=substr($tag, 1);
+        }
+
         // Check if tag is a valid tag.
-        foreach (static::getArray() as $tag) {
-            if ($tag->find == $name) {
+        foreach (static::getArray() as $newtag) {
+            if ($newtag->find == $tag) {
+                $tag=clone $newtag;
+                $tag->setClosing($closing);
+                if (isset($param)) {
+                    $tag->setParamValue($param);
+                }
+                if ($tag->isClosing() && !$tag->close) {
+                    // This is a closing tag for a tag that is not supposed to be closed
+                    // such as [br], we will just ignore it.
+                    $tag=null;
+                }
                 return $tag;
             }
         }
     }
+
+    /**
+     * Set value of parameter
+     */
+    private function setParamValue($value) {
+        // params in zophCode do not have spaces, so we cut off at the first space
+        list($value)=explode(" ", $value, 2);
+        $this->paramValue=$value;
+    }
+
     /**
      * Check whether a given value conforms to the requirement
      * @param string Param value to check
@@ -129,9 +225,9 @@ class tag {
      * @param string value to insert into tag
      * @return string parameter with value inserted in place of [param] placeholder
      */
-    public function addParam($value) {
-        if ($this->checkParam($value)) {
-            return " " . str_replace("[param]", $value, $this->param);
+    private function getParam() {
+        if (!empty($this->param) && $this->checkParam($this->paramValue)) {
+            return " " . str_replace("[param]", $this->paramValue, $this->param);
         }
     }
 }
