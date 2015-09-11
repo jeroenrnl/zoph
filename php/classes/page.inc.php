@@ -1,6 +1,8 @@
 <?php
-
-/*
+/**
+ * Page class
+ * A page is plaintext or zophCode that can be used to personalize parts
+ * of the Zoph interface
  *
  * This file is part of Zoph.
  *
@@ -16,8 +18,19 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
+/**
+ * Page class
+ * A page is plaintext or zophCode that can be used to personalize parts
+ * of the Zoph interface
+ *
+ * @author Jeroen Roos
+ * @package Zoph
+ */
 class page extends zophTable {
     /** @var string The name of the database table */
     protected static $table_name="pages";

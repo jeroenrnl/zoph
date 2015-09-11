@@ -19,10 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
 /**
  * The pageset class groups a set of pages in a certain order
+ * @author Jeroen Roos
+ * @package Zoph
  */
 class pageset extends zophTable {
     /** @var string The name of the database table */
