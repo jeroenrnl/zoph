@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,7 +25,7 @@ class page extends zophTable {
     protected static $primary_keys=array("page_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("title");
-    /** @var bool keep keys with insert. In most cases the keys are set 
+    /** @var bool keep keys with insert. In most cases the keys are set
       * by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -53,12 +53,12 @@ class page extends zophTable {
      * Delete a page from the db
      */
     public function delete() {
-        if (!$this->getId()) { 
-            return; 
+        if (!$this->getId()) {
+            return;
         }
         parent::delete(array("pages_pageset"));
     }
-    
+
     /**
      * Return an array of fields to display
      * @todo Returns HTML
@@ -85,12 +85,16 @@ class page extends zophTable {
         return $zophcode;
     }
 
-    function get_order($pageset_id) {
+    /**
+     * Get the position of a page in a pageset
+     * @param pageset The pageset to look in
+     */
+    public function getOrder(pageset $pageset) {
         $sql = "select page_order from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id=" . $pageset_id . " and " .
-            " page_id=" . $this->get("page_id") . " limit 1";
+            " where pageset_id=" . $pageset->getId() . " and " .
+            " page_id=" . $this->getId() . " limit 1";
         $result=query($sql, "Could not get current order");
-        if(num_rows($result)) {
+        if (num_rows($result)) {
             return intval(result($result, 0));
         } else {
             return false;
@@ -110,11 +114,11 @@ class page extends zophTable {
      * @return block template to display
      */
     public static function getTable(array $pages = null, pageset $pageset=null) {
-        if(is_null($pages)) {
+        if (is_null($pages)) {
             $pages=page::getAll();
         }
         $lpages=array();
-        foreach($pages as $page) {
+        foreach ($pages as $page) {
             $page->lookup();
             $lpages[]=$page;
         }

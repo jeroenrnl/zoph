@@ -84,9 +84,9 @@ class pageset extends zophTable {
             "all" => translate("On all pages",0));
     }
 
-    function getPages($pagenum=null) {
+    public function getPages($pagenum=null) {
         $sql = "select page_id from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id = " . $this->get("pageset_id") .
+            " where pageset_id = " . $this->getId() .
             " order by page_order";
         if ($pagenum) {
             $sql.=" limit " . escape_string($pagenum) . ",1";
@@ -95,7 +95,7 @@ class pageset extends zophTable {
         return $pages;
     }
 
-    function get_pagecount() {
+    public function getPageCount() {
         $sql = "select count(page_id) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id = " . $this->get("pageset_id");
         return static::getCountFromQuery($sql);
@@ -108,75 +108,85 @@ class pageset extends zophTable {
      *       Someday, this should either give a nice error or this limitation
      *       should be removed.
      */
-    function addpage($page_id) {
-        $page=new page($page_id);
-        if (!$page->get_order($this->get("pageset_id"))) {
+    public function addPage($page) {
+        if (!$page->getOrder($this)) {
             $sql = "insert into " . DB_PREFIX . "pages_pageset " .
                 "values(" . $this ->get("pageset_id") . ", " .
-                escape_string($page_id) . ", " .
-                ($this->get_maxorder() + 1) . ")";
+                escape_string($page->getId()) . ", " .
+                ($this->getMaxOrder() + 1) . ")";
             query($sql, "Could not add page to pageset");
         }
     }
 
-    function remove_page($page_id) {
+    public function removePage($page) {
         $sql = "delete from " . DB_PREFIX . "pages_pageset " .
-            "where pageset_id=" . $this ->get("pageset_id") . " and " .
-            "page_id=" . escape_string($page_id);
+            "where pageset_id=" . $this ->getId() . " and " .
+            "page_id=" . $page->getId();
         query($sql, "Could not remove page from pageset");
     }
 
-    function moveup($page_id) {
-        $page=new page($page_id);
-        $order=$page->get_order($this->get("pageset_id"));
+    public function moveUp($page) {
+        $order=$page->getOrder($this);
         if ($order>=2) {
-            $prevorder=$this->get_prevorder($order);
+            $prevorder=$this->getPrevOrder($order);
+
+            /** @todo This messes up ALL page orders, not just for this pageset! */
             $sql="update zoph_pages_pageset set page_order=" . $order .
                 " where page_order=" . $prevorder;
             query($sql, "Could not change order");
             $sql="update zoph_pages_pageset set page_order=" . $prevorder .
-                " where page_id=" . $page_id;
+                " where page_id=" . $page->getId();
             query($sql, "Could not change order");
         }
     }
-    function movedown($page_id) {
-        $page=new page($page_id);
-        $order=$page->get_order($this->get("pageset_id"));
-        $max=$this->get_maxorder();
+    public function moveDown($page) {
+        $order=$page->getOrder($this);
+        $max=$this->getMaxOrder();
         if ($order!=0 and $order<$max) {
-            $nextorder=$this->get_nextorder($order);
+            $nextorder=$this->getNextOrder($order);
+            /** @todo This messes up ALL page orders, not just for this pageset! */
             $sql="update zoph_pages_pageset set page_order=" . $order .
                 " where page_order=" . $nextorder;
             query($sql, "Could not change order");
             $sql="update zoph_pages_pageset set page_order=" . $nextorder .
-                " where page_id=" . $page_id;
+                " where page_id=" . $page->GetId();
             query($sql, "Could not change order");
 
         }
     }
 
-    function get_maxorder() {
+    public function getMaxOrder() {
         $sql = "select max(page_order) from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id=" . $this->get("pageset_id");
+            " where pageset_id=" . $this->getId();
         $result=query($sql, "Could not get max order");
         return intval(result($result, 0));
     }
 
-    function get_nextorder($order) {
-        // If pages have been deleted, the page_order field may no longer
-        // be nicely numbered 1,2,3, etc. but there may be holes in the list
-        // so this function and get_prevorder() determine the next or previous
-        // value of page_order.
+    /**
+     * Get Next order
+     * If pages have been deleted, the page_order field may no longer
+     * be nicely numbered 1,2,3, etc. but there may be holes in the list
+     * so this function and getPrevOrder() determine the next or previous
+     * value of page_order.
+     */
+    public function getNextOrder($order) {
         $sql = "select min(page_order) from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id=" . $this->get("pageset_id") .
+            " where pageset_id=" . $this->getId() .
             " and page_order>" . $order;
         $result=query($sql, "Could not get max order");
         return intval(result($result, 0));
     }
 
-    function get_prevorder($order) {
+    /**
+     * Get previous order
+     * If pages have been deleted, the page_order field may no longer
+     * be nicely numbered 1,2,3, etc. but there may be holes in the list
+     * so this function and getiNextOrder() determine the next or previous
+     * value of page_order.
+     */
+    public function getPrevOrder($order) {
         $sql = "select max(page_order) from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id=" . $this->get("pageset_id") .
+            " where pageset_id=" . $this->getId() .
             " and page_order<" . $order;
         $result=query($sql, "Could not get max order");
         return intval(result($result, 0));

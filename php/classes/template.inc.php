@@ -253,9 +253,14 @@ class template {
      * @param array fields to use to contruct title
      * @return array Array that can be fed to the createPulldown methods.
      */
-    public static function createSelectArray(array $records, array $name_fields) {
+    public static function createSelectArray(array $records, array $name_fields, $addEmpty=false) {
         if (empty($records) || !$name_fields) { 
             return array(); 
+        }
+        $sa=array();
+
+        if($addEmpty) {
+            $sa[]="&nbsp;";
         }
 
         foreach ($records as $rec) {

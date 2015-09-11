@@ -133,7 +133,7 @@ class smiley {
     public static function processMessage($msg) {
         $find=array();
         $replace=array();
-        foreach (static::$smileys as $smiley) {
+        foreach (static::getArray() as $smiley) {
             array_push($find, "/" . preg_quote($smiley->smiley) . "/");
             array_push($replace, (string) $smiley);
         }
