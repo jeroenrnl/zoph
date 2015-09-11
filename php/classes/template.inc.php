@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,10 +38,10 @@ class template {
     /** @var array contains actionlinks */
     private $actionlinks=array();
 
-    /** 
-     * @var array contains blocks or sub-templates that will be 
+    /**
+     * @var array contains blocks or sub-templates that will be
      *              displayed inside this template by calling the
-     *              getBlocks() function from within the template 
+     *              getBlocks() function from within the template
      */
     private $blocks=array();
 
@@ -55,10 +55,10 @@ class template {
     public function __construct($template, $vars=null) {
         $tpl=conf::get("interface.template");
         $this->vars=$vars;
-        if(preg_match("/^[A-Za-z0-9_\-]+$/", $tpl) && 
+        if (preg_match("/^[A-Za-z0-9_\-]+$/", $tpl) &&
                 preg_match("/^[A-Za-z0-9_\-]+$/", $template)) {
             $file="templates/" . $tpl . "/" . $template . ".tpl.php";
-            if(!file_exists($file)) {
+            if (!file_exists($file)) {
                 $file="templates/default/" . $template . ".tpl.php";
             }
             $this->template=$file;
@@ -78,27 +78,27 @@ class template {
      */
     public static function getImage($image) {
         $tpl=conf::get("interface.template");
-        if(preg_match("/^[A-Za-z0-9_\-\/\.]+$/", $image) && !preg_match("/\.\./", $image)) {
+        if (preg_match("/^[A-Za-z0-9_\-\/\.]+$/", $image) && !preg_match("/\.\./", $image)) {
             $file="templates/" . $tpl . "/images/" . $image;
-            if(!file_exists($file)) {
+            if (!file_exists($file)) {
                 $file="templates/default/images/" . $image;
             }
             return $file;
-        } else {    
+        } else {
             log::msg("Illegal characters in icon name", log::FATAL, log::GENERAL);
         }
     }
 
     /**
      * Print the template
-     * 
+     *
      * @return string
      */
     public function __toString() {
-        if($this->vars) {
+        if ($this->vars) {
             extract($this->vars,  EXTR_PREFIX_ALL, "tpl");
         }
-        if(!defined("ZOPH")) {
+        if (!defined("ZOPH")) {
             define('ZOPH', true);
         }
         try {
@@ -110,10 +110,10 @@ class template {
             die();
         }
     }
-    
+
     /**
      * Return the template in a string
-     * 
+     *
      * @return string
      */
     public function toString() {
@@ -139,20 +139,20 @@ class template {
                 "</script>\n";
         }
 
-        if(!empty($this->script)) {
+        if (!empty($this->script)) {
             $html.="    <script type='text/javascript'>";
             $html.="        " . $this->script;
             $html.="    </script>";
-        }    
+        }
 
-        foreach($this->css as $css_href) {
-            $html.="    <link type='text/css' rel='stylesheet' href='" . 
+        foreach ($this->css as $css_href) {
+            $html.="    <link type='text/css' rel='stylesheet' href='" .
                 $css_href . "'>\n";
         }
-        if(!empty($this->style)) {
+        if (!empty($this->style)) {
             $html.="    <style>" . $this->style . "</style>\n";
         }
-        if(!empty($title)) {
+        if (!empty($title)) {
             $html.="    <title>" . $title . "</title>\n";
         }
 
@@ -182,7 +182,7 @@ class template {
      */
     protected function displayBlocks() {
         $html="";
-        foreach($this->getBlocks() as $block) {
+        foreach ($this->getBlocks() as $block) {
             $html.=$block;
         }
         return $html;
@@ -203,7 +203,7 @@ class template {
      * @param array of actionlinks
      */
     public function addActionlinks(array $al) {
-        foreach($al as $title => $link) {
+        foreach ($al as $title => $link) {
             $this->addActionlink($title, $link);
         }
     }
@@ -213,17 +213,17 @@ class template {
      * @param array Optional array of actionlinks, otherwise use the ones in the class
      */
     private function getActionlinks(array $actionlinks=null) {
-        if($actionlinks==null) {
+        if ($actionlinks==null) {
             $actionlinks=$this->actionlinks;
         }
-        if(is_array($actionlinks)) {
+        if (is_array($actionlinks)) {
             $tpl=new template("actionlinks", array(
                 "actionlinks" => $actionlinks)
             );
             return $tpl->toString();
         }
     }
-    
+
     /**
      * Create a link list
      * Creates a comma separated list of links from the given records.
@@ -254,7 +254,9 @@ class template {
      * @return array Array that can be fed to the createPulldown methods.
      */
     public static function createSelectArray(array $records, array $name_fields) {
-        if (!$records || !$name_fields) { return; }
+        if (empty($records) || !$name_fields) { 
+            return array(); 
+        }
 
         foreach ($records as $rec) {
             // this only makes sense when there is one key
@@ -262,7 +264,9 @@ class template {
 
             $name = "";
             foreach ($name_fields as $n) {
-                if ($name) { $name .= " "; }
+                if ($name) { 
+                    $name .= " "; 
+                }
                 $name .= $rec->get($n);
             }
 
@@ -273,7 +277,7 @@ class template {
     }
 
     /**
-     * Create pulldown (select) 
+     * Create pulldown (select)
      * @param string name for select box
      * @param string current value
      *
@@ -288,7 +292,7 @@ class template {
             "autosubmit"    => (bool) $autosubmit
         ));
     }
- 
+
     /**
      * Create pulldown (select) to change the view
      * @param string name for select box
@@ -296,12 +300,12 @@ class template {
      * @param bool autosubmit form after making a change
      */
     public static function createViewPulldown($name, $value, $autosubmit=false) {
-        return self::createPulldown($name, $value, array(
+        return static::createPulldown($name, $value, array(
             "list" => translate("List",0),
             "tree" => translate("Tree",0),
             "thumbs" => translate("Thumbnails",0)), (bool) $autosubmit);
-    } 
- 
+    }
+
     /**
      * Create pulldown (select) to determine how the automatic thumbnail is selected
      * @param string name for select box
@@ -309,15 +313,15 @@ class template {
      * @param bool autosubmit form after making a change
      */
     public static function createAutothumbPulldown($name, $value, $autosubmit=false) {
-        return  self::createPulldown($name, $value, array(
+        return  static::createPulldown($name, $value, array(
             "oldest" => translate("Oldest photo",0),
             "newest" => translate("Newest photo",0),
             "first" => translate("Changed least recently",0),
-            "last" => translate("Changed most recently",0), 
-            "highest" => translate("Highest ranked",0), 
-            "random" => translate("Random",0)), 
+            "last" => translate("Changed most recently",0),
+            "highest" => translate("Highest ranked",0),
+            "random" => translate("Random",0)),
         (bool)$autosubmit);
-    }  
+    }
 
     /**
      * Create pulldown (select) that lists all photo fields
@@ -325,8 +329,8 @@ class template {
      * @param string current value
      */
     public static function createPhotoFieldPulldown($name, $value) {
-        return  self::createPulldown($name, $value, translate(photo::getFields(),0)); 
-    }  
+        return  static::createPulldown($name, $value, translate(photo::getFields(),0));
+    }
 
     /**
      * Create pulldown (select) with options "yes" and "no" (translated)
@@ -334,11 +338,11 @@ class template {
      * @param string current value
      */
     public static function createYesNoPulldown($name, $value) {
-        return  self::createPulldown($name, $value,array(
-            "0" => translate("No",0), 
+        return  static::createPulldown($name, $value,array(
+            "0" => translate("No",0),
             "1" => translate("Yes",0)
-        )); 
-    }  
+        ));
+    }
 
     /**
      * Get all templates
@@ -346,7 +350,7 @@ class template {
      */
     public static function getAll() {
         $templates=array();
-        foreach(glob(settings::$php_loc . "/templates/*", GLOB_ONLYDIR) as $tpl) {
+        foreach (glob(settings::$php_loc . "/templates/*", GLOB_ONLYDIR) as $tpl) {
             $tpl=basename($tpl);
             $templates[$tpl]=$tpl;
         }
