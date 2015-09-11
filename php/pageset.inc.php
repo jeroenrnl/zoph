@@ -1,13 +1,17 @@
 <?php
-
-/*
+/**
+ * Pagesets are a set of pages.
+ * You can associate an album, category, person or place with a pageset.
+ * This means that the first page in the set is shown when calling this album, etc.
+ * Through a pagination link, one can go to the other pages.
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -17,6 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/**
+ * The pageset class groups a set of pages in a certain order
+ */
 class pageset extends zophTable {
     /** @var string The name of the database table */
     protected static $table_name="pageset";
@@ -24,52 +31,64 @@ class pageset extends zophTable {
     protected static $primary_keys=array("pageset_id");
     /** @var array Fields that may not be empty */
     protected static $not_null=array("title");
-    /** @var bool keep keys with insert. In most cases the keys are set 
+    /** @var bool keep keys with insert. In most cases the keys are set
      *  by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="pageset.php?pageset_id=";
 
-    function __construct($id = 0) {
+    /**
+     * Create pageset
+     * @param int If existing pageset is to be pulled from the db, the id has to be given
+     * @return pageset
+     */
+    public function __construct($id = 0) {
         parent::__construct($id);
         $this->set("date","now()");
     }
 
-    function update() {
+    /**
+     * Update existing pageset in db
+     */
+    public function update() {
         $this->set("timestamp","now()");
         parent::update();
         $this->lookup();
     }
 
-    function delete() {
-        if(!$this->get("pageset_id")) { return; }
+    /**
+     * Delete pageset from db
+     * Also delete page-pageset relations
+     */
+    public function delete() {
+        if (!$this->get("pageset_id")) { return; }
         parent::delete(array("pages_pageset"));
     }
-    
-    
+
+
     function getDisplayArray() {
         return array(
             translate("title") => $this->get("title"),
             translate("date") => $this->get("date"),
             translate("updated") => $this->get("timestamp"),
-            translate("created by", false) => $this->lookup_user(),
+            translate("created by", false) => $this->getUser()->getLink(),
             translate("show original page") => translate($this->get("show_orig"),0),
             translate("position of original") => translate($this->get("orig_pos"),0)
         );
     }
     function get_original_select_array() {
         return array(
-            "never" => translate("Never",0), 
-            "first" => translate("On first page",0), 
+            "never" => translate("Never",0),
+            "first" => translate("On first page",0),
             "last" => translate("On last page",0),
             "all" => translate("On all pages",0));
     }
 
-    function get_pages($pagenum=null) {
+    function getPages($pagenum=null) {
         $sql = "select page_id from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id = " . $this->get("pageset_id") .
             " order by page_order";
-        if($pagenum) {
+        if ($pagenum) {
             $sql.=" limit " . escape_string($pagenum) . ",1";
         }
         $pages=page::getRecordsFromQuery($sql);
@@ -79,29 +98,29 @@ class pageset extends zophTable {
     function get_pagecount() {
         $sql = "select count(page_id) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id = " . $this->get("pageset_id");
-        return self::getCountFromQuery($sql);
+        return static::getCountFromQuery($sql);
     }
 
     /**
      * Add a page to this set
      * @todo If the page already exists in this pageset, it fails silently
      *       because, at this moment a page cannot be more than once in a pageset
-     *       Someday, this should either give a nice error or this limitation 
+     *       Someday, this should either give a nice error or this limitation
      *       should be removed.
      */
     function addpage($page_id) {
         $page=new page($page_id);
         if (!$page->get_order($this->get("pageset_id"))) {
-            $sql = "insert into " . DB_PREFIX . "pages_pageset " . 
+            $sql = "insert into " . DB_PREFIX . "pages_pageset " .
                 "values(" . $this ->get("pageset_id") . ", " .
                 escape_string($page_id) . ", " .
                 ($this->get_maxorder() + 1) . ")";
             query($sql, "Could not add page to pageset");
         }
     }
-    
+
     function remove_page($page_id) {
-        $sql = "delete from " . DB_PREFIX . "pages_pageset " . 
+        $sql = "delete from " . DB_PREFIX . "pages_pageset " .
             "where pageset_id=" . $this ->get("pageset_id") . " and " .
             "page_id=" . escape_string($page_id);
         query($sql, "Could not remove page from pageset");
@@ -110,7 +129,7 @@ class pageset extends zophTable {
     function moveup($page_id) {
         $page=new page($page_id);
         $order=$page->get_order($this->get("pageset_id"));
-        if($order>=2) {
+        if ($order>=2) {
             $prevorder=$this->get_prevorder($order);
             $sql="update zoph_pages_pageset set page_order=" . $order .
                 " where page_order=" . $prevorder;
@@ -124,7 +143,7 @@ class pageset extends zophTable {
         $page=new page($page_id);
         $order=$page->get_order($this->get("pageset_id"));
         $max=$this->get_maxorder();
-        if($order!=0 and $order<$max) {
+        if ($order!=0 and $order<$max) {
             $nextorder=$this->get_nextorder($order);
             $sql="update zoph_pages_pageset set page_order=" . $order .
                 " where page_order=" . $nextorder;
@@ -142,7 +161,7 @@ class pageset extends zophTable {
         $result=query($sql, "Could not get max order");
         return intval(result($result, 0));
     }
-    
+
     function get_nextorder($order) {
         // If pages have been deleted, the page_order field may no longer
         // be nicely numbered 1,2,3, etc. but there may be holes in the list
@@ -164,73 +183,41 @@ class pageset extends zophTable {
     }
 
 
-    function lookup_user() {
-        $pagesetuser = new user($this->get("user"));
-        $pagesetuser->lookup();
-        $user_name = $pagesetuser->get("user_name");
-        $pagesetuser->lookup_person();
-        $pagesetperson = $pagesetuser->person->getName();
-        $pagesetperson_id = $pagesetuser->person->get("person_id");
-        $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> " .
-            "(<a href=person.php?person_id=%s>%s</a>)", 
-            $this->get("user"), $user_name, $pagesetperson_id, $pagesetperson);
-        return $return;
+    public function getUser() {
+        $user = new user($this->get("user"));
+        $user->lookup();
+        return $user;
     }
 
-    function get_list_line() {
-        $html="<tr>";
-        $html.="<td><a href=pageset.php?pageset_id=" . $this->get("pageset_id") . ">";
-        $html.=$this->get("title");
-        $html.="</a></td>";
-        $html.="<td>" . $this->get("date") . "</td>";
-        $html.="<td>" . $this->get("timestamp") . "</td>";
-        $html.="<td>" . $this->lookup_user() . "</td>";
-        $html.="</tr>";
-        return $html;
-    }
-}    
-function get_all_pagesets() {
-    $sql = "select pageset_id,title,date,timestamp,user from " . DB_PREFIX . "pageset";
-
-    $pagesets=pageset::getRecordsFromQuery($sql);
-    $html=get_pagesets_table_header();
-
-    foreach ($pagesets as $pageset) {
-        $html.=$pageset->get_list_line();
-    }
-    $html.="</table><br>";
-    return $html;
-}
-
-function get_pagesets_table_header() {
-    $html="<table class='pagesets'>";
-    $html.="<tr><th>" . translate("title") . "</th>";
-    $html.="<th>" . translate("date") . "</th>";
-    $html.="<th>" . translate("last modified") . "</th>";
-    $html.="<th>" . translate("user") . "</th>";
-    $html.="</tr>";
-    return $html;
-}
-function get_pagesets($constraints = null, $conj = "and", $ops = null,
-    $order = "title") {
-
-    return pageset::getRecords($order, $constraints, $conj, $ops);
-}
-
-function get_pageset_select_array($pageset_array = null) {
-
-    $psa[""] = "";
-
-    if (!$pageset_array) {
-        $pageset_array = get_pagesets();
-    }
-
-    if ($pageset_array) {
-        foreach ($pageset_array as $pageset) {
-            $psa[$pageset->get("pageset_id")] = $pageset->get("title");
+    public static function getTable(array $pagesets=null) {
+        if (!$pagesets) {
+           $pagesets=pageset::getAll();
         }
+        $lpagesets=array();
+        foreach ($pagesets as $pageset) {
+            $pageset->lookup();
+            $lpagesets[]=$pageset;
+        }
+        return new block("pagesets", array(
+            "pagesets" => $lpagesets
+        ));
     }
 
-    return $psa;
+    public static function get_pageset_select_array($pageset_array = null) {
+
+        $psa[""] = "";
+
+        if (!$pageset_array) {
+            $pageset_array = get_pagesets();
+        }
+
+        if ($pageset_array) {
+            foreach ($pageset_array as $pageset) {
+                $psa[$pageset->get("pageset_id")] = $pageset->get("title");
+            }
+        }
+
+        return $psa;
+    }
 }
 

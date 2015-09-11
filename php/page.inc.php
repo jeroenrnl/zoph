@@ -31,25 +31,40 @@ class page extends zophTable {
     /** @var string URL for this class */
     protected static $url="page.php?page_id=";
 
-    function insert() {
+    /**
+     * Insert a new page into the db
+     */
+    public function insert() {
         $this->set("date","now()");
         parent::insert();
         $this->lookup();
     }
 
-    function update() {
+    /**
+     * Update an existing page in the db
+     */
+    public function update() {
         $this->set("timestamp","now()");
         parent::update();
         $this->lookup();
     }
 
-    function delete() {
-        if(!$this->get("page_id")) { return; }
+    /**
+     * Delete a page from the db
+     */
+    public function delete() {
+        if (!$this->getId()) { 
+            return; 
+        }
         parent::delete(array("pages_pageset"));
     }
     
-    
-    function getDisplayArray() {
+    /**
+     * Return an array of fields to display
+     * @todo Returns HTML
+     * @return array array of fields
+     */
+    public function getDisplayArray() {
         $zophcode = new zophCode\parser($this->get("text"));
         $text="<div class='page-preview'>" . $zophcode . "</div>";
 
@@ -61,32 +76,13 @@ class page extends zophTable {
         );
     }
 
-    function display() {
+    /**
+     * Parse Zophcode
+     * @return string parsed code
+     */
+    public function display() {
         $zophcode = new zophCode\parser($this->get("text"));
         return $zophcode;
-    }
-
-    function get_list_line($pageset_id=null) {
-        $html="<tr>";
-        $html.="<td><a href=page.php?page_id=" . $this->get("page_id") . ">";
-        $html.=$this->get("title");
-        $html.="</a></td>";
-        $html.="<td>" . $this->get("date") . "</td>";
-        $html.="<td>" . $this->get("timestamp") . "</td>";
-        if(isset($pageset_id)) {
-            $html.="<td><span class='actionlink'>";
-            $html.="<a href='pageset.php?_action=moveup&pageset_id=" . 
-                $pageset_id . "&page_id=". $this->get("page_id") . "'>";
-            $html.=translate("move up") . "</a> | ";
-            $html.="<a href='pageset.php?_action=movedown&pageset_id=" . 
-                $pageset_id . "&page_id=". $this->get("page_id") . "'>";
-            $html.=translate("move down") . "</a> | ";
-            $html.="<a href='pageset.php?_action=delpage&pageset_id=" . 
-                $pageset_id . "&page_id=". $this->get("page_id") . "'>";
-            $html.=translate("remove") . "</a></span></td>";
-        }    
-        $html.="</tr>";
-        return $html;
     }
 
     function get_order($pageset_id) {
@@ -101,73 +97,32 @@ class page extends zophTable {
         }
     }
 
-    function get_pagesets() {
-        $html="";
+    public function getPagesets() {
         $sql = "select pageset_id from " . DB_PREFIX . "pages_pageset" .
-            " where page_id = " . $this->get("page_id");
-        $pagesets=pageset::getRecordsFromQuery($sql);
-        if(!empty($pagesets)) {
-            $html=get_pagesets_table_header();
-            foreach ($pagesets as $pageset) {
-                $pageset->lookup();
-                $html.=$pageset->get_list_line();
-            }
-            $html.="</table><br>";
+            " where page_id = " . $this->getId();
+        return pageset::getRecordsFromQuery($sql);
+    }
+
+    /**
+     * Get a table of pages
+     * @param Array array of pages to show
+     * @param pageset Pageset to display
+     * @return block template to display
+     */
+    public static function getTable(array $pages = null, pageset $pageset=null) {
+        if(is_null($pages)) {
+            $pages=page::getAll();
         }
-        return $html;
-    }
-
-}
-function get_all_pages() {
-    $pages=get_pages();
-    $html=get_pages_table_header();
-    foreach ($pages as $page) {
-        $page->lookup();
-        $html.=$page->get_list_line();
-    }
-    $html.="</table><br>";
-    return $html;
-}
-
-function get_pages_table_header() {
-    $html="<table class='pages'>";
-    $html.="<tr><th>" . translate("title") . "</th>";
-    $html.="<th>" . translate("date") . "</th>";
-    $html.="<th>" . translate("last modified") . "</th>";
-    $html.="</tr>";
-    return $html;
-}
-
-function get_page_table($pages_array, $pageset_id) {
-    $html=get_pages_table_header();
-
-    foreach ($pages_array as $page) {
-        $page->lookup();
-        $html.=$page->get_list_line($pageset_id);
-    }
-    $html.="</table><br>";
-    return $html;
-}
-
-function get_pages($constraints = null, $conj = "and", $ops = null,
-    $order = "title") {
-
-    return page::getRecords($order, $constraints, $conj, $ops);
-}
-
-function get_pages_select_array($pages_array = null) {
-
-    $pa[""] = "";
-
-    if (!$pages_array) {
-        $pages_array = get_pages();
-    }
-
-    if ($pages_array) {
-        foreach ($pages_array as $page) {
-            $pa[$page->get("page_id")] = $page->get("title");
+        $lpages=array();
+        foreach($pages as $page) {
+            $page->lookup();
+            $lpages[]=$page;
         }
+
+        return new block("pages", array(
+            "pages"     => $lpages,
+            "pageset"   => $pageset
+        ));
     }
 
-    return $pa;
 }

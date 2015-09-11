@@ -39,7 +39,7 @@ if ($user->is_admin()) {
   </h1>
   <div class="main">
     <br>
-    <?php echo get_all_pages() ?>
+    <?php echo page::getTable() ?>
     <br>
   </div>
 <?php

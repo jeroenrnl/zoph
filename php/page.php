@@ -86,13 +86,14 @@ if ($action == "confirm") {
             </dl>
             <br>
     <?php
-    $zophpagesets=$zophpage->get_pagesets();
+    $pagesets=$zophpage->getPagesets();
 
-    if(!empty($zophpagesets)) {
+
+    if(!empty($pagesets)) {
         ?>
         <h2><?php echo translate("Pagesets")?></h2>
         <?php echo translate("This page is used in the following pagesets:") ?>
-        <?php echo $zophpage->get_pagesets(); ?>
+        <?php echo pageset::getTable($pagesets) ?>
         <?php
     }
     ?>

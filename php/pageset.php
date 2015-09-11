@@ -103,14 +103,14 @@ if ($action == "confirm") {
         <h2>
           <?php echo translate("Pages in this pageset"); ?>
         </h2>
-    <?php echo get_page_table($pageset->get_pages(), $pageset->get("pageset_id")); ?>
+    <?php echo page::getTable($pageset->getPages(), $pageset); ?>
         <form action="pageset.php" class="addpage">
           <input type="hidden" name="_action" value="addpage">
           <input type="hidden" name="pageset_id" value="<?php echo $pageset->get("pageset_id") ?>">
           <label for="page_id">
             <?php echo translate("Add a page:") ?>
           </label>
-          <?php echo template::createPulldown("page_id", 0, get_pages_select_array(), true); ?>
+          <?php echo template::createPulldown("page_id", 0, template::createSelectArray(page::getRecords("title"), array("title")), true); ?>
           <input type="submit" name="_button" value="<?php echo translate("add",0)?>">
         </form>
         <br>

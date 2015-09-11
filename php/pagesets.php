@@ -37,7 +37,7 @@ if ($user->is_admin()) {
 </h1>
 <div class="main">
   <br>
-  <?php echo get_all_pagesets() ?>
+  <?php echo pageset::getTable() ?>
   <br>
 </div>
 <?php
