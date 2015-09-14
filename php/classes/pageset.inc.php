@@ -31,11 +31,11 @@
  */
 class pageset extends zophTable {
     /** @var string The name of the database table */
-    protected static $table_name="pageset";
+    protected static $tableName="pageset";
     /** @var array List of primary keys */
-    protected static $primary_keys=array("pageset_id");
+    protected static $primaryKeys=array("pageset_id");
     /** @var array Fields that may not be empty */
-    protected static $not_null=array("title");
+    protected static $notNull=array("title");
     /** @var bool keep keys with insert. In most cases the keys are set
      *  by the db with auto_increment */
     protected static $keepKeys = false;

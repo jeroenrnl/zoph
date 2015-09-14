@@ -32,11 +32,11 @@
 class comment extends zophTable {
 
     /** @var string The name of the database table */
-    protected static $table_name="comments";
+    protected static $tableName="comments";
     /** @var array List of primary keys */
-    protected static $primary_keys=array("comment_id");
+    protected static $primaryKeys=array("comment_id");
     /** @var array Fields that may not be empty */
-    protected static $not_null=array("subject");
+    protected static $notNull=array("subject");
     /** @var bool keep keys with insert. In most cases the keys are set by the
                   db with auto_increment */
     protected static $keepKeys = false;

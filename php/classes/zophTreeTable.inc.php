@@ -80,13 +80,13 @@ abstract class zophTreeTable extends zophTable {
         if ($this->children) {
             return $this->children;
         }
-        $key = static::$primary_keys[0];
+        $key = static::$primaryKeys[0];
         $id = (int) $this->getId();
         if (!$id) {
             return;
         }
 
-        $qry = new select(static::$table_name);
+        $qry = new select(static::$tableName);
         $qry->where(new clause("parent_" . $key . "=:parent"));
         $qry->addParam(new param(":parent", $key, PDO::PARAM_INT));
 
@@ -103,7 +103,7 @@ abstract class zophTreeTable extends zophTable {
      * Gets the ancestors of this record.
      */
     public function get_ancestors($anc = array()) {
-        $key = static::$primary_keys[0];
+        $key = static::$primaryKeys[0];
         $pid = $this->get("parent_" . $key);
         // root of tree
         if ($pid == 0) {
@@ -158,7 +158,7 @@ abstract class zophTreeTable extends zophTable {
     private function getXMLtree(DOMDocument $xml, $search) {
         $rootname=static::XMLROOT;
         $nodename=static::XMLNODE;
-        $idname=static::$primary_keys[0];
+        $idname=static::$primaryKeys[0];
 
         $newchild=$xml->createElement($nodename);
 

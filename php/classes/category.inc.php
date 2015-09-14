@@ -36,11 +36,11 @@ class category extends zophTreeTable implements Organizer {
     const XMLNODE="category";
 
     /** @var string The name of the database table */
-    protected static $table_name="categories";
+    protected static $tableName="categories";
     /** @var array List of primary keys */
-    protected static $primary_keys=array("category_id");
+    protected static $primaryKeys=array("category_id");
     /** @var array Fields that may not be empty */
-    protected static $not_null=array("category");
+    protected static $notNull=array("category");
     /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;

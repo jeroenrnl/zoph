@@ -35,11 +35,11 @@
  */
 abstract class zophTable {
     /** @var string The name of the database table */
-    protected static $table_name;
+    protected static $tableName;
     /** @var array List of primary keys */
-    protected static $primary_keys=array();
+    protected static $primaryKeys=array();
     /** @var array Fields that may not be empty */
-    protected static $not_null=array();
+    protected static $notNull=array();
     /** @var bool keep keys with insert. In most cases the keys are set
      *   by the db with auto_increment */
     protected static $keepKeys = false;
@@ -58,7 +58,7 @@ abstract class zophTable {
      */
     public function __construct($id=0) {
         if ($id && !is_numeric($id)) { die("id for " . get_called_class() . " must be numeric"); }
-        $this->set(static::$primary_keys[0],$id);
+        $this->set(static::$primaryKeys[0],$id);
     }
 
     /**
@@ -82,8 +82,8 @@ abstract class zophTable {
      * @throws ZophException
      */
     public function getId() {
-        if (sizeof(static::$primary_keys)==1) {
-            return (int) $this->get(static::$primary_keys[0]);
+        if (sizeof(static::$primaryKeys)==1) {
+            return (int) $this->get(static::$primaryKeys[0]);
         } else {
             throw new ZophException("This class (" . get_class($this) . ") " .
               "requires a specific getId() implementation, please report a bug");
@@ -116,9 +116,9 @@ abstract class zophTable {
             // ignore empty keys or values unless the field must be set.
 
             if ($null) {
-                if ((!in_array($key, static::$not_null)) && (empty($key) )) { continue; }
+                if ((!in_array($key, static::$notNull)) && (empty($key) )) { continue; }
             } else {
-                if ((!in_array($key, static::$not_null)) && (empty($key) || $val == "")) {
+                if ((!in_array($key, static::$notNull)) && (empty($key) || $val == "")) {
                     continue;
                 }
             }
@@ -158,7 +158,7 @@ abstract class zophTable {
      * @return bool Whether or not field is listed
      */
     public function isKey($name) {
-        return in_array($name, static::$primary_keys);
+        return in_array($name, static::$primaryKeys);
     }
 
     /**
@@ -167,7 +167,7 @@ abstract class zophTable {
      * @todo Should return something more sensible
      */
     public function lookup() {
-        $qry=new select(array(static::$table_name));
+        $qry=new select(array(static::$tableName));
 
         list($qry, $where) = $this->addWhereForKeys($qry);
 
@@ -218,7 +218,7 @@ abstract class zophTable {
      * parameter causes these fields to be manually inserted.
      */
     public function insert() {
-        $qry=new insert(array(static::$table_name));
+        $qry=new insert(array(static::$tableName));
         reset($this->fields);
 
         foreach ($this->fields as $name => $value) {
@@ -230,7 +230,7 @@ abstract class zophTable {
             } else if ($value === "now()") {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
                 $qry->addSet($name, "now()");
-            } else if ($value =="" && in_array($name, static::$not_null)) {
+            } else if ($value =="" && in_array($name, static::$notNull)) {
                 die("<p class='error'><b>$name</b> may not be empty</p>");
             } else if ($value !== "") {
                 $qry->addParam(new param(":" . $name, $value, PDO::PARAM_STR));
@@ -241,8 +241,8 @@ abstract class zophTable {
         }
 
         $id=$qry->execute();
-        if (count(static::$primary_keys) == 1 && !static::$keepKeys) {
-            $this->fields[static::$primary_keys[0]] = $id;
+        if (count(static::$primaryKeys) == 1 && !static::$keepKeys) {
+            $this->fields[static::$primaryKeys[0]] = $id;
         }
 
         return $id;
@@ -276,7 +276,7 @@ abstract class zophTable {
             $extra_tables = null;
         }
 
-        $qry=new delete(array(static::$table_name));
+        $qry=new delete(array(static::$tableName));
 
         list($qry, $where) = $this->addWhereForKeys($qry);
 
@@ -303,7 +303,7 @@ abstract class zophTable {
      * Updates a record.
      */
     public function update() {
-        $qry=new update(array(static::$table_name));
+        $qry=new update(array(static::$tableName));
 
         list($qry, $where) = $this->addWhereForKeys($qry);
 
@@ -326,7 +326,7 @@ abstract class zophTable {
             } else if ($value === "now()") {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
                 $qry->addSetFunction($name . "=now()");
-            } else if ($value =="" && in_array($name, static::$not_null)) {
+            } else if ($value =="" && in_array($name, static::$notNull)) {
                 die("<p class='error'><b>$name</b> may not be empty</p>");
             } else if ($value !== "" && !is_null($value)) {
                 $qry->addSet($name, $name);
@@ -497,7 +497,7 @@ abstract class zophTable {
      * @return int count
      */
     public static function getCount() {
-        $qry=new select(array(static::$table_name));
+        $qry=new select(array(static::$tableName));
         $qry->addFunction(array("count" => "COUNT(*)"));
         return static::getCountFromQuery($qry);
     }
@@ -551,7 +551,7 @@ abstract class zophTable {
     public static function getRecords($order = null, $constraints = null,
             $conj = "AND", $ops = null) {
 
-        $qry = new select(static::$table_name);
+        $qry = new select(static::$tableName);
         if (is_array($constraints)) {
             $qry->addWhereFromConstraints($constraints, $conj, $ops);
         }
@@ -626,7 +626,7 @@ abstract class zophTable {
      * Creates a constraint clause based on the given keys
      */
     private function addWhereForKeys(query $query, clause $where = null) {
-        foreach (static::$primary_keys as $key) {
+        foreach (static::$primaryKeys as $key) {
             $value = $this->fields[$key];
             if (!$value) {
                 continue;
