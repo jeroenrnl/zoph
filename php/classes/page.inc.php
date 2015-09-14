@@ -48,7 +48,7 @@ class page extends zophTable {
      * Insert a new page into the db
      */
     public function insert() {
-        $this->set("date","now()");
+        $this->set("date", "now()");
         parent::insert();
         $this->lookup();
     }
@@ -57,7 +57,7 @@ class page extends zophTable {
      * Update an existing page in the db
      */
     public function update() {
-        $this->set("timestamp","now()");
+        $this->set("timestamp", "now()");
         parent::update();
         $this->lookup();
     }
@@ -94,8 +94,7 @@ class page extends zophTable {
      * @return string parsed code
      */
     public function display() {
-        $zophcode = new zophCode\parser($this->get("text"));
-        return $zophcode;
+        return new zophCode\parser($this->get("text"));
     }
 
     /**

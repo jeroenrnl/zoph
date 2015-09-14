@@ -49,14 +49,14 @@ class pageset extends zophTable {
      */
     public function __construct($id = 0) {
         parent::__construct($id);
-        $this->set("date","now()");
+        $this->set("date", "now()");
     }
 
     /**
      * Update existing pageset in db
      */
     public function update() {
-        $this->set("timestamp","now()");
+        $this->set("timestamp", "now()");
         parent::update();
         $this->lookup();
     }
@@ -66,27 +66,30 @@ class pageset extends zophTable {
      * Also delete page-pageset relations
      */
     public function delete() {
-        if (!$this->get("pageset_id")) { return; }
+        if (!$this->get("pageset_id")) {
+            return;
+        }
         parent::delete(array("pages_pageset"));
     }
 
 
-    function getDisplayArray() {
+    public function getDisplayArray() {
         return array(
             translate("title") => $this->get("title"),
             translate("date") => $this->get("date"),
             translate("updated") => $this->get("timestamp"),
             translate("created by", false) => $this->getUser()->getLink(),
-            translate("show original page") => translate($this->get("show_orig"),0),
-            translate("position of original") => translate($this->get("orig_pos"),0)
+            translate("show original page") => translate($this->get("show_orig"), 0),
+            translate("position of original") => translate($this->get("orig_pos"), 0)
         );
     }
-    function get_original_select_array() {
+
+    public function get_original_select_array() {
         return array(
-            "never" => translate("Never",0),
-            "first" => translate("On first page",0),
-            "last" => translate("On last page",0),
-            "all" => translate("On all pages",0));
+            "never" => translate("Never", 0),
+            "first" => translate("On first page", 0),
+            "last" => translate("On last page", 0),
+            "all" => translate("On all pages", 0));
     }
 
     public function getPages($pagenum=null) {
@@ -94,10 +97,9 @@ class pageset extends zophTable {
             " where pageset_id = " . $this->getId() .
             " order by page_order";
         if ($pagenum) {
-            $sql.=" limit " . escape_string($pagenum) . ",1";
+            $sql.=" limit " . escape_string($pagenum) . ", 1";
         }
-        $pages=page::getRecordsFromQuery($sql);
-        return $pages;
+        return page::getRecordsFromQuery($sql);
     }
 
     public function getPageCount() {
@@ -147,7 +149,7 @@ class pageset extends zophTable {
     public function moveDown($page) {
         $order=$page->getOrder($this);
         $max=$this->getMaxOrder();
-        if ($order!=0 and $order<$max) {
+        if ($order!=0 && $order<$max) {
             $nextorder=$this->getNextOrder($order);
             /** @todo This messes up ALL page orders, not just for this pageset! */
             $sql="update zoph_pages_pageset set page_order=" . $order .
@@ -170,7 +172,7 @@ class pageset extends zophTable {
     /**
      * Get Next order
      * If pages have been deleted, the page_order field may no longer
-     * be nicely numbered 1,2,3, etc. but there may be holes in the list
+     * be nicely numbered 1, 2, 3, etc. but there may be holes in the list
      * so this function and getPrevOrder() determine the next or previous
      * value of page_order.
      */
@@ -185,7 +187,7 @@ class pageset extends zophTable {
     /**
      * Get previous order
      * If pages have been deleted, the page_order field may no longer
-     * be nicely numbered 1,2,3, etc. but there may be holes in the list
+     * be nicely numbered 1, 2, 3, etc. but there may be holes in the list
      * so this function and getiNextOrder() determine the next or previous
      * value of page_order.
      */
