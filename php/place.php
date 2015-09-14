@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,11 +54,11 @@ if ($action == "confirm") {
     <h1><?php echo translate("delete place") ?></h1>
     <div class="main">
       <span class="actionlink">
-        <a href="place.php?_action=confirm&amp;place_id=<?php 
+        <a href="place.php?_action=confirm&amp;place_id=<?php
             echo $place->get("place_id") ?>">
           <?php echo translate("delete") ?>
         </a> |
-        <a href="place.php?_action=display&amp;place_id=<?php 
+        <a href="place.php?_action=display&amp;place_id=<?php
             echo $place->get("place_id") ?>">
           <?php echo translate("cancel") ?>
         </a>

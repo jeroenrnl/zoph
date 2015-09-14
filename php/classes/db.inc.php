@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,11 +49,11 @@ class db {
     /**
      * Make database connection
      * @param string DSN
-     * @param string username 
+     * @param string username
      * @param string password
      */
     private function __construct($dsn, $dbuser, $dbpass) {
-        self::$connection=new PDO($dsn,$dbuser,$dbpass); 
+        self::$connection=new PDO($dsn,$dbuser,$dbpass);
         self::$connection->setAttribute(
             PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         self::$connection->setAttribute(
@@ -70,7 +70,7 @@ class db {
         }
         return self::$connection;
     }
-    
+
     /**
      * Set login details
      * @param string database hostname
@@ -109,10 +109,10 @@ class db {
      * Get the Data Source Name for the database connection
      * Currently hardcoded to MySQL, in the future this might change
      */
-        
+
     private static function getDSN() {
         $db="mysql";
-        
+
         return sprintf("%s:host=%s;dbname=%s", $db, self::$dbhost, self::$dbname);
     }
 

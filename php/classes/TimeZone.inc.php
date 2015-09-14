@@ -9,7 +9,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -111,7 +111,7 @@ class TimeZone extends DateTimeZone {
             $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
                 " value='" . $text . "' class='autocomplete'>";
         } else {
-            $html=template::createPulldown("timezone_id", self::getKey($value), 
+            $html=template::createPulldown("timezone_id", self::getKey($value),
                 self::getSelectArray());
         }
         return $html;
@@ -139,9 +139,9 @@ class TimeZone extends DateTimeZone {
         if(class_exists("XMLReader")) {
             $failed=false;
             $xml=new XMLReader();
-            @$xml->open("http://api.geonames.org/timezone?username=zoph&lat=" . 
+            @$xml->open("http://api.geonames.org/timezone?username=zoph&lat=" .
                 $lat . "&lng=" . $lon) or $failed=true;
-            
+
             if (!$failed) {
                 while($xml->read()) {
                     if($xml->name=="timezoneId") {
@@ -151,12 +151,12 @@ class TimeZone extends DateTimeZone {
                 }
             } else {
                 $error=error_get_last();
-                log::msg("Could not connect to Geonames site: " . 
+                log::msg("Could not connect to Geonames site: " .
                     $error["message"], log::ERROR, log::GENERAL);
             }
             return null;
         }
-    }    
+    }
 }
 
 ?>

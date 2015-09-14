@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,7 @@ require_once "exif.inc.php";
  * @package Zoph
  */
 abstract class Import {
-    
+
     /**
      * Rotates a file based on the EXIF orientation flag
      *
@@ -96,17 +96,17 @@ abstract class Import {
             if ($vars) {
                 $photo->setFields($vars);
             }
-            
+
             if(strlen(trim($photo->get("date")))==0) {
                 $date=date("Y-m-d", filemtime($file));
-                log::msg("Photo has no date set, using filedate (" . $date . ").", 
+                log::msg("Photo has no date set, using filedate (" . $date . ").",
                     log::NOTIFY, log::IMPORT);
                 $photo->set("date", $date);
             }
 
             if(strlen(trim($photo->get("time")))==0) {
                 $time=date("H:i:s", filemtime($file));
-                log::msg("Photo has no time set, using time from filedate (" . $time . ").", 
+                log::msg("Photo has no time set, using time from filedate (" . $time . ").",
                     log::NOTIFY, log::IMPORT);
                 $photo->set("time", $time);
             }
@@ -123,7 +123,7 @@ abstract class Import {
                 echo $e->getMessage();
                 throw $e;
             }
-           
+
             if(conf::get("import.cli.thumbs")===true) {
                 try {
                     $photo->thumbnail(false);
@@ -157,12 +157,12 @@ abstract class Import {
     }
     /**
      * Displays a progressbar
-     * 
-     * This is a bit of a hack because PHP 5.2 and before do not support late static binding. 
-     * For now, this  method figures out whether it's in the CLI or not and then call the 
+     *
+     * This is a bit of a hack because PHP 5.2 and before do not support late static binding.
+     * For now, this  method figures out whether it's in the CLI or not and then call the
      * cliImport method. This is a bit dirty, but it works
      *
-     * @todo as soon as anything before PHP 5.3 is deprecated, this should be replaced by late 
+     * @todo as soon as anything before PHP 5.3 is deprecated, this should be replaced by late
      * static binding.
      */
     public static function progress($cur, $total) {
@@ -170,7 +170,7 @@ abstract class Import {
             cliImport::progress($cur, $total);
         }
     }
-    
+
     /**
      * Import an XML file
      *
@@ -184,8 +184,8 @@ abstract class Import {
         $xml=new DomDocument;
         $xml->Load($file);
 
-        $schemas = array ( 
-            "gpx 1.0" => "xml/gpx10.xsd", 
+        $schemas = array (
+            "gpx 1.0" => "xml/gpx10.xsd",
             "gpx 1.1" => "xml/gpx11.xsd" );
 
         foreach ($schemas as $name => $schema) {

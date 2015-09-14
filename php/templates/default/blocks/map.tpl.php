@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,19 +31,19 @@ if(!ZOPH) { die("Illegal call"); }
     <?php if($this->hasMarkers()): ?>
         // Add markers:
         <?php foreach ($this->getMarkers() as $m): ?>
-            zMaps.createMarker("<?php echo $m->lat ?>","<?php echo $m->lon ?>", 
+            zMaps.createMarker("<?php echo $m->lat ?>","<?php echo $m->lon ?>",
                 icons["<?php echo $m->icon ?>"], '<?php echo $m->title ?>',
                 '<?php echo $m->quicklook ?>');
         <?php endforeach ?>
     <?php endif ?>
-    
+
     <?php if($this->hasTracks()): ?>
         // Add tracks:
         // @todo: might not work with multiple tracks.
         <?php foreach ($this->getTracks() as $track): ?>
             var points=new Array();
             <?php foreach($track->getPoints() as $point): ?>
-                points.push(new mxn.LatLonPoint(<?php echo $point->get("lat") ?>, 
+                points.push(new mxn.LatLonPoint(<?php echo $point->get("lat") ?>,
                     <?php echo $point->get("lon") ?>));
             <?php endforeach; ?>
             track=new mxn.Polyline(points)
@@ -59,7 +59,7 @@ if(!ZOPH) { die("Illegal call"); }
         mapstraction.setCenterAndZoom(center,zoomlevel);
     <?php else: ?>
         mapstraction.autoCenterAndZoom();
-    <?php endif ?> 
+    <?php endif ?>
 
     <?php if($this->edit): ?>
         zMaps.setUpdateHandlers();
@@ -67,4 +67,4 @@ if(!ZOPH) { die("Illegal call"); }
 
 </script>
 
-            
+

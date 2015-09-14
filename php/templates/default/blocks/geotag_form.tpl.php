@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,7 +41,7 @@
                 <input type="text" id="maxtime" name="_maxtime" value="300">
                 <?php echo translate("seconds"); ?>
                 <div class="inputhint">
-                  <?php echo translate("Maximum time difference between photo " . 
+                  <?php echo translate("Maximum time difference between photo " .
                     "and GPS timestamp"); ?>
                 </div><br>
                 <label for="validtz"><?php echo translate("Valid timezone"); ?></label>
@@ -64,8 +64,8 @@
                     <?php echo translate("All tracks"); ?><br>
                     <input type="radio" name="_tracks" id="tracks2" value="specific">
                     <?php echo translate("Specific track") . ": " ?>
-                    <?php echo template::createPulldown("_track", "", 
-                        template::createSelectArray(track::getRecords("track_id"), 
+                    <?php echo template::createPulldown("_track", "",
+                        template::createSelectArray(track::getRecords("track_id"),
                             array("name"))) ?>
                 </fieldset>
             </fieldset>
@@ -86,7 +86,7 @@
                 </label>
                 <input type="text" name="_int_maxdist" id="intmaxdist" value="1">
                 <?php echo template::createPulldown("_entity","km", array(
-                    "km"    => "km", 
+                    "km"    => "km",
                     "miles" => "miles")) ?>
                 <div class="inputhint">
                     <?php echo translate("Do not interpolate if distance between points is " .

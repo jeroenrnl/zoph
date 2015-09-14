@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,10 +24,10 @@ if(!ZOPH) { die("Illegal call"); }
     <div>
         <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
         <div class="generate">
-            <input type="text" id="<?php echo $tpl_id ?>" pattern="<?php echo $tpl_regex ?>" 
-                name="<?php echo $tpl_name ?>" value="<?php echo $tpl_value; ?>" 
+            <input type="text" id="<?php echo $tpl_id ?>" pattern="<?php echo $tpl_regex ?>"
+                name="<?php echo $tpl_name ?>" value="<?php echo $tpl_value; ?>"
                 size="<?php echo $tpl_size ?>" <?php echo $tpl_req ?>>
-            <input type="button" onclick="zConf.genSalt('<?php echo $tpl_id ?>')" 
+            <input type="button" onclick="zConf.genSalt('<?php echo $tpl_id ?>')"
                 value="<?php echo translate("Generate",0); ?>">
         </div>
         <input class="reset" type="checkbox" name="_reset_<?php echo $tpl_name ?>">
@@ -43,4 +43,4 @@ if(!ZOPH) { die("Illegal call"); }
             </div>
         <?php endif; ?>
     </div>
-    
+

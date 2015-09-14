@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,7 @@
  * @package Zoph
  */
 class log {
-    
+
     public static $stopOnFatal=true;
 
     public static $sev = array(
@@ -40,7 +40,7 @@ class log {
         10 => "Fatal Error",
         5 => "Message",
         0 => "None");
-   
+
     const MOREDEBUG = 60;
     const DEBUG = 50;
     const NOTIFY = 40;
@@ -78,10 +78,10 @@ class log {
      * @param bigint Subject of the message.
      * @param bool echo the message or return the contents
      */
-    public static function msg($msg, 
+    public static function msg($msg,
         $severity = self::NOTIFY, $subj = self::GENERAL, $print = true) {
 
-        /** 
+        /**
          * There are 3 settings in config.ing.php that are important;
          * LOG_SEVERITY: Show log messages with a severity higher than this
          * LOG_SUBJECT:  Only show messages about this subject

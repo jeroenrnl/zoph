@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -56,7 +56,7 @@ require_once "header.inc.php";
 if ($user->is_admin()) {
     ?>
       <span class="actionlink">
-        <a href="album.php?_action=new&amp;parent_album_id=<?php 
+        <a href="album.php?_action=new&amp;parent_album_id=<?php
             echo $album->get("album_id") ?>"><?php echo translate("new") ?>
         </a>
       </span>
@@ -95,7 +95,7 @@ if($show_orig) {
     if ($user->is_admin()) {
         ?>
         <span class="actionlink">
-          <a href="album.php?_action=edit&amp;album_id=<?php 
+          <a href="album.php?_action=edit&amp;album_id=<?php
             echo $album->get("album_id") ?>">
             <?php echo translate("edit") ?>
           </a>
@@ -103,7 +103,7 @@ if($show_orig) {
         if($album->get("coverphoto")) {
             ?>
             |
-            <a href="album.php?_action=update&amp;album_id=<?php 
+            <a href="album.php?_action=update&amp;album_id=<?php
                 echo $album->get("album_id") ?>&amp;coverphoto=NULL">
                 <?php echo translate("unset coverphoto") ?>
             </a>
@@ -136,7 +136,7 @@ if($show_orig) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
             <span class="actionlink">
-                <a href="photos.php?album_id=<?php 
+                <a href="photos.php?album_id=<?php
                     echo $album->getBranchIds() . $sort ?>">
                   <?php echo translate("view photos") ?>
                 </a>
@@ -159,7 +159,7 @@ if($show_orig) {
     if ($photoCount > 0) {
         ?>
           <span class="actionlink">
-            <a href="photos.php?album_id=<?php 
+            <a href="photos.php?album_id=<?php
                 echo $album->get("album_id") . $sort ?>">
               <?php echo translate("view photos")?>
             </a>

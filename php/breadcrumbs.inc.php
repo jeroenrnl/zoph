@@ -1,14 +1,14 @@
 <?php
 /**
  * Display and modify breadcrumbs
- * 
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,8 +22,8 @@
  * @author Jeroen Roos
  */
 
-// This is needed because this file is sometimes included from 
-// global context and sometimes from class context. 
+// This is needed because this file is sometimes included from
+// global context and sometimes from class context.
 // This is temporary until Zoph has moved to templating entirely
 // or the global $user has been completely phased out.
 if(!isset($user)) {
@@ -66,9 +66,9 @@ if ($user->prefs->get("show_breadcrumbs")) {
     $page=array_reverse(explode("/",$_SERVER['PHP_SELF']));
     $page=$page[0];
     if (!isset($skipcrumb) && isset($title) && count($user->crumbs) < 100 &&
-        (empty($_action) || ($_action == "display" || 
+        (empty($_action) || ($_action == "display" ||
         $_action == "search" || $_action == translate("search") ||
-        $_action == "notify" || $_action == "compose" || 
+        $_action == "notify" || $_action == "compose" ||
         ($user->prefs->get("auto_edit") && $_action != "update" &&
         $_action != "select" && $_action != "deselect" &&
         $_action != "delrate" && $page == "photo.php")))) {

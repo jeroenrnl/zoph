@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -78,7 +78,7 @@ if ($action == "display") {
         if($person->get("coverphoto")) {
             ?>
             |
-            <a href="person.php?_action=update&amp;person_id=<?php 
+            <a href="person.php?_action=update&amp;person_id=<?php
                 echo $person->getId() ?>&amp;coverphoto=NULL">
               <?php echo translate("unset coverphoto") ?>
             </a>
@@ -143,7 +143,7 @@ if ($action == "display") {
                       <?php echo translate("view") ?>
                     </a>
                   </span>
-                  <?php echo $person->home->get("title") ? 
+                  <?php echo $person->home->get("title") ?
                     $person->home->get("title") . "<br>" : "" ?>
                   <?php echo $person->home->getAddress() ?></dd>
                 <?php
@@ -158,7 +158,7 @@ if ($action == "display") {
                       <?php echo translate("view") ?>
                     </a>
                   </span>
-                  <?php echo $person->work->get("title") ? 
+                  <?php echo $person->work->get("title") ?
                     $person->work->get("title") . "<br>" : "" ?>
                   <?php echo $person->work->getAddress() ?>
                 </dd>

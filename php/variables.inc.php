@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -60,8 +60,8 @@ function e($var) {
         $return=htmlspecialchars($var);
         # Extra escape for a few chars that may cause troubles but are
         # not escaped by htmlspecialchars.
-        $return=str_replace(array("<", ">", "\"", "(", ")", "'", "[",  "]", "{", "}", "~", "`"), 
-            array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;", "&#39;","&#91;", "&#93;", "&#123;", 
+        $return=str_replace(array("<", ">", "\"", "(", ")", "'", "[",  "]", "{", "}", "~", "`"),
+            array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;", "&#39;","&#91;", "&#93;", "&#123;",
               "&#125;", "&#126;", "&#96;"), $return);
     }
     return $return;
@@ -70,5 +70,5 @@ function e($var) {
 if ($_GET) { $request_vars = &$_GET; }
 else       { $request_vars = &$_POST; }
 $request_vars=i($request_vars);
-    
+
 ?>

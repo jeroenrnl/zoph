@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -59,7 +59,7 @@ if ($_action == "mail") {
     }
 
     $mail->setTXTBody(e($message));
-    
+
     $body = $mail->get();
     $hdrs = $mail->headers($hdrs);
     foreach($hdrs as $header => $content) {
@@ -135,7 +135,7 @@ if ($_action == "notify") {
 
         $url = getZophURL() . "login.php";
 
-        $body .= "\n" . 
+        $body .= "\n" .
         $body .= translate("For accessing these Albums you have to use this URL:",0);
         $body .= " " . $url . "\n";
     }
@@ -177,7 +177,7 @@ if ($_action != "mail") {
         <?php echo create_text_input("from_email", e($from_email), 24, 64) ?><br>
         <label for="subject"><?php echo translate("subject") ?>:</label>
         <?php echo create_text_input("subject", e($subject), 48, 64) ?><br>
-        
+
         <label for="message"><?php echo translate("message:") ?></label><br>
         <textarea name="message" class="email" cols="70" rows="15">
             <?php echo e($message) ?>
