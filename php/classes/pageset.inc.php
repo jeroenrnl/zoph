@@ -84,12 +84,15 @@ class pageset extends zophTable {
         );
     }
 
-    public function get_original_select_array() {
-        return array(
-            "never" => translate("Never", 0),
-            "first" => translate("On first page", 0),
-            "last" => translate("On last page", 0),
-            "all" => translate("On all pages", 0));
+    public function getOriginalDropdown() {
+        return template::createPulldown("show_orig", $this->get("show_orig"),
+            array(
+                "never" => translate("Never", 0),
+                "first" => translate("On first page", 0),
+                "last" => translate("On last page", 0),
+                "all" => translate("On all pages", 0)
+            )
+        );
     }
 
     public function getPages($pagenum=null) {
@@ -220,21 +223,5 @@ class pageset extends zophTable {
         ));
     }
 
-    public static function get_pageset_select_array($pageset_array = null) {
-
-        $psa[""] = "";
-
-        if (!$pageset_array) {
-            $pageset_array = get_pagesets();
-        }
-
-        if ($pageset_array) {
-            foreach ($pageset_array as $pageset) {
-                $psa[$pageset->get("pageset_id")] = $pageset->get("title");
-            }
-        }
-
-        return $psa;
-    }
 }
 

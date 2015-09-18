@@ -131,10 +131,7 @@ if ($action == "confirm") {
             <label for="title"><?php echo translate("title") ?></label>
             <?php echo create_text_input("title", $pageset->get("title")) ?><br>
             <label for="show_orig"><?php echo translate("show original page") ?></label>
-            <?php echo template::createPulldown("show_orig",
-                $pageset->get("show_orig"),
-                $pageset->get_original_select_array())
-            ?><br>
+            <?php echo $pageset->getOriginalDropdown(); ?><br>
             <label for="orig_pos"><?php echo translate("position of original") ?></label>
             <?php echo template::createPulldown("orig_pos",
                 $pageset->get("orig_pos"),

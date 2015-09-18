@@ -65,7 +65,7 @@
           <?php echo person::createPulldown("spouse_id", $person->get("spouse_id")) ?><br>
           <label for="pageset"><?php echo translate("pageset") ?></label>
           <?php echo template::createPulldown("pageset", $person->get("pageset"),
-              get_pageset_select_array()) ?><br>
+              template::createSelectArray(pageset::getRecords("title"), array("title"), true)) ?><br>
           <label for="notes"><?php echo translate("notes") ?></label>
           <textarea name="notes" cols="40" rows="4">
             <?php echo $person->get("notes") ?>

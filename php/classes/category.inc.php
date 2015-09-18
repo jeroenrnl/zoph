@@ -228,7 +228,7 @@ class category extends zophTreeTable implements Organizer {
                 array(
                     translate("pageset"),
                     template::createPulldown("pageset", $this->get("pageset"),
-                        get_pageset_select_array())),
+                         template::createSelectArray(pageset::getRecords("title"), array("title"), true))),
             "sortname" =>
                 array(
                     translate("sort name"),

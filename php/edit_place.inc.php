@@ -74,7 +74,7 @@ if($place->isRoot()) {
 <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
 <label for="pageset"><?php echo translate("pageset") ?></label>
 <?php echo template::createPulldown("pageset", $place->get("pageset"),
-    get_pageset_select_array()) ?><br>
+    template::createSelectArray(pageset::getRecords("title"), array("title"), true)) ?><br>
 <fieldset class="map">
   <legend><?php echo translate("map") ?></legend>
   <label for="lat"><?php echo translate("latitude") ?></label>
