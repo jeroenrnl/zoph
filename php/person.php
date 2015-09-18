@@ -89,7 +89,7 @@ if ($action == "display") {
         <?php
     }
     ?>
-    <?php echo translate("person") ?>
+    <?php echo $title ?>
     </h1>
     <?php
     if($user->is_admin()) {
