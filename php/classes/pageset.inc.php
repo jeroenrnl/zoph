@@ -72,7 +72,9 @@ class pageset extends zophTable {
         parent::delete(array("pages_pageset"));
     }
 
-
+    /**
+     * Get an array of information to be displayed for this pageset
+     */
     public function getDisplayArray() {
         return array(
             translate("title") => $this->get("title"),
@@ -84,6 +86,10 @@ class pageset extends zophTable {
         );
     }
 
+    /**
+     * Get a dropdown to select what to do with the original (zoph default) page to
+     * be displayed
+     */
     public function getOriginalDropdown() {
         return template::createPulldown("show_orig", $this->get("show_orig"),
             array(
@@ -95,6 +101,10 @@ class pageset extends zophTable {
         );
     }
 
+    /**
+     * Get the pages in this pageset
+     * @param int Specific page to get instead of all
+     */
     public function getPages($pagenum=null) {
         $sql = "select page_id from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id = " . $this->getId() .
@@ -105,6 +115,10 @@ class pageset extends zophTable {
         return page::getRecordsFromQuery($sql);
     }
 
+    /**
+     * Get the number of pages in this pageset
+     * @param page Page to remove
+     */
     public function getPageCount() {
         $sql = "select count(page_id) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id = " . $this->get("pageset_id");
@@ -113,12 +127,13 @@ class pageset extends zophTable {
 
     /**
      * Add a page to this set
+     * @param page Page to add
      * @todo If the page already exists in this pageset, it fails silently
      *       because, at this moment a page cannot be more than once in a pageset
      *       Someday, this should either give a nice error or this limitation
      *       should be removed.
      */
-    public function addPage($page) {
+    public function addPage(page $page) {
         if (!$page->getOrder($this)) {
             $sql = "insert into " . DB_PREFIX . "pages_pageset " .
                 "values(" . $this ->get("pageset_id") . ", " .
@@ -128,14 +143,22 @@ class pageset extends zophTable {
         }
     }
 
-    public function removePage($page) {
+    /**
+     * Remove a page from this pageset
+     * @param page Page to remove
+     */
+    public function removePage(page $page) {
         $sql = "delete from " . DB_PREFIX . "pages_pageset " .
             "where pageset_id=" . $this ->getId() . " and " .
             "page_id=" . $page->getId();
         query($sql, "Could not remove page from pageset");
     }
 
-    public function moveUp($page) {
+    /**
+     * Move a page up in the order list
+     * @param page Page to move up
+     */
+    public function moveUp(page $page) {
         $order=$page->getOrder($this);
         if ($order>=2) {
             $prevorder=$this->getPrevOrder($order);
@@ -149,7 +172,12 @@ class pageset extends zophTable {
             query($sql, "Could not change order");
         }
     }
-    public function moveDown($page) {
+
+    /**
+     * Move a page down in the order list
+     * @param page Page to move down
+     */
+    public function moveDown(page $page) {
         $order=$page->getOrder($this);
         $max=$this->getMaxOrder();
         if ($order!=0 && $order<$max) {
@@ -165,7 +193,11 @@ class pageset extends zophTable {
         }
     }
 
-    public function getMaxOrder() {
+    /**
+     * Get the highest used page_order value for this pageset
+     * @return int maximum page_order
+     */
+    private function getMaxOrder() {
         $sql = "select max(page_order) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id=" . $this->getId();
         $result=query($sql, "Could not get max order");
@@ -179,7 +211,7 @@ class pageset extends zophTable {
      * so this function and getPrevOrder() determine the next or previous
      * value of page_order.
      */
-    public function getNextOrder($order) {
+    private function getNextOrder($order) {
         $sql = "select min(page_order) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id=" . $this->getId() .
             " and page_order>" . $order;
@@ -194,7 +226,7 @@ class pageset extends zophTable {
      * so this function and getiNextOrder() determine the next or previous
      * value of page_order.
      */
-    public function getPrevOrder($order) {
+    private function getPrevOrder($order) {
         $sql = "select max(page_order) from " . DB_PREFIX . "pages_pageset" .
             " where pageset_id=" . $this->getId() .
             " and page_order<" . $order;
@@ -202,13 +234,21 @@ class pageset extends zophTable {
         return intval(result($result, 0));
     }
 
-
+    /**
+     * Get the user who created this pageset
+     * @return user the user
+     */
     public function getUser() {
         $user = new user($this->get("user"));
         $user->lookup();
         return $user;
     }
 
+    /**
+     * Get table of pagesets
+     * @param array pagesets to put in the table (default: all)
+     * @return block template block with all pagesets
+     */
     public static function getTable(array $pagesets=null) {
         if (!$pagesets) {
            $pagesets=pageset::getAll();
@@ -222,6 +262,4 @@ class pageset extends zophTable {
             "pagesets" => $lpagesets
         ));
     }
-
 }
-

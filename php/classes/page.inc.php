@@ -113,6 +113,9 @@ class page extends zophTable {
         }
     }
 
+    /**
+     * Get the pagesets this page is in
+     */
     public function getPagesets() {
         $sql = "select pageset_id from " . DB_PREFIX . "pages_pageset" .
             " where page_id = " . $this->getId();
