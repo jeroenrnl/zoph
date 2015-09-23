@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -25,7 +25,7 @@
 /**
  * Autoload classes
  */
-function zophAutoload($file) {  
+function zophAutoload($file) {
     if(is_readable(settings::$php_loc . "/" . $file)) {
         require_once $file;
     } else {
@@ -35,7 +35,7 @@ function zophAutoload($file) {
 }
 
 function zophAutoloadClass($class) {
-    $file="classes/" . $class . ".inc.php";
+    $file="classes/" . str_replace("\\", "/", $class) . ".inc.php";
     return zophAutoload($file);
 }
 
@@ -75,11 +75,7 @@ if(!defined("LOGON")) {
         require_once "auth.inc.php";
     }
 
-    require_once "code.inc.php";
     require_once "comment.inc.php";
-
-    require_once "page.inc.php";
-    require_once "pageset.inc.php";
 
     require_once "file.inc.php";
 

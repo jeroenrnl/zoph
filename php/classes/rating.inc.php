@@ -29,11 +29,11 @@
 class rating extends zophTable {
 
     /** @var string The name of the database table */
-    protected static $table_name="photo_ratings";
+    protected static $tableName="photo_ratings";
     /** @var array List of primary keys */
-    protected static $primary_keys=array("rating_id");
+    protected static $primaryKeys=array("rating_id");
     /** @var array Fields that may not be empty */
-    protected static $not_null=array("photo_id", "rating", "user_id");
+    protected static $notNull=array("photo_id", "rating", "user_id");
     /** @var bool keep keys with insert. In most cases the keys are set by
                   the db with auto_increment */
     protected static $keepKeys = false;

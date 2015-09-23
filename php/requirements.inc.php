@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,7 +35,7 @@ if(!file_exists(conf::get("path.magic")) && strlen(conf::get("path.magic"))>0) {
 
 if(!ini_get("date.timezone")) {
     @$tz=date("e");
-    log::msg("You should set your timezone in php.ini, guessing it should be $tz", 
+    log::msg("You should set your timezone in php.ini, guessing it should be $tz",
         log::WARN, log::GENERAL);
     date_default_timezone_set($tz);
 }

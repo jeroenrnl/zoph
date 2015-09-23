@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,15 +21,15 @@
 
 if(!ZOPH) { die("Illegal call"); }
 ?>
-<select name="<?php echo $tpl_name ?>" id="<?php echo $tpl_id ?>" 
+<select name="<?php echo $tpl_name ?>" id="<?php echo $tpl_id ?>"
     <?php echo ($tpl_autosubmit ? "onChange='form.submit()'" : "") ?> >
     <?php foreach($tpl_options as $option=>$label): ?>
         <?php if($tpl_value==$option): ?>
             <?php $selected="selected"; ?>
         <?php else: ?>
             <?php $selected=""; ?>
-        <?php endif ?>    
+        <?php endif ?>
         <option <?php echo $selected; ?> value="<?php echo $option ?>"><?php echo $label ?></option>
     <?php endforeach ?>
 </select>
-    
+

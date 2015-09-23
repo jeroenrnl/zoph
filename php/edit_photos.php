@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -75,7 +75,7 @@ if  ($num_thumbnails) {
     $num = min($cells, $num_thumbnails);
 
     $title = sprintf(translate("Edit Photos (Page %s/%s)", 0), $page_num, $num_pages);
-    $title_bar = sprintf(translate("edit photos %s to %s of %s"), 
+    $title_bar = sprintf(translate("edit photos %s to %s of %s"),
         ($offset + 1), ($offset + $num), $num_photos);
 } else {
     $title = translate("No Photos Found");
@@ -105,8 +105,8 @@ if ($num_thumbnails <= 0) {
     $album_select_array = null;
     $places_select_array = null;
     $people_select_array = null;
-    
-    
+
+
     // create once
     if(!conf::get("interface.autocomplete")) {
         if(!$user->prefs->get("autocomp_categories")) {
@@ -170,7 +170,7 @@ if ($num_thumbnails <= 0) {
     unset($request_vars["__category__all"]);
     for ($i = 0; $i < $num_thumbnails; $i++) {
         $photo_id = $thumbnails[$i]->get('photo_id');
-        
+
         unset($request_vars["___location_id__" . $photo_id]);
         unset($request_vars["___photographer_id__" . $photo_id]);
         unset($request_vars["__album__" . $photo_id]);
@@ -186,7 +186,7 @@ if ($num_thumbnails <= 0) {
         $can_edit = $user->is_admin() || $permissions->get("writable");
 
         $photo = new photo($photo_id);
-        
+
         if(array_key_exists("_action__" . $photo_id, $request_vars)) {
             $action = $request_vars["_action__" . $photo_id];
         }
@@ -246,7 +246,7 @@ if ($num_thumbnails <= 0) {
         if ($action == "update") {
             $request_vars["_action"]="display";
         }
-    
+
         $photo->lookup();
 
         $queryIgnoreArray[] = "__photo_id__$photo_id";
@@ -270,13 +270,13 @@ if ($num_thumbnails <= 0) {
         <?php
         if ($can_edit) {
             ?>
-              <input type="hidden" name="__photo_id__<?php echo $photo_id ?>" 
+              <input type="hidden" name="__photo_id__<?php echo $photo_id ?>"
                 value="<?php echo $photo_id ?>">
-              <input type="radio" name="_action__<?php echo $photo_id ?>" 
+              <input type="radio" name="_action__<?php echo $photo_id ?>"
                 value="update" checked><?php echo translate("edit", 0) ?><br>
-              <input type="radio" name="_action__<?php echo $photo_id ?>" 
+              <input type="radio" name="_action__<?php echo $photo_id ?>"
                 value=""><?php echo translate("skip", 0) ?><br>
-              <input type="radio" name="_action__<?php echo $photo_id ?>" 
+              <input type="radio" name="_action__<?php echo $photo_id ?>"
                 value="delete"><?php echo translate("delete", 0) ?>
             <?php
         } else {
@@ -313,30 +313,30 @@ if ($num_thumbnails <= 0) {
                   <label for="title__<?php echo $photo_id?>">
                     <?php echo translate("title") ?>
                   </label>
-                  <?php echo create_text_input("__title__$photo_id", 
+                  <?php echo create_text_input("__title__$photo_id",
                     $photo->get("title"), 30, 64) ?>
                   <br>
                   <label for="date__<?php echo $photo_id ?>">
                     <?php echo translate("date") ?>
                   </label>
-                  <?php echo create_text_input("__date__$photo_id", 
+                  <?php echo create_text_input("__date__$photo_id",
                     $photo->get("date") , 12, 10, "date") ?>
                   <span class="inputhint">YYYY-MM-DD</span><br>
                   <label for="time__<?php echo $photo_id ?>">
                     <?php echo translate("time") ?>
                   </label>
-                  <?php echo create_text_input("__time__$photo_id", 
+                  <?php echo create_text_input("__time__$photo_id",
                     $photo->get("time"), 10, 8, "time") ?>
                   <span class="inputhint">HH:MM:SS</span><br>
                   <label for="location_id__<?php echo $photo_id ?>">
                     <?php echo translate("location") ?>
                   </label>
-                  <?php echo place::createPulldown("__location_id__$photo_id", 
+                  <?php echo place::createPulldown("__location_id__$photo_id",
                     $photo->get("location_id")) ?><br>
                   <label for="photographer_id__<?php echo $photo_id?>">
                     <?php echo translate("photographer") ?>
                   </label>
-                  <?php echo photographer::createPulldown("__photographer_id__$photo_id", 
+                  <?php echo photographer::createPulldown("__photographer_id__$photo_id",
                     $photo->get("photographer_id")) ?><br>
             <?php
             if (conf::get("feature.rating")) {
@@ -353,8 +353,8 @@ if ($num_thumbnails <= 0) {
                   <label for="description__<?php echo $photo_id?>">
                     <?php echo translate("description") ?>
                   </label>
-                  <textarea name="__description__<?php echo $photo_id ?>" 
-                    id="description__<?php echo $photo_id?>" class="desc" 
+                  <textarea name="__description__<?php echo $photo_id ?>"
+                    id="description__<?php echo $photo_id?>" class="desc"
                     cols="50" rows="3">
                     <?php echo $photo->get("description") ?>
                   </textarea>
@@ -370,7 +370,7 @@ if ($num_thumbnails <= 0) {
                 foreach ($albums as $album) {
                     ?>
                     <?php echo $append ?>
-                    <input type="checkbox" name="_remove_album__<?php echo $photo_id ?>[]" 
+                    <input type="checkbox" name="_remove_album__<?php echo $photo_id ?>[]"
                     value="<?php echo $album->get("album_id") ?>">
                     <?php echo $album->getLink() ?>
                     <?php
@@ -394,9 +394,9 @@ if ($num_thumbnails <= 0) {
                 foreach ($categories as $category) {
                     ?>
                     <?php echo $append ?>
-                    <input type="checkbox" name="_remove_category__<?php echo $photo_id ?>[]" 
+                    <input type="checkbox" name="_remove_category__<?php echo $photo_id ?>[]"
                         value="<?php echo $category->get("category_id") ?>">
-                    <?php 
+                    <?php
                     echo $category->getLink();
                     $append = "<br>\n";
                 }
@@ -418,7 +418,7 @@ if ($num_thumbnails <= 0) {
                 foreach ($people as $person) {
                     ?>
                     <?php echo $append ?>
-                    <input type="checkbox" name="_remove_person__<?php echo $photo_id ?>[]" 
+                    <input type="checkbox" name="_remove_person__<?php echo $photo_id ?>[]"
                         value="<?php echo $person->get("person_id") ?>">
                     <?php echo $person->getLink() ?>
                     <?php
@@ -449,7 +449,7 @@ if ($num_thumbnails <= 0) {
         $pager_vars[$key] = $val;
     }
     $request_vars = $pager_vars;
-    echo pager($offset, $num_photos, $num_pages, $cells, 
+    echo pager($offset, $num_photos, $num_pages, $cells,
         $user->prefs->get("max_pager_size"), $request_vars, "_off");
 } // if photos
 ?>

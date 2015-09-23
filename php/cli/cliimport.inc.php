@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,12 +25,12 @@
 class CliImport extends Import {
     /**
      * Displays a progressbar on the CLI
-     * 
-     * The progressbar will not be wider than 60 characters, so we have 
+     *
+     * The progressbar will not be wider than 60 characters, so we have
      * 20 chars left for counter etc. on a 80 char screen
-     * the real width of the screen is not checked because it cannot be 
+     * the real width of the screen is not checked because it cannot be
      * done in PHP without external programs
-     * After displaying the progressbar, it will 'backspace' to the 
+     * After displaying the progressbar, it will 'backspace' to the
      * beginning of the line, so any error message will
      * not cause a distorted screen
      * @var int progress

@@ -9,7 +9,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -52,14 +52,14 @@ class photographer extends person implements Organizer {
             $photo->unsetPhotographer();
         }
     }
-   
+
     /**
-     * Return the number of photos this person has taken 
+     * Return the number of photos this person has taken
      * @return int count
      */
     public function getPhotoCount() {
         $user=user::getCurrent();
-        
+
         $ignore=null;
         $vars=array(
             "photographer_id" => $this->getId()

@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -47,7 +47,7 @@ class watermarkedPhoto extends photo {
                 $name = $this->get("name");
                 $image_path = conf::get("path.images") . "/" . $this->get("path") . "/" . $name;
                 $image=imagecreatefromjpeg($image_path);
-                $image=$this->watermark($image, $watermark_file, conf::get("watermark.pos.x"), 
+                $image=$this->watermark($image, $watermark_file, conf::get("watermark.pos.x"),
                     conf::get("watermark.pos.y"), conf::get("watermark.transparency"));
                 ob_start();
                     imagejpeg($image);
@@ -55,7 +55,7 @@ class watermarkedPhoto extends photo {
                 $jpeg=ob_get_clean();
                 $headers["Content-Length"]=strlen($jpeg);
                 $headers["Content-Disposition"]="inline; filename=" . $name;
-                // Return current time as last modified time 
+                // Return current time as last modified time
                 // this is debatable, we could also send the file time as last modified
                 $headers["Last-Modified"]=gmdate("D, d M Y H:i:s") . ' GMT';
                 $headers["Content-type"]="image/jpeg";
@@ -76,11 +76,11 @@ class watermarkedPhoto extends photo {
      * @param int transparency (0 = invisible, 100 = no transparency)
      * @return imageresource watermarked photo
      */
-    private function watermark($orig, $watermark, $positionX = "center", 
+    private function watermark($orig, $watermark, $positionX = "center",
       $positionY = "center", $transparency = 50) {
 
         $wm=imagecreatefromgif($watermark);
-        
+
         $width_orig=ImageSX($orig);
         $height_orig=ImageSY($orig);
 

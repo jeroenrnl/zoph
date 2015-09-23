@@ -10,7 +10,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,14 +26,14 @@
  */
 function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
-    $good_ops = array ( "=", "!=", "less than", "more than", ">", ">=", 
+    $good_ops = array ( "=", "!=", "less than", "more than", ">", ">=",
         "<", "<=", "like", "not like", "is in photo", "is not in photo" );
 
     $good_conj = array ( "and", "or" );
 
-    $good_fields= array ( "location_id", "rating", "photographer_id", 
-        "date", "time", "timestamp", "name", "path", "title", "view", "description", 
-        "width", "height", "size", "aperture", "camera_make", "camera_model", 
+    $good_fields= array ( "location_id", "rating", "photographer_id",
+        "date", "time", "timestamp", "name", "path", "title", "view", "description",
+        "width", "height", "size", "aperture", "camera_make", "camera_model",
         "compression", "exposure", "flash_used", "focal_length", "iso_equiv", "metering_mode" );
     $good_text= array ( "album", "category", "person", "photographer" );
 
@@ -99,7 +99,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         } else {
             $conj = "and";
         }
-        if (!in_array($conj, $good_conj)) 
+        if (!in_array($conj, $good_conj))
             { die ("Illegal conjunction: " . e($conj)); }
 
         if (!empty($vars[$index . "-op"])) {
@@ -107,12 +107,12 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         } else {
             $op = "=";
         }
-        if (!in_array($op, $good_ops)) 
+        if (!in_array($op, $good_ops))
             { die ("Illegal operator: " . e($op)); }
 
         if (!empty($vars[$index . "-children"])) {
             $object=explode("_", $key);
-            if($object[0]=="location") { $object[0] = "place"; } 
+            if($object[0]=="location") { $object[0] = "place"; }
             $obj=new $object[0]($val);
             $val_with_children=$obj->getBranchIds();
             $val=$val_with_children;
@@ -123,28 +123,28 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             else if ($op = "!=") { $op = "is not"; }
         }
 
-        if ($key == "text") { 
+        if ($key == "text") {
             if (strncasecmp($key, "text", 4) == 0) {
                 $key = $vars["_" . $key . $suffix];
             }
             if (!in_array($key, $good_text))
                 { die ("Illegal text search: " . e($key)); }
-              
+
             $val = escape_string($val);
             $key = escape_string($key);
         }
         if ($key == "person" || $key == "photographer") {
             $val = "%" . escape_string(strtolower($val)) . "%";
-            
-            $query = "select person_id from " . DB_PREFIX . "people where 
+
+            $query = "select person_id from " . DB_PREFIX . "people where
                         lower(concat(first_name, \" \", last_name)) like \"$val\"";
 
-            $people = person::getRecordsFromQuery($query); 
+            $people = person::getRecordsFromQuery($query);
 
 
             $key .= "_id";
             $val = "";
-            
+
             $op = "=";
 
             if ($people && count($people) > 0) {
@@ -164,7 +164,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $key = "album_id";
             $album_name = $val;
             $val = "-1";
-            if (strpos($album_name, "/")) { 
+            if (strpos($album_name, "/")) {
                 $hiersearch=true;
             }
             $search_string=explode("/", $album_name);
@@ -195,12 +195,12 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 }
             }
         }
-        
+
         if ($key == "category") {
             $key = "category_id";
             $cat_name = $val;
             $val = "-1";
-            if (strpos($cat_name, "/")) { 
+            if (strpos($cat_name, "/")) {
                 $hiersearch=true;
             }
             $search_string=explode("/", $cat_name);
@@ -246,8 +246,8 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 // the regexp matches a list of numbers, separated by comma's.
                 // "1" matches, "1," not, "1,2" matches "1,333" matches
                 // "1, a" not, etc.
-                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) { 
-                    die("$key must be numeric"); 
+                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) {
+                    die("$key must be numeric");
                 }
 
                 $op = "in";
@@ -266,7 +266,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 if ($where) { $where .= " $conj "; }
 
                 $from["$pc"] = "photo_categories";
-                
+
                 if (!preg_match("/^([0-9]+)+(,([0-9]+))*$/", $val)) { die("$key must be numeric"); }
 
                 $op = "in";
@@ -302,8 +302,8 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 // the regexp matches a list of numbers, separated by comma's.
                 // "1" matches, "1," not, "1,2" matches "1,333" matches
                 // "1, a" not, etc.
-                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) { 
-                    die("$key must be numeric"); 
+                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) {
+                    die("$key must be numeric");
                 }
                 $where .=
                     "(${ppl}.person_id $op (" . escape_string($val) . ")" .
@@ -317,11 +317,11 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         } else if($key == "userrating") {
             if ($where) { $where .= " AND "; }
             $ratinguser_id=$vars["_userrating_user"];
-            
+
             if(!($ratinguser_id && $user->is_admin())) {
                 $ratinguser_id=$user->get("user_id");
             }
-            
+
             if($val != "null") {
                 $from["pr"]="photo_ratings";
                 $where.=" pr.user_id=" . escape_string($ratinguser_id) .
@@ -384,7 +384,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             }
             if (!in_array($key, $good_fields))
                 { die ("Illegal field: " . e($key)); }
-              
+
             $key = "ph.$key";
 
             $val = escape_string($val);
@@ -401,7 +401,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
             if ($where) { $where .= " $conj "; }
             $where .= "(" . $key . " " . $op . " " . $val;
-            
+
             if ($op == "!=" ) {
                 $where .= " or " . $key . " is null)";
             } else {
@@ -429,7 +429,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         $where .= generate_excluded_people_clause(
             $excluded_people, $from_clause, $where);
     }
-    
+
     if (!empty($where)) { $where = "where $where"; }
 
     $num_photos = 0;
@@ -472,7 +472,7 @@ function generate_from_clause($from_array) {
         while (list($abbrev, $table) = each($from_array)) {
             $fromClause .= " JOIN ";
             $joinClause = " on ${abbrev}.photo_id = ph.photo_id";
-                
+
             $fromClause .= DB_PREFIX . "$table as $abbrev" . $joinClause;
         }
     }

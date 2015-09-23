@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -55,11 +55,27 @@ require_once "header.inc.php";
 <?php
 if ($user->is_admin()) {
     ?>
-      <span class="actionlink">
-        <a href="album.php?_action=new&amp;parent_album_id=<?php 
-            echo $album->get("album_id") ?>"><?php echo translate("new") ?>
-        </a>
-      </span>
+      <ul class="actionlink">
+        <li>
+            <a href="album.php?_action=new&amp;parent_album_id=<?php
+                echo $album->get("album_id") ?>"><?php echo translate("new") ?>
+            </a>
+        </li>
+        <li>
+            <a href="album.php?_action=edit&amp;album_id=<?php
+                echo $album->get("album_id") ?>">
+                <?php echo translate("edit") ?>
+          </a>
+        </li>
+        <?php if($album->get("coverphoto")): ?>
+        <li>
+            <a href="album.php?_action=update&amp;album_id=<?php
+                echo $album->get("album_id") ?>&amp;coverphoto=NULL">
+                <?php echo translate("unset coverphoto") ?>
+            </a>
+        </li>
+        <?php endif; ?>
+      </ul>
     <?php
 }
 ?>
@@ -92,29 +108,6 @@ if($show_orig) {
     ?>
     </h2>
     <?php
-    if ($user->is_admin()) {
-        ?>
-        <span class="actionlink">
-          <a href="album.php?_action=edit&amp;album_id=<?php 
-            echo $album->get("album_id") ?>">
-            <?php echo translate("edit") ?>
-          </a>
-        <?php
-        if($album->get("coverphoto")) {
-            ?>
-            |
-            <a href="album.php?_action=update&amp;album_id=<?php 
-                echo $album->get("album_id") ?>&amp;coverphoto=NULL">
-                <?php echo translate("unset coverphoto") ?>
-            </a>
-            <?php
-        }
-        ?>
-        </span>
-        <br>
-        <p>
-        <?php
-    }
     echo $album->displayCoverPhoto();
     ?>
     </p>
@@ -136,7 +129,7 @@ if($show_orig) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
             <span class="actionlink">
-                <a href="photos.php?album_id=<?php 
+                <a href="photos.php?album_id=<?php
                     echo $album->getBranchIds() . $sort ?>">
                   <?php echo translate("view photos") ?>
                 </a>
@@ -159,7 +152,7 @@ if($show_orig) {
     if ($photoCount > 0) {
         ?>
           <span class="actionlink">
-            <a href="photos.php?album_id=<?php 
+            <a href="photos.php?album_id=<?php
                 echo $album->get("album_id") . $sort ?>">
               <?php echo translate("view photos")?>
             </a>

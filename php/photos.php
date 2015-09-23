@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,7 +26,7 @@ require_once "include.inc.php";
 
 $_cols = (int) getvar("_cols");
 $_rows = (int) getvar("_rows");
-$_off = (int) getvar("_off"); 
+$_off = (int) getvar("_off");
 
 $_order = getvar("_order");
 $_dir = getvar("_dir");
@@ -74,7 +74,7 @@ if  ($num_thumbnails) {
     $name = isset($lightbox) ? "Lightbox" : "Photos";
 
     $title = sprintf(translate("$name (Page %s/%s)", 0), $page_num, $num_pages);
-    $title_bar = sprintf(translate("photos %s to %s of %s"), 
+    $title_bar = sprintf(translate("photos %s to %s of %s"),
         ($offset + 1), ($offset + $num), $num_photos);
 } else {
     $title = translate("No Photos Found");
@@ -85,7 +85,7 @@ if (!($num_thumbnails == 0 || $_cols <= 4)) {
     $width = ((THUMB_SIZE + 14) * $_cols) + 25;
     $default_width= conf::get("interface.width");
     if ($width > $default_width || strpos($default_width, "%")) {
-        $extrastyle = "body	{ width: " . $width . "px; }\n"; 
+        $extrastyle = "body	{ width: " . $width . "px; }\n";
     }
 }
 require_once "header.inc.php";
@@ -119,7 +119,7 @@ if ($user->is_admin()) {
     <?php
 }
 ?>
-<a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a> 
+<a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a>
 <?php
 if(conf::get("feature.download") && ($user->get("download") || $user->is_admin())) {
     ?>
@@ -149,7 +149,7 @@ if ($num_thumbnails <= 0) {
         $down = template::getImage("down1.gif");
         break;
     }
-    
+
     ?>
       <div id="sortorder">
         <?php echo create_form($vars, array ("_rows", "_cols", "_order", "_button")) ?>
@@ -188,14 +188,14 @@ if ($num_thumbnails <= 0) {
         if (getvar("_random")) {
             echo $thumbnails[$i]->getThumbnailLink() . "\n";
         } else {
-            echo $thumbnails[$i]->getThumbnailLink("photo.php?" . 
-                update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n"; 
+            echo $thumbnails[$i]->getThumbnailLink("photo.php?" .
+                update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n";
         }
 
         if (!empty($lightbox)) {
             ?>
             <div class="actionlink">
-              <a href="photos.php?<?php echo update_query_string($vars, "_photo_id", 
+              <a href="photos.php?<?php echo update_query_string($vars, "_photo_id",
                 $thumbnails[$i]->get("photo_id"), $ignore) ?>">x</a>
             </div>
             <?php
@@ -207,7 +207,7 @@ if ($num_thumbnails <= 0) {
     ?>
     <br>
     <?php
-    echo pager($offset, $num_photos, $num_pages, $cells, 
+    echo pager($offset, $num_photos, $num_pages, $cells,
       $user->prefs->get("max_pager_size"), $vars, "_off");
 } // if photos
 ?>

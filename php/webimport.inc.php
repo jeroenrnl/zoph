@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -53,12 +53,12 @@ class WebImport extends Import {
      */
     public static function photos(Array $files, Array $vars) {
         // thumbnails have already been created, no need to repeat...
-        conf::set("import.cli.thumbs", false); 
+        conf::set("import.cli.thumbs", false);
         conf::set("import.cli.exif", true);
         conf::set("import.cli.size", true);
         parent::photos($files, $vars);
     }
-    
+
     /**
      * Return a translated, textual error message from a PHP upload error
      *
@@ -69,7 +69,7 @@ class WebImport extends Import {
         switch ($error) {
         case UPLOAD_ERR_INI_SIZE:
             $errortext.=sprintf(translate("The uploaded file exceeds the " .
-                "upload_max_filesize directive (%s) in php.ini."), 
+                "upload_max_filesize directive (%s) in php.ini."),
                 ini_get("upload_max_filesize"));
             $errortext.=" " . sprintf(translate("This may also be caused by " .
                 "the max_post_size (%s) in php.ini."), ini_get("max_post_size"));
@@ -101,7 +101,7 @@ class WebImport extends Import {
 
     /**
      * Process uploaded file
-     * 
+     *
      * Catches the uploaded file, runs some checks and moves it into the
      * upload directory.
      * @param array PHP _FILE var with data about the uploaded file
@@ -109,7 +109,7 @@ class WebImport extends Import {
     public static function processUpload($file) {
         $filename=$file["name"];
         $tmp_name=$file["tmp_name"];
-        
+
         $error=$file["error"];
 
         if($error) {
@@ -133,7 +133,7 @@ class WebImport extends Import {
             try {
                 create_dir_recursive($dir);
             } catch (FileDirCreationFailedException $e) {
-                log::msg($dir . " does not exist, and I can not create it. (" . 
+                log::msg($dir . " does not exist, and I can not create it. (" .
                     $e->getMessage() . ")", log::FATAL, log::IMPORT);
                 die();
             }
@@ -149,17 +149,17 @@ class WebImport extends Import {
             if(!file_exists($dest)) {
                 move_uploaded_file($tmp_name, $dest);
             } else {
-                log::msg("A file named <b>" . $filename . 
+                log::msg("A file named <b>" . $filename .
                     "</b> already exists in <b>" . $dir . "</b>", log::FATAL, log::IMPORT);
             }
         } else {
-            log::msg("Directory <b>" . $dir . "</b> is not writable", 
+            log::msg("Directory <b>" . $dir . "</b> is not writable",
                 log::FATAL, log::IMPORT);
             return false;
         }
         return true;
     }
-    
+
     /**
      * Processes a file
      *
@@ -227,7 +227,7 @@ class WebImport extends Import {
      * @param string full path to file
      * @todo unpack_dir should be removed when done
      */
-    private static function unpackArchive(file $file) { 
+    private static function unpackArchive(file $file) {
         $dir = conf::get("path.images") . "/" . conf::get("path.upload");
         $mime=$file->getMime();
         switch($mime) {
@@ -249,8 +249,8 @@ class WebImport extends Import {
             break;
         }
         if (empty($extr)) {
-            log::msg("To be able to process an archive of type " . $mime . 
-                ", you need to set \"" . $msg . "\" in the configuration screen " . 
+            log::msg("To be able to process an archive of type " . $mime .
+                ", you need to set \"" . $msg . "\" in the configuration screen " .
                 " to a program that can unpack this file.", log::FATAL, log::IMPORT);
             touch($file . ".zophignore");
             return false;
@@ -262,7 +262,7 @@ class WebImport extends Import {
             mkdir($unpack_dir);
             rename($file, $unpack_file);
 
-            $cmd = "cd " . escapeshellarg($unpack_dir) . " && " . 
+            $cmd = "cd " . escapeshellarg($unpack_dir) . " && " .
                 $extr . " " .  escapeshellarg($unpack_file) . " 2>&1";
             system($cmd);
             if(file_exists($unpack_file)) {
@@ -283,7 +283,7 @@ class WebImport extends Import {
             }
         }
     }
-    
+
     /**
      * Resize an image before import
      *
@@ -295,7 +295,7 @@ class WebImport extends Import {
 
         $photo->set("path", conf::get("path.upload"));
         $photo->set("name", basename($file));
-        
+
         ob_start();
             $dir=conf::get("path.images") . "/" . conf::get("path.upload");
             $thumb_dir=$dir. "/" . THUMB_PREFIX;
@@ -334,7 +334,7 @@ class WebImport extends Import {
             return self::getProgressXML($search);
         }
     }
-            
+
     /**
      * Get XML indicating progress of a certain upload
      * This requires the APC PHP extension.
@@ -344,7 +344,7 @@ class WebImport extends Import {
         $xml = new DOMDocument('1.0','UTF-8');
         $rootnode=$xml->createElement(self::XMLROOT);
         $node=$xml->createElement(self::XMLNODE);
-            
+
 
         if(PHP_VERSION_ID < 50400) {
             if(function_exists("apc_fetch")) {
@@ -386,7 +386,7 @@ class WebImport extends Import {
         $current=$xml->createElement("current");
         $total=$xml->createElement("total");
         $filename=$xml->createElement("filename");
-        
+
         $id->appendChild($xml->createTextNode($uploadId));
         $current->appendChild($xml->createTextNode($progress['current']));
         $total->appendChild($xml->createTextNode($progress['total']));
@@ -401,7 +401,7 @@ class WebImport extends Import {
         $xml->appendChild($rootnode);
         return $xml;
     }
-    
+
 
     /**
      * Generate an XML file with thumbs in the import dir
@@ -415,11 +415,11 @@ class WebImport extends Import {
         foreach ($files as $file) {
             unset($icon);
             unset($status);
-            
+
             $md5=$file->getMD5();
-           
+
             $type=$file->type;
-            
+
             switch ($type) {
             case "image":
                 $thumb=THUMB_PREFIX . DIRECTORY_SEPARATOR . THUMB_PREFIX . "_" . $file->getName();
@@ -483,7 +483,7 @@ class WebImport extends Import {
         // only delete "related files", not the referenced file.
         $file->delete(true, true);
     }
-    
+
     /**
      * Delete a file
      *
@@ -501,7 +501,7 @@ class WebImport extends Import {
     /**
      * Get a file list from a list of MD5 hashes.
      *
-     * Take a list of MD5 hashes (in $vars["_import_image"]) and return an 
+     * Take a list of MD5 hashes (in $vars["_import_image"]) and return an
      * array of @see file objects
      * @param Array $vars
      */

@@ -39,11 +39,11 @@ class person extends zophTable implements Organizer {
 
 
     /** @var string The name of the database table */
-    protected static $table_name="people";
+    protected static $tableName="people";
     /** @var array List of primary keys */
-    protected static $primary_keys=array("person_id");
+    protected static $primaryKeys=array("person_id");
     /** @var array Fields that may not be empty */
-    protected static $not_null=array("first_name");
+    protected static $notNull=array("first_name");
     /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;
@@ -550,7 +550,7 @@ class person extends zophTable implements Organizer {
             $search=null;
         }
         $records=static::getAll($search,true);
-        $idname=static::$primary_keys[0];
+        $idname=static::$primaryKeys[0];
 
         foreach ($records as $record) {
             $newchild=$xml->createElement(static::XMLNODE);

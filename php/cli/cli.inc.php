@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,13 +46,13 @@ class cli {
     /**
      * Create cli object
      * @param User user doing the import
-     * @param int API version of the executable script. This is used to check if the executable 
+     * @param int API version of the executable script. This is used to check if the executable
      *            script is compatible with the scripts in php directory
      * @param $args array of CLI arguments
      */
     public function __construct(user $user, $api, array $args) {
         if($api != self::API) {
-            throw new CliAPINotCompatibleException("This Zoph installation is not compatible " . 
+            throw new CliAPINotCompatibleException("This Zoph installation is not compatible " .
                 "with the Zoph executable you are running.");
         }
         $this->user=$user;
@@ -81,7 +81,7 @@ class cli {
             $this->addNew();
             break;
         case "config":
-            $this->doConfig(); 
+            $this->doConfig();
             break;
         case "dumpconfig":
             $this->doDumpCondig();
@@ -106,7 +106,7 @@ class cli {
         foreach($files as $filename) {
             try {
                 if(arguments::$command=="import") {
-                    
+
                     $file=new file($filename);
                     $file->check();
 
@@ -161,7 +161,7 @@ class cli {
                 "Multiple photos with id $id were found. This is probably a bug");
         }
     }
-        
+
     /**
      * Looks up a file by filename
      * @todo Maybe this should be moved into the file object?
@@ -183,10 +183,10 @@ class cli {
             // absolute path given
 
             $path="/" . cleanup_path($path) . "/";
-            
+
             // check if path is in conf::get("path.images")
             if(substr($path, 0, strlen(conf::get("path.images")))!=conf::get("path.images")) {
-                throw new ImportFileNotInPathException($file ." is not in the images path (" . 
+                throw new ImportFileNotInPathException($file ." is not in the images path (" .
                     conf::get("path.images") . "), skipping.\n");
             } else {
                 $path=substr($path, strlen(conf::get("path.images")));
@@ -201,7 +201,7 @@ class cli {
         $photos=photo::getByName($filename, $path);
         if(sizeof($photos)==0) {
             throw new ImportFileNotFoundException($file ." not found.\n");
-        } else if (sizeof($photos)==1) {    
+        } else if (sizeof($photos)==1) {
             return $photos[0];
         } else {
             throw new ImportMultipleMatchesException("Multiple files named " . $file ." found.\n");
@@ -266,7 +266,7 @@ class cli {
     }
     /**
      * Add albums, categories, places, people that should be added because of --new or --autoadd
-     * if $vars is given, 
+     * if $vars is given,
      */
     public function addNew() {
         $vars=$this->args->getVars();
@@ -350,7 +350,7 @@ class cli {
         }
 
         if(conf::get("import.cli.verbose") > 0) {
-            echo "Setting config \"$name\" to \"$value\""  . 
+            echo "Setting config \"$name\" to \"$value\""  .
                 ( $default ? " (default)" : "" ) . "\n";
         }
 
@@ -358,7 +358,7 @@ class cli {
         $item->setValue($value);
         $item->update();
     }
-    
+
     /**
      * Process --dump-config
      */
@@ -388,14 +388,14 @@ class cli {
         $curlen=strlen($cur);
         foreach($this->files as $file) {
             if(substr($file, 0, $curlen) != $cur) {
-                throw new CliNotInCWDException("Sorry, --dirpattern can only be used when " . 
+                throw new CliNotInCWDException("Sorry, --dirpattern can only be used when " .
                     "importing files under the current dir. i.e. do not use absolute paths " .
                     "or '../' when specifying --dirpattern.");
             }
             $filename=substr($file, $curlen + 1);
             $dirs=explode("/", $filename);
             array_pop($dirs);
-            
+
             $photo=new photo();
             $photo->file["orig"]=$file;
 
@@ -502,7 +502,7 @@ OPTIONS:
     --[no-]exif
     --[no-]size
     --useids
-    --move 
+    --move
     --copy
     --[no-]dateddirs
     --[no-]hierarchical

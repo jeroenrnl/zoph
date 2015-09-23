@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -107,7 +107,7 @@ if ($action == "display") {
     ?>
     <h1>
         <span class="actionlink">
-          <a href="groups.php"><?php echo translate("return") ?></a> | 
+          <a href="groups.php"><?php echo translate("return") ?></a> |
           <a href="group.php?_action=edit&amp;group_id=<?php echo $group->get("group_id") ?>">
             <?php echo translate("edit") ?>
           </a> |
@@ -129,12 +129,12 @@ if ($action == "display") {
         <tr>
         <th><?php echo translate("name") ?></th>
         <th><?php echo translate("access level") ?></th>
-    <?php 
-    if (conf::get("watermark.enable")) { 
+    <?php
+    if (conf::get("watermark.enable")) {
         ?>
         <th><?php echo translate("watermark level") ?></th>
-        <?php 
-    } 
+        <?php
+    }
     ?>
         <th><?php echo translate("writable") ?></th>
         </tr>
@@ -148,15 +148,15 @@ if ($action == "display") {
             <tr>
               <td><?php echo $name ?></td>
               <td><?php echo $permissions->get("access_level") ?></td>
-            <?php 
-            if (conf::get("watermark.enable")) { 
+            <?php
+            if (conf::get("watermark.enable")) {
                 ?>
                 <td><?php echo $permissions->get("watermark_level") ?></td>
-                <?php 
-            } 
+                <?php
+            }
             ?>
               <td>
-                <?php echo $permissions->get("writable") == "1" 
+                <?php echo $permissions->get("writable") == "1"
                     ? translate("Yes") : translate("No") ?>
               </td>
             </tr>
@@ -216,7 +216,7 @@ if ($action == "display") {
         echo translate("Granting access to an album will also grant access to that album's " .
             "ancestors if required. Granting access to all albums will not overwrite " .
             "previously granted permissions.");
-        if (conf::get("watermark.enable")) { 
+        if (conf::get("watermark.enable")) {
             echo "<br>\n" . translate("A photo will be watermarked if the photo level is " .
                 "higher than the watermark level.");
         }
@@ -227,10 +227,10 @@ if ($action == "display") {
               <th colspan="2"><?php echo translate("name") ?></th>
               <th><?php echo translate("access level") ?></th>
         <?php
-        if (conf::get("watermark.enable")) { 
+        if (conf::get("watermark.enable")) {
             ?>
                <th><?php echo translate("watermark level") ?></th>
-            <?php 
+            <?php
         }
         ?>
                <th><?php echo translate("writable"); ?></th>
@@ -247,8 +247,8 @@ if ($action == "display") {
                <td>
                   <?php echo create_text_input("access_level_all", "5", 4, 2) ?>
                </td>
-        <?php 
-        if (conf::get("watermark.enable")) { 
+        <?php
+        if (conf::get("watermark.enable")) {
             ?>
                <td>
                   <?php echo create_text_input("watermark_level_all", "5", 4, 2) ?>
@@ -264,21 +264,21 @@ if ($action == "display") {
                <td>
                </td>
              <td>
-                <input type="hidden" name="group_id_new" 
+                <input type="hidden" name="group_id_new"
                     value="<?php echo $group->get("group_id") ?>">
                 <?php echo template::createPulldown("album_id_new", "", album::getSelectArray()) ?>
              </td>
              <td>
                 <?php echo create_text_input("access_level_new", "5", 4, 2) ?>
              </td>
-        <?php 
-        if (conf::get("watermark.enable")) { 
+        <?php
+        if (conf::get("watermark.enable")) {
             ?>
              <td>
                <?php echo create_text_input("watermark_level_new", "5", 4, 2) ?>
              </td>
-            <?php 
-        } 
+            <?php
+        }
         ?>
              <td>
                <?php echo template::createYesNoPulldown("writable_new", "0") ?>
@@ -298,32 +298,32 @@ if ($action == "display") {
                 ?>
                 <tr>
                   <td>
-                    <input type="checkbox" name="_remove_permission_album__<?php echo $id ?>" 
+                    <input type="checkbox" name="_remove_permission_album__<?php echo $id ?>"
                         value="1">
                   </td>
                   <td>
                     <?php echo $name ?>
                   </td>
                   <td>
-                    <input type="hidden" name="album_id__<?php echo $id ?>" 
+                    <input type="hidden" name="album_id__<?php echo $id ?>"
                       value="<?php echo $id ?>">
-                    <input type="hidden" name="group_id__<?php echo $id ?>" 
+                    <input type="hidden" name="group_id__<?php echo $id ?>"
                       value="<?php echo $group_id ?>">
-                    <?php echo create_text_input("access_level__$id", 
+                    <?php echo create_text_input("access_level__$id",
                         $permissions->get("access_level"), 4, 2) ?>
                   </td>
-                <?php 
-                if (conf::get("watermark.enable")) { 
+                <?php
+                if (conf::get("watermark.enable")) {
                     ?>
                       <td>
-                        <?php echo create_text_input("watermark_level__$id", 
+                        <?php echo create_text_input("watermark_level__$id",
                             $permissions->get("watermark_level"), 4, 2) ?>
                       </td>
                     <?php
                 }
                 ?>
                   <td>
-                    <?php echo template::createYesNoPulldown("writable__$id", 
+                    <?php echo template::createYesNoPulldown("writable__$id",
                         $permissions->get("writable")) ?>
                   </td>
                 </tr>

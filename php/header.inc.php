@@ -1,14 +1,14 @@
 <?php
 /**
  * Display the header of the page
- * 
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,19 +33,19 @@ $icons=array(
     "children" => template::getImage("icons/folder.png"),
     "geo-photo" => template::getImage("icons/geo-photo.png"),
     "geo-place" => template::getImage("icons/geo-place.png"),
-    "resize" => template::getImage("icons/resize.png"), 
+    "resize" => template::getImage("icons/resize.png"),
     "unpack" => template::getImage("icons/unpack.png"),
     "remove" => template::getImage("icons/remove.png"),
     "down2" => template::getImage("down2.gif"),
         "pleasewait" => template::getImage("pleasewait.gif")
-   ); 
+   );
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link type="text/css" rel="stylesheet" href="css.php">
-        <link type="image/png" rel="icon" 
+        <link type="image/png" rel="icon"
             href="<?php echo template::getImage("icons/favicon.png") ?>">
         <script type="text/javascript">
             var template = "<?php echo conf::get("interface.template"); ?>";
@@ -56,7 +56,7 @@ $icons=array(
             };
 
         </script>
-        
+
         <script type="text/javascript" src="js/util.js"></script>
         <script type="text/javascript" src="js/xml.js"></script>
         <script type="text/javascript" src="js/thumbview.js"></script>
@@ -78,17 +78,17 @@ if(conf::get("interface.autocomplete")) {
 }
 if(conf::get("maps.provider")) {
     ?>
-        <script type="text/javascript" 
+        <script type="text/javascript"
             src="js/mxn/mxn.js?(<?php echo conf::get("maps.provider"); ?>)">
         </script>
         <script type="text/javascript" src="js/maps.js"></script>
         <script type="text/javascript" src="js/custommaps.js"></script>
     <?php
-    if(conf::get("maps.geocode")) { 
+    if(conf::get("maps.geocode")) {
         ?>
         <script type="text/javascript" src="js/geocode.js"></script>
-        <?php 
-    }        
+        <?php
+    }
     switch (strtolower(conf::get("maps.provider"))) {
     case 'googlev3':
         ?>

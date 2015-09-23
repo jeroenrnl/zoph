@@ -36,11 +36,11 @@ class album extends zophTreeTable implements Organizer {
     const XMLNODE="album";
 
     /** @var string The name of the database table */
-    protected static $table_name="albums";
+    protected static $tableName="albums";
     /** @var array List of primary keys */
-    protected static $primary_keys=array("album_id");
+    protected static $primaryKeys=array("album_id");
     /** @var array Fields that may not be empty */
-    protected static $not_null=array("album");
+    protected static $notNull=array("album");
     /** @var bool keep keys with insert. In most cases the keys
                   are set by the db with auto_increment */
     protected static $keepKeys = false;
@@ -297,7 +297,7 @@ class album extends zophTreeTable implements Organizer {
                 array(
                     translate("pageset"),
                     template::createPulldown("pageset", $this->get("pageset"),
-                        get_pageset_select_array())),
+                        template::createSelectArray(pageset::getRecords("title"), array("title"), true))),
             "sortname" =>
                 array(
                     translate("sort name"),

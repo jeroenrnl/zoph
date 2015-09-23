@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,7 +29,7 @@ if(!ZOPH) { die("Illegal call"); }
             "geotag %s photos by clicking 'geotag'."), $tpl_total_count); ?>
     <?php else: ?>
         <?php printf(translate("The location of %s photos has been determined. You can " .
-            "check the results below. Click 'geotag' to geotag all %s photos."), 
+            "check the results below. Click 'geotag' to geotag all %s photos."),
             $tpl_tagged_count, $tpl_total_count); ?>
     <?php endif; ?>
 <?php else: ?>

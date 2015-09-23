@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49,7 +49,7 @@ class confItemSelect extends confItem {
             $this->addOption($key, $desc);
         }
     }
-   
+
     /**
      * Get array of options
      * @return array options
@@ -58,7 +58,7 @@ class confItemSelect extends confItem {
         return $this->options;
     }
 
-    /** 
+    /**
      * Check value
      * check if a specific value is legal for this option
      * @param string value

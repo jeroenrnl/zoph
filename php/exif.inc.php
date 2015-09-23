@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,7 +29,7 @@ function process_exif($image) {
     $exifdata = array();
     $file=new file($image);
     $mime=$file->getMime();
-    
+
     if($mime == "image/jpeg") {
         $exif = read_exif_data($image);
     } else {
@@ -142,7 +142,7 @@ function process_exif($image) {
         list($a, $b) = explode('/', $exif["FNumber"]);
         if($b>0) {
             $exifdata["aperture"] = sprintf("f/%.1f", $a / $b);
-        } 
+        }
     }
     else if (isset($exif["ApertureValue"])) {
         list($a, $b) = explode('/', $exif["ApertureValue"]);
@@ -215,7 +215,7 @@ function process_exif($image) {
         $exifdata["comment"] = $exif["Comment"];
     }
 
-    if (isset($exif["GPSLatitudeRef"]) && isset($exif["GPSLatitude"]) && 
+    if (isset($exif["GPSLatitudeRef"]) && isset($exif["GPSLatitude"]) &&
         isset($exif["GPSLongitudeRef"]) && isset($exif["GPSLongitude"])) {
         $latarray=$exif["GPSLatitude"];
 
@@ -239,7 +239,7 @@ function process_exif($image) {
             $lat = $lat * -1;
         }
         $exifdata["lat"]=$lat;
-        
+
         $lonarray=$exif["GPSLongitude"];
 
         $londegarray=explode("/", $lonarray[0]);
@@ -264,7 +264,7 @@ function process_exif($image) {
             $exifdata["alt"]=$alt;
         }
         */
-    } 
+    }
 
     return $exifdata;
 }
