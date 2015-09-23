@@ -102,12 +102,17 @@ class page extends zophTable {
      * @param pageset The pageset to look in
      */
     public function getOrder(pageset $pageset) {
-        $sql = "select page_order from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id=" . $pageset->getId() . " and " .
-            " page_id=" . $this->getId() . " limit 1";
-        $result=query($sql, "Could not get current order");
-        if (num_rows($result)) {
-            return intval(result($result, 0));
+        $qry=new select(array("pgps" => "pages_pageset"));
+        $qry->addFields(array("page_order"));
+        $where=new clause("pageset_id=:psid");
+        $where->addAnd(new clause("page_id=:pageid"));
+        $qry->addParam(new param(":psid", $pageset->getId(), PDO::PARAM_INT));
+        $qry->addParam(new param(":pageid", $this->getId(), PDO::PARAM_INT));
+        $qry->where($where);
+        $qry->addLimit(1);
+        $stmt=$qry->execute();
+        if ($stmt->rowCount()) {
+            return intval($stmt->fetchColumn());
         } else {
             return false;
         }
@@ -117,9 +122,12 @@ class page extends zophTable {
      * Get the pagesets this page is in
      */
     public function getPagesets() {
-        $sql = "select pageset_id from " . DB_PREFIX . "pages_pageset" .
-            " where page_id = " . $this->getId();
-        return pageset::getRecordsFromQuery($sql);
+        $qry=new select(array("pgps" => "pages_pageset"));
+        $qry->addFields(array("pageset_id"));
+        $where=new clause("page_id=:pageid");
+        $qry->addParam(new param(":pageid", $this->getId(), PDO::PARAM_INT));
+        $qry->where($where);
+        return pageset::getRecordsFromQuery($qry);
     }
 
     /**
