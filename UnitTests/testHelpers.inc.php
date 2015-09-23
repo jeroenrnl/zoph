@@ -90,8 +90,37 @@ class helpers {
         return $track;
     }
 
+    public static function createPagesPagesets($num=10) {
+        $pagesets=array();
+        $psIds=array();
+        $pIds=array();
+        for ($i=0; $i<=1; $i++) {
+            $pagesets[$i]=new pageset();
+            $pagesets[$i]->set("title", "Test Page " . $i);
+            $pagesets[$i]->insert();
+            $psIds[]=$pagesets[$i]->getId();
+        }
 
+        for ($i=1; $i<=$num; $i++) {
+            $page=new page();
+            $page->set("title", "Test Page " . $i);
+            $page->set("text", "Test Page [b]" . $i . "[/b]");
+            $page->insert();
 
+            $pIds[]=$page->getId();
+
+            // Add even pages to $pagesets[0] and odd pages to $pagesets[1]
+            $pagesets[$i%2]->addPage($page);
+
+            // Add page 1 and 2 to the other as well
+            if ($i == 1) {
+                $pagesets[0]->addPage($page);
+            } else if ($i == 2) {
+                $pagesets[1]->addPage($page);
+            }
+        }
+        return array($psIds, $pIds);
+    }
 }
 
 ?>
