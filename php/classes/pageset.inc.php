@@ -117,7 +117,6 @@ class pageset extends zophTable {
 
     /**
      * Get the number of pages in this pageset
-     * @param page Page to remove
      */
     public function getPageCount() {
         $sql = "select count(page_id) from " . DB_PREFIX . "pages_pageset" .
@@ -210,6 +209,7 @@ class pageset extends zophTable {
      * be nicely numbered 1, 2, 3, etc. but there may be holes in the list
      * so this function and getPrevOrder() determine the next or previous
      * value of page_order.
+     * @param int Get the next order after...
      */
     private function getNextOrder($order) {
         $sql = "select min(page_order) from " . DB_PREFIX . "pages_pageset" .
@@ -225,6 +225,7 @@ class pageset extends zophTable {
      * be nicely numbered 1, 2, 3, etc. but there may be holes in the list
      * so this function and getiNextOrder() determine the next or previous
      * value of page_order.
+     * @param int Get the previous order before...
      */
     private function getPrevOrder($order) {
         $sql = "select max(page_order) from " . DB_PREFIX . "pages_pageset" .

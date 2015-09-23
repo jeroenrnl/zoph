@@ -124,7 +124,7 @@ class page extends zophTable {
 
     /**
      * Get a table of pages
-     * @param Array array of pages to show
+     * @param array array of pages to show
      * @param pageset Pageset to display
      * @return block template to display
      */
