@@ -36,6 +36,8 @@ abstract class zophTreeTable extends zophTable {
     protected $children;
     protected $ancestors;
 
+    abstract public function getChildren($order = null);
+
     /**
      * Deletes a record along with all of its descendants.
      * @param array Names of tables from which entries also should be deleted.
@@ -72,32 +74,6 @@ abstract class zophTreeTable extends zophTable {
     }
 
 
-    /*
-     * Gets the children of this record.
-     */
-    public function getChildren($order = null) {
-
-        if ($this->children) {
-            return $this->children;
-        }
-        $key = static::$primaryKeys[0];
-        $id = (int) $this->getId();
-        if (!$id) {
-            return;
-        }
-
-        $qry = new select(static::$tableName);
-        $qry->where(new clause("parent_" . $key . "=:parent"));
-        $qry->addParam(new param(":parent", $key, PDO::PARAM_INT));
-
-        if ($order) {
-            $qry->addOrder($order);
-        }
-
-        $this->children = static::getRecordsFromQuery($sql);
-        return $this->children;
-
-    }
 
     /*
      * Gets the ancestors of this record.
