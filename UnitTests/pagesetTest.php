@@ -187,8 +187,7 @@ class pagesetTest extends PHPUnit_Framework_TestCase {
         $pageset2->lookup();
 
         // Check if page 1 is still at the top in the other pageset
-        // This test fails due to a known bug
-        //$this->assertEquals(self::$pIds[0], $pageset2->getPages(0)[0]->getId());
+        $this->assertEquals(self::$pIds[0], $pageset2->getPages(0)[0]->getId());
 
         // Move the page back up
         $pageset->moveUp($page);
