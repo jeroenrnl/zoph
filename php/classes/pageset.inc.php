@@ -106,22 +106,26 @@ class pageset extends zophTable {
      * @param int Specific page to get instead of all
      */
     public function getPages($pagenum=null) {
-        $sql = "select page_id from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id = " . $this->getId() .
-            " order by page_order";
+        $qry=new select(array("pps" => "pages_pageset"));
+        $qry->addFields(array("page_id"));
+        $qry->where(new clause("pageset_id=:pagesetid"));
+        $qry->addParam(new param(":pagesetid", $this->getId(), PDO::PARAM_INT));
+        $qry->addOrder("page_order");
         if ($pagenum) {
-            $sql.=" limit " . escape_string($pagenum) . ", 1";
+            $qry->addLimit(1, (int) $pagenum);
         }
-        return page::getRecordsFromQuery($sql);
+        return page::getRecordsFromQuery($qry);
     }
 
     /**
      * Get the number of pages in this pageset
      */
     public function getPageCount() {
-        $sql = "select count(page_id) from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id = " . $this->get("pageset_id");
-        return static::getCountFromQuery($sql);
+        $qry=new select(array("pps" => "pages_pageset"));
+        $qry->addFunction(array("count" => "COUNT(page_id)"));
+        $qry->where(new clause("pageset_id=:pagesetid"));
+        $qry->addParam(new param(":pagesetid", $this->getId(), PDO::PARAM_INT));
+        return static::getCountFromQuery($qry);
     }
 
     /**
@@ -134,11 +138,11 @@ class pageset extends zophTable {
      */
     public function addPage(page $page) {
         if (!$page->getOrder($this)) {
-            $sql = "insert into " . DB_PREFIX . "pages_pageset " .
-                "values(" . $this ->get("pageset_id") . ", " .
-                escape_string($page->getId()) . ", " .
-                ($this->getMaxOrder() + 1) . ")";
-            query($sql, "Could not add page to pageset");
+            $qry=new insert(array("pages_pageset"));
+            $qry->addParam(new param(":pageset_id", $this->getId(), PDO::PARAM_INT));
+            $qry->addParam(new param(":page_id", $page->getId(), PDO::PARAM_INT));
+            $qry->addParam(new param(":page_order", $this->getMaxOrder() + 1, PDO::PARAM_INT));
+            $qry->execute();
         }
     }
 
@@ -147,10 +151,14 @@ class pageset extends zophTable {
      * @param page Page to remove
      */
     public function removePage(page $page) {
-        $sql = "delete from " . DB_PREFIX . "pages_pageset " .
-            "where pageset_id=" . $this ->getId() . " and " .
-            "page_id=" . $page->getId();
-        query($sql, "Could not remove page from pageset");
+        $qry=new delete(array("pages_pageset"));
+        $where=new clause("pageset_id=:pagesetid");
+        $where->addAnd(new clause("page_id=:pageid"));
+        $qry->addParam(new param(":pagesetid", $this->getId(), PDO::PARAM_INT));
+        $qry->addParam(new param(":pageid", $page->getId(), PDO::PARAM_INT));
+        $qry->where($where);
+
+        $qry->execute();
     }
 
     /**
@@ -160,15 +168,11 @@ class pageset extends zophTable {
     public function moveUp(page $page) {
         $order=$page->getOrder($this);
         if ($order>=2) {
-            $prevorder=$this->getPrevOrder($order);
+            $currentOrder=new param(":curorder", $order, PDO::PARAM_INT);
+            $newOrder=new param(":neworder", $this->getPrevOrder($order), PDO::PARAM_INT);
+            $pageId=new param(":pageid", $page->getId(), PDO::PARAM_INT);
 
-            /** @todo This messes up ALL page orders, not just for this pageset! */
-            $sql="update zoph_pages_pageset set page_order=" . $order .
-                " where page_order=" . $prevorder;
-            query($sql, "Could not change order");
-            $sql="update zoph_pages_pageset set page_order=" . $prevorder .
-                " where page_id=" . $page->getId();
-            query($sql, "Could not change order");
+            $this->move($currentOrder, $newOrder, $pageId);
         }
     }
 
@@ -180,16 +184,55 @@ class pageset extends zophTable {
         $order=$page->getOrder($this);
         $max=$this->getMaxOrder();
         if ($order!=0 && $order<$max) {
-            $nextorder=$this->getNextOrder($order);
-            /** @todo This messes up ALL page orders, not just for this pageset! */
-            $sql="update zoph_pages_pageset set page_order=" . $order .
-                " where page_order=" . $nextorder;
-            query($sql, "Could not change order");
-            $sql="update zoph_pages_pageset set page_order=" . $nextorder .
-                " where page_id=" . $page->GetId();
-            query($sql, "Could not change order");
+            $currentOrder=new param(":curorder", $order, PDO::PARAM_INT);
+            $newOrder=new param(":neworder", $this->getNextOrder($order), PDO::PARAM_INT);
+            $pageId=new param(":pageid", $page->getId(), PDO::PARAM_INT);
 
+            $this->move($currentOrder, $newOrder, $pageId);
         }
+    }
+
+    /**
+     * Move a page up or down in a pageset
+     * First, it changes the page that has the new order for the page we want to move
+     * to the old order for that page.
+     * For example, if we have a pageset with 2 pages, page 1 and 2, in that order:
+     * pageId = 1, order = 1
+     * pageId = 2, order = 2
+     * [step 1]
+     * We are going to move page 2 up, then after the first action, it will look like this:
+     * pageId = 1, order = 1
+     * pageId = 2, order = 1
+     * [step 2]
+     * Then finally, we update the order for the page we are actually moving:
+     * pageId = 1, order = 2
+     * pageId = 2, order = 1
+     * @param param currentOrder: a database parameter for the current order
+     * @param param newOder: a database parameter for the new order
+     * @param param pageId: a database parameter for the pageId.
+     */
+    private function move(param $currentOrder, param $newOrder, param $pageId) {
+        $pagesetId=new param(":pagesetid", $this->getId(), PDO::PARAM_INT);
+
+        // [step 1]
+        $qry=new update(array("pages_pageset"));
+        $qry->addSet("page_order", "curorder");
+        $where=new clause("page_order=:neworder");
+        $where->addAnd(new clause("pageset_id=:pagesetid"));
+        $qry->where($where);
+        $qry->addParams(array($currentOrder, $newOrder, $pagesetId));
+
+        $qry->execute();
+
+        // [step 2]
+        $qry=new update(array("pages_pageset"));
+        $qry->addSet("page_order", "neworder");
+        $where=new clause("page_id=:pageid");
+        $where->addAnd(new clause("pageset_id=:pagesetid"));
+        $qry->where($where);
+        $qry->addParams(array($newOrder, $pageId, $pagesetId));
+
+        $qry->execute();
     }
 
     /**
@@ -197,10 +240,13 @@ class pageset extends zophTable {
      * @return int maximum page_order
      */
     private function getMaxOrder() {
-        $sql = "select max(page_order) from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id=" . $this->getId();
-        $result=query($sql, "Could not get max order");
-        return intval(result($result, 0));
+        $qry=new select(array("pps" => "pages_pageset"));
+        $qry->addFunction(array("max_order" => "MAX(page_order)"));
+        $qry->where(new clause("pageset_id=:pagesetid"));
+        $qry->addParam(new param(":pagesetid", $this->getId(), PDO::PARAM_INT));
+
+        $stmt=$qry->execute();
+        return intval($stmt->fetchColumn());
     }
 
     /**
@@ -212,11 +258,16 @@ class pageset extends zophTable {
      * @param int Get the next order after...
      */
     private function getNextOrder($order) {
-        $sql = "select min(page_order) from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id=" . $this->getId() .
-            " and page_order>" . $order;
-        $result=query($sql, "Could not get max order");
-        return intval(result($result, 0));
+        $qry=new select(array("pps" => "pages_pageset"));
+        $qry->addFunction(array("next_order" => "MIN(page_order)"));
+        $where=new clause("pageset_id=:pagesetid");
+        $where->addAnd(new clause("page_order>:order"));
+        $qry->where($where);
+        $qry->addParam(new param(":pagesetid", $this->getId(), PDO::PARAM_INT));
+        $qry->addParam(new param(":order", $order, PDO::PARAM_INT));
+
+        $stmt=$qry->execute();
+        return intval($stmt->fetchColumn());
     }
 
     /**
@@ -228,11 +279,16 @@ class pageset extends zophTable {
      * @param int Get the previous order before...
      */
     private function getPrevOrder($order) {
-        $sql = "select max(page_order) from " . DB_PREFIX . "pages_pageset" .
-            " where pageset_id=" . $this->getId() .
-            " and page_order<" . $order;
-        $result=query($sql, "Could not get max order");
-        return intval(result($result, 0));
+        $qry=new select(array("pps" => "pages_pageset"));
+        $qry->addFunction(array("prev_order" => "MAX(page_order)"));
+        $where=new clause("pageset_id=:pagesetid");
+        $where->addAnd(new clause("page_order<:order"));
+        $qry->where($where);
+        $qry->addParam(new param(":pagesetid", $this->getId(), PDO::PARAM_INT));
+        $qry->addParam(new param(":order", $order, PDO::PARAM_INT));
+
+        $stmt=$qry->execute();
+        return intval($stmt->fetchColumn());
     }
 
     /**
