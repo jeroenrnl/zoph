@@ -57,7 +57,7 @@ class comment extends zophTable {
      * Update existing comment in the db
      */
     public function update() {
-        $this->set("timestamp","now()");
+        $this->set("timestamp", "now()");
         parent::update();
         $this->lookup();
     }
@@ -66,7 +66,9 @@ class comment extends zophTable {
      * Delete a comment from the db
      */
     public function delete() {
-        if(!$this->get("comment_id")) { return; }
+        if (!$this->getId() {
+            return;
+        }
         parent::delete();
 
         $sql = "delete from " . DB_PREFIX . "photo_comments where comment_id=";
@@ -84,7 +86,7 @@ class comment extends zophTable {
         $date=$this->get("comment_date");
         $changed=$this->get("timestamp");
 
-        $zophcode = new zophCode\parser($this->get("comment"), array("b","i", "u"));
+        $zophcode = new zophCode\parser($this->get("comment"), array("b", "i", "u"));
         $comment="<div>" . $zophcode . "</div>";
 
         return array(
@@ -113,12 +115,14 @@ class comment extends zophTable {
      * Get the photo that this comment belongs to
      */
     public function getPhoto() {
-        if(!$this->get("comment_id")) { return; }
+        if (!$this->getId() {
+            return;
+        }
         $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
             " where comment_id=" . (int) $this->getId() .
             " limit 1";
         $result=photo::getRecordsFromQuery($sql);
-        if($result[0]) {
+        if ($result[0]) {
             $result[0]->lookup();
             return $result[0];
         } else {
@@ -161,11 +165,11 @@ class comment extends zophTable {
             "subject"       => $this->get("subject"),
             "commentdate"   => $this->get("comment_date"),
             "userlink"      => $this->getUserLink(),
-            "zophcode"      => new zophCode\parser($this->get("comment"), array("b","i", "u")),
+            "zophcode"      => new zophCode\parser($this->get("comment"), array("b", "i", "u")),
             "actionlinks"   => null
 
         );
-        
+
         if ($user->is_admin() || $this->isOwner($user)) {
             $tpl_data["actionlinks"]=array(
                 translate("display")    => "comment.php?_action=display&amp;comment_id=" .  $this->getId(),
@@ -174,7 +178,7 @@ class comment extends zophTable {
             );
         }
 
-        if($thumbnail) {
+        if ($thumbnail) {
             $tpl_data["thumbnail"]=$photo->getThumbnailLink();
         }
 

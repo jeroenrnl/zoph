@@ -389,7 +389,7 @@ class photoTest extends ZophDataBaseTestCase {
         $obj->addToPhoto($photo);
         
         $this->assertInstanceOf("comment", $obj);
-        $this->assertEquals($obj->get_photo()->getId(), $photo->getId());
+        $this->assertEquals($obj->getPhoto()->getId(), $photo->getId());
     }
 
     /**
@@ -403,7 +403,7 @@ class photoTest extends ZophDataBaseTestCase {
         $actual=array();
         foreach($comments as $comment) {
             $this->assertInstanceOf("comment", $comment);
-            $this->assertEquals($comment->get_photo()->getId(), $photo->getId());
+            $this->assertEquals($comment->getPhoto()->getId(), $photo->getId());
             $actual[]=$comment->getId();
         }
 
