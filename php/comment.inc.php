@@ -43,20 +43,20 @@ class comment extends zophTable {
     /** @var string URL for this class */
     protected static $url="comment.php?comment_id=";
 
-    function insert() {
+    public function insert() {
         $this->set("comment_date", "now()");
         $this->set("ipaddr", $_SERVER['REMOTE_ADDR']);
         parent::insert();
         $this->lookup();
     }
 
-    function update() {
+    public function update() {
         $this->set("timestamp","now()");
         parent::update();
         $this->lookup();
     }
 
-    function delete() {
+    public function delete() {
         if(!$this->get("comment_id")) { return; }
         parent::delete();
 
@@ -67,7 +67,7 @@ class comment extends zophTable {
     }
 
 
-    function getDisplayArray($user = null) {
+    public function getDisplayArray($user = null) {
         $date=$this->get("comment_date");
         $changed=$this->get("timestamp");
 
@@ -85,7 +85,7 @@ class comment extends zophTable {
         );
     }
 
-    function lookup_user() {
+    private function lookup_user() {
         $comment_user = new user($this->get("user_id"));
         $comment_user->lookup();
         $user_name = $comment_user->get("user_name");
@@ -98,7 +98,7 @@ class comment extends zophTable {
         return $return;
     }
 
-    function get_photo() {
+    public function get_photo() {
         if(!$this->get("comment_id")) { return; }
         $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
             " where comment_id=" . (int) $this->getId() .
@@ -112,7 +112,7 @@ class comment extends zophTable {
         }
     }
 
-    function addToPhoto(photo $photo) {
+    public function addToPhoto(photo $photo) {
         $sql = "insert into " . DB_PREFIX . "photo_comments values" .
             "(" . (int) $photo->getId() . ", " . (int) $this->getId() . ")";
 
@@ -120,7 +120,7 @@ class comment extends zophTable {
         query($sql, "Failed to add comment:");
     }
 
-    function is_owner($user) {
+    public function is_owner($user) {
         if($user->getId()==$this->get("user_id")) {
             return true;
         } else {
@@ -128,7 +128,7 @@ class comment extends zophTable {
         }
     }
 
-    function toHTML($user, $thumbnail=null) {
+    public function toHTML($user, $thumbnail=null) {
         $this->lookup();
         $photo=$this->get_photo();
 
