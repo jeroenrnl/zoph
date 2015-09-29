@@ -43,6 +43,9 @@ class comment extends zophTable {
     /** @var string URL for this class */
     protected static $url="comment.php?comment_id=";
 
+    /**
+     * Insert a new comment into the db
+     */
     public function insert() {
         $this->set("comment_date", "now()");
         $this->set("ipaddr", $_SERVER['REMOTE_ADDR']);
@@ -50,12 +53,18 @@ class comment extends zophTable {
         $this->lookup();
     }
 
+    /**
+     * Update existing comment in the db
+     */
     public function update() {
         $this->set("timestamp","now()");
         parent::update();
         $this->lookup();
     }
 
+    /**
+     * Delete a comment from the db
+     */
     public function delete() {
         if(!$this->get("comment_id")) { return; }
         parent::delete();
@@ -66,8 +75,12 @@ class comment extends zophTable {
         query($sql, "Could not clean comment from photo");
     }
 
-
-    public function getDisplayArray($user = null) {
+    /**
+     * Get array to display comment data
+     * @return array display array
+     */
+    public function getDisplayArray() {
+        $user=user::getCurrent();
         $date=$this->get("comment_date");
         $changed=$this->get("timestamp");
 
@@ -77,7 +90,7 @@ class comment extends zophTable {
         return array(
             translate("subject") => $this->get("subject"),
             translate("date") => $date,
-            translate("user") => $this->lookupUser(),
+            translate("user") => $this->getUserLink(),
             translate("IP address") => $user->is_admin() ? $this->get("ipaddr") : "<i>" .
                 translate("only visible for admin users") . "</i>",
             translate("comment") => $comment,
@@ -85,19 +98,20 @@ class comment extends zophTable {
         );
     }
 
-    private function lookupUser() {
-        $comment_user = new user($this->get("user_id"));
-        $comment_user->lookup();
-        $user_name = $comment_user->get("user_name");
-        $comment_user->lookup_person();
-        $comment_person = $comment_user->person->getName();
-        $comment_person_id = (int) $comment_user->person->getId();
-        $return = sprintf("<a href=\"user.php?user_id=%s\">%s</a> " .
-            "(<a href=person.php?person_id=%s>%s</a>)", $this->get("user_id"),
-            $user_name, $comment_person_id, $comment_person);
-        return $return;
+    /**
+     * Lookup user that created this comment and return a link
+     */
+    private function getUserLink() {
+        $user = new user($this->get("user_id"));
+        $user->lookup();
+        $user->lookup_person();
+
+        return $user->getLink() . " (" . $user->person->getLink() . ")";
     }
 
+    /**
+     * Get the photo that this comment belongs to
+     */
     public function getPhoto() {
         if(!$this->get("comment_id")) { return; }
         $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
@@ -112,6 +126,9 @@ class comment extends zophTable {
         }
     }
 
+    /**
+     * Add this comment to a photo
+     */
     public function addToPhoto(photo $photo) {
         $sql = "insert into " . DB_PREFIX . "photo_comments values" .
             "(" . (int) $photo->getId() . ", " . (int) $this->getId() . ")";
@@ -120,52 +137,50 @@ class comment extends zophTable {
         query($sql, "Failed to add comment:");
     }
 
+    /**
+     * Return whether the given user is the owner (creator) of this comment
+     * @param user User to check
+     * @return bool true: user is owner, false: user is not owner
+     */
     public function isOwner($user) {
-        if($user->getId()==$this->get("user_id")) {
-            return true;
-        } else {
-            return false;
-        }
+        return ($user->getId()==$this->get("user_id"));
     }
 
-    public function toHTML($user, $thumbnail=null) {
+    /**
+     * Display this comment
+     * @param bool Display a thumbnail of the photo this comment belongs to
+     * @return block Template block
+     */
+    public function toHTML($thumbnail=false) {
+        $user=user::getCurrent();
+
         $this->lookup();
         $photo=$this->getPhoto();
 
-        $html = "<div class=\"comment\">\n";
-        $html .= "<h3>\n";
+        $tpl_data=array(
+            "subject"       => $this->get("subject"),
+            "commentdate"   => $this->get("comment_date"),
+            "userlink"      => $this->getUserLink(),
+            "zophcode"      => new zophCode\parser($this->get("comment"), array("b","i", "u")),
+            "actionlinks"   => null
 
+        );
+        
         if ($user->is_admin() || $this->isOwner($user)) {
-            $html .= "<span class=\"actionlink\">\n";
-            $html .= "<a href=\"comment.php?_action=display&amp;comment_id=" .
-                $this->get("comment_id") . "\">\n";
-            $html .= translate("display") . "</a> | ";
-
-            $html .= "<a href=\"comment.php?_action=edit&amp;comment_id=" .
-                $this->get("comment_id") . "\">";
-            $html .= translate("edit") . "</a> | ";
-            $html .= "<a href=\"comment.php?_action=delete&amp;comment_id=" .
-                $this->get("comment_id") ."\">";
-            $html .= translate("delete") . "</a>\n";
-            $html .= "</span>\n";
+            $tpl_data["actionlinks"]=array(
+                translate("display")    => "comment.php?_action=display&amp;comment_id=" .  $this->getId(),
+                translate("edit")       => "comment.php?_action=edit&amp;comment_id=" .  $this->getId(),
+                translate("delete")     => "comment.php?_action=delete&amp;comment_id=" .  $this->getId()
+            );
         }
 
-        $html .= $this->get("subject") . "</h3>\n";
-        $html .= "<div class=\"commentinfo\">\n";
-        $html .= $this->get("comment_date");
-        $html .= " " . translate("by",0) . " <b>" . $this->lookupUser() . "</b>";
-        $html .= "</div>\n";
-
-        if ($thumbnail) {
-            $html .= "<div class=\"thumbnail\">\n";
-            $html .= $photo->getThumbnailLink();
-            $html .= "</div>\n";
+        if($thumbnail) {
+            $tpl_data["thumbnail"]=$photo->getThumbnailLink();
         }
 
-        $zophcode = new zophCode\parser($this->get("comment"), array("b","i", "u"));
-        $html .= $zophcode;
-        $html .= "<br></div>\n";
-        return $html;
+        $tpl=new block("comment", $tpl_data);
+
+        return $tpl;
     }
 }
 

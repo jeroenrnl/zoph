@@ -124,7 +124,7 @@ if ($action == "display") {
         <?php
         foreach($comments as $comment) {
             $comment->lookup();
-            echo $comment->toHTML($user, true);
+            echo $comment->toHTML(true);
         }
     }
 } else if ($action == "confirm") {
