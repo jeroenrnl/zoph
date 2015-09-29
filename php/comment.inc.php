@@ -77,7 +77,7 @@ class comment extends zophTable {
         return array(
             translate("subject") => $this->get("subject"),
             translate("date") => $date,
-            translate("user") => $this->lookup_user(),
+            translate("user") => $this->lookupUser(),
             translate("IP address") => $user->is_admin() ? $this->get("ipaddr") : "<i>" .
                 translate("only visible for admin users") . "</i>",
             translate("comment") => $comment,
@@ -85,7 +85,7 @@ class comment extends zophTable {
         );
     }
 
-    private function lookup_user() {
+    private function lookupUser() {
         $comment_user = new user($this->get("user_id"));
         $comment_user->lookup();
         $user_name = $comment_user->get("user_name");
@@ -98,7 +98,7 @@ class comment extends zophTable {
         return $return;
     }
 
-    public function get_photo() {
+    public function getPhoto() {
         if(!$this->get("comment_id")) { return; }
         $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
             " where comment_id=" . (int) $this->getId() .
@@ -120,7 +120,7 @@ class comment extends zophTable {
         query($sql, "Failed to add comment:");
     }
 
-    public function is_owner($user) {
+    public function isOwner($user) {
         if($user->getId()==$this->get("user_id")) {
             return true;
         } else {
@@ -130,12 +130,12 @@ class comment extends zophTable {
 
     public function toHTML($user, $thumbnail=null) {
         $this->lookup();
-        $photo=$this->get_photo();
+        $photo=$this->getPhoto();
 
         $html = "<div class=\"comment\">\n";
         $html .= "<h3>\n";
 
-        if ($user->is_admin() || $this->is_owner($user)) {
+        if ($user->is_admin() || $this->isOwner($user)) {
             $html .= "<span class=\"actionlink\">\n";
             $html .= "<a href=\"comment.php?_action=display&amp;comment_id=" .
                 $this->get("comment_id") . "\">\n";
@@ -153,7 +153,7 @@ class comment extends zophTable {
         $html .= $this->get("subject") . "</h3>\n";
         $html .= "<div class=\"commentinfo\">\n";
         $html .= $this->get("comment_date");
-        $html .= " " . translate("by",0) . " <b>" . $this->lookup_user() . "</b>";
+        $html .= " " . translate("by",0) . " <b>" . $this->lookupUser() . "</b>";
         $html .= "</div>\n";
 
         if ($thumbnail) {
@@ -169,16 +169,4 @@ class comment extends zophTable {
     }
 }
 
-function get_all_comments() {
-    return comment::getRecordsFromQuery("SELECT comment_id FROM " . DB_PREFIX . "comments");
-}
-
-function format_comments($user, $comments) {
-    $html=null;
-    foreach ($comments as $comment) {
-        $comment->lookup();
-        $html.=$comment->toHTML($user, true);
-    }
-    return $html;
-}
 ?>
