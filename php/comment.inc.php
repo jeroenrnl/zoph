@@ -66,7 +66,7 @@ class comment extends zophTable {
      * Delete a comment from the db
      */
     public function delete() {
-        if (!$this->getId() {
+        if (!$this->getId()) {
             return;
         }
         parent::delete();
@@ -115,7 +115,7 @@ class comment extends zophTable {
      * Get the photo that this comment belongs to
      */
     public function getPhoto() {
-        if (!$this->getId() {
+        if (!$this->getId()) {
             return;
         }
         $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
