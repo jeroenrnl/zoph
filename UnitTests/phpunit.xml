@@ -39,6 +39,7 @@
       <file>tagTest.php</file>
       <file>replaceTest.php</file>
       <file>commentTest.php</file>
+      <file>searchTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>

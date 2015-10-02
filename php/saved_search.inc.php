@@ -41,10 +41,20 @@ class search extends zophTable {
     protected static $url="search.php?search_id=";
 
     /**
+     * Update an existing search in the db
+     */
+    public function update() {
+        // Set timestamp to NULL so db will set it to current
+        $this->set("timestamp", null);
+        parent::update();
+    }
+
+    /**
      * Lookup an existing search in the db
      */
     public function lookup() {
         $user=user::getCurrent();
+        $where="";
         if (!$user->is_admin()) {
             $where= "(owner=" . escape_string($user->get("user_id")) .
             " OR " . "public=TRUE) AND ";
