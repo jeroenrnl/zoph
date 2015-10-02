@@ -38,6 +38,7 @@
       <file>smileyTest.php</file>
       <file>tagTest.php</file>
       <file>replaceTest.php</file>
+      <file>commentTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>

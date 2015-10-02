@@ -75,8 +75,6 @@ if(!defined("LOGON")) {
         require_once "auth.inc.php";
     }
 
-    require_once "comment.inc.php";
-
     require_once "file.inc.php";
 
     require_once "saved_search.inc.php";

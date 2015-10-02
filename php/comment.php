@@ -34,7 +34,7 @@ if ($comment_id) {
     $comment_user->lookup();
 }
 
-if(!$user->is_admin() && (!$comment->is_owner($user)) && ($_action!="new") && $_action!="insert") {
+if(!$user->is_admin() && (!$comment->isOwner($user)) && ($_action!="new") && $_action!="insert") {
     $_action="display";
 }
 
@@ -42,7 +42,7 @@ if(!$user->is_admin() && !$user->get("leave_comments") && ($_action=="new" || $_
     redirect("zoph.php");
 }
 
-$photo=$comment->get_photo();
+$photo=$comment->getPhoto();
 
 if ($photo) {
     $photo_id=$photo->get("photo_id");
@@ -100,7 +100,7 @@ if ($action == "confirm") {
     ?>
       <h1>
     <?php
-    if ($user->is_admin() || $comment->is_owner($user)) {
+    if ($user->is_admin() || $comment->isOwner($user)) {
         ?>
         <span class="actionlink">
           <a href="photo.php?photo_id=<?php echo $photo_id ?>">
@@ -123,7 +123,7 @@ if ($action == "confirm") {
         <?php echo $photo->getImageTag(MID_PREFIX); ?>
         <br>
         <dl class "comment">
-            <?php echo create_field_html($comment->getDisplayArray($user)) ?>
+            <?php echo create_field_html($comment->getDisplayArray()) ?>
         </dl>
         <br>
     </div>

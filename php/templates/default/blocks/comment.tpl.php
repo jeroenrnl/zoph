@@ -1,8 +1,6 @@
 <?php
 /**
- * Show overview of comments
- *
- * This file is part of Zoph.
+ * Template for displaying a comment
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +15,26 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package Zoph
+ * @package ZophTemplates
  * @author Jeroen Roos
  */
-require_once "include.inc.php";
 
-if (!conf::get("feature.comments")) {
-    redirect("zoph.php");
-}
-
-require_once "header.inc.php";
+if (!ZOPH) { die("Illegal call"); }
 ?>
-<h1>
-  <?php echo translate("Comments") ?>
-</h1>
-<div class="main">
-  <br>
-<?php
-$comments=comment::getRecords();
-foreach ($comments as $comment) {
-    $photo=$comment->getPhoto();
-    if($user->get_permissions_for_photo($photo->get("photo_id")) || $user->is_admin()) {
-        echo $comment->toHTML(true);
-    }
-}
-require_once "footer.inc.php";
-?>
+<div class="comment">
+    <h3>
+        <?= $this->getActionlinks($tpl_actionlinks); ?>
+        <?= $tpl_subject ?>
+    </h3>
+    <div class="commentinfo">
+        <?= $tpl_commentdate ?>
+        <?= translate("by", 0) ?> <b><?= $tpl_userlink ?></b>
+    </div>
+    <?php if(isset($tpl_thumbnail)): ?>
+        <div class="thumbnail">
+            <?= $tpl_thumbnail ?>
+        </div>
+    <?php endif ?>
+    <?= $tpl_zophcode ?>
+    <br>
+</div>

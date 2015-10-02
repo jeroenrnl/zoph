@@ -122,7 +122,10 @@ if ($action == "display") {
         ?>
         <h3><?php echo translate("comments by this user") ?></h3>
         <?php
-        echo format_comments($user,$comments);
+        foreach($comments as $comment) {
+            $comment->lookup();
+            echo $comment->toHTML(true);
+        }
     }
 } else if ($action == "confirm") {
     ?>

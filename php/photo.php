@@ -467,7 +467,7 @@ if ($action != "insert" && !$found) {
         if($comments) {
             echo "<h2>" . translate("comments") . "</h2>\n";
             foreach($comments as $comment) {
-                echo $comment->toHTML($user) . "\n";
+                echo $comment->toHTML() . "\n";
             }
             echo "<br>&nbsp;\n";
         }
