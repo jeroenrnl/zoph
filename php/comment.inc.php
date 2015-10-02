@@ -146,7 +146,7 @@ class comment extends zophTable {
      * @param user User to check
      * @return bool true: user is owner, false: user is not owner
      */
-    public function isOwner($user) {
+    public function isOwner(user $user) {
         return ($user->getId()==$this->get("user_id"));
     }
 
