@@ -69,12 +69,7 @@ class comment extends zophTable {
         if (!$this->getId()) {
             return;
         }
-        parent::delete();
-
-        $sql = "delete from " . DB_PREFIX . "photo_comments where comment_id=";
-        $sql .= escape_string($this->get("comment_id"));
-
-        query($sql, "Could not clean comment from photo");
+        parent::delete(array("photo_comments"));
     }
 
     /**
@@ -118,10 +113,13 @@ class comment extends zophTable {
         if (!$this->getId()) {
             return;
         }
-        $sql = "select photo_id from " . DB_PREFIX . "photo_comments" .
-            " where comment_id=" . (int) $this->getId() .
-            " limit 1";
-        $result=photo::getRecordsFromQuery($sql);
+        $qry=new select(array("pcom" => "photo_comments"));
+        $qry->addFields(array("photo_id"));
+        $qry->where(new clause("comment_id=:commentId"));
+        $qry->addParam(new param(":commentId", (int) $this->getId(), PDO::PARAM_INT));
+        $qry->addLimit(1);
+
+        $result=photo::getRecordsFromQuery($qry);
         if ($result[0]) {
             $result[0]->lookup();
             return $result[0];
@@ -134,11 +132,13 @@ class comment extends zophTable {
      * Add this comment to a photo
      */
     public function addToPhoto(photo $photo) {
-        $sql = "insert into " . DB_PREFIX . "photo_comments values" .
-            "(" . (int) $photo->getId() . ", " . (int) $this->getId() . ")";
+        $qry=new insert(array("photo_comments"));
+        $qry->addParams(array(
+            new param(":photo_id", (int) $photo->getId(), PDO::PARAM_INT),
+            new param(":comment_id", (int) $this->getId(), PDO::PARAM_INT)
+        ));
 
-
-        query($sql, "Failed to add comment:");
+        $qry->execute();
     }
 
     /**
@@ -161,7 +161,7 @@ class comment extends zophTable {
         $this->lookup();
         $photo=$this->getPhoto();
 
-        $tpl_data=array(
+        $tplData=array(
             "subject"       => $this->get("subject"),
             "commentdate"   => $this->get("comment_date"),
             "userlink"      => $this->getUserLink(),
@@ -171,7 +171,7 @@ class comment extends zophTable {
         );
 
         if ($user->is_admin() || $this->isOwner($user)) {
-            $tpl_data["actionlinks"]=array(
+            $tplData["actionlinks"]=array(
                 translate("display")    => "comment.php?_action=display&amp;comment_id=" .  $this->getId(),
                 translate("edit")       => "comment.php?_action=edit&amp;comment_id=" .  $this->getId(),
                 translate("delete")     => "comment.php?_action=delete&amp;comment_id=" .  $this->getId()
@@ -179,12 +179,10 @@ class comment extends zophTable {
         }
 
         if ($thumbnail) {
-            $tpl_data["thumbnail"]=$photo->getThumbnailLink();
+            $tplData["thumbnail"]=$photo->getThumbnailLink();
         }
 
-        $tpl=new block("comment", $tpl_data);
-
-        return $tpl;
+        return new block("comment", $tplData);
     }
 }
 
