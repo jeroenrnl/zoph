@@ -676,7 +676,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <input type="submit" name="_action" value="<?php echo translate("search", 0); ?>">
       </span>
     <?php
-    echo get_list_of_saved_searches($user)
+    echo search::getList();
     ?>
 
     </div>
