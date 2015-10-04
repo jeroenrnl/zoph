@@ -21,6 +21,12 @@
  * @author Jeroen Roos
  */
 
+/**
+ * Store and retrieve searches
+ *
+ * @package Zoph
+ * @author Jeroen Roos
+ */
 class search extends zophTable {
     /** @var string The name of the database table */
     protected static $tableName="saved_search";
@@ -34,9 +40,22 @@ class search extends zophTable {
     /** @var string URL for this class */
     protected static $url="search.php?search_id=";
 
+    /**
+     * Update an existing search in the db
+     */
+    public function update() {
+        // Set timestamp to NULL so db will set it to current
+        $this->set("timestamp", null);
+        parent::update();
+    }
+
+    /**
+     * Lookup an existing search in the db
+     */
     public function lookup() {
         $user=user::getCurrent();
-        if ($user->is_admin()) {
+        $where="";
+        if (!$user->is_admin()) {
             $where= "(owner=" . escape_string($user->get("user_id")) .
             " OR " . "public=TRUE) AND ";
         }
@@ -51,90 +70,101 @@ class search extends zophTable {
         return $this->lookupFromSQL($sql);
     }
 
-    function getName() {
+    /**
+     * Get the name of this search
+     */
+    public function getName() {
         return $this->get("name");
     }
 
-    function getPhotoCount($user = null) {
-        // This should be created some time, but might slow down too much
+    /**
+     * Dummy function that acts as a placeholder for functionality that should be created
+     * someday
+     * @todo This should be created some time, but might slow down too much
+     */
+    public function getPhotoCount() {
+
     }
 
+    /**
+     * Get array that can be used to build an edit form
+     * @return array edit array
+     */
     public function getEditArray() {
         $user=user::getCurrent();
-        $edit_array=array();
+        $editArray=array();
 
 
-        $edit_array[]=array(
+        $editArray[]=array(
             translate("Name"),
-            create_text_input("name", $this->get("name"),40,64));
+            create_text_input("name", $this->get("name"), 40, 64));
 
         if ($user->is_admin()) {
-            $edit_array[]=array (
+            $editArray[]=array (
                 translate("Owner"),
                 template::createPulldown("owner", $this->get("owner"),
                     template::createSelectArray(user::getRecords("user_name"),
                     array("user_name"))));
-            $edit_array[]=array(
+            $editArray[]=array(
                 translate("Public"),
                 template::createYesNoPulldown("public", $this->get("public")));
 
         }
-        return $edit_array;
+        return $editArray;
     }
 
-    function display($user = null) {
-        if ($user && ($this->get("owner") != $user->get("user_id"))) {
+    /**
+     * Display the search
+     */
+    public function getLink() {
+        $user=user::getCurrent();
+        $tplData=array(
+            "href"      => $this->getSearchURL() . "&_action=" . translate("search"),
+            "link"      => $this->getName(),
+            "target"    => ""
+        );
+
+        if ($this->get("owner") != $user->get("user_id")) {
             $owner=new user($this->get("owner"));
             $owner->lookup();
-            $ownertext="<span class='searchinfo'>(" . translate("by") . " " .
-                $owner->getLink() . ")</span>";
+            $tplData["owner"]=$owner;
         }
-        return "<a href='" . $this->getLink() . "&_action=" .
-            translate("search") . "'>" . $this->getName() .
-            "</a> " . $ownertext;
+        return new block("savedSearch", $tplData);
     }
 
-    function getLink() {
+    /**
+     * Get a link to use this search
+     * This is different from getURL(), the URL returned by this function will take you to the
+     * photo page, with the saved search applied.
+     */
+    public function getSearchURL() {
         return "search.php?" . $this->get("search");
     }
-}
 
-function get_saved_searches($user) {
-
-    $sql="SELECT * FROM " . DB_PREFIX . "saved_search";
-    if (!$user->is_admin()) {
-        $sql.=" WHERE (owner=" . escape_string($user->get("user_id")) .
-            " OR " .  "public=TRUE)";
+    /**
+     * Get a link to this search
+     */
+    public function getURL() {
+        return "search.php?search_id=" . $this->getId();
     }
-    return search::getRecordsFromQuery($sql);
-}
 
-function get_list_of_saved_searches($user) {
-    $searches=get_saved_searches($user);
-    if ($searches) {
-        $html="<h2>" . translate("Saved searches") . "</h2>";
-        $html.="<ul class='saved_search'>";
+    /**
+     * Get a list of saved searches
+     */
+    public static function getList() {
+        $user=user::getCurrent();
+        $searches=static::getRecords("name", array(
+            "owner"     => $user->getId(),
+            "public"    => "true"
+        ), "OR");
 
-        foreach ($searches as $search) {
-            $html.="<span class='actionlink'>";
-            $html.="<a href='" . $search->getLink() . "'>" .
-                translate("load") . "</a>";
-            if (($search->get("owner") == $user->get("user_id")) ||
-                $user->is_admin()) {
-                $html.=" | <a href='search.php?search_id=" .
-                        $search->get("search_id") .
-                        "&_action=edit'>" . translate("edit") . "</a>";
-                $html.=" | <a href='search.php?search_id=" .
-                        $search->get("search_id") .
-                        "&_action=delete'>" . translate("delete") . "</a>";
-            }
-            $html.="</span>";
-            $html.="<li>" . $search->display($user) . "</li>\n";
-
+        if ($searches) {
+            return new block("savedSearches", array(
+                "searches"  => $searches,
+                "user"      => $user
+            ));
         }
-        $html.="</ul>\n\n";
+        return;
     }
-    return $html;
 }
-
 ?>

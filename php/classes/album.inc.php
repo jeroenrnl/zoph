@@ -27,7 +27,7 @@
  *
  * @package Zoph
  * @author Jason Geiger
- * @auther Jeroen Roos
+ * @author Jeroen Roos
  */
 class album extends zophTreeTable implements Organizer {
     /** @param Name of the root node in XML responses */
