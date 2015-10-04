@@ -115,68 +115,56 @@ class search extends zophTable {
 
     /**
      * Display the search
-     * @todo Contains HTML
-     * @todo The user param should probably be removed
-     * @todo To be in line with the rest of Zoph, this should be called getLink()
-     * @param user
      */
-    public function display($user = null) {
-        if ($user && ($this->get("owner") != $user->get("user_id"))) {
+    public function getLink() {
+        $user=user::getCurrent();
+        $tplData=array(
+            "href"      => $this->getSearchURL() . "&_action=" . translate("search"),
+            "link"      => $this->getName(),
+            "target"    => ""
+        );
+
+        if ($this->get("owner") != $user->get("user_id")) {
             $owner=new user($this->get("owner"));
             $owner->lookup();
-            $ownertext="<span class='searchinfo'>(" . translate("by") . " " .
-                $owner->getLink() . ")</span>";
+            $tplData["owner"]=$owner;
         }
-        return "<a href='" . $this->getLink() . "&_action=" .
-            translate("search") . "'>" . $this->getName() .
-            "</a> " . $ownertext;
+        return new block("saved_search", $tplData);
     }
 
     /**
-     * Get a link to this search
-     * @todo to be in line with the rest of Zoph, this should be called getURL()
+     * Get a link to use this search
+     * This is different from getURL(), the URL returned by this function will take you to the
+     * photo page, with the saved search applied.
      */
-    public function getLink() {
+    public function getSearchURL() {
         return "search.php?" . $this->get("search");
     }
 
     /**
+     * Get a link to this search
+     */
+    public function getURL() {
+        return "search.php?search_id=" . $this->getId();
+    }
+
+    /**
      * Get a list of saved searches
-     * @todo should be renamed to comply to naming convention
-     * @todo Contains HTML
      */ 
     public static function getList() {
         $user=user::getCurrent();
-        //$searches=static::getAll();
         $searches=static::getRecords("name", array(
             "owner"     => $user->getId(), 
             "public"    => "true"
         ), "OR");
 
         if ($searches) {
-            $html="<h2>" . translate("Saved searches") . "</h2>";
-            $html.="<ul class='saved_search'>";
-
-            foreach ($searches as $search) {
-                $html.="<span class='actionlink'>";
-                $html.="<a href='" . $search->getLink() . "'>" .
-                    translate("load") . "</a>";
-                if (($search->get("owner") == $user->get("user_id")) ||
-                    $user->is_admin()) {
-                    $html.=" | <a href='search.php?search_id=" .
-                            $search->get("search_id") .
-                            "&_action=edit'>" . translate("edit") . "</a>";
-                    $html.=" | <a href='search.php?search_id=" .
-                            $search->get("search_id") .
-                            "&_action=delete'>" . translate("delete") . "</a>";
-                }
-                $html.="</span>";
-                $html.="<li>" . $search->display($user) . "</li>\n";
-
-            }
-            $html.="</ul>\n\n";
+            return new block("saved_searches", array(
+                "searches"  => $searches,
+                "user"      => $user
+            ));
         }
-        return $html;
+        return;
     }
 }
 ?>
