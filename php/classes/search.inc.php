@@ -129,7 +129,7 @@ class search extends zophTable {
             $owner->lookup();
             $tplData["owner"]=$owner;
         }
-        return new block("saved_search", $tplData);
+        return new block("savedSearch", $tplData);
     }
 
     /**
@@ -150,16 +150,16 @@ class search extends zophTable {
 
     /**
      * Get a list of saved searches
-     */ 
+     */
     public static function getList() {
         $user=user::getCurrent();
         $searches=static::getRecords("name", array(
-            "owner"     => $user->getId(), 
+            "owner"     => $user->getId(),
             "public"    => "true"
         ), "OR");
 
         if ($searches) {
-            return new block("saved_searches", array(
+            return new block("savedSearches", array(
                 "searches"  => $searches,
                 "user"      => $user
             ));
