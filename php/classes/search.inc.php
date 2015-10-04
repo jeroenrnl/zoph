@@ -92,25 +92,25 @@ class search extends zophTable {
      */
     public function getEditArray() {
         $user=user::getCurrent();
-        $edit_array=array();
+        $editArray=array();
 
 
-        $edit_array[]=array(
+        $editArray[]=array(
             translate("Name"),
-            create_text_input("name", $this->get("name"),40,64));
+            create_text_input("name", $this->get("name"), 40, 64));
 
         if ($user->is_admin()) {
-            $edit_array[]=array (
+            $editArray[]=array (
                 translate("Owner"),
                 template::createPulldown("owner", $this->get("owner"),
                     template::createSelectArray(user::getRecords("user_name"),
                     array("user_name"))));
-            $edit_array[]=array(
+            $editArray[]=array(
                 translate("Public"),
                 template::createYesNoPulldown("public", $this->get("public")));
 
         }
-        return $edit_array;
+        return $editArray;
     }
 
     /**
