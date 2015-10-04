@@ -141,27 +141,18 @@ class search extends zophTable {
     }
 
     /**
-     * Get list of saved searches
-     * @todo can possibly be rewritten as a call to getRecords()
-     */
-    public static function getAll() {
-        $user=user::getCurrent();
-        $sql="SELECT * FROM " . DB_PREFIX . "saved_search";
-        if (!$user->is_admin()) {
-            $sql.=" WHERE (owner=" . escape_string($user->get("user_id")) .
-                " OR " .  "public=TRUE)";
-        }
-        return search::getRecordsFromQuery($sql);
-    }
-
-    /**
      * Get a list of saved searches
      * @todo should be renamed to comply to naming convention
      * @todo Contains HTML
      */ 
     public static function getList() {
         $user=user::getCurrent();
-        $searches=static::getAll();
+        //$searches=static::getAll();
+        $searches=static::getRecords("name", array(
+            "owner"     => $user->getId(), 
+            "public"    => "true"
+        ), "OR");
+
         if ($searches) {
             $html="<h2>" . translate("Saved searches") . "</h2>";
             $html.="<ul class='saved_search'>";
