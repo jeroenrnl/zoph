@@ -65,6 +65,46 @@ class searchTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
+     * Test the lookup function by having different users lookup searches
+     */
+    public function testLookup() {
+        $search=new search(1);
+        $search->lookup();
+
+        $this->assertEquals("Blue", $search->getName());
+
+        // User 1 is admin and is allowed to see search 2, which is owner by user 2:
+        $search=new search(2);
+        $search->lookup();
+
+        $this->assertEquals("More Blue", $search->getName());
+
+        // User 2 logs in:
+        user::setCurrent(new user(2));
+
+        // User 2 is not allowed to see search 1 (it's owned by admin and not public)
+        $search=new search(1);
+        $search->lookup();
+
+        $this->assertEquals("", $search->getName());
+
+        // User 2 is allowed to see search 2, which he is owns:
+        $search=new search(2);
+        $search->lookup();
+
+        $this->assertEquals("More Blue", $search->getName());
+
+        // User 2 is allowed to see search 3, since it is public:
+        $search=new search(3);
+        $search->lookup();
+
+        $this->assertEquals("Public Red", $search->getName());
+
+        // User 1 logs back 1 so the rest of the tests work:
+        user::setCurrent(new user(1));
+    }
+
+    /**
      * Test updating existing search
      */
     public function testUpdate() {
@@ -105,7 +145,7 @@ class searchTest extends PHPUnit_Framework_TestCase {
         $search=new search();
         $search->set("name", "To be deleted");
         $search->insert();
-        
+
         $id=$search->getId();
         unset($search);
 
