@@ -78,7 +78,7 @@ class clause {
             foreach ($this->subclauses as $subclause) {
                 $conj=$subclause["conj"];
                 $subc=$subclause["subc"];
-                $sql.= " " . $conj . " " . $subc;
+                $sql.= " " . $conj . " (" . $subc . ")";
             }
         }
         return $sql;

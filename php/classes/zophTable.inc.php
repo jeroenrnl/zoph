@@ -187,21 +187,13 @@ abstract class zophTable {
      */
     public function lookupFromSQL($sql) {
         $result = query($sql, "Lookup failed:");
-        if ($result instanceof PDOStatement) {
-            $results=$result->fetchAll(PDO::FETCH_ASSOC);
-            $rows=count($results);
-        } else {
-            $rows=num_rows($result);
-        }
+
+        $results=$result->fetchAll(PDO::FETCH_ASSOC);
+        $rows=count($results);
+
         if ($rows == 1) {
-            if ($result instanceof PDOStatement) {
-                $row=array_pop($results);
-            } else {
-                $row = fetch_assoc($result);
-            }
-
+            $row=array_pop($results);
             $this->fields = array();
-
             $this->fields = array_merge($this->fields, $row);
 
             return 1;

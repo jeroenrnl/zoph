@@ -75,7 +75,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $qry->where($where);
 
         $sql=(string) $qry;
-        $exp_sql="SELECT * FROM zoph_photos WHERE (photo_id > :minid) AND (photo_id < :maxid);";
+        $exp_sql="SELECT * FROM zoph_photos WHERE (photo_id > :minid) AND ((photo_id < :maxid));";
 
         $this->assertEquals($exp_sql, $sql);
 
