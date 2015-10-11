@@ -394,8 +394,8 @@ class album extends zophTreeTable implements Organizer {
         }
         $qry=new select(array("a" => "albums"));
         $qry->addFields(array("album_id"));
-        $qry->where(new clause("lower(album)=:name"));
-        $qry->addParam(new param(":name", strtolower($name), PDO::PARAM_STR));
+        $qry->where(new clause("lower(album) LIKE :name"));
+        $qry->addParam(new param(":name", "%" . strtolower($name) . "%", PDO::PARAM_STR));
 
         return static::getRecordsFromQuery($qry);
     }

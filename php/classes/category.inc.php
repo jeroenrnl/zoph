@@ -372,7 +372,7 @@ class category extends zophTreeTable implements Organizer {
     /**
      * Lookup category by name
      * @param string name
-     * @todo This function is almost equal to category::getByName() these should be merged
+     * @todo This function is almost equal to album::getByName() these should be merged
      */
     public static function getByName($name) {
         if (empty($name)) {
@@ -380,8 +380,8 @@ class category extends zophTreeTable implements Organizer {
         }
         $qry=new select(array("c" => "categories"));
         $qry->addFields(array("category_id"));
-        $qry->where(new clause("lower(category)=:name"));
-        $qry->addParam(new param(":name", strtolower($name), PDO::PARAM_STR));
+        $qry->where(new clause("lower(category) LIKE :name"));
+        $qry->addParam(new param(":name", "%" . strtolower($name) . "%", PDO::PARAM_STR));
 
         return static::getRecordsFromQuery($qry);
     }
