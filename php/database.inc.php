@@ -52,6 +52,7 @@ function query($sql, $error = false) {
         } else {
             $result=mysql_query($sql) or die_with_db_error($error, $sql);
         }
+
         return $result;
     }
 }
@@ -80,6 +81,10 @@ function fetch_assoc($result) {
     return mysql_fetch_assoc($result);
 }
 
+function fetch_row($result) {
+    return mysql_fetch_row($result);
+}
+
 function result($result, $row) {
     // $row is never used
     if ($result instanceof PDOStatement) {
@@ -94,8 +99,9 @@ function result($result, $row) {
  */
 function getArrayFromQuery($sql) {
     $objs=array();
-    query($sql);
-    while ($row = fetch_row()) {
+    $result=query($sql, "Failed to get array from SQL");
+
+    while ($row = fetch_row($result)) {
         $objs[] = $row[0];
     }
     return $objs;
