@@ -27,6 +27,7 @@
       <file>groupPermissionsTest.php</file>
       <file>personTest.php</file>
       <file>photographerTest.php</file>
+      <file>getPhotoTest.php</file>
       <file>cliTest.php</file>
       <file>ratingTest.php</file>
       <file>relationTest.php</file>
