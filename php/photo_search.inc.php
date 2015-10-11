@@ -25,7 +25,6 @@
  * @todo This should be replaced by a proper OO based construction
  */
 function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
-
     $good_ops = array ( "=", "!=", "less than", "more than", ">", ">=",
         "<", "<=", "like", "not like", "is in photo", "is not in photo" );
 
@@ -90,8 +89,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $key = substr($key, 0, $hashPos);
         }
 
-        //echo "key = $key<br>";
-        //echo "suffix = $suffix<br>";
         $index = "_" . $key . $suffix;
 
         if (!empty($vars[$index . "-conj"])) {
@@ -99,34 +96,41 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         } else {
             $conj = "and";
         }
-        if (!in_array($conj, $good_conj))
-            { die ("Illegal conjunction: " . e($conj)); }
+        if (!in_array($conj, $good_conj)) {
+            die ("Illegal conjunction: " . e($conj));
+        }
 
         if (!empty($vars[$index . "-op"])) {
             $op = $vars[$index . "-op"];
         } else {
             $op = "=";
         }
-        if (!in_array($op, $good_ops))
-            { die ("Illegal operator: " . e($op)); }
+
+        if (!in_array($op, $good_ops)) {
+            die ("Illegal operator: " . e($op));
+        }
 
         if (!empty($vars[$index . "-children"])) {
             $object=explode("_", $key);
-            if($object[0]=="location") { $object[0] = "place"; }
+            if($object[0]=="location") {
+                $object[0] = "place";
+            }
             $obj=new $object[0]($val);
             $val_with_children=$obj->getBranchIds();
             $val=$val_with_children;
         }
 
         if ($val == "null") {
-            if ($op == "=") { $op = "is"; }
-            else if ($op = "!=") { $op = "is not"; }
+            if ($op == "=") {
+                $op = "is";
+            } else if ($op = "!=") {
+                $op = "is not";
+            }
         }
 
         if ($key == "text") {
-            if (strncasecmp($key, "text", 4) == 0) {
-                $key = $vars["_" . $key . $suffix];
-            }
+            $key = $vars["_" . $key . $suffix];
+
             if (!in_array($key, $good_text))
                 { die ("Illegal text search: " . e($key)); }
 
@@ -173,7 +177,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $albums = album::getByName($album_name);
                 foreach($albums as $album) {
                     $album->lookup();
-                    if(!$parent_album) {
+                    if(!isset($parent_album)) {
                         $val=$album->get("album_id");
                         $parent_album=$album;
                     } else if ($hiersearch){
@@ -209,7 +213,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $categories = category::getByName($cat_name);
                 foreach($categories as $category) {
                     $category->lookup();
-                    if(!$parent_cat) {
+                    if(!isset($parent_cat)) {
                         $val=$category->get("category_id");
                         $parent_cat=$category;
                     } else if ($hiersearch){
@@ -231,8 +235,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 }
             }
         }
-
-        //echo "<p>key = '$key'; op = '$op', value = '$val'</p>\n";
 
         if ($key == "album_id") {
             $pa = "pa" . substr($suffix, 1);
@@ -315,10 +317,13 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $excluded_people["${ppl}-conj"] = $conj;
             }
         } else if($key == "userrating") {
-            if ($where) { $where .= " AND "; }
-            $ratinguser_id=$vars["_userrating_user"];
+            if ($where) {
+                $where .= " " . $conj . " ";
+            }
 
-            if(!($ratinguser_id && $user->is_admin())) {
+            if($user->is_admin() && isset($vars["_userrating_user"])) {
+                $ratinguser_id=$vars["_userrating_user"];
+            } else {
                 $ratinguser_id=$user->get("user_id");
             }
 
@@ -337,7 +342,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 }
             }
         } else if ( $key=="rating" ) {
-            if ($where) { $where .= " AND "; }
+            if ($where) {
+                $where .= " " . $conj . " ";
+            }
             $from["vpr"]="view_photo_avg_rating";
             $where .= " vpr.rating  $op $val ";
         } else if ( $key=="lat" || $key=="lon") {
@@ -348,11 +355,11 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $ids=array();
                 $lat=(float) $latlon["lat"];
                 $lon=(float) $latlon["lon"];
-                $distance=(float) getvar("_latlon_distance");
-                if(getvar("_latlon_entity")=="miles") {
+                $distance=(float) $vars["_latlon_distance"];
+                if(isset($vars["_latlon_entity"]) && $vars["_latlon_entity"]=="miles") {
                     $distance=$distance * 1.609344;
                 }
-                if(getvar("_latlon_photos")) {
+                if(isset($vars["_latlon_photos"])) {
                     $photos=photo::getPhotosNear($lat, $lon, $distance, null);
                     if($photos) {
                         foreach($photos as $photo) {
@@ -360,7 +367,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                         }
                     }
                 }
-                if(getvar("_latlon_places")) {
+                if(isset($vars["_latlon_places"])) {
                     $places=place::getPlacesNear($lat, $lon, $distance, null);
                     foreach($places as $place) {
                         $photos=$place->getPhotos($user);
@@ -369,7 +376,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                         }
                     }
                 }
-                if ($where) { $where .= " $conj "; }
+                if ($where) {
+                    $where .= " $conj ";
+                }
                 if($ids) {
                     $where.="ph.photo_id in (" . implode(",", array_unique($ids)) . ")";
                 } else {
@@ -416,21 +425,20 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     }
 
     if (!empty($excluded_albums)) {
-        $where .= generate_excluded_albums_clause(
-            $excluded_albums, $from_clause, $where);
+        $where .= generate_excluded_albums_clause($excluded_albums, $from_clause, $where);
     }
 
     if (!empty($excluded_categories)) {
-        $where .= generate_excluded_categories_clause(
-            $excluded_categories, $from_clause, $where);
+        $where .= generate_excluded_categories_clause($excluded_categories, $from_clause, $where);
     }
 
     if (!empty($excluded_people)) {
-        $where .= generate_excluded_people_clause(
-            $excluded_people, $from_clause, $where);
+        $where .= generate_excluded_people_clause($excluded_people, $from_clause, $where);
     }
 
-    if (!empty($where)) { $where = "where $where"; }
+    if (!empty($where)) {
+        $where = "where $where";
+    }
 
     $num_photos = 0;
 
@@ -456,7 +464,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 "select $select from $from_clause $where order by $order " .
                 "limit $offset, $rows";
         }
-
         $thumbnails = photo::getRecordsFromQuery($query);
 
     }
@@ -495,8 +502,12 @@ function generate_excluded_albums_clause($excluded_albums, $from, $where) {
     $album_constraints = "";
 
     while (list($pa, $album_ids) = each($excluded_albums)) {
-        if (strpos($pa, "-conj")) {continue;}
-        if ($album_from) { $album_from .= ", "; }
+        if (strpos($pa, "-conj")) {
+            continue;
+        }
+        if ($album_from) {
+            $album_from .= ", ";
+        }
         $album_from .= DB_PREFIX . "photo_albums as $pa";
         $photo_id_query =
             "select distinct ${pa}.photo_id from $album_from " .
@@ -504,7 +515,7 @@ function generate_excluded_albums_clause($excluded_albums, $from, $where) {
             escape_string($album_ids) . "))";
 
         if ($where) {
-            $photo_id_query .= " and $where";
+          //  $photo_id_query .= " and $where";
         }
         $ids = implode(',', getArrayFromQuery($photo_id_query));
 
@@ -535,7 +546,7 @@ function generate_excluded_categories_clause($excluded_categories, $from, $where
             escape_string($cat_ids) . "))";
 
         if ($where) {
-            $photo_id_query .= " and $where";
+ //           $photo_id_query .= " and $where";
         }
 
         $ids = implode(',', getArrayFromQuery($photo_id_query));
@@ -558,19 +569,19 @@ function generate_excluded_people_clause($excluded_people, $from, $where) {
     $person_constraints = "";
 
     while (list($pp, $person_ids) = each($excluded_people)) {
-        if (strpos($pp, "-conj")) {continue;}
-        if ($person_from) { $person_from .= ", "; }
+        if (strpos($pp, "-conj")) {
+            continue;
+        }
+        if ($person_from) {
+            $person_from .= ", ";
+        }
         $person_from .= DB_PREFIX . "photo_people as $pp";
         $photo_id_query =
             "select distinct ${pp}.photo_id from $person_from " .
             "where (ph.photo_id = ${pp}.photo_id and ${pp}.person_id in (" .
             escape_string($person_ids) . "))";
 
-        if ($where) {
-            $photo_id_query .= " and $where";
-        }
         $ids = implode(',', getArrayFromQuery($photo_id_query));
-
         if ($ids) {
             if ($person_constraints || $where) {
                 $person_constraints .= " " . $excluded_people["${pp}-conj"] . " ";
