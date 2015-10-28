@@ -143,7 +143,7 @@ class user extends zophTable {
         $where=new clause("p.photo_id = :photoid");
         $qry->addParam(new param(":photoid", (int) $photo_id, PDO::PARAM_INT));
 
-        list($qry, $where) = static::expandQueryForUser($qry, $where, $this);
+        list($qry, $where) = selectHelper::expandQueryForUser($qry, $where, $this);
 
         $qry->addFields(array("gp.*"));
         $qry->addLimit(1);

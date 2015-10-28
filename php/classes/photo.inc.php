@@ -115,7 +115,7 @@ class photo extends zophTable {
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
 
         if (!$user->is_admin()) {
-            list($qry,$where)=static::expandQueryForUser($qry, $where);
+            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
@@ -298,7 +298,7 @@ class photo extends zophTable {
         $qry->addOrder("a.album");
 
         if (!$user->is_admin()) {
-            list($qry,$where)=static::expandQueryForUser($qry, $where);
+            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);

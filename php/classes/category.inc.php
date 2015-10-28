@@ -114,7 +114,7 @@ class category extends zophTreeTable implements Organizer {
         $qry->addParam(new param(":catid", (int) $this->getId(), PDO::PARAM_INT));
         $qry->addGroupBy("c.category_id");
 
-        $qry=static::addOrderToQuery($qry, $order);
+        $qry=selectHelper::addOrderToQuery($qry, $order);
 
         if ($order!="name") {
             $qry->addOrder("name");
@@ -148,7 +148,7 @@ class category extends zophTreeTable implements Organizer {
         $qry->addParam(new param(":cat_id", $this->getId(), PDO::PARAM_INT));
 
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = static::expandQueryForUser($qry, $where);
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
@@ -173,7 +173,7 @@ class category extends zophTreeTable implements Organizer {
         $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
 
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = static::expandQueryForUser($qry, $where);
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
 
         if ($this->get("parent_category_id")) {
@@ -291,10 +291,10 @@ class category extends zophTreeTable implements Organizer {
         }
 
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = static::expandQueryForUser($qry, $where);
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
 
-        $qry=static::getAutoCoverOrder($qry, $autocover);
+        $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
         $qry->where($where);
         $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
@@ -343,7 +343,7 @@ class category extends zophTreeTable implements Organizer {
         $qry->addParam(new param(":catid", $this->getId(), PDO::PARAM_INT));
 
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = static::expandQueryForUser($qry, $where);
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
@@ -401,7 +401,7 @@ class category extends zophTreeTable implements Organizer {
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
         if (!$user->is_admin()) {
             $qry->join(array("p" => "photos"), "pc.photo_id=p.photo_id");
-            list($qry, $where) = static::expandQueryForUser($qry);
+            list($qry, $where) = selectHelper::expandQueryForUser($qry);
             $qry->where($where);
         }
         return parent::getTopNfromSQL($qry);

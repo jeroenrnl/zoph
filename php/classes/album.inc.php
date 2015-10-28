@@ -152,14 +152,14 @@ class album extends zophTreeTable implements Organizer {
 
         $qry->addParam(new param(":album_id", (int) $this->getId(), PDO::PARAM_INT));
 
-        $qry=static::addOrderToQuery($qry, $order);
+        $qry=selectHelper::addOrderToQuery($qry, $order);
 
         if ($order!="name") {
             $qry->addOrder("name");
         }
 
         if (!$user->is_admin()) {
-            list($qry,$where)=static::expandQueryForUser($qry, $where);
+            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
@@ -193,7 +193,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addParam(new param(":albid", $this->getId(), PDO::PARAM_INT));
 
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = static::expandQueryForUser($qry, $where);
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
@@ -235,7 +235,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addParam(new param(":alb_id", $this->getId(), PDO::PARAM_INT));
 
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = static::expandQueryForUser($qry, $where);
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
@@ -261,7 +261,7 @@ class album extends zophTreeTable implements Organizer {
         $where=clause::InClause("pa.album_id", $ids);
 
         if (!user::getCurrent()->is_admin()) {
-            list($qry,$where)=static::expandQueryForUser($qry, $where);
+            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
         $qry->where($where);
 
@@ -365,10 +365,10 @@ class album extends zophTreeTable implements Organizer {
         }
 
         if (!user::getCurrent()->is_admin()) {
-            list($qry, $where) = static::expandQueryForUser($qry, $where);
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
 
-        $qry=static::getAutoCoverOrder($qry, $autocover);
+        $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
         $qry->where($where);
         $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
@@ -414,7 +414,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addOrder("count DESC")->addOrder("a.album");
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
         if (!$user->is_admin()) {
-            list($qry, $where) = static::expandQueryForUser($qry);
+            list($qry, $where) = selectHelper::expandQueryForUser($qry);
             $qry->where($where);
         }
         return parent::getTopNfromSQL($qry);

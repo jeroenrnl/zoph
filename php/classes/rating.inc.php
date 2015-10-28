@@ -162,7 +162,7 @@ class rating extends zophTable {
         $subqry->addGroupBy("p.photo_id");
 
         if (!user::getCurrent()->is_admin()) {
-            list($subqry, $where)=static::expandQueryForUser($subqry);
+            list($subqry, $where)=selectHelper::expandQueryForUser($subqry);
 
             if ($where instanceof clause) {
                 $subqry->where($where);
