@@ -71,6 +71,15 @@ class clause {
         return new self($var . " IN (" . implode(", ", $param->getName()) . ")");
     }
 
+    /**
+     * Create a WHERE ... NOT IN ( ..., ..., ...) clause
+     * @param string variable
+     * @param param parameters
+     */
+    public static function NotInClause($var, param $param) {
+        return new self($var . " NOT IN (" . implode(", ", $param->getName()) . ")");
+    }
+
     public function __toString() {
         $sql="(" . $this->clause . ")";
 
