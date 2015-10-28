@@ -198,5 +198,16 @@ class select extends query {
 
         return $sql . ";";
     }
+
+    /**
+     * Return the first column from the query as an array
+     * This function should only be run on queries with a single column,
+     * or it will make little sense
+     * @return Array array of values
+     */
+    public function toArray() {
+        $stmt=$this->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+    }
 }
 
