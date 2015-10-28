@@ -46,9 +46,9 @@ class validator {
         } else {
 
             $qry = new select(array("users"));
-            $qry->addField("user_id");
+            $qry->addFields(array("user_id"));
             $where=new clause("user_name=:username");
-            $where->addAnd("password=:password");
+            $where->addAnd(new clause("password=password(:password)"));
             $qry->where($where);
             $qry->addParams(array(
                 new param(":username", $this->username, PDO::PARAM_STR),
