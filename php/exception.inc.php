@@ -306,4 +306,13 @@ class CliUnknownErrorException extends CliException {}
  * @package ZophException
  */
 class DatabaseException extends ZophException {}
+
+/**
+ * Security Exception
+ *
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class SecurityException extends ZophException {}
+class KeyMustBeNumericSecurityException extends ZophException {}
 ?>

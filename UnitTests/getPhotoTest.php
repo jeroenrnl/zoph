@@ -180,6 +180,10 @@ class getPhotoTest extends PHPUnit_Framework_TestCase {
                     "text#0"            => "white/grey25",
                 ), 0, 999, 1, array(6, 7, 8, 9)),
             array(array(
+                    "_text#0"           => "category",
+                    "text#0"            => "white/nonexistent",
+                ), 0, 999, 1, array()),
+            array(array(
                     "_text#0"           => "person",
                     "text#0"            => "John",
                 ), 0, 999, 1, array(1, 2, 3, 4)),
@@ -231,8 +235,12 @@ class getPhotoTest extends PHPUnit_Framework_TestCase {
                     "_latlon_photos"    => "1",
                 ), 0, 999, 1, array()),
             array(array(
-                    "rating"            => "null",
+                    "rating"            => "null"
                 ), 0, 999, 1, array(7, 9, 11, 12)),
+            // The next is added to compare it with the same query for another user, below.
+            array(array(
+                    "category_id"          => 2
+                ), 0, 999, 1, array(1,2,3,4)),
             // Test limits
             array(array(), 0, 5, 1, array(1, 2, 3, 4, 5)),
             array(array(), 5, 999, 1, array(6, 7, 8, 9, 10, 11, 12)),
@@ -246,7 +254,12 @@ class getPhotoTest extends PHPUnit_Framework_TestCase {
                     "album_id#2"        => 11,
                     "_album_id#2-conj"  => "and",
                     "_album_id#2-op"    => "!="
-                ), 0, 999, 2, array(1))
+                ), 0, 999, 2, array(1)),
+            // The next is the same query as above, but now for a non-admin user
+            array(array(
+                    "category_id"          => 2
+                ), 0, 999, 3, array(1)),
+            // Test limits
          );
     }
 
