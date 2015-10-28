@@ -191,7 +191,7 @@ class testData {
         return array(
             1 => array(1,2),
             2 => array(1,3), // !!! album 2 is added because it's the parent of 3 !!!
-            4 => array(2)
+            4 => array(2)    // !!! album 1 is added because it's the parent of 1 !!!
         );
     }
 
