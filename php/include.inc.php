@@ -56,8 +56,6 @@ require_once "settings.inc.php";
 require_once "requirements.inc.php";
 require_once "util.inc.php";
 
-require_once "validator.inc.php";
-
 require_once "track.inc.php";
 require_once "point.inc.php";
 
