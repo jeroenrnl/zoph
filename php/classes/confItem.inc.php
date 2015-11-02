@@ -80,7 +80,7 @@ abstract class confItem extends zophTable {
             $qry->where(new clause("conf_id=:confid"));
             $qry->addParam(new param(":confid", $this->fields["conf_id"], PDO::PARAM_STR));
 
-            if (static::getCountFromQuery($qry) > 0) {
+            if ($qry->getCount() > 0) {
                 parent::update();
             } else {
                 parent::insert();

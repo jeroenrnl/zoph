@@ -50,7 +50,7 @@ if(empty($upload_id)) {
     }
 }
 
-$num=escape_string(getvar("num"));
+$num=e(getvar("num"));
 if($num && !is_numeric($num)) {
     log::msg("num must be numeric", log::FATAL, log::IMPORT);
 } else if (!$num) {

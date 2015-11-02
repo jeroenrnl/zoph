@@ -636,7 +636,7 @@ class photoTest extends ZophDataBaseTestCase {
      */
     private function buildTrack() {
         conf::set("maps.provider", "googlev3")->update();
-        query("truncate zoph_point");
+        db::SQL("truncate zoph_point");
         $track=new track();
 
         $track->set("name", "Test Track");

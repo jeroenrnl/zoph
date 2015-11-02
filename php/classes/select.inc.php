@@ -209,5 +209,19 @@ class select extends query {
         $stmt=$this->execute();
         return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
     }
+
+    /**
+     * Executes a "SELECT COUNT(*) FROM ..." query and returns the counter
+     * @return int count
+     */
+    public function getCount() {
+        try {
+            $result = db::query($this);
+        } catch (PDOException $e) {
+            log::msg("Unable to get count", log::FATAL, log::DB);
+        }
+
+        return $result->fetch(PDO::FETCH_BOTH)[0];
+    }
 }
 

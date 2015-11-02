@@ -66,8 +66,6 @@ require_once "prefs.inc.php";
 require_once "user.inc.php";
 require_once "group.inc.php";
 
-require_once "database.inc.php";
-
 if(!defined("LOGON")) {
     if(!defined("TEST")) {
         require_once "auth.inc.php";

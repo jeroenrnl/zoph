@@ -261,7 +261,7 @@ class photo extends zophTable {
         $qry->addFunction(array("pos" => "max(position)"));
         $qry->where(new clause("photo_id=:photoid"));
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
-        $result=query($qry)->fetch(PDO::FETCH_ASSOC);
+        $result=db::query($qry)->fetch(PDO::FETCH_ASSOC);
         return (int) $result["pos"];
     }
 
@@ -521,7 +521,7 @@ class photo extends zophTable {
 
         list($width, $height, $filetype, $size)=getimagesize($file);
 
-        $alt = escape_string($this->get("title"));
+        $alt = e($this->get("title"));
 
         return new block("img", array(
             "src"   => $image_href,
@@ -1544,7 +1544,7 @@ class photo extends zophTable {
     public static function getTotalSize() {
         $qry=new select(array("p" => "photos"));
         $qry->addFunction(array("total" => "sum(size)"));
-        return static::getCountFromQuery($qry);
+        return $qry->getCount();
     }
 
     /**

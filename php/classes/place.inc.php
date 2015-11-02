@@ -103,7 +103,12 @@ class place extends zophTreeTable implements Organizer {
         $qry->addParam($locid);
         $qry->addParam($locidNull);
 
-        query($qry, "Could not remove references:");
+        try {
+            db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Could not remove references", log::FATAL, log::DB);
+        }
+
 
         $qry=new update(array("ppl" => "people"));
         $qry->where(new clause("home_id=:locid"));
@@ -111,7 +116,11 @@ class place extends zophTreeTable implements Organizer {
         $qry->addParam($locid);
         $qry->addParam($locidNull);
 
-        query($qry, "Could not remove references:");
+        try {
+            db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Could not remove references", log::FATAL, log::DB);
+        }
 
         $qry=new update(array("ppl" => "people"));
         $qry->where(new clause("work_id=:locid"));
@@ -119,7 +128,11 @@ class place extends zophTreeTable implements Organizer {
         $qry->addParam($locid);
         $qry->addParam($locidNull);
 
-        query($qry, "Could not remove references:");
+        try {
+            db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Could not remove references", log::FATAL, log::DB);
+        }
 
         parent::delete();
     }
@@ -287,7 +300,7 @@ class place extends zophTreeTable implements Organizer {
         }
         $qry->where($where);
 
-        return photo::getCountFromQuery($qry);
+        return $qry->getCount();
     }
 
     /**
@@ -311,7 +324,7 @@ class place extends zophTreeTable implements Organizer {
         }
         $qry->where($where);
 
-        return static::getCountFromQuery($qry);
+        return $qry->getCount();
     }
 
     /**
@@ -398,7 +411,7 @@ class place extends zophTreeTable implements Organizer {
         $qry->where($where);
 
 
-        $result=query($qry);
+        $result=db::query($qry);
         if ($result) {
             return $result->fetch(PDO::FETCH_ASSOC);
         } else {
@@ -579,7 +592,7 @@ class place extends zophTreeTable implements Organizer {
             $qry->addFunction(array("count" => "COUNT(DISTINCT location_id)"));
             list($qry, $where)=selectHelper::expandQueryForUser($qry);
             $qry->where($where);
-            return static::getCountFromQuery($qry);
+            return $qry->getCount();
 
         }
     }

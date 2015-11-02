@@ -292,7 +292,7 @@ function create_form($vars, $ignore = array()) {
     $form = "";
     while (list($key, $val) = each($vars)) {
         if (in_array($key, $ignore)) { continue; }
-        $form .= "<input type=\"hidden\" name=\"$key\" value=\"" . escape_string($val) . "\">\n";
+        $form .= "<input type=\"hidden\" name=\"$key\" value=\"" . e($val) . "\">\n";
     }
 
     return $form;

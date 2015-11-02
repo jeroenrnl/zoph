@@ -58,7 +58,7 @@ class rating extends zophTable {
             if ($user->get("allow_multirating")) {
                 // This user is allowed to rate the same photoe  multiple
                 // times, however we will allow only one from the same IP
-                $constraints["ipaddress"] = escape_string($_SERVER["REMOTE_ADDR"]);
+                $constraints["ipaddress"] = e($_SERVER["REMOTE_ADDR"]);
             }
         }
 
@@ -77,9 +77,12 @@ class rating extends zophTable {
         $qry->addParam(new param(":photoid", (int) $photo->getId(), PDO::PARAM_INT));
         $qry->addGroupBy("photo_id");
 
-        $result = query($qry, "Rating recalculation failed");
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-
+        try {
+            $result = db::query($qry);
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            log::msg("Rating recalculation failed", log::FATAL, log::DB);
+        }
         $avg = (round(100 * $row["average"])) / 100.0;
 
         if ($avg == 0) {
@@ -175,7 +178,11 @@ class rating extends zophTable {
         $qry->addGroupBy("rating");
         $qry->addOrder("rating");
 
-        $result = query($qry, "Rating grouping failed");
+        try {
+            $result = db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Rating grouping failed", log::FATAL, log::DB);
+        }
 
         $ratings=array_fill(0, 11, 0);
         while($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -203,7 +210,11 @@ class rating extends zophTable {
         $qry->addGroupBy("ROUND(rating)");
         $qry->addOrder("ROUND(rating)");
 
-        $result = query($qry, "Rating grouping failed");
+        try {
+            $result = db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Rating grouping failed", log::FATAL, log::DB);
+        }
         $ratings=array_fill(1, 10, 0);
         while($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $rating=(int) $row["rating"];

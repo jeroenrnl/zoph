@@ -183,10 +183,14 @@ abstract class zophTable {
 
     /**
      * Looks up a record using supplied SQL query
-     * @param string SQL query to use
+     * @param select SQL query to use
      */
-    public function lookupFromSQL($sql) {
-        $result = query($sql, "Lookup failed:");
+    public function lookupFromSQL(select $qry) {
+        try {
+            $result = db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Lookup failed", log::FATAL, log::DB);
+        }
 
         $results=$result->fetchAll(PDO::FETCH_ASSOC);
         $rows=count($results);
@@ -279,14 +283,22 @@ abstract class zophTable {
 
         $qry->where($where);
 
-        query($qry, "Delete failed:");
+        try {
+            $qry->execute();
+        } catch (PDOException $e) {
+            log::msg("Delete failed", log::FATAL, log::DB);
+        }
 
         if ($extra_tables) {
             foreach ($extra_tables as $table) {
                 $qry=new delete(array($table));
                 list($qry, $where) = $this->addWhereForKeys($qry);
                 $qry->where($where);
-                query($qry, "Delete from " . $table . " failed:");
+                try {
+                    $qry->execute();
+                } catch (PDOException $e) {
+                    log::msg("Delete from " . $table . " failed", log::FATAL, log::DB);
+                }
             }
         }
     }
@@ -336,8 +348,11 @@ abstract class zophTable {
 
         $qry->where($where);
 
-        query($qry, "Update failed:");
-
+        try {
+            $qry->execute();
+        } catch (PDOException $e) {
+            log::msg("Update failed", log::FATAL, log::DB);
+        }
     }
 
     /**
@@ -491,7 +506,7 @@ abstract class zophTable {
     public static function getCount() {
         $qry=new select(array(static::$tableName));
         $qry->addFunction(array("count" => "COUNT(*)"));
-        return static::getCountFromQuery($qry);
+        return $qry->getCount();
     }
 
     /**
@@ -514,22 +529,6 @@ abstract class zophTable {
         }
         return $pop_array;
     }
-
-    /**
-     * Executes a "SELECT COUNT(*) FROM ..." query and returns the counter
-     * @param string SQL query
-     * @return int count
-     * @todo should be moved into select object
-     */
-    public static function getCountFromQuery($sql) {
-        $result = query($sql, "Unable to get count");
-        if ($result instanceof PDOStatement) {
-            return $result->fetch(PDO::FETCH_BOTH)[0];
-        } else {
-            return result($result, 0, 0);
-        }
-    }
-
 
     /**
      * Gets an array of the records for a table by doing a * "select *"
@@ -593,24 +592,20 @@ abstract class zophTable {
     /**
      * Stores the results the the given query in an array of objects of
      * this given type.
-     * @param string SQL query
+     * @param select SQL query
      */
-    public static function getRecordsFromQuery($sql) {
+    public static function getRecordsFromQuery(select $qry) {
         $class=get_called_class();
-        $result = query($sql, "Unable to get records");
+        try {
+            $result = db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Unable to get records", log::FATAL, log::DB);
+        }
         $objs=array();
-        if ($result instanceof PDOStatement) {
-            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                $obj = new $class;
-                $obj->setFields($row);
-                $objs[] = $obj;
-            }
-        } else {
-            while ($row = fetch_assoc($result)) {
-                $obj = new $class;
-                $obj->setFields($row);
-                $objs[] = $obj;
-            }
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            $obj = new $class;
+            $obj->setFields($row);
+            $objs[] = $obj;
         }
         return $objs;
     }

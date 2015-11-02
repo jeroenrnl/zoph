@@ -152,7 +152,7 @@ class category extends zophTreeTable implements Organizer {
         }
 
         $qry->where($where);
-        $count=static::getCountFromQuery($qry);
+        $count=$qry->getCount();
         $this->photoCount=$count;
         return $count;
     }
@@ -193,7 +193,7 @@ class category extends zophTreeTable implements Organizer {
             $qry->where($where);
         }
 
-        $count=static::getCountFromQuery($qry);
+        $count=$qry->getCount();
         $this->photoTotalCount=$count;
         return $count;
     }
@@ -349,7 +349,7 @@ class category extends zophTreeTable implements Organizer {
         $qry->where($where);
 
 
-        $result=query($qry);
+        $result=db::query($qry);
         if ($result) {
             return $result->fetch(PDO::FETCH_ASSOC);
         } else {

@@ -199,7 +199,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->where($where);
 
 
-        $result=query($qry);
+        $result=db::query($qry);
         if ($result) {
             return $result->fetch(PDO::FETCH_ASSOC);
         } else {
@@ -239,7 +239,7 @@ class album extends zophTreeTable implements Organizer {
         }
 
         $qry->where($where);
-        $count=static::getCountFromQuery($qry);
+        $count=$qry->getCount();
         $this->photoCount=$count;
         return $count;
     }
@@ -265,7 +265,7 @@ class album extends zophTreeTable implements Organizer {
         }
         $qry->where($where);
 
-        return static::getCountFromQuery($qry);
+        return $qry->getCount();
     }
 
     /**
@@ -484,7 +484,7 @@ class album extends zophTreeTable implements Organizer {
             $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
             $qry->where($where);
         }
-        return static::getCountFromQuery($qry);
+        return $qry->getCount();
     }
 }
 

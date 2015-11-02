@@ -445,7 +445,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     $countQry=clone $qry;
     $countQry->addFunction(array("count" => "COUNT(distinct p.photo_id)"));
 
-    $num_photos = zophTable::getCountFromQuery($countQry);
+    $num_photos = $countQry->getCount();
 
     if ($num_photos > 0) {
         if (isset($vars["_random"]) && $num_photos > 1) {

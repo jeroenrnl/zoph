@@ -94,7 +94,7 @@ class person extends zophTable implements Organizer {
         $qry->where($where);
         $qry->addParams($params);
 
-        $result=query($qry)->fetch(PDO::FETCH_ASSOC);
+        $result=db::query($qry)->fetch(PDO::FETCH_ASSOC);
         $pos=$result["position"];
 
         $qry=new delete("photo_people");
@@ -452,7 +452,7 @@ class person extends zophTable implements Organizer {
 
         $qry->where($where);
 
-        $result=query($qry);
+        $result=db::query($qry);
         if ($result) {
             return $result->fetch(PDO::FETCH_ASSOC);
         } else {
