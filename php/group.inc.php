@@ -37,7 +37,7 @@ class group extends zophTable {
             $this->add_member($vars["_member"]);
         }
 
-        if($vars["_remove_user"]) {
+        if(isset($vars["_remove_user"])) {
             $this->remove_members($vars["_remove_user"]);
         }
             
