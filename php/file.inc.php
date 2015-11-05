@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,8 +54,8 @@ class file {
                     "There's something wrong with symlink $filename\n");
             }
         } else if (is_dir($filename) && !conf::get("import.cli.recursive")) {
-            throw new FileDirectoryNotSupportedException("$filename is a directory\n");
-        } 
+            throw new FileDirectoryNotSupportedException($filename . " is a directory\n");
+        }
 
         $this->name=basename($filename);
         $this->path=realpath(dirname($filename));
@@ -69,9 +69,9 @@ class file {
     }
 
     /**
-     * Returns the link destination. Contrary to the PHP readlink() function, 
-     * this function recurses through the links until it has located a real 
-     * file. So, in case a link points to a link, which points to a link, 
+     * Returns the link destination. Contrary to the PHP readlink() function,
+     * this function recurses through the links until it has located a real
+     * file. So, in case a link points to a link, which points to a link,
      * which points to... I guess you got it.
      * Also, it will simply return a file object if the file is not a link.
      */
@@ -92,7 +92,7 @@ class file {
         $files=glob($dir . "/*");
         foreach($files as $file) {
             $f=realpath($file);
-            
+
             log::msg($f . ": " . md5($f), log::DEBUG, log::IMPORT);
             if(md5($f) == $md5) {
                 return new file($f);
@@ -106,7 +106,7 @@ class file {
     public function __toString() {
         return $this->getPath() . "/" . $this->getName();
     }
-   
+
     /**
      * Returns filename
      */
@@ -129,7 +129,7 @@ class file {
         return $this->destName;
     }
 
-    /** 
+    /**
      * This generates an MD5 for a filename, to uniquely identify a file
      * that is not (yet) in the database and therefore has no db key.
      */
@@ -151,7 +151,7 @@ class file {
                 if(!is_dir($this) && is_writable($this)) {
                     unlink($this);
                 } else {
-                    log::msg(sprintf(translate("Could not delete %s."), $this), 
+                    log::msg(sprintf(translate("Could not delete %s."), $this),
                         log::ERROR, log::IMPORT);
                     return false;
                 }
@@ -160,9 +160,9 @@ class file {
         if($thumbs) {
             $dir=dirname($this);
             $file=basename($this);
-            $midname=$dir . "/" . MID_PREFIX . "/" . 
+            $midname=$dir . "/" . MID_PREFIX . "/" .
                 MID_PREFIX . "_" . $file;
-            $thumbname=$dir . "/" . THUMB_PREFIX . "/" . 
+            $thumbname=$dir . "/" . THUMB_PREFIX . "/" .
                 THUMB_PREFIX . "_" . $file;
             $mid=new file($midname);
             $mid->delete();
@@ -181,7 +181,7 @@ class file {
         $this->destPath="/" . cleanup_path($path) . "/";
         $this->destName=basename($this->readlink());
     }
-    
+
     /**
      * Makes checks if a file can be found and read
      */
@@ -204,11 +204,11 @@ class file {
         // First checks are the same...
         $this->check();
         if(!is_writable($this->destPath)) {
-            throw new FileDirNotWritableException("Directory not writable: " . 
+            throw new FileDirNotWritableException("Directory not writable: " .
               $this->destPath);
         }
         if(file_exists($this->destPath . $this->destName)) {
-            throw new FileExistsException("File already exists: " . 
+            throw new FileExistsException("File already exists: " .
                 $this->destPath . $this->destName);
         }
         return true;
@@ -259,7 +259,7 @@ class file {
         $destPath=$this->destPath;
         $destName=$this->destName;
         $dest=$destPath . "/" . $destName;
-        
+
         $this->checkCopy();
         if(copy($this, $dest)) {
             return new File($dest);
@@ -276,7 +276,7 @@ class file {
             $mode=octdec(conf::get("import.filemode"));
         }
         if(!chmod($this, $mode)) {
-            log::msg("Could not change permissions for <b>" . $this . "</b>", 
+            log::msg("Could not change permissions for <b>" . $this . "</b>",
                 LOG::ERROR, LOG::IMPORT);
         }
     }
@@ -291,7 +291,7 @@ class file {
         $this->type=get_filetype($mime[0]);
         return $mime[0];
     }
-    
+
     /**
      * Get files in a specific directory
      *

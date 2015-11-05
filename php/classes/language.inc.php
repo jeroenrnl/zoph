@@ -1,6 +1,6 @@
 <?php
 /**
- * Class that takes care of the translation of strings in Zoph. 
+ * Class that takes care of the translation of strings in Zoph.
  *
  * This file is part of Zoph.
  *
@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -51,7 +51,7 @@ class language {
     const LANG_DIR="lang";
 
     /**
-     * @param string iso ISO definition of the language, usually 2 letters or 
+     * @param string iso ISO definition of the language, usually 2 letters or
      * two letters dash two letters, for example nl en-ca.
      * This is also the name of the file it will try to read.
      */
@@ -92,7 +92,7 @@ class language {
         $header=fgets($file);
         $zoph_header="# zoph language file - ";
         if(strtolower(substr($header,0,23))!=$zoph_header) {
-            log::msg("Incorrect language header in <b>" . 
+            log::msg("Incorrect language header in <b>" .
                 $this->filename . "</b>", log::ERROR, log::LANG);
             log::msg("<pre>" . $header. "</pre>", log::DEBUG, log::LANG);
             return false;
@@ -117,10 +117,10 @@ class language {
                 $strings=explode("=",$line);
                 $this->translations[$strings[0]]=$strings[1];
             }
-        }              
+        }
         fclose($file);
         return true;
-    
+
     }
 
     /**
@@ -151,7 +151,7 @@ class language {
      * @param array The array to be translated
      * @param bool If true add [tr] before any string that cannot be
      *   translated.
-     * @return string The translated array 
+     * @return string The translated array
      */
     private function translateArray($array, $error = true) {
         $tr=array();
@@ -160,7 +160,7 @@ class language {
         }
         return $tr;
     }
-            
+
     /**
      * Get all languages
      * @return array array of language objects
@@ -182,17 +182,17 @@ class language {
                             $langs[$iso]=$lang;
                         }
                     } else {
-                        log::msg("Language files should have lowercase names, cannot open <b>" . 
+                        log::msg("Language files should have lowercase names, cannot open <b>" .
                             $filename . "</b>", log::WARN, log::LANG);
                     }
                 } else {
-                    log::msg("Cannot read <b>" . $filename . "</b>, skipping. ", 
+                    log::msg("Cannot read <b>" . $filename . "</b>, skipping. ",
                         log::ERROR, log::LANG);
                 }
             }
         } else {
             log::msg("Cannot read language dir!", log::WARN, log::LANG);
-        }    
+        }
         $base_lang=new language(self::$base);
         $base_lang->name=self::$base_name;
         $langs[self::$base]=$base_lang;
@@ -242,7 +242,7 @@ class language {
             self::$base . "</b>", log::NOTIFY, log::LANG);
         return new language(self::$base);
     }
-   
+
     /**
      * Get HTTP_ACCEPT_LANG and interprete it
      * @return array array of languages in preference order
@@ -260,7 +260,7 @@ class language {
                 $langs[]=strtolower($l[0]);
 
                 # A user could select a "sublanguage" such as en-gb for British
-                # English, or de-ch for Swiss German to make sure that 
+                # English, or de-ch for Swiss German to make sure that
                 # Zoph offers these users English or German, unless the more
                 # specific one is available (Zoph has a Canadian English
                 # translation for example), we add both en-gb and en to the list
@@ -269,11 +269,11 @@ class language {
                     $genlangs[]=strtolower($genlang[0]);
                 }
             }
-            
+
             $return=array_unique(array_merge($langs, $genlangs));
-            log::msg("<b>Client accepts language(s):</b>: " . 
+            log::msg("<b>Client accepts language(s):</b>: " .
                 $_SERVER["HTTP_ACCEPT_LANGUAGE"], log::DEBUG, log::LANG);
-            log::msg("<b>Zoph's interpretation</b>: " . implode(", ", $return), 
+            log::msg("<b>Zoph's interpretation</b>: " . implode(", ", $return),
                 log::DEBUG, log::LANG);
         }
         return $return;
@@ -291,7 +291,7 @@ function translate($str, $error=true){
     global $lang;
     if($lang instanceof language) {
         return $lang->translate($str, $error);
-    } else {      
+    } else {
         return $str;
     }
 }

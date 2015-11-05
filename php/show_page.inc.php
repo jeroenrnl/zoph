@@ -17,24 +17,25 @@
  */
 
 $page=array_reverse(explode("/", $_SERVER["PHP_SELF"]));
-if($page[0]=="show_page.inc.php") {
+if ($page[0]=="show_page.inc.php") {
     redirect("zoph.php");
 }
 
 // If no page is set, we always show original.
 $page_html="";
 $show_orig=true;
-if($obj->get("pageset")) {
+if ($obj->get("pageset")) {
     $pageset=new pageset($obj->get("pageset"));
     $pageset->lookup();
-    $pagecount=$pageset->get_pagecount();
-    if($pagecount==0) {
+    $pagecount=$pageset->getPageCount();
+    if ($pagecount==0) {
         $show_orig=true;
+        /* Return in global scope jumps out of the included file */
         return;
     }
     $pageset_page=getvar("_pageset_page");
     $orig=$pageset->get("show_orig");
-    if(!$pageset_page || $pageset_page==0) {
+    if (!$pageset_page || $pageset_page==0) {
         $pageset_page=0;
         $first=true;
     } else if ($pageset_page==$pagecount - 1) {
@@ -46,7 +47,7 @@ if($obj->get("pageset")) {
         ($orig=="never")) {
             $show_orig=false;
     }
-    $pages=$pageset->get_pages($pageset_page);
+    $pages=$pageset->getPages($pageset_page);
     $page=$pages[0];
     $page->lookup();
     $page_html="<div class='page'>" .
@@ -54,7 +55,7 @@ if($obj->get("pageset")) {
         pager($pageset_page, $pagecount, $pagecount, 1, 5, $request_vars, "_pageset_page") .
         "<br>\n</div>\n";
 
-    if($pageset->get("orig_pos") == "bottom") {
+    if ($pageset->get("orig_pos") == "bottom") {
         echo $page_html;
         $page_html="";
     }

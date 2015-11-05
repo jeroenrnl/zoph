@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+require_once "testSetup.php";
+
 /**
  * Test group_permissions class.
  *
@@ -44,9 +46,9 @@ class groupPermissionsTest extends ZophDataBaseTestCase {
             $prm->insert();
 
             $perm=$gr->get_group_permissions($alb);
-            $this->assertEquals($perm->get("access_level"), $al);
-            $this->assertEquals($perm->get("watermark_level"), $wml);
-            $this->assertEquals($perm->get("writable"),$wr);
+            $this->assertEquals($al, $perm->get("access_level"));
+            $this->assertEquals($wml, $perm->get("watermark_level"));
+            $this->assertEquals($wr, $perm->get("writable"));
         }
     }
 

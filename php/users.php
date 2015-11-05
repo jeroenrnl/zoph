@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -60,7 +60,7 @@ if ($users) {
         <?php
         if ((count(album::getNewer($u, $u->get_lastnotify())) > 0)) {
             ?>
-              <a href="notify.php?_action=notify&amp;user_id=<?php 
+              <a href="notify.php?_action=notify&amp;user_id=<?php
                 echo $u->get("user_id") ?>&amp;shownewalbums=1">i
                 <?php echo translate("Notify User", 0) ?>
               </a> |

@@ -2,35 +2,35 @@
 /**
  * Raw MIME encoder class
  *
- *  @copyright 2002-2003  Richard Heyes                                
- *  All rights reserved.                                                  
- *                                                                        
- *  Redistribution and use in source and binary forms, with or without    
- *  modification, are permitted provided that the following conditions    
- *  are met:                                                              
- *                                                                        
- *  o Redistributions of source code must retain the above copyright      
- *    notice, this list of conditions and the following disclaimer.       
- *  o Redistributions in binary form must reproduce the above copyright   
- *    notice, this list of conditions and the following disclaimer in the 
+ *  @copyright 2002-2003  Richard Heyes
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  o Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  o Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- *  o The names of the authors may not be used to endorse or promote      
- *    products derived from this software without specific prior written  
- *    permission.                                                         
- *                                                                        
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   
- *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     
- *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
- *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT  
- *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
- *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT      
- *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT   
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
- *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
- *                                                                        
- * @author Richard Heyes <richard@phpguru.org>                           
+ *  o The names of the authors may not be used to endorse or promote
+ *    products derived from this software without specific prior written
+ *    permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @author Richard Heyes <richard@phpguru.org>
  * @author Jeroen Roos
  *
  * @package Zoph
@@ -132,7 +132,7 @@ class mailMimePart {
         foreach ($params as $key => $value) {
             switch ($key) {
             case 'content_type':
-                $headers['Content-Type'] = $value . 
+                $headers['Content-Type'] = $value .
                     (isset($charset) ? '; charset="' . $charset . '"' : '');
                 break;
 
@@ -146,7 +146,7 @@ class mailMimePart {
                 break;
 
             case 'disposition':
-                $headers['Content-Disposition'] = $value . 
+                $headers['Content-Disposition'] = $value .
                     (isset($dfilename) ? '; filename="' . $dfilename . '"' : '');
                 break;
 
@@ -235,7 +235,7 @@ class mailMimePart {
      * @param string The body of the subpart, if any.
      * @param array The parameters for the subpart, same
      *                as the $params argument for constructor.
-     * @return mailMimePart the part you just added. 
+     * @return mailMimePart the part you just added.
      */
     public function addSubPart($body, $params) {
         $this->subparts[] = new mailMimePart($body, $params);
@@ -290,7 +290,7 @@ class mailMimePart {
                     $char = $escape . strtoupper(sprintf('%02s', dechex($dec)));
                 }
 
-                if ((strlen($newline) + strlen($char)) >= $line_max) {        
+                if ((strlen($newline) + strlen($char)) >= $line_max) {
                     // PHP_EOL is not counted
                     $output  .= $newline . $escape . $eol;
                     // soft line break; " =\r\n" is okay

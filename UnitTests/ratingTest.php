@@ -160,9 +160,9 @@ class ratingTest extends ZophDataBaseTestCase {
         $ratings=rating::getGraphArray();
         $this->assertInternalType("array", $ratings);
 
-        $this->assertEquals($ratings[0]["count"], 10);
+        $this->assertEquals($ratings[0]["count"], 12);
         
-        for($c=1; $c<=10; $c++) {
+        for($c=1; $c<sizeof($ratings); $c++) {
             $this->assertEquals($ratings[$c]["count"], 0);
         }
 
@@ -175,7 +175,7 @@ class ratingTest extends ZophDataBaseTestCase {
         $user=new user(1);
         user::setCurrent($user);
         
-        for($p=1; $p<=10; $p++) {
+        for($p=1; $p<=12; $p++) {
             $photo=new photo($p);
             $photo->delete();
         }
@@ -337,7 +337,7 @@ class ratingTest extends ZophDataBaseTestCase {
         // user, rating => count
         return array(
             array(1, array(
-                0 => 2,
+                0 => 4,
                 1 => 0,
                 2 => 0,
                 3 => 0,

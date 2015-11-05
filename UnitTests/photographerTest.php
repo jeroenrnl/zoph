@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,7 +54,7 @@ class photographerTest extends ZophDataBaseTestCase {
 
         $pg->removePhoto($photo);
         $photo->update();
-        
+
         $actual=$photo->getPhotographer();
         $this->assertEquals(null, $actual);
     }
@@ -91,11 +91,11 @@ class photographerTest extends ZophDataBaseTestCase {
         foreach($pgs as $pg) {
             $this->assertContains($pg->getId(), $pg_ids);
         }
-        
+
         user::setCurrent(new user(1));
     }
-        
-    
+
+
     public function getPhotoCount() {
         // user_id, photographer_id, count
         return array(
@@ -118,4 +118,4 @@ class photographerTest extends ZophDataBaseTestCase {
      }
 
 
-}    
+}

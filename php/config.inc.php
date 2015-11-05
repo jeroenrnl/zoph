@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jeroen Roos
  * @author Jason Geiger
@@ -42,7 +42,7 @@ define('THUMB_PREFIX', 'thumb');
 define('MID_PREFIX', 'mid');
 
 // LOG_ALWAYS and LOG_SEVERITY can have the following values:
-// log::DEBUG, log::NOTIFY, log::WARN, log::ERROR, log::FATAL, log::NONE
+// log::DEBUG, log::NOTIFY, log::WARN, log::ERROR, log::FATAL, log::MSG, log::NONE
 
 // Always show fatal errors
 define('LOG_ALWAYS', log::FATAL);

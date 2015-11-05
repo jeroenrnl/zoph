@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,14 +28,32 @@
  * @author Jeroen Roos
  */
 class testData {
-    
-    
+
+
     public static function getPhotos() {
         $photos=array();
-        for($num=1; $num<=10; $num++) {
+        for($num=1; $num<=12; $num++) {
             $photos[$num]=sprintf("TEST_%04d.JPG", $num);
         }
         return $photos;
+    }
+
+    public static function getPhotoData() {
+        /** date, time, timestamp, lat, lon */
+        return array(
+            1 => array("2014-01-01", "00:01:00", "2014-01-01 00:01:00", 52.25, 5.75),
+            2 => array("2014-01-02", "00:01:00", "2014-01-02 00:01:00", 51.9225, 4.47917),
+            3 => array("2014-01-03", "00:01:00", "2014-01-03 00:01:00", 51.9225, 4.47917),
+            4 => array("2014-01-04", "00:01:00", "2014-01-04 00:01:00", 52.37403, 4.88969),
+            5 => array("2014-01-05", "00:01:00", "2014-01-05 00:01:00", 52.37403, 4.88969),
+            6 => array("2014-01-06", "00:01:00", "2014-01-06 00:01:00", 51.5, 10.5),
+            7 => array("2014-01-07", "00:01:00", "2014-01-10 00:05:00", 52.52437, 13.41053),
+            8 => array("2014-01-08", "00:01:00", "2014-01-10 00:04:00", 43.70011, -79.4163),
+            9 => array("2014-01-09", "00:01:00", "2014-01-10 00:03:00", 40.71427, -74.00597),
+            10 => array("2014-01-10", "00:01:00", "2014-01-10 00:02:00", 38.89511, -77.03637),
+            11 => array("2015-06-17", "00:01:00", "2015-06-17 00:01:00", -25, 135),
+            12 => array("2015-06-17", "00:02:00", "2015-06-17 00:02:00", -25, 135)
+       );
     }
 
     public static function getCategories() {
@@ -78,23 +96,24 @@ class testData {
     public static function getLocations() {
         return array(
             /* 1 => "World" */
-            2 => array(1, "Europe"),
-            3 => array(2, "Netherlands"),
-            4 => array(3,"Rotterdam"),
-            5 => array(3,"Amsterdam"),
-            6 => array(2,"Germany"),
-            7 => array(6,"Berlin"),
-            8 => array(1,"North America"),
-            9 => array(8,"Canada"),
-            10 => array(9,"Toronto"),
-            11 => array(8,"USA"),
-            12 => array(11,"New York"),
-            13 => array(12,"New York City"),
-            14 => array(11,"New Jersey"),
-            14 => array(11,"DC"),
-            15 => array(14,"Washington DC"),
-            16 => array(11,"Washington"),
-            17 => array(16,"Seattle")
+            2 => array(1, "Europe", 48.69096, 9.14062),
+            3 => array(2, "Netherlands", 52.25, 5.75),
+            4 => array(3,"Rotterdam", 51.9225, 4.47917),
+            5 => array(3,"Amsterdam", 52.37403, 4.88969),
+            6 => array(2,"Germany", 51.5, 10.5),
+            7 => array(6,"Berlin", 52.52437, 13.41053),
+            8 => array(1,"North America", 6.07323, -100.54688),
+            9 => array(8,"Canada", 60.10867, -113.64258),
+            10 => array(9,"Toronto", 43.70011, -79.4163),
+            11 => array(8,"USA", 39.76, -98.5),
+            12 => array(11,"New York",43.00035, -75.4999),
+            13 => array(12,"New York City", 40.71427, -74.00597),
+            14 => array(11,"New Jersey", 40.16706, -74.49987),
+            14 => array(11,"DC", 38.91706, -77.00025),
+            15 => array(14,"Washington DC", 38.89511, -77.03637),
+            16 => array(11,"Washington", 47.50012, -120.50147),
+            17 => array(16,"Seattle", 47.60621, -122.33207),
+            18 => array(1, "Australia", -25, 135)
         );
     }
 
@@ -130,7 +149,7 @@ class testData {
     public static function getAdminUsers() {
         return array(2);
     }
-    
+
     public static function getLightboxAlbums() {
         return array(
             /* user => lb */
@@ -161,7 +180,9 @@ class testData {
             7 => array(2,11),
             8 => array(3,11),
             9 => array(4,11),
-            10 => array(4,12)
+            10 => array(4,12),
+            11 => array(),
+            12 => array()
         );
     }
 
@@ -170,7 +191,7 @@ class testData {
         return array(
             1 => array(1,2),
             2 => array(1,3), // !!! album 2 is added because it's the parent of 3 !!!
-            4 => array(2)
+            4 => array(2)    // !!! album 1 is added because it's the parent of 1 !!!
         );
     }
 
@@ -185,7 +206,9 @@ class testData {
             7 => array(10,11),
             8 => array(10,11),
             9 => array(10,11),
-            10 => array(3,4,5,7,12)
+            10 => array(3,4,5,7,12),
+            11 => array(),
+            12 => array()
         );
     }
 
@@ -200,7 +223,9 @@ class testData {
             7 => array(2,3,5),
             8 => array(),
             9 => array(),
-            10 => array()
+            10 => array(),
+            11 => array(),
+            12 => array()
         );
     }
 
@@ -215,7 +240,9 @@ class testData {
             7 => 7,
             8 => 10,
             9 => 13,
-            10 => 14
+            10 => 14,
+            11 => 18,
+            12 => 18
         );
     }
 
@@ -231,6 +258,8 @@ class testData {
             8 => 4,
             9 => 5,
             10 => 6,
+            11 => 7,
+            12 => 7
         );
     }
 
@@ -243,7 +272,9 @@ class testData {
             5 => array(6=>10, 3=>9),
             6 => array(3=>7, 2=>5),
             8 => array(4=>9, 6=>3),
-            10 => array(6=>10, 4=>1)
+            10 => array(6=>10, 4=>1),
+            11 => array(),
+            12 => array()
         );
     }
 

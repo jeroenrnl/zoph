@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -43,12 +43,12 @@ $category->lookup();
 $obj=&$category;
 $ancestors = $category->get_ancestors();
 $order = $user->prefs->get("child_sortorder");
-$children = $category->getChildrenForUser($order);
+$children = $category->getChildren($order);
 
 $photoCount = $category->getPhotoCount();
 $totalPhotoCount = $category->getTotalPhotoCount();
 
-$title = $category->get("parent_category_id") ? 
+$title = $category->get("parent_category_id") ?
     $category->get("category") : translate("Categories");
 
 require_once "header.inc.php";
@@ -58,11 +58,11 @@ require_once "header.inc.php";
 if ($user->is_admin()) {
     ?>
     <span class="actionlink">
-      <a href="category.php?_action=new&amp;parent_category_id=<?php 
+      <a href="category.php?_action=new&amp;parent_category_id=<?php
         echo $category->get("category_id") ?>"><?php echo translate("new") ?>
       </a>
     </span>
-    <?php 
+    <?php
 }
 echo "\n" . translate("categories") . "\n" ?>
 </h1>
@@ -98,15 +98,15 @@ if($show_orig) {
     if ($user->is_admin()) {
         ?>
         <span class="actionlink">
-          <a href="category.php?_action=edit&amp;category_id=<?php 
+          <a href="category.php?_action=edit&amp;category_id=<?php
             echo $category->get("category_id") ?>"><?php echo translate("edit") ?>
           </a>
         <?php
         if($category->get("coverphoto")) {
             ?>
             |
-            <a href="category.php?_action=update&amp;category_id=<?php 
-                echo $category->get("category_id") ?>&amp;coverphoto=NULL"><?php 
+            <a href="category.php?_action=update&amp;category_id=<?php
+                echo $category->get("category_id") ?>&amp;coverphoto=NULL"><?php
                 echo translate("unset coverphoto") ?>
             </a>
             <?php
@@ -143,7 +143,7 @@ if($show_orig) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
             <span class="actionlink">
-                <a href="photos.php?category_id=<?php echo $category->getBranchIds() . 
+                <a href="photos.php?category_id=<?php echo $category->getBranchIds() .
                     $sort ?>"><?php echo translate("view photos") ?>
                 </a>
             </span>
@@ -169,7 +169,7 @@ if($show_orig) {
     if ($photoCount > 0) {
         ?>
         <span class="actionlink">
-            <a href="photos.php?category_id=<?php echo $category->get("category_id") . 
+            <a href="photos.php?category_id=<?php echo $category->get("category_id") .
                 $sort ?>"><?php echo translate("view photos")?>
             </a>
         </span>

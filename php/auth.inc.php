@@ -1,14 +1,14 @@
 <?php
 /**
  * Check if user is logged in, or perform authentication
- * 
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -51,7 +51,7 @@ if(!defined("CLI")) {
         $user=user::getByName($username);
         if(!$user) {
             throw new CliUserNotValidException($username . " is not a valid user");
-        }    
+        }
     }
     $user->lookup();
     $user->lookup_person();
@@ -84,7 +84,7 @@ if ($_action == "logout") {
         $user->lookup();
         $user->lookup_person();
         $user->lookup_prefs();
-        
+
         // Update Last Login Fields
         $updated_user = new user($user->get("user_id"));
         $updated_user->set("lastlogin", "now()");
@@ -101,7 +101,7 @@ if (!empty($user)) {
     $user->prefs->load();
     $lang=$user->load_language();
     user::setCurrent($user);
-        
+
     if (!defined("CLI")) {
         $_SESSION['user'] = &$user;
     }
@@ -116,12 +116,12 @@ if (!empty($user)) {
             $redirect_clean = "http://" . $_SERVER['SERVER_NAME'] . $redirect_clean;
         }
         redirect($redirect_clean, "Redirect");
-    } 
+    }
     if (array_key_exists('HTTPS', $_SERVER) && (conf::get("ssl.force")=="login")) {
         redirect(getZophURL("http"), "switch back from https to http");
     }
 } else {
     $lang = new language(conf::get("interface.language"));
-}        
+}
 
 ?>

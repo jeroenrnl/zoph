@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -69,7 +69,7 @@ if($_action=="" || $_action=="display") {
             "hidden"        => $hidden));
 
     }
-        
+
 } else if ($_action=="do_geotag") {
     $validtz=getvar("_validtz");
     $overwrite=getvar("_overwrite");
@@ -106,7 +106,7 @@ if($_action=="" || $_action=="display") {
         }
 
         foreach($photos as $photo) {
-            $point=$photo->getLatLon($track, $maxtime, $interpolate, $int_maxdist, 
+            $point=$photo->getLatLon($track, $maxtime, $interpolate, $int_maxdist,
                 $entity, $int_maxtime);
             if($point instanceof point) {
                 $photo->setLatLon($point);
@@ -124,7 +124,7 @@ if($_action=="" || $_action=="display") {
     }
     $content=new block("tracks_geotag_results", array(
         "count"         => $total,
-        "actionlinks"   => 
+        "actionlinks"   =>
             array(translate("geotag") => "tracks.php?" . html_entity_decode($new_vars)),
         "test"          => (bool) is_array($test),
         "tagged_count"  => (int) $tagged,

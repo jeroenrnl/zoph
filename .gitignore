@@ -1,3 +1,4 @@
 UnitTests/output/
 .sonar
 .images
+*.swp

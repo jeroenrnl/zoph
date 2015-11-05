@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,6 +22,14 @@
  * @author Jeroen Roos
  */
 
+use db\select;
+use db\param;
+use db\insert;
+use db\delete;
+use db\db;
+use db\clause;
+use db\selectHelper;
+
 /**
  * A category class corresponding to the category table.
  *
@@ -30,53 +38,58 @@
  * @author Jeroen Roos
  */
 class category extends zophTreeTable implements Organizer {
-
     /** @param Name of the root node in XML responses */
     const XMLROOT="categories";
     /** @param Name of the leaf nodes in XML responses */
     const XMLNODE="category";
 
-
-
     /** @var string The name of the database table */
-    protected static $table_name="categories";
+    protected static $tableName="categories";
     /** @var array List of primary keys */
-    protected static $primary_keys=array("category_id");
+    protected static $primaryKeys=array("category_id");
     /** @var array Fields that may not be empty */
-    protected static $not_null=array("category");
-    /** @var bool keep keys with insert. In most cases the keys are set 
+    protected static $notNull=array("category");
+    /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url="categories.php?parent_category_id=";
     /** @var int cached photocount */
     protected $photoCount;
+    /** @var int cached photoTotalCount */
+    protected $photoTotalCount;
 
     /**
-     * Add a photo to this album
+     * Add a photo to this category
      * @param photo Photo to add
      * @todo Permissions are currently not checked, this should be done before calling this function
      */
     public function addPhoto(photo $photo) {
-        $sql = "INSERT INTO " . DB_PREFIX . "photo_categories " .
-            "(photo_id, category_id) VALUES ('" .
-            escape_string($photo->getId()) . "', '" .
-            escape_string($this->getId()) . "')";
-        query($sql);
+        $qry=new insert(array("photo_categories"));
+        $qry->addParam(new param(":photo_id", $photo->getId(), PDO::PARAM_INT));
+        $qry->addParam(new param(":category_id", $this->getId(), PDO::PARAM_INT));
+        $qry->execute();
     }
 
     /**
-     * Remove a photo from this album
+     * Remove a photo from this category
      * @param photo Photo to remove
      * @todo Permissions are currently not checked, this should be done before calling this function
      */
     public function removePhoto(photo $photo) {
-        $sql = "DELETE FROM " . DB_PREFIX . "photo_categories " .
-            "WHERE photo_id = '" . escape_string($photo->getId()) . "'" .
-            " AND category_id = '" . escape_string($this->getId()) . "'";
-        query($sql);
+        $qry=new delete(array("photo_categories"));
+        $where=new clause("photo_id=:photoid");
+        $where->addAnd(new clause("category_id=:catid"));
+        $qry->where($where);
+
+        $qry->addParams(array(
+            new param(":photoid", $photo->getId(), PDO::PARAM_INT),
+            new param(":catid", $this->getId(), PDO::PARAM_INT)
+        ));
+
+        $qry->execute();
     }
-    
+
     /**
      * Delete category
      */
@@ -96,129 +109,116 @@ class category extends zophTreeTable implements Organizer {
      * Get sub-categories
      * @param string order
      */
-    public function getChildren($order=null) {
-        $order_fields="";
-        if($order && $order!="name") {
-            $order_fields=get_sql_for_order($order);
-            $order=" ORDER BY " . $order . ", name ";
-        } else if ($order=="name") {
-            $order=" ORDER BY name ";
+    public function getChildren($order="name") {
+
+        if (!in_array($order,
+            array("name", "sortname", "oldest", "newest", "first", "last", "lowest", "highest", "average", "random"))) {
+            $order="name";
+        }
+        $qry=new select(array("c" => "categories"));
+        $qry->addFields(array("*", "name" => "category"));
+        $where=new clause("parent_category_id=:catid");
+
+        $qry->addParam(new param(":catid", (int) $this->getId(), PDO::PARAM_INT));
+        $qry->addGroupBy("c.category_id");
+
+        $qry=selectHelper::addOrderToQuery($qry, $order);
+
+        if ($order!="name") {
+            $qry->addOrder("name");
         }
 
-        $id = $this->get("category_id");
-        if (!$id) { return; }
+        $qry->where($where);
 
-        $sql =
-            "SELECT c.*, category as name " .
-            $order_fields . " FROM " .
-            DB_PREFIX . "categories as c " .
-            "WHERE parent_category_id=" . $id .
-            " GROUP BY c.category_id " .
-            $order;
+        $this->children=static::getRecordsFromQuery($qry);
+        if (!user::getCurrent()->is_admin()) {
+            return remove_empty($this->children);
+        } else {
+            return $this->children;
+        }
+    }
 
-        $this->children=self::getRecordsFromQuery($sql);
-        return $this->children;
-    }
-    
     /**
-     * Get children of this category, with categories this user cannot see, filtered out.
-     * @param string sort order.
-     * @return array category tree
-     */
-    public function getChildrenForUser($order=null) {
-        return remove_empty($this->getChildren($order));
-    }
-    
-    /**
-     * Get count of photos in this album
+     * Get count of photos in this category
+     * @todo This function is very similar to album::getPhotoCount, should be merged
      */
     public function getPhotoCount() {
-        $user=user::getCurrent();
+        $db=db::getHandle();
 
-        if ($this->photoCount) { return $this->photoCount; }
-
-        $id = $this->get("category_id");
-
-        if ($user->is_admin()) {
-            $sql =
-                "select count(photo_id) from " .
-                DB_PREFIX . "photo_categories " .
-                "where category_id = '" .  escape_string($id) . "'";
-        } else {
-            $sql =
-                "select count(distinct pc.photo_id) from " .
-                DB_PREFIX . "photo_categories as pc JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON pc.photo_id = pa.photo_id JOIN " .
-                DB_PREFIX . "photos as p " .
-                "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE pc.category_id = '" .  escape_string($id) . "' " .
-                "AND gu.user_id = '" . escape_string($user->get("user_id")) . 
-                "' AND gp.access_level >= p.level";
+        if ($this->photoCount) {
+            return $this->photoCount;
         }
 
-        return self::getCountFromQuery($sql);
+        $qry=new select(array("pc" => "photo_categories"));
+        $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
+        $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
+        $where=new clause("category_id = :cat_id");
+        $qry->addParam(new param(":cat_id", $this->getId(), PDO::PARAM_INT));
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+        }
+
+        $qry->where($where);
+        $count=$qry->getCount();
+        $this->photoCount=$count;
+        return $count;
     }
 
     /**
      * Get count of photos for this category and all subcategories
      */
     public function getTotalPhotoCount() {
-        $user=user::getCurrent();
+        $where=null;
+        $db=db::getHandle();
+
+        if ($this->photoTotalCount) {
+            return $this->photoTotalCount;
+        }
+
+        $qry=new select(array("pc" => "photo_categories"));
+        $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
+        $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+        }
+
         if ($this->get("parent_category_id")) {
-            $id_list = $this->getBranchIds();
-            $id_constraint = "pc.category_id in ($id_list)";
-        } else {
-            $id_constraint = "";
-        }
-
-
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT COUNT(DISTINCT pc.photo_id) FROM " .
-                DB_PREFIX . "photo_categories AS pc";
-            if ($id_constraint) {
-                $sql .= " WHERE $id_constraint";
-            }
-        } else {
-            $sql =
-                "SELECT COUNT(DISTINCT pc.photo_id) FROM " .
-                DB_PREFIX . "photo_categories AS pc JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pc.photo_id = pa.photo_id JOIN " .
-                DB_PREFIX . "photos as p " .
-                "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= p.level";
-
-            if ($id_constraint) {
-                $sql .= " AND $id_constraint";
+            $id_list=null;
+            $this->getBranchIdArray($id_list);
+            $ids=new param(":cat_id", $id_list, PDO::PARAM_INT);
+            $qry->addParam($ids);
+            $catids=clause::InClause("category_id", $ids);
+            if ($where instanceof clause) {
+                $where->addAnd($catids);
+            } else {
+                $where=$catids;
             }
         }
 
-        return self::getCountFromQuery($sql);
+        if ($where instanceof clause) {
+            $qry->where($where);
+        }
+
+        $count=$qry->getCount();
+        $this->photoTotalCount=$count;
+        return $count;
     }
 
     /**
      * Get array that can be used to create an edit form
+     * @todo Returns HTML, move into template
      */
     public function getEditArray() {
-        if($this->isRoot()) {
+        if ($this->isRoot()) {
             $parent=array(
                 translate("parent category"),
                 translate("Categories"));
         } else {
             $parent=array(
                 translate("parent category"),
-                self::createPulldown("parent_category_id", $this->get("parent_category_id"))
+                static::createPulldown("parent_category_id", $this->get("parent_category_id"))
             );
         }
         return array(
@@ -235,8 +235,8 @@ class category extends zophTreeTable implements Organizer {
             "pageset" =>
                 array(
                     translate("pageset"),
-                    template::createPulldown("pageset", $this->get("pageset"), 
-                        get_pageset_select_array())),
+                    template::createPulldown("pageset", $this->get("pageset"),
+                         template::createSelectArray(pageset::getRecords("title"), array("title"), true))),
             "sortname" =>
                 array(
                     translate("sort name"),
@@ -274,58 +274,44 @@ class category extends zophTreeTable implements Organizer {
     /**
      * Get coverphoto for this category.
      * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
-     * @param bool choose autocover from this album AND children
+     * @param bool choose autocover from this category AND children
      * @return photo coverphoto
+     * @todo This function is almost equal to album::getAutoCover(), should be merged
      */
     public function getAutoCover($autocover=null,$children=false) {
-        $user=user::getCurrent();
         $coverphoto=$this->getCoverphoto();
-        if($coverphoto instanceof photo) {
+        if ($coverphoto instanceof photo) {
             return $coverphoto;
         }
 
-        $order=self::getAutoCoverOrder($autocover);
-        if($children) {
-            $cat_where=" WHERE pc.category_id in (" . $this->getBranchIds() .")";
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id")
+            ->join(array("pc" => "photo_categories"), "pc.photo_id = ar.photo_id");
+
+        if ($children) {
+            $ids=new param(":ids",$this->getBranchIdArray(), PDO::PARAM_INT);
+            $qry->addParam($ids);
+            $where=clause::InClause("pc.category_id", $ids);
         } else {
-            $cat_where=" WHERE pc.category_id =" .$this->get("category_id");
+            $where=new clause("pc.category_id=:id");
+            $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
         }
 
-        if ($user->is_admin()) {
-            $sql =
-                "select distinct ar.photo_id from " .
-                DB_PREFIX . "view_photo_avg_rating ar JOIN " .
-                DB_PREFIX . "photo_categories as pc ON" .
-                " pc.photo_id = ar.photo_id" .
-                $cat_where . " " . $order;
-        } else {
-            $sql=
-                "select distinct p.photo_id from " .
-                DB_PREFIX . "photos as p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id JOIN " .
-                DB_PREFIX . "photo_categories as pc " .
-                "ON pc.photo_id = p.photo_id " .
-                $cat_where .
-                " AND gu.user_id =" .
-                " '" . escape_string($user->get("user_id")) . "'" .
-                " AND gp.access_level >= p.level " .
-                $order;
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
-        $coverphotos=photo::getRecordsFromQuery($sql);
+
+        $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
+        $qry->where($where);
+        $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
 
         if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
             return $coverphoto;
         } else if (!$children) {
-            // No photos found in this cat... let's look again, but now 
+            // No photos found in this cat... let's look again, but now
             // also in subcat...
             return $this->getAutoCover($autocover, true);
 
@@ -343,62 +329,37 @@ class category extends zophTreeTable implements Organizer {
     /**
      * Get details (statistics) about this category from db
      * @return array Array with statistics
+     * @todo This function is almost equal to album::getDetails() these should be merged
      */
     public function getDetails() {
-        $user=user::getCurrent();
-        $user_id = (int) $user->getId();
-        $id = (int) $this->getId();
+        $qry=new select(array("pc" => "photo_categories"));
+        $qry->addFunction(array(
+            "count"     => "COUNT(DISTINCT p.photo_id)",
+            "oldest"    => "MIN(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "newest"    => "MAX(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "first"     => "MIN(p.timestamp)",
+            "last"      => "MAX(p.timestamp)",
+            "lowest"    => "ROUND(MIN(ar.rating),1)",
+            "highest"   => "ROUND(MAX(ar.rating),1)",
+            "average"   => "ROUND(AVG(ar.rating),2)"));
+        $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id")
+            ->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
-        if ($user->is_admin()) {
-            $sql = "SELECT ".
-                "COUNT(DISTINCT ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " . 
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photo_categories pc JOIN " .
-                DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pc.photo_id JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id " .
-                "WHERE pc.category_id=" . escape_string($id) .
-                " GROUP BY pc.category_id";
-        } else {
-            $sql = "SELECT " .
-                "COUNT(DISTINCT ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photo_categories pc JOIN " .
-                DB_PREFIX . "photos ph " .
-                "ON ph.photo_id=pc.photo_id JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id LEFT JOIN " .
-                DB_PREFIX . "photo_albums pa " .
-                "ON ph.photo_id=pa.photo_id LEFT JOIN " .
-                DB_PREFIX . "group_permissions gp " .
-                "ON pa.album_id=gp.album_id LEFT JOIN " . 
-                DB_PREFIX . "groups_users gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE ph.level<gp.access_level AND " .
-                "gu.user_id=" . escape_string($user_id) . " AND " .
-                "pc.category_id=" . escape_string($id) .
-                " GROUP BY pc.category_id";
+        $qry->addGroupBy("pc.category_id");
+
+        $where=new clause("pc.category_id=:catid");
+        $qry->addParam(new param(":catid", $this->getId(), PDO::PARAM_INT));
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
-        $result=query($sql);
-        if($result) {
-            return fetch_assoc($result);
+
+        $qry->where($where);
+
+
+        $result=db::query($qry);
+        if ($result) {
+            return $result->fetch(PDO::FETCH_ASSOC);
         } else {
             return null;
         }
@@ -409,7 +370,7 @@ class category extends zophTreeTable implements Organizer {
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
-        if(!isset($details)) {
+        if (!isset($details)) {
             $details=$this->getDetails();
         }
         $details["title"]=translate("In this category:", false);
@@ -419,17 +380,18 @@ class category extends zophTreeTable implements Organizer {
     /**
      * Lookup category by name
      * @param string name
+     * @todo This function is almost equal to album::getByName() these should be merged
      */
     public static function getByName($name) {
-        if(empty($name)) {
+        if (empty($name)) {
             return false;
         }
-        $where =
-            "lower(category)='" . escape_string(strtolower($name)) . "'";
+        $qry=new select(array("c" => "categories"));
+        $qry->addFields(array("category_id"));
+        $qry->where(new clause("lower(category) LIKE :name"));
+        $qry->addParam(new param(":name", "%" . strtolower($name) . "%", PDO::PARAM_STR));
 
-        $query = "select category_id from " . DB_PREFIX . "categories where $where";
-
-        return self::getRecordsFromQuery($query);
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
@@ -437,38 +399,20 @@ class category extends zophTreeTable implements Organizer {
      */
     public static function getTopN() {
         $user=user::getCurrent();
-        if ($user->is_admin()) {
-            $sql =
-                "select cat.*, count(*) as count from " .
-                DB_PREFIX . "categories as cat, " .
-                DB_PREFIX . "photo_categories as pc " .
-                "where pc.category_id = cat.category_id " .
-                "group by cat.category_id " .
-                "order by count desc, cat.category " .
-                "limit 0, " . escape_string($user->prefs->get("reports_top_n"));
-        } else {
-            $sql =
-                "select cat.*, count(distinct ph.photo_id) as count from " .
-                DB_PREFIX . "categories as cat JOIN " .
-                DB_PREFIX . "photo_categories as pc ON " .
-                "pc.category_id = cat.category_id JOIN " .
-                DB_PREFIX . "photos as ph ON " .
-                " pc.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "photo_albums as pa ON " .
-                " pa.photo_id = pc.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp ON " .
-                "pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu ON " .
-                "gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . 
-                escape_string($user->get("user_id")) . "'" .
-                "AND gp.access_level >= ph.level " .
-                "GROUP BY cat.category_id " .
-                "ORDER BY count desc, cat.category " .
-                "LIMIT 0, " . escape_string($user->prefs->get("reports_top_n"));
-        }
 
-        return parent::getTopNfromSQL($sql);
+        $qry=new select(array("c" => "categories"));
+        $qry->addFields(array("category_id", "category"));
+        $qry->addFunction(array("count" => "count(distinct pc.photo_id)"));
+        $qry->join(array("pc" => "photo_categories"), "pc.category_id=c.category_id");
+        $qry->addGroupBy("c.category_id");
+        $qry->addOrder("count DESC")->addOrder("c.category");
+        $qry->addLimit((int) $user->prefs->get("reports_top_n"));
+        if (!$user->is_admin()) {
+            $qry->join(array("p" => "photos"), "pc.photo_id=p.photo_id");
+            list($qry, $where) = selectHelper::expandQueryForUser($qry);
+            $qry->where($where);
+        }
+        return parent::getTopNfromSQL($qry);
 
     }
 
@@ -478,16 +422,15 @@ class category extends zophTreeTable implements Organizer {
     public static function getCountForUser() {
         $user=user::getCurrent();
 
-        if($user && $user->is_admin()) {
-            return self::getCount();
+        if ($user && $user->is_admin()) {
+            return static::getCount();
         } else {
-            $sql =
-                "SELECT category_id, parent_category_id  FROM " .
-                DB_PREFIX . "categories as c";
-            $cats=self::getRecordsFromQuery($sql);
+            $qry=new select(array("c" => "categories"));
+            $qry->addFields(array("category_id", "parent_category_id"));
+            $cats=static::getRecordsFromQuery($qry);
             $cat_clean=remove_empty($cats);
             return count($cat_clean);
         }
     }
-}    
+}
 ?>

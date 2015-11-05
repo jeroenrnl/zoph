@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,7 +20,7 @@
  */
 
 /**
- * This class reads and interpretes CLI arguments 
+ * This class reads and interpretes CLI arguments
  */
 
 class arguments {
@@ -30,7 +30,7 @@ class arguments {
     private $processed = array();
     /** Contains the interpreted arguments, after lookup */
     private $vars = array();
-    
+
     /** Default command */
     public static $command="import";
 
@@ -73,7 +73,7 @@ class arguments {
         $args["dirpattern"]="";
 
         /* For new albums, categories, places, people */
-        
+
         $parent=0;
         $args["palbum"]=array();
         $args["pcat"]=array();
@@ -85,6 +85,8 @@ class arguments {
         $size=sizeof($argv);
         for($i=0; $i<$size; $i++) {
             switch($argv[$i]) {
+            case "":
+                break;
             case "--instance":
             case "-i":
                 $args["instance"]=$argv[++$i];
@@ -230,7 +232,7 @@ class arguments {
             case "--move":
                 conf::set("import.cli.copy", false);
                 break;
-            
+
             case "-A":
             case "--autoadd":
             case "--auto-add":
@@ -242,13 +244,13 @@ class arguments {
             case "--addalways":
                 conf::set("import.cli.add.always", true);
                 break;
-            
+
             case "-r":
             case "--recursive":
                 conf::set("import.cli.recursive", true);
                 break;
 
-            
+
             case "--dateddirs":
             case "--datedDirs":
             case "--dated":
@@ -335,7 +337,7 @@ class arguments {
             switch($type) {
             case "albums":
                 foreach($arg as $name) {
-                    if(self::$command=="new" || 
+                    if(self::$command=="new" ||
                       (conf::get("import.cli.add.auto") && !album::getByName($name))) {
                         $parent=array_shift($args["palbum"]);
                         // this is a string comparison because the trim() in process() changes
@@ -368,7 +370,7 @@ class arguments {
                 break;
             case "categories":
                 foreach($arg as $name) {
-                    if(self::$command=="new" || 
+                    if(self::$command=="new" ||
                       (conf::get("import.cli.add.auto") && !category::getByName($name))) {
                         $parent=array_shift($args["pcat"]);
                         // this is a string comparison because the trim() in process() changes
@@ -401,7 +403,7 @@ class arguments {
                 break;
             case "people":
                 foreach($arg as $name) {
-                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && 
+                    if(self::$command=="new" || (conf::get("import.cli.add.auto") &&
                       !person::getByName($name))) {
                         $vars["_new_person"][]=$name;
                     } else {
@@ -417,7 +419,7 @@ class arguments {
                 break;
             case "photographer":
                 $name=$arg;
-                if(self::$command=="new" || 
+                if(self::$command=="new" ||
                   (conf::get("import.cli.add.auto") && !person::getByName($name))) {
                     $vars["_new_photographer"][]=$name;
                 } else {
@@ -432,7 +434,7 @@ class arguments {
                 break;
             case "location":
                 foreach($arg as $name) {
-                    if(self::$command=="new" || (conf::get("import.cli.add.auto") && 
+                    if(self::$command=="new" || (conf::get("import.cli.add.auto") &&
                       !place::getByName($name))) {
                         $parent=array_shift($args["pplace"]);
                         // this is a string comparison because the trim() in process() changes

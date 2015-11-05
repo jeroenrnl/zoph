@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -71,7 +71,7 @@ class PlaceException extends OrganizerException {}
 class PlaceNotFoundException extends PlaceException {}
 
 /**
- * Exceptions for albums 
+ * Exceptions for albums
  * @author Jeroen Roos
  * @package ZophException
  */
@@ -85,7 +85,7 @@ class AlbumException extends OrganizerException {}
 class AlbumNotFoundException extends AlbumException {}
 
 /**
- * Exceptions for categories 
+ * Exceptions for categories
  * @author Jeroen Roos
  * @package ZophException
  */
@@ -128,7 +128,7 @@ class ImportFileNotInPathException extends ImportException {}
 class ImportFileNotFoundException extends ImportException {}
 
 /**
- * Exception thrown when ID is not numeric 
+ * Exception thrown when ID is not numeric
  * @todo migrate to a more general exception
  * @author Jeroen Roos
  * @package ZophException
@@ -136,7 +136,7 @@ class ImportFileNotFoundException extends ImportException {}
 class ImportIdIsNotNumericException extends ImportException {}
 
 /**
- * Exception thrown when multiple files have been found 
+ * Exception thrown when multiple files have been found
  * @author Jeroen Roos
  * @package ZophException
  */
@@ -164,7 +164,7 @@ class FileRenameException extends FileException {}
 class FileSymlinkProblemException extends FileException {}
 
 /**
- * Exception thrown when something is wrong with a photo 
+ * Exception thrown when something is wrong with a photo
  * @author Jeroen Roos
  * @package ZophException
  */
@@ -193,7 +193,7 @@ class PhotoNotFoundException extends PhotoException {}
 class MailException extends ZophException {}
 
 /**
- * Exception thrown when something goes wrong with 
+ * Exception thrown when something goes wrong with
  * relation between photos
  * @author Jeroen Roos
  * @package ZophException
@@ -292,9 +292,27 @@ class CliAPINotCompatibleException extends CliException {}
 
 /**
  * Exception for CLI: Unknown Error
- * 
+ *
  * @author Jeroen Roos
  * @package ZophException
  */
 class CliUnknownErrorException extends CliException {}
+
+
+/**
+ * Database Exception
+ *
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class DatabaseException extends ZophException {}
+
+/**
+ * Security Exception
+ *
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class SecurityException extends ZophException {}
+class KeyMustBeNumericSecurityException extends ZophException {}
 ?>

@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,6 +21,13 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+
+use db\select;
+use db\update;
+use db\param;
+use db\db;
+use db\clause;
+use db\selectHelper;
 
 /**
  * A class corresponding to the places table.
@@ -37,12 +44,12 @@ class place extends zophTreeTable implements Organizer {
 
 
     /** @var string The name of the database table */
-    protected static $table_name="places";
+    protected static $tableName="places";
     /** @var array List of primary keys */
-    protected static $primary_keys=array("place_id");
+    protected static $primaryKeys=array("place_id");
     /** @var array Fields that may not be empty */
-    protected static $not_null=array("title");
-    /** @var bool keep keys with insert. In most cases the keys are set 
+    protected static $notNull=array("title");
+    /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -56,13 +63,13 @@ class place extends zophTreeTable implements Organizer {
         $photo->setLocation($this);
     }
 
-    
+
     /**
      * Remove a photo from this place
      * @param photo photo to remove
      */
     public function removePhoto(photo $photo) {
-        if($photo->getLocation() == $this) {
+        if ($photo->getLocation() == $this) {
             $photo->unsetLocation();
         }
     }
@@ -71,18 +78,18 @@ class place extends zophTreeTable implements Organizer {
      * Insert place into database
      */
     public function insert() {
-        if($this->get("timezone_id")) {
+        if ($this->get("timezone_id")) {
             $this->TZidToTimezone();
         }
         unset($this->fields["timezone_id"]);
         parent::insert();
     }
-    
+
     /**
      * Update existing place with new data
      */
     public function update() {
-        if($this->get("timezone_id")) {
+        if ($this->get("timezone_id")) {
             $this->TZidToTimezone();
         }
         unset($this->fields["timezone_id"]);
@@ -93,21 +100,47 @@ class place extends zophTreeTable implements Organizer {
      * Delete this place from database
      */
     public function delete() {
-        $id=escape_string($this->get("place_id"));
-        if(!is_numeric($id)) {die("place_id is not numeric"); }
+        $locid=new param(":locid", (int) $this->getId(), PDO::PARAM_INT);
+        $locidNull=new param(":locidnull", null, PDO::PARAM_INT);
 
-        $sql="update " . DB_PREFIX . "photos set location_id=null where " .
-            "location_id=" . $id;
-        query($sql, "Could not remove references:");
 
-        $sql="update " . DB_PREFIX . "people set home_id=null where " .
-            "home_id=" .  $id;
-        query($sql, "Could not remove references:", $sql);
+        $qry=new update(array("p" => "photos"));
+        $qry->where(new clause("location_id=:locid"));
+        $qry->addSet("location_id", "locidnull");
+        $qry->addParam($locid);
+        $qry->addParam($locidNull);
 
-        $sql="update " . DB_PREFIX . "people set work_id=null where " .
-            "work_id=" .  $id;
-        query($sql, "Could not remove references:");
-        
+        try {
+            db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Could not remove references", log::FATAL, log::DB);
+        }
+
+
+        $qry=new update(array("ppl" => "people"));
+        $qry->where(new clause("home_id=:locid"));
+        $qry->addSet("home_id", "locidnull");
+        $qry->addParam($locid);
+        $qry->addParam($locidNull);
+
+        try {
+            db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Could not remove references", log::FATAL, log::DB);
+        }
+
+        $qry=new update(array("ppl" => "people"));
+        $qry->where(new clause("work_id=:locid"));
+        $qry->addSet("work_id", "locidnull");
+        $qry->addParam($locid);
+        $qry->addParam($locidNull);
+
+        try {
+            db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Could not remove references", log::FATAL, log::DB);
+        }
+
         parent::delete();
     }
 
@@ -117,44 +150,43 @@ class place extends zophTreeTable implements Organizer {
      * @return array of places.
      */
     public function getChildren($order=null) {
-        $order_fields="";
+        $qry=new select(array("pl" => "places"));
+        $qry->addFields(array("*", "name"=>"title"));
+        $qry->join(array("p"  => "photos"), "pl.place_id=p.location_id", "LEFT");
 
-        if($order=="sortname") {
-            #places do not have a sortname
-            $order="name";
+        $where=new clause("parent_place_id=:placeid");
+
+        $qry->addParam(new param(":placeid", (int) $this->getId(), PDO::PARAM_INT));
+
+        $qry->addGroupBy("pl.place_id");
+
+        if ($order=="sortname") {
+            # places do not have a sortname
+            $order=null;
         }
-        if($order && $order!="name") {
-            $order_fields=get_sql_for_order($order);
-            $order=" ORDER BY " . $order . ", name ";
-        } else if ($order=="name") {
-            $order=" ORDER BY name ";
+
+        $qry=selectHelper::addOrderToQuery($qry, $order);
+
+        if ($order!="name") {
+            $qry->addOrder("name");
         }
-        
-        $sql =
-            "SELECT *, title as name " .
-            $order_fields . " FROM " .
-            DB_PREFIX . "places as pl " .
-            "WHERE pl.parent_place_id=" . (int) $this->getId() .
-            " GROUP BY pl.place_id " .
-            $order; 
-        $this->children=self::getRecordsFromQuery($sql);
-        return $this->children;
-    }    
-   
-    /**
-     * Get this place's children, taking into account permissions for a specific user
-     * @param string sort order
-     */
-    public function getChildrenForUser($order=null) {
-        return remove_empty($this->getChildren($order));
+
+        $qry->where($where);
+
+        $this->children=static::getRecordsFromQuery($qry);
+        if (!user::getCurrent()->is_admin()) {
+            return remove_empty($this->children);
+        } else {
+            return $this->children;
+        }
     }
-    
+
     /**
      * Converts timezone id for this place into a named timezone
      */
     private function TZidToTimezone() {
         $tzkey=$this->get("timezone_id");
-        if($tzkey>0) {
+        if ($tzkey>0) {
             $tzarray=TimeZone::getSelectArray();
             $tz=$tzarray[$tzkey];
             $this->set("timezone", $tz);
@@ -169,7 +201,7 @@ class place extends zophTreeTable implements Organizer {
      * @return string name of this place
      */
     public function getName() {
-        return $this->get("title"); 
+        return $this->get("title");
     }
 
     /**
@@ -185,16 +217,16 @@ class place extends zophTreeTable implements Organizer {
         }
 
         $city="";
-        if ($this->get("city")) { 
+        if ($this->get("city")) {
             $city=e($this->get("city"));
-            if ($this->get("state")) { 
+            if ($this->get("state")) {
                 $city .= ", " . e($this->get("state"));
             }
-        } else if ($this->get("state")) { 
-            $city .= e($this->get("state")); 
+        } else if ($this->get("state")) {
+            $city .= e($this->get("state"));
         }
-        if ($this->get("zip")) { 
-            $city.=" " . e($this->get("zip")); 
+        if ($this->get("zip")) {
+            $city.=" " . e($this->get("zip"));
         }
         $address[]=$city;
 
@@ -219,7 +251,7 @@ class place extends zophTreeTable implements Organizer {
             $html .= "<h2>" . e($this->get("title")) . "</h2>\n";
         }
         $html .= $this->getAddress();
-        if($this->get("url")) {
+        if ($this->get("url")) {
             $html .= "<br><br>\n";
             $html .= "<a href=\"" . e($this->get("url")) . "\">";
             $html .= e($this->get("urldesc")) . "</a>";
@@ -242,36 +274,22 @@ class place extends zophTreeTable implements Organizer {
             translate("notes") => $this->get("notes"),
             translate("timezone") => $this->get("timezone"));
     }
-    
+
     /**
      * Get photos in this place
      */
     public function getPhotos() {
-        $user=user::getCurrent();
+        $qry=new select(array("p" => "photos"));
+        $qry->addFields(array("photo_id"));
+        $where=new clause("location_id=:locid");
+        $qry->addParam(new param("locid", (int) $this->getId(), PDO::PARAM_INT));
 
-        $id = $this->get("place_id");
-
-        if ($user->is_admin()) {
-            $sql =
-                "select photo_id from " .
-                DB_PREFIX . "photos " .
-                "where location_id = '" .  escape_string($id) . "'";
-        } else {
-            $sql =
-                "select p.photo_id from " .
-                DB_PREFIX . "photos as p JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON p.photo_id = pa.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE p.location_id = " . escape_string($id) .
-                " AND gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= p.level";
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
+        $qry->where($where);
 
-        return photo::getRecordsFromQuery($sql);
+        return photo::getRecordsFromQuery($qry);
     }
 
     /**
@@ -279,28 +297,17 @@ class place extends zophTreeTable implements Organizer {
      * @return int count
      */
     public function getPhotoCount() {
-        $user=user::getCurrent();
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array("count" => "COUNT(DISTINCT(p.photo_id))"));
+        $where=new clause("location_id=:locid");
+        $qry->addParam(new param("locid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT COUNT(*) FROM " .
-                DB_PREFIX . "photos " .
-                "WHERE location_id = " . (int) $this->getId();
-        } else {
-            $sql =
-                "SELECT COUNT(DISTINCT p.photo_id) FROM " .
-                DB_PREFIX . "photos AS p JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON p.photo_id = pa.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE p.location_id = " . (int) $this->getId() .
-                " AND gu.user_id = " . (int) $user->getId() .
-                " AND gp.access_level >= p.level";
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
-        return photo::getCountFromQuery($sql);
+        $qry->where($where);
+
+        return $qry->getCount();
     }
 
     /**
@@ -308,37 +315,23 @@ class place extends zophTreeTable implements Organizer {
      * @return int count
      */
     public function getTotalPhotoCount() {
-        $user=user::getCurrent();
+        $this->lookup();
 
-        $id_list = $this->getBranchIds();
-        $id_constraint = "p.location_id in ($id_list)";
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array("count" => "COUNT(DISTINCT(p.photo_id))"));
 
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT COUNT(DISTINCT p.photo_id) FROM " .
-                DB_PREFIX . "photos p ";
+        $idList=null;
+        $this->getBranchIdArray($idList);
+        $ids=new param(":locid", $idList, PDO::PARAM_INT);
+        $qry->addParam($ids);
+        $where=clause::InClause("p.location_id", $ids);
 
-            if (!empty($id_constraint)) {
-                $sql .= " WHERE $id_constraint";
-            }
-        } else {
-            $sql =
-                "select count(distinct pa.photo_id) from " .
-                DB_PREFIX . "photos as p JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= p.level";
-
-            if ($id_constraint) {
-                $sql .= " AND $id_constraint";
-            }
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
-        return self::getCountFromQuery($sql);
+        $qry->where($where);
+
+        return $qry->getCount();
     }
 
     /**
@@ -348,55 +341,41 @@ class place extends zophTreeTable implements Organizer {
      * @return photo coverphoto
      */
     public function getAutoCover($autocover=null,$children=false) {
-        $user=user::getCurrent();
         $coverphoto=$this->getCoverphoto();
-        if($coverphoto instanceof photo) {
+        if ($coverphoto instanceof photo) {
             return $coverphoto;
         }
 
-        $order=self::getAutoCoverOrder($autocover);
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array("photo_id" => "DISTINCT ar.photo_id"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
-        if($children) {
-            $place_where=" WHERE p.location_id in (" . $this->getBranchIds() .")";
+        if ($children) {
+            $ids=new param(":ids",$this->getBranchIdArray(), PDO::PARAM_INT);
+            $qry->addParam($ids);
+            $where=clause::InClause("p.location_id", $ids);
         } else {
-            $place_where=" WHERE p.location_id =" .$this->get("place_id");
+            $where=new clause("p.location_id=:id");
+            $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
         }
 
-        if ($user->is_admin()) {
-            $sql =
-                "SELECT DISTINCT p.photo_id FROM " .
-                DB_PREFIX . "photos AS p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id " .
-                $place_where . " " . $order;
-        } else {
-            $sql=
-                "SELECT DISTINCT p.photo_id FROM " .
-                DB_PREFIX . "photos AS p JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON p.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums AS pa" .
-                " ON pa.photo_id = p.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id " .
-                $place_where .
-                " AND gu.user_id =" .
-                " '" . escape_string($user->get("user_id")) . "'" .
-                " AND gp.access_level >= p.level " .
-                $order;
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
-        $coverphotos=photo::getRecordsFromQuery($sql);
+
+        $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
+        $qry->where($where);
+        $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
 
         if ($coverphoto instanceof photo) {
             $coverphoto->lookup();
             return $coverphoto;
         } else if (!$children) {
-            // No photos found in this place... let's look again, but now 
-            // also in sub-places...
+            // No photos found in this place... let's look again, but now
+            // also in subplaces...
             return $this->getAutoCover($autocover, true);
+
         }
     }
 
@@ -414,56 +393,34 @@ class place extends zophTreeTable implements Organizer {
      * @return array Array with statistics
      */
     public function getDetails() {
-        $id = (int) $this->getId();
-        $user=user::getCurrent();
-        $user_id = (int) $user->getId();
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array(
+            "count"     => "COUNT(DISTINCT p.photo_id)",
+            "oldest"    => "MIN(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "newest"    => "MAX(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "first"     => "MIN(p.timestamp)",
+            "last"      => "MAX(p.timestamp)",
+            "lowest"    => "ROUND(MIN(ar.rating),1)",
+            "highest"   => "ROUND(MAX(ar.rating),1)",
+            "average"   => "ROUND(AVG(ar.rating),2)"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
 
-        if ($user->is_admin()) {
-            $sql = "SELECT ".
-                "COUNT(DISTINCT ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photos ph JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id " .
-                "WHERE ph.location_id=" . escape_string($id) .
-                " GROUP BY ph.location_id";
-        } else {
-            $sql = "SELECT " .
-                "COUNT(DISTINCT ph.photo_id) AS count, " .
-                "MIN(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS oldest, " .
-                "MAX(DATE_FORMAT(CONCAT_WS(' ',ph.date,ph.time), " .
-                "GET_FORMAT(DATETIME, 'ISO'))) AS newest, " .
-                "MIN(ph.timestamp) AS first, " .
-                "MAX(ph.timestamp) AS last, " .
-                "ROUND(MIN(ar.rating),1) AS lowest, " .
-                "ROUND(MAX(ar.rating),1) AS highest, " . 
-                "ROUND(AVG(ar.rating),2) AS average FROM " . 
-                DB_PREFIX . "photos ph JOIN " .
-                DB_PREFIX . "view_photo_avg_rating ar" .
-                " ON ph.photo_id = ar.photo_id JOIN " .
-                DB_PREFIX . "photo_albums pa " .
-                "ON ph.photo_id=pa.photo_id LEFT JOIN " .
-                DB_PREFIX . "group_permissions gp " .
-                "ON pa.album_id=gp.album_id LEFT JOIN " . 
-                DB_PREFIX . "groups_users gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE ph.level<gp.access_level AND " .
-                "gu.user_id=" . escape_string($user_id) . " AND " .
-                "ph.location_id=" . escape_string($id) .
-                " GROUP BY ph.location_id";
+
+        $qry->addGroupBy("p.location_id");
+
+        $where=new clause("p.location_id=:locid");
+        $qry->addParam(new param(":locid", $this->getId(), PDO::PARAM_INT));
+
+        if (!user::getCurrent()->is_admin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
-        $result=query($sql);
-        if($result) {
-            return fetch_assoc($result);
+
+        $qry->where($where);
+
+
+        $result=db::query($qry);
+        if ($result) {
+            return $result->fetch(PDO::FETCH_ASSOC);
         } else {
             return null;
         }
@@ -474,7 +431,7 @@ class place extends zophTreeTable implements Organizer {
      * @param array Don't fetch details, but use the given array
      */
     public function getDetailsXML(array $details=null) {
-        if(!isset($details)) {
+        if (!isset($details)) {
             $details=$this->getDetails();
         }
         $details["title"]=translate("In this place:", false);
@@ -490,8 +447,8 @@ class place extends zophTreeTable implements Organizer {
     public function getNear($distance, $limit=100, $entity="km") {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
-        if($lat && $lon) {
-            return self::getPlacesNear((float) $lat, (float) $lon, 
+        if ($lat && $lon) {
+            return static::getPlacesNear((float) $lat, (float) $lon,
                 (float) $distance, (int) $limit, $entity);
         }
     }
@@ -505,33 +462,35 @@ class place extends zophTreeTable implements Organizer {
      * @param string entity: km|miles
      * @return array places
      */
-    public static function getPlacesNear($lat, $lon, $distance, 
-            $limit, $entity="km") { 
-            
+    public static function getPlacesNear($lat, $lon, $distance,
+            $limit, $entity="km") {
+
         // If lat and lon are not set, don't bother trying to find
         // near locations
-        if($lat && $lon) {
-            $lat=(float) $lat;
-            $lon=(float) $lon;
-
-            if($entity=="miles") {
+        if ($lat && $lon) {
+            if ($entity=="miles") {
                 $distance=(float) $distance * 1.609344;
             }
-            if($limit) {
-                $lim=" limit 0,". (int) $limit;
-            }
-            $sql="select place_id, (6371 * acos(" .
-                "cos(radians(" . $lat . ")) * " .
-                "cos(radians(lat) ) * cos(radians(lon) - " .
-                "radians(" . $lon . ")) +" . 
-                "sin(radians(" . $lat . ")) * " .
-                "sin(radians(lat)))) AS distance from " .
-                DB_PREFIX . "places " .
-                "having distance <= " . $distance . 
-                " order by distance" . $lim;
+            $qry=new select(array("pl" => "places"));
+            $qry->addFields(array("place_id"));
+            $qry->addFunction(array("distance" => "(6371 * acos(" .
+                "cos(radians(:lat)) * cos(radians(lat) ) * cos(radians(lon) - " .
+                "radians(:lon)) + sin(radians(:lat2)) * sin(radians(lat))))"));
+            $qry->having(new clause("distance <= :dist"));
 
-            $near=self::getRecordsFromQuery($sql);
-            return $near;
+
+            $qry->addParam(new param(":lat", (float) $lat, PDO::PARAM_STR));
+            $qry->addParam(new param(":lat2", (float) $lat, PDO::PARAM_STR));
+            $qry->addParam(new param(":lon", (float) $lon, PDO::PARAM_STR));
+            $qry->addParam(new param(":dist", (float) $distance, PDO::PARAM_STR));
+
+            if ($limit) {
+                $qry->addLimit((int) $limit);
+            }
+
+            $qry->addOrder("distance");
+
+            return static::getRecordsFromQuery($qry);
         } else {
             return null;
         }
@@ -544,7 +503,7 @@ class place extends zophTreeTable implements Organizer {
     public function getQuicklook() {
         $cover="";
         $autocover=$this->getAutoCover(user::getCurrent()->prefs->get("autothumb"));
-        if($autocover instanceof photo) {
+        if ($autocover instanceof photo) {
             $cover=$autocover->getImageTag(THUMB_PREFIX);
         }
 
@@ -553,11 +512,11 @@ class place extends zophTreeTable implements Organizer {
         $html.=$cover;
         $count=$this->getPhotoCount();
         $totalcount=$this->getTotalPhotoCount();
-        $html.="<br><small>" . 
+        $html.="<br><small>" .
             e(sprintf(translate("There are %s photos"), $count) .
            " " . translate("in this place")) . "<br>";
-        if($count!=$totalcount) {
-            $html.=e(sprintf(translate("There are %s photos"),$totalcount) . 
+        if ($count!=$totalcount) {
+            $html.=e(sprintf(translate("There are %s photos"),$totalcount) .
             " " . translate("in this place") . " " . translate("or its children")) . "<br>";
         }
         $html.="<\/small>";
@@ -572,7 +531,7 @@ class place extends zophTreeTable implements Organizer {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
         $timezone=$this->get("timezone");
-        if((!$timezone && $lat && $lon)) {
+        if ((!$timezone && $lat && $lon)) {
             $tz=TimeZone::guess($lat, $lon);
             return $tz;
         }
@@ -585,7 +544,7 @@ class place extends zophTreeTable implements Organizer {
     public function setTzForChildren() {
         $tz=$this->get("timezone");
         $places=$this->getBranchIdArray($places);
-        if($places) {
+        if ($places) {
             foreach ($places as $place_id) {
                 $place=new place($place_id);
                 $place->set("timezone", $tz);
@@ -599,14 +558,15 @@ class place extends zophTreeTable implements Organizer {
      * @param string name
      */
     public static function getByName($name) {
-        if(empty($name)) {
+        if (empty($name)) {
             return false;
         }
-        $title=strtolower(escape_string($name));
-        $sql="SELECT place_id from " . DB_PREFIX . "places WHERE " .
-            " LOWER(title) = \"" . $title . "\";";
+        $qry=new select(array("pl" => "places"));
+        $qry->addFields(array("place_id"));
+        $qry->where(new clause("lower(title)=:name"));
+        $qry->addParam(new param(":name", strtolower($name), PDO::PARAM_STR));
 
-        return self::getRecordsFromQuery($sql);
+        return static::getRecordsFromQuery($qry);
     }
 
     /**
@@ -614,50 +574,33 @@ class place extends zophTreeTable implements Organizer {
      */
     public static function getTopN() {
         $user=user::getCurrent();
-
-        if ($user->is_admin()) {
-            $sql =
-                "select plc.*, count(*) as count from " .
-                DB_PREFIX . "places as plc, " .
-                DB_PREFIX . "photos as ph " .
-                "where plc.place_id = ph.location_id " .
-                "group by plc.place_id " .
-                "order by count desc, plc.title, plc.city " .
-                "limit 0, " . (int) $user->prefs->get("reports_top_n");
-        } else {
-            $sql =
-                "SELECT plc.*, count(distinct ph.photo_id) AS count FROM " .
-                DB_PREFIX . "photos as ph JOIN " .
-                DB_PREFIX . "places as plc " .
-                "ON ph.location_id = plc.place_id JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON pa.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . 
-                escape_string($user->get("user_id")) . 
-                "' AND gp.access_level >= ph.level " .
-                "GROUP BY plc.place_id " .
-                "ORDER BY count desc, plc.title, plc.city " .
-                "LIMIT 0, " . (int) $user->prefs->get("reports_top_n");
+        $qry=new select(array("pl" => "places"));
+        $qry->addFields(array("place_id", "title"));
+        $qry->addFunction(array("count" => "count(distinct p.photo_id)"));
+        $qry->join(array("p" => "photos"), "pl.place_id=p.location_id");
+        $qry->addGroupBy("p.location_id");
+        $qry->addOrder("count DESC")->addOrder("pl.title");
+        $qry->addLimit((int) $user->prefs->get("reports_top_n"));
+        if (!$user->is_admin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry);
+            $qry->where($where);
         }
-
-        return parent::getTopNfromSQL($sql);
-
+        return parent::getTopNfromSQL($qry);
     }
-    
+
     /**
      * Get count of places
      */
     public static function getCount() {
-        $user=user::getCurrent();
-        if($user->is_admin()) {
+        if (user::getCurrent()->is_admin()) {
             return parent::getCount();
         } else {
-            $places=self::getPhotographed($user);
-            return count($places);
+            $qry=new select(array("p"=>"photos"));
+            $qry->addFunction(array("count" => "COUNT(DISTINCT location_id)"));
+            list($qry, $where)=selectHelper::expandQueryForUser($qry);
+            $qry->where($where);
+            return $qry->getCount();
+
         }
     }
 
@@ -671,43 +614,9 @@ class place extends zophTreeTable implements Organizer {
      * @todo it seems this function not used at all
      * @todo should be moved into zophTable
      */
-    public static function getAll($constraints = null, $conj = "and", $ops = null,
+    public static function getAll($constraints = null, $conj = "AND", $ops = null,
         $order = "city, title, address") {
-        return self::getRecords($order, $constraints, $conj, $ops);
-    }
-
-    /**
-     * Get places that appear on a photo
-     * @param user user
-     * @return array places
-     */
-    private static function getPhotographed($user = null) {
-        if ($user && !$user->is_admin()) {
-            $sql =
-                "SELECT DISTINCT plc.* FROM " .
-                DB_PREFIX . "photos AS ph JOIN " .
-                DB_PREFIX . "places AS plc " .
-                "ON ph.location_id = plc.place_id JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pa.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id " .
-                "where gu.user_id = '" . 
-                escape_string($user->get("user_id")) .
-                "' AND gp.access_level >= ph.level " .
-                "ORDER BY plc.city, plc.title";
-        } else {
-            $sql =
-                "select distinct plc.* from " .
-                DB_PREFIX . "places as plc, " .
-                DB_PREFIX . "photos as ph " .
-                "where plc.place_id = ph.location_id " .
-                "order by plc.city, plc.title";
-        }
-
-        return self::getRecordsFromQuery($sql);
+        return static::getRecords($order, $constraints, $conj, $ops);
     }
 
     /**

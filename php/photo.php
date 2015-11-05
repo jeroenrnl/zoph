@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -70,15 +70,15 @@ if ($photo_id) { // would be passed for edit or delete
 
         if ($offset > 0) {
             $newoffset = $offset - 1;
-            $prev_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act . 
-                htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . 
+            $prev_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act .
+                htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" .
                 translate("Prev") . "</a>";
         }
 
         if ($offset + 1 < $num_photos) {
             $newoffset = $offset + 1;
-            $next_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act . 
-                htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" . 
+            $next_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act .
+                htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" .
                 translate("Next") . "</a>";
         }
     } else {
@@ -106,17 +106,17 @@ if (isset($offset)) {
     $cells = $_cols * $_rows;
 
     $up_qs = update_query_string($request_vars, null, null, $ignore);
-    
+
     if ($cells) {
-        $_off = $cells * floor($_off / ($cells)); 
+        $_off = $cells * floor($_off / ($cells));
         $up_qs .= "&amp;_off=" . $_off;
     }
-    
+
     $up_link = "<a href=\"photos.php?$up_qs\">" . translate("Up", 0) . "</a>";
 }
 
 $return_qs=$_qs;
-if(empty($return_qs)) { 
+if(empty($return_qs)) {
     $return_qs=$qs;
 }
 
@@ -141,7 +141,7 @@ if ($_action == "lightbox") {
     redirect($link);
 }
 
-if ($user->is_admin() || 
+if ($user->is_admin() ||
         ($permissions instanceof photo_permissions && $permissions->get("writable"))) {
     $_deg = getvar("_deg");
     $_thumbnail = getvar("_thumbnail");
@@ -200,11 +200,11 @@ if (!$user->prefs->get("auto_edit") && $_action=="edit" ) {
 
 if ($user->is_admin() && $_action!="delete") {
     $actionlinks["select"]="photo.php?_action=select&amp;" . $qs;
-    $actionlinks["delete"]="photo.php?_action=delete&amp;photo_id=" . $photo->get("photo_id") . 
+    $actionlinks["delete"]="photo.php?_action=delete&amp;photo_id=" . $photo->get("photo_id") .
         "&amp;_qs=" . $encoded_qs;
-} else if ($_action=="delete") {    
+} else if ($_action=="delete") {
     unset($actionlinks);
-    $actionlinks["delete"]="photo.php?_action=confirm&amp;photo_id=" . $photo->get("photo_id") . 
+    $actionlinks["delete"]="photo.php?_action=confirm&amp;photo_id=" . $photo->get("photo_id") .
         "&amp;_qs=" . $encoded_qs;
     $actionlinks["cancel"]="photo.php?" . $_qs;
 }
@@ -241,7 +241,7 @@ if ($_action == "edit") {
     $photo->setFields($request_vars);
     $photo->insert();
     $action = "update";
-    
+
     unset($actionlinks["email"]);
     unset($actionlinks["lightbox"]);
     unset($actionlinks["add comment"]);
@@ -288,7 +288,7 @@ require_once "header.inc.php";
 if ($action != "insert" && !$found) {
     ?>
       <h1>
-      
+
       <?php echo translate("photo") ?>
       </h1>
       <div class="main">
@@ -316,14 +316,14 @@ if ($action != "insert" && !$found) {
         <div id="rotate">
             <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
                 <p>
-                    <input type="hidden" name="photo_id" 
+                    <input type="hidden" name="photo_id"
                         value="<?php echo $photo->get("photo_id") ?>">
                     <select name="_deg">
                         <option>90</option>
                         <option>180</option>
                         <option>270</option>
                     </select>
-                    <input type="submit" name="_button" 
+                    <input type="submit" name="_button"
                         value="<?php echo translate("rotate", 0) ?>">
                 </p>
             </form>
@@ -343,7 +343,7 @@ if ($action != "insert" && !$found) {
         <?php echo $photo->getFullsizeLink($photo->get("name")) ?> :
         <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
         <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
-    </div>    
+    </div>
     <div class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
     <ul class="tabs">
     <?php
@@ -365,7 +365,7 @@ if ($action != "insert" && !$found) {
     </ul>
     <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX)) ?>
     <?php
-    if (($user->is_admin() || $user->get("browse_people")) && 
+    if (($user->is_admin() || $user->get("browse_people")) &&
         $people_links = $photo->getPeopleLinks()) {
         ?>
           <div id="personlink">
@@ -377,8 +377,8 @@ if ($action != "insert" && !$found) {
     <dl class="photo">
     <?php echo create_field_html($photo->getDisplayArray()) ?>
     <?php
-    if ((conf::get("feature.rating")  && 
-        ($user->is_admin() || $user->get("allow_rating"))) 
+    if ((conf::get("feature.rating")  &&
+        ($user->is_admin() || $user->get("allow_rating")))
         || $photo->getRating()) {
 
         $rating = $photo->getRating();
@@ -393,7 +393,7 @@ if ($action != "insert" && !$found) {
                 echo $rating . "<br>";
             }
         }
-        if (conf::get("feature.rating") && 
+        if (conf::get("feature.rating") &&
             ($user->is_admin() || $user->get("allow_rating"))) {
             ?>
               <form id="ratingform" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
@@ -441,7 +441,7 @@ if ($action != "insert" && !$found) {
             <span class="actionlink">
                 <a href="#" onclick="document.getElementById('allexif').style.display='block'">
                   <?php echo translate("display",0) ?>
-                </a> | 
+                </a> |
                 <a href="#" onclick="document.getElementById('allexif').style.display='none'">
                   <?php echo translate("hide",0) ?>
                 </a>
@@ -467,7 +467,7 @@ if ($action != "insert" && !$found) {
         if($comments) {
             echo "<h2>" . translate("comments") . "</h2>\n";
             foreach($comments as $comment) {
-                echo $comment->toHTML($user) . "\n";
+                echo $comment->toHTML() . "\n";
             }
             echo "<br>&nbsp;\n";
         }

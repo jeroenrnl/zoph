@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,7 @@ if(!ZOPH) { die("Illegal call"); }
                 <?php $selected="selected"; ?>
             <?php else: ?>
                 <?php $selected=""; ?>
-            <?php endif ?>    
+            <?php endif ?>
             <option <?php echo $selected; ?> value="<?php echo $option ?>">
               <?php echo $label ?>
             </option>
@@ -46,4 +46,4 @@ if(!ZOPH) { die("Illegal call"); }
             <?php echo $tpl_desc ?>
         </div>
     <?php endif; ?>
-    
+

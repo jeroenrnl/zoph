@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,18 +27,18 @@ if(!ZOPH) { die("Illegal call"); }
             <a href='#' onclick="thumbview.expandall('<?php echo $tpl_id ?>')">
                 <?php echo translate("expand all");?>
             </a>
-        </li> 
+        </li>
         <li>
             <a href='#' onclick='thumbview.collapseall("<?php echo $tpl_id ?>")'>
                 <?php echo translate("collapse all");?>
             </a>
-        </li> 
+        </li>
     </ul>
 <?php endif ?>
 
 <ul class="tree" id="<?php echo $tpl_id ?>">
 <?php foreach ($tpl_items as $item): ?>
-    <?php $children=$item->getChildrenForUser(); ?>
+    <?php $children=$item->getChildren(); ?>
     <li class="collapsed">
         <?php if($children): ?>
             <div class="toggle" onclick="thumbview.toggle(this.parentNode)"></div>
@@ -46,7 +46,7 @@ if(!ZOPH) { die("Illegal call"); }
         <a href="<?php echo $item->getURL() ?>">
             <?php echo $item->getName() ?></a>
         <span class="photocount">
-            <?php 
+            <?php
                 $pc=$item->getPhotoCount();
                 $tpc=$item->getTotalPhotoCount();
             ?>
@@ -68,7 +68,7 @@ if(!ZOPH) { die("Illegal call"); }
             </ul>
         <?php endif; ?>
         <?php if($children): ?>
-        <?php 
+        <?php
             $tpl=new template("view_tree", array(
                 "items" => $children,
                 "user" => $tpl_user,

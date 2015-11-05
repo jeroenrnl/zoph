@@ -10,7 +10,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,46 +24,43 @@
  * @author Jeroen Roos
  * @todo This should be replaced by a proper OO based construction
  */
+
+use db\select;
+use db\param;
+use db\clause;
+use db\selectHelper;
+
 function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
+    $good_ops = array("=", "!=", "less than", "more than", ">", ">=",
+        "<", "<=", "like", "not like", "is in photo", "is not in photo");
 
-    $good_ops = array ( "=", "!=", "less than", "more than", ">", ">=", 
-        "<", "<=", "like", "not like", "is in photo", "is not in photo" );
+    $good_conj = array("and", "or");
 
-    $good_conj = array ( "and", "or" );
+    $good_dir = array("asc", "desc");
 
-    $good_fields= array ( "location_id", "rating", "photographer_id", 
-        "date", "time", "timestamp", "name", "path", "title", "view", "description", 
-        "width", "height", "size", "aperture", "camera_make", "camera_model", 
-        "compression", "exposure", "flash_used", "focal_length", "iso_equiv", "metering_mode" );
-    $good_text= array ( "album", "category", "person", "photographer" );
+    $good_fields= array("location_id", "rating", "photographer_id",
+        "date", "time", "timestamp", "name", "path", "title", "view", "description",
+        "width", "height", "size", "aperture", "camera_make", "camera_model",
+        "compression", "exposure", "flash_used", "focal_length", "iso_equiv", "metering_mode");
+    $good_text= array("album", "category", "person", "photographer");
 
-    $select = "distinct ph.photo_id, ph.name, ph.path, ph.width, ph.height";
 
-    if(!is_numeric($offset)) { die("offset must be numeric"); }
-    if(!is_numeric($rows)) { die("rows must be numeric"); }
-
-    $from_clause=DB_PREFIX . "photos as ph";
-
-    if ($user && !$user->is_admin()) {
-        $from_clause .= " JOIN " . DB_PREFIX . "photo_albums AS pa " .
-            "ON ph.photo_id = pa.photo_id JOIN " .
-            DB_PREFIX . "group_permissions as gp " .
-            "ON pa.album_id = gp.album_id JOIN " .
-            DB_PREFIX . "groups_users as gu " .
-            "ON gp.group_id = gu.group_id ";
-
-        $where =
-             " gu.user_id = '" . escape_string($user->get("user_id")) . "'" .
-             " AND (gp.access_level >= ph.level)";
+    if (!is_numeric($offset)) {
+        die("offset must be numeric");
     }
-    else {
-        $where = "";
+    if (!is_numeric($rows)) {
+        die("rows must be numeric");
     }
 
+    $qry = new select(array("p" => "photos"));
+
+    /**
+     * @todo this part could be moved into a separate function
+     */
     if (isset($vars["_order"])) {
-        $ord = $vars["_order"];
+        $order = $vars["_order"];
     } else {
-        $ord = conf::get("interface.sort.order");
+        $order = conf::get("interface.sort.order");
     }
 
     if (isset($vars["_dir"])) {
@@ -72,515 +69,414 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         $dir = conf::get("interface.sort.dir");
     }
 
-    $order = "ph." . $ord . " $dir";
-    if ($ord == "date") { $order .= ", ph.time $dir"; }
-    $order .= ", ph.photo_id $dir";
+    if (!in_array(strtolower($dir), $good_dir)) {
+        die ("Illegal sort direction: " . e($dir));
+    }
 
-    while (list($key, $val) = each($vars)) {
-
-        if (empty($key) || empty($val))  { continue; }
-        if ($key[0] == '_')              { continue; }
-        if (strpos(" $key", "PHP") == 1) { continue; }
+   foreach($vars as $key => $val) {
+        if (empty($key) || empty($val) || $key[0] == "_" || strpos(" $key", "PHP") == 1) {
+            continue;
+        }
 
         // handle refinements of searches
         $suffix = "";
         $hashPos = strrpos($key, "#");
-        if ($hashPos > 0) { // don't care about first position
+        if ($hashPos > 0) {
             $suffix = substr($key, $hashPos);
             $key = substr($key, 0, $hashPos);
         }
 
-        //echo "key = $key<br>";
-        //echo "suffix = $suffix<br>";
         $index = "_" . $key . $suffix;
-
+        $origSuffix=$suffix;
+        $suffix=str_replace("#", "_", $suffix);
         if (!empty($vars[$index . "-conj"])) {
             $conj = $vars[$index . "-conj"];
         } else {
             $conj = "and";
         }
-        if (!in_array($conj, $good_conj)) 
-            { die ("Illegal conjunction: " . e($conj)); }
+        if (!in_array($conj, $good_conj)) {
+            die ("Illegal conjunction: " . e($conj));
+        }
 
         if (!empty($vars[$index . "-op"])) {
             $op = $vars[$index . "-op"];
         } else {
             $op = "=";
         }
-        if (!in_array($op, $good_ops)) 
-            { die ("Illegal operator: " . e($op)); }
+
+        if (!in_array($op, $good_ops)) {
+            die ("Illegal operator: " . e($op));
+        }
 
         if (!empty($vars[$index . "-children"])) {
             $object=explode("_", $key);
-            if($object[0]=="location") { $object[0] = "place"; } 
-            $obj=new $object[0]($val);
-            $val_with_children=$obj->getBranchIds();
-            $val=$val_with_children;
-        }
-
-        if ($val == "null") {
-            if ($op == "=") { $op = "is"; }
-            else if ($op = "!=") { $op = "is not"; }
-        }
-
-        if ($key == "text") { 
-            if (strncasecmp($key, "text", 4) == 0) {
-                $key = $vars["_" . $key . $suffix];
+            if ($object[0]=="location") {
+                $object[0] = "place";
             }
-            if (!in_array($key, $good_text))
-                { die ("Illegal text search: " . e($key)); }
-              
-            $val = escape_string($val);
-            $key = escape_string($key);
+            $obj=new $object[0]($val);
+            $val=$obj->getBranchIdArray();
         }
+
+        if ($key == "text") {
+            $key = $vars["_" . $key . $origSuffix];
+
+            if (!in_array($key, $good_text)) {
+                die ("Illegal text search: " . e($key));
+            }
+
+            $val = e($val);
+            $key = e($key);
+        }
+
+        // the regexp matches a list of numbers, separated by comma's.
+        if (!is_array($val) && preg_match("/^([0-9]+)(,([0-9]+))+$/", $val)) {
+            $val=explode(",", $val);
+        }
+
+
+        /**
+         * The code below can be used to reference persons by name directly from the URL
+         * it's not actually used in Zoph and it's not well documented.
+         * But it could be used to create a URL like http://www.zoph.org/search.php?person=Jeroen Roos
+         * With the help of url rewrite, one could even change that into something like
+         * http://www.zoph.org/person/Jeroen Roos
+         */
         if ($key == "person" || $key == "photographer") {
-            $val = "%" . escape_string(strtolower($val)) . "%";
-            
-            $query = "select person_id from " . DB_PREFIX . "people where 
-                        lower(concat(first_name, \" \", last_name)) like \"$val\"";
+            $personQry=new select(array("pp" => "photo_people"));
+            $personQry->join(array("ppl" => "people"), "pp.person_id=ppl.person_id");
+            $personQry->addFields(array("person_id"));
+            $personQry->where(new clause("lower(concat(first_name, \" \", last_name)) like :name"));
+            $personQry->addParam(new param(":name", "%" . $val . "%", PDO::PARAM_STR));
 
-            $people = person::getRecordsFromQuery($query); 
+            $people = person::getRecordsFromQuery($personQry);
 
-
-            $key .= "_id";
-            $val = "";
-            
-            $op = "=";
+            $peopleIds=array();
 
             if ($people && count($people) > 0) {
-
                 foreach ($people as $person) {
-                    if ($val) { $val .= ","; }
-                    $val .= $person->get("person_id");
+                    $peopleIds[]=$person->getId();
                 }
-            }
-            else {
+            } else {
                 // the person did not exist, no photos should be found
-                $val = "-1";
+                // however, we can't just return 0 here, as there may be an OR clause in the query...
+                $peopleIds[]=-1;
             }
-        }
-        $hiersearch=false;
-        if ($key == "album") {
-            $key = "album_id";
-            $album_name = $val;
-            $val = "-1";
-            if (strpos($album_name, "/")) { 
-                $hiersearch=true;
-            }
-            $search_string=explode("/", $album_name);
 
-            foreach($search_string as $album_name) {
-                $albums = album::getByName($album_name);
-                foreach($albums as $album) {
-                    $album->lookup();
-                    if(!$parent_album) {
-                        $val=$album->get("album_id");
-                        $parent_album=$album;
-                    } else if ($hiersearch){
-                        $next_album_id=$album->get("album_id");
-                        $children=$parent_album->getChildren();
-                        foreach ($children as $child) {
-                            $child->lookup();
-                            if ($child->get("album_id")==$next_album_id) {
-                                $val=$album->get("album_id");
-                                $parent_album=$album;
-                                break;
-                            } else {
-                                $val=-1;
-                            }
-                        }
-                    } else {
-                         $val .= "," . $album->get("album_id");
-                    }
+            $param=new param(":peopleIds" . $suffix, $peopleIds, PDO::PARAM_INT);
+            $qry->addParam($param);
+            if ($key=="person") {
+                $alias = "pp" . substr($suffix, 1);
+                $qry->addClause(clause::InClause($alias . ".person_id", $param), $conj);
+                $qry->join(array($alias => "photo_people"), "p.photo_id=" . $alias . ".photo_id");
+            } else if ($key=="photographer") {
+                $qry->addClause(clause::InClause("photographer_id", $param), $conj);
+            }
+            continue;
+        } else if ($key == "album") {
+            $album=album::getByNameHierarchical($val);
+            if ($album instanceof album) {
+                $key="album_id";
+                $val=$album->getId();
+            } else if (is_array($album)) {
+                $key="album_id";
+                $val=array();
+                foreach($album as $alb) {
+                    $val[]=$alb->getId();
                 }
+            } else {
+                // the album did not exist, no photos should be found
+                // however, we can't just return 0 here, as there may be an OR clause in the query...
+                $key="album_id";
+                $val=-1;
             }
-        }
-        
-        if ($key == "category") {
-            $key = "category_id";
-            $cat_name = $val;
-            $val = "-1";
-            if (strpos($cat_name, "/")) { 
-                $hiersearch=true;
-            }
-            $search_string=explode("/", $cat_name);
-
-            foreach($search_string as $cat_name) {
-                $categories = category::getByName($cat_name);
-                foreach($categories as $category) {
-                    $category->lookup();
-                    if(!$parent_cat) {
-                        $val=$category->get("category_id");
-                        $parent_cat=$category;
-                    } else if ($hiersearch){
-                        $next_cat_id=$category->get("category_id");
-                        $children=$parent_cat->getChildren();
-                        foreach ($children as $child) {
-                            $child->lookup();
-                            if ($child->get("category_id")==$next_cat_id) {
-                                $val=$category->get("category_id");
-                                $parent_cat=$category;
-                                break;
-                            } else {
-                                $val=-1;
-                            }
-                        }
-                    } else {
-                         $val .= "," . $category->get("category_id");
-                    }
+        } else if ($key == "category") {
+            $category=category::getByNameHierarchical($val);
+            if ($category instanceof category) {
+                $key="category_id";
+                $val=$category->getId();
+            } else if (is_array($category)) {
+                $key="category_id";
+                $val=array();
+                foreach($category as $cat) {
+                    $val[]=$cat->getId();
                 }
+            } else {
+                // the category did not exist, no photos should be found
+                // however, we can't just return 0 here, as there may be an OR clause in the query...
+                $key="category_id";
+                $val=-1;
             }
-        }
 
-        //echo "<p>key = '$key'; op = '$op', value = '$val'</p>\n";
+        }
 
         if ($key == "album_id") {
-            $pa = "pa" . substr($suffix, 1);
             if ($op == "=") {
-                if ($where) { $where .= " $conj "; }
-                // If the user is not an admin, the albums table
-                // is already in the join
-                if ($user->is_admin() || $pa != "pa") {
-                    $from["$pa"] = "photo_albums";
+                $alias = "pa" . substr($suffix, 1);
+                $qry->join(array($alias => "photo_albums"), "p.photo_id=" . $alias . ".photo_id");
+                if (is_int($val)) {
+                    $qry->addClause(new clause($alias . ".album_id=:albumId" . $suffix), $conj);
+                    $qry->addParam(new param(":albumId" . $suffix, $val, PDO::PARAM_INT));
+                } else if (is_array($val)) {
+                    $param=new param(":albumIds" . $suffix, $val, PDO::PARAM_INT);
+                    $qry->addParam($param);
+                    $qry->addClause(clause::InClause($alias . ".album_id", $param), $conj);
+                } else {
+                    throw new KeyMustBeNumericSecurityException("album_id must be numeric");
                 }
-                // the regexp matches a list of numbers, separated by comma's.
-                // "1" matches, "1," not, "1,2" matches "1,333" matches
-                // "1, a" not, etc.
-                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) { 
-                    die("$key must be numeric"); 
-                }
+            } else {
+                // assume "not in"
+                $exclAlbumsQry=new select(array("p" => "photos"));
+                $exclAlbumsQry->addFields(array("photo_id"), true);
 
-                $op = "in";
-                $where .=
-                    "(${pa}.album_id $op (" . escape_string($val) . "))";
+                $exclAlbumsQry->join(array("pa" => "photo_albums"), "p.photo_id=pa.photo_id");
 
-            }
-            else { // assume "not in"
-                // a simple join won't work for the "not in" case
-                $excluded_albums["$pa"] = $val;
-                $excluded_albums["${pa}-conj"] = $conj;
+                $param=new param(":albumIds" . $suffix, (array) $val, PDO::PARAM_INT);
+                $exclAlbumsQry->addParam($param);
+                $exclAlbumsQry->where(clause::InClause("pa.album_id", $param));
+
+                $exclPhotoIds=$exclAlbumsQry->toArray();
+
+                $param=new param(":photoIds" . $suffix, (array) $exclPhotoIds, PDO::PARAM_INT);
+                $qry->addParam($param);
+                $qry->addClause(clause::NotInClause("p.photo_id", $param), $conj);
             }
         } else if ($key == "category_id") {
-            $pc = "pc" . substr($suffix, 1);
             if ($op == "=") {
-                if ($where) { $where .= " $conj "; }
-
-                $from["$pc"] = "photo_categories";
-                
-                if (!preg_match("/^([0-9]+)+(,([0-9]+))*$/", $val)) { die("$key must be numeric"); }
-
-                $op = "in";
-                $where .=
-                    "(${pc}.category_id $op (" . escape_string($val) . ")" .
-                    " and ${pc}.photo_id = ph.photo_id)";
+                $alias = "pc" . substr($suffix, 1);
+                $qry->join(array($alias => "photo_categories"), "p.photo_id=" . $alias . ".photo_id");
+                if (is_int($val)) {
+                    $qry->addClause(new clause($alias . ".category_id=:categoryId" . $suffix), $conj);
+                    $qry->addParam(new param(":categoryId" . $suffix, $val, PDO::PARAM_INT));
+                } else if (is_array($val)) {
+                    $param=new param(":categoryIds" . $suffix, $val, PDO::PARAM_INT);
+                    $qry->addParam($param);
+                    $qry->addClause(clause::InClause($alias . ".category_id", $param), $conj);
+                } else {
+                    throw new KeyMustBeNumericSecurityException("category_id must be numeric");
+                }
             } else { // assume "not in"
-                // a simple join won't work for the "not in" case
-                $excluded_categories["$pc"] = $val;
-                $excluded_categories["${pc}-conj"] = $conj;
+                $exclCategoryQry=new select(array("p" => "photos"));
+                $exclCategoryQry->addFields(array("photo_id"), true);
+
+                $exclCategoryQry->join(array("pc" => "photo_categories"), "p.photo_id=pc.photo_id");
+
+                $param=new param(":categoryIds" . $suffix, (array) $val, PDO::PARAM_INT);
+                $exclCategoryQry->addParam($param);
+                $exclCategoryQry->where(clause::InClause("pc.category_id", $param));
+
+                $exclPhotoIds=$exclCategoryQry->toArray();
+                $param=new param(":photoIds" . $suffix, (array) $exclPhotoIds, PDO::PARAM_INT);
+                $qry->addParam($param);
+                $qry->addClause(clause::NotInClause("p.photo_id", $param), $conj);
             }
         } else if ($key == "location_id") {
-            if ($where) { $where .= " $conj "; }
-            if(preg_match("/[a-zA-Z]+/", $val)) { die("No letters allowed in $key"); }
-
-            if ($op == "=") {
-                $op = "in";
-                $add = "";
+            if (is_int($val)) {
+                $qry->addParam(new param(":locationId" . $suffix, $val, PDO::PARAM_INT));
+                if ($op == "=") {
+                    $qry->addClause(new clause("p.location_id=:locationId" . $suffix), $conj);
+                } else {
+                    $clause=new clause("p.location_id != :locationId" . $suffix);
+                    $clause->addOr(new clause("p.location_id is null"));
+                    $qry->addClause($clause, $conj);
+                }
+            } else if (is_array($val)) {
+                $param=new param(":locationIds" . $suffix, $val, PDO::PARAM_INT);
+                $qry->addParam($param);
+                $qry->addClause(clause::InClause("p.location_id", $param), $conj);
             } else {
-                $op = "not in";
-                $add = " or ph.location_id is null";
+                throw new KeyMustBeNumericSecurityException("location_id must be numeric");
             }
-            $where .=
-                "(ph.location_id $op (" . escape_string($val) . ")$add)";
         } else if ($key == "person_id") {
-            $ppl = "ppl" . substr($suffix, 1);
             if ($op == "=") {
-                if ($where) { $where .= " $conj "; }
-
-                $from["$ppl"] = "photo_people";
-
-                $op = "in";
-                // the regexp matches a list of numbers, separated by comma's.
-                // "1" matches, "1," not, "1,2" matches "1,333" matches
-                // "1, a" not, etc.
-                if (!preg_match("/^-*([0-9]+)+(,([0-9]+))*$/", $val)) { 
-                    die("$key must be numeric"); 
+                $alias = "ppl" . substr($suffix, 1);
+                $qry->join(array($alias => "photo_people"), "p.photo_id=" . $alias . ".photo_id");
+                if (is_int($val)) {
+                    $qry->addClause(new clause($alias . ".person_id=:personId" . $suffix), $conj);
+                    $qry->addParam(new param(":personId" . $suffix, $val, PDO::PARAM_INT));
+                } else if (is_array($val)) {
+                    $param=new param(":personIds" . $suffix, $val, PDO::PARAM_INT);
+                    $qry->addParam($param);
+                    $qry->addClause(clause::InClause($alias . ".person_id", $param), $conj);
+                } else {
+                    throw new KeyMustBeNumericSecurityException("person_id must be numeric");
                 }
-                $where .=
-                    "(${ppl}.person_id $op (" . escape_string($val) . ")" .
-                    " and ${ppl}.photo_id = ph.photo_id)";
-            }
-            else {
-                // a simple join won't work for the "not in" case
-                $excluded_people["$ppl"] = $val;
-                $excluded_people["${ppl}-conj"] = $conj;
-            }
-        } else if($key == "userrating") {
-            if ($where) { $where .= " AND "; }
-            $ratinguser_id=$vars["_userrating_user"];
-            
-            if(!($ratinguser_id && $user->is_admin())) {
-                $ratinguser_id=$user->get("user_id");
-            }
-            
-            if($val != "null") {
-                $from["pr"]="photo_ratings";
-                $where.=" pr.user_id=" . escape_string($ratinguser_id) .
-                    " AND pr.rating=" . escape_string($val);
+
             } else {
-                $no_rate_sql="SELECT DISTINCT(photo_id) FROM " .
-                    DB_PREFIX . "photo_ratings AS pr " .
-                    "WHERE pr.user_id=" . escape_string($ratinguser_id);
-                $ids = implode(',', getArrayFromQuery($no_rate_sql));
+                // assume "not in"
+                $exclPeopleQry=new select(array("p" => "photos"));
+                $exclPeopleQry->addFields(array("photo_id"), true);
 
-                if ($ids) {
-                    $where .= "(ph.photo_id not in ($ids))";
+                $exclPeopleQry->join(array("ppl" => "photo_people"), "p.photo_id=ppl.photo_id");
+
+                $param=new param(":personIds" . $suffix, (array) $val, PDO::PARAM_INT);
+                $exclPeopleQry->addParam($param);
+                $exclPeopleQry->where(clause::InClause("ppl.person_id", $param));
+
+                $exclPhotoIds=$exclPeopleQry->toArray();
+
+                $param=new param(":photoIds" . $suffix, (array) $exclPhotoIds, PDO::PARAM_INT);
+                $qry->addParam($param);
+                $qry->addClause(clause::NotInClause("p.photo_id", $param), $conj);
+            }
+        } else if ($key == "userrating") {
+            if ($user->is_admin() && isset($vars["_userrating_user"])) {
+                $ratinguser_id=$vars["_userrating_user"];
+            } else {
+                $ratinguser_id=$user->getId();
+            }
+            if ($val != "null") {
+                $alias = "pr" . substr($suffix, 1);
+                $qry->join(array($alias => "photo_ratings"), "p.photo_id=" . $alias . ".photo_id");
+
+                $clause=new clause($alias . ".user_id=:ratingUserId" . $suffix);
+                $clause->addAnd(new clause($alias . ".rating=:rating" . $suffix));
+
+                $qry->addParam(new param(":ratingUserId", $ratinguser_id, PDO::PARAM_INT));
+                $qry->addParam(new param(":rating", $val, PDO::PARAM_INT));
+
+                $qry->addClause($clause, $conj);
+            } else {
+                $noRateQry=new select(array("pr" => "photo_ratings"));
+                $noRateQry->addFields(array("photo_id"), true);
+                $noRateQry->where(new clause("pr.user_id=:ratingUserId"));
+                $noRateQry->addParam(new param(":ratingUserId", $ratinguser_id, PDO::PARAM_INT));
+
+                $photoIds=$noRateQry->toArray();
+
+                if (sizeOf($photoIds) > 0) {
+                    $param=new param(":photoIds" . $suffix, (array) $photoIds, PDO::PARAM_INT);
+                    $qry->addParam($param);
+                    $qry->addClause(clause::NotInClause("p.photo_id", $param), $conj);
                 }
             }
-        } else if ( $key=="rating" ) {
-            if ($where) { $where .= " AND "; }
-            $from["vpr"]="view_photo_avg_rating";
-            $where .= " vpr.rating  $op $val ";
+        } else if ($key=="rating") {
+            $alias = "vpr" . substr($suffix, 1);
+            $qry->join(array($alias => "view_photo_avg_rating"), "p.photo_id=" . $alias . ".photo_id");
+            if ($val=="null") {
+                if ($op == "!=") {
+                    $clause=new clause($alias . ".rating is not null");
+                } else if ($op == "=") {
+                    $clause=new clause($alias . ".rating is null");
+                }
+            } else {
+                $qry->addParam(new param(":rating" . $suffix, $val, PDO::PARAM_INT));
+                $clause=new clause($alias . ".rating " . $op . " :rating" . $suffix);
+            }
+            $qry->addClause($clause, $conj);
         } else if ( $key=="lat" || $key=="lon") {
 
             $latlon[$key]=$val;
 
-            if( !empty($latlon["lat"]) && !empty($latlon["lon"])) {
+            if ( !empty($latlon["lat"]) && !empty($latlon["lon"])) {
                 $ids=array();
                 $lat=(float) $latlon["lat"];
                 $lon=(float) $latlon["lon"];
-                $distance=(float) getvar("_latlon_distance");
-                if(getvar("_latlon_entity")=="miles") {
+                $distance=(float) $vars["_latlon_distance"];
+                if (isset($vars["_latlon_entity"]) && $vars["_latlon_entity"]=="miles") {
                     $distance=$distance * 1.609344;
                 }
-                if(getvar("_latlon_photos")) {
+                if (isset($vars["_latlon_photos"])) {
                     $photos=photo::getPhotosNear($lat, $lon, $distance, null);
-                    if($photos) {
+                    if ($photos) {
                         foreach($photos as $photo) {
-                            $ids[]=$photo->get("photo_id");
+                            $ids[]=$photo->getId();
                         }
                     }
                 }
-                if(getvar("_latlon_places")) {
+                if (isset($vars["_latlon_places"])) {
                     $places=place::getPlacesNear($lat, $lon, $distance, null);
                     foreach($places as $place) {
                         $photos=$place->getPhotos($user);
                         foreach($photos as $photo) {
-                            $ids[]=$photo->get("photo_id");
+                            $ids[]=$photo->getId();
                         }
                     }
                 }
-                if ($where) { $where .= " $conj "; }
-                if($ids) {
-                    $where.="ph.photo_id in (" . implode(",", array_unique($ids)) . ")";
+                if ($ids) {
+                    $param=new param(":photoIds" . $suffix, $ids, PDO::PARAM_INT);
+                    $qry->addParam($param);
+                    $qry->addClause(clause::InClause("p.photo_id", $param), $conj);
                 } else {
                     // No photos were found
-                    $where.="ph.photo_id = -1";
+                    $qry->addClause(new clause("p.photo_id=-1"), $conj);
                 }
             }
-        } else { // any other field
-
+        } else {
+            // any other field
+            $clause=null;
+            /** @todo check why a strncasecmp is necessary here */
             if (strncasecmp($key, "field", 5) == 0) {
-                $key = $vars["_" . $key . $suffix];
+                $key = $vars["_" . $key . $origSuffix];
             }
-            if (!in_array($key, $good_fields))
-                { die ("Illegal field: " . e($key)); }
-              
-            $key = "ph.$key";
+            if (!in_array($key, $good_fields)) {
+                die ("Illegal field: " . e($key));
+            }
 
-            $val = escape_string($val);
-            $key = escape_string($key);
-            if ($op == "like" or $op == "not like") {
-                $val = "'%" . strtolower($val) . "%'";
-                $key = "lower(" . $key . ")";
-            }
-            else if ($val != "null") {
-                if (!is_numeric($val)) {
-                    $val = "'" . escape_string($val) . "'";
+            $val = e($val);
+            $key = e($key);
+            if ($val=="null") {
+                if ($op == "!=") {
+                    $clause=new clause("p." . $key . " is not null");
+                } else if ($op == "=") {
+                    $clause=new clause("p." . $key . " is null");
                 }
-            }
-
-            if ($where) { $where .= " $conj "; }
-            $where .= "(" . $key . " " . $op . " " . $val;
-            
-            if ($op == "!=" ) {
-                $where .= " or " . $key . " is null)";
             } else {
-                $where .= ")";
-            }
+                $clause=new clause("p." . $key . " " . $op . " :" . $key . $suffix);
 
+                if ($op == "like" or $op == "not like") {
+                    $val="%" . $val . "%";
+                } else if ($op == "!=") {
+                    $clause->addOr(new clause("p." . $key . " is null"));
+                }
+
+                $qry->addParam(new param(":" . $key . $suffix, $val, PDO::PARAM_STR));
+
+            }
+            if ($clause instanceof clause) {
+                $qry->addClause($clause, $conj);
+            }
         }
 
     }
-    if(!empty($from)) {
-        $from_clause .= generate_from_clause($from);
-    }
 
-    if (!empty($excluded_albums)) {
-        $where .= generate_excluded_albums_clause(
-            $excluded_albums, $from_clause, $where);
+    if (!$user->is_admin()) {
+        $qry->join(array("pa" => "photo_albums"), "p.photo_id=pa.photo_id");
+        list($qry, $where) = selectHelper::expandQueryForUser($qry, null, $user);
+        $qry->addClause($where, "AND");
     }
-
-    if (!empty($excluded_categories)) {
-        $where .= generate_excluded_categories_clause(
-            $excluded_categories, $from_clause, $where);
-    }
-
-    if (!empty($excluded_people)) {
-        $where .= generate_excluded_people_clause(
-            $excluded_people, $from_clause, $where);
-    }
-    
-    if (!empty($where)) { $where = "where $where"; }
 
     $num_photos = 0;
 
     // do this count separately since the select uses limit
-    $query = "select count(distinct ph.photo_id) from $from_clause $where";
-    $num_photos = zophTable::getCountFromQuery($query);
+    $countQry=clone $qry;
+    $countQry->addFunction(array("count" => "COUNT(distinct p.photo_id)"));
+
+    $num_photos = $countQry->getCount();
 
     if ($num_photos > 0) {
-
         if (isset($vars["_random"]) && $num_photos > 1) {
             // get one random result
             mt_srand((double) microtime() * 1000000);
             $offset = mt_rand(0, $num_photos - 1);
             $rows = 1;
             $num_photos = 1;
-
-            // don't bother with order
-            $query =
-                "select $select from $from_clause $where limit $offset, $rows";
+        } else {
+            $qry->addOrder("p." . $order . " " . $dir);
+            if ($order == "date") {
+                $qry->addOrder("p.time " . $dir);
+            }
+            $qry->addOrder("p.photo_id " . $dir);
         }
-        else {
-            $query =
-                "select $select from $from_clause $where order by $order " .
-                "limit $offset, $rows";
-        }
+        $qry->addLimit($rows, $offset);
+        $distinct=true;
+        $qry->addFields(array("p.photo_id"), $distinct);
+        $qry->addFields(array("p.name", "p.path", "p.width", "p.height"));
 
-        $thumbnails = photo::getRecordsFromQuery($query);
+        $thumbnails = photo::getRecordsFromQuery($qry);
 
     }
 
     return $num_photos;
 
 }
-
-function generate_from_clause($from_array) {
-    $fromClause = "";
-    $joinClause = "";
-    if ($from_array) {
-        while (list($abbrev, $table) = each($from_array)) {
-            $fromClause .= " JOIN ";
-            $joinClause = " on ${abbrev}.photo_id = ph.photo_id";
-                
-            $fromClause .= DB_PREFIX . "$table as $abbrev" . $joinClause;
-        }
-    }
-    return $fromClause;
-}
-
-/*
-  The generate_excluded methods below simulate subselects since MySQL
-  doesn not support them.  These are kind of ugly but the problem is
-  that for "not in" or "!=" constraints on albums, categories or people,
-  a simple joining will not work (as it does in the non-negated case).
-  This is because when a photo is in multiple albums or cats, or there
-  are multiple people in the photo, the join will match one of the
-  other rows.  I hope there is a better way to do this.
-*/
-
-function generate_excluded_albums_clause($excluded_albums, $from, $where) {
-
-    $album_from = $from;
-    $album_constraints = "";
-
-    while (list($pa, $album_ids) = each($excluded_albums)) {
-        if (strpos($pa, "-conj")) {continue;}
-        if ($album_from) { $album_from .= ", "; }
-        $album_from .= DB_PREFIX . "photo_albums as $pa";
-        $photo_id_query =
-            "select distinct ${pa}.photo_id from $album_from " .
-            "where (ph.photo_id = ${pa}.photo_id and ${pa}.album_id in (" .
-            escape_string($album_ids) . "))";
-
-        if ($where) {
-            $photo_id_query .= " and $where";
-        }
-        $ids = implode(',', getArrayFromQuery($photo_id_query));
-
-        if ($ids) {
-            if ($album_constraints || $where) {
-                $album_constraints .= " " . $excluded_albums["${pa}-conj"] . " ";
-            }
-            $album_constraints .= "(ph.photo_id not in ($ids))";
-        }
-
-    }
-
-    return $album_constraints;
-}
-
-function generate_excluded_categories_clause($excluded_categories, $from, $where) {
-
-    $cat_from = $from;
-    $cat_constraints = "";
-
-    while (list($pc, $cat_ids) = each($excluded_categories)) {
-        if (strpos($pc, "-conj")) {continue;}
-        if ($cat_from) { $cat_from .= ", "; }
-        $cat_from .= DB_PREFIX . "photo_categories as $pc";
-        $photo_id_query =
-            "select distinct ${pc}.photo_id from $cat_from " .
-            "where (ph.photo_id = ${pc}.photo_id and ${pc}.category_id in (" .
-            escape_string($cat_ids) . "))";
-
-        if ($where) {
-            $photo_id_query .= " and $where";
-        }
-
-        $ids = implode(',', getArrayFromQuery($photo_id_query));
-
-        if ($ids) {
-            if ($cat_constraints || $where) {
-                $cat_constraints .= " " . $excluded_categories["${pc}-conj"] . " ";
-            }
-            $cat_constraints .= "(ph.photo_id not in ($ids))";
-        }
-
-    }
-
-    return $cat_constraints;
-}
-
-function generate_excluded_people_clause($excluded_people, $from, $where) {
-
-    $person_from = $from;
-    $person_constraints = "";
-
-    while (list($pp, $person_ids) = each($excluded_people)) {
-        if (strpos($pp, "-conj")) {continue;}
-        if ($person_from) { $person_from .= ", "; }
-        $person_from .= DB_PREFIX . "photo_people as $pp";
-        $photo_id_query =
-            "select distinct ${pp}.photo_id from $person_from " .
-            "where (ph.photo_id = ${pp}.photo_id and ${pp}.person_id in (" .
-            escape_string($person_ids) . "))";
-
-        if ($where) {
-            $photo_id_query .= " and $where";
-        }
-        $ids = implode(',', getArrayFromQuery($photo_id_query));
-
-        if ($ids) {
-            if ($person_constraints || $where) {
-                $person_constraints .= " " . $excluded_people["${pp}-conj"] . " ";
-            }
-            $person_constraints .= "(ph.photo_id not in ($ids))";
-        }
-
-    }
-
-    return $person_constraints;
-}
-
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Map. Create and display a map using the mapstraction library. 
+ * Map. Create and display a map using the mapstraction library.
  *
  * This file is part of Zoph.
  *
@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -65,7 +65,7 @@ class map extends block {
         }
         parent::__construct($template, $vars);
 
-    } 
+    }
 
     /**
      * Add a marker to the map
@@ -109,10 +109,10 @@ class map extends block {
     }
 
     /**
-     * Get markers for this map 
+     * Get markers for this map
      */
     public function getMarkers() {
-        // if multiple photos are taken in the same place, that place 
+        // if multiple photos are taken in the same place, that place
         // is multiple times in the array, let's remove doubles:
         $markers=array_unique($this->markers, SORT_REGULAR);
         return $markers;

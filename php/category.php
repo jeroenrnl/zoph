@@ -1,14 +1,14 @@
 <?php
 /**
  * Define and modify categories
- * 
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -62,15 +62,15 @@ require_once "header.inc.php";
 if ($action == "confirm") {
     ?>
       <span class="actionlink">
-        <a href="category.php?_action=confirm&amp;category_id=<?php 
+        <a href="category.php?_action=confirm&amp;category_id=<?php
             echo $category->get("category_id") ?>"><?php echo translate("delete") ?></a> |
-        <a href="category.php?_action=edit&amp;category_id=<?php 
+        <a href="category.php?_action=edit&amp;category_id=<?php
             echo $category->get("category_id") ?>"><?php echo translate("cancel") ?></a>
       </span>
       <?php echo translate("delete category") ?>
     </h1>
     <div class="main">
-      <?php echo sprintf(translate("Confirm deletion of '%s' and its subcategories:") , 
+      <?php echo sprintf(translate("Confirm deletion of '%s' and its subcategories:") ,
         $category->get("category")) ?>
     <?php
 } else {
@@ -79,7 +79,7 @@ if ($action == "confirm") {
       <a href="categories.php?parent_category_id=<?php echo $category->get("category_id") ?>">
         <?php echo translate("return") ?>
       </a> |
-      <a href="category.php?_action=delete&amp;category_id=<?php 
+      <a href="category.php?_action=delete&amp;category_id=<?php
         echo $category->get("category_id") ?>">
         <?php echo translate("delete") ?>
       </a>

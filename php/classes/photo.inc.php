@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,6 +22,12 @@
  * @package Zoph
  */
 
+use db\db;
+use db\select;
+use db\param;
+use db\clause;
+use db\selectHelper;
+
 /**
  * A class corresponding to the photos table.
  *
@@ -31,12 +37,12 @@
  */
 class photo extends zophTable {
     /** @var string The name of the database table */
-    protected static $table_name="photos";
+    protected static $tableName="photos";
     /** @var array List of primary keys */
-    protected static $primary_keys=array("photo_id");
+    protected static $primaryKeys=array("photo_id");
     /** @var array Fields that may not be empty */
-    protected static $not_null=array();
-    /** @var bool keep keys with insert. In most cases the keys are set by the 
+    protected static $notNull=array();
+    /** @var bool keep keys with insert. In most cases the keys are set by the
              db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -52,11 +58,6 @@ class photo extends zophTable {
      * will be split in a photo object, referencing one or more file objects.
      */
     public $file=array();
-
-    /**
-     * Create a new photo object
-     * @param int photo_id
-     */
 
     /**
     * Display the image
@@ -82,7 +83,7 @@ class photo extends zophTable {
 
         // we assume that the client generates proper RFC 822/1123 dates
         //   (should work for all modern browsers and proxy caches)
-        if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) &&
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) &&
             $_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime) {
               $header["http_status"]="HTTP/1.1 304 Not Modified";
               $jpeg=null;
@@ -108,34 +109,31 @@ class photo extends zophTable {
      */
     public function lookup() {
         $user=user::getCurrent();
-        if (!$this->get("photo_id")) { return; }
-        if ($user->is_admin()) {
-            $sql = "SELECT * FROM " . DB_PREFIX . "photos " .
-                "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "'";
-        } else {
-            $sql =
-                "select p.* from " .
-                DB_PREFIX . "photos as p JOIN " .
-                DB_PREFIX . "photo_albums as pa " .
-                "ON p.photo_id = pa.photo_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE p.photo_id = '" . escape_string($this->get("photo_id")) . "'" .
-                " AND gu.user_id = '" . escape_string($user->get("user_id")) . "'" .
-                " AND gp.access_level >= p.level " .
-                "LIMIT 0, 1";
+        if (!$this->getId()) {
+            return;
+        }
+        $qry = new select(array("p" => "photos"));
+
+        $distinct=true;
+        $qry->addFields(array("*"), $distinct);
+
+        $where=new clause("p.photo_id=:photoid");
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+
+        if (!$user->is_admin()) {
+            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
 
-        $success = $this->lookupFromSQL($sql);
-        
-        if ($success) {
+        $qry->where($where);
+
+        $photo = $this->lookupFromSQL($qry);
+
+        if ($photo) {
             $this->lookupPhotographer();
             $this->lookupLocation();
         }
 
-        return $success;
+        return $photo;
     }
 
     /**
@@ -168,73 +166,73 @@ class photo extends zophTable {
      */
     public function delete() {
         parent::delete(array(
-            "photo_people", 
-            "photo_categories", 
-            "photo_albums", 
-            "photo_ratings", 
+            "photo_people",
+            "photo_categories",
+            "photo_albums",
+            "photo_ratings",
             "photo_comments")
         );
     }
 
-    /** 
+    /**
      * Update photo relations, such as albums, categories, etc.
      * @param array array of variables to update
      * @param string suffix for varnames
      */
     public function updateRelations(array $vars, $suffix = "") {
-        
+
         $albums=album::getFromVars($vars, $suffix);
         $categories=category::getFromVars($vars, $suffix);
         $people=person::getFromVars($vars, $suffix);
-        
+
         // Albums
         if (!empty($vars["_remove_album$suffix"])) {
-            foreach((array) $vars["_remove_album$suffix"] as $alb) {
+            foreach ((array) $vars["_remove_album$suffix"] as $alb) {
                 $this->removeFrom(new album($alb));
             }
         }
-        
-        if(isset($this->_album_id)) {
-            $albums=array_merge($albums,$this->_album_id);
+
+        if (isset($this->_album_id)) {
+            $albums=array_merge($albums, $this->_album_id);
             unset($this->_album_id);
         }
-        
-        foreach($albums as $album) {
+
+        foreach ($albums as $album) {
             $this->addTo(new album($album));
         }
 
         // Categories
         if (!empty($vars["_remove_category$suffix"])) {
-            foreach((array) $vars["_remove_category$suffix"] as $cat) {
+            foreach ((array) $vars["_remove_category$suffix"] as $cat) {
                 $this->removeFrom(new category($cat));
             }
         }
 
-        if(isset($this->_category_id)) {
-            $categories=array_merge($categories,$this->_category_id);
+        if (isset($this->_category_id)) {
+            $categories=array_merge($categories, $this->_category_id);
             unset($this->_category_id);
         }
 
-        foreach($categories as $cat) {
+        foreach ($categories as $cat) {
             $this->addTo(new category($cat));
         }
 
         // People
         if (!empty($vars["_remove_person$suffix"])) {
-            foreach((array) $vars["_remove_person$suffix"] as $pers) {
+            foreach ((array) $vars["_remove_person$suffix"] as $pers) {
                 $this->removeFrom(new person($pers));
             }
         }
 
-        if(isset($this->_person_id)) {
-            $people=array_merge($people,$this->_person_id);
+        if (isset($this->_person_id)) {
+            $people=array_merge($people, $this->_person_id);
             unset($this->_person_id);
         }
-        foreach($people as $person) {
+        foreach ($people as $person) {
             $this->addTo(new person($person));
         }
     }
-    
+
     /**
      * Updates the photo's dimensions and filesize
      */
@@ -254,7 +252,7 @@ class photo extends zophTable {
     public function updateEXIF() {
         $file=$this->getFilePath();
         $exif=process_exif($file);
-        if($exif) {
+        if ($exif) {
             $this->setFields($exif);
             $this->update();
         }
@@ -265,10 +263,11 @@ class photo extends zophTable {
      * @return int position
      */
     public function getLastPersonPos() {
-        $sql =
-            "SELECT max(position) AS pos FROM " . DB_PREFIX . "photo_people " .
-            "WHERE photo_id = '" . escape_string($this->get("photo_id")) . "';";
-        $result=fetch_array(query($sql));
+        $qry=new select(array("pp" => "photo_people"));
+        $qry->addFunction(array("pos" => "max(position)"));
+        $qry->where(new clause("photo_id=:photoid"));
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $result=db::query($qry)->fetch(PDO::FETCH_ASSOC);
         return (int) $result["pos"];
     }
 
@@ -295,29 +294,22 @@ class photo extends zophTable {
     public function getAlbums() {
         $user=user::getCurrent();
 
-        if ($user->is_admin()) {
-            $sql = "SELECT al.album_id, al.parent_album_id, al.album FROM " .
-                DB_PREFIX . "photo_albums AS pa, " .
-                DB_PREFIX . "albums AS al " .
-                "WHERE pa.photo_id = '" . (int) $this->getId() . "'" .
-                " AND pa.album_id = al.album_id ORDER BY al.album";
-        } else {
-            $sql = "SELECT al.album_id, al.parent_album_id, al.album FROM " .
-                DB_PREFIX . "albums AS al JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON al.album_id = pa.album_id JOIN " .
-                DB_PREFIX . "group_permissions as gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users as gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE pa.photo_id = '" . (int) $this->getId() . "'" .
-                " AND gu.user_id = '" . (int) $user->getId() . "' " .
-                " AND gp.access_level >= " .
-                (int) $this->get("level") .
-                " ORDER BY al.album";
+        $qry=new select(array("a" => "albums"));
+        $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
+        $qry->addFields(array("album_id", "parent_album_id", "album"));
+
+        $where=new clause("pa.photo_id=:photoid");
+
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $qry->addOrder("a.album");
+
+        if (!$user->is_admin()) {
+            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
 
-        return album::getRecordsFromQuery($sql);
+        $qry->where($where);
+
+        return album::getRecordsFromQuery($qry);
     }
 
     /**
@@ -325,28 +317,39 @@ class photo extends zophTable {
      * @return array of categories
      */
     public function getCategories() {
-        $sql = "SELECT cat.category_id, cat.parent_category_id, cat.category FROM " .
-            DB_PREFIX . "photo_categories AS pc, " .
-            DB_PREFIX . "categories AS cat " .
-            "WHERE pc.photo_id = '" . (int) $this->getId() . "'" .
-            " AND pc.category_id = cat.category_id ORDER BY cat.category";
+        $qry=new select(array("c" => "categories"));
+        $qry->join(array("pc" => "photo_categories"), "c.category_id = pc.category_id");
+        $distinct=true;
+        $qry->addFields(array("category_id"), $distinct);
+        $qry->addFields(array("parent_category_id", "category"));
 
-        return category::getRecordsFromQuery($sql);
+        $where=new clause("pc.photo_id=:photoid");
+
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $qry->addOrder("c.category");
+        $qry->where($where);
+
+        return category::getRecordsFromQuery($qry);
     }
 
     /**
      * Get a list of people on this photo
      * @return array of people
      */
-    function getPeople() {
-        $sql = "SELECT p.person_id, p.last_name, " .
-            "p.first_name, p.called FROM " .
-            DB_PREFIX . "photo_people AS pp, " .
-            DB_PREFIX . "people AS p " .
-            "WHERE pp.photo_id = '" . (int) $this->getId() . "'" .
-            " AND pp.person_id = p.person_id ORDER BY pp.position";
+    public function getPeople() {
+        $qry=new select(array("p" => "people"));
+        $qry->join(array("pp" => "photo_people"), "pp.person_id = p.person_id");
+        $distinct=true;
+        $qry->addFields(array("person_id"), $distinct);
+        $qry->addFields(array("last_name", "first_name", "called"));
 
-        return person::getRecordsFromQuery($sql);
+        $where=new clause("pp.photo_id=:photoid");
+
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $qry->addOrder("pp.position");
+        $qry->where($where);
+
+        return person::getRecordsFromQuery($qry);
     }
 
     /**
@@ -371,16 +374,16 @@ class photo extends zophTable {
      *
      * @param file The file to be imported
      */
-    function import(file $file) {
+    public function import(file $file) {
         $this->set("name", $file->getName());
-        
+
         $newPath=$this->get("path") . "/";
-        if(conf::get("import.dated")) {
+        if (conf::get("import.dated")) {
             // This is not really validating the date, just making sure
             // no-one is playing tricks, such as setting the date to /etc/passwd or
             // something.
             $date=$this->get("date");
-            if(!preg_match("/^[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}$/", $date)) {
+            if (!preg_match("/^[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}$/", $date)) {
                 log::msg("Illegal date, using today's", log::ERROR, log::IMPORT);
                 $date=date("Y-m-d");
             }
@@ -392,12 +395,12 @@ class photo extends zophTable {
             }
         }
         $toPath="/" . cleanup_path(conf::get("path.images") . "/" . $newPath) . "/";
-        
+
         $path=$file->getPath();
         create_dir_recursive($toPath . "/" . MID_PREFIX);
         create_dir_recursive($toPath . "/" . THUMB_PREFIX);
-        
-        if($path ."/" != $toPath) {
+
+        if ($path ."/" != $toPath) {
             $file->setDestination($toPath);
             $files[]=$file;
 
@@ -405,21 +408,21 @@ class photo extends zophTable {
 
             $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $newname;
             $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $newname;
-            
-            if(file_exists($path . "/". $thumbname)) {
+
+            if (file_exists($path . "/". $thumbname)) {
                 $thumb=new file($path . "/" . $thumbname);
                 $thumb->setDestination($toPath . "/" . THUMB_PREFIX . "/");
                 $files[]=$thumb;
             }
-            if(file_exists($path . "/". $midname)) {
+            if (file_exists($path . "/". $midname)) {
                 $mid=new file($path . "/" . $midname);
                 $mid->setDestination($toPath . "/" . MID_PREFIX . "/");
                 $files[]=$mid;
             }
-        
+
             try {
-                foreach($files as $file) {
-                    if(conf::get("import.cli.copy")==false) {
+                foreach ($files as $file) {
+                    if (conf::get("import.cli.copy")==false) {
                         $file->checkMove();
                     } else {
                         $file->checkCopy();
@@ -429,11 +432,11 @@ class photo extends zophTable {
                 echo $e->getMessage() . "\n";
                 throw $e;
             }
-            // We run this loop twice, because we only want to move/copy the 
+            // We run this loop twice, because we only want to move/copy the
             // file if *all* files can be moved/copied.
             try {
-                foreach($files as $file) {
-                    if(conf::get("import.cli.copy")==false) {
+                foreach ($files as $file) {
+                    if (conf::get("import.cli.copy")==false) {
                         $new=$file->move();
                     } else {
                         $new=$file->copy();
@@ -456,7 +459,7 @@ class photo extends zophTable {
      * @return string full path.
      */
     public function getFilePath($type=null) {
-        $image_path = conf::get("path.images") . DIRECTORY_SEPARATOR . 
+        $image_path = conf::get("path.images") . DIRECTORY_SEPARATOR .
             $this->get("path") . DIRECTORY_SEPARATOR;
 
         if ($type==THUMB_PREFIX || $type==MID_PREFIX) {
@@ -494,7 +497,7 @@ class photo extends zophTable {
             "target" => ($user->prefs->get("fullsize_new_win") ? "_blank" : "")
         ));
     }
-    
+
     /**
      * Get the URL to an image
      * @param string "mid" or "thumb"
@@ -524,7 +527,7 @@ class photo extends zophTable {
 
         list($width, $height, $filetype, $size)=getimagesize($file);
 
-        $alt = escape_string($this->get("title"));
+        $alt = e($this->get("title"));
 
         return new block("img", array(
             "src"   => $image_href,
@@ -535,7 +538,7 @@ class photo extends zophTable {
     }
 
     /**
-     * Stores the rating of a photo for a user 
+     * Stores the rating of a photo for a user
      * @param int rating
      */
     public function rate($rating) {
@@ -558,7 +561,7 @@ class photo extends zophTable {
     public function getRatingForUser(user $user) {
         $ratings=rating::getRatings($this, $user);
         $rating=array_pop($ratings);
-        if($rating instanceof rating) {
+        if ($rating instanceof rating) {
             return $rating->get("rating");
         }
     }
@@ -579,7 +582,7 @@ class photo extends zophTable {
         $image_info = getimagesize($file);
         switch ($image_info[2]) {
         case IMAGETYPE_GIF:
-            $resource = imagecreatefromgif($file);
+            $resource = imagecreatefromgif ($file);
             break;
         case IMAGETYPE_JPEG:
             $resource = imagecreatefromjpeg($file);
@@ -658,12 +661,12 @@ class photo extends zophTable {
         $name=$this->get("name");
         $midname=MID_PREFIX . "/" . MID_PREFIX . "_" . $name;
         $thumbname=THUMB_PREFIX . "/" . THUMB_PREFIX . "_" . $name;
-        
-        if(!file_exists($path . $midname) || $force===true) {
-            $this->createThumbnail(MID_PREFIX, MID_SIZE); 
+
+        if (!file_exists($path . $midname) || $force===true) {
+            $this->createThumbnail(MID_PREFIX, MID_SIZE);
         }
-        if(!file_exists($path . $thumbname) || $force===true) {
-            $this->createThumbnail(THUMB_PREFIX, THUMB_SIZE); 
+        if (!file_exists($path . $thumbname) || $force===true) {
+            $this->createThumbnail(THUMB_PREFIX, THUMB_SIZE);
         }
         return true;
     }
@@ -675,7 +678,7 @@ class photo extends zophTable {
      */
     private function createThumbnail($prefix, $size) {
         $img_src = $this->getImageResource();
-        
+
         $image_info = getimagesize($this->getFilePath());
         $width = $image_info[0];
         $height = $image_info[1];
@@ -683,8 +686,7 @@ class photo extends zophTable {
         if ($width >= $height) {
             $new_width = $size;
             $new_height = round(($new_width / $width) * $height);
-        }
-        else {
+        } else {
             $new_height = $size;
             $new_width = round(($new_height / $height) * $width);
         }
@@ -703,7 +705,7 @@ class photo extends zophTable {
             $prefix . '_' .  $this->get("name");
         $dir=dirname($new_image);
 
-        if(!is_writable($dir)) {
+        if (!is_writable($dir)) {
             throw new FileDirNotWritableException("Directory not writable: " . $dir);
         }
 
@@ -727,9 +729,9 @@ class photo extends zophTable {
         $dir = conf::get("path.images") . "/" . $this->get("path") . "/";
         $name = $this->get('name');
 
-        $images[$dir . THUMB_PREFIX . '/' . THUMB_PREFIX . '_' . 
-            $name] = 
-            $dir . THUMB_PREFIX . '/rot_' . THUMB_PREFIX . '_' . 
+        $images[$dir . THUMB_PREFIX . '/' . THUMB_PREFIX . '_' .
+            $name] =
+            $dir . THUMB_PREFIX . '/rot_' . THUMB_PREFIX . '_' .
             $name;
 
         $images[$dir . MID_PREFIX . '/' . MID_PREFIX . '_' . $name] =
@@ -754,7 +756,10 @@ class photo extends zophTable {
 
         // make a system call to convert or jpegtran to do the rotation.
         while (list($file, $tmp_file) = each($images)) {
-            switch(conf::get("rotate.command")) {
+            if (!file_exists($file)) {
+                throw new FileNotFoundException("Could not find " . $file);
+            }
+            switch (conf::get("rotate.command")) {
             case "jpegtran":
                 $cmd = 'jpegtran -copy all -rotate ' .  escapeshellarg($deg) .
                     ' -outfile ' .  escapeshellarg($tmp_file) . ' ' .
@@ -791,7 +796,7 @@ class photo extends zophTable {
         $date=$this->getReverseDate();
 
         $loclink="";
-        if($this->location instanceof place) {
+        if ($this->location instanceof place) {
             $loclink =new block("link", array(
                 "href" => $this->location->getURL(),
                 "link" => $this->location->getName(),
@@ -800,7 +805,7 @@ class photo extends zophTable {
         }
 
         $pglink="";
-        if($this->photographer instanceof photographer) {
+        if ($this->photographer instanceof photographer) {
             $pglink =new block("link", array(
                 "href" => $this->photographer->getURL(),
                 "link" => $this->photographer->getName(),
@@ -810,14 +815,14 @@ class photo extends zophTable {
 
         return array(
             translate("title") => $this->get("title"),
-            translate("location") => $loclink, 
+            translate("location") => $loclink,
             translate("view") => $this->get("view"),
             translate("date") => create_date_link($date),
             translate("time") => $this->getTimeDetails(),
             translate("photographer") => $pglink
         );
     }
-    
+
     /**
      * Get array of properties of this object, used to build mail message
      * @return array photo properties
@@ -877,21 +882,21 @@ class photo extends zophTable {
      * Get time this photo was taken, corrected with timezone information
      * @return string time
      */
-    public function getTime() { 
+    public function getTime() {
         $this->lookup();
         $loc=$this->location;
-        if($loc instanceof place) {
+        if ($loc instanceof place) {
             $loc->lookup();
         }
 
-        if($loc && TimeZone::validate($loc->get("timezone"))) {
+        if ($loc && TimeZone::validate($loc->get("timezone"))) {
             $place_tz=new TimeZone($loc->get("timezone"));
         }
-        if(TimeZone::validate(conf::get("date.tz"))) {
+        if (TimeZone::validate(conf::get("date.tz"))) {
             $camera_tz=new TimeZone(conf::get("date.tz"));
         }
 
-        if(!isset($place_tz) && isset($camera_tz)) {
+        if (!isset($place_tz) && isset($camera_tz)) {
             // Camera timezone is known, place timezone is not.
             $place_tz=$camera_tz;
         } else if (isset($place_tz) && !isset($camera_tz)) {
@@ -904,7 +909,7 @@ class photo extends zophTable {
             $camera_tz=$default_tz;
         }
         $place_time=$this->getCorrectedTime($camera_tz, $place_tz);
-        
+
         return $place_time;
     }
 
@@ -920,7 +925,7 @@ class photo extends zophTable {
 
         $date=$place_time->format($date_format);
         $time=$place_time->format($time_format);
-        return array($date,$time);
+        return array($date, $time);
     }
 
     /**
@@ -935,16 +940,16 @@ class photo extends zophTable {
 
         $place_tz=new TimeZone("UTC");
         $camera_tz=$default_tz;
-        
-        if(TimeZone::validate(conf::get("date.tz"))) {
+
+        if (TimeZone::validate(conf::get("date.tz"))) {
             $camera_tz=new TimeZone(conf::get("date.tz"));
         }
 
         $place_time=$this->getCorrectedTime($camera_tz, $place_tz);
-        
+
         $date=$place_time->format($date_format);
         $time=$place_time->format($time_format);
-        return array($date,$time);
+        return array($date, $time);
     }
 
     /**
@@ -974,7 +979,7 @@ class photo extends zophTable {
         $place_time=$camera_time;
         $place_time->setTimezone($place_tz);
         $corr=$this->get("time_corr");
-        if($corr) {
+        if ($corr) {
             $place_time->modify($corr . " minutes");
         }
 
@@ -988,19 +993,19 @@ class photo extends zophTable {
      */
     private function getTimeDetails() {
         $tz=null;
-        if(TimeZone::validate(conf::get("date.tz"))) {
+        if (TimeZone::validate(conf::get("date.tz"))) {
             $tz=conf::get("date.tz");
         }
-        
+
         $this->lookup();
         $place=$this->location;
         $place_tz=null;
         $location=null;
-        if(isset($place)) {
+        if (isset($place)) {
             $place_tz=$place->get("timezone");
             $location=$place->get("title");
         }
-       
+
         $datetime=$this->getFormattedDateTime();
 
         $tpl=new block("time_details", array(
@@ -1021,10 +1026,16 @@ class photo extends zophTable {
      * @return array of comments
      */
     public function getComments() {
-        $sql = "select comment_id from " . DB_PREFIX . "photo_comments where" .
-            " photo_id = " .  $this->get("photo_id");
-        $comments=comment::getRecordsFromQuery($sql);
-        return $comments;
+        $qry=new select(array("pcom" => "photo_comments"));
+        $distinct=true;
+        $qry->addFields(array("comment_id"), $distinct);
+
+        $where=new clause("pcom.photo_id=:photoid");
+
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $qry->where($where);
+
+        return comment::getRecordsFromQuery($qry);
     }
 
     /**
@@ -1036,12 +1047,12 @@ class photo extends zophTable {
 
         $allrelated=photoRelation::getRelated($this);
 
-        if($user->is_admin()) {
+        if ($user->is_admin()) {
             return $allrelated;
         } else {
             $related=array();
-            foreach($allrelated as $photo) {
-                if($user->get_permissions_for_photo($photo->getId())) {
+            foreach ($allrelated as $photo) {
+                if ($user->get_permissions_for_photo($photo->getId())) {
                     $related[]=$photo;
                 }
             }
@@ -1063,17 +1074,17 @@ class photo extends zophTable {
      * @todo contains lots of HTML
      * @todo is a mess
      */
-    function exifToHTML() {
+    public function exifToHTML() {
         if (exif_imagetype($this->getFilePath())==IMAGETYPE_JPEG) {
             $exif=read_exif_data($this->getFilePath());
             if ($exif) {
                 $return="<dl class='allexif'>\n";
 
-                foreach($exif as $key => $value) {
-                    if(!is_array($value)) {
+                foreach ($exif as $key => $value) {
+                    if (!is_array($value)) {
                         $return .="    <dt>$key</dt>\n" .
-                                  "    <dd>" . 
-                                          preg_replace("/[^[:print:]]/", "", $value) . 
+                                  "    <dd>" .
+                                          preg_replace("/[^[:print:]]/", "", $value) .
                                   "    </dd>\n";
                     } else {
                         $return .="    <dt>$key</dt>\n" .
@@ -1081,8 +1092,8 @@ class photo extends zophTable {
                                   "        <dl>\n";
                         foreach ($value as $subkey => $subval) {
                             $return .= "     <dt>$subkey</dt>\n" .
-                                       "     <dd>" . 
-                                               preg_replace("/[^[:print:]]/", "", $subval) . 
+                                       "     <dd>" .
+                                               preg_replace("/[^[:print:]]/", "", $subval) .
                                        "     </dd>\n";
                         }
                         $return .= "         </dl>\n" .
@@ -1109,16 +1120,16 @@ class photo extends zophTable {
         $title=e($this->get("title"));
         $file=$this->get("name");
 
-        if($title) {
+        if ($title) {
             $html="<h2>" . e($title) . "<\/h2><p>" . e($file) . "<\/p>";
         } else {
             $html="<h2>" . e($file) . "<\/h2>";
-        }    
+        }
         $html.=$this->getThumbnailLink()->toStringNoEnter() .
-          "<p><small>" . 
+          "<p><small>" .
           $this->get("date") . " " . $this->get("time") . "<br>";
-        if($this->photographer) {
-            $html.=translate("by",0) . " " . $this->photographer->getLink(1) . "<br>";
+        if ($this->photographer) {
+            $html.=translate("by", 0) . " " . $this->photographer->getLink(1) . "<br>";
         }
         $html.="<\/small><\/p>";
         return $html;
@@ -1129,12 +1140,12 @@ class photo extends zophTable {
      * @param string icon to be used.
      * @return marker instance of marker class
      */
-    function getMarker($icon="geo-photo") {
-        $marker=map::getMarkerFromObj($this, $icon); 
-        if(!$marker instanceof marker) {
+    public function getMarker($icon="geo-photo") {
+        $marker=map::getMarkerFromObj($this, $icon);
+        if (!$marker instanceof marker) {
             $loc=$this->location;
-            if($loc instanceof place) {
-                return $loc->getMarker(); 
+            if ($loc instanceof place) {
+                return $loc->getMarker();
             }
         } else {
             return $marker;
@@ -1147,15 +1158,15 @@ class photo extends zophTable {
      * @param int limit maxiumum number of photos to return
      * @param string entity (km or miles)
      */
-    public function getNear($distance, $limit=100, $entity="km") { 
+    public function getNear($distance, $limit=100, $entity="km") {
         $lat=$this->get("lat");
         $lon=$this->get("lon");
-        if($lat && $lon) {
-            return self::getPhotosNear(
-                (float) $lat, 
-                (float) $lon, 
-                (float) $distance, 
-                (int) $limit, 
+        if ($lat && $lon) {
+            return static::getPhotosNear(
+                (float) $lat,
+                (float) $lon,
+                (float) $distance,
+                (int) $limit,
                 $entity
             );
         }
@@ -1169,33 +1180,35 @@ class photo extends zophTable {
      * @param int limit maxiumum number of photos to return
      * @param string entity (km or miles)
      */
-    public static function getPhotosNear($lat, $lon, $distance, 
-            $limit, $entity="km") { 
-            
+    public static function getPhotosNear($lat, $lon, $distance,
+            $limit, $entity="km") {
+
         // If lat and lon are not set, don't bother trying to find
         // near photos
-        if($lat && $lon) {
-            $lat=(float) $lat;
-            $lon=(float) $lon;
-
-            if($entity=="miles") {
+        if ($lat && $lon) {
+            if ($entity=="miles") {
                 $distance=(float) $distance * 1.609344;
             }
-            if($limit) {
-                $lim=" limit 0,". (int) $limit;
-            }
-            $sql="select photo_id, (6371 * acos(" .
-                "cos(radians(" . $lat . ")) * " .
-                "cos(radians(lat) ) * cos(radians(lon) - " .
-                "radians(" . $lon . ")) +" . 
-                "sin(radians(" . $lat . ")) * " .
-                "sin(radians(lat)))) AS distance from " .
-                DB_PREFIX . "photos " .
-                "having distance <= " . $distance . 
-                " order by distance" . $lim;
+            $qry=new select(array("p" => "photos"));
+            $qry->addFields(array("photo_id"));
+            $qry->addFunction(array("distance" => "(6371 * acos(" .
+                "cos(radians(:lat)) * cos(radians(lat) ) * cos(radians(lon) - " .
+                "radians(:lon)) + sin(radians(:lat2)) * sin(radians(lat))))"));
+            $qry->having(new clause("distance <= :dist"));
 
-            $near=self::getRecordsFromQuery($sql);
-            return $near;
+
+            $qry->addParam(new param(":lat", (float) $lat, PDO::PARAM_STR));
+            $qry->addParam(new param(":lat2", (float) $lat, PDO::PARAM_STR));
+            $qry->addParam(new param(":lon", (float) $lon, PDO::PARAM_STR));
+            $qry->addParam(new param(":dist", (float) $distance, PDO::PARAM_STR));
+
+            if ($limit) {
+                $qry->addLimit((int) $limit);
+            }
+
+            $qry->addOrder("distance");
+
+            return static::getRecordsFromQuery($qry);
         } else {
             return null;
         }
@@ -1208,21 +1221,29 @@ class photo extends zophTable {
      * @return array photo(s)
      */
     public static function getByName($file, $path=null) {
-        $sql="SELECT photo_id FROM " . DB_PREFIX . "photos " .
-            "WHERE name=\"" . escape_string($file) ."\"";
-        if(!empty($path)) {
-            $sql .= " AND path='" . escape_string($path) ."'";
+        $qry=new select(array("p" => "photos"));
+        $qry->addFields(array("photo_id"));
+
+        $where=new clause("name = :file");
+        $qry->addParam(new param(":file", $file, PDO::PARAM_STR));
+
+        if (!empty($path)) {
+            $where->addAnd(new clause("path = :path"));
+            $qry->addParam(new param(":path", $path, PDO::PARAM_STR));
         }
-        return self::getRecordsFromQuery($sql);
+
+        $qry->where($where);
+
+        return static::getRecordsFromQuery($qry);
     }
-    
+
     /**
      * Calculate SHA1 hash for a file
      * @return string SHA1 hash
      */
     private function getHashFromFile() {
         $file=$this->getFilePath();
-        if(file_exists($file)) {
+        if (file_exists($file)) {
             return sha1_file($file);
         } else {
             throw new FileNotFoundException("File not found:" . $file);
@@ -1231,14 +1252,14 @@ class photo extends zophTable {
 
     /**
      * Get hash for photo.
-     * Returns the hash for a photo, either the file hash, or a salted hash that 
+     * Returns the hash for a photo, either the file hash, or a salted hash that
      * can be used to share photos
      * @param string type file, full or mid
      * @return string hash
      */
     public function getHash($type="file") {
         $hash=$this->get("hash");
-        if(empty($hash)) {
+        if (empty($hash)) {
             try {
                 $hash=$this->getHashFromFile();
                 $this->set("hash", $hash);
@@ -1247,7 +1268,7 @@ class photo extends zophTable {
                 log::msg($e->getMessage(), log::ERROR, log::IMG);
             }
         }
-        switch($type) {
+        switch ($type) {
         case "file":
             $return=$hash;
             break;
@@ -1278,37 +1299,39 @@ class photo extends zophTable {
      * @param track track to use or null to use all tracks
      * @param int maximum time the time can be off
      * @param bool Whether to interpolate between 2 found times/positions
-     * @param int Interpolation max_distance: what is the maximum distance between two 
+     * @param int Interpolation max_distance: what is the maximum distance between two
      *            points to still interpolate
      * @param string km / miles entity in which max_distance is measured
      * @param int Interpolation maxtime Maximum time between to point to still interpolate
      */
-    public function getLatLon(track $track=null, $max_time=300, $interpolate=true, 
+    public function getLatLon(track $track=null, $maxtime=300, $interpolate=true,
             $int_maxdist=5, $entity="km", $int_maxtime=600) {
 
         date_default_timezone_set("UTC");
         $datetime=$this->getUTCTime();
         $utc=strtotime($datetime[0] . " " . $datetime[1]);
-        
-        $mintime=$utc-$max_time;
-        $maxtime=$utc+$max_time;
-        
-        if($track) {
-            $track_id=$track->getId();
-            $where=" AND track_id=" . escape_string($track_id);
-        } else {
-            $where="";
-        }
-        
-        $sql="SELECT * FROM " . DB_PREFIX . "point" .
-            " WHERE datetime > \"" . date("Y-m-d H:i:s", $mintime) . "\" AND" .
-            " datetime < \"" . date("Y-m-d H:i:s", $maxtime)  . "\"" .
-            $where .
-            " ORDER BY abs(timediff(datetime,\"" . date("Y-m-d H:i:s", $utc) . "\")) ASC" .
-            " LIMIT 1";
 
-        $points=point::getRecordsFromQuery($sql);
-        if(sizeof($points) > 0 && $points[0] instanceof point) {
+        $qry=new select(array("pt" => "point"));
+
+        $where=new clause("datetime > :mintime");
+        $where->addAnd(new clause("datetime < :maxtime"));
+
+        $qry->addParam(new param(":mintime", date("Y-m-d H:i:s", $utc - $maxtime), PDO::PARAM_STR));
+        $qry->addParam(new param(":maxtime", date("Y-m-d H:i:s", $utc + $maxtime), PDO::PARAM_STR));
+        $qry->addParam(new param(":utc", date("Y-m-d H:i:s", $utc), PDO::PARAM_STR));
+
+        if ($track) {
+            $where->addAnd(new clause("track_id=:trackid"));
+            $qry->addParam(new param(":trackid", (int) $track->getId(), PDO::PARAM_INT));
+        }
+
+        $qry->addOrder("abs(timediff(datetime, :utc)) ASC");
+        $qry->addLimit(1);
+
+        $qry->where($where);
+
+        $points=point::getRecordsFromQuery($qry);
+        if (sizeof($points) > 0 && $points[0] instanceof point) {
             $point=$points[0];
             $pointtime=strtotime($point->get("datetime"));
         } else {
@@ -1316,18 +1339,18 @@ class photo extends zophTable {
             $interpolate=false;
             $point=null;
         }
-        
-        if($interpolate && ($pointtime != $utc)) {
-            if($utc>$pointtime) {
+
+        if ($interpolate && ($pointtime != $utc)) {
+            if ($utc>$pointtime) {
                 $p1=$point;
                 $p2=$point->getNext();
             } else {
                 $p1=$point->getPrev();
                 $p2=$point;
             }
-            if($p1 instanceof point && $p2 instanceof point) {
-                $p3=point::interpolate($p1,$p2,$utc,$int_maxdist, $entity, $int_maxtime);
-                if($p3 instanceof point) {
+            if ($p1 instanceof point && $p2 instanceof point) {
+                $p3=point::interpolate($p1, $p2, $utc, $int_maxdist, $entity, $int_maxtime);
+                if ($p3 instanceof point) {
                     $point=$p3;
                 }
             }
@@ -1339,7 +1362,7 @@ class photo extends zophTable {
      * Takes an array of photos and returns a subset
      *
      * @param array photos to return a subset from
-     * @param array Array should contain first and/or last and/or random to determine 
+     * @param array Array should contain first and/or last and/or random to determine
      *                           which subset(s)
      * @param int count Number of each to return
      * @return array subset of photos
@@ -1350,56 +1373,56 @@ class photo extends zophTable {
         $random=array();
         $begin=0;
         $end=null;
-        
+
         $max=count($photos);
-        
-        if($count>$max) {
+
+        if ($count>$max) {
             $count=$max;
         }
 
-        if(in_array("first", $subset)) {
+        if (in_array("first", $subset)) {
             $first=array_slice($photos, 0, $count);
             $max=$max-$count;
             $begin=$count;
         }
-        if(in_array("last", $subset)) {
+        if (in_array("last", $subset)) {
             $last=array_slice($photos, -$count);
             $max=$max-$count;
             $end=-$count;
         }
 
-        if(in_array("random", $subset) && ($max > 0)) {
-            $center=array_slice($photos,$begin,$end);
-            
+        if (in_array("random", $subset) && ($max > 0)) {
+            $center=array_slice($photos, $begin, $end);
+
             $max=count($center);
 
-            if($max!=0) {
-                if($count>$max) {
+            if ($max!=0) {
+                if ($count>$max) {
                     $count=$max;
                 }
                 $random_keys=(array) array_rand($center, $count);
-                foreach($random_keys as $key) {
+                foreach ($random_keys as $key) {
                     $random[]=$center[$key];
                 }
             }
         }
-        $subset=array_merge($first,$random,$last);
+        $subset=array_merge($first, $random, $last);
 
         // remove duplicates due to overlap:
         $clean_subset=array();
-        foreach($subset as $photo) {
+        foreach ($subset as $photo) {
             $clean_subset[$photo->get("photo_id")]=$photo;
         }
 
         return $clean_subset;
     }
-        
+
 
 
     /**
      * Take an array of photos and remove photos with no valid timezone
      *
-     * This function is needed for geotagging: for photos without a valid 
+     * This function is needed for geotagging: for photos without a valid
      * timezone it is not possible to determine the UTC time, needed for geotagging.
      * @param array Array of photos
      * @return array Array of photos with a valid timezone
@@ -1407,44 +1430,44 @@ class photo extends zophTable {
     public static function removePhotosWithNoValidTZ(array $photos) {
 
         $gphotos=array();
-        log::msg("Number of photos before valid timezone check: " . 
+        log::msg("Number of photos before valid timezone check: " .
             count($photos), log::DEBUG, log::GEOTAG);
 
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $photo->lookup();
             $loc=$photo->location;
-            if(get_class($loc)=="place") {
+            if (get_class($loc)=="place") {
                 $tz=$loc->get("timezone");
-                if(TimeZone::validate($tz)) {
+                if (TimeZone::validate($tz)) {
                     $gphotos[]=$photo;
                 }
             }
         }
-        log::msg("Number of photos after valid timezone check: " . count($gphotos), 
+        log::msg("Number of photos after valid timezone check: " . count($gphotos),
             log::DEBUG, log::GEOTAG);
         return $gphotos;
     }
-    
+
     /**
-     * Take an array of photos and remove photos that already have lat/lon 
+     * Take an array of photos and remove photos that already have lat/lon
      * information set.
      *
-     * This function is needed for geotagging, so photos that have lat/lon 
+     * This function is needed for geotagging, so photos that have lat/lon
      * manually set will not be overwritten
      * @param array Array of photos
      * @return array Array of photos with no lat/lon info
      */
     public static function removePhotosWithLatLon($photos) {
         $gphotos=array();
-        log::msg("Number of photos before overwrite check: " . count($photos), 
+        log::msg("Number of photos before overwrite check: " . count($photos),
             log::DEBUG, log::GEOTAG);
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $photo->lookup();
-            if(!($photo->get("lat") or $photo->get("lon"))) {
+            if (!($photo->get("lat") or $photo->get("lon"))) {
                 $gphotos[]=$photo;
             }
         }
-        log::msg("Number of photos after overwrite check: " . count($gphotos), 
+        log::msg("Number of photos after overwrite check: " . count($gphotos),
             log::DEBUG, log::GEOTAG);
         return $gphotos;
     }
@@ -1457,39 +1480,39 @@ class photo extends zophTable {
      */
 
     public static function getFromHash($hash, $type="file") {
-        if(!preg_match("/^[A-Za-z0-9]+$/", $hash)) {
+
+        $qry=new select(array("p" => "photos"));
+
+        if (!preg_match("/^[A-Za-z0-9]+$/", $hash)) {
             die("Illegal characters in hash");
         }
-        switch($type) {
+        switch ($type) {
         case "file":
-            $where="WHERE hash=\"" . escape_string($hash) . "\";";
+            $where=new clause("hash=:hash");
             break;
         case "full":
-            $salt=conf::get("share.salt.full");
-            $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
-               "\"" . escape_string($hash) . "\";";
+            $qry->addParam(new param(":salt", conf::get("share.salt.full"), PDO::PARAM_STR));
+            $where=new clause("sha1(CONCAT(:salt, hash))=:hash");
             break;
         case "mid":
-            $salt=conf::get("share.salt.mid");
-            $where="WHERE sha1(CONCAT('" . $salt . "', hash))=" .
-               "\"" . escape_string($hash) . "\";";
+            $qry->addParam(new param(":salt", conf::get("share.salt.mid"), PDO::PARAM_STR));
+            $where=new clause("sha1(CONCAT(:salt, hash))=:hash");
             break;
         default:
             die("Unsupported hash type");
             break;
         }
+        $qry->addParam(new param(":hash", $hash, PDO::PARAM_STR));
+        $qry->where($where);
 
-
-        $sql="SELECT * FROM " . DB_PREFIX . "photos " . $where;
-
-        $photos=self::getRecordsFromQuery($sql);
-        if(is_array($photos) && sizeof($photos) > 0) {
+        $photos=static::getRecordsFromQuery($qry);
+        if (is_array($photos) && sizeof($photos) > 0) {
             return $photos[0];
         } else {
             throw new PhotoNotFoundException("Could not find photo from hash");
         }
     }
-    
+
     /**
      * Create a list of fields that can be used to sort photos on
      * @return array list of fields
@@ -1525,18 +1548,19 @@ class photo extends zophTable {
      * @return int size in bytes
      */
     public static function getTotalSize() {
-        $sql = "select sum(size) from " . DB_PREFIX . "photos";
-        return self::getCountFromQuery($sql);
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array("total" => "sum(size)"));
+        return $qry->getCount();
     }
 
     /**
      * Get filesize for a set of photos
      * @param array Array of photos
      * @return int size in bytes
-     */ 
+     */
     public static function getFilesize(array $photos) {
         $bytes=0;
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $photo->lookup();
             $bytes+=$photo->get("size");
         }

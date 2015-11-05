@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -56,7 +56,7 @@ if($action!="insert") {
     foreach($members as $member) {
         $member->lookup();
         ?>
-        <input class="remove" type="checkbox" name="_remove_user[]" 
+        <input class="remove" type="checkbox" name="_remove_user[]"
             value="<?php echo $member->get("user_id")?>">
         <?php echo $member->getLink() ?>
         <br>

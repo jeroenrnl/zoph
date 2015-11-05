@@ -1,6 +1,6 @@
 <?php
 /**
- * Change password 
+ * Change password
  *
  * This file is part of Zoph.
  *
@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,7 +39,7 @@ if ($_action == "update" && conf::get("interface.user.default") != $user->get("u
         if ($password == $confirm) {
             $change->set("password", $password);
             $change->update();
-            $msg = sprintf(translate("The password for %s has been changed"), 
+            $msg = sprintf(translate("The password for %s has been changed"),
                 $change->get("user_name"));
         } else {
             $msg = translate("The passwords did not match");
@@ -72,7 +72,7 @@ if (!$user->is_admin() && conf::get("interface.user.default") == $change->get("u
     <?php
 } else {
     ?>
-    <input type="hidden" name="_action" value="update">  
+    <input type="hidden" name="_action" value="update">
     <input type="hidden" name="userid" id="userid" value="<?php echo $change->get("user_id")?>">
     <label for="password"><?php echo translate("password") ?></label>
     <input type="password" name="password" id="password" value="" size="16" maxlength="32">

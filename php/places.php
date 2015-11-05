@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -47,7 +47,7 @@ $place->lookup();
 $obj=&$place;
 $ancestors = $place->get_ancestors();
 $order = $user->prefs->get("child_sortorder");
-$children = $place->getChildrenForUser($order);
+$children = $place->getChildren($order);
 $totalPhotoCount = $place->getTotalPhotoCount();
 $photoCount = $place->getPhotoCount();
 
@@ -59,7 +59,7 @@ require_once "header.inc.php";
 
 <?php
 if ($user->is_admin()) {
-    $new="<a href=\"place.php?_action=new&amp;parent_place_id=" . $place->get("place_id") . "\">" . 
+    $new="<a href=\"place.php?_action=new&amp;parent_place_id=" . $place->get("place_id") . "\">" .
       translate("new") . "</a> |";
 }
 if ($user->is_admin() || $user->get("browse_tracks")) {
@@ -99,7 +99,7 @@ if ($show_orig) {
         <span class="actionlink">
             <a href="place.php?_action=edit&amp;place_id=<?php echo $place->get("place_id") ?>">
                 <?php echo translate("edit") ?>
-            </a> | 
+            </a> |
             <a href="place.php?_action=delete&amp;place_id=<?php echo $place->get("place_id") ?>">
                 <?php echo translate("delete") ?>
             </a>
@@ -114,7 +114,7 @@ if ($show_orig) {
         }
         ?>
         </span>
-        
+
         <h2>
         <?php
         if ($ancestors) {
@@ -161,7 +161,7 @@ if ($show_orig) {
                 <?php echo translate("view photos") ?>
               </a>
             </span>
-            <?php   
+            <?php
             $fragment .= " " . translate("or its children");
             if ($totalPhotoCount > 1) {
                 echo sprintf(translate("There are %s photos"), $totalPhotoCount);
@@ -193,7 +193,7 @@ if ($show_orig) {
         }
     } else {
         echo translate("There are no photos");
-        echo $fragment . ".<br>\n"; 
+        echo $fragment . ".<br>\n";
     }
     if ($children) {
         $tpl=new template("view_" . $_view, array(

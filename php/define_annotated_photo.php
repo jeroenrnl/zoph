@@ -13,7 +13,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,7 +21,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Nixon P. Childs
  * @author Jeroen Roos
@@ -57,9 +57,9 @@ if (!$found) {
     <br>
     <label for="size"><?php echo translate("send fullsize") ?></label>
     <?php echo template::createPulldown("_size", "mid", array(
-        "full" => translate("Yes",0), 
-        "mid" => translate("No",0)) 
-    ) 
+        "full" => translate("Yes",0),
+        "mid" => translate("No",0))
+    )
     ?>
     <br>
     <input type="checkbox" name="photo_title_cb">
@@ -177,7 +177,7 @@ if (!$found) {
 
     if($photo->get("aperature")) {
         ?>
-    
+
         <input type="checkbox" name="aperture_cb">
         <label for="aperture"><?php echo translate("aperture") ?></label>
         <?php echo create_text_input("aperture", $photo->get("aperture"), 35, 50) ?>
@@ -244,7 +244,7 @@ if (!$found) {
     <label><?php echo create_text_input("extra_name", "", 15, 50) ?></label>
     <?php echo create_text_input("extra", "", 35, 50) ?>
     <br>
-   
+
     <input class="bigbutton" type="submit" value="<?php echo translate("Annotate Photo") ?>">
     <?php
 } // if found

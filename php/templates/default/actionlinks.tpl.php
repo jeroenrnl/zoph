@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,8 +25,8 @@ if(!ZOPH) { die("Illegal call"); }
         <ul class="actionlink">
             <?php foreach($tpl_actionlinks as $text => $link): ?>
             <li>
-                <a href="<? echo $link ?>">
-                    <?php echo $text ?>
+                <a href="<?= $link ?>">
+                    <?= $text ?>
                 </a>
             </li>
             <?php endforeach; ?>
