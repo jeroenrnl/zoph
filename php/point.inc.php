@@ -21,6 +21,11 @@
  * @package Zoph
  */
 
+use db\delete;
+use db\param;
+use db\clause;
+use db\select;
+
 /**
  * This class describes a point, which is a GPS position + timestamp
  *

@@ -24,6 +24,15 @@
  * @package Zoph
  */
 
+use db\select;
+use db\db;
+use db\insert;
+use db\param;
+use db\update;
+use db\query;
+use db\clause;
+use db\delete;
+
 /**
  * A generic table class.  Is is meant to be subclassed by particular
  * table classes.  A table is represented by a name, an array of

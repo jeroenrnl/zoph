@@ -24,6 +24,12 @@
 
 require_once "user.inc.php";
 
+use db\select;
+use db\param;
+use db\delete;
+use db\db;
+use db\clause;
+
 /**
  * conf is the main object for access to Zoph's configuration
  * in the database

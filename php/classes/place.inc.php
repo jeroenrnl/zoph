@@ -22,6 +22,13 @@
  * @author Jeroen Roos
  */
 
+use db\select;
+use db\update;
+use db\param;
+use db\db;
+use db\clause;
+use db\selectHelper;
+
 /**
  * A class corresponding to the places table.
  *

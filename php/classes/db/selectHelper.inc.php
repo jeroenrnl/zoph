@@ -21,6 +21,10 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+
+use \user;
+use \PDO;
 /**
  * This object contains a few functions that could be in the select object,
  * but are Zoph-specific and I want to keep the database objects generic.

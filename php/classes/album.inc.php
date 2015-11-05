@@ -22,6 +22,14 @@
  * @author Jeroen Roos
  */
 
+use db\select;
+use db\param;
+use db\insert;
+use db\delete;
+use db\db;
+use db\clause;
+use db\selectHelper;
+
 /**
  * Photo album
  *

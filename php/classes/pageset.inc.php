@@ -24,6 +24,13 @@
  * @package Zoph
  */
 
+use db\select;
+use db\param;
+use db\insert;
+use db\update;
+use db\clause;
+use db\delete;
+
 /**
  * The pageset class groups a set of pages in a certain order
  * @author Jeroen Roos

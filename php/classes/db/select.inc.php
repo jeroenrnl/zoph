@@ -21,6 +21,10 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+
+use \PDO;
+
 /**
  * The select object is used to create SELECT queries
  *

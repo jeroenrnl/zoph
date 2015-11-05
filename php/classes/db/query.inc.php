@@ -21,6 +21,9 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+use \PDO;
+
 /**
  * The query object is used to create queries
  *

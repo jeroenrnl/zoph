@@ -22,6 +22,8 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+
 /**
  * The param object contains a parameter that is sent to the database
  *

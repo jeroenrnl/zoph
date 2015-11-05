@@ -23,6 +23,8 @@
 
 require_once "testSetup.php";
 
+use db\db;
+
 /**
  * Test photo class
  *

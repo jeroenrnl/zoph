@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+
 /**
  * The clause object is used to build WHERE-clauses
  *

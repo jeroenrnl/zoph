@@ -22,6 +22,11 @@
  */
 
 require_once "testSetup.php";
+
+use db\select;
+use db\clause;
+use db\param;
+
 /**
  * Test class for user.
  *

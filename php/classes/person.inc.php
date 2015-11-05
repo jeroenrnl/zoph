@@ -23,6 +23,15 @@
  * @package Zoph
  */
 
+use db\select;
+use db\param;
+use db\insert;
+use db\update;
+use db\delete;
+use db\db;
+use db\clause;
+use db\selectHelper;
+
 /**
  * Person class
  *

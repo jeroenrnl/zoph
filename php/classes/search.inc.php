@@ -21,6 +21,10 @@
  * @author Jeroen Roos
  */
 
+use db\select;
+use db\param;
+use db\clause;
+
 /**
  * Store and retrieve searches
  *

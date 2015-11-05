@@ -21,6 +21,10 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+
+use \PDO;
+
 /**
  * The db object is used to connect to the database
  * Example code:

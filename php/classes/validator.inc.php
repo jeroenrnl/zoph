@@ -16,6 +16,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+use db\select;
+use db\param;
+use db\clause;
+
 /*
  * A class to validate a user.
  */

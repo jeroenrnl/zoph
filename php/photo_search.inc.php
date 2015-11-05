@@ -24,6 +24,12 @@
  * @author Jeroen Roos
  * @todo This should be replaced by a proper OO based construction
  */
+
+use db\select;
+use db\param;
+use db\clause;
+use db\selectHelper;
+
 function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     $good_ops = array("=", "!=", "less than", "more than", ">", ">=",
         "<", "<=", "like", "not like", "is in photo", "is not in photo");

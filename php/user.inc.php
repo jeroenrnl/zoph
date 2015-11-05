@@ -18,6 +18,12 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+use db\select;
+use db\clause;
+use db\param;
+use db\selectHelper;
+
 class user extends zophTable {
     /** @var string The name of the database table */
     protected static $tableName="users";

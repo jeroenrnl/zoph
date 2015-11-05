@@ -21,6 +21,12 @@
  * @author Jeroen Roos
  */
 
+use db\insert;
+use db\param;
+use db\db;
+use db\clause;
+use db\select;
+
 /**
  * Test the conf class
  *

@@ -21,6 +21,13 @@
  * @author Jeroen Roos
  */
 
+use db\select;
+use db\db;
+use db\param;
+use db\insert;
+use db\delete;
+use db\clause;
+
 /**
  * Test class that tests the database classes
  * @package ZophUnitTest

@@ -22,6 +22,12 @@
  * @package Zoph
  */
 
+use db\db;
+use db\select;
+use db\param;
+use db\clause;
+use db\selectHelper;
+
 /**
  * A class corresponding to the photos table.
  *

@@ -19,6 +19,10 @@
  * @package Zoph
  */
 
+use db\delete;
+use db\param;
+use db\clause;
+
 /**
  * A track is a collection of points, which are used for geotagging
  *

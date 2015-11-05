@@ -21,6 +21,12 @@
  * @package Zoph
  */
 
+use db\select;
+use db\param;
+use db\db;
+use db\clause;
+use db\selectHelper;
+
 /**
  * Photo ratings
  * @author Jeroen Roos

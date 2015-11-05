@@ -31,13 +31,13 @@ require_once "testData.php";
 require_once "testImage.php";
 set_include_path(get_include_path() . PATH_SEPARATOR . getcwd() . "/../php");
 set_include_path(get_include_path() . PATH_SEPARATOR . getcwd() . "/../php/classes");
-echo getcwd();
-require_once "db.inc.php";
-require_once "settings.inc.php";
-settings::$php_loc=getcwd() . "/../php";
+
+require_once "autoload.inc.php";
 
 require_once "include.inc.php";
 require_once "cli/cliimport.inc.php";
+
+use db\db;
 
 $lang=new language("en");
 
