@@ -24,6 +24,7 @@
 namespace db;
 
 use \PDO;
+use \log;
 
 /**
  * The db object is used to connect to the database
@@ -128,18 +129,18 @@ class db {
         $db=static::getHandle();
 
         try {
+            log::msg("SQL Query: " . (string) $query, log::DEBUG, log::DB);
             $stmt=$db->prepare($query);
             foreach($query->getParams() as $param) {
                 if ($param instanceof param) {
+                    log::msg("Param: <b>" . $param->getName() . "</b>: " . $param->getValue(), log::DEBUG, log::DB);
                     $stmt->bindValue($param->getName(), $param->getValue(), $param->getType());
                 }
             }
             $stmt->execute();
         } catch (PDOException $e) {
             echo $e->getMessage() . "\n";
-            var_dump($query);
-            echo "\n" . $query . "\n";
-            die("SQL failed");
+            log::msg("SQL failed", log::FATAL, log::DB);
         }
 
         return $stmt;

@@ -20,10 +20,6 @@
  * @author Jason Geiger
  */
 
-// Temporary, until mysql_ calls have been migrated to PDO
-// Otherwise, php 5.5+ reports deprecation errors:
-error_reporting(E_ALL ^ E_DEPRECATED);
-
 // This file should contain the following settings:
 // VERSION, RELEASEDATE, INI_FILE, THUMB_SIZE, MID_SIZE, THUMB_PREFIX, MID_PREFIX, LOG_ALWAYS
 // LOG_SEVERITY, LOG_SUBJECT.
