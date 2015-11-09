@@ -49,3 +49,4 @@ CREATE VIEW zoph_view_photo_avg_rating AS
 ALTER TABLE zoph_prefs MODIFY COLUMN child_sortorder enum('name', 'sortname', 'oldest', 'newest',
         'first', 'last', 'lowest', 'highest', 'average', 'random') default 'sortname' NOT NULL;
 
+ALTER TABLE zoph_users MODIFY COLUMN lastip varchar(48);
