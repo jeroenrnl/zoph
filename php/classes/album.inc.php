@@ -128,7 +128,7 @@ class album extends zophTreeTable implements Organizer {
         $users = user::getRecords("user_id", array("lightbox_id" => $this->get("album_id")));
         if ($users) {
             foreach ($users as $user) {
-                $user->setFields(array("lightbox_id" => "null"));
+                $user->setFields(array("lightbox_id" => null));
                 $user->update();
             }
         }
