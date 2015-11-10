@@ -562,6 +562,7 @@ class person extends zophTable implements Organizer {
         $idname=static::$primaryKeys[0];
 
         foreach ($records as $record) {
+            $record->lookup();
             $newchild=$xml->createElement(static::XMLNODE);
             $key=$xml->createElement("key");
             $title=$xml->createElement("title");
