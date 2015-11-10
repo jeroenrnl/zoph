@@ -27,7 +27,7 @@ class cli {
      * Defines the API version between the /bin/zoph binary and the files in the webroot
      * these must be equal.
      */
-    const API=3;
+    const API=4;
 
     /**
      * @var The user that is doing the import
