@@ -1544,6 +1544,28 @@ class photo extends zophTable {
     }
 
     /**
+     * Create a list of fields that can be specified during import 
+     * @return array list of fields
+     */
+    public static function getImportFields() {
+        return array(
+            "" => "",
+            "time" => "time",
+            "timestamp" => "timestamp",
+            "aperture" => "aperture",
+            "camera_make" => "camera make",
+            "camera_model" => "camera model",
+            "compression" => "compression",
+            "exposure" => "exposure",
+            "flash_used" => "flash used",
+            "focal_length" => "focal length",
+            "iso_equiv" => "iso equiv",
+            "metering_mode" => "metering mode",
+            "mapzoom" => "mapzoom"
+        );
+    }
+
+    /**
      * Get accumulated disk size for all photos, as used on the info page
      * @return int size in bytes
      */

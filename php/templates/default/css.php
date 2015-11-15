@@ -1227,6 +1227,7 @@ dl.track dd {
     padding-right: 4px;
     min-height: 1.3em;
     margin: 4px 0px;
+    border: none; 
 }
 
 dl.color_scheme dd,
@@ -1739,7 +1740,8 @@ form.import fieldset#import_checkboxes {
     display: none;
 }
 
-fieldset.multiple {
+fieldset.multiple,
+fieldset.formhelper-multiple {
     background: transparent;
     margin: 0 0 5px 0;
     padding: 0;
@@ -1747,9 +1749,31 @@ fieldset.multiple {
     width: 230px;
 }
 
+fieldset.formhelper-multiple {
+    width: 100%;
+}
+
+fieldset.formhelper-multiple > .actionlink {
+    float: left;
+    margin-left: 10px;
+}
+
 fieldset.multiple img.actionlink:last-child {
     /* hide the remove icon on last dropdown */
     display: none;
+}
+
+fieldset.import-extrafields {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+fieldset.import-extrafields > select {
+    font-size: 10px;
+    float: left;
+    width: 100px;
+    margin: 2px 8px 10px 1em;
 }
 
 div.preview {
