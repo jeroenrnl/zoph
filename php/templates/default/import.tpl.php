@@ -123,6 +123,14 @@ if(!ZOPH) { die("Illegal call"); }
                 <label for="level"><?php echo translate("level") ?></label>
                 <?php echo create_text_input("level", "", 4, 2) ?>
                 <span class="inputhint">1 - 10</span><br>
+                <label for="extrafields"><?php echo translate("extra fields") ?></label><br>
+                <span class="inputhint"><?= translate("These settings will override EXIF data!") ?></span><br>
+                <fieldset class="formhelper-multiple">
+                    <fieldset class="import-extrafields">
+                        <?php echo template::createImportFieldPulldown("_field[]", "") ?>
+                        <?php echo create_text_input("field[]", "", 30, 64) ?>
+                    </fieldset>
+                </fieldset> 
                 <label for="description"><?php echo translate("description") ?></label>
                 <textarea name="description" cols="40" rows="4"></textarea><br>
                 <input id="import_submit" type="submit"
