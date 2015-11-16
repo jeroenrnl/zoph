@@ -21,6 +21,9 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+use \PDO;
+
 /**
  * The query object is used to create queries
  *
@@ -165,6 +168,27 @@ abstract class query {
      */
     public function where(clause $clause) {
         $this->where=$clause;
+        return $this;
+    }
+
+    /**
+     * Add a subclause to the WHERE, or set the clause as a WHERE if it is not yet set
+     * @param clause clause to add
+     * @param string AND|OR
+     * @return query return the query to enable chaining
+     */
+    public function addClause(clause $clause, $conj="AND") {
+        if ($this->where instanceof clause) {
+            if (strtoupper($conj) == "AND") {
+                $this->where->addAnd($clause);
+            } else if (strtoupper($conj) == "OR") {
+                $this->where->addOr($clause);
+            } else {
+                throw new DatabaseException("Unknown conjunction: " . e($conj));
+            }
+        } else {
+            $this->where($clause);
+        }
         return $this;
     }
 

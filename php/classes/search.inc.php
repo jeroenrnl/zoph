@@ -21,6 +21,10 @@
  * @author Jeroen Roos
  */
 
+use db\select;
+use db\param;
+use db\clause;
+
 /**
  * Store and retrieve searches
  *
@@ -54,20 +58,20 @@ class search extends zophTable {
      */
     public function lookup() {
         $user=user::getCurrent();
-        $where="";
+        $qry=new select(array("ss" => "saved_search"));
+        $where=new clause("search_id=:searchid");
+
+        $qry->addParam(new param(":searchid", $this->getId(), PDO::PARAM_INT));
+
         if (!$user->is_admin()) {
-            $where= "(owner=" . escape_string($user->get("user_id")) .
-            " OR " . "public=TRUE) AND ";
+            $clause=new clause("owner=:owner");
+            $qry->addParam(new param(":owner", $user->getId(), PDO::PARAM_INT));
+            $clause->addOr(new clause("public=TRUE"));
+            $where->addAnd($clause);
         }
 
-        $sql="SELECT * FROM " . DB_PREFIX . "saved_search WHERE " .
-            $where .
-            "search_id=" . escape_string($this->get("search_id"));
-        /** @todo Once this function has been changed to new db code,
-                  the fetch_assoc in zophTable::lookupFromSQL can
-                  be removed
-         */
-        return $this->lookupFromSQL($sql);
+        $qry->where($where);
+        return $this->lookupFromSQL($qry);
     }
 
     /**

@@ -582,7 +582,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
           </td>
           <td colspan="2">
             <input type="text" name="field[<?php echo $i; ?>]" value="<?php
-                echo escape_string($field[$i]); ?>" size="24" maxlength="64">
+                echo e($field[$i]); ?>" size="24" maxlength="64">
           </td>
         </tr>
         <?php
@@ -626,7 +626,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
           </td>
           <td colspan=2>
             <input type="text" name="text[<?php echo $i; ?>]"
-                value="<?php echo escape_string($text[$i]); ?>" size="24" maxlength="64">
+                value="<?php echo e($text[$i]); ?>" size="24" maxlength="64">
           </td>
           </tr>
         <?php

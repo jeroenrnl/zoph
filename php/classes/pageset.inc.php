@@ -24,6 +24,13 @@
  * @package Zoph
  */
 
+use db\select;
+use db\param;
+use db\insert;
+use db\update;
+use db\clause;
+use db\delete;
+
 /**
  * The pageset class groups a set of pages in a certain order
  * @author Jeroen Roos
@@ -125,7 +132,7 @@ class pageset extends zophTable {
         $qry->addFunction(array("count" => "COUNT(page_id)"));
         $qry->where(new clause("pageset_id=:pagesetid"));
         $qry->addParam(new param(":pagesetid", $this->getId(), PDO::PARAM_INT));
-        return static::getCountFromQuery($qry);
+        return $qry->getCount();
     }
 
     /**

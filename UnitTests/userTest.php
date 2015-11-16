@@ -22,6 +22,11 @@
  */
 
 require_once "testSetup.php";
+
+use db\select;
+use db\clause;
+use db\param;
+
 /**
  * Test class for user.
  *
@@ -78,11 +83,12 @@ class userTest extends ZophDatabaseTestCase {
 
         unset($user);
 
-        $sql="SELECT count(user_id) as count FROM zoph_users WHERE user_id=" . $id;
+        $qry=new select(array("users"));
+        $qry->addFunction(array("count" => "COUNT(user_id)"));
+        $qry->where(new clause("user_id=:userid"));
+        $qry->addParam(new param(":userid", $id, PDO::PARAM_INT));
 
-        $result=query($sql);
-        $row=mysql_fetch_row($result);
-        $this->assertEquals($row[0], 1);
+        $this->assertEquals($qry->getCount(), 1);
 
         // Test Password
 
@@ -104,11 +110,12 @@ class userTest extends ZophDatabaseTestCase {
 
         $new_user->delete();
 
-        $sql="SELECT count(user_id) as count FROM zoph_users WHERE user_id=" . $id;
-        $result=query($sql);
-        $row=mysql_fetch_row($result);
-        $this->assertEquals($row[0], 0);
+        $qry=new select(array("users"));
+        $qry->addFunction(array("count" => "COUNT(user_id)"));
+        $qry->where(new clause("user_id=:userid"));
+        $qry->addParam(new param(":userid", $id, PDO::PARAM_INT));
 
+        $this->assertEquals($qry->getCount(), 0);
     }
 
     public function testSetPasswordOnUpdate() {

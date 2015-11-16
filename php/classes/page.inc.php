@@ -23,6 +23,10 @@
  * @package Zoph
  */
 
+use db\select;
+use db\param;
+use db\clause;
+
 /**
  * Page class
  * A page is plaintext or zophCode that can be used to personalize parts

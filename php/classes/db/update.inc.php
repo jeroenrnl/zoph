@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+
 /**
  * The insert object is used to create UPDATE queries
  *

@@ -21,6 +21,12 @@
  * @author Jeroen Roos
  */
 
+use db\insert;
+use db\param;
+use db\db;
+use db\clause;
+use db\select;
+
 /**
  * Test the conf class
  *
@@ -73,7 +79,7 @@ class configTest extends ZophDataBaseTestCase {
         $qry=new select(array("co" => "conf"));
         $qry->where(new clause("conf_id=:conf_id"));
         $qry->addParam(new param(":conf_id", "test.unknown", PDO::PARAM_STR));
-        $result=query($qry);
+        $result=db::query($qry);
         $records=$result->fetch(PDO::FETCH_ASSOC);
 
         $this->assertFalse($records);

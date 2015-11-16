@@ -190,6 +190,57 @@ abstract class zophTreeTable extends zophTable {
         return new static(1);
     }
 
+    /**
+     * Search for an object by hierarchical name
+     * @example If you have an album "Vacation" with subalbums "2010"
+     *          and "2012", both with a subalbum named "France"
+     *          album::getByNameHierarchical("Vacation/2010/France");
+     *          will match the "France" album in 2010, but not in 2012, even
+     *          if they are both called "France"
+     * @param string name to search for
+     * @return zophTreeTable found object
+     */
+    public static function getByNameHierarchical($name) {
+        if (strpos($name, "/") === false) {
+            return static::getByName($name);
+        }
+
+        $found=0;
+
+        $searchString=explode("/", $name);
+        $depth=sizeof($searchString);
+        foreach($searchString as $namePart) {
+            $objs = static::getByName($namePart);
+            foreach($objs as $obj) {
+                $obj->lookup();
+                if (!isset($parentObj)) {
+                    $found++;
+                    $parentObj=$obj;
+                } else {
+                    $nextObjId=$obj->getId();
+                    $children=$parentObj->getChildren();
+                    foreach ($children as $child) {
+                        $child->lookup();
+                        if ($child->getId()==$nextObjId) {
+                            $parentObj=$obj;
+                            $found++;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Only report success if we have traversed the full depth of the search.
+        if ($depth == $found) {
+            return $obj;
+        } else {
+            return false;
+        }
+
+    }
+
+
     public static function getXMLdata($search, DOMDocument $xml, DOMElement $rootnode) {
         $obj = static::getRoot();
         $obj->lookup();

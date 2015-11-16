@@ -18,6 +18,13 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+use db\select;
+use db\insert;
+use db\delete;
+use db\param;
+use db\clause;
+
 class group extends zophTable {
     /** @var string The name of the database table */
     protected static $tableName="groups";

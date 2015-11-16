@@ -21,6 +21,10 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+
+use \PDO;
+
 /**
  * The select object is used to create SELECT queries
  *
@@ -197,6 +201,31 @@ class select extends query {
         }
 
         return $sql . ";";
+    }
+
+    /**
+     * Return the first column from the query as an array
+     * This function should only be run on queries with a single column,
+     * or it will make little sense
+     * @return Array array of values
+     */
+    public function toArray() {
+        $stmt=$this->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+    }
+
+    /**
+     * Executes a "SELECT COUNT(*) FROM ..." query and returns the counter
+     * @return int count
+     */
+    public function getCount() {
+        try {
+            $result = db::query($this);
+        } catch (PDOException $e) {
+            log::msg("Unable to get count", log::FATAL, log::DB);
+        }
+
+        return $result->fetch(PDO::FETCH_BOTH)[0];
     }
 }
 

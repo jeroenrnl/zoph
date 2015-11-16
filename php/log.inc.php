@@ -67,9 +67,6 @@ class log {
     const GENERAL = 32768;
     const ALL=65535;
 
-    function __construct() {
-    }
-
     /**
      * Log a message
      * for now, only to the screen, but I may add file and database later;
@@ -89,16 +86,21 @@ class log {
          *               no matter what the subject is.
          */
 
-        if(((LOG_SEVERITY >= $severity) && (LOG_SUBJECT & $subj)) ||
+        if (((LOG_SEVERITY >= $severity) && (LOG_SUBJECT & $subj)) ||
             (LOG_ALWAYS >= $severity)) {
 
-            $msg="<b>" . self::$sev[$severity] . "</b>: " . $msg . "<br>\n";
-            if($print) {
-                if(!defined("CLI")) {
+            $dbt = debug_backtrace();
+            $file = basename($dbt[0]["file"]);
+            $line = $dbt[0]["line"];
+
+            $msg="<b>" . self::$sev[$severity] . "</b>: " . $msg . " <tt>" . $file . "</tt>: " . $line . ".<br>\n";
+
+            if ($print) {
+                if (!defined("CLI")) {
                     echo $msg;
                 } else {
-                    $html=array("<b>", "</b>", "<strong>", "<strong>", "<br>");
-                    $cli=array("\033[1m", "\033[0m", "\033[1m", "\033[0m", "\n");
+                    $html=array("<b>", "</b>", "<strong>", "<strong>", "<br>", "<tt>", "</tt>");
+                    $cli=array("\033[1m", "\033[0m", "\033[1m", "\033[0m", "\n", "", "");
                     echo str_replace($html, $cli, $msg);
                 }
             } else {
@@ -106,7 +108,7 @@ class log {
             }
         }
 
-        if($severity == self::FATAL && self::$stopOnFatal) {
+        if ($severity == self::FATAL && self::$stopOnFatal) {
             die("fatal error");
         }
     }

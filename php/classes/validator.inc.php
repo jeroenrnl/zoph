@@ -16,6 +16,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+use db\select;
+use db\param;
+use db\clause;
+
 /*
  * A class to validate a user.
  */
@@ -35,26 +39,31 @@ class validator {
     /*
      * Validate a user.
      */
-    function validate() {
+    public function validate() {
         $user = null;
 
         // No username or password are given, and a default user is defined
         // let's login as that...
         if (!$this->username && !$this->password && conf::get("interface.user.default")) {
             $user = new user(conf::get("interface.user.default"));
+            $user->lookup();
         } else {
 
-            $query =
-                "select user_id from " . DB_PREFIX . "users where " .
-                "user_name = '" .  escape_string($this->username) . "' and " .
-                "password = password('" . escape_string($this->password) . "')";
+            $qry = new select(array("users"));
+            $qry->addFields(array("user_id"));
+            $where=new clause("user_name=:username");
+            $where->addAnd(new clause("password=password(:password)"));
+            $qry->where($where);
+            $qry->addParams(array(
+                new param(":username", $this->username, PDO::PARAM_STR),
+                new param(":password", $this->password, PDO::PARAM_STR)
+            ));
 
-            $result = query($query);
+            $stmt=$qry->execute();
 
-            if (num_rows($result) == 1) {
-                $row = fetch_array($result);
-
-                $user = new user($row["user_id"]);
+            if($stmt->rowCount() == 1) {
+                $user = new user($stmt->fetchColumn());
+                $user->lookup();
             }
         }
         return $user;

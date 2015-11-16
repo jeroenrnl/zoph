@@ -24,6 +24,11 @@
  * @package Zoph
  */
 
+use db\select;
+use db\param;
+use db\clause;
+use db\selectHelper;
+
 /**
  * Photographer class
  *
@@ -86,7 +91,7 @@ class photographer extends person implements Organizer {
             $subqry = new select(array("p" => "photos"));
             $subqry->addFunction(array("person_id" => "DISTINCT p.photographer_id"));
             $subqry->join(array("ppl" => "people"), "p.photographer_id=ppl.person_id");
-            list($subqry,$where)=self::expandQueryForUser($subqry, $where);
+            list($subqry,$where)=selectHelper::expandQueryForUser($subqry, $where);
             if($where instanceof clause) {
                 $subqry->where($where);
                 if($search != null) {

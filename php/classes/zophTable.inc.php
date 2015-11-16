@@ -24,6 +24,15 @@
  * @package Zoph
  */
 
+use db\select;
+use db\db;
+use db\insert;
+use db\param;
+use db\update;
+use db\query;
+use db\clause;
+use db\delete;
+
 /**
  * A generic table class.  Is is meant to be subclassed by particular
  * table classes.  A table is represented by a name, an array of
@@ -183,25 +192,21 @@ abstract class zophTable {
 
     /**
      * Looks up a record using supplied SQL query
-     * @param string SQL query to use
+     * @param select SQL query to use
      */
-    public function lookupFromSQL($sql) {
-        $result = query($sql, "Lookup failed:");
-        if ($result instanceof PDOStatement) {
-            $results=$result->fetchAll(PDO::FETCH_ASSOC);
-            $rows=count($results);
-        } else {
-            $rows=num_rows($result);
+    public function lookupFromSQL(select $qry) {
+        try {
+            $result = db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Lookup failed", log::FATAL, log::DB);
         }
+
+        $results=$result->fetchAll(PDO::FETCH_ASSOC);
+        $rows=count($results);
+
         if ($rows == 1) {
-            if ($result instanceof PDOStatement) {
-                $row=array_pop($results);
-            } else {
-                $row = fetch_assoc($result);
-            }
-
+            $row=array_pop($results);
             $this->fields = array();
-
             $this->fields = array_merge($this->fields, $row);
 
             return 1;
@@ -287,14 +292,22 @@ abstract class zophTable {
 
         $qry->where($where);
 
-        query($qry, "Delete failed:");
+        try {
+            $qry->execute();
+        } catch (PDOException $e) {
+            log::msg("Delete failed", log::FATAL, log::DB);
+        }
 
         if ($extra_tables) {
             foreach ($extra_tables as $table) {
                 $qry=new delete(array($table));
                 list($qry, $where) = $this->addWhereForKeys($qry);
                 $qry->where($where);
-                query($qry, "Delete from " . $table . " failed:");
+                try {
+                    $qry->execute();
+                } catch (PDOException $e) {
+                    log::msg("Delete from " . $table . " failed", log::FATAL, log::DB);
+                }
             }
         }
     }
@@ -344,8 +357,11 @@ abstract class zophTable {
 
         $qry->where($where);
 
-        query($qry, "Update failed:");
-
+        try {
+            $qry->execute();
+        } catch (PDOException $e) {
+            log::msg("Update failed", log::FATAL, log::DB);
+        }
     }
 
     /**
@@ -499,7 +515,7 @@ abstract class zophTable {
     public static function getCount() {
         $qry=new select(array(static::$tableName));
         $qry->addFunction(array("count" => "COUNT(*)"));
-        return static::getCountFromQuery($qry);
+        return $qry->getCount();
     }
 
     /**
@@ -522,21 +538,6 @@ abstract class zophTable {
         }
         return $pop_array;
     }
-
-    /**
-     * Executes a "SELECT COUNT(*) FROM ..." query and returns the counter
-     * @param string SQL query
-     * @return int count
-     */
-    public static function getCountFromQuery($sql) {
-        $result = query($sql, "Unable to get count");
-        if ($result instanceof PDOStatement) {
-            return $result->fetch(PDO::FETCH_BOTH)[0];
-        } else {
-            return result($result, 0, 0);
-        }
-    }
-
 
     /**
      * Gets an array of the records for a table by doing a * "select *"
@@ -600,24 +601,20 @@ abstract class zophTable {
     /**
      * Stores the results the the given query in an array of objects of
      * this given type.
-     * @param string SQL query
+     * @param select SQL query
      */
-    public static function getRecordsFromQuery($sql) {
+    public static function getRecordsFromQuery(select $qry) {
         $class=get_called_class();
-        $result = query($sql, "Unable to get records");
+        try {
+            $result = db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Unable to get records", log::FATAL, log::DB);
+        }
         $objs=array();
-        if ($result instanceof PDOStatement) {
-            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                $obj = new $class;
-                $obj->setFields($row);
-                $objs[] = $obj;
-            }
-        } else {
-            while ($row = fetch_assoc($result)) {
-                $obj = new $class;
-                $obj->setFields($row);
-                $objs[] = $obj;
-            }
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            $obj = new $class;
+            $obj->setFields($row);
+            $objs[] = $obj;
         }
         return $objs;
     }
@@ -679,171 +676,6 @@ abstract class zophTable {
             return $cover->getImageTag(THUMB_PREFIX);
         }
     }
-
-    /**
-     * Get the ORDER BY and LIMIT statements to pick an autocover
-     * This is a temporary function until all old SQL has been phased out
-     * @param select Query to add the ORDER BY and LIMIT statements to
-     * @param string [oldest|newest|first|last|random|highest]
-     * @return select Modified query
-     */
-    public static function getAutoCoverOrder(select $query, $autocover="highest") {
-        switch ($autocover) {
-        case "oldest":
-            $qry=$query->addOrder("p.date")->addOrder("p.time")->addLimit(1);
-            break;
-        case "newest":
-            $qry=$query->addOrder("p.date DESC")->addOrder("p.time DESC")->addLimit(1);
-            break;
-        case "first":
-            $qry=$query->addOrder("p.timestamp")->addLimit(1);
-            break;
-        case "last":
-            $qry=$query->addOrder("p.timestamp DESC")->addLimit(1);
-            break;
-        case "random":
-            $qry=$query->addOrder("rand()")->addLimit(1);
-            break;
-        case "highest":
-        default:
-            $qry=$query->addOrder("ar.rating DESC")->addLimit(1);
-            break;
-        }
-        return $qry;
-    }
-
-    /**
-     * Add JOINs and WHERE clauses to a query to restrict it to the photos the current user can see
-     * Many queries have to be joined with the same tables in order to filter out the photos
-     * a non-admin user is not allowed to see, this function expands an existing query with the needed
-     * JOINs and WHERE clauses.
-     */
-    protected static function expandQueryForUser(select $qry, clause $where=null, user $user=null) {
-        if (!$user) {
-            $user=user::getCurrent();
-        }
-
-        if (!$qry->hasTable("photos")) {
-            $qry=static::addPhotoTableToQuery($qry);
-        }
-
-        if (!$qry->hasTable("photo_albums")) {
-            $qry->join(array("pa" => "photo_albums"), "pa.photo_id = p.photo_id");
-        }
-
-        if (!$qry->hasTable("group_permissions")) {
-            $qry->join(array("gp" => "group_permissions"), "pa.album_id = gp.album_id");
-        }
-
-        if (!$qry->hasTable("groups_users")) {
-            $qry->join(array("gu" => "groups_users"), "gp.group_id = gu.group_id");
-        }
-
-        $clause=new clause("gu.user_id=:userid");
-        $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
-
-        if (is_null($where)) {
-            $where=$clause;
-        } else {
-            $where->addAnd($clause);
-        }
-        $where->addAnd(new clause("gp.access_level >= p.level"));
-
-        return array($qry, $where);
-     }
-
-    /**
-     * This function adds a relation table to the query, in order to make it possible to
-     * JOIN with the photo table
-     * @param select query
-     * @return select modified query
-     */
-    protected static function addRelationTableToQuery(select $qry) {
-        if ($qry->hasTable("albums") && !$qry->hasTable("photo_albums")) {
-            $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
-        } else if ($qry->hasTable("categories") && !$qry->hasTable("photo_categories")) {
-            $qry->join(array("pc" => "photo_categories"), "pc.category_id = c.category_id");
-        } else if ($qry->hasTable("people") && !$qry->hasTable("photo_people")) {
-            $qry->join(array("pp" => "photo_people"), "pp.person_id = ppl.person_id");
-        }
-
-        return $qry;
-    }
-
-    /**
-     * This function tries to figure out how to JOIN the current query with the photo table
-     * @param select query
-     * @return select modified query
-     */
-    protected static function addPhotoTableToQuery(select $qry) {
-        $qry=static::addRelationTableToQuery($qry);
-
-        if ($qry->hasTable("photo_albums")) {
-            $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id");
-        } else if ($qry->hasTable("photo_categories")) {
-            $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
-        } else if ($qry->hasTable("photo_people")) {
-            $qry->join(array("p" => "photos"), "pp.photo_id = p.photo_id");
-        } else if ($qry->hasTable("places")) {
-            $qry->join(array("p" => "photos"), "p.location_id = pl.place_id");
-        } else {
-            throw new DatabaseException("JOIN failed");
-        }
-
-        return $qry;
-   }
-
-    /**
-     * Add modify query to ORDER BY a calculated field
-     * @param select SQL query to modify
-     * @param string [oldest|newest|first|last|lowest|highest|average|random]
-     * @return query modified query
-     */
-    protected static function addOrderToQuery(select $qry, $order) {
-        if (!$qry->hasTable("photos") &&
-                in_array($order, array("oldest", "newest", "first", "last",
-                    "lowest", "highest", "average"))) {
-            $qry=static::addPhotoTableToQuery($qry);
-        }
-
-        if (!$qry->hasTable("view_photo_avg_rating") &&
-                in_array($order, array("lowest", "highest", "average"))) {
-            $qry->join(array("ar" => "view_photo_avg_rating"), "ar.photo_id = p.photo_id");
-        }
-
-        switch ($order) {
-        case "oldest":
-            $qry->addFunction(array("oldest" => "min(p.date)"));
-            break;
-        case "newest":
-            $qry->addFunction(array("newest" => "max(p.date)"));
-            break;
-        case "first":
-            $qry->addFunction(array("first" => "min(p.timestamp)"));
-            break;
-        case "last":
-            $qry->addFunction(array("last" => "max(p.timestamp)"));
-            break;
-        case "lowest":
-            $qry->addFunction(array("lowest" => "min(rating)"));
-            break;
-        case "highest":
-            $qry->addFunction(array("highest" => "max(rating)"));
-            break;
-        case "average":
-            $qry->addFunction(array("average" => "avg(rating)"));
-            break;
-        case "random":
-            $qry->addFunction(array("random" => "rand()"));
-            break;
-        }
-
-        if (!empty($order)) {
-            $qry->addOrder($order);
-        }
-        return $qry;
-    }
-
 
     /**
      * Get XML from a database table

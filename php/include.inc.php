@@ -22,30 +22,7 @@
  * @author Jeroen Roos
  */
 
-/**
- * Autoload classes
- */
-function zophAutoload($file) {
-    if(is_readable(settings::$php_loc . "/" . $file)) {
-        require_once $file;
-    } else {
-        return false;
-    }
-
-}
-
-function zophAutoloadClass($class) {
-    $file="classes/" . str_replace("\\", "/", $class) . ".inc.php";
-    return zophAutoload($file);
-}
-
-function zophAutoloadInterface($interface) {
-    $file="interfaces/" . $interface . ".inc.php";
-    return zophAutoload($file);
-}
-
-spl_autoload_register("zophAutoloadClass");
-spl_autoload_register("zophAutoloadInterface");
+require_once "autoload.inc.php";
 
 require_once "exception.inc.php";
 require_once "variables.inc.php";
@@ -56,8 +33,6 @@ require_once "settings.inc.php";
 require_once "requirements.inc.php";
 require_once "util.inc.php";
 
-require_once "validator.inc.php";
-
 require_once "track.inc.php";
 require_once "point.inc.php";
 
@@ -67,8 +42,6 @@ require_once "color_scheme.inc.php";
 require_once "prefs.inc.php";
 require_once "user.inc.php";
 require_once "group.inc.php";
-
-require_once "database.inc.php";
 
 if(!defined("LOGON")) {
     if(!defined("TEST")) {

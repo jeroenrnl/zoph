@@ -22,6 +22,10 @@
  * @package Zoph
  */
 
+use db\select;
+use db\param;
+use db\clause;
+
 /**
  * This class stores relations between 2 photos.
  * This could be used store an original and a changed copy

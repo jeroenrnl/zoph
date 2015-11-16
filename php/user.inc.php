@@ -18,6 +18,12 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+use db\select;
+use db\clause;
+use db\param;
+use db\selectHelper;
+
 class user extends zophTable {
     /** @var string The name of the database table */
     protected static $tableName="users";
@@ -143,7 +149,7 @@ class user extends zophTable {
         $where=new clause("p.photo_id = :photoid");
         $qry->addParam(new param(":photoid", (int) $photo_id, PDO::PARAM_INT));
 
-        list($qry, $where) = static::expandQueryForUser($qry, $where, $this);
+        list($qry, $where) = selectHelper::expandQueryForUser($qry, $where, $this);
 
         $qry->addFields(array("gp.*"));
         $qry->addLimit(1);

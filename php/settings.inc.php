@@ -21,6 +21,8 @@
  * @package Zoph
  */
 
+use db\db;
+
 /**
  * This class takes care of loading and processing settings
  *

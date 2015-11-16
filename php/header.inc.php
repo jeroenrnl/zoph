@@ -64,6 +64,7 @@ $icons=array(
 if(basename($_SERVER["SCRIPT_NAME"])=="import.php") {
     ?>
         <script type="text/javascript" src="js/import.js"></script>
+        <script type="text/javascript" src="js/formhelper.js"></script>
     <?php
 }
 if(basename($_SERVER["SCRIPT_NAME"])=="config.php") {

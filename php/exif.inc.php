@@ -89,17 +89,17 @@ function process_exif($image) {
         //$exifdata["flash_used"] = $exif["Flash"] ? "Yes" : "No";
 
         // Revamped to handled more expressive flash indications
-        $fYN="No";
+        $fYN="N";
 
         switch ($exif["Flash"]) {
 
         // Flash Not Fired
         case 16:
-        case 0: $fYN="No"; break;
+        case 0: $fYN="N"; break;
 
         // Flash Fired
         case 9:
-        default: $fYN="Yes"; break;
+        default: $fYN="Y"; break;
         }
 
         $exifdata["flash_used"] = $fYN;

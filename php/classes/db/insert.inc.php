@@ -1,6 +1,6 @@
 <?php
 /**
- * Database query class for DELETE queries
+ * Database query class for INSERT queries
  *
  * This file is part of Zoph.
  *
@@ -21,33 +21,50 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+
 /**
- * The delete object is used to create DELETE queries
+ * The insert object is used to create INSERT queries
  *
  * @package Zoph
  * @author Jeroen Roos
  */
-class delete extends query {
-    /** @var bool Set to true to allow DELETE query without WHERE
-             this will delete all data from the table
-             There currently is no way of setting this, because it
-             is a protection against accidently running a query like
-             this during development or due to a bug */
-    private $deleteAll=false;
+class insert extends query {
+    private $set=array();
 
     /**
-     * Create DELETE query
+     * Create INSERT query
      * @return string SQL query
      */
     public function __toString() {
-        $sql = "DELETE FROM " . $this->table;
-        if ($this->where instanceof clause) {
-            $sql .= " WHERE " . $this->where;
-        } else if (!$this->deleteAll) {
-            throw new DatabaseException("DELETE query without WHERE");
+        $sql = "INSERT INTO " . $this->table;
+
+        $fields=array();
+        $values=array();
+
+        foreach ($this->getParams() as $param) {
+            $fields[]=substr($param->getName(),1);
+            $values[]=$param->getName();
         }
 
+        foreach ($this->set as $name => $value) {
+            $fields[]=$name;
+            $values[]=$value;
+        }
+
+        $sql.=" (" . implode(", ", $fields) . ")";
+        $sql.=" VALUES(" . implode(", ", $values) . ") ";
+
         return $sql . ";";
+    }
+
+    public function addSet($name, $value) {
+        $this->set[$name]=$value;
+    }
+
+    public function execute() {
+        parent::execute();
+        return db::getHandle()->lastInsertId();
     }
 
 }

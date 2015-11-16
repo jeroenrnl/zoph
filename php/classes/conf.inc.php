@@ -22,8 +22,13 @@
  * @author Jeroen Roos
  */
 
-require_once "database.inc.php";
 require_once "user.inc.php";
+
+use db\select;
+use db\param;
+use db\delete;
+use db\db;
+use db\clause;
 
 /**
  * conf is the main object for access to Zoph's configuration
@@ -58,7 +63,11 @@ class conf {
         $qry=new select(array("co" => "conf"));
         $qry->addFields(array("conf_id", "value"));
 
-        $result=query($qry, "Cannot load configuration from database");
+        try {
+            $result=db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Cannot load configuration from database", log::FATAL, log::CONFIG | log::DB);
+        }
 
         while($row = $result->fetch(PDO::FETCH_NUM)) {
             $key=$row[0];
@@ -78,7 +87,7 @@ class conf {
                 $qry=new delete(array("co" => "conf"));
                 $qry->where(new clause("conf_id=:confid"));
                 $qry->addParam(new param(":confid", $key, PDO::PARAM_STR));
-                query($qry);
+                $qry->execute();
             }
 
         }

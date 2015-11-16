@@ -23,6 +23,8 @@
 
 require_once "testSetup.php";
 
+use db\db;
+
 /**
  * Test photo class
  *
@@ -155,7 +157,7 @@ class photoTest extends ZophDataBaseTestCase {
         $expected=array(
             "camera make"   => "Zoph",
             "camera model"  => "Zoph Digital 2000",
-            "flash used"    => "No",
+            "flash used"    => "N",
             "focal length"  => "1200.0mm",
             "exposure"      => "0.005 s  (1/200) [aperture priority (semi-auto)]",
             "aperture"      => "f/2.8",
@@ -636,7 +638,7 @@ class photoTest extends ZophDataBaseTestCase {
      */
     private function buildTrack() {
         conf::set("maps.provider", "googlev3")->update();
-        query("truncate zoph_point");
+        db::SQL("truncate zoph_point");
         $track=new track();
 
         $track->set("name", "Test Track");

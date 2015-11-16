@@ -21,6 +21,11 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+
+use \PDO;
+use \log;
+
 /**
  * The db object is used to connect to the database
  * Example code:
@@ -53,10 +58,10 @@ class db {
      * @param string password
      */
     private function __construct($dsn, $dbuser, $dbpass) {
-        self::$connection=new PDO($dsn,$dbuser,$dbpass);
-        self::$connection->setAttribute(
+        static::$connection=new PDO($dsn,$dbuser,$dbpass);
+        static::$connection->setAttribute(
             PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        self::$connection->setAttribute(
+        static::$connection->setAttribute(
             PDO::ATTR_EMULATE_PREPARES,false);
     }
 
@@ -65,10 +70,10 @@ class db {
      * Make connection first, if it has not been made
      */
     public static function getHandle() {
-        if(!self::$connection) {
-            self::connect();
+        if (!static::$connection) {
+            static::connect();
         }
-        return self::$connection;
+        return static::$connection;
     }
 
     /**
@@ -80,18 +85,18 @@ class db {
      * @param string database table prefix
      */
     public static function setLoginDetails($dbhost, $dbname, $dbuser, $dbpass, $dbprefix) {
-        self::$dbhost=$dbhost;
-        self::$dbname=$dbname;
-        self::$dbuser=$dbuser;
-        self::$dbpass=$dbpass;
-        self::$dbprefix=$dbprefix;
+        static::$dbhost=$dbhost;
+        static::$dbname=$dbname;
+        static::$dbuser=$dbuser;
+        static::$dbpass=$dbpass;
+        static::$dbprefix=$dbprefix;
     }
 
     /**
      * Get table prefix
      */
     public static function getPrefix() {
-        return self::$dbprefix;
+        return static::$dbprefix;
     }
 
     /**
@@ -99,10 +104,10 @@ class db {
      * @param string PDO DSN
      */
     private static function connect($dsn=null) {
-        if(!$dsn) {
-            $dsn=self::getDSN();
+        if (!$dsn) {
+            $dsn=static::getDSN();
         }
-        new db($dsn, self::$dbuser, self::$dbpass);
+        new db($dsn, static::$dbuser, static::$dbpass);
     }
 
     /**
@@ -113,7 +118,7 @@ class db {
     private static function getDSN() {
         $db="mysql";
 
-        return sprintf("%s:host=%s;dbname=%s", $db, self::$dbhost, self::$dbname);
+        return sprintf("%s:host=%s;dbname=%s", $db, static::$dbhost, static::$dbname);
     }
 
     /**
@@ -121,24 +126,42 @@ class db {
      * @param query Query to run
      */
     public static function query(query $query) {
-        $db=self::getHandle();
+        $db=static::getHandle();
 
         try {
+            log::msg("SQL Query: " . (string) $query, log::DEBUG, log::DB);
             $stmt=$db->prepare($query);
             foreach($query->getParams() as $param) {
-                if($param instanceof param) {
+                if ($param instanceof param) {
+                    log::msg("Param: <b>" . $param->getName() . "</b>: " . $param->getValue(), log::DEBUG, log::DB);
                     $stmt->bindValue($param->getName(), $param->getValue(), $param->getType());
                 }
             }
             $stmt->execute();
         } catch (PDOException $e) {
             echo $e->getMessage() . "\n";
-            var_dump($query);
-            echo "\n" . $query . "\n";
-            die("SQL failed");
+            log::msg("SQL failed", log::FATAL, log::DB);
         }
 
         return $stmt;
     }
+
+    /**
+     * Execute an SQL query
+     * This is meant to execute queries that cannot be handled via the query builder
+     * it should not be used for SELECT, UPDATE, DELETE or INSERT queries,
+     * these can be handled via their respective objects
+     */
+    public static function SQL($sql) {
+        try {
+            $db=static::getHandle();
+            $stmt=$db->prepare($sql);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage() . "\n";
+            log::msg("SQL failed", log::FATAL, log::DB);
+        }
+    }
+
 }
 

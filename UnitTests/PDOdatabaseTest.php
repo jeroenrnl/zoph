@@ -21,6 +21,13 @@
  * @author Jeroen Roos
  */
 
+use db\select;
+use db\db;
+use db\param;
+use db\insert;
+use db\delete;
+use db\clause;
+
 /**
  * Test class that tests the database classes
  * @package ZophUnitTest
@@ -75,7 +82,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $qry->where($where);
 
         $sql=(string) $qry;
-        $exp_sql="SELECT * FROM zoph_photos WHERE (photo_id > :minid) AND (photo_id < :maxid);";
+        $exp_sql="SELECT * FROM zoph_photos WHERE (photo_id > :minid) AND ((photo_id < :maxid));";
 
         $this->assertEquals($exp_sql, $sql);
 

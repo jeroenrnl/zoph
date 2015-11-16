@@ -435,7 +435,7 @@ CREATE TABLE zoph_users (
   lightbox_id int(11) default NULL,
   lastnotify datetime default NULL,
   lastlogin datetime default NULL,
-  lastip varchar(16) default NULL,
+  lastip varchar(48) default NULL,
   PRIMARY KEY  (user_id)
 ) ENGINE=MyISAM;
 

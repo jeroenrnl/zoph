@@ -22,6 +22,12 @@
  * @package Zoph
  */
 
+use db\db;
+use db\select;
+use db\param;
+use db\clause;
+use db\selectHelper;
+
 /**
  * A class corresponding to the photos table.
  *
@@ -115,7 +121,7 @@ class photo extends zophTable {
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
 
         if (!$user->is_admin()) {
-            list($qry,$where)=static::expandQueryForUser($qry, $where);
+            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
@@ -261,7 +267,7 @@ class photo extends zophTable {
         $qry->addFunction(array("pos" => "max(position)"));
         $qry->where(new clause("photo_id=:photoid"));
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
-        $result=query($qry)->fetch(PDO::FETCH_ASSOC);
+        $result=db::query($qry)->fetch(PDO::FETCH_ASSOC);
         return (int) $result["pos"];
     }
 
@@ -298,7 +304,7 @@ class photo extends zophTable {
         $qry->addOrder("a.album");
 
         if (!$user->is_admin()) {
-            list($qry,$where)=static::expandQueryForUser($qry, $where);
+            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
 
         $qry->where($where);
@@ -521,7 +527,7 @@ class photo extends zophTable {
 
         list($width, $height, $filetype, $size)=getimagesize($file);
 
-        $alt = escape_string($this->get("title"));
+        $alt = e($this->get("title"));
 
         return new block("img", array(
             "src"   => $image_href,
@@ -1538,13 +1544,35 @@ class photo extends zophTable {
     }
 
     /**
+     * Create a list of fields that can be specified during import 
+     * @return array list of fields
+     */
+    public static function getImportFields() {
+        return array(
+            "" => "",
+            "time" => "time",
+            "timestamp" => "timestamp",
+            "aperture" => "aperture",
+            "camera_make" => "camera make",
+            "camera_model" => "camera model",
+            "compression" => "compression",
+            "exposure" => "exposure",
+            "flash_used" => "flash used",
+            "focal_length" => "focal length",
+            "iso_equiv" => "iso equiv",
+            "metering_mode" => "metering mode",
+            "mapzoom" => "mapzoom"
+        );
+    }
+
+    /**
      * Get accumulated disk size for all photos, as used on the info page
      * @return int size in bytes
      */
     public static function getTotalSize() {
         $qry=new select(array("p" => "photos"));
         $qry->addFunction(array("total" => "sum(size)"));
-        return static::getCountFromQuery($qry);
+        return $qry->getCount();
     }
 
     /**

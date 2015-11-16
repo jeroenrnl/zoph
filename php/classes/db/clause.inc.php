@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+namespace db;
+
 /**
  * The clause object is used to build WHERE-clauses
  *
@@ -71,6 +73,15 @@ class clause {
         return new self($var . " IN (" . implode(", ", $param->getName()) . ")");
     }
 
+    /**
+     * Create a WHERE ... NOT IN ( ..., ..., ...) clause
+     * @param string variable
+     * @param param parameters
+     */
+    public static function NotInClause($var, param $param) {
+        return new self($var . " NOT IN (" . implode(", ", $param->getName()) . ")");
+    }
+
     public function __toString() {
         $sql="(" . $this->clause . ")";
 
@@ -78,7 +89,7 @@ class clause {
             foreach ($this->subclauses as $subclause) {
                 $conj=$subclause["conj"];
                 $subc=$subclause["subc"];
-                $sql.= " " . $conj . " " . $subc;
+                $sql.= " " . $conj . " (" . $subc . ")";
             }
         }
         return $sql;
