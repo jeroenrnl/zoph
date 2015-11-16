@@ -359,7 +359,7 @@ class cliTest extends ZophDataBaseTestCase {
         $admin->lookup();
         $admin->lookup_person();
         $admin->lookup_prefs();
-        $cli=new cli($admin, 3, $args);
+        $cli=new cli($admin, 4, $args);
         $cli->run();
     }        
 
