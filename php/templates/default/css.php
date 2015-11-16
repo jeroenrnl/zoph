@@ -1227,7 +1227,7 @@ dl.track dd {
     padding-right: 4px;
     min-height: 1.3em;
     margin: 4px 0px;
-    border: none; 
+    border: none;
 }
 
 dl.color_scheme dd,

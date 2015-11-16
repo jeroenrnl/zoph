@@ -21,7 +21,7 @@
  *       this should be done by the main template;
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
     <script type="text/javascript">
         <?php echo $tpl_javascript; ?>
@@ -130,7 +130,7 @@ if(!ZOPH) { die("Illegal call"); }
                         <?php echo template::createImportFieldPulldown("_field[]", "") ?>
                         <?php echo create_text_input("field[]", "", 30, 64) ?>
                     </fieldset>
-                </fieldset> 
+                </fieldset>
                 <label for="description"><?php echo translate("description") ?></label>
                 <textarea name="description" cols="40" rows="4"></textarea><br>
                 <input id="import_submit" type="submit"
