@@ -308,8 +308,7 @@ class user extends zophTable {
                 strpos($this->crumbs[$numCrumbs - 1], ">$title<")) {
 
                 $this->eatCrumb();
-            }
-            else {
+            } else {
                 $numCrumbs++;
             }
 
@@ -318,8 +317,7 @@ class user extends zophTable {
                 $link =
                     substr($link, 0, $question) ."?_crumb=$numCrumbs&amp;" .
                     substr($link, $question + 1);
-            }
-            else {
+            } else {
                 $link .= "?_crumb=$numCrumbs";
             }
 
@@ -337,7 +335,9 @@ class user extends zophTable {
      */
     public function eatCrumb($num = -1) {
         if ($this->crumbs && count($this->crumbs) > 0) {
-            if ($num < 0) { $num = count($this->crumbs) - 1; }
+            if ($num < 0) {
+                $num = count($this->crumbs) - 1;
+            }
             $this->crumbs = array_slice($this->crumbs, 0, $num);
         }
     }
@@ -373,7 +373,7 @@ class user extends zophTable {
      * @return user user object
      */
     public static function getByName($name) {
-        $users=self::getRecords(null, array("user_name" => $name));
+        $users=static::getRecords(null, array("user_name" => $name));
         return $users[0];
     }
 
@@ -383,7 +383,7 @@ class user extends zophTable {
      * @return array Array of all users
      */
     public static function getAll($order = "user_name") {
-        return self::getRecords($order);
+        return static::getRecords($order);
     }
 
     /**
@@ -395,7 +395,7 @@ class user extends zophTable {
         $user->lookup();
         $user->lookupPrefs();
         $user->lookupPerson();
-        self::$current=$user;
+        static::$current=$user;
     }
 
     /**
@@ -403,14 +403,14 @@ class user extends zophTable {
      * (Log out)
      */
     public static function unsetCurrent() {
-        self::$current=null;
+        static::$current=null;
     }
 
     /**
      * Get currently logged in user
      */
     public static function getCurrent() {
-        return self::$current;
+        return static::$current;
     }
 
 }
