@@ -1544,7 +1544,7 @@ class photo extends zophTable {
     }
 
     /**
-     * Create a list of fields that can be specified during import 
+     * Create a list of fields that can be specified during import
      * @return array list of fields
      */
     public static function getImportFields() {

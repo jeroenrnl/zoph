@@ -336,7 +336,7 @@ class template {
     public static function createPhotoFieldPulldown($name, $value) {
         return  static::createPulldown($name, $value, translate(photo::getFields(),0));
     }
-    
+
     /**
      * Create pulldown (select) that lists photo fields for the import page
      * @param string name for select box

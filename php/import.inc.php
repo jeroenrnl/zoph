@@ -93,7 +93,7 @@ abstract class Import {
                 unset($vars["rating"]);
             }
 
-            if(is_array($vars["_field"])) {
+            if(isset($vars["field"]) && is_array($vars["_field"])) {
                 foreach($vars["_field"] as $key => $field) {
                     $vars[$field]=$vars["field"][$key];
                 }
