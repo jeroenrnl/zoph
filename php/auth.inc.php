@@ -54,8 +54,8 @@ if(!defined("CLI")) {
         }
     }
     $user->lookup();
-    $user->lookup_person();
-    $user->lookup_prefs();
+    $user->lookupPerson();
+    $user->lookupPrefs();
 }
 
 
@@ -82,8 +82,8 @@ if ($_action == "logout") {
     // we have a valid user
     if (!empty($user)) {
         $user->lookup();
-        $user->lookup_person();
-        $user->lookup_prefs();
+        $user->lookupPerson();
+        $user->lookupPrefs();
 
         // Update Last Login Fields
         $updated_user = new user($user->get("user_id"));
@@ -99,7 +99,7 @@ if ($_action == "logout") {
 
 if (!empty($user)) {
     $user->prefs->load();
-    $lang=$user->load_language();
+    $lang=$user->loadLanguage();
     user::setCurrent($user);
 
     if (!defined("CLI")) {

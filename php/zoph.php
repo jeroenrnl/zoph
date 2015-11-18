@@ -71,7 +71,7 @@ echo "\n";
             </a>
           </li>
 <?php
-if ($user->is_admin() || $user->get("browse_people")) {
+if ($user->isAdmin() || $user->get("browse_people")) {
     $person_count = person::getCountForUser();
     ?>
     <li>
@@ -82,7 +82,7 @@ if ($user->is_admin() || $user->get("browse_people")) {
     </li>
     <?php
 }
-if ($user->is_admin() || $user->get("browse_places")) {
+if ($user->isAdmin() || $user->get("browse_places")) {
     $place_count = place::getCount();
     ?>
     <li>

@@ -378,7 +378,7 @@ class person extends zophTable implements Organizer {
         $where=new clause("pp.person_id=:id");
         $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->is_admin()) {
+        if (!user::getCurrent()->isAdmin()) {
             list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
 
@@ -455,7 +455,7 @@ class person extends zophTable implements Organizer {
         $where=new clause("p.photographer_id=:photographerid");
         $qry->addParam(new param(":photographerid", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->is_admin()) {
+        if (!user::getCurrent()->isAdmin()) {
             list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
         }
 
@@ -512,7 +512,7 @@ class person extends zophTable implements Organizer {
         $qry->addOrder("count DESC")->addOrder("ppl.last_name")->addOrder("ppl.first_name");
 
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
-        if (!$user->is_admin()) {
+        if (!$user->isAdmin()) {
             list($qry, $where) = selectHelper::expandQueryForUser($qry);
             $qry->where($where);
         }
@@ -537,7 +537,7 @@ class person extends zophTable implements Organizer {
 
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
 
-        if (!user::getCurrent()->is_admin()) {
+        if (!user::getCurrent()->isAdmin()) {
             list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
 
@@ -611,7 +611,7 @@ class person extends zophTable implements Organizer {
      */
     public static function getCountForUser() {
         $user=user::getCurrent();
-        if ($user && !$user->is_admin()) {
+        if ($user && !$user->isAdmin()) {
             return static::getCount();
         } else {
             $allowed=array();
@@ -643,7 +643,7 @@ class person extends zophTable implements Organizer {
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
 
 
-        if ($user && !$user->is_admin()) {
+        if ($user && !$user->isAdmin()) {
             $people=(array)static::getAll($search);
             $photographers=(array)photographer::getAll($search);
             foreach ($people as $person) {

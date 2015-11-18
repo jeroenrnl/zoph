@@ -24,7 +24,7 @@
 
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -44,7 +44,7 @@ $users = user::getAll();
 
 if ($users) {
     foreach($users as $u) {
-        $u->lookup_person();
+        $u->lookupPerson();
         ?>
         <tr>
           <td>
@@ -58,7 +58,7 @@ if ($users) {
           <td>
             <span class="actionlink">
         <?php
-        if ((count(album::getNewer($u, $u->get_lastnotify())) > 0)) {
+        if ((count(album::getNewer($u, $u->getLastNotify())) > 0)) {
             ?>
               <a href="notify.php?_action=notify&amp;user_id=<?php
                 echo $u->get("user_id") ?>&amp;shownewalbums=1">i

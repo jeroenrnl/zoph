@@ -93,7 +93,7 @@ class comment extends zophTable {
             translate("subject") => $this->get("subject"),
             translate("date") => $date,
             translate("user") => $this->getUserLink(),
-            translate("IP address") => $user->is_admin() ? $this->get("ipaddr") : "<i>" .
+            translate("IP address") => $user->isAdmin() ? $this->get("ipaddr") : "<i>" .
                 translate("only visible for admin users") . "</i>",
             translate("comment") => $comment,
             translate("updated") => $changed
@@ -106,7 +106,7 @@ class comment extends zophTable {
     private function getUserLink() {
         $user = new user($this->get("user_id"));
         $user->lookup();
-        $user->lookup_person();
+        $user->lookupPerson();
 
         return $user->getLink() . " (" . $user->person->getLink() . ")";
     }
@@ -175,7 +175,7 @@ class comment extends zophTable {
 
         );
 
-        if ($user->is_admin() || $this->isOwner($user)) {
+        if ($user->isAdmin() || $this->isOwner($user)) {
             $tplData["actionlinks"]=array(
                 translate("display")    => "comment.php?_action=display&amp;comment_id=" .  $this->getId(),
                 translate("edit")       => "comment.php?_action=edit&amp;comment_id=" .  $this->getId(),

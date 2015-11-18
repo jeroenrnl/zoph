@@ -38,7 +38,7 @@ if ($zophpage_id) {
     redirect("zoph.php", "No page id given!");
 }
 
-if(!$user->is_admin()) {
+if(!$user->isAdmin()) {
     $_action="display";
 }
 

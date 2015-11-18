@@ -30,7 +30,7 @@ if ($_action == "update") {
         $user->prefs->setFields($request_vars);
         $user->prefs->update();
         $user->prefs->load(1);
-        $lang = $user->load_language(1);
+        $lang = $user->loadLanguage(1);
     }
 }
 $action = "update";
@@ -159,7 +159,7 @@ if ($user->get("user_id") == conf::get("interface.user.default")) {
     </dd>
     <dt>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
     <a href="color_schemes.php"><?php echo translate("color scheme") ?></a>
     <?php

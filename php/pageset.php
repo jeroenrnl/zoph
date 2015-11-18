@@ -33,7 +33,7 @@ if (!is_null($page_id)) {
     $page = new page($page_id);
 }
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     $_action="display";
 }
 

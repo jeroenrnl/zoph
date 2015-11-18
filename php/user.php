@@ -24,7 +24,7 @@
 
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -79,7 +79,7 @@ if ($action == "display") {
     <?php
     $url = getZophURL() . "login.php";
 
-    $this_user->lookup_person();
+    $this_user->lookupPerson();
     $name = $this_user->person->getName();
 
     $subject = translate("Your Zoph Account", 0);

@@ -27,7 +27,7 @@ $userid = getvar("userid");
 $password = getvar("password");
 $confirm = getvar("confirm");
 
-if($user->is_admin() && $userid) {
+if($user->isAdmin() && $userid) {
     $change=new user($userid);
     $change->lookup();
 } else {
@@ -65,7 +65,7 @@ if (isset($msg)) {
 ?>
       <h2><?php echo $change->get("user_name") ?></h2>
 <?php
-if (!$user->is_admin() && conf::get("interface.user.default") == $change->get("user_id")) {
+if (!$user->isAdmin() && conf::get("interface.user.default") == $change->get("user_id")) {
     ?>
     <?php echo sprintf(translate("The user '%s' is currently defined as the default user " .
         "and does not have permission to change its password."), $user->get("user_name")) ?>

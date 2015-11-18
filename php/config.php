@@ -24,7 +24,7 @@
 require_once "include.inc.php";
 $title=translate("Configuration");
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 

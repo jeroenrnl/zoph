@@ -34,7 +34,7 @@ if ($_action=="insert") {
     $search=new search($search_id);
     $search->lookup();
     if (!($search->get("owner") == $user->get("user_id") ||
-        $user->is_admin())) {
+        $user->isAdmin())) {
         redirect("zoph.php", "You're not allowed to do that!");
     }
 }

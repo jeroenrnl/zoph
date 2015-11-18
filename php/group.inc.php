@@ -172,7 +172,7 @@ class group extends zophTable {
     }
 }
 
-function get_groups($order = "group_name") {
+function getGroups($order = "group_name") {
     return group::getRecords($order);
 }
 

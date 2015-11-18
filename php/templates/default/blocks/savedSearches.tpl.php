@@ -27,7 +27,7 @@ if (!ZOPH) { die("Illegal call"); }
         <li>
             <ul class="actionlink">
                 <li><a href="<?= $search->getSearchURL() ?>"><?= translate("load") ?></a></li>
-                <?php if (($search->get("owner") == $tpl_user->getId()) || $tpl_user->is_admin()): ?>
+                <?php if (($search->get("owner") == $tpl_user->getId()) || $tpl_user->isAdmin()): ?>
                     <li><a href="<?= $search->getURL() ?>&_action=edit"><?= translate("edit") ?></a></li>
                     <li><a href="<?= $search->getURL() ?>&_action=delete"><?= translate("delete") ?></a></li>
                 <?php endif ?>

@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * A class representing a user of Zoph.
  *
  * This file is part of Zoph.
@@ -17,6 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
 use db\select;
@@ -24,6 +27,13 @@ use db\clause;
 use db\param;
 use db\selectHelper;
 
+/**
+ * A class representing a user of Zoph
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @package Zoph
+ */
 class user extends zophTable {
     /** @var string The name of the database table */
     protected static $tableName="users";
@@ -37,40 +47,65 @@ class user extends zophTable {
     /** @var string URL for this class */
     protected static $url="user.php?user_id=";
 
-
+    /** @var user currently logged on user */
     private static $current;
 
+    /** @var person Person linked to this user */
     public $person;
+    /** @var user_prefs Preferences of this user */
     public $prefs;
+    /** @var array Breadcrumbs for this user */
     public $crumbs;
-    public $lang; // holds translations
+    /** @var lang Holds translations */
+    public $lang;
 
-    function insert() {
+    /**
+     * Insert a new user into the db
+     */
+    public function insert() {
         parent::insert();
-        $this->prefs = new prefs($this->get("user_id"));
+        $this->prefs = new prefs($this->getId());
         $this->prefs->insert();
     }
 
-    function delete() {
+    /**
+     * Delete a user from the db
+     * also delete the preferences for this user
+     */
+    public function delete() {
         parent::delete(array("prefs"));
     }
 
-    function lookup_person() {
+    /**
+     * Lookup the person linked to this user
+     */
+    public function lookupPerson() {
         $this->person = new person($this->get("person_id"));
         $this->person->lookup();
     }
 
-    function lookup_prefs() {
-        $this->prefs = new prefs($this->get("user_id"));
+    /**
+     * Lookup the preferences of this user
+     */
+    public function lookupPrefs() {
+        $this->prefs = new prefs($this->getId());
         $this->prefs->lookup();
     }
 
-    function is_admin() {
+    /**
+     * Is this user an admin?
+     * @return bool
+     */
+    public function isAdmin() {
         $this->lookup();
         return $this->get("user_class") == 0;
     }
 
-    function get_lastnotify() {
+    /**
+     * When was this user last notified of new albums?
+     * @return string timestamp
+     */
+    public function getLastNotify() {
         return $this->get("lastnotify");
     }
 
@@ -79,7 +114,7 @@ class user extends zophTable {
      * @todo should be phased out in favour of @see getURL, since this contains HTML
      * @return string link
      */
-    function getLink() {
+    public function getLink() {
         return "<a href='" . $this->getURL() . "'>" . $this->getName() . "</a>";
     }
 
@@ -87,15 +122,23 @@ class user extends zophTable {
      * Get URL to this object
      * @return string URL
      */
-    function getURL() {
+    public function getURL() {
         return "user.php?user_id=" . $this->getId();
     }
 
-    function getName() {
+    /**
+     * Get the username
+     * @return string name
+     */
+    public function getName() {
         return $this->get("user_name");
     }
 
-    function get_groups() {
+    /**
+     * Get groups for this user
+     * @return array Groups
+     */
+    public function getGroups() {
         $qry = new select(array("gu" => "groups_users"));
         $qry->addFields(array("group_id"));
         $qry->where(new clause("user_id=:userid"));
@@ -104,13 +147,13 @@ class user extends zophTable {
         return group::getRecordsFromQuery($qry);
     }
 
-
-
-    function get_album_permissions($album_id) {
-        if (!is_numeric($album_id)) { die("album_id must be numeric"); }
-        if (!$album_id) { return; }
-
-        $groups=$this->get_groups();
+    /**
+     * Get album permissions for this user
+     * @param album album to get permissions for
+     * @return group_permissions Permissions object
+     */
+    public function getAlbumPermissions(album $album) {
+        $groups=$this->getGroups();
 
         $groupIds=array();
         foreach ($groups as $group) {
@@ -122,7 +165,7 @@ class user extends zophTable {
             $where = new clause("album_id=:albumid");
             $groups=new param(":groupid", $groupIds, PDO::PARAM_INT);
             $qry->addParams(array(
-                new param(":albumid", (int) $album_id, PDO::PARAM_INT),
+                new param(":albumid", (int) $album->getId(), PDO::PARAM_INT),
                 $groups
             ));
             $where->addAnd(clause::InClause("gp.group_id", $groups));
@@ -141,13 +184,17 @@ class user extends zophTable {
         return null;
     }
 
-
-    function get_permissions_for_photo($photo_id) {
+    /**
+     * Get permissions for a specific photo, for this user
+     * @param photo Photo to get permissions for
+     * @return group_permissions Permissions object
+     */
+    public function getPhotoPermissions(photo $photo) {
         $qry=new select(array("p" => "photos"));
         $qry->addFields(array("photo_id"));
 
         $where=new clause("p.photo_id = :photoid");
-        $qry->addParam(new param(":photoid", (int) $photo_id, PDO::PARAM_INT));
+        $qry->addParam(new param(":photoid", (int) $photo->getId(), PDO::PARAM_INT));
 
         list($qry, $where) = selectHelper::expandQueryForUser($qry, $where, $this);
 
@@ -165,8 +212,12 @@ class user extends zophTable {
         return null;
     }
 
-    function getDisplayArray() {
-        $this->lookup_person();
+    /**
+     * Get array to display information about this user
+     * @return array of properties to display
+     */
+    public function getDisplayArray() {
+        $this->lookupPerson();
         $da = array(
             translate("username") => $this->get("user_name"),
             translate("person") => $this->person->getLink(),
@@ -218,8 +269,12 @@ class user extends zophTable {
 
         return $da;
     }
-
-    function load_language($force = 0) {
+    /**
+     * Load language
+     * This loads the translations of Zoph's web gui
+     * @param bool Even load when already loaded
+     */
+    public function loadLanguage($force = 0) {
         $langs=array();
 
         if (!$force && $this->lang != null) {
@@ -236,7 +291,15 @@ class user extends zophTable {
         return $this->lang;
     }
 
-    function add_crumb($title, $link) {
+    /**
+     * Add a crumb
+     * Crumbs are the path a user followed through Zoph's web GUI and can be
+     * used to easily go back to an earlier visited page
+     * @param string title
+     * @param string url to the page
+     * @todo should be moved into a separate class
+     */
+    public function addCrumb($title, $link) {
         $numCrumbs = count($this->crumbs);
         if ($numCrumbs == 0 || (!strpos($link, "_crumb="))) {
 
@@ -244,7 +307,7 @@ class user extends zophTable {
             if ($numCrumbs > 0 &&
                 strpos($this->crumbs[$numCrumbs - 1], ">$title<")) {
 
-                $this->eat_crumb();
+                $this->eatCrumb();
             }
             else {
                 $numCrumbs++;
@@ -264,14 +327,26 @@ class user extends zophTable {
         }
     }
 
-    function eat_crumb($num = -1) {
+    /**
+     * Eat a crumb
+     * A crumb is 'eaten' when a user clicks on the link
+     * it means that the crumbs at the end are removed up to the place
+     * where the user went back to
+     * @param int number of crumbs to eat
+     * @todo should be moved into a separate class
+     */
+    public function eatCrumb($num = -1) {
         if ($this->crumbs && count($this->crumbs) > 0) {
             if ($num < 0) { $num = count($this->crumbs) - 1; }
             $this->crumbs = array_slice($this->crumbs, 0, $num);
         }
     }
 
-    function get_last_crumb() {
+    /**
+     * Get the last crumb
+     * @todo should be moved into a separate class
+     */
+    public function getLastCrumb() {
         if ($this->crumbs && count($this->crumbs) > 0) {
             return html_entity_decode($this->crumbs[count($this->crumbs) - 1]);
         }
@@ -284,6 +359,10 @@ class user extends zophTable {
         return rating::getGraphArrayForUser($this);
     }
 
+    /**
+     * Get the comments this user has placed
+     * @return array comments
+     */
     public function getComments() {
         return comment::getRecords("comment_date", array("user_id" => (int) $this->getId()));
     }
@@ -309,17 +388,19 @@ class user extends zophTable {
 
     /**
      * Set currently logged in user
+     * (log in)
      * @param user user object
      */
     public static function setCurrent(user $user) {
         $user->lookup();
-        $user->lookup_prefs();
-        $user->lookup_person();
+        $user->lookupPrefs();
+        $user->lookupPerson();
         self::$current=$user;
     }
 
     /**
      * Delete currently logged in user
+     * (Log out)
      */
     public static function unsetCurrent() {
         self::$current=null;

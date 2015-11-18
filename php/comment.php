@@ -34,19 +34,18 @@ if ($comment_id) {
     $comment_user->lookup();
 }
 
-if(!$user->is_admin() && (!$comment->isOwner($user)) && ($_action!="new") && $_action!="insert") {
+if(!$user->isAdmin() && (!$comment->isOwner($user)) && ($_action!="new") && $_action!="insert") {
     $_action="display";
 }
 
-if(!$user->is_admin() && !$user->get("leave_comments") && ($_action=="new" || $_action=="insert")) {
+if(!$user->isAdmin() && !$user->get("leave_comments") && ($_action=="new" || $_action=="insert")) {
     redirect("zoph.php");
 }
 
 $photo=$comment->getPhoto();
 
 if ($photo) {
-    $photo_id=$photo->get("photo_id");
-    if(!$user->get_permissions_for_photo($photo_id) && !$user->is_admin()) {
+    if(!$user->getPhotoPermissions($photo) && !$user->isAdmin()) {
         redirect("zoph.php");
     }
 } else {
@@ -100,7 +99,7 @@ if ($action == "confirm") {
     ?>
       <h1>
     <?php
-    if ($user->is_admin() || $comment->isOwner($user)) {
+    if ($user->isAdmin() || $comment->isOwner($user)) {
         ?>
         <span class="actionlink">
           <a href="photo.php?photo_id=<?php echo $photo_id ?>">

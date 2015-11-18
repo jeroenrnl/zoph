@@ -54,31 +54,31 @@ class anonymousUserTest extends zophDatabaseTestCase {
     }
 
     /**
-     * Test lookup_person() method
+     * Test lookupPerson() method
      */
     public function testLookup_person() {
-        $this->assertFalse($this->object->lookup_person());
+        $this->assertFalse($this->object->lookupPerson());
     }
 
     /**
-     * Test lookup_prefs() method
+     * Test lookupPrefs() method
      */
     public function testLookup_prefs() {
-        $this->assertFalse($this->object->lookup_prefs());
+        $this->assertFalse($this->object->lookupPrefs());
     }
 
     /**
-     * Test is_admin() method.
+     * Test isAdmin() method.
      */
     public function testIs_admin() {
-        $this->assertFalse($this->object->is_admin());
+        $this->assertFalse($this->object->isAdmin());
     }
 
     /**
-     * Test get_lastnotify() method.
+     * Test getLastNotify() method.
      */
     public function testGet_lastnotify() {
-        $ln=$this->object->get_lastnotify();
+        $ln=$this->object->getLastNotify();
         $this->assertEquals($ln,0);
     }
 
@@ -106,28 +106,28 @@ class anonymousUserTest extends zophDatabaseTestCase {
     }
 
     /**
-     * Test get_groups() method.
+     * Test getGroups() method.
      */
     public function testGet_groups() {
-        $g=$this->object->get_groups();
+        $g=$this->object->getGroups();
         $this->assertEquals($g,0);
     }
 
     /**
-     * Test get_album_permissions() method.
+     * Test getAlbumPermissions() method.
      * @dataProvider getAlbumIds
      */
     public function testGet_album_permissions($id, $perm) {
-        $ap=$this->object->get_album_permissions($id);
+        $ap=$this->object->getAlbumPermissions(new album($id));
         $this->assertEquals($ap,$perm);
     }
 
     /**
-     * Test get_permissions_for_photo() method.
+     * Test getPhotoPermissions() method.
      * @dataProvider getPhotoIds
      */
     public function testGet_permissions_for_photo($id) {
-        $pp=$this->object->get_permissions_for_photo($id);
+        $pp=$this->object->getPhotoPermissions(new photo($id));
         $this->assertInstanceOf("group_permissions",$pp);
         $this->assertEquals($pp->get("album_id"), 0);
         $this->assertEquals($pp->get("group_id"), 0);
@@ -143,11 +143,11 @@ class anonymousUserTest extends zophDatabaseTestCase {
     }
 
     /**
-     * Test load_language() method.
+     * Test loadLanguage() method.
      * @dataProvider getTrueFalse
      */
     public function testLoad_language($force) {
-        $lang=$this->object->load_language($force);
+        $lang=$this->object->loadLanguage($force);
         $this->assertNull($lang);
     }
 

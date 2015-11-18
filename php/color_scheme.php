@@ -23,7 +23,7 @@
  */
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     $_action = "display";
 }
 
@@ -61,7 +61,7 @@ if ($action == "display") {
     ?>
     <h1>
     <?php
-    if ($user->is_admin()) {
+    if ($user->isAdmin()) {
         ?>
         <span class="actionlink">
           <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php

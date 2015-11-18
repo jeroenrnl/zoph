@@ -33,7 +33,7 @@ if(empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
-if (!$user->is_admin() && !$user->get("browse_places")) {
+if (!$user->isAdmin() && !$user->get("browse_places")) {
     redirect("zoph.php");
 }
 
@@ -58,11 +58,11 @@ require_once "header.inc.php";
 <h1>
 
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     $new="<a href=\"place.php?_action=new&amp;parent_place_id=" . $place->get("place_id") . "\">" .
       translate("new") . "</a> |";
 }
-if ($user->is_admin() || $user->get("browse_tracks")) {
+if ($user->isAdmin() || $user->get("browse_tracks")) {
     ?>
     <span class="actionlink">
         <?php echo $new; ?>
@@ -74,7 +74,7 @@ if ($user->is_admin() || $user->get("browse_tracks")) {
 <?php echo translate("places") . "\n" ?>
 </h1>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     include "selection.inc.php";
 }
 $page_html="";
@@ -94,7 +94,7 @@ if ($show_orig) {
       </form>
       <br>
     <?php
-    if ($user->is_admin()) {
+    if ($user->isAdmin()) {
         ?>
         <span class="actionlink">
             <a href="place.php?_action=edit&amp;place_id=<?php echo $place->get("place_id") ?>">
@@ -133,7 +133,7 @@ if ($show_orig) {
     ?>
         </p>
     <?php
-    if ($user->get("detailed_places") || $user->is_admin()) {
+    if ($user->get("detailed_places") || $user->isAdmin()) {
         echo $place->toHTML();
         if ($place->get("notes")) {
             echo "<p>";

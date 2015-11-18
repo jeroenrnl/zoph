@@ -23,7 +23,7 @@
 
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -38,7 +38,7 @@ require_once "header.inc.php";
     </h1>
     <div class="main">
 <?php
-$groups = get_groups();
+$groups = getGroups();
 
 if ($groups) {
     echo "<dl class='groups'>";

@@ -24,7 +24,7 @@ $title="Zoph";
 $content="";
 $mapping_js="";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     $_action="display";
     if (!$user->get("browse_tracks")) {
         redirect("zoph.php");

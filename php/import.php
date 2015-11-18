@@ -20,7 +20,7 @@
  */
 
 require_once "include.inc.php";
-if ((!conf::get("import.enable")) || (!$user->is_admin() && !$user->get("import"))) {
+if ((!conf::get("import.enable")) || (!$user->isAdmin() && !$user->get("import"))) {
         redirect("zoph.php");
 }
 

@@ -23,11 +23,11 @@
  */
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     $_action = "display";
 }
 
-if (!$user->get("browse_people") && !$user->is_admin()) {
+if (!$user->get("browse_people") && !$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -62,7 +62,7 @@ if ($action == "display") {
     ?>
     <h1>
     <?php
-    if ($user->is_admin()) {
+    if ($user->isAdmin()) {
         ?>
         <span class="actionlink">
           <a href="person.php?_action=edit&amp;person_id=<?php echo $person->get("person_id") ?>">
@@ -92,7 +92,7 @@ if ($action == "display") {
     <?php echo $title ?>
     </h1>
     <?php
-    if($user->is_admin()) {
+    if($user->isAdmin()) {
         include "selection.inc.php";
     }
     include "show_page.inc.php";
@@ -119,7 +119,7 @@ if ($action == "display") {
         </p>
         <dl>
         <?php
-        if ($user->get("detailed_people") || $user->is_admin()) {
+        if ($user->get("detailed_people") || $user->isAdmin()) {
             ?>
             <?php echo create_field_html($person->getDisplayArray()) ?>
             <?php

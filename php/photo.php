@@ -85,8 +85,8 @@ if ($photo_id) { // would be passed for edit or delete
         $photo = new photo();
     }
 }
-if(!$user->is_admin()) {
-    $permissions = $user->get_permissions_for_photo($photo_id);
+if(!$user->isAdmin()) {
+    $permissions = $user->getPhotoPermissions($photo);
 }
 
 if (isset($offset)) {
@@ -124,24 +124,24 @@ if ($_action == "lightbox") {
     $photo->addTo(new album($user->get("lightbox_id")));
     $action = "display";
 } else if ($_action == "rate") {
-    if (conf::get("feature.rating") && ($user->is_admin() || $user->get("allow_rating"))) {
+    if (conf::get("feature.rating") && ($user->isAdmin() || $user->get("allow_rating"))) {
         $rating = getvar("rating");
         $photo->rate($rating);
-        $link = strip_href($user->get_last_crumb());
+        $link = strip_href($user->getLastCrumb());
         if (!$link) { $link = "zoph.php"; }
         redirect($link);
     }
     $action = "display";
-} else if ($_action == "delrate" && $user->is_admin()) {
+} else if ($_action == "delrate" && $user->isAdmin()) {
     $rating_id=getvar("_rating_id");
     $rating=new rating( (int) $rating_id);
     $rating->delete();
-    $link = strip_href($user->get_last_crumb());
+    $link = strip_href($user->getLastCrumb());
     if (!$link) { $link = "zoph.php"; }
     redirect($link);
 }
 
-if ($user->is_admin() ||
+if ($user->isAdmin() ||
         ($permissions instanceof photo_permissions && $permissions->get("writable"))) {
     $_deg = getvar("_deg");
     $_thumbnail = getvar("_thumbnail");
@@ -162,7 +162,7 @@ if ($user->is_admin() ||
 }
 
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     if ($_action == "new" || $_action == "insert" ||
         $_action == "delete" || $_action == "confirm") {
         // only an admin can do these
@@ -184,13 +184,13 @@ if (conf::get("feature.mail")) {
     $actionlinks["email"]="mail.php?_action=compose&amp;photo_id=" . $photo->get("photo_id");
 }
 
-if ($user->is_admin() || $permissions->get("writable")) {
+if ($user->isAdmin() || $permissions->get("writable")) {
     $actionlinks["edit"]="photo.php?_action=edit&" . $qs;
 }
 if ($user->get("lightbox_id")) {
     $actionlinks["lightbox"]="photo.php?_action=lightbox&amp;" . $qs;
 }
-if (conf::get("feature.comments") && ($user->is_admin() || $user->get("leave_comments"))) {
+if (conf::get("feature.comments") && ($user->isAdmin() || $user->get("leave_comments"))) {
     $actionlinks["add comment"]="comment.php?_action=new&amp;photo_id=" . $photo->get("photo_id");
 }
 
@@ -198,7 +198,7 @@ if (!$user->prefs->get("auto_edit") && $_action=="edit" ) {
     $actionlinks["return"]="photo.php?" .  $return_qs;
 }
 
-if ($user->is_admin() && $_action!="delete") {
+if ($user->isAdmin() && $_action!="delete") {
     $actionlinks["select"]="photo.php?_action=select&amp;" . $qs;
     $actionlinks["delete"]="photo.php?_action=delete&amp;photo_id=" . $photo->get("photo_id") .
         "&amp;_qs=" . $encoded_qs;
@@ -251,8 +251,8 @@ if ($_action == "edit") {
     $action = "confirm";
 } else if ($_action == "confirm") {
     $photo->delete();
-    $user->eat_crumb();
-    $link = strip_href($user->get_last_crumb());
+    $user->eatCrumb();
+    $link = strip_href($user->getLastCrumb());
     if (!$link) { $link = "zoph.php"; }
     redirect($link, "Go back");
 } else if ($_action == "select") {
@@ -311,7 +311,7 @@ if ($action != "insert" && !$found) {
     <?php require_once "selection.inc.php"; ?>
       <div class="main">
     <?php
-    if (conf::get("rotate.enable") && ($user->is_admin() || $permissions->get("writable"))) {
+    if (conf::get("rotate.enable") && ($user->isAdmin() || $permissions->get("writable"))) {
         ?>
         <div id="rotate">
             <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
@@ -347,7 +347,7 @@ if ($action != "insert" && !$found) {
     <div class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
     <ul class="tabs">
     <?php
-    if(conf::get("share.enable") && ($user->is_admin() || $user->get("allow_share"))) {
+    if(conf::get("share.enable") && ($user->isAdmin() || $user->get("allow_share"))) {
         $hash=$photo->getHash();
         $full_hash=sha1(conf::get("share.salt.full") . $hash);
         $mid_hash=sha1(conf::get("share.salt.mid") . $hash);
@@ -365,7 +365,7 @@ if ($action != "insert" && !$found) {
     </ul>
     <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX)) ?>
     <?php
-    if (($user->is_admin() || $user->get("browse_people")) &&
+    if (($user->isAdmin() || $user->get("browse_people")) &&
         $people_links = $photo->getPeopleLinks()) {
         ?>
           <div id="personlink">
@@ -378,7 +378,7 @@ if ($action != "insert" && !$found) {
     <?php echo create_field_html($photo->getDisplayArray()) ?>
     <?php
     if ((conf::get("feature.rating")  &&
-        ($user->is_admin() || $user->get("allow_rating")))
+        ($user->isAdmin() || $user->get("allow_rating")))
         || $photo->getRating()) {
 
         $rating = $photo->getRating();
@@ -387,14 +387,14 @@ if ($action != "insert" && !$found) {
           <dd>
         <?php
         if($rating) {
-            if($user->is_admin()) {
+            if($user->isAdmin()) {
                 echo $photo->getRatingDetails();
             } else {
                 echo $rating . "<br>";
             }
         }
         if (conf::get("feature.rating") &&
-            ($user->is_admin() || $user->get("allow_rating"))) {
+            ($user->isAdmin() || $user->get("allow_rating"))) {
             ?>
               <form id="ratingform" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
                 <input type="hidden" name="_action" value="rate">
@@ -457,7 +457,7 @@ if ($action != "insert" && !$found) {
         $tpl=new block("related_photos", array(
             "photo"     => $photo,
             "related"   => $related,
-            "admin"     => (bool) $user->is_admin()
+            "admin"     => (bool) $user->isAdmin()
         ));
         echo $tpl;
     }

@@ -28,7 +28,7 @@ $_action=getvar("_action");
 $test=getvar("_test");
 $map=null;
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     if($user->get("browse_tracks")) {
         $_action="display";
     } else {

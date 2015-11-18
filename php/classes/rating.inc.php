@@ -118,7 +118,7 @@ class rating extends zophTable {
         $user=user::getCurrent();
         $user->lookup();
 
-        if (!($user->is_admin() || $user->get("allow_rating"))) {
+        if (!($user->isAdmin() || $user->get("allow_rating"))) {
             return;
         }
 
@@ -170,7 +170,7 @@ class rating extends zophTable {
         $subqry->join(array("pr" => "photo_ratings"), "p.photo_id = pr.photo_id", "LEFT");
         $subqry->addGroupBy("p.photo_id");
 
-        if (!user::getCurrent()->is_admin()) {
+        if (!user::getCurrent()->isAdmin()) {
             list($subqry, $where)=selectHelper::expandQueryForUser($subqry);
 
             if ($where instanceof clause) {

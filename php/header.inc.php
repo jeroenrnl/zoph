@@ -143,11 +143,11 @@ $tabs = array(
     translate("categories", 0) => "categories.php"
 );
 
-if ($user->is_admin() || $user->get("browse_people")) {
+if ($user->isAdmin() || $user->get("browse_people")) {
     $tabs[translate("people", 0)] = "people.php";
 }
 
-if ($user->is_admin() || $user->get("browse_places")) {
+if ($user->isAdmin() || $user->get("browse_places")) {
     $tabs[translate("places", 0)] = "places.php";
 }
 
@@ -161,12 +161,12 @@ if ($user->get("lightbox_id")) {
 $tabs[translate("search",0)] = "search.php";
 
 if (conf::get("import.enable") &&
-    ($user->is_admin() || $user->get("import"))) {
+    ($user->isAdmin() || $user->get("import"))) {
 
     $tabs[translate("import", 0)] = "import.php";
 }
 
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     $tabs[translate("admin", 0)] = "admin.php";
 }
 

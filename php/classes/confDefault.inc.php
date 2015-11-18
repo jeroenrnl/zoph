@@ -146,7 +146,7 @@ class confDefault extends conf {
             "permissions.");
         $intUserDefault->addOption(0, "Disabled");
         foreach ($users as $usr) {
-            if (!$usr->is_admin()) {
+            if (!$usr->isAdmin()) {
                 $intUserDefault->addOption($usr->getId(), $usr->getName());
             }
         }
@@ -163,7 +163,7 @@ class confDefault extends conf {
             "name in the Zoph database.");
         $intUserCli->addOption(0, "Autodetect");
         foreach ($users as $usr) {
-            if ($usr->is_admin()) {
+            if ($usr->isAdmin()) {
                 $intUserCli->addOption($usr->getId(), $usr->getName());
             }
         }

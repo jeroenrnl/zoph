@@ -25,7 +25,7 @@ require_once "header.inc.php";
 ?>
 <h1>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
     <span class="actionlink">
       <a href="pageset.php?_action=new"><?php echo translate("new") ?></a>
