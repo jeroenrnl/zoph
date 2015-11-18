@@ -22,8 +22,6 @@
  * @author Jeroen Roos
  */
 
-require_once "user.inc.php";
-
 use db\select;
 use db\param;
 use db\delete;
