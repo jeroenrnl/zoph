@@ -81,7 +81,7 @@ if(empty($_action)) {
         $upload_num = $upload_id . "_" . $num;
 
         $body=new block("uploadform", array(
-            "progress"  => WebImport::getProgressName(),
+            "progress"  => ini_get("session.upload_progress.name"),
             "action"    => "import.php?upload=1",
             "onsubmit"  => "zImport.startUpload(this, upload_id, num); return true",
             "num"       => $num,
@@ -114,7 +114,7 @@ if(empty($_action)) {
         if($_FILES["file"]) {
             $file=$_FILES["file"];
         }
-        $upload_num=getvar(WebImport::getProgressName());
+        $upload_num=getvar(ini_get("session.upload_progress.name"));
 
         WebImport::processUpload($file);
 
