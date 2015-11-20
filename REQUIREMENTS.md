@@ -4,10 +4,10 @@ Zoph is being developped on Linux, but it should be able to run on any OS that c
 
 Zoph requires the following:
 * Apache 2.2
-* PHP 5.3, 5.4 or 5.5
-* MySQL 5.1
-* ImageMagick 6.6
-* Jhead 2.8x
+* PHP 5.5 or 5.6
+* MySQL 5.6
+* ImageMagick 6.9
+* Jhead 2.97
 
 Other versions may work as well, see below for more details. How to install these applications and get them to work together is depending on your OS and distribution. Check the documentation of the application and/or your distribution for details.
 
@@ -15,20 +15,17 @@ Other versions may work as well, see below for more details. How to install thes
 * Current versions of Zoph are developped on Apache 2.2.x
 
 ##PHP##
-Current versions of Zoph are developped on PHP 5.4
-* PHP 5.2 and older are no longer supported
-* PHP 5.3 should still work
+Current versions of Zoph are developped on PHP 5.5 and 5.6
+* PHP 5.4 and older are no longer supported
 
 ###Required features###
 The following features (extensions) to PHP are required for Zoph. Not all distributions automatically install all of them.
 * session
-* mysql
 * pcre
 * gd2
 * exif
 * xml
 * pear (if you want to use the e-mail features)
-* APC
 * FileInfo
 
 ##php.ini settings##
@@ -49,36 +46,24 @@ If you are using the watermarking feature, you probably need to increase the mem
 
 The e-mail photo feature may require increasing the memory_limit setting. See EMAIL_PHOTOS on the Configuration page.
 
-###APC settings###
-
-The file upload feature of Zoph v0.8.2 and later uses the PHP APC extension to track upload progress.
-```
-apc.enabled = "1"
-apc.rfc1867="1"
-apc.rfc1867_prefix="upload_"
-apc.rfc1867_name="APC_UPLOAD_PROGRESS"
-```
-
 ##MySQL##
-* Current versions are developped with MySQL 5.1
-* MySQL 5.0 should work too
-* MySQL 4.0 and 4.1 may still work but are no longer supported.
+* Current versions are developped with MySQL 5.6
+* MySQL 5.0 to 5.5 may still work but are no longer supported.
 
 ##ImageMagick##
-* Current Zoph versions have been tested against ImageMagick 6.7.x
+* Current Zoph versions have been tested against ImageMagick 6.9.x
 
 ##Jhead##
-* Jhead 2.8x
+* Jhead 2.97
     * Other versions probably work as well
 
-Jhead is a handy little program that extracts the information stored in the Exif headers that are added by most digital cameras. Exif stores date and time plus a bunch of other info about a photo. Zoph uses Jhead to parse the header so you'll need to install it. You can download it from http://www.sentex.net/~mwandel/jhead/.
+Jhead is a handy little program that extracts the information stored in the Exif headers that are added by most digital cameras. Exif stores date and time plus a bunch of other info about a photo. Zoph can use it to automatically rotate images during import. You can download it from http://www.sentex.net/~mwandel/jhead/.
 
 ##Browser##
 In order to be able to use Zoph, you will need a browser.
-* Zoph is being developped and thoroughly tested with Firefox 24.x
+* Zoph is being developped and thoroughly tested with a recent Firefox build
 * Zoph should work with all recent browser versions
     * Please report a bug if it doesn't.
 * Older versions usually work, but layout may not be 100% ok.
 * Some features require Javascript support
-    * You can turn off Javascript support in Zoph with the JAVASCRIPT configuration setting. Obviously features that require it will be disabled as well.
-    * Zoph should work when Javascript is turned off in the browser, except if the Autocomplete feature is enabled, however, Zoph will detect this and warn the user to turn Autocompletion off (or Javascript on).
+    * Most of Zoph should work when Javascript is turned off in the browser, but this is decreasing, Javascript is required for more and more functions!
