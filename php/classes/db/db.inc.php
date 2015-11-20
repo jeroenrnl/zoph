@@ -129,11 +129,11 @@ class db {
         $db=static::getHandle();
 
         try {
-            log::msg("SQL Query: " . (string) $query, log::DEBUG, log::DB);
+            log::msg("SQL Query: " . (string) $query, log::DEBUG, log::SQL);
             $stmt=$db->prepare($query);
             foreach($query->getParams() as $param) {
                 if ($param instanceof param) {
-                    log::msg("Param: <b>" . $param->getName() . "</b>: " . $param->getValue(), log::DEBUG, log::DB);
+                    log::msg("Param: <b>" . $param->getName() . "</b>: " . $param->getValue(), log::DEBUG, log::SQL);
                     $stmt->bindValue($param->getName(), $param->getValue(), $param->getType());
                 }
             }
