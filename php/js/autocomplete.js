@@ -4,7 +4,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
 // (at your option) any later version.
-// 
+//
 // Zoph is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,12 +27,12 @@ var autocomplete=function() {
         var ac=getElementsByClass('autocomplete');
 
         selected=[];
-        
+
         for (var i=0; i<ac.length; i++) {
             inputToAutocomplete(ac[i]);
         }
         setTimeout(autocomplete.setpos,10);
-    
+
     }
 
     function inputToAutocomplete(el) {
@@ -47,32 +47,32 @@ var autocomplete=function() {
             // prevent duplicate id
             el.id=id + "_id";
         }
-        
+
         var text=el;
-        text.id=id; 
+        text.id=id;
         text.onmousedown=show;
         text.onkeyup=change;
         text.onfocus=focus;
         text.onblur=unfocus;
         text.onmouseup=change;
         text.onkeypress=handleKeys;
-    
+
         text.setAttribute("autocomplete", "off");
-        
+
 //        text.className="autocompinput";
         text.className=text.className.replace("autocomplete", "autocompinput");
         text.style.width="200px";
 
         var dropdown=document.createElement("ul");
-        
+
         dropdown.className="autocompdropdown";
         dropdown.id=id + "dropdown";
 
         dropdown.style.position="absolute";
         dropdown.style.display="none";
-        
+
         el.parentNode.insertBefore(dropdown,el.nextSibling);
-        
+
         if(el.parentNode.className.indexOf("multiple")>=0 && el.id.indexOf("[")) {
             // This is a field that can appear multiple times, so we add a
             // 'remove' link
@@ -82,7 +82,7 @@ var autocomplete=function() {
             remove.className="actionlink";
 
             el.parentNode.insertBefore(remove,el.nextSibling.nextSibling);
-            
+
         }
     }
 
@@ -122,7 +122,7 @@ var autocomplete=function() {
             dropdown[i].style.left=findPos(input[i])[0] + "px";
             dropdown[i].style.top=findPos(input[i])[1] + input[i].offsetHeight + "px";
         }
-    }    
+    }
     function show() {
         showdropdown(this);
         }
@@ -135,25 +135,12 @@ var autocomplete=function() {
         oldvalue[obj.id]=obj.value;
         oldtext=-1;
         autocompdropdown=getElementsByClass("autocompdropdown");
-        
+
         for (var i=0; i<autocompdropdown.length; i++) {
             removeChildren(autocompdropdown[i]);
             hidedropdown(autocompdropdown[i].previousSibling);
         }
 
-        if (navigator.appName=="Microsoft Internet Explorer" && parseInt(navigator.appVersion, 10) <= 6) {
-            // The following is hiding all select type inputs
-            // Because some complete moron at Micro$oft decided
-            // that it would be a good idea to always display them on
-            // top... completely ignoring the z-index setting.
-            var select=document.getElementsByTagName("select");
-            for (var s=0; s<select.length; s++) {
-                select[s].style.visibility="hidden";
-            }
-            // while we're at it... MSIE doesn't support max-height too, so
-            // we'll fix it
-            dropdown.style.height="15em";
-        }
         obj.value="";
         dropdown.style.display="block";
         dropdown.style.width=obj.offsetWidth + "px";
@@ -167,12 +154,6 @@ var autocomplete=function() {
     }
 
     function hidedropdown(obj) {
-        if(navigator.appName=="Microsoft Internet Explorer" && parseInt(navigator.appVersion, 10) <= 6) {
-            var select=document.getElementsByTagName("select");
-            for (var i=0; i<select.length; i++) {
-                select[i].style.visibility="visible";
-            }
-        }
         dropdown=document.getElementById(obj.id + "dropdown");
         dropdown.style.display="none";
         if(oldvalue[obj.id]) {
@@ -263,13 +244,10 @@ var autocomplete=function() {
         // Whenever a selection from a list is made, the textbox will
         // also lose focus, this delay is made to give the browser
         // time to process the click, before the dropdown is destroyed.
-        if(!(navigator.appName=="Microsoft Internet Explorer" && parseInt(navigator.appVersion, 10) <= 6)) {
-            // In MSIE, scrolling the dropdown will make the textbox lose focus
-            // so there we do not hide it on losing focus.
-            obj=this;
-            setTimeout(function() { autocomplete.hidedropdown(obj); } , 200);
-        }
+        obj=this;
+        setTimeout(function() { autocomplete.hidedropdown(obj); } , 200);
     }
+
     function clickli() {
         var li=this;
         var key=li.firstChild.innerHTML;
@@ -283,7 +261,7 @@ var autocomplete=function() {
         var dropdown = document.getElementById(dropdownid);
         var field = dropdown.previousSibling;
         var orig_field = field.previousSibling;
-        
+
         field.value = newvalue;
 
         orig_field.value = key;
@@ -299,14 +277,14 @@ var autocomplete=function() {
     function createNewInput(after) {
         input=after.cloneNode(true);
         hidden=after.previousSibling.cloneNode(true);
-        
+
         input.id=increaseValueInBrackets(after.id);
         if(!document.getElementById(input.id)) {
             input.name=increaseValueInBrackets(after.name);
-            
+
             hidden.id=increaseValueInBrackets(after.previousSibling.id);
             hidden.name=increaseValueInBrackets(after.previousSibling.name);
-            
+
             input.value="";
             hidden.value="";
             after.parentNode.insertBefore(input,after.nextSibling.nextSibling.nextSibling);
@@ -316,10 +294,10 @@ var autocomplete=function() {
     }
 
     function handleKeys(event) {
-        obj=this; 
+        obj=this;
         dropdown = document.getElementById(obj.id + "dropdown");
         keycode=event.keyCode;
-     
+
         // 40 = cursor down
         // 38 = cursor up
         // 9 = tab
@@ -338,12 +316,12 @@ var autocomplete=function() {
             for(var i=0; i<dataarray.length; i++) {
                 data=trim(dataarray[i]);
                 datashort=data.substring(0,constraint.length);
-                
+
                 if(datashort.toUpperCase()==constraint.toUpperCase()) {
                     match[j]=trim(dataarray[i]);
                     maxlength=Math.max(maxlength, match[j].length);
                     j++;
-                }   
+                }
             }
             if(match.length>1) {
                 for (var m=0; m<=maxlength; m++) {
@@ -358,7 +336,7 @@ var autocomplete=function() {
                     }
                 }
                 obj.value=trim(match[0].substring(0,maxmatch));
-            
+
             } else if (match.length==1) {
                 obj.value=trim(match[0]);
             }
@@ -372,8 +350,8 @@ var autocomplete=function() {
                 nowselected.id="";
             }
             flattree=flattentree(dropdown, "LI");
-            if (selectedvalue[dropdown.id] < 0) { 
-                selectedvalue[dropdown.id]=0; 
+            if (selectedvalue[dropdown.id] < 0) {
+                selectedvalue[dropdown.id]=0;
             }
             flattree[selectedvalue[dropdown.id]].id="selected";
             return false;  // prevents update
@@ -384,7 +362,7 @@ var autocomplete=function() {
                 nowselected.id="";
             }
             flattree=flattentree(dropdown, "LI");
-            if (selectedvalue[dropdown.id] > (flattree.length - 1)) { 
+            if (selectedvalue[dropdown.id] > (flattree.length - 1)) {
                 selectedvalue[dropdown.id] =flattree.length - 1;
             }
             flattree[selectedvalue[dropdown.id]].id="selected";
@@ -433,7 +411,7 @@ var autocomplete=function() {
         }
         return flattree;
     }
-    
+
     return {
         setpos:setpos,
         init:init,
@@ -446,8 +424,4 @@ var autocomplete=function() {
 if(window.addEventListener) {
     window.addEventListener("load",autocomplete.init,false);
     window.addEventListener("resize",autocomplete.setpos, false);
-} else {
-    // M$ refuses to play by the rules... as always
-    window.attachEvent("onload",autocomplete.init);
-    window.attachEvent("onresize",autocomplete.setpos);
 }
