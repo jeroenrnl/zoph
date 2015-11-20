@@ -125,8 +125,6 @@ div.details {
     float: left;
 
     padding: 20px;
-    /* For stupid MSIE */
-    background: #ffffff;
     background: rgba(255,255,255,0.9);
 
     border-radius: 10px;
@@ -1377,15 +1375,7 @@ fieldset.editphotos-fields {
     padding-top: 10px;
 }
 
-/* These are the lists on the bulk edit page, such as the list of albums + the remove checkbox.
- * This is a bit of a hack, needed to make opera and MSIE behave. */
-
-fieldset.checkboxlist {
-    display: block;
-    float: left;
-    width: 60%;
-    clear: right;
-    }
+/* These are the lists on the bulk edit page, such as the list of albums + the remove checkbox. */
 
 fieldset.checkboxlist legend {
     display: none;
@@ -1872,8 +1862,6 @@ ul.tabs div.contents {
     width: 515px;
 
     border: none;
-    /* For stupid MSIE */
-    background: #ffffff;
     background: rgba(255,255,255,0.9);
     z-index: 1;
 }
