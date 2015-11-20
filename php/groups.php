@@ -38,21 +38,21 @@ require_once "header.inc.php";
     </h1>
     <div class="main">
 <?php
-$groups = getGroups();
+$groups = group::getRecords("group_name");
 
 if ($groups) {
     echo "<dl class='groups'>";
     foreach($groups as $group) {
         ?>
-        <dt><?php echo $group->get("group_name") ?></dt>
+        <dt><?php echo $group->getName() ?></dt>
         <dd>
         <?php
         echo $group->get("description") . "<br>";
-        echo $group->get_members_links();
+        echo implode("&nbsp;", $group->getMemberLinks());
         ?>
         </dd>
         <span class="actionlink">
-          <a href="group.php?group_id=<?php echo $group->get("group_id") ?>">
+          <a href="group.php?group_id=<?php echo $group->getId() ?>">
             <?php echo translate("display") ?>
           </a>
         </span>

@@ -40,18 +40,18 @@ class groupTest extends ZophDataBaseTestCase {
         $this->assertEquals($group->get("group_id"), $id);
         foreach ($members as $member) {
             $user=user::getByName($member);
-            $group->add_member($user->getId());
+            $group->addMember($user);
         }
         $group->update();
     }
 
     /**
-     * Test get_albums() function
+     * Test getAlbums() function
      * @dataProvider getGroupAlbums();
      */
     public function testGetAlbums($groupId, array $expAlbumids) {
         $group=new group($groupId);
-        $albums=$group->get_albums();
+        $albums=$group->getAlbums();
 
         $actAlbumids=array();
         foreach ($albums as $album) {
@@ -67,7 +67,7 @@ class groupTest extends ZophDataBaseTestCase {
      */
     public function testGetMembers($groupId, array $expUserIds) {
         $group=new group($groupId);
-        $users=$group->get_members();
+        $users=$group->getMembers();
 
         $actUserIds=array();
         foreach ($users as $user) {
@@ -82,10 +82,11 @@ class groupTest extends ZophDataBaseTestCase {
      */
     public function testRemoveMembers() {
         $group=new group(1);
-        $group->remove_members(2);
-        $group->remove_members(array(5,7));
+        $group->removeMember(new user(2));
+        $group->removeMember(new user(5));
+        $group->removeMember(new user(7));
 
-        $users=$group->get_members();
+        $users=$group->getMembers();
         foreach ($users as $user) {
             $actUserIds[]=$user->getId();
         }

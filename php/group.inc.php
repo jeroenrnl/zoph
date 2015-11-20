@@ -1,7 +1,6 @@
 <?php
-
-/*
- * A class representing a usergroup of Zoph.
+/**
+ * A class representing a group of users.
  *
  * This file is part of Zoph.
  *
@@ -17,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
 use db\select;
@@ -25,6 +27,12 @@ use db\delete;
 use db\param;
 use db\clause;
 
+/**
+ * A class representing a group of users
+ *
+ * @author Jeroen Roos
+ * @package Zoph
+ */
 class group extends zophTable {
     /** @var string The name of the database table */
     protected static $tableName="groups";
@@ -38,24 +46,25 @@ class group extends zophTable {
     /** @var string URL for this class */
     protected static $url="group.php?group_id=";
 
-    function updateMembers($vars = null) {
-        parent::update();
-        if ($vars["_member"]) {
-            $this->add_member($vars["_member"]);
-        }
-
-        if ($vars["_remove_user"]) {
-            $this->remove_members($vars["_remove_user"]);
-        }
-
-    }
-
-    function delete() {
+    /**
+     * Delete a group
+     * Also remove all users from this group and remove any permissions set for this group
+     */
+    public function delete() {
         parent::delete(array("groups_users", "group_permissions"));
     }
 
-    function get_group_permissions($album_id) {
-        $gp = new group_permissions($this->get("group_id"), $album_id);
+    public function getName() {
+        return $this->get("group_name");
+    }
+
+    /**
+     * Get permissions for a group
+     * @param album Album to lookup permissions for
+     * @return group_permissions Permissions object
+     */
+    public function getGroupPermissions(album $album) {
+        $gp = new group_permissions($this->getId(), $album->getId());
         if ($gp->lookup()) {
             return $gp;
         }
@@ -63,7 +72,11 @@ class group extends zophTable {
         return null;
     }
 
-    function get_albums() {
+    /**
+     * Get albums associated with this permissions object
+     * @return array of albums
+     */
+    public function getAlbums() {
         $qry=new select(array("gp" => "group_permissions"));
         $qry->addFields(array("album_id"));
         $qry->where(new clause("group_id=:groupid"));
@@ -71,16 +84,24 @@ class group extends zophTable {
         return album::getRecordsFromQuery($qry);
     }
 
-    function getDisplayArray() {
-        $da = array(
+    /**
+     * Get display array
+     * Get an array of properties to display
+     * @return array properties
+     */
+    public function getDisplayArray() {
+        return array(
             translate("group") => $this->get("group_name"),
             translate("description") => $this->get("description"),
-            translate("members") => $this->get_members_links("<br>"));
-
-        return $da;
+            translate("members") => implode("<br>", $this->getMemberLinks())
+        );
     }
 
-    function get_members() {
+    /**
+     * Get members of this group
+     * @return array of users
+     */
+    public function getMembers() {
         $qry=new select(array("gu" => "groups_users"));
         $qry->addFields(array("user_id"));
         $qry->where(new clause("group_id=:groupid"));
@@ -89,34 +110,35 @@ class group extends zophTable {
         return user::getRecordsFromQuery($qry);
     }
 
-    function add_member($member_id) {
-        if (!is_numeric($member_id)) {
-            die("member_id must be numeric");
-        }
+    /**
+     * Add a member to a group
+     * @param user User to add
+     */
+    public function addMember(user $user) {
         $qry=new insert(array("gu" => "groups_users"));
         $qry->addParams(array(
             new param(":group_id", (int) $this->getId(), PDO::PARAM_INT),
-            new param(":user_id", (int) $member_id, PDO::PARAM_INT)
+            new param(":user_id", (int) $user->getId(), PDO::PARAM_INT)
         ));
 
         $qry->execute();
 
     }
 
-    function remove_members($userIds) {
-        if (!is_array($userIds)) {
-            $userIds = array($userIds);
-        }
-        $ids=new param(":userid", $userIds, PDO::PARAM_INT);
+    /**
+     * Remove a member from a group
+     * @param user User to remove
+     */
+    public function removeMember(user $user) {
 
         $qry=new delete(array("gu" => "groups_users"));
 
         $where=new clause("group_id=:groupid");
-        $where->addAnd(clause::InClause("user_id", $ids));
+        $where->addAnd(new clause("user_id=:userid"));
 
         $qry->addParams(array(
             new param(":groupid", (int) $this->getId(), PDO::PARAM_INT),
-            $ids
+            new param(":userid", $user->getId(), PDO::PARAM_INT)
         ));
 
         $qry->where($where);
@@ -124,56 +146,70 @@ class group extends zophTable {
         $qry->execute();
     }
 
-    function get_non_members() {
-        $users=user::getAll();
-        $members=$this->get_members();
+    /**
+     * Get an array of users that are NOT a member of this group
+     * @return array of users
+     */
+    private function getNonMembers() {
+        $userIds=array();
+        $memberIds=array();
 
-        foreach ($users as $u) {
-            $user_ids[]=$u->get("user_id");
+        $users=user::getAll();
+        $members=$this->getMembers();
+
+        foreach ($users as $user) {
+            $userIds[]=$user->getId();
         }
         if ($members) {
-            foreach ($members as $m) {
-                $member_ids[]=$m->get("user_id");
+            foreach ($members as $member) {
+                $memberIds[]=$member->getId();
             }
-            $non_member_ids=array_diff($user_ids, $member_ids);
+            $nonMemberIds=array_diff($userIds, $memberIds);
         } else {
-            $non_member_ids=$user_ids;
+            $nonMemberIds=$userIds;
         }
 
-        $non_members=array();
+        $nonMembers=array();
 
-        foreach ($non_member_ids as $n) {
-            $non_members[]=new user($n);
+        foreach ($nonMemberIds as $id) {
+            $nonMembers[]=new user($id);
         }
-        return $non_members;
+        return $nonMembers;
 
     }
 
-    function get_new_member_pulldown($name) {
-        $new_members=$this->get_non_members();
-        $value_array[0]=null;
-        foreach ($new_members as $nm) {
+    /**
+     * Create a pulldown to add new members to this group
+     * @param string name for the pulldown field
+     * @return template Pulldown
+     */
+    public function getNewMemberPulldown($name) {
+        $valueArray=array();
+
+        $newMembers=$this->getNonMembers();
+        $valueArray[0]=null;
+        foreach ($newMembers as $nm) {
             $nm->lookup();
-            $value_array[$nm->get("user_id")]=$nm->get("user_name");
+            $valueArray[$nm->getId()]=$nm->getName();
         }
-        return template::createPulldown($name, null, $value_array);
+        return template::createPulldown($name, null, $valueArray);
     }
 
-    function get_members_links($separator="&nbsp;") {
-        $html="";
-        $members=$this->get_members();
+    /**
+     * Get links to all members of this group
+     * @return array array of links
+     */
+    public function getMemberLinks() {
+        $links=array();
+        $members=$this->getMembers();
         if ($members) {
             foreach ($members as $member) {
                 $member->lookup();
-                $html.=$member->getLink() . $separator;
+                $links[]=$member->getLink();
             }
         }
-        return $html;
+        return $links;
     }
-}
-
-function getGroups($order = "group_name") {
-    return group::getRecords($order);
 }
 
 ?>
