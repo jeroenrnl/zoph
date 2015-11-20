@@ -351,7 +351,7 @@ abstract class zophTable {
 
         }
 
-        if (sizeOf($qry->getParams()) === 0) {
+        if (sizeOf($qry->getParams()) === 0 || sizeOf($qry->getSet()) === 0) {
             return;
         }
 
