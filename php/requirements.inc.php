@@ -45,7 +45,7 @@ ini_set("magic_quotes_runtime", false);
 ini_set("magic_quotes_gpc", false);
 ini_set("session.use_only_cookies", true);
 
-if(PHP_VERSION_ID < 50300) {
-    die("You should run at least PHP 5.3 to use Zoph");
+if(PHP_VERSION_ID < 50500) {
+    die("You should run at least PHP 5.5 to use Zoph");
 }
 
