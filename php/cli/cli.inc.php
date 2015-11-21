@@ -57,11 +57,11 @@ class cli {
         }
         $this->user=$user;
 
-        if(!$user->is_admin()) {
+        if(!$user->isAdmin()) {
             throw new CliUserNotAdminException("CLI_USER must be an admin user");
         }
         $user->prefs->load();
-        $user->load_language();
+        $user->loadLanguage();
         $this->args=new arguments($args);
     }
 

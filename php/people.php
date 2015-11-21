@@ -32,7 +32,7 @@ if(empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
-if (!$user->is_admin() && !$user->get("browse_people")) {
+if (!$user->isAdmin() && !$user->get("browse_people")) {
     redirect("zoph.php");
 }
 
@@ -46,7 +46,7 @@ require_once "header.inc.php";
 ?>
   <h1>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
     <span class="actionlink">
       <a href="person.php?_action=new">

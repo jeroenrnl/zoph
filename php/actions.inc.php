@@ -46,8 +46,8 @@ if ($_action == "edit") {
     $_action = "new";
     $action = "insert"; // in case redirect doesn't work
 
-    $user->eat_crumb();
-    $link = strip_href($user->get_last_crumb());
+    $user->eatCrumb();
+    $link = strip_href($user->getLastCrumb());
     if (!$link) { $link = $redirect; }
     redirect($link, "Redirect");
 } else {

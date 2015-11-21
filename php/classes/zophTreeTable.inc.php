@@ -256,7 +256,7 @@ abstract class zophTreeTable extends zophTable {
 
     public static function getTreeSelectArray($rec = null, $select_array = null, $depth=0) {
         $user=user::getCurrent();
-        $user->lookup_prefs();
+        $user->lookupPrefs();
         $order = $user->prefs->get("child_sortorder");
 
         if (!$rec) {

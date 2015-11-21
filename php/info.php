@@ -41,7 +41,7 @@ require_once "header.inc.php";
       template::getImage("mailaddr.png") . "\">") ?>
   </p>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
     <br>
     <table id="zophinfo">

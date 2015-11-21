@@ -37,7 +37,7 @@ require_once "header.inc.php";
 $comments=comment::getRecords();
 foreach ($comments as $comment) {
     $photo=$comment->getPhoto();
-    if($user->get_permissions_for_photo($photo->get("photo_id")) || $user->is_admin()) {
+    if($user->getPhotoPermissions($photo) || $user->isAdmin()) {
         echo $comment->toHTML(true);
     }
 }

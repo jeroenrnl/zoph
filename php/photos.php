@@ -110,7 +110,7 @@ if($_action=translate("search")) {
         <?php echo translate("save search") ?></a> |
     <?php
 }
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
     <a href="edit_photos.php?<?php echo $qs ?>">
         <?php echo translate("edit") ?></a> |
@@ -121,7 +121,7 @@ if ($user->is_admin()) {
 ?>
 <a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a>
 <?php
-if(conf::get("feature.download") && ($user->get("download") || $user->is_admin())) {
+if(conf::get("feature.download") && ($user->get("download") || $user->isAdmin())) {
     ?>
     | <a href="download.php?<?php echo $qs ?>"><?php echo translate("download") ?></a>
     <?php

@@ -319,7 +319,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $qry->addClause(clause::NotInClause("p.photo_id", $param), $conj);
             }
         } else if ($key == "userrating") {
-            if ($user->is_admin() && isset($vars["_userrating_user"])) {
+            if ($user->isAdmin() && isset($vars["_userrating_user"])) {
                 $ratinguser_id=$vars["_userrating_user"];
             } else {
                 $ratinguser_id=$user->getId();
@@ -439,7 +439,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
     }
 
-    if (!$user->is_admin()) {
+    if (!$user->isAdmin()) {
         $qry->join(array("pa" => "photo_albums"), "p.photo_id=pa.photo_id");
         list($qry, $where) = selectHelper::expandQueryForUser($qry, null, $user);
         $qry->addClause($where, "AND");

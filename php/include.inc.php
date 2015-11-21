@@ -40,8 +40,6 @@ require_once "point.inc.php";
 require_once "group_permissions.inc.php";
 require_once "color_scheme.inc.php";
 require_once "prefs.inc.php";
-require_once "user.inc.php";
-require_once "group.inc.php";
 
 if(!defined("LOGON")) {
     if(!defined("TEST")) {

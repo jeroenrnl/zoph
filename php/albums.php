@@ -53,7 +53,7 @@ require_once "header.inc.php";
 ?>
 <h1>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
       <ul class="actionlink">
         <li>
@@ -82,7 +82,7 @@ if ($user->is_admin()) {
     <?php echo $title . "\n" ?>
 </h1>
 <?php
-if($user->is_admin()) {
+if($user->isAdmin()) {
     include "selection.inc.php";
 }
 include "show_page.inc.php";

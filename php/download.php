@@ -26,7 +26,7 @@ require_once "include.inc.php";
 $vars=clean_request_vars($request_vars);
 
 $_action=getvar("_action");
-if(!conf::get("feature.download") || (!$user->get("download") && !$user->is_admin())) {
+if(!conf::get("feature.download") || (!$user->get("download") && !$user->isAdmin())) {
     redirect("zoph.php");
 }
 if($_action=="getfile" || $_action=="download") {
@@ -115,7 +115,7 @@ if($_action=="getfile") {
             </span>
             <?php
         } else {
-            $link = strip_href($user->get_last_crumb());
+            $link = strip_href($user->getLastCrumb());
             echo sprintf(translate("All photos have been downloaded in %s zipfiles."), $filenum)
             ?>
             <span class="actionlink">

@@ -31,7 +31,7 @@ $photo_id = getvar("photo_id");
 $type = getvar("type");
 
 if(($type=="import_thumb" || $type=="import_mid") &&
-    ($user->is_admin() || $user->get("import"))) {
+    ($user->isAdmin() || $user->get("import"))) {
 
     $md5 = getvar("file");
     $file = file::getFromMD5(conf::get("path.images") . "/" . conf::get("path.upload"), $md5);
@@ -79,8 +79,8 @@ if ($found) {
     $image_path = conf::get("path.images") . "/" . $photo->get("path") . "/";
     $watermark_file="";
 
-    if(!$user->is_admin() && conf::get("watermark.enable")) {
-        $permissions = $user->get_permissions_for_photo($photo_id);
+    if(!$user->isAdmin() && conf::get("watermark.enable")) {
+        $permissions = $user->getPhotoPermissions($photo);
         $watermark = $permissions->get("watermark_level");
         $photolevel=$photo->get("level");
         if($photolevel > $watermark) {

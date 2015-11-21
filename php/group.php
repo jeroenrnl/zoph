@@ -17,7 +17,7 @@
 
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -30,14 +30,14 @@ if ($_action == "update_albums") {
     // Check if the "Grant access to all albums" checkbox is ticked
     $_access_level_all_checkbox = getvar("_access_level_all_checkbox");
 
-    if($_access_level_all_checkbox) {
+    if ($_access_level_all_checkbox) {
         $albums = album::getAll();
         if ($albums) {
             foreach ($albums as $alb) {
                 $permissions = new group_permissions(
                     $group_id, $alb->get("album_id"));
                 $permissions->setFields($request_vars,"","_all");
-                if(!conf::get("watermark.enable")) {
+                if (!conf::get("watermark.enable")) {
                     $permissions->set("watermark_level", 0);
                 }
                 $permissions->insert();
@@ -45,32 +45,34 @@ if ($_action == "update_albums") {
         }
     }
 
-    $albums = $group->get_albums();
+    $albums = $group->getAlbums();
     foreach ($albums as $album) {
         $id=$album->get("album_id");
-        $remove_permission_album = $request_vars["_remove_permission_album__$id"];
-        // first check if album needs to be revoked
-        if ($remove_permission_album) {
-            $permissions = new group_permissions($group_id, $id);
-            $permissions->delete();
+        if(isset($request_vars["_remove_permission_album__$id"])) {
+            $remove_permission_album = $request_vars["_remove_permission_album__$id"];
+            // first check if album needs to be revoked
+            if ($remove_permission_album) {
+                $permissions = new group_permissions($group_id, $id);
+                $permissions->delete();
+            }
         }
     }
     // Check if new album should be added
-    if($album_id_new) {
+    if ($album_id_new) {
         $permissions = new group_permissions();
         $permissions->setFields($request_vars,"","_new");
-        if(!conf::get("watermark.enable")) {
+        if (!conf::get("watermark.enable")) {
             $permissions->set("watermark_level", 0);
         }
         $permissions->insert();
     }
-    // update ablums
-    $albums = $group->get_albums();
+    // update albums
+    $albums = $group->getAlbums();
 
     foreach ($albums as $album) {
         $album->lookup();
         $name=$album->get("album");
-        $id=$album->get("album_id");
+        $id=$album->getId();
         $permissions = new group_permissions();
         $permissions->setFields($request_vars,"","__$id");
         $permissions->update();
@@ -79,7 +81,15 @@ if ($_action == "update_albums") {
     $action = "update";
 } else if ($_action=="update") {
     $group->setFields($request_vars);
-    $group->updateMembers($request_vars);
+    if (isset($request_vars["_member"]) && ((int) $request_vars["_member"] > 0 )) {
+        $group->addMember(new user((int) $request_vars["_member"]));
+    }
+
+    if (isset($request_vars["_remove_user"]) && is_array($request_vars["_remove_user"])) {
+        foreach ($request_vars["_remove_user"] as $user_id) {
+            $group->removeMember(new user((int) $user_id));
+        }
+    }
     $group->update();
     $action = "update";
 } else {
@@ -141,9 +151,12 @@ if ($action == "display") {
     <?php
     $albums = album::getSelectArray();
     foreach ($albums as $id=>$name) {
-        if (!$id || $id == 1) { continue; }
-        $permissions = $group->get_group_permissions($id);
-        if($permissions) {
+        if (!$id || $id == 1) {
+            continue;
+        }
+        $album = new album($id);
+        $permissions = $group->getGroupPermissions($album);
+        if ($permissions) {
             ?>
             <tr>
               <td><?php echo $name ?></td>
@@ -292,9 +305,12 @@ if ($action == "display") {
         <?php
         $albums = album::getSelectArray();
         foreach ($albums as $id=>$name) {
-            if (!$id || $id == 1) { continue; }
-            $permissions = $group->get_group_permissions($id);
-            if($permissions) {
+            if (!$id || $id == 1) {
+                continue;
+            }
+            $album=new album($id);
+            $permissions = $group->getGroupPermissions($album);
+            if ($permissions) {
                 ?>
                 <tr>
                   <td>

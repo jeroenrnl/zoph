@@ -23,7 +23,7 @@
  */
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -33,7 +33,7 @@ $user_id = getvar("user_id");
 if($user_id > 0) {
     $u=new user($user_id);
     $u->lookup();
-    $u->lookup_person();
+    $u->lookupPerson();
 }
 
 $subject = getvar("subject");
@@ -111,7 +111,7 @@ if ($_action == "notify") {
     $body = translate("Hi",0) . " " . e($to_name) . ",\n\n";
 
     if ($shownewalbums) {
-        $date = $u->get_lastnotify();
+        $date = $u->getLastNotify();
         $body .= translate("I have enabled access to the following albums for you:",0) . "\n\n";
 
         $albums = getNewer($u, $date);

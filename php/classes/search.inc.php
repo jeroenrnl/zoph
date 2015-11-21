@@ -63,7 +63,7 @@ class search extends zophTable {
 
         $qry->addParam(new param(":searchid", $this->getId(), PDO::PARAM_INT));
 
-        if (!$user->is_admin()) {
+        if (!$user->isAdmin()) {
             $clause=new clause("owner=:owner");
             $qry->addParam(new param(":owner", $user->getId(), PDO::PARAM_INT));
             $clause->addOr(new clause("public=TRUE"));
@@ -103,7 +103,7 @@ class search extends zophTable {
             translate("Name"),
             create_text_input("name", $this->get("name"), 40, 64));
 
-        if ($user->is_admin()) {
+        if ($user->isAdmin()) {
             $editArray[]=array (
                 translate("Owner"),
                 template::createPulldown("owner", $this->get("owner"),

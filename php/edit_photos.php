@@ -170,22 +170,22 @@ if ($num_thumbnails <= 0) {
     unset($request_vars["__category__all"]);
     for ($i = 0; $i < $num_thumbnails; $i++) {
         $photo_id = $thumbnails[$i]->get('photo_id');
+        $photo = new photo($photo_id);
 
         unset($request_vars["___location_id__" . $photo_id]);
         unset($request_vars["___photographer_id__" . $photo_id]);
         unset($request_vars["__album__" . $photo_id]);
         unset($request_vars["__category__" . $photo_id]);
         unset($request_vars["__person__" . $photo_id]);
-        $permissions = $user->get_permissions_for_photo($photo_id);
-        if (!$user->is_admin() && !$permissions) {
+        $permissions = $user->getPhotoPermissions($photo);
+        if (!$user->isAdmin() && !$permissions) {
             continue;
         }
 
         $can_edit = false;
         $action="";
-        $can_edit = $user->is_admin() || $permissions->get("writable");
+        $can_edit = $user->isAdmin() || $permissions->get("writable");
 
-        $photo = new photo($photo_id);
 
         if(array_key_exists("_action__" . $photo_id, $request_vars)) {
             $action = $request_vars["_action__" . $photo_id];
@@ -288,7 +288,7 @@ if ($num_thumbnails <= 0) {
               <?php echo $photo->getThumbnailLink() . "\n" ?><br>
         <?php
         if ($can_edit && conf::get("rotate.enable") &&
-            ($user->is_admin() || $permissions->get("writable"))) {
+            ($user->isAdmin() || $permissions->get("writable"))) {
             ?>
               <?php echo translate("rotate", 0) ?>
               <select name="_deg__<?php echo $photo_id ?>">

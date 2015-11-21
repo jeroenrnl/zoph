@@ -52,7 +52,7 @@ if ($action == "insert") {
     ?>
     <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
     <?php
-    if (conf::get("rotate.enable") && ($user->is_admin() || $permissions->get("writable"))) {
+    if (conf::get("rotate.enable") && ($user->isAdmin() || $permissions->get("writable"))) {
         ?>
         <div class="rotate">
         <?php echo translate("rotate", 0) ?>
@@ -87,7 +87,7 @@ if ($action == "insert") {
 
     <ul class="tabs">
     <?php
-    if(conf::get("share.enable") && ($user->is_admin() || $user->get("allow_share"))) {
+    if(conf::get("share.enable") && ($user->isAdmin() || $user->get("allow_share"))) {
         $hash=$photo->getHash();
         $full_hash=sha1(conf::get("share.salt.full") . $hash);
         $mid_hash=sha1(conf::get("share.salt.mid") . $hash);
@@ -142,7 +142,7 @@ echo photographer::createPulldown("photographer_id", $photo->get("photographer_i
 ?>
 <br>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
     <label for="level"><?php echo translate("level") ?></label>
     <?php echo create_text_input("level", $photo->get("level"), 4, 2) ?>

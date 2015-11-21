@@ -135,12 +135,12 @@ class userTest extends ZophDatabaseTestCase {
 
 
     /**
-     * Test lookup_person() method
+     * Test lookupPerson() method
      */
     public function testLookup_person() {
         $obj = new user(3);
         $obj->lookup();
-        $obj->lookup_person();
+        $obj->lookupPerson();
         $this->assertInstanceOf("person", $obj->person);
         $name=$obj->person->getName();
         $this->assertEquals("Jimi Hendrix",$name);
@@ -148,39 +148,39 @@ class userTest extends ZophDatabaseTestCase {
         unset($obj);
         $obj = new user(10);
         $obj->lookup();
-        $obj->lookup_person();
+        $obj->lookupPerson();
         $this->assertInstanceOf("person", $obj->person);
         $name=$obj->person->getName();
         $this->assertEquals("",$name);
     }
 
     /**
-     * Test lookup_prefs() method
+     * Test lookupPrefs() method
      */
     public function testLookup_prefs() {
         $obj = new user(1);
-        $obj->lookup_prefs();
+        $obj->lookupPrefs();
         $this->assertInstanceOf("prefs", $obj->prefs);
     }
 
     /**
-     * Test is_admin() method.
+     * Test isAdmin() method.
      */
     public function testIs_admin() {
         $obj = new user(1);
         $obj->lookup();
-        $this->assertTrue($obj->is_admin());
+        $this->assertTrue($obj->isAdmin());
         $obj = new user(7);
         $obj->lookup();
-        $this->assertFalse($obj->is_admin());
+        $this->assertFalse($obj->isAdmin());
     }
 
     /**
-     * Test get_lastnotify() method.
+     * Test getLastNotify() method.
      */
     public function testGet_lastnotify() {
         $obj = new user(1);
-        $ln=$obj->get_lastnotify();
+        $ln=$obj->getLastNotify();
         $this->assertEquals($ln,"");
     }
 
@@ -214,33 +214,33 @@ class userTest extends ZophDatabaseTestCase {
     }
 
     /**
-     * Test get_groups() method.
+     * Test getGroups() method.
      */
     public function testGet_groups() {
         $obj = new user(1);
-        $g=$obj->get_groups();
+        $g=$obj->getGroups();
         $this->assertInternalType("array", $g);
         $this->assertEmpty($g);
     }
 
     /**
-     * Test get_album_permissions() method.
+     * Test getAlbumPermissions() method.
      * @dataProvider getAlbumIds1
      */
     public function testGet_album_permissions1($id, $perm) {
         $obj = new user(1);
-        $ap=$obj->get_album_permissions($id);
+        $ap=$obj->getAlbumPermissions(new album($id));
         $this->assertEquals($ap,$perm);
     }
 
     /**
-     * Test get_album_permissions() method.
+     * Test getAlbumPermissions() method.
      * @dataProvider getAlbumIds3
      */
     public function testGet_album_permissions3($id, $perm) {
         $obj = new user(3);
         $obj->lookup();
-        $ap=$obj->get_album_permissions($id);
+        $ap=$obj->getAlbumPermissions(new album($id));
         if (is_null($perm)) {
             $this->assertEquals($ap,$perm);
         } else {
@@ -250,22 +250,22 @@ class userTest extends ZophDatabaseTestCase {
     }
 
     /**
-     * Test get_permissions_for_photo() method.
+     * Test getPhotoPermissions() method.
      * @dataProvider getPhotoPermissionsForUser1
      */
     public function testGet_permissions_for_photo1($id, $perm) {
         $obj = new user(1);
-        $pp=$obj->get_permissions_for_photo($id);
+        $pp=$obj->getPhotoPermissions(new photo($id));
         $this->assertEquals($pp,$perm);
     }
 
     /**
-     * Test get_permissions_for_photo() method.
+     * Test getPhotoPermissions() method.
      * @dataProvider getPhotoPermissionsForUser3
      */
     public function testGet_permissions_for_photo3($id, $perm) {
         $obj = new user(3);
-        $pp=$obj->get_permissions_for_photo($id);
+        $pp=$obj->getPhotoPermissions(new photo($id));
 
         if (is_null($perm)) {
             $this->assertNull($pp);
@@ -282,7 +282,7 @@ class userTest extends ZophDatabaseTestCase {
     public function testGetDisplayArray() {
         $obj = new user(1);
         $obj->lookup();
-        $obj->load_language();
+        $obj->loadLanguage();
         $da=$obj->getDisplayArray();
         $this->assertInternalType("array", $da);
 
@@ -324,44 +324,44 @@ class userTest extends ZophDatabaseTestCase {
         $obj = new user(7);
         $obj->lookup();
         $obj->lookup();
-        $obj->load_language();
+        $obj->loadLanguage();
         $da=$obj->getDisplayArray();
 
         $this->assertArrayHasKey("lightbox album",$da);
     }
 
     /**
-     * Test load_language() method.
+     * Test loadLanguage() method.
      * @dataProvider getTrueFalse
      */
     public function testLoad_language($force) {
         $obj = new user(1);
-        $lang=$obj->load_language($force);
+        $lang=$obj->loadLanguage($force);
         $this->assertInstanceOf("language", $lang);
 
-        $obj->lookup_prefs();
+        $obj->lookupPrefs();
         $obj->prefs->set("language", "nl");
 
-        $lang=$obj->load_language($force);
+        $lang=$obj->loadLanguage($force);
         $this->assertInstanceOf("language", $lang);
     }
 
     public function testCrumbs() {
         $obj = new user(5);
-        $obj->add_crumb("test", "test.html");
-        $obj->add_crumb("test", "test1.html");
-        $obj->add_crumb("test2", "test2.html?what=ever");
-        $obj->add_crumb("test3", "test3.html");
-        $obj->add_crumb("test4", "test4.html");
+        $obj->addCrumb("test", "test.html");
+        $obj->addCrumb("test", "test1.html");
+        $obj->addCrumb("test2", "test2.html?what=ever");
+        $obj->addCrumb("test3", "test3.html");
+        $obj->addCrumb("test4", "test4.html");
 
-        $this->assertEquals($obj->get_last_crumb(),"<a href=\"test4.html?_crumb=4\">test4</a>");
-        $obj->eat_crumb(2);
-        $this->assertEquals($obj->get_last_crumb(),
+        $this->assertEquals($obj->getLastCrumb(),"<a href=\"test4.html?_crumb=4\">test4</a>");
+        $obj->eatCrumb(2);
+        $this->assertEquals($obj->getLastCrumb(),
             "<a href=\"test2.html?_crumb=2&what=ever\">test2</a>");
-        $obj->eat_crumb(1);
-        $this->assertEquals($obj->get_last_crumb(),"<a href=\"test1.html?_crumb=1\">test</a>");
-        $obj->eat_crumb();
-        $this->assertNull($obj->get_last_crumb());
+        $obj->eatCrumb(1);
+        $this->assertEquals($obj->getLastCrumb(),"<a href=\"test1.html?_crumb=1\">test</a>");
+        $obj->eatCrumb();
+        $this->assertNull($obj->getLastCrumb());
     }
 
     /**

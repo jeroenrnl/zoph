@@ -54,9 +54,9 @@ if ($user->prefs->get("show_breadcrumbs")) {
     }
 
     if ($_clear_crumbs) {
-        $user->eat_crumb(0);
+        $user->eatCrumb(0);
     } else if ($_crumb) {
-        $user->eat_crumb($_crumb);
+        $user->eatCrumb($_crumb);
     }
     if(!empty($tpl_title)) {
         $title=$tpl_title;
@@ -72,7 +72,7 @@ if ($user->prefs->get("show_breadcrumbs")) {
         ($user->prefs->get("auto_edit") && $_action != "update" &&
         $_action != "select" && $_action != "deselect" &&
         $_action != "delrate" && $page == "photo.php")))) {
-        $user->add_crumb($title, htmlentities($_SERVER["REQUEST_URI"]));
+        $user->addCrumb($title, htmlentities($_SERVER["REQUEST_URI"]));
     }
 
     $max_crumbs=$user->prefs->get("num_breadcrumbs");

@@ -86,7 +86,7 @@ class photographer extends person implements Organizer {
             $where=self::getWhereForSearch($search, $search_first);
         }
 
-        if(!user::getCurrent()->is_admin()) {
+        if(!user::getCurrent()->isAdmin()) {
             $ids=array();
             $subqry = new select(array("p" => "photos"));
             $subqry->addFunction(array("person_id" => "DISTINCT p.photographer_id"));

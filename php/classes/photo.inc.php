@@ -120,7 +120,7 @@ class photo extends zophTable {
         $where=new clause("p.photo_id=:photoid");
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if (!$user->is_admin()) {
+        if (!$user->isAdmin()) {
             list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
 
@@ -303,7 +303,7 @@ class photo extends zophTable {
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
         $qry->addOrder("a.album");
 
-        if (!$user->is_admin()) {
+        if (!$user->isAdmin()) {
             list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
         }
 
@@ -1047,12 +1047,12 @@ class photo extends zophTable {
 
         $allrelated=photoRelation::getRelated($this);
 
-        if ($user->is_admin()) {
+        if ($user->isAdmin()) {
             return $allrelated;
         } else {
             $related=array();
             foreach ($allrelated as $photo) {
-                if ($user->get_permissions_for_photo($photo->getId())) {
+                if ($user->getPhotoPermissions($photo)) {
                     $related[]=$photo;
                 }
             }

@@ -72,7 +72,7 @@ class WebImport extends Import {
                 "upload_max_filesize directive (%s) in php.ini."),
                 ini_get("upload_max_filesize"));
             $errortext.=" " . sprintf(translate("This may also be caused by " .
-                "the max_post_size (%s) in php.ini."), ini_get("max_post_size"));
+                "the post_max_size (%s) in php.ini."), ini_get("post_max_size"));
             break;
         case UPLOAD_ERR_FORM_SIZE:
             $errortext.=sprintf(translate("The uploaded file exceeds the maximum " .
@@ -337,49 +337,24 @@ class WebImport extends Import {
 
     /**
      * Get XML indicating progress of a certain upload
-     * This requires the APC PHP extension.
-     * If it is not available, it will always return 0 / unknown
      */
     public static function getProgressXML($uploadId) {
         $xml = new DOMDocument('1.0','UTF-8');
         $rootnode=$xml->createElement(self::XMLROOT);
         $node=$xml->createElement(self::XMLNODE);
 
-
-        if(PHP_VERSION_ID < 50400) {
-            if(function_exists("apc_fetch")) {
-                $progress=apc_fetch("upload_" . $uploadId);
-                if($progress===false) {
-                    $progress['current']=0;
-                    $progress['total']=0;
-                    // probably something wrong with APC settings
-                    if(ini_get("apc.enabled")==false) {
-                        $progress['filename']="Enable apc.enabled in php.ini";
-                    } else if(ini_get("apc.rfc1867")==false) {
-                        $progress['filename']="Enable apc.rfc1867 in php.ini";
-                    }
-                }
-            } else {
-                // APC extension not available
-                $progress['current']=0;
-                $progress['total']=0;
-                $progress['filename']="APC extension not available";
-            }
+        if (ini_get("session.upload_progress.enabled")==true) {
+            $upl_prog=$_SESSION[ini_get("session.upload_progress.prefix") . $uploadId];
+            $progress['current']=$upl_prog["bytes_processed"];
+            $progress['total']=$upl_prog["content_length"];
+            // for now we take the first file as multiple uploads
+            // are not yet supported
+            $progress['filename']=$upl_prog["files"][0]["name"];
         } else {
-            if (ini_get("session.upload_progress.enabled")==true) {
-                $upl_prog=$_SESSION[ini_get("session.upload_progress.prefix") . $uploadId];
-                $progress['current']=$upl_prog["bytes_processed"];
-                $progress['total']=$upl_prog["content_length"];
-                // for now we take the first file as multiple uploads
-                // are not yet supported
-                $progress['filename']=$upl_prog["files"][0]["name"];
-            } else {
-                // session.upload_progress not enables extension not available
-                $progress['current']=0;
-                $progress['total']=0;
-                $progress['filename']="Enable session.upload_progress.enabled in php.ini";
-            }
-
+            // session.upload_progress not enables extension not available
+            $progress['current']=0;
+            $progress['total']=0;
+            $progress['filename']="Enable session.upload_progress.enabled in php.ini";
         }
 
         $id=$xml->createElement("id");
@@ -401,7 +376,6 @@ class WebImport extends Import {
         $xml->appendChild($rootnode);
         return $xml;
     }
-
 
     /**
      * Generate an XML file with thumbs in the import dir
@@ -517,19 +491,6 @@ class WebImport extends Import {
         } else {
             log::msg("No files specified", log::FATAL, log::IMPORT);
             return false;
-        }
-    }
-
-    /**
-     * Get the name of the progress hidden input field
-     * The name of this field differs based on the way progress is checked
-     * APC (PHP5.3) or session.import_progress (PHP>=5.4)
-     */
-    public static function getProgressName() {
-        if(PHP_VERSION_ID < 50400) {
-            return "APC_UPLOAD_PROGRESS";
-        } else {
-            return ini_get("session.upload_progress.name");
         }
     }
 }

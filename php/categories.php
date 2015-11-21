@@ -55,7 +55,7 @@ require_once "header.inc.php";
 ?>
 <h1>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
     <span class="actionlink">
       <a href="category.php?_action=new&amp;parent_category_id=<?php
@@ -67,7 +67,7 @@ if ($user->is_admin()) {
 echo "\n" . translate("categories") . "\n" ?>
 </h1>
 <?php
-if($user->is_admin()) {
+if($user->isAdmin()) {
     include "selection.inc.php";
 }
 include "show_page.inc.php";
@@ -95,7 +95,7 @@ if($show_orig) {
         <?php echo $title . "\n" ?>
     </h2>
     <?php
-    if ($user->is_admin()) {
+    if ($user->isAdmin()) {
         ?>
         <span class="actionlink">
           <a href="category.php?_action=edit&amp;category_id=<?php

@@ -47,6 +47,10 @@ class update extends query {
         $this->set[]=$function;
     }
 
+    public function getSet() {
+        return $this->set;
+    }
+
     /**
      * Create UPDATE query
      * @return string SQL query

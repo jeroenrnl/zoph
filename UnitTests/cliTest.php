@@ -357,8 +357,8 @@ class cliTest extends ZophDataBaseTestCase {
         $args=str_replace("_", " ", $cli_array);
         $admin=new user(1);
         $admin->lookup();
-        $admin->lookup_person();
-        $admin->lookup_prefs();
+        $admin->lookupPerson();
+        $admin->lookupPrefs();
         $cli=new cli($admin, 4, $args);
         $cli->run();
     }        

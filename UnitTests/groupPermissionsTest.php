@@ -45,7 +45,7 @@ class groupPermissionsTest extends ZophDataBaseTestCase {
             $prm->set("writable", $wr);
             $prm->insert();
 
-            $perm=$gr->get_group_permissions($alb);
+            $perm=$gr->getGroupPermissions(new album($alb));
             $this->assertEquals($al, $perm->get("access_level"));
             $this->assertEquals($wml, $perm->get("watermark_level"));
             $this->assertEquals($wr, $perm->get("writable"));

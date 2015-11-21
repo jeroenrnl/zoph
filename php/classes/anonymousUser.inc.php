@@ -31,7 +31,6 @@
  */
 require_once "util.inc.php";
 require_once "variables.inc.php";
-require_once "user.inc.php";
 require_once "prefs.inc.php";
 
 /**
@@ -40,6 +39,7 @@ require_once "prefs.inc.php";
  * it is currently used for the 'share this photo' feature.
  * This is basicly a wrapper around the user object returning
  * null or false to prevent an anonymous user to gain extra
+ * privileges
  *
  * @package Zoph
  * @author Jeroen Roos
@@ -65,28 +65,28 @@ final class anonymousUser extends user {
     /**
      * Return a bogus person id
      */
-    public function lookup_person() {
+    public function lookupPerson() {
         return false;
     }
 
     /**
      * Fake preferences lookup
      */
-    public function lookup_prefs() {
+    public function lookupPrefs() {
         return false;
     }
 
     /**
      * Anonymous user is never admin
      */
-    function is_admin() {
+    function isAdmin() {
         return false;
     }
 
     /**
      * Anonymous users don't get notified.
      */
-    function get_lastnotify() {
+    function getLastNotify() {
         return 0;
     }
 
@@ -115,7 +115,7 @@ final class anonymousUser extends user {
     /**
      * No groups for user
      */
-    function get_groups() {
+    function getGroups() {
         return 0;
     }
 
@@ -123,16 +123,18 @@ final class anonymousUser extends user {
      * Get albums user can see
      * Anonymous user has no albums permissions
      * always return null
+     * @param album unused, only for compatibility with @see user object
      */
-    function get_album_permissions($album_id) {
+    function getAlbumPermissions(album $album) {
         return null;
     }
 
     /**
      * Get permissions for specific photo.
      * No permissions for anonymous user
+     * @param photo unused, only for compatibility with @see user object
      */
-    function get_permissions_for_photo($photo_id) {
+    function getPhotoPermissions(photo $photo) {
         return new group_permissions(0,0);
     }
 
@@ -147,8 +149,9 @@ final class anonymousUser extends user {
     /**
      * At this moment, anonynmous users only get photos
      * and no text, so no need load any language strings
+     * @param bool Force loading - unused, only for compatibility with @see user object
      */
-    function load_language($force = 0) {
+    function loadLanguage($force = 0) {
         return null;
     }
 }

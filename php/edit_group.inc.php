@@ -52,17 +52,17 @@ if($action!="insert") {
       <legend><?php echo translate("members") ?></legend>
 
     <?php
-    $members=$group->get_members();
+    $members=$group->getMembers();
     foreach($members as $member) {
         $member->lookup();
         ?>
         <input class="remove" type="checkbox" name="_remove_user[]"
-            value="<?php echo $member->get("user_id")?>">
+            value="<?php echo $member->getId()?>">
         <?php echo $member->getLink() ?>
         <br>
         <?php
     }
-    echo $group->get_new_member_pulldown("_member");
+    echo $group->getNewMemberPulldown("_member");
     ?>
     </fieldset>
     <?php
