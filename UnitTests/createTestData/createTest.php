@@ -174,7 +174,7 @@ class createTestData {
             $group->insert();
             foreach ($arr_group[1] as $member) {
                 $user=user::getByName($member);
-                $group->add_member($user->getId());
+                $group->addMember($user);
             }
             $group->update();
         }
@@ -183,17 +183,17 @@ class createTestData {
     private static function createGroupPermissions() {
         $groupPermissions=testData::getGroupPermissions();
 
-        foreach ($groupPermissions as $group=>$albums) {
-            $gr=new group($group);
-            $gr->lookup();
-            foreach ($albums as $alb) {
-                $prm=new group_permissions($group, $alb);
+        foreach ($groupPermissions as $groupId=>$albums) {
+            $group=new group($groupId);
+            $group->lookup();
+            foreach ($albums as $albumId) {
+                $prm=new group_permissions($groupId, $albumId);
                 $prm->set("access_level", 5);
                 $prm->set("watermark_level", 3);
                 $prm->set("writable", 0);
                 $prm->insert();
 
-                $gr->get_group_permissions($alb);
+                $group->getGroupPermissions(new album($albumId));
            }
 
         }
