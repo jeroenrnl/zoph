@@ -167,6 +167,14 @@ class testData {
             4 => array("guitarists", array("brian", "jimi"))
         );
     }
+    
+    public static function getCircles() {
+        return array(
+            1 => array("Queen", array("Brian May", "Freddie Mercury", "Roger Taylor", "John Deacon")),
+            2 => array("Singers", array("Freddie Mercury", "Brian May", "Phil Collins", "Paul McCartney", "John Lennon")),
+            3 => array("Bass Players", array("John Deacon", "Paul McCartney"))
+        );
+    }
 
     public static function getPhotoAlbums() {
         // photo => albums

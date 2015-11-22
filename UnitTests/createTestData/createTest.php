@@ -61,6 +61,7 @@ class createTestData {
         self::createLocations();
         self::createUsers();
         self::createPeople();
+        self::createCircles();
         self::createGroups();
         self::createGroupPermissions();
         self::createTestImages();
@@ -164,6 +165,21 @@ class createTestData {
         }
     }
 
+
+    private static function createCircles() {
+        $circles=testData::getCircles();
+
+        foreach ($circles as $circleArray) {
+            $circle=new circle();
+            $circle->set("circle_name", $circleArray[0]);
+            $circle->insert();
+            foreach ($circleArray[1] as $member) {
+                $person=person::getByName($member);
+                $circle->addMember($person[0]);
+            }
+            $circle->update();
+        }
+    }
 
     private static function createGroups() {
         $groups=testData::getGroups();

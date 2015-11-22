@@ -50,3 +50,18 @@ ALTER TABLE zoph_prefs MODIFY COLUMN child_sortorder enum('name', 'sortname', 'o
         'first', 'last', 'lowest', 'highest', 'average', 'random') default 'sortname' NOT NULL;
 
 ALTER TABLE zoph_users MODIFY COLUMN lastip varchar(48);
+
+CREATE TABLE zoph_circles (
+        circle_id int(11) NOT NULL auto_increment,
+        circle_name varchar(32),
+        description varchar(128),
+        PRIMARY KEY  (circle_id)
+) ENGINE=MyISAM;
+
+CREATE TABLE zoph_circles_people (
+        circle_id int(11) NOT NULL default '0',
+        person_id int(11) NOT NULL default '0',
+        changedate timestamp NOT NULL,
+        PRIMARY KEY  (circle_id,person_id)
+) ENGINE=MyISAM;
+
