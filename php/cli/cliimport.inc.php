@@ -38,7 +38,9 @@ class CliImport extends Import {
      */
 
     public static function progress($cur, $total) {
-
+        if(!defined("CLI")) {
+            return;
+        }
         if($total>=60) {
             $calccur=$cur/$total*60;
             $dispcur=floor($calccur);
