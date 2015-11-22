@@ -23,7 +23,7 @@ if(!ZOPH) { die("Illegal call"); }
 ?>
 <ul class="thumbs">
     <?php foreach ($tpl_items as $item): ?>
-        <li class="popup" id="thumb_<?php echo get_class($item);?>_<?php echo $item->getId(); ?>" >
+        <li class="popup thumb_<?php echo get_class($item);?>" id="thumb_<?php echo get_class($item);?>_<?php echo $item->getId(); ?>" >
             <div class="coverphoto">
                 <a href="<?php echo $item->getURL() ?>">
                     <?php echo $item->displayAutoCover($tpl_autothumb); ?>
@@ -34,13 +34,18 @@ if(!ZOPH) { die("Illegal call"); }
                     <?php echo $item->getName() ?>
                     <span class="photocount">
                         <?php
-                            $count=$item->getPhotoCount();
-                            if($item instanceof zophTreeTable):
-                                $count2=$item->getTotalPhotoCount();
-                            elseif ($item instanceof person):
-                                $count2=$item->getPhotographer()->getPhotoCount();
+                            if($item instanceof circle):
+                                $count=$item->getPeopleCount();
+                                $count2=$count;
                             else:
-                                $count2=0;
+                                $count=$item->getPhotoCount();
+                                if($item instanceof zophTreeTable):
+                                    $count2=$item->getTotalPhotoCount();
+                                elseif ($item instanceof person):
+                                    $count2=$item->getPhotographer()->getPhotoCount();
+                                else:
+                                    $count2=0;
+                                endif;
                             endif;
                         ?>
                         <?php if($count==$count2): ?>

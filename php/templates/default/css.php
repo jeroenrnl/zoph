@@ -119,6 +119,11 @@ ul.thumbs > li dl.extradata {
     display: none;
 }
 
+ul.thumbs > li.thumb_circle {
+    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(0,0,0,0.2) inset;
+}
+
 div.details {
     display: block;
     position: absolute;

@@ -64,6 +64,50 @@ class circle extends zophTable {
     }
 
     /**
+     * Automatically select a coverphoto for this circle
+     */
+    public function getAutoCover() {
+        $people=new select(array("cp" => "circles_people"));
+        $people->addFields(array("person_id"));
+        $people->where(new clause("circle_id=:circleid"));
+        $people->addParam(new param(":circleid", (int) $this->getId(), PDO::PARAM_INT));
+
+        $peopleIds=$people->toArray();
+        $param=new param(":personIds", (array) $peopleIds, PDO::PARAM_INT);
+
+        $qry=new select(array("p" => "photos"));
+        $qry->addFields(array(
+            "photo_id"  => "p.photo_id",
+            "rating"    => "ar.rating"
+        ));
+        $qry->addFunction(array("count" => "count(person_id)"));
+
+        $qry->join(array("ppl" => "photo_people"), "p.photo_id=ppl.photo_id");
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id=ar.photo_id");
+
+        $qry->addOrder("count DESC")->addOrder("rating DESC");
+        $qry->addGroupBy("photo_id");
+        $qry->addLimit(1);
+
+        $qry->addParam($param);
+        $qry->where(clause::InClause("ppl.person_id", $param));
+   
+        $coverphotos=photo::getRecordsFromQuery($qry);
+        $coverphoto=array_shift($coverphotos);
+        if ($coverphoto instanceof photo) {
+            $coverphoto->lookup();
+            return $coverphoto;
+        }
+    }
+
+    /**
+     * Automatically select a coverphoto for this circle
+     */
+    public function getPeopleCount() {
+        return sizeof($this->getMembers());
+    }
+
+    /**
      * Get members of this circle
      * @return array of people
      */

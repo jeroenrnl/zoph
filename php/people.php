@@ -90,7 +90,28 @@ if ($_l == "all") {
 } else {
     $first_letter = $_l;
 }
-$ppl = person::getAllPeopleAndPhotographers($first_letter);
+if(!$first_letter) {
+    $circles=circle::getRecords("circle_name");
+    if ($circles) {
+        if ($_view=="thumbs") {
+            $template="view_thumbs";
+        } else {
+            $template="view_list";
+        }
+        $tpl=new template($template, array(
+            "id" => $_view . "circle",
+            "items" => $circles,
+            "autothumb" => $_autothumb,
+            "links" => array(
+                translate("people") => "people.php?circle_id=",
+            )
+        ));
+        echo $tpl;
+    }
+    $ppl = person::getAllNoCircle();
+} else {
+    $ppl = person::getAllPeopleAndPhotographers($first_letter);
+}
 if ($ppl) {
     if ($_view=="thumbs") {
         $template="view_thumbs";
