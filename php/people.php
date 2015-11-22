@@ -76,7 +76,7 @@ for ($l = 'a'; $l <= 'z' && $l != 'aa'; $l++) {
     <form class="viewsettings" method="get" action="people.php">
       <?php echo create_form($request_vars, array ("_view", "_autothumb",
         "_button")) ?>
-      <?php echo translate("Category view", 0) . "\n" ?>
+      <?php echo translate("Person view", 0) . "\n" ?>
       <?php echo template::createViewPulldown("_view", $_view, true) ?>
       <?php echo translate("Automatic thumbnail", 0) . "\n" ?>
       <?php echo template::createAutothumbPulldown("_autothumb", $_autothumb, true) ?>
