@@ -673,18 +673,18 @@ class person extends zophTable implements Organizer {
      * that are NOT a member of a circle
      */
     public static function getAllNoCircle() {
-        $all = self::getAllPeopleAndPhotographers();
+        $all = static::getAllPeopleAndPhotographers();
         $circles = circle::getRecords();
         $return=array();
 
-        foreach($all as $person) {
+        foreach ($all as $person) {
             $return[$person->getId()] = $person;
         }
 
-        foreach($circles as $circle) {
+        foreach ($circles as $circle) {
             $members=$circle->getMembers();
-            foreach($members as $member) {
-                if(isset($return[$member->getId()])){
+            foreach ($members as $member) {
+                if (isset($return[$member->getId()])){
                     unset($return[$member->getId()]);
                 }
             }

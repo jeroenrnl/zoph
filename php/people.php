@@ -24,11 +24,11 @@
 
 require_once "include.inc.php";
 $_view=getvar("_view");
-if(empty($_view)) {
+if (empty($_view)) {
     $_view=$user->prefs->get("view");
 }
 $_autothumb=getvar("_autothumb");
-if(empty($_autothumb)) {
+if (empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
@@ -90,7 +90,7 @@ if ($_l == "all") {
 } else {
     $first_letter = $_l;
 }
-if(!$first_letter) {
+if (!$first_letter) {
     $circles=circle::getRecords("circle_name");
     if ($circles) {
         if ($_view=="thumbs") {
