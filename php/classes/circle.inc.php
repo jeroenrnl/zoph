@@ -22,6 +22,7 @@
  */
 
 use db\select;
+use db\selectHelper;
 use db\insert;
 use db\delete;
 use db\param;
@@ -65,8 +66,12 @@ class circle extends zophTable {
 
     /**
      * Automatically select a coverphoto for this circle
+     * It selects the coverphoto by FIRST getting the photos with the most people on it and
+     * only then picking the oldest, newest, etc.
+     * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
+     * @return photo coverphoto
      */
-    public function getAutoCover() {
+    public function getAutoCover($autocover=null) {
         $people=new select(array("cp" => "circles_people"));
         $people->addFields(array("person_id"));
         $people->where(new clause("circle_id=:circleid"));
@@ -85,13 +90,15 @@ class circle extends zophTable {
         $qry->join(array("ppl" => "photo_people"), "p.photo_id=ppl.photo_id");
         $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id=ar.photo_id");
 
-        $qry->addOrder("count DESC")->addOrder("rating DESC");
+        $qry->addOrder("count DESC");
         $qry->addGroupBy("photo_id");
         $qry->addLimit(1);
 
         $qry->addParam($param);
         $qry->where(clause::InClause("ppl.person_id", $param));
-   
+
+        $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
+ 
         $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
         if ($coverphoto instanceof photo) {
