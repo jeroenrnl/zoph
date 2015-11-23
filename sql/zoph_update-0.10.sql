@@ -53,8 +53,9 @@ ALTER TABLE zoph_users MODIFY COLUMN lastip varchar(48);
 
 CREATE TABLE zoph_circles (
         circle_id int(11) NOT NULL auto_increment,
-        circle_name varchar(32),
-        description varchar(128),
+        circle_name varchar(32) default NULL,
+        description varchar(128) default NULL,
+        coverphoto int(11) default NULL,
         PRIMARY KEY  (circle_id)
 ) ENGINE=MyISAM;
 

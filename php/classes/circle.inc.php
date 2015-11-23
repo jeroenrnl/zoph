@@ -72,6 +72,11 @@ class circle extends zophTable {
      * @return photo coverphoto
      */
     public function getAutoCover($autocover=null) {
+        $coverphoto=$this->getCoverphoto();
+        if ($coverphoto instanceof photo) {
+            return $coverphoto;
+        }
+
         $people=new select(array("cp" => "circles_people"));
         $people->addFields(array("person_id"));
         $people->where(new clause("circle_id=:circleid"));
@@ -98,7 +103,7 @@ class circle extends zophTable {
         $qry->where(clause::InClause("ppl.person_id", $param));
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
- 
+
         $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
         if ($coverphoto instanceof photo) {

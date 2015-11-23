@@ -182,8 +182,9 @@ INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NU
 
 CREATE TABLE zoph_circles (
         circle_id int(11) NOT NULL auto_increment,
-        circle_name varchar(32),
-        description varchar(128),
+        circle_name varchar(32) default NULL,
+        description varchar(128) default NULL,
+        coverphoto int(11) default NULL,
         PRIMARY KEY  (circle_id)
 ) ENGINE=MyISAM;
 
@@ -193,7 +194,6 @@ CREATE TABLE zoph_circles_people (
         changedate timestamp NOT NULL,
         PRIMARY KEY  (circle_id,person_id)
 ) ENGINE=MyISAM;
---
 
 --
 -- Table structure for table 'zoph_photo_albums'
