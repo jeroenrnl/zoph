@@ -27,6 +27,10 @@ if(!ZOPH) { die("Illegal call"); }
         <a href="<?php echo $item->getURL() ?>"><?php echo $item->getName() ?></a>
         <span class="photocount">
             <?php
+            if ($item instanceof circle):
+                $count=$item->getPeopleCount();
+                $count2=$count;
+            else:
                 $count=$item->getPhotoCount();
                 if($item instanceof zophTreeTable):
                     $count2=$item->getTotalPhotoCount();
@@ -35,9 +39,10 @@ if(!ZOPH) { die("Illegal call"); }
                 else:
                     $count2=0;
                 endif;
+            endif;
             ?>
             <?php if($count==$count2): ?>
-                (<?php echo $count; ?>)
+            (<?php echo $count; ?>)
             <?php else: ?>
                 (<?php echo $count; ?>/<?php echo $count2; ?>)
             <?php endif; ?>
