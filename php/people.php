@@ -41,7 +41,15 @@ $_l = getvar("_l");
 if (empty($_l)) {
     $_l = "all";
 }
-$title = translate("People");
+
+if(getvar("circle_id")) {
+    $circle=new circle(getvar("circle_id"));
+    $circle->lookup();
+    $title=$circle->getName();
+} else {
+    $title = translate("People");
+}
+
 require_once "header.inc.php";
 ?>
   <h1>
@@ -56,7 +64,7 @@ if ($user->isAdmin()) {
     <?php
     }
 ?>
-<?php echo translate("people") ?></h1>
+<?php echo strtolower($title) ?></h1>
     <div class="letter">
 <?php
 for ($l = 'a'; $l <= 'z' && $l != 'aa'; $l++) {
@@ -90,7 +98,14 @@ if ($_l == "all") {
 } else {
     $first_letter = $_l;
 }
-if (!$first_letter) {
+if(isset($circle)) {
+    $people=$circle->getMembers();
+    $ppl=array();
+    foreach($people as $person) {
+        $person->lookup();
+        $ppl[]=$person;
+     }
+} else if (!$first_letter) {
     $circles=circle::getRecords("circle_name");
     if ($circles) {
         if ($_view=="thumbs") {
