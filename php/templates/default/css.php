@@ -215,8 +215,7 @@ ul.tree {
 
 ul.tree ul {
     list-style: none;
-    margin-top: 0;
-    margin-bottom: 0;
+    margin: 0;
 }
 
 

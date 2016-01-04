@@ -240,18 +240,19 @@ class person extends zophTable implements Organizer {
     /**
      * Get children for this person
      * @todo This function is currently not used
-     */
     public function getChildren() {
         $constraints["father_id"] = $this->get("person_id");
         $constraints["mother_id"] = $this->get("person_id");
         return static::getAll($constraints, "or");
     }
+     */
 
     /**
      * Get name for this person
      * @return string name
      */
     public function getName() {
+        $this->lookup();
         if ($this->get("called")) {
             $name = $this->get("called");
         } else {
@@ -706,11 +707,12 @@ class person extends zophTable implements Organizer {
             } else {
                 $where=new clause("ppl.last_name like lower(concat(:search,'%'))");
                 if ($search_first) {
-                    $where->addOr("ppl.first_name like lower(concat(:search, '%'))");
+                    $where->addOr(new clause("ppl.first_name like lower(concat(:search, '%'))"));
                 }
             }
         }
         return $where;
+
     }
 }
 

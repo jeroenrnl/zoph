@@ -113,12 +113,17 @@ if(isset($circle)) {
         } else {
             $template="view_list";
         }
+        $template="view_" . $_view;
         $tpl=new template($template, array(
             "id" => $_view . "circle",
             "items" => $circles,
             "autothumb" => $_autothumb,
             "links" => array(
-                translate("people") => "people.php?circle_id=",
+                translate("people") => "people.php?circle_id="
+            ),
+            "links_person" => array(
+                translate("photos of") => "photos.php?person_id=",
+                translate("photos by") => "photos.php?photographer_id="
             )
         ));
         echo $tpl;

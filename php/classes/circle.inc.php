@@ -45,7 +45,7 @@ class circle extends zophTable {
                   the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
-    protected static $url="people.php?circle_id=";
+    protected static $url="circle.php?circle_id=";
 
     public function getName() {
         return $this->get("circle_name");
@@ -130,6 +130,35 @@ class circle extends zophTable {
         $qry->addParam(new param(":circleid", (int) $this->getId(), PDO::PARAM_INT));
 
         return person::getRecordsFromQuery($qry);
+    }
+
+    /**
+     * Make getChildren an alias of getMembers() so tree view can work for circles
+     */
+    public function getChildren() {
+        return $this->getMembers();
+    }
+
+    /**
+     * getPhotocount for members
+     */
+    public function getPhotocount() {
+        $count=0;
+        foreach($this->getMembers() as $member) {
+            $count+=$member->getPhotocount();
+        }
+        return $count;
+    }
+
+    /**
+     * getTotalPhotocount for members
+     */
+    public function getTotalPhotocount() {
+        $count=0;
+        foreach($this->getMembers() as $member) {
+            $count+=$member->getTotalPhotocount();
+        }
+        return $count;
     }
 
     /**

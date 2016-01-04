@@ -38,7 +38,14 @@ if(!ZOPH) { die("Illegal call"); }
 
 <ul class="tree" id="<?php echo $tpl_id ?>">
 <?php foreach ($tpl_items as $item): ?>
-    <?php $children=$item->getChildren(); ?>
+    <?php 
+        if($item instanceof person):
+            $children=null;
+            $tpl_links=$tpl_links_person;
+        else:
+            $children=$item->getChildren(); 
+        endif;
+    ?>
     <li class="collapsed">
         <?php if($children): ?>
             <div class="toggle" onclick="thumbview.toggle(this.parentNode)"></div>
@@ -69,12 +76,15 @@ if(!ZOPH) { die("Illegal call"); }
         <?php endif; ?>
         <?php if($children): ?>
         <?php
-            $tpl=new template("view_tree", array(
+            $param=array(
                 "items" => $children,
-                "user" => $tpl_user,
                 "id" => "sub_" . $tpl_id,
                 "links" => $tpl_links
-            ));
+            );
+            if(isset($tpl_links_person)) {
+                $param["links_person"]=$tpl_links_person;
+            }
+            $tpl=new template("view_tree", $param);
             echo $tpl;
         ?>
     <?php endif; ?>
