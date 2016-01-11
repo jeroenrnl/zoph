@@ -45,7 +45,7 @@ class circle extends zophTable {
                   the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
-    protected static $url="circle.php?circle_id=";
+    protected static $url="people.php?circle_id=";
 
     public function getName() {
         return $this->get("circle_name");

@@ -25,9 +25,7 @@ if(!ZOPH) { die("Illegal call"); }
         <ul class="actionlink">
             <?php foreach($tpl_actionlinks as $text => $link): ?>
             <li>
-                <a href="<?= $link ?>">
-                    <?= $text ?>
-                </a>
+                <a href="<?= $link ?>"><?= $text ?></a>
             </li>
             <?php endforeach; ?>
        </ul>

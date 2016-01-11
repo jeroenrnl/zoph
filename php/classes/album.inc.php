@@ -335,17 +335,6 @@ class album extends zophTreeTable implements Organizer {
     }
 
     /**
-     * Return the URL to the current album
-     * This should eventually replace getLink, since that contains
-     * HTML.
-     * @todo PHP 5.3 -> move into zophTable
-     * @return string URL
-     */
-    public function getURL() {
-        return "albums.php?parent_album_id=" . $this->getId();
-    }
-
-    /**
      * Get coverphoto for this album.
      * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
      * @param bool choose autocover from this album AND children

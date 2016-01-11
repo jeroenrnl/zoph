@@ -238,14 +238,12 @@ class person extends zophTable implements Organizer {
     }
 
     /**
-     * Get children for this person
-     * @todo This function is currently not used
-    public function getChildren() {
-        $constraints["father_id"] = $this->get("person_id");
-        $constraints["mother_id"] = $this->get("person_id");
-        return static::getAll($constraints, "or");
-    }
+     * Get children
+     * Since people cannot be nested, always returns null
      */
+    public function getChildren() {
+        return null;
+    }
 
     /**
      * Get name for this person
@@ -299,14 +297,6 @@ class person extends zophTable implements Organizer {
         }
 
         return "<a href=\"person.php?person_id=" . $this->get("person_id") . "\">$name</a>";
-    }
-
-    /**
-     * Get URL to this person
-     */
-
-    public function getURL() {
-        return "person.php?person_id=" . $this->getId();
     }
 
     /**

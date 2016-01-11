@@ -55,14 +55,17 @@ require_once "header.inc.php";
   <h1>
 <?php
 if ($user->isAdmin()) {
-    ?>
-    <span class="actionlink">
-      <a href="person.php?_action=new">
-        <?php echo translate("new") ?>
-      </a>
-    </span>
-    <?php
+    $actionlinks=array(
+        translate("new") => "person.php?_action=new",
+        translate("new circle") => "circle.php?_action=new"
+    );
+    if(isset($circle) && $circle instanceof circle) {
+        $actionlinks[translate("edit circle")]="circle.php?_action=edit&circle_id=" . $circle->getId();
     }
+    
+    $tpl=new block("actionlinks", array("actionlinks" => $actionlinks));
+    echo $tpl;
+}
 ?>
 <?php echo strtolower($title) ?></h1>
     <div class="letter">
@@ -119,9 +122,6 @@ if(isset($circle)) {
             "items" => $circles,
             "autothumb" => $_autothumb,
             "links" => array(
-                translate("people") => "people.php?circle_id="
-            ),
-            "links_person" => array(
                 translate("photos of") => "photos.php?person_id=",
                 translate("photos by") => "photos.php?photographer_id="
             )

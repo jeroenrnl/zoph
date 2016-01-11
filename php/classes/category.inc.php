@@ -264,14 +264,6 @@ class category extends zophTreeTable implements Organizer {
     }
 
     /**
-     * Return an URL for this category
-     * @todo Can be moved into zophTable
-     */
-    public function getURL() {
-        return "categories.php?parent_category_id=" . $this->getId();
-    }
-
-    /**
      * Get coverphoto for this category.
      * @param string how to select a coverphoto: oldest, newest, first, last, random, highest
      * @param bool choose autocover from this category AND children

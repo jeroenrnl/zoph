@@ -217,7 +217,7 @@ class template {
             $actionlinks=$this->actionlinks;
         }
         if (is_array($actionlinks)) {
-            $tpl=new template("actionlinks", array(
+            $tpl=new block("actionlinks", array(
                 "actionlinks" => $actionlinks)
             );
             return $tpl->toString();

@@ -119,14 +119,6 @@ class user extends zophTable {
     }
 
     /**
-     * Get URL to this object
-     * @return string URL
-     */
-    public function getURL() {
-        return "user.php?user_id=" . $this->getId();
-    }
-
-    /**
      * Get the username
      * @return string name
      */
