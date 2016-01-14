@@ -107,7 +107,6 @@ $tpl=new block("header", array(
 echo $tpl;
 ?>
 <body>
-  <ul class="menu">
 <?php
 $tabs = array(
     translate("home", 0) => "zoph.php",
@@ -160,20 +159,11 @@ if (strpos($_SERVER["PHP_SELF"], "/") === false) {
     $self = substr(strrchr($_SERVER['PHP_SELF'], "/"), 1);
 }
 
-while (list($label, $page) = each($tabs)) {
-    if ($page == $self) {
-        $class = "class=\"selected\"";
-    } else {
-        $class="";
-    }
-    ?>
-    <li <?php echo $class ?>>
-        <a href="<?php echo $page ?>"><?php echo $label ?></a>
-    </li>
-    <?php
-}
-?>
-</ul>
-<?php
+$tpl=new block("menu", array(
+    "tabs"  => $tabs,
+    "self"  => $self
+));
+echo $tpl;
+
 require_once "breadcrumbs.inc.php";
 ?>
