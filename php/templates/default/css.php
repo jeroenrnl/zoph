@@ -432,7 +432,7 @@ ul.menu li.selected > a { color: <?php echo color_scheme::getColor("selected_tab
 
 /* The breadcrumb line at the top of the page */
 
-div.breadcrumb {
+div.breadcrumbs {
     background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
     border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
     color: <?php echo color_scheme::getColor("text_color") ?>;
@@ -442,14 +442,14 @@ div.breadcrumb {
     padding: 2px 10px 2px 10px;
     clear: left;
     width: 100%;
-    }
+}
 
-div.breadcrumb ul {
+ul.breadcrumbs {
     margin: 0;
     padding: 0;
 }
 
-div.breadcrumb li {
+ul.breadcrumbs li {
     margin-left: 1px;
     padding-left: 2px;
     padding-right: 8px;
@@ -458,15 +458,15 @@ div.breadcrumb li {
     display: inline;
 }
 
-div.breadcrumb li:before {
+ul.breadcrumbs li:before {
     content: "\0020 \0020 \0020 \00BB \0020";
 }
 
-div.breadcrumb li.first:before {
+ul.breadcrumbs li:first-child:before {
     content: " ";
 }
 
-div.breadcrumb li.firstdots:before {
+ul.breadcrumbs.firstdots li:first-child:before {
     content: "... \00BB \0020 ";
 }
 

@@ -1,8 +1,6 @@
 <?php
 /**
- * Display and modify breadcrumbs
- *
- * This file is part of Zoph.
+ * Template for 'breadcrumbs'
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,37 +15,23 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package Zoph
- * @author Jason Geiger
  * @author Jeroen Roos
+ * @package ZophTemplates
  */
 
-if ($user->prefs->get("show_breadcrumbs")) {
-    
-    breadcrumb::init();
-    
-    // can probably be removed
-    if(!empty($tpl_title)) {
-        $title=$tpl_title;
-    }
-    
-    if(!isset($_action)) {
-        $_action="";
-    }
-
-    new breadcrumb($title, $_action);
-
-    $_clear_crumbs = getvar("_clear_crumbs");
-    $_crumb = getvar("_crumb");
-
-    if ($_clear_crumbs) {
-        breadcrumb::eat(0);
-    } else if ($_crumb) {
-        breadcrumb::eat($_crumb);
-    }
-
-    echo breadcrumb::display();
-
-    
-}
+if(!ZOPH) { die("Illegal call"); }
 ?>
+<div class="breadcrumbs">
+    <ul class="actionlink">
+        <li>
+            <a href="<?= $tpl_clearURL ?>">x</a>
+        </li>
+    </ul>
+    <ul class="breadcrumbs <?= $tpl_class ?>">
+        <?php foreach($tpl_crumbs as $crumb): ?>
+            <li>
+                <a href="<?= $crumb->getLink() ?>"><?= $crumb->getTitle() ?></a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>

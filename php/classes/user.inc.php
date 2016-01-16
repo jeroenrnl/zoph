@@ -54,8 +54,6 @@ class user extends zophTable {
     public $person;
     /** @var user_prefs Preferences of this user */
     public $prefs;
-    /** @var array Breadcrumbs for this user */
-    public $crumbs;
     /** @var lang Holds translations */
     public $lang;
 
@@ -281,67 +279,6 @@ class user extends zophTable {
 
         $this->lang=language::load($langs);
         return $this->lang;
-    }
-
-    /**
-     * Add a crumb
-     * Crumbs are the path a user followed through Zoph's web GUI and can be
-     * used to easily go back to an earlier visited page
-     * @param string title
-     * @param string url to the page
-     * @todo should be moved into a separate class
-     */
-    public function addCrumb($title, $link) {
-        $numCrumbs = count($this->crumbs);
-        if ($numCrumbs == 0 || (!strpos($link, "_crumb="))) {
-
-            // if title is the same remove last and add new
-            if ($numCrumbs > 0 &&
-                strpos($this->crumbs[$numCrumbs - 1], ">$title<")) {
-
-                $this->eatCrumb();
-            } else {
-                $numCrumbs++;
-            }
-
-            $question = strpos($link, "?");
-            if ($question > 0) {
-                $link =
-                    substr($link, 0, $question) ."?_crumb=$numCrumbs&amp;" .
-                    substr($link, $question + 1);
-            } else {
-                $link .= "?_crumb=$numCrumbs";
-            }
-
-            $this->crumbs[] = "<a href=\"$link\">$title</a>";
-        }
-    }
-
-    /**
-     * Eat a crumb
-     * A crumb is 'eaten' when a user clicks on the link
-     * it means that the crumbs at the end are removed up to the place
-     * where the user went back to
-     * @param int number of crumbs to eat
-     * @todo should be moved into a separate class
-     */
-    public function eatCrumb($num = -1) {
-        if ($this->crumbs && count($this->crumbs) > 0) {
-            if ($num < 0) {
-                $num = count($this->crumbs) - 1;
-            }
-            $this->crumbs = array_slice($this->crumbs, 0, $num);
-        }
-    }
-
-    /**
-     * Get the last crumb
-     * @todo should be moved into a separate class
-     */
-    public function getLastCrumb() {
-        if ($this->crumbs && count($this->crumbs) > 0) {
-            return html_entity_decode($this->crumbs[count($this->crumbs) - 1]);
-        }
     }
 
     /**

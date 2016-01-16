@@ -213,9 +213,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             if ($op == "=") {
                 $alias = "pa" . substr($suffix, 1);
                 $qry->join(array($alias => "photo_albums"), "p.photo_id=" . $alias . ".photo_id");
-                if (is_int($val)) {
+                if (is_numeric($val)) {
                     $qry->addClause(new clause($alias . ".album_id=:albumId" . $suffix), $conj);
-                    $qry->addParam(new param(":albumId" . $suffix, $val, PDO::PARAM_INT));
+                    $qry->addParam(new param(":albumId" . $suffix, (int) $val, PDO::PARAM_INT));
                 } else if (is_array($val)) {
                     $param=new param(":albumIds" . $suffix, $val, PDO::PARAM_INT);
                     $qry->addParam($param);
@@ -244,9 +244,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             if ($op == "=") {
                 $alias = "pc" . substr($suffix, 1);
                 $qry->join(array($alias => "photo_categories"), "p.photo_id=" . $alias . ".photo_id");
-                if (is_int($val)) {
+                if (is_numeric($val)) {
                     $qry->addClause(new clause($alias . ".category_id=:categoryId" . $suffix), $conj);
-                    $qry->addParam(new param(":categoryId" . $suffix, $val, PDO::PARAM_INT));
+                    $qry->addParam(new param(":categoryId" . $suffix, (int) $val, PDO::PARAM_INT));
                 } else if (is_array($val)) {
                     $param=new param(":categoryIds" . $suffix, $val, PDO::PARAM_INT);
                     $qry->addParam($param);
@@ -270,8 +270,8 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $qry->addClause(clause::NotInClause("p.photo_id", $param), $conj);
             }
         } else if ($key == "location_id") {
-            if (is_int($val)) {
-                $qry->addParam(new param(":locationId" . $suffix, $val, PDO::PARAM_INT));
+            if (is_numeric($val)) {
+                $qry->addParam(new param(":locationId" . $suffix, (int) $val, PDO::PARAM_INT));
                 if ($op == "=") {
                     $qry->addClause(new clause("p.location_id=:locationId" . $suffix), $conj);
                 } else {
@@ -290,9 +290,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             if ($op == "=") {
                 $alias = "ppl" . substr($suffix, 1);
                 $qry->join(array($alias => "photo_people"), "p.photo_id=" . $alias . ".photo_id");
-                if (is_int($val)) {
+                if (is_numeric($val)) {
                     $qry->addClause(new clause($alias . ".person_id=:personId" . $suffix), $conj);
-                    $qry->addParam(new param(":personId" . $suffix, $val, PDO::PARAM_INT));
+                    $qry->addParam(new param(":personId" . $suffix, (int) $val, PDO::PARAM_INT));
                 } else if (is_array($val)) {
                     $param=new param(":personIds" . $suffix, $val, PDO::PARAM_INT);
                     $qry->addParam($param);
