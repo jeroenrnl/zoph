@@ -75,7 +75,7 @@ if ($action == "confirm") {
         "dl" => $track->getDisplayArray()
     ));
     $tpl->addBlock($dl);
-    if (is_null(conf::get("maps.provider"))) {
+    if (!is_null(conf::get("maps.provider"))) {
         $map=new map();
         $map->addTrack($track);
         $tpl->addBlock($map);

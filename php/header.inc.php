@@ -63,7 +63,7 @@ if(conf::get("interface.autocomplete")) {
 }
 
 if(conf::get("maps.provider")) {
-    $scripts[]="js/mxn/mxn.js?" . conf::get("maps.provider");
+    $scripts[]="js/mxn/mxn.js?(" . conf::get("maps.provider") .")";
     $scripts[]="js/maps.js";
     $scripts[]="js/custommaps.js";
     if(conf::get("maps.geocode")) {
