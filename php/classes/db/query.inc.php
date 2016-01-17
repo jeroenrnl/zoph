@@ -151,7 +151,7 @@ abstract class query {
                 $value=array_values($value);
                 $name=array_values($param->getName());
                 $type=$param->getType();
-                for($n=0; $n<sizeof($value); $n++) {
+                for ($n=0; $n<sizeof($value); $n++) {
                     $params[]=new param($name[$n], $value[$n], $type);
                 }
             } else {

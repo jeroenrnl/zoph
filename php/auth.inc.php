@@ -29,13 +29,13 @@
  */
 
 $_action="display";
-if(!defined("CLI")) {
+if (!defined("CLI")) {
     session_start();
     if (array_key_exists('user', $_SESSION)) {
         $user = $_SESSION['user'];
 
-        if($user instanceof anonymousUser) {
-            if(!defined("IMAGE_PHP")) {
+        if ($user instanceof anonymousUser) {
+            if (!defined("IMAGE_PHP")) {
                 unset($user);
                 $_action="logout";
             }
@@ -49,7 +49,7 @@ if(!defined("CLI")) {
     } else {
         $username=$_SERVER["USER"];
         $user=user::getByName($username);
-        if(!$user) {
+        if (!$user) {
             throw new CliUserNotValidException($username . " is not a valid user");
         }
     }
@@ -67,7 +67,7 @@ if ($_action == "logout") {
     redirect("logon.php", "Logout");
 } else if (empty($user)) {
     $hash=getvar("hash");
-    if(defined("IMAGE_PHP") && conf::get("share.enable") && !empty($hash)) {
+    if (defined("IMAGE_PHP") && conf::get("share.enable") && !empty($hash)) {
         require_once "classes/anonymousUser.inc.php";
         $user = new anonymousUser();
     } else {

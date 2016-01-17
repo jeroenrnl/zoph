@@ -19,14 +19,14 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 
 <div class="related">
     <h2><?php echo translate("related photos") ?></h2>
-    <?php foreach($tpl_related as $related): ?>
+    <?php foreach ($tpl_related as $related): ?>
         <div class="thumbnail">
-            <?php if($tpl_admin): ?>
+            <?php if ($tpl_admin): ?>
                 <ul class="actionlink">
                     <li>
                       <a href="relation.php?photo_id_1=<?php

@@ -34,7 +34,7 @@ $category = new category($category_id);
 $obj = &$category;
 $redirect = "categories.php";
 
-if($_action=="update" && getvar("sortorder")=="") {
+if ($_action=="update" && getvar("sortorder")=="") {
     // overiding the default action, to be able to clear the sortorder
     $obj->setFields($request_vars);
     $obj->set("sortorder", "");

@@ -293,7 +293,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $ids=array();
 
         // First insert a few rows in photo table;
-        for($i=0; $i<3; $i++) {
+        for ($i=0; $i<3; $i++) {
             $qry=new insert(array("photos"));
             $qry->addParam(new param(":name", "test123", PDO::PARAM_STR));
             $qry->execute();

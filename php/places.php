@@ -25,11 +25,11 @@
 require_once "include.inc.php";
 
 $_view=getvar("_view");
-if(empty($_view)) {
+if (empty($_view)) {
     $_view=$user->prefs->get("view");
 }
 $_autothumb=getvar("_autothumb");
-if(empty($_autothumb)) {
+if (empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
@@ -104,7 +104,7 @@ if ($show_orig) {
                 <?php echo translate("delete") ?>
             </a>
         <?php
-        if($place->get("coverphoto")) {
+        if ($place->get("coverphoto")) {
             ?>
                 |
                 <a href="place.php?_action=update&amp;place_id=<?php echo $place->get("place_id") ?>&amp;coverphoto=NULL">
@@ -153,7 +153,7 @@ if ($show_orig) {
     <br><br>
     <?php
     $fragment = translate("in this place");
-    if($totalPhotoCount > 0) {
+    if ($totalPhotoCount > 0) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
             <span class="actionlink">
@@ -209,11 +209,11 @@ if ($show_orig) {
     ?>
     </div>
     <?php
-    if(conf::get("maps.provider")) {
+    if (conf::get("maps.provider")) {
         $map=new map();
         $map->setCenterAndZoomFromObj($place);
         $marker=$place->getMarker();
-        if($marker instanceof marker) {
+        if ($marker instanceof marker) {
             $map->addMarker($marker);
         }
         $map->addMarkers($children);

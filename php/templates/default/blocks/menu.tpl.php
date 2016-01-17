@@ -19,10 +19,10 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <ul class="menu">
-    <?php foreach($tpl_tabs as $label => $page): ?>
+    <?php foreach ($tpl_tabs as $label => $page): ?>
         <li class=<?= $page == $tpl_self ? "selected" : "" ?>>
             <a href="<?= $page ?>"><?= $label ?></a>
         </li>

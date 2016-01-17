@@ -48,7 +48,7 @@ class breadcrumb {
         $page=$page[0];
 
         $crumbActions=array("", "display", "search", translate("search"), "notify", "compose");
-        if($user->prefs->get("auto_edit") && $page=="photo.php") {
+        if ($user->prefs->get("auto_edit") && $page=="photo.php") {
             $crumbActions[]="edit";
         }
 
@@ -92,7 +92,7 @@ class breadcrumb {
      * This function reads the crumbs from the session, and makes sure it is updated
      */
     public static function init() {
-        if(isset($_SESSION["crumbs"])) {
+        if (isset($_SESSION["crumbs"])) {
             static::$crumbs=$_SESSION["crumbs"];
         }
         $_SESSION["crumbs"]=&static::$crumbs;
@@ -103,13 +103,13 @@ class breadcrumb {
      * construct the link for clearing the crumbs (the 'x' on the right)
      */
     public static function getClearURL() {
-        if($_POST) {
+        if ($_POST) {
             $clear_url=$_SERVER["PHP_SELF"] . "?" . getvar("_qs");
         } else {
             $clear_url = htmlentities($_SERVER["REQUEST_URI"]);
         }
 
-        if(strpos($clear_url, "clear_crumbs") == 0) {
+        if (strpos($clear_url, "clear_crumbs") == 0) {
             if (strpos($clear_url, "?") > 0) {
                 $clear_url .= "&amp;";
             } else {

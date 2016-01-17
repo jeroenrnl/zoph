@@ -19,7 +19,7 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <div class="breadcrumbs">
     <ul class="actionlink">
@@ -28,7 +28,7 @@ if(!ZOPH) { die("Illegal call"); }
         </li>
     </ul>
     <ul class="breadcrumbs <?= $tpl_class ?>">
-        <?php foreach($tpl_crumbs as $crumb): ?>
+        <?php foreach ($tpl_crumbs as $crumb): ?>
             <li>
                 <a href="<?= $crumb->getLink() ?>"><?= $crumb->getTitle() ?></a>
             </li>

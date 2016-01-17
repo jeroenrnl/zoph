@@ -122,12 +122,12 @@ class placeTest extends ZophDataBaseTestCase {
         $children=$place->getChildren($order);
 
         $ids=array();
-        foreach($children as $child) {
+        foreach ($children as $child) {
             $ids[]=$child->getId();
         }
 
         // We can't test order for random, so sort them first
-        if($order=="random") {
+        if ($order=="random") {
             sort($ids);
         }
 
@@ -185,7 +185,7 @@ class placeTest extends ZophDataBaseTestCase {
         $photos=$loc->getPhotos();
 
         $ids=array();
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $ids[]=$photo->getId();
         }
 
@@ -285,7 +285,7 @@ class placeTest extends ZophDataBaseTestCase {
         $pl_ids=array();
         $topN=place::getTopN();
 
-        foreach($topN as $place) {
+        foreach ($topN as $place) {
             $pl_ids[]=$place["id"];
         }
         $this->assertEquals($expected, $pl_ids);

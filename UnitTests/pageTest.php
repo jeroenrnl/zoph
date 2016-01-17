@@ -40,12 +40,12 @@ class pageTest extends PHPUnit_Framework_TestCase {
 
     public static function tearDownAfterClass() {
         $pages=page::getRecords();
-        foreach($pages as $page) {
+        foreach ($pages as $page) {
             $page->delete();
         }
 
         $pagesets=pageset::getRecords();
-        foreach($pagesets as $pageset) {
+        foreach ($pagesets as $pageset) {
             $pageset->delete();
         }
 
@@ -122,12 +122,12 @@ class pageTest extends PHPUnit_Framework_TestCase {
         $pagesets=$page->getPagesets();
 
         $actPagesetIds=array();
-        foreach($pagesets as $pageset) {
+        foreach ($pagesets as $pageset) {
             $actPagesetIds[]=$pageset->getId();
         }
 
         $expPagesetIds=array();
-        foreach($pagesetIds as $pagesetId) {
+        foreach ($pagesetIds as $pagesetId) {
             $expPagesetIds[]=self::$psIds[$pagesetId];
         }
 

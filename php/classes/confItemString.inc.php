@@ -33,7 +33,7 @@ class confItemString extends confItem {
     protected $size=30;
 
     public function display() {
-        if($this->internal) {
+        if ($this->internal) {
             return;
         }
         $tpl=new block("confItemString", array(
@@ -54,11 +54,11 @@ class confItemString extends confItem {
     }
 
     public function checkValue($value) {
-        if($this->required && $value=="") {
+        if ($this->required && $value=="") {
             return false;
         }
 
-        if(isset($this->regex)) {
+        if (isset($this->regex)) {
             return preg_match("/" . $this->regex ."/", $value);
         } else {
             return true;

@@ -87,7 +87,7 @@ if ($action == "insert") {
 
     <ul class="tabs">
     <?php
-    if(conf::get("share.enable") && ($user->isAdmin() || $user->get("allow_share"))) {
+    if (conf::get("share.enable") && ($user->isAdmin() || $user->get("allow_share"))) {
         $hash=$photo->getHash();
         $full_hash=sha1(conf::get("share.salt.full") . $hash);
         $mid_hash=sha1(conf::get("share.salt.mid") . $hash);

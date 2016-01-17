@@ -88,10 +88,10 @@ class language {
      */
     function readHeader() {
         $file=$this->openFile();
-        if(!$file) { return false; }
+        if (!$file) { return false; }
         $header=fgets($file);
         $zoph_header="# zoph language file - ";
-        if(strtolower(substr($header,0,23))!=$zoph_header) {
+        if (strtolower(substr($header,0,23))!=$zoph_header) {
             log::msg("Incorrect language header in <b>" .
                 $this->filename . "</b>", log::ERROR, log::LANG);
             log::msg("<pre>" . $header. "</pre>", log::DEBUG, log::LANG);
@@ -109,9 +109,9 @@ class language {
      */
     function read() {
         $file=$this->openFile();
-        if(!$file) { return false; }
+        if (!$file) { return false; }
         while ($line=fgets($file)) {
-            if($line[0] == "#") {
+            if ($line[0] == "#") {
                 log::msg("<b>" . $this->iso . "</b>:" . $line, log::MOREDEBUG, log::LANG);
             } else {
                 $strings=explode("=",$line);
@@ -132,13 +132,13 @@ class language {
      */
     function translate($string, $error = true) {
         $tag="";
-        if(is_array($string)) {
+        if (is_array($string)) {
             return $this->translateArray($string, $error);
         }
-        if(array_key_exists($string, $this->translations)) {
+        if (array_key_exists($string, $this->translations)) {
             return trim($this->translations[$string]);
         } else {
-            if($error && !($this->iso==self::$base)) {
+            if ($error && !($this->iso==self::$base)) {
                 $tag = "<b>[tr]</b> ";
             }
             return $tag . $string;
@@ -155,7 +155,7 @@ class language {
      */
     private function translateArray($array, $error = true) {
         $tr=array();
-        foreach($array as $key=>$string) {
+        foreach ($array as $key=>$string) {
             $tr[$key]=translate($string, $error);
         }
         return $tr;
@@ -168,17 +168,17 @@ class language {
     public static function getAll() {
         $langs=array();
         $dir=settings::$php_loc . "/" . self::LANG_DIR;
-        if(is_dir($dir) && is_readable($dir)) {
-            foreach(glob($dir . "/*") as $filename) {
-                if(!is_dir($filename)  && is_readable($filename)) {
+        if (is_dir($dir) && is_readable($dir)) {
+            foreach (glob($dir . "/*") as $filename) {
+                if (!is_dir($filename)  && is_readable($filename)) {
                     $iso=basename($filename);
-                    if($iso == strtolower($iso)) {
+                    if ($iso == strtolower($iso)) {
                         # making filename lowercase, so we won't include
                         # any capitalized filenames... Zoph will not able
                         # to find them back later...
                         # is isocode nl file NL Nl or nl?
                         $lang=new language($iso);
-                        if($lang->readHeader()) {
+                        if ($lang->readHeader()) {
                             $langs[$iso]=$lang;
                         }
                     } else {
@@ -223,9 +223,9 @@ class language {
         array_push($langs, conf::get("interface.language"), self::$base);
         foreach ($langs as $l) {
             log::msg("Trying to load language: <b>" . $l . "</b>", log::DEBUG, log::LANG);
-            if(self::exists($l)) {
+            if (self::exists($l)) {
                 $lang=new language($l);
-                if($lang->readHeader() && $lang->read()) {
+                if ($lang->readHeader() && $lang->read()) {
                     log::msg("Loaded language: <b>" . $l . "</b><br>", log::DEBUG, log::LANG);
                     return $lang;
                 }
@@ -251,7 +251,7 @@ class language {
         $langs=array();
         $genlangs=array();
         $return=array();
-        if(isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
+        if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
             $accept_langs=explode(",", $_SERVER["HTTP_ACCEPT_LANGUAGE"]);
             foreach ($accept_langs as $al) {
                 # Some browers add a 'quality' identifier to indicate
@@ -264,7 +264,7 @@ class language {
                 # Zoph offers these users English or German, unless the more
                 # specific one is available (Zoph has a Canadian English
                 # translation for example), we add both en-gb and en to the list
-                if(strpos($l[0], "-")) {
+                if (strpos($l[0], "-")) {
                     $genlang=explode("-", $l[0]);
                     $genlangs[]=strtolower($genlang[0]);
                 }
@@ -289,7 +289,7 @@ class language {
  */
 function translate($str, $error=true){
     global $lang;
-    if($lang instanceof language) {
+    if ($lang instanceof language) {
         return $lang->translate($str, $error);
     } else {
         return $str;

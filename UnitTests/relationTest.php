@@ -125,14 +125,14 @@ class relationTest extends ZophDataBaseTestCase {
 
         $rel_1=$photo_1->getRelated();
         $act_rem_1=array();
-        foreach($rel_1 as $r) {
+        foreach ($rel_1 as $r) {
             $act_rem_1[]=$r->getId();
         }
         $this->assertEquals($rem_1, $act_rem_1);
 
         $rel_2=$photo_2->getRelated();
         $act_rem_2=array();
-        foreach($rel_2 as $r) {
+        foreach ($rel_2 as $r) {
             $act_rem_2[]=$r->getId();
         }
         $this->assertEquals($rem_2, $act_rem_2);

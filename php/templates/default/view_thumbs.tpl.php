@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <ul class="thumbs">
     <?php foreach ($tpl_items as $item): ?>
@@ -34,12 +34,12 @@ if(!ZOPH) { die("Illegal call"); }
                     <?php echo $item->getName() ?>
                     <span class="photocount">
                         <?php
-                            if($item instanceof circle):
+                            if ($item instanceof circle):
                                 $count=$item->getPeopleCount();
                                 $count2=$count;
                             else:
                                 $count=$item->getPhotoCount();
-                                if($item instanceof zophTreeTable):
+                                if ($item instanceof zophTreeTable):
                                     $count2=$item->getTotalPhotoCount();
                                 elseif ($item instanceof person):
                                     $count2=$item->getPhotographer()->getPhotoCount();
@@ -48,7 +48,7 @@ if(!ZOPH) { die("Illegal call"); }
                                 endif;
                             endif;
                         ?>
-                        <?php if($count==$count2): ?>
+                        <?php if ($count==$count2): ?>
                             (<?php echo $count; ?>)
                         <?php else: ?>
                             (<?php echo $count; ?>/<?php echo $count2; ?>)

@@ -18,7 +18,7 @@
  * @package ZophTemplates
  * @author Jeroen Roos
  */
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <img src="<?php echo $tpl_src ?>" class="<?php echo $tpl_class ?>"
     <?php echo $tpl_size ?> alt="<?php echo $tpl_alt ?>">

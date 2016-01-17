@@ -25,11 +25,11 @@
 require_once "include.inc.php";
 
 $_view=getvar("_view");
-if(empty($_view)) {
+if (empty($_view)) {
     $_view=$user->prefs->get("view");
 }
 $_autothumb=getvar("_autothumb");
-if(empty($_autothumb)) {
+if (empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
@@ -67,7 +67,7 @@ if ($user->isAdmin()) {
                 <?php echo translate("edit") ?>
           </a>
         </li>
-        <?php if($album->get("coverphoto")): ?>
+        <?php if ($album->get("coverphoto")): ?>
         <li>
             <a href="album.php?_action=update&amp;album_id=<?php
                 echo $album->get("album_id") ?>&amp;coverphoto=NULL">
@@ -82,11 +82,11 @@ if ($user->isAdmin()) {
     <?php echo $title . "\n" ?>
 </h1>
 <?php
-if($user->isAdmin()) {
+if ($user->isAdmin()) {
     include "selection.inc.php";
 }
 include "show_page.inc.php";
-if($show_orig) {
+if ($show_orig) {
     ?>
     <div class="main">
       <form class="viewsettings" method="get" action="albums.php">
@@ -136,7 +136,7 @@ if($show_orig) {
             </span>
             <?php
             $fragment .= " " . translate("or its children");
-            if($totalPhotoCount>1) {
+            if ($totalPhotoCount>1) {
                 echo sprintf(translate("There are %s photos"), $totalPhotoCount);
                 echo " $fragment.<br>\n";
             } else {

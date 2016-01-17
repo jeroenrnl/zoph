@@ -19,11 +19,11 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
-        <?php if($tpl_actionlinks): ?>
+        <?php if ($tpl_actionlinks): ?>
         <ul class="actionlink">
-            <?php foreach($tpl_actionlinks as $text => $link): ?>
+            <?php foreach ($tpl_actionlinks as $text => $link): ?>
             <li>
                 <a href="<?= $link ?>"><?= $text ?></a>
             </li>

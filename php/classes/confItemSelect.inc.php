@@ -45,7 +45,7 @@ class confItemSelect extends confItem {
      * @param array array of options
      */
     public function addOptions(array $options) {
-        foreach($options as $key=>$desc) {
+        foreach ($options as $key=>$desc) {
             $this->addOption($key, $desc);
         }
     }
@@ -73,7 +73,7 @@ class confItemSelect extends confItem {
      * @return block template block
      */
     public function display() {
-        if($this->internal) {
+        if ($this->internal) {
             return;
         }
         $tpl=new block("confItemSelect", array(

@@ -19,7 +19,7 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
     <div class="confGroup">
         <h2>
@@ -28,7 +28,7 @@ if(!ZOPH) { die("Illegal call"); }
         <div class="desc">
             <?php echo $tpl_desc; ?>
         </div>
-        <?php foreach($tpl_items as $item): ?>
+        <?php foreach ($tpl_items as $item): ?>
             <div class="confItem">
                 <?php echo $item->display() ?>
             </div>

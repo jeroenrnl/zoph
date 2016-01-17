@@ -32,7 +32,7 @@ class testData {
 
     public static function getPhotos() {
         $photos=array();
-        for($num=1; $num<=12; $num++) {
+        for ($num=1; $num<=12; $num++) {
             $photos[$num]=sprintf("TEST_%04d.JPG", $num);
         }
         return $photos;

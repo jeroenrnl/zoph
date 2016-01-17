@@ -144,7 +144,7 @@ class circle extends zophTable {
      */
     public function getPhotocount() {
         $count=0;
-        foreach($this->getMembers() as $member) {
+        foreach ($this->getMembers() as $member) {
             $count+=$member->getPhotocount();
         }
         return $count;
@@ -155,7 +155,7 @@ class circle extends zophTable {
      */
     public function getTotalPhotocount() {
         $count=0;
-        foreach($this->getMembers() as $member) {
+        foreach ($this->getMembers() as $member) {
             $count+=$member->getTotalPhotocount();
         }
         return $count;

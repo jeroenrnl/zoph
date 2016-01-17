@@ -46,14 +46,14 @@
        <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "128") ?></span>
        <br>
 <?php
-if($action!="insert") {
+if ($action!="insert") {
     ?>
     <fieldset class="addusers">
       <legend><?php echo translate("members") ?></legend>
 
     <?php
     $members=$group->getMembers();
-    foreach($members as $member) {
+    foreach ($members as $member) {
         $member->lookup();
         ?>
         <input class="remove" type="checkbox" name="_remove_user[]"

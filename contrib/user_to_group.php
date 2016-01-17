@@ -40,7 +40,7 @@
     $users=get_users();
     echo "<h2>Creating a group for each user...</h2>\n";
     echo "<ul>\n";
-    foreach($users as $u) {
+    foreach ($users as $u) {
         $user_name=$u->get("user_name");
         echo "<li>" . $user_name . "</li>\n";
         $user_id=$u->get("user_id");
@@ -54,7 +54,7 @@
     echo "</ul>\n";
     echo "<h2>Migrating user permissions to group permissions...</h2>\n";
     echo "<ul>\n";
-    foreach($users as $u) {
+    foreach ($users as $u) {
         $user_name=$u->get("user_name");
         echo "<li>" . $user_name . "</li>\n";
         $user_id=$u->get("user_id");
@@ -62,7 +62,7 @@
             "WHERE user_id=" . escape_string($user_id);
 
         $result=mysql_query($sql);
-        while($row=mysql_fetch_array($result, MYSQL_ASSOC)) {
+        while ($row=mysql_fetch_array($result, MYSQL_ASSOC)) {
             unset($row["user_id"]);
             $row["group_id"]=$user_group[$user_id];
             $gp=new group_permissions();

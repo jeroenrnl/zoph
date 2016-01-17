@@ -24,11 +24,11 @@
 
 require_once("include.inc.php");
 
-if(!isset($user)) {
+if (!isset($user)) {
     $user=user::getCurrent();
 }
 
-if(!$user->is_admin()) {
+if (!$user->is_admin()) {
     die("Must be admin");
 }
 
@@ -91,10 +91,10 @@ $convert = array(
 <?php
 foreach ($convert as $newname => $oldname) {
     $newconfig=conf::getItemByName($newname);
-    if(defined($oldname)) {
+    if (defined($oldname)) {
         $oldconfig=constant($oldname);
 
-        if($newconfig->checkValue($oldconfig)) {
+        if ($newconfig->checkValue($oldconfig)) {
             $newconfig->setValue($oldconfig);
             echo $oldname . " --> " . $newname . "<br>\n";
         } else {
@@ -113,10 +113,10 @@ $convert = array(
 
 foreach ($convert as $newname => $oldname) {
     $newconfig=conf::getItemByName($newname);
-    if(defined($oldname)) {
+    if (defined($oldname)) {
         $oldconfig="0" . decoct(constant($oldname));
 
-        if($newconfig->checkValue($oldconfig)) {
+        if ($newconfig->checkValue($oldconfig)) {
             $newconfig->setValue($oldconfig);
             echo $oldname . " --> " . $newname . "<br>\n";
         } else {
@@ -127,7 +127,7 @@ foreach ($convert as $newname => $oldname) {
 }
 
 $ssl_force=conf::getItemByName("ssl.force");
-if(defined(FORCE_SSL_LOGIN) && FORCE_SSL_LOGIN) {
+if (defined(FORCE_SSL_LOGIN) && FORCE_SSL_LOGIN) {
     $ssl_force->setValue("login");
 } else if (defined(FORCE_SSL) && FORCE_SSL) {
     $ssl_force->setValue("always");
@@ -146,7 +146,7 @@ foreach ($convert as $newname => $oldname) {
     $oldconfig=$$oldname;
     $newconfig=conf::getItemByName($newname);
 
-    if($newconfig->checkValue($oldconfig)) {
+    if ($newconfig->checkValue($oldconfig)) {
         $newconfig->setValue($oldconfig);
         echo "$" . $oldname . " --> " . $newname . "<br>\n";
     } else {

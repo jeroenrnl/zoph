@@ -18,10 +18,10 @@
  * @author Jeroen Roos
  * @package ZophTemplates
  */
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
         <br>
-        <?php if(is_array($tpl_tracks)): ?>
+        <?php if (is_array($tpl_tracks)): ?>
         <table class="tracks">
             <tr>
                 <th><?php echo translate("name") ?></th>
@@ -30,7 +30,7 @@ if(!ZOPH) { die("Illegal call"); }
                 <th><?php echo translate("number of points") ?></th>
 
             </tr>
-            <?php foreach($tpl_tracks as $track): ?>
+            <?php foreach ($tpl_tracks as $track): ?>
             <tr>
                 <td>
                      <a href="track.php?track_id=<?php echo $track->getId(); ?>">

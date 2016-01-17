@@ -53,9 +53,9 @@ class param {
      * @param int type
      */
     public function __construct($name, $value, $type=null) {
-        if(is_array($value)) {
+        if (is_array($value)) {
             $this->name=array();
-            for($n=0; $n<sizeof($value); $n++) {
+            for ($n=0; $n<sizeof($value); $n++) {
                 $this->name[]=$name . "_" . $n;
             }
         } else {

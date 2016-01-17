@@ -38,10 +38,10 @@ class settings {
      * and figure out which of the settings should be used.
      */
     public static function loadINI($instance="") {
-        if(!defined("INI_FILE")) {
+        if (!defined("INI_FILE")) {
             define("INI_FILE", "/etc/zoph.ini");
         }
-        if(defined("DB_HOST") ||
+        if (defined("DB_HOST") ||
            defined("DB_NAME") ||
            defined ("DB_USER") ||
            defined("DB_PASS") ||
@@ -51,10 +51,10 @@ class settings {
                 INI_FILE, log::FATAL, log::GENERAL);
         } else {
 
-            if(file_exists(INI_FILE)) {
+            if (file_exists(INI_FILE)) {
                 $ini=parse_ini_file(INI_FILE, true);
-                if(!empty($instance)) {
-                    if(!isset($ini[$instance])) {
+                if (!empty($instance)) {
+                    if (!isset($ini[$instance])) {
                         throw new CliInstanceNotFoundException("Instance " . $instance .
                             " not found in " . INI_FILE);
                     }
@@ -78,11 +78,11 @@ class settings {
 
     public static function detectInstance(array $ini) {
         $php_loc=dirname($_SERVER['SCRIPT_FILENAME']);
-        foreach($ini as $instance=>$i) {
-            if(!isset($i["php_location"])) {
+        foreach ($ini as $instance=>$i) {
+            if (!isset($i["php_location"])) {
                 log::msg("php_location setting missing from " . $instance . " in " .
                     INI_FILE, log::FATAL, log::GENERAL);
-            } else if($php_loc==$i["php_location"]) {
+            } else if ($php_loc==$i["php_location"]) {
                 return $instance;
             }
         }
@@ -97,14 +97,14 @@ class settings {
      * @todo get rid of constants.
      */
     public static function parseINI($i) {
-        if(!isset($i["php_location"])) {
+        if (!isset($i["php_location"])) {
             $php_loc=dirname($_SERVER['SCRIPT_FILENAME']);
             log::msg("No php_location setting in " . INI_FILE . " found that matches " .
                 $php_loc, log::FATAL, log::GENERAL);
         } else {
             self::$php_loc=$i["php_location"];
         }
-        if(!isset($i["db_host"]) || !isset($i["db_name"]) ||
+        if (!isset($i["db_host"]) || !isset($i["db_name"]) ||
           !isset($i["db_user"]) || !isset($i["db_pass"]) ||
           !isset($i["db_prefix"])) {
             log::msg("db_host, db_name, db_user, db_pass or db_prefix setting missing from " .
@@ -127,8 +127,8 @@ class settings {
         }
     }
 }
-if(!defined("CLI")) {
-    if(defined("TEST")) {
+if (!defined("CLI")) {
+    if (defined("TEST")) {
         /* unittest code cannot use autodetection of PHP location
            because the code is executed from PHPUnit context */
         $i=settings::loadINI(INSTANCE);

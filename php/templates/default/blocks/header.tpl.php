@@ -29,7 +29,7 @@
     <script type="text/javascript">
         var template = "<?php echo conf::get("interface.template"); ?>";
         var icons={
-        <?php foreach($tpl_icons as $icon=>$file): ?>
+        <?php foreach ($tpl_icons as $icon=>$file): ?>
             "<?php echo $icon ?>": "<?php echo $file ?>",
         <?php endforeach ?>
         };

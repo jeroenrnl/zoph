@@ -51,13 +51,13 @@ class cli {
      * @param $args array of CLI arguments
      */
     public function __construct(user $user, $api, array $args) {
-        if($api != self::API) {
+        if ($api != self::API) {
             throw new CliAPINotCompatibleException("This Zoph installation is not compatible " .
                 "with the Zoph executable you are running.");
         }
         $this->user=$user;
 
-        if(!$user->isAdmin()) {
+        if (!$user->isAdmin()) {
             throw new CliUserNotAdminException("CLI_USER must be an admin user");
         }
         $user->prefs->load();
@@ -103,25 +103,25 @@ class cli {
      */
     private function processFiles() {
         $files=$this->args->getFiles();
-        foreach($files as $filename) {
+        foreach ($files as $filename) {
             try {
-                if(arguments::$command=="import") {
+                if (arguments::$command=="import") {
 
                     $file=new file($filename);
                     $file->check();
 
                     $file->getMime();
-                    if($file->type=="directory" && conf::get("import.cli.recursive")) {
+                    if ($file->type=="directory" && conf::get("import.cli.recursive")) {
                         $this->files=array_merge($this->files, file::getFromDir($file, true));
-                    } else if($file->type!="image") {
+                    } else if ($file->type!="image") {
                         throw new ImportFileNotImportableException("$file is not an image\n");
                     } else {
                         $this->files[]=$file;
                     }
                 } else {
-                    if(conf::get("import.cli.useids")) {
+                    if (conf::get("import.cli.useids")) {
                         $file=$filename;
-                        if(is_numeric($file)) {
+                        if (is_numeric($file)) {
                             $this->photos[]=$this->lookupFileById($file);
                         } else if (preg_match("/^[0-9]+-[0-9]+$/", $file)) {
                             list($start, $end) = explode("-",$file);
@@ -152,7 +152,7 @@ class cli {
     private function lookupFileById($id) {
         $photo=new photo((int) $id);
         $count=$photo->lookup();
-        if($count==1) {
+        if ($count==1) {
             return $photo;
         } else if ($count==0) {
             throw new ImportFileNotFoundException("No photo with id $id was found\n");
@@ -169,28 +169,28 @@ class cli {
     private function lookupFile($file) {
         $filename=basename($file);
         $path=dirname($file);
-        if($path==".") {
+        if ($path==".") {
             // No path given
             //unset($path);
             $path="./";
         }
 
-        if(substr($path,0,2)=="./") {
+        if (substr($path,0,2)=="./") {
             // Path relative to the current dir given, change into absolute path
             $path="/" . cleanup_path(getcwd() . "/" . $path);
         }
-        if($path[0]=="/") {
+        if ($path[0]=="/") {
             // absolute path given
 
             $path="/" . cleanup_path($path) . "/";
 
             // check if path is in conf::get("path.images")
-            if(substr($path, 0, strlen(conf::get("path.images")))!=conf::get("path.images")) {
+            if (substr($path, 0, strlen(conf::get("path.images")))!=conf::get("path.images")) {
                 throw new ImportFileNotInPathException($file ." is not in the images path (" .
                     conf::get("path.images") . "), skipping.\n");
             } else {
                 $path=substr($path, strlen(conf::get("path.images")));
-                if($path[0]=="/") {
+                if ($path[0]=="/") {
                     // conf::get("path.images") didn't end in '/', let's cut it off
                     $path=substr($path, 1);
                 }
@@ -199,7 +199,7 @@ class cli {
             $path=cleanup_path($path);
         }
         $photos=photo::getByName($filename, $path);
-        if(sizeof($photos)==0) {
+        if (sizeof($photos)==0) {
             throw new ImportFileNotFoundException($file ." not found.\n");
         } else if (sizeof($photos)==1) {
             return $photos[0];
@@ -213,13 +213,13 @@ class cli {
      */
     private function doImport() {
         $vars=$this->args->getVars();
-        if(conf::get("import.cli.add.auto")) {
+        if (conf::get("import.cli.add.auto")) {
             $vars=$this->addNew();
         }
-        if(is_array($this->files) && sizeof($this->files)>0) {
-            if(!isset($vars["_dirpattern"])) {
+        if (is_array($this->files) && sizeof($this->files)>0) {
+            if (!isset($vars["_dirpattern"])) {
                 $photos=array();
-                foreach($this->files as $file) {
+                foreach ($this->files as $file) {
                     $photo=new photo();
                     $photo->file["orig"]=$file;
                     $photos[]=$photo;
@@ -237,26 +237,26 @@ class cli {
      * Process --update
      */
     private function doUpdate() {
-        if(is_array($this->photos) && sizeof($this->photos)>0) {
+        if (is_array($this->photos) && sizeof($this->photos)>0) {
             $total=sizeof($this->photos);
             $cur=0;
-            foreach($this->photos as $photo) {
+            foreach ($this->photos as $photo) {
                 cliimport::progress($cur, $total);
                 $cur++;
                 $photo->lookup();
                 $photo->setFields($this->args->getVars());
                 $photo->update();
                 $photo->updateRelations($this->args->getVars(), "_id");
-                if(conf::get("import.cli.thumbs")===true) {
+                if (conf::get("import.cli.thumbs")===true) {
                     $photo->thumbnail(true);
                 }
-                if(conf::get("import.cli.exif")===true) {
+                if (conf::get("import.cli.exif")===true) {
                     $photo->updateEXIF();
                 }
-                if(conf::get("import.cli.size")===true) {
+                if (conf::get("import.cli.size")===true) {
                     $photo->updateSize();
                 }
-                if(conf::get("import.cli.hash")===true) {
+                if (conf::get("import.cli.hash")===true) {
                     $photo->getHash();
                 }
             }
@@ -273,11 +273,11 @@ class cli {
         $newvars=array();
         $return_vars=array();
 
-        foreach($vars as $var=>$array) {
+        foreach ($vars as $var=>$array) {
             switch($var) {
             case "_new_album":
                 $newvars["_album_id"]=array();
-                foreach($array as $new) {
+                foreach ($array as $new) {
                     $album=new album();
                     $album->set("album", $new["name"]);
                     $album->set("parent_album_id", (int) $new["parent"]);
@@ -287,7 +287,7 @@ class cli {
                 break;
             case "_new_cat":
                 $newvars["_category_id"]=array();
-                foreach($array as $new) {
+                foreach ($array as $new) {
                     $cat=new category();
                     $cat->set("category", $new["name"]);
                     $cat->set("parent_category_id", (int) $new["parent"]);
@@ -296,7 +296,7 @@ class cli {
                 }
                 break;
             case "_new_place":
-                foreach($array as $new) {
+                foreach ($array as $new) {
                     $place=new place();
                     $place->set("title", $new["name"]);
                     $place->set("parent_place_id", (int) $new["parent"]);
@@ -307,7 +307,7 @@ class cli {
                 break;
             case "_new_person":
                 $newvars["_person_id"]=array();
-                foreach($array as $new) {
+                foreach ($array as $new) {
                     $person=new person();
                     $person->setName($new);
                     $person->insert();
@@ -315,7 +315,7 @@ class cli {
                 }
                 break;
             case "_new_photographer":
-                foreach($array as $new) {
+                foreach ($array as $new) {
                     $person=new person();
                     $person->setName($new);
                     $person->insert();
@@ -325,8 +325,8 @@ class cli {
                 $return_vars[$var]=$array;
             }
         }
-        foreach($newvars as $name=>$array) {
-            if(array_key_exists($name, $return_vars) && is_array($return_vars[$name])) {
+        foreach ($newvars as $name=>$array) {
+            if (array_key_exists($name, $return_vars) && is_array($return_vars[$name])) {
                 $return_vars[$name]=array_merge($return_vars[$name], $array);
             }
             $return_vars[$name]=$array;
@@ -343,13 +343,13 @@ class cli {
         $default=isset($vars["_configdefault"]);
         $item=conf::getItemByName($name);
 
-        if($default) {
+        if ($default) {
             $value=$item->getDefault();
         } else {
             $value=$vars["_configvalue"];
         }
 
-        if(conf::get("import.cli.verbose") > 0) {
+        if (conf::get("import.cli.verbose") > 0) {
             echo "Setting config \"$name\" to \"$value\""  .
                 ( $default ? " (default)" : "" ) . "\n";
         }
@@ -366,7 +366,7 @@ class cli {
         $conf=conf::getAll();
         foreach ($conf as $item) {
             foreach ($item as $citem) {
-                if($citem instanceof confItemBool) {
+                if ($citem instanceof confItemBool) {
                     $value=( $citem->getValue() ? "true": "false" );
                 } else {
                     $value=$citem->getValue();
@@ -386,8 +386,8 @@ class cli {
 
         $cur=getcwd();
         $curlen=strlen($cur);
-        foreach($this->files as $file) {
-            if(substr($file, 0, $curlen) != $cur) {
+        foreach ($this->files as $file) {
+            if (substr($file, 0, $curlen) != $cur) {
                 throw new CliNotInCWDException("Sorry, --dirpattern can only be used when " .
                     "importing files under the current dir. i.e. do not use absolute paths " .
                     "or '../' when specifying --dirpattern.");
@@ -400,14 +400,14 @@ class cli {
             $photo->file["orig"]=$file;
 
             $counter=0;
-            foreach($dirs as $dir) {
-                if(isset($patt[$counter])) {
+            foreach ($dirs as $dir) {
+                if (isset($patt[$counter])) {
                     switch($patt[$counter]) {
                     case "a":
                         // album
                         $album=album::getByName($dir);
-                        if($album[0] instanceof album) {
-                            if(!is_array($photo->_album_id)) {
+                        if ($album[0] instanceof album) {
+                            if (!is_array($photo->_album_id)) {
                                 $photo->_album_id=array();
                             }
                             $photo->_album_id[]=$album[0]->getId();
@@ -418,8 +418,8 @@ class cli {
                     case "c":
                         // category
                         $cat=category::getByName($dir);
-                        if($cat[0] instanceof category) {
-                            if(!is_array($photo->_category_id)) {
+                        if ($cat[0] instanceof category) {
+                            if (!is_array($photo->_category_id)) {
                                 $photo->_category_id=array();
                             }
                             $photo->_category_id[]=$cat[0]->getId();
@@ -439,8 +439,8 @@ class cli {
                     case "p":
                         // person
                         $person=person::getByName($dir);
-                        if($person[0] instanceof person) {
-                            if(!is_array($photo->_person_id)) {
+                        if ($person[0] instanceof person) {
+                            if (!is_array($photo->_person_id)) {
                                 $photo->_person_id=array();
                             }
                             $photo->_person_id[]=$person[0]->getId();
@@ -451,7 +451,7 @@ class cli {
                     case "D":
                         // dir / path
                         $path=$photo->_path;
-                        if(!empty($path)) {
+                        if (!empty($path)) {
                             $path .= "/";
                         }
                         $photo->_path=$path . $dir;
@@ -459,7 +459,7 @@ class cli {
                     case "P":
                         // photographer
                         $person=person::getByName($dir);
-                        if($person[0] instanceof person) {
+                        if ($person[0] instanceof person) {
                             $photo->set("photographer_id", $person[0]->getId());
                         } else {
                             throw new PersonNotFoundException("Person not found: " . $dir);

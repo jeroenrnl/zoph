@@ -19,7 +19,7 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
         <dl class="<?php echo $tpl_class; ?>">
             <?php foreach ($tpl_dl as $key => $value): ?>

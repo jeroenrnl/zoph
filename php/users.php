@@ -43,7 +43,7 @@ require_once "header.inc.php";
 $users = user::getAll();
 
 if ($users) {
-    foreach($users as $u) {
+    foreach ($users as $u) {
         $u->lookupPerson();
         ?>
         <tr>

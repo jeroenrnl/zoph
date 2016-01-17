@@ -42,7 +42,7 @@ require_once "header.inc.php";
 $color_schemes = color_scheme::getRecords("name");
 
 if ($color_schemes) {
-    foreach($color_schemes as $cs) {
+    foreach ($color_schemes as $cs) {
         ?>
         <span class="actionlink">
           <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php

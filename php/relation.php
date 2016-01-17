@@ -41,11 +41,11 @@ $photo_2->lookup();
 $relation=new photoRelation($photo_1, $photo_2);
 $exists=$relation->lookup();
 
-if(($_action == "insert" || $_action == "new") && $exists) {
+if (($_action == "insert" || $_action == "new") && $exists) {
     $_action="edit";
 }
 
-if($_action != "insert" && $_action != "new" && $_action != "update") {
+if ($_action != "insert" && $_action != "new" && $_action != "update") {
     $desc_1 = $relation->getDesc($photo_1);
     $desc_2 = $relation->getDesc($photo_2);
 }
@@ -54,7 +54,7 @@ $obj = &$relation;
 require_once "actions.inc.php";
 
 
-if($action=="display") {
+if ($action=="display") {
     $title=translate("relationship");
 } else {
     $title=translate($action . " relationship");

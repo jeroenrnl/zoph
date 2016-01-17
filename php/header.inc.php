@@ -58,15 +58,15 @@ case "config.php":
     break;
 }
 
-if(conf::get("interface.autocomplete")) {
+if (conf::get("interface.autocomplete")) {
     $scripts[]="js/autocomplete.js";
 }
 
-if(conf::get("maps.provider")) {
+if (conf::get("maps.provider")) {
     $scripts[]="js/mxn/mxn.js?(" . conf::get("maps.provider") .")";
     $scripts[]="js/maps.js";
     $scripts[]="js/custommaps.js";
-    if(conf::get("maps.geocode")) {
+    if (conf::get("maps.geocode")) {
         $scripts[]="js/geocode.js";
     }
     switch (strtolower(conf::get("maps.provider"))) {

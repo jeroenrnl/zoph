@@ -375,7 +375,7 @@ class userTest extends ZophDatabaseTestCase {
         $this->assertInternalType("array", $graph);
 
         // Check if all keys are present
-        for($i=1; $i<=10; $i++) {
+        for ($i=1; $i<=10; $i++) {
             $this->assertArrayHasKey($i, $graph);
         }
 

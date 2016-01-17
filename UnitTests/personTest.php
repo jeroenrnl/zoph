@@ -39,7 +39,7 @@ class personTest extends ZophDataBaseTestCase {
         $person->insert();
         $this->assertInstanceOf("person", $person);
         $this->assertEquals($person->getId(), $id);
-        if(!is_null($user_id)) {
+        if (!is_null($user_id)) {
             $user=new user($user_id);
             $user->lookup();
             $user->set("person_id", $id);
@@ -57,7 +57,7 @@ class personTest extends ZophDataBaseTestCase {
 
         $people=$photo->getPeople();
         $people_ids=array();
-        foreach($people as $p) {
+        foreach ($people as $p) {
             $people_ids[]=$p->getId();
         }
 
@@ -72,7 +72,7 @@ class personTest extends ZophDataBaseTestCase {
 
         $people=$photo->getPeople();
         $people_ids=array();
-        foreach($people as $p) {
+        foreach ($people as $p) {
             $people_ids[]=$p->getId();
         }
 
@@ -90,7 +90,7 @@ class personTest extends ZophDataBaseTestCase {
 
         $people=$photo->getPeople();
         $people_ids=array();
-        foreach($people as $p) {
+        foreach ($people as $p) {
             $people_ids[]=$p->getId();
         }
 
@@ -348,7 +348,7 @@ class personTest extends ZophDataBaseTestCase {
         $personids=array();
         $topN=person::getTopN();
 
-        foreach($topN as $person) {
+        foreach ($topN as $person) {
             $personids[]=$person["id"];
         }
         $this->assertEquals($expected, $personids);
@@ -364,7 +364,7 @@ class personTest extends ZophDataBaseTestCase {
         $personids=array();
         $all=person::getAllPeopleAndPhotographers($search);
 
-        foreach($all as $person) {
+        foreach ($all as $person) {
             $personids[]=$person->getId();
         }
         $this->assertEquals($expected, $personids);

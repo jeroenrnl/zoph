@@ -191,7 +191,7 @@ class rating extends zophTable {
         }
 
         $ratings=array_fill(0, 11, 0);
-        while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $rating=(int) $row["rating"];
             $ratings[$rating]=(int) $row["count"];
         }
@@ -222,7 +222,7 @@ class rating extends zophTable {
             log::msg("Rating grouping failed", log::FATAL, log::DB);
         }
         $ratings=array_fill(1, 10, 0);
-        while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $rating=(int) $row["rating"];
             $ratings[$rating]=(int) $row["count"];
         }

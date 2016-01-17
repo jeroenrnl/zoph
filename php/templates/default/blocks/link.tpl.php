@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 
 <a href="<?php echo $tpl_href ?>" target="<?php echo $tpl_target ?>">

@@ -42,7 +42,7 @@ class cliTest extends ZophDataBaseTestCase {
         $this->doCleanup($files);
 
         $testdata=$this->getFilenames();
-        foreach($testdata as $testimg) {
+        foreach ($testdata as $testimg) {
             helpers::createTestImage($testimg[0], $testimg[1], $testimg[2], $testimg[3]);
         }
 
@@ -51,7 +51,7 @@ class cliTest extends ZophDataBaseTestCase {
 
         $this->runCLI($cli);
 
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $this->assertFileExists($file);
         }
 
@@ -70,7 +70,7 @@ class cliTest extends ZophDataBaseTestCase {
         $this->doCleanup($files);
 
         $testdata=$this->getFilenames();
-        foreach($testdata as $testimg) {
+        foreach ($testdata as $testimg) {
             helpers::createTestImage($testimg[0], $testimg[1], $testimg[2], $testimg[3]);
         }
 
@@ -81,7 +81,7 @@ class cliTest extends ZophDataBaseTestCase {
 
         $this->runCLI($cli);
 
-        for($i=1; $i<=3; $i++) {
+        for ($i=1; $i<=3; $i++) {
             $photos=photo::getByName("PHOTO-0" . $i . ".JPG");
             $photo=array_pop($photos);
             $this->assertInstanceOf("photo", $photo);
@@ -112,12 +112,12 @@ class cliTest extends ZophDataBaseTestCase {
             $this->assertInstanceOf("place", $place);
             $this->assertEquals(3, $place->getId());
         }
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $this->assertFileExists($file);
         }
 
         $this->doCleanup($files);
-        foreach(array("2013.02.01", "2013.02.02", "2013.02.03") as $dir) {
+        foreach (array("2013.02.01", "2013.02.02", "2013.02.03") as $dir) {
             $this->cleanDirs($dir);
         }
     }
@@ -130,7 +130,7 @@ class cliTest extends ZophDataBaseTestCase {
         $this->doCleanup($files);
 
         $testdata=$this->getFilenames();
-        foreach($testdata as $testimg) {
+        foreach ($testdata as $testimg) {
             helpers::createTestImage($testimg[0], $testimg[1], $testimg[2], $testimg[3]);
         }
 
@@ -152,12 +152,12 @@ class cliTest extends ZophDataBaseTestCase {
 
         $this->runCLI($cli);
 
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $this->assertFileExists($file);
         }
 
         $this->doCleanup($files);
-        foreach(array("2013.02.01", "", "2013/02/03") as $dir) {
+        foreach (array("2013.02.01", "", "2013/02/03") as $dir) {
             $this->cleanDirs($dir);
         }
     }
@@ -303,7 +303,7 @@ class cliTest extends ZophDataBaseTestCase {
     }
 
     private function doCleanup($files) {
-        foreach($files as $file) {
+        foreach ($files as $file) {
             @unlink($file);
         }
     }
@@ -317,15 +317,15 @@ class cliTest extends ZophDataBaseTestCase {
             MID_PREFIX
         );
 
-        foreach($files as $dir => $file) {
-            if(is_int($dir)) {
+        foreach ($files as $dir => $file) {
+            if (is_int($dir)) {
                 $dir="";
             } else {
                 $dir.="/";
             }
 
-            foreach($prefixes as $prefix) {
-                if(!empty($prefix)) {
+            foreach ($prefixes as $prefix) {
+                if (!empty($prefix)) {
                     $filename=conf::get("path.images") . "/" . $dir . $prefix . "/" .
                         $prefix . "_" . $file;
                 } else {
@@ -344,8 +344,8 @@ class cliTest extends ZophDataBaseTestCase {
             THUMB_PREFIX,
             MID_PREFIX
         );
-        foreach($prefixes as $prefix) {
-            if(!empty($prefix)) {
+        foreach ($prefixes as $prefix) {
+            if (!empty($prefix)) {
                 @rmdir(conf::get("path.images") . "/" . $dir . "/" . $prefix);
             }
         }

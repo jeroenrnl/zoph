@@ -64,7 +64,7 @@ if ($photo_id) { // would be passed for edit or delete
     if  ($num_thumbnails) {
         $photo = $thumbnails[0];
         $photo_id = $photo->get("photo_id");
-        if(isset($_action) && !$_action=="" ) {
+        if (isset($_action) && !$_action=="" ) {
             $act="_action=" . $_action . "&";
         }
 
@@ -85,7 +85,7 @@ if ($photo_id) { // would be passed for edit or delete
         $photo = new photo();
     }
 }
-if(!$user->isAdmin()) {
+if (!$user->isAdmin()) {
     $permissions = $user->getPhotoPermissions($photo);
 }
 
@@ -116,7 +116,7 @@ if (isset($offset)) {
 }
 
 $return_qs=$_qs;
-if(empty($return_qs)) {
+if (empty($return_qs)) {
     $return_qs=$qs;
 }
 
@@ -230,7 +230,7 @@ if ($_action == "edit") {
     $photo->updateRelations($request_vars,"_id"); // pass again for add people, cats, etc
     $photo->update();
     $action = "update";
-    if(!empty($_qs)) {
+    if (!empty($_qs)) {
         redirect("photo.php?" . $_qs, "Update done");
     }
 } else if ($_action == "new") {
@@ -257,10 +257,10 @@ if ($_action == "edit") {
     redirect($link, "Go back");
 } else if ($_action == "select") {
     $sel_key=false;
-    if(is_array($_SESSION["selected_photo"])) {
+    if (is_array($_SESSION["selected_photo"])) {
         $sel_key=array_search($photo_id, $_SESSION["selected_photo"]);
     }
-    if($sel_key === false) {
+    if ($sel_key === false) {
         $_SESSION["selected_photo"][]=$photo->get("photo_id");
     }
     $action="display";
@@ -268,7 +268,7 @@ if ($_action == "edit") {
     $return=getvar("_return");
     $sel_key=array_search($photo_id, $_SESSION["selected_photo"]);
 
-    if($sel_key !== false) {
+    if ($sel_key !== false) {
         unset($_SESSION["selected_photo"][$sel_key]);
     }
     redirect($return . "?" . html_entity_decode(urldecode($_qs)), "Redirect");
@@ -347,7 +347,7 @@ if ($action != "insert" && !$found) {
     <div class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
     <ul class="tabs">
     <?php
-    if(conf::get("share.enable") && ($user->isAdmin() || $user->get("allow_share"))) {
+    if (conf::get("share.enable") && ($user->isAdmin() || $user->get("allow_share"))) {
         $hash=$photo->getHash();
         $full_hash=sha1(conf::get("share.salt.full") . $hash);
         $mid_hash=sha1(conf::get("share.salt.mid") . $hash);
@@ -386,8 +386,8 @@ if ($action != "insert" && !$found) {
           <dt><?php echo translate("rating") ?></dt>
           <dd>
         <?php
-        if($rating) {
-            if($user->isAdmin()) {
+        if ($rating) {
+            if ($user->isAdmin()) {
                 echo $photo->getRatingDetails();
             } else {
                 echo $rating . "<br>";
@@ -435,7 +435,7 @@ if ($action != "insert" && !$found) {
     if ($user->prefs->get("allexif")) {
         $allexif=$photo->exifToHTML();
 
-        if($allexif) {
+        if ($allexif) {
             ?>
             <h2><?php echo translate("Full EXIF details",0)?></h2>
             <span class="actionlink">
@@ -464,9 +464,9 @@ if ($action != "insert" && !$found) {
     if (conf::get("feature.comments")) {
         $comments=$photo->getComments();
 
-        if($comments) {
+        if ($comments) {
             echo "<h2>" . translate("comments") . "</h2>\n";
-            foreach($comments as $comment) {
+            foreach ($comments as $comment) {
                 echo $comment->toHTML() . "\n";
             }
             echo "<br>&nbsp;\n";
@@ -489,10 +489,10 @@ if ($action != "insert" && !$found) {
 ?>
 </div>
 <?php
-if(conf::get("maps.provider") && ($_action=="display" || $_action=="edit" || $_action==="")) {
+if (conf::get("maps.provider") && ($_action=="display" || $_action=="edit" || $_action==="")) {
     $map=new map();
 
-    if($_action == "edit") {
+    if ($_action == "edit") {
         $map->setEditable();
         $map->setCenterAndZoomFromObj($photo);
         $map->addMarkers(array($photo), $user);

@@ -53,7 +53,7 @@ class albumTest extends ZophDataBaseTestCase {
 
         $albums=$photo->getAlbums();
 
-        foreach($albums as $alb) {
+        foreach ($albums as $alb) {
             $ids[]=$alb->getId();
         }
 
@@ -89,7 +89,7 @@ class albumTest extends ZophDataBaseTestCase {
 
         $albums=$photo->getAlbums();
 
-        foreach($albums as $alb) {
+        foreach ($albums as $alb) {
             $ids[]=$alb->getId();
         }
 
@@ -109,11 +109,11 @@ class albumTest extends ZophDataBaseTestCase {
         $album=new album($id);
         $alb_children=$album->getChildren($order);
         $children=array();
-        foreach($alb_children as $child) {
+        foreach ($alb_children as $child) {
             $children[]=$child->getId();
         }
 
-        if($order=="random") {
+        if ($order=="random") {
             // Of course, we cannot check the order for random, therefore we sort them.
             // Thus we only check if all the expected categories are present, not the order
             sort($children);
@@ -290,7 +290,7 @@ class albumTest extends ZophDataBaseTestCase {
         $albids=array();
         $topN=album::getTopN();
 
-        foreach($topN as $album) {
+        foreach ($topN as $album) {
             $albids[]=$album["id"];
         }
         $this->assertEquals($expected, $albids);
@@ -306,7 +306,7 @@ class albumTest extends ZophDataBaseTestCase {
         $albids=array();
         $all=album::getAll();
 
-        foreach($all as $album) {
+        foreach ($all as $album) {
             $albids[]=$album->getId();
         }
         $this->assertEquals($expected, $albids);
@@ -320,7 +320,7 @@ class albumTest extends ZophDataBaseTestCase {
         $user=new user(2);
         $newer=album::getNewer($user, "1970-01-01");
         $albids=array();
-        foreach($newer as $album) {
+        foreach ($newer as $album) {
             $albids[]=$album->getId();
         }
         $this->assertEquals([1,2], $albids);

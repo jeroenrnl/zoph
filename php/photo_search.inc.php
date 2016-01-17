@@ -73,7 +73,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         die ("Illegal sort direction: " . e($dir));
     }
 
-   foreach($vars as $key => $val) {
+   foreach ($vars as $key => $val) {
         if (empty($key) || empty($val) || $key[0] == "_" || strpos(" $key", "PHP") == 1) {
             continue;
         }
@@ -180,7 +180,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             } else if (is_array($album)) {
                 $key="album_id";
                 $val=array();
-                foreach($album as $alb) {
+                foreach ($album as $alb) {
                     $val[]=$alb->getId();
                 }
             } else {
@@ -197,7 +197,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             } else if (is_array($category)) {
                 $key="category_id";
                 $val=array();
-                foreach($category as $cat) {
+                foreach ($category as $cat) {
                     $val[]=$cat->getId();
                 }
             } else {
@@ -378,16 +378,16 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 if (isset($vars["_latlon_photos"])) {
                     $photos=photo::getPhotosNear($lat, $lon, $distance, null);
                     if ($photos) {
-                        foreach($photos as $photo) {
+                        foreach ($photos as $photo) {
                             $ids[]=$photo->getId();
                         }
                     }
                 }
                 if (isset($vars["_latlon_places"])) {
                     $places=place::getPlacesNear($lat, $lon, $distance, null);
-                    foreach($places as $place) {
+                    foreach ($places as $place) {
                         $photos=$place->getPhotos($user);
-                        foreach($photos as $photo) {
+                        foreach ($photos as $photo) {
                             $ids[]=$photo->getId();
                         }
                     }

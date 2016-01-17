@@ -42,7 +42,7 @@ if (empty($_l)) {
     $_l = "all";
 }
 
-if(getvar("circle_id")) {
+if (getvar("circle_id")) {
     $circle=new circle(getvar("circle_id"));
     $circle->lookup();
     $title=$circle->getName();
@@ -59,7 +59,7 @@ if ($user->isAdmin()) {
         translate("new") => "person.php?_action=new",
         translate("new circle") => "circle.php?_action=new"
     );
-    if(isset($circle) && $circle instanceof circle) {
+    if (isset($circle) && $circle instanceof circle) {
         $actionlinks[translate("edit circle")]="circle.php?_action=edit&circle_id=" . $circle->getId();
     }
 
@@ -101,10 +101,10 @@ if ($_l == "all") {
 } else {
     $first_letter = $_l;
 }
-if(isset($circle)) {
+if (isset($circle)) {
     $people=$circle->getMembers();
     $ppl=array();
-    foreach($people as $person) {
+    foreach ($people as $person) {
         $person->lookup();
         $ppl[]=$person;
      }

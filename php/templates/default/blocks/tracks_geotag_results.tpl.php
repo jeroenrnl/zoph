@@ -18,11 +18,11 @@
  * @author Jeroen Roos
  * @package ZophTemplates
  */
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
-<?php if($tpl_test==true): ?>
+<?php if ($tpl_test==true): ?>
     <?php echo $this->getActionlinks($tpl_actionlinks); ?>
-    <?php if($tpl_tagged_count==0): ?>
+    <?php if ($tpl_tagged_count==0): ?>
         <?php printf(translate("The location of none of the photos in the test set " .
             "could be determined. This does not necessarily mean that none of the " .
             "photos can be geotagged, since only a subset was tried. You can try to " .
@@ -33,7 +33,7 @@ if(!ZOPH) { die("Illegal call"); }
             $tpl_tagged_count, $tpl_total_count); ?>
     <?php endif; ?>
 <?php else: ?>
-    <?php if($tpl_tagged_count==0): ?>
+    <?php if ($tpl_tagged_count==0): ?>
         <?php echo translate("No photos were found matching your search criteria."); ?>
     <?php else: ?>
         <?php printf(translate("%s photos were geotagged"), $tpl_tagged_count); ?>

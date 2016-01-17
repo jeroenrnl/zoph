@@ -249,7 +249,7 @@ class mailMimePart {
      * @param string The encoding type to use, 7bit, base64, or quoted-printable.
      */
     private function getEncodedData($data, $encoding) {
-        if($encoding=="quoted-printable") {
+        if ($encoding=="quoted-printable") {
             return $this->quotedPrintableEncode($data);
         } else if ($encoding=="base64") {
             return rtrim(chunk_split(base64_encode($data), 76, PHP_EOL));
@@ -270,7 +270,7 @@ class mailMimePart {
         $escape = '=';
         $output = '';
 
-        while(list(, $line) = each($lines)){
+        while (list(, $line) = each($lines)){
 
             $linlen     = strlen($line);
             $newline = '';
@@ -282,11 +282,11 @@ class mailMimePart {
                 if (($dec == 32) AND ($i == ($linlen - 1))){    // convert space at eol only
                     $char = '=20';
 
-                } elseif(($dec == 9) AND ($i == ($linlen - 1))) {  // convert tab at eol only
+                } elseif (($dec == 9) AND ($i == ($linlen - 1))) {  // convert tab at eol only
                     $char = '=09';
-                } elseif($dec == 9) {
+                } elseif ($dec == 9) {
                     ; // Do nothing if a tab.
-                } elseif(($dec == 61) OR ($dec < 32 ) OR ($dec > 126)) {
+                } elseif (($dec == 61) OR ($dec < 32 ) OR ($dec > 126)) {
                     $char = $escape . strtoupper(sprintf('%02s', dechex($dec)));
                 }
 

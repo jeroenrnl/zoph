@@ -24,7 +24,7 @@
 define("LOGON", true);
 require_once "include.inc.php";
 
-if(isset($_GET["redirect"])) {
+if (isset($_GET["redirect"])) {
     $redirect = urlencode($_GET["redirect"]);
 } else {
     $redirect = "";

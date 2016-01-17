@@ -110,7 +110,7 @@ class ratingTest extends ZophDataBaseTestCase {
         $photo=new photo($photo_id);
         $photo->lookup();
 
-        foreach($ratings as $nr=>$rating) {
+        foreach ($ratings as $nr=>$rating) {
 
             $_SERVER["REMOTE_ADDR"]=$user->getName() . $nr . ".zoph.org";
 
@@ -152,7 +152,7 @@ class ratingTest extends ZophDataBaseTestCase {
     public function testNoRatings() {
         $user=new user(1);
         user::setCurrent($user);
-        for($r=1; $r<=19; $r++) {
+        for ($r=1; $r<=19; $r++) {
             $rating=new rating($r);
             $rating->delete();
         }
@@ -162,7 +162,7 @@ class ratingTest extends ZophDataBaseTestCase {
 
         $this->assertEquals($ratings[0]["count"], 12);
 
-        for($c=1; $c<sizeof($ratings); $c++) {
+        for ($c=1; $c<sizeof($ratings); $c++) {
             $this->assertEquals($ratings[$c]["count"], 0);
         }
 
@@ -175,14 +175,14 @@ class ratingTest extends ZophDataBaseTestCase {
         $user=new user(1);
         user::setCurrent($user);
 
-        for($p=1; $p<=12; $p++) {
+        for ($p=1; $p<=12; $p++) {
             $photo=new photo($p);
             $photo->delete();
         }
         $ratings=rating::getGraphArray();
         $this->assertInternalType("array", $ratings);
 
-        for($c=0; $c<=10; $c++) {
+        for ($c=0; $c<=10; $c++) {
             $this->assertEquals($ratings[$c]["count"], 0);
         }
 

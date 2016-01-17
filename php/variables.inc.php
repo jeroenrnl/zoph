@@ -35,13 +35,13 @@ function getvar($var) {
 }
 
 function i($var) {
-    if($var === "<" || $var === "<=" || $var === ">=" || $var === ">") {
+    if ($var === "<" || $var === "<=" || $var === ">=" || $var === ">") {
         // Strip tags breaks some searches
         return $var;
     }
-    if(is_array($var)) {
+    if (is_array($var)) {
         $return=array();
-        foreach($var as $key => $value) {
+        foreach ($var as $key => $value) {
             $return[i($key)]=i($value);
         }
     } else {
@@ -51,9 +51,9 @@ function i($var) {
 }
 
 function e($var) {
-    if(is_array($var)) {
+    if (is_array($var)) {
         $return=array();
-        foreach($var as $key => $value) {
+        foreach ($var as $key => $value) {
             $return[e($key)]=e($value);
         }
     } else {

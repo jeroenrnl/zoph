@@ -396,7 +396,7 @@ class MailMime {
 
         case !$text AND !$html AND $attachments:
             $message = $this->addMixedPart();
-            foreach($this->parts as $part) {
+            foreach ($this->parts as $part) {
                 $this->addAttachmentPart($message, $part);
             }
             break;
@@ -404,7 +404,7 @@ class MailMime {
         case $text AND $attachments:
             $message = $this->addMixedPart();
             $this->addTextPart($message, $this->txtbody);
-            foreach($this->parts as $part) {
+            foreach ($this->parts as $part) {
                 $this->addAttachmentPart($message, $part);
             }
             break;

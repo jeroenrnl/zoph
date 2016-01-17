@@ -65,11 +65,11 @@ class categoryTest extends ZophDataBaseTestCase {
         $category=new category($id);
         $cat_children=$category->getChildren($order);
         $children=array();
-        foreach($cat_children as $child) {
+        foreach ($cat_children as $child) {
             $children[]=$child->getId();
         }
 
-        if($order=="random") {
+        if ($order=="random") {
             // Of course, we cannot check the order for random, therefore we sort them.
             // Thus we only check if all the expected categories are present, not the order
             sort($children);
@@ -232,7 +232,7 @@ class categoryTest extends ZophDataBaseTestCase {
         $catids=array();
         $topN=category::getTopN();
 
-        foreach($topN as $category) {
+        foreach ($topN as $category) {
             $catids[]=$category["id"];
         }
         $this->assertEquals($expected, $catids);

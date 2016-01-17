@@ -25,11 +25,11 @@
 require_once "include.inc.php";
 
 $_view=getvar("_view");
-if(empty($_view)) {
+if (empty($_view)) {
     $_view=$user->prefs->get("view");
 }
 $_autothumb=getvar("_autothumb");
-if(empty($_autothumb)) {
+if (empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
@@ -67,11 +67,11 @@ if ($user->isAdmin()) {
 echo "\n" . translate("categories") . "\n" ?>
 </h1>
 <?php
-if($user->isAdmin()) {
+if ($user->isAdmin()) {
     include "selection.inc.php";
 }
 include "show_page.inc.php";
-if($show_orig) {
+if ($show_orig) {
     ?>
     <div class="main">
       <form class="viewsettings" method="get" action="categories.php">
@@ -102,7 +102,7 @@ if($show_orig) {
             echo $category->get("category_id") ?>"><?php echo translate("edit") ?>
           </a>
         <?php
-        if($category->get("coverphoto")) {
+        if ($category->get("coverphoto")) {
             ?>
             |
             <a href="category.php?_action=update&amp;category_id=<?php

@@ -25,13 +25,13 @@ $object=getvar("object");
 $search=getvar("search");
 
 $obj_array=explode("_", $object);
-if($obj_array[0]=="details") {
+if ($obj_array[0]=="details") {
     $obj_name=$obj_array[1];
     $obj=new $obj_name((int) $obj_array[2]);
 
     echo $obj->getDetailsXML();
 } else {
-    if($object=="location" || $object=="home" || $object=="work") {
+    if ($object=="location" || $object=="home" || $object=="work") {
         $object="place";
     } else if ($object=="father" || $object=="mother" || $object=="spouse") {
         $object="person";

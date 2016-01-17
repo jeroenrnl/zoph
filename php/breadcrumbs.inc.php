@@ -27,11 +27,11 @@ if ($user->prefs->get("show_breadcrumbs")) {
     breadcrumb::init();
 
     // can probably be removed
-    if(!empty($tpl_title)) {
+    if (!empty($tpl_title)) {
         $title=$tpl_title;
     }
 
-    if(!isset($_action)) {
+    if (!isset($_action)) {
         $_action="";
     }
 

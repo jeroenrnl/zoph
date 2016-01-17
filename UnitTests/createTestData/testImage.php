@@ -45,7 +45,7 @@ class testImage {
     }
 
     public function addToAlbum($album) {
-        if(!in_array($album, $this->albums)) {
+        if (!in_array($album, $this->albums)) {
             $this->albums[]=$album;
         }
     }
@@ -55,7 +55,7 @@ class testImage {
     }
 
     public function addToCategory($cat) {
-        if(!in_array($cat, $this->categories)) {
+        if (!in_array($cat, $this->categories)) {
             $this->categories[]=$cat;
         }
     }
@@ -89,37 +89,37 @@ class testImage {
         $text=array();
         $rtext=array();
 
-        if($this->getCategoryCount() > 0) {
+        if ($this->getCategoryCount() > 0) {
             $colourleft->setColor($categories[$this->categories[0]][1]);
             $colourright->setColor($categories[$this->categories[1]][1]);
             $text[]="Categories:";
-            foreach(array_keys($this->categories) as $i) {
+            foreach (array_keys($this->categories) as $i) {
                 $text[]="   " . $this->categories[$i] . ": " .
                     $categories[$this->categories[$i]][1];
             }
         }
 
-        if($this->getAlbumCount() > 0) {
+        if ($this->getAlbumCount() > 0) {
             $text[]="";
             $text[]="Albums:";
-            foreach(array_keys($this->albums) as $i) {
+            foreach (array_keys($this->albums) as $i) {
                 $text[]="   " . $this->albums[$i] . ": " . $albums[$this->albums[$i]][1];
             }
         }
-        if($this->location) {
+        if ($this->location) {
             $rtext[]="Location:";
             $rtext[]="   " . $this->location . ": " . $locations[$this->location][1];
         }
 
-        if($this->getPersonCount() > 0) {
+        if ($this->getPersonCount() > 0) {
             $rtext[]="";
             $rtext[]="People:";
-            foreach(array_keys($this->people) as $i) {
+            foreach (array_keys($this->people) as $i) {
                 $rtext[]="   " . $this->people[$i] . ": " . $people[$this->people[$i]];
             }
         }
 
-        if($this->photographer) {
+        if ($this->photographer) {
             $rtext[]="";
             $rtext[]="Photographer:";
             $rtext[]="   " . $this->photographer . ": " . $people[$this->photographer];
@@ -140,10 +140,10 @@ class testImage {
         $image->drawImage($draw);
 
 
-        foreach($text as $i=>$line) {
+        foreach ($text as $i=>$line) {
             $image->annotateImage($textcolour, 50, 50 + 25 * $i, 0, $line);
         }
-        foreach($rtext as $i=>$line) {
+        foreach ($rtext as $i=>$line) {
             $image->annotateImage($textcolour, 350, 50 + 25 * $i, 0, $line);
         }
 
