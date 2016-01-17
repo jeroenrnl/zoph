@@ -23,7 +23,7 @@
  */
 
 class breadcrumb {
-    
+
     /** @var string title of the crumb */
     private $title;
     /** @var string url of the crumb */
@@ -39,7 +39,7 @@ class breadcrumb {
      * only add a crumb if a title was set and if there is either no
      * action or a safe action ("edit", "delete", etc would be unsafe)
      * @param string title
-     * @param string action (display, edit, delete, etc.) 
+     * @param string action (display, edit, delete, etc.)
      */
     public function __construct($title, $action) {
         $user=user::getCurrent();
@@ -53,7 +53,7 @@ class breadcrumb {
         }
 
         $numCrumbs = count(static::$crumbs);
-        
+
         if (isset($title) && $numCrumbs < 100 && in_array($action, $crumbActions, true)) {
             if ($numCrumbs == 0 || (!strpos($link, "_crumb="))) {
 
@@ -72,7 +72,7 @@ class breadcrumb {
                 } else {
                     $link .= "?_crumb=$numCrumbs";
                 }
-                
+
                 $this->title=$title;
                 $this->link=$link;
                 self::$crumbs[] = $this;
@@ -145,7 +145,7 @@ class breadcrumb {
             return end(self::$crumbs);
         }
     }
-    
+
     public static function display() {
         $user=user::getCurrent();
 

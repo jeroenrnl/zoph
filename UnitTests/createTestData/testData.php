@@ -167,7 +167,7 @@ class testData {
             4 => array("guitarists", array("brian", "jimi"))
         );
     }
-    
+
     public static function getCircles() {
         return array(
             1 => array("Queen", array("Brian May", "Freddie Mercury", "Roger Taylor", "John Deacon")),

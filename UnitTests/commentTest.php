@@ -103,7 +103,7 @@ class commentTest extends ZophDataBaseTestCase {
         $comment=new comment();
         $comment->set("comment", "comment");
         $comment->insert();
-        
+
         $id=$comment->getId();
         unset($comment);
 
@@ -115,7 +115,7 @@ class commentTest extends ZophDataBaseTestCase {
 
         $photo=new photo(1);
         $count=sizeOf($photo->getComments());
-       
+
         $comment->addToPhoto($photo);
 
         $newcount=sizeOf($photo->getComments());
@@ -146,7 +146,7 @@ class commentTest extends ZophDataBaseTestCase {
 
         $this->assertEquals($photoId, $photo->getId());
     }
-        
+
 
     /**
      * Test isOwner() function
@@ -161,7 +161,7 @@ class commentTest extends ZophDataBaseTestCase {
         $this->assertTrue($comment->isOwner($user));
         $this->assertFalse($comment->isOwner($wronguser));
     }
-        
+
 
     /**
      * DataProvider for creating comments

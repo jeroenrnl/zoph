@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -62,7 +62,7 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
 
     }
 
-    
+
     public function getXMLtestdata() {
         return array(
             array("album", "", $this->getAllAlbumsXML()),
@@ -74,7 +74,7 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
             array("album", "Album 2", $this->getAllAlbumsXMLSearch2())
         );
     }
-    
+
     public function getXMLtestdataForUser() {
         return array(
             array("album", "", $this->getAllAlbumsXMLForUser()),
@@ -84,14 +84,14 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
             array("photographer", "", $this->getAllPhotographersXMLForUser())
         );
     }
-    
+
     private function getAllAlbumsXML() {
         $xml= "<albums>\n";
-        $xml.="  <album><key/><title/>\n"; // empty 
+        $xml.="  <album><key/><title/>\n"; // empty
         $xml.="  </album>\n";
         $xml.="  <album><key/><title/>\n"; // root = 1
         $xml.="    <albums>\n";
-        $xml.="      <album><key/><title/>\n"; // 2 
+        $xml.="      <album><key/><title/>\n"; // 2
         $xml.="        <albums>\n";
         $xml.="          <album><key/><title/>\n"; // 3
         $xml.="            <albums>\n";
@@ -123,11 +123,11 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         $xml.="          </album>\n";
         $xml.="        </albums>\n";
         $xml.="      </album>\n";
-        $xml.="      <album><key/><title/>\n"; // 3 
+        $xml.="      <album><key/><title/>\n"; // 3
         $xml.="      </album>\n";
-        $xml.="      <album><key/><title/>\n"; // 4 
+        $xml.="      <album><key/><title/>\n"; // 4
         $xml.="      </album>\n";
-        $xml.="      <album><key/><title/>\n"; // 5 
+        $xml.="      <album><key/><title/>\n"; // 5
         $xml.="      </album>\n";
         $xml.="    </albums>\n";
         $xml.="  </album>\n";
@@ -138,7 +138,7 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
 
     private function getAllCategoriesXML() {
         $xml= "<categories>\n";
-        $xml.="  <category><key/><title/>\n"; // empty 
+        $xml.="  <category><key/><title/>\n"; // empty
         $xml.="  </category>\n";
         $xml.="  <category><key/><title/>\n"; // root = 1
         $xml.="    <categories>\n";
@@ -152,7 +152,7 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         $xml.="          </category>\n";
         $xml.="        </categories>\n";
         $xml.="      </category>\n";
-        $xml.="      <category><key/><title/>\n"; // 2 
+        $xml.="      <category><key/><title/>\n"; // 2
         $xml.="        <categories>\n";
         $xml.="          <category><key/><title/>\n"; // 4
         $xml.="          </category>\n";
@@ -166,9 +166,9 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         $xml.="          </category>\n";
         $xml.="          <category><key/><title/>\n"; // 11
         $xml.="          </category>\n";
-        $xml.="          <category><key/><title/>\n"; // 12 
+        $xml.="          <category><key/><title/>\n"; // 12
         $xml.="          </category>\n";
-        $xml.="          <category><key/><title/>\n"; // 13 
+        $xml.="          <category><key/><title/>\n"; // 13
         $xml.="          </category>\n";
         $xml.="        </categories>\n";
         $xml.="      </category>\n";
@@ -183,11 +183,11 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
 
     private function getAllPlacesXML() {
         $xml= "<places>\n";
-        $xml.="  <place><key/><title/>\n"; // empty 
+        $xml.="  <place><key/><title/>\n"; // empty
         $xml.="  </place>\n";
         $xml.="  <place><key/><title/>\n"; // root = 1
         $xml.="    <places>\n";
-        $xml.="      <place><key/><title/>\n"; // 18 
+        $xml.="      <place><key/><title/>\n"; // 18
         $xml.="      </place>\n";
         $xml.="      <place><key/><title/>\n"; // 2
         $xml.="        <places>\n";
@@ -196,8 +196,8 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         $xml.="              <place><key/><title/>\n"; // 7
         $xml.="              </place>\n";
         $xml.="            </places>\n";
-        $xml.="          </place>\n"; 
-        $xml.="          <place><key/><title/>\n"; // 3 
+        $xml.="          </place>\n";
+        $xml.="          <place><key/><title/>\n"; // 3
         $xml.="            <places>\n";
         $xml.="              <place><key/><title/>\n"; // 5
         $xml.="              </place>\n";
@@ -265,11 +265,11 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
 
     private function getAllAlbumsXMLSearch2() {
         $xml= "<albums>\n";
-        $xml.="  <album><key/><title/>\n"; // empty 
+        $xml.="  <album><key/><title/>\n"; // empty
         $xml.="  </album>\n";
         $xml.="  <album>\n"; // root = 1
         $xml.="    <albums>\n";
-        $xml.="      <album>\n"; // 2 
+        $xml.="      <album>\n"; // 2
         $xml.="        <albums>\n";
         $xml.="          <album>\n"; // 3
         $xml.="            <albums>\n";
@@ -301,11 +301,11 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         $xml.="          </album>\n";
         $xml.="        </albums>\n";
         $xml.="      </album>\n";
-        $xml.="      <album>"; // 3 
+        $xml.="      <album>"; // 3
         $xml.="      </album>\n";
-        $xml.="      <album>\n"; // 4 
+        $xml.="      <album>\n"; // 4
         $xml.="      </album>\n";
-        $xml.="      <album>\n"; // 5 
+        $xml.="      <album>\n"; // 5
         $xml.="      </album>\n";
         $xml.="    </albums>\n";
         $xml.="  </album>\n";
@@ -313,14 +313,14 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
 
         return $xml;
     }
-    
+
     private function getAllAlbumsXMLForUser() {
         $xml= "<albums>\n";
-        $xml.="  <album><key/><title/>\n"; // empty 
+        $xml.="  <album><key/><title/>\n"; // empty
         $xml.="  </album>\n";
         $xml.="  <album><key/><title/>\n"; // root = 1
         $xml.="    <albums>\n";
-        $xml.="      <album><key/><title/>\n"; // 2 
+        $xml.="      <album><key/><title/>\n"; // 2
         $xml.="      </album>\n"; // 2
         $xml.="    </albums>\n";
         $xml.="  </album>\n";
@@ -328,14 +328,14 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
 
         return $xml;
     }
-    
+
     private function getAllCategoriesXMLForUser() {
         $xml= "<categories>\n";
-        $xml.="  <category><key/><title/>\n"; // empty 
+        $xml.="  <category><key/><title/>\n"; // empty
         $xml.="  </category>\n";
         $xml.="  <category><key/><title/>\n"; // root = 1
         $xml.="    <categories>\n";
-        $xml.="      <category><key/><title/>\n"; // 2 
+        $xml.="      <category><key/><title/>\n"; // 2
         $xml.="        <categories>\n";
         $xml.="          <category><key/><title/>\n"; // 3
         $xml.="          </category>\n";
@@ -358,7 +358,7 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
 
     private function getAllPlacesXMLForUser() {
         $xml= "<places>\n";
-        $xml.="  <place><key/><title/>\n"; // empty 
+        $xml.="  <place><key/><title/>\n"; // empty
         $xml.="  </place>\n";
         $xml.="  <place><key/><title/>\n"; // root = 1
         $xml.="    <places>\n";
@@ -369,8 +369,8 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         $xml.="              <place><key/><title/>\n"; // 7
         $xml.="              </place>\n";
         $xml.="            </places>\n";
-        $xml.="          </place>\n"; 
-        $xml.="          <place><key/><title/>\n"; // 3 
+        $xml.="          </place>\n";
+        $xml.="          <place><key/><title/>\n"; // 3
         $xml.="          </place>\n";
         $xml.="        </places>\n";
         $xml.="      </place>\n";

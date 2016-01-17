@@ -183,7 +183,7 @@ class placeTest extends ZophDataBaseTestCase {
 
         $loc=new place($loc_id);
         $photos=$loc->getPhotos();
-        
+
         $ids=array();
         foreach($photos as $photo) {
             $ids[]=$photo->getId();
@@ -192,7 +192,7 @@ class placeTest extends ZophDataBaseTestCase {
         $this->assertEquals($expected, $ids);
     }
 
-        
+
     /**
      * Test getDetails()
      / @dataProvider getDetails();
@@ -268,7 +268,7 @@ class placeTest extends ZophDataBaseTestCase {
                             <data>%s sub-places</data>
                           </detail>
                         </response>
-                      </details>", 
+                      </details>",
                        $place_id, $exp_details["count"],$disp_oldest, $disp_newest, $disp_first, $disp_last,  $exp_details["lowest"], $exp_details["highest"], $exp_details["average"],$subplace);
 
         $this->assertXmlStringEqualsXmlString($expectedXML, $details);
@@ -320,7 +320,7 @@ class placeTest extends ZophDataBaseTestCase {
      */
     public function testGetCount($user_id, $expected) {
         user::setCurrent(new user($user_id));
-        
+
         $count=place::getCount();
 
         $this->assertEquals($expected, $count);
@@ -501,7 +501,7 @@ class placeTest extends ZophDataBaseTestCase {
             array(11, "random", array(12,14,16))
         );
     }
-    
+
     /**
      * dataProvider function
      * @return user, place, array(count, oldest, newest, first, last, highest, average)
@@ -560,7 +560,7 @@ class placeTest extends ZophDataBaseTestCase {
             array(3, 6, array()),
             array(4, 4, array(2))
         );
-    }   
+    }
 
 
 }

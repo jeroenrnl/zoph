@@ -181,7 +181,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $this->assertEquals($exp_sql, $sql);
 
         $this->assertEquals(array($param), $qry->getParams());
-            
+
     }
 
     /**

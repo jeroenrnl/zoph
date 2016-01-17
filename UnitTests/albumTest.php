@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,7 +27,7 @@ require_once "testSetup.php";
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class albumTest extends ZophDataBaseTestCase {    
+class albumTest extends ZophDataBaseTestCase {
     /**
      * Create Albums in the database
      * @dataProvider getAlbums();
@@ -198,7 +198,7 @@ class albumTest extends ZophDataBaseTestCase {
                             <data>%s sub-albums</data>
                           </detail>
                         </response>
-                      </details>", 
+                      </details>",
                        $alb_id, $exp_details["count"],$disp_oldest, $disp_newest, $disp_first, $disp_last,  $exp_details["lowest"], $exp_details["highest"], $exp_details["average"],$subalb);
 
         $this->assertXmlStringEqualsXmlString($expectedXML, $details);
@@ -219,7 +219,7 @@ class albumTest extends ZophDataBaseTestCase {
         $this->assertEquals($pc, $count);
         user::setCurrent(new user(1));
     }
-    
+
     /**
      * Test getTotalPhotoCount() function
      * @dataProvider getTotalPhotoCount();
@@ -280,7 +280,7 @@ class albumTest extends ZophDataBaseTestCase {
         $this->assertEquals($photo, $cover->getId());
         user::setCurrent(new user(1));
     }
-    
+
     /**
      * Test getTopN() function
      * @dataProvider getTopNData();
@@ -362,7 +362,7 @@ class albumTest extends ZophDataBaseTestCase {
         return array(
             array(1,5),
             array(2,6)
-        );    
+        );
     }
 
     /**
@@ -477,7 +477,7 @@ class albumTest extends ZophDataBaseTestCase {
             array(4,"last", 2, 7),
         );
     }
-    
+
     /**
      * dataProvider function
      * @return array userid, topN

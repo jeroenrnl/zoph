@@ -1,6 +1,6 @@
 <?php
 /**
- * This class creates images to use as photos in Zoph's unittests 
+ * This class creates images to use as photos in Zoph's unittests
  *
  * This file is part of Zoph.
  *
@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  */
 
 /**
- * This class creates images to use as photos in Zoph's unittests 
+ * This class creates images to use as photos in Zoph's unittests
  *
  * @package ZophUnitTest
  * @author Jeroen Roos
@@ -53,7 +53,7 @@ class testImage {
     private function getAlbumCount() {
         return sizeof($this->albums);
     }
-    
+
     public function addToCategory($cat) {
         if(!in_array($cat, $this->categories)) {
             $this->categories[]=$cat;
@@ -62,7 +62,7 @@ class testImage {
     private function getCategoryCount() {
         return sizeof($this->categories);
     }
-    
+
 
     public function addPerson($pers) {
         $this->people[]=$pers;
@@ -94,11 +94,11 @@ class testImage {
             $colourright->setColor($categories[$this->categories[1]][1]);
             $text[]="Categories:";
             foreach(array_keys($this->categories) as $i) {
-                $text[]="   " . $this->categories[$i] . ": " . 
+                $text[]="   " . $this->categories[$i] . ": " .
                     $categories[$this->categories[$i]][1];
             }
         }
-        
+
         if($this->getAlbumCount() > 0) {
             $text[]="";
             $text[]="Albums:";
@@ -110,7 +110,7 @@ class testImage {
             $rtext[]="Location:";
             $rtext[]="   " . $this->location . ": " . $locations[$this->location][1];
         }
-        
+
         if($this->getPersonCount() > 0) {
             $rtext[]="";
             $rtext[]="People:";
@@ -129,7 +129,7 @@ class testImage {
         $textcolour=new ImagickDraw();
         $textcolour->setFillColor("black");
         $textcolour->setFontsize(20);
-        
+
         $image=new Imagick();
         $image->newImage(600,400, $colourleft);
 
@@ -146,8 +146,8 @@ class testImage {
         foreach($rtext as $i=>$line) {
             $image->annotateImage($textcolour, 350, 50 + 25 * $i, 0, $line);
         }
-            
-            
+
+
         $image->writeImage("/tmp/" . $this->getName());
         $image->destroy();
         unset($image);

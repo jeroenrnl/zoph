@@ -23,14 +23,14 @@
  */
 
 if ($user->prefs->get("show_breadcrumbs")) {
-    
+
     breadcrumb::init();
-    
+
     // can probably be removed
     if(!empty($tpl_title)) {
         $title=$tpl_title;
     }
-    
+
     if(!isset($_action)) {
         $_action="";
     }
@@ -48,6 +48,6 @@ if ($user->prefs->get("show_breadcrumbs")) {
 
     echo breadcrumb::display();
 
-    
+
 }
 ?>
