@@ -8,6 +8,9 @@
     <blacklist>
         <directory>/usr/share</directory>
     </blacklist>
+    <whitelist>
+        <directory>../php</directory>
+    </whitelist>
   </filter>
   <php>
     <const name="INSTANCE" value="zophgit" />
