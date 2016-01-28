@@ -1,6 +1,7 @@
 <?php
 /**
- * Template for definitionlists
+ * Template for displaying the 'are you sure' (confirm) question when deleting
+ * an item
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +19,15 @@
  * @author Jeroen Roos
  * @package ZophTemplates
  */
-
-if (!ZOPH) { die("Illegal call"); }
+if (!ZOPH) {
+    die("Illegal call");
+}
 ?>
-<dl class="<?php echo $tpl_class; ?>">
-    <?php foreach ($tpl_dl as $key => $value): ?>
-        <?php if (!empty($value)): ?>
-            <dt><?php echo e($key) ?></dt>
-            <dd><?php echo $value ?></dd>
-        <?php endif; ?>
-    <?php endforeach; ?>
-</dl>
-<br>
+<h1>
+    <?= $this->getActionlinks($tpl_actionlinks) ?>
+    <?= $tpl_title ?>
+</h1>
+<div class="main">
+    <?= sprintf(translate("Confirm deletion of '%s'"), $tpl_obj->getName()) ?>
+    <?= $this->getActionlinks($tpl_mainActionlinks) ?>
+</div>

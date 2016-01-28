@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for definitionlists
+ * Template for HTML input hidden field
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,18 +15,14 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @author Jeroen Roos
  * @package ZophTemplates
+ * @author Jeroen Roos
  */
 
-if (!ZOPH) { die("Illegal call"); }
+if (!ZOPH) {
+    die("Illegal call");
+}
 ?>
-<dl class="<?php echo $tpl_class; ?>">
-    <?php foreach ($tpl_dl as $key => $value): ?>
-        <?php if (!empty($value)): ?>
-            <dt><?php echo e($key) ?></dt>
-            <dd><?php echo $value ?></dd>
-        <?php endif; ?>
-    <?php endforeach; ?>
-</dl>
-<br>
+
+<input type="hidden" name="<?= $tpl_name ?>" value="<?= $tpl_value ?>">
+
