@@ -71,7 +71,7 @@ if ($action == "confirm") {
         translate("delete") => "track.php?_action=delete&amp;track_id=" . $track->get("track_id")
     ));
     $dl=new block("definitionlist",array(
-        "class" => "track",
+        "class" => "display track",
         "dl" => $track->getDisplayArray()
     ));
     $tpl->addBlock($dl);

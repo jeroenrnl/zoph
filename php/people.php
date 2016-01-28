@@ -61,6 +61,7 @@ if ($user->isAdmin()) {
     );
     if (isset($circle) && $circle instanceof circle) {
         $actionlinks[translate("edit circle")]="circle.php?_action=edit&circle_id=" . $circle->getId();
+        $actionlinks[translate("delete circle")]="circle.php?_action=delete&circle_id=" . $circle->getId();
     }
 
     $tpl=new block("actionlinks", array("actionlinks" => $actionlinks));
