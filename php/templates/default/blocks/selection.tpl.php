@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for displaying
+ * Template for a selected image
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,23 +15,17 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @author Jeroen Roos
  * @package ZophTemplates
+ * @author Jeroen Roos
  */
-if (!ZOPH) {
-    die("Illegal call");
-}
+if (!ZOPH) { die("Illegal call"); }
 ?>
-<h1>
-    <?= $this->getActionlinks($tpl_actionlinks) ?>
-    <?= $tpl_title ?>
-</h1>
-<?php if ($tpl_selection): ?>
-    <?= $tpl_selection ?>
-<?php endif ?>
-<div class="main">
-    <?= $this->getActionlinks($tpl_mainActionlinks) ?>
-    <h2><?= e($tpl_obj->getName()) ?></h2>
-    <p><?= $tpl_obj->displayCoverphoto() ?></p>
-    <?= $this->displayBlocks(); ?>
+<div id="selection">
+    <?php printf(translate("%s photo(s) selected"), $tpl_count) ?>
+    <?php foreach ($tpl_photos as $photo): ?>
+        <div class="thumbnail">
+            <?= $photo["actionlinks"] ?>
+            <?= $photo["photo"]->getImageTag(THUMB_PREFIX); ?>
+        </div>
+    <?php endforeach ?>
 </div>

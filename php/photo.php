@@ -257,7 +257,7 @@ if ($_action == "edit") {
     redirect($link, "Go back");
 } else if ($_action == "select") {
     $sel_key=false;
-    if (is_array($_SESSION["selected_photo"])) {
+    if (isset($_SESSION["selected_photo"]) && is_array($_SESSION["selected_photo"])) {
         $sel_key=array_search($photo_id, $_SESSION["selected_photo"]);
     }
     if ($sel_key === false) {

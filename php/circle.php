@@ -43,6 +43,11 @@ if ($action != "insert") {
     $title = translate("New circle");
 }
 
+$selection=new selection($_SESSION, array(
+    "coverphoto"    => "circle.php?_action=update&amp;circle_id=" . $circle->getId() . "&amp;coverphoto=",
+    "return"        => "_return=circle.php&amp;_qs=circle_id=" . $circle->getId()
+));
+
 require_once "header.inc.php";
 if ($action == "display") {
     $actionlinks=array();
@@ -62,7 +67,8 @@ if ($action == "display") {
         "title"             => $title,
         "actionlinks"       => $actionlinks,
         "mainActionlinks"   => null,
-        "obj"               => $circle
+        "obj"               => $circle,
+        "selection"         => $selection
     ));
 
     if ($user->get("detailed_people") || $user->isAdmin()) {
