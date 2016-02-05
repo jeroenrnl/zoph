@@ -32,7 +32,6 @@ if (!$user->get("browse_people") && !$user->isAdmin()) {
 
 $circleId = (int) getvar("circle_id");
 $circle = new circle($circleId);
-
 $obj = &$circle;
 $redirect = "people.php";
 require_once "actions.inc.php";
@@ -43,10 +42,15 @@ if ($action != "insert") {
     $title = translate("New circle");
 }
 
-$selection=new selection($_SESSION, array(
-    "coverphoto"    => "circle.php?_action=update&amp;circle_id=" . $circle->getId() . "&amp;coverphoto=",
-    "return"        => "_return=circle.php&amp;_qs=circle_id=" . $circle->getId()
-));
+try {
+    $selection=new selection($_SESSION, array(
+        "coverphoto"    => "circle.php?_action=update&amp;circle_id=" . $circle->getId() . "&amp;coverphoto=",
+        "return"        => "_return=circle.php&amp;_qs=circle_id=" . $circle->getId()
+    ));
+} catch (PhotoNoSelectionException $e) {
+    $selection=null;
+}
+
 
 require_once "header.inc.php";
 if ($action == "display") {
@@ -60,7 +64,7 @@ if ($action == "display") {
         );
         if ($circle->get("coverphoto")) {
             $actionlinks[translate("unset coverphoto")]=
-                "circle.php?_action=update&amp;person_id=" . $circle->getId() . "&amp;coverphoto=NULL";
+                "circle.php?_action=update&amp;circle_id=" . $circle->getId() . "&amp;coverphoto=NULL";
         }
     }
     $tpl=new template("display", array(

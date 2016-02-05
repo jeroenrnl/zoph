@@ -43,8 +43,8 @@ class selection {
      *              afterwards.
      */
     public function __construct($session, $links) {
-        if (!isset($session["selected_photo"])) {
-            return;
+        if (!isset($session["selected_photo"]) || sizeof($session["selected_photo"])===0) {
+            throw new PhotoNoSelectionException("No photos selected");
         }
 
         $this->links=$links;

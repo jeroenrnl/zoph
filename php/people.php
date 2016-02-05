@@ -46,10 +46,14 @@ if (getvar("circle_id")) {
     $circle=new circle(getvar("circle_id"));
     $circle->lookup();
     $title=$circle->getName();
-    $selection=new selection($_SESSION, array(
-        "coverphoto"    => "circle.php?_action=update&amp;circle_id=" . $circle->getId() . "&amp;coverphoto=",
-        "return"        => "_return=circle.php&amp;_qs=circle_id=" . $circle->getId()
-    ));
+    try {
+        $selection=new selection($_SESSION, array(
+            "coverphoto"    => "circle.php?_action=update&amp;circle_id=" . $circle->getId() . "&amp;coverphoto=",
+            "return"        => "_return=circle.php&amp;_qs=circle_id=" . $circle->getId()
+        ));
+    } catch (PhotoNoSelectionException $e) {
+        $selection=null;
+    }
 
 } else {
     $title = translate("People");
@@ -82,7 +86,7 @@ if ($user->isAdmin()) {
 $tpl->addBlock(new block("people_letters", array(
     "l"    => $_l
 )));
-    
+
 if ($_l == "all") {
     $first_letter=null;
 } else if ($_l == "no last name") {
