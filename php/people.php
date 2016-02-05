@@ -66,7 +66,7 @@ $tpl=new template("organizer", array(
     "title"     => strtolower($title),
     "selection" => $selection,
     "view"      => $_view,
-    "view_name" => "Category view",
+    "view_name" => "People view",
     "autothumb" => $_autothumb
 ));
 
