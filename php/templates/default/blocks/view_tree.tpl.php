@@ -76,7 +76,7 @@ if (!ZOPH) { die("Illegal call"); }
                 "id" => "sub_" . $tpl_id,
                 "links" => $tpl_links
             );
-            $tpl=new template("view_tree", $param);
+            $tpl=new block("view_tree", $param);
             echo $tpl;
         ?>
     <?php endif; ?>

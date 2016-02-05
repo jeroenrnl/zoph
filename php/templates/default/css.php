@@ -471,7 +471,7 @@ ul.breadcrumbs.firstdots li:first-child:before {
 }
 
 /* Main page */
-.main, .info, .letter, .page, div.map, div#selection, .warning   {
+.main, .info, .page, div.map, div#selection, .warning   {
     background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     width: 100%;
@@ -481,6 +481,7 @@ ul.breadcrumbs.firstdots li:first-child:before {
     clear: both;
     overflow: hidden;
 }
+
 
 .main > div.map {
     left: -1px;
@@ -879,16 +880,30 @@ img.actionlink {
     vertical-align: top;
 }
 
-
 /* Letter in an alphabetic select list */
 .letter {
+    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    clear: both;
+    overflow: hidden;
+    font-size: medium;
+    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    padding: 10px;
+    width: 100%;
+    margin: 10px 0 30px -11px;
     text-align: center;
-    font-size: small;
 }
 
 /* The letter that is currently active */
 .letter .selected   {
     font-weight: bold;
+}
+
+.letter a {
+    text-decoration: none;
+}
+
+.letter a:hover {
+    text-decoration: underline;
 }
 
 /* Description of an album, category, etc. */

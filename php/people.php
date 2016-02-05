@@ -46,14 +46,26 @@ if (getvar("circle_id")) {
     $circle=new circle(getvar("circle_id"));
     $circle->lookup();
     $title=$circle->getName();
+    $selection=new selection($_SESSION, array(
+        "coverphoto"    => "circle.php?_action=update&amp;circle_id=" . $circle->getId() . "&amp;coverphoto=",
+        "return"        => "_return=circle.php&amp;_qs=circle_id=" . $circle->getId()
+    ));
+
 } else {
     $title = translate("People");
+    $selection=null;
 }
 
 require_once "header.inc.php";
-?>
-  <h1>
-<?php
+
+$tpl=new template("organizer", array(
+    "title"     => strtolower($title),
+    "selection" => $selection,
+    "view"      => $_view,
+    "view_name" => "Category view",
+    "autothumb" => $_autothumb
+));
+
 if ($user->isAdmin()) {
     $actionlinks=array(
         translate("new") => "person.php?_action=new",
@@ -64,37 +76,13 @@ if ($user->isAdmin()) {
         $actionlinks[translate("delete circle")]="circle.php?_action=delete&circle_id=" . $circle->getId();
     }
 
-    $tpl=new block("actionlinks", array("actionlinks" => $actionlinks));
-    echo $tpl;
+    $tpl->addActionlinks($actionlinks);
 }
-?>
-<?php echo strtolower($title) ?></h1>
-    <div class="letter">
-<?php
-for ($l = 'a'; $l <= 'z' && $l != 'aa'; $l++) {
-    $title = $l;
-    if ($l == $_l) {
-        $title = "<span class=\"selected\">" . strtoupper($title) . "</span>";
-    }
-    ?>
-    <a href="people.php?_l=<?php echo $l ?>"><?php echo $title ?></a> |
-    <?php
-}
-?>
-    <a href="people.php?_l=no%20last%20name"><?php echo translate("no last name") ?></a> |
-    <a href="people.php?_l=all"><?php echo translate("all") ?></a>
-  </div>
-  <div class="main">
-    <form class="viewsettings" method="get" action="people.php">
-      <?php echo create_form($request_vars, array ("_view", "_autothumb",
-        "_button")) ?>
-      <?php echo translate("Category view", 0) . "\n" ?>
-      <?php echo template::createViewPulldown("_view", $_view, true) ?>
-      <?php echo translate("Automatic thumbnail", 0) . "\n" ?>
-      <?php echo template::createAutothumbPulldown("_autothumb", $_autothumb, true) ?>
-    </form>
-    <br>
-<?php
+
+$tpl->addBlock(new block("people_letters", array(
+    "l"    => $_l
+)));
+    
 if ($_l == "all") {
     $first_letter=null;
 } else if ($_l == "no last name") {
@@ -112,13 +100,7 @@ if (isset($circle)) {
 } else if (!$first_letter) {
     $circles=circle::getRecords("circle_name");
     if ($circles) {
-        if ($_view=="thumbs") {
-            $template="view_thumbs";
-        } else {
-            $template="view_list";
-        }
-        $template="view_" . $_view;
-        $tpl=new template($template, array(
+        $block=new block("view_" . $_view, array(
             "id" => $_view . "circle",
             "items" => $circles,
             "autothumb" => $_autothumb,
@@ -127,7 +109,7 @@ if (isset($circle)) {
                 translate("photos by") => "photos.php?photographer_id="
             )
         ));
-        echo $tpl;
+        $tpl->addBlock($block);
     }
     $ppl = person::getAllNoCircle();
 } else {
@@ -139,7 +121,7 @@ if ($ppl) {
     } else {
         $template="view_list";
     }
-    $tpl=new template($template, array(
+    $block=new block($template, array(
         "id" => $_view . "view",
         "items" => $ppl,
         "autothumb" => $_autothumb,
@@ -148,7 +130,7 @@ if ($ppl) {
             translate("photos by") => "photos.php?photographer_id="
         )
     ));
-    echo $tpl;
+    $tpl->addBlock($block);
 } else {
     ?>
       <div class="error">
@@ -156,6 +138,7 @@ if ($ppl) {
             htmlentities($_l)) ?></div>
     <?php
 }
+echo $tpl;
 ?>
 <br>
 

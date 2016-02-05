@@ -167,7 +167,7 @@ if ($show_orig) {
         }
     }
     if ($children) {
-        $tpl=new template("view_" . $_view, array(
+        $tpl=new block("view_" . $_view, array(
             "id" => $_view . "view",
             "items" => $children,
             "autothumb" => $_autothumb,
