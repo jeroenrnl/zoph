@@ -169,6 +169,16 @@ class template {
     }
 
     /**
+     * Add multiple blocks
+     * @param array Blocks to be added
+     */
+    public function addBlocks(array $blocks) {
+        foreach ($blocks as $block) {
+            $this->addBlock($block);
+        }
+    }
+
+    /**
      * Get the blocks inside this template
      * @return array blocks
      */
@@ -217,7 +227,7 @@ class template {
             $actionlinks=$this->actionlinks;
         }
         if (is_array($actionlinks)) {
-            $tpl=new template("actionlinks", array(
+            $tpl=new block("actionlinks", array(
                 "actionlinks" => $actionlinks)
             );
             return $tpl->toString();
@@ -357,6 +367,34 @@ class template {
             "1" => translate("Yes",0)
         ));
     }
+
+    public static function createFormInputText($name, $value, $label=null, $hint=null, $size=32) {
+        return new block("formInputText", array(
+            "name"  => $name,
+            "value" => e($value),
+            "label" => e($label),
+            "hint"  => e($hint),
+            "size"  => (int) $size
+        ));
+    }
+
+    public static function createFormInputHidden($name, $value) {
+        return new block("formInputHidden", array(
+            "name"  => $name,
+            "value" => e($value),
+        ));
+    }
+
+    public static function createFormTextarea($name, $value, $label=null, $cols=40, $rows=4) {
+        return new block("formTextarea", array(
+            "name"  => $name,
+            "value" => e($value),
+            "label" => e($label),
+            "cols"  => (int) $cols,
+            "rows"  => (int) $rows
+        ));
+    }
+
 
     /**
      * Get all templates

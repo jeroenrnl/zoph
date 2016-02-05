@@ -19,13 +19,13 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <table class="reports">
     <tr>
         <th colspan="3"><h3><?php echo $tpl_title ?></h3></th>
     </tr>
-    <?php foreach($tpl_lines as $line): ?>
+    <?php foreach ($tpl_lines as $line): ?>
     <tr>
         <td>
             <a href="<?php echo $line["url"] ?>">

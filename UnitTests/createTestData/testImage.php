@@ -1,6 +1,6 @@
 <?php
 /**
- * This class creates images to use as photos in Zoph's unittests 
+ * This class creates images to use as photos in Zoph's unittests
  *
  * This file is part of Zoph.
  *
@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  */
 
 /**
- * This class creates images to use as photos in Zoph's unittests 
+ * This class creates images to use as photos in Zoph's unittests
  *
  * @package ZophUnitTest
  * @author Jeroen Roos
@@ -45,7 +45,7 @@ class testImage {
     }
 
     public function addToAlbum($album) {
-        if(!in_array($album, $this->albums)) {
+        if (!in_array($album, $this->albums)) {
             $this->albums[]=$album;
         }
     }
@@ -53,16 +53,16 @@ class testImage {
     private function getAlbumCount() {
         return sizeof($this->albums);
     }
-    
+
     public function addToCategory($cat) {
-        if(!in_array($cat, $this->categories)) {
+        if (!in_array($cat, $this->categories)) {
             $this->categories[]=$cat;
         }
     }
     private function getCategoryCount() {
         return sizeof($this->categories);
     }
-    
+
 
     public function addPerson($pers) {
         $this->people[]=$pers;
@@ -89,37 +89,37 @@ class testImage {
         $text=array();
         $rtext=array();
 
-        if($this->getCategoryCount() > 0) {
+        if ($this->getCategoryCount() > 0) {
             $colourleft->setColor($categories[$this->categories[0]][1]);
             $colourright->setColor($categories[$this->categories[1]][1]);
             $text[]="Categories:";
-            foreach(array_keys($this->categories) as $i) {
-                $text[]="   " . $this->categories[$i] . ": " . 
+            foreach (array_keys($this->categories) as $i) {
+                $text[]="   " . $this->categories[$i] . ": " .
                     $categories[$this->categories[$i]][1];
             }
         }
-        
-        if($this->getAlbumCount() > 0) {
+
+        if ($this->getAlbumCount() > 0) {
             $text[]="";
             $text[]="Albums:";
-            foreach(array_keys($this->albums) as $i) {
+            foreach (array_keys($this->albums) as $i) {
                 $text[]="   " . $this->albums[$i] . ": " . $albums[$this->albums[$i]][1];
             }
         }
-        if($this->location) {
+        if ($this->location) {
             $rtext[]="Location:";
             $rtext[]="   " . $this->location . ": " . $locations[$this->location][1];
         }
-        
-        if($this->getPersonCount() > 0) {
+
+        if ($this->getPersonCount() > 0) {
             $rtext[]="";
             $rtext[]="People:";
-            foreach(array_keys($this->people) as $i) {
+            foreach (array_keys($this->people) as $i) {
                 $rtext[]="   " . $this->people[$i] . ": " . $people[$this->people[$i]];
             }
         }
 
-        if($this->photographer) {
+        if ($this->photographer) {
             $rtext[]="";
             $rtext[]="Photographer:";
             $rtext[]="   " . $this->photographer . ": " . $people[$this->photographer];
@@ -129,7 +129,7 @@ class testImage {
         $textcolour=new ImagickDraw();
         $textcolour->setFillColor("black");
         $textcolour->setFontsize(20);
-        
+
         $image=new Imagick();
         $image->newImage(600,400, $colourleft);
 
@@ -140,14 +140,14 @@ class testImage {
         $image->drawImage($draw);
 
 
-        foreach($text as $i=>$line) {
+        foreach ($text as $i=>$line) {
             $image->annotateImage($textcolour, 50, 50 + 25 * $i, 0, $line);
         }
-        foreach($rtext as $i=>$line) {
+        foreach ($rtext as $i=>$line) {
             $image->annotateImage($textcolour, 350, 50 + 25 * $i, 0, $line);
         }
-            
-            
+
+
         $image->writeImage("/tmp/" . $this->getName());
         $image->destroy();
         unset($image);

@@ -238,13 +238,11 @@ class person extends zophTable implements Organizer {
     }
 
     /**
-     * Get children for this person
-     * @todo This function is currently not used
+     * Get children
+     * Since people cannot be nested, always returns null
      */
     public function getChildren() {
-        $constraints["father_id"] = $this->get("person_id");
-        $constraints["mother_id"] = $this->get("person_id");
-        return static::getAll($constraints, "or");
+        return null;
     }
 
     /**
@@ -252,6 +250,7 @@ class person extends zophTable implements Organizer {
      * @return string name
      */
     public function getName() {
+        $this->lookup();
         if ($this->get("called")) {
             $name = $this->get("called");
         } else {
@@ -298,14 +297,6 @@ class person extends zophTable implements Organizer {
         }
 
         return "<a href=\"person.php?person_id=" . $this->get("person_id") . "\">$name</a>";
-    }
-
-    /**
-     * Get URL to this person
-     */
-
-    public function getURL() {
-        return "person.php?person_id=" . $this->getId();
     }
 
     /**
@@ -669,6 +660,30 @@ class person extends zophTable implements Organizer {
     }
 
     /**
+     * Get all people and all photographers for the currently logged on user
+     * that are NOT a member of a circle
+     */
+    public static function getAllNoCircle() {
+        $all = static::getAllPeopleAndPhotographers();
+        $circles = circle::getRecords();
+        $return=array();
+
+        foreach ($all as $person) {
+            $return[$person->getId()] = $person;
+        }
+
+        foreach ($circles as $circle) {
+            $members=$circle->getMembers();
+            foreach ($members as $member) {
+                if (isset($return[$member->getId()])){
+                    unset($return[$member->getId()]);
+                }
+            }
+        }
+        return $return;
+    }
+
+    /**
      * Get SQL WHERE clause to search for people
      * @param string search string
      * @param bool search for first name
@@ -682,11 +697,12 @@ class person extends zophTable implements Organizer {
             } else {
                 $where=new clause("ppl.last_name like lower(concat(:search,'%'))");
                 if ($search_first) {
-                    $where->addOr("ppl.first_name like lower(concat(:search, '%'))");
+                    $where->addOr(new clause("ppl.first_name like lower(concat(:search, '%'))"));
                 }
             }
         }
         return $where;
+
     }
 }
 

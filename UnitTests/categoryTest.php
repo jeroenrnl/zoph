@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -65,11 +65,11 @@ class categoryTest extends ZophDataBaseTestCase {
         $category=new category($id);
         $cat_children=$category->getChildren($order);
         $children=array();
-        foreach($cat_children as $child) {
+        foreach ($cat_children as $child) {
             $children[]=$child->getId();
         }
 
-        if($order=="random") {
+        if ($order=="random") {
             // Of course, we cannot check the order for random, therefore we sort them.
             // Thus we only check if all the expected categories are present, not the order
             sort($children);
@@ -77,7 +77,7 @@ class categoryTest extends ZophDataBaseTestCase {
         $this->assertEquals($exp_children, $children);
      }
 
-        
+
     /**
      * Test getPhotoCount() function
      * @dataProvider getCategoryPhotoCount();
@@ -215,7 +215,7 @@ class categoryTest extends ZophDataBaseTestCase {
                             <data>%s sub-categories</data>
                           </detail>
                         </response>
-                      </details>", 
+                      </details>",
                        $cat_id, $exp_details["count"],$disp_oldest, $disp_newest, $disp_first, $disp_last,  $exp_details["lowest"], $exp_details["highest"], $exp_details["average"],$subcat);
 
         $this->assertXmlStringEqualsXmlString($expectedXML, $details);
@@ -232,7 +232,7 @@ class categoryTest extends ZophDataBaseTestCase {
         $catids=array();
         $topN=category::getTopN();
 
-        foreach($topN as $category) {
+        foreach ($topN as $category) {
             $catids[]=$category["id"];
         }
         $this->assertEquals($expected, $catids);
@@ -249,7 +249,7 @@ class categoryTest extends ZophDataBaseTestCase {
         $count=category::getCountForUser();
 
         $this->assertEquals($exp_count, $count);
-        
+
         user::setCurrent(new user(1));
      }
 
@@ -266,7 +266,7 @@ class categoryTest extends ZophDataBaseTestCase {
         $count=$category->getTotalPhotoCount();
 
         $this->assertEquals($exp_count, $count);
-        
+
         user::setCurrent(new user(1));
      }
 

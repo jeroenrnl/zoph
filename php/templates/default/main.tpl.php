@@ -20,7 +20,7 @@
  * @todo This is a temporary template until the entire zoph page is generated from a template
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 require_once "header.inc.php";
 ?>
     <h1>
@@ -30,7 +30,7 @@ require_once "header.inc.php";
     <div class="main">
         <?php echo $this->displayBlocks(); ?>
     </div>
-    <?php if(!empty($tpl_mapping_js)): ?>
+    <?php if (!empty($tpl_mapping_js)): ?>
     <div class="map" id="map">
     </div>
     <script type='text/javascript'>

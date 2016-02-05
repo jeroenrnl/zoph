@@ -42,7 +42,7 @@ $groups = group::getRecords("group_name");
 
 if ($groups) {
     echo "<dl class='groups'>";
-    foreach($groups as $group) {
+    foreach ($groups as $group) {
         ?>
         <dt><?php echo $group->getName() ?></dt>
         <dd>

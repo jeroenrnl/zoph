@@ -30,7 +30,7 @@ if (!ZOPH) { die("Illegal call"); }
         <?= $tpl_commentdate ?>
         <?= translate("by", 0) ?> <b><?= $tpl_userlink ?></b>
     </div>
-    <?php if(isset($tpl_thumbnail)): ?>
+    <?php if (isset($tpl_thumbnail)): ?>
         <div class="thumbnail">
             <?= $tpl_thumbnail ?>
         </div>

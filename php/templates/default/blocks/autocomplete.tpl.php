@@ -19,7 +19,7 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <!-- Do not insert enter between the two inputs because the Javascript chokes on that! //-->
 <input type=hidden id="<?php echo $tpl_id ?>" name="<?php echo $tpl_name ?>"

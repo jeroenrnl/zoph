@@ -251,7 +251,7 @@ class photo extends zophTable {
      */
     public function updateEXIF() {
         $file=$this->getFilePath();
-        $exif=process_exif($file);
+        $exif=process_exif ($file);
         if ($exif) {
             $this->setFields($exif);
             $this->update();

@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <ul class="list">
 <?php foreach ($tpl_items as $item): ?>
@@ -27,24 +27,29 @@ if(!ZOPH) { die("Illegal call"); }
         <a href="<?php echo $item->getURL() ?>"><?php echo $item->getName() ?></a>
         <span class="photocount">
             <?php
+            if ($item instanceof circle):
+                $count=$item->getPeopleCount();
+                $count2=$count;
+            else:
                 $count=$item->getPhotoCount();
-                if($item instanceof zophTreeTable):
+                if ($item instanceof zophTreeTable):
                     $count2=$item->getTotalPhotoCount();
                 elseif ($item instanceof person):
                     $count2=$item->getPhotographer()->getPhotoCount();
                 else:
                     $count2=0;
                 endif;
+            endif;
             ?>
-            <?php if($count==$count2): ?>
-                (<?php echo $count; ?>)
+            <?php if ($count==$count2): ?>
+            (<?php echo $count; ?>)
             <?php else: ?>
                 (<?php echo $count; ?>/<?php echo $count2; ?>)
             <?php endif; ?>
         </span>
-        <?php if(isset($tpl_links)): ?>
+        <?php if (isset($tpl_links)): ?>
             <ul class="actionlink">
-                <?php foreach($tpl_links as $link => $url): ?>
+                <?php foreach ($tpl_links as $link => $url): ?>
                     <li>
                       <a href="<?php echo $url; ?><?php echo $item->getId(); ?>">
                         <?php echo $link; ?>

@@ -32,7 +32,7 @@ $_order = getvar("_order");
 $_dir = getvar("_dir");
 $_show = getvar("_show");
 $vars=clean_request_vars($request_vars);
-if(!preg_match("/^[a-zA-Z_]*$/", $_order)) {
+if (!preg_match("/^[a-zA-Z_]*$/", $_order)) {
     die("Illegal characters in _order");
 }
 
@@ -99,11 +99,11 @@ $qs_no_action=preg_replace('/_action=\w+&?/', '', $qs);
 $qs=htmlentities($qs);
 $qs_no_action=htmlentities($qs_no_action);
 
-if($qs_no_action) {
+if ($qs_no_action) {
     $qs_no_action .= "&amp;";
 }
 
-if($_action=translate("search")) {
+if ($_action=translate("search")) {
     ?>
 
     <a href="search.php?<?php echo $qs_no_action ?>_action=new">
@@ -121,7 +121,7 @@ if ($user->isAdmin()) {
 ?>
 <a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a>
 <?php
-if(conf::get("feature.download") && ($user->get("download") || $user->isAdmin())) {
+if (conf::get("feature.download") && ($user->get("download") || $user->isAdmin())) {
     ?>
     | <a href="download.php?<?php echo $qs ?>"><?php echo translate("download") ?></a>
     <?php
@@ -214,12 +214,12 @@ if ($num_thumbnails <= 0) {
 <br>
 </div>
 <?php
-if(conf::get("maps.provider")) {
+if (conf::get("maps.provider")) {
     $map=new map();
-    foreach($thumbnails as $thumbnail) {
+    foreach ($thumbnails as $thumbnail) {
         $thumbnail->lookup();
         $marker=$thumbnail->getMarker();
-        if($marker instanceof marker) {
+        if ($marker instanceof marker) {
             $map->addMarker($marker);
         }
     }

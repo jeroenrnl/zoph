@@ -38,7 +38,7 @@ abstract class Import {
     protected static function autorotate($file) {
         $cmd = "jhead -autorot " . escapeshellarg($file);
         exec($cmd, $output, $return);
-        if($return > 0) {
+        if ($return > 0) {
             $msg=implode($output, "<br>");
             throw new ImportAutorotException($msg);
         }
@@ -57,9 +57,9 @@ abstract class Import {
         $total=sizeof($files);
         $cur=0;
 
-        if(isset($vars["_path"])) {
+        if (isset($vars["_path"])) {
             $path=cleanup_path("/" . $vars["_path"] . "/");
-            if(strpos($path, "..") !== false) {
+            if (strpos($path, "..") !== false) {
                 log::msg("Illegal characters in path", log::FATAL, log::IMPORT);
                 die();
             }
@@ -67,11 +67,11 @@ abstract class Import {
             $path="";
         }
 
-        foreach($files as $file) {
+        foreach ($files as $file) {
             static::progress($cur, $total);
             $cur++;
 
-            if($file instanceof photo) {
+            if ($file instanceof photo) {
                 $photo=$file;
                 $file=$photo->file["orig"];
             } else if ($file instanceof file) {
@@ -79,22 +79,22 @@ abstract class Import {
             }
 
             $mime=$file->getMime();
-            if(conf::get("import.cli.exif")===true && $mime=="image/jpeg") {
-                $exif=process_exif($file);
-                if($exif) {
+            if (conf::get("import.cli.exif")===true && $mime=="image/jpeg") {
+                $exif=process_exif ($file);
+                if ($exif) {
                     $photo->setFields($exif);
                 }
             }
-            if(isset($vars["rating"])) {
+            if (isset($vars["rating"])) {
                 $rating=$vars["rating"];
-                if(!(is_numeric($rating) && (1 <= $rating) && ($rating <= 10))) {
+                if (!(is_numeric($rating) && (1 <= $rating) && ($rating <= 10))) {
                     unset($rating);
                 }
                 unset($vars["rating"]);
             }
 
-            if(isset($vars["field"]) && is_array($vars["_field"])) {
-                foreach($vars["_field"] as $key => $field) {
+            if (isset($vars["field"]) && is_array($vars["_field"])) {
+                foreach ($vars["_field"] as $key => $field) {
                     $vars[$field]=$vars["field"][$key];
                 }
                 unset($vars["_field"]);
@@ -105,20 +105,20 @@ abstract class Import {
                 $photo->setFields($vars);
             }
 
-            if(strlen(trim($photo->get("date")))==0) {
+            if (strlen(trim($photo->get("date")))==0) {
                 $date=date("Y-m-d", filemtime($file));
                 log::msg("Photo has no date set, using filedate (" . $date . ").",
                     log::NOTIFY, log::IMPORT);
                 $photo->set("date", $date);
             }
 
-            if(strlen(trim($photo->get("time")))==0) {
+            if (strlen(trim($photo->get("time")))==0) {
                 $time=date("H:i:s", filemtime($file));
                 log::msg("Photo has no time set, using time from filedate (" . $time . ").",
                     log::NOTIFY, log::IMPORT);
                 $photo->set("time", $time);
             }
-            if(isset($photo->_path)) {
+            if (isset($photo->_path)) {
                 $photo->set("path", $path . "/" . $photo->_path);
                 unset($photo->_path);
             } else {
@@ -132,7 +132,7 @@ abstract class Import {
                 throw $e;
             }
 
-            if(conf::get("import.cli.thumbs")===true) {
+            if (conf::get("import.cli.thumbs")===true) {
                 try {
                     $photo->thumbnail(false);
                 } catch (Exception $e) {
@@ -141,15 +141,15 @@ abstract class Import {
             }
 
             if ($photo->insert()) {
-                if(conf::get("import.cli.size")===true) {
+                if (conf::get("import.cli.size")===true) {
                     $photo->updateSize();
                 }
                 $photo->update();
                 $photo->updateRelations($vars, "_id");
-                if(isset($rating)) {
+                if (isset($rating)) {
                     $photo->rate($rating);
                 }
-                if(conf::get("import.cli.hash")===true) {
+                if (conf::get("import.cli.hash")===true) {
                     try {
                         $photo->getHash();
                     } catch (Exception $e) {
@@ -182,12 +182,12 @@ abstract class Import {
             "gpx 1.1" => "xml/gpx11.xsd" );
 
         foreach ($schemas as $name => $schema) {
-            if(@$xml->schemaValidate($schema)) {
+            if (@$xml->schemaValidate($schema)) {
                 echo basename($file) ." is a valid " . $name . " file";
                 $xmltype=$name;
             }
         }
-        if(!isset($xmltype)) {
+        if (!isset($xmltype)) {
             throw ImportFileNotImportableException(basename($file) . " is not a known XML file.");
         } else {
             switch($name) {

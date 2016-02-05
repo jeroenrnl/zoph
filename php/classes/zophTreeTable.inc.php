@@ -209,9 +209,9 @@ abstract class zophTreeTable extends zophTable {
 
         $searchString=explode("/", $name);
         $depth=sizeof($searchString);
-        foreach($searchString as $namePart) {
+        foreach ($searchString as $namePart) {
             $objs = static::getByName($namePart);
-            foreach($objs as $obj) {
+            foreach ($objs as $obj) {
                 $obj->lookup();
                 if (!isset($parentObj)) {
                     $found++;

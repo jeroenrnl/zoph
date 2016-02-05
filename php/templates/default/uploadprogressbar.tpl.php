@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) {
+if (!ZOPH) {
     die("Illegal call");
 }
 ?>

@@ -68,7 +68,7 @@ if (!$found) {
     <?php
     $location = "";
     $place_id = $photo->get("location_id");
-    if($place_id) {
+    if ($place_id) {
         $place = new place($place_id);
         $place->lookup();
         $location = $place->get("title") ? $place->get("title") : $place->get("city");
@@ -78,14 +78,14 @@ if (!$found) {
     <label for="location"><?php echo translate("location") ?></label>
     <?php echo create_text_input("location", $location, 35, 50) ?><br>
     <?php
-    if($photo->get("date")) {
+    if ($photo->get("date")) {
         ?>
         <input type="checkbox" name="date_cb">
         <label for="date"><?php echo translate("date") ?></label>
         <?php echo create_text_input("date", $photo->get("date"), 35, 50) ?><br>
         <?php
     }
-    if($photo->get("time")) {
+    if ($photo->get("time")) {
         ?>
         <input type="checkbox" name="time_cb">
         <label for="time"><?php echo translate("time") ?></label>
@@ -99,7 +99,7 @@ if (!$found) {
     <?php
     $photographer = "";
     $p_id = $photo->get("photographer_id");
-    if($p_id) {
+    if ($p_id) {
         $person = new person($p_id);
         $person->lookup();
         $photographer = $person->getName();
@@ -130,7 +130,7 @@ if (!$found) {
     <textarea name="people" rows="2" cols="35"><?php echo $people_string ?></textarea><br>
     <?php
 
-    if($photo->get("camera_make")) {
+    if ($photo->get("camera_make")) {
         ?>
         <input type="checkbox" name="camera_make_cb">
         <label for="camera_make"><?php echo translate("camera make") ?></label>
@@ -139,7 +139,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("camera_model")) {
+    if ($photo->get("camera_model")) {
         ?>
         <input type="checkbox" name="camera_model_cb">
         <label for="camera_model"><?php echo translate("camera model") ?></label>
@@ -148,7 +148,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("flash_used")) {
+    if ($photo->get("flash_used")) {
         ?>
         <input type="checkbox" name="flash_used_cb">
         <label for="flash_used"><?php echo translate("flash used") ?></label>
@@ -157,7 +157,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("focal_length")) {
+    if ($photo->get("focal_length")) {
         ?>
         <input type="checkbox" name="focal_length_cb">
         <label for="focal_length"><?php echo translate("focal length") ?></label>
@@ -166,7 +166,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("exposure")) {
+    if ($photo->get("exposure")) {
         ?>
         <input type="checkbox" name="exposure_cb">
         <label for="exposure"><?php echo translate("exposure") ?></label>
@@ -175,7 +175,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("aperature")) {
+    if ($photo->get("aperature")) {
         ?>
 
         <input type="checkbox" name="aperture_cb">
@@ -185,7 +185,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("compression")) {
+    if ($photo->get("compression")) {
         ?>
         <input type="checkbox" name="compression_cb">
         <label for="compression"><?php echo translate("compression") ?></label>
@@ -194,7 +194,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("iso_equiv")) {
+    if ($photo->get("iso_equiv")) {
         ?>
         <input type="checkbox" name="iso_equiv_cb">
         <label for="iso_equiv"><?php echo translate("iso equiv") ?></label>
@@ -203,7 +203,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("metering_mode")) {
+    if ($photo->get("metering_mode")) {
         ?>
         <input type="checkbox" name="metering mode_cb">
         <label for="metering_mode"><?php echo translate("metering mode") ?></label>
@@ -212,7 +212,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("focus_dist")) {
+    if ($photo->get("focus_dist")) {
         ?>
         <input type="checkbox" name="focus_dist_cb">
         <label for="focus_dist"><?php echo translate("focus distance") ?></label>
@@ -221,7 +221,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("ccd_width")) {
+    if ($photo->get("ccd_width")) {
         ?>
         <input type="checkbox" name="ccd_width_cb">
         <label for="ccd_width"><?php echo translate("ccd width") ?></label>
@@ -230,7 +230,7 @@ if (!$found) {
         <?php
     }
 
-    if($photo->get("comment")) {
+    if ($photo->get("comment")) {
         ?>
         <input type="checkbox" name="comment_cb">
         <label for="comment"><?php echo translate("comment") ?></label>

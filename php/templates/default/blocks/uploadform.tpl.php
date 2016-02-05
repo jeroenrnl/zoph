@@ -21,7 +21,7 @@
  *       the general form templates?
  */
 
-if(!ZOPH) {
+if (!ZOPH) {
     die("Illegal call");
 }
 ?>

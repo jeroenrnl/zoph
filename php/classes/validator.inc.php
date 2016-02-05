@@ -61,7 +61,7 @@ class validator {
 
             $stmt=$qry->execute();
 
-            if($stmt->rowCount() == 1) {
+            if ($stmt->rowCount() == 1) {
                 $user = new user($stmt->fetchColumn());
                 $user->lookup();
             }

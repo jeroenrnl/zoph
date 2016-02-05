@@ -53,7 +53,7 @@ class admin {
      * Get an array of all entries in the admin page
      */
     public static function getArray() {
-        if(empty(self::$pages)) {
+        if (empty(self::$pages)) {
             self::createArray();
         }
         return self::$pages;

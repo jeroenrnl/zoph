@@ -185,6 +185,14 @@ class PhotoThumbCreationFailedException extends PhotoException {}
 class PhotoNotFoundException extends PhotoException {}
 
 /**
+ * Exception thrown when selection-related functions are called
+ * while there is no selection.
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class PhotoNoSelectionException extends PhotoException {}
+
+/**
  * Exception thrown when a file is tried to be imported that
  * for some reason can not be imported
  * @author Jeroen Roos

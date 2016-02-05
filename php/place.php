@@ -30,8 +30,8 @@ $place = new place($place_id);
 
 $obj = &$place;
 $redirect = "places.php";
-if($_action=="settzchildren") {
-    if($user->isAdmin()) {
+if ($_action=="settzchildren") {
+    if ($user->isAdmin()) {
         $place->lookup();
         $place->setTzForChildren();
     }
@@ -71,14 +71,14 @@ if ($action == "confirm") {
 ?>
 </div>
 <?php
-if(conf::get("maps.provider")) {
+if (conf::get("maps.provider")) {
     $map=new map();
     $marker=$place->getMarker();
     $map->setCenterAndZoomFromObj($place);
-    if($marker instanceof marker) {
+    if ($marker instanceof marker) {
         $map->addMarker($marker);
     }
-    if($_action == "edit" || $_action == "new") {
+    if ($_action == "edit" || $_action == "new") {
         $map->setEditable();
     }
     echo $map;

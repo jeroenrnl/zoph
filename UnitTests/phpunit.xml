@@ -8,6 +8,9 @@
     <blacklist>
         <directory>/usr/share</directory>
     </blacklist>
+    <whitelist>
+        <directory>../php</directory>
+    </whitelist>
   </filter>
   <php>
     <const name="INSTANCE" value="zophgit" />
@@ -26,6 +29,7 @@
       <file>groupTest.php</file>
       <file>groupPermissionsTest.php</file>
       <file>personTest.php</file>
+      <file>circleTest.php</file>
       <file>photographerTest.php</file>
       <file>getPhotoTest.php</file>
       <file>cliTest.php</file>

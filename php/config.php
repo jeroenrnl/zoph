@@ -29,12 +29,12 @@ if (!$user->isAdmin()) {
 }
 
 // Configuration setting depends on POST
-if(!empty($_GET)) {
+if (!empty($_GET)) {
     redirect("config.php");
 }
 
 $_action=getvar("_action");
-if($_action == "setconfig") {
+if ($_action == "setconfig") {
     conf::loadFromRequestVars($request_vars);
 }
 conf::loadFromDB();
@@ -47,7 +47,7 @@ $tpl=new template("config", array(
 // it is also included in header.inc.php, but header.inc.php should be
 // phased out soon.
 $tpl->js[]="js/conf.js";
-foreach(conf::getAll() as $name=>$item) {
+foreach (conf::getAll() as $name=>$item) {
     $tpl->addBlock($item->display());
 }
 echo $tpl;

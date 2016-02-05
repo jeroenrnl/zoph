@@ -32,7 +32,7 @@ class testData {
 
     public static function getPhotos() {
         $photos=array();
-        for($num=1; $num<=12; $num++) {
+        for ($num=1; $num<=12; $num++) {
             $photos[$num]=sprintf("TEST_%04d.JPG", $num);
         }
         return $photos;
@@ -165,6 +165,14 @@ class testData {
             2 => array("Beatles", array("johnl", "paul")),
             3 => array("Genesis", array("phil")),
             4 => array("guitarists", array("brian", "jimi"))
+        );
+    }
+
+    public static function getCircles() {
+        return array(
+            1 => array("Queen", array("Brian May", "Freddie Mercury", "Roger Taylor", "John Deacon")),
+            2 => array("Singers", array("Freddie Mercury", "Brian May", "Phil Collins", "Paul McCartney", "John Lennon")),
+            3 => array("Bass Players", array("John Deacon", "Paul McCartney"))
         );
     }
 

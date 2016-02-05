@@ -19,9 +19,9 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
-<?php if(isset($tpl_topnode)): ?>
+<?php if (isset($tpl_topnode)): ?>
     <ul class="actionlink">
         <li>
             <a href='#' onclick="thumbview.expandall('<?php echo $tpl_id ?>')">
@@ -38,9 +38,11 @@ if(!ZOPH) { die("Illegal call"); }
 
 <ul class="tree" id="<?php echo $tpl_id ?>">
 <?php foreach ($tpl_items as $item): ?>
-    <?php $children=$item->getChildren(); ?>
+    <?php
+        $children=$item->getChildren();
+    ?>
     <li class="collapsed">
-        <?php if($children): ?>
+        <?php if ($children): ?>
             <div class="toggle" onclick="thumbview.toggle(this.parentNode)"></div>
         <?php endif; ?>
         <a href="<?php echo $item->getURL() ?>">
@@ -50,15 +52,15 @@ if(!ZOPH) { die("Illegal call"); }
                 $pc=$item->getPhotoCount();
                 $tpc=$item->getTotalPhotoCount();
             ?>
-            <?php if($pc==$tpc): ?>
+            <?php if ($pc==$tpc): ?>
                 (<?php echo $pc; ?>)
             <?php else: ?>
                 (<?php echo $pc; ?>/<?php echo $tpc; ?>)
             <?php endif; ?>
         </span>
-        <?php if(isset($tpl_links)): ?>
+        <?php if (isset($tpl_links) && !($item instanceof circle)): ?>
             <ul class="actionlink">
-                <?php foreach($tpl_links as $link => $url): ?>
+                <?php foreach ($tpl_links as $link => $url): ?>
                     <li>
                       <a href="<?php echo $url; ?><?php echo $item->getId(); ?>">
                         <?php echo $link; ?>
@@ -67,14 +69,14 @@ if(!ZOPH) { die("Illegal call"); }
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
-        <?php if($children): ?>
+        <?php if ($children): ?>
         <?php
-            $tpl=new template("view_tree", array(
+            $param=array(
                 "items" => $children,
-                "user" => $tpl_user,
                 "id" => "sub_" . $tpl_id,
                 "links" => $tpl_links
-            ));
+            );
+            $tpl=new block("view_tree", $param);
             echo $tpl;
         ?>
     <?php endif; ?>

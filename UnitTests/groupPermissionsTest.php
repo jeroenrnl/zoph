@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -38,7 +38,7 @@ class groupPermissionsTest extends ZophDataBaseTestCase {
     public function testCreateGroupPermissions($group, $albums, $al, $wml, $wr) {
         $gr=new group($group);
         $gr->lookup();
-        foreach($albums as $alb) {
+        foreach ($albums as $alb) {
             $prm=new group_permissions($group, $alb);
             $prm->set("access_level", $al);
             $prm->set("watermark_level", $wml);

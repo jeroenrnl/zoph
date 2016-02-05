@@ -41,7 +41,7 @@ class watermarkedPhoto extends photo {
     public function display($type=null) {
         $headers=array();
         // Only fullsize images are (currently) watermarked
-        if(empty($type)) {
+        if (empty($type)) {
             $watermark_file = conf::get("path.images") . "/" . conf::get("watermark.file");
             if (file_exists($watermark_file)) {
                 $name = $this->get("name");

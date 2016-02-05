@@ -31,7 +31,7 @@ define('RELEASEDATE', '21-2-2014');
 // zoph.ini. The location can be set by the next config item:
 
 // INI FILE is already defined when using CLI and when running UnitTests
-if(!defined("INI_FILE")) {
+if (!defined("INI_FILE")) {
     define('INI_FILE', "/etc/zoph.ini");
 }
 

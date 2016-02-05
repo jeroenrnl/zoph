@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,7 @@ require_once "testSetup.php";
  * @author Jeroen Roos
  */
 class ratingTest extends ZophDataBaseTestCase {
-    
+
     /**
      * Test retrieving ratings from database
      * @dataProvider getRatings
@@ -56,7 +56,7 @@ class ratingTest extends ZophDataBaseTestCase {
         $this->assertEquals($ip, $ipaddr);
 
     }
-    
+
     /**
      * Test retrieving average ratings from database
      * @dataProvider getAverage
@@ -101,16 +101,16 @@ class ratingTest extends ZophDataBaseTestCase {
         global $user;
         $user = new user($user_id);
         $user->lookup();
-        
+
         $user->set("allow_multirating", true);
         $user->update();
 
         user::setCurrent($user);
-        
+
         $photo=new photo($photo_id);
         $photo->lookup();
 
-        foreach($ratings as $nr=>$rating) {
+        foreach ($ratings as $nr=>$rating) {
 
             $_SERVER["REMOTE_ADDR"]=$user->getName() . $nr . ".zoph.org";
 
@@ -132,7 +132,7 @@ class ratingTest extends ZophDataBaseTestCase {
         $user->update();
 
         user::setCurrent($user);
-        
+
         // This photo currently has an average of 5
         // this should stay this way!
         $photo=new photo(3);
@@ -152,7 +152,7 @@ class ratingTest extends ZophDataBaseTestCase {
     public function testNoRatings() {
         $user=new user(1);
         user::setCurrent($user);
-        for($r=1; $r<=19; $r++) {
+        for ($r=1; $r<=19; $r++) {
             $rating=new rating($r);
             $rating->delete();
         }
@@ -161,8 +161,8 @@ class ratingTest extends ZophDataBaseTestCase {
         $this->assertInternalType("array", $ratings);
 
         $this->assertEquals($ratings[0]["count"], 12);
-        
-        for($c=1; $c<sizeof($ratings); $c++) {
+
+        for ($c=1; $c<sizeof($ratings); $c++) {
             $this->assertEquals($ratings[$c]["count"], 0);
         }
 
@@ -174,15 +174,15 @@ class ratingTest extends ZophDataBaseTestCase {
     public function testNoPhotos() {
         $user=new user(1);
         user::setCurrent($user);
-        
-        for($p=1; $p<=12; $p++) {
+
+        for ($p=1; $p<=12; $p++) {
             $photo=new photo($p);
             $photo->delete();
         }
         $ratings=rating::getGraphArray();
         $this->assertInternalType("array", $ratings);
 
-        for($c=0; $c<=10; $c++) {
+        for ($c=0; $c<=10; $c++) {
             $this->assertEquals($ratings[$c]["count"], 0);
         }
 
@@ -219,7 +219,7 @@ class ratingTest extends ZophDataBaseTestCase {
         foreach ($rating_array as $rating=>$count) {
             $this->assertEquals($count, $ratings[$rating]["count"]);
 
-            
+
         }
     }
 
@@ -240,7 +240,7 @@ class ratingTest extends ZophDataBaseTestCase {
         $this->assertInternalType("array", $vars["ratings"]);
         foreach ($vars["ratings"] as $rating) {
             $this->assertInstanceOf("rating", $rating);
-            
+
             $expected=array_shift($det_array[1]);
 
             $username=$rating->getUser()->getName();
@@ -250,11 +250,11 @@ class ratingTest extends ZophDataBaseTestCase {
             $this->assertEquals($expected[3], $rating->get("ipaddress"));
 
         }
-        
+
 
 
     }
-    
+
     /**
      * Test deleting a rating
      * @dataProvider getRatingsToBeDeleted
@@ -272,8 +272,8 @@ class ratingTest extends ZophDataBaseTestCase {
 
         $new_avg=rating::getAverage($photo);
         $this->assertEquals($avg, $new_avg);
-        
-    }   
+
+    }
     public function getAverage() {
         return array(
             array(1, 7.5),

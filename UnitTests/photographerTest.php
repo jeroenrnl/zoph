@@ -88,7 +88,7 @@ class photographerTest extends ZophDataBaseTestCase {
 
         $pgs=photographer::getAll();
 
-        foreach($pgs as $pg) {
+        foreach ($pgs as $pg) {
             $this->assertContains($pg->getId(), $pg_ids);
         }
 

@@ -44,7 +44,7 @@ function create_field_html_table($fields) {
 
 function create_edit_fields($fields) {
     $html = "";
-    while(list($key, $field) = each($fields)) {
+    while (list($key, $field) = each($fields)) {
         $html.=
             "<label for=\"$key\">$field[0]</label>\n" . $field[1] ."<br>";
     }
@@ -52,7 +52,7 @@ function create_edit_fields($fields) {
 }
 
 function create_text_input($name, $value, $size = 20, $max = 32, $type="text") {
-    if($type=="time") {
+    if ($type=="time") {
         $step="step=\"1\"";
     } else {
         $step="";
@@ -258,7 +258,7 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
     $ignore[] = "PHPSESSID";
     $ignore[] = "_crumb";
     $qstr="";
-    if($vars) {
+    if ($vars) {
         while (list($key, $val) = each($vars)) {
             if (in_array($key, $ignore)) { continue; }
             if ($key == $new_key) { continue; }
@@ -373,14 +373,14 @@ function file_extension($str) {
  * @return string URL
  */
 function getZophURL($proto=null) {
-    if(is_null($proto)) {
-        if(isset($_SERVER["HTTPS"]) && !empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != "off")) {
+    if (is_null($proto)) {
+        if (isset($_SERVER["HTTPS"]) && !empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != "off")) {
             $proto="https";
         } else {
             $proto="http";
         }
     } else {
-        if(!preg_match("/^http(s?)$/", $proto)) {
+        if (!preg_match("/^http(s?)$/", $proto)) {
             die("illegal protocol");
         }
     }
@@ -389,15 +389,15 @@ function getZophURL($proto=null) {
     $new_url=substr($current_url, 0, strrpos($current_url, "/"));
     $url=$proto . "://" . preg_replace("/\/\//","/", $new_url);
 
-    if(conf::get("url.http") && $proto = "http") {
+    if (conf::get("url.http") && $proto = "http") {
         $url=conf::get("url.http");
     }
 
-    if(conf::get("url.https") && $proto = "https") {
+    if (conf::get("url.https") && $proto = "https") {
         $url=conf::get("url.http");
     }
 
-    if(substr($url, -1) != "/") {
+    if (substr($url, -1) != "/") {
         $url.="/";
     }
     return $url;
@@ -469,7 +469,7 @@ function cleanup_path($path) {
 
 function create_actionlinks($actionlinks) {
     $bar="";
-    if(is_array($actionlinks)) {
+    if (is_array($actionlinks)) {
         $html="<span class=\"actionlink\">\n";
         while (list($key, $val) = each($actionlinks)) {
             $html .= $bar . "<a href=\"" . $val . "\">" . translate($key, 0) . "</a>";
@@ -489,18 +489,18 @@ function running_on_windows() {
 }
 
 function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
-    if(class_exists("ZipArchive")) {
+    if (class_exists("ZipArchive")) {
         $zip=new ZipArchive();
         $tempfile="/tmp/zoph_" . $user->get("user_id") . "_" . $filename ."_" . $filenum . ".zip";
         @unlink($tempfile);
         if ($zip->open($tempfile, ZIPARCHIVE::CREATE)!==TRUE) {
             die("cannot open $tempfile\n");
         }
-        foreach($photos as $key => $photo) {
-            if($data=@file_get_contents($photo->getFilePath())) {
+        foreach ($photos as $key => $photo) {
+            if ($data=@file_get_contents($photo->getFilePath())) {
                 $size=strlen($data);
                 $zipsize=$zipsize+$size;
-                if($zipsize>=$maxsize) {
+                if ($zipsize>=$maxsize) {
                     break;
                 }
                 $currentfile=$key;
@@ -526,7 +526,7 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
  * @return string human readable filesize
  */
 function getHuman($bytes) {
-    if($bytes==0) {
+    if ($bytes==0) {
         // prevents div by 0
         return "0B";
     } else {
@@ -620,10 +620,10 @@ function remove_empty(array $children) {
     $user=user::getCurrent();
     $clean=array();
     // If user is not admin, remove any children that do not have photos
-    if(!$user->isAdmin()) {
-        foreach($children as $child) {
+    if (!$user->isAdmin()) {
+        foreach ($children as $child) {
             $count=$child->getTotalPhotoCount();
-            if($count>0) {
+            if ($count>0) {
                 $clean[]=$child;
             }
         }
@@ -640,7 +640,7 @@ function create_bar_graph($legend, $value_array, $scale) {
     # link:  Where should it link to. (may be null)
     # count: Count of that value;
 
-    foreach($value_array as $row) {
+    foreach ($value_array as $row) {
         $counts[]=$row[2];
     }
     $max=max($counts);
@@ -652,14 +652,14 @@ function create_bar_graph($legend, $value_array, $scale) {
     $html.="    <th>" . $legend[1] ."</th>\n";
     $html.="  <tr>\n";
 
-    foreach($value_array as $row) {
+    foreach ($value_array as $row) {
         $html.="  <tr>\n";
         $html.="    <td>\n";
-        if($row[1]) {
+        if ($row[1]) {
             $html.="   <a href='" . $row[1] . "'>";
         }
         $html.=$row[0];
-        if($row[1]) {
+        if ($row[1]) {
             $html.="</a>\n";
         }
         $html.="    </td>\n";
@@ -688,7 +688,7 @@ function create_progress_bar($id = "progressbar", $w = 300, $complete = 0) {
 }
 
 function redirect($url = "zoph.php", $msg = "Access denied") {
-    if(!((LOG_SUBJECT & log::REDIRECT) && (LOG_SEVERITY >= log::DEBUG))) {
+    if (!((LOG_SUBJECT & log::REDIRECT) && (LOG_SEVERITY >= log::DEBUG))) {
         header("Location: " . $url);
     }
         echo "<a href='" . $url . "'>" . $msg . "</a>";
@@ -723,7 +723,7 @@ function get_filetype($mime) {
 function create_dir($directory) {
     if (file_exists($directory) == false) {
         if (@mkdir($directory, octdec(conf::get("import.dirmode")))) {
-            if(!defined("CLI") || conf::get("import.cli.verbose")>=1) {
+            if (!defined("CLI") || conf::get("import.cli.verbose")>=1) {
                 log::msg(translate("Created directory") . ": $directory", log::NOTIFY, log::GENERAL);
             }
             return true;
@@ -738,7 +738,7 @@ function create_dir($directory) {
 function create_dir_recursive($directory){
     $nextdir="";
     $directory="/" . cleanup_path($directory);
-    foreach(explode("/",$directory) as $subdir) {
+    foreach (explode("/",$directory) as $subdir) {
         $nextdir=$nextdir . $subdir . "/";
         try {
             $result=create_dir($nextdir);

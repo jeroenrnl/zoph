@@ -52,7 +52,7 @@ if ($action == "insert") {
             person::getSelectArray()) ?>
          <br>
 <?php
-if($_action=="new") {
+if ($_action=="new") {
     ?>
          <label for="password"><?php echo translate("password") ?></label>
          <input type="password" name="password" id="password" value="" size="16" maxlength="32">

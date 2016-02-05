@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for 'actionlinks'
+ * Template for displaying
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,20 @@
  * @author Jeroen Roos
  * @package ZophTemplates
  */
-
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) {
+    die("Illegal call");
+}
 ?>
-        <?php if($tpl_actionlinks): ?>
-        <ul class="actionlink">
-            <?php foreach($tpl_actionlinks as $text => $link): ?>
-            <li>
-                <a href="<?= $link ?>">
-                    <?= $text ?>
-                </a>
-            </li>
-            <?php endforeach; ?>
-       </ul>
-        <?php endif; ?>
+<h1>
+    <?= $this->getActionlinks($tpl_actionlinks) ?>
+    <?= $tpl_title ?>
+</h1>
+<?php if ($tpl_selection): ?>
+    <?= $tpl_selection ?>
+<?php endif ?>
+<div class="main">
+    <?= $this->getActionlinks($tpl_mainActionlinks) ?>
+    <h2><?= e($tpl_obj->getName()) ?></h2>
+    <p><?= $tpl_obj->displayCoverphoto() ?></p>
+    <?= $this->displayBlocks(); ?>
+</div>

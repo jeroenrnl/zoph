@@ -28,7 +28,7 @@ $zophpage = new page($zophpage_id);
 if ($zophpage_id) {
     $zophpage->lookup();
     $title = $zophpage->get("title");
-    if(empty($title)) {
+    if (empty($title)) {
         $title=translate("Page");
     }
 } else if ($_action == "new") {
@@ -38,7 +38,7 @@ if ($zophpage_id) {
     redirect("zoph.php", "No page id given!");
 }
 
-if(!$user->isAdmin()) {
+if (!$user->isAdmin()) {
     $_action="display";
 }
 
@@ -89,7 +89,7 @@ if ($action == "confirm") {
     $pagesets=$zophpage->getPagesets();
 
 
-    if(!empty($pagesets)) {
+    if (!empty($pagesets)) {
         ?>
         <h2><?php echo translate("Pagesets")?></h2>
         <?php echo translate("This page is used in the following pagesets:") ?>

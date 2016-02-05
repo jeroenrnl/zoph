@@ -67,7 +67,7 @@ class conf {
             log::msg("Cannot load configuration from database", log::FATAL, log::CONFIG | log::DB);
         }
 
-        while($row = $result->fetch(PDO::FETCH_NUM)) {
+        while ($row = $result->fetch(PDO::FETCH_NUM)) {
             $key=$row[0];
             $value=$row[1];
             try {

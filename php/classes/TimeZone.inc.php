@@ -42,9 +42,9 @@ class TimeZone extends DateTimeZone {
         $zones=self::listIdentifiers();
         array_unshift($zones, "&nbsp;");
         $len=strlen($search);
-        foreach($zones as $id => $tz) {
+        foreach ($zones as $id => $tz) {
             $tzshort=strtolower(substr($tz,0,$len));
-            if(strtolower($search)==$tzshort) {
+            if (strtolower($search)==$tzshort) {
                 $newchild=$xml->createElement("tz");
                 $key=$xml->createElement("key");
                 $title=$xml->createElement("title");
@@ -99,13 +99,13 @@ class TimeZone extends DateTimeZone {
      */
     public static function createPulldown($name, $value=null) {
         $id=preg_replace("/^_+/", "", $name);
-        if($value) {
+        if ($value) {
             $text=$value;
         } else {
             $text="";
         }
 
-        if(conf::get("interface.autocomplete")) {
+        if (conf::get("interface.autocomplete")) {
             $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
                 " value='" . $value . "'>";
             $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
@@ -136,15 +136,15 @@ class TimeZone extends DateTimeZone {
      * @return string timezone
      */
     public static function guess($lat, $lon) {
-        if(class_exists("XMLReader")) {
+        if (class_exists("XMLReader")) {
             $failed=false;
             $xml=new XMLReader();
             @$xml->open("http://api.geonames.org/timezone?username=zoph&lat=" .
                 $lat . "&lng=" . $lon) or $failed=true;
 
             if (!$failed) {
-                while($xml->read()) {
-                    if($xml->name=="timezoneId") {
+                while ($xml->read()) {
+                    if ($xml->name=="timezoneId") {
                         $xml->read();
                         return $xml->value;
                     }

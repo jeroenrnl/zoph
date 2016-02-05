@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,7 +27,7 @@ require_once "testSetup.php";
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class albumTest extends ZophDataBaseTestCase {    
+class albumTest extends ZophDataBaseTestCase {
     /**
      * Create Albums in the database
      * @dataProvider getAlbums();
@@ -53,7 +53,7 @@ class albumTest extends ZophDataBaseTestCase {
 
         $albums=$photo->getAlbums();
 
-        foreach($albums as $alb) {
+        foreach ($albums as $alb) {
             $ids[]=$alb->getId();
         }
 
@@ -89,7 +89,7 @@ class albumTest extends ZophDataBaseTestCase {
 
         $albums=$photo->getAlbums();
 
-        foreach($albums as $alb) {
+        foreach ($albums as $alb) {
             $ids[]=$alb->getId();
         }
 
@@ -109,11 +109,11 @@ class albumTest extends ZophDataBaseTestCase {
         $album=new album($id);
         $alb_children=$album->getChildren($order);
         $children=array();
-        foreach($alb_children as $child) {
+        foreach ($alb_children as $child) {
             $children[]=$child->getId();
         }
 
-        if($order=="random") {
+        if ($order=="random") {
             // Of course, we cannot check the order for random, therefore we sort them.
             // Thus we only check if all the expected categories are present, not the order
             sort($children);
@@ -198,7 +198,7 @@ class albumTest extends ZophDataBaseTestCase {
                             <data>%s sub-albums</data>
                           </detail>
                         </response>
-                      </details>", 
+                      </details>",
                        $alb_id, $exp_details["count"],$disp_oldest, $disp_newest, $disp_first, $disp_last,  $exp_details["lowest"], $exp_details["highest"], $exp_details["average"],$subalb);
 
         $this->assertXmlStringEqualsXmlString($expectedXML, $details);
@@ -219,7 +219,7 @@ class albumTest extends ZophDataBaseTestCase {
         $this->assertEquals($pc, $count);
         user::setCurrent(new user(1));
     }
-    
+
     /**
      * Test getTotalPhotoCount() function
      * @dataProvider getTotalPhotoCount();
@@ -280,7 +280,7 @@ class albumTest extends ZophDataBaseTestCase {
         $this->assertEquals($photo, $cover->getId());
         user::setCurrent(new user(1));
     }
-    
+
     /**
      * Test getTopN() function
      * @dataProvider getTopNData();
@@ -290,7 +290,7 @@ class albumTest extends ZophDataBaseTestCase {
         $albids=array();
         $topN=album::getTopN();
 
-        foreach($topN as $album) {
+        foreach ($topN as $album) {
             $albids[]=$album["id"];
         }
         $this->assertEquals($expected, $albids);
@@ -306,7 +306,7 @@ class albumTest extends ZophDataBaseTestCase {
         $albids=array();
         $all=album::getAll();
 
-        foreach($all as $album) {
+        foreach ($all as $album) {
             $albids[]=$album->getId();
         }
         $this->assertEquals($expected, $albids);
@@ -320,7 +320,7 @@ class albumTest extends ZophDataBaseTestCase {
         $user=new user(2);
         $newer=album::getNewer($user, "1970-01-01");
         $albids=array();
-        foreach($newer as $album) {
+        foreach ($newer as $album) {
             $albids[]=$album->getId();
         }
         $this->assertEquals([1,2], $albids);
@@ -362,7 +362,7 @@ class albumTest extends ZophDataBaseTestCase {
         return array(
             array(1,5),
             array(2,6)
-        );    
+        );
     }
 
     /**
@@ -477,7 +477,7 @@ class albumTest extends ZophDataBaseTestCase {
             array(4,"last", 2, 7),
         );
     }
-    
+
     /**
      * dataProvider function
      * @return array userid, topN

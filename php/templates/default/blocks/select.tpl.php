@@ -19,12 +19,12 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <select name="<?php echo $tpl_name ?>" id="<?php echo $tpl_id ?>"
     <?php echo ($tpl_autosubmit ? "onChange='form.submit()'" : "") ?> >
-    <?php foreach($tpl_options as $option=>$label): ?>
-        <?php if($tpl_value==$option): ?>
+    <?php foreach ($tpl_options as $option=>$label): ?>
+        <?php if ($tpl_value==$option): ?>
             <?php $selected="selected"; ?>
         <?php else: ?>
             <?php $selected=""; ?>

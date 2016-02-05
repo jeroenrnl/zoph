@@ -19,7 +19,7 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 require_once "header.inc.php";
 ?>
     <h1>
@@ -27,7 +27,7 @@ require_once "header.inc.php";
     </h1>
     <div class="main">
         <ul class="admin">
-            <?php foreach($tpl_adminpages as $adminpage): ?>
+            <?php foreach ($tpl_adminpages as $adminpage): ?>
             <li>
                 <a href="<?php echo $adminpage->url ?>">
                     <img src="<?php echo $adminpage->icon; ?>">

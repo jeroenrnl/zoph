@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,7 +32,7 @@ use db\db;
  * @author Jeroen Roos
  */
 class photoTest extends ZophDataBaseTestCase {
-    
+
 
     /**
      * test display() method
@@ -45,7 +45,7 @@ class photoTest extends ZophDataBaseTestCase {
         list($header, $ph) = $photo->display();
 
         $image = imagecreatefromstring($ph);
-        
+
         // Compare dimensions to stored size
         $this->assertEquals($photo->get("width"), imagesx($image));
 
@@ -58,13 +58,13 @@ class photoTest extends ZophDataBaseTestCase {
         );
 
         $this->assertEquals($exp_header, $header);
-        
+
         // test midsize image
         list($header, $ph) = $photo->display(MID_PREFIX);
 
         $image = imagecreatefromstring($ph);
         $this->assertEquals(MID_SIZE, imagesx($image));
-        
+
         $_SERVER['HTTP_IF_MODIFIED_SINCE'] = $modified;
 
         list($header, $ph) = $photo->display();
@@ -108,15 +108,15 @@ class photoTest extends ZophDataBaseTestCase {
         $cat_ids=array();
         $people_ids=array();
 
-        foreach($albums as $album) {
+        foreach ($albums as $album) {
             $album_ids[]=$album->getId();
         }
 
-        foreach($cats as $cat) {
+        foreach ($cats as $cat) {
             $cat_ids[]=$cat->getId();
         }
 
-        foreach($people as $person) {
+        foreach ($people as $person) {
             $people_ids[]=$person->getId();
         }
 
@@ -132,26 +132,26 @@ class photoTest extends ZophDataBaseTestCase {
     public function testUpdateEXIF() {
         $photo=new photo(2);
         $photo->lookup();
-       
+
         $data=array(
-            "ISO"       => "100", 
-            "Make"      => "Zoph", 
+            "ISO"       => "100",
+            "Make"      => "Zoph",
             "Model"     => "Zoph Digital 2000",
             "ApertureValue" => "2.8",
-            "ExposureTime" => "1/200", 
+            "ExposureTime" => "1/200",
             "ExposureProgram#"  => "3",
             "EXIF:Flash#"    => "16",
             "FocalLength"   => "1200",
             "GPSLatitude"   => "150,0,0",
             "GPSLatitudeRef#"   => "E",
-            "GPSLongitude"  => "80,0,0", 
+            "GPSLongitude"  => "80,0,0",
             "GPSLongitudeRef#"  => "N"
             );
-         
+
         helpers::writeEXIFdata($photo->getFilePath(), $data);
 
         $photo->updateEXIF();
-        
+
         $display=$photo->getCameraDisplayArray();
 
         $expected=array(
@@ -188,7 +188,7 @@ class photoTest extends ZophDataBaseTestCase {
         $this->assertInstanceOf("block", $block->vars["link"]);
         $this->assertEquals("templates/default/blocks/img.tpl.php", $block->vars["link"]->template);
         $this->assertEquals("", $block->vars["target"]);
-        
+
         $block=$photo->getThumbnailLink("http://test");
 
         $this->assertInstanceOf("block", $block);
@@ -211,7 +211,7 @@ class photoTest extends ZophDataBaseTestCase {
         $this->assertEquals("image.php?photo_id=3", $block->vars["href"]);
         $this->assertEquals("photo", $block->vars["link"]);
         $this->assertEquals("", $block->vars["target"]);
-        
+
         $user=user::getCurrent();
         $user->prefs->set("fullsize_new_win",true);
         $block=$photo->getFullsizeLink("photo");
@@ -224,7 +224,7 @@ class photoTest extends ZophDataBaseTestCase {
     public function testGetURL() {
         $photo=new photo(3);
         $photo->lookup();
-        
+
         $url=$photo->getURL();
         $this->assertEquals("image.php?photo_id=3", $url);
 
@@ -249,7 +249,7 @@ class photoTest extends ZophDataBaseTestCase {
         $this->assertEquals("", $block->vars["class"]);
         $this->assertEquals("width=\"600\" height=\"400\"", $block->vars["size"]);
         $this->assertEquals("Nothing", $block->vars["alt"]);
-        
+
         $block=$photo->getImageTag("mid");
         $this->assertInstanceOf("block", $block);
         $this->assertEquals("image.php?photo_id=3&amp;type=mid", $block->vars["src"]);
@@ -293,15 +293,15 @@ class photoTest extends ZophDataBaseTestCase {
     public function testAddToAlbum($photo, array $newalbums) {
         $ids=array();
         $photo=new photo($photo);
-        foreach($newalbums as $alb) {
+        foreach ($newalbums as $alb) {
             $photo->addTo(new album($alb));
         }
         $albums=$photo->getAlbums();
-        foreach($albums as $album) {
+        foreach ($albums as $album) {
             $ids[]=$album->getId();
             $this->assertInstanceOf("album", $album);
         }
-        foreach($newalbums as $album_id) {
+        foreach ($newalbums as $album_id) {
             $this->assertContains($album_id, $ids);
         }
     }
@@ -318,7 +318,7 @@ class photoTest extends ZophDataBaseTestCase {
 
         $albums=$photo->getAlbums();
         $act_albums=array();
-        foreach($albums as $album) {
+        foreach ($albums as $album) {
             $act_albums[]=$album->getId();
         }
 
@@ -335,15 +335,15 @@ class photoTest extends ZophDataBaseTestCase {
     public function testAddToCategories($photo, array $newcats) {
         $ids=array();
         $photo=new photo($photo);
-        foreach($newcats as $cat) {
+        foreach ($newcats as $cat) {
             $photo->addTo(new category($cat));
         }
         $cats=$photo->getCategories();
-        foreach($cats as $cat) {
+        foreach ($cats as $cat) {
             $ids[]=$cat->getId();
             $this->assertInstanceOf("category", $cat);
         }
-        foreach($newcats as $cat_id) {
+        foreach ($newcats as $cat_id) {
             $this->assertContains($cat_id, $ids);
         }
     }
@@ -355,15 +355,15 @@ class photoTest extends ZophDataBaseTestCase {
     public function testAddPerson($photo, array $newpers) {
         $ids=array();
         $photo=new photo($photo);
-        foreach($newpers as $pers) {
+        foreach ($newpers as $pers) {
             $photo->addTo(new person($pers));
         }
         $peo=$photo->getPeople();
-        foreach($peo as $per) {
+        foreach ($peo as $per) {
             $ids[]=$per->getId();
             $this->assertInstanceOf("person", $per);
         }
-        foreach($newpers as $per_id) {
+        foreach ($newpers as $per_id) {
             $this->assertContains($per_id, $ids);
         }
     }
@@ -389,7 +389,7 @@ class photoTest extends ZophDataBaseTestCase {
         $_SERVER["REMOTE_ADDR"]=$user->getName() . ".zoph.org";
         $obj->insert();
         $obj->addToPhoto($photo);
-        
+
         $this->assertInstanceOf("comment", $obj);
         $this->assertEquals($obj->getPhoto()->getId(), $photo->getId());
     }
@@ -403,7 +403,7 @@ class photoTest extends ZophDataBaseTestCase {
 
         $comments=$photo->getComments();
         $actual=array();
-        foreach($comments as $comment) {
+        foreach ($comments as $comment) {
             $this->assertInstanceOf("comment", $comment);
             $this->assertEquals($comment->getPhoto()->getId(), $photo->getId());
             $actual[]=$comment->getId();
@@ -427,15 +427,15 @@ class photoTest extends ZophDataBaseTestCase {
         // Camera's timezone is UTC
         $conf=conf::set("date.tz", "UTC");
         $conf->update();
-        
+
         $conf=conf::set("date.format", "d-m-Y");
         $conf->update();
 
         $conf=conf::set("date.timeformat", "H:i:s T");
         $conf->update();
-        
+
         $location=$photo->location;
-        
+
         // Timezone for New York, where photo was taken.
         $location->set("timezone", "America/New_York");
         $location->update();
@@ -448,10 +448,10 @@ class photoTest extends ZophDataBaseTestCase {
      */
     public function testGetTime() {
         $this->setupTime();
-        
+
         $photo=new photo(9);
         $photo->lookup();
-        
+
         $datetime=$photo->getTime();
 
         $expected=new Time("31-12-2012 23:00:00 America/New_York");
@@ -464,7 +464,7 @@ class photoTest extends ZophDataBaseTestCase {
      */
     public function testGetFormattedDateTime() {
         $this->setupTime();
-        
+
         $photo=new photo(9);
         $photo->lookup();
         // First test:
@@ -505,11 +505,11 @@ class photoTest extends ZophDataBaseTestCase {
         // The time should be 1/1/13 4:00, EST
         $location->set("timezone", "America/New_York");
         $location->update();
-        
+
         $datetime=$photo->getFormattedDateTime();
         $this->assertEquals("01-01-2013", $datetime[0]);
         $this->assertEquals("04:00:00 EST", $datetime[1]);
-        
+
         // Fifth Test
         // camera timezone is Australia (+8)
         // place timezone is Los Angeles (-8)
@@ -534,27 +534,27 @@ class photoTest extends ZophDataBaseTestCase {
      */
     public function testGetReverseDate() {
         $this->setupTime();
-        
+
         $photo=new photo(9);
         $photo->lookup();
-        
+
         $date=$photo->getReverseDate();
         $this->assertEquals("2012-12-31", $date);
     }
-        
-        
+
+
 
     /**
      * Test getUTCtime function
      */
     public function testGetUTCtime() {
         $this->setupTime();
-        
+
         conf::set("date.tz", "Europe/Amsterdam");
-        
+
         $photo=new photo(9);
         $photo->lookup();
-        
+
         $datetime=$photo->getUTCtime();
 
         $this->assertEquals("01-01-2013", $datetime[0]);
@@ -568,8 +568,8 @@ class photoTest extends ZophDataBaseTestCase {
      */
     public function testImportImages($id, $name, $bg, $fg, $exif) {
         user::setCurrent(new user(1));
-        if(file_exists(conf::get("path.images") . "/" . $name)) {
-            unlink(conf::get("path.images") . "/" . $name);        
+        if (file_exists(conf::get("path.images") . "/" . $name)) {
+            unlink(conf::get("path.images") . "/" . $name);
         }
         helpers::createTestImage($name, $bg, $fg, $exif);
         $photos[]=new file("/tmp/" . $name);
@@ -578,7 +578,7 @@ class photoTest extends ZophDataBaseTestCase {
 
 
         $imported=cliimport::photos($photos, array());
-        foreach($imported as $photo) {
+        foreach ($imported as $photo) {
             $this->assertInstanceOf("photo", $photo);
             $this->assertEquals($name, $photo->get("name"));
 
@@ -595,8 +595,8 @@ class photoTest extends ZophDataBaseTestCase {
 
     public function testImportImagesDated($id, $name, $bg, $fg, $exif) {
         user::setCurrent(new user(1));
-        if(file_exists(conf::get("path.images") . "/" . $name)) {
-            unlink(conf::get("path.images") . "/" . $name);        
+        if (file_exists(conf::get("path.images") . "/" . $name)) {
+            unlink(conf::get("path.images") . "/" . $name);
         }
         helpers::createTestImage($name, $bg, $fg, $exif);
         $photos[]=new file("/tmp/" . $name);
@@ -606,7 +606,7 @@ class photoTest extends ZophDataBaseTestCase {
 
 
         $imported=cliimport::photos($photos, array());
-        foreach($imported as $photo) {
+        foreach ($imported as $photo) {
             $this->assertInstanceOf("photo", $photo);
             $this->assertEquals($name, $photo->get("name"));
 
@@ -614,7 +614,7 @@ class photoTest extends ZophDataBaseTestCase {
             $date=str_replace("-", ".", $photo->get("date"));
             $this->assertFileExists(conf::get("path.images") . "/" . $date . "/" . $name);
         }
-        unlink(conf::get("path.images") . "/" . $date . "/" . $name);        
+        unlink(conf::get("path.images") . "/" . $date . "/" . $name);
     }
 
     /**
@@ -643,7 +643,7 @@ class photoTest extends ZophDataBaseTestCase {
 
         $track->set("name", "Test Track");
 
-        for($x=0; $x<500; $x++) {
+        for ($x=0; $x<500; $x++) {
             $point=new point();
             $point->set("lat", round(52 - ($x/100),2));
             $point->set("lon", 5);
@@ -670,11 +670,11 @@ class photoTest extends ZophDataBaseTestCase {
             4   => 51.6,
             5   => 51.5
         );
-        
+
         // Set temporary testdata for time and lat/lon
         $photos=array();
-        
-        for($i=1; $i<=5; $i++) {
+
+        for ($i=1; $i<=5; $i++) {
             $photo=new photo($i);
             $photo->lookup();
 
@@ -687,7 +687,7 @@ class photoTest extends ZophDataBaseTestCase {
             $photos[]=$photo;
         }
 
-        foreach(array(4,5) as $i) {
+        foreach (array(4,5) as $i) {
             $place=new place($i);
             $place->set("timezone", "UTC");
             $place->update();
@@ -699,7 +699,7 @@ class photoTest extends ZophDataBaseTestCase {
         $ph=photo::removePhotosWithLatLon($photos);
         $this->assertEquals(4, sizeof($ph));
 
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $point=$photo->getLatLon($track, 300, true);
             $photo->setLatLon($point);
             $photo->update();
@@ -722,12 +722,12 @@ class photoTest extends ZophDataBaseTestCase {
         $first=array();
         $last=array();
 
-        for($i=1; $i<=50; $i++) {
-            if($i<=5) {
+        for ($i=1; $i<=50; $i++) {
+            if ($i<=5) {
                 $first[$i]=new photo($i);
             }
             $photos[]=new photo($i);
-            if($i>45) {
+            if ($i>45) {
                 $last[$i]=new photo($i);
             }
 
@@ -746,14 +746,14 @@ class photoTest extends ZophDataBaseTestCase {
         $this->assertCount(15, $subset);
 
         $photos=array();
-        
-        for($i=1; $i<=4; $i++) {
+
+        for ($i=1; $i<=4; $i++) {
             $photos[]=new photo($i);
         }
         $subset=photo::getSubset($photos, array("first", "random", "last"), 5);
-        
+
         $photos=array();
-        for($i=1; $i<=8; $i++) {
+        for ($i=1; $i<=8; $i++) {
             $photos[]=new photo($i);
         }
         $subset=photo::getSubset($photos, array("first", "random"), 5);
@@ -832,7 +832,7 @@ class photoTest extends ZophDataBaseTestCase {
 
         $photo=new photo();
         $photo->set("name", "invalid.jpg");
-        
+
         $dir = conf::get("path.images") . "/";
 
         $ph=$dir .  $photo->get("name");
@@ -854,7 +854,7 @@ class photoTest extends ZophDataBaseTestCase {
 
         $photo=new photo(5);
         $photo->lookup();
-        
+
         // Mess up by changing imagedir
         $imagedir=conf::get("path.images");
         conf::set("path.images", "/tmp");
@@ -872,7 +872,7 @@ class photoTest extends ZophDataBaseTestCase {
      */
     public function testGetByName($file, $path, $exp_id) {
         // Set path, so lookup by path can be tested
-        if($file=="TEST_0003.JPG") {
+        if ($file=="TEST_0003.JPG") {
             $photo=new photo(3);
             $photo->lookup();
             $photo->set("path", "dir003/dir003");
@@ -892,7 +892,7 @@ class photoTest extends ZophDataBaseTestCase {
         conf::set("share.salt.full", "TestSaltFull");
         conf::set("share.salt.mid", "TestSaltMid");
 
-        if($type=="full") {
+        if ($type=="full") {
             $hash=sha1("TestSaltFull" . $hash);
         } else if ($type="mid") {
             $hash=sha1("TestSaltMid" . $hash);
@@ -916,7 +916,7 @@ class photoTest extends ZophDataBaseTestCase {
         $photos = photo::getRecords($order, $constraints, $conj, $ops);
 
         $act=array();
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $act[]=$photo->getId();
         }
 
@@ -946,11 +946,11 @@ class photoTest extends ZophDataBaseTestCase {
 
     public function getImages() {
         return array(
-            array(13, "FILE_0001.JPG", "blue", "yellow", 
+            array(13, "FILE_0001.JPG", "blue", "yellow",
                 array("DateTimeOriginal" => "2013-01-01 13:00:00")),
             array(13, "FILE_0002.JPG", "red", "yellow",
                 array("DateTimeOriginal" => "2012-12-31 15:00:00")),
-            array(13, "FILE_0003.JPG", "yellow", "blue", 
+            array(13, "FILE_0003.JPG", "yellow", "blue",
                 array("DateTimeOriginal" => "2013-01-01 14:00:00"))
          );
     }
@@ -1020,9 +1020,9 @@ class photoTest extends ZophDataBaseTestCase {
          );
     }
 
-    public function getRotateCmds() {   
+    public function getRotateCmds() {
         return array(
-            array("jpegtran"), 
+            array("jpegtran"),
             array("convert")
         );
     }
@@ -1059,7 +1059,7 @@ class photoTest extends ZophDataBaseTestCase {
         // order, constraints, conj, ops
         return array(
             array(
-                "name", 
+                "name",
                 array(
                     "width" => "600",
                     "height" => "400"
@@ -1096,6 +1096,6 @@ class photoTest extends ZophDataBaseTestCase {
         );
     }
 
-        
+
 
 }

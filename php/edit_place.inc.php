@@ -40,7 +40,7 @@
         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
         <label for="parent_place_id"><?php echo translate("parent location") ?></label>
 <?php
-if($place->isRoot()) {
+if ($place->isRoot()) {
     echo translate("places");
 } else {
     echo place::createPulldown("parent_place_id", $place->get("parent_place_id"));
@@ -83,7 +83,7 @@ if($place->isRoot()) {
   <?php echo create_text_input("lon", $place->get("lon"), 10, 10) ?><br>
   <label for="mapzoom"><?php echo translate("zoom level") ?></label>
   <?php echo place::createZoomPulldown($place->get("mapzoom")) ?><br>
-  <?php if(conf::get("maps.geocode")): ?>
+  <?php if (conf::get("maps.geocode")): ?>
     <div class="geocode">
       <input id="geocode" class="geocode" type="button"
         value="<?php echo translate("search", false) ?>">
@@ -99,9 +99,9 @@ if($place->isRoot()) {
   <?php endif; ?>
 </fieldset>
 <?php
-if(conf::get("date.guesstz")) {
+if (conf::get("date.guesstz")) {
     $tz=e($place->guessTZ());
-    if(!empty($tz)) {
+    if (!empty($tz)) {
         ?>
         <ul class="actionlink">
           <li>
@@ -114,7 +114,7 @@ if(conf::get("date.guesstz")) {
         <?php
     }
 }
-if($place->get("timezone")) {
+if ($place->get("timezone")) {
     ?>
     <span class="actionlink">
       <a href="place.php?_action=settzchildren&place_id=<?php echo $place->get("place_id") ?>">

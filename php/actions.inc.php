@@ -46,9 +46,13 @@ if ($_action == "edit") {
     $_action = "new";
     $action = "insert"; // in case redirect doesn't work
 
-    $user->eatCrumb();
-    $link = strip_href($user->getLastCrumb());
-    if (!$link) { $link = $redirect; }
+    breadcrumb::eat();
+    $crumb = breadcrumb::getLast();
+    if ($crumb instanceof breadcrumb) {
+        $link=$crumb->getLink();
+    } else {
+        $link = $redirect;
+    }
     redirect($link, "Redirect");
 } else {
     $action = "display";

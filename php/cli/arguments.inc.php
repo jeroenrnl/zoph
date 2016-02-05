@@ -44,7 +44,7 @@ class arguments {
         // We don't care about the name of the script
         array_shift($argv);
         $this->arguments=$argv;
-        if(count($this->arguments)===0) {
+        if (count($this->arguments)===0) {
             $this->arguments[]="--help";
         }
         $this->process();
@@ -83,7 +83,7 @@ class arguments {
           Used short arguments: A C D H I N P V a c d f h i l n p r t u v w
         */
         $size=sizeof($argv);
-        for($i=0; $i<$size; $i++) {
+        for ($i=0; $i<$size; $i++) {
             switch($argv[$i]) {
             case "":
                 break;
@@ -97,9 +97,9 @@ class arguments {
             case "--album":
             case "-a":
                 $albums=explode(",",$argv[++$i]);
-                foreach($albums as $album) {
+                foreach ($albums as $album) {
                     $args["albums"][]=trim($album);
-                    if(isset($parent)) {
+                    if (isset($parent)) {
                         $args["palbum"][]=trim($parent);
                     }
                 }
@@ -110,9 +110,9 @@ class arguments {
             case "--categories":
             case "-c":
                 $cats=explode(",",$argv[++$i]);
-                foreach($cats as $cat) {
+                foreach ($cats as $cat) {
                     $args["categories"][]=trim($cat);
-                    if(isset($parent)) {
+                    if (isset($parent)) {
                         $args["pcat"][]=trim($parent);
                     }
                 }
@@ -123,7 +123,7 @@ class arguments {
             case "-C":
                 self::$command="config";
                 $args["_configitem"]=$argv[++$i];
-                if(isset($argv[$i+1])) {
+                if (isset($argv[$i+1])) {
                     $args["_configvalue"]=$argv[++$i];
                 } else {
                     $args["_configdefault"]=true;
@@ -145,9 +145,9 @@ class arguments {
             case "-l":
                 // Multiple locations are possible when using --new
                 $locs=explode(",",$argv[++$i]);
-                foreach($locs as $loc) {
+                foreach ($locs as $loc) {
                     $args["location"][]=trim($loc);
-                    if(isset($parent)) {
+                    if (isset($parent)) {
                         $args["pplace"][]=trim($parent);
                     }
                 }
@@ -158,7 +158,7 @@ class arguments {
             case "--person":
             case "-p":
                 $people=explode(",",$argv[++$i]);
-                foreach($people as $person) {
+                foreach ($people as $person) {
                     $args["people"][]=trim($person);
                 }
                 break;
@@ -300,7 +300,7 @@ class arguments {
                 conf::set("import.cli.verbose", ++$verbose);
                 break;
             default:
-                if(substr($argv[$i],0,1)=="-") {
+                if (substr($argv[$i],0,1)=="-") {
                     echo "unknown argument: " . $argv[$i] . "\n";
                     exit(1);
                 } else {
@@ -309,16 +309,16 @@ class arguments {
                 break;
             }
         }
-        if(isset($args["fields"])) {
+        if (isset($args["fields"])) {
             $newfields=array();
-            foreach($args["fields"] as $f) {
+            foreach ($args["fields"] as $f) {
                 $field=explode("=", $f);
                 $newfields[$field[0]]=$field[1];
             }
             $args["fields"]=$newfields;
         }
 
-        if(conf::get("import.cli.useids")==true && self::$command=="import") {
+        if (conf::get("import.cli.useids")==true && self::$command=="import") {
             self::$command="update";
         }
     }
@@ -328,29 +328,29 @@ class arguments {
     private function lookup() {
         $args=$this->processed;
         $vars=&$this->vars;
-        foreach($args as $type=>$arg) {
-            if(empty($arg) || empty($type)) {
+        foreach ($args as $type=>$arg) {
+            if (empty($arg) || empty($type)) {
                 continue;
             }
 
             log::msg($type . "\t->\t" . implode(",", (array) $arg), log::DEBUG, log::IMPORT);
             switch($type) {
             case "albums":
-                foreach($arg as $name) {
-                    if(self::$command=="new" ||
+                foreach ($arg as $name) {
+                    if (self::$command=="new" ||
                       (conf::get("import.cli.add.auto") && !album::getByName($name))) {
                         $parent=array_shift($args["palbum"]);
                         // this is a string comparison because the trim() in process() changes
                         // everything into a string...
-                        if($parent==="0") {
-                            if(conf::get("import.cli.add.always")) {
+                        if ($parent==="0") {
+                            if (conf::get("import.cli.add.always")) {
                                 $parent_id=album::getRoot()->getId();
                             } else {
                                 throw new CliNoParentException("No parent for album " . $name);
                             }
                         } else {
                             $palbum=album::getByName($parent);
-                            if($palbum) {
+                            if ($palbum) {
                                 $parent_id=$palbum[0]->getId();
                             } else {
                                 throw new AlbumNotFoundException("Album not found: $parent");
@@ -359,7 +359,7 @@ class arguments {
                         $vars["_new_album"][]=array("parent" => $parent_id, "name" => $name);
                     } else {
                         $album=album::getByName($name);
-                        if($album) {
+                        if ($album) {
                             $album_id=$album[0]->getId();
                             $vars["_album_id"][]=$album_id;
                         } else {
@@ -369,21 +369,21 @@ class arguments {
                 }
                 break;
             case "categories":
-                foreach($arg as $name) {
-                    if(self::$command=="new" ||
+                foreach ($arg as $name) {
+                    if (self::$command=="new" ||
                       (conf::get("import.cli.add.auto") && !category::getByName($name))) {
                         $parent=array_shift($args["pcat"]);
                         // this is a string comparison because the trim() in process() changes
                         // everything into a string...
-                        if($parent==="0") {
-                            if(conf::get("import.cli.add.always")) {
+                        if ($parent==="0") {
+                            if (conf::get("import.cli.add.always")) {
                                 $parent_id=category::getRoot()->getId();
                             } else {
                                 throw new CliNoParentException("No parent for category " . $name);
                             }
                         } else {
                             $pcat=category::getByName($parent);
-                            if($pcat) {
+                            if ($pcat) {
                                 $parent_id=$pcat[0]->getId();
                             } else {
                                 throw new CategoryNotFoundException("Category not found: $parent");
@@ -392,7 +392,7 @@ class arguments {
                         $vars["_new_cat"][]=array("parent" => $parent_id, "name" => $name);
                     } else {
                         $cat=category::getByName($name);
-                        if($cat) {
+                        if ($cat) {
                             $cat_id=$cat[0]->getId();
                             $vars["_category_id"][]=$cat_id;
                         } else {
@@ -402,13 +402,13 @@ class arguments {
                 }
                 break;
             case "people":
-                foreach($arg as $name) {
-                    if(self::$command=="new" || (conf::get("import.cli.add.auto") &&
+                foreach ($arg as $name) {
+                    if (self::$command=="new" || (conf::get("import.cli.add.auto") &&
                       !person::getByName($name))) {
                         $vars["_new_person"][]=$name;
                     } else {
                         $person=person::getByName($name);
-                        if($person) {
+                        if ($person) {
                             $person_id=$person[0]->getId();
                             $vars["_person_id"][]=$person_id;
                         } else {
@@ -419,12 +419,12 @@ class arguments {
                 break;
             case "photographer":
                 $name=$arg;
-                if(self::$command=="new" ||
+                if (self::$command=="new" ||
                   (conf::get("import.cli.add.auto") && !person::getByName($name))) {
                     $vars["_new_photographer"][]=$name;
                 } else {
                     $person=person::getByName($name);
-                    if($person) {
+                    if ($person) {
                         $person_id=$person[0]->getId();
                         $vars["photographer_id"]=$person_id;
                     } else {
@@ -433,21 +433,21 @@ class arguments {
                 }
                 break;
             case "location":
-                foreach($arg as $name) {
-                    if(self::$command=="new" || (conf::get("import.cli.add.auto") &&
+                foreach ($arg as $name) {
+                    if (self::$command=="new" || (conf::get("import.cli.add.auto") &&
                       !place::getByName($name))) {
                         $parent=array_shift($args["pplace"]);
                         // this is a string comparison because the trim() in process() changes
                         // everything into a string...
-                        if($parent==="0") {
-                            if(conf::get("import.cli.add.always")) {
+                        if ($parent==="0") {
+                            if (conf::get("import.cli.add.always")) {
                                 $parent_id=place::getRoot()->getId();
                             } else {
                                 throw new CliNoParentException("No parent for location " . $name);
                             }
                         } else {
                             $pplace=place::getByName($parent);
-                            if($pplace) {
+                            if ($pplace) {
                                 $parent_id=$pplace[0]->getId();
                             } else {
                                 throw new PlaceNotFoundException("Location not found: $parent");
@@ -457,7 +457,7 @@ class arguments {
                     } else {
                         $name=$arg[0];
                         $place=place::getByName($name);
-                        if($place) {
+                        if ($place) {
                             $place_id=$place[0]->getId();
                             $vars["location_id"]=$place_id;
                         } else {
@@ -470,7 +470,7 @@ class arguments {
                 $vars["_path"]=$arg;
                 break;
             case "dirpattern":
-                if(!preg_match("/^[aclpDP]+$/", $arg)) {
+                if (!preg_match("/^[aclpDP]+$/", $arg)) {
                     throw new CliIllegalDirpatternException("Illegal characters in " .
                         "--dirpattern, allowed are: aclpDP");
                 } else {
@@ -479,7 +479,7 @@ class arguments {
                 break;
 
             case "fields":
-                foreach($arg as $field=>$value) {
+                foreach ($arg as $field=>$value) {
                     $vars[$field]=$value;
                 }
                 break;

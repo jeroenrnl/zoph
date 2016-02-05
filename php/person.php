@@ -75,7 +75,7 @@ if ($action == "display") {
             <?php echo translate("new") ?>
           </a>
         <?php
-        if($person->get("coverphoto")) {
+        if ($person->get("coverphoto")) {
             ?>
             |
             <a href="person.php?_action=update&amp;person_id=<?php
@@ -92,11 +92,19 @@ if ($action == "display") {
     <?php echo $title ?>
     </h1>
     <?php
-    if($user->isAdmin()) {
-        include "selection.inc.php";
+    if ($user->isAdmin()) {
+		try {
+			$selection=new selection($_SESSION, array(
+				"coverphoto"    => "person.php?_action=update&amp;person_id=" . $person->getId() . "&amp;coverphoto=",
+				"return"        => "_return=person.php&amp;_qs=person_id=" . $person->getId()
+			));
+		} catch (PhotoNoSelectionException $e) {
+			$selection=null;
+		}
+		echo $selection;
     }
     include "show_page.inc.php";
-    if($show_orig) {
+    if ($show_orig) {
         ?>
         <div class="main">
         <span class="actionlink">

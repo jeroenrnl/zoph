@@ -48,7 +48,7 @@ if ($_action == "update_albums") {
     $albums = $group->getAlbums();
     foreach ($albums as $album) {
         $id=$album->get("album_id");
-        if(isset($request_vars["_remove_permission_album__$id"])) {
+        if (isset($request_vars["_remove_permission_album__$id"])) {
             $remove_permission_album = $request_vars["_remove_permission_album__$id"];
             // first check if album needs to be revoked
             if ($remove_permission_album) {

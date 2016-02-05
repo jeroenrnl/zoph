@@ -44,12 +44,12 @@ class getPhotoTest extends PHPUnit_Framework_TestCase {
 
         $actCount=get_photos($vars, $offset, $rows, $photos, new user($userId));
 
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $actPhotoIds[]=$photo->getId();
         }
         // This test is only done when there is no limit, because the counter
         // always gives the full set
-        if($offset==0 && $rows==999) {
+        if ($offset==0 && $rows==999) {
             $this->assertEquals(sizeOf($expPhotoIds), $actCount);
         } else {
             $this->assertEquals(12, $actCount);

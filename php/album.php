@@ -33,7 +33,7 @@ $album = new album($album_id);
 $obj = &$album;
 $redirect = "albums.php";
 
-if($_action=="update" && getvar("sortorder")=="") {
+if ($_action=="update" && getvar("sortorder")=="") {
     // overiding the default action, to be able to clear the sortorder
     $obj->setFields($request_vars);
     $obj->set("sortorder", "");

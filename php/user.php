@@ -118,11 +118,11 @@ if ($action == "display") {
     echo $tpl;
 
     $comments=$this_user->getComments();
-    if(!empty($comments)) {
+    if (!empty($comments)) {
         ?>
         <h3><?php echo translate("comments by this user") ?></h3>
         <?php
-        foreach($comments as $comment) {
+        foreach ($comments as $comment) {
             $comment->lookup();
             echo $comment->toHTML(true);
         }

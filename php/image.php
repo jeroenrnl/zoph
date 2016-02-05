@@ -30,7 +30,7 @@ require_once "include.inc.php";
 $photo_id = getvar("photo_id");
 $type = getvar("type");
 
-if(($type=="import_thumb" || $type=="import_mid") &&
+if (($type=="import_thumb" || $type=="import_mid") &&
     ($user->isAdmin() || $user->get("import"))) {
 
     $md5 = getvar("file");
@@ -39,7 +39,7 @@ if(($type=="import_thumb" || $type=="import_mid") &&
     $photo = new photo();
     $photo->set("name", basename($file));
     $photo->set("path", conf::get("path.upload"));
-    if($type=="import_thumb") {
+    if ($type=="import_thumb") {
         $type="thumb";
     } else if ($type=="import_mid") {
         $type="mid";
@@ -65,7 +65,7 @@ if(($type=="import_thumb" || $type=="import_mid") &&
     $photo = new annotatedPhoto($photo_id);
     $found = $photo->lookup();
     $photo->setVars($request_vars);
-    if(getvar("_size")=="mid") {
+    if (getvar("_size")=="mid") {
         $type=MID_PREFIX;
     }
 } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {
@@ -79,11 +79,11 @@ if ($found) {
     $image_path = conf::get("path.images") . "/" . $photo->get("path") . "/";
     $watermark_file="";
 
-    if(!$user->isAdmin() && conf::get("watermark.enable")) {
+    if (!$user->isAdmin() && conf::get("watermark.enable")) {
         $permissions = $user->getPhotoPermissions($photo);
         $watermark = $permissions->get("watermark_level");
         $photolevel=$photo->get("level");
-        if($photolevel > $watermark) {
+        if ($photolevel > $watermark) {
             $photo=new watermarkedPhoto($photo_id);
             $photo->lookup();
         }
@@ -91,8 +91,8 @@ if ($found) {
 
     list($headers, $image)=$photo->display($type);
 
-    foreach($headers as $label=>$value) {
-        if($label=="http_status") {
+    foreach ($headers as $label=>$value) {
+        if ($label=="http_status") {
             // http status codes do not have a label
             header($value);
         } else {
@@ -100,7 +100,7 @@ if ($found) {
         }
     }
 
-    if(!is_null($image)) {
+    if (!is_null($image)) {
         echo $image;
     }
     exit;

@@ -346,24 +346,6 @@ class userTest extends ZophDatabaseTestCase {
         $this->assertInstanceOf("language", $lang);
     }
 
-    public function testCrumbs() {
-        $obj = new user(5);
-        $obj->addCrumb("test", "test.html");
-        $obj->addCrumb("test", "test1.html");
-        $obj->addCrumb("test2", "test2.html?what=ever");
-        $obj->addCrumb("test3", "test3.html");
-        $obj->addCrumb("test4", "test4.html");
-
-        $this->assertEquals($obj->getLastCrumb(),"<a href=\"test4.html?_crumb=4\">test4</a>");
-        $obj->eatCrumb(2);
-        $this->assertEquals($obj->getLastCrumb(),
-            "<a href=\"test2.html?_crumb=2&what=ever\">test2</a>");
-        $obj->eatCrumb(1);
-        $this->assertEquals($obj->getLastCrumb(),"<a href=\"test1.html?_crumb=1\">test</a>");
-        $obj->eatCrumb();
-        $this->assertNull($obj->getLastCrumb());
-    }
-
     /**
      * Test getRatingGraph() method.
      * Tests only 1 user with no ratings
@@ -375,7 +357,7 @@ class userTest extends ZophDatabaseTestCase {
         $this->assertInternalType("array", $graph);
 
         // Check if all keys are present
-        for($i=1; $i<=10; $i++) {
+        for ($i=1; $i<=10; $i++) {
             $this->assertArrayHasKey($i, $graph);
         }
 

@@ -112,7 +112,7 @@ class WebImport extends Import {
 
         $error=$file["error"];
 
-        if($error) {
+        if ($error) {
             // should do some nicer printing to this error some time
             log::msg(self::handleUploadErrors($error), log::FATAL, log::IMPORT);
             return false;
@@ -121,14 +121,14 @@ class WebImport extends Import {
         $file=new file($tmp_name);
         $mime=$file->getMime();
 
-        if(!$file->type) {
+        if (!$file->type) {
             log::msg("Illegal filetype: $mime", log::FATAL, log::IMPORT);
             return false;
         }
 
         $dir=conf::get("path.images") . DIRECTORY_SEPARATOR . conf::get("path.upload");
         $realDir=realpath($dir);
-        if($realDir === false) {
+        if ($realDir === false) {
             log::msg($dir . " does not exist, creating...", log::WARN, log::IMPORT);
             try {
                 create_dir_recursive($dir);
@@ -139,14 +139,14 @@ class WebImport extends Import {
             }
             // doublecheck if path really has been correctly created.
             $realDir=realpath($dir);
-            if($realDir === false) {
+            if ($realDir === false) {
                 log::msg($dir . " does not exist, and I can not create it.", log::WARN, log::FATAL);
             }
         }
         $dir=$realDir;
         $dest=$dir . "/" . basename($filename);
-        if(is_writable($dir)) {
-            if(!file_exists($dest)) {
+        if (is_writable($dir)) {
+            if (!file_exists($dest)) {
                 move_uploaded_file($tmp_name, $dest);
             } else {
                 log::msg("A file named <b>" . $filename .
@@ -175,7 +175,7 @@ class WebImport extends Import {
         $dir=conf::get("path.images") . "/" . conf::get("path.upload") . "/";
         $file=file::getFromMD5($dir, $md5);
 
-        if($file instanceof file) {
+        if ($file instanceof file) {
             $mime=$file->getMime();
             $type=$file->type;
         } else {
@@ -184,7 +184,7 @@ class WebImport extends Import {
 
         switch($type) {
         case "image":
-            if($mime=="image/jpeg" && conf::get("import.rotate")) {
+            if ($mime=="image/jpeg" && conf::get("import.rotate")) {
                 self::autorotate($file);
             }
             self::resizeImage($file);
@@ -265,15 +265,15 @@ class WebImport extends Import {
             $cmd = "cd " . escapeshellarg($unpack_dir) . " && " .
                 $extr . " " .  escapeshellarg($unpack_file) . " 2>&1";
             system($cmd);
-            if(file_exists($unpack_file)) {
+            if (file_exists($unpack_file)) {
                 unlink($unpack_file);
             }
         $output=ob_end_clean();
         log::msg($output, log::NOTIFY, log::IMPORT);
         $files=file::getFromDir($unpack_dir, true);
-        foreach($files as $import_file) {
+        foreach ($files as $import_file) {
             $type=$import_file->type;
-            if($type == "image" or $type == "archive" or $type == "xml") {
+            if ($type == "image" or $type == "archive" or $type == "xml") {
                 $import_file->setDestination($dir);
                 try {
                     $import_file->move();
@@ -300,12 +300,12 @@ class WebImport extends Import {
             $dir=conf::get("path.images") . "/" . conf::get("path.upload");
             $thumb_dir=$dir. "/" . THUMB_PREFIX;
             $mid_dir=$dir . "/" . MID_PREFIX;
-            if(!file_exists($thumb_dir)) {
+            if (!file_exists($thumb_dir)) {
                 mkdir($thumb_dir);
             } else if (!is_dir($thumb_dir)) {
                 log::msg("Cannot create " . $thumb_dir . ", file exists.", log::FATAL, log::IMPORT);
             }
-            if(!file_exists($mid_dir)) {
+            if (!file_exists($mid_dir)) {
                 mkdir($mid_dir);
             } else if (!is_dir($mid_dir)) {
                 log::msg("Cannot create " . $mid_dir . ", file exists.", log::FATAL, log::IMPORT);
@@ -328,7 +328,7 @@ class WebImport extends Import {
      *       this class can give. Eventually, both functions should be called directly
      */
     public static function getXML($search) {
-        if($search=="thumbs") {
+        if ($search=="thumbs") {
             return self::getThumbsXML();
         } else {
             return self::getProgressXML($search);
@@ -398,7 +398,7 @@ class WebImport extends Import {
             case "image":
                 $thumb=THUMB_PREFIX . DIRECTORY_SEPARATOR . THUMB_PREFIX . "_" . $file->getName();
                 $mid=MID_PREFIX . DIRECTORY_SEPARATOR . MID_PREFIX . "_" . $file->getName();
-                if(file_exists($dir . DIRECTORY_SEPARATOR . $thumb) &&
+                if (file_exists($dir . DIRECTORY_SEPARATOR . $thumb) &&
                   file_exists($dir . DIRECTORY_SEPARATOR . $mid)) {
                     $status="done";
                 } else {
@@ -425,11 +425,11 @@ class WebImport extends Import {
             $xmlfile->setAttribute("type",$type);
             $xmlmd5=$xml->createElement("md5", $md5);
             $xmlfile->appendChild($xmlmd5);
-            if(!empty($icon)) {
+            if (!empty($icon)) {
                 $xmlicon=$xml->createElement("icon", $icon);
                 $xmlfile->appendChild($xmlicon);
             }
-            if(!empty($status)) {
+            if (!empty($status)) {
                 $xmlstatus=$xml->createElement("status", $status);
                 $xmlfile->appendChild($xmlstatus);
             }
@@ -480,13 +480,13 @@ class WebImport extends Import {
      * @param Array $vars
      */
     public static function getFileList(Array $import) {
-        foreach($import as $md5) {
+        foreach ($import as $md5) {
             $file=file::getFromMD5(conf::get("path.images") . "/" . conf::get("path.upload"), $md5);
-            if(!empty($file)) {
+            if (!empty($file)) {
                 $files[]=$file;
             }
         }
-        if(is_array($files)) {
+        if (is_array($files)) {
             return $files;
         } else {
             log::msg("No files specified", log::FATAL, log::IMPORT);

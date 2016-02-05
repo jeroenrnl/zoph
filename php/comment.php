@@ -34,18 +34,18 @@ if ($comment_id) {
     $comment_user->lookup();
 }
 
-if(!$user->isAdmin() && (!$comment->isOwner($user)) && ($_action!="new") && $_action!="insert") {
+if (!$user->isAdmin() && (!$comment->isOwner($user)) && ($_action!="new") && $_action!="insert") {
     $_action="display";
 }
 
-if(!$user->isAdmin() && !$user->get("leave_comments") && ($_action=="new" || $_action=="insert")) {
+if (!$user->isAdmin() && !$user->get("leave_comments") && ($_action=="new" || $_action=="insert")) {
     redirect("zoph.php");
 }
 
 $photo=$comment->getPhoto();
 
 if ($photo) {
-    if(!$user->getPhotoPermissions($photo) && !$user->isAdmin()) {
+    if (!$user->getPhotoPermissions($photo) && !$user->isAdmin()) {
         redirect("zoph.php");
     }
 } else {
@@ -65,7 +65,7 @@ $obj = &$comment;
 
 require_once "actions.inc.php";
 
-if($_action == "insert") {
+if ($_action == "insert") {
     $comment->addToPhoto($photo);
 }
 

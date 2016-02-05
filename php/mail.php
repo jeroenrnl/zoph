@@ -46,7 +46,7 @@ if (conf::get("feature.annotate")) {
 if ($annotate) {
     $skipcrumb = true;
     $photo=new annotatedPhoto($photo_id);
-    if(!empty($annotate_vars)) {
+    if (!empty($annotate_vars)) {
         parse_str($annotate_vars, $vars);
     } else {
         $vars=$request_vars;
@@ -75,7 +75,7 @@ else {
 
             $size = getvar("_size");
 
-            if($annotate) {
+            if ($annotate) {
                 $file=$photo->get("name");
                 $size = $vars["_size"];
             } else if ($size == "full") {
@@ -91,7 +91,7 @@ else {
                 $html = "<center>\n";
                 $html .= "<img src=\"" . $file . "\"><br>\n";
                 $html .= str_replace("\n", "<br>\n", $message);
-                if($includeurl) {
+                if ($includeurl) {
                     $html .= "<a href=\"" . getZophURL() .
                         "/photo.php?photo_id=" . $photo_id . "\">";
                     $html .= sprintf(translate("See this photo in %s"),
@@ -100,7 +100,7 @@ else {
                 }
                 $html .= "</center>\n";
 
-                if($annotate) {
+                if ($annotate) {
                     list($headers,$image)=$photo->display($size);
                     $mail->addHTMLImageFromString($image, $photo->get("name"),
                         $headers["Content-type"]);
@@ -110,14 +110,14 @@ else {
                 $mail->setHTMLBody($html);
                 $mail->setTXTBody($message);
             } else {
-                if($includeurl) {
+                if ($includeurl) {
                     $message .= "\n";
                     $message .= sprintf(translate("See this photo in %s"),
                         conf::get("interface.title"));
                     $message .= ": " . getZophURL() . "/photo.php?photo_id=" . $photo_id;
                 }
                 $mail->setTXTBody($message);
-                if($annotate) {
+                if ($annotate) {
                     list($headers,$image)=$photo->display($size);
                     $mail->addAttachmentFromString($image, $photo->get("name"),
                         $headers["Content-type"]);
@@ -132,7 +132,7 @@ else {
             }
             $body = $mail->get();
             $hdrs = $mail->headers($hdrs);
-            foreach($hdrs as $header => $content) {
+            foreach ($hdrs as $header => $content) {
                 $headers .= $header . ": " . $content . "\n";
             }
             if (mail($to_email,$subject, $body,$headers)) {

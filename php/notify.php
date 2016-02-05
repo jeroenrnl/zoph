@@ -30,7 +30,7 @@ if (!$user->isAdmin()) {
 $title = translate("Notify");
 
 $user_id = getvar("user_id");
-if($user_id > 0) {
+if ($user_id > 0) {
     $u=new user($user_id);
     $u->lookup();
     $u->lookupPerson();
@@ -62,7 +62,7 @@ if ($_action == "mail") {
 
     $body = $mail->get();
     $hdrs = $mail->headers($hdrs);
-    foreach($hdrs as $header => $content) {
+    foreach ($hdrs as $header => $content) {
         $headers .= $header . ": " . e($content) . "\n";
     }
     if (mail(e($to_email),"", $body,$headers)) {
@@ -70,7 +70,7 @@ if ($_action == "mail") {
 
         $setlastmodified = getvar("setlastmodified");
         if ($setlastmodified) {
-            if($u instanceof user) {
+            if ($u instanceof user) {
                 $u->set("lastnotify", "now()");
                 $u->update();
             }
@@ -83,7 +83,7 @@ if ($_action == "mail") {
     $from_name = $user->person->getName();
     $from_email = $user->person->get_email();
 
-    if($u instanceof user) {
+    if ($u instanceof user) {
         $to_name = $u->person->getName();
         $to_email = $u->person->get_email();
     }

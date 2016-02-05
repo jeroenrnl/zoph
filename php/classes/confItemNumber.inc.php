@@ -35,7 +35,7 @@ class confItemNumber extends confItemString {
     protected $step=1;
 
     public function display() {
-        if($this->internal) {
+        if ($this->internal) {
             return;
         }
         $tpl=new block("confItemNumber", array(
@@ -55,15 +55,15 @@ class confItemNumber extends confItemString {
     }
 
     public function checkValue($value) {
-        if($this->required && $value=="") {
+        if ($this->required && $value=="") {
             return false;
         }
 
-        if((isset($this->min) && ($value < $this->min)) ||
+        if ((isset($this->min) && ($value < $this->min)) ||
            (isset($this->max) && ($value > $this->max)) ||
            (isset($this->step) && ($value % $this->step !== 0))) {
             return false;
-        } else if(isset($this->regex)) {
+        } else if (isset($this->regex)) {
             return preg_match("/" . $this->regex ."/", $value);
         } else {
             return true;

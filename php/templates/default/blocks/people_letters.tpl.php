@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for definitionlists
+ * Template for the a to z links top of the people overview
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +19,13 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
-        <dl class="<?php echo $tpl_class; ?>">
-            <?php foreach ($tpl_dl as $key => $value): ?>
-                <dt><?php echo e($key) ?></dt>
-                <dd><?php echo $value ?></dd>
-            <?php endforeach; ?>
-        </dl>
-        <br>
+<div class="letter">
+    <?php for ($l = "a"; $l != "aa"; $l++): ?>
+        <a href="people.php?_l=<?= $l ?>" <?= ($l == $tpl_l) ? "class=\"selected\"" : "" ?>"><?= $l ?></a> |
+    <?php endfor ?>
+    <a href="people.php?_l=no%20last%20name"><?php echo translate("no last name") ?></a> |
+    <a href="people.php?_l=all"><?php echo translate("all") ?></a>
+</div>
+

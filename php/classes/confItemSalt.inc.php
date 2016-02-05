@@ -34,7 +34,7 @@ class confItemSalt extends confItemString {
     protected $size=40;
 
     public function display() {
-        if($this->internal) {
+        if ($this->internal) {
             return;
         }
         $id=str_replace(".", "_", $this->getName());

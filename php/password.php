@@ -27,7 +27,7 @@ $userid = getvar("userid");
 $password = getvar("password");
 $confirm = getvar("confirm");
 
-if($user->isAdmin() && $userid) {
+if ($user->isAdmin() && $userid) {
     $change=new user($userid);
     $change->lookup();
 } else {

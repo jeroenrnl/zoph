@@ -37,8 +37,8 @@ class group_permissions extends zophTable {
 
 
     function __construct($gid = -1, $aid = -1) {
-        if($gid && !is_numeric($gid)) { die("group_id must be numeric"); }
-        if($aid && !is_numeric($aid)) { die("album_id must be numeric"); }
+        if ($gid && !is_numeric($gid)) { die("group_id must be numeric"); }
+        if ($aid && !is_numeric($aid)) { die("album_id must be numeric"); }
         $this->set("group_id", $gid);
         $this->set("album_id", $aid);
     }

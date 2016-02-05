@@ -38,10 +38,10 @@ class CliImport extends Import {
      */
 
     public static function progress($cur, $total) {
-        if(!defined("CLI")) {
+        if (!defined("CLI")) {
             return;
         }
-        if($total>=60) {
+        if ($total>=60) {
             $calccur=$cur/$total*60;
             $dispcur=floor($calccur);
             $disptotal=60;
@@ -54,8 +54,8 @@ class CliImport extends Import {
         $display.=str_repeat("|", $dispcur);
         $rem=round($calccur - $dispcur,2);
         $num=$total/$disptotal;
-        if($num > 3) {
-            if($rem > 0.333  && $rem < 0.666 ) {
+        if ($num > 3) {
+            if ($rem > 0.333  && $rem < 0.666 ) {
                 $display.=".";
             } else if ($rem > 0.6666 && $rem < 0.999) {
                 $display.=":";
@@ -63,7 +63,7 @@ class CliImport extends Import {
                 $display.="|";
             }
         } else if ($num == 2) {
-            if($rem >= 0.5) {
+            if ($rem >= 0.5) {
                 $display.=".";
             }
         }

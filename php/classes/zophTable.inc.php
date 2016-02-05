@@ -384,6 +384,10 @@ abstract class zophTable {
         return $da;
     }
 
+    /**
+     * Get an URL for the current object
+     * @return string URL
+     */
     public function getURL() {
         return static::$url . $this->getId();
     }
