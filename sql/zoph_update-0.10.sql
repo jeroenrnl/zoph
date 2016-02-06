@@ -56,6 +56,7 @@ CREATE TABLE zoph_circles (
         circle_name varchar(32) default NULL,
         description varchar(128) default NULL,
         coverphoto int(11) default NULL,
+	hidden char(1) default '0',
         PRIMARY KEY  (circle_id)
 ) ENGINE=MyISAM;
 
@@ -65,4 +66,6 @@ CREATE TABLE zoph_circles_people (
         changedate timestamp NOT NULL,
         PRIMARY KEY  (circle_id,person_id)
 ) ENGINE=MyISAM;
+
+ALTER TABLE zoph_users ADD COLUMN see_hidden_people char(1) NOT NULL default '0';
 

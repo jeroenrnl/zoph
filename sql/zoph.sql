@@ -185,6 +185,7 @@ CREATE TABLE zoph_circles (
         circle_name varchar(32) default NULL,
         description varchar(128) default NULL,
         coverphoto int(11) default NULL,
+	hidden char(1) default '0',
         PRIMARY KEY  (circle_id)
 ) ENGINE=MyISAM;
 
@@ -444,6 +445,7 @@ CREATE TABLE zoph_users (
   browse_places char(1) NOT NULL default '0',
   browse_tracks char(1) NOT NULL DEFAULT '0',
   detailed_people char(1) NOT NULL default '0',
+  see_hidden_people char(1) NOT NULL default '0',
   detailed_places char(1) NOT NULL default '0',
   import char(1) NOT NULL default '0',
   download char(1) NOT NULL default '0',
@@ -463,7 +465,7 @@ CREATE TABLE zoph_users (
 --
 
 
-INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1','1','0', '0', NULL,NULL,NULL,NULL);
+INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1','1','1','0', '0', NULL,NULL,NULL,NULL);
 
 CREATE TABLE zoph_pageset (
   pageset_id int(11) NOT NULL auto_increment,
