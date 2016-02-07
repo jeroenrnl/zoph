@@ -101,7 +101,7 @@ if (isset($circle)) {
         $ppl[]=$person;
      }
 } else if (!$first_letter) {
-    $circles=circle::getRecords("circle_name");
+    $circles=circle::getAll();
     if ($circles) {
         $block=new block("view_" . $_view, array(
             "id" => $_view . "circle",

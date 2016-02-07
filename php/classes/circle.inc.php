@@ -47,16 +47,17 @@ class circle extends zophTable {
     /** @var string URL for this class */
     protected static $url="people.php?circle_id=";
 
-
+    /**
+     * Update this object in the database
+     */
     public function update() {
-        if(in_array($this->get("hidden"), array(null, "N", ""))) {
-            $this->set("hidden", "N");
-        } else {
-            $this->set("hidden", "Y");
-        }
+        $this->set("hidden", (bool) $this->get("hidden") ? "1" : "0");
         parent::update();
     }
 
+    /**
+     * Get the name of this circle
+     */
     public function getName() {
         return $this->get("circle_name");
     }
@@ -72,11 +73,19 @@ class circle extends zophTable {
             translate("description") => $this->get("description"),
             translate("members") => implode("<br>", $this->getMemberLinks()),
         );
-        if($this->get("hidden")=="Y") {
+        if ($this->isHidden()) {
             $da["hidden"]=translate("This circle is hidden in overviews");
         }
 
         return $da;
+    }
+
+    /**
+     * Returns whether or not this circle is hidden
+     * @return bool hidden or not
+     */
+    public function isHidden() {
+        return (bool) $this->get("hidden");
     }
 
     /**
@@ -276,6 +285,28 @@ class circle extends zophTable {
         }
         return $links;
     }
+
+    /**
+     * Get all circles
+     */
+    public static function getAll($showHidden=false) {
+        $rawCircles=static::getRecords("circle_name");
+        $user=user::getCurrent();
+
+        if ($showHidden && ($user->isAdmin() || $user->get("see_hidden_people"))) {
+            $circles=$rawCircles;
+        } else {
+            foreach ($rawCircles as $circle) {
+                if (!$circle->isHidden()) {
+                    $circles[]=$circle;
+                }
+            }
+        }
+
+        return $circles;
+    }
+
+
 }
 
 ?>

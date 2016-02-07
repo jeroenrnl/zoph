@@ -110,12 +110,11 @@ if ($action == "display") {
         "onsubmit"      => null,
         "action"        => $action,
     ));
-
     $form->addBlocks(array(
         template::createFormInputHidden("circle_id", $circle->getId()),
         template::createFormInputText("circle_name", $circle->getName(), translate("Name"), "", 32),
         template::createFormTextArea("description", $circle->get("description"), translate("Description"), 40, 4),
-        template::createFormInputCheckbox("hidden", $circle->get("hidden"), translate("Hide in overviews"))
+        template::createFormInputCheckbox("hidden", $circle->isHidden(), translate("Hide in overviews"))
     ));
 
     $tpl->addBlock($form);

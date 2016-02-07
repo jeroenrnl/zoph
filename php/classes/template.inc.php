@@ -385,9 +385,7 @@ class template {
         ));
     }
 
-    public static function createFormInputCheckbox($name, $value, $label, $hint=null) {
-        $checked=strtoupper($value) !== "N";
- 
+    public static function createFormInputCheckbox($name, $checked, $label, $hint=null) {
         return new block("formInputCheckbox", array(
             "name"  => $name,
             "checked" => $checked,
