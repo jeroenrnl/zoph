@@ -47,6 +47,16 @@ class circle extends zophTable {
     /** @var string URL for this class */
     protected static $url="people.php?circle_id=";
 
+
+    public function update() {
+        if(in_array($this->get("hidden"), array(null, "N", ""))) {
+            $this->set("hidden", "N");
+        } else {
+            $this->set("hidden", "Y");
+        }
+        parent::update();
+    }
+
     public function getName() {
         return $this->get("circle_name");
     }
@@ -57,11 +67,16 @@ class circle extends zophTable {
      * @return array properties
      */
     public function getDisplayArray() {
-        return array(
+        $da=array(
             translate("circle") => $this->getName(),
             translate("description") => $this->get("description"),
-            translate("members") => implode("<br>", $this->getMemberLinks())
+            translate("members") => implode("<br>", $this->getMemberLinks()),
         );
+        if($this->get("hidden")=="Y") {
+            $da["hidden"]=translate("This circle is hidden in overviews");
+        }
+
+        return $da;
     }
 
     /**

@@ -385,6 +385,17 @@ class template {
         ));
     }
 
+    public static function createFormInputCheckbox($name, $value, $label, $hint=null) {
+        $checked=strtoupper($value) !== "N";
+ 
+        return new block("formInputCheckbox", array(
+            "name"  => $name,
+            "checked" => $checked,
+            "label" => e($label),
+            "hint"  => e($hint),
+        ));
+    }
+
     public static function createFormTextarea($name, $value, $label=null, $cols=40, $rows=4) {
         return new block("formTextarea", array(
             "name"  => $name,
