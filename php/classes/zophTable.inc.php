@@ -612,7 +612,7 @@ abstract class zophTable {
         try {
             $result = db::query($qry);
         } catch (PDOException $e) {
-            log::msg("Unable to get records", log::FATAL, log::DB);
+            log::msg("Unable to get records: " . $e->getMessage(), log::FATAL, log::DB);
         }
         $objs=array();
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
