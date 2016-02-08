@@ -153,6 +153,17 @@ class circle extends zophTable {
         $qry->where(new clause("circle_id=:circleid"));
         $qry->addParam(new param(":circleid", (int) $this->getId(), PDO::PARAM_INT));
 
+        if(!user::getCurrent()->isAdmin()) {
+            $allowed=person::getAllPeopleAndPhotoGraphers();
+            $ids=array();
+            foreach($allowed as $person) {
+                $ids[]=$person->getId();
+            }
+            $param=new param(":peopledIds", $ids, PDO::PARAM_INT);
+            $qry->addParam($param);
+            $qry->addClause(clause::InClause("person_id", $param, "AND"));
+        }
+
         return person::getRecordsFromQuery($qry);
     }
 
