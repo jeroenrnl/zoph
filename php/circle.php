@@ -42,6 +42,10 @@ if ($action != "insert") {
     $title = translate("New circle");
 }
 
+if($circle->isHidden() && !$user->canSeeHiddenCircles()) {
+    redirect("people.php");
+}
+
 try {
     $selection=new selection($_SESSION, array(
         "coverphoto"    => "circle.php?_action=update&amp;circle_id=" . $circle->getId() . "&amp;coverphoto=",

@@ -203,6 +203,14 @@ class user extends zophTable {
     }
 
     /**
+     * Check wheter this user can see hidden circles
+     * @return bool user can see hidden circles
+     */
+    public function canSeeHiddenCircles() {
+        return ($this->isAdmin() || $this->get("see_hidden_people"));
+    }
+
+    /**
      * Get array to display information about this user
      * @return array of properties to display
      */

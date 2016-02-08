@@ -24,6 +24,8 @@
 
 require_once "include.inc.php";
 $_view=getvar("_view");
+$_showhidden=(bool) getvar("_showhidden");
+
 if (empty($_view)) {
     $_view=$user->prefs->get("view");
 }
@@ -55,6 +57,10 @@ if (getvar("circle_id")) {
         $selection=null;
     }
 
+    if($circle->isHidden() && !$user->canSeeHiddenCircles()) {
+        redirect("people.php");
+    }
+
 } else {
     $title = translate("People");
     $selection=null;
@@ -70,6 +76,7 @@ $tpl=new template("organizer", array(
     "autothumb" => $_autothumb
 ));
 
+$actionlinks=array();
 if ($user->isAdmin()) {
     $actionlinks=array(
         translate("new") => "person.php?_action=new",
@@ -80,8 +87,16 @@ if ($user->isAdmin()) {
         $actionlinks[translate("delete circle")]="circle.php?_action=delete&circle_id=" . $circle->getId();
     }
 
-    $tpl->addActionlinks($actionlinks);
 }
+
+if (!isset($circle) && ($user->canSeeHiddenCircles())) {
+    if($_showhidden) {
+        $actionlinks[translate("hide hidden")]="people.php?_showhidden=0";
+    } else {
+        $actionlinks[translate("show hidden")]="people.php?_showhidden=1";
+    }
+}
+$tpl->addActionlinks($actionlinks);
 $tpl->addBlock(new block("people_letters", array(
     "l"    => $_l
 )));
@@ -101,7 +116,7 @@ if (isset($circle)) {
         $ppl[]=$person;
      }
 } else if (!$first_letter) {
-    $circles=circle::getAll();
+    $circles=circle::getAll($_showhidden);
     if ($circles) {
         $block=new block("view_" . $_view, array(
             "id" => $_view . "circle",
