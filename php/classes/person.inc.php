@@ -296,7 +296,7 @@ class person extends zophTable implements Organizer {
                 $this->get("first_name");
         }
 
-        return "<a href=\"person.php?person_id=" . $this->get("person_id") . "\">$name</a>";
+        return "<a href=\"person.php?person_id=" . $this->getId() . "\">$name</a>";
     }
 
     /**
@@ -588,7 +588,7 @@ class person extends zophTable implements Organizer {
 
         $people_array = static::getAll();
         foreach ($people_array as $person) {
-            $ppl[$person->get("person_id")] =
+            $ppl[$person->getId()] =
                  ($person->get("last_name") ? $person->get("last_name") .  ", " : "") .
                  ($person->get("called") ? $person->get("called") : $person->get("first_name"));
         }
@@ -609,10 +609,10 @@ class person extends zophTable implements Organizer {
             $people=static::getAll();
             $photographers=photographer::getAll();
             foreach ($people as $person) {
-                $allowed[]=$person->get("person_id");
+                $allowed[]=$person->getId();
             }
             foreach ($photographers as $photographer) {
-                $allowed[]=$photographer->get("person_id");
+                $allowed[]=$photographer->getId();
             }
 
             $allowed=array_unique($allowed);
@@ -634,16 +634,16 @@ class person extends zophTable implements Organizer {
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
 
 
-        if ($user && !$user->isAdmin()) {
+        if (!$user->isAdmin()) {
             $people=(array)static::getAll($search);
             $photographers=(array)photographer::getAll($search);
             foreach ($people as $person) {
                 $person->lookup();
-                $allowed[]=$person->get("person_id");
+                $allowed[]=$person->getId();
             }
             foreach ($photographers as $photographer) {
                 $photographer->lookup();
-                $allowed[]=$photographer->get("person_id");
+                $allowed[]=$photographer->getId();
             }
             $allowed=array_unique($allowed);
             if (count($allowed)==0) {
