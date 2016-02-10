@@ -90,6 +90,10 @@ if ($_action=="new") {
           <?php echo template::createYesNoPulldown("detailed_people",
             $this_user->get("detailed_people")) ?>
           <br>
+          <label for="hiddencircles"><?php echo translate("can see hidden circles") ?></label>
+          <?php echo template::createYesNoPulldown("see_hidden_circles",
+            $this_user->get("see_hidden_circles")) ?>
+          <br>
           <label for="detailedplaces"><?php echo translate("can view details of places") ?></label>
           <?php echo template::createYesNoPulldown("detailed_places",
             $this_user->get("detailed_places")) ?>

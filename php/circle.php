@@ -42,6 +42,10 @@ if ($action != "insert") {
     $title = translate("New circle");
 }
 
+if($circle->isHidden() && !$user->canSeeHiddenCircles()) {
+    redirect("people.php");
+}
+
 try {
     $selection=new selection($_SESSION, array(
         "coverphoto"    => "circle.php?_action=update&amp;circle_id=" . $circle->getId() . "&amp;coverphoto=",
@@ -110,11 +114,11 @@ if ($action == "display") {
         "onsubmit"      => null,
         "action"        => $action,
     ));
-
     $form->addBlocks(array(
         template::createFormInputHidden("circle_id", $circle->getId()),
         template::createFormInputText("circle_name", $circle->getName(), translate("Name"), "", 32),
-        template::createFormTextArea("description", $circle->get("description"), translate("Description"), 40, 4)
+        template::createFormTextArea("description", $circle->get("description"), translate("Description"), 40, 4),
+        template::createFormInputCheckbox("hidden", $circle->isHidden(), translate("Hide in overviews"))
     ));
 
     $tpl->addBlock($form);

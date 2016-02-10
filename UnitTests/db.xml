@@ -280,73 +280,79 @@
 		<field name="circle_id">1</field>
 		<field name="circle_name">Queen</field>
 		<field name="description" xsi:nil="true" />
+		<field name="coverphoto" xsi:nil="true" />
+		<field name="hidden">0</field>
 	</row>
 	<row>
 		<field name="circle_id">2</field>
 		<field name="circle_name">Singers</field>
 		<field name="description" xsi:nil="true" />
+		<field name="coverphoto" xsi:nil="true" />
+		<field name="hidden">0</field>
 	</row>
 	<row>
 		<field name="circle_id">3</field>
 		<field name="circle_name">Bass Players</field>
 		<field name="description" xsi:nil="true" />
+		<field name="coverphoto" xsi:nil="true" />
+		<field name="hidden">0</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_circles_people">
 	<row>
 		<field name="circle_id">1</field>
 		<field name="person_id">2</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="circle_id">1</field>
 		<field name="person_id">5</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="circle_id">1</field>
 		<field name="person_id">7</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="circle_id">1</field>
 		<field name="person_id">9</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="circle_id">2</field>
 		<field name="person_id">5</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="circle_id">2</field>
 		<field name="person_id">2</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="circle_id">2</field>
 		<field name="person_id">6</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="circle_id">2</field>
 		<field name="person_id">4</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="circle_id">2</field>
 		<field name="person_id">8</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="circle_id">3</field>
 		<field name="person_id">9</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="circle_id">3</field>
 		<field name="person_id">4</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_color_schemes">
@@ -474,127 +480,127 @@
 	<row>
 		<field name="comment_id">1</field>
 		<field name="user_id">2</field>
-		<field name="comment_date">2015-11-22 10:43:46</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by brian</field>
 		<field name="comment">I love that Special Red :-)</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">brian.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">2</field>
 		<field name="user_id">5</field>
-		<field name="comment_date">2015-11-22 10:43:46</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by freddie</field>
 		<field name="comment">Beautiful!</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">freddie.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">3</field>
 		<field name="user_id">7</field>
-		<field name="comment_date">2015-11-22 10:43:46</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by roger</field>
 		<field name="comment">Nice</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">roger.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">4</field>
 		<field name="user_id">2</field>
-		<field name="comment_date">2015-11-22 10:43:46</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by brian</field>
 		<field name="comment">The letters are all distorted!</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">brian.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">5</field>
 		<field name="user_id">5</field>
-		<field name="comment_date">2015-11-22 10:43:46</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by freddie</field>
 		<field name="comment">Crap :-(</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">freddie.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">6</field>
 		<field name="user_id">3</field>
-		<field name="comment_date">2015-11-22 10:43:47</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by jimi</field>
 		<field name="comment">Self portrait!</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">jimi.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">7</field>
 		<field name="user_id">3</field>
-		<field name="comment_date">2015-11-22 10:43:47</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by jimi</field>
 		<field name="comment">Me and [b]Brian[/b]!</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">jimi.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">8</field>
 		<field name="user_id">2</field>
-		<field name="comment_date">2015-11-22 10:43:47</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by brian</field>
 		<field name="comment">:-)</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">brian.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">9</field>
 		<field name="user_id">4</field>
-		<field name="comment_date">2015-11-22 10:43:47</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by paul</field>
 		<field name="comment">Just beautiful</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">paul.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">10</field>
 		<field name="user_id">6</field>
-		<field name="comment_date">2015-11-22 10:43:47</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by phil</field>
 		<field name="comment">That &lt;span style=&quot;background: grey&quot;&gt;grey&lt;/span&gt; is annoying me so badly, I'm illegally using HTML in this comment!</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">phil.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">11</field>
 		<field name="user_id">1</field>
-		<field name="comment_date">2015-11-22 10:43:47</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by admin</field>
 		<field name="comment">Can you guys stop this, or I am [b]revoking[/b] your accounts!</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">admin.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">12</field>
 		<field name="user_id">6</field>
-		<field name="comment_date">2015-11-22 10:43:47</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by phil</field>
 		<field name="comment">Love this picture!</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">phil.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">13</field>
 		<field name="user_id">4</field>
-		<field name="comment_date">2015-11-22 10:43:47</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by paul</field>
 		<field name="comment">Can't [i]you[/i] [b]see[/b] it isn't even [u]sharp[/u] on the right side, Phil? :mrgreen:</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">paul.zoph.org</field>
 	</row>
 	<row>
 		<field name="comment_id">14</field>
 		<field name="user_id">1</field>
-		<field name="comment_date">2015-11-22 10:43:47</field>
+		<field name="comment_date">2016-02-06 23:13:59</field>
 		<field name="subject">Comment by admin</field>
 		<field name="comment">Really, I am going to [b]revoke[/b] your accounts! :mad:</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 		<field name="ipaddr">admin.zoph.org</field>
 	</row>
 	</table_data>
@@ -607,7 +613,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
@@ -615,7 +621,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
@@ -623,7 +629,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
@@ -631,7 +637,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:56</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
@@ -639,7 +645,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:56</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
@@ -647,7 +653,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:56</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
@@ -655,7 +661,7 @@
 		<field name="access_level">5</field>
 		<field name="watermark_level">3</field>
 		<field name="writable">0</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:56</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_groups">
@@ -684,47 +690,47 @@
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">2</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">5</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">7</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">1</field>
 		<field name="user_id">9</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
 		<field name="user_id">8</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">2</field>
 		<field name="user_id">4</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">3</field>
 		<field name="user_id">6</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
 		<field name="user_id">2</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	<row>
 		<field name="group_id">4</field>
 		<field name="user_id">3</field>
-		<field name="changedate">2015-11-22 09:43:43</field>
+		<field name="changedate">2016-02-06 22:13:55</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_pages">
@@ -1258,7 +1264,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">8</field>
 		<field name="ipaddress">brian.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">2</field>
@@ -1266,7 +1272,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">freddie.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">3</field>
@@ -1274,7 +1280,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">8</field>
 		<field name="ipaddress">roger.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">4</field>
@@ -1282,7 +1288,7 @@
 		<field name="photo_id">1</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">johnd.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">5</field>
@@ -1290,7 +1296,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">5</field>
 		<field name="ipaddress">brian.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">6</field>
@@ -1298,7 +1304,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">3</field>
 		<field name="ipaddress">freddie.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">7</field>
@@ -1306,7 +1312,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">6</field>
 		<field name="ipaddress">roger.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">8</field>
@@ -1314,7 +1320,7 @@
 		<field name="photo_id">2</field>
 		<field name="rating">3</field>
 		<field name="ipaddress">johnd.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">9</field>
@@ -1322,7 +1328,7 @@
 		<field name="photo_id">3</field>
 		<field name="rating">5</field>
 		<field name="ipaddress">jimi.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">10</field>
@@ -1330,7 +1336,7 @@
 		<field name="photo_id">4</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">paul.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">11</field>
@@ -1338,7 +1344,7 @@
 		<field name="photo_id">4</field>
 		<field name="rating">6</field>
 		<field name="ipaddress">johnl.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:46</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">12</field>
@@ -1346,7 +1352,7 @@
 		<field name="photo_id">5</field>
 		<field name="rating">10</field>
 		<field name="ipaddress">phil.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">13</field>
@@ -1354,7 +1360,7 @@
 		<field name="photo_id">5</field>
 		<field name="rating">9</field>
 		<field name="ipaddress">jimi.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">14</field>
@@ -1362,7 +1368,7 @@
 		<field name="photo_id">6</field>
 		<field name="rating">7</field>
 		<field name="ipaddress">jimi.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">15</field>
@@ -1370,7 +1376,7 @@
 		<field name="photo_id">6</field>
 		<field name="rating">5</field>
 		<field name="ipaddress">brian.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">16</field>
@@ -1378,7 +1384,7 @@
 		<field name="photo_id">8</field>
 		<field name="rating">9</field>
 		<field name="ipaddress">paul.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">17</field>
@@ -1386,7 +1392,7 @@
 		<field name="photo_id">8</field>
 		<field name="rating">3</field>
 		<field name="ipaddress">phil.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">18</field>
@@ -1394,7 +1400,7 @@
 		<field name="photo_id">10</field>
 		<field name="rating">10</field>
 		<field name="ipaddress">phil.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	<row>
 		<field name="rating_id">19</field>
@@ -1402,7 +1408,7 @@
 		<field name="photo_id">10</field>
 		<field name="rating">1</field>
 		<field name="ipaddress">paul.zoph.org</field>
-		<field name="timestamp">2015-11-22 09:43:47</field>
+		<field name="timestamp">2016-02-06 22:13:59</field>
 	</row>
 	</table_data>
 	<table_data name="zoph_photo_relations">
@@ -2486,6 +2492,7 @@
 		<field name="browse_places">1</field>
 		<field name="browse_tracks">1</field>
 		<field name="detailed_people">1</field>
+		<field name="see_hidden_circles">1</field>
 		<field name="detailed_places">1</field>
 		<field name="import">1</field>
 		<field name="download">1</field>
@@ -2508,6 +2515,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
+		<field name="see_hidden_circles">1</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2530,6 +2538,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2552,6 +2561,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2574,6 +2584,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2596,6 +2607,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2618,6 +2630,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2640,6 +2653,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2662,6 +2676,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>

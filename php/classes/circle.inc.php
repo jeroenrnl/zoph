@@ -47,6 +47,17 @@ class circle extends zophTable {
     /** @var string URL for this class */
     protected static $url="people.php?circle_id=";
 
+    /**
+     * Update this object in the database
+     */
+    public function update() {
+        $this->set("hidden", (bool) $this->get("hidden") ? "1" : "0");
+        parent::update();
+    }
+
+    /**
+     * Get the name of this circle
+     */
     public function getName() {
         return $this->get("circle_name");
     }
@@ -57,11 +68,24 @@ class circle extends zophTable {
      * @return array properties
      */
     public function getDisplayArray() {
-        return array(
+        $da=array(
             translate("circle") => $this->getName(),
             translate("description") => $this->get("description"),
-            translate("members") => implode("<br>", $this->getMemberLinks())
+            translate("members") => implode("<br>", $this->getMemberLinks()),
         );
+        if ($this->isHidden()) {
+            $da["hidden"]=translate("This circle is hidden in overviews");
+        }
+
+        return $da;
+    }
+
+    /**
+     * Returns whether or not this circle is hidden
+     * @return bool hidden or not
+     */
+    public function isHidden() {
+        return (bool) $this->get("hidden");
     }
 
     /**
@@ -128,6 +152,17 @@ class circle extends zophTable {
         $qry->addFields(array("person_id"));
         $qry->where(new clause("circle_id=:circleid"));
         $qry->addParam(new param(":circleid", (int) $this->getId(), PDO::PARAM_INT));
+
+        if(!user::getCurrent()->isAdmin()) {
+            $allowed=person::getAllPeopleAndPhotoGraphers();
+            $ids=array();
+            foreach($allowed as $person) {
+                $ids[]=$person->getId();
+            }
+            $param=new param(":peopledIds", $ids, PDO::PARAM_INT);
+            $qry->addParam($param);
+            $qry->addClause(clause::InClause("person_id", $param, "AND"));
+        }
 
         return person::getRecordsFromQuery($qry);
     }
@@ -261,6 +296,28 @@ class circle extends zophTable {
         }
         return $links;
     }
+
+    /**
+     * Get all circles
+     */
+    public static function getAll($showHidden=false) {
+        $rawCircles=static::getRecords("circle_name");
+        $user=user::getCurrent();
+
+        if ($showHidden && ($user->canSeeHiddenCircles()) {
+            $circles=$rawCircles;
+        } else {
+            foreach ($rawCircles as $circle) {
+                if (!$circle->isHidden()) {
+                    $circles[]=$circle;
+                }
+            }
+        }
+
+        return $circles;
+    }
+
+
 }
 
 ?>
