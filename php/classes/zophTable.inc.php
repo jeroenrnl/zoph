@@ -360,7 +360,7 @@ abstract class zophTable {
         try {
             $qry->execute();
         } catch (PDOException $e) {
-            log::msg("Update failed", log::FATAL, log::DB);
+            log::msg("Update failed: " . $e->getMessage(), log::FATAL, log::DB);
         }
     }
 
