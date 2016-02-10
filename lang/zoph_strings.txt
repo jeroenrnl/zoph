@@ -452,6 +452,7 @@ can rate the same photo multiple times=
 can share photos=
 can view details of people=
 can view details of places=
+can view hidden circles=
 cancel=
 categories=
 category description=

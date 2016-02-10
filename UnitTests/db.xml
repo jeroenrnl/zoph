@@ -2492,7 +2492,7 @@
 		<field name="browse_places">1</field>
 		<field name="browse_tracks">1</field>
 		<field name="detailed_people">1</field>
-		<field name="see_hidden_people">1</field>
+		<field name="see_hidden_circles">1</field>
 		<field name="detailed_places">1</field>
 		<field name="import">1</field>
 		<field name="download">1</field>
@@ -2515,7 +2515,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
-		<field name="see_hidden_people">0</field>
+		<field name="see_hidden_circles">1</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2538,7 +2538,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
-		<field name="see_hidden_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2561,7 +2561,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
-		<field name="see_hidden_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2584,7 +2584,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
-		<field name="see_hidden_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2607,7 +2607,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
-		<field name="see_hidden_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2630,7 +2630,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
-		<field name="see_hidden_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2653,7 +2653,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
-		<field name="see_hidden_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>
@@ -2676,7 +2676,7 @@
 		<field name="browse_places">0</field>
 		<field name="browse_tracks">0</field>
 		<field name="detailed_people">0</field>
-		<field name="see_hidden_people">0</field>
+		<field name="see_hidden_circles">0</field>
 		<field name="detailed_places">0</field>
 		<field name="import">0</field>
 		<field name="download">0</field>

@@ -445,7 +445,7 @@ CREATE TABLE zoph_users (
   browse_places char(1) NOT NULL default '0',
   browse_tracks char(1) NOT NULL DEFAULT '0',
   detailed_people char(1) NOT NULL default '0',
-  see_hidden_people char(1) NOT NULL default '0',
+  see_hidden_circles char(1) NOT NULL default '0',
   detailed_places char(1) NOT NULL default '0',
   import char(1) NOT NULL default '0',
   download char(1) NOT NULL default '0',

@@ -304,7 +304,7 @@ class circle extends zophTable {
         $rawCircles=static::getRecords("circle_name");
         $user=user::getCurrent();
 
-        if ($showHidden && ($user->isAdmin() || $user->get("see_hidden_people"))) {
+        if ($showHidden && ($user->canSeeHiddenCircles()) {
             $circles=$rawCircles;
         } else {
             foreach ($rawCircles as $circle) {

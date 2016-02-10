@@ -67,5 +67,5 @@ CREATE TABLE zoph_circles_people (
         PRIMARY KEY  (circle_id,person_id)
 ) ENGINE=MyISAM;
 
-ALTER TABLE zoph_users ADD COLUMN see_hidden_people char(1) NOT NULL default '0';
+ALTER TABLE zoph_users ADD COLUMN see_hidden_circles char(1) NOT NULL default '0';
 
