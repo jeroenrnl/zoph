@@ -61,7 +61,7 @@ if ($users) {
         if ((count(album::getNewer($u, $u->getLastNotify())) > 0)) {
             ?>
               <a href="notify.php?_action=notify&amp;user_id=<?php
-                echo $u->get("user_id") ?>&amp;shownewalbums=1">i
+                echo $u->get("user_id") ?>&amp;shownewalbums=1">
                 <?php echo translate("Notify User", 0) ?>
               </a> |
             <?php
