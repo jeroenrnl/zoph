@@ -76,7 +76,11 @@ if ($action == "display") {
         "actionlinks"       => $actionlinks,
         "mainActionlinks"   => null,
         "obj"               => $circle,
-        "selection"         => $selection
+        "selection"         => $selection,
+        "pageTop"           => null,
+        "pageBottom"        => null,
+        "page"              => null,
+        "showMain"          => true
     ));
 
     if ($user->get("detailed_people") || $user->isAdmin()) {

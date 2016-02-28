@@ -29,9 +29,17 @@ if (!ZOPH) {
 <?php if ($tpl_selection): ?>
     <?= $tpl_selection ?>
 <?php endif ?>
-<div class="main">
-    <?= $this->getActionlinks($tpl_mainActionlinks) ?>
-    <h2><?= e($tpl_obj->getName()) ?></h2>
-    <p><?= $tpl_obj->displayCoverphoto() ?></p>
-    <?= $this->displayBlocks(); ?>
-</div>
+<?php if ($tpl_pageTop): ?>
+    <?= $tpl_page ?>
+<?php endif ?>
+<?php if ($tpl_showMain): ?>
+    <div class="main">
+        <?= $this->getActionlinks($tpl_mainActionlinks) ?>
+        <h2><?= e($tpl_obj->getName()) ?></h2>
+        <p><?= $tpl_obj->displayCoverphoto() ?></p>
+        <?= $this->displayBlocks(); ?>
+    </div>
+<?php endif ?>
+<?php if ($tpl_pageBottom): ?>
+    <?= $tpl_page ?>
+<?php endif ?>

@@ -207,7 +207,7 @@ if ($num_thumbnails <= 0) {
     ?>
     <br>
     <?php
-    echo pager($offset, $num_photos, $num_pages, $cells,
+    echo new pager($offset, $num_photos, $num_pages, $cells,
       $user->prefs->get("max_pager_size"), $vars, "_off");
 } // if photos
 ?>

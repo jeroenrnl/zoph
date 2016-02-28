@@ -169,6 +169,16 @@ class template {
     }
 
     /**
+     * Add a page
+     * A page can simply be added to the list of blocks as it can be displayed
+     * with the __toString() function
+     * @param page Page to be added
+     */
+    public function addPage(page $page) {
+        $this->blocks[]=$page;
+    }
+
+    /**
      * Add multiple blocks
      * @param array Blocks to be added
      */

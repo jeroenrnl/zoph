@@ -536,69 +536,6 @@ function getHuman($bytes) {
     }
 }
 
-function pager($current, $total, $num_pages, $page_size, $max_size, $request_vars, $var) {
-    $url=$_SERVER['PHP_SELF'];
-    $page_num = floor($current / $page_size) + 1;
-    if ($current > 0) {
-        $new_offset = max(0, $current - $page_size);
-        $html="<div class='prev'>\n";
-        $html.="[ <a href='" . $url . "?";
-        $html.=update_query_string($request_vars, $var, $new_offset);
-        $html.="'>" . translate("Prev") . "</a> ]\n";
-        $html.="</div>\n";
-    } else {
-        $html="<div class='prev'>&nbsp;</div>\n";
-    }
-
-    if ($num_pages > 1) {
-        $html.="<div class='pagelink'>[ ";
-        $mid_page = floor($max_size / 2);
-        $page = $page_num - $mid_page;
-        if ($page <= 0) { $page = 1; }
-
-        $last_page = $page + $max_size - 1;
-        if ($last_page > $num_pages) {
-            $page = $page - $last_page + $num_pages;
-            if ($page <= 0) { $page = 1; }
-            $last_page = $num_pages;
-        }
-
-        if ($page > 1) {
-            $html.="<a href='" . $url . "?";
-            $html.=update_query_string($request_vars, $var, 0). "'>1</a> ...";
-        }
-
-        while ($page <= $last_page) {
-            $new_offset = ($page - 1) * $page_size;
-            $new_query_string=update_query_string($request_vars, $var, $new_offset);
-            $currentpage=$page == $page_num ? " class='currentpage'" : "";
-            $html.="&nbsp;<a href='" . $url . "?" . $new_query_string . "'>";
-            $html.="<span " . $currentpage . ">" . $page . "</span></a>&nbsp;";
-            $page++;
-        }
-
-        if ($page <= $num_pages) {
-            $new_query_string=update_query_string($request_vars, $var, ($num_pages-1) * $page_size);
-            $html.="... <a href='" . $url . "?" . $new_query_string . "'>";
-            $html.=$num_pages . "</a>";
-        }
-        $html.=" ]</div>\n\n";
-    } else {
-        $html.="<div class=\"pagelink\">&nbsp;</div>\n";
-    }
-    if ($total >  $current + $page_size) {
-        $new_offset = $current + $page_size;
-        $new_query_string=update_query_string($request_vars, $var, $new_offset);
-        $html.="<div class='next'>";
-        $html.="[ <a href='" . $url . "?" . $new_query_string . "'>";
-        $html.=translate("Next") . "</a> ]";
-        $html.="</div>";
-    } else {
-        $html.="<div class=\"next\">&nbsp;</div>\n";
-    }
-    return $html;
-}
-
 function check_js($user) {
     if (($user->prefs->get("autocomp_albums")) ||
         ($user->prefs->get("autocomp_categories")) ||

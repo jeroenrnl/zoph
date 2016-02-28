@@ -1023,8 +1023,51 @@ div.photohdr {
     width: 60%;
 }
 
-.currentpage    {
-    color: red;
+ul.pager    {
+    display: block;
+    font-size: medium;
+    font-weight: normal;
+    text-align: center;
+    left: auto;
+    right: auto;
+}
+
+ul.pager li {
+    display: inline-block;
+}
+
+ul.pagegroup {
+    display: inline-block;
+    margin: 5px;
+    float: left;
+    overflow: hidden;
+}
+
+ul.pagegroup li {
+    display: block;
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    border-radius: 5px;
+    float: left;
+    margin: 3px;
+}
+
+ul.pagegroup li a {
+    display: block;
+    padding: 6px 12px;
+    text-decoration: none;
+    text-align: center;
+    vertical-align: middle;
+}
+
+ul.pagegroup li:hover {
+    background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>;
+}
+
+ul.pagegroup li.current {
+    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
     font-weight: bold;
 }
 

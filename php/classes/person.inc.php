@@ -32,6 +32,7 @@ use db\db;
 use db\clause;
 use db\selectHelper;
 
+
 /**
  * Person class
  *
@@ -40,6 +41,8 @@ use db\selectHelper;
  * @package Zoph
  */
 class person extends zophTable implements Organizer {
+
+    use showPage;
 
     /** @param Name of the root node in XML responses */
     const XMLROOT="people";

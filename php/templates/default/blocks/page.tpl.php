@@ -1,8 +1,6 @@
 <?php
 /**
- * Show pagesets
- *
- * This file is part of Zoph.
+ * Template for displaying a page for an object
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,31 +15,19 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package Zoph
+ * @package ZophTemplates
  * @author Jeroen Roos
+ * @todo    Possibly this could be integrated into the templates for the
+ *          organizer objects themselves?
  */
-require_once "include.inc.php";
 
-$title=translate("Pagesets");
-require_once "header.inc.php";
-?>
-<h1>
-<?php
-if ($user->isAdmin()) {
-    ?>
-    <span class="actionlink">
-      <a href="pageset.php?_action=new"><?php echo translate("new") ?></a>
-    </span>
-    <?php
+if (!ZOPH) {
+    die("Illegal call");
 }
 ?>
-<?php echo $title ?>
-</h1>
-<div class="main">
-  <br>
-  <?php echo pageset::getTable() ?>
-  <br>
+<div class="page">
+    <?php foreach ($this->getBlocks() as $block): ?>
+        <?= $block ?>
+    <?php endforeach ?>
+    <br>
 </div>
-<?php
-require_once "footer.inc.php";
-?>
