@@ -38,6 +38,9 @@ use db\selectHelper;
  * @author Jeroen Roos
  */
 class album extends zophTreeTable implements Organizer {
+
+    use showPage;
+
     /** @param Name of the root node in XML responses */
     const XMLROOT="albums";
     /** @param Name of the leaf nodes in XML responses */

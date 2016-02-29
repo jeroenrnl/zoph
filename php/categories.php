@@ -51,7 +51,19 @@ $totalPhotoCount = $category->getTotalPhotoCount();
 $title = $category->get("parent_category_id") ?
     $category->get("category") : translate("Categories");
 
+$pagenum = getvar("_pageset_page");
+
 require_once "header.inc.php";
+
+try {
+    $pageset=$category->getPageset();
+    $page=$category->getPage($request_vars, $pagenum);
+    $showOrig=$category->showOrig($pagenum);
+} catch (pageException $e) {
+    $showOrig=true;
+    $page=null;
+}
+
 ?>
 <h1>
 <?php
@@ -70,8 +82,11 @@ echo "\n" . translate("categories") . "\n" ?>
 if ($user->isAdmin()) {
     include "selection.inc.php";
 }
-include "show_page.inc.php";
-if ($show_orig) {
+if($category->showPageOnTop()) {
+    echo $page;
+}
+
+if ($showOrig) {
     ?>
     <div class="main">
       <form class="viewsettings" method="get" action="categories.php">
@@ -199,6 +214,8 @@ if ($show_orig) {
     </div>
     <?php
 } // if show_orig
-echo $page_html;
+if($category->showPageOnBottom()) {
+    echo $page;
+}
 require_once "footer.inc.php";
 ?>
