@@ -33,56 +33,56 @@ class pager {
     private $current=0;
     private $pages=array();
 
-    public function __construct($current, $total, $num_pages, $page_size, $max_size, $request_vars, $var) {
+    public function __construct($current, $total, $numPages, $pageSize, $maxSize, $requestVars, $var) {
         $url=$_SERVER['PHP_SELF'];
-        $page_num = floor($current / $page_size) + 1;
-        $this->current=(string) $page_num;
+        $pageNum = floor($current / $pageSize) + 1;
+        $this->current=(string) $pageNum;
 
         $pageGroup=0;
         $pages[$pageGroup]=array();
 
         if ($current > 0) {
-            $new_offset = max(0, $current - $page_size);
-            $this->pages[$pageGroup][translate("Prev")]= $url . "?" . update_query_string($request_vars, $var, $new_offset);
+            $newOffset = max(0, $current - $pageSize);
+            $this->pages[$pageGroup][translate("Prev")]= $url . "?" . update_query_string($requestVars, $var, $newOffset);
         }
 
-        if ($num_pages > 1) {
-            $mid_page = floor($max_size / 2);
-            $page = $page_num - $mid_page;
+        if ($numPages > 1) {
+            $midPage = floor($maxSize / 2);
+            $page = $pageNum - $midPage;
             if ($page <= 0) {
                 $page = 1;
             }
 
-            $last_page = $page + $max_size - 1;
-            if ($last_page > $num_pages) {
-                $page = $page - $last_page + $num_pages;
+            $lastPage = $page + $maxSize - 1;
+            if ($lastPage > $numPages) {
+                $page = $page - $lastPage + $numPages;
                 if ($page <= 0) {
                     $page = 1;
                 }
-                $last_page = $num_pages;
+                $lastPage = $numPages;
             }
 
             if ($page > 1) {
-                $this->pages[$pageGroup]["1"] = $url . "?" . update_query_string($request_vars, $var, 0);
+                $this->pages[$pageGroup]["1"] = $url . "?" . update_query_string($requestVars, $var, 0);
             }
 
             $pages[++$pageGroup]=array();
 
-            while ($page <= $last_page) {
-                $new_offset = ($page - 1) * $page_size;
-                $this->pages[$pageGroup][(string) $page] = $url . "?" . update_query_string($request_vars, $var, $new_offset);
+            while ($page <= $lastPage) {
+                $newOffset = ($page - 1) * $pageSize;
+                $this->pages[$pageGroup][(string) $page] = $url . "?" . update_query_string($requestVars, $var, $newOffset);
                 $page++;
             }
 
             $pages[++$pageGroup]=array();
 
-            if ($page <= $num_pages) {
-                $this->pages[$pageGroup][(string) $num_pages] = $url . "?" . update_query_string($request_vars, $var, ($num_pages-1) * $page_size);
+            if ($page <= $numPages) {
+                $this->pages[$pageGroup][(string) $numPages] = $url . "?" . update_query_string($requestVars, $var, ($numPages-1) * $pageSize);
             }
         }
-        if ($total >  $current + $page_size) {
-            $new_offset = $current + $page_size;
-            $this->pages[$pageGroup][translate("Next")]= $url . "?" . update_query_string($request_vars, $var, $new_offset);
+        if ($total >  $current + $pageSize) {
+            $newOffset = $current + $pageSize;
+            $this->pages[$pageGroup][translate("Next")]= $url . "?" . update_query_string($requestVars, $var, $newOffset);
         }
     }
 
