@@ -312,6 +312,7 @@ class userTest extends ZophDatabaseTestCase {
           'can leave comments' => 'Yes',
           'can rate photos' => 'Yes',
           'can rate the same photo multiple times' => 'No',
+          'can view hidden circles' => 'Yes',
           'can share photos' => 'No',
         );
         $this->assertEquals($expected, $da);
