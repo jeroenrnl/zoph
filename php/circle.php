@@ -42,7 +42,7 @@ if ($action != "insert") {
     $title = translate("New circle");
 }
 
-if($circle->isHidden() && !$user->canSeeHiddenCircles()) {
+if ($circle->isHidden() && !$user->canSeeHiddenCircles()) {
     redirect("people.php");
 }
 

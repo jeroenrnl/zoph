@@ -82,7 +82,7 @@ echo "\n" . translate("categories") . "\n" ?>
 if ($user->isAdmin()) {
     include "selection.inc.php";
 }
-if($category->showPageOnTop()) {
+if ($category->showPageOnTop()) {
     echo $page;
 }
 
@@ -214,7 +214,7 @@ if ($showOrig) {
     </div>
     <?php
 } // if show_orig
-if($category->showPageOnBottom()) {
+if ($category->showPageOnBottom()) {
     echo $page;
 }
 require_once "footer.inc.php";

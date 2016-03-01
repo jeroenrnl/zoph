@@ -89,7 +89,7 @@ if ($user->isAdmin() || $user->get("browse_tracks")) {
 if ($user->isAdmin()) {
     include "selection.inc.php";
 }
-if($place->showPageOnTop()) {
+if ($place->showPageOnTop()) {
     echo $page;
 }
 
@@ -234,7 +234,7 @@ if ($showOrig) {
         echo $map;
     }
 } // if show_orig
-if($place->showPageOnBottom()) {
+if ($place->showPageOnBottom()) {
     echo $page;
 }
 require_once "footer.inc.php";

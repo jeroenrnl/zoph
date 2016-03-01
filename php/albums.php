@@ -98,7 +98,7 @@ if ($user->isAdmin()) {
 if ($user->isAdmin()) {
     include "selection.inc.php";
 }
-if($album->showPageOnTop()) {
+if ($album->showPageOnTop()) {
     echo $page;
 }
 if ($showOrig) {
@@ -197,7 +197,7 @@ if ($showOrig) {
     </div>
     <?php
 } // if show_orig
-if($album->showPageOnBottom()) {
+if ($album->showPageOnBottom()) {
     echo $page;
 }
 require_once "footer.inc.php";
