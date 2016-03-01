@@ -340,13 +340,6 @@ function get_date_select_array($date, $days) {
     return $date_array;
 }
 
-function strip_href($str) {
-    if ($str) {
-        return preg_replace("/<a href=\"([^\"]+)\">.*/", "\\1", $str);
-    }
-    return $str;
-}
-
 function file_extension($str) {
     return substr($str, strrpos($str, '.') + 1);
 }

@@ -115,7 +115,7 @@ if ($_action=="getfile") {
             </span>
             <?php
         } else {
-            $link = strip_href($user->getLastCrumb());
+            $link = breadcrumb::getLast()->getLink();
             echo sprintf(translate("All photos have been downloaded in %s zipfiles."), $filenum)
             ?>
             <span class="actionlink">
