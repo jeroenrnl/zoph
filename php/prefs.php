@@ -203,7 +203,18 @@ foreach ($langs as $language) {
     <dt><?php echo translate("Sort order for subalbums and categories") ?></dt>
     <dd>
         <?php echo template::createPulldown("child_sortorder",
-            $user->prefs->get("child_sortorder"), get_sort_array()); ?>
+            $user->prefs->get("child_sortorder"), array(
+                "name" => translate("Name",0),
+                "sortname" => translate("Sort Name",0),
+                "oldest" => translate("Oldest photo",0),
+                "newest" => translate("Newest photo",0),
+                "first" => translate("Changed least recently",0),
+                "last" => translate("Changed most recently",0),
+                "lowest" => translate("Lowest ranked",0),
+                "highest" => translate("Highest ranked",0),
+                "average" => translate("Average ranking",0),
+                "random" => translate("Random",0)
+            )); ?>
     </dd>
 </dl>
 <?php

@@ -129,20 +129,6 @@ function create_photo_text_pulldown($var, $name = null) {
         "photographer" => translate("photographer",0)));
 }
 
-function get_sort_array() {
-    return array(
-        "name" => translate("Name",0),
-        "sortname" => translate("Sort Name",0),
-        "oldest" => translate("Oldest photo",0),
-        "newest" => translate("Newest photo",0),
-        "first" => translate("Changed least recently",0),
-        "last" => translate("Changed most recently",0),
-        "lowest" => translate("Lowest ranked",0),
-        "highest" => translate("Highest ranked",0),
-        "average" => translate("Average ranking",0),
-        "random" => translate("Random",0)
-    );
-}
 /*
  * Remove any params without values and operator params without corresponding
  * fields (e.g. _album_id-op when there is no _album_id).  This can be called
@@ -340,10 +326,6 @@ function get_date_select_array($date, $days) {
     return $date_array;
 }
 
-function file_extension($str) {
-    return substr($str, strrpos($str, '.') + 1);
-}
-
 /**
  * Get the current Zoph URL
  * Autodetect or use the URL set in configuration.
@@ -379,24 +361,6 @@ function getZophURL($proto=null) {
         $url.="/";
     }
     return $url;
-}
-
-function get_image_type($name) {
-    $ext = strtolower(file_extension($name));
-    if ($ext == "jpg" || $ext == "jpeg" || $ext == "jpe") {
-        return "image/jpeg";
-    }
-    else if ($ext == "gif") {
-        return "image/gif";
-    }
-    else if ($ext == "tiff" || $ext == "tif") {
-        return "image/tiff";
-    }
-    else if ($ext == "png") {
-        return "image/png";
-    }
-
-    return "";
 }
 
 /**
@@ -531,31 +495,6 @@ function redirect($url = "zoph.php", $msg = "Access denied") {
     }
         echo "<a href='" . $url . "'>" . $msg . "</a>";
     die();
-}
-
-function get_filetype($mime) {
-    switch ($mime) {
-    case "image/jpeg":
-    case "image/png":
-    case "image/gif":
-        $type="image";
-        break;
-    case "application/x-bzip2":
-    case "application/x-gzip":
-    case "application/x-tar":
-    case "application/zip":
-        $type="archive";
-        break;
-    case "application/xml":
-        $type="xml";
-        break;
-    case "directory":
-        $type="directory";
-        break;
-    default:
-        $type=false;
-    }
-    return $type;
 }
 
 function create_dir($directory) {

@@ -76,20 +76,20 @@ else {
             $size = getvar("_size");
 
             if ($annotate) {
-                $file=$photo->get("name");
+                $filename=$photo->get("name");
                 $size = $vars["_size"];
             } else if ($size == "full") {
-                $file = $photo->get("name");
+                $filename = $photo->get("name");
                 $dir = conf::get("path.images") . "/" . $photo->get("path") . "/";
             } else {
-                $file = MID_PREFIX . "_" . $photo->get("name");
+                $filename = MID_PREFIX . "_" . $photo->get("name");
                 $dir = conf::get("path.images") . "/" . $photo->get("path") . "/" .
                     MID_PREFIX . "/";
             }
-
+            $file=new file($dir . DIRECTORY_SEPARATOR . $filename);
             if ($html) {
                 $html = "<center>\n";
-                $html .= "<img src=\"" . $file . "\"><br>\n";
+                $html .= "<img src=\"" . $filename . "\"><br>\n";
                 $html .= str_replace("\n", "<br>\n", $message);
                 if ($includeurl) {
                     $html .= "<a href=\"" . getZophURL() .
@@ -105,7 +105,7 @@ else {
                     $mail->addHTMLImageFromString($image, $photo->get("name"),
                         $headers["Content-type"]);
                 } else {
-                    $mail->addHTMLImageFromFile($dir . "/" . $file, get_image_type($file));
+                    $mail->addHTMLImageFromFile($dir . "/" . $filename, $file->getMime());
                 }
                 $mail->setHTMLBody($html);
                 $mail->setTXTBody($message);
@@ -122,7 +122,7 @@ else {
                     $mail->addAttachmentFromString($image, $photo->get("name"),
                         $headers["Content-type"]);
                 } else {
-                    $mail->addAttachmentFromFile($dir . "/" . $file, get_image_type($file));
+                    $mail->addAttachmentFromFile($dir . "/" . $filename, $file->getMime());
                 }
             }
             $mail->setFrom("$from_name <$from_email>");
