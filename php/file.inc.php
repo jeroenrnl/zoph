@@ -295,31 +295,31 @@ class file {
     /**
      * Gets type of file for this file
      */
-	private function setFiletype($mime) {
-		switch ($mime) {
-			case "image/jpeg":
-			case "image/png":
-			case "image/gif":
-				$type="image";
-				break;
-			case "application/x-bzip2":
-			case "application/x-gzip":
-			case "application/x-tar":
-			case "application/zip":
-				$type="archive";
-				break;
-			case "application/xml":
-				$type="xml";
-				break;
-			case "directory":
-				$type="directory";
-				break;
-			default:
-			$type=false;
-		}
-		$this->type=$type;
-		return $type;
-	}
+    private function setFiletype($mime) {
+        switch ($mime) {
+            case "image/jpeg":
+            case "image/png":
+            case "image/gif":
+                $type="image";
+                break;
+            case "application/x-bzip2":
+            case "application/x-gzip":
+            case "application/x-tar":
+            case "application/zip":
+                $type="archive";
+                break;
+            case "application/xml":
+                $type="xml";
+                break;
+            case "directory":
+                $type="directory";
+                break;
+            default:
+            $type=false;
+        }
+        $this->type=$type;
+        return $type;
+    }
 
 
     /**
