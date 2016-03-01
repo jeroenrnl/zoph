@@ -340,21 +340,6 @@ function get_date_select_array($date, $days) {
     return $date_array;
 }
 
-function encode_href($str) {
-    $encoded_href = '';
-    foreach (explode('/', $str) as $path) {
-        if ($path) {
-            $encoded_href .= '/' . rawurlencode($path);
-        }
-    }
-
-    if (strpos(" $str", '/') != 1) {
-        $encoded_href = substr($encoded_href, 1);
-    }
-
-    return $encoded_href;
-}
-
 function strip_href($str) {
     if ($str) {
         return preg_replace("/<a href=\"([^\"]+)\">.*/", "\\1", $str);
@@ -421,21 +406,6 @@ function get_image_type($name) {
     return "";
 }
 
-function valid_image($name) {
-    $ext = strtolower(file_extension($name));
-    if ($ext == "jpg" ||
-        $ext == "jpeg" ||
-        $ext == "jpe" ||
-        $ext == "gif" ||
-        $ext == "tiff" ||
-        $ext == "tif" ||
-        $ext == "png") {
-
-        return true;
-    }
-    return false;
-}
-
 /**
  * Encode URL raw
  * based on urlencode_array
@@ -477,14 +447,6 @@ function create_actionlinks($actionlinks) {
         }
         $html.="</span>\n";
         return $html;
-    }
-}
-
-function running_on_windows() {
-    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-        return true;
-    } else {
-        return false;
     }
 }
 
@@ -568,60 +530,6 @@ function remove_empty(array $children) {
     } else {
         return $children;
     }
-}
-
-function create_bar_graph($legend, $value_array, $scale) {
-    # $value_array is an array that contains an array for each line
-    # of the graph. Each of those arrays contains 3 values:
-    # value: The value we're graphing,
-    # link:  Where should it link to. (may be null)
-    # count: Count of that value;
-
-    foreach ($value_array as $row) {
-        $counts[]=$row[2];
-    }
-    $max=max($counts);
-    $pixels=$scale/$max;
-
-    $html="<table class='ratings'>\n";
-    $html.="  <tr>\n";
-    $html.="    <th>" . $legend[0] ."</th>\n";
-    $html.="    <th>" . $legend[1] ."</th>\n";
-    $html.="  <tr>\n";
-
-    foreach ($value_array as $row) {
-        $html.="  <tr>\n";
-        $html.="    <td>\n";
-        if ($row[1]) {
-            $html.="   <a href='" . $row[1] . "'>";
-        }
-        $html.=$row[0];
-        if ($row[1]) {
-            $html.="</a>\n";
-        }
-        $html.="    </td>\n";
-        $html.="    <td>\n";
-        $html.="      <div class='ratings' style='width: " .
-            ceil($row[2]*$pixels) . "px'>";
-        $html.="&nbsp;</div>&nbsp;";
-        $html.=$row[2];
-        $html.="    </td>\n";
-        $html.="  </tr>\n";
-    }
-    $html.="</table>";
-    return $html;
-}
-
-function create_progress_bar($id = "progressbar", $w = 300, $complete = 0) {
-    $html = "<div id=\"" . $id . "_outer\" class=\"progressbar\"
-                style=\"width: " . $w . "px\">\n";
-    $html.= "   <div id=\"" . $id . "_inner\" class=\"progressfill\"";
-
-    $html.= "style=\"width: " . $complete . "%\">\n";
-    $html.= $complete . "%";
-    $html.="    </div>\n";
-    $html.="</div>\n";
-    return $html;
 }
 
 function redirect($url = "zoph.php", $msg = "Access denied") {
