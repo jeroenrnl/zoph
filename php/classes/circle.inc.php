@@ -63,6 +63,13 @@ class circle extends zophTable {
     }
 
     /**
+     * Get URL for this circle
+     */
+    public function getURL() {
+        return static::$url . $this->getId();
+    }
+
+    /**
      * Get display array
      * Get an array of properties to display
      * @return array properties

@@ -476,6 +476,20 @@ class person extends zophTable implements Organizer {
     }
 
     /**
+     * Get array of circles this person is a member of
+     * @return array of circles
+     */
+    public function getCircles() {
+        $qry=new select(array("cp" => "circles_people"));
+        $qry->addFields(array("circle_id"));
+        $qry->where(new clause("person_id=:personid"));
+        $qry->addParam(new param(":personid", (int) $this->getId(), PDO::PARAM_INT));
+
+        return circle::getRecordsFromQuery($qry);
+    }
+
+
+    /**
      * Lookup person by name;
      * @param string name
      */

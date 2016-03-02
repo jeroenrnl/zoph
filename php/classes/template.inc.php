@@ -104,7 +104,7 @@ class template {
         try {
             ob_start();
                 include $this->template;
-            return ob_get_clean();
+            return trim(ob_get_clean());
         } catch(Exception $e) {
             echo $e->getMessage();
             die();

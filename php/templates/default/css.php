@@ -145,6 +145,26 @@ div.details {
     -ms-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
 }
 
+dl {
+}
+
+dl dt {
+    font-weight: bold;
+    width: 15%;
+    float: left;
+    clear: left;
+    min-height: 1.5em;
+    text-align: right;
+    margin: 2px 5px;
+}
+
+dl dd {
+    width: 75%;
+    float: left;
+    clear: right;
+    margin: 2px 5px;
+}
+
 div.details > h3 {
     margin: -20px -20px 0 -20px;
     padding: 5px 20px;
