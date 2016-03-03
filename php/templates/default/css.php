@@ -1407,12 +1407,9 @@ fieldset.geotag  {
 }
 
 fieldset.members {
+    clear: both;
+    margin: 20px 20px 20px 12em;
     width: 15em;
-    padding: 10px;
-    margin-left: 12em;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    padding-bottom: 20px;
     border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
 }
 
@@ -1435,10 +1432,16 @@ fieldset.members legend {
     left: 2em;
     padding-right: 2em;
     padding-left: 2em;
-        font-weight: bold;
+    font-weight: bold;
     border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
     background: <?php echo color_scheme::getColor("title_bg_color") ?>;
 }
+
+fieldset.members legend {
+    padding: 0.5em 4em;
+    margin-bottom: 0.8em;
+}
+
 
 fieldset.editphotos div.thumbnail {
     vertical-align: top;
