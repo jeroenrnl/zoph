@@ -351,7 +351,7 @@ class cli {
 
         if (conf::get("import.cli.verbose") > 0) {
             echo "Setting config \"$name\" to \"$value\""  .
-                ( $default ? " (default)" : "" ) . "\n";
+                ($default ? " (default)" : "") . "\n";
         }
 
 
@@ -367,7 +367,7 @@ class cli {
         foreach ($conf as $item) {
             foreach ($item as $citem) {
                 if ($citem instanceof confItemBool) {
-                    $value=( $citem->getValue() ? "true": "false" );
+                    $value=($citem->getValue() ? "true": "false");
                 } else {
                     $value=$citem->getValue();
                 }

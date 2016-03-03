@@ -135,7 +135,7 @@ if ($action == "confirm") {
             <label for="orig_pos"><?php echo translate("position of original") ?></label>
             <?php echo template::createPulldown("orig_pos",
                 $pageset->get("orig_pos"),
-                array("top" => translate("Top",0), "bottom" => translate("Bottom",0)) ) ?><br>
+                array("top" => translate("Top",0), "bottom" => translate("Bottom",0))) ?><br>
             <input type="submit" value="<?php echo translate($action, 0) ?>">
         </form>
     </div>

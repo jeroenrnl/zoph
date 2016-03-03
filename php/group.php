@@ -81,7 +81,7 @@ if ($_action == "update_albums") {
     $action = "update";
 } else if ($_action=="update") {
     $group->setFields($request_vars);
-    if (isset($request_vars["_member"]) && ((int) $request_vars["_member"] > 0 )) {
+    if (isset($request_vars["_member"]) && ((int) $request_vars["_member"] > 0)) {
         $group->addMember(new user((int) $request_vars["_member"]));
     }
 

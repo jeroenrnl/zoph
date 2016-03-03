@@ -125,7 +125,7 @@ abstract class zophTable {
             // ignore empty keys or values unless the field must be set.
 
             if ($null) {
-                if ((!in_array($key, static::$notNull)) && (empty($key) )) { continue; }
+                if ((!in_array($key, static::$notNull)) && (empty($key))) { continue; }
             } else {
                 if ((!in_array($key, static::$notNull)) && (empty($key) || $val == "")) {
                     continue;

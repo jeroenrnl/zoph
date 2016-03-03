@@ -477,7 +477,7 @@ class place extends zophTreeTable implements Organizer {
             $qry=new select(array("pl" => "places"));
             $qry->addFields(array("place_id"));
             $qry->addFunction(array("distance" => "(6371 * acos(" .
-                "cos(radians(:lat)) * cos(radians(lat) ) * cos(radians(lon) - " .
+                "cos(radians(:lat)) * cos(radians(lat)) * cos(radians(lon) - " .
                 "radians(:lon)) + sin(radians(:lat2)) * sin(radians(lat))))"));
             $qry->having(new clause("distance <= :dist"));
 

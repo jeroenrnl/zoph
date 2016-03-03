@@ -363,11 +363,11 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $clause=new clause($alias . ".rating " . $op . " :rating" . $suffix);
             }
             $qry->addClause($clause, $conj);
-        } else if ( $key=="lat" || $key=="lon") {
+        } else if ($key=="lat" || $key=="lon") {
 
             $latlon[$key]=$val;
 
-            if ( !empty($latlon["lat"]) && !empty($latlon["lon"])) {
+            if (!empty($latlon["lat"]) && !empty($latlon["lon"])) {
                 $ids=array();
                 $lat=(float) $latlon["lat"];
                 $lon=(float) $latlon["lon"];

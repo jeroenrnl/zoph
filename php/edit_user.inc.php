@@ -72,7 +72,7 @@ if ($_action=="new") {
 ?>
          <label for="userclass"><?php echo translate("class") ?></label>
          <?php echo template::createPulldown("user_class", $this_user->get("user_class"),
-            array("1" => translate("User",0), "0" => translate("Admin",0)) ) ?>
+            array("1" => translate("User",0), "0" => translate("Admin",0))) ?>
           <br>
           <label for="browsepeople"><?php echo translate("can browse people") ?></label>
           <?php echo template::createYesNoPulldown("browse_people",

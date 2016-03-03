@@ -1193,7 +1193,7 @@ class photo extends zophTable {
             $qry=new select(array("p" => "photos"));
             $qry->addFields(array("photo_id"));
             $qry->addFunction(array("distance" => "(6371 * acos(" .
-                "cos(radians(:lat)) * cos(radians(lat) ) * cos(radians(lon) - " .
+                "cos(radians(:lat)) * cos(radians(lat)) * cos(radians(lon) - " .
                 "radians(:lon)) + sin(radians(:lat2)) * sin(radians(lat))))"));
             $qry->having(new clause("distance <= :dist"));
 

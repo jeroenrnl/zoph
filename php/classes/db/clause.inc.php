@@ -65,7 +65,7 @@ class clause {
     }
 
     /**
-     * Create a WHERE ... IN ( ..., ..., ...) clause
+     * Create a WHERE ... IN (..., ..., ...) clause
      * @param string variable
      * @param param parameters
      */
@@ -74,7 +74,7 @@ class clause {
     }
 
     /**
-     * Create a WHERE ... NOT IN ( ..., ..., ...) clause
+     * Create a WHERE ... NOT IN (..., ..., ...) clause
      * @param string variable
      * @param param parameters
      */

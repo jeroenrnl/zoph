@@ -64,7 +64,7 @@ if ($photo_id) { // would be passed for edit or delete
     if  ($num_thumbnails) {
         $photo = $thumbnails[0];
         $photo_id = $photo->get("photo_id");
-        if (isset($_action) && !$_action=="" ) {
+        if (isset($_action) && !$_action=="") {
             $act="_action=" . $_action . "&";
         }
 
@@ -135,7 +135,7 @@ if ($_action == "lightbox") {
     $action = "display";
 } else if ($_action == "delrate" && $user->isAdmin()) {
     $rating_id=getvar("_rating_id");
-    $rating=new rating( (int) $rating_id);
+    $rating=new rating((int) $rating_id);
     $rating->delete();
     breadcrumb::init();
     $link = html_entity_decode(breadcrumb::getLast()->getLink());
@@ -196,7 +196,7 @@ if (conf::get("feature.comments") && ($user->isAdmin() || $user->get("leave_comm
     $actionlinks["add comment"]="comment.php?_action=new&amp;photo_id=" . $photo->get("photo_id");
 }
 
-if (!$user->prefs->get("auto_edit") && $_action=="edit" ) {
+if (!$user->prefs->get("auto_edit") && $_action=="edit") {
     $actionlinks["return"]="photo.php?" .  $return_qs;
 }
 

@@ -152,7 +152,7 @@ function clean_request_vars($vars) {
         // keep _action now that the pager links point back to search.php
         if ($key == "_button") { continue; }
 
-        if ( is_array($val) ) {
+        if (is_array($val)) {
             while (list($subkey, $subval) = each($val)) {
                 if (empty($subval)) { continue; }
 
