@@ -1,3 +1,26 @@
+Zoph 0.9.1 to 0.9.2
+===================
+* If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.1. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.
+
+Copy files
+----------
+Copy the contents of the php directory, including all subdirs, into your webroot and copy the lang directory into the webroot as well. 
+
+     cp -a php/* /var/www/html/zoph
+     cp -a lang /var/www/html/zoph
+
+Database changes
+----------------
+* Execute zoph-update-0.9.2.sql:
+
+    mysql -u zoph_admin -p zoph < sql/zoph_update-0.9.2.sql
+
+Changes this script makes:
+
+* Add previously missing 'random' sortorder to preferences
+* Resize Last IP address field so IPv6 addresses can be stored
+* Database changes for 'circles' feature
+
 
 Zoph 0.9 to 0.9.1
 =================
@@ -6,17 +29,16 @@ Zoph 0.9 to 0.9.1
 
 Copy files
 ----------
-Copy the contents of the php directory, including all subdirs, into your webroot and copy the lang directory into the webroot as well. You should make a backup copy of config.inc.php to prevent overwriting it.
+Copy the contents of the php directory, including all subdirs, into your webroot and copy the lang directory into the webroot as well.
 
-     cp config.inc.php config.local.php
      cp -a php/* /var/www/html/zoph
      cp -a lang /var/www/html/zoph
 
 Database changes
 ----------------
-* Execute zoph-update-0.10.sql:
+* Execute zoph-update-0.9.1.sql:
 
-    mysql -u zoph_admin -p zoph < sql/zoph_update-0.10.sql
+    mysql -u zoph_admin -p zoph < sql/zoph_update-0.9.1.sql
 
 Changes this script makes:
 
