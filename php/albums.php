@@ -39,6 +39,9 @@ if (!$parent_album_id) {
 } else {
     $album = new album($parent_album_id);
 }
+
+$pagenum = getvar("_pageset_page");
+
 $album->lookup();
 $obj=&$album;
 $ancestors = $album->get_ancestors();
@@ -50,6 +53,16 @@ $photoCount = $album->getPhotoCount();
 $title = $album->get("parent_album_id") ? $album->get("album") : translate("Albums");
 
 require_once "header.inc.php";
+
+try {
+    $pageset=$album->getPageset();
+    $page=$album->getPage($request_vars, $pagenum);
+    $showOrig=$album->showOrig($pagenum);
+} catch (pageException $e) {
+    $showOrig=true;
+    $page=null;
+}
+
 ?>
 <h1>
 <?php
@@ -85,8 +98,10 @@ if ($user->isAdmin()) {
 if ($user->isAdmin()) {
     include "selection.inc.php";
 }
-include "show_page.inc.php";
-if ($show_orig) {
+if ($album->showPageOnTop()) {
+    echo $page;
+}
+if ($showOrig) {
     ?>
     <div class="main">
       <form class="viewsettings" method="get" action="albums.php">
@@ -182,6 +197,8 @@ if ($show_orig) {
     </div>
     <?php
 } // if show_orig
-echo $page_html;
+if ($album->showPageOnBottom()) {
+    echo $page;
+}
 require_once "footer.inc.php";
 ?>

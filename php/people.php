@@ -57,7 +57,7 @@ if (getvar("circle_id")) {
         $selection=null;
     }
 
-    if($circle->isHidden() && !$user->canSeeHiddenCircles()) {
+    if ($circle->isHidden() && !$user->canSeeHiddenCircles()) {
         redirect("people.php");
     }
 
@@ -90,7 +90,7 @@ if ($user->isAdmin()) {
 }
 
 if (!isset($circle) && ($user->canSeeHiddenCircles())) {
-    if($_showhidden) {
+    if ($_showhidden) {
         $actionlinks[translate("hide hidden")]="people.php?_showhidden=0";
     } else {
         $actionlinks[translate("show hidden")]="people.php?_showhidden=1";

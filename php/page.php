@@ -25,6 +25,11 @@ require_once "include.inc.php";
 
 $zophpage_id = getvar("page_id");
 $zophpage = new page($zophpage_id);
+
+$obj = &$zophpage;
+
+require_once "actions.inc.php";
+
 if ($zophpage_id) {
     $zophpage->lookup();
     $title = $zophpage->get("title");
@@ -36,15 +41,14 @@ if ($zophpage_id) {
 } else if ($_action != "insert") {
     // no id given and action is not new or insert
     redirect("zoph.php", "No page id given!");
+} else {
+    $title = $zophpage->get("title");
 }
 
 if (!$user->isAdmin()) {
     $_action="display";
 }
 
-$obj = &$zophpage;
-
-require_once "actions.inc.php";
 require_once "header.inc.php";
 
 if ($action == "confirm") {

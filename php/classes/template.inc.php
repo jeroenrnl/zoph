@@ -104,7 +104,7 @@ class template {
         try {
             ob_start();
                 include $this->template;
-            return ob_get_clean();
+            return trim(ob_get_clean());
         } catch(Exception $e) {
             echo $e->getMessage();
             die();
@@ -166,6 +166,16 @@ class template {
      */
     public function addBlock(block $block) {
         $this->blocks[]=$block;
+    }
+
+    /**
+     * Add a page
+     * A page can simply be added to the list of blocks as it can be displayed
+     * with the __toString() function
+     * @param page Page to be added
+     */
+    public function addPage(page $page) {
+        $this->blocks[]=$page;
     }
 
     /**

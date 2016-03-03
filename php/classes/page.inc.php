@@ -48,6 +48,10 @@ class page extends zophTable {
     /** @var string URL for this class */
     protected static $url="page.php?page_id=";
 
+    public function __toString() {
+        return (string) $this->display();
+    }
+
     /**
      * Insert a new page into the db
      */

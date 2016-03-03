@@ -42,7 +42,20 @@ if ($action != "insert") {
     $title = translate("New circle");
 }
 
-if($circle->isHidden() && !$user->canSeeHiddenCircles()) {
+if ($_action=="update") {
+    if (((int) getvar("_member") > 0 )) {
+        $circle->addMember(new person((int) getvar("_member")));
+    }
+
+    if (is_array(getvar("_removeMember"))) {
+        foreach (getvar("_removeMember") as $personId) {
+            $circle->removeMember(new person((int) $personId));
+        }
+    }
+    $action = "update";
+}
+
+if ($circle->isHidden() && !$user->canSeeHiddenCircles()) {
     redirect("people.php");
 }
 
@@ -76,7 +89,11 @@ if ($action == "display") {
         "actionlinks"       => $actionlinks,
         "mainActionlinks"   => null,
         "obj"               => $circle,
-        "selection"         => $selection
+        "selection"         => $selection,
+        "pageTop"           => null,
+        "pageBottom"        => null,
+        "page"              => null,
+        "showMain"          => true
     ));
 
     if ($user->get("detailed_people") || $user->isAdmin()) {
@@ -114,11 +131,19 @@ if ($action == "display") {
         "onsubmit"      => null,
         "action"        => $action,
     ));
+
+    $curMembers=$circle->getMembers();
+    $members=new block("members", array(
+        "members"   => $curMembers,
+        "group"     => $circle
+    ));
+
     $form->addBlocks(array(
         template::createFormInputHidden("circle_id", $circle->getId()),
         template::createFormInputText("circle_name", $circle->getName(), translate("Name"), "", 32),
         template::createFormTextArea("description", $circle->get("description"), translate("Description"), 40, 4),
-        template::createFormInputCheckbox("hidden", $circle->isHidden(), translate("Hide in overviews"))
+        template::createFormInputCheckbox("hidden", $circle->isHidden(), translate("Hide in overviews")),
+        $members
     ));
 
     $tpl->addBlock($form);

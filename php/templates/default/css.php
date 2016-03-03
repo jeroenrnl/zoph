@@ -145,6 +145,26 @@ div.details {
     -ms-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
 }
 
+dl {
+}
+
+dl dt {
+    font-weight: bold;
+    width: 15%;
+    float: left;
+    clear: left;
+    min-height: 1.5em;
+    text-align: right;
+    margin: 2px 5px;
+}
+
+dl dd {
+    width: 75%;
+    float: left;
+    clear: right;
+    margin: 2px 5px;
+}
+
 div.details > h3 {
     margin: -20px -20px 0 -20px;
     padding: 5px 20px;
@@ -1023,8 +1043,51 @@ div.photohdr {
     width: 60%;
 }
 
-.currentpage    {
-    color: red;
+ul.pager    {
+    display: block;
+    font-size: medium;
+    font-weight: normal;
+    text-align: center;
+    left: auto;
+    right: auto;
+}
+
+ul.pager li {
+    display: inline-block;
+}
+
+ul.pagegroup {
+    display: inline-block;
+    margin: 5px;
+    float: left;
+    overflow: hidden;
+}
+
+ul.pagegroup li {
+    display: block;
+    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    border-radius: 5px;
+    float: left;
+    margin: 3px;
+}
+
+ul.pagegroup li a {
+    display: block;
+    padding: 6px 12px;
+    text-decoration: none;
+    text-align: center;
+    vertical-align: middle;
+}
+
+ul.pagegroup li:hover {
+    background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>;
+}
+
+ul.pagegroup li.current {
+    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
     font-weight: bold;
 }
 
@@ -1343,13 +1406,10 @@ fieldset.geotag  {
     border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
 }
 
-fieldset.addusers {
+fieldset.members {
+    clear: both;
+    margin: 20px 20px 20px 12em;
     width: 15em;
-    padding: 10px;
-    margin-left: 12em;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    padding-bottom: 20px;
     border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
 }
 
@@ -1366,16 +1426,22 @@ fieldset.map {
 fieldset.editphotos legend,
 fieldset.map legend,
 fieldset.geotag legend,
-fieldset.addusers legend {
+fieldset.members legend {
     clear: both;
     display: block;
     left: 2em;
     padding-right: 2em;
     padding-left: 2em;
-        font-weight: bold;
+    font-weight: bold;
     border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
     background: <?php echo color_scheme::getColor("title_bg_color") ?>;
 }
+
+fieldset.members legend {
+    padding: 0.5em 4em;
+    margin-bottom: 0.8em;
+}
+
 
 fieldset.editphotos div.thumbnail {
     vertical-align: top;

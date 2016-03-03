@@ -44,5 +44,11 @@ function zophAutoloadInterface($interface) {
     return zophAutoload($file);
 }
 
+function zophAutoloadTrait($trait) {
+    $file="traits/" . $trait . ".inc.php";
+    return zophAutoload($file);
+}
+
 spl_autoload_register("zophAutoloadClass");
 spl_autoload_register("zophAutoloadInterface");
+spl_autoload_register("zophAutoloadTrait");

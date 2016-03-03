@@ -1,8 +1,7 @@
 <?php
 /**
- * Show pagesets
- *
- * This file is part of Zoph.
+ * Template to show members of a group
+ * used for usergroups and circles
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,31 +16,23 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package Zoph
  * @author Jeroen Roos
+ * @package ZophTemplates
  */
-require_once "include.inc.php";
 
-$title=translate("Pagesets");
-require_once "header.inc.php";
-?>
-<h1>
-<?php
-if ($user->isAdmin()) {
-    ?>
-    <span class="actionlink">
-      <a href="pageset.php?_action=new"><?php echo translate("new") ?></a>
-    </span>
-    <?php
+if (!ZOPH) {
+    die("Illegal call");
 }
 ?>
-<?php echo $title ?>
-</h1>
-<div class="main">
-  <br>
-  <?php echo pageset::getTable() ?>
-  <br>
-</div>
-<?php
-require_once "footer.inc.php";
-?>
+<fieldset class="members">
+    <legend><?= translate("members") ?></legend>
+    <?php foreach ($tpl_members as $member): ?>
+        <input class="remove" type="checkbox" name="_removeMember[]"
+            value="<?= $member->getId() ?>">
+        <a href="<?= $member->getURL() ?>">
+            <?= $member->getName() ?>
+        </a><br>
+    <?php endforeach ?>
+    <?= $tpl_group->getNewMemberPulldown("_member") ?>
+</fieldset>
+<br>

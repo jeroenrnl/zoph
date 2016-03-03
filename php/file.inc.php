@@ -288,9 +288,39 @@ class file {
         $fileinfo=new finfo(FILEINFO_MIME, conf::get("path.magic"));
         $mime=explode(";", $fileinfo->file($this->readlink()));
         log::msg("<b>" . $this->readlink() . "</b>: " . $mime[0], log::DEBUG, log::IMPORT);
-        $this->type=get_filetype($mime[0]);
+        $this->setFiletype($mime[0]);
         return $mime[0];
     }
+
+    /**
+     * Gets type of file for this file
+     */
+    private function setFiletype($mime) {
+        switch ($mime) {
+            case "image/jpeg":
+            case "image/png":
+            case "image/gif":
+                $type="image";
+                break;
+            case "application/x-bzip2":
+            case "application/x-gzip":
+            case "application/x-tar":
+            case "application/zip":
+                $type="archive";
+                break;
+            case "application/xml":
+                $type="xml";
+                break;
+            case "directory":
+                $type="directory";
+                break;
+            default:
+            $type=false;
+        }
+        $this->type=$type;
+        return $type;
+    }
+
 
     /**
      * Get files in a specific directory

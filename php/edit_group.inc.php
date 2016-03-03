@@ -47,25 +47,12 @@
        <br>
 <?php
 if ($action!="insert") {
-    ?>
-    <fieldset class="addusers">
-      <legend><?php echo translate("members") ?></legend>
-
-    <?php
-    $members=$group->getMembers();
-    foreach ($members as $member) {
-        $member->lookup();
-        ?>
-        <input class="remove" type="checkbox" name="_remove_user[]"
-            value="<?php echo $member->getId()?>">
-        <?php echo $member->getLink() ?>
-        <br>
-        <?php
-    }
-    echo $group->getNewMemberPulldown("_member");
-    ?>
-    </fieldset>
-    <?php
+    $curMembers=$group->getMembers();
+    $members=new block("members", array(
+        "members"   => $curMembers,
+        "group"     => $group
+    ));
+    echo $members;
 }
 ?>
     <input type="submit" value="<?php echo translate($action, 0) ?>">

@@ -53,7 +53,19 @@ $photoCount = $place->getPhotoCount();
 
 $title = $place->get("parent_place_id") ? $place->get("title") : translate("Places");
 
+$pagenum = getvar("_pageset_page");
+
 require_once "header.inc.php";
+
+try {
+    $pageset=$place->getPageset();
+    $page=$place->getPage($request_vars, $pagenum);
+    $showOrig=$place->showOrig($pagenum);
+} catch (pageException $e) {
+    $showOrig=true;
+    $page=null;
+}
+
 ?>
 <h1>
 
@@ -77,9 +89,11 @@ if ($user->isAdmin() || $user->get("browse_tracks")) {
 if ($user->isAdmin()) {
     include "selection.inc.php";
 }
-$page_html="";
-include "show_page.inc.php";
-if ($show_orig) {
+if ($place->showPageOnTop()) {
+    echo $page;
+}
+
+if ($showOrig) {
     ?>
     <div class="main">
       <form class="viewsettings" method="get" action="places.php">
@@ -220,6 +234,8 @@ if ($show_orig) {
         echo $map;
     }
 } // if show_orig
-echo $page_html;
+if ($place->showPageOnBottom()) {
+    echo $page;
+}
 require_once "footer.inc.php";
 ?>

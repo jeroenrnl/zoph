@@ -127,7 +127,8 @@ if ($_action == "lightbox") {
     if (conf::get("feature.rating") && ($user->isAdmin() || $user->get("allow_rating"))) {
         $rating = getvar("rating");
         $photo->rate($rating);
-        $link = strip_href($user->getLastCrumb());
+        breadcrumb::init();
+        $link = html_entity_decode(breadcrumb::getLast()->getLink());
         if (!$link) { $link = "zoph.php"; }
         redirect($link);
     }
@@ -136,7 +137,8 @@ if ($_action == "lightbox") {
     $rating_id=getvar("_rating_id");
     $rating=new rating( (int) $rating_id);
     $rating->delete();
-    $link = strip_href($user->getLastCrumb());
+    breadcrumb::init();
+    $link = html_entity_decode(breadcrumb::getLast()->getLink());
     if (!$link) { $link = "zoph.php"; }
     redirect($link);
 }
@@ -251,8 +253,9 @@ if ($_action == "edit") {
     $action = "confirm";
 } else if ($_action == "confirm") {
     $photo->delete();
-    $user->eatCrumb();
-    $link = strip_href($user->getLastCrumb());
+    breadcrumb::init();
+    breadcrumb::eat();
+    $link = html_entity_decode(breadcrumb::getLast()->getLink());
     if (!$link) { $link = "zoph.php"; }
     redirect($link, "Go back");
 } else if ($_action == "select") {

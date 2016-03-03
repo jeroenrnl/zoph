@@ -88,7 +88,8 @@ class photo extends zophTable {
               $header["http_status"]="HTTP/1.1 304 Not Modified";
               $jpeg=null;
         } else {
-            $image_type = get_image_type($image_path);
+            $file=new file($image_path);
+            $image_type=$file->getMime();
             if ($image_type) {
                 $header["Content-Length"] = $filesize;
                 $header["Content-Disposition"]="inline; filename=" . $name;

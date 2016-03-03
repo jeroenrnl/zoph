@@ -99,6 +99,27 @@ class CategoryException extends OrganizerException {}
 class CategoryNotFoundException extends CategoryException {}
 
 /**
+ * Exceptions for pages and pagesets
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class PageException extends ZophException {}
+
+/**
+ * The pageset contains no pages
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class PagePagesetHasNoPagesException extends PageException {}
+
+/**
+ * No pageset exception
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class PageNoPagesetForObjectException extends PageException {}
+
+/**
  * Exception class for Import-related exceptions
  * @author Jeroen Roos
  * @package ZophException

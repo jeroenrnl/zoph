@@ -449,7 +449,7 @@ if ($num_thumbnails <= 0) {
         $pager_vars[$key] = $val;
     }
     $request_vars = $pager_vars;
-    echo pager($offset, $num_photos, $num_pages, $cells,
+    echo new pager($offset, $num_photos, $num_pages, $cells,
         $user->prefs->get("max_pager_size"), $request_vars, "_off");
 } // if photos
 ?>

@@ -32,6 +32,7 @@ use db\db;
 use db\clause;
 use db\selectHelper;
 
+
 /**
  * Person class
  *
@@ -40,6 +41,8 @@ use db\selectHelper;
  * @package Zoph
  */
 class person extends zophTable implements Organizer {
+
+    use showPage;
 
     /** @param Name of the root node in XML responses */
     const XMLROOT="people";
@@ -471,6 +474,20 @@ class person extends zophTable implements Organizer {
         $details["title"]=translate("Photos taken by this person:", false);
         return parent::getDetailsXML($details);
     }
+
+    /**
+     * Get array of circles this person is a member of
+     * @return array of circles
+     */
+    public function getCircles() {
+        $qry=new select(array("cp" => "circles_people"));
+        $qry->addFields(array("circle_id"));
+        $qry->where(new clause("person_id=:personid"));
+        $qry->addParam(new param(":personid", (int) $this->getId(), PDO::PARAM_INT));
+
+        return circle::getRecordsFromQuery($qry);
+    }
+
 
     /**
      * Lookup person by name;

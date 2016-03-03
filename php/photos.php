@@ -85,7 +85,7 @@ if (!($num_thumbnails == 0 || $_cols <= 4)) {
     $width = ((THUMB_SIZE + 14) * $_cols) + 25;
     $default_width= conf::get("interface.width");
     if ($width > $default_width || strpos($default_width, "%")) {
-        $extrastyle = "body	{ width: " . $width . "px; }\n";
+        $extrastyle = "body    { width: " . $width . "px; }\n";
     }
 }
 require_once "header.inc.php";
@@ -207,7 +207,7 @@ if ($num_thumbnails <= 0) {
     ?>
     <br>
     <?php
-    echo pager($offset, $num_photos, $num_pages, $cells,
+    echo new pager($offset, $num_photos, $num_pages, $cells,
       $user->prefs->get("max_pager_size"), $vars, "_off");
 } // if photos
 ?>

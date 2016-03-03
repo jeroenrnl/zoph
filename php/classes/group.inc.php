@@ -107,7 +107,13 @@ class group extends zophTable {
         $qry->where(new clause("group_id=:groupid"));
         $qry->addParam(new param(":groupid", (int) $this->getId(), PDO::PARAM_INT));
 
-        return user::getRecordsFromQuery($qry);
+        $members=user::getRecordsFromQuery($qry);
+        $return=array();
+        foreach ($members as $member) {
+            $member->lookup();
+            $return[]=$member;
+        }
+        return $return;
     }
 
     /**

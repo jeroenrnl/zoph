@@ -63,6 +63,13 @@ class circle extends zophTable {
     }
 
     /**
+     * Get URL for this circle
+     */
+    public function getURL() {
+        return static::$url . $this->getId();
+    }
+
+    /**
      * Get display array
      * Get an array of properties to display
      * @return array properties
@@ -153,10 +160,10 @@ class circle extends zophTable {
         $qry->where(new clause("circle_id=:circleid"));
         $qry->addParam(new param(":circleid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if(!user::getCurrent()->isAdmin()) {
+        if (!user::getCurrent()->isAdmin()) {
             $allowed=person::getAllPeopleAndPhotoGraphers();
             $ids=array();
-            foreach($allowed as $person) {
+            foreach ($allowed as $person) {
                 $ids[]=$person->getId();
             }
             $param=new param(":peopledIds", $ids, PDO::PARAM_INT);
@@ -304,7 +311,7 @@ class circle extends zophTable {
         $rawCircles=static::getRecords("circle_name");
         $user=user::getCurrent();
 
-        if ($showHidden && ($user->canSeeHiddenCircles()) {
+        if ($showHidden && ($user->canSeeHiddenCircles())) {
             $circles=$rawCircles;
         } else {
             foreach ($rawCircles as $circle) {
