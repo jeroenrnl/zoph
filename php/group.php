@@ -85,8 +85,8 @@ if ($_action == "update_albums") {
         $group->addMember(new user((int) $request_vars["_member"]));
     }
 
-    if (isset($request_vars["_remove_user"]) && is_array($request_vars["_remove_user"])) {
-        foreach ($request_vars["_remove_user"] as $user_id) {
+    if (is_array(getvar("_removeMember"))) {
+        foreach (getvar("_removeMember") as $user_id) {
             $group->removeMember(new user((int) $user_id));
         }
     }

@@ -1406,7 +1406,7 @@ fieldset.geotag  {
     border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
 }
 
-fieldset.addusers {
+fieldset.members {
     width: 15em;
     padding: 10px;
     margin-left: 12em;
@@ -1429,7 +1429,7 @@ fieldset.map {
 fieldset.editphotos legend,
 fieldset.map legend,
 fieldset.geotag legend,
-fieldset.addusers legend {
+fieldset.members legend {
     clear: both;
     display: block;
     left: 2em;
