@@ -79,26 +79,25 @@ class photographer extends person implements Organizer {
      * @return array list of photographer objects
      * @todo This code could be much simplified if we could use subqueries
      */
-    public static function getAll($search = null, $search_first = null) {
+    public static function getAll($search = null, $search_first = false) {
         $where=null;
         $qry=new select(array("ppl" => "people"));
-        if ($search != null) {
-            $where=self::getWhereForSearch($search, $search_first);
-        }
 
         if (!user::getCurrent()->isAdmin()) {
             $ids=array();
             $subqry = new select(array("p" => "photos"));
             $subqry->addFunction(array("person_id" => "DISTINCT p.photographer_id"));
             $subqry->join(array("ppl" => "people"), "p.photographer_id=ppl.person_id");
-            list($subqry,$where)=selectHelper::expandQueryForUser($subqry, $where);
-            if ($where instanceof clause) {
-                $subqry->where($where);
-                if ($search != null) {
-                    $subqry->addParam(new param("search", $search, PDO::PARAM_STR));
+            if ($search != null) {
+                $where=self::getWhereForSearch($search, $search_first);
+                $subqry->addParam(new param(":search", $search, PDO::PARAM_STR));
+                if ($search_first) {
+                    $subqry->addParam(new param(":searchfirst", $search, PDO::PARAM_STR));
                 }
-                $where=null;
             }
+            list($subqry,$where)=selectHelper::expandQueryForUser($subqry, $where);
+
+            $subqry->where($where);
 
             $photographers=self::getRecordsFromQuery($subqry);
 
@@ -114,7 +113,11 @@ class photographer extends person implements Organizer {
             $where=clause::InClause("person_id", $param);
             $qry->addParam($param);
         } else if ($search != null) {
+            $qry->where(self::getWhereForSearch($search, $search_first));
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
+            if ($search_first) {
+                $qry->addParam(new param("searchfirst", $search, PDO::PARAM_STR));
+            }
         }
 
         if ($where instanceof clause) {

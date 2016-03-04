@@ -388,15 +388,19 @@ class album extends zophTreeTable implements Organizer {
      * @param string name
      * @todo This function is almost equal to category::getByName(), should be merged
      */
-    public static function getByName($name) {
+    public static function getByName($name, $like=false) {
         if (empty($name)) {
             return false;
         }
         $qry=new select(array("a" => "albums"));
         $qry->addFields(array("album_id"));
-        $qry->where(new clause("lower(album) LIKE :name"));
-        $qry->addParam(new param(":name", "%" . strtolower($name) . "%", PDO::PARAM_STR));
-
+        if ($like) {
+            $qry->where(new clause("lower(album) LIKE :name"));
+            $qry->addParam(new param(":name", "%" . strtolower($name) . "%", PDO::PARAM_STR));
+        } else {
+            $qry->where(new clause("lower(album)=:name"));
+            $qry->addParam(new param(":name", strtolower($name), PDO::PARAM_STR));
+        }
         return static::getRecordsFromQuery($qry);
     }
 

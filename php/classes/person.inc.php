@@ -541,6 +541,9 @@ class person extends zophTable implements Organizer {
         if (!is_null($search)) {
             $where=static::getWhereForSearch($search, $search_first);
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
+            if ($search_first) {
+                $qry->addParam(new param("searchfirst", $search, PDO::PARAM_STR));
+            }
         }
 
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
@@ -714,7 +717,7 @@ class person extends zophTable implements Organizer {
             } else {
                 $where=new clause("ppl.last_name like lower(concat(:search,'%'))");
                 if ($search_first) {
-                    $where->addOr(new clause("ppl.first_name like lower(concat(:search, '%'))"));
+                    $where->addOr(new clause("ppl.first_name like lower(concat(:searchfirst, '%'))"));
                 }
             }
         }

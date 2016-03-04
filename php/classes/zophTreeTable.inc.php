@@ -202,7 +202,7 @@ abstract class zophTreeTable extends zophTable {
      */
     public static function getByNameHierarchical($name) {
         if (strpos($name, "/") === false) {
-            return static::getByName($name);
+            return static::getByName($name, true);
         }
 
         $found=0;
@@ -210,7 +210,7 @@ abstract class zophTreeTable extends zophTable {
         $searchString=explode("/", $name);
         $depth=sizeof($searchString);
         foreach ($searchString as $namePart) {
-            $objs = static::getByName($namePart);
+            $objs = static::getByName($namePart, true);
             foreach ($objs as $obj) {
                 $obj->lookup();
                 if (!isset($parentObj)) {
