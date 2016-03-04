@@ -314,6 +314,7 @@ class circle extends zophTable {
         if ($showHidden && ($user->canSeeHiddenCircles())) {
             $circles=$rawCircles;
         } else {
+            $circles=array();
             foreach ($rawCircles as $circle) {
                 if (!$circle->isHidden()) {
                     $circles[]=$circle;
