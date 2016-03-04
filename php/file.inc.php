@@ -339,7 +339,7 @@ class file {
             if ($filename[0]!=".") {
                 if (is_dir($dir . "/" . $filename)) {
                     if ($recursive) {
-                        $return=array_merge($return,self::getFromDir($dir . "/" . $filename, true));
+                        $return=array_merge($return,static::getFromDir($dir . "/" . $filename, true));
                     }
                 } else if (is_null($search) or preg_match($search, $filename)) {
                     $file=new file($dir . "/" . $filename);

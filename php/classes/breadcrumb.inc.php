@@ -75,7 +75,7 @@ class breadcrumb {
 
                 $this->title=$title;
                 $this->link=$link;
-                self::$crumbs[] = $this;
+                static::$crumbs[] = $this;
             }
         }
     }
@@ -129,11 +129,11 @@ class breadcrumb {
      * @param int number of crumbs to eat
      */
     public static function eat($num = -1) {
-        if (count(self::$crumbs) > 0) {
+        if (count(static::$crumbs) > 0) {
             if ($num < 0) {
-                $num = count(self::$crumbs) - 1;
+                $num = count(static::$crumbs) - 1;
             }
-            self::$crumbs = array_slice(self::$crumbs, 0, $num);
+            static::$crumbs = array_slice(static::$crumbs, 0, $num);
         }
     }
 
@@ -141,8 +141,8 @@ class breadcrumb {
      * Get the last crumb
      */
     public static function getLast() {
-        if (count(self::$crumbs) > 0) {
-            return end(self::$crumbs);
+        if (count(static::$crumbs) > 0) {
+            return end(static::$crumbs);
         }
     }
 
@@ -150,17 +150,17 @@ class breadcrumb {
         $user=user::getCurrent();
 
         $max_crumbs=$user->prefs->get("num_breadcrumbs");
-        if (($num_crumbs = count(self::$crumbs)) > $max_crumbs) {
-            $crumbs=array_slice(self::$crumbs, $num_crumbs - $max_crumbs);
+        if (($num_crumbs = count(static::$crumbs)) > $max_crumbs) {
+            $crumbs=array_slice(static::$crumbs, $num_crumbs - $max_crumbs);
             $class="firstdots";
         } else {
-            $crumbs=self::$crumbs;
+            $crumbs=static::$crumbs;
             $class="";
         }
         $tpl=new block("breadcrumbs", array(
             "crumbs"    =>  $crumbs,
             "class"     =>  $class,
-            "clearURL"  =>  self::getClearURL()
+            "clearURL"  =>  static::getClearURL()
         ));
 
         return $tpl;

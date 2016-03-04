@@ -89,7 +89,7 @@ class photographer extends person implements Organizer {
             $subqry->addFunction(array("person_id" => "DISTINCT p.photographer_id"));
             $subqry->join(array("ppl" => "people"), "p.photographer_id=ppl.person_id");
             if ($search != null) {
-                $where=self::getWhereForSearch($search, $search_first);
+                $where=static::getWhereForSearch($search, $search_first);
                 $subqry->addParam(new param(":search", $search, PDO::PARAM_STR));
                 if ($search_first) {
                     $subqry->addParam(new param(":searchfirst", $search, PDO::PARAM_STR));
@@ -99,7 +99,7 @@ class photographer extends person implements Organizer {
 
             $subqry->where($where);
 
-            $photographers=self::getRecordsFromQuery($subqry);
+            $photographers=static::getRecordsFromQuery($subqry);
 
             if (sizeof($photographers) == 0) {
                 return null;
@@ -113,7 +113,7 @@ class photographer extends person implements Organizer {
             $where=clause::InClause("person_id", $param);
             $qry->addParam($param);
         } else if ($search != null) {
-            $qry->where(self::getWhereForSearch($search, $search_first));
+            $qry->where(static::getWhereForSearch($search, $search_first));
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
             if ($search_first) {
                 $qry->addParam(new param("searchfirst", $search, PDO::PARAM_STR));

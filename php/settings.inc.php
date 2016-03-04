@@ -60,7 +60,7 @@ class settings {
                     }
                 } else {
                     // No instance given, autodetect
-                    $instance=self::detectInstance($ini);
+                    $instance=static::detectInstance($ini);
                 }
                 return $ini[$instance];
             } else {
@@ -102,7 +102,7 @@ class settings {
             log::msg("No php_location setting in " . INI_FILE . " found that matches " .
                 $php_loc, log::FATAL, log::GENERAL);
         } else {
-            self::$php_loc=$i["php_location"];
+            static::$php_loc=$i["php_location"];
         }
         if (!isset($i["db_host"]) || !isset($i["db_name"]) ||
           !isset($i["db_user"]) || !isset($i["db_pass"]) ||

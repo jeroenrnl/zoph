@@ -39,7 +39,7 @@ class TimeZone extends DateTimeZone {
         $xml = new DOMDocument('1.0','UTF-8');
         $rootnode=$xml->createElement("zones");
 
-        $zones=self::listIdentifiers();
+        $zones=static::listIdentifiers();
         array_unshift($zones, "&nbsp;");
         $len=strlen($search);
         foreach ($zones as $id => $tz) {
@@ -65,7 +65,7 @@ class TimeZone extends DateTimeZone {
      * @return array zones
      */
     public static function getSelectArray() {
-        $zones=self::listIdentifiers();
+        $zones=static::listIdentifiers();
         array_unshift($zones, "");
         return $zones;
     }
@@ -75,7 +75,7 @@ class TimeZone extends DateTimeZone {
      * @return array zones with names as key
      */
     public static function getTzArray() {
-        $zones=self::getSelectArray();
+        $zones=static::getSelectArray();
         $zones=array_values($zones);
         $zones=array_combine($zones, $zones);
         return $zones;
@@ -87,7 +87,7 @@ class TimeZone extends DateTimeZone {
      * @return string key
      */
     public static function getKey($tz) {
-        return array_search($tz,self::getSelectArray());
+        return array_search($tz,static::getSelectArray());
     }
 
     /**
@@ -111,8 +111,8 @@ class TimeZone extends DateTimeZone {
             $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
                 " value='" . $text . "' class='autocomplete'>";
         } else {
-            $html=template::createPulldown("timezone_id", self::getKey($value),
-                self::getSelectArray());
+            $html=template::createPulldown("timezone_id", static::getKey($value),
+                static::getSelectArray());
         }
         return $html;
     }
@@ -124,7 +124,7 @@ class TimeZone extends DateTimeZone {
      */
     public static function validate($tz) {
         // Checks if $tz contains a valid timezone string
-        $tzones=self::listIdentifiers();
+        $tzones=static::listIdentifiers();
         return array_search($tz, $tzones);
     }
 

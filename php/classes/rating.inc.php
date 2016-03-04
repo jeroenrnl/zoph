@@ -68,7 +68,7 @@ class rating extends zophTable {
             }
         }
 
-        return self::getRecords(null, $constraints);
+        return static::getRecords(null, $constraints);
      }
 
     /**
@@ -122,7 +122,7 @@ class rating extends zophTable {
             return;
         }
 
-        $current_ratings=self::getRatings($photo, $user);
+        $current_ratings=static::getRatings($photo, $user);
 
         if (sizeof($current_ratings) > 0) {
             $cur_rating=array_pop($current_ratings);
@@ -145,9 +145,9 @@ class rating extends zophTable {
      * @return block template block to display details
      */
     public static function getDetails(photo $photo) {
-        $rating=self::getAverage($photo);
+        $rating=static::getAverage($photo);
 
-        $ratings=self::getRatings($photo);
+        $ratings=static::getRatings($photo);
 
         $tpl=new block("rating_details",array(
             "rating" => $rating,
@@ -236,7 +236,7 @@ class rating extends zophTable {
      * @return array graph array
      */
     public static function getGraphArrayForUser(user $user) {
-        $ratings=self::getPhotoCountForUser($user);
+        $ratings=static::getPhotoCountForUser($user);
         $max = max($ratings);
         if ($max == 0) {
             // no ratings
@@ -271,7 +271,7 @@ class rating extends zophTable {
      * @return array graph array
      */
     public static function getGraphArray() {
-        $ratings=self::getPhotoCount();
+        $ratings=static::getPhotoCount();
         $max = max($ratings);
         if ($max == 0) {
             // no ratings

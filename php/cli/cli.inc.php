@@ -51,7 +51,7 @@ class cli {
      * @param $args array of CLI arguments
      */
     public function __construct(user $user, $api, array $args) {
-        if ($api != self::API) {
+        if ($api != static::API) {
             throw new CliAPINotCompatibleException("This Zoph installation is not compatible " .
                 "with the Zoph executable you are running.");
         }
@@ -87,10 +87,10 @@ class cli {
             $this->doDumpCondig();
             break;
         case "version":
-            self::showVersion();
+            static::showVersion();
             break;
         case "help":
-            self::showHelp();
+            static::showHelp();
             break;
         default:
             throw new CliUnknownErrorException("Unknown command, please file a bug");
