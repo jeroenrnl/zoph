@@ -425,10 +425,33 @@ class category extends zophTreeTable implements Organizer {
             return static::getCount();
         } else {
             $qry=new select(array("c" => "categories"));
-            $qry->addFields(array("category_id", "parent_category_id"));
-            $cats=static::getRecordsFromQuery($qry);
-            $cat_clean=remove_empty($cats);
-            return count($cat_clean);
+            $qry->join(array("pc" => "photo_categories"), "c.category_id=pc.category_id");
+            $qry->addFunction(array("category_id" => "distinct c.category_id"));
+            $qry->addFields(array("parent_category_id"));
+            $subqry=new select(array("pa" => "photo_albums"));
+            $subqry->addFields(array("photo_id"));
+            $subqry->join(array("gp" => "group_permissions"), "gp.album_id=pa.album_id")
+                   ->join(array("gu" => "groups_users"), "gu.group_id=gp.group_id");
+            $subqry->where(new clause("user_id=:userid"));
+
+            $qry->where(clause::inSubQry("photo_id", $subqry));
+            $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
+
+            $categories=static::getRecordsFromQuery($qry);
+            /*
+             * $categories now contains all categories that have photos,
+             * however, the user can also see all categories up to the root
+             * or else he won't be able to browse to them
+             */
+            $allCategories=array();
+            foreach($categories as $category) {
+                $allCategories[$category->getId()]=$category;
+                $ancestors=$category->get_ancestors();
+                foreach($ancestors as $ancestor) {
+                    $allCategories[$ancestor->getId()]=$ancestor;
+                }
+            }
+            return count($allCategories);
         }
     }
 }
