@@ -142,20 +142,11 @@ class db {
              * Set LOG_SEVERITY to log::MOREDEBUG and LOG_SUBJECT to log::SQL in config.inc.php
              * to create a log of all SQL queries + execution times in /tmp
              */
-            if ((LOG_SEVERITY >= log::MOREDEBUG) && (LOG_SUBJECT & log::SQL)) { 
-                $debug=$query;
-                foreach ($query->getParams() as $param) {
-                    if ($param->getType() == PDO::PARAM_INT) {
-                        $debug=str_replace($param->getName(), $param->getValue(), $debug);
-                    } else {
-                        $debug=str_replace($param->getName(), "\"" . $param->getValue() . "\"", $debug);
-                    }
-                }
-                file_put_contents("/tmp/zophdebug", $debug, FILE_APPEND);
-                $start=microtime(true);
+            if ((LOG_SEVERITY >= log::MOREDEBUG) && (LOG_SUBJECT & log::SQL)) {
+                $start=$query->logToFile(""); 
             }
             $stmt->execute();
-            if(isset($debug)) {
+            if(isset($start)) {
                 $time=microtime(true)-$start;
                 file_put_contents("/tmp/zophdebug", ": " . $time . "\n", FILE_APPEND);
             }

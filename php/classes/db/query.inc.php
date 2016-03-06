@@ -330,6 +330,23 @@ abstract class query {
     }
 
     /**
+     * Log the query to file, for debugging purposes
+     */
+    public function logToFile($eol="\n", $file="/tmp/zophdebug") {
+        $debug=(string) $this;
+        foreach ($this->getParams() as $param) {
+            if ($param->getType() == PDO::PARAM_INT) {
+                $debug=str_replace($param->getName(), $param->getValue(), $debug);
+            } else {
+                $debug=str_replace($param->getName(), "\"" . $param->getValue() . "\"", $debug);
+            }
+        }
+        file_put_contents($file, $debug . $eol, FILE_APPEND);
+        return microtime(true);
+    }
+    
+
+    /**
      * The __toString() magic function creates the query to be fed to the db
      * each inheritance of this class will have to implement it.
      * @return string SQL query
