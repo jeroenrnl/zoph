@@ -440,7 +440,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     }
 
     if (!$user->isAdmin()) {
-        $qry->join(array("pa" => "photo_albums"), "p.photo_id=pa.photo_id");
         list($qry, $where) = selectHelper::expandQueryForUser($qry, null, $user);
         $qry->addClause($where, "AND");
     }
