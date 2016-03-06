@@ -36,6 +36,8 @@ abstract class zophTreeTable extends zophTable {
     protected $children;
     protected $ancestors;
 
+    static $ancestorCache=array();
+
     abstract public function getChildren($order = null);
 
     /**
@@ -79,26 +81,28 @@ abstract class zophTreeTable extends zophTable {
      * Gets the ancestors of this record.
      */
     public function get_ancestors($anc = array()) {
-        $key = static::$primaryKeys[0];
-        $pid = $this->get("parent_" . $key);
-        // root of tree
-        if ($pid == 0) {
-            $this->ancestors = $anc;
-            return $this->ancestors;
+        if(!isset(static::$ancestorCache[$this->getId()])) {
+            $key = static::$primaryKeys[0];
+            $pid = $this->get("parent_" . $key);
+            // root of tree
+            if ($pid == 0) {
+                $this->ancestors = $anc;
+                return $this->ancestors;
+            }
+
+            $class = get_class($this);
+            $parent = new $class;
+            $parent->set($key, $pid);
+            $parent->lookup();
+
+            array_push($anc, $parent);
+
+            static::$ancestorCache[$this->getId()] = $parent->get_ancestors($anc);
         }
-
-        $class = get_class($this);
-        $parent = new $class;
-        $parent->set($key, $pid);
-        $parent->lookup();
-
-        array_push($anc, $parent);
-
-        $this->ancestors = $parent->get_ancestors($anc);
-        return $this->ancestors;
+        return static::$ancestorCache[$this->getId()];
     }
 
-    /*
+        /*
      * Gets a list of the id of this record along with the ids of
      * all of its descendants.
      * @param array id_array add values to this array

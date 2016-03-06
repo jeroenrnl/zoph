@@ -62,6 +62,8 @@ class category extends zophTreeTable implements Organizer {
     /** @var int cached photoTotalCount */
     protected $photoTotalCount;
 
+    static $categoryCache=null;
+
     /**
      * Add a photo to this category
      * @param photo Photo to add
@@ -108,6 +110,48 @@ class category extends zophTreeTable implements Organizer {
         return $this->get("category");
     }
 
+    public static function getAll() {
+        if(static::$categoryCache) {
+            return static::$categoryCache;
+        }
+        $qry=new select(array("c" => "categories"));
+        $qry->addFields(array("*", "name" => "category"));
+        if (!user::getCurrent()->isAdmin()) {
+            $userQry=new select(array("c" => "categories"));
+            $userQry->addFields(array("category_id", "parent_category_id"));
+        
+            list($userQry, $where) = selectHelper::expandQueryForUser($userQry, null);
+
+            $userQry->where($where);
+
+            $categories=static::getRecordsFromQuery($userQry);
+
+            /**
+             * We now have a list of categories this person can see, (that is, categories 
+             * that contain photos this user can see). However, sometimes it may be needed
+             * to have access to a category with no viewable photos, in order to reach a viewable
+             * category. Therefore, we are going to backtrack up to the root for each category
+             */
+            $catIds=array();
+            foreach($categories as $category) {
+                $catIds[$category->getId()]=$category->getId();
+
+                $parents=$category->get_ancestors();
+
+                foreach($parents as $p) {
+                    $catIds[$p->getId()]=$p->getId();
+                }
+            }
+            $ids=new param(":catid", array_values($catIds), PDO::PARAM_INT);
+            $qry->addParam($ids);
+            $qry->where(clause::InClause("c.category_id", $ids));
+            
+        }
+        static::$categoryCache=static::getRecordsFromQuery($qry);
+        return static::$categoryCache;
+    }
+
+
     /**
      * Get sub-categories
      * @param string order
@@ -118,11 +162,22 @@ class category extends zophTreeTable implements Organizer {
             array("name", "sortname", "oldest", "newest", "first", "last", "lowest", "highest", "average", "random"))) {
             $order="name";
         }
+
         $qry=new select(array("c" => "categories"));
         $qry->addFields(array("*", "name" => "category"));
-        $where=new clause("parent_category_id=:catid");
 
-        $qry->addParam(new param(":catid", (int) $this->getId(), PDO::PARAM_INT));
+        $categories=static::getAll();
+        $catIds=array();
+        foreach($categories as $category) {
+            $catIds[]=$category->getId();
+        }
+        $ids=new param(":catid", $catIds, PDO::PARAM_INT);
+        $qry->addParam($ids);
+        $where=clause::InClause("c.category_id", $ids);
+
+        $parent=new clause("parent_category_id=:parentid");
+        
+        $qry->addParam(new param(":parentid", (int) $this->getId(), PDO::PARAM_INT));
         $qry->addGroupBy("c.category_id");
 
         $qry=selectHelper::addOrderToQuery($qry, $order);
@@ -131,14 +186,17 @@ class category extends zophTreeTable implements Organizer {
             $qry->addOrder("name");
         }
 
-        $qry->where($where);
-
-        $this->children=static::getRecordsFromQuery($qry);
-        if (!user::getCurrent()->isAdmin()) {
-            return remove_empty($this->children);
+        if ($where instanceof clause) {
+            $where->addAnd($parent);
         } else {
-            return $this->children;
+            $where=$parent;
         }
+
+        if ($where instanceof clause) {
+            $qry->where($where);
+        }
+        $this->children=static::getRecordsFromQuery($qry);
+        return $this->children;
     }
 
     /**
