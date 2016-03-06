@@ -154,8 +154,6 @@ class album extends zophTreeTable implements Organizer {
 
         $qry=new select(array("a" => "albums"));
         $qry->addFields(array("*", "name"=>"album"));
-        $qry->join(array("pa" => "photo_albums"), "a.album_id=pa.album_id", "LEFT")
-            ->join(array("p"  => "photos"      ), "pa.photo_id=p.photo_id", "LEFT");
 
         $where=new clause("parent_album_id=:album_id");
 
@@ -170,11 +168,13 @@ class album extends zophTreeTable implements Organizer {
         }
 
         if (!$user->isAdmin()) {
-            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
+            $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
+                ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+            $where->addAnd(new clause("gu.user_id=:userid"));
+            $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
         }
 
         $qry->where($where);
-
         $this->children=static::getRecordsFromQuery($qry);
         return $this->children;
     }
