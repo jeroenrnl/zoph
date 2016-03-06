@@ -116,11 +116,11 @@ class selectHelper {
      */
     private static function addRelationTableToQuery(select $qry) {
         if ($qry->hasTable("albums") && !$qry->hasTable("photo_albums")) {
-            $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
+            $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id", "LEFT");
         } else if ($qry->hasTable("categories") && !$qry->hasTable("photo_categories")) {
-            $qry->join(array("pc" => "photo_categories"), "pc.category_id = c.category_id");
+            $qry->join(array("pc" => "photo_categories"), "pc.category_id = c.category_id", "LEFT");
         } else if ($qry->hasTable("people") && !$qry->hasTable("photo_people")) {
-            $qry->join(array("pp" => "photo_people"), "pp.person_id = ppl.person_id");
+            $qry->join(array("pp" => "photo_people"), "pp.person_id = ppl.person_id", "LEFT");
         }
 
         return $qry;
@@ -135,13 +135,13 @@ class selectHelper {
         $qry=static::addRelationTableToQuery($qry);
 
         if ($qry->hasTable("photo_albums")) {
-            $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id");
+            $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id", "LEFT");
         } else if ($qry->hasTable("photo_categories")) {
-            $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
+            $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id", "LEFT");
         } else if ($qry->hasTable("photo_people")) {
-            $qry->join(array("p" => "photos"), "pp.photo_id = p.photo_id");
+            $qry->join(array("p" => "photos"), "pp.photo_id = p.photo_id", "LEFT");
         } else if ($qry->hasTable("places")) {
-            $qry->join(array("p" => "photos"), "p.location_id = pl.place_id");
+            $qry->join(array("p" => "photos"), "p.location_id = pl.place_id", "LEFT");
         } else {
             throw new DatabaseException("JOIN failed");
         }

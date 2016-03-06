@@ -106,6 +106,7 @@ class albumTest extends ZophDataBaseTestCase {
      * @dataProvider getChildren()
      */
     public function testGetChildren($id, array $exp_children, $order=null) {
+        user::setCurrent(new user(1));
         $album=new album($id);
         $alb_children=$album->getChildren($order);
         $children=array();
