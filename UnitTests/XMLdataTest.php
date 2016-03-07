@@ -41,6 +41,7 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
         $actual->loadXML($object::getXML($search)->saveXML());
         $expected=new DOMDocument();
         $expected->loadXML($xml);
+
         $this->assertEqualXMLStructure($expected->firstChild, $actual->firstChild, false);
 
     }
@@ -50,7 +51,7 @@ class XMLdataTest extends PHPUnit_Framework_TestCase {
      * @dataProvider getXMLtestdataForUser
      */
     public function testGetXMLForUser($object, $search, $xml) {
-        user::setCurrent(new user(2));
+        user::setCurrent(new user(5));
 
         $actual = new DOMDocument;
         $actual->loadXML($object::getXML($search)->saveXML());

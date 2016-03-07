@@ -62,7 +62,7 @@ class category extends zophTreeTable implements Organizer {
     /** @var int cached photoTotalCount */
     protected $photoTotalCount;
 
-    static $categoryCache=null;
+    public static $categoryCache=null;
 
     /**
      * Add a photo to this category
@@ -116,6 +116,7 @@ class category extends zophTreeTable implements Organizer {
         }
         $qry=new select(array("c" => "categories"));
         $qry->addFields(array("*", "name" => "category"));
+
         if (!user::getCurrent()->isAdmin()) {
             $userQry=new select(array("c" => "categories"));
             $userQry->addFields(array("category_id", "parent_category_id"));
@@ -142,6 +143,9 @@ class category extends zophTreeTable implements Organizer {
                     $catIds[$p->getId()]=$p->getId();
                 }
             }
+            if(sizeof($catIds)==0) {
+                return array();
+            }
             $ids=new param(":catid", array_values($catIds), PDO::PARAM_INT);
             $qry->addParam($ids);
             $qry->where(clause::InClause("c.category_id", $ids));
@@ -157,7 +161,6 @@ class category extends zophTreeTable implements Organizer {
      * @param string order
      */
     public function getChildren($order="name") {
-
         if (!in_array($order,
             array("name", "sortname", "oldest", "newest", "first", "last", "lowest", "highest", "average", "random"))) {
             $order="name";
@@ -171,6 +174,11 @@ class category extends zophTreeTable implements Organizer {
         foreach($categories as $category) {
             $catIds[]=$category->getId();
         }
+
+        if(sizeof($catIds)==0) {
+            return array();
+        }
+
         $ids=new param(":catid", $catIds, PDO::PARAM_INT);
         $qry->addParam($ids);
         $where=clause::InClause("c.category_id", $ids);

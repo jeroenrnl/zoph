@@ -330,8 +330,10 @@ class user extends zophTable {
      * Set currently logged in user
      * (log in)
      * @param user user object
+     * @todo a proper framework needs to be made to invalidate caches
      */
     public static function setCurrent(user $user) {
+        category::$categoryCache=null;
         $user->lookup();
         $user->lookupPrefs();
         $user->lookupPerson();
