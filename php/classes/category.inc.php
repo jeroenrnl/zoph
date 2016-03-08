@@ -111,7 +111,7 @@ class category extends zophTreeTable implements Organizer {
     }
 
     public static function getAll() {
-        if(static::$categoryCache) {
+        if (static::$categoryCache) {
             return static::$categoryCache;
         }
         $qry=new select(array("c" => "categories"));
@@ -120,7 +120,7 @@ class category extends zophTreeTable implements Organizer {
         if (!user::getCurrent()->isAdmin()) {
             $userQry=new select(array("c" => "categories"));
             $userQry->addFields(array("category_id", "parent_category_id"));
-        
+
             list($userQry, $where) = selectHelper::expandQueryForUser($userQry, null);
 
             $userQry->where($where);
@@ -128,28 +128,28 @@ class category extends zophTreeTable implements Organizer {
             $categories=static::getRecordsFromQuery($userQry);
 
             /**
-             * We now have a list of categories this person can see, (that is, categories 
+             * We now have a list of categories this person can see, (that is, categories
              * that contain photos this user can see). However, sometimes it may be needed
              * to have access to a category with no viewable photos, in order to reach a viewable
              * category. Therefore, we are going to backtrack up to the root for each category
              */
             $catIds=array();
-            foreach($categories as $category) {
+            foreach ($categories as $category) {
                 $catIds[$category->getId()]=$category->getId();
 
                 $parents=$category->get_ancestors();
 
-                foreach($parents as $p) {
+                foreach ($parents as $p) {
                     $catIds[$p->getId()]=$p->getId();
                 }
             }
-            if(sizeof($catIds)==0) {
+            if (sizeof($catIds)==0) {
                 return array();
             }
             $ids=new param(":catid", array_values($catIds), PDO::PARAM_INT);
             $qry->addParam($ids);
             $qry->where(clause::InClause("c.category_id", $ids));
-            
+
         }
         static::$categoryCache=static::getRecordsFromQuery($qry);
         return static::$categoryCache;
@@ -171,11 +171,11 @@ class category extends zophTreeTable implements Organizer {
 
         $categories=static::getAll();
         $catIds=array();
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $catIds[]=$category->getId();
         }
 
-        if(sizeof($catIds)==0) {
+        if (sizeof($catIds)==0) {
             return array();
         }
 
@@ -184,7 +184,7 @@ class category extends zophTreeTable implements Organizer {
         $where=clause::InClause("c.category_id", $ids);
 
         $parent=new clause("parent_category_id=:parentid");
-        
+
         $qry->addParam(new param(":parentid", (int) $this->getId(), PDO::PARAM_INT));
         $qry->addGroupBy("c.category_id");
 
@@ -510,10 +510,10 @@ class category extends zophTreeTable implements Organizer {
              * or else he won't be able to browse to them
              */
             $allCategories=array();
-            foreach($categories as $category) {
+            foreach ($categories as $category) {
                 $allCategories[$category->getId()]=$category;
                 $ancestors=$category->get_ancestors();
-                foreach($ancestors as $ancestor) {
+                foreach ($ancestors as $ancestor) {
                     $allCategories[$ancestor->getId()]=$ancestor;
                 }
             }

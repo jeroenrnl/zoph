@@ -216,7 +216,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                  * Because the query builder expects the photo_album table to be aliased to "pa",
                  * the first occurence does not have number suffix
                  */
-                if($alias=="pa1") {
+                if ($alias=="pa1") {
                     $alias="pa";
                 }
                 $qry->join(array($alias => "photo_albums"), "p.photo_id=" . $alias . ".photo_id");

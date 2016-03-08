@@ -344,7 +344,7 @@ abstract class query {
         file_put_contents($file, $debug . $eol, FILE_APPEND);
         return microtime(true);
     }
-    
+
 
     /**
      * The __toString() magic function creates the query to be fed to the db

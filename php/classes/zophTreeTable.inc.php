@@ -81,7 +81,7 @@ abstract class zophTreeTable extends zophTable {
      * Gets the ancestors of this record.
      */
     public function get_ancestors($anc = array()) {
-        if(!isset(static::$ancestorCache[$this->getId()])) {
+        if (!isset(static::$ancestorCache[$this->getId()])) {
             $key = static::$primaryKeys[0];
             $pid = $this->get("parent_" . $key);
             // root of tree

@@ -137,16 +137,16 @@ class db {
                     $stmt->bindValue($param->getName(), $param->getValue(), $param->getType());
                 }
             }
-            
+
             /**
              * Set LOG_SEVERITY to log::MOREDEBUG and LOG_SUBJECT to log::SQL in config.inc.php
              * to create a log of all SQL queries + execution times in /tmp
              */
             if ((LOG_SEVERITY >= log::MOREDEBUG) && (LOG_SUBJECT & log::SQL)) {
-                $start=$query->logToFile(""); 
+                $start=$query->logToFile("");
             }
             $stmt->execute();
-            if(isset($start)) {
+            if (isset($start)) {
                 $time=microtime(true)-$start;
                 file_put_contents("/tmp/zophdebug", ": " . $time . "\n", FILE_APPEND);
             }
