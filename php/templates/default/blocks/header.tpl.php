@@ -45,7 +45,7 @@
     <?php endforeach ?>
     <?php if (isset($tpl_extrastyle)): ?>
         <style type="text/css">
-            <?php echo $extrastyle ?>
+            <?php echo $tpl_extrastyle ?>
         </style>
     <?php endif ?>
     <title><?php echo $tpl_title ?></title>
