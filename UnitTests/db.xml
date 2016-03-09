@@ -2508,7 +2508,7 @@
 	<row>
 		<field name="user_id">2</field>
 		<field name="person_id">2</field>
-		<field name="user_class">1</field>
+		<field name="user_class">0</field>
 		<field name="user_name">brian</field>
 		<field name="password"></field>
 		<field name="browse_people">0</field>

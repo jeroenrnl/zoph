@@ -327,9 +327,9 @@ class categoryTest extends ZophDataBaseTestCase {
             array(1,"first", 3, 1),
             array(1,"last", 4, 10),
             array(1,"newest", 5, 10),
-            array(2,"oldest", 2, 1),
-            array(2,"newest", 2, 1),
-            array(3,"first", 3, 1),
+            array(5,"oldest", 2, 1),
+            array(5,"newest", 2, 1),
+            array(5,"first", 3, 1),
             array(4,"last", 4, 2),
         );
     }
@@ -345,9 +345,9 @@ class categoryTest extends ZophDataBaseTestCase {
             array(1,"first", 3, 1),
             array(1,"last", 4, 10),
             array(1,"newest", 4, 10),
-            array(2,"oldest", 1, 1),
-            array(2,"newest", 2, 1),
-            array(2,"first", 3, 1),
+            array(5,"oldest", 1, 1),
+            array(5,"newest", 2, 1),
+            array(5,"first", 3, 1),
             array(4,"last", 4, 2),
         );
     }
@@ -377,7 +377,7 @@ class categoryTest extends ZophDataBaseTestCase {
                 "highest" 	=> "7.5",
                 "average" 	=> "6.50",
             )),
-            array(2,2,1,array(
+            array(5,2,1,array(
                 "count" 	=> "1",
                 "oldest" 	=> "2014-01-01 00:01:00",
                 "newest" 	=> "2014-01-01 00:01:00",
@@ -397,7 +397,7 @@ class categoryTest extends ZophDataBaseTestCase {
     public function getTopNData() {
         return array(
             array(1,array(10,2,11,5,7)),
-            array(2,array(10,11,3,2))
+            array(5,array(10,11,3,2))
         );
     }
 
@@ -408,7 +408,7 @@ class categoryTest extends ZophDataBaseTestCase {
     public function getCategoryCount() {
         return array(
             array(1,13),
-            array(2,6),
+            array(5,6),
             array(3,6),
             array(4,7),
             array(6,0)
@@ -422,7 +422,7 @@ class categoryTest extends ZophDataBaseTestCase {
         return array(
             array(1,1,10),
             array(1,2,5),
-            array(2,1,2),
+            array(5,1,2),
             array(3,2,1),
             array(4,2,2),
             array(6,2,0)

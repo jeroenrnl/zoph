@@ -102,9 +102,9 @@ class photographerTest extends ZophDataBaseTestCase {
             array(1, 2, 3),
             array(1, 3, 4),
             array(1, 4, 1),
-            array(2, 2, 1),
-            array(2, 3, 1),
-            array(2, 5, 0),
+            array(5, 2, 1),
+            array(5, 3, 1),
+            array(5, 5, 0),
             array(4, 2, 2)
          );
     }
@@ -112,7 +112,7 @@ class photographerTest extends ZophDataBaseTestCase {
     public function getAllPhotographers() {
         return array(
             array(1, array(1,2,3,4,5,6,7,8,9,10,11)),
-            array(2, array(2,3)),
+            array(5, array(2,3)),
             array(4, array(2,3,4))
         );
      }

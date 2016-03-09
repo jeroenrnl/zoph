@@ -125,7 +125,7 @@ class createTestData {
             $user=new user();
             $user->set("user_name",$name);
             $user->insert();
-            if (array_key_exists($id, $adminUsers)) {
+            if (in_array($id, $adminUsers)) {
                 $user->set("user_class", 0);
                 $user->update();
             } else {
