@@ -24,6 +24,10 @@ var zMaps=function() {
         // This creates a new map
         mapstraction=new mxn.Mapstraction(div, provider);
         mapstraction.addControls({ pan: true, zoom: 'large', scale: true, map_type: true });
+        if (provider=="googlev3") {
+            // Mapstraction API call no longer correctly adds controls...
+            mapstraction.getMap().setOptions({zoomControl: true, panControl: true});
+        }
 
         var center=new mxn.LatLonPoint(0,0);
         if(provider=="openlayers") {
