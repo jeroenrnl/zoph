@@ -219,7 +219,7 @@ class cli {
         if (is_array($this->files) && sizeof($this->files)>0) {
             if (!isset($vars["_dirpattern"])) {
                 $photos=array();
-                foreach ($this->files as $file) {
+                foreach (array_unique($this->files) as $file) {
                     $photo=new photo();
                     $photo->file["orig"]=$file;
                     $photos[]=$photo;
