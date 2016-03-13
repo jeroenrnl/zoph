@@ -131,9 +131,15 @@ class circle extends zophTable {
         $qry->addLimit(1);
 
         $qry->addParam($param);
-        $qry->where(clause::InClause("ppl.person_id", $param));
+        $where=clause::InClause("ppl.person_id", $param);
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
+
+        if (!user::getCurrent()->isAdmin()) {
+            list($qry, $where)=selectHelper::expandQueryForUser($qry, $where);
+        }
+
+        $qry->where($where);
 
         $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
@@ -310,6 +316,16 @@ class circle extends zophTable {
     public static function getAll($showHidden=false) {
         $rawCircles=static::getRecords("circle_name");
         $user=user::getCurrent();
+
+        if (!$user->isAdmin()) {
+            $circles=array();
+            foreach ($rawCircles as $circle) {
+                if (sizeof($circle->getMembers())>0) {
+                    $circles[]=$circle;
+                }
+            }
+            $rawCircles=$circles;
+        }
 
         if ($showHidden && ($user->canSeeHiddenCircles())) {
             $circles=$rawCircles;
