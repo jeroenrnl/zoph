@@ -81,7 +81,7 @@ class circle extends zophTable {
             translate("members") => implode("<br>", $this->getMemberLinks()),
         );
         if ($this->isHidden()) {
-            $da["hidden"]=translate("This circle is hidden in overviews");
+            $da[translate("hidden")]=translate("This circle is hidden in overviews");
         }
 
         return $da;
@@ -138,7 +138,6 @@ class circle extends zophTable {
         if (!user::getCurrent()->isAdmin()) {
             list($qry, $where)=selectHelper::expandQueryForUser($qry, $where);
         }
-
         $qry->where($where);
 
         $coverphotos=photo::getRecordsFromQuery($qry);
@@ -150,7 +149,8 @@ class circle extends zophTable {
     }
 
     /**
-     * Automatically select a coverphoto for this circle
+     * Get the number of people in this circle
+     * @return int count
      */
     public function getPeopleCount() {
         return sizeof($this->getMembers());
@@ -182,6 +182,7 @@ class circle extends zophTable {
 
     /**
      * Make getChildren an alias of getMembers() so tree view can work for circles
+     * @return array of people
      */
     public function getChildren() {
         return $this->getMembers();
@@ -189,29 +190,39 @@ class circle extends zophTable {
 
     /**
      * getPhotocount for members
+     * @return int count
      */
     public function getPhotocount() {
-        $count=0;
+        $user=user::getCurrent();
+
+        $allPhotos=array();
         foreach ($this->getMembers() as $member) {
-            $count+=$member->getPhotocount();
+
+            $photos=array();
+            $vars=array(
+                "person_id" => $member->getId()
+            );
+            get_photos($vars, 0, 99999999999, $photos, $user);
+            foreach ($photos as $photo) {
+                $allPhotos[$photo->getId()]=true;
+            }
         }
-        return $count;
+        return sizeOf($allPhotos);
     }
 
     /**
      * getTotalPhotocount for members
+     * There is no such thing as subpersons, so photoCount() and totalPhotoCount() are always
+     * equal.
+     * @return int count
      */
     public function getTotalPhotocount() {
-        $count=0;
-        foreach ($this->getMembers() as $member) {
-            $count+=$member->getTotalPhotocount();
-        }
-        return $count;
+        return $this->getPhotocount();
     }
 
     /**
      * Add a member to a circle
-     * @param person Person to addd
+     * @param person Person to add
      */
     public function addMember(person $person) {
         $qry=new insert(array("cp" => "circles_people"));
@@ -312,6 +323,8 @@ class circle extends zophTable {
 
     /**
      * Get all circles
+     * @param bool Whether or not to show hidden circles
+     * @return array of circles
      */
     public static function getAll($showHidden=false) {
         $rawCircles=static::getRecords("circle_name");
@@ -340,8 +353,5 @@ class circle extends zophTable {
 
         return $circles;
     }
-
-
 }
-
 ?>
