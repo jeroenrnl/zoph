@@ -164,6 +164,7 @@ class db {
      * This is meant to execute queries that cannot be handled via the query builder
      * it should not be used for SELECT, UPDATE, DELETE or INSERT queries,
      * these can be handled via their respective objects
+     * @param string SQL
      */
     public static function SQL($sql) {
         try {

@@ -30,14 +30,23 @@ namespace db;
  * @author Jeroen Roos
  */
 class clause {
-
+    /** @var contains the WHERE clause */
     private $clause;
+    /** @var contains any subclauses */
     private $subclauses;
 
+    /**
+     * Create a new WHERE clause
+     * @param string clause to be created
+     */
     public function __construct($clause) {
         $this->clause=$clause;
     }
 
+    /**
+     * Add a subclause with AND conjunction
+     * @param clause subclause to be added
+     */
     public function addAnd(clause $clause) {
         $this->subclauses[]=array(
             "conj" => "AND",
@@ -46,6 +55,10 @@ class clause {
         return $this;
     }
 
+    /**
+     * Add a subclause with OR conjunction
+     * @param clause subclause to be added
+     */
     public function addOr(clause $clause) {
         $this->subclauses[]=array(
             "conj" => "OR",
@@ -55,6 +68,10 @@ class clause {
         return $this;
     }
 
+    /**
+     * Add a subclause with NOT conjunction
+     * @param clause subclause to be added
+     */
     public function addNot(clause $clause) {
         $this->subclauses[]=array(
             "conj" => "NOT",

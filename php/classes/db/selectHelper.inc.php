@@ -25,6 +25,7 @@ namespace db;
 
 use \user;
 use \PDO;
+
 /**
  * This object contains a few functions that could be in the select object,
  * but are Zoph-specific and I want to keep the database objects generic.
@@ -34,7 +35,6 @@ use \PDO;
  * @package Zoph
  * @author Jeroen Roos
  */
-
 class selectHelper {
     /**
      * Get the ORDER BY and LIMIT statements to pick an autocover
@@ -73,6 +73,9 @@ class selectHelper {
      * Many queries have to be joined with the same tables in order to filter out the photos
      * a non-admin user is not allowed to see, this function expands an existing query with the needed
      * JOINs and WHERE clauses.
+     * @param select SELECT query to be expanded
+     * @param clause WHERE clause for the query
+     * @param user user to expand the query for - if null, use the currently logged in user
      */
     public static function expandQueryForUser(select $qry, clause $where=null, user $user=null) {
         if (!$user) {

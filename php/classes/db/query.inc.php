@@ -77,6 +77,7 @@ abstract class query {
     /**
      * Add one or more fields to a query
      * @param array list of fields [ "alias" => "field"]
+     * @param bool Whether or not this is a DISTINCT query.
      * @return query
      */
     public function addFields(array $fields, $distinct=false) {
@@ -106,6 +107,7 @@ abstract class query {
 
     /**
      * Add one or more fields to a query that is calculated using an SQL function
+     * @param array Array of functions [ "alias" => "function()"]
      */
     public function addFunction(array $functions) {
         foreach ($functions as $alias => $function) {
@@ -331,6 +333,8 @@ abstract class query {
 
     /**
      * Log the query to file, for debugging purposes
+     * @param string Characters to be added at end of line
+     * @param string Name of file to log the query to
      */
     public function logToFile($eol="\n", $file="/tmp/zophdebug") {
         $debug=(string) $this;
