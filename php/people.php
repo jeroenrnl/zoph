@@ -40,8 +40,16 @@ if (!$user->isAdmin() && !$user->get("browse_people")) {
 
 $_l = getvar("_l");
 
-if (empty($_l)) {
+if (empty($_l) || $_l=="all") {
     $_l = "all";
+    $first_letter=null;
+    $msg=translate("No people were found");
+} else if ($_l == "no last name") {
+    $first_letter=" ";
+    $msg=translate("No people with no last name were found");
+} else {
+    $first_letter = $_l;
+    $msg=sprintf(translate("No people were found with a last name beginning with '%s'."), htmlentities($_l));
 }
 
 if (getvar("circle_id")) {
@@ -101,13 +109,6 @@ $tpl->addBlock(new block("people_letters", array(
     "l"    => $_l
 )));
 
-if ($_l == "all") {
-    $first_letter=null;
-} else if ($_l == "no last name") {
-    $first_letter="";
-} else {
-    $first_letter = $_l;
-}
 if (isset($circle)) {
     $people=$circle->getMembers();
     $ppl=array();
@@ -149,12 +150,13 @@ if ($ppl) {
         )
     ));
     $tpl->addBlock($block);
-} else {
-    ?>
-      <div class="error">
-        <?php echo sprintf(translate("No people were found with a last name beginning with '%s'."),
-            htmlentities($_l)) ?></div>
-    <?php
+}
+
+if (!$ppl && !isset($circles) && !isset($circle)) {
+    $block=new block("error", array(
+        "text"   => $msg
+    ));
+    $tpl->addBlock($block);
 }
 echo $tpl;
 ?>
