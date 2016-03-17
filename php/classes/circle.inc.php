@@ -21,6 +21,7 @@
  * @package Zoph
  */
 
+use db\db;
 use db\select;
 use db\selectHelper;
 use db\insert;
@@ -147,6 +148,58 @@ class circle extends zophTable {
             return $coverphoto;
         }
     }
+
+    /**
+     * Get details (statistics) about this circle from db
+     * @return array Array with statistics
+     * @todo this function is almost equal to the getDetails() function in other classes they should be merged
+     */
+    public function getDetails() {
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array(
+            "count"     => "COUNT(DISTINCT p.photo_id)",
+            "oldest"    => "MIN(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "newest"    => "MAX(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "first"     => "MIN(p.timestamp)",
+            "last"      => "MAX(p.timestamp)",
+            "lowest"    => "ROUND(MIN(ar.rating),1)",
+            "highest"   => "ROUND(MAX(ar.rating),1)",
+            "average"   => "ROUND(AVG(ar.rating),2)"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
+        $qry->join(array("pp" => "photo_people"), "p.photo_id = pp.photo_id");
+        $qry->join(array("cp" => "circles_people"), "cp.person_id = pp.person_id");
+
+        $qry->addGroupBy("cp.circle_id");
+
+        $where=new clause("cp.circle_id=:circleid");
+        $qry->addParam(new param(":circleid", $this->getId(), PDO::PARAM_INT));
+
+        if (!user::getCurrent()->isAdmin()) {
+            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+        }
+
+        $qry->where($where);
+
+        $result=db::query($qry);
+        if ($result) {
+            return $result->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Turn the array from @see getDetails() into XML
+     * @param array Don't fetch details, but use the given array
+     */
+    public function getDetailsXML(array $details=null) {
+        if (!isset($details)) {
+            $details=$this->getDetails();
+        }
+        $details["title"]=translate("Photos of people in this circle:", false);
+        return parent::getDetailsXML($details);
+    }
+
 
     /**
      * Get the number of people in this circle
