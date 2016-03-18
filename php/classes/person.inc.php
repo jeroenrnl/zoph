@@ -608,6 +608,7 @@ class person extends zophTable implements Organizer {
 
         $people_array = static::getAll();
         foreach ($people_array as $person) {
+            $person->lookup();
             $ppl[$person->getId()] =
                  ($person->get("last_name") ? $person->get("last_name") .  ", " : "") .
                  ($person->get("called") ? $person->get("called") : $person->get("first_name"));
