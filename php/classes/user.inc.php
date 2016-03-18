@@ -71,7 +71,7 @@ class user extends zophTable {
      * also delete the preferences for this user
      */
     public function delete() {
-        parent::delete(array("prefs"));
+        parent::delete(array("prefs", "groups_users"));
     }
 
     /**
