@@ -712,16 +712,16 @@ abstract class zophTable {
     public static function getAutocoverOrder($autocover) {
         switch ($autocover) {
         case "oldest":
-            $order="ORDER BY p.date, p.time DESC LIMIT 1";
+            $order="ORDER BY ar.date, ar.time DESC LIMIT 1";
             break;
         case "newest":
-            $order="ORDER BY p.date DESC, p.time DESC LIMIT 1";
+            $order="ORDER BY ar.date DESC, ar.time DESC LIMIT 1";
             break;
         case "first":
-            $order="ORDER BY p.timestamp LIMIT 1";
+            $order="ORDER BY ar.timestamp LIMIT 1";
             break;
         case "last":
-            $order="ORDER BY p.timestamp DESC LIMIT 1";
+            $order="ORDER BY ar.timestamp DESC LIMIT 1";
             break;
         case "random":
             $order="ORDER BY rand() LIMIT 1";
