@@ -90,14 +90,13 @@ class photographer extends person implements Organizer {
             $subqry->join(array("ppl" => "people"), "p.photographer_id=ppl.person_id");
             if ($search != null) {
                 $where=static::getWhereForSearch($search, $search_first);
+                $subqry->where($where);
                 $subqry->addParam(new param(":search", $search, PDO::PARAM_STR));
                 if ($search_first) {
                     $subqry->addParam(new param(":searchfirst", $search, PDO::PARAM_STR));
                 }
             }
-            list($subqry,$where)=selectHelper::expandQueryForUser($subqry, $where);
-
-            $subqry->where($where);
+            $subqry = selectHelper::expandQueryForUser($subqry);
 
             $photographers=static::getRecordsFromQuery($subqry);
 

@@ -69,46 +69,31 @@ class selectHelper {
     }
 
     /**
-     * Add JOINs and WHERE clauses to a query to restrict it to the photos the current user can see
-     * Many queries have to be joined with the same tables in order to filter out the photos
-     * a non-admin user is not allowed to see, this function expands an existing query with the needed
-     * JOINs and WHERE clauses.
+     * Expand the query so that it is restricted it to the photos the (current) user can see
      * @param select SELECT query to be expanded
-     * @param clause WHERE clause for the query
      * @param user user to expand the query for - if null, use the currently logged in user
      */
-    public static function expandQueryForUser(select $qry, clause $where=null, user $user=null) {
+    public static function expandQueryForUser(select $qry, user $user=null) {
         if (!$user) {
             $user=user::getCurrent();
+        }
+
+        // The user is an admin, simply return the query and where clause unaltered
+        if ($user->isAdmin()) {
+            return $qry;
         }
 
         if (!$qry->hasTable("photos")) {
             $qry=static::addPhotoTableToQuery($qry);
         }
 
-        if (!$qry->hasTable("photo_albums")) {
-            $qry->join(array("pa" => "photo_albums"), "pa.photo_id = p.photo_id");
-        }
 
-        if (!$qry->hasTable("group_permissions")) {
-            $qry->join(array("gp" => "group_permissions"), "pa.album_id = gp.album_id");
-        }
-
-        if (!$qry->hasTable("groups_users")) {
-            $qry->join(array("gu" => "groups_users"), "gp.group_id = gu.group_id");
-        }
-
-        $clause=new clause("gu.user_id=:userid");
+        $subqry=new select(array("pu" => "view_photo_user"));
+        $subqry->where(new clause("pu.user_id = :userid"));
         $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
+        $qry->join(array("spu" => $subqry), "p.photo_id = spu.photo_id");
 
-        if (is_null($where)) {
-            $where=$clause;
-        } else {
-            $where->addAnd($clause);
-        }
-        $where->addAnd(new clause("gp.access_level >= p.level"));
-
-        return array($qry, $where);
+        return $qry;
      }
 
     /**

@@ -447,8 +447,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     }
 
     if (!$user->isAdmin()) {
-        list($qry, $where) = selectHelper::expandQueryForUser($qry, null, $user);
-        $qry->addClause($where, "AND");
+        $qry = selectHelper::expandQueryForUser($qry, $user);
     }
 
     $num_photos = 0;

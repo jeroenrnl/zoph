@@ -137,7 +137,7 @@ class circle extends zophTable {
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where)=selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
         $qry->where($where);
 
@@ -175,7 +175,7 @@ class circle extends zophTable {
         $qry->addParam(new param(":circleid", $this->getId(), PDO::PARAM_INT));
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
 
         $qry->where($where);

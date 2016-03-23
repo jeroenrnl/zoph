@@ -373,7 +373,7 @@ class person extends zophTable implements Organizer {
         $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
@@ -450,7 +450,7 @@ class person extends zophTable implements Organizer {
         $qry->addParam(new param(":photographerid", $this->getId(), PDO::PARAM_INT));
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
 
         $qry->where($where);
@@ -521,8 +521,7 @@ class person extends zophTable implements Organizer {
 
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
         if (!$user->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry);
-            $qry->where($where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
         return parent::getTopNfromSQL($qry);
 
@@ -549,7 +548,7 @@ class person extends zophTable implements Organizer {
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
 
         if ($where instanceof clause) {

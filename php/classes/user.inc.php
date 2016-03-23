@@ -185,9 +185,14 @@ class user extends zophTable {
 
         $where=new clause("p.photo_id = :photoid");
         $qry->addParam(new param(":photoid", (int) $photo->getId(), PDO::PARAM_INT));
+        $qry->addParam(new param(":userid", (int) $this->getId(), PDO::PARAM_INT));
 
-        list($qry, $where) = selectHelper::expandQueryForUser($qry, $where, $this);
+        $qry->join(array("pa" => "photo_albums"), "pa.photo_id=p.photo_id");
+        $qry->join(array("gp" => "group_permissions"), "gp.album_id=pa.album_id");
+        $qry->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
 
+        $where->addAnd(new clause("gp.access_level>=p.level"));
+        $where->addAnd(new clause("gu.user_id=:userid"));
         $qry->addFields(array("gp.*"));
         $qry->addLimit(1);
         // do ordering to grab entry with most permissions
