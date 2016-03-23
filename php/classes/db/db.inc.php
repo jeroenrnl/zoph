@@ -127,7 +127,6 @@ class db {
      */
     public static function query(query $query) {
         $db=static::getHandle();
-
         try {
             log::msg("SQL Query: " . (string) $query, log::DEBUG, log::SQL);
             $stmt=$db->prepare($query);
@@ -142,7 +141,7 @@ class db {
              * Set LOG_SEVERITY to log::MOREDEBUG and LOG_SUBJECT to log::SQL in config.inc.php
              * to create a log of all SQL queries + execution times in /tmp
              */
-            if ((LOG_SEVERITY >= log::MOREDEBUG) && (LOG_SUBJECT & log::SQL)) {
+            if ((LOG_SEVERITY == log::TOFILE) && (LOG_SUBJECT & log::SQL)) {
                 $start=$query->logToFile("");
             }
             $stmt->execute();
@@ -151,7 +150,8 @@ class db {
                 file_put_contents("/tmp/zophdebug", ": " . $time . "\n", FILE_APPEND);
             }
 
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
+            debug_print_backtrace();
             echo $e->getMessage() . "\n";
             log::msg("SQL failed", log::FATAL, log::DB);
         }

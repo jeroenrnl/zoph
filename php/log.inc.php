@@ -39,6 +39,7 @@ class log {
         20 => "Error",
         10 => "Fatal Error",
         5 => "Message",
+        1 => "To File",
         0 => "None");
 
     const MOREDEBUG = 60;
@@ -49,6 +50,7 @@ class log {
     const FATAL = 10;
     const MSG = 5;
     const NONE = 0;
+    const TOFILE = 1;
 
     const VARS = 1;
     const LANG = 2;
