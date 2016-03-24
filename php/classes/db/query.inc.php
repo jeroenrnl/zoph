@@ -335,18 +335,42 @@ abstract class query {
      * Log the query to file, for debugging purposes
      * @param string Characters to be added at end of line
      * @param string Name of file to log the query to
+     * @codeCoverageIgnore
      */
     public function logToFile($eol="\n", $file="/tmp/zophdebug") {
-        $debug=(string) $this;
-        foreach ($this->getParams() as $param) {
+        file_put_contents($file, $this->prettyPrint() . $eol, FILE_APPEND);
+        return microtime(true);
+    }
+
+    /**
+     * Format a query, including all parameters, for debugging purposes
+     * @codeCoverageIgnore
+     */
+    public function prettyPrint($withHTML=false) {
+        $sql=(string) $this;
+
+        $allParams=$this->getParams();
+
+        // Here we sort the parameters by the length of their name,
+        // longest first.
+        // This is so we don't overwrite part of a parameter name
+        // in case the first part of the name is the same
+        $sort=create_function('$a, $b', 'return(strlen($b->getName()) - strlen($a->getName()));');
+        usort($allParams, $sort);
+
+        foreach ($allParams as $param) {
+            $value=$param->getValue();
+            if ($withHTML) {
+                $value="<b>" . $value . "</b>";
+            }
+
             if ($param->getType() == PDO::PARAM_INT) {
-                $debug=str_replace($param->getName(), $param->getValue(), $debug);
+                $sql=str_replace($param->getName(), $value, $sql);
             } else {
-                $debug=str_replace($param->getName(), "\"" . $param->getValue() . "\"", $debug);
+                $sql=str_replace($param->getName(), "\"" . $value . "\"", $sql);
             }
         }
-        file_put_contents($file, $debug . $eol, FILE_APPEND);
-        return microtime(true);
+        return $sql;
     }
 
 
