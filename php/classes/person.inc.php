@@ -621,8 +621,7 @@ class person extends zophTable implements Organizer {
      * @return int count
      */
     public static function getCountForUser() {
-        $user=user::getCurrent();
-        if ($user && !$user->isAdmin()) {
+        if (user::getCurrent()->isAdmin()) {
             return static::getCount();
         } else {
             $allowed=array();
