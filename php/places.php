@@ -70,6 +70,7 @@ try {
 <h1>
 
 <?php
+$new=null;
 if ($user->isAdmin()) {
     $new="<a href=\"place.php?_action=new&amp;parent_place_id=" . $place->get("place_id") . "\">" .
       translate("new") . "</a> |";
