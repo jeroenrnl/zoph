@@ -158,7 +158,6 @@ class place extends zophTreeTable implements Organizer {
         $qry->join(array("p"  => "photos"), "pl.place_id=p.location_id", "LEFT");
 
         $where=new clause("parent_place_id=:placeid");
-
         $qry->addParam(new param(":placeid", (int) $this->getId(), PDO::PARAM_INT));
 
         $qry->addGroupBy("pl.place_id");
@@ -174,14 +173,24 @@ class place extends zophTreeTable implements Organizer {
             $qry->addOrder("name");
         }
 
-        $qry->where($where);
-
-        $this->children=static::getRecordsFromQuery($qry);
         if (!user::getCurrent()->isAdmin()) {
-            return remove_empty($this->children);
-        } else {
-            return $this->children;
+            $places=static::getAll();
+            $placeIds=array();
+            foreach ($places as $place) {
+                $placeIds[]=$place->getId();
+            }
+
+            if (sizeof($placeIds)==0) {
+                return array();
+            }
+
+            $ids=new param(":placeid", $placeIds, PDO::PARAM_INT);
+            $qry->addParam($ids);
+            $where->addAnd(clause::InClause("pl.place_id", $ids));
         }
+        $qry->where($where);
+        $this->children=static::getRecordsFromQuery($qry);
+        return $this->children;
     }
 
     /**
@@ -607,17 +616,28 @@ class place extends zophTreeTable implements Organizer {
 
     /**
      * Get all places
-     * @param array constraints, conditions that should be matched
-     * @param string conjunctions, and/or
-     * @param array ops, operators: =, !=, etc.
-     * @param string sort order
-     * @return array places
-     * @todo it seems this function not used at all
-     * @todo should be moved into zophTable
      */
-    public static function getAll($constraints = null, $conj = "AND", $ops = null,
-        $order = "city, title, address") {
-        return static::getRecords($order, $constraints, $conj, $ops);
+    public static function getAll() {
+        if (user::getCurrent()->isAdmin()) {
+            return static::getRecords();
+        } else {
+            $qry=new select(array("pl" => "places"));
+            $qry->join(array("p" => "photos"), "p.location_id=pl.place_id");
+            $qry = selectHelper::expandQueryForUser($qry);
+            $places=static::getRecordsFromQuery($qry);
+
+            $qry=new select(array("pl" => "places"));
+
+            $ids=static::getAllAncestors($places);
+            if (sizeof($ids)==0) {
+                return array();
+            }
+            $ids=new param(":placeid", array_values($ids), PDO::PARAM_INT);
+            $qry->addParam($ids);
+            $qry->where(clause::InClause("pl.place_id", $ids));
+
+            return static::getRecordsFromQuery($qry);
+        }
     }
 
     /**

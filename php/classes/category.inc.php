@@ -125,26 +125,11 @@ class category extends zophTreeTable implements Organizer {
 
             $categories=static::getRecordsFromQuery($userQry);
 
-            /**
-             * We now have a list of categories this person can see, (that is, categories
-             * that contain photos this user can see). However, sometimes it may be needed
-             * to have access to a category with no viewable photos, in order to reach a viewable
-             * category. Therefore, we are going to backtrack up to the root for each category
-             */
-            $catIds=array();
-            foreach ($categories as $category) {
-                $catIds[$category->getId()]=$category->getId();
-
-                $parents=$category->get_ancestors();
-
-                foreach ($parents as $p) {
-                    $catIds[$p->getId()]=$p->getId();
-                }
-            }
-            if (sizeof($catIds)==0) {
+            $ids=static::getAllAncestors($categories);
+            if (sizeof($ids)==0) {
                 return array();
             }
-            $ids=new param(":catid", array_values($catIds), PDO::PARAM_INT);
+            $ids=new param(":catid", array_values($ids), PDO::PARAM_INT);
             $qry->addParam($ids);
             $qry->where(clause::InClause("c.category_id", $ids));
 

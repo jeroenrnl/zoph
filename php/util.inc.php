@@ -472,23 +472,6 @@ function check_js($user) {
     }
 }
 
-function remove_empty(array $children) {
-    $user=user::getCurrent();
-    $clean=array();
-    // If user is not admin, remove any children that do not have photos
-    if (!$user->isAdmin()) {
-        foreach ($children as $child) {
-            $count=$child->getTotalPhotoCount();
-            if ($count>0) {
-                $clean[]=$child;
-            }
-        }
-        return $clean;
-    } else {
-        return $children;
-    }
-}
-
 function redirect($url = "zoph.php", $msg = "Access denied") {
     if (!((LOG_SUBJECT & log::REDIRECT) && (LOG_SEVERITY >= log::DEBUG))) {
         header("Location: " . $url);

@@ -36,8 +36,6 @@ abstract class zophTreeTable extends zophTable {
     protected $children;
     protected $ancestors;
 
-    static $ancestorCache=array();
-
     abstract public function getChildren($order = null);
 
     /**
@@ -81,28 +79,47 @@ abstract class zophTreeTable extends zophTable {
      * Gets the ancestors of this record.
      */
     public function get_ancestors($anc = array()) {
-        if (!isset(static::$ancestorCache[$this->getId()])) {
-            $key = static::$primaryKeys[0];
-            $pid = $this->get("parent_" . $key);
-            // root of tree
-            if ($pid == 0) {
-                $this->ancestors = $anc;
-                return $this->ancestors;
-            }
+        $key = static::$primaryKeys[0];
+        $pid = $this->get("parent_" . $key);
 
-            $class = get_class($this);
-            $parent = new $class;
-            $parent->set($key, $pid);
-            $parent->lookup();
-
-            array_push($anc, $parent);
-
-            static::$ancestorCache[$this->getId()] = $parent->get_ancestors($anc);
+        // root of tree
+        if ($pid == 0) {
+            $this->ancestors = null;
+            return $anc;
         }
-        return static::$ancestorCache[$this->getId()];
+
+        $parent = new static($pid);
+        $parent->lookup();
+
+        array_push($anc, $parent);
+        return $parent->get_ancestors($anc);
     }
 
-        /*
+    /**
+     * Get all ancestors of this a list of records, in order to get
+     * all viewable records
+     *
+     * We now have a list of records this person can see, (that is, albums,
+     * categories or places that contain photos this user can see). However,
+     * sometimes it may be neededi to have access to a category, album or
+     * place with no viewable photos, in order to reach a viewable
+     * album, category or place. Therefore, we are going to backtrack up to
+     * the root for each.
+     */
+    public static function getAllAncestors(array $records) {
+        $ids=array();
+        foreach ($records as $record) {
+            $ids[$record->getId()]=$record->getId();
+
+            $parents=$record->get_ancestors();
+
+            foreach ($parents as $parent) {
+                $ids[$parent->getId()]=$parent->getId();
+            }
+        }
+        return $ids;
+    }
+    /*
      * Gets a list of the id of this record along with the ids of
      * all of its descendants.
      * @param array id_array add values to this array
@@ -113,7 +130,6 @@ abstract class zophTreeTable extends zophTable {
             $id_array=array();
         }
         $id_array[] = (int) $this->getId();
-
         $this->getChildren();
 
         if ($this->children) {
