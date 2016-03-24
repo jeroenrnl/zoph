@@ -82,6 +82,11 @@ abstract class zophTreeTable extends zophTable {
         $key = static::$primaryKeys[0];
         $pid = $this->get("parent_" . $key);
 
+        if (!$pid) {
+            $this->lookup();
+            $pid = $this->get("parent_" . $key);
+        }
+
         // root of tree
         if ($pid == 0) {
             $this->ancestors = null;
