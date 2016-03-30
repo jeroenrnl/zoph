@@ -71,7 +71,7 @@ if (conf::get("maps.provider")) {
     }
     switch (strtolower(conf::get("maps.provider"))) {
     case "googlev3":
-        $scripts[]="http://maps.google.com/maps/api/js?sensor=false";
+        $scripts[]="https://maps.google.com/maps/api/js?sensor=false";
         break;
     case "yahoo":
         $scripts[]="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=Zoph";
