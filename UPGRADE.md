@@ -20,6 +20,7 @@ Changes this script makes:
 * Add previously missing 'random' sortorder to preferences
 * Resize Last IP address field so IPv6 addresses can be stored
 * Database changes for 'circles' feature
+* Create a VIEW on the database to speed up queries for non-admin users
 
 
 Zoph 0.9 to 0.9.1
