@@ -13,6 +13,7 @@ Zoph 0.9.2 is the new stable release. I have decided to drop the separation betw
 * Issue #60 The link text for "next" and "previous" as well as page numbers has been increased in size for better usability esp. on mobile devices
 * Added a script for fixing filename case (by Jason Taylor [@JiCit] )
 * Access Google maps via https (Jason Taylor [@JiCiT])
+* As of this version, the language files are in the php dir, and no longer need to be copied or moved separately
 
 ###Bugs###
 * [http://github.com/jeroenrnl/zoph/issues/49 Issue #49] Zoph now supports MySQL strict mode

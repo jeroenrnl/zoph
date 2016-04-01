@@ -58,7 +58,7 @@ $ cp -r php/* /var/www/html/zoph/
 ```
 ##Configure the PHP templates##
 
-Many configuration items can be set in php/config.inc.php file. For more information, see http://en.wikibooks.org/wiki/Zoph/Configuration.
+Some configuration options can be set in php/config.inc.php file. Usually you will not have to change anything there. Most configuration can be done from the web interface of Zoph. For more information, see http://en.wikibooks.org/wiki/Zoph/Configuration.
 
 ##Install the CLI scripts##
 

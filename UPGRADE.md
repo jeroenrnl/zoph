@@ -4,10 +4,9 @@ Zoph 0.9.1 to 0.9.2
 
 Copy files
 ----------
-Copy the contents of the php directory, including all subdirs, into your webroot and copy the lang directory into the webroot as well. 
+Copy the contents of the php directory, including all subdirs, into your webroot. 
 
      cp -a php/* /var/www/html/zoph
-     cp -a lang /var/www/html/zoph
 
 Database changes
 ----------------
