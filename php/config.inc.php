@@ -26,7 +26,7 @@
 // All other settings are now made from the webinterface
 
 define('VERSION', '0.9.2');
-define('RELEASEDATE', 'xx-03-2016');
+define('RELEASEDATE', '01-04-2016');
 // DB_HOST, DB_NAME, DB_USER, DB_PASS and DB_PREFIX have been moved to
 // zoph.ini. The location can be set by the next config item:
 
