@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 
 <div class="ratingdetails collapsed">
@@ -33,7 +33,7 @@ if(!ZOPH) { die("Illegal call"); }
                 <th><?php echo translate("IP address"); ?></th>
                 <th><?php echo translate("date"); ?></th></tr>
             </tr>
-            <?php foreach($tpl_ratings as $rating): ?>
+            <?php foreach ($tpl_ratings as $rating): ?>
                 <tr>
                     <td>
                         <a href="<?php echo $rating->getUser()->getURL() ?>">
@@ -46,8 +46,8 @@ if(!ZOPH) { die("Illegal call"); }
                     <td>
                       <ul class="actionlink">
                         <li>
-                          <a href="photo.php?_action=delrate&photo_id=<?php 
-                            echo $tpl_photo_id; ?>&_rating_id=<?php 
+                          <a href="photo.php?_action=delrate&photo_id=<?php
+                            echo $tpl_photo_id; ?>&_rating_id=<?php
                             echo $rating->get("rating_id"); ?>">
                             <?php echo translate("delete") ?>
                           </a>
@@ -61,4 +61,4 @@ if(!ZOPH) { die("Illegal call"); }
     </div>
 </div>
 
-            
+

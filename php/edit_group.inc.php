@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,26 +46,13 @@
        <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "128") ?></span>
        <br>
 <?php
-if($action!="insert") {
-    ?>
-    <fieldset class="addusers">
-      <legend><?php echo translate("members") ?></legend>
-
-    <?php
-    $members=$group->get_members();
-    foreach($members as $member) {
-        $member->lookup();
-        ?>
-        <input class="remove" type="checkbox" name="_remove_user[]" 
-            value="<?php echo $member->get("user_id")?>">
-        <?php echo $member->getLink() ?>
-        <br>
-        <?php
-    }
-    echo $group->get_new_member_pulldown("_member");
-    ?>
-    </fieldset>
-    <?php
+if ($action!="insert") {
+    $curMembers=$group->getMembers();
+    $members=new block("members", array(
+        "members"   => $curMembers,
+        "group"     => $group
+    ));
+    echo $members;
 }
 ?>
     <input type="submit" value="<?php echo translate($action, 0) ?>">

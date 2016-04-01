@@ -1,14 +1,14 @@
 <?php
 /**
  * Mail a photo
- * 
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,7 +46,7 @@ if (conf::get("feature.annotate")) {
 if ($annotate) {
     $skipcrumb = true;
     $photo=new annotatedPhoto($photo_id);
-    if(!empty($annotate_vars)) {
+    if (!empty($annotate_vars)) {
         parse_str($annotate_vars, $vars);
     } else {
         $vars=$request_vars;
@@ -72,57 +72,57 @@ else {
                 "X-Zoph-Version" => VERSION
             );
             $headers="";
-            
+
             $size = getvar("_size");
-            
-            if($annotate) {
-                $file=$photo->get("name");
+
+            if ($annotate) {
+                $filename=$photo->get("name");
                 $size = $vars["_size"];
             } else if ($size == "full") {
-                $file = $photo->get("name");
+                $filename = $photo->get("name");
                 $dir = conf::get("path.images") . "/" . $photo->get("path") . "/";
             } else {
-                $file = MID_PREFIX . "_" . $photo->get("name");
+                $filename = MID_PREFIX . "_" . $photo->get("name");
                 $dir = conf::get("path.images") . "/" . $photo->get("path") . "/" .
                     MID_PREFIX . "/";
             }
-
+            $file=new file($dir . DIRECTORY_SEPARATOR . $filename);
             if ($html) {
-                $html = "<center>\n"; 
-                $html .= "<img src=\"" . $file . "\"><br>\n";
+                $html = "<center>\n";
+                $html .= "<img src=\"" . $filename . "\"><br>\n";
                 $html .= str_replace("\n", "<br>\n", $message);
-                if($includeurl) {
-                    $html .= "<a href=\"" . getZophURL() . 
+                if ($includeurl) {
+                    $html .= "<a href=\"" . getZophURL() .
                         "/photo.php?photo_id=" . $photo_id . "\">";
-                    $html .= sprintf(translate("See this photo in %s"), 
+                    $html .= sprintf(translate("See this photo in %s"),
                         conf::get("interface.title"));
                     $html .= "</a>";
                 }
                 $html .= "</center>\n";
-                
-                if($annotate) {
+
+                if ($annotate) {
                     list($headers,$image)=$photo->display($size);
-                    $mail->addHTMLImageFromString($image, $photo->get("name"), 
+                    $mail->addHTMLImageFromString($image, $photo->get("name"),
                         $headers["Content-type"]);
                 } else {
-                    $mail->addHTMLImageFromFile($dir . "/" . $file, get_image_type($file));
+                    $mail->addHTMLImageFromFile($dir . "/" . $filename, $file->getMime());
                 }
                 $mail->setHTMLBody($html);
                 $mail->setTXTBody($message);
             } else {
-                if($includeurl) {
+                if ($includeurl) {
                     $message .= "\n";
-                    $message .= sprintf(translate("See this photo in %s"), 
+                    $message .= sprintf(translate("See this photo in %s"),
                         conf::get("interface.title"));
                     $message .= ": " . getZophURL() . "/photo.php?photo_id=" . $photo_id;
                 }
                 $mail->setTXTBody($message);
-                if($annotate) {
+                if ($annotate) {
                     list($headers,$image)=$photo->display($size);
-                    $mail->addAttachmentFromString($image, $photo->get("name"), 
+                    $mail->addAttachmentFromString($image, $photo->get("name"),
                         $headers["Content-type"]);
                 } else {
-                    $mail->addAttachmentFromFile($dir . "/" . $file, get_image_type($file));
+                    $mail->addAttachmentFromFile($dir . "/" . $filename, $file->getMime());
                 }
             }
             $mail->setFrom("$from_name <$from_email>");
@@ -132,7 +132,7 @@ else {
             }
             $body = $mail->get();
             $hdrs = $mail->headers($hdrs);
-            foreach($hdrs as $header => $content) {
+            foreach ($hdrs as $header => $content) {
                 $headers .= $header . ": " . $content . "\n";
             }
             if (mail($to_email,$subject, $body,$headers)) {
@@ -154,13 +154,13 @@ require_once "header.inc.php";
 ?>
 
       <h1>
-<?php 
+<?php
 if (conf::get("feature.annotate")) {
     ?>
-      <span class="actionlink"> 
+      <span class="actionlink">
         <a href="define_annotated_photo.php?photo_id=<?php echo $photo->get("photo_id") ?>">
           <?php echo translate("create annotated photo", 0) ?>
-        </a> 
+        </a>
       </span>
     <?php
     }
@@ -209,12 +209,12 @@ if ($found && $_action == "compose") {
         ?>
         <label for="size"><?php echo translate("send fullsize") ?></label>
         <?php echo template::createPulldown("_size", "mid", array(
-            "full" => translate("Yes",0), 
-            "mid" => translate("No",0)) ); ?>
+            "full" => translate("Yes",0),
+            "mid" => translate("No",0))); ?>
         <br>
         <label for="includeurl"><?php echo translate("include URL") ?></label>
         <?php echo template::createYesNoPulldown("includeurl", "1") ?><br>
-        <?php   
+        <?php
     }
     ?>
     <label for="message"><?php echo translate("message:") ?></label><br>
@@ -223,7 +223,7 @@ if ($found && $_action == "compose") {
     if ($annotate) {
         ?>
         <input type="hidden" name="annotate_vars" value="<?php echo $annotate_vars ?>">
-        <img src="image.php?photo_id=<?php echo $photo_id 
+        <img src="image.php?photo_id=<?php echo $photo_id
            ?>&annotated=1&<?php echo $annotate_vars ?>"
            alt="<?php echo $photo->get("title") ? $photo->get("title") : $photo->get("name") ?>">
         <?php

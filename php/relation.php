@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -22,7 +22,7 @@
  */
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -37,27 +37,27 @@ $photo_2=new photo($photo_id_2);
 
 $photo_1->lookup();
 $photo_2->lookup();
-    
+
 $relation=new photoRelation($photo_1, $photo_2);
 $exists=$relation->lookup();
-    
-if(($_action == "insert" || $_action == "new") && $exists) {
+
+if (($_action == "insert" || $_action == "new") && $exists) {
     $_action="edit";
 }
 
-if($_action != "insert" && $_action != "new" && $_action != "update") {
+if ($_action != "insert" && $_action != "new" && $_action != "update") {
     $desc_1 = $relation->getDesc($photo_1);
     $desc_2 = $relation->getDesc($photo_2);
-} 
+}
 
 $obj = &$relation;
 require_once "actions.inc.php";
 
 
-if($action=="display") {
+if ($action=="display") {
     $title=translate("relationship");
 } else {
-    $title=translate($action . " relationship");    
+    $title=translate($action . " relationship");
 }
 
 require_once "header.inc.php";
@@ -67,14 +67,14 @@ if ($action == "confirm") {
     <h1><?php echo translate("delete relationship") ?></h1>
     <div class="main">
       <span class="actionlink">
-        <a href="relation.php?_action=confirm&amp;photo_id_1=<?php 
+        <a href="relation.php?_action=confirm&amp;photo_id_1=<?php
             echo $photo_id_1 ?>&photo_id_2=<?php echo $photo_id_2 ?>">
           <?php echo translate("delete") ?>
         </a> |
-        <a href="relation.php?_action=edit&amp;photo_id_1=<?php 
+        <a href="relation.php?_action=edit&amp;photo_id_1=<?php
             echo $photo_id_1 ?>&photo_id_2=<?php echo $photo_id_2 ?>">
           <?php echo translate("cancel") ?>
-        </a> 
+        </a>
         </span>
         <?php echo translate("Confirm deletion of this relationship") ?>
         <br>
@@ -98,11 +98,11 @@ if ($action == "confirm") {
           <a href="photo.php?photo_id=<?php echo $photo_id_1 ?>">
             <?php echo translate("return") ?>
           </a> |
-          <a href="relation.php?_action=edit&amp;photo_id_1=<?php 
+          <a href="relation.php?_action=edit&amp;photo_id_1=<?php
             echo $photo_id_1 ?>&amp;photo_id_2=<?php echo $photo_id_2 ?>">i
             <?php echo translate("edit") ?>
           </a> |
-          <a href="relation.php?_action=delete&amp;photo_id_1=<?php 
+          <a href="relation.php?_action=delete&amp;photo_id_1=<?php
             echo $photo_id_1 ?>&amp;photo_id_2=<?php echo $photo_id_2 ?>">
             <?php echo translate("delete") ?>
           </a>

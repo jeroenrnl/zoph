@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,14 +19,14 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <?php $d=0; ?>
 <table class="calendar">
   <tr>
     <td class="prev">
       <a href="<?php echo $tpl_prev ?>">&lt;&lt;</a>
-    </td>  
+    </td>
     <td colspan=5>
       <h2><?php echo $tpl_header ?></h2>
     </td>
@@ -35,23 +35,23 @@ if(!ZOPH) { die("Illegal call"); }
     </td>
   </tr>
   <tr>
-    <?php foreach($tpl_titles as $title): ?>
+    <?php foreach ($tpl_titles as $title): ?>
       <th><?php echo $title ?></th>
     <?php endforeach; ?>
   </tr>
   <tr>
-    <?php foreach($tpl_days as $day): ?>
+    <?php foreach ($tpl_days as $day): ?>
       <td class="<?php echo $day["class"] ?>">
-        <?php if($day["link"]): ?>
+        <?php if ($day["link"]): ?>
           <a href="<?php echo ($day["link"]) ?>">
         <?php endif; ?>
         <?php echo $day["date"] ?>
-        <?php if($day["link"]): ?>
+        <?php if ($day["link"]): ?>
           </a>
         <?php endif; ?>
       </td>
       <?php $d++ ?>
-      <?php if($d % 7 == 0): ?>
+      <?php if ($d % 7 == 0): ?>
         </tr>
         <tr>
       <?php endif; ?>

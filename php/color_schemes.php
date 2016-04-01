@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,7 +24,7 @@
 
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -42,22 +42,22 @@ require_once "header.inc.php";
 $color_schemes = color_scheme::getRecords("name");
 
 if ($color_schemes) {
-    foreach($color_schemes as $cs) {
+    foreach ($color_schemes as $cs) {
         ?>
         <span class="actionlink">
-          <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php 
+          <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php
               echo $cs->get("color_scheme_id") ?>">
             <?php echo translate("delete") ?>
           </a> |
-          <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php 
+          <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php
                echo $cs->get("color_scheme_id") ?>">
              <?php echo translate("edit") ?>
           </a> |
-          <a href="color_scheme.php?_action=copy&amp;color_scheme_id=<?php 
+          <a href="color_scheme.php?_action=copy&amp;color_scheme_id=<?php
               echo $cs->get("color_scheme_id") ?>">
             <?php echo translate("copy") ?>
           </a>
-        </span> 
+        </span>
         <?php echo $cs->get("name") ?>
         <br>
         <?php

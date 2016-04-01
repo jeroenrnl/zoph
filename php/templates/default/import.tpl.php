@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,7 +21,7 @@
  *       this should be done by the main template;
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
     <script type="text/javascript">
         <?php echo $tpl_javascript; ?>
@@ -33,7 +33,7 @@ if(!ZOPH) { die("Illegal call"); }
     <noscript>
       <div class='warning'>
         <img class='icon' src='<?php echo template::getImage("icons/warning.png") ?>'>
-        <?php echo translate("This page needs Javascript switched on and will not " . 
+        <?php echo translate("This page needs Javascript switched on and will not " .
             "function without it."); ?>
       </div>
    </noscript>
@@ -41,7 +41,7 @@ if(!ZOPH) { die("Illegal call"); }
         <div class="import_uploads">
             <h2><?php echo translate("Upload photo",0);?></h2>
             <iframe class="upload" id="upload_<?php echo $tpl_num; ?>"
-                src="import.php?_action=browse&upload_id=<?php 
+                src="import.php?_action=browse&upload_id=<?php
                 echo $tpl_upload_id ?>&num=<?php echo $tpl_num ?>"
                 allowtransparency=1 frameborder=0>
             </iframe>
@@ -123,9 +123,17 @@ if(!ZOPH) { die("Illegal call"); }
                 <label for="level"><?php echo translate("level") ?></label>
                 <?php echo create_text_input("level", "", 4, 2) ?>
                 <span class="inputhint">1 - 10</span><br>
+                <label for="extrafields"><?php echo translate("extra fields") ?></label><br>
+                <span class="inputhint"><?= translate("These settings will override EXIF data!") ?></span><br>
+                <fieldset class="formhelper-multiple">
+                    <fieldset class="import-extrafields">
+                        <?php echo template::createImportFieldPulldown("_field[]", "") ?>
+                        <?php echo create_text_input("field[]", "", 30, 64) ?>
+                    </fieldset>
+                </fieldset>
                 <label for="description"><?php echo translate("description") ?></label>
                 <textarea name="description" cols="40" rows="4"></textarea><br>
-                <input id="import_submit" type="submit" 
+                <input id="import_submit" type="submit"
                     value="<?php echo translate("import", 0) ?>">
             </form>
         </div>

@@ -12,7 +12,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -41,7 +41,7 @@ class block extends template {
      */
     public function __construct($template, $vars=null) {
         $this->vars=$vars;
-        if(!preg_match("/^[A-Za-z0-9_]+$/", $template)) {
+        if (!preg_match("/^[A-Za-z0-9_]+$/", $template)) {
             log::msg("Illegal characters in template", log::FATAL, log::GENERAL);
         } else {
             $this->template="templates/default/blocks/" . $template . ".tpl.php";

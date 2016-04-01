@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,17 +24,17 @@
 require_once "include.inc.php";
 $title=translate("Configuration");
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
 // Configuration setting depends on POST
-if(!empty($_GET)) {
+if (!empty($_GET)) {
     redirect("config.php");
 }
 
 $_action=getvar("_action");
-if($_action == "setconfig") {
+if ($_action == "setconfig") {
     conf::loadFromRequestVars($request_vars);
 }
 conf::loadFromDB();
@@ -47,7 +47,7 @@ $tpl=new template("config", array(
 // it is also included in header.inc.php, but header.inc.php should be
 // phased out soon.
 $tpl->js[]="js/conf.js";
-foreach(conf::getAll() as $name=>$item) {
+foreach (conf::getAll() as $name=>$item) {
     $tpl->addBlock($item->display());
 }
 echo $tpl;

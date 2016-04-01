@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 
 <div class="graph bar <?php echo $tpl_class ?>">
@@ -30,14 +30,14 @@ if(!ZOPH) { die("Illegal call"); }
             <th><?php echo $tpl_count_label ?></th>
         </tr>
 
-        <?php foreach($tpl_rows as $row): ?>
+        <?php foreach ($tpl_rows as $row): ?>
         <tr>
             <td>
-                <?php if(isset($row["link"])): ?>
+                <?php if (isset($row["link"])): ?>
                     <a href="<?php echo $row["link"] ?>">
-                <?php endif ?>    
+                <?php endif ?>
                 <?php echo $row["value"] ?>
-                <?php if(isset($row["link"])): ?>
+                <?php if (isset($row["link"])): ?>
                     </a>
                 <?php endif ?>
             </td>
@@ -52,4 +52,4 @@ if(!ZOPH) { die("Illegal call"); }
     </table>
 </div>
 
-            
+

@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,12 +28,12 @@
  * @author Jeroen Roos
  */
 class confItemString extends confItem {
-    
+
     protected $regex=".+";
     protected $size=30;
 
     public function display() {
-        if($this->internal) {
+        if ($this->internal) {
             return;
         }
         $tpl=new block("confItemString", array(
@@ -54,11 +54,11 @@ class confItemString extends confItem {
     }
 
     public function checkValue($value) {
-        if($this->required && $value=="") {
+        if ($this->required && $value=="") {
             return false;
         }
 
-        if(isset($this->regex)) {
+        if (isset($this->regex)) {
             return preg_match("/" . $this->regex ."/", $value);
         } else {
             return true;

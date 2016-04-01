@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <li class="share">
     <div class="tab">
@@ -28,7 +28,7 @@ if(!ZOPH) { die("Illegal call"); }
     <div class="contents">
         <h1><?echo translate("share this photo", 0) ?></h1>
         <ul class="share">
-            <?php if(!empty($tpl_hash)): ?>
+            <?php if (!empty($tpl_hash)): ?>
                 <li class="direct_link">
                   <input type="text" value="<?php echo $tpl_full_link; ?>">
                 </li>

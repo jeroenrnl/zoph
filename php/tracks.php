@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,8 +28,8 @@ $_action=getvar("_action");
 $test=getvar("_test");
 $map=null;
 
-if (!$user->is_admin()) {
-    if($user->get("browse_tracks")) {
+if (!$user->isAdmin()) {
+    if ($user->get("browse_tracks")) {
         $_action="display";
     } else {
         redirect("zoph.php");
@@ -42,10 +42,10 @@ if (!$user->is_admin()) {
     $num_photos=sizeof($photos);
 }
 
-if($_action=="" || $_action=="display") {
+if ($_action=="" || $_action=="display") {
     $title = translate("Tracks");
     $tracks=track::getAll();
-    if(count($tracks>0)) {
+    if (count($tracks>0)) {
         $content=new block("tracks_table", array(
             "tracks" => $tracks
         ));
@@ -69,7 +69,7 @@ if($_action=="" || $_action=="display") {
             "hidden"        => $hidden));
 
     }
-        
+
 } else if ($_action=="do_geotag") {
     $validtz=getvar("_validtz");
     $overwrite=getvar("_overwrite");
@@ -83,7 +83,7 @@ if($_action=="" || $_action=="display") {
     $entity=getvar("_entity");
     $tphotos=array();
 
-    if($tracks!="all") {
+    if ($tracks!="all") {
         $track_id=getvar("_track");
         $track=new track($track_id);
         $track->lookup();
@@ -91,26 +91,26 @@ if($_action=="" || $_action=="display") {
         $track=null;
     }
 
-    if($validtz) {
+    if ($validtz) {
         $photos=photo::removePhotosWithNoValidTZ($photos);
     }
-    if(!$overwrite) {
+    if (!$overwrite) {
         $photos=photo::removePhotosWithLatLon($photos);
     }
 
     $total=count($photos);
 
-    if($total>0) {
-        if(is_array($test)) {
+    if ($total>0) {
+        if (is_array($test)) {
             $photos=photo::getSubset($photos, $test, $count);
         }
 
-        foreach($photos as $photo) {
-            $point=$photo->getLatLon($track, $maxtime, $interpolate, $int_maxdist, 
+        foreach ($photos as $photo) {
+            $point=$photo->getLatLon($track, $maxtime, $interpolate, $int_maxdist,
                 $entity, $int_maxtime);
-            if($point instanceof point) {
+            if ($point instanceof point) {
                 $photo->setLatLon($point);
-                if(!is_array($test)) {
+                if (!is_array($test)) {
                     $photo->update();
                 }
                 $tphotos[]=$photo;
@@ -124,7 +124,7 @@ if($_action=="" || $_action=="display") {
     }
     $content=new block("tracks_geotag_results", array(
         "count"         => $total,
-        "actionlinks"   => 
+        "actionlinks"   =>
             array(translate("geotag") => "tracks.php?" . html_entity_decode($new_vars)),
         "test"          => (bool) is_array($test),
         "tagged_count"  => (int) $tagged,
@@ -134,10 +134,10 @@ if($_action=="" || $_action=="display") {
 $tpl=new template("main", array(
     "title" => $title,
 ));
-if($content instanceof block) {
+if ($content instanceof block) {
     $tpl->addBlock($content);
 }
-if($map instanceof block) {
+if ($map instanceof block) {
     $tpl->addBlock($map);
 }
 echo $tpl;

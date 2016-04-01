@@ -9,7 +9,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,6 +23,11 @@
  *
  * @package Zoph
  */
+
+use db\select;
+use db\param;
+use db\clause;
+use db\selectHelper;
 
 /**
  * Photographer class
@@ -48,18 +53,18 @@ class photographer extends person implements Organizer {
      */
     public function removePhoto(photo $photo) {
         $current=$photo->getPhotographer();
-        if($current instanceof photographer && $current->getId() == $this->getId()) {
+        if ($current instanceof photographer && $current->getId() == $this->getId()) {
             $photo->unsetPhotographer();
         }
     }
-   
+
     /**
-     * Return the number of photos this person has taken 
+     * Return the number of photos this person has taken
      * @return int count
      */
     public function getPhotoCount() {
         $user=user::getCurrent();
-        
+
         $ignore=null;
         $vars=array(
             "photographer_id" => $this->getId()
@@ -72,44 +77,54 @@ class photographer extends person implements Organizer {
      * @param string search for names that begin with this string
      * @param bool also search first name
      * @return array list of photographer objects
+     * @todo This code could be much simplified if we could use subqueries
      */
+    public static function getAll($search = null, $search_first = false) {
+        $where=null;
+        $qry=new select(array("ppl" => "people"));
 
-    public static function getAll($search = null, $search_first = null) {
-        $user=user::getCurrent();
+        if (!user::getCurrent()->isAdmin()) {
+            $ids=array();
+            $subqry = new select(array("p" => "photos"));
+            $subqry->addFunction(array("person_id" => "DISTINCT p.photographer_id"));
+            $subqry->join(array("ppl" => "people"), "p.photographer_id=ppl.person_id");
+            if ($search != null) {
+                $where=static::getWhereForSearch($search, $search_first);
+                $subqry->where($where);
+                $subqry->addParam(new param(":search", $search, PDO::PARAM_STR));
+                if ($search_first) {
+                    $subqry->addParam(new param(":searchfirst", $search, PDO::PARAM_STR));
+                }
+            }
+            $subqry = selectHelper::expandQueryForUser($subqry);
 
-        $where=self::getWhereForSearch("", $search, $search_first);
-        if ($user->is_admin()) {
-            if($where!="") {
-                $where="WHERE " . $where;
+            $photographers=static::getRecordsFromQuery($subqry);
+
+            if (sizeof($photographers) == 0) {
+                return null;
             }
-            $sql =
-                "SELECT * FROM " .
-                DB_PREFIX . "people AS ppl " .
-                $where . 
-                " ORDER BY last_name, called, first_name";
-        } else {
-            if($where!="") {
-                $where="AND " . $where;
+
+            foreach ($photographers as $photographer) {
+                $ids[]=$photographer->getId();
             }
-            $sql =
-                "SELECT DISTINCT ppl.* FROM " .
-                DB_PREFIX . "people AS ppl " .
-                "WHERE person_id in " .
-                "(SELECT photographer_id FROM " .
-                DB_PREFIX . "photos AS ph JOIN " .
-                DB_PREFIX . "photo_albums AS pa " .
-                "ON pa.photo_id = ph.photo_id JOIN " .
-                DB_PREFIX . "group_permissions AS gp " .
-                "ON pa.album_id = gp.album_id JOIN " .
-                DB_PREFIX . "groups_users AS gu " .
-                "ON gp.group_id = gu.group_id " .
-                "WHERE gu.user_id = '" . (int) $user->getId() . "' " .
-                $where .
-                " AND gp.access_level >= ph.level)" .
-                " ORDER BY ppl.last_name, ppl.called, ppl.first_name";
+
+            $param=new param(":person_ids", $ids, PDO::PARAM_INT);
+            $where=clause::InClause("person_id", $param);
+            $qry->addParam($param);
+        } else if ($search != null) {
+            $qry->where(static::getWhereForSearch($search, $search_first));
+            $qry->addParam(new param("search", $search, PDO::PARAM_STR));
+            if ($search_first) {
+                $qry->addParam(new param("searchfirst", $search, PDO::PARAM_STR));
+            }
         }
 
-        return static::getRecordsFromQuery($sql);
+        if ($where instanceof clause) {
+            $qry->where($where);
+        }
+
+        $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
+        return static::getRecordsFromQuery($qry);
     }
 }
 ?>

@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35,7 +35,7 @@ class confGroup implements ArrayAccess, IteratorAggregate {
     private $desc;
     /** @var array confItem objects */
     private $items=array();
-    
+
     /**
      * Set the name of the group
      * @param string Name
@@ -98,7 +98,7 @@ class confGroup implements ArrayAccess, IteratorAggregate {
      * Return item
      * For ArrayAccess interface
      * @param string offset
-     * @return confItem 
+     * @return confItem
      */
     public function offsetGet($off) {
         return $this->items[$off];
@@ -108,15 +108,15 @@ class confGroup implements ArrayAccess, IteratorAggregate {
      * Add item
      * For ArrayAccess interface
      * @param string offset
-     * @param string value 
+     * @param string value
      */
     public function offsetSet($off, $value) {
-        if(is_null($off)) {
-            if($value instanceof confItem) {
+        if (is_null($off)) {
+            if ($value instanceof confItem) {
                 $off=$value->getName();
             }
         }
-        if(!is_null($off)) {
+        if (!is_null($off)) {
             $this->items[$off]=$value;
         } else {
             $this->items[]=$value;
@@ -134,7 +134,7 @@ class confGroup implements ArrayAccess, IteratorAggregate {
 
     /**
      * For IteratorAggregate interface
-     * allow us to do foreach() on this object
+     * allow us to do foreach () on this object
      */
     public function getIterator() {
         return new ArrayIterator($this->items);

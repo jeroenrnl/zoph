@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40,7 +40,7 @@
         <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
         <label for="parent_place_id"><?php echo translate("parent location") ?></label>
 <?php
-if($place->isRoot()) {
+if ($place->isRoot()) {
     echo translate("places");
 } else {
     echo place::createPulldown("parent_place_id", $place->get("parent_place_id"));
@@ -73,8 +73,8 @@ if($place->isRoot()) {
 <?php echo create_text_input("urldesc", $place->get("urldesc"), 32, 32) ?>
 <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
 <label for="pageset"><?php echo translate("pageset") ?></label>
-<?php echo template::createPulldown("pageset", $place->get("pageset"), 
-    get_pageset_select_array()) ?><br>
+<?php echo template::createPulldown("pageset", $place->get("pageset"),
+    template::createSelectArray(pageset::getRecords("title"), array("title"), true)) ?><br>
 <fieldset class="map">
   <legend><?php echo translate("map") ?></legend>
   <label for="lat"><?php echo translate("latitude") ?></label>
@@ -83,9 +83,9 @@ if($place->isRoot()) {
   <?php echo create_text_input("lon", $place->get("lon"), 10, 10) ?><br>
   <label for="mapzoom"><?php echo translate("zoom level") ?></label>
   <?php echo place::createZoomPulldown($place->get("mapzoom")) ?><br>
-  <?php if(conf::get("maps.geocode")): ?>
+  <?php if (conf::get("maps.geocode")): ?>
     <div class="geocode">
-      <input id="geocode" class="geocode" type="button" 
+      <input id="geocode" class="geocode" type="button"
         value="<?php echo translate("search", false) ?>">
       <div id="geocoderesults"></div>
       <script type="text/javascript">
@@ -99,22 +99,22 @@ if($place->isRoot()) {
   <?php endif; ?>
 </fieldset>
 <?php
-if(conf::get("date.guesstz")) {
+if (conf::get("date.guesstz")) {
     $tz=e($place->guessTZ());
-    if(!empty($tz)) {
+    if (!empty($tz)) {
         ?>
         <ul class="actionlink">
           <li>
-            <a href="place.php?_action=update&place_id=<?php 
+            <a href="place.php?_action=update&place_id=<?php
                 echo (int) $place->getId() ?>&timezone=<?php echo $tz ?>">
               <?php echo $tz ?>
             </a>
           </li>
         </ul>
         <?php
-    } 
+    }
 }
-if($place->get("timezone")) {
+if ($place->get("timezone")) {
     ?>
     <span class="actionlink">
       <a href="place.php?_action=settzchildren&place_id=<?php echo $place->get("place_id") ?>">

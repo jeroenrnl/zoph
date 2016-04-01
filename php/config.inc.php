@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jeroen Roos
  * @author Jason Geiger
@@ -25,13 +25,13 @@
 // LOG_SEVERITY, LOG_SUBJECT.
 // All other settings are now made from the webinterface
 
-define('VERSION', '0.9.1');
-define('RELEASEDATE', '21-2-2014');
+define('VERSION', '0.9.2');
+define('RELEASEDATE', '01-04-2016');
 // DB_HOST, DB_NAME, DB_USER, DB_PASS and DB_PREFIX have been moved to
 // zoph.ini. The location can be set by the next config item:
 
 // INI FILE is already defined when using CLI and when running UnitTests
-if(!defined("INI_FILE")) {
+if (!defined("INI_FILE")) {
     define('INI_FILE', "/etc/zoph.ini");
 }
 
@@ -42,7 +42,7 @@ define('THUMB_PREFIX', 'thumb');
 define('MID_PREFIX', 'mid');
 
 // LOG_ALWAYS and LOG_SEVERITY can have the following values:
-// log::DEBUG, log::NOTIFY, log::WARN, log::ERROR, log::FATAL, log::NONE
+// log::DEBUG, log::NOTIFY, log::WARN, log::ERROR, log::FATAL, log::MSG, log::NONE
 
 // Always show fatal errors
 define('LOG_ALWAYS', log::FATAL);

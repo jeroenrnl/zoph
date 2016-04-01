@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,19 +34,18 @@ if ($comment_id) {
     $comment_user->lookup();
 }
 
-if(!$user->is_admin() && (!$comment->is_owner($user)) && ($_action!="new") && $_action!="insert") {
+if (!$user->isAdmin() && (!$comment->isOwner($user)) && ($_action!="new") && $_action!="insert") {
     $_action="display";
 }
 
-if(!$user->is_admin() && !$user->get("leave_comments") && ($_action=="new" || $_action=="insert")) {
+if (!$user->isAdmin() && !$user->get("leave_comments") && ($_action=="new" || $_action=="insert")) {
     redirect("zoph.php");
 }
 
-$photo=$comment->get_photo();
+$photo=$comment->getPhoto();
 
 if ($photo) {
-    $photo_id=$photo->get("photo_id");
-    if(!$user->get_permissions_for_photo($photo_id) && !$user->is_admin()) {
+    if (!$user->getPhotoPermissions($photo) && !$user->isAdmin()) {
         redirect("zoph.php");
     }
 } else {
@@ -66,7 +65,7 @@ $obj = &$comment;
 
 require_once "actions.inc.php";
 
-if($_action == "insert") {
+if ($_action == "insert") {
     $comment->addToPhoto($photo);
 }
 
@@ -83,16 +82,16 @@ if ($action == "confirm") {
       <h1><?php echo translate("delete comment") ?></h1>
         <div class="main">
            <span class="actionlink">
-             <a href="comment.php?_action=confirm&amp;comment_id=<?php 
+             <a href="comment.php?_action=confirm&amp;comment_id=<?php
                 echo $comment->get("comment_id") ?>">
                 <?php echo translate("delete") ?>
              </a> |
-             <a href="comment.php?_action=edit&amp;comment_id=<?php 
+             <a href="comment.php?_action=edit&amp;comment_id=<?php
                 echo $comment->get("comment_id") ?>">
                 <?php echo translate("cancel") ?>
              </a>
            </span>
-           <?php echo sprintf(translate("Confirm deletion of comment '<b>%s</b>' by '<b>%s</b>'"), 
+           <?php echo sprintf(translate("Confirm deletion of comment '<b>%s</b>' by '<b>%s</b>'"),
                 $comment->get("subject"), $comment_user->get("user_name")) ?>
          </div>
     <?php
@@ -100,16 +99,16 @@ if ($action == "confirm") {
     ?>
       <h1>
     <?php
-    if ($user->is_admin() || $comment->is_owner($user)) {
+    if ($user->isAdmin() || $comment->isOwner($user)) {
         ?>
         <span class="actionlink">
           <a href="photo.php?photo_id=<?php echo $photo_id ?>">
             <?php echo translate("return") ?>
           </a> |
-          <a href="comment.php?_action=edit&amp;comment_id=<?php 
+          <a href="comment.php?_action=edit&amp;comment_id=<?php
             echo $comment->get("comment_id") ?>"><?php echo translate("edit") ?>
           </a> |
-          <a href="comment.php?_action=delete&amp;comment_id=<?php 
+          <a href="comment.php?_action=delete&amp;comment_id=<?php
             echo $comment->get("comment_id") ?>"><?php echo translate("delete") ?>
           </a>
         </span>
@@ -123,7 +122,7 @@ if ($action == "confirm") {
         <?php echo $photo->getImageTag(MID_PREFIX); ?>
         <br>
         <dl class "comment">
-            <?php echo create_field_html($comment->getDisplayArray($user)) ?>
+            <?php echo create_field_html($comment->getDisplayArray()) ?>
         </dl>
         <br>
     </div>
@@ -146,13 +145,13 @@ if ($action == "confirm") {
         <input type="hidden" name="photo_id" value="<?php echo $photo_id ?>">
         <label for="subject"><?php echo translate("subject") ?></label>
         <?php echo create_text_input("subject", $comment->get("subject")) ?><br>
-        <label for="comment"><?php echo translate("comment") ?></label> 
+        <label for="comment"><?php echo translate("comment") ?></label>
         <textarea name="comment" rows="8" cols="80">
           <?php echo $comment->get("comment") ?>
         </textarea><br>
         <input type="submit" value="<?php echo translate($action, 0) ?>">
         <h2><?php echo translate("smileys you can use"); ?></h2>
-        <?php echo smiley::getOverview(); ?>
+        <?php echo zophCode\smiley::getOverview(); ?>
       </form>
     </div>
 

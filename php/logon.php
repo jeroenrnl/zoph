@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,7 +24,7 @@
 define("LOGON", true);
 require_once "include.inc.php";
 
-if(isset($_GET["redirect"])) {
+if (isset($_GET["redirect"])) {
     $redirect = urlencode($_GET["redirect"]);
 } else {
     $redirect = "";
@@ -36,7 +36,7 @@ if (conf::get("ssl.force") != "never") {
 }
 
 $user = new user();
-$lang=$user->load_language();
+$lang=$user->loadLanguage();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>

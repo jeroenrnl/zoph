@@ -1,6 +1,6 @@
 <?php
 /**
- * Map. Create and display a map using the mapstraction library. 
+ * Map. Create and display a map using the mapstraction library.
  *
  * This file is part of Zoph.
  *
@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -54,18 +54,18 @@ class map extends block {
      * @return map new object
      */
     function __construct($template="map", $vars=null) {
-        if(!is_array($vars)) {
+        if (!is_array($vars)) {
             $vars=array();
         }
-        if(!array_key_exists("id", $vars)) {
+        if (!array_key_exists("id", $vars)) {
             $vars["id"]=$this->map;
         }
-        if(!array_key_exists("provider", $vars)) {
+        if (!array_key_exists("provider", $vars)) {
             $vars["provider"]=conf::get("maps.provider");
         }
         parent::__construct($template, $vars);
 
-    } 
+    }
 
     /**
      * Add a marker to the map
@@ -80,9 +80,9 @@ class map extends block {
      * @param array Array of objects to get markers from
      */
     public function addMarkers(array $objs) {
-        foreach($objs as $obj) {
+        foreach ($objs as $obj) {
             $marker=$obj->getMarker();
-            if($marker instanceof marker) {
+            if ($marker instanceof marker) {
                 $this->addMarker($marker);
             }
         }
@@ -99,7 +99,7 @@ class map extends block {
     public static function getMarkerFromObj($obj, $icon) {
         $lat=$obj->get("lat");
         $lon=$obj->get("lon");
-        if($lat && $lon) {
+        if ($lat && $lon) {
             $title=$obj->get("title");
             $quicklook=$obj->getQuicklook();
             return new marker($lat, $lon, $icon, $title, $quicklook);
@@ -109,10 +109,10 @@ class map extends block {
     }
 
     /**
-     * Get markers for this map 
+     * Get markers for this map
      */
     public function getMarkers() {
-        // if multiple photos are taken in the same place, that place 
+        // if multiple photos are taken in the same place, that place
         // is multiple times in the array, let's remove doubles:
         $markers=array_unique($this->markers, SORT_REGULAR);
         return $markers;
@@ -178,25 +178,25 @@ class map extends block {
         $lat=$obj->get("lat");
         $lon=$obj->get("lon");
         $zoom=$obj->get("mapzoom");
-        if(!$lat && !$lon) {
-            if($obj instanceof photo && $obj->location instanceof place) {
+        if (!$lat && !$lon) {
+            if ($obj instanceof photo && $obj->location instanceof place) {
                 $lat=$obj->location->get("lat");
                 $lon=$obj->location->get("lon");
                 $zoom=$obj->location->get("mapzoom");
             } else if ($obj instanceof place) {
-                foreach($obj->get_ancestors() as $parent) {
+                foreach ($obj->get_ancestors() as $parent) {
                     $lat=$parent->get("lat");
                     $lon=$parent->get("lon");
                     $zoom=$parent->get("mapzoom");
-                    if($lat && $lon) {
+                    if ($lat && $lon) {
                         break;
                     }
                 }
             }
         }
-        if(!$lat) { $lat=0; }
-        if(!$lon) { $lon=0; }
-        if(!$zoom) { $zoom=2; }
+        if (!$lat) { $lat=0; }
+        if (!$lon) { $lon=0; }
+        if (!$zoom) { $zoom=2; }
         $this->setCenterAndZoom($lat, $lon, $zoom);
     }
 

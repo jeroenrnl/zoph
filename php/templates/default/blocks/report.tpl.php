@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,13 +19,13 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <table class="reports">
     <tr>
         <th colspan="3"><h3><?php echo $tpl_title ?></h3></th>
     </tr>
-    <?php foreach($tpl_lines as $line): ?>
+    <?php foreach ($tpl_lines as $line): ?>
     <tr>
         <td>
             <a href="<?php echo $line["url"] ?>">

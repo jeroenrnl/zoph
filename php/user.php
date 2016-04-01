@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,7 +24,7 @@
 
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -79,7 +79,7 @@ if ($action == "display") {
     <?php
     $url = getZophURL() . "login.php";
 
-    $this_user->lookup_person();
+    $this_user->lookupPerson();
     $name = $this_user->person->getName();
 
     $subject = translate("Your Zoph Account", 0);
@@ -103,7 +103,7 @@ if ($action == "display") {
       <input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
       <input type="hidden" name="subject" value="<?php echo $subject ?>">
       <input type="hidden" name="message" value="<?php echo $message ?>">
-      <input class="bigbutton" type="submit" name="_button" 
+      <input class="bigbutton" type="submit" name="_button"
         value="<?php echo translate("Notify User", 0) ?>">
     </form>
     <br>
@@ -118,11 +118,14 @@ if ($action == "display") {
     echo $tpl;
 
     $comments=$this_user->getComments();
-    if(!empty($comments)) {
+    if (!empty($comments)) {
         ?>
         <h3><?php echo translate("comments by this user") ?></h3>
         <?php
-        echo format_comments($user,$comments);
+        foreach ($comments as $comment) {
+            $comment->lookup();
+            echo $comment->toHTML(true);
+        }
     }
 } else if ($action == "confirm") {
     ?>
@@ -147,7 +150,7 @@ if ($action == "display") {
     <?php
 } else {
     require_once "edit_user.inc.php";
-} 
+}
 ?>
 </div>
 <?php require_once "footer.inc.php"; ?>

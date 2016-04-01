@@ -1,7 +1,7 @@
 <?php
 /**
  * A class representing an annotated photo
- * An annotated photo is a photo with information about the 
+ * An annotated photo is a photo with information about the
  * photo added to the image
  *
  * This file is part of Zoph.
@@ -10,7 +10,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,7 +26,7 @@
 
 /**
  * A class representing an annotated photo
- * An annotated photo is a photo with information about the 
+ * An annotated photo is a photo with information about the
  * photo added to the image
  *
  * @package Zoph
@@ -50,7 +50,7 @@ class annotatedPhoto extends photo {
      * @throws photoException
      */
     public function display($type=null) {
-        if($type=="full") {
+        if ($type=="full") {
             $type=null;
         }
         $headers=array();
@@ -123,20 +123,20 @@ class annotatedPhoto extends photo {
 
         $final_array=array();
         if ($vars) {
-            foreach($vars as $var) {
+            foreach ($vars as $var) {
                 $tmp_array = explode("\n", wordwrap($var, $maxWidthChars, "\n   "));
-                foreach($tmp_array as $val) {
+                foreach ($tmp_array as $val) {
                     $final_array[] = str_replace("\r", "", $val);
                 }
             }
 
         }
 
-        $noted_image = ImageCreateTrueColor (ImageSX($orig_image), 
+        $noted_image = ImageCreateTrueColor (ImageSX($orig_image),
             ImageSY($orig_image) + ((ImageFontHeight($font) + $padding) * sizeof($final_array)));
 
-        /* Use a light grey background to hide the jpeg artifacts caused by 
-         * the sharp edges in text. 
+        /* Use a light grey background to hide the jpeg artifacts caused by
+         * the sharp edges in text.
          */
 
         $offwhite = ImageColorAllocate($noted_image, 240,240, 240);
@@ -144,11 +144,11 @@ class annotatedPhoto extends photo {
         $black = ImageColorAllocate($noted_image, 0, 0, 0);
         ImageColorTransparent($noted_image, $black);
 
-        ImageCopy($noted_image, $orig_image, 0, 0, 0, 0, 
+        ImageCopy($noted_image, $orig_image, 0, 0, 0, 0,
             ImageSX($orig_image), ImageSY($orig_image));
 
         if ($final_array) {
-            foreach($final_array as $val) {
+            foreach ($final_array as $val) {
                 ImageString ($noted_image, $font, $indent, $row, $val, $black);
                 $row += ImageFontHeight($font) + $padding;
             }
@@ -162,7 +162,7 @@ class annotatedPhoto extends photo {
 
         $headers["Content-Length"]=strlen($jpeg);
         $headers["Content-Disposition"]="inline; filename=" . $name;
-        // Return current time as last modified time 
+        // Return current time as last modified time
         // this is debatable, we could also send the file time as last modified
         $headers["Last-Modified"]=gmdate("D, d M Y H:i:s") . ' GMT';
         $headers["Content-type"]="image/jpeg";

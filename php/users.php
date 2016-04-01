@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -24,7 +24,7 @@
 
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -43,8 +43,8 @@ require_once "header.inc.php";
 $users = user::getAll();
 
 if ($users) {
-    foreach($users as $u) {
-        $u->lookup_person();
+    foreach ($users as $u) {
+        $u->lookupPerson();
         ?>
         <tr>
           <td>
@@ -58,10 +58,10 @@ if ($users) {
           <td>
             <span class="actionlink">
         <?php
-        if ((count(album::getNewer($u, $u->get_lastnotify())) > 0)) {
+        if ((count(album::getNewer($u, $u->getLastNotify())) > 0)) {
             ?>
-              <a href="notify.php?_action=notify&amp;user_id=<?php 
-                echo $u->get("user_id") ?>&amp;shownewalbums=1">i
+              <a href="notify.php?_action=notify&amp;user_id=<?php
+                echo $u->get("user_id") ?>&amp;shownewalbums=1">
                 <?php echo translate("Notify User", 0) ?>
               </a> |
             <?php

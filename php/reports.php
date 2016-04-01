@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -66,8 +66,8 @@ if ($top_places) {
 $graph=new block("graph_bar", array(
     "title"     => translate("photo ratings", 0),
     "class"     => "ratings",
-    "value_label" => translate("rating",0 ),
-    "count_label" => translate("count",0 ),
+    "value_label" => translate("rating",0),
+    "count_label" => translate("count",0),
     "rows"      => rating::getGraphArray()
 ));
 

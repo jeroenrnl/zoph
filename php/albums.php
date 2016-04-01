@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,11 +25,11 @@
 require_once "include.inc.php";
 
 $_view=getvar("_view");
-if(empty($_view)) {
+if (empty($_view)) {
     $_view=$user->prefs->get("view");
 }
 $_autothumb=getvar("_autothumb");
-if(empty($_autothumb)) {
+if (empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
@@ -39,38 +39,69 @@ if (!$parent_album_id) {
 } else {
     $album = new album($parent_album_id);
 }
+
+$pagenum = getvar("_pageset_page");
+
 $album->lookup();
 $obj=&$album;
 $ancestors = $album->get_ancestors();
 $order = $user->prefs->get("child_sortorder");
-$children = $album->getChildrenForUser($order);
+$children = $album->getChildren($order);
 $totalPhotoCount = $album->getTotalPhotoCount();
 $photoCount = $album->getPhotoCount();
 
 $title = $album->get("parent_album_id") ? $album->get("album") : translate("Albums");
 
 require_once "header.inc.php";
+
+try {
+    $pageset=$album->getPageset();
+    $page=$album->getPage($request_vars, $pagenum);
+    $showOrig=$album->showOrig($pagenum);
+} catch (pageException $e) {
+    $showOrig=true;
+    $page=null;
+}
+
 ?>
 <h1>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
-      <span class="actionlink">
-        <a href="album.php?_action=new&amp;parent_album_id=<?php 
-            echo $album->get("album_id") ?>"><?php echo translate("new") ?>
-        </a>
-      </span>
+      <ul class="actionlink">
+        <li>
+            <a href="album.php?_action=new&amp;parent_album_id=<?php
+                echo $album->get("album_id") ?>"><?php echo translate("new") ?>
+            </a>
+        </li>
+        <li>
+            <a href="album.php?_action=edit&amp;album_id=<?php
+                echo $album->get("album_id") ?>">
+                <?php echo translate("edit") ?>
+          </a>
+        </li>
+        <?php if ($album->get("coverphoto")): ?>
+        <li>
+            <a href="album.php?_action=update&amp;album_id=<?php
+                echo $album->get("album_id") ?>&amp;coverphoto=NULL">
+                <?php echo translate("unset coverphoto") ?>
+            </a>
+        </li>
+        <?php endif; ?>
+      </ul>
     <?php
 }
 ?>
     <?php echo $title . "\n" ?>
 </h1>
 <?php
-if($user->is_admin()) {
+if ($user->isAdmin()) {
     include "selection.inc.php";
 }
-include "show_page.inc.php";
-if($show_orig) {
+if ($album->showPageOnTop()) {
+    echo $page;
+}
+if ($showOrig) {
     ?>
     <div class="main">
       <form class="viewsettings" method="get" action="albums.php">
@@ -92,29 +123,6 @@ if($show_orig) {
     ?>
     </h2>
     <?php
-    if ($user->is_admin()) {
-        ?>
-        <span class="actionlink">
-          <a href="album.php?_action=edit&amp;album_id=<?php 
-            echo $album->get("album_id") ?>">
-            <?php echo translate("edit") ?>
-          </a>
-        <?php
-        if($album->get("coverphoto")) {
-            ?>
-            |
-            <a href="album.php?_action=update&amp;album_id=<?php 
-                echo $album->get("album_id") ?>&amp;coverphoto=NULL">
-                <?php echo translate("unset coverphoto") ?>
-            </a>
-            <?php
-        }
-        ?>
-        </span>
-        <br>
-        <p>
-        <?php
-    }
     echo $album->displayCoverPhoto();
     ?>
     </p>
@@ -136,14 +144,14 @@ if($show_orig) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
             <span class="actionlink">
-                <a href="photos.php?album_id=<?php 
+                <a href="photos.php?album_id=<?php
                     echo $album->getBranchIds() . $sort ?>">
                   <?php echo translate("view photos") ?>
                 </a>
             </span>
             <?php
             $fragment .= " " . translate("or its children");
-            if($totalPhotoCount>1) {
+            if ($totalPhotoCount>1) {
                 echo sprintf(translate("There are %s photos"), $totalPhotoCount);
                 echo " $fragment.<br>\n";
             } else {
@@ -159,7 +167,7 @@ if($show_orig) {
     if ($photoCount > 0) {
         ?>
           <span class="actionlink">
-            <a href="photos.php?album_id=<?php 
+            <a href="photos.php?album_id=<?php
                 echo $album->get("album_id") . $sort ?>">
               <?php echo translate("view photos")?>
             </a>
@@ -174,7 +182,7 @@ if($show_orig) {
         }
     }
     if ($children) {
-        $tpl=new template("view_" . $_view, array(
+        $tpl=new block("view_" . $_view, array(
             "id" => $_view . "view",
             "items" => $children,
             "autothumb" => $_autothumb,
@@ -189,6 +197,8 @@ if($show_orig) {
     </div>
     <?php
 } // if show_orig
-echo $page_html;
+if ($album->showPageOnBottom()) {
+    echo $page;
+}
 require_once "footer.inc.php";
 ?>

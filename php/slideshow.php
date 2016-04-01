@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -43,7 +43,7 @@ if  ($num_thumbnails) {
         $title = sprintf(translate("photo %s of %s"),  ($offset + 1) , $num_photos);
     }
 } else {
-    redirect(html_entity_decode("photos.php?" . update_query_string($clean_vars, "_off", 0)), 
+    redirect(html_entity_decode("photos.php?" . update_query_string($clean_vars, "_off", 0)),
         "No photos");
 }
 
@@ -52,7 +52,7 @@ $newoffset = $offset + 1;
 $qs = implode("&amp;", explode("&", $_SERVER["QUERY_STRING"]));
 $clean_qs=update_query_string($clean_vars, "", 0);
 $new_qs = $qs;
-if (strpos($_SERVER["QUERY_STRING"], "_off=") !== false ) {
+if (strpos($_SERVER["QUERY_STRING"], "_off=") !== false) {
     $new_qs = str_replace("_off=$offset", "_off=$newoffset", $new_qs);
 } else {
     if ($new_qs) {
@@ -70,8 +70,8 @@ $header = "";
 <link TYPE="text/css" REL="stylesheet" HREF="css.php">
 <?php
 if (!$_pause) {
-    $header = "<meta http-equiv=\"refresh\" content=\"" . 
-        $user->prefs->get("slideshow_time") . ";URL=" . 
+    $header = "<meta http-equiv=\"refresh\" content=\"" .
+        $user->prefs->get("slideshow_time") . ";URL=" .
         $_SERVER["PHP_SELF"] . "?" . $new_qs. "\">\n";
 } else {
     $header="";
@@ -117,15 +117,15 @@ if ($num_thumbnails <= 0) {
     ?>
     <div class="prev">&nbsp;</div>
     <div class="photohdr">
-        <?php echo $photo->getFullsizeLink($photo->get("name"))?>: 
+        <?php echo $photo->getFullsizeLink($photo->get("name"))?>:
         <?php echo $photo->get("width") ?> x <?php echo $photo->get("height")?>,
         <?php echo $photo->get("size") ?> <?php echo translate("bytes")?>
-    </div>    
+    </div>
     <div class="next">&nbsp;</div>
     <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX))?>
     <?php
     if ($people_links = $photo->getPeopleLinks()) {
-        ?>  
+        ?>
         <div id="personlink"><?php echo $people_links ?></div>
         <?php
     }

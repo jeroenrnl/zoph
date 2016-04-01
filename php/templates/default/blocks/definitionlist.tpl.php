@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,12 +19,14 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
-        <dl class="<?php echo $tpl_class; ?>">
-            <?php foreach ($tpl_dl as $key => $value): ?>
-                <dt><?php echo e($key) ?></dt>
-                <dd><?php echo $value ?></dd>
-            <?php endforeach; ?>
-        </dl>
-        <br>
+<dl class="<?php echo $tpl_class; ?>">
+    <?php foreach ($tpl_dl as $key => $value): ?>
+        <?php if (!empty($value)): ?>
+            <dt><?php echo e($key) ?></dt>
+            <dd><?php echo $value ?></dd>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</dl>
+<br>

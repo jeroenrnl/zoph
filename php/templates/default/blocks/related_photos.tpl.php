@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,18 +19,18 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 
 <div class="related">
     <h2><?php echo translate("related photos") ?></h2>
-    <?php foreach($tpl_related as $related): ?>
+    <?php foreach ($tpl_related as $related): ?>
         <div class="thumbnail">
-            <?php if($tpl_admin): ?>
+            <?php if ($tpl_admin): ?>
                 <ul class="actionlink">
                     <li>
-                      <a href="relation.php?photo_id_1=<?php 
-                        echo (int) $tpl_photo->getId() ?>&photo_id_2=<?php 
+                      <a href="relation.php?photo_id_1=<?php
+                        echo (int) $tpl_photo->getId() ?>&photo_id_2=<?php
                         echo (int) $related->getId() ?>">
                         <?php echo translate("edit") ?>
                       </a>

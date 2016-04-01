@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -26,23 +26,23 @@ require_once "include.inc.php";
 $vars=clean_request_vars($request_vars);
 
 $_action=getvar("_action");
-if(!conf::get("feature.download") || (!$user->get("download") && !$user->is_admin())) {
+if (!conf::get("feature.download") || (!$user->get("download") && !$user->isAdmin())) {
     redirect("zoph.php");
 }
-if($_action=="getfile" || $_action=="download") {
+if ($_action=="getfile" || $_action=="download") {
     $filename=getvar("_filename");
-    if(!$filename) { $filename="zoph"; }
-    if(!preg_match("/^[a-zA-Z0-9_-]+$/", $filename)) {
+    if (!$filename) { $filename="zoph"; }
+    if (!preg_match("/^[a-zA-Z0-9_-]+$/", $filename)) {
         die("Invalid filename");
     }
 
     $filenum=getvar("_filenum");
-    if(!$filenum) { $filenum=1; }
+    if (!$filenum) { $filenum=1; }
 }
 
 if ($_action=="download") {
     $zipfile="/tmp/zoph_" . $user->get("user_id") . "_" . $filename ."_" . $filenum . ".zip";
-    if(file_exists($zipfile)) {
+    if (file_exists($zipfile)) {
         header("Content-Length: " . filesize($zipfile));
         header("Content-Disposition: inline; filename=" . $filename . $filenum . ".zip");
         header("Content-type: application/zip");
@@ -64,22 +64,22 @@ require_once "header.inc.php";
 
 <?php
 
-if($_action=="getfile") {
+if ($_action=="getfile") {
     $maxsize=getvar("_maxsize");
-    if(!$maxsize) { $maxsize=25000000; }
-        
-    if(!is_numeric($maxsize)) {
+    if (!$maxsize) { $maxsize=25000000; }
+
+    if (!is_numeric($maxsize)) {
         die("Maximum size must be numeric");
     }
     $maxfiles=getvar("_maxfiles");
-    if(!$maxfiles) { $maxfiles=200; }
-    if(!is_numeric($maxfiles)) {
+    if (!$maxfiles) { $maxfiles=200; }
+    if (!is_numeric($maxfiles)) {
         die("Maximum files must be numeric");
     }
     $dateddirs=getvar("dateddirs");
 
     $offset=getvar("_off");
-    if(!$offset) { $offset=0; }
+    if (!$offset) { $offset=0; }
 
     $photos;
 
@@ -93,19 +93,19 @@ if($_action=="getfile") {
         $number=create_zipfile($photos, $maxsize, $filename, $filenum, $user);
         $newoffset=$offset + $number + 1;
         echo "<iframe style=\"border: none; width: 100%; height: 4em\" " .
-            "src=download.php?_action=download&_filename=" . $filename . 
+            "src=download.php?_action=download&_filename=" . $filename .
             "&_filenum=" . $filenum . "></iframe>";
-                   
+
         $new_qs=str_replace("_off=$offset", "_off=$newoffset", $_SERVER["QUERY_STRING"]);
-        if($new_qs==$_SERVER["QUERY_STRING"]) {
+        if ($new_qs==$_SERVER["QUERY_STRING"]) {
             $new_qs=$new_qs . "&_off=$newoffset";
         }
         $qs=$new_qs;
         $new_qs=str_replace("_filenum=$filenum", "_filenum=" . ($filenum + 1), $qs);
-        if($new_qs==$qs) {
+        if ($new_qs==$qs) {
             $new_qs=$new_qs . "&_filenum=" . ($filenum + 1);
         }
-        if($newoffset < $totalPhotoCount) {
+        if ($newoffset < $totalPhotoCount) {
             echo sprintf(translate("Downloaded %s of %s photos."), $newoffset, $totalPhotoCount);
             ?>
             <span class="actionlink">
@@ -115,8 +115,8 @@ if($_action=="getfile") {
             </span>
             <?php
         } else {
-            $link = strip_href($user->get_last_crumb());
-            echo sprintf(translate("All photos have been downloaded in %s zipfiles."), $filenum) 
+            $link = breadcrumb::getLast()->getLink();
+            echo sprintf(translate("All photos have been downloaded in %s zipfiles."), $filenum)
             ?>
             <span class="actionlink">
               <a href="<?php echo $link ?>">
@@ -143,9 +143,9 @@ if($_action=="getfile") {
     } else {
         ?>
         <form class="download">
-          <p> 
-            <?php printf(translate("You have requested the download of %s photos," . 
-                "with a total size of  %s."), $num_photos, 
+          <p>
+            <?php printf(translate("You have requested the download of %s photos," .
+                "with a total size of  %s."), $num_photos,
                 getHuman(photo::getFilesize($photos))); ?>
           </p>
           <p>
@@ -161,11 +161,11 @@ if($_action=="getfile") {
             <label for="maxfiles">
               <?php echo translate("Maximum number of files per zipfile") ?>
             </label>
-            <?php echo template::createPulldown("_maxfiles", "100", 
+            <?php echo template::createPulldown("_maxfiles", "100",
                 array(
                     10 => 10,
                     25 => 25,
-                    50 => 50, 
+                    50 => 50,
                     75 => 75,
                     100 => 100,
                     150 => 150,
@@ -178,20 +178,20 @@ if($_action=="getfile") {
             <label for="maxsize">
               <?php echo translate("Maximum size per zipfile") ?>
             </label>
-            <?php echo template::createPulldown("_maxsize", "50000000", 
+            <?php echo template::createPulldown("_maxsize", "50000000",
                 array(
-                    "5000000" => "5MiB", 
-                    "10000000" => "10MiB", 
-                    "25000000" => "25MiB", 
-                    "50000000" => "50MiB", 
-                    "75000000" => "75MiB", 
-                    "100000000" => "100MiB", 
-                    "150000000" => "150MiB", 
-                    "250000000" => "250MiB", 
-                    "500000000" => "500MiB", 
-                    "650000000" => "650MiB", 
-                    "1000000000" => "1GiB", 
-                    "2000000000" => "2GiB", 
+                    "5000000" => "5MiB",
+                    "10000000" => "10MiB",
+                    "25000000" => "25MiB",
+                    "50000000" => "50MiB",
+                    "75000000" => "75MiB",
+                    "100000000" => "100MiB",
+                    "150000000" => "150MiB",
+                    "250000000" => "250MiB",
+                    "500000000" => "500MiB",
+                    "650000000" => "650MiB",
+                    "1000000000" => "1GiB",
+                    "2000000000" => "2GiB",
                     "4200000000" => "4.2GiB")
                 ) ?><br>
             <input type="submit" value="<?php echo translate("download") ?>">

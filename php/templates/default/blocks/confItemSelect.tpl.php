@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,16 +19,16 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
     <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
     <select name="<?php echo $tpl_name ?>">
-        <?php foreach($tpl_options as $option=>$label): ?>
-            <?php if($tpl_value===$option): ?>
+        <?php foreach ($tpl_options as $option=>$label): ?>
+            <?php if ($tpl_value===$option): ?>
                 <?php $selected="selected"; ?>
             <?php else: ?>
                 <?php $selected=""; ?>
-            <?php endif ?>    
+            <?php endif ?>
             <option <?php echo $selected; ?> value="<?php echo $option ?>">
               <?php echo $label ?>
             </option>
@@ -36,14 +36,14 @@ if(!ZOPH) { die("Illegal call"); }
     </select>
     <input class="reset" type="checkbox" name="_reset_<?php echo $tpl_name ?>">
     <span><?php echo translate("reset to default",0) ?></span>
-    <?php if(!empty($tpl_hint)): ?>
+    <?php if (!empty($tpl_hint)): ?>
         <div class="inputhint">
             <?php echo $tpl_hint ?>
         </div>
     <?php endif; ?>
-    <?php if(!empty($tpl_desc)): ?>
+    <?php if (!empty($tpl_desc)): ?>
         <div class="desc">
             <?php echo $tpl_desc ?>
         </div>
     <?php endif; ?>
-    
+

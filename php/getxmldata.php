@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,13 +25,13 @@ $object=getvar("object");
 $search=getvar("search");
 
 $obj_array=explode("_", $object);
-if($obj_array[0]=="details") {
+if ($obj_array[0]=="details") {
     $obj_name=$obj_array[1];
     $obj=new $obj_name((int) $obj_array[2]);
 
     echo $obj->getDetailsXML();
 } else {
-    if($object=="location" || $object=="home" || $object=="work") {
+    if ($object=="location" || $object=="home" || $object=="work") {
         $object="place";
     } else if ($object=="father" || $object=="mother" || $object=="spouse") {
         $object="person";
@@ -42,7 +42,7 @@ if($obj_array[0]=="details") {
     } else if ($object=="import_thumbs") {
         $object="WebImport";
         $search="thumbs";
-    } 
+    }
 
     echo $object::getXML($search)->SaveXML();
 }

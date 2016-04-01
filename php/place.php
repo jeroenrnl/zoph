@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -30,15 +30,15 @@ $place = new place($place_id);
 
 $obj = &$place;
 $redirect = "places.php";
-if($_action=="settzchildren") {
-    if($user->is_admin()) {
+if ($_action=="settzchildren") {
+    if ($user->isAdmin()) {
         $place->lookup();
         $place->setTzForChildren();
     }
     $action="display";
 }
 require_once "actions.inc.php";
-if (!$user->is_admin() || $action == "display") {
+if (!$user->isAdmin() || $action == "display") {
     redirect("places.php?parent_place_id=" . $place->get("place_id"), "Redirect");
 }
 if ($action != "insert") {
@@ -54,11 +54,11 @@ if ($action == "confirm") {
     <h1><?php echo translate("delete place") ?></h1>
     <div class="main">
       <span class="actionlink">
-        <a href="place.php?_action=confirm&amp;place_id=<?php 
+        <a href="place.php?_action=confirm&amp;place_id=<?php
             echo $place->get("place_id") ?>">
           <?php echo translate("delete") ?>
         </a> |
-        <a href="place.php?_action=display&amp;place_id=<?php 
+        <a href="place.php?_action=display&amp;place_id=<?php
             echo $place->get("place_id") ?>">
           <?php echo translate("cancel") ?>
         </a>
@@ -71,14 +71,14 @@ if ($action == "confirm") {
 ?>
 </div>
 <?php
-if(conf::get("maps.provider")) {
+if (conf::get("maps.provider")) {
     $map=new map();
     $marker=$place->getMarker();
     $map->setCenterAndZoomFromObj($place);
-    if($marker instanceof marker) {
+    if ($marker instanceof marker) {
         $map->addMarker($marker);
     }
-    if($_action == "edit" || $_action == "new") {
+    if ($_action == "edit" || $_action == "new") {
         $map->setEditable();
     }
     echo $map;

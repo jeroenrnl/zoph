@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,7 @@
  * @package Zoph
  */
 class log {
-    
+
     public static $stopOnFatal=true;
 
     public static $sev = array(
@@ -38,15 +38,19 @@ class log {
         30 => "Warning",
         20 => "Error",
         10 => "Fatal Error",
-        0 => "Message");
-   
+        5 => "Message",
+        1 => "To File",
+        0 => "None");
+
     const MOREDEBUG = 60;
     const DEBUG = 50;
     const NOTIFY = 40;
     const WARN = 30;
     const ERROR = 20;
     const FATAL = 10;
+    const MSG = 5;
     const NONE = 0;
+    const TOFILE = 1;
 
     const VARS = 1;
     const LANG = 2;
@@ -58,14 +62,12 @@ class log {
     const DB = 128;
     const SQL = 256;
     const XML = 512;
-    /* 1024 and 2048, are free */
+    const CONF = 1024;
+    /* 2048, is free */
     const IMG = 4096;
     /* 8192, 16384 are free */
     const GENERAL = 32768;
     const ALL=65535;
-
-    function __construct() {
-    }
 
     /**
      * Log a message
@@ -75,10 +77,10 @@ class log {
      * @param bigint Subject of the message.
      * @param bool echo the message or return the contents
      */
-    public static function msg($msg, 
+    public static function msg($msg,
         $severity = self::NOTIFY, $subj = self::GENERAL, $print = true) {
 
-        /** 
+        /**
          * There are 3 settings in config.ing.php that are important;
          * LOG_SEVERITY: Show log messages with a severity higher than this
          * LOG_SUBJECT:  Only show messages about this subject
@@ -86,16 +88,21 @@ class log {
          *               no matter what the subject is.
          */
 
-        if(((LOG_SEVERITY >= $severity) && (LOG_SUBJECT & $subj)) ||
+        if (((LOG_SEVERITY >= $severity) && (LOG_SUBJECT & $subj)) ||
             (LOG_ALWAYS >= $severity)) {
 
-            $msg="<b>" . self::$sev[$severity] . "</b>: " . $msg . "<br>\n";
-            if($print) {
-                if(!defined("CLI")) {
+            $dbt = debug_backtrace();
+            $file = basename($dbt[0]["file"]);
+            $line = $dbt[0]["line"];
+
+            $msg="<b>" . static::$sev[$severity] . "</b>: " . $msg . " <tt>" . $file . "</tt>: " . $line . ".<br>\n";
+
+            if ($print) {
+                if (!defined("CLI")) {
                     echo $msg;
                 } else {
-                    $html=array("<b>", "</b>", "<strong>", "<strong>", "<br>");
-                    $cli=array("\033[1m", "\033[0m", "\033[1m", "\033[0m", "\n");
+                    $html=array("<b>", "</b>", "<strong>", "<strong>", "<br>", "<tt>", "</tt>");
+                    $cli=array("\033[1m", "\033[0m", "\033[1m", "\033[0m", "\n", "", "");
                     echo str_replace($html, $cli, $msg);
                 }
             } else {
@@ -103,7 +110,7 @@ class log {
             }
         }
 
-        if($severity == self::FATAL && self::$stopOnFatal) {
+        if ($severity == static::FATAL && static::$stopOnFatal) {
             die("fatal error");
         }
     }

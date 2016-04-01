@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 
 <div class="timedetails collapsed">
@@ -33,22 +33,22 @@ if(!ZOPH) { die("Illegal call"); }
             <dt><?php echo translate("time"); ?></dt>
             <dd><?php echo $tpl_photo_time; ?></dd>
             <dt><?php echo translate("timezone"); ?></dt>
-            <?php if(isset($tpl_camera_tz)): ?>
+            <?php if (isset($tpl_camera_tz)): ?>
                 <dd><?php echo $tpl_camera_tz; ?></dd>
             <?php else: ?>
                 <dd><i><?php echo translate("not set"); ?></i></dd>
             <?php endif; ?>
-            <?php if(!empty($tpl_corr)): ?>
+            <?php if (!empty($tpl_corr)): ?>
                 <dt><?php echo translate("correction"); ?></dt>
                 <dd><?php echo $tpl_corr . " " . translate("minutes"); ?></dd>
             <?php endif; ?>
             <br>
-            <?php if(isset($tpl_location)): ?>
+            <?php if (isset($tpl_location)): ?>
                 <h3><?php echo translate("location"); ?></h3>
                 <dt><?php echo translate("location"); ?></dt>
                 <dd><?php echo $tpl_location; ?></dd>
                 <dt><?php echo translate("timezone"); ?></dt>
-                <?php if(!empty($tpl_loc_tz)): ?>
+                <?php if (!empty($tpl_loc_tz)): ?>
                     <dd><?php echo $tpl_loc_tz; ?></dd>
                 <?php else: ?>
                     <dd><i><?php echo translate("not set"); ?></i></dd>
@@ -65,4 +65,4 @@ if(!ZOPH) { die("Illegal call"); }
     </div>
 </div>
 
-            
+

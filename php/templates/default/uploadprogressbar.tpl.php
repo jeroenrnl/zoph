@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) {
+if (!ZOPH) {
     die("Illegal call");
 }
 ?>
@@ -30,7 +30,7 @@ if(!ZOPH) {
     <span id="sz_<?php echo $tpl_upload_num ?>" class="sz_upload">
         <?php echo $tpl_size; ?>
     </span>
-    <div id="pb_<?php echo $tpl_upload_num; ?>_outer" class="progressbar" 
+    <div id="pb_<?php echo $tpl_upload_num; ?>_outer" class="progressbar"
         style="width: <?php echo $tpl_width; ?>px">
         <div id="pb_<?php echo $tpl_upload_num; ?>_inner" class="progressfill"
             style="width: <?php echo $tpl_complete; ?>%">

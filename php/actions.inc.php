@@ -12,7 +12,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -46,9 +46,13 @@ if ($_action == "edit") {
     $_action = "new";
     $action = "insert"; // in case redirect doesn't work
 
-    $user->eat_crumb();
-    $link = strip_href($user->get_last_crumb());
-    if (!$link) { $link = $redirect; }
+    breadcrumb::eat();
+    $crumb = breadcrumb::getLast();
+    if ($crumb instanceof breadcrumb) {
+        $link=$crumb->getLink();
+    } else {
+        $link = $redirect;
+    }
     redirect($link, "Redirect");
 } else {
     $action = "display";

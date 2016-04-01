@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -53,8 +53,8 @@ echo "\n";
 ?>
     </div>
     <div class="intro" id="first">
-      <?php echo sprintf(translate("Welcome %s. %s currently contains"), 
-          $user->person->getLink(), 
+      <?php echo sprintf(translate("Welcome %s. %s currently contains"),
+          $user->person->getLink(),
           conf::get("interface.title")) . "\n"; ?>
       <ul class="intro">
         <li>
@@ -64,14 +64,14 @@ echo "\n";
           </a>
         </li>
         <li>
-          <?php echo sprintf(translate("%s photos in %s"), $category_photoCount, 
+          <?php echo sprintf(translate("%s photos in %s"), $category_photoCount,
               $category_count) ?>
             <a href="categories.php">
               <?php echo $category_count == 1 ? translate("category") : translate("categories") ?>
             </a>
           </li>
 <?php
-if ($user->is_admin() || $user->get("browse_people")) {
+if ($user->isAdmin() || $user->get("browse_people")) {
     $person_count = person::getCountForUser();
     ?>
     <li>
@@ -82,7 +82,7 @@ if ($user->is_admin() || $user->get("browse_people")) {
     </li>
     <?php
 }
-if ($user->is_admin() || $user->get("browse_places")) {
+if ($user->isAdmin() || $user->get("browse_places")) {
     $place_count = place::getCount();
     ?>
     <li>
@@ -104,27 +104,27 @@ $min_rating = (int) $user->prefs->get("random_photo_min_rating");
 $recent->sub(new DateInterval("P" . (int) $sub_days . "D"));
 $timestamp=$recent->format("Y-m-d");
 
-echo sprintf(translate("You may search for photos %s taken %s or %s modified %s in " . 
-    "the past %s days."), "<a href=\"photos.php?_date-op=%3E%3D&amp;date=" . $timestamp . "\">", 
-    "</a>", "<a href=\"photos.php?_timestamp-op=%3E%3D&amp;timestamp=" . $timestamp . "\">", 
+echo sprintf(translate("You may search for photos %s taken %s or %s modified %s in " .
+    "the past %s days."), "<a href=\"photos.php?_date-op=%3E%3D&amp;date=" . $timestamp . "\">",
+    "</a>", "<a href=\"photos.php?_timestamp-op=%3E%3D&amp;timestamp=" . $timestamp . "\">",
     "</a>", $sub_days);
 echo "\n";
 echo sprintf(translate("Or you may use the %s search page %s to find photos using " .
-    "multiple criteria. You may also view a %s randomly chosen photo %s like the one above."), 
-    "<a href=\"search.php\">", "</a>", 
+    "multiple criteria. You may also view a %s randomly chosen photo %s like the one above."),
+    "<a href=\"search.php\">", "</a>",
     "<a href=\"photos.php?_random=1&amp;_rating-op=%3E%3D&amp;rating=" . $min_rating . "\">",
     "</a>");
 echo "\n        <p class=\"intro\">\n";
 echo sprintf(translate("These options are always available in the tabs on the upper right. " .
     "Use the %s home %s link to return here. Click on any thumbnail to see a larger version " .
-    "along with information about that photo."),"<a href=\"zoph.php\">","</a>"); 
+    "along with information about that photo."),"<a href=\"zoph.php\">","</a>");
 echo "\n        </p>\n";
 if ($user->get("user_id") != conf::get("interface.user.default")) {
     ?>
     <p class="intro">
     <?php echo sprintf(translate("To edit your preferences or change your password, " .
         "click %s here %s."),"<a href=\"prefs.php\">","</a>");
-    echo "\n        </p>\n"; 
+    echo "\n        </p>\n";
 }
 ?>
     <p class="version">

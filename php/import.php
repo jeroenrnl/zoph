@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,12 +20,12 @@
  */
 
 require_once "include.inc.php";
-if ((!conf::get("import.enable")) || (!$user->is_admin() && !$user->get("import"))) {
+if ((!conf::get("import.enable")) || (!$user->isAdmin() && !$user->get("import"))) {
         redirect("zoph.php");
 }
 
 // Detect upload larger than upload_max_filesize.
-if(isset($_GET["upload"]) && $_GET["upload"]==1 && $_POST==null) {
+if (isset($_GET["upload"]) && $_GET["upload"]==1 && $_POST==null) {
     echo WebImport::handleUploadErrors(UPLOAD_ERR_INI_SIZE);
     die();
 }
@@ -42,23 +42,23 @@ session_write_close();
 // Generate an id for the uploads so multiple simultanious uploads will
 // not clash.
 $upload_id=getvar("upload_id");
-if(empty($upload_id)) {
+if (empty($upload_id)) {
     $upload_id=uniqid("zoph_");
 } else {
-    if(!preg_match("/^[A-Za-z0-9_]+$/", $upload_id)) {
+    if (!preg_match("/^[A-Za-z0-9_]+$/", $upload_id)) {
         log::msg("Illegal characters in upload_id", log::FATAL, log::IMPORT);
     }
 }
 
-$num=escape_string(getvar("num"));
-if($num && !is_numeric($num)) {
+$num=e(getvar("num"));
+if ($num && !is_numeric($num)) {
     log::msg("num must be numeric", log::FATAL, log::IMPORT);
 } else if (!$num) {
     $num=1;
 }
 
 
-if(empty($_action)) {
+if (empty($_action)) {
     $javascript=
         "translate=new Array();\n" .
         "translate['retry']='" .trim(translate("retry", false)) . "';\n" .
@@ -77,11 +77,11 @@ if(empty($_action)) {
     echo $tpl;
     include "footer.inc.php";
 } else if ($_action=="browse") {
-    if(conf::get("import.upload")) {
+    if (conf::get("import.upload")) {
         $upload_num = $upload_id . "_" . $num;
 
         $body=new block("uploadform", array(
-            "progress"  => WebImport::getProgressName(),
+            "progress"  => ini_get("session.upload_progress.name"),
             "action"    => "import.php?upload=1",
             "onsubmit"  => "zImport.startUpload(this, upload_id, num); return true",
             "num"       => $num,
@@ -110,11 +110,11 @@ if(empty($_action)) {
     </html>
     <?php
 } else if ($_action=="upload") {
-    if(conf::get("import.upload")) {
-        if($_FILES["file"]) {
+    if (conf::get("import.upload")) {
+        if ($_FILES["file"]) {
             $file=$_FILES["file"];
         }
-        $upload_num=getvar(WebImport::getProgressName());
+        $upload_num=getvar(ini_get("session.upload_progress.name"));
 
         WebImport::processUpload($file);
 

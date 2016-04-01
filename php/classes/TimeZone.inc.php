@@ -9,7 +9,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -39,12 +39,12 @@ class TimeZone extends DateTimeZone {
         $xml = new DOMDocument('1.0','UTF-8');
         $rootnode=$xml->createElement("zones");
 
-        $zones=self::listIdentifiers();
+        $zones=static::listIdentifiers();
         array_unshift($zones, "&nbsp;");
         $len=strlen($search);
-        foreach($zones as $id => $tz) {
+        foreach ($zones as $id => $tz) {
             $tzshort=strtolower(substr($tz,0,$len));
-            if(strtolower($search)==$tzshort) {
+            if (strtolower($search)==$tzshort) {
                 $newchild=$xml->createElement("tz");
                 $key=$xml->createElement("key");
                 $title=$xml->createElement("title");
@@ -65,7 +65,7 @@ class TimeZone extends DateTimeZone {
      * @return array zones
      */
     public static function getSelectArray() {
-        $zones=self::listIdentifiers();
+        $zones=static::listIdentifiers();
         array_unshift($zones, "");
         return $zones;
     }
@@ -75,7 +75,7 @@ class TimeZone extends DateTimeZone {
      * @return array zones with names as key
      */
     public static function getTzArray() {
-        $zones=self::getSelectArray();
+        $zones=static::getSelectArray();
         $zones=array_values($zones);
         $zones=array_combine($zones, $zones);
         return $zones;
@@ -87,7 +87,7 @@ class TimeZone extends DateTimeZone {
      * @return string key
      */
     public static function getKey($tz) {
-        return array_search($tz,self::getSelectArray());
+        return array_search($tz,static::getSelectArray());
     }
 
     /**
@@ -99,20 +99,20 @@ class TimeZone extends DateTimeZone {
      */
     public static function createPulldown($name, $value=null) {
         $id=preg_replace("/^_+/", "", $name);
-        if($value) {
+        if ($value) {
             $text=$value;
         } else {
             $text="";
         }
 
-        if(conf::get("interface.autocomplete")) {
+        if (conf::get("interface.autocomplete")) {
             $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
                 " value='" . $value . "'>";
             $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
                 " value='" . $text . "' class='autocomplete'>";
         } else {
-            $html=template::createPulldown("timezone_id", self::getKey($value), 
-                self::getSelectArray());
+            $html=template::createPulldown("timezone_id", static::getKey($value),
+                static::getSelectArray());
         }
         return $html;
     }
@@ -124,7 +124,7 @@ class TimeZone extends DateTimeZone {
      */
     public static function validate($tz) {
         // Checks if $tz contains a valid timezone string
-        $tzones=self::listIdentifiers();
+        $tzones=static::listIdentifiers();
         return array_search($tz, $tzones);
     }
 
@@ -136,27 +136,27 @@ class TimeZone extends DateTimeZone {
      * @return string timezone
      */
     public static function guess($lat, $lon) {
-        if(class_exists("XMLReader")) {
+        if (class_exists("XMLReader")) {
             $failed=false;
             $xml=new XMLReader();
-            @$xml->open("http://api.geonames.org/timezone?username=zoph&lat=" . 
+            @$xml->open("http://api.geonames.org/timezone?username=zoph&lat=" .
                 $lat . "&lng=" . $lon) or $failed=true;
-            
+
             if (!$failed) {
-                while($xml->read()) {
-                    if($xml->name=="timezoneId") {
+                while ($xml->read()) {
+                    if ($xml->name=="timezoneId") {
                         $xml->read();
                         return $xml->value;
                     }
                 }
             } else {
                 $error=error_get_last();
-                log::msg("Could not connect to Geonames site: " . 
+                log::msg("Could not connect to Geonames site: " .
                     $error["message"], log::ERROR, log::GENERAL);
             }
             return null;
         }
-    }    
+    }
 }
 
 ?>

@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,7 +23,7 @@
 
 require_once "include.inc.php";
 
-if (!$user->is_admin()) {
+if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 
@@ -38,21 +38,21 @@ require_once "header.inc.php";
     </h1>
     <div class="main">
 <?php
-$groups = get_groups();
+$groups = group::getRecords("group_name");
 
 if ($groups) {
     echo "<dl class='groups'>";
-    foreach($groups as $group) {
+    foreach ($groups as $group) {
         ?>
-        <dt><?php echo $group->get("group_name") ?></dt>
+        <dt><?php echo $group->getName() ?></dt>
         <dd>
         <?php
         echo $group->get("description") . "<br>";
-        echo $group->get_members_links();
+        echo implode("&nbsp;", $group->getMemberLinks());
         ?>
         </dd>
         <span class="actionlink">
-          <a href="group.php?group_id=<?php echo $group->get("group_id") ?>">
+          <a href="group.php?group_id=<?php echo $group->getId() ?>">
             <?php echo translate("display") ?>
           </a>
         </span>

@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -25,15 +25,15 @@
 require_once "include.inc.php";
 
 $_view=getvar("_view");
-if(empty($_view)) {
+if (empty($_view)) {
     $_view=$user->prefs->get("view");
 }
 $_autothumb=getvar("_autothumb");
-if(empty($_autothumb)) {
+if (empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
-if (!$user->is_admin() && !$user->get("browse_places")) {
+if (!$user->isAdmin() && !$user->get("browse_places")) {
     redirect("zoph.php");
 }
 
@@ -47,22 +47,35 @@ $place->lookup();
 $obj=&$place;
 $ancestors = $place->get_ancestors();
 $order = $user->prefs->get("child_sortorder");
-$children = $place->getChildrenForUser($order);
+$children = $place->getChildren($order);
 $totalPhotoCount = $place->getTotalPhotoCount();
 $photoCount = $place->getPhotoCount();
 
 $title = $place->get("parent_place_id") ? $place->get("title") : translate("Places");
 
+$pagenum = getvar("_pageset_page");
+
 require_once "header.inc.php";
+
+try {
+    $pageset=$place->getPageset();
+    $page=$place->getPage($request_vars, $pagenum);
+    $showOrig=$place->showOrig($pagenum);
+} catch (pageException $e) {
+    $showOrig=true;
+    $page=null;
+}
+
 ?>
 <h1>
 
 <?php
-if ($user->is_admin()) {
-    $new="<a href=\"place.php?_action=new&amp;parent_place_id=" . $place->get("place_id") . "\">" . 
+$new=null;
+if ($user->isAdmin()) {
+    $new="<a href=\"place.php?_action=new&amp;parent_place_id=" . $place->get("place_id") . "\">" .
       translate("new") . "</a> |";
 }
-if ($user->is_admin() || $user->get("browse_tracks")) {
+if ($user->isAdmin() || $user->get("browse_tracks")) {
     ?>
     <span class="actionlink">
         <?php echo $new; ?>
@@ -74,12 +87,14 @@ if ($user->is_admin() || $user->get("browse_tracks")) {
 <?php echo translate("places") . "\n" ?>
 </h1>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     include "selection.inc.php";
 }
-$page_html="";
-include "show_page.inc.php";
-if ($show_orig) {
+if ($place->showPageOnTop()) {
+    echo $page;
+}
+
+if ($showOrig) {
     ?>
     <div class="main">
       <form class="viewsettings" method="get" action="places.php">
@@ -94,17 +109,17 @@ if ($show_orig) {
       </form>
       <br>
     <?php
-    if ($user->is_admin()) {
+    if ($user->isAdmin()) {
         ?>
         <span class="actionlink">
             <a href="place.php?_action=edit&amp;place_id=<?php echo $place->get("place_id") ?>">
                 <?php echo translate("edit") ?>
-            </a> | 
+            </a> |
             <a href="place.php?_action=delete&amp;place_id=<?php echo $place->get("place_id") ?>">
                 <?php echo translate("delete") ?>
             </a>
         <?php
-        if($place->get("coverphoto")) {
+        if ($place->get("coverphoto")) {
             ?>
                 |
                 <a href="place.php?_action=update&amp;place_id=<?php echo $place->get("place_id") ?>&amp;coverphoto=NULL">
@@ -114,7 +129,7 @@ if ($show_orig) {
         }
         ?>
         </span>
-        
+
         <h2>
         <?php
         if ($ancestors) {
@@ -133,7 +148,7 @@ if ($show_orig) {
     ?>
         </p>
     <?php
-    if ($user->get("detailed_places") || $user->is_admin()) {
+    if ($user->get("detailed_places") || $user->isAdmin()) {
         echo $place->toHTML();
         if ($place->get("notes")) {
             echo "<p>";
@@ -153,7 +168,7 @@ if ($show_orig) {
     <br><br>
     <?php
     $fragment = translate("in this place");
-    if($totalPhotoCount > 0) {
+    if ($totalPhotoCount > 0) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
             <span class="actionlink">
@@ -161,7 +176,7 @@ if ($show_orig) {
                 <?php echo translate("view photos") ?>
               </a>
             </span>
-            <?php   
+            <?php
             $fragment .= " " . translate("or its children");
             if ($totalPhotoCount > 1) {
                 echo sprintf(translate("There are %s photos"), $totalPhotoCount);
@@ -193,10 +208,10 @@ if ($show_orig) {
         }
     } else {
         echo translate("There are no photos");
-        echo $fragment . ".<br>\n"; 
+        echo $fragment . ".<br>\n";
     }
     if ($children) {
-        $tpl=new template("view_" . $_view, array(
+        $tpl=new block("view_" . $_view, array(
             "id"        => $_view . "view",
             "items"     => $children,
             "autothumb" => $_autothumb,
@@ -209,17 +224,19 @@ if ($show_orig) {
     ?>
     </div>
     <?php
-    if(conf::get("maps.provider")) {
+    if (conf::get("maps.provider")) {
         $map=new map();
         $map->setCenterAndZoomFromObj($place);
         $marker=$place->getMarker();
-        if($marker instanceof marker) {
+        if ($marker instanceof marker) {
             $map->addMarker($marker);
         }
         $map->addMarkers($children);
         echo $map;
     }
 } // if show_orig
-echo $page_html;
+if ($place->showPageOnBottom()) {
+    echo $page;
+}
 require_once "footer.inc.php";
 ?>

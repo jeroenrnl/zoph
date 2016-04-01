@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 
 <div id="<?php echo $tpl_id ?>" class="map">
@@ -28,22 +28,22 @@ if(!ZOPH) { die("Illegal call"); }
 <script type="text/javascript">
     // Transform div into map:
     zMaps.createMap("<?php echo $tpl_id ?>","<?php echo $tpl_provider?>");
-    <?php if($this->hasMarkers()): ?>
+    <?php if ($this->hasMarkers()): ?>
         // Add markers:
         <?php foreach ($this->getMarkers() as $m): ?>
-            zMaps.createMarker("<?php echo $m->lat ?>","<?php echo $m->lon ?>", 
-                icons["<?php echo $m->icon ?>"], '<?php echo $m->title ?>',
-                '<?php echo $m->quicklook ?>');
+            zMaps.createMarker("<?php echo $m->lat ?>","<?php echo $m->lon ?>",
+                icons["<?php echo $m->icon ?>"], '<?php echo str_replace("'", "\\'", $m->title) ?>',
+                '<?php echo str_replace("'", "\\'", $m->quicklook) ?>');
         <?php endforeach ?>
     <?php endif ?>
-    
-    <?php if($this->hasTracks()): ?>
+
+    <?php if ($this->hasTracks()): ?>
         // Add tracks:
         // @todo: might not work with multiple tracks.
         <?php foreach ($this->getTracks() as $track): ?>
             var points=new Array();
-            <?php foreach($track->getPoints() as $point): ?>
-                points.push(new mxn.LatLonPoint(<?php echo $point->get("lat") ?>, 
+            <?php foreach ($track->getPoints() as $point): ?>
+                points.push(new mxn.LatLonPoint(<?php echo $point->get("lat") ?>,
                     <?php echo $point->get("lon") ?>));
             <?php endforeach; ?>
             track=new mxn.Polyline(points)
@@ -51,7 +51,7 @@ if(!ZOPH) { die("Illegal call"); }
         <?php endforeach ?>
     <?php endif ?>
 
-    <?php if(!is_null($this->clat) && (!is_null($this->clon)) && (!is_null($this->zoom))): ?>
+    <?php if (!is_null($this->clat) && (!is_null($this->clon)) && (!is_null($this->zoom))): ?>
         var center=new mxn.LatLonPoint(
             <?php echo $this->clat ?>,
             <?php echo $this->clon ?>);
@@ -59,12 +59,12 @@ if(!ZOPH) { die("Illegal call"); }
         mapstraction.setCenterAndZoom(center,zoomlevel);
     <?php else: ?>
         mapstraction.autoCenterAndZoom();
-    <?php endif ?> 
+    <?php endif ?>
 
-    <?php if($this->edit): ?>
+    <?php if ($this->edit): ?>
         zMaps.setUpdateHandlers();
     <?php endif ?>
 
 </script>
 
-            
+

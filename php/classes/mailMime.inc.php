@@ -2,40 +2,40 @@
 /**
  * HTML MIME Mail composer class
  *
- *  @copyright 2002-2003  Richard Heyes                                
- *  @copyright 2003-2005  The PHP Group                                
- *  All rights reserved.                                                  
- *                                                                        
- *  Redistribution and use in source and binary forms, with or without    
- *  modification, are permitted provided that the following conditions    
- *  are met:                                                              
- *                                                                        
- *  o Redistributions of source code must retain the above copyright      
- *    notice, this list of conditions and the following disclaimer.       
- *  o Redistributions in binary form must reproduce the above copyright   
- *    notice, this list of conditions and the following disclaimer in the 
+ *  @copyright 2002-2003  Richard Heyes
+ *  @copyright 2003-2005  The PHP Group
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  o Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  o Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- *  o The names of the authors may not be used to endorse or promote      
- *    products derived from this software without specific prior written  
- *    permission.                                                         
- *                                                                        
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS   
- *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT     
- *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR 
- *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT  
- *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
- *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT      
- *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY 
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT   
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
- *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
- *                                                                        
+ *  o The names of the authors may not be used to endorse or promote
+ *    products derived from this software without specific prior written
+ *    permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
  * @author Tobias Ratschiller <tobias@dnet.it> and
  * @author Sascha Schumann <sascha@schumann.cx>
- * @author Richard Heyes <richard@phpguru.org>                           
+ * @author Richard Heyes <richard@phpguru.org>
  * @author Tomas V.V.Cox <cox@idecnet.com> (port to PEAR)
- * 
+ *
  * @author Jeroen Roos
  *
  * @package Zoph
@@ -46,9 +46,9 @@
  * images and attachments.
  * @author Tobias Ratschiller <tobias@dnet.it> and
  * @author Sascha Schumann <sascha@schumann.cx>
- * @author Richard Heyes <richard@phpguru.org>                           
+ * @author Richard Heyes <richard@phpguru.org>
  * @author Tomas V.V.Cox <cox@idecnet.com> (port to PEAR)
- * 
+ *
  * @author Jeroen Roos
  *
  * @package Zoph
@@ -88,9 +88,9 @@ class MailMime {
      * html should show.
      *
      * @param  string  Either a string or the file name with the contents
-     * @param  bool If true the first param should be treated as a file name, 
+     * @param  bool If true the first param should be treated as a file name,
      *              else as a string (default)
-     * @param  bool If true the text or file is appended to the existing body, 
+     * @param  bool If true the text or file is appended to the existing body,
      *              else the old body is overwritten
      * @return bool true on success
      */
@@ -116,7 +116,7 @@ class MailMime {
      * Adds a html part to the mail
      *
      * @param  string Either a string or the file name with the contents
-     * @param  bool If true the first param should be treated as a file name, 
+     * @param  bool If true the first param should be treated as a file name,
      *              else as a string (default)
      * @return bool true on succes
      */
@@ -137,9 +137,9 @@ class MailMime {
      * @paramstring The image data.
      * @param string The file name
      * @param string The content type
-     * @return bool true 
+     * @return bool true
      */
-    public function addHTMLImageFromString($filedata, $filename, 
+    public function addHTMLImageFromString($filedata, $filename,
             $c_type='application/octet-stream') {
         $filename = basename($filename);
         $this->html_images[] = array(
@@ -158,23 +158,23 @@ class MailMime {
      * @param string The content type
      * @param string encoding.
      */
-    public function addHTMLImageFromFile($file, 
+    public function addHTMLImageFromFile($file,
             $c_type='application/octet-stream') {
         $filedata = $this->file2str($file);
         return $this->addHTMLImageFromString($filedata, $file, $c_type);
     }
 
     /**
-     * Adds a file to the list of attachments. The source is a string containing the 
+     * Adds a file to the list of attachments. The source is a string containing the
      * contents of the file.
      *
      * @param string The file data to use as attachment
      * @param string The content type
-     * @param string The filename of the attachment. 
+     * @param string The filename of the attachment.
      * @param string encoding.
      * @throws MailException
      */
-    public function addAttachmentFromString($filedata, $filename, 
+    public function addAttachmentFromString($filedata, $filename,
             $c_type = 'application/octet-stream', $encoding = 'base64') {
         if (empty($filename)) {
             throw new MailException("The supplied filename for the attachment can\'t be empty");
@@ -195,7 +195,7 @@ class MailMime {
      * @param string The content type
      * @param string encoding.
      */
-    public function addAttachmentFromFile($file, 
+    public function addAttachmentFromFile($file,
             $c_type = 'application/octet-stream', $encoding = 'base64') {
         $filedata=$this->file2str($file);
         $this->addAttachmentFromString($filedata, $file, $c_type, $encoding);
@@ -374,7 +374,7 @@ class MailMime {
 
         if (!empty($this->html_images) AND isset($this->htmlbody)) {
             foreach ($this->html_images as $value) {
-                $regex = '#(\s)((?i)src|background|href(?-i))\s*=\s*(["\']?)' . 
+                $regex = '#(\s)((?i)src|background|href(?-i))\s*=\s*(["\']?)' .
                     preg_quote($value['name'], '#') .  '\3#';
                 $rep = '\1\2=\3cid:' . $value['cid'] .'\3';
                 $this->htmlbody = preg_replace($regex, $rep,
@@ -396,7 +396,7 @@ class MailMime {
 
         case !$text AND !$html AND $attachments:
             $message = $this->addMixedPart();
-            foreach($this->parts as $part) {
+            foreach ($this->parts as $part) {
                 $this->addAttachmentPart($message, $part);
             }
             break;
@@ -404,7 +404,7 @@ class MailMime {
         case $text AND $attachments:
             $message = $this->addMixedPart();
             $this->addTextPart($message, $this->txtbody);
-            foreach($this->parts as $part) {
+            foreach ($this->parts as $part) {
                 $this->addAttachmentPart($message, $part);
             }
             break;

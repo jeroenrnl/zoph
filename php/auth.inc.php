@@ -1,14 +1,14 @@
 <?php
 /**
  * Check if user is logged in, or perform authentication
- * 
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,13 +29,13 @@
  */
 
 $_action="display";
-if(!defined("CLI")) {
+if (!defined("CLI")) {
     session_start();
     if (array_key_exists('user', $_SESSION)) {
         $user = $_SESSION['user'];
 
-        if($user instanceof anonymousUser) {
-            if(!defined("IMAGE_PHP")) {
+        if ($user instanceof anonymousUser) {
+            if (!defined("IMAGE_PHP")) {
                 unset($user);
                 $_action="logout";
             }
@@ -49,13 +49,13 @@ if(!defined("CLI")) {
     } else {
         $username=$_SERVER["USER"];
         $user=user::getByName($username);
-        if(!$user) {
+        if (!$user) {
             throw new CliUserNotValidException($username . " is not a valid user");
-        }    
+        }
     }
     $user->lookup();
-    $user->lookup_person();
-    $user->lookup_prefs();
+    $user->lookupPerson();
+    $user->lookupPrefs();
 }
 
 
@@ -67,7 +67,7 @@ if ($_action == "logout") {
     redirect("logon.php", "Logout");
 } else if (empty($user)) {
     $hash=getvar("hash");
-    if(defined("IMAGE_PHP") && conf::get("share.enable") && !empty($hash)) {
+    if (defined("IMAGE_PHP") && conf::get("share.enable") && !empty($hash)) {
         require_once "classes/anonymousUser.inc.php";
         $user = new anonymousUser();
     } else {
@@ -82,9 +82,9 @@ if ($_action == "logout") {
     // we have a valid user
     if (!empty($user)) {
         $user->lookup();
-        $user->lookup_person();
-        $user->lookup_prefs();
-        
+        $user->lookupPerson();
+        $user->lookupPrefs();
+
         // Update Last Login Fields
         $updated_user = new user($user->get("user_id"));
         $updated_user->set("lastlogin", "now()");
@@ -99,9 +99,9 @@ if ($_action == "logout") {
 
 if (!empty($user)) {
     $user->prefs->load();
-    $lang=$user->load_language();
+    $lang=$user->loadLanguage();
     user::setCurrent($user);
-        
+
     if (!defined("CLI")) {
         $_SESSION['user'] = &$user;
     }
@@ -116,12 +116,12 @@ if (!empty($user)) {
             $redirect_clean = "http://" . $_SERVER['SERVER_NAME'] . $redirect_clean;
         }
         redirect($redirect_clean, "Redirect");
-    } 
+    }
     if (array_key_exists('HTTPS', $_SERVER) && (conf::get("ssl.force")=="login")) {
         redirect(getZophURL("http"), "switch back from https to http");
     }
 } else {
     $lang = new language(conf::get("interface.language"));
-}        
+}
 
 ?>

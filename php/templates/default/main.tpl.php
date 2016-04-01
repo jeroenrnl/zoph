@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,7 +20,7 @@
  * @todo This is a temporary template until the entire zoph page is generated from a template
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 require_once "header.inc.php";
 ?>
     <h1>
@@ -30,7 +30,7 @@ require_once "header.inc.php";
     <div class="main">
         <?php echo $this->displayBlocks(); ?>
     </div>
-    <?php if(!empty($tpl_mapping_js)): ?>
+    <?php if (!empty($tpl_mapping_js)): ?>
     <div class="map" id="map">
     </div>
     <script type='text/javascript'>

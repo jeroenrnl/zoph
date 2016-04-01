@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -30,16 +30,16 @@ require_once "include.inc.php";
 $photo_id = getvar("photo_id");
 $type = getvar("type");
 
-if(($type=="import_thumb" || $type=="import_mid") && 
-    ($user->is_admin() || $user->get("import"))) {
+if (($type=="import_thumb" || $type=="import_mid") &&
+    ($user->isAdmin() || $user->get("import"))) {
 
     $md5 = getvar("file");
     $file = file::getFromMD5(conf::get("path.images") . "/" . conf::get("path.upload"), $md5);
-    
+
     $photo = new photo();
     $photo->set("name", basename($file));
     $photo->set("path", conf::get("path.upload"));
-    if($type=="import_thumb") {
+    if ($type=="import_thumb") {
         $type="thumb";
     } else if ($type=="import_mid") {
         $type="mid";
@@ -65,7 +65,7 @@ if(($type=="import_thumb" || $type=="import_mid") &&
     $photo = new annotatedPhoto($photo_id);
     $found = $photo->lookup();
     $photo->setVars($request_vars);
-    if(getvar("_size")=="mid") {
+    if (getvar("_size")=="mid") {
         $type=MID_PREFIX;
     }
 } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {
@@ -78,12 +78,12 @@ if ($found) {
     $name = $photo->get("name");
     $image_path = conf::get("path.images") . "/" . $photo->get("path") . "/";
     $watermark_file="";
-    
-    if(!$user->is_admin() && conf::get("watermark.enable")) {
-        $permissions = $user->get_permissions_for_photo($photo_id);
+
+    if (!$user->isAdmin() && conf::get("watermark.enable")) {
+        $permissions = $user->getPhotoPermissions($photo);
         $watermark = $permissions->get("watermark_level");
         $photolevel=$photo->get("level");
-        if($photolevel > $watermark) {
+        if ($photolevel > $watermark) {
             $photo=new watermarkedPhoto($photo_id);
             $photo->lookup();
         }
@@ -91,8 +91,8 @@ if ($found) {
 
     list($headers, $image)=$photo->display($type);
 
-    foreach($headers as $label=>$value) {
-        if($label=="http_status") {
+    foreach ($headers as $label=>$value) {
+        if ($label=="http_status") {
             // http status codes do not have a label
             header($value);
         } else {
@@ -100,7 +100,7 @@ if ($found) {
         }
     }
 
-    if(!is_null($image)) {
+    if (!is_null($image)) {
         echo $image;
     }
     exit;

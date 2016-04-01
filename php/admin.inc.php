@@ -9,7 +9,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -53,17 +53,17 @@ class admin {
      * Get an array of all entries in the admin page
      */
     public static function getArray() {
-        if(empty(self::$pages)) {
-            self::createArray();
+        if (empty(static::$pages)) {
+            static::createArray();
         }
-        return self::$pages;
+        return static::$pages;
     }
 
     /**
      * Fill the static array containing the entries for the admin page
      */
     private static function createArray() {
-        self::$pages=array(
+        static::$pages=array(
             new admin("users", "create or modify user accounts", "users.php", "users.png"),
             new admin("groups", "create or modify user groups", "groups.php", "groups.png"),
             new admin("pages", "create or modify zoph pages", "pages.php", "pages.png"),

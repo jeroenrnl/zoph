@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -42,7 +42,7 @@
           <?php echo create_text_input("called", $person->get("called"), 16, 16) ?>
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "16") ?></span><br>
           <label for="gender"><?php echo translate("gender") ?></label>
-          <?php echo template::createPulldown("gender", $person->get("gender"), 
+          <?php echo template::createPulldown("gender", $person->get("gender"),
             array("1" => translate("male",0), "2" => translate("female",0))) ?><br>
           <label for="dob"><?php echo translate("date of birth") ?></label>
           <?php echo create_text_input("dob", $person->get("dob"), 12, 10) ?>
@@ -64,8 +64,8 @@
           <label for="spouse"><?php echo translate("spouse") ?></label>
           <?php echo person::createPulldown("spouse_id", $person->get("spouse_id")) ?><br>
           <label for="pageset"><?php echo translate("pageset") ?></label>
-          <?php echo template::createPulldown("pageset", $person->get("pageset"), 
-              get_pageset_select_array()) ?><br>
+          <?php echo template::createPulldown("pageset", $person->get("pageset"),
+              template::createSelectArray(pageset::getRecords("title"), array("title"), true)) ?><br>
           <label for="notes"><?php echo translate("notes") ?></label>
           <textarea name="notes" cols="40" rows="4">
             <?php echo $person->get("notes") ?>

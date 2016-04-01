@@ -1,12 +1,65 @@
 # Zoph Changelog #
 
+##Zoph 0.9.2##
+###1 apr 2016###
+
+Zoph 0.9.2 is the new stable release. I have decided to drop the separation between 'stable' and 'unstable' or 'feature' releases. This means that it is recommended for everyone to upgrade to this release.
+
+###Features###
+* Issue #44 : Added 'circles': a way to group people in Zoph. This is especially handy if you have a large amount of people in your Zoph, and the 'person' page is becoming confusing or cluttered.
+* Issue #46 A circle and it's members can be surpressed in the overview page, so you can, for example, hide people that you added only for a small set of photos.
+* Issue #20 Zoph has switched to the PDO classes for database access. This ensures compatibility with PHP in the future, because the old mysql libs will be dropped soon.
+* Issue #32 It is now possible to set more properties of a photo, including map zoom from the web import.
+* Issue #60 The link text for "next" and "previous" as well as page numbers has been increased in size for better usability esp. on mobile devices
+* Added a script for fixing filename case (by Jason Taylor [@JiCit] )
+* Access Google maps via https (Jason Taylor [@JiCiT])
+* As of this version, the language files are in the php dir, and no longer need to be copied or moved separately
+
+###Bugs###
+* [http://github.com/jeroenrnl/zoph/issues/49 Issue #49] Zoph now supports MySQL strict mode
+* [http://github.com/jeroenrnl/zoph/issues/55 Issue #55] Autocomplete not working for people
+* [http://github.com/jeroenrnl/zoph/issues/58 Issue #58] Sort order for albums and categories can not be changed
+* CLI: Fixed an issue where Zoph would try to import to the current directory when double spaces were present in CLI
+* Better handling of file not found problems during import
+* Fixed two bugs that caused maps not to display
+* Fixed an issue where breadcrumbs wouldn't be removed correctly in some cases
+* Changed erronous extension of Exception class
+* Fixed slow login times for non-admin users
+* Improved performance on people page
+* Fixed: zoom buttons are missing from Google Maps
+* Remove duplicate files from import (if you would specify the same file twice on CLI import, you would get an error, this is now filtered out)
+* Fixed an issue where the person pulldown on the add user page appeared to be empty
+* Remove a user from a group when a the user is deleted
+* Fixed a warning about unknown variable on places page
+* Allow apostropes in place names when creating map markers (Jason Taylor [@JiCiT])
+
+###Refactor###
+* A complete new query builder has been created
+* Many more parts of Zoph can be (and are being) tested automatically now, this should improve overall quality and reduce bugs
+* Many parts of Zoph have been cleaned up to modernize code to the current state of PHP - dropping PHP 5.3 and 5.4 compatibility
+* Dropped MSIE6/7 compatibility
+* Added documentation to many parts of Zoph's source code
+* Many changes to readability of source code, such as more consistent use of whitespace
+* Added some more debugging possibilities to easier troubleshoot in case of problems
+* Changed logging so less logging is displayed when set to log::NONE
+* Changed all self:: references into static:: references
+* Added function scope to many methods
+* Started using namespaces to better organize the classes
+* Updated version numbers in REQUIREMENTS readme. 
+* Issue #8 (partial) Changed several parts of Zoph to use templates 
+* Added improvements to templating system
+* Modified query for photo access rights to a view for performance reasons
+* Changed logging so SQL query log to file can be done without displaying 
+* Performance improvement on place page
+* Added a posibility to debug queries including parameters
+
 ## Zoph 0.9.1 ##
 ### 21 Feb 2014 ###
 Zoph 0.9.1 is the first feature release for Zoph 0.9, it shows a preview of some of the new features for Zoph 0.10. Most important change is the move of most configuration items from config.inc.php into the Web GUI.
 
 ####Features####
 
-* issue#28 Configuration through webinterface 
+* Issue #28 Configuration through webinterface 
 * Removed display desc under thumbnail feature 
 * Removed MIXED_THUMBNAILS and THUMB_EXTENSION settings 
 * removed DEFAULT_SHOW_ALL setting 
@@ -15,27 +68,27 @@ Zoph 0.9.1 is the first feature release for Zoph 0.9, it shows a preview of some
 * Removed alternative password validators 
 * Removed checks for PHP 5.1 
 * Adding CLI support for configuration 
-* issue#7 Added a favicon 
-* issue#18 Added "return" link on bulk edit page 
+* Issue #7 Added a favicon 
+* Issue #18 Added "return" link on bulk edit page 
 * Added a script to migrate config to new db-based system 
-* issue#8 Made template selectible from webinterface 
+* Issue #8 Made template selectible from webinterface 
 * Removed MAX_CRUMBS 
 
 ####Bugs####
 
 * Simplified CLI code & fixed bug in --autoadd
-* issue#34 Rows and columns swapped on photos page
-* issue#36 Webimporter does not import description
-* issue#37 Can not add position on map using the mouse
+* Issue #34 Rows and columns swapped on photos page
+* Issue #36 Webimporter does not import description
+* Issue #37 Can not add position on map using the mouse
 * Fixed a bug that caused EXIF information in some (rare) cases to report the aperture wrong.
 * Strict standards warning 
-* issue#45 Pagebreak inside HTML tags causes browser to render incorrectly
-* issue#45 Added selectArray cache to zophTable
-* issue#48 Repair photo ratings during import
-* issue#50 Geonames project has changed URL and requires username
-* issue#51 Fixed depth in tree display when autocorrect is off
-* issue#39 Added support for session.upload_progress as APC replacement (PHP 5.4 compatibility)
-* issue#38 CLI tries to lookup previous argument's value when looking up photographer
+* Issue #45 Pagebreak inside HTML tags causes browser to render incorrectly
+* Issue #45 Added selectArray cache to zophTable
+* Issue #48 Repair photo ratings during import
+* Issue #50 Geonames project has changed URL and requires username
+* Issue #51 Fixed depth in tree display when autocorrect is off
+* Issue #39 Added support for session.upload_progress as APC replacement (PHP 5.4 compatibility)
+* Issue #38 CLI tries to lookup previous argument's value when looking up photographer
 
 ####Improvements####
 
@@ -44,7 +97,7 @@ to create cleaner, less duplicated and more robust code. I have introduced UnitT
 about 20% of Zoph's sourcecode now tested fully automatic for bugs). As a help to that, I am now 
 using Sonar to automatically run these tests and also analyse Zoph code for other problems.
 
-* * issue#29 First step in creating unittests for Zoph 
+* * Issue #29 First step in creating unittests for Zoph 
 * Sonar Support 
 * Refactor of PHP part of Mapping implementation 
 * Move timezone-related global functions into class 
@@ -74,7 +127,7 @@ using Sonar to automatically run these tests and also analyse Zoph code for othe
 * Removed various unused variables 
 * Removed duplicate templates 
 * Removed unused $user from createPulldown() calls. 
-* issue#40 Change documentation to Markdown        
+* Issue #40 Change documentation to Markdown        
 * Modified some queries to improve performance 
 
 ## Zoph 0.9.0.1 ##
@@ -85,14 +138,14 @@ Zoph 0.9.0.1 is the first maintenance release for Zoph 0.9. It adds compatibilit
 
 #### Bugs ####
 
-* issue#1  Changed TYPE=MyISAM to ENGINE=MyISAM for MySQL > 5.4.4 compatibility
-* issue#1  Fixed: PHP Notice: Array to string conversion
-* issue#2  Changed timestamp(14) into timestamp
-* issue#3  Removed pass-by-reference for PHP 5.4 compatibility
-* issue#6  Missing French translation
-* issue#30 Remove warning about undefined variables
-* issue#31 Fixed several errors in geotagging code
-* issue#33 Fixed: no error message when rotate fails
+* Issue #1  Changed TYPE=MyISAM to ENGINE=MyISAM for MySQL > 5.4.4 compatibility
+* Issue #1  Fixed: PHP Notice: Array to string conversion
+* Issue #2  Changed timestamp(14) into timestamp
+* Issue #3  Removed pass-by-reference for PHP 5.4 compatibility
+* Issue #6  Missing French translation
+* Issue #30 Remove warning about undefined variables
+* Issue #31 Fixed several errors in geotagging code
+* Issue #33 Fixed: no error message when rotate fails
              Fixed a small layout issue on the prefs page
 
 ## Zoph 0.9 ##

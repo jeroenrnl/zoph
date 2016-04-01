@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
@@ -35,13 +35,13 @@ require_once "header.inc.php";
     <?php echo translate("Zoph is free software.", 0) ?>
   </p>
   <p>
-    <?php echo sprintf(translate("Releases and documentation can be found at %s.", 0), 
+    <?php echo sprintf(translate("Releases and documentation can be found at %s.", 0),
       "<a href=\"http://www.zoph.org/\">http://www.zoph.org/</a>") ?>
-    <?php echo sprintf(translate("Send feedback to %s.", 0), "<img src=\"" . 
+    <?php echo sprintf(translate("Send feedback to %s.", 0), "<img src=\"" .
       template::getImage("mailaddr.png") . "\">") ?>
   </p>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
     <br>
     <table id="zophinfo">

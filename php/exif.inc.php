@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -29,8 +29,8 @@ function process_exif($image) {
     $exifdata = array();
     $file=new file($image);
     $mime=$file->getMime();
-    
-    if($mime == "image/jpeg") {
+
+    if ($mime == "image/jpeg") {
         $exif = read_exif_data($image);
     } else {
         $exif = false;
@@ -89,17 +89,17 @@ function process_exif($image) {
         //$exifdata["flash_used"] = $exif["Flash"] ? "Yes" : "No";
 
         // Revamped to handled more expressive flash indications
-        $fYN="No";
+        $fYN="N";
 
         switch ($exif["Flash"]) {
 
         // Flash Not Fired
         case 16:
-        case 0: $fYN="No"; break;
+        case 0: $fYN="N"; break;
 
         // Flash Fired
         case 9:
-        default: $fYN="Yes"; break;
+        default: $fYN="Y"; break;
         }
 
         $exifdata["flash_used"] = $fYN;
@@ -107,14 +107,14 @@ function process_exif($image) {
 
     if (isset($exif["FocalLength"])) {
         list($a, $b) = explode('/', $exif["FocalLength"]);
-        if($b>0) {
+        if ($b>0) {
             $exifdata["focal_length"] = sprintf("%.1fmm", $a / $b);
         }
     }
     $exifdata["exposure"]="";
     if (isset($exif["ExposureTime"])) {
         list($a, $b) = explode('/', $exif["ExposureTime"]);
-        if($b>0) {
+        if ($b>0) {
             $val = $a / $b;
             $exifdata["exposure"] = sprintf("%.3f s", $val);
             if ($val <= 0.5) {
@@ -140,19 +140,19 @@ function process_exif($image) {
 
     if (isset($exif["FNumber"])) {
         list($a, $b) = explode('/', $exif["FNumber"]);
-        if($b>0) {
+        if ($b>0) {
             $exifdata["aperture"] = sprintf("f/%.1f", $a / $b);
-        } 
+        }
     }
     else if (isset($exif["ApertureValue"])) {
         list($a, $b) = explode('/', $exif["ApertureValue"]);
-        if($b>0) {
+        if ($b>0) {
             $exifdata["aperture"] = sprintf("f/%.1f", pow(2,($a / $b)/2));
         }
     }
     else if (isset($exif["MaxApertureValue"])) {
         list($a, $b) = explode('/', $exif["MaxApertureValue"]);
-        if($b>0) {
+        if ($b>0) {
             $exifdata["aperture"] = sprintf("f/%.1f", pow(2,($a / $b)/2));
         }
     }
@@ -195,7 +195,7 @@ function process_exif($image) {
 
     if (isset($exif["CompressedBitsPerPixel"])) {
         list($a, $b) = explode('/', $exif["CompressedBitsPerPixel"]);
-        if($b>0) {
+        if ($b>0) {
             $val = round($a / $b);
             switch ($val) {
             case 1:
@@ -215,7 +215,7 @@ function process_exif($image) {
         $exifdata["comment"] = $exif["Comment"];
     }
 
-    if (isset($exif["GPSLatitudeRef"]) && isset($exif["GPSLatitude"]) && 
+    if (isset($exif["GPSLatitudeRef"]) && isset($exif["GPSLatitude"]) &&
         isset($exif["GPSLongitudeRef"]) && isset($exif["GPSLongitude"])) {
         $latarray=$exif["GPSLatitude"];
 
@@ -235,11 +235,11 @@ function process_exif($image) {
 
         $lat=$latdeg + ($latmin / 60) + ($latsec / 3600);
 
-        if($exif["GPSLatitudeRef"] == "S") {
+        if ($exif["GPSLatitudeRef"] == "S") {
             $lat = $lat * -1;
         }
         $exifdata["lat"]=$lat;
-        
+
         $lonarray=$exif["GPSLongitude"];
 
         $londegarray=explode("/", $lonarray[0]);
@@ -252,19 +252,19 @@ function process_exif($image) {
 
         $lon=$londeg + ($lonmin / 60) + ($lonsec / 3600);
 
-        if($exif["GPSLongitudeRef"] == "W") {
+        if ($exif["GPSLongitudeRef"] == "W") {
             $lon = $lon * -1;
         }
         $exifdata["lon"]=$lon;
         /*
         // No alt in db yet
-        if(isset($exif["GPSAltitude"])) {
+        if (isset($exif["GPSAltitude"])) {
             $altarray=explode("/", $exif["GPSAltitude"]);
             $alt=$altarray[0] / $altarray[1];
             $exifdata["alt"]=$alt;
         }
         */
-    } 
+    }
 
     return $exifdata;
 }

@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -25,11 +25,11 @@
 require_once "include.inc.php";
 
 $_view=getvar("_view");
-if(empty($_view)) {
+if (empty($_view)) {
     $_view=$user->prefs->get("view");
 }
 $_autothumb=getvar("_autothumb");
-if(empty($_autothumb)) {
+if (empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
@@ -43,35 +43,50 @@ $category->lookup();
 $obj=&$category;
 $ancestors = $category->get_ancestors();
 $order = $user->prefs->get("child_sortorder");
-$children = $category->getChildrenForUser($order);
+$children = $category->getChildren($order);
 
 $photoCount = $category->getPhotoCount();
 $totalPhotoCount = $category->getTotalPhotoCount();
 
-$title = $category->get("parent_category_id") ? 
+$title = $category->get("parent_category_id") ?
     $category->get("category") : translate("Categories");
 
+$pagenum = getvar("_pageset_page");
+
 require_once "header.inc.php";
+
+try {
+    $pageset=$category->getPageset();
+    $page=$category->getPage($request_vars, $pagenum);
+    $showOrig=$category->showOrig($pagenum);
+} catch (pageException $e) {
+    $showOrig=true;
+    $page=null;
+}
+
 ?>
 <h1>
 <?php
-if ($user->is_admin()) {
+if ($user->isAdmin()) {
     ?>
     <span class="actionlink">
-      <a href="category.php?_action=new&amp;parent_category_id=<?php 
+      <a href="category.php?_action=new&amp;parent_category_id=<?php
         echo $category->get("category_id") ?>"><?php echo translate("new") ?>
       </a>
     </span>
-    <?php 
+    <?php
 }
 echo "\n" . translate("categories") . "\n" ?>
 </h1>
 <?php
-if($user->is_admin()) {
+if ($user->isAdmin()) {
     include "selection.inc.php";
 }
-include "show_page.inc.php";
-if($show_orig) {
+if ($category->showPageOnTop()) {
+    echo $page;
+}
+
+if ($showOrig) {
     ?>
     <div class="main">
       <form class="viewsettings" method="get" action="categories.php">
@@ -95,18 +110,18 @@ if($show_orig) {
         <?php echo $title . "\n" ?>
     </h2>
     <?php
-    if ($user->is_admin()) {
+    if ($user->isAdmin()) {
         ?>
         <span class="actionlink">
-          <a href="category.php?_action=edit&amp;category_id=<?php 
+          <a href="category.php?_action=edit&amp;category_id=<?php
             echo $category->get("category_id") ?>"><?php echo translate("edit") ?>
           </a>
         <?php
-        if($category->get("coverphoto")) {
+        if ($category->get("coverphoto")) {
             ?>
             |
-            <a href="category.php?_action=update&amp;category_id=<?php 
-                echo $category->get("category_id") ?>&amp;coverphoto=NULL"><?php 
+            <a href="category.php?_action=update&amp;category_id=<?php
+                echo $category->get("category_id") ?>&amp;coverphoto=NULL"><?php
                 echo translate("unset coverphoto") ?>
             </a>
             <?php
@@ -143,7 +158,7 @@ if($show_orig) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
             <span class="actionlink">
-                <a href="photos.php?category_id=<?php echo $category->getBranchIds() . 
+                <a href="photos.php?category_id=<?php echo $category->getBranchIds() .
                     $sort ?>"><?php echo translate("view photos") ?>
                 </a>
             </span>
@@ -169,7 +184,7 @@ if($show_orig) {
     if ($photoCount > 0) {
         ?>
         <span class="actionlink">
-            <a href="photos.php?category_id=<?php echo $category->get("category_id") . 
+            <a href="photos.php?category_id=<?php echo $category->get("category_id") .
                 $sort ?>"><?php echo translate("view photos")?>
             </a>
         </span>
@@ -184,7 +199,7 @@ if($show_orig) {
     }
 
     if ($children) {
-        $tpl=new template("view_" . $_view, array(
+        $tpl=new block("view_" . $_view, array(
             "id" => $_view . "view",
             "items" => $children,
             "autothumb" => $_autothumb,
@@ -199,6 +214,8 @@ if($show_orig) {
     </div>
     <?php
 } // if show_orig
-echo $page_html;
+if ($category->showPageOnBottom()) {
+    echo $page;
+}
 require_once "footer.inc.php";
 ?>

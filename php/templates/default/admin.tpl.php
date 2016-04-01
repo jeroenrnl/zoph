@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,7 +19,7 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 require_once "header.inc.php";
 ?>
     <h1>
@@ -27,7 +27,7 @@ require_once "header.inc.php";
     </h1>
     <div class="main">
         <ul class="admin">
-            <?php foreach($tpl_adminpages as $adminpage): ?>
+            <?php foreach ($tpl_adminpages as $adminpage): ?>
             <li>
                 <a href="<?php echo $adminpage->url ?>">
                     <img src="<?php echo $adminpage->icon; ?>">

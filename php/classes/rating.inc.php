@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,6 +21,12 @@
  * @package Zoph
  */
 
+use db\select;
+use db\param;
+use db\db;
+use db\clause;
+use db\selectHelper;
+
 /**
  * Photo ratings
  * @author Jeroen Roos
@@ -29,12 +35,12 @@
 class rating extends zophTable {
 
     /** @var string The name of the database table */
-    protected static $table_name="photo_ratings";
+    protected static $tableName="photo_ratings";
     /** @var array List of primary keys */
-    protected static $primary_keys=array("rating_id");
+    protected static $primaryKeys=array("rating_id");
     /** @var array Fields that may not be empty */
-    protected static $not_null=array("photo_id", "rating", "user_id");
-    /** @var bool keep keys with insert. In most cases the keys are set by 
+    protected static $notNull=array("photo_id", "rating", "user_id");
+    /** @var bool keep keys with insert. In most cases the keys are set by
                   the db with auto_increment */
     protected static $keepKeys = false;
     /** @var string URL for this class */
@@ -49,20 +55,20 @@ class rating extends zophTable {
     public static function getRatings(photo $photo = null, user $user = null) {
         $constraints=array();
 
-        if($photo instanceof photo) {
+        if ($photo instanceof photo) {
             $constraints["photo_id"] = (int) $photo->getId();
         }
 
-        if($user instanceof user) {
+        if ($user instanceof user) {
             $constraints["user_id"] = (int) $user->getId();
             if ($user->get("allow_multirating")) {
-                // This user is allowed to rate the same photoe  multiple 
+                // This user is allowed to rate the same photoe  multiple
                 // times, however we will allow only one from the same IP
-                $constraints["ipaddress"] = escape_string($_SERVER["REMOTE_ADDR"]);
+                $constraints["ipaddress"] = e($_SERVER["REMOTE_ADDR"]);
             }
         }
 
-        return self::getRecords(null, $constraints);
+        return static::getRecords(null, $constraints);
      }
 
     /**
@@ -71,23 +77,28 @@ class rating extends zophTable {
      * @return float average rating
      */
     public static function getAverage(photo $photo) {
-        $sql = "SELECT AVG(rating) FROM " . DB_PREFIX . "photo_ratings ".
-            " WHERE photo_id = '" . (int) $photo->getId() . "'";
-        
-        $result = query($sql, "Rating recalculation failed");
+        $qry=new select(array("pr" => "photo_ratings"));
+        $qry->addFunction(array("average"=>"AVG(rating)"));
+        $qry->where(new clause("photo_id=:photoid"));
+        $qry->addParam(new param(":photoid", (int) $photo->getId(), PDO::PARAM_INT));
+        $qry->addGroupBy("photo_id");
 
-        $row = fetch_array($result);
+        try {
+            $result = db::query($qry);
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            log::msg("Rating recalculation failed", log::FATAL, log::DB);
+        }
+        $avg = (round(100 * $row["average"])) / 100.0;
 
-        $avg = (round(100 * $row[0])) / 100.0;
-
-        if($avg == 0) {
+        if ($avg == 0) {
             $avg = null;
         }
 
         return $avg;
 
      }
-    
+
     /**
      * Get the user who made this rating
      * @return user user
@@ -97,7 +108,7 @@ class rating extends zophTable {
         $user->lookup();
         return $user;
      }
-    
+
     /**
      * Add a new rating to the database
      * @param int rating
@@ -107,13 +118,13 @@ class rating extends zophTable {
         $user=user::getCurrent();
         $user->lookup();
 
-        if(!($user->is_admin() || $user->get("allow_rating"))) {
+        if (!($user->isAdmin() || $user->get("allow_rating"))) {
             return;
         }
-        
-        $current_ratings=self::getRatings($photo, $user);
 
-        if(sizeof($current_ratings) > 0) {
+        $current_ratings=static::getRatings($photo, $user);
+
+        if (sizeof($current_ratings) > 0) {
             $cur_rating=array_pop($current_ratings);
 
             $cur_rating->set("rating", (int) $rating);
@@ -134,9 +145,9 @@ class rating extends zophTable {
      * @return block template block to display details
      */
     public static function getDetails(photo $photo) {
-        $rating=self::getAverage($photo);
+        $rating=static::getAverage($photo);
 
-        $ratings=self::getRatings($photo);
+        $ratings=static::getRatings($photo);
 
         $tpl=new block("rating_details",array(
             "rating" => $rating,
@@ -153,38 +164,30 @@ class rating extends zophTable {
      * @return array array of rating => count pairs;
      */
     public static function getPhotoCount() {
-        $user=user::getCurrent();
+        $subqry=new select(array("p" => "photos"));
+        $subqry->addFields(array("photo_id"));
+        $subqry->addFunction(array("rating" => "FLOOR(AVG(pr.rating)+0.5)"));
+        $subqry->join(array("pr" => "photo_ratings"), "p.photo_id = pr.photo_id", "LEFT");
+        $subqry->addGroupBy("p.photo_id");
 
-        if ($user->is_admin()) {
-            $sql = "SELECT rating, count(*) AS count FROM ( " .
-                   "    SELECT p.photo_id, FLOOR(avg(pr.rating)+0.5) AS rating FROM " .
-                        DB_PREFIX . "photos AS p LEFT JOIN " .
-                        DB_PREFIX . "photo_ratings AS pr ON " .
-                        "p.photo_id = pr.photo_id " .
-                        "GROUP BY p.photo_id) AS avg_rating " .
-                "GROUP BY rating ORDER BY rating;";
-        } else {
-            $sql = "SELECT rating, count(*) AS count FROM ( " .
-                    "   SELECT p.photo_id, FLOOR(avg(pr.rating)+0.5) AS rating FROM " .
-                        DB_PREFIX . "photo_ratings AS pr RIGHT JOIN " .
-                        DB_PREFIX . "photos AS p " .
-                    "   ON pr.photo_id = p.photo_id JOIN " .
-                        DB_PREFIX . "photo_albums AS pa " .
-                    "   ON p.photo_id = pa.photo_id JOIN " .
-                        DB_PREFIX . "group_permissions AS gp " .
-                    "   ON pa.album_id = gp.album_id JOIN " .
-                        DB_PREFIX . "groups_users AS gu " .
-                    "   ON gp.group_id = gu.group_id " .
-                    "   WHERE gu.user_id = " . (int) $user->getId() .
-                    "   AND gp.access_level >= p.level " .
-                    "   GROUP BY p.photo_id) AS avg_rating " .
-                    "GROUP BY rating ORDER BY rating;";
+        if (!user::getCurrent()->isAdmin()) {
+            $subqry=selectHelper::expandQueryForUser($subqry);
         }
 
-        $result = query($sql, "Rating grouping failed");
-        
+        $qry=new select(array("avg_rating" => $subqry));
+        $qry->addFields(array("rating"));
+        $qry->addFunction(array("count"=>"COUNT(*)"));
+        $qry->addGroupBy("rating");
+        $qry->addOrder("rating");
+
+        try {
+            $result = db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Rating grouping failed", log::FATAL, log::DB);
+        }
+
         $ratings=array_fill(0, 11, 0);
-        while($row = fetch_array($result)) {
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $rating=(int) $row["rating"];
             $ratings[$rating]=(int) $row["count"];
         }
@@ -198,14 +201,24 @@ class rating extends zophTable {
      * @return array array of rating => count pairs;
      */
     public static function getPhotoCountForUser(user $user) {
-        $sql = "SELECT ROUND(rating) AS rating, count(*) AS count FROM " .
-            DB_PREFIX . "photo_ratings " .
-            "WHERE user_id=" . (int) $user->getId() .  
-            " GROUP BY ROUND(rating) ORDER BY ROUND(rating) ";
+        $qry = new select(array("pr" => "photo_ratings"));
+        $qry->addFunction(array(
+            "rating"    => "ROUND(rating)",
+            "count"     => "COUNT(*)"
+        ));
 
-        $result = query($sql, "Rating grouping failed");
+        $qry->where(new clause("user_id=:userid"));
+        $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
+        $qry->addGroupBy("ROUND(rating)");
+        $qry->addOrder("ROUND(rating)");
+
+        try {
+            $result = db::query($qry);
+        } catch (PDOException $e) {
+            log::msg("Rating grouping failed", log::FATAL, log::DB);
+        }
         $ratings=array_fill(1, 10, 0);
-        while($row = fetch_array($result)) {
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $rating=(int) $row["rating"];
             $ratings[$rating]=(int) $row["count"];
         }
@@ -219,9 +232,9 @@ class rating extends zophTable {
      * @return array graph array
      */
     public static function getGraphArrayForUser(user $user) {
-        $ratings=self::getPhotoCountForUser($user);
+        $ratings=static::getPhotoCountForUser($user);
         $max = max($ratings);
-        if($max == 0) {
+        if ($max == 0) {
             // no ratings
             $max=100;
         }
@@ -232,21 +245,21 @@ class rating extends zophTable {
         );
 
 
-        foreach($ratings as $rating=>$count) {
+        foreach ($ratings as $rating=>$count) {
             $graph[$rating]=array(
                 "count" => (int) $count,
                 "width" => round($count / $max * 100, 2),
                 "value" => (int) $rating
             );
 
-            if($count > 0) {
+            if ($count > 0) {
                 $link["userrating"]=$rating;
                 $graph[$rating]["link"]="search.php?" . http_build_query($link);
             }
         }
         return $graph;
     }
-        
+
 
     /**
      * Turn array from `getPhotoCount()` into an array that
@@ -254,9 +267,9 @@ class rating extends zophTable {
      * @return array graph array
      */
     public static function getGraphArray() {
-        $ratings=self::getPhotoCount();
+        $ratings=static::getPhotoCount();
         $max = max($ratings);
-        if($max == 0) {
+        if ($max == 0) {
             // no ratings
             $max=100;
         }
@@ -267,15 +280,15 @@ class rating extends zophTable {
         );
 
 
-        foreach($ratings as $rating=>$count) {
+        foreach ($ratings as $rating=>$count) {
             $graph[$rating]=array(
                 "count" => (int) $count,
                 "width" => round($count / $max * 100, 2),
                 "value" => (int) $rating
             );
 
-            if($count > 0) {
-                if($rating == 0) {
+            if ($count > 0) {
+                if ($rating == 0) {
                     $graph[0]["link"] = "photos.php?rating=null";
                     $graph[0]["value"] = translate("not rated");
                 } else {

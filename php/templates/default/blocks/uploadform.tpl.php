@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,11 +21,11 @@
  *       the general form templates?
  */
 
-if(!ZOPH) {
+if (!ZOPH) {
     die("Illegal call");
 }
 ?>
-    <form enctype="multipart/form-data" action="<?php echo $tpl_action; ?>" method="POST" 
+    <form enctype="multipart/form-data" action="<?php echo $tpl_action; ?>" method="POST"
         onSubmit="<?php echo $tpl_onsubmit; ?>">
         <input type="hidden" name="<?php echo $tpl_progress ?>"
             id="upload_<?php echo $tpl_num; ?>"

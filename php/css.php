@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -17,7 +17,7 @@
  */
 
 header("Content-Type: text/css");
-if(isset($_GET['logged_on'])) {
+if (isset($_GET['logged_on'])) {
     define("LOGON", true);
     echo "/* This is the default CSS, the user is not logged on */";
 } else {
@@ -26,7 +26,7 @@ if(isset($_GET['logged_on'])) {
 require_once "include.inc.php";
 $tpl=conf::get("interface.template");
 $css="templates/" . $tpl . "/css.php";
-if(!file_exists($css)) {
+if (!file_exists($css)) {
     $css="templates/default/css.php";
 }
 require_once $css;

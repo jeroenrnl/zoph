@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -15,7 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * This code is heavily based on: 
+ * This code is heavily based on:
  * PHP Calendar Class Version 1.4 (5th March 2001)
  *
  * Copyright David Wilkinson 2000 - 2001. All Rights reserved.
@@ -32,7 +32,7 @@
  *
  * URL:   http://www.cascade.org.uk/software/php/calendar/
  * Email: davidw@cascade.org.uk
- * 
+ *
  * @author David Wilkinson
  * @author Jeroen Roos
  * @url http://www.cascade.org.uk/software/php/calendar
@@ -41,7 +41,7 @@
  */
 
 class Calendar {
-    /** 
+    /**
      * @var int The start day of the week. This is the day that appears in the first column
      * of the calendar. Sunday = 0.
      */
@@ -138,7 +138,7 @@ class Calendar {
      * Return the URL to link to  for a given date.
      */
     public function getDateLink(Time $date) {
-        if($date > new Time) { return; }
+        if ($date > new Time) { return; }
 
         if ($this->searchField == "timestamp") {
 
@@ -151,7 +151,7 @@ class Calendar {
             $date_tomorrow = clone $date;
             $date_tomorrow->add(new DateInterval("P1D"));
             $tomorrow = $date_tomorrow->format("Ymd000000");
-            
+
 
             $qs =
                 rawurlencode("timestamp#1") . "=" . "$today&" .
@@ -186,7 +186,7 @@ class Calendar {
 
         $titles=array("S", "M", "T", "W", "T", "F", "S");
 
-        for($i=0; $i < $firstDay; $i++) {
+        for ($i=0; $i < $firstDay; $i++) {
             $days[]=array(
                 "date"  => "",
                 "link"  => "",
@@ -194,9 +194,9 @@ class Calendar {
             );
         }
 
-        for($day=1; $day<=$daysInMonth; $day++) {
+        for ($day=1; $day<=$daysInMonth; $day++) {
             $classes="calendar day";
-            if($date == $today) { $classes .= " today"; }
+            if ($date == $today) { $classes .= " today"; }
             $days[]=array(
                 "date"  => $day,
                 "link"  => $this->getDateLink($date),
@@ -204,7 +204,7 @@ class Calendar {
             );
             $date->add(new dateInterval("P1D"));
         }
-            
+
 
 
         $tpl=new block("calendar", array(
