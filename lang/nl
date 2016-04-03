@@ -22,7 +22,6 @@ A number in pixels ("px") or percent ("%"), the latter is a percentage of the us
 A photo will be watermarked if the photo level is higher than the watermark level.=Een foto zal een watermerk krijgen als het niveau van de foto hoger is dan het watermerk niveau.
 A possible cause is the upload_max_filesize variable in php.ini=Een mogelijke oorzaak is de upload_max_filesize instelling in php.ini
 A user can use the annotate photo function to e-mail a photo with a textual annotation. Can only be used in combination with the "Mail photos" feature above.=Een gebruiker kan deze functie gebruiken om gevens toe te voegen aan een foto, wordt gebruikt in combinatie met de "Mail foto"-functie hierboven.
-API key for Cloudmade Maps. Only needed if using "Cloudmade" as provider. You can use Zoph's key (which is the default), but please do not use this key for any other applications.=API-sleutel voor Cloudmade Maps (kaarten). Alleen nodig als je voor Cloudmade kiest om als kaartenleverancier. Je kunt Zoph's sleutel gebruiken (de standaardwaarde), maar gebruik deze niet voor andere applicaties.
 About=Info
 Add a page:=Voeg een pagina toe:
 Add comment=Commentaar geven
@@ -80,7 +79,6 @@ Center=Midden
 Change Password=Wachtwoord wijzigen
 Changed least recently=Langst geleden gewijzigd
 Changed most recently=Laatst gewijzigd
-Cloudmade Key=Sleutel voor Cloudmade
 Color Schemes=Kleurprofielen
 Comments=Commentaar
 Configuration=Configuratie
