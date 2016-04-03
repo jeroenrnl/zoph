@@ -4,7 +4,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
 // (at your option) any later version.
-// 
+//
 // Zoph is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -13,111 +13,119 @@
 // along with Zoph; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-/**
- * @todo Really should get rid of this global var...
- */
+var zMaps = JSClass({
+    singleton: true ,
 
-var mapstraction;
+    create: function (div, provider) {
+        var map = new L.Map(div);
+        var layer;
 
-var zMaps=function() {
-    function createMap(div, provider) {
-        // This creates a new map
-        mapstraction=new mxn.Mapstraction(div, provider);
-        mapstraction.addControls({ pan: true, zoom: 'large', scale: true, map_type: true });
+        if ( provider == 'googlev3' ) {
+            layer = new L.Google('ROADMAP');
+        } else {
+            var url;
 
-        var center=new mxn.LatLonPoint(0,0);
-        if(provider=="openlayers") {
-            var osm=mapstraction.getMap();
-            osm.baseLayer.attribution="<a href='http://www.openstreetmap.org/copyright'>&copy; OpenStreetMap</a>";
-            osm.addControl(new OpenLayers.Control.Attribution());
+            if ( provider == 'mapquest') {
+                url = 'http://otile4.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png';
+            } else {
+                url = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+            }
+
+            layer = new L.tileLayer(url);
         }
-        mapstraction.setCenterAndZoom(center, 2);
-        zMapsCustom.customMap(mapstraction);
-    }
 
-    function clickMap(event_name, event_source, event_args) {
-        var latfield=document.getElementById('lat');
-        var lonfield=document.getElementById('lon');
-        var zoomfield=document.getElementById('mapzoom');
-        var maptypefield=document.getElementById('maptype');
+        map.addLayer(layer);
 
-        latfield.value=event_args.location.lat;
-        lonfield.value=event_args.location.lon;
-        if(zoomfield) {
-            zoomfield.value=mapstraction.getZoom();
+        this.map = map;
+        this.markerGroup = new L.featureGroup();
+        this.latField = $('#lat');
+        this.lonField = $('#lon');
+        this.zoomField = $('#mapzoom');
+    } ,
+    createMarker: function (lat, lon, icon, title, infoBubble) {
+        var marker = new L.marker(
+            [lat, lon],
+            {
+                title: title,
+            }
+        );
+        if ( icon ) {
+            marker.setIcon( new L.icon( {iconUrl: icon} ) );
         }
-        mapstraction.removeMarker(mapstraction.markers[0]);
-        marker = new mxn.Marker(event_args.location);
-        mapstraction.addMarker(marker);
-    }
+        this.map.setView( new L.LatLng(lat, lon), (this.map.getZoom() || 14) );
+        marker.addTo(this.map)
+            .bindPopup(infoBubble);
 
-    function zoomUpdate(event_name, event_source, event_args) {
-        var zoomfield=document.getElementById('mapzoom');
-        if(zoomfield) {
-            zoomfield.value=mapstraction.getZoom();
+        this.markerGroup.addLayer(marker);
+        if ( this.markerGroup.getLayers().length > 1 ) {
+            this.map.fitBounds(this.markerGroup.getBounds());
         }
-    }
-
-    function createMarker(lat, lon, icon, title, infoBubble) {
-        var point=new mxn.LatLonPoint(lat, lon);
-        var marker=new mxn.Marker(point);
-        if (title) {
-            marker.setLabel(title);
-        }
-        if(icon) {
-            marker.setIcon(icon, [22,22]);
-        }
-        if (infoBubble) {
-            marker.setInfoBubble(infoBubble);
-        }
-        mapstraction.addMarker(marker);
-    }
-
-    function setFieldUpdate() {
+    } ,
+    setCenterAndZoom: function (lat, lon, zoomlevel) {
+        this.map.setView(
+            [(lat || 0), (lon || 0)],
+            zoomlevel
+        );
+    } ,
+    removeAllMarkers: function () {
+        var map = this.map;
+        $.map(this.markerGroup.getLayers(), function(layer) {
+            map.removeLayer(layer);
+        });
+        this.markerGroup.clearLayers();
+    } ,
+    setFieldUpdate: function () {
         // This makes sure that the map is updated when a user changes the
         // Lat and Lon fields manually.
-        var latfield=document.getElementById("lat");
-        var lonfield=document.getElementById("lon");
-        var zoomfield=document.getElementById("mapzoom");
+        this.latField.add(this.lonField).add(this.zoomField).on(
+            'change',
+            { this: this },
+            function(e){
+                var distance = document.getElementById("latlon_distance");
 
-        latfield.onchange=zMaps.updateMap;
-        lonfield.onchange=zMaps.updateMap;
+                var lat = e.data.this.latField.val();
+                var lon = e.data.this.lonField.val();
+                var zoomlevel = e.data.this.map.getZoom();
+
+                if (e.data.this.zoomField) {
+                   zoomlevel = parseInt(e.data.this.zoomField.val());
+               }
+
+                // remove all markers
+                e.data.this.removeAllMarkers();
+                e.data.this.createMarker(lat, lon, null, null, null);
+                e.data.this.setCenterAndZoom(lat, lon, zoomlevel);
+            }
+        );
+    } ,
+    clickMap: function (event_name, event_source, event_args) {
+        this.latField.val(event_args.location.lat);
+        this.lonfield.val(event_args.location.lon);
         if(zoomfield) {
-            zoomfield.onchange=zMaps.updateMap;
+            zoomField.val( this.map.getZoom() );
         }
-    }
-
-    function updateMap() {
-        var latfield=document.getElementById("lat");
-        var lonfield=document.getElementById("lon");
-        var zoomfield=document.getElementById("mapzoom");
-        var distance=document.getElementById("latlon_distance");
-        var lat=latfield.value;
-        var lon=lonfield.value;
-        var zoomlevel=mapstraction.getZoom();
-        
-        if(zoomfield) {
-           zoomlevel=parseInt(zoomfield.value);
+        this.map.removeMarkers();
+        this.createMarker(latField.val(), lonField.val(), null, null, null);
+    } ,
+    zoomUpdate: function (event_name, event_source, event_args) {
+        if ( this.zoomField ) {
+            this.zoomField.val( this.map.getZoom() );
         }
-
-        mapstraction.removeMarker(mapstraction.markers[0]);
-        createMarker(lat, lon,null,null,null);
-        mapstraction.setCenterAndZoom(new mxn.LatLonPoint(lat,lon),zoomlevel);
+    } ,
+    setUpdateHandlers: function () {
+        this.map.on('click', this.clickMap);
+        this.map.on('zoomend', this.zoomUpdate);
+        this.map.on('dragend', this.zoomUpdate);
+        this.setFieldUpdate();
+    } ,
+    drawPolyline: function (path, color, opacity, weight) {
+        L.polyline(
+            path,
+            {
+                color: strokeColor,
+                opacity: opacity,
+                weight: weight
+            }
+        ).addTo(this.map);
     }
-
-    function setUpdateHandlers() {
-        mapstraction.click.addHandler(zMaps.clickMap);
-        mapstraction.changeZoom.addHandler(zMaps.zoomUpdate);
-        mapstraction.endPan.addHandler(zMaps.zoomUpdate);
-        setFieldUpdate();
-    }
-
-    return {
-        createMap:createMap,
-        clickMap:clickMap,
-        zoomUpdate:zoomUpdate,
-        createMarker:createMarker,
-        updateMap:updateMap,
-        setUpdateHandlers:setUpdateHandlers
-    };
-}();
+});
