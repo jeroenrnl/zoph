@@ -22,49 +22,50 @@
 if (!ZOPH) { die("Illegal call"); }
 ?>
 
-<div id="<?php echo $tpl_id ?>" class="map">
+<div id="<?php echo $tpl_id ?>" class="map" style="height: 400px, width: 600px">
 </div>
 
 <script type="text/javascript">
     // Transform div into map:
-    zMaps.createMap("<?php echo $tpl_id ?>","<?php echo $tpl_provider?>");
+    var map = zMaps.instance("<?php echo $tpl_id ?>", "<?php echo $tpl_provider ?>");
     <?php if ($this->hasMarkers()): ?>
-        // Add markers:
+    // Add markers:
         <?php foreach ($this->getMarkers() as $m): ?>
-            zMaps.createMarker("<?php echo $m->lat ?>","<?php echo $m->lon ?>",
-                icons["<?php echo $m->icon ?>"], '<?php echo $m->title ?>',
-                '<?php echo $m->quicklook ?>');
+    map.createMarker(
+        "<?php echo $m->lat ?>",
+        "<?php echo $m->lon ?>",
+        icons["<?php echo $m->icon ?>"],
+        '<?php echo str_replace("'", "\\'", $m->title) ?>',
+        '<?php echo str_replace("'", "\\'", $m->quicklook) ?>'
+    );
         <?php endforeach ?>
     <?php endif ?>
 
     <?php if ($this->hasTracks()): ?>
-        // Add tracks:
-        // @todo: might not work with multiple tracks.
+    // Add tracks:
+    // @todo: might not work with multiple tracks.
         <?php foreach ($this->getTracks() as $track): ?>
-            var points=new Array();
+    var points = new Array();
             <?php foreach ($track->getPoints() as $point): ?>
-                points.push(new mxn.LatLonPoint(<?php echo $point->get("lat") ?>,
-                    <?php echo $point->get("lon") ?>));
+    points.push(
+        <?php echo '// ' . $point->get("lat") ?>,
+        <?php echo '// ' . $point->get("lon") ?>
+    );
             <?php endforeach; ?>
-            track=new mxn.Polyline(points)
-            mapstraction.addPolyline(track);
+    map.drawPolyline(points);
         <?php endforeach ?>
     <?php endif ?>
 
     <?php if (!is_null($this->clat) && (!is_null($this->clon)) && (!is_null($this->zoom))): ?>
-        var center=new mxn.LatLonPoint(
+        map.setCenterAndZoom(
             <?php echo $this->clat ?>,
-            <?php echo $this->clon ?>);
-        var zoomlevel=<?php echo $this->zoom ?>;
-        mapstraction.setCenterAndZoom(center,zoomlevel);
-    <?php else: ?>
-        mapstraction.autoCenterAndZoom();
+            <?php echo $this->clon ?>,
+            <?php echo $this->zoom ?>
+        );
     <?php endif ?>
 
     <?php if ($this->edit): ?>
-        zMaps.setUpdateHandlers();
+        map.setUpdateHandlers();
     <?php endif ?>
 
 </script>
-
-
