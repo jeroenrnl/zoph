@@ -25,6 +25,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link type="text/css" rel="stylesheet" href="css.php">
+    <?php foreach ($tpl_extrastyle as $extrastyle): ?>
+        <link type="text/css" rel="stylesheet" href="<?php echo $extrastyle ?>">
+    <?php endforeach ?>
     <link type="image/png" rel="icon" href="<?php echo self::getImage("icons/favicon.png") ?>">
     <script type="text/javascript">
         var template = "<?php echo conf::get("interface.template"); ?>";
@@ -43,10 +46,5 @@
     <?php foreach ($tpl_scripts as $script): ?>
         <script type="text/javascript" src="<?= $script ?>"></script>
     <?php endforeach ?>
-    <?php if (isset($tpl_extrastyle)): ?>
-        <style type="text/css">
-            <?php echo $extrastyle ?>
-        </style>
-    <?php endif ?>
     <title><?php echo $tpl_title ?></title>
 </head>

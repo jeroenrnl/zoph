@@ -4,7 +4,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
 // (at your option) any later version.
-// 
+//
 // Zoph is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -13,212 +13,123 @@
 // along with Zoph; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-var zGeocode=function() {
-
-    function checkGeocode() {
-        // To prevent overwrite of tediously set lat & lon
-        // you need to click the 'find' button twice, if a lat&lon have
-        // already been set.
-        var button=document.getElementById("geocode");
-        var lat=document.getElementById("lat").value;
-        var lon=document.getElementById("lon").value;
-
-        if(lat==0 && lon==0) {
-            enableGeocode(button);
+var zGeocode = JSClass({
+    create: function(provider) {
+        if ( provider === "googlev3" ) {
+            this.geocoder = L.Control.Geocoder.google();
+        } else if ( provider === "photon" ) {
+            this.geocoder = L.Control.Geocoder.photon();
         } else {
-            disableGeocode(button);
+            this.geocoder = L.Control.Geocoder.nominatim()
         }
-    }
-        
-    function enableGeocode() {
-        var button=document.getElementById("geocode");
-        button.className=button.className.replace("geo_disabled", "geocode");
-        button.onclick=zGeocode.startGeocode;
-    }
+    } ,
+    geocode: function() {
+        var accordion = $("#geocoderesults > #accordion")
 
-    function disableGeocode() {
-        var button=document.getElementById("geocode");
-        button.className=button.className.replace("geocode", "geo_disabled");
-        button.onclick=zGeocode.enableGeocode;
-    }
+        // remove geocoderesults previous contents
+        accordion.accordion( "destroy" );
 
-
-
-
-    function startGeocode() {
-        var objQuery={
-            title:      document.getElementById("title").value,
-            address:    document.getElementById("address").value,
-            address2:   document.getElementById("address2").value,
-            city:       document.getElementById("city").value,
-            state:      document.getElementById("state").value,
-            zip:        document.getElementById("zip").value,
-            country:    document.getElementById("country").value
+        // start query object
+        var objQuery = {
+            title:      $("#title").val(),
+            address:    $("#address").val(),
+            address2:   $("#address2").val(),
+            city:       $("#city").val(),
+            state:      $("#state").val(),
+            zip:        $("#zip").val(),
+            country:    $("#country").val()
         };
 
         // remove empty items
         for (var i in objQuery) {
-            if(trim(objQuery[i])==="") {
+            if ( trim(objQuery[i]) === "" ) {
                 delete objQuery[i];
             }
         }
 
-        geocode(objQuery);
-    }
+        // don't use title if we have an address
+        if (objQuery.address || objQuery.address2 ) {
+            delete objQuery["title"];
+        }
 
-    function geocode(objQuery) {
-        var divResult=document.getElementById("geocoderesults"); 
-        var query="";
-        for (var i in objQuery) {
-            if(trim(query)!=="") {
+        // build up query
+        var query = "";
+        for ( var i in objQuery ) {
+            if ( trim(query) !== "") {
                 query += ", ";
             }
-            query+=objQuery[i];
+            query += objQuery[i];
         }
-    
-        divResult.innerHTML="searching for...<br>" + query;
 
-        var url="http://api.geonames.org/search?username=zoph&q=" + encodeURI(query) + "&style=SHORT";
-        var http=new XMLHttpRequest();
-        http.open("GET", url, true);
+        // interstitial
+        $("#geocoderesults").html("searching for...<br>" + query);
 
-       http.onreadystatechange=function() {
-            zGeocode.handleGeocode(http, objQuery);
-        };
-        http.send(null);
-    } 
+        // submit the query
+        this.geocoder.geocode(query, this.displayGeocode);
+    } ,
+    displayGeocode: function(results) {
+        var geocoderesults = $("#geocoderesults");
 
-    function handleGeocode(http, objQuery) {
-        var divResult=document.getElementById("geocoderesults"); 
-        if (http.readyState == 4) {
-            if(http.status == 200) {
-                var response=http.responseXML;
-                var geonames=response.getElementsByTagName("geoname");
-                if(geonames.length > 0) {
-                    displayGeocode(geonames, divResult, 0);
-                } else {
-                    // No results, let's try again with some less fields
-                    if (objQuery.zip) {
-                        delete (objQuery.zip);
-                    } else if (objQuery.address2) {
-                        delete objQuery.address2;
-                    } else if(objQuery.title) {
-                        delete objQuery.title;
-                    } else if (objQuery.address) {
-                        delete objQuery.address;
-                    } else if (objQuery.state) {
-                        delete objQuery.state;
-                    } else if (objQuery.country) {
-                        delete objQuery.country;
-                    } else {
-                        divResult.innerHTML="";
-                        var b=document.createElement("b");
-                        b.innerHTML=translate['Nothing found'];
-                        divResult.appendChild(b);
-                        return;
+        if ( results.length > 0 ) {
+            var accordion = $('<div id="divAccordion"></div>');
+
+            // overwrite geocode HTML with the new accordion div
+            geocoderesults.html(accordion);
+
+            // itterate through results
+            $.each(results, function(index, result) {
+                // build up code that we'll use to create an accordion
+                var html = '<h3>' + result.name + '<h3>'
+                    + '<div>'
+                    + '<label for="txtLatitude.' + index + '">Latitude</label>'
+                    + '<input id="txtLatitude.' + index + '" type="text" value="' + result.center.lat + '" disabled>'
+                    + '<label for="txtLongitude.' + index + '">Longitude</label>'
+                    + '<input id="txtLongitude.' + index + '" type="text" value="' + result.center.lng + '" disabled>'
+                    + '<input id="txtBBox.' + index + '" type="hidden">'
+                    + '</div>';
+
+                $.each(result.properties, function(key, value) {
+                    + '<label for="txt' + key + '.' + index + '">Lat/Lon</label>'
+                    + '<input id="txt' + key + '.' + index + '" type="text" value="' + value + '" disabled>'
+                });
+
+                html += '</div>';
+
+                // append the new HTML to the accordion div
+                accordion.append(html);
+
+                // save the BBox data
+                $("#txtBBox\\." + index).data("bbox", result.bbox);
+            });
+
+            // add a button for applying geocoding results
+            $('<button id="btnApplyGeocode">Apply</button>')
+                .click(function(event) {
+                    // get the index of the active accordion panal
+                    var index = accordion.accordion( "option", "active" );
+
+                    $('#lat').val($('#txtLatitude\\.' + index).val());
+                    $('#lon').val($('#txtLongitude\\.' + index).val());
+
+                    // get our map
+                    var map = zMaps.instance().map;
+                    if ( map ) {
+                        // zoom the map to the bounding box of our selected info
+                        map.fitBounds($("#txtBBox\\." + index).data("bbox"));
+                            //[bbox[0].lat, bbox[0].lng], [bbox[1].lat, bbox[1].lng]);
+
+                        // set the zoom level field
+                        var mapzoom = $("#mapzoom");
+                        if ( mapzoom ) {
+                            mapzoom.val(map.getZoom());
+                        }
                     }
-                    geocode(objQuery);
-                }
-                         
-            } else if (http.status == 0) {
-                divResult.innerHTML="";
-                var b=document.createElement("b");
-                b.innerHTML=translate['An error occurred'];
-                divResult.appendChild(b);
-            }
+                })
+                .appendTo(geocoderesults);
+
+            accordion.accordion();
+        } else {
+            geocoderesults.html('No results found!');
         }
     }
-
-    function displayGeocode(geonames, divResult, result) {
-        var total=geonames.length;
-        var titlefield=document.getElementById("title");
-        var title, lat, lon, content, tag;
-
-        // Define zoomlevels for different kinds of respones
-        // see http://www.geonames.org/export/codes.html
-        var zoomlevels= {
-            "A": 6, // Country, state, region
-            "H": 8, // Stream, lake
-            "L": 15, // Parks, area
-            "P": 12, // City, village
-            "R": 17, // Road, railroad
-            "S": 18, // Spot, building, farm
-            "T": 12, // Mountain, hill, rock
-            "U": 5,   // Undersea
-            "V": 14  // Forest, heath
-        };
-        var zoomlevel=12;
-
-        for(var c=0; c<geonames[result].childNodes.length; c++) {
-            tag=geonames[result].childNodes[c];
-            content=null;
-            if(tag.textContent) {
-                content=tag.textContent;
-            } else {
-                // And again, M$ is to dumb to follow simple 
-                // standards
-                content=tag.text;
-            }
-            switch(tag.nodeName) {
-                case "toponymName":
-                    title=content;
-                    break;
-                case "lat":
-                    lat=content;
-                    break;
-                case "lng":
-                case "lon":
-                    lon=content;
-                    break;
-                case "fcl":
-                    zoomlevel=zoomlevels[content];
-                    break;
-            }
-        }
-        if(lat && lon) {
-            document.getElementById("lat").value=lat;
-            document.getElementById("lon").value=lon;
-            document.getElementById("mapzoom").value=zoomlevel;
-            zMaps.updateMap();
-        }
-        var left=document.createElement("input");
-        left.setAttribute("type", "button");
-        left.className="leftright";
-        left.setAttribute("value","<");
-        
-        var right=document.createElement("input");
-        right.setAttribute("type", "button");
-        right.setAttribute("value",">");
-        right.className="leftright";
-        
-        if(result===0) {
-            left.disabled=true;
-        } else if ((result + 1) == total) {
-            right.disabled=true;
-        }
-        
-        right.onclick=function() { displayGeocode(geonames, divResult, result + 1); };
-        left.onclick=function() { displayGeocode(geonames, divResult, result - 1); };
-        // This is a little bit of a hidden feature, click the title of the
-        // found place to set this place's title.
-        var b=document.createElement("b");
-        b.onclick=function() { titlefield.value=title; }; 
-        b.innerHTML=title;
-        var text=document.createTextNode((result + 1) + " / " + total);
-        
-        divResult.innerHTML="";
-        divResult.appendChild(b);
-        divResult.appendChild(document.createElement("br"));
-        divResult.appendChild(text);
-        divResult.appendChild(document.createElement("br"));
-        divResult.appendChild(left);
-        divResult.appendChild(right);
-        disableGeocode();
-    }
-    return {
-        checkGeocode:checkGeocode,
-        enableGeocode:enableGeocode,
-        startGeocode:startGeocode,
-        handleGeocode:handleGeocode
-    };
-}();
+});

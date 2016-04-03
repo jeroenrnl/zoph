@@ -491,7 +491,7 @@ ul.breadcrumbs.firstdots li:first-child:before {
 }
 
 /* Main page */
-.main, .info, .page, div.map, div#selection, .warning   {
+.main, .info, .page, div#selection, .warning   {
     background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     width: 100%;
@@ -503,36 +503,21 @@ ul.breadcrumbs.firstdots li:first-child:before {
 }
 
 
-.main > div.map {
-    left: -1px;
-    padding: 0;
-}
-
 div.warning {
     background: #ffffcc;
 }
+
 
 div.warning img.icon {
     float: left;
     margin-right: 10px;
 }
 
+
 div.map {
     height: 450px;
 }
 
-div.map small {
-    display: block;
-    /* used in infoBubble */
-    font-size: x-small;
-}
-
-div.minimap {
-    float: right;
-    right: 10px;
-    width: 50%;
-    height: 300px;
-}
 
 /* explanation of the config item on the config page */
 div.main#config .desc {
@@ -2013,4 +1998,3 @@ table.calendar th {
     font-size: small;
     margin-bottom: 2px;
 }
-

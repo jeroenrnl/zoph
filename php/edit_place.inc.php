@@ -93,7 +93,8 @@ if ($place->isRoot()) {
           "An error occurred": "<?php echo trim(translate("An error occurred.", false)); ?>",
           "Nothing found": "<?php echo trim(translate("Nothing found", false)); ?>"
         };
-        zGeocode.checkGeocode();
+        var geocode = new zGeocode("<?php echo conf::get("maps.geocode") ?>");
+        $("#geocode").click(geocode.geocode);
       </script>
     </div>
   <?php endif; ?>

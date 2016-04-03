@@ -52,7 +52,6 @@ $convert = array(
     "path.unbz" => "UNBZ_CMD",
     "maps.provider" => "MAPS",
     "maps.geocode" => "GEOCODE",
-    "maps.key.cloudmade" => "CLOUDMADE_KEY",
     "import.enable" => "IMPORT",
     "import.upload" => "UPLOAD",
     "import.maxupload" => "MAX_UPLOAD",

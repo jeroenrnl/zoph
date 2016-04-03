@@ -25,7 +25,7 @@
 header("Content-Type: text/html; charset=utf-8");
 global $user;
 
-$icons=array(
+$icons = array(
     "count"     => template::getImage("icons/photo.png"),
     "taken"     => template::getImage("icons/date.png"),
     "modified"  => template::getImage("icons/modified.png"),
@@ -40,53 +40,49 @@ $icons=array(
     "pleasewait"=> template::getImage("pleasewait.gif")
 );
 
-$javascript=array();
+$extrastyle = array();
+$javascript = array();
 
-$scripts=array(
-    "js/util.js",
-    "js/xml.js",
+$scripts = array(
+    "js/jquery.min.js",
+    "js/util.js" ,
+    "js/xml.js" ,
     "js/thumbview.js"
-    );
+);
 
 switch(basename($_SERVER["SCRIPT_NAME"])) {
 case "import.php":
-    $scripts[]="js/import.js";
-    $scripts[]="js/formhelper.js";
+    $scripts []= "js/import.js";
+    $scripts []= "js/formhelper.js";
     break;
 case "config.php":
-    $scripts[]="js/conf.js";
+    $scripts []= "js/conf.js";
     break;
 }
 
 if (conf::get("interface.autocomplete")) {
-    $scripts[]="js/autocomplete.js";
+    $scripts []= "js/autocomplete.js";
 }
 
 if (conf::get("maps.provider")) {
-    $scripts[]="js/mxn/mxn.js?(" . conf::get("maps.provider") .")";
-    $scripts[]="js/maps.js";
-    $scripts[]="js/custommaps.js";
+    $extrastyle []= "./leaflet.css";
+
+    $scripts []= "js/leaflet/leaflet.js";
+    $scripts []= "https://maps.google.com/maps/api/js";
+    $scripts []= "js/leaflet/layer/tile/Google.js";
+    $scripts []= "js/js.class.js";
+    $scripts []= "js/maps.js";
+
     if (conf::get("maps.geocode")) {
-        $scripts[]="js/geocode.js";
-    }
-    switch (strtolower(conf::get("maps.provider"))) {
-    case "googlev3":
-        $scripts[]="http://maps.google.com/maps/api/js?sensor=false";
-        break;
-    case "yahoo":
-        $scripts[]="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=Zoph";
-        break;
-    case "openlayers":
-        $scripts[]="http://openlayers.org/api/OpenLayers.js";
-        break;
-    case "cloudmade":
-        $scripts[]="http://tile.cloudmade.com/wml/0.2/web-maps-lite.js";
-        $javascript[]="var cloudmade_key = \"" . conf::get("maps.key.cloudmade") . "\"";
-        break;
+        $extrastyle []= "./jquery-ui.min.css";
+        
+        $scripts []= "js/jquery-ui.min.js";
+        $scripts []= "js/leaflet/control/Control.Geocoder.js";
+        $scripts []= "js/geocode.js";
     }
 }
 
-$html_title=conf::get("interface.title");
+$html_title = conf::get("interface.title");
 if (isset($title)) {
     $html_title.=" - " . $title;
 }
@@ -96,7 +92,7 @@ if (isset($title)) {
 <html>
 
 <?php
-$tpl=new block("header", array(
+$tpl = new block("header", array(
     "icons"         => $icons,
     "scripts"       => $scripts,
     "javascript"    => $javascript,

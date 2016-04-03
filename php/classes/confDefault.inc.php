@@ -339,10 +339,9 @@ class confDefault extends conf {
             "mapping provider");
         $mapsProvider->setLabel("Mapping provider");
         $mapsProvider->addOption("", "Disabled");
+        $mapsProvider->addOption("osm", "OpenStreetMaps");
+        $mapsProvider->addOption("mapquest", "MapQuest-OSM");
         $mapsProvider->addOption("googlev3", "Google Maps v3");
-        $mapsProvider->addOption("yahoo", "Yahoo maps");
-        $mapsProvider->addOption("cloudmade", "Cloudmade (OpenStreetMap)");
-        $mapsProvider->addOption("openlayers", "OpenLayers (OpenStreetMap)");
         $mapsProvider->setDefault("");
         $maps[]=$mapsProvider;
 
@@ -350,22 +349,13 @@ class confDefault extends conf {
         $mapsGeocode->setName("maps.geocode");
         $mapsGeocode->setLabel("Geocode provider");
         $mapsGeocode->setDesc("With geocoding you can lookup the location of a " .
-            "place from it's name. Here you can select the provider. Currently " .
-            "the only one available is 'geonames'");
+            "place from it's name. Here you can select the provider.");
         $mapsGeocode->addOption("", "Disabled");
-        $mapsGeocode->addOption("geonames", "GeoNames");
+        $mapsGeocode->addOption("osm", "OpenStreetMaps");
+        $mapsGeocode->addOption("photon", "Photon-OSM");
+        $mapsGeocode->addOption("googlev3", "Google Maps v3");
         $mapsGeocode->setDefault("");
         $maps[]=$mapsGeocode;
-
-        $mapsKeyCloudmade = new confItemString();
-        $mapsKeyCloudmade->setName("maps.key.cloudmade");
-        $mapsKeyCloudmade->setLabel("Cloudmade Key");
-        $mapsKeyCloudmade->setDesc("API key for Cloudmade Maps. Only needed if using " .
-            "\"Cloudmade\" as provider. You can use Zoph's key (which is the default), " .
-            "but please do not use this key for any other applications.");
-        $mapsKeyCloudmade->setRegex("(^$|[a-z0-9]{32})");
-        $mapsKeyCloudmade->setDefault("f3b46b04edd64ea79066b7e6921205df");
-        $maps[]=$mapsKeyCloudmade;
     }
 
     /**
@@ -884,4 +874,3 @@ class confDefault extends conf {
 
     }
 }
-
