@@ -24,7 +24,7 @@
  */
 
 /**
- * This class contains a set of translations read from a file in the self::LANG_DIR
+ * This class contains a set of translations read from a file in the static::LANG_DIR
  * directory.
  * These files have the following format
  * # Zoph Language File - <language name>
@@ -57,7 +57,7 @@ class language {
      */
     function __construct($iso) {
         $this->name=$iso;
-        $this->filename=self::LANG_DIR. "/" . $iso;
+        $this->filename=static::LANG_DIR. "/" . $iso;
         $this->iso=strtolower($iso);
     }
 
@@ -138,7 +138,7 @@ class language {
         if (array_key_exists($string, $this->translations)) {
             return trim($this->translations[$string]);
         } else {
-            if ($error && !($this->iso==self::$base)) {
+            if ($error && !($this->iso==static::$base)) {
                 $tag = "<b>[tr]</b> ";
             }
             return $tag . $string;
@@ -167,7 +167,7 @@ class language {
      */
     public static function getAll() {
         $langs=array();
-        $dir=settings::$php_loc . "/" . self::LANG_DIR;
+        $dir=settings::$php_loc . "/" . static::LANG_DIR;
         if (is_dir($dir) && is_readable($dir)) {
             foreach (glob($dir . "/*") as $filename) {
                 if (!is_dir($filename)  && is_readable($filename)) {
@@ -193,9 +193,9 @@ class language {
         } else {
             log::msg("Cannot read language dir!", log::WARN, log::LANG);
         }
-        $base_lang=new language(self::$base);
-        $base_lang->name=self::$base_name;
-        $langs[self::$base]=$base_lang;
+        $base_lang=new language(static::$base);
+        $base_lang->name=static::$base_name;
+        $langs[static::$base]=$base_lang;
         ksort($langs);
         return $langs;
     }
@@ -206,7 +206,7 @@ class language {
      * @return string null|iso
      */
     public static function exists($iso) {
-        $file=self::LANG_DIR . '/' . $iso;
+        $file=static::LANG_DIR . '/' . $iso;
         if (file_exists($file) && is_file($file)) {
             return $iso;
         } else {
@@ -220,16 +220,16 @@ class language {
      * @return language language object
      */
     public static function load($langs) {
-        array_push($langs, conf::get("interface.language"), self::$base);
+        array_push($langs, conf::get("interface.language"), static::$base);
         foreach ($langs as $l) {
             log::msg("Trying to load language: <b>" . $l . "</b>", log::DEBUG, log::LANG);
-            if (self::exists($l)) {
+            if (static::exists($l)) {
                 $lang=new language($l);
                 if ($lang->readHeader() && $lang->read()) {
                     log::msg("Loaded language: <b>" . $l . "</b><br>", log::DEBUG, log::LANG);
                     return $lang;
                 }
-            } else if ($l==self::$base) {
+            } else if ($l==static::$base) {
                 # If it is the base language, no file needs to exist
                 log::msg("Using base language: <b>" . $l . "</b>", log::NOTIFY, log::LANG);
 
@@ -239,8 +239,8 @@ class language {
 
         }
         log::msg("No languages found, falling back to default: <b>" .
-            self::$base . "</b>", log::NOTIFY, log::LANG);
-        return new language(self::$base);
+            static::$base . "</b>", log::NOTIFY, log::LANG);
+        return new language(static::$base);
     }
 
     /**

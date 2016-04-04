@@ -145,7 +145,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_date_op = getvar('_date_op');
 
     $count = sizeof($date) - 1;
-    if ( $date[$count] == "+" ) {
+    if ($date[$count] == "+") {
         $date[$count] = "";
     }
     for ($i = 0; $i <= $count; $i++) {
@@ -188,7 +188,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_timestamp_op = getvar('_timestamp_op');
 
     $count = sizeof($timestamp) - 1;
-    if ( $timestamp[$count] == "+" ) {
+    if ($timestamp[$count] == "+") {
         $timestamp[$count] = "";
     }
     for ($i = 0; $i <= $count; $i++) {
@@ -242,7 +242,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     }
 
     $count = sizeof($album_id) - 1;
-    if ( $album_id[$count] == "+" ) {
+    if ($album_id[$count] == "+") {
         $album_id[$count] = "";
     }
 
@@ -305,7 +305,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     }
 
     $count = sizeof($category_id) - 1;
-    if ( $category_id[$count] == "+" ) {
+    if ($category_id[$count] == "+") {
         $category_id[$count] = "";
     }
 
@@ -370,7 +370,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     }
 
     $count = sizeof($location_id) - 1;
-    if ( $location_id[$count] == "+" ) {
+    if ($location_id[$count] == "+") {
         $location_id[$count] = "";
     }
 
@@ -424,7 +424,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_rating_op = getvar('_rating_op');
 
     $count = sizeof($rating) - 1;
-    if ( $rating[$count] == "+" ) {
+    if ($rating[$count] == "+") {
         $rating[$count] = "";
     }
 
@@ -465,7 +465,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_person_id_op = getvar('_person_id_op');
 
     $count = sizeof($person_id) - 1;
-    if ( $person_id[$count] == "+" ) {
+    if ($person_id[$count] == "+") {
         $person_id[$count] = "";
     }
 
@@ -506,7 +506,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_photographer_id_op = getvar('_photographer_id_op');
 
     $count = sizeof($photographer_id) - 1;
-    if ( $photographer_id[$count] == "+" ) {
+    if ($photographer_id[$count] == "+") {
         $photographer_id[$count] = "";
     }
 
@@ -551,7 +551,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_field_op = getvar('_field_op');
 
     $count = sizeof($_field) - 1;
-    if ( $_field[$count] == "+" ) {
+    if ($_field[$count] == "+") {
         $_field[$count] = "";
     }
     for ($i = 0; $i <= $count; $i++) {

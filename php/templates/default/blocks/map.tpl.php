@@ -32,8 +32,8 @@ if (!ZOPH) { die("Illegal call"); }
         // Add markers:
         <?php foreach ($this->getMarkers() as $m): ?>
             zMaps.createMarker("<?php echo $m->lat ?>","<?php echo $m->lon ?>",
-                icons["<?php echo $m->icon ?>"], '<?php echo $m->title ?>',
-                '<?php echo $m->quicklook ?>');
+                icons["<?php echo $m->icon ?>"], '<?php echo str_replace("'", "\\'", $m->title) ?>',
+                '<?php echo str_replace("'", "\\'", $m->quicklook) ?>');
         <?php endforeach ?>
     <?php endif ?>
 

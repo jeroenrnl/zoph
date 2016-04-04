@@ -69,6 +69,26 @@ class circleTest extends ZophDataBaseTestCase {
             "members"       => implode("<br>", $memberLinks)
         );
         $this->assertEquals($exp, $circle->getDisplayArray());
+        
+        $circle->set("hidden", true);
+        $circle->update();
+        
+        $exp["hidden"]="This circle is hidden in overviews";
+
+        $this->assertEquals($exp, $circle->getDisplayArray());
+    }
+
+    /**
+    }
+
+    /**
+     * test getURL() function
+     */
+    public function testGetURL() {
+        $circle=new circle(3);
+        $url="people.php?circle_id=3";
+
+        $this->assertEquals($url, $circle->getUrl());
     }
 
     /**
@@ -84,12 +104,15 @@ class circleTest extends ZophDataBaseTestCase {
     }
 
     /**
-     * Test getMembers() function
+     * Test getMembers(), getChildren() and getPeopleCount function
+     * getChildren() is an alias for getMembers, therefore testing both in in go.
+     * getPeopleCount() is providing a direct way to access the number of members
      * @dataProvider getCircleMembers();
      */
     public function testGetMembers($circleId, array $expPersonIds) {
         $circle=new circle($circleId);
         $members=$circle->getMembers();
+        $children=$circle->getChildren();
 
         $actPersonIds=array();
         foreach ($members as $member) {
@@ -97,6 +120,13 @@ class circleTest extends ZophDataBaseTestCase {
         }
 
         $this->assertEquals($expPersonIds, $actPersonIds);
+        $this->assertEquals(sizeof($expPersonIds), $circle->getPeopleCount());
+
+        $actChildIds=array();
+        foreach ($children as $child) {
+            $actChildIds[]=$child->getId();
+        }
+        $this->assertEquals($expPersonIds, $actChildIds);
     }
 
     /**
@@ -133,6 +163,67 @@ class circleTest extends ZophDataBaseTestCase {
         $this->assertEquals(array(9), $actPersonIds);
     }
 
+    /**
+     * Test getAutoCover() function
+     * @dataProvider getAutoCover
+     */
+    public function testGetAutoCover($circleId, $autocoverId, $userId, $autocover) {
+        user::setCurrent(new user($userId));
+
+        $circle=new circle($circleId);
+        $circle->lookup();
+
+        $cover=$circle->getAutoCover($autocover);
+
+        $this->assertEquals($autocoverId, $cover->getId());
+
+        user::setCurrent(new user(1));
+    }
+
+    /**
+     * Test getPhotoCount() and getTotalPhotoCount function
+     * getTotalPhotoCount() simply returns getPhotoCount, because
+     * there is no concept of sub-persons.
+     * @dataProvider getPhotoCount()
+     */
+    public function testGetPhotoCount($circleId, $userId, $expCount) {
+        user::setCurrent(new user($userId));
+
+        $circle=new circle($circleId);
+
+        $this->assertEquals($expCount, $circle->getPhotocount());
+        $this->assertEquals($expCount, $circle->getTotalPhotocount());
+
+        user::setCurrent(new user(1));
+    }
+
+    /**
+     * Test getAll()
+     * @dataProvider getAllCircles()
+     */
+    public function testGetAll($userId, $showHidden, $expCircleIds) {
+
+        $circle=new circle(2);
+        $circle->lookup();
+        $circle->set("hidden", true);
+        $circle->update();
+
+        $user=new user(5);
+        $user->lookup();
+        $user->set("see_hidden_circles", 1);
+        $user->update();
+
+        user::setCurrent(new user($userId));
+        $circles=circle::getAll($showHidden);
+
+        $actCircleIds=array();
+        foreach ($circles as $circle) {
+            $actCircleIds[]=$circle->getId();
+        }
+        sort($actCircleIds);
+        $this->assertEquals($expCircleIds, $actCircleIds);
+    }
+
     public function getCircles() {
         return array(
             array(4, "TestCircle", array("Freddie Mercury", "John Deacon","Brian May","Roger Taylor")),
@@ -148,4 +239,36 @@ class circleTest extends ZophDataBaseTestCase {
         );
     }
 
+    public function getAutoCover() {
+        // $circleId, $autocoverId, $userId, $autocover
+        return array(
+            array(1, 1, 1, null),
+            array(1, 1, 3, null),
+            array(2, 7, 1, "newest"),
+            array(2, 1, 3, "first")
+        );
+    }
+
+    public function getPhotoCount() {
+        // $circleId, $userId, $expCount
+        return array(
+            array(1, 1, 4),
+            array(1, 3, 2),
+            array(2, 1, 6),
+            array(2, 3, 2)
+        );
+    }
+
+    public function getAllCircles() {
+        // $userId, $showHidden, $expCircleIds
+
+        return array(
+            array(1, false, array(1,3)),
+            array(1, true, array(1,2,3)),
+            array(3, false, array(1,3)),
+            array(3, true, array(1,3)),
+            array(5, false, array(1,3)),
+            array(5, true, array(1,2,3))
+        );
+    }
 }

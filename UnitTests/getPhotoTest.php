@@ -248,13 +248,13 @@ class getPhotoTest extends PHPUnit_Framework_TestCase {
             array(array(
                     "userrating"        => 8,
                     "_userrating_user"  => 99,
-                ), 0, 999, 2, array(1)),
+                ), 0, 999, 2, array()),
             array(array(
                     "album_id#1"        => 2,
                     "album_id#2"        => 11,
                     "_album_id#2-conj"  => "and",
                     "_album_id#2-op"    => "!="
-                ), 0, 999, 2, array(1)),
+                ), 0, 999, 5, array(1)),
             // The next is the same query as above, but now for a non-admin user
             array(array(
                     "category_id"          => 2

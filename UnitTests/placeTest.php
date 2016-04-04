@@ -473,8 +473,8 @@ class placeTest extends ZophDataBaseTestCase {
             array(1, 6, 1, 2),
             array(1, 7, 1, 1),
             array(1, 3, 1, 5),
-            array(2, 3, 1, 1),
-            array(2, 2, 0, 2)
+            array(5, 3, 1, 1),
+            array(5, 2, 0, 2)
         );
     }
 
@@ -485,7 +485,7 @@ class placeTest extends ZophDataBaseTestCase {
         // user_id, count
         return array(
             array(1, 18),
-            array(2, 2),
+            array(5, 2),
             array(3, 2),
             array(4, 4)
         );
@@ -509,34 +509,34 @@ class placeTest extends ZophDataBaseTestCase {
     public function getDetails() {
         return array(
             array(1,4,"no",array(
-                "count" 	=> "2",
-                "oldest" 	=> "2014-01-02 00:01:00",
-                "newest" 	=> "2014-01-03 00:01:00",
-                "first" 	=> "2014-01-01 23:01:00",
-                "last" 	    => "2014-01-02 23:01:00",
-                "lowest" 	=> "4.3",
-                "highest" 	=> "5.0",
-                "average" 	=> "4.63"
+                "count"     => "2",
+                "oldest"     => "2014-01-02 00:01:00",
+                "newest"     => "2014-01-03 00:01:00",
+                "first"     => "2014-01-01 23:01:00",
+                "last"         => "2014-01-02 23:01:00",
+                "lowest"     => "4.3",
+                "highest"     => "5.0",
+                "average"     => "4.63"
             )),
             array(1,3,2, array(
-                "count" 	=> "1",
-                "oldest" 	=> "2014-01-01 00:01:00",
-                "newest" 	=> "2014-01-01 00:01:00",
-                "first" 	=> "2013-12-31 23:01:00",
-                "last" 	    => "2013-12-31 23:01:00",
-                "lowest" 	=> "7.5",
-                "highest" 	=> "7.5",
-                "average" 	=> "7.50",
+                "count"     => "1",
+                "oldest"     => "2014-01-01 00:01:00",
+                "newest"     => "2014-01-01 00:01:00",
+                "first"     => "2013-12-31 23:01:00",
+                "last"         => "2013-12-31 23:01:00",
+                "lowest"     => "7.5",
+                "highest"     => "7.5",
+                "average"     => "7.50",
             )),
-            array(2,3,"no",array(
-                "count" 	=> "1",
-                "oldest" 	=> "2014-01-01 00:01:00",
-                "newest" 	=> "2014-01-01 00:01:00",
-                "first" 	=> "2013-12-31 23:01:00",
-                "last" 	    => "2013-12-31 23:01:00",
-                "lowest" 	=> "7.5",
-                "highest" 	=> "7.5",
-                "average" 	=> "7.50",
+            array(5,3,"no",array(
+                "count"     => "1",
+                "oldest"     => "2014-01-01 00:01:00",
+                "newest"     => "2014-01-01 00:01:00",
+                "first"     => "2013-12-31 23:01:00",
+                "last"         => "2013-12-31 23:01:00",
+                "lowest"     => "7.5",
+                "highest"     => "7.5",
+                "average"     => "7.50",
             )),
         );
     }
@@ -548,7 +548,7 @@ class placeTest extends ZophDataBaseTestCase {
     public function getTopNData() {
         return array(
             array(1,array(5,18,4,7,14)),
-            array(2,array(7,3))
+            array(5,array(7,3))
         );
     }
 

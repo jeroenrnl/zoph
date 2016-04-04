@@ -286,7 +286,7 @@ class mailMimePart {
                     $char = '=09';
                 } elseif ($dec == 9) {
                     ; // Do nothing if a tab.
-                } elseif (($dec == 61) OR ($dec < 32 ) OR ($dec > 126)) {
+                } elseif (($dec == 61) OR ($dec < 32) OR ($dec > 126)) {
                     $char = $escape . strtoupper(sprintf('%02s', dechex($dec)));
                 }
 

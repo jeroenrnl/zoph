@@ -21,6 +21,7 @@
  * @package Zoph
  */
 
+use db\db;
 use db\select;
 use db\selectHelper;
 use db\insert;
@@ -81,7 +82,7 @@ class circle extends zophTable {
             translate("members") => implode("<br>", $this->getMemberLinks()),
         );
         if ($this->isHidden()) {
-            $da["hidden"]=translate("This circle is hidden in overviews");
+            $da[translate("hidden")]=translate("This circle is hidden in overviews");
         }
 
         return $da;
@@ -131,9 +132,14 @@ class circle extends zophTable {
         $qry->addLimit(1);
 
         $qry->addParam($param);
-        $qry->where(clause::InClause("ppl.person_id", $param));
+        $where=clause::InClause("ppl.person_id", $param);
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
+
+        if (!user::getCurrent()->isAdmin()) {
+            $qry = selectHelper::expandQueryForUser($qry);
+        }
+        $qry->where($where);
 
         $coverphotos=photo::getRecordsFromQuery($qry);
         $coverphoto=array_shift($coverphotos);
@@ -144,7 +150,60 @@ class circle extends zophTable {
     }
 
     /**
-     * Automatically select a coverphoto for this circle
+     * Get details (statistics) about this circle from db
+     * @return array Array with statistics
+     * @todo this function is almost equal to the getDetails() function in other classes they should be merged
+     */
+    public function getDetails() {
+        $qry=new select(array("p" => "photos"));
+        $qry->addFunction(array(
+            "count"     => "COUNT(DISTINCT p.photo_id)",
+            "oldest"    => "MIN(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "newest"    => "MAX(DATE_FORMAT(CONCAT_WS(' ',p.date,p.time), GET_FORMAT(DATETIME, 'ISO')))",
+            "first"     => "MIN(p.timestamp)",
+            "last"      => "MAX(p.timestamp)",
+            "lowest"    => "ROUND(MIN(ar.rating),1)",
+            "highest"   => "ROUND(MAX(ar.rating),1)",
+            "average"   => "ROUND(AVG(ar.rating),2)"));
+        $qry->join(array("ar" => "view_photo_avg_rating"), "p.photo_id = ar.photo_id");
+        $qry->join(array("pp" => "photo_people"), "p.photo_id = pp.photo_id");
+        $qry->join(array("cp" => "circles_people"), "cp.person_id = pp.person_id");
+
+        $qry->addGroupBy("cp.circle_id");
+
+        $where=new clause("cp.circle_id=:circleid");
+        $qry->addParam(new param(":circleid", $this->getId(), PDO::PARAM_INT));
+
+        if (!user::getCurrent()->isAdmin()) {
+            $qry = selectHelper::expandQueryForUser($qry);
+        }
+
+        $qry->where($where);
+
+        $result=db::query($qry);
+        if ($result) {
+            return $result->fetch(PDO::FETCH_ASSOC);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Turn the array from @see getDetails() into XML
+     * @param array Don't fetch details, but use the given array
+     */
+    public function getDetailsXML(array $details=null) {
+        if (!isset($details)) {
+            $details=$this->getDetails();
+        }
+        $details["title"]=translate("Photos of people in this circle:", false);
+        return parent::getDetailsXML($details);
+    }
+
+
+    /**
+     * Get the number of people in this circle
+     * @return int count
      */
     public function getPeopleCount() {
         return sizeof($this->getMembers());
@@ -176,6 +235,7 @@ class circle extends zophTable {
 
     /**
      * Make getChildren an alias of getMembers() so tree view can work for circles
+     * @return array of people
      */
     public function getChildren() {
         return $this->getMembers();
@@ -183,29 +243,39 @@ class circle extends zophTable {
 
     /**
      * getPhotocount for members
+     * @return int count
      */
     public function getPhotocount() {
-        $count=0;
+        $user=user::getCurrent();
+
+        $allPhotos=array();
         foreach ($this->getMembers() as $member) {
-            $count+=$member->getPhotocount();
+
+            $photos=array();
+            $vars=array(
+                "person_id" => $member->getId()
+            );
+            get_photos($vars, 0, 99999999999, $photos, $user);
+            foreach ($photos as $photo) {
+                $allPhotos[$photo->getId()]=true;
+            }
         }
-        return $count;
+        return sizeOf($allPhotos);
     }
 
     /**
      * getTotalPhotocount for members
+     * There is no such thing as subpersons, so photoCount() and totalPhotoCount() are always
+     * equal.
+     * @return int count
      */
     public function getTotalPhotocount() {
-        $count=0;
-        foreach ($this->getMembers() as $member) {
-            $count+=$member->getTotalPhotocount();
-        }
-        return $count;
+        return $this->getPhotocount();
     }
 
     /**
      * Add a member to a circle
-     * @param person Person to addd
+     * @param person Person to add
      */
     public function addMember(person $person) {
         $qry=new insert(array("cp" => "circles_people"));
@@ -306,14 +376,27 @@ class circle extends zophTable {
 
     /**
      * Get all circles
+     * @param bool Whether or not to show hidden circles
+     * @return array of circles
      */
     public static function getAll($showHidden=false) {
         $rawCircles=static::getRecords("circle_name");
         $user=user::getCurrent();
 
+        if (!$user->isAdmin()) {
+            $circles=array();
+            foreach ($rawCircles as $circle) {
+                if (sizeof($circle->getMembers())>0) {
+                    $circles[]=$circle;
+                }
+            }
+            $rawCircles=$circles;
+        }
+
         if ($showHidden && ($user->canSeeHiddenCircles())) {
             $circles=$rawCircles;
         } else {
+            $circles=array();
             foreach ($rawCircles as $circle) {
                 if (!$circle->isHidden()) {
                     $circles[]=$circle;
@@ -323,8 +406,5 @@ class circle extends zophTable {
 
         return $circles;
     }
-
-
 }
-
 ?>

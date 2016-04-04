@@ -53,10 +53,10 @@ class color_scheme extends zophTable {
      * @param string #xxxxxx HTML color code
      */
     public static function getColor($color) {
-        if (!is_null(self::$current)) {
-            return "#" . self::$current->get($color);
+        if (!is_null(static::$current)) {
+            return "#" . static::$current->get($color);
         } else {
-            return self::getDefault($color);
+            return static::getDefault($color);
         }
     }
 
@@ -113,7 +113,7 @@ class color_scheme extends zophTable {
      * @param color_scheme the color scheme to use
      */
     public static function setCurrent(color_scheme $cs) {
-        self::$current=$cs;
+        static::$current=$cs;
     }
 }
 ?>

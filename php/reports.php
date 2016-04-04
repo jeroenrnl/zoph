@@ -66,8 +66,8 @@ if ($top_places) {
 $graph=new block("graph_bar", array(
     "title"     => translate("photo ratings", 0),
     "class"     => "ratings",
-    "value_label" => translate("rating",0 ),
-    "count_label" => translate("count",0 ),
+    "value_label" => translate("rating",0),
+    "count_label" => translate("count",0),
     "rows"      => rating::getGraphArray()
 ));
 

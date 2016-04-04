@@ -122,7 +122,7 @@ class photo extends zophTable {
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
 
         if (!$user->isAdmin()) {
-            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
 
         $qry->where($where);
@@ -305,11 +305,13 @@ class photo extends zophTable {
         $qry->addOrder("a.album");
 
         if (!$user->isAdmin()) {
-            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
+            $qry->join(array("gp" => "group_permissions"), "gp.album_id=a.album_id");
+            $qry->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+            $where->addAnd(new clause("gu.user_id=:userid"));
+            $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
         }
 
         $qry->where($where);
-
         return album::getRecordsFromQuery($qry);
     }
 
@@ -1193,7 +1195,7 @@ class photo extends zophTable {
             $qry=new select(array("p" => "photos"));
             $qry->addFields(array("photo_id"));
             $qry->addFunction(array("distance" => "(6371 * acos(" .
-                "cos(radians(:lat)) * cos(radians(lat) ) * cos(radians(lon) - " .
+                "cos(radians(:lat)) * cos(radians(lat)) * cos(radians(lon) - " .
                 "radians(:lon)) + sin(radians(:lat2)) * sin(radians(lat))))"));
             $qry->having(new clause("distance <= :dist"));
 

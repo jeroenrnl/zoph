@@ -77,6 +77,7 @@ abstract class query {
     /**
      * Add one or more fields to a query
      * @param array list of fields [ "alias" => "field"]
+     * @param bool Whether or not this is a DISTINCT query.
      * @return query
      */
     public function addFields(array $fields, $distinct=false) {
@@ -106,6 +107,7 @@ abstract class query {
 
     /**
      * Add one or more fields to a query that is calculated using an SQL function
+     * @param array Array of functions [ "alias" => "function()"]
      */
     public function addFunction(array $functions) {
         foreach ($functions as $alias => $function) {
@@ -328,6 +330,49 @@ abstract class query {
         }
         return $this;
     }
+
+    /**
+     * Log the query to file, for debugging purposes
+     * @param string Characters to be added at end of line
+     * @param string Name of file to log the query to
+     * @codeCoverageIgnore
+     */
+    public function logToFile($eol="\n", $file="/tmp/zophdebug") {
+        file_put_contents($file, $this->prettyPrint() . $eol, FILE_APPEND);
+        return microtime(true);
+    }
+
+    /**
+     * Format a query, including all parameters, for debugging purposes
+     * @codeCoverageIgnore
+     */
+    public function prettyPrint($withHTML=false) {
+        $sql=(string) $this;
+
+        $allParams=$this->getParams();
+
+        // Here we sort the parameters by the length of their name,
+        // longest first.
+        // This is so we don't overwrite part of a parameter name
+        // in case the first part of the name is the same
+        $sort=create_function('$a, $b', 'return(strlen($b->getName()) - strlen($a->getName()));');
+        usort($allParams, $sort);
+
+        foreach ($allParams as $param) {
+            $value=$param->getValue();
+            if ($withHTML) {
+                $value="<b>" . $value . "</b>";
+            }
+
+            if ($param->getType() == PDO::PARAM_INT) {
+                $sql=str_replace($param->getName(), $value, $sql);
+            } else {
+                $sql=str_replace($param->getName(), "\"" . $value . "\"", $sql);
+            }
+        }
+        return $sql;
+    }
+
 
     /**
      * The __toString() magic function creates the query to be fed to the db

@@ -114,7 +114,7 @@ class WebImport extends Import {
 
         if ($error) {
             // should do some nicer printing to this error some time
-            log::msg(self::handleUploadErrors($error), log::FATAL, log::IMPORT);
+            log::msg(static::handleUploadErrors($error), log::FATAL, log::IMPORT);
             return false;
         }
 
@@ -185,16 +185,16 @@ class WebImport extends Import {
         switch($type) {
         case "image":
             if ($mime=="image/jpeg" && conf::get("import.rotate")) {
-                self::autorotate($file);
+                static::autorotate($file);
             }
-            self::resizeImage($file);
+            static::resizeImage($file);
             $return=null;
             break;
         case "archive":
-            $return=self::unpackArchive($file);
+            $return=static::unpackArchive($file);
             break;
         case "xml":
-            $return=self::XMLimport($file);
+            $return=static::XMLimport($file);
             break;
         default:
             log::msg("Unknown filetype " . $type .
@@ -329,9 +329,9 @@ class WebImport extends Import {
      */
     public static function getXML($search) {
         if ($search=="thumbs") {
-            return self::getThumbsXML();
+            return static::getThumbsXML();
         } else {
-            return self::getProgressXML($search);
+            return static::getProgressXML($search);
         }
     }
 
@@ -340,8 +340,8 @@ class WebImport extends Import {
      */
     public static function getProgressXML($uploadId) {
         $xml = new DOMDocument('1.0','UTF-8');
-        $rootnode=$xml->createElement(self::XMLROOT);
-        $node=$xml->createElement(self::XMLNODE);
+        $rootnode=$xml->createElement(static::XMLROOT);
+        $node=$xml->createElement(static::XMLNODE);
 
         if (ini_get("session.upload_progress.enabled")==true) {
             $upl_prog=$_SESSION[ini_get("session.upload_progress.prefix") . $uploadId];

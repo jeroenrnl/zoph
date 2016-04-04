@@ -106,6 +106,7 @@ class albumTest extends ZophDataBaseTestCase {
      * @dataProvider getChildren()
      */
     public function testGetChildren($id, array $exp_children, $order=null) {
+        user::setCurrent(new user(1));
         $album=new album($id);
         $alb_children=$album->getChildren($order);
         $children=array();
@@ -389,7 +390,7 @@ class albumTest extends ZophDataBaseTestCase {
      */
     public function getDetails() {
         return array(
-            array(2,2,"no", array(
+            array(2, 2, 1, array(
                 "count"     => "2",
                 "oldest"    => "2014-01-01 00:01:00",
                 "newest"    => "2014-01-07 00:01:00",
@@ -399,7 +400,7 @@ class albumTest extends ZophDataBaseTestCase {
                 "highest"   => "7.5",
                 "average"   => "7.50"
             )),
-            array(4,3,"no", array(
+            array(4, 3, "no", array(
                 "count"     => "3",
                 "oldest"    => "2014-01-01 00:01:00",
                 "newest"    => "2014-01-08 00:01:00",
@@ -409,7 +410,7 @@ class albumTest extends ZophDataBaseTestCase {
                 "highest"   => "7.5",
                 "average"   => "5.92",
             )),
-            array(1,6,1,array(
+            array(1, 6, 1,array(
                 "count"     => "3",
                 "oldest"    => "2014-01-03 00:01:00",
                 "newest"    => "2014-01-05 00:01:00",
@@ -436,8 +437,8 @@ class albumTest extends ZophDataBaseTestCase {
             array(1,1,10),
             array(1,6,4),
             array(1,11,3),
-            array(2,1,2),
-            array(2,8,0),
+            array(5,1,2),
+            array(5,8,0),
             array(4,1,4),
             array(4,2,4),
         );
@@ -471,9 +472,9 @@ class albumTest extends ZophDataBaseTestCase {
             array(1,"first", 3, 1),
             array(1,"last", 4, 9),
             array(1,"newest", 4, 10),
-            array(2,"oldest", 1, 1),
-            array(2,"newest", 2, 7),
-            array(2,"first", 2, 1),
+            array(5,"oldest", 1, 1),
+            array(5,"newest", 2, 7),
+            array(5,"first", 2, 1),
             array(4,"last", 2, 7),
         );
     }
@@ -485,7 +486,7 @@ class albumTest extends ZophDataBaseTestCase {
     public function getTopNData() {
         return array(
             array(1,array(3,4,5,6,11)),
-            array(2,array(2)),
+            array(5,array(2)),
             array(4,array(3,2))
         );
     }
@@ -497,7 +498,7 @@ class albumTest extends ZophDataBaseTestCase {
     public function getAllData() {
         return array(
             array(1,array(2,3,4,5,6,7,9,10,8,11,12,13,14,1)),
-            array(2,array(2,1)),
+            array(5,array(2,1)),
             array(4,array(2,3,1))
         );
     }
@@ -509,7 +510,7 @@ class albumTest extends ZophDataBaseTestCase {
     public function getAlbumCount() {
         return array (
             array(1, 14),
-            array(2, 2),
+            array(5, 2),
             array(4, 3)
          );
      }

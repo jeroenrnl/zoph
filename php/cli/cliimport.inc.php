@@ -55,7 +55,7 @@ class CliImport extends Import {
         $rem=round($calccur - $dispcur,2);
         $num=$total/$disptotal;
         if ($num > 3) {
-            if ($rem > 0.333  && $rem < 0.666 ) {
+            if ($rem > 0.333  && $rem < 0.666) {
                 $display.=".";
             } else if ($rem > 0.6666 && $rem < 0.999) {
                 $display.=":";

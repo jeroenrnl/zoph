@@ -52,7 +52,7 @@ $newoffset = $offset + 1;
 $qs = implode("&amp;", explode("&", $_SERVER["QUERY_STRING"]));
 $clean_qs=update_query_string($clean_vars, "", 0);
 $new_qs = $qs;
-if (strpos($_SERVER["QUERY_STRING"], "_off=") !== false ) {
+if (strpos($_SERVER["QUERY_STRING"], "_off=") !== false) {
     $new_qs = str_replace("_off=$offset", "_off=$newoffset", $new_qs);
 } else {
     if ($new_qs) {

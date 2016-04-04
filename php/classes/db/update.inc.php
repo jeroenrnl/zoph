@@ -37,16 +37,30 @@ class update extends query {
              is a protection against accidently running a query like
              this during development or due to a bug */
     private $updateAll=false;
+    /** @var array Array of fields to be SET in UPDATE query */
     private $set=array();
 
+    /**
+     * Add a field to be SET in UPDATE query
+     * @param string field to be SET
+     * @param string name of param to be used to SET this field
+     */
     public function addSet($field, $param) {
         $this->set[]=$field . "=:" . $param;
     }
 
+    /**
+     * Add a field to be SET in UPDATE query, using a function to set it
+     * @param string field=function() expression
+     */
     public function addSetFunction($function) {
         $this->set[]=$function;
     }
 
+    /**
+     * Get array of SET statements for this query
+     * @return array SET statements
+     */
     public function getSet() {
         return $this->set;
     }

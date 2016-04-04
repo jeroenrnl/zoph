@@ -212,6 +212,13 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         if ($key == "album_id") {
             if ($op == "=") {
                 $alias = "pa" . substr($suffix, 1);
+                /*
+                 * Because the query builder expects the photo_album table to be aliased to "pa",
+                 * the first occurence does not have number suffix
+                 */
+                if ($alias=="pa1") {
+                    $alias="pa";
+                }
                 $qry->join(array($alias => "photo_albums"), "p.photo_id=" . $alias . ".photo_id");
                 if (is_numeric($val)) {
                     $qry->addClause(new clause($alias . ".album_id=:albumId" . $suffix), $conj);
@@ -363,11 +370,11 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $clause=new clause($alias . ".rating " . $op . " :rating" . $suffix);
             }
             $qry->addClause($clause, $conj);
-        } else if ( $key=="lat" || $key=="lon") {
+        } else if ($key=="lat" || $key=="lon") {
 
             $latlon[$key]=$val;
 
-            if ( !empty($latlon["lat"]) && !empty($latlon["lon"])) {
+            if (!empty($latlon["lat"]) && !empty($latlon["lon"])) {
                 $ids=array();
                 $lat=(float) $latlon["lat"];
                 $lon=(float) $latlon["lon"];
@@ -440,9 +447,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     }
 
     if (!$user->isAdmin()) {
-        $qry->join(array("pa" => "photo_albums"), "p.photo_id=pa.photo_id");
-        list($qry, $where) = selectHelper::expandQueryForUser($qry, null, $user);
-        $qry->addClause($where, "AND");
+        $qry = selectHelper::expandQueryForUser($qry, $user);
     }
 
     $num_photos = 0;
@@ -450,7 +455,6 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     // do this count separately since the select uses limit
     $countQry=clone $qry;
     $countQry->addFunction(array("count" => "COUNT(distinct p.photo_id)"));
-
     $num_photos = $countQry->getCount();
 
     if ($num_photos > 0) {

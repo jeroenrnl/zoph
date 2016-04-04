@@ -121,7 +121,7 @@ class arguments {
 
             case "--config":
             case "-C":
-                self::$command="config";
+                static::$command="config";
                 $args["_configitem"]=$argv[++$i];
                 if (isset($argv[$i+1])) {
                     $args["_configvalue"]=$argv[++$i];
@@ -130,7 +130,7 @@ class arguments {
                 }
                 break;
             case "--dumpconfig":
-                self::$command="dumpconfig";
+                static::$command="dumpconfig";
                 break;
             case "--fields":
             case "--field":
@@ -138,7 +138,7 @@ class arguments {
                 $args["fields"][]=$argv[++$i];
                 break;
             case "--import":
-                self::$command="import";
+                static::$command="import";
                 break;
             case "--place":
             case "--location":
@@ -207,15 +207,15 @@ class arguments {
 
             case "--update":
             case "-u":
-                self::$command="update";
+                static::$command="update";
                 break;
             case "--import":
             case "-I":
-                self::$command="import";
+                static::$command="import";
                 break;
             case "--new":
             case "-N":
-                self::$command="new";
+                static::$command="new";
                 break;
 
             case "--useIds":
@@ -288,11 +288,11 @@ class arguments {
 
             case "-V":
             case "--version":
-                self::$command="version";
+                static::$command="version";
                 break;
             case "-h":
             case "--help":
-                self::$command="help";
+                static::$command="help";
                 break;
             case "-v":
             case "--verbose":
@@ -318,8 +318,8 @@ class arguments {
             $args["fields"]=$newfields;
         }
 
-        if (conf::get("import.cli.useids")==true && self::$command=="import") {
-            self::$command="update";
+        if (conf::get("import.cli.useids")==true && static::$command=="import") {
+            static::$command="update";
         }
     }
     /**
@@ -337,7 +337,7 @@ class arguments {
             switch($type) {
             case "albums":
                 foreach ($arg as $name) {
-                    if (self::$command=="new" ||
+                    if (static::$command=="new" ||
                       (conf::get("import.cli.add.auto") && !album::getByName($name))) {
                         $parent=array_shift($args["palbum"]);
                         // this is a string comparison because the trim() in process() changes
@@ -370,7 +370,7 @@ class arguments {
                 break;
             case "categories":
                 foreach ($arg as $name) {
-                    if (self::$command=="new" ||
+                    if (static::$command=="new" ||
                       (conf::get("import.cli.add.auto") && !category::getByName($name))) {
                         $parent=array_shift($args["pcat"]);
                         // this is a string comparison because the trim() in process() changes
@@ -403,7 +403,7 @@ class arguments {
                 break;
             case "people":
                 foreach ($arg as $name) {
-                    if (self::$command=="new" || (conf::get("import.cli.add.auto") &&
+                    if (static::$command=="new" || (conf::get("import.cli.add.auto") &&
                       !person::getByName($name))) {
                         $vars["_new_person"][]=$name;
                     } else {
@@ -419,7 +419,7 @@ class arguments {
                 break;
             case "photographer":
                 $name=$arg;
-                if (self::$command=="new" ||
+                if (static::$command=="new" ||
                   (conf::get("import.cli.add.auto") && !person::getByName($name))) {
                     $vars["_new_photographer"][]=$name;
                 } else {
@@ -434,7 +434,7 @@ class arguments {
                 break;
             case "location":
                 foreach ($arg as $name) {
-                    if (self::$command=="new" || (conf::get("import.cli.add.auto") &&
+                    if (static::$command=="new" || (conf::get("import.cli.add.auto") &&
                       !place::getByName($name))) {
                         $parent=array_shift($args["pplace"]);
                         // this is a string comparison because the trim() in process() changes

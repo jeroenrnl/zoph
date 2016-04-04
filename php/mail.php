@@ -210,7 +210,7 @@ if ($found && $_action == "compose") {
         <label for="size"><?php echo translate("send fullsize") ?></label>
         <?php echo template::createPulldown("_size", "mid", array(
             "full" => translate("Yes",0),
-            "mid" => translate("No",0)) ); ?>
+            "mid" => translate("No",0))); ?>
         <br>
         <label for="includeurl"><?php echo translate("include URL") ?></label>
         <?php echo template::createYesNoPulldown("includeurl", "1") ?><br>

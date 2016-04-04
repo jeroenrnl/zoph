@@ -1,0 +1,8 @@
+# Used to remove files from deployment using `git archive`
+# This is used when creating a release
+# git files
+.gitattributes 	export-ignore
+.gitignore 	export-ignore
+# Unittests
+UnitTests	export-ignore
+sonar-project.properties	export-ignore

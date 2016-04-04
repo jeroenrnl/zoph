@@ -64,27 +64,30 @@ class select extends query {
     }
     /**
      * Add a JOIN clause to the query
-     * @param string table to join
+     * @param array table to join array of "alias" => "tablename"
+     *                                  or "alias" => select subquery
      * @param string ON clause
      * @param string join type
      * @return query return the query to enable chaining
      */
-    public function join($table, $on, $jointype="INNER") {
-        if (is_array($table)) {
-            $tbl=reset($table);
-            $as=key($table);
-            $table=$tbl . " AS " . $as;
-            $this->tables[$as]=$tbl;
-        } else {
-            $this->tables[$table]=$table;
-        }
-
-        $table=db::getPrefix() . $table;
-
+    public function join(array $table, $on, $jointype="INNER") {
         if (!in_array($jointype, array("INNER", "LEFT", "RIGHT"))) {
             throw new DatabaseException("Unknown JOIN type");
         }
-        $this->joins[]=$jointype . " JOIN " . $table . " ON " . $on;
+
+        $tbl=reset($table);
+        $as=key($table);
+
+        if ($tbl instanceof select) {
+            // We are joining with a subquery
+            $this->joins[]=$jointype . " JOIN (" . rtrim((string) $tbl, ";") . ") AS " . $as . " ON " . $on;
+        } else {
+            $table=$tbl . " AS " . $as;
+            $this->tables[$as]=$tbl;
+            $table=db::getPrefix() . $table;
+            $this->joins[]=$jointype . " JOIN " . $table . " ON " . $on;
+        }
+
         return $this;
     }
 

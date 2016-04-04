@@ -127,7 +127,6 @@ class db {
      */
     public static function query(query $query) {
         $db=static::getHandle();
-
         try {
             log::msg("SQL Query: " . (string) $query, log::DEBUG, log::SQL);
             $stmt=$db->prepare($query);
@@ -137,8 +136,22 @@ class db {
                     $stmt->bindValue($param->getName(), $param->getValue(), $param->getType());
                 }
             }
+
+            /**
+             * Set LOG_SEVERITY to log::MOREDEBUG and LOG_SUBJECT to log::SQL in config.inc.php
+             * to create a log of all SQL queries + execution times in /tmp
+             */
+            if ((LOG_SEVERITY == log::TOFILE) && (LOG_SUBJECT & log::SQL)) {
+                $start=$query->logToFile("");
+            }
             $stmt->execute();
-        } catch (PDOException $e) {
+            if (isset($start)) {
+                $time=microtime(true)-$start;
+                file_put_contents("/tmp/zophdebug", ": " . $time . "\n", FILE_APPEND);
+            }
+
+        } catch (\PDOException $e) {
+            debug_print_backtrace();
             echo $e->getMessage() . "\n";
             log::msg("SQL failed", log::FATAL, log::DB);
         }
@@ -151,6 +164,7 @@ class db {
      * This is meant to execute queries that cannot be handled via the query builder
      * it should not be used for SELECT, UPDATE, DELETE or INSERT queries,
      * these can be handled via their respective objects
+     * @param string SQL
      */
     public static function SQL($sql) {
         try {

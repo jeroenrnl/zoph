@@ -1,5 +1,5 @@
 #
-# Zoph 0.9 -> 0.10 update
+# Zoph 0.9.1 -> 0.9.2 update
 #
 # This file is part of Zoph.
 #
@@ -16,36 +16,6 @@
 # along with Zoph; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-#
-# Between stable releases 0.9 and 0.10 several feature releases are planned
-# If you upgrade to 0.9.x, be prepared to comment the changes for 0.9.1 once
-# you upgrade to 0.9.2 or 0.10.
-#
-
-#
-# Changes for 0.9.1
-#
-CREATE TABLE zoph_conf ( 
-	conf_id char(64) NOT NULL, 
-	value varchar(128) default NULL, 
-	timestamp timestamp, 
-	PRIMARY kEY (conf_id)
-	) ENGINE=MyISAM;
-
-ALTER TABLE zoph_prefs DROP COLUMN desc_thumbnails;
-
-ALTER TABLE zoph_photos DROP COLUMN rating;
-
-CREATE INDEX photo_id ON zoph_photo_ratings(photo_id);
-
-CREATE VIEW zoph_view_photo_avg_rating AS 
-	SELECT p.photo_id, avg(pr.rating) AS rating FROM zoph_photos AS p 
-	LEFT JOIN zoph_photo_ratings AS pr ON p.photo_id = pr.photo_id 
-	GROUP BY p.photo_id;
-
-#
-# Changes for 0.9.2
-#
 ALTER TABLE zoph_prefs MODIFY COLUMN child_sortorder enum('name', 'sortname', 'oldest', 'newest',
         'first', 'last', 'lowest', 'highest', 'average', 'random') default 'sortname' NOT NULL;
 
@@ -69,3 +39,9 @@ CREATE TABLE zoph_circles_people (
 
 ALTER TABLE zoph_users ADD COLUMN see_hidden_circles char(1) NOT NULL default '0';
 
+CREATE VIEW zoph_view_photo_user AS
+  SELECT p.photo_id AS photo_id, gu.user_id AS user_id FROM zoph_photos AS p 
+    JOIN zoph_photo_albums AS pa ON pa.photo_id = p.photo_id
+    JOIN zoph_group_permissions AS gp ON pa.album_id = gp.album_id
+    JOIN zoph_groups_users AS gu ON gp.group_id = gu.group_id
+  WHERE gp.access_level >= p.level;

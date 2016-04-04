@@ -109,7 +109,7 @@ class point extends zophTable {
 
         $qry->addOrder("datetime");
 
-        $points=self::getRecordsFromQuery($qry);
+        $points=static::getRecordsFromQuery($qry);
         if (is_array($points) && sizeof($points) > 0) {
             return $points[0];
         } else {
@@ -129,7 +129,7 @@ class point extends zophTable {
 
         $qry->addOrder("datetime DESC");
 
-        $points=self::getRecordsFromQuery($qry);
+        $points=static::getRecordsFromQuery($qry);
         if (is_array($points) && sizeof($points) > 0) {
             return $points[0];
         } else {

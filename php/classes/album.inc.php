@@ -154,8 +154,6 @@ class album extends zophTreeTable implements Organizer {
 
         $qry=new select(array("a" => "albums"));
         $qry->addFields(array("*", "name"=>"album"));
-        $qry->join(array("pa" => "photo_albums"), "a.album_id=pa.album_id", "LEFT")
-            ->join(array("p"  => "photos"      ), "pa.photo_id=p.photo_id", "LEFT");
 
         $where=new clause("parent_album_id=:album_id");
 
@@ -170,11 +168,13 @@ class album extends zophTreeTable implements Organizer {
         }
 
         if (!$user->isAdmin()) {
-            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
+            $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
+                ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+            $where->addAnd(new clause("gu.user_id=:userid"));
+            $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
         }
 
         $qry->where($where);
-
         $this->children=static::getRecordsFromQuery($qry);
         return $this->children;
     }
@@ -185,6 +185,8 @@ class album extends zophTreeTable implements Organizer {
      * @todo this function is almost equal to category::getDetails() they should be merged
      */
     public function getDetails() {
+        $user=user::getCurrent();
+
         $qry=new select(array("pa" => "photo_albums"));
         $qry->addFunction(array(
             "count"     => "COUNT(DISTINCT p.photo_id)",
@@ -203,8 +205,11 @@ class album extends zophTreeTable implements Organizer {
         $where=new clause("pa.album_id=:albid");
         $qry->addParam(new param(":albid", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+        if (!$user->isAdmin()) {
+            $qry->join(array("gp" => "group_permissions"), "pa.album_id=gp.album_id")
+                ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+            $where->addAnd(new clause("gu.user_id=:userid"));
+            $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
         }
 
         $qry->where($where);
@@ -246,7 +251,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addParam(new param(":alb_id", $this->getId(), PDO::PARAM_INT));
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
 
         $qry->where($where);
@@ -272,7 +277,7 @@ class album extends zophTreeTable implements Organizer {
         $where=clause::InClause("pa.album_id", $ids);
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
+            $qry=selectHelper::expandQueryForUser($qry);
         }
         $qry->where($where);
 
@@ -365,7 +370,7 @@ class album extends zophTreeTable implements Organizer {
         }
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
@@ -388,15 +393,19 @@ class album extends zophTreeTable implements Organizer {
      * @param string name
      * @todo This function is almost equal to category::getByName(), should be merged
      */
-    public static function getByName($name) {
+    public static function getByName($name, $like=false) {
         if (empty($name)) {
             return false;
         }
         $qry=new select(array("a" => "albums"));
         $qry->addFields(array("album_id"));
-        $qry->where(new clause("lower(album) LIKE :name"));
-        $qry->addParam(new param(":name", "%" . strtolower($name) . "%", PDO::PARAM_STR));
-
+        if ($like) {
+            $qry->where(new clause("lower(album) LIKE :name"));
+            $qry->addParam(new param(":name", "%" . strtolower($name) . "%", PDO::PARAM_STR));
+        } else {
+            $qry->where(new clause("lower(album)=:name"));
+            $qry->addParam(new param(":name", strtolower($name), PDO::PARAM_STR));
+        }
         return static::getRecordsFromQuery($qry);
     }
 
@@ -414,8 +423,10 @@ class album extends zophTreeTable implements Organizer {
         $qry->addOrder("count DESC")->addOrder("a.album");
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
         if (!$user->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry);
-            $qry->where($where);
+            $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
+                ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+            $qry->where(new clause("gu.user_id=:userid"));
+            $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
         }
         return parent::getTopNfromSQL($qry);
 

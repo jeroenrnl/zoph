@@ -43,7 +43,7 @@ if ($action != "insert") {
 }
 
 if ($_action=="update") {
-    if (((int) getvar("_member") > 0 )) {
+    if (((int) getvar("_member") > 0)) {
         $circle->addMember(new person((int) getvar("_member")));
     }
 

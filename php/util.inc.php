@@ -152,7 +152,7 @@ function clean_request_vars($vars) {
         // keep _action now that the pager links point back to search.php
         if ($key == "_button") { continue; }
 
-        if ( is_array($val) ) {
+        if (is_array($val)) {
             while (list($subkey, $subval) = each($val)) {
                 if (empty($subval)) { continue; }
 
@@ -469,23 +469,6 @@ function check_js($user) {
                 "boxes on this page, however, you do not seem to have Javascript " .
                 "support. You should either enable javascript or turn autocompletion " .
                 "off, or this page will not work as expected!") . "</div></noscript>";
-    }
-}
-
-function remove_empty(array $children) {
-    $user=user::getCurrent();
-    $clean=array();
-    // If user is not admin, remove any children that do not have photos
-    if (!$user->isAdmin()) {
-        foreach ($children as $child) {
-            $count=$child->getTotalPhotoCount();
-            if ($count>0) {
-                $clean[]=$child;
-            }
-        }
-        return $clean;
-    } else {
-        return $children;
     }
 }
 

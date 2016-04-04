@@ -373,7 +373,7 @@ class person extends zophTable implements Organizer {
         $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
@@ -450,7 +450,7 @@ class person extends zophTable implements Organizer {
         $qry->addParam(new param(":photographerid", $this->getId(), PDO::PARAM_INT));
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
 
         $qry->where($where);
@@ -521,8 +521,7 @@ class person extends zophTable implements Organizer {
 
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
         if (!$user->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry);
-            $qry->where($where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
         return parent::getTopNfromSQL($qry);
 
@@ -541,12 +540,15 @@ class person extends zophTable implements Organizer {
         if (!is_null($search)) {
             $where=static::getWhereForSearch($search, $search_first);
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
+            if ($search_first) {
+                $qry->addParam(new param("searchfirst", $search, PDO::PARAM_STR));
+            }
         }
 
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
 
         if (!user::getCurrent()->isAdmin()) {
-            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
+            $qry = selectHelper::expandQueryForUser($qry);
         }
 
         if ($where instanceof clause) {
@@ -605,6 +607,7 @@ class person extends zophTable implements Organizer {
 
         $people_array = static::getAll();
         foreach ($people_array as $person) {
+            $person->lookup();
             $ppl[$person->getId()] =
                  ($person->get("last_name") ? $person->get("last_name") .  ", " : "") .
                  ($person->get("called") ? $person->get("called") : $person->get("first_name"));
@@ -618,8 +621,7 @@ class person extends zophTable implements Organizer {
      * @return int count
      */
     public static function getCountForUser() {
-        $user=user::getCurrent();
-        if ($user && !$user->isAdmin()) {
+        if (user::getCurrent()->isAdmin()) {
             return static::getCount();
         } else {
             $allowed=array();
@@ -714,7 +716,7 @@ class person extends zophTable implements Organizer {
             } else {
                 $where=new clause("ppl.last_name like lower(concat(:search,'%'))");
                 if ($search_first) {
-                    $where->addOr(new clause("ppl.first_name like lower(concat(:search, '%'))"));
+                    $where->addOr(new clause("ppl.first_name like lower(concat(:searchfirst, '%'))"));
                 }
             }
         }

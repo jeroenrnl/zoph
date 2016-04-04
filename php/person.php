@@ -62,6 +62,7 @@ if ($action == "display") {
     $photos_by = $person->getPhotographer()->getPhotoCount();
 
     $selection=null;
+    $actionlinks=null;
 
     if ($user->isAdmin()) {
         $actionlinks=array(

@@ -516,3 +516,9 @@ CREATE VIEW zoph_view_photo_avg_rating AS
     LEFT JOIN zoph_photo_ratings AS pr ON p.photo_id = pr.photo_id
     GROUP BY p.photo_id;
 
+CREATE VIEW zoph_view_photo_user AS
+  SELECT p.photo_id AS photo_id, gu.user_id AS user_id FROM zoph_photos AS p 
+    JOIN zoph_photo_albums AS pa ON pa.photo_id = p.photo_id
+    JOIN zoph_group_permissions AS gp ON pa.album_id = gp.album_id
+    JOIN zoph_groups_users AS gu ON gp.group_id = gu.group_id
+  WHERE gp.access_level >= p.level;

@@ -33,6 +33,14 @@ use db\db;
  */
 class photoTest extends ZophDataBaseTestCase {
 
+    /**
+     * Setup testcase
+     * Make sure admin user is logged in
+     */
+    public function setUp() {
+        parent::setUp();
+        user::setCurrent(new user(1));
+    }
 
     /**
      * test display() method
@@ -413,7 +421,7 @@ class photoTest extends ZophDataBaseTestCase {
     }
 
     /**
-     * Test getTime function
+     * Preparations for time tests
      */
     private function setupTime() {
         ini_set("date.timezone", "Europe/Amsterdam");

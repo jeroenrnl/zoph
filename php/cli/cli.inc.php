@@ -51,7 +51,7 @@ class cli {
      * @param $args array of CLI arguments
      */
     public function __construct(user $user, $api, array $args) {
-        if ($api != self::API) {
+        if ($api != static::API) {
             throw new CliAPINotCompatibleException("This Zoph installation is not compatible " .
                 "with the Zoph executable you are running.");
         }
@@ -87,10 +87,10 @@ class cli {
             $this->doDumpCondig();
             break;
         case "version":
-            self::showVersion();
+            static::showVersion();
             break;
         case "help":
-            self::showHelp();
+            static::showHelp();
             break;
         default:
             throw new CliUnknownErrorException("Unknown command, please file a bug");
@@ -219,7 +219,7 @@ class cli {
         if (is_array($this->files) && sizeof($this->files)>0) {
             if (!isset($vars["_dirpattern"])) {
                 $photos=array();
-                foreach ($this->files as $file) {
+                foreach (array_unique($this->files) as $file) {
                     $photo=new photo();
                     $photo->file["orig"]=$file;
                     $photos[]=$photo;
@@ -351,7 +351,7 @@ class cli {
 
         if (conf::get("import.cli.verbose") > 0) {
             echo "Setting config \"$name\" to \"$value\""  .
-                ( $default ? " (default)" : "" ) . "\n";
+                ($default ? " (default)" : "") . "\n";
         }
 
 
@@ -367,7 +367,7 @@ class cli {
         foreach ($conf as $item) {
             foreach ($item as $citem) {
                 if ($citem instanceof confItemBool) {
-                    $value=( $citem->getValue() ? "true": "false" );
+                    $value=($citem->getValue() ? "true": "false");
                 } else {
                     $value=$citem->getValue();
                 }
