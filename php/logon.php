@@ -37,26 +37,10 @@ if (conf::get("ssl.force") != "never") {
 
 $user = new user();
 $lang=$user->loadLanguage();
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link TYPE="text/css" REL="stylesheet" HREF="css.php?logged_on=no">
-<title><?php echo conf::get("interface.title") . ' - ' . translate("logon",0) ?></title>
-</head>
-<body>
-<h1><?php echo translate("logon",0) ?></h1>
-<div class="main" id="logon">
-    <form action="zoph.php" method="POST">
-        <h2 class="logon"><?php echo conf::get("interface.title") ?></h2>
-        <label for="uname"><?php echo translate("username",0) ?></label>
-        <input type="text" name="uname" id="uname"><br>
-        <label for="pword"><?php echo translate("password",0) ?></label>
-        <input type="password" name="pword" id="pword"><br>
-        <input type="hidden" name="redirect" value="<?php echo $redirect ?>">
-        <input type="submit" value="<?php echo translate("submit",0); ?>">
-    </form>
-</div>
-</body>
-</html>
+
+$tpl=new template("logon", array(
+    "title" =>  conf::get("interface.title"),
+    "redirect"  =>  $redirect
+));
+
+echo $tpl;

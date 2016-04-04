@@ -24,11 +24,14 @@ session_cache_limiter("public");
 require_once "variables.inc.php";
 $hash = getvar("hash");
 $annotated = getvar('annotated');
+$type = getvar("type");
+if($type == "background") {
+    define("IMAGE_BG", 1);
+}
 define("IMAGE_PHP", 1);
 require_once "include.inc.php";
 
 $photo_id = getvar("photo_id");
-$type = getvar("type");
 
 if (($type=="import_thumb" || $type=="import_mid") &&
     ($user->isAdmin() || $user->get("import"))) {

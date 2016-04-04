@@ -70,6 +70,9 @@ if ($_action == "logout") {
     if (defined("IMAGE_PHP") && conf::get("share.enable") && !empty($hash)) {
         require_once "classes/anonymousUser.inc.php";
         $user = new anonymousUser();
+    } else if (defined("IMAGE_BG")) {
+        require_once "classes/anonymousUser.inc.php";
+        $user = new anonymousUser();
     } else {
         $uname = getvar("uname");
         $pword = getvar("pword");

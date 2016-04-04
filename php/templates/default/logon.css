@@ -1,0 +1,118 @@
+<?php
+/** 
+ * This file is part of Zoph.
+ *
+ * Zoph is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Zoph is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with Zoph; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jeroen Roos
+ * @package ZophTemplates
+ *
+ */
+?>
+
+body {
+	font-family: Verdana, Arial, Sans-serif;
+	padding: 0;
+	margin: 0;
+	font-size: 10px;
+}
+
+img.background	{
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+body > h1 {
+	position: absolute;
+	left: 15px;
+	top: 0px;
+	font-size: 6em;
+	text-align: left;
+	color: rgba(0,0,0,0.3);
+	margin: 0;
+}
+
+div.logon {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	margin:	auto;
+	background: white;
+	width: 300px;
+	height: 220px;
+	border-radius: 15px;
+	opacity: 0.95;
+	box-shadow: 5px 5px 5px 5px rgba(0,0,0,0.5);
+	background: linear-gradient(to bottom, #1e5799 0%,#7db9e8 100%);
+}
+
+div.logon h1 {
+	background: #1e5799;
+	color: white;
+	border-radius: 15px 15px 0 0;
+	padding: 10px;
+	margin: 0;
+	text-align: center;
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+div.logon label {
+	color: rgba(0,0,0,0.8);
+	display: block;
+	clear: both;
+	font-size: 1.5em;
+	margin: 5px 20px 0 20px;
+}
+
+div.logon input {
+	opacity: 0.6;
+	display: block;
+	clear: both;
+} 
+
+div.logon input[type=text],
+div.logon input[type=password] {
+	width: 256px;
+	height: 35px;
+	padding: 8px;
+	margin: 0 20px 5px 20px;
+	border: 1px solid rgba(0,0,0,0.5);
+	border-radius: 5px;
+	background: rgba(0,0,0,0.1);
+
+}
+
+div.logon input[type=submit] {
+	position: absolute;
+	border: none;
+	width: 300px;
+	padding: 10px;
+	margin: auto 0 0 0;
+	background: #1e5799;
+	color: white;
+	font-size: 1.5em;
+	font-weight: bold;
+	top: auto;
+	bottom: 0;
+	height: 35px;
+	border-radius: 0 0 15px 15px;
+}
+	
+div.logon input[type=submit]:hover {
+	background: #7db9e8;
+}
