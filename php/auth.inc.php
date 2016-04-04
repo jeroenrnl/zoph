@@ -27,7 +27,6 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
-
 $_action="display";
 if (!defined("CLI")) {
     session_start();
@@ -78,7 +77,6 @@ if ($_action == "logout") {
         $validator = new validator($uname, $pword);
         $user = $validator->validate();
     }
-
     // we have a valid user
     if (!empty($user)) {
         $user->lookup();
@@ -86,10 +84,10 @@ if ($_action == "logout") {
         $user->lookupPrefs();
 
         // Update Last Login Fields
-        $updated_user = new user($user->get("user_id"));
-        $updated_user->set("lastlogin", "now()");
-        $updated_user->set("lastip", $_SERVER["REMOTE_ADDR"]);
-        $updated_user->update();
+        $user->set("lastlogin", "now()");
+        $user->set("lastip", $_SERVER["REMOTE_ADDR"]);
+        $user->update();
+        $user->lookup();
     } else {
         $this_page=urlencode(preg_replace("/^\//", "", $_SERVER['REQUEST_URI']));
         redirect("logon.php?redirect=" . $this_page);
@@ -97,7 +95,7 @@ if ($_action == "logout") {
 
 }
 
-if (!empty($user)) {
+if (!empty($user) && !($user instanceof anonymousUser)) {
     $user->prefs->load();
     $lang=$user->loadLanguage();
     user::setCurrent($user);
@@ -120,6 +118,8 @@ if (!empty($user)) {
     if (array_key_exists('HTTPS', $_SERVER) && (conf::get("ssl.force")=="login")) {
         redirect(getZophURL("http"), "switch back from https to http");
     }
+} else if ($user instanceof anonymousUser) {
+    user::setCurrent($user);
 } else {
     $lang = new language(conf::get("interface.language"));
 }

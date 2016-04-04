@@ -63,6 +63,20 @@ final class anonymousUser extends user {
     }
 
     /**
+     * Fake lookup
+     */
+    public function lookup() {
+        return false;
+    }
+
+    /**
+     * Fake update
+     */
+    public function update() {
+        return false;
+    }
+
+    /**
      * Return a bogus person id
      */
     public function lookupPerson() {
