@@ -67,6 +67,17 @@ class user extends zophTable {
     }
 
     /**
+     * lookup user, unset password
+     * this is both to prevent hashes to be displayed in debug info
+     * and to prevent the password to be overwritten with the hash
+     * of the hash of the password
+     */
+    public function lookup() {
+        parent::lookup();
+        unset($this->fields["password"]);
+    }
+
+    /**
      * Delete a user from the db
      * also delete the preferences for this user
      */
