@@ -74,14 +74,24 @@ if (($type=="import_thumb" || $type=="import_mid") &&
 } else if ($type==MID_PREFIX || $type==THUMB_PREFIX || empty($type)) {
     $photo = new photo($photo_id);
     $found = $photo->lookup();
+} else if ($type=="background") {
+    $templates=array(
+        conf::get("interface.template"),
+        "default"
+    );
+    foreach($templates as $template) {
+        $bgs=glob(settings::$php_loc . "/templates/" . $template . "/images/backgrounds/*.{jpg,JPG}", GLOB_BRACE);
+        if(sizeof($bgs) > 0) {
+            $image=$bgs[array_rand($bgs)];
+            redirect("templates/" . $template . "/images/backgrounds/" . basename($image));
+        }
+    }
+    exit;
 } else {
     die("Illegal type");
 }
 if ($found) {
-    $name = $photo->get("name");
-    $image_path = conf::get("path.images") . "/" . $photo->get("path") . "/";
     $watermark_file="";
-
     if (!$user->isAdmin() && conf::get("watermark.enable")) {
         $permissions = $user->getPhotoPermissions($photo);
         $watermark = $permissions->get("watermark_level");
