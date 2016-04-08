@@ -34,14 +34,15 @@ if (!ZOPH) {
 <img class="background" srcset="image.php?type=background 2x, image.php?type=background 1x">
 <h1><?= $tpl_title ?></h1>
 <div class="logon">
-    <h1><?= translate("logon",0)?></h1>
+    <h1>Zoph</h1>
     <form action="zoph.php" method="POST">
         <label for="uname"><?= translate("username",0) ?></label>
-        <input type="text" name="uname" id="uname"><br>
+        <input type="text" name="uname" id="uname">
         <label for="pword"><?= translate("password",0) ?></label>
-        <input type="password" name="pword" id="pword"><br>
+        <input type="password" name="pword" id="pword">
         <input type="hidden" name="redirect" value="<?= $tpl_redirect ?>">
-        <input type="submit" value="<?= translate("submit",0); ?>">
+        <input type="submit" value="<?= translate("logon",0); ?>">
+        <div class="error"></div>
     </form>
 </div>
 </body>
