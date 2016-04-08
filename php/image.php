@@ -25,7 +25,7 @@ require_once "variables.inc.php";
 $hash = getvar("hash");
 $annotated = getvar('annotated');
 $type = getvar("type");
-if($type == "background") {
+if ($type == "background") {
     define("IMAGE_BG", 1);
 }
 define("IMAGE_PHP", 1);
@@ -79,9 +79,9 @@ if (($type=="import_thumb" || $type=="import_mid") &&
         conf::get("interface.template"),
         "default"
     );
-    foreach($templates as $template) {
+    foreach ($templates as $template) {
         $bgs=glob(settings::$php_loc . "/templates/" . $template . "/images/backgrounds/*.{jpg,JPG}", GLOB_BRACE);
-        if(sizeof($bgs) > 0) {
+        if (sizeof($bgs) > 0) {
             $image=$bgs[array_rand($bgs)];
             redirect("templates/" . $template . "/images/backgrounds/" . basename($image));
         }
