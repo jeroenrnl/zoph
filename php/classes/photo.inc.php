@@ -138,6 +138,18 @@ class photo extends zophTable {
     }
 
     /**
+     * Lookup a photo, ignoring access rights
+     */
+    public function lookupAll() {
+        $qry = new select(array("p" => "photos"));
+        $qry->where(new clause("p.photo_id=:photoid"));
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $photo = $this->lookupFromSQL($qry);
+        return $photo;
+    }
+
+
+    /**
      * Lookup photographer of this photo
      */
     private function lookupPhotographer() {
@@ -1245,6 +1257,7 @@ class photo extends zophTable {
      * @return string SHA1 hash
      */
     private function getHashFromFile() {
+        $this->lookupAll();
         $file=$this->getFilePath();
         if (file_exists($file)) {
             return sha1_file($file);

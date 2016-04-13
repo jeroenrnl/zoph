@@ -285,6 +285,19 @@ class album extends zophTreeTable implements Organizer {
     }
 
     /**
+     * Get the photos in this album
+     * Does NOT check user permissions!
+     */
+    public function getPhotos() {
+        $qry=new select(array("pa" => "photo_albums"));
+        $qry->addFields(array("photo_id" => "pa.photo_id"));
+        $qry->where(new clause("pa.album_id = :alb_id"));
+        $qry->addParam(new param(":alb_id", $this->getId(), PDO::PARAM_INT));
+
+        return photo::getRecordsFromQuery($qry);
+    }
+
+    /**
      * Get array of fields/values to create an edit form
      * @return array fields/values
      */

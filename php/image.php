@@ -75,15 +75,23 @@ if (($type=="import_thumb" || $type=="import_mid") &&
     $photo = new photo($photo_id);
     $found = $photo->lookup();
 } else if ($type=="background") {
-    $templates=array(
-        conf::get("interface.template"),
-        "default"
-    );
-    foreach ($templates as $template) {
-        $bgs=glob(settings::$php_loc . "/templates/" . $template . "/images/backgrounds/*.{jpg,JPG}", GLOB_BRACE);
-        if (sizeof($bgs) > 0) {
-            $image=$bgs[array_rand($bgs)];
-            redirect("templates/" . $template . "/images/backgrounds/" . basename($image));
+    if (conf::get("interface.logon.background.album")) {
+        $album=new album(conf::get("interface.logon.background.album"));
+        $photos=$album->getPhotos();
+        $photo=$photos[array_rand($photos)];
+        $photo->lookup();
+        redirect("image.php?hash=" . $photo->getHash("full"));
+    } else {
+        $templates=array(
+            conf::get("interface.template"),
+            "default"
+        );
+        foreach ($templates as $template) {
+            $bgs=glob(settings::$php_loc . "/templates/" . $template . "/images/backgrounds/*.{jpg,JPG}", GLOB_BRACE);
+            if (sizeof($bgs) > 0) {
+                $image=$bgs[array_rand($bgs)];
+                redirect("templates/" . $template . "/images/backgrounds/" . basename($image));
+            }
         }
     }
     exit;
