@@ -24,7 +24,7 @@ if (!ZOPH) { die("Illegal call"); }
     <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
     <select name="<?php echo $tpl_name ?>">
         <?php foreach ($tpl_options as $option=>$label): ?>
-            <?php if ($tpl_value===$option): ?>
+            <?php if ($tpl_value==$option): ?>
                 <?php $selected="selected"; ?>
             <?php else: ?>
                 <?php $selected=""; ?>

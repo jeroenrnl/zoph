@@ -497,6 +497,20 @@ class album extends zophTreeTable implements Organizer {
         }
         return $qry->getCount();
     }
+
+    /**
+     * Get an array of id => name to build a non-hierarchical array
+     * this function always returns ALL albums and does NOT check user permissions
+     * @retrun array albums
+     */
+    public static function getSelectArray() {
+        $albums=static::getRecords();
+        $selectArray=array(null => "");
+        foreach ($albums as $album) {
+            $selectArray[(string) $album->getId()] = $album->getName();
+        }
+        return $selectArray;
+    }
 }
 
 ?>

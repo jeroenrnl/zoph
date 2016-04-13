@@ -31,6 +31,9 @@ class confItemSelect extends confItem {
     /** @var array list of options */
     private $options=array();
 
+    /** @var bool translate options */
+    private $translate=true;
+
     /**
      * Add an option
      * @param string key
@@ -59,6 +62,14 @@ class confItemSelect extends confItem {
     }
 
     /**
+     * Set whether or not the options must be translated
+     * @param bool translate yes/no
+     */
+    public function setOptionsTranslate($translate) {
+        $this->translate=$translate;
+    }
+
+    /**
      * Check value
      * check if a specific value is legal for this option
      * @param string value
@@ -76,14 +87,19 @@ class confItemSelect extends confItem {
         if ($this->internal) {
             return;
         }
-        $tpl=new block("confItemSelect", array(
-            "label" => e(translate($this->getLabel(),0)),
+        $params=array(
+            "label" => e(translate($this->getLabel(), 0)),
             "name" => e($this->getName()),
             "value" => e($this->getValue()),
-            "desc" => e(translate($this->getDesc(),0)),
-            "hint" => e(translate($this->getHint(),0)),
-            "options" => translate($this->getOptions(),0)
-        ));
+            "desc" => e(translate($this->getDesc(), 0)),
+            "hint" => e(translate($this->getHint(), 0)),
+        );
+        if ($this->translate) {
+            $params["options"] = translate($this->getOptions(), 0);
+        } else {
+            $params["options"] = $this->getOptions();
+        }
+        $tpl=new block("confItemSelect", $params);
         return $tpl;
      }
 }
