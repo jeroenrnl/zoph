@@ -285,6 +285,19 @@ class album extends zophTreeTable implements Organizer {
     }
 
     /**
+     * Get the photos in this album
+     * Does NOT check user permissions!
+     */
+    public function getPhotos() {
+        $qry=new select(array("pa" => "photo_albums"));
+        $qry->addFields(array("photo_id" => "pa.photo_id"));
+        $qry->where(new clause("pa.album_id = :alb_id"));
+        $qry->addParam(new param(":alb_id", $this->getId(), PDO::PARAM_INT));
+
+        return photo::getRecordsFromQuery($qry);
+    }
+
+    /**
      * Get array of fields/values to create an edit form
      * @return array fields/values
      */
@@ -496,6 +509,20 @@ class album extends zophTreeTable implements Organizer {
             $qry->where($where);
         }
         return $qry->getCount();
+    }
+
+    /**
+     * Get an array of id => name to build a non-hierarchical array
+     * this function always returns ALL albums and does NOT check user permissions
+     * @retrun array albums
+     */
+    public static function getSelectArray() {
+        $albums=static::getRecords();
+        $selectArray=array(null => "");
+        foreach ($albums as $album) {
+            $selectArray[(string) $album->getId()] = $album->getName();
+        }
+        return $selectArray;
     }
 }
 

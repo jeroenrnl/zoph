@@ -128,6 +128,19 @@ class confDefault extends conf {
         $intSortDir->setDefault("asc");
         $interface[]=$intSortDir;
 
+        $intLogonBgAlbum = new confItemSelect();
+        $intLogonBgAlbum->setName("interface.logon.background.album");
+        $intLogonBgAlbum->setLabel("Logon screen background album");
+        $intLogonBgAlbum->setDesc("Select an album from which a random photo is chosen as a " .
+            "background for the logon screen");
+        $intLogonBgAlbum->addOptions(album::getSelectArray());
+        $intLogonBgAlbum->setOptionsTranslate(false);
+        $intLogonBgAlbum->setDefault(null);
+        $intLogonBgAlbum->requiresEnabled(new confItemBool("share.enable"));
+
+        $interface[]=$intLogonBgAlbum;
+
+
         return $interface;
     }
 

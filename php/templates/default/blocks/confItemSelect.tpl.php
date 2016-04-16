@@ -22,9 +22,9 @@
 if (!ZOPH) { die("Illegal call"); }
 ?>
     <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
-    <select name="<?php echo $tpl_name ?>">
+    <select <?= ($tpl_enabled ? "" : "disabled") ?> name="<?php echo $tpl_name ?>">
         <?php foreach ($tpl_options as $option=>$label): ?>
-            <?php if ($tpl_value===$option): ?>
+            <?php if ($tpl_value==$option): ?>
                 <?php $selected="selected"; ?>
             <?php else: ?>
                 <?php $selected=""; ?>
@@ -43,7 +43,8 @@ if (!ZOPH) { die("Illegal call"); }
     <?php endif; ?>
     <?php if (!empty($tpl_desc)): ?>
         <div class="desc">
-            <?php echo $tpl_desc ?>
+            <?= $tpl_desc ?>
+            <?= $tpl_unmet ?>
         </div>
     <?php endif; ?>
 

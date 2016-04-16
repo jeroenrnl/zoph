@@ -6,3 +6,7 @@
 # Unittests
 UnitTests	export-ignore
 sonar-project.properties	export-ignore
+# binary files
+*.jpg	binary	diff=exif
+*.gif	binary	diff=exif
+*.png	binary	diff=exif

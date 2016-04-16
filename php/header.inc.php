@@ -23,7 +23,7 @@
  */
 
 header("Content-Type: text/html; charset=utf-8");
-global $user;
+$user=user::getCurrent();
 
 $icons=array(
     "count"     => template::getImage("icons/photo.png"),
