@@ -1563,6 +1563,15 @@ textarea {
     float: left;
 }
 
+select:disabled {
+    background: #ddd;
+    border: 1px solid #bbb;
+}
+
+span.unmetRequirements {
+    color: red;
+}
+
 form.geotag select,
 form.import select,
 form.geotag input,

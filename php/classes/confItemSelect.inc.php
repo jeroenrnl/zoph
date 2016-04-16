@@ -88,11 +88,13 @@ class confItemSelect extends confItem {
             return;
         }
         $params=array(
-            "label" => e(translate($this->getLabel(), 0)),
-            "name" => e($this->getName()),
-            "value" => e($this->getValue()),
-            "desc" => e(translate($this->getDesc(), 0)),
-            "hint" => e(translate($this->getHint(), 0)),
+            "label"     => e(translate($this->getLabel(), 0)),
+            "name"      => e($this->getName()),
+            "value"     => e($this->getValue()),
+            "desc"      => e(translate($this->getDesc(), 0)),
+            "unmet"     => $this->displayUnmetRequirements(),
+            "hint"      => e(translate($this->getHint(), 0)),
+            "enabled"   => (bool) $this->requirementsMet()
         );
         if ($this->translate) {
             $params["options"] = translate($this->getOptions(), 0);

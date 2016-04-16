@@ -136,6 +136,7 @@ class confDefault extends conf {
         $intLogonBgAlbum->addOptions(album::getSelectArray());
         $intLogonBgAlbum->setOptionsTranslate(false);
         $intLogonBgAlbum->setDefault(null);
+        $intLogonBgAlbum->requiresEnabled(new confItemBool("share.enable"));
 
         $interface[]=$intLogonBgAlbum;
 
