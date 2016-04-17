@@ -28,6 +28,7 @@
  * @author Jeroen Roos
  */
 $_action="display";
+$error="";
 if (!defined("CLI")) {
     session_start();
     if (array_key_exists('user', $_SESSION)) {
@@ -92,8 +93,11 @@ if ($_action == "logout") {
         $user->update();
         $user->lookup();
     } else {
+        if(!empty($uname)) {
+            $error="error=PWDFAIL&";
+        }
         $this_page=urlencode(preg_replace("/^\//", "", $_SERVER['REQUEST_URI']));
-        redirect("logon.php?redirect=" . $this_page);
+        redirect("logon.php?" . $error . "redirect=" . $this_page);
     }
 
 }

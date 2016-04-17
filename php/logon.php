@@ -38,9 +38,19 @@ if (conf::get("ssl.force") != "never") {
 $user = new user();
 $lang=$user->loadLanguage();
 
+$error="";
+if (isset($_GET["error"])) {
+    switch ($_GET["error"]) {
+    case "PWDFAIL":
+        $error=translate("You have entered an incorrect username/password combination");
+        break;
+    }
+}
+
 $tpl=new template("logon", array(
-    "title" =>  conf::get("interface.title"),
-    "redirect"  =>  $redirect
+    "title"     =>  conf::get("interface.title"),
+    "redirect"  =>  $redirect,
+    "error"     =>  $error
 ));
 
 echo $tpl;

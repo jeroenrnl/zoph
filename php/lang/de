@@ -237,6 +237,7 @@ Welcome %s. %s currently contains=Willkommen, %s. %s enthält derzeit
 Yes=Ja
 You can upload a single image or a zip or tar file of images.=Man kann eine einzelne Bilddatei oder einen Zip- oder Tarball von Bildern uploaden.
 You have enabled autocompletion for one or more dropdown boxes on this page, however, you do not seem to have Javascript support. You should either enable javascript or turn autocompletion off, or this page will not work as expected!=Sie haben auto-ergänzung für ein oder mehrere Dropdown-Felder auf dieser Seite eingeschaltet, es scheint jedoch das JavaScript-Unterstützung ausgeschaltet ist. Entweder aktivieren Sie JavaScript oder schalten Sie auto-ergänzung aus, oder diese Seite wird nicht funktionieren wie erwartet!
+You have entered an incorrect username/password combination=Sie haben ein falsche Gebrauchersname/Passwort-kombination eingegeben
 You have requested the download of %s photos, with a total size of %s.=Sie haben gesucht %s Photos herunter zu laden.
 You may search for photos %s taken %s or %s modified %s in the past %s days.=Man kann Fotos nach ihrem %s Erstellungsdatum%s oder ihrem %s Modifikationsdatum%s in den letzten %s Tagen suchen.
 You need to have ZIP support in PHP to download zip files=Sie brauchen ZIP Unterstützung in PHP um Zip-Dateien herunter zu laden

@@ -42,7 +42,7 @@ if (!ZOPH) {
         <input type="password" name="pword" id="pword">
         <input type="hidden" name="redirect" value="<?= $tpl_redirect ?>">
         <input type="submit" value="<?= translate("logon",0); ?>">
-        <div class="error"></div>
+        <div class="error"><?= $tpl_error ?></div>
     </form>
 </div>
 </body>
