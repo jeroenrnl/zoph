@@ -119,3 +119,10 @@ div.logon input[type=submit] {
 div.logon input[type=submit]:hover {
 	background: #bbbbbb;
 }
+
+div.logon div.error {
+	text-align: center;
+	margin: 0 20px;
+	font-weight: bold;
+	color: red;
+}

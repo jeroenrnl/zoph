@@ -237,6 +237,7 @@ Welcome %s. %s currently contains=Welcome %s. %s currently contains
 Yes=Yes
 You can upload a single image or a zip or tar file of images.=You can upload a single image or a zip or tar file of images.
 You have enabled autocompletion for one or more dropdown boxes on this page, however, you do not seem to have Javascript support. You should either enable javascript or turn autocompletion off, or this page will not work as expected!=You have enabled autocompletion for one or more dropdown boxes on this page, however, you do not seem to have Javascript support. You should either enable javascript or turn autocompletion off, or this page will not work as expected!
+You have entered an incorrect username/password combination=You have entered an incorrect username/password combination
 You have requested the download of %s photos, with a total size of %s.=You have requested the download of %s photos, with a total size of %s
 You may search for photos %s taken %s or %s modified %s in the past %s days.=You may search for photos %s taken %s or %s modified %s in the past %s days.
 You need to have ZIP support in PHP to download zip files=You need to have ZIP support in PHP to download zip files
