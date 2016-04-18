@@ -343,5 +343,35 @@ class DatabaseException extends ZophException {}
  * @package ZophException
  */
 class SecurityException extends ZophException {}
-class KeyMustBeNumericSecurityException extends ZophException {}
+class KeyMustBeNumericSecurityException extends SecurityException {}
+
+
+/**
+ * User Exception
+ *
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class userException extends ZophException {}
+
+/**
+ * User Not Found Exception
+ *
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class userNotFoundException extends userException {}
+
+/**
+ * User Multiple Found Exception
+ * This means there are multiple users with the same username in the database
+ * this should not happen.
+ *
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class userMultipleFoundException extends userException {}
+
+
+
 ?>

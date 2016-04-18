@@ -39,8 +39,8 @@ $user = new user();
 $lang=$user->loadLanguage();
 
 $error="";
-if (isset($_GET["error"])) {
-    switch ($_GET["error"]) {
+if (!is_null(getvar("error"))) {
+    switch (getvar("error")) {
     case "PWDFAIL":
         $error=translate("You have entered an incorrect username/password combination");
         break;

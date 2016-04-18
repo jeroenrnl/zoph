@@ -24,6 +24,7 @@
       <file>albumTest.php</file>
       <file>placeTest.php</file>
       <file>userTest.php</file>
+      <file>validatorTest.php</file>
       <file>anonymousUserTest.php</file>
       <file>categoryTest.php</file>
       <file>groupTest.php</file>

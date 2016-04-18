@@ -93,7 +93,13 @@ if ($_action == "logout") {
         $user->update();
         $user->lookup();
     } else {
-        if(!empty($uname)) {
+        if (!empty($uname)) {
+            /*  A username was given, but by now, no succesful logon has
+                happened so, we'll redirect, with error set to PWDFAIL.
+                This will show an error on the login screen.
+                There is no indication what the exact problem was (unknown user,
+                wrong password, etc.) as this might give an adversary more information
+                than we want to give away */
             $error="error=PWDFAIL&";
         }
         $this_page=urlencode(preg_replace("/^\//", "", $_SERVER['REQUEST_URI']));
