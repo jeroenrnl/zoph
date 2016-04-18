@@ -440,7 +440,7 @@ CREATE TABLE zoph_users (
   person_id int(11) NOT NULL default '0',
   user_class char(1) NOT NULL default '1',
   user_name varchar(16) NOT NULL default '',
-  password varchar(64) default NULL,
+  password varchar(255) default NULL,
   browse_people char(1) NOT NULL default '0',
   browse_places char(1) NOT NULL default '0',
   browse_tracks char(1) NOT NULL DEFAULT '0',

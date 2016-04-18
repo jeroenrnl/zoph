@@ -37,7 +37,7 @@ if ($_action == "update" && conf::get("interface.user.default") != $user->get("u
 
     if ($password) {
         if ($password == $confirm) {
-            $change->set("password", $password);
+            $change->set("password", validator::hashPassword($password));
             $change->update();
             $msg = sprintf(translate("The password for %s has been changed"),
                 $change->get("user_name"));

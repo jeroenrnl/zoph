@@ -76,7 +76,7 @@ class userTest extends ZophDatabaseTestCase {
     public function testCreateAndDelete() {
         $user = new user();
         $user->set("user_name", "Test User");
-        $user->set("password", "secret");
+        $user->set("password", validator::hashPassword("secret"));
         $user->insert();
 
         $id = $user->getId();
@@ -121,7 +121,7 @@ class userTest extends ZophDatabaseTestCase {
     public function testSetPasswordOnUpdate() {
         $user=new user(3);
         $user->lookup();
-        $user->set("password", "secret");
+        $user->set("password", validator::hashPassword("secret"));
         $user->update();
 
         unset($user);

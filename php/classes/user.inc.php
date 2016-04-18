@@ -67,17 +67,6 @@ class user extends zophTable {
     }
 
     /**
-     * lookup user, unset password
-     * this is both to prevent hashes to be displayed in debug info
-     * and to prevent the password to be overwritten with the hash
-     * of the hash of the password
-     */
-    public function lookup() {
-        parent::lookup();
-        unset($this->fields["password"]);
-    }
-
-    /**
      * Delete a user from the db
      * also delete the preferences for this user
      */
@@ -330,7 +319,13 @@ class user extends zophTable {
      */
     public static function getByName($name) {
         $users=static::getRecords(null, array("user_name" => $name));
-        return $users[0];
+        if (sizeof($users)==1) {
+            return $users[0];
+        } else if (sizeof($users)==0) {
+            throw new userNotFoundException("User not found");
+        } else {
+            throw new userMultipleFoundException("Multiple users with the same name found");
+        }
     }
 
     /**
