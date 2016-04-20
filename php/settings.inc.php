@@ -32,6 +32,7 @@ use db\db;
 class settings {
 
     public static $php_loc;
+    public static $instance;
     /**
      * Load ini file, as defined in the INI_FILE constant
      * Check if these settings are still made in config.inc.php
@@ -83,6 +84,7 @@ class settings {
                 log::msg("php_location setting missing from " . $instance . " in " .
                     INI_FILE, log::FATAL, log::GENERAL);
             } else if ($php_loc==$i["php_location"]) {
+                static::$instance=$instance;
                 return $instance;
             }
         }

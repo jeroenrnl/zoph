@@ -140,6 +140,24 @@ class confDefault extends conf {
 
         $interface[]=$intLogonBgAlbum;
 
+        $intCookieExpire = new confItemSelect();
+        $intCookieExpire->setName("interface.cookie.expire");
+        $intCookieExpire->setLabel("Cookie Expiry Time");
+        $intCookieExpire->setDesc("Set the time after which a cookie will expire, that is, " .
+            "when a user will need to re-login. \"session\" (default) means: until user " .
+            "closes the browser");
+        $intCookieExpire->addOptions(array(
+            0       => "session",
+            3600    => "1 hour",
+            14400   => "4 hours",
+            28800   => "8 hours",
+            86400   => "1 day",
+            604800  => "1 week",
+            2592300 => "1 month"
+        ));
+        $intCookieExpire->setDefault(0);
+        $interface[]=$intCookieExpire;
+
 
         return $interface;
     }
