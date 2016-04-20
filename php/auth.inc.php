@@ -30,6 +30,8 @@
 $_action="display";
 $error="";
 if (!defined("CLI")) {
+    ini_set("session.name", settings::$instance);
+    session_set_cookie_params(conf::get("interface.cookie.expire"));
     session_start();
     if (array_key_exists('user', $_SESSION)) {
         $user = $_SESSION['user'];
