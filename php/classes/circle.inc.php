@@ -136,9 +136,8 @@ class circle extends zophTable {
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
+
         $qry->where($where);
 
         $coverphotos=photo::getRecordsFromQuery($qry);
@@ -174,9 +173,7 @@ class circle extends zophTable {
         $where=new clause("cp.circle_id=:circleid");
         $qry->addParam(new param(":circleid", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry->where($where);
 
@@ -219,7 +216,7 @@ class circle extends zophTable {
         $qry->where(new clause("circle_id=:circleid"));
         $qry->addParam(new param(":circleid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
+        if (!user::getCurrent()->canSeeAllPhotos()) {
             $allowed=person::getAllPeopleAndPhotoGraphers();
             $ids=array();
             foreach ($allowed as $person) {
@@ -383,7 +380,7 @@ class circle extends zophTable {
         $rawCircles=static::getRecords("circle_name");
         $user=user::getCurrent();
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $circles=array();
             foreach ($rawCircles as $circle) {
                 if (sizeof($circle->getMembers())>0) {

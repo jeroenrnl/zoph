@@ -170,9 +170,7 @@ class rating extends zophTable {
         $subqry->join(array("pr" => "photo_ratings"), "p.photo_id = pr.photo_id", "LEFT");
         $subqry->addGroupBy("p.photo_id");
 
-        if (!user::getCurrent()->isAdmin()) {
-            $subqry=selectHelper::expandQueryForUser($subqry);
-        }
+        $subqry=selectHelper::expandQueryForUser($subqry);
 
         $qry=new select(array("avg_rating" => $subqry));
         $qry->addFields(array("rating"));

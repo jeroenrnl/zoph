@@ -79,7 +79,7 @@ class selectHelper {
         }
 
         // The user is an admin, simply return the query and where clause unaltered
-        if ($user->isAdmin()) {
+        if ($user->canSeeAllPhotos()) {
             return $qry;
         }
 

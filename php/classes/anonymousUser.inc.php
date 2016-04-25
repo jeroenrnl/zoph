@@ -93,7 +93,14 @@ final class anonymousUser extends user {
     /**
      * Anonymous user is never admin
      */
-    function isAdmin() {
+    public function isAdmin() {
+        return false;
+    }
+
+    /**
+     * Anonymous user can never view all photos
+     */
+    public function canSeeAllPhotos() {
         return false;
     }
 

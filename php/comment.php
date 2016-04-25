@@ -45,7 +45,7 @@ if (!$user->isAdmin() && !$user->get("leave_comments") && ($_action=="new" || $_
 $photo=$comment->getPhoto();
 
 if ($photo) {
-    if (!$user->getPhotoPermissions($photo) && !$user->isAdmin()) {
+    if (!$user->getPhotoPermissions($photo) && !$user->canSeeAllPhotos()) {
         redirect("zoph.php");
     }
 } else {

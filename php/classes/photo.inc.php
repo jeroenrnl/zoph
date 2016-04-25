@@ -109,7 +109,6 @@ class photo extends zophTable {
      * Lookup a photo, considering access rights
      */
     public function lookup() {
-        $user=user::getCurrent();
         if (!$this->getId()) {
             return;
         }
@@ -121,9 +120,7 @@ class photo extends zophTable {
         $where=new clause("p.photo_id=:photoid");
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if (!$user->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry->where($where);
 
@@ -316,7 +313,7 @@ class photo extends zophTable {
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
         $qry->addOrder("a.album");
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "gp.album_id=a.album_id");
             $qry->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $where->addAnd(new clause("gu.user_id=:userid"));
@@ -1062,7 +1059,7 @@ class photo extends zophTable {
 
         $allrelated=photoRelation::getRelated($this);
 
-        if ($user->isAdmin()) {
+        if ($user->canSeeAllPhotos()) {
             return $allrelated;
         } else {
             $related=array();

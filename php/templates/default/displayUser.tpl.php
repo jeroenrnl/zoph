@@ -1,8 +1,6 @@
 <?php
 /**
- * Show overview of comments
- *
- * This file is part of Zoph.
+ * Template for displaying user information
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +15,30 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package Zoph
  * @author Jeroen Roos
+ * @package ZophTemplates
  */
-require_once "include.inc.php";
-
-if (!conf::get("feature.comments")) {
-    redirect("zoph.php");
+if (!ZOPH) {
+    die("Illegal call");
 }
-
-require_once "header.inc.php";
 ?>
 <h1>
-  <?php echo translate("Comments") ?>
+    <?= $this->getActionlinks($tpl_actionlinks) ?>
+    <?= $tpl_title ?>
 </h1>
 <div class="main">
-  <br>
-<?php
-$comments=comment::getRecords();
-foreach ($comments as $comment) {
-    $photo=$comment->getPhoto();
-    if ($user->getPhotoPermissions($photo) || $user->canSeeAllPhotos()) {
-        echo $comment->toHTML(true);
-    }
-}
-require_once "footer.inc.php";
-?>
+    <h2><?= e($tpl_obj->getName()) ?></h2>
+    <dl class="users">
+        <?php foreach ($tpl_fields as $title => $value): ?>
+            <dt><?= $title ?></dt>
+            <dd><?= $value ?></dd>
+        <?php endforeach ?>
+    </dl>
+    <?= $tpl_ratingGraph ?>
+    <?php if ($tpl_hasComments): ?>
+        <h3><?= translate("comments by this user") ?></h3>
+        <?php foreach ($tpl_comments as $comment): ?>
+            <?= $comment ?>
+        <?php endforeach ?>
+    <?php endif ?>
+</div>

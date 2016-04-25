@@ -80,7 +80,7 @@ class album extends zophTreeTable implements Organizer {
         $where=new clause("a.album_id=:albumid");
         $qry->addParam(new param(":albumid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $where->addAnd(new clause("gu.user_id=:userid"));
@@ -167,7 +167,7 @@ class album extends zophTreeTable implements Organizer {
             $qry->addOrder("name");
         }
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $where->addAnd(new clause("gu.user_id=:userid"));
@@ -205,7 +205,7 @@ class album extends zophTreeTable implements Organizer {
         $where=new clause("pa.album_id=:albid");
         $qry->addParam(new param(":albid", $this->getId(), PDO::PARAM_INT));
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "pa.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $where->addAnd(new clause("gu.user_id=:userid"));
@@ -250,9 +250,7 @@ class album extends zophTreeTable implements Organizer {
         $where=new clause("pa.album_id = :alb_id");
         $qry->addParam(new param(":alb_id", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry->where($where);
         $count=$qry->getCount();
@@ -276,9 +274,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addParam($ids);
         $where=clause::InClause("pa.album_id", $ids);
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry=selectHelper::expandQueryForUser($qry);
-        }
+        $qry=selectHelper::expandQueryForUser($qry);
         $qry->where($where);
 
         return $qry->getCount();
@@ -382,9 +378,7 @@ class album extends zophTreeTable implements Organizer {
             $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
         }
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
         $qry->where($where);
@@ -435,7 +429,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addGroupBy("a.album_id");
         $qry->addOrder("count DESC")->addOrder("a.album");
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $qry->where(new clause("gu.user_id=:userid"));
@@ -462,7 +456,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addFields(array("album_id"), true);
         $qry->addOrder("album");
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "gp.album_id = a.album_id");
             $qry->join(array("gu" => "groups_users"), "gp.group_id = gu.group_id");
             $qry->where(new clause("gu.user_id=:userid"));
@@ -501,7 +495,7 @@ class album extends zophTreeTable implements Organizer {
         $qry=new select(array("a" => "albums"));
         $qry->addFunction(array("count" => "COUNT(DISTINCT a.album_id)"));
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $where=new clause("user_id=:userid");

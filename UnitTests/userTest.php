@@ -314,6 +314,9 @@ class userTest extends ZophDatabaseTestCase {
           'can rate the same photo multiple times' => 'No',
           'can view hidden circles' => 'Yes',
           'can share photos' => 'No',
+          'can view all photos' => 'No',
+          'can delete photos' => 'No',
+          'can edit albums, categories, places and people' => 'No'
         );
         $this->assertEquals($expected, $da);
     }

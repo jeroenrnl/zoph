@@ -372,9 +372,7 @@ class person extends zophTable implements Organizer {
         $where=new clause("pp.person_id=:id");
         $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
         $qry->where($where);
@@ -449,9 +447,7 @@ class person extends zophTable implements Organizer {
         $where=new clause("p.photographer_id=:photographerid");
         $qry->addParam(new param(":photographerid", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry->where($where);
 
@@ -520,9 +516,8 @@ class person extends zophTable implements Organizer {
         $qry->addOrder("count DESC")->addOrder("ppl.last_name")->addOrder("ppl.first_name");
 
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
-        if (!$user->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
+
         return parent::getTopNfromSQL($qry);
 
     }
@@ -547,9 +542,7 @@ class person extends zophTable implements Organizer {
 
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         if ($where instanceof clause) {
             $qry->where($where);
@@ -621,7 +614,7 @@ class person extends zophTable implements Organizer {
      * @return int count
      */
     public static function getCountForUser() {
-        if (user::getCurrent()->isAdmin()) {
+        if (user::getCurrent()->canSeeAllPhotos()) {
             return static::getCount();
         } else {
             $allowed=array();
@@ -653,7 +646,7 @@ class person extends zophTable implements Organizer {
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
 
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $people=(array)static::getAll($search);
             $photographers=(array)photographer::getAll($search);
             foreach ($people as $person) {

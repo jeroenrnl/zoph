@@ -216,6 +216,16 @@ class user extends zophTable {
     }
 
     /**
+     * Check wheter this user can see all photos.
+     * This means that the permissions checking is bypassed for this user,
+     * as if it is an admin user, but without giving full admin rights
+     * @return bool user can see all photos
+     */
+    public function canSeeAllPhotos() {
+        return ($this->isAdmin() || $this->get("see_all_photos"));
+    }
+
+    /**
      * Get array to display information about this user
      * @return array of properties to display
      */
@@ -226,11 +236,17 @@ class user extends zophTable {
             translate("person") => $this->person->getLink(),
             translate("class") =>
                 $this->get("user_class") == 0 ? "Admin" : "User",
+            translate("can view all photos") => $this->get("view_all_photos") == 1
+                ? translate("Yes") : translate("No"),
+            translate("can delete photos") => $this->get("delete_photos") == 1
+                ? translate("Yes") : translate("No"),
             translate("can browse people") => $this->get("browse_people") == 1
                 ? translate("Yes") : translate("No"),
             translate("can browse places") => $this->get("browse_places") == 1
                 ? translate("Yes") : translate("No"),
             translate("can browse tracks") => $this->get("browse_tracks") == 1
+                ? translate("Yes") : translate("No"),
+            translate("can edit albums, categories, places and people") => $this->get("edit_organizers") == 1
                 ? translate("Yes") : translate("No"),
             translate("can view details of people") =>
                 $this->get("detailed_people") == 1

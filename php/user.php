@@ -57,26 +57,62 @@ if ($action != "insert") {
 require_once "header.inc.php";
 
 if ($action == "display") {
+    $actionlinks=array(
+        "edit"      => "user.php?_action=edit&amp;user_id=" . $this_user->getId(),
+        "delete"    => "user.php?_action=delete&amp;user_id=" . $this_user->getId(),
+        "new"       => "user.php?_action=new"
+    );
+    $comments=$this_user->getComments();
+
+    $ratingGraph = new block("graph_bar", array(
+        "title"         => translate("photo ratings"),
+        "class"         => "ratings",
+        "value_label"   => translate("rating", 0),
+        "count_label"   => translate("count", 0),
+        "rows"          => $this_user->getRatingGraph()
+    ));
+
+    $tpl=new template("displayUser", array(
+        "title"         => $title,
+        "actionlinks"   => $actionlinks,
+        "obj"           => $this_user,
+        "fields"        => $this_user->getDisplayArray(),
+        "hasComments"   => (bool) (sizeOf($comments) > 0),
+        "comments"      => $comments,
+        "ratingGraph"   => $ratingGraph
+    ));
+
+    echo $tpl;
+
+} else if ($action == "confirm") {
     ?>
     <h1>
       <span class="actionlink">
-        <a href="user.php?_action=edit&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("edit") ?>
-        </a> |
-        <a href="user.php?_action=delete&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("delete") ?>
-        </a> |
-        <a href="user.php?_action=new"><?php echo translate("new") ?></a>
+        <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>">
+          <?php echo translate("cancel") ?>
+        </a>
       </span>
-      <?php echo translate("user") ?>
+      <?php echo translate("delete user") ?>
     </h1>
     <div class="main">
-      <h2><?php echo e($this_user->get("user_name")) ?></h2>
-        <dl class='users'>
-            <?php echo create_field_html($this_user->getDisplayArray(), 3) ?>
-        </dl>
-        <br>
+      <span class="actionlink">
+        <a href="user.php?_action=confirm&amp;user_id=<?php echo $this_user->get("user_id") ?>">
+          <?php echo translate("delete") ?>
+        </a> |
+        <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>">
+          <?php echo translate("cancel") ?>
+        </a>
+      </span>
+      <?php echo sprintf(translate("Confirm deletion of '%s'"), $this_user->get("user_name")) ?>
     <?php
+} else {
+    require_once "edit_user.inc.php";
+}
+?>
+</div>
+
+<!--
+    // NOTIFY USER, to be rewritten
     $url = getZophURL() . "login.php";
 
     $this_user->lookupPerson();
@@ -106,51 +142,5 @@ if ($action == "display") {
       <input class="bigbutton" type="submit" name="_button"
         value="<?php echo translate("Notify User", 0) ?>">
     </form>
-    <br>
-    <?php
-        $tpl = new block("graph_bar", array(
-            "title"     => translate("photo ratings"),
-        "class"     => "ratings",
-        "value_label" => translate("rating", 0),
-        "count_label" => translate("count", 0),
-        "rows"      => $this_user->getRatingGraph()
-    ));
-    echo $tpl;
-
-    $comments=$this_user->getComments();
-    if (!empty($comments)) {
-        ?>
-        <h3><?php echo translate("comments by this user") ?></h3>
-        <?php
-        foreach ($comments as $comment) {
-            $comment->lookup();
-            echo $comment->toHTML(true);
-        }
-    }
-} else if ($action == "confirm") {
-    ?>
-    <h1>
-      <span class="actionlink">
-        <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("cancel") ?>
-        </a>
-      </span>
-      <?php echo translate("delete user") ?>
-    </h1>
-    <div class="main">
-      <span class="actionlink">
-        <a href="user.php?_action=confirm&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("delete") ?>
-        </a> |
-        <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("cancel") ?>
-        </a>
-      </span>
-      <?php echo sprintf(translate("Confirm deletion of '%s'"), $this_user->get("user_name")) ?>
-    <?php
-} else {
-    require_once "edit_user.inc.php";
-}
-?>
-</div>
+!-->
 <?php require_once "footer.inc.php"; ?>
