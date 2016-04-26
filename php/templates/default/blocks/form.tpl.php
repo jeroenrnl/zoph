@@ -27,6 +27,6 @@ if (!ZOPH) {
         onSubmit="<?php echo $tpl_onsubmit; ?>">
         <input type="hidden" name="_action" value="<?= $tpl_action ?>">
         <?= $this->displayBlocks(); ?>
-        <input type="submit" value="<?= translate("submit") ?>">
+        <input type="submit" value="<?= $tpl_submit ?>">
     </form>
 

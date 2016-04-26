@@ -34,6 +34,7 @@ if (!ZOPH) {
             <dd><?= $value ?></dd>
         <?php endforeach ?>
     </dl>
+    <?= $tpl_notifyForm ?>
     <?= $tpl_ratingGraph ?>
     <?php if ($tpl_hasComments): ?>
         <h3><?= translate("comments by this user") ?></h3>
