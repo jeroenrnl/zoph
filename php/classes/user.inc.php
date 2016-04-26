@@ -61,6 +61,7 @@ class user extends zophTable {
      * Insert a new user into the db
      */
     public function insert() {
+        $this->set("lastnotify", "now()");
         parent::insert();
         $this->prefs = new prefs($this->getId());
         $this->prefs->insert();

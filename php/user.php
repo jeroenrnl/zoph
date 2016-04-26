@@ -139,7 +139,6 @@ if ($action == "display") {
     $userClassPulldown=template::createPulldown("user_class", $this_user->get("user_class"),
         array("1" => translate("User",0), "0" => translate("Admin",0)));
 
-    /** @todo add lastnotify = now */
     $form->addInputHidden("user_id", $this_user->getId());
     $form->addInputText("user_name", $this_user->getName(), translate("user name"), sprintf(translate("%s chars max"), 16), 16);
     $form->addPulldown("person_id", $personPulldown, translate("person"));
