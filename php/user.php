@@ -137,14 +137,14 @@ if ($action == "display") {
         ( $action == "insert" ? "1" : $this_user->get("person_id") ),
         person::getSelectArray());
     $userClassPulldown=template::createPulldown("user_class", $this_user->get("user_class"),
-        array("1" => translate("User",0), "0" => translate("Admin",0)));
+        array("1" => translate("User", 0), "0" => translate("Admin",0)));
 
     $form->addInputHidden("user_id", $this_user->getId());
     $form->addInputText("user_name", $this_user->getName(), translate("user name"), sprintf(translate("%s chars max"), 16), 16);
     $form->addPulldown("person_id", $personPulldown, translate("person"));
 
-    if ($action == "new") {
-        $form->addInputPassword("password", "", translate("password"), 32, sprintf(translate("%s chars max"), 32));
+    if ($_action == "new") {
+        $form->addInputPassword("password", translate("password"), 32, sprintf(translate("%s chars max"), 32));
     } else {
         $actionlinks[translate("change password")]="password.php?userid=" . $this_user->getId();
     }

@@ -159,14 +159,14 @@ if ($_action == "notify") {
 
     $subject = translate("Your Zoph Account", 0);
     $message =
-        translate("Hi",0) . " " . e($to_name) .  ",\n\n" .
+        translate("Hi", 0) . " " . e($to_name) .  ",\n\n" .
         translate("I have created a Zoph account for you", 0) .
         ":\n\n" .  e($url) . "\n" .
         translate("user name", 0) . ": " .
         e($u->getName()) . "\n";
 
     $message .=
-        "\n" . translate("Regards,",0) . "\n" .
+        "\n" . translate("Regards,", 0) . "\n" .
         e($user->person->getName());
 }
 

@@ -130,7 +130,7 @@ if ($action == "display") {
         "formAction"    => "circle.php",
         "onsubmit"      => null,
         "action"        => $action,
-        "submit"        => translate("submit",0)
+        "submit"        => translate("submit", 0)
     ));
 
     $form->addInputHidden("circle_id", $circle->getId());
