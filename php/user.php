@@ -141,7 +141,7 @@ if ($action == "display") {
 
     /** @todo add lastnotify = now */
     $form->addInputHidden("user_id", $this_user->getId());
-    $form->addInputText("user_name", $user->getName(), translate("user name"), sprintf(translate("%s chars max"), 16), 16);
+    $form->addInputText("user_name", $this_user->getName(), translate("user name"), sprintf(translate("%s chars max"), 16), 16);
     $form->addPulldown("person_id", $personPulldown, translate("person"));
 
     if ($action == "new") {
