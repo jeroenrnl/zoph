@@ -378,6 +378,15 @@ class template {
         ));
     }
 
+    /**
+     * Create a form field INPUT type text
+     * @param string name
+     * @param string current / initial value
+     * @param string label text for label
+     * @param string input hint
+     * @param int size of the field
+     * @return block template block for INPUT field
+     */
     public static function createFormInputText($name, $value, $label=null, $hint=null, $size=32) {
         return new block("formInputText", array(
             "name"  => $name,
@@ -388,6 +397,29 @@ class template {
         ));
     }
 
+    /**
+     * Create a form field INPUT type password
+     * @param string name
+     * @param string label text for label
+     * @param string input hint
+     * @param int size of the field
+     * @return block template block for INPUT field
+     */
+    public static function createFormInputPassword($name, $label=null, $hint=null, $size=32) {
+        return new block("formInputPassword", array(
+            "name"  => $name,
+            "label" => e($label),
+            "hint"  => e($hint),
+            "size"  => (int) $size
+        ));
+    }
+
+    /**
+     * Create a form field INPUT type hidden
+     * @param string name
+     * @param string value
+     * @return block template block for INPUT field
+     */
     public static function createFormInputHidden($name, $value) {
         return new block("formInputHidden", array(
             "name"  => $name,
@@ -395,6 +427,14 @@ class template {
         ));
     }
 
+    /**
+     * Create a form field INPUT type checkbox
+     * @param string name
+     * @param bool checked
+     * @param string label text for label
+     * @param string input hint
+     * @return block template block for INPUT field
+     */
     public static function createFormInputCheckbox($name, $checked, $label, $hint=null) {
         return new block("formInputCheckbox", array(
             "name"  => $name,
@@ -404,6 +444,15 @@ class template {
         ));
     }
 
+    /**
+     * Create a form field TEXTAREA
+     * @param string name
+     * @param string current / initial value
+     * @param string label text for label
+     * @param int columns
+     * @param int rows
+     * @return block template block for TEXTAREA field
+     */
     public static function createFormTextarea($name, $value, $label=null, $cols=40, $rows=4) {
         return new block("formTextarea", array(
             "name"  => $name,
@@ -414,6 +463,22 @@ class template {
         ));
     }
 
+    /**
+     * Create a form field dropdown
+     * this function is not actually creating the dropdown, but
+     * acts as a wrapper around the dropdown, to add a label
+     * @param string name
+     * @param block dropdown
+     * @param string label text for label
+     * @return block template block for SELECT field
+     */
+    public static function createFormPulldown($name, block $dropdown, $label) {
+        return new block("formPulldown", array(
+            "name"      => $name,
+            "dropdown"  => $dropdown,
+            "label"     => $label
+        ));
+    }
 
     /**
      * Get all templates

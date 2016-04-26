@@ -232,53 +232,18 @@ class user extends zophTable {
     public function getDisplayArray() {
         $this->lookupPerson();
         $da = array(
-            translate("username") => $this->get("user_name"),
-            translate("person") => $this->person->getLink(),
-            translate("class") =>
-                $this->get("user_class") == 0 ? "Admin" : "User",
-            translate("can view all photos") => $this->get("view_all_photos") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can delete photos") => $this->get("delete_photos") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can browse people") => $this->get("browse_people") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can browse places") => $this->get("browse_places") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can browse tracks") => $this->get("browse_tracks") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can edit albums, categories, places and people") => $this->get("edit_organizers") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can view details of people") =>
-                $this->get("detailed_people") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can view hidden circles") =>
-                $this->get("see_hidden_circles") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can view details of places") =>
-                $this->get("detailed_places") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can import") =>
-                $this->get("import") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can download zipfiles") =>
-                $this->get("download") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can leave comments") =>
-                $this->get("leave_comments") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can rate photos") =>
-                $this->get("allow_rating") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can rate the same photo multiple times") =>
-                $this->get("allow_multirating") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can share photos", 0) =>
-                $this->get("allow_share") == 1
-                ? translate("Yes") : translate("No"),
-            translate("last login") =>
-                $this->get("lastlogin"),
-            translate("last ip address") =>
-                $this->get("lastip"));
+            translate("username")   => $this->get("user_name"),
+            translate("person")     => $this->person->getLink(),
+            translate("class")      => $this->get("user_class") == 0 ? "Admin" : "User"
+        );
+        $desc=$this->getAccessRightsDescription();
+        foreach ($this->getAccessRightsArray() as $field => $value) {
+            $da[$desc[$field]] = $value == 1 ? translate("Yes") : translate("No");
+        }
+        $da = array_merge($da, array(
+            translate("last login")         => $this->get("lastlogin"),
+            translate("last ip address")    => $this->get("lastip")
+        ));
 
         if ($this->get("lightbox_id")) {
             $lightbox = new album($this->get("lightbox_id"));
@@ -291,6 +256,47 @@ class user extends zophTable {
 
         return $da;
     }
+
+    public function getAccessRightsArray() {
+        return array(
+            "view_all_photos"       => $this->get("view_all_photos"),
+            "delete_photos"         => $this->get("delete_photos"),
+            "browse_people"         => $this->get("browse_people"),
+            "browse_places"         => $this->get("browse_places"),
+            "browse_tracks"         => $this->get("browse_tracks"),
+            "edit_organizers"       => $this->get("edit_organizers"),
+            "detailed_people"       => $this->get("detailed_people"),
+            "see_hidden_circles"    => $this->get("see_hidden_circles"),
+            "detailed_places"       => $this->get("detailed_places"),
+            "import"                => $this->get("import"),
+            "download"              => $this->get("download"),
+            "leave_comments"        => $this->get("leave_comments"),
+            "allow_rating"          => $this->get("allow_rating"),
+            "allow_multirating"     => $this->get("allow_multirating"),
+            "allow_share"           => $this->get("allow_share")
+        );
+    }
+
+    public function getAccessRightsDescription() {
+        return array(
+            "view_all_photos"       => translate("can view all photos"),
+            "delete_photos"         => translate("can delete photos"),
+            "browse_people"         => translate("can browse people"),
+            "browse_places"         => translate("can browse places"),
+            "browse_tracks"         => translate("can browse tracks"),
+            "edit_organizers"       => translate("can edit albums, categories, places and people"),
+            "detailed_people"       => translate("can view details of people"),
+            "see_hidden_circles"    => translate("can view hidden circles"),
+            "detailed_places"       => translate("can view details of places"),
+            "import"                => translate("can import"),
+            "download"              => translate("can download zipfiles"),
+            "leave_comments"        => translate("can leave comments"),
+            "allow_rating"          => translate("can rate photos"),
+            "allow_multirating"     => translate("can rate the same photo multiple times"),
+            "allow_share"           => translate("can share photos")
+        );
+    }
+
     /**
      * Load language
      * This loads the translations of Zoph's web gui

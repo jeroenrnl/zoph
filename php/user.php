@@ -83,7 +83,6 @@ if ($action == "display") {
     ));
 
     echo $tpl;
-
 } else if ($action == "confirm") {
     ?>
     <h1>
@@ -106,7 +105,58 @@ if ($action == "display") {
       <?php echo sprintf(translate("Confirm deletion of '%s'"), $this_user->get("user_name")) ?>
     <?php
 } else {
-    require_once "edit_user.inc.php";
+    $actionlinks=array(
+        "return"      => "users.php",
+        "new"       => "user.php?_action=new"
+    );
+    $tpl=new template("edit", array(
+        "title"             => $title, "actionlinks"       => $actionlinks,
+        "mainActionlinks"   => null,
+        "obj"               => $this_user,
+    ));
+
+    $form=new block("form", array(
+        "formAction"        => "user.php",
+        "onsubmit"          => null,
+        "action"            => $action
+    ));
+
+    $personPulldown=template::createPulldown("person_id",
+            ( $action == "insert" ? "1" : $this_user->get("person_id") ),
+            person::getSelectArray());
+    $userClassPulldown=template::createPulldown("user_class", $this_user->get("user_class"),
+            array("1" => translate("User",0), "0" => translate("Admin",0)));
+
+    /** @todo add lastnotify = now */
+    $fields=array(
+        template::createFormInputHidden("user_id", $this_user->getId()),
+        template::createFormInputText("user_name", $user->getName(), translate("user name"), sprintf(translate("%s chars max"), 16), 16),
+        template::createFormPulldown("person_id", $personPulldown, translate("person")),
+
+    );
+
+    if ($action == "new") {
+        $fields[] = template::createFormInputPassword("password", "", translate("password"), 32, sprintf(translate("%s chars max"), 32));
+    } else {
+        $actionlinks[translate("change password")]="password.php?userid=" . $this_user->getId();
+    }
+
+    $fields[]=template::createFormPulldown("user_class", $userClassPulldown, translate("class"));
+
+    $desc=$this_user->getAccessRightsDescription();
+
+    foreach ($this_user->getAccessRightsArray() as $field => $value) {
+        $pulldown=template::createPulldown($field, $value, array(
+            "1" => translate("Yes"),
+            "0" => translate("No")
+        ));
+        $fields[]=template::createFormPulldown($field, $pulldown, translate($desc[$field]));
+    }
+
+    $form->addBlocks($fields);
+    $tpl->addBlock($form);
+
+    echo $tpl;
 }
 ?>
 </div>
