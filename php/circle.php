@@ -126,11 +126,16 @@ if ($action == "display") {
         "obj"               => $circle
     ));
 
-    $form=new block("form", array(
+    $form=new form("form", array(
         "formAction"    => "circle.php",
         "onsubmit"      => null,
         "action"        => $action,
     ));
+
+    $form->addInputHidden("circle_id", $circle->getId());
+    $form->addInputText("circle_name", $circle->getName(), translate("Name"), "", 32);
+    $form->addTextArea("description", $circle->get("description"), translate("Description"), 40, 4);
+    $form->addInputCheckbox("hidden", $circle->isHidden(), translate("Hide in overviews"));
 
     $curMembers=$circle->getMembers();
     $members=new block("members", array(
@@ -138,13 +143,7 @@ if ($action == "display") {
         "group"     => $circle
     ));
 
-    $form->addBlocks(array(
-        template::createFormInputHidden("circle_id", $circle->getId()),
-        template::createFormInputText("circle_name", $circle->getName(), translate("Name"), "", 32),
-        template::createFormTextArea("description", $circle->get("description"), translate("Description"), 40, 4),
-        template::createFormInputCheckbox("hidden", $circle->isHidden(), translate("Hide in overviews")),
-        $members
-    ));
+    $form->addBlock($members);
 
     $tpl->addBlock($form);
 }
