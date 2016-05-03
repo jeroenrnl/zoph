@@ -23,7 +23,7 @@
  */
 require_once "include.inc.php";
 
-if (!$user->isAdmin()) {
+if (!$user->canEditOrganizers()) {
     redirect("zoph.php");
 }
 

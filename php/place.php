@@ -31,14 +31,14 @@ $place = new place($place_id);
 $obj = &$place;
 $redirect = "places.php";
 if ($_action=="settzchildren") {
-    if ($user->isAdmin()) {
+    if ($user->canEditOrganizers()) {
         $place->lookup();
         $place->setTzForChildren();
     }
     $action="display";
 }
 require_once "actions.inc.php";
-if (!$user->isAdmin() || $action == "display") {
+if (!$user->canEditOrganizers() || $action == "display") {
     redirect("places.php?parent_place_id=" . $place->get("place_id"), "Redirect");
 }
 if ($action != "insert") {

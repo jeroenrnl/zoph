@@ -227,6 +227,54 @@ class user extends zophTable {
     }
 
     /**
+     * Check wheter this user can edit, add and delete albums, categories, places and people
+     * @return bool user can add, edit and delete albums, categories, places and people
+     */
+    public function canEditOrganizers() {
+        return ($this->isAdmin() || $this->get("edit_organizers"));
+    }
+
+    /**
+     * Check wheter this user can browse people
+     * @return bool user can see the list of people that are in photos this user can see
+     */
+    public function canBrowsePeople() {
+        return ($this->canEditOrganizers() || $this->get("browse_people"));
+    }
+
+    /**
+     * Check wheter this user can see details of people (such as address, birthdate, etc.)
+     * @return bool user can see details of people
+     */
+    public function canSeePeopleDetails() {
+        return ($this->canEditOrganizers() || $this->get("detailed_people"));
+    }
+
+    /**
+     * Check wheter this user can browse places
+     * @return bool user can see the list of places where photos this user can see were taken
+     */
+    public function canBrowsePlaces() {
+        return ($this->canEditOrganizers() || $this->get("browse_places"));
+    }
+
+    /**
+     * Check wheter this user can browse tracks
+     * @return bool user can see tracks
+     */
+    public function canBrowseTracks() {
+        return ($this->isAdmin() || $this->get("browse_tracks"));
+    }
+
+    /**
+     * Check wheter this user can see details of places (such as address)
+     * @return bool user can see details of places
+     */
+    public function canSeePlaceDetails() {
+        return ($this->canEditOrganizers() || $this->get("detailed_places"));
+    }
+
+    /**
      * Get array to display information about this user
      * @return array of properties to display
      */

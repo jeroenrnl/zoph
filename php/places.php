@@ -33,7 +33,7 @@ if (empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
-if (!$user->isAdmin() && !$user->get("browse_places")) {
+if (!$user->canBrowsePlaces()) {
     redirect("zoph.php");
 }
 
@@ -71,11 +71,11 @@ try {
 
 <?php
 $new=null;
-if ($user->isAdmin()) {
+if ($user->canEditOrganizers()) {
     $new="<a href=\"place.php?_action=new&amp;parent_place_id=" . $place->get("place_id") . "\">" .
       translate("new") . "</a> |";
 }
-if ($user->isAdmin() || $user->get("browse_tracks")) {
+if ($user->canBrowseTracks()) {
     ?>
     <span class="actionlink">
         <?php echo $new; ?>
@@ -109,7 +109,7 @@ if ($showOrig) {
       </form>
       <br>
     <?php
-    if ($user->isAdmin()) {
+    if ($user->canEditOrganizers()) {
         ?>
         <span class="actionlink">
             <a href="place.php?_action=edit&amp;place_id=<?php echo $place->get("place_id") ?>">
@@ -148,7 +148,7 @@ if ($showOrig) {
     ?>
         </p>
     <?php
-    if ($user->get("detailed_places") || $user->isAdmin()) {
+    if ($user->canSeePlaceDetails()) {
         echo $place->toHTML();
         if ($place->get("notes")) {
             echo "<p>";

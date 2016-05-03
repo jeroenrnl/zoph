@@ -368,8 +368,7 @@ if ($action != "insert" && !$found) {
     </ul>
     <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX)) ?>
     <?php
-    if (($user->isAdmin() || $user->get("browse_people")) &&
-        $people_links = $photo->getPeopleLinks()) {
+    if ($user->canBrowsePeople() && $people_links = $photo->getPeopleLinks()) {
         ?>
           <div id="personlink">
         <?php echo $people_links ?>

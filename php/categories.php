@@ -67,7 +67,7 @@ try {
 ?>
 <h1>
 <?php
-if ($user->isAdmin()) {
+if ($user->canEditOrganizers()) {
     ?>
     <span class="actionlink">
       <a href="category.php?_action=new&amp;parent_category_id=<?php
@@ -110,7 +110,7 @@ if ($showOrig) {
         <?php echo $title . "\n" ?>
     </h2>
     <?php
-    if ($user->isAdmin()) {
+    if ($user->canEditOrganizers()) {
         ?>
         <span class="actionlink">
           <a href="category.php?_action=edit&amp;category_id=<?php

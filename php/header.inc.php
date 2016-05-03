@@ -114,11 +114,11 @@ $tabs = array(
     translate("categories", 0) => "categories.php"
 );
 
-if ($user->isAdmin() || $user->get("browse_people")) {
+if ($user->canBrowsePeople()) {
     $tabs[translate("people", 0)] = "people.php";
 }
 
-if ($user->isAdmin() || $user->get("browse_places")) {
+if ($user->canBrowsePlaces()) {
     $tabs[translate("places", 0)] = "places.php";
 }
 

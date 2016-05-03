@@ -26,7 +26,7 @@ if (!$user->isAdmin()) {
     $_action = "display";
 }
 
-if (!$user->get("browse_people") && !$user->isAdmin()) {
+if (!$user->canBrowsePeople()) {
     redirect("zoph.php");
 }
 
@@ -96,7 +96,7 @@ if ($action == "display") {
         "showMain"          => true
     ));
 
-    if ($user->get("detailed_people") || $user->isAdmin()) {
+    if ($user->canSeePeopleDetails()) {
         $tpl->addBlock(new block("definitionlist", array(
             "class" => "display circle",
             "dl"    => $circle->getDisplayArray()

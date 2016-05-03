@@ -51,6 +51,17 @@ class userTest extends ZophDatabaseTestCase {
 
         $lang=new language("en");
         $this->getDataSet();
+
+        $obj = new user(7);
+        $obj->lookup();
+        $obj->set("browse_people", false);
+        $obj->set("browse_places", false);
+        $obj->set("browse_tracks", false);
+        $obj->set("detailed_people", false);
+        $obj->set("detailed_places", false);
+        $obj->set("edit_organizers", false);
+        $obj->update();
+
     }
 
     /**
@@ -166,13 +177,105 @@ class userTest extends ZophDatabaseTestCase {
     /**
      * Test isAdmin() method.
      */
-    public function testIs_admin() {
+    public function testIsAdmin() {
         $obj = new user(1);
         $obj->lookup();
         $this->assertTrue($obj->isAdmin());
         $obj = new user(7);
         $obj->lookup();
         $this->assertFalse($obj->isAdmin());
+    }
+
+    /**
+     * Test browse_people access right
+     */
+    public function testBrowsePeople() {
+        $obj = new user(1);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePeople());
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertFalse($obj->canBrowsePeople());
+        $obj->set("browse_people", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePeople());
+        $obj->set("browse_people", false);
+        $obj->set("edit_organizers", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePeople());
+    }
+
+    /**
+     * Test detailed_people access right
+     */
+    public function testDetailedPeople() {
+        $obj = new user(1);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePeopleDetails());
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertFalse($obj->canSeePeopleDetails());
+        $obj->set("detailed_people", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePeopleDetails());
+        $obj->set("detailed_people", false);
+        $obj->set("edit_organizers", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePeopleDetails());
+    }
+
+    /**
+     * Test browse_places access right
+     */
+    public function testBrowsePlaces() {
+        $obj = new user(1);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePlaces());
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertFalse($obj->canBrowsePlaces());
+        $obj->set("browse_places", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePlaces());
+        $obj->set("browse_places", false);
+        $obj->set("edit_organizers", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePlaces());
+    }
+
+    /**
+     * Test detailed_places access right
+     */
+    public function testDetailedPlaces() {
+        $obj = new user(1);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePlaceDetails());
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertFalse($obj->canSeePlaceDetails());
+        $obj->set("detailed_places", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePlaceDetails());
+        $obj->set("detailed_places", false);
+        $obj->set("edit_organizers", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePlaceDetails());
     }
 
     /**

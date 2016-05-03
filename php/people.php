@@ -34,7 +34,7 @@ if (empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
-if (!$user->isAdmin() && !$user->get("browse_people")) {
+if (!$user->canBrowsePeople()) {
     redirect("zoph.php");
 }
 
@@ -85,7 +85,7 @@ $tpl=new template("organizer", array(
 ));
 
 $actionlinks=array();
-if ($user->isAdmin()) {
+if ($user->canEditOrganizers()) {
     $actionlinks=array(
         translate("new") => "person.php?_action=new",
         translate("new circle") => "circle.php?_action=new"

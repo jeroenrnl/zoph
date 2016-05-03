@@ -66,7 +66,7 @@ try {
 ?>
 <h1>
 <?php
-if ($user->isAdmin()) {
+if ($user->canEditOrganizers()) {
     ?>
       <ul class="actionlink">
         <li>
