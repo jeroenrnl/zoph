@@ -92,29 +92,17 @@ if ($action == "display") {
         "comments"      => $comments,
         "ratingGraph"   => $ratingGraph
     ));
-
-    echo $tpl;
 } else if ($action == "confirm") {
-    ?>
-    <h1>
-      <span class="actionlink">
-        <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("cancel") ?>
-        </a>
-      </span>
-      <?php echo translate("delete user") ?>
-    </h1>
-    <div class="main">
-      <span class="actionlink">
-        <a href="user.php?_action=confirm&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("delete") ?>
-        </a> |
-        <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("cancel") ?>
-        </a>
-      </span>
-      <?php echo sprintf(translate("Confirm deletion of '%s'"), $this_user->get("user_name")) ?>
-    <?php
+    $actionlinks=array(
+        translate("delete") => "user.php?_action=confirm&amp;user_id=" . $this_user->getId(),
+        translate("cancel") => "user.php?_action=display&amp;user_id=" . $this_user->getId(),
+    );
+    $tpl=new template("confirm", array(
+        "title"             => translate("delete user"),
+        "actionlinks"       => null,
+        "mainActionlinks"   => $actionlinks,
+        "obj"               => $this_user
+    ));
 } else {
     $actionlinks=array(
         "return"      => "users.php",
@@ -134,13 +122,14 @@ if ($action == "display") {
     ));
 
     $personPulldown=template::createPulldown("person_id",
-        ( $action == "insert" ? "1" : $this_user->get("person_id") ),
+        ($action == "insert" ? "1" : $this_user->get("person_id")),
         person::getSelectArray());
     $userClassPulldown=template::createPulldown("user_class", $this_user->get("user_class"),
-        array("1" => translate("User", 0), "0" => translate("Admin",0)));
+        array("1" => translate("User", 0), "0" => translate("Admin", 0)));
 
     $form->addInputHidden("user_id", $this_user->getId());
-    $form->addInputText("user_name", $this_user->getName(), translate("user name"), sprintf(translate("%s chars max"), 16), 16);
+    $form->addInputText("user_name", $this_user->getName(), translate("user name"), 
+        sprintf(translate("%s chars max"), 16), 16);
     $form->addPulldown("person_id", $personPulldown, translate("person"));
 
     if ($_action == "new") {
@@ -162,10 +151,7 @@ if ($action == "display") {
     }
 
     $tpl->addBlock($form);
-
-    echo $tpl;
 }
+echo $tpl;
 ?>
-</div>
-
 <?php require_once "footer.inc.php"; ?>
