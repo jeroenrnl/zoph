@@ -181,6 +181,8 @@ class user extends zophTable {
      * @return group_permissions Permissions object
      */
     public function getPhotoPermissions(photo $photo) {
+        $permissions=null;
+
         $qry=new select(array("p" => "photos"));
         $qry->addFields(array("photo_id"));
 
@@ -202,10 +204,24 @@ class user extends zophTable {
 
         $gps = group_permissions::getRecordsFromQuery($qry);
         if ($gps && sizeof($gps) >= 1) {
-            return $gps[0];
+            $permissions=$gps[0];
         }
 
-        return null;
+        if ($this->canSeeAllPhotos()) {
+            if ($permissions instanceof group_permissions) {
+                $permissions->set("access_level", 9);
+            } else {
+                $permissions=new group_permissions();
+                $permissions->set("access_level", 9);
+                $permissions->set("watermark_level", 0);
+                $permissions->set("writable", 0);
+            }
+
+            if ($this->isAdmin()) {
+                $permissions->set("writable", 1);
+            }
+        }
+        return $permissions;
     }
 
     /**
@@ -223,7 +239,7 @@ class user extends zophTable {
      * @return bool user can see all photos
      */
     public function canSeeAllPhotos() {
-        return ($this->isAdmin() || $this->get("see_all_photos"));
+        return ($this->isAdmin() || $this->get("view_all_photos"));
     }
 
     /**

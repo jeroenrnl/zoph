@@ -359,7 +359,13 @@ class userTest extends ZophDatabaseTestCase {
     public function testGet_permissions_for_photo1($id, $perm) {
         $obj = new user(1);
         $pp=$obj->getPhotoPermissions(new photo($id));
-        $this->assertEquals($pp,$perm);
+        if (is_null($perm)) {
+            $this->assertNull($pp);
+        } else {
+            $this->assertInstanceOf("group_permissions", $pp);
+            $this->assertEquals($perm[0],$pp->get("album_id"));
+            $this->assertEquals($perm[1],$pp->get("group_id"));
+        }
     }
 
     /**
@@ -526,20 +532,20 @@ class userTest extends ZophDatabaseTestCase {
 
     /**
      * Return a list of photo id's and permissions for user 1
-     * User 1 is admin, so no permissions will be returned.
+     * User 1 is admin, so a fake permissions object will be returned.
      */
     public function getPhotoPermissionsForUser1() {
         return array(
-            array(1,null),
-            array(2,null),
-            array(3,null),
-            array(4,null),
-            array(5,null),
-            array(6,null),
-            array(7,null),
-            array(8,null),
-            array(9,null),
-            array(10,null),
+            array(1,array(-1,-1)),
+            array(2,array(-1,-1)),
+            array(3,array(-1,-1)),
+            array(4,array(-1,-1)),
+            array(5,array(-1,-1)),
+            array(6,array(-1,-1)),
+            array(7,array(-1,-1)),
+            array(8,array(-1,-1)),
+            array(9,array(-1,-1)),
+            array(10,array(-1,-1)),
         );
     }
 

@@ -85,6 +85,7 @@ if ($photo_id) { // would be passed for edit or delete
         $photo = new photo();
     }
 }
+
 if (!$user->isAdmin()) {
     $permissions = $user->getPhotoPermissions($photo);
 }
@@ -163,7 +164,6 @@ if ($user->isAdmin() ||
     }
 }
 
-
 if (!$user->isAdmin()) {
     if ($_action == "new" || $_action == "insert" ||
         $_action == "delete" || $_action == "confirm") {
@@ -175,8 +175,7 @@ if (!$user->isAdmin()) {
     if (!$permissions) {
         $photo = new photo(-1); // in case redirect fails
         redirect("zoph.php");
-    }
-    else if ($permissions->get("writable") == 0) {
+    } else if ($permissions->get("writable") == 0) {
         $_action = "display";
     }
 }
