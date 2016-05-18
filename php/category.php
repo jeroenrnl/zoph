@@ -61,12 +61,12 @@ require_once "header.inc.php";
 <?php
 if ($action == "confirm") {
     ?>
-      <span class="actionlink">
-        <a href="category.php?_action=confirm&amp;category_id=<?php
-            echo $category->get("category_id") ?>"><?php echo translate("delete") ?></a> |
-        <a href="category.php?_action=edit&amp;category_id=<?php
-            echo $category->get("category_id") ?>"><?php echo translate("cancel") ?></a>
-      </span>
+      <ul class="actionlink">
+        <li><a href="category.php?_action=confirm&amp;category_id=<?php
+            echo $category->getId() ?>"><?php echo translate("delete") ?></a></li>
+        <li><a href="category.php?_action=edit&amp;category_id=<?php
+            echo $category->get("category_id") ?>"><?php echo translate("cancel") ?></a></li>
+      </ul>
       <?php echo translate("delete category") ?>
     </h1>
     <div class="main">
@@ -75,21 +75,21 @@ if ($action == "confirm") {
     <?php
 } else {
     ?>
-    <span class="actionlink">
-      <a href="categories.php?parent_category_id=<?php echo $category->get("category_id") ?>">
+    <ul class="actionlink">
+      <li><a href="categories.php?parent_category_id=<?php echo $category->getId() ?>">
         <?php echo translate("return") ?>
-      </a> |
-      <a href="category.php?_action=delete&amp;category_id=<?php
+      </a></li>
+      <li><a href="category.php?_action=delete&amp;category_id=<?php
         echo $category->get("category_id") ?>">
         <?php echo translate("delete") ?>
-      </a>
-    </span>
+      </a></li>
+    </ul>
     <?php echo translate("category") ?>
     </h1>
     <div class="main">
       <form action="category.php">
         <input type="hidden" name="_action" value="<?php echo $action ?>">
-        <input type="hidden" name="category_id" value="<?php echo $category->get("category_id") ?>">
+        <input type="hidden" name="category_id" value="<?php echo $category->getId() ?>">
         <?php echo create_edit_fields($category->getEditArray()) ?>
         <input type="submit" value="<?php echo translate($action, 0) ?>">
       </form>

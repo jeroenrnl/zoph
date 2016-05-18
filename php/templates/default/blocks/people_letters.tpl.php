@@ -21,11 +21,11 @@
 
 if (!ZOPH) { die("Illegal call"); }
 ?>
-<div class="letter">
+<ul class="actionlink letter">
     <?php for ($l = "a"; $l != "aa"; $l++): ?>
-        <a href="people.php?_l=<?= $l ?>" <?= ($l == $tpl_l) ? "class=\"selected\"" : "" ?>"><?= $l ?></a> |
+        <li><a href="people.php?_l=<?= $l ?>" <?= ($l == $tpl_l) ? "class=\"selected\"" : "" ?>"><?= $l ?></a></li>
     <?php endfor ?>
-    <a href="people.php?_l=no%20last%20name"><?php echo translate("no last name") ?></a> |
-    <a href="people.php?_l=all"><?php echo translate("all") ?></a>
-</div>
+    <li><a href="people.php?_l=no%20last%20name"><?php echo translate("no last name") ?></a></li>
+    <li><a href="people.php?_l=all"><?php echo translate("all") ?></a></li>
+</ul>
 

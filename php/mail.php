@@ -157,11 +157,11 @@ require_once "header.inc.php";
 <?php
 if (conf::get("feature.annotate")) {
     ?>
-      <span class="actionlink">
-        <a href="define_annotated_photo.php?photo_id=<?php echo $photo->get("photo_id") ?>">
+      <ul class="actionlink">
+        <li><a href="define_annotated_photo.php?photo_id=<?php echo $photo->getId() ?>">
           <?php echo translate("create annotated photo", 0) ?>
-        </a>
-      </span>
+        </a></li>
+      </ul>
     <?php
     }
 ?>

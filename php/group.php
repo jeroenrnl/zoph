@@ -116,16 +116,16 @@ require_once "header.inc.php";
 if ($action == "display") {
     ?>
     <h1>
-        <span class="actionlink">
-          <a href="groups.php"><?php echo translate("return") ?></a> |
-          <a href="group.php?_action=edit&amp;group_id=<?php echo $group->get("group_id") ?>">
+        <ul class="actionlink">
+          <li><a href="groups.php"><?php echo translate("return") ?></a></li>
+          <li><a href="group.php?_action=edit&amp;group_id=<?php echo $group->get("group_id") ?>">
             <?php echo translate("edit") ?>
-          </a> |
-          <a href="group.php?_action=delete&amp;group_id=<?php echo $group->get("group_id") ?>">
+          </a></li>
+          <li><a href="group.php?_action=delete&amp;group_id=<?php echo $group->get("group_id") ?>">
             <?php echo translate("delete") ?>
-          </a> |
-          <a href="group.php?_action=new"><?php echo translate("new") ?></a>
-        </span>
+          </a></li>
+          <li><a href="group.php?_action=new"><?php echo translate("new") ?></a></li>
+        </ul>
       <?php echo translate("group") ?>
     </h1>
     <div class="main">
@@ -182,22 +182,22 @@ if ($action == "display") {
 } else if ($action == "confirm") {
     ?>
     <h1>
-      <span class="actionlink">
-        <a href="group.php?_action=display&amp;group_id=<?php echo $group->get("group_id") ?>">
+      <ul class="actionlink">
+        <li><a href="group.php?_action=display&amp;group_id=<?php echo $group->get("group_id") ?>">
           <?php echo translate("cancel") ?>
-        </a>
-      </span>
+        </a></li>
+      </ul>
       <?php echo translate("delete group") ?>
     </h1>
     <div class="main">
-      <span class="actionlink">
-        <a href="group.php?_action=confirm&amp;group_id=<?php echo $group->get("group_id") ?>">
+      <ul class="actionlink">
+        <li><a href="group.php?_action=confirm&amp;group_id=<?php echo $group->get("group_id") ?>">
           <?php echo translate("delete") ?>
-        </a> |
-        <a href="group.php?_action=display&amp;group_id=<?php echo $group->get("group_id") ?>">
+        </a></li>
+        <li><a href="group.php?_action=display&amp;group_id=<?php echo $group->get("group_id") ?>">
           <?php echo translate("cancel") ?>
-        </a>
-      </span>
+        </a></li>
+      </ul>
       <?php echo sprintf(translate("Confirm deletion of '%s'"), $group->get("group_name")) ?>
       <?php
 } else {

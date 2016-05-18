@@ -18,10 +18,10 @@
 ?>
 <!-- begin edit_person.inc !-->
           <h1>
-          <span class="actionlink">
-            <a href="people.php"><?php echo translate("return") ?></a> |
-            <a href="person.php?_action=new"><?php echo translate("new") ?></a>
-          </span>
+          <ul class="actionlink">
+            <li><a href="people.php"><?php echo translate("return") ?></a></li>
+            <li><a href="person.php?_action=new"><?php echo translate("new") ?></a></li>
+          </ul>
             <?php echo translate($_action) ?> <?php echo translate("person") ?>
           </h1>
       <?php echo check_js($user); ?>

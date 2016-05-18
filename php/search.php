@@ -101,10 +101,10 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     ?>
     <h1><?php echo translate("Delete saved search")?></h1>
     <div class="main">
-        <span class="actionlink">
-            <a href='<?php echo $url ?>'><?php echo translate("delete") ?></a>
-            | <a href='search.php'><?php echo translate("cancel") ?></a>
-        </span>
+        <ul class="actionlink">
+            <li><a href='<?php echo $url ?>'><?php echo translate("delete") ?></a></li>
+            <li><a href='search.php'><?php echo translate("cancel") ?></a></li>
+        </ul>
         <?php printf(translate("Confirm deletion of saved search '%s'"), $search->get("name")) ?>
         <br>
      </div>

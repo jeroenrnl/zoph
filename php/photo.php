@@ -439,14 +439,14 @@ if ($action != "insert" && !$found) {
         if ($allexif) {
             ?>
             <h2><?php echo translate("Full EXIF details",0)?></h2>
-            <span class="actionlink">
-                <a href="#" onclick="document.getElementById('allexif').style.display='block'">
+            <ul class="actionlink">
+                <li><a href="#" onclick="document.getElementById('allexif').style.display='block'">
                   <?php echo translate("display",0) ?>
-                </a> |
-                <a href="#" onclick="document.getElementById('allexif').style.display='none'">
+                </a></li>
+                <li><a href="#" onclick="document.getElementById('allexif').style.display='none'">
                   <?php echo translate("hide",0) ?>
-                </a>
-            </span>
+                </a></li>
+            </ul>
             <?php
             echo $allexif;
         }

@@ -91,7 +91,7 @@ if (!($num_thumbnails == 0 || $_cols <= 4)) {
 require_once "header.inc.php";
 ?>
 <h1>
-  <span class="actionlink">
+  <ul class="actionlink">
 <?php
 $qs = preg_replace('/_crumb=\d+&?/', '', $_SERVER["QUERY_STRING"]);
 $qs_no_action=preg_replace('/_action=\w+&?/', '', $qs);
@@ -105,29 +105,28 @@ if ($qs_no_action) {
 
 if ($_action=translate("search")) {
     ?>
-
-    <a href="search.php?<?php echo $qs_no_action ?>_action=new">
-        <?php echo translate("save search") ?></a> |
+    <li><a href="search.php?<?php echo $qs_no_action ?>_action=new">
+        <?php echo translate("save search") ?></a></li>
     <?php
 }
 if ($user->isAdmin()) {
     ?>
-    <a href="edit_photos.php?<?php echo $qs ?>">
-        <?php echo translate("edit") ?></a> |
-    <a href="tracks.php?_action=geotag&<?php echo $qs_no_action ?>">
-        <?php echo translate("geotag") ?></a> |
+    <li><a href="edit_photos.php?<?php echo $qs ?>">
+        <?php echo translate("edit") ?></a></li>
+    <li><a href="tracks.php?_action=geotag&<?php echo $qs_no_action ?>">
+        <?php echo translate("geotag") ?></a></li>
     <?php
 }
 ?>
-<a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a>
+<li><a href="slideshow.php?<?php echo $qs ?>"><?php echo translate("slideshow") ?></a></li>
 <?php
 if (conf::get("feature.download") && ($user->get("download") || $user->isAdmin())) {
     ?>
-    | <a href="download.php?<?php echo $qs ?>"><?php echo translate("download") ?></a>
+    <li><a href="download.php?<?php echo $qs ?>"><?php echo translate("download") ?></a></li>
     <?php
 }
 ?>
-  </span>
+  </ul>
   <?php echo $title_bar . "\n" ?>
 </h1>
 <div class="main">
@@ -194,10 +193,10 @@ if ($num_thumbnails <= 0) {
 
         if (!empty($lightbox)) {
             ?>
-            <div class="actionlink">
-              <a href="photos.php?<?php echo update_query_string($vars, "_photo_id",
-                $thumbnails[$i]->get("photo_id"), $ignore) ?>">x</a>
-            </div>
+            <ul class="actionlink">
+              <li><a href="photos.php?<?php echo update_query_string($vars, "_photo_id",
+                $thumbnails[$i]->get("photo_id"), $ignore) ?>">x</a></li>
+            </ul>
             <?php
         }
         ?>

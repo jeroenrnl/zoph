@@ -38,11 +38,11 @@ $title = translate("Preferences");
 require_once "header.inc.php";
 ?>
       <h1>
-        <span class="actionlink">
-          <a href="password.php">
+        <ul class="actionlink">
+          <li><a href="password.php">
             <?php echo translate("change password") ?>
-          </a>
-        </span>
+          </a></li>
+        </ul>
         <?php echo translate("edit preferences") ?>
       </h1>
   <div class="main">

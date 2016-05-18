@@ -81,16 +81,16 @@ if ($action == "confirm") {
     ?>
       <h1><?php echo translate("delete comment") ?></h1>
         <div class="main">
-           <span class="actionlink">
-             <a href="comment.php?_action=confirm&amp;comment_id=<?php
-                echo $comment->get("comment_id") ?>">
+           <ul class="actionlink">
+             <li><a href="comment.php?_action=confirm&amp;comment_id=<?php
+                echo $comment->getId() ?>">
                 <?php echo translate("delete") ?>
-             </a> |
-             <a href="comment.php?_action=edit&amp;comment_id=<?php
-                echo $comment->get("comment_id") ?>">
+             </a></li>
+             <li><a href="comment.php?_action=edit&amp;comment_id=<?php
+                echo $comment->getId() ?>">
                 <?php echo translate("cancel") ?>
-             </a>
-           </span>
+             </a></li>
+           </ul>
            <?php echo sprintf(translate("Confirm deletion of comment '<b>%s</b>' by '<b>%s</b>'"),
                 $comment->get("subject"), $comment_user->get("user_name")) ?>
          </div>
@@ -101,17 +101,17 @@ if ($action == "confirm") {
     <?php
     if ($user->isAdmin() || $comment->isOwner($user)) {
         ?>
-        <span class="actionlink">
-          <a href="photo.php?photo_id=<?php echo $photo_id ?>">
+        <ul class="actionlink">
+          <li><a href="photo.php?photo_id=<?php echo $photo->getId() ?>">
             <?php echo translate("return") ?>
-          </a> |
-          <a href="comment.php?_action=edit&amp;comment_id=<?php
-            echo $comment->get("comment_id") ?>"><?php echo translate("edit") ?>
-          </a> |
-          <a href="comment.php?_action=delete&amp;comment_id=<?php
-            echo $comment->get("comment_id") ?>"><?php echo translate("delete") ?>
-          </a>
-        </span>
+          </a></li>
+          <li><a href="comment.php?_action=edit&amp;comment_id=<?php
+            echo $comment->getId() ?>"><?php echo translate("edit") ?>
+          </a></li>
+          <li><a href="comment.php?_action=delete&amp;comment_id=<?php
+            echo $comment->getId() ?>"><?php echo translate("delete") ?>
+          </a></li>
+        </ul>
         <?php
     }
     echo $title;

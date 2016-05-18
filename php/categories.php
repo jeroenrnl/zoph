@@ -69,11 +69,11 @@ try {
 <?php
 if ($user->canEditOrganizers()) {
     ?>
-    <span class="actionlink">
-      <a href="category.php?_action=new&amp;parent_category_id=<?php
+    <ul class="actionlink">
+      <li><a href="category.php?_action=new&amp;parent_category_id=<?php
         echo $category->get("category_id") ?>"><?php echo translate("new") ?>
-      </a>
-    </span>
+      </a></li>
+    </ul>
     <?php
 }
 echo "\n" . translate("categories") . "\n" ?>
@@ -112,22 +112,21 @@ if ($showOrig) {
     <?php
     if ($user->canEditOrganizers()) {
         ?>
-        <span class="actionlink">
-          <a href="category.php?_action=edit&amp;category_id=<?php
+        <ul class="actionlink">
+          <li><a href="category.php?_action=edit&amp;category_id=<?php
             echo $category->get("category_id") ?>"><?php echo translate("edit") ?>
-          </a>
+          </a></li>
         <?php
         if ($category->get("coverphoto")) {
             ?>
-            |
-            <a href="category.php?_action=update&amp;category_id=<?php
+            <li><a href="category.php?_action=update&amp;category_id=<?php
                 echo $category->get("category_id") ?>&amp;coverphoto=NULL"><?php
                 echo translate("unset coverphoto") ?>
-            </a>
+            </a></li>
             <?php
         }
         ?>
-        </span>
+        </ul>
         <br>
         <p>
         <?php
@@ -157,11 +156,11 @@ if ($showOrig) {
     if ($totalPhotoCount > 0) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
-            <span class="actionlink">
-                <a href="photos.php?category_id=<?php echo $category->getBranchIds() .
+            <ul class="actionlink">
+                <li><a href="photos.php?category_id=<?php echo $category->getBranchIds() .
                     $sort ?>"><?php echo translate("view photos") ?>
-                </a>
-            </span>
+                </a></li>
+            </ul>
             <?php
             if (!$category->get("parent_category_id")) {
                 $fragment = translate("that have been categorized");
@@ -183,11 +182,11 @@ if ($showOrig) {
     $fragment = translate("in this category");
     if ($photoCount > 0) {
         ?>
-        <span class="actionlink">
-            <a href="photos.php?category_id=<?php echo $category->get("category_id") .
+        <ul class="actionlink">
+            <li><a href="photos.php?category_id=<?php echo $category->getId() .
                 $sort ?>"><?php echo translate("view photos")?>
-            </a>
-        </span>
+            </a></li>
+        </ul>
         <?php
         if ($photoCount > 1) {
             echo sprintf(translate("There are %s photos"), $photoCount);

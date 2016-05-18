@@ -173,12 +173,12 @@ if ($action == "display") {
       <?php echo translate("delete person") ?>
     </h1>
     <div class="main">
-      <span class="actionlink">
-        <a href="person.php?_action=confirm&amp;person_id=<?php echo $person->get("person_id") ?>">
-          <?php echo translate("delete") ?></a> |
-        <a href="person.php?_action=display&amp;person_id=<?php echo $person->get("person_id") ?>">
-          <?php echo translate("cancel") ?></a>
-      </span>
+      <ul class="actionlink">
+        <li><a href="person.php?_action=confirm&amp;person_id=<?php echo $person->get("person_id") ?>">
+          <?php echo translate("delete") ?></a></li>
+        <li><a href="person.php?_action=display&amp;person_id=<?php echo $person->get("person_id") ?>">
+          <?php echo translate("cancel") ?></a></li>
+      </ul>
       <?php echo sprintf(translate("Confirm deletion of '%s'"), $person->getName()) ?>:
       <br>
     </div>

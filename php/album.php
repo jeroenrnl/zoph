@@ -61,28 +61,28 @@ if ($action == "confirm") {
         <div class="main">
            <?php echo sprintf(translate("Confirm deletion of '%s' and its subalbums:"),
                 $album->get("album")) ?>
-           <span class="actionlink">
-             <a href="album.php?_action=confirm&amp;album_id=<?php
-                echo $album->get("album_id") ?>">
+           <ul class="actionlink">
+             <li><a href="album.php?_action=confirm&amp;album_id=<?php
+                echo $album->getId() ?>">
                 <?php echo translate("delete") ?>
-             </a> |
-             <a href="album.php?_action=edit&amp;album_id=<?php
-                echo $album->get("album_id") ?>">
+             </a></li>
+             <li><a href="album.php?_action=edit&amp;album_id=<?php
+                echo $album->getId() ?>">
                 <?php echo translate("cancel") ?>
-             </a>
-           </span>
+             </a></li>
+           </ul>
          </div>
     <?php
 } else {
     ?>
       <h1>
-        <span class="actionlink">
-          <a href="albums.php"><?php echo translate("return") ?></a> |
-          <a href="album.php?_action=delete&amp;album_id=<?php
+        <ul class="actionlink">
+          <li><a href="albums.php"><?php echo translate("return") ?></a></li>
+          <li><a href="album.php?_action=delete&amp;album_id=<?php
             echo $album->get("album_id") ?>">
             <?php echo translate("delete") ?>
-          </a>
-        </span>
+          </a></li>
+        </ul>
         <?php echo translate("album") ?>
       </h1>
       <div class="main">

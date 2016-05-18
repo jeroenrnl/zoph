@@ -53,16 +53,16 @@ if ($action == "confirm") {
     ?>
     <h1><?php echo translate("delete place") ?></h1>
     <div class="main">
-      <span class="actionlink">
-        <a href="place.php?_action=confirm&amp;place_id=<?php
-            echo $place->get("place_id") ?>">
+      <ul class="actionlink">
+        <li><a href="place.php?_action=confirm&amp;place_id=<?php
+            echo $place->getId() ?>">
           <?php echo translate("delete") ?>
-        </a> |
-        <a href="place.php?_action=display&amp;place_id=<?php
-            echo $place->get("place_id") ?>">
+        </a></li>
+        <li><a href="place.php?_action=display&amp;place_id=<?php
+            echo $place->getId() ?>">
           <?php echo translate("cancel") ?>
-        </a>
-      </span>
+        </a></li>
+      </ul>
       <?php echo sprintf(translate("Confirm deletion of '%s'"), $title) ?>:
     <?php
 } else {

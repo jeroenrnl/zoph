@@ -66,30 +66,30 @@ if ($action == "confirm") {
     ?>
       <h1><?php echo translate("delete pageset") ?></h1>
         <div class="main">
-           <span class="actionlink">
-             <a href="pageset.php?_action=confirm&amp;pageset_id=<?php
-                echo $pageset->get("pageset_id") ?>"><?php echo translate("delete") ?>
-             </a> |
-             <a href="pageset.php?_action=edit&amp;pageset_id=<?php
-                echo $pageset->get("pageset_id") ?>"><?php echo translate("cancel") ?>
-             </a>
-           </span>
+           <ul class="actionlink">
+             <li><a href="pageset.php?_action=confirm&amp;pageset_id=<?php
+                echo $pageset->getId() ?>"><?php echo translate("delete") ?>
+             </a></li>
+             <li><a href="pageset.php?_action=edit&amp;pageset_id=<?php
+                echo $pageset->getId() ?>"><?php echo translate("cancel") ?>
+             </a></li>
+           </ul>
            <?php echo translate("Confirm deletion of this pageset"); ?>
          </div>
     <?php
 } else if ($action == "display") {
     ?>
       <h1>
-        <span class="actionlink">
-          <a href="pageset.php?_action=edit&amp;pageset_id=<?php
-            echo $pageset->get("pageset_id") ?>">
+        <ul class="actionlink">
+          <li><a href="pageset.php?_action=edit&amp;pageset_id=<?php
+            echo $pageset->getId() ?>">
             <?php echo translate("edit") ?>
-          </a> |
-          <a href="pageset.php?_action=delete&amp;pageset_id=<?php
-            echo $pageset->get("pageset_id") ?>">
+          </a></li>
+          <li><a href="pageset.php?_action=delete&amp;pageset_id=<?php
+            echo $pageset->getId() ?>">
             <?php echo translate("delete") ?>
-          </a>
-        </span>
+          </a></li>
+        </ul>
         <?php echo $title; ?>
       </h1>
       <div class="main">
