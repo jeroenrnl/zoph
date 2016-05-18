@@ -258,11 +258,7 @@ class place extends zophTreeTable implements Organizer {
      */
     public function toHTML() {
 
-        $html = "";
-        if ($this->get("title"))    {
-            $html .= "<h2>" . e($this->get("title")) . "</h2>\n";
-        }
-        $html .= $this->getAddress();
+        $html = $this->getAddress();
         if ($this->get("url")) {
             $html .= "<br><br>\n";
             $html .= "<a href=\"" . e($this->get("url")) . "\">";

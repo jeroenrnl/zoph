@@ -68,23 +68,28 @@ try {
 
 ?>
 <h1>
-
-<?php
-$new=null;
-if ($user->canEditOrganizers()) {
-    $new="<a href=\"place.php?_action=new&amp;parent_place_id=" . $place->get("place_id") . "\">" .
-      translate("new") . "</a> |";
-}
-if ($user->canBrowseTracks()) {
-    ?>
-    <span class="actionlink">
-        <?php echo $new; ?>
-        <a href="tracks.php"><?php echo translate("tracks") ?></a>
-    </span>
-    <?php
-}
-?>
-<?php echo translate("places") . "\n" ?>
+    <ul class="actionlink">
+    <?php if ($user->canEditOrganizers()): ?>
+        <li><a href="place.php?_action=new&amp;parent_place_id=<?= $place->getId() ?>">
+            <?= translate("new") ?>
+        </a></li>
+        <li><a href="place.php?_action=edit&amp;place_id=<?= $place->getId() ?>">
+            <?= translate("edit") ?>
+        </a></li>
+        <li><a href="place.php?_action=delete&amp;place_id=<?= $place->getId() ?>">
+            <?= translate("delete") ?>
+        </a></li>
+        <?php if ($place->get("coverphoto")): ?>
+            <li><a href="place.php?_action=update&amp;place_id=<?= $place->getId() ?>&amp;coverphoto=NULL">
+              <?= translate("unset coverphoto") ?>
+            </a></li>
+        <?php endif ?>
+    <?php endif ?>
+    <?php if ($user->canBrowseTracks()): ?>
+        <li><a href="tracks.php"><?= translate("tracks") ?></a></li>
+    <?php endif ?>
+    </ul>
+    <?= $title ?>
 </h1>
 <?php
 if ($user->isAdmin()) {
@@ -108,45 +113,21 @@ if ($showOrig) {
     ?>
       </form>
       <br>
+    <h2>
     <?php
-    if ($user->canEditOrganizers()) {
-        ?>
-        <span class="actionlink">
-            <a href="place.php?_action=edit&amp;place_id=<?php echo $place->get("place_id") ?>">
-                <?php echo translate("edit") ?>
-            </a> |
-            <a href="place.php?_action=delete&amp;place_id=<?php echo $place->get("place_id") ?>">
-                <?php echo translate("delete") ?>
-            </a>
-        <?php
-        if ($place->get("coverphoto")) {
+    if ($ancestors) {
+        while ($parent = array_pop($ancestors)) {
             ?>
-                |
-                <a href="place.php?_action=update&amp;place_id=<?php echo $place->get("place_id") ?>&amp;coverphoto=NULL">
-                  <?php echo translate("unset coverphoto") ?>
-                </a>
+            <a href="<?php echo $parent->getURL() ?>"><?php echo $parent->getName() ?></a> &gt;
             <?php
         }
-        ?>
-        </span>
-
-        <h2>
-        <?php
-        if ($ancestors) {
-            while ($parent = array_pop($ancestors)) {
-                ?>
-                <a href="<?php echo $parent->getURL() ?>"><?php echo $parent->getName() ?></a> &gt;
-                <?php
-            }
-        }
-        ?>
-        </h2>
-        <p>
-        <?php
     }
-    echo $place->displayCoverphoto();
     ?>
-        </p>
+        <?= $title ?>
+    </h2>
+    <p>
+        <?= $place->displayCoverphoto(); ?>
+    </p>
     <?php
     if ($user->canSeePlaceDetails()) {
         echo $place->toHTML();
@@ -155,8 +136,6 @@ if ($showOrig) {
             echo e($place->get("notes"));
             echo "</p>";
         }
-    } else {
-        echo "<h2>" . $title . "</h2>\n";
     }
     if ($place->get("place_description")) {
         echo $place->get("place_description");
@@ -171,11 +150,11 @@ if ($showOrig) {
     if ($totalPhotoCount > 0) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
-            <span class="actionlink">
-              <a href="photos.php?location_id=<?php echo $place->getBranchIds() ?>">
+            <ul class="actionlink">
+              <li><a href="photos.php?location_id=<?php echo $place->getBranchIds() ?>">
                 <?php echo translate("view photos") ?>
-              </a>
-            </span>
+              </a></li>
+            </ul>
             <?php
             $fragment .= " " . translate("or its children");
             if ($totalPhotoCount > 1) {
@@ -192,11 +171,11 @@ if ($showOrig) {
         }
         if ($photoCount > 0) {
             ?>
-            <span class="actionlink">
-              <a href="photos.php?location_id=<?php echo $place->get("place_id") ?>">
+            <ul class="actionlink">
+              <li><a href="photos.php?location_id=<?php echo $place->get("place_id") ?>">
                 <?php echo translate("view photos")?>
-              </a>
-            </span>
+              </a></li>
+            </ul>
             <?php
             if ($photoCount > 1) {
                 echo sprintf(translate("There are %s photos"), $photoCount);
