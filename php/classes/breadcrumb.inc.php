@@ -47,7 +47,7 @@ class breadcrumb {
         $page=array_reverse(explode("/",$_SERVER['PHP_SELF']));
         $page=$page[0];
 
-        $crumbActions=array("", "display", "search", translate("search"), "notify", "compose");
+        $crumbActions=array("", "display", "search", translate("search"), "notify", "compose", "new");
         if ($user->prefs->get("auto_edit") && $page=="photo.php") {
             $crumbActions[]="edit";
         }
