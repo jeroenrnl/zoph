@@ -66,17 +66,27 @@ try {
 
 ?>
 <h1>
-<?php
-if ($user->canEditOrganizers()) {
-    ?>
-    <ul class="actionlink">
-      <li><a href="category.php?_action=new&amp;parent_category_id=<?php
-        echo $category->get("category_id") ?>"><?php echo translate("new") ?>
-      </a></li>
-    </ul>
-    <?php
-}
-echo "\n" . translate("categories") . "\n" ?>
+    <?php if ($user->canEditOrganizers()):  ?>
+        <ul class="actionlink">
+            <li><a href="category.php?_action=new&amp;parent_category_id=<?php
+            echo $category->getId() ?>"><?php echo translate("new") ?>
+            </a></li>
+            <li><a href="category.php?_action=edit&amp;category_id=<?php
+            echo $category->getId() ?>"><?php echo translate("edit") ?>
+            </a></li>
+            <?php
+            if ($category->get("coverphoto")) {
+                ?>
+                <li><a href="category.php?_action=update&amp;category_id=<?php
+                    echo $category->getId() ?>&amp;coverphoto=NULL"><?php
+                    echo translate("unset coverphoto") ?>
+                </a></li>
+                <?php
+            }
+            ?>
+        </ul>
+    <?php endif ?>
+    <?= $title ?>
 </h1>
 <?php
 if ($user->isAdmin()) {
@@ -109,30 +119,8 @@ if ($showOrig) {
     ?>
         <?php echo $title . "\n" ?>
     </h2>
-    <?php
-    if ($user->canEditOrganizers()) {
-        ?>
-        <ul class="actionlink">
-          <li><a href="category.php?_action=edit&amp;category_id=<?php
-            echo $category->get("category_id") ?>"><?php echo translate("edit") ?>
-          </a></li>
-        <?php
-        if ($category->get("coverphoto")) {
-            ?>
-            <li><a href="category.php?_action=update&amp;category_id=<?php
-                echo $category->get("category_id") ?>&amp;coverphoto=NULL"><?php
-                echo translate("unset coverphoto") ?>
-            </a></li>
-            <?php
-        }
-        ?>
-        </ul>
-        <br>
-        <p>
-        <?php
-    }
-    echo $category->displayCoverphoto();
-    ?>
+    <p>
+    <?= $category->displayCoverphoto(); ?>
     </p>
     <?php
     if ($category->get("category_description")) {
