@@ -22,7 +22,7 @@
  */
 require_once "include.inc.php";
 
-if (!$user->isAdmin()) {
+if (!$user->canEditOrganizers()) {
     $_action = "display";
 }
 
