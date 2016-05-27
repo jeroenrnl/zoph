@@ -18,6 +18,12 @@
 
 ALTER TABLE zoph_users CHANGE COLUMN password password varchar(255);
 
-ALTER TABLE zoph_users ADD COLUMN view_all_photos CHAR(1) NOT NULL DEFAULT '0' AFTER class;
+ALTER TABLE zoph_users ADD COLUMN view_all_photos CHAR(1) NOT NULL DEFAULT '0' AFTER user_class;
 ALTER TABLE zoph_users ADD COLUMN delete_photos CHAR(1) NOT NULL DEFAULT '0' AFTER view_all_photos;
 ALTER TABLE zoph_users ADD COLUMN edit_organizers CHAR(1) NOT NULL DEFAULT '0' AFTER browse_tracks;
+
+ALTER TABLE zoph_albums ADD COLUMN createdby int(11) NOT NULL DEFAULT 1;
+ALTER TABLE zoph_categories ADD COLUMN createdby int(11) NOT NULL DEFAULT 1;
+ALTER TABLE zoph_places ADD COLUMN createdby int(11) NOT NULL DEFAULT 1;
+ALTER TABLE zoph_people ADD COLUMN createdby int(11) NOT NULL DEFAULT 1;
+ALTER TABLE zoph_circles ADD COLUMN createdby int(11) NOT NULL DEFAULT 1;

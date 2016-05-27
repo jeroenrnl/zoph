@@ -101,6 +101,15 @@ class user extends zophTable {
     }
 
     /**
+     * Is this user the creator of this organizer?
+     * @return bool
+     */
+    public function isCreator(organizer $obj) {
+        $obj->lookup();
+        return ((int) $obj->get("createdby") === $this->getId());
+    }
+
+    /**
      * When was this user last notified of new albums?
      * @return string timestamp
      */
@@ -144,6 +153,14 @@ class user extends zophTable {
      * @return group_permissions Permissions object
      */
     public function getAlbumPermissions(album $album) {
+        // An admin or creator of an album always has full permissions on that album
+        if ($this->isAdmin() || $this->isCreator($album)) {
+            $gp=new group_permissions(0, $album->getId());
+            $gp->set("access_level", 9);
+            $gp->set("watermark_level", 0);
+            $gp->set("writable", true);
+            return $gp;
+        }
         $groups=$this->getGroups();
 
         $groupIds=array();

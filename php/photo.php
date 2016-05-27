@@ -407,7 +407,7 @@ if ($action != "insert" && !$found) {
             <?php
         }
     }
-    if ($album_links = template::createLinkList($photo->getAlbums($user))) {
+    if ($album_links = template::createLinkList($photo->getAlbums())) {
         ?>
             <dt><?php echo translate("albums") ?></dt>
             <dd><?php echo $album_links ?></dd>

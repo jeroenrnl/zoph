@@ -395,14 +395,12 @@ function cleanup_path($path) {
 }
 
 function create_actionlinks($actionlinks) {
-    $bar="";
     if (is_array($actionlinks)) {
-        $html="<span class=\"actionlink\">\n";
+        $html="<ul class=\"actionlink\">\n";
         while (list($key, $val) = each($actionlinks)) {
-            $html .= $bar . "<a href=\"" . $val . "\">" . translate($key, 0) . "</a>";
-            $bar=" | ";
+            $html .= "<li><a href=\"" . $val . "\">" . translate($key, 0) . "</a></li>";
         }
-        $html.="</span>\n";
+        $html.="</ul>\n";
         return $html;
     }
 }

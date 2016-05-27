@@ -328,22 +328,12 @@ class userTest extends ZophDatabaseTestCase {
 
     /**
      * Test getAlbumPermissions() method.
-     * @dataProvider getAlbumIds1
+     * @dataProvider getAlbumIds
      */
-    public function testGet_album_permissions1($id, $perm) {
-        $obj = new user(1);
-        $ap=$obj->getAlbumPermissions(new album($id));
-        $this->assertEquals($ap,$perm);
-    }
-
-    /**
-     * Test getAlbumPermissions() method.
-     * @dataProvider getAlbumIds3
-     */
-    public function testGet_album_permissions3($id, $perm) {
-        $obj = new user(3);
-        $obj->lookup();
-        $ap=$obj->getAlbumPermissions(new album($id));
+    public function testGet_album_permissions($user_id, $id, $perm) {
+        $user = new user($user_id);
+        $user->lookup();
+        $ap=$user->getAlbumPermissions(new album($id));
         if (is_null($perm)) {
             $this->assertEquals($ap,$perm);
         } else {
@@ -422,10 +412,13 @@ class userTest extends ZophDatabaseTestCase {
           'can rate photos' => 'Yes',
           'can rate the same photo multiple times' => 'No',
           'can view hidden circles' => 'Yes',
+          'can view all photos' => 'Yes',
+          'can delete photos' => 'Yes',
+          'can edit albums, categories, places and people' => 'Yes',
           'can share photos' => 'No',
-          'can view all photos' => 'No',
-          'can delete photos' => 'No',
-          'can edit albums, categories, places and people' => 'No'
+          'can view all photos' => 'Yes',
+          'can delete photos' => 'Yes',
+          'can edit albums, categories, places and people' => 'Yes'
         );
         $this->assertEquals($expected, $da);
     }
@@ -498,35 +491,28 @@ class userTest extends ZophDatabaseTestCase {
     }
 
     /**
-     * Return a list of album id's used for testing and permissions for userid 1
+     * Return a list of album id's used for testing of permissions
      * User id 1 is the admin user, who is not member of a group
-     * and therefore has no permissions.
-     */
-    public function getAlbumIds1() {
-        return array(
-            array(1,null),
-            array(3,null),
-            array(5,null),
-            array(7,null)
-        );
-    }
-    /**
-     * Return a list of album id's used for testing and permissions for userid 3
+     * and therefore has has group 0
      * User id 3 is 'jimi', who is a member of the "guitarists" group.
      * and therefore has no permissions.
      */
-    public function getAlbumIds3() {
+    public function getAlbumIds() {
         return array(
-            array(1,4),
-            array(2,4),
-            array(3,null),
-            array(4,null),
-            array(5,null),
-            array(6,null),
-            array(7,null),
-            array(8,null),
-            array(9,null),
-            array(10,null)
+            array(1,1,0),
+            array(1,3,0),
+            array(1,5,0),
+            array(1,7,0),
+            array(3,1,4),
+            array(3,2,4),
+            array(3,3,null),
+            array(3,4,null),
+            array(3,5,null),
+            array(3,6,null),
+            array(3,7,null),
+            array(3,8,null),
+            array(3,9,null),
+            array(3,10,null)
         );
     }
 

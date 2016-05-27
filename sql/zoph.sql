@@ -26,6 +26,7 @@ CREATE TABLE zoph_albums (
   coverphoto int(11) default NULL,
   pageset int(11) DEFAULT NULL,
   sortorder varchar(32) default NULL,
+  createdby int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY  (album_id),
   KEY album_parent_id (parent_album_id)
 ) ENGINE=MyISAM;
@@ -35,7 +36,7 @@ CREATE TABLE zoph_albums (
 --
 
 
-INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL, NULL, NULL,NULL);
+INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL, NULL, NULL,NULL, 1);
 
 --
 -- Table structure for table 'zoph_categories'
@@ -50,6 +51,7 @@ CREATE TABLE zoph_categories (
   coverphoto int(11) default NULL,
   pageset int(11) DEFAULT NULL,
   sortorder varchar(32) default NULL,
+  createdby int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY  (category_id),
   KEY cat_parent_id (parent_category_id)
 ) ENGINE=MyISAM;
@@ -58,7 +60,7 @@ CREATE TABLE zoph_categories (
 -- Dumping data for table 'zoph_categories'
 --
 
-INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL, NULL,NULL,NULL, NULL);
+INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL, NULL,NULL,NULL, NULL, 1);
 
 --
 -- Table structure for table 'zoph_color_schemes'
@@ -164,6 +166,7 @@ CREATE TABLE zoph_people (
   coverphoto int(11) default NULL,
   pageset int(11) DEFAULT NULL,
   email varchar(64) default NULL,
+  createdby int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY  (person_id),
   KEY person_last_name (last_name(10)),
   KEY person_first_name (first_name(10))
@@ -174,7 +177,7 @@ CREATE TABLE zoph_people (
 --
 
 
-INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL);
+INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL, 1);
 
 --
 -- Table structure for table 'zoph_circles'
@@ -186,6 +189,7 @@ CREATE TABLE zoph_circles (
         description varchar(128) default NULL,
         coverphoto int(11) default NULL,
 	hidden char(1) default '0',
+        createdby int(11) NOT NULL DEFAULT 1,
         PRIMARY KEY  (circle_id)
 ) ENGINE=MyISAM;
 
@@ -342,12 +346,13 @@ CREATE TABLE zoph_places (
   lon float(10,6),
   mapzoom tinyint unsigned,
   timezone varchar(50) default NULL,
+  createdby int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY  (place_id),
   KEY place_city (city(10)),
   KEY place_title (title(10))
 ) ENGINE=MyISAM;
 
-INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, 1);
 
 --
 -- Dumping data for table 'zoph_places'
@@ -439,11 +444,14 @@ CREATE TABLE zoph_users (
   user_id int(11) NOT NULL auto_increment,
   person_id int(11) NOT NULL default '0',
   user_class char(1) NOT NULL default '1',
+  view_all_photos CHAR(1) NOT NULL DEFAULT '0',
+  delete_photos CHAR(1) NOT NULL DEFAULT '0',
   user_name varchar(16) NOT NULL default '',
   password varchar(255) default NULL,
   browse_people char(1) NOT NULL default '0',
   browse_places char(1) NOT NULL default '0',
   browse_tracks char(1) NOT NULL DEFAULT '0',
+  edit_organizers CHAR(1) NOT NULL DEFAULT '0',
   detailed_people char(1) NOT NULL default '0',
   see_hidden_circles char(1) NOT NULL default '0',
   detailed_places char(1) NOT NULL default '0',
@@ -463,9 +471,9 @@ CREATE TABLE zoph_users (
 --
 -- Dumping data for table 'zoph_users'
 --
+-- Password is "admin"
 
-
-INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1','1','1','0', '0', NULL,NULL,NULL,NULL);
+INSERT INTO zoph_users VALUES (1,1,'0','1','1','admin','$2y$10$cFl.NZJDITXBg6Etl3udd.JpNkgzsRIwBoJf7f5AWqi9Itv1HJY6q','1','1','1','1','1','1','1','1','1','1','1','0', '0', NULL,NULL,NULL,NULL);
 
 CREATE TABLE zoph_pageset (
   pageset_id int(11) NOT NULL auto_increment,

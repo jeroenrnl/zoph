@@ -49,6 +49,14 @@ class circle extends zophTable {
     protected static $url="people.php?circle_id=";
 
     /**
+     * Insert a new record in the database
+     */
+    public function insert() {
+        $this->set("createdby", (int) user::getCurrent()->getId());
+        return parent::insert();
+    }
+
+    /**
      * Update this object in the database
      */
     public function update() {

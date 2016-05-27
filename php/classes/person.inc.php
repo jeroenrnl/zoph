@@ -71,6 +71,14 @@ class person extends zophTable implements Organizer {
     public $work;
 
     /**
+     * Insert a new record in the database
+     */
+    public function insert() {
+        $this->set("createdby", (int) user::getCurrent()->getId());
+        return parent::insert();
+    }
+
+    /**
      * Add this person to a photo.
      * This records in the database that this person appears on the photo
      * @param photo Photo to add the person to
