@@ -124,6 +124,15 @@ class category extends zophTreeTable implements Organizer {
 
             $userQry = selectHelper::expandQueryForUser($userQry);
 
+            if ($user->canEditOrganizers()) {
+                $subqry=new select(array("c" => "categories"));
+                $subqry->addFields(array("category_id", "parent_category_id"));
+
+                $subqry->where(new clause("c.createdby=:ownerid"));
+                $subqry->addParam(new param(":ownerid", (int) $user->getId(), PDO::PARAM_INT));
+                $userQry->union($subqry);
+            }
+
             $categories=static::getRecordsFromQuery($userQry);
 
             $ids=static::getAllAncestors($categories);
@@ -133,7 +142,6 @@ class category extends zophTreeTable implements Organizer {
             $ids=new param(":catid", array_values($ids), PDO::PARAM_INT);
             $qry->addParam($ids);
             $qry->where(clause::InClause("c.category_id", $ids));
-
         }
         static::$categoryCache=static::getRecordsFromQuery($qry);
         return static::$categoryCache;
@@ -178,15 +186,10 @@ class category extends zophTreeTable implements Organizer {
             $qry->addOrder("name");
         }
 
-        if ($where instanceof clause) {
-            $where->addAnd($parent);
-        } else {
-            $where=$parent;
-        }
+        $where->addAnd($parent);
 
-        if ($where instanceof clause) {
-            $qry->where($where);
-        }
+        $qry->where($where);
+
         $this->children=static::getRecordsFromQuery($qry);
         return $this->children;
     }
