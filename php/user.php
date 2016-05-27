@@ -108,8 +108,14 @@ if ($action == "display") {
         "return"      => "users.php",
         "new"       => "user.php?_action=new"
     );
+
+    if ($_action != "new") {
+        $actionlinks[translate("change password")]="password.php?userid=" . $this_user->getId();
+    }
+
     $tpl=new template("edit", array(
-        "title"             => $title, "actionlinks"       => $actionlinks,
+        "title"             => $title,
+        "actionlinks"       => $actionlinks,
         "mainActionlinks"   => null,
         "obj"               => $this_user,
     ));
@@ -134,8 +140,6 @@ if ($action == "display") {
 
     if ($_action == "new") {
         $form->addInputPassword("password", translate("password"), 32, sprintf(translate("%s chars max"), 32));
-    } else {
-        $actionlinks[translate("change password")]="password.php?userid=" . $this_user->getId();
     }
 
     $form->addPulldown("user_class", $userClassPulldown, translate("class"));
