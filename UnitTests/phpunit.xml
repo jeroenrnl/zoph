@@ -17,9 +17,9 @@
   </php>
   <testsuites>
     <testsuite name="Zoph">
-      <file>XMLdataTest.php</file>
-      <file>configTest.php</file>
       <file>PDOdatabaseTest.php</file>
+      <file>configTest.php</file>
+      <file>XMLdataTest.php</file>
       <file>photoTest.php</file>
       <file>albumTest.php</file>
       <file>placeTest.php</file>
