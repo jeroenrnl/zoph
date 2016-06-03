@@ -55,6 +55,9 @@ if (empty($_l) || $_l=="all") {
 if (getvar("circle_id")) {
     $circle=new circle(getvar("circle_id"));
     $circle->lookup();
+    if (!$circle->isVisible()) {
+        redirect("people.php");
+    }
     $title=$circle->getName();
     try {
         $selection=new selection($_SESSION, array(

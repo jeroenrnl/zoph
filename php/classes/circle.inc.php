@@ -105,6 +105,27 @@ class circle extends zophTable {
     }
 
     /**
+     * Is this circle visible for this user?
+     * Bear in mind that this is NOT the opposite of the isHidden() function above!
+     * That function is about hiding otherwise visible circles, this function is
+     * about checking access rights. Possibly the two concepts should be merged
+     * at some point.
+     */
+    public function isVisible() {
+        $user=user::getCurrent();
+        return ((sizeof($this->getMembers())>0) || $this->isCreatedBy($user) || $user->isAdmin());
+    }
+
+    /**
+     * Has this circle been created by the given user?
+     * @param user User to check
+     * @return bool
+     */
+    public function isCreatedBy(user $user) {
+        $this->lookup();
+        return ((int) $this->get("createdby") === $user->getId());
+    }
+    /**
      * Automatically select a coverphoto for this circle
      * It selects the coverphoto by FIRST getting the photos with the most people on it and
      * only then picking the oldest, newest, etc.
@@ -391,7 +412,7 @@ class circle extends zophTable {
         if (!$user->canSeeAllPhotos()) {
             $circles=array();
             foreach ($rawCircles as $circle) {
-                if (sizeof($circle->getMembers())>0) {
+                if ($circle->isVisible()) {
                     $circles[]=$circle;
                 }
             }
