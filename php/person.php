@@ -46,6 +46,9 @@ if ($name) {
     $person = new person($person_id);
 }
 
+if ($_action=="display" && !$person->isVisible()) {
+    redirect("people.php");
+}
 $obj = &$person;
 $redirect = "people.php";
 require_once "actions.inc.php";

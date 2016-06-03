@@ -492,6 +492,32 @@ class person extends zophTable implements Organizer {
         return circle::getRecordsFromQuery($qry);
     }
 
+    /**
+     * Return whether the currently logged on user can see this person
+     * @param user Use this user instead of the logged in one
+     * @return bool whether or not this person should be visible
+     */
+    public function isVisible(user $user=null) {
+        if (!$user) {
+            $user=user::getCurrent();
+        }
+        $all=static::getAllPeopleAndPhotographers();
+
+        $ids=array();
+        foreach ($all as $person) {
+            $ids[]=$person->getId();
+        }
+
+        return in_array($this->getId(), $ids);
+    }
+
+    public function isCreator(user $user=null) {
+        if (!$user) {
+            $user=user::getCurrent();
+        }
+
+        return ($user->getId()===$this->get("createdby"));
+    }
 
     /**
      * Lookup person by name;
@@ -536,10 +562,11 @@ class person extends zophTable implements Organizer {
      * @param bool Search for first name
      */
     public static function getAll($search=null, $search_first = false) {
+        $user=user::getCurrent();
         $where=null;
 
         $qry=new select(array("ppl" => "people"));
-        $qry->addFunction(array("person_id" => "DISTINCT ppl.person_id"));
+        $qry->addFields(array("ppl.*"), true);
         if (!is_null($search)) {
             $where=static::getWhereForSearch($search, $search_first);
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
@@ -548,12 +575,31 @@ class person extends zophTable implements Organizer {
             }
         }
 
-        $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
+        $qry->addOrder("last_name")->addOrder("called")->addOrder("first_name");
 
         $qry = selectHelper::expandQueryForUser($qry);
 
         if ($where instanceof clause) {
             $qry->where($where);
+        }
+
+        if (!$user->canSeeAllPhotos() && $user->canEditOrganizers()) {
+            $subqry=new select(array("ppl" => "people"));
+            $subqry->addFields(array("ppl.*"), true);
+
+            $subwhere=new clause("ppl.createdby=:ownerid");
+            $subqry->addParam(new param(":ownerid", (int) $user->getId(), PDO::PARAM_INT));
+
+            if (!is_null($search)) {
+                $subwhere->addAnd(static::getWhereForSearch($search, $search_first, "subsearch"));
+                $subqry->addParam(new param("subsearch", $search, PDO::PARAM_STR));
+                if ($search_first) {
+                    $subqry->addParam(new param("subsearchfirst", $search, PDO::PARAM_STR));
+                }
+            }
+
+            $subqry->where($subwhere);
+            $qry->union($subqry);
         }
         return static::getRecordsFromQuery($qry);
     }
@@ -676,7 +722,25 @@ class person extends zophTable implements Organizer {
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
             $qry->where(static::getWhereForSearch($search));
         }
-        return static::getRecordsFromQuery($qry);
+        $all=static::getRecordsFromQuery($qry);
+
+        $ids=array();
+        foreach ($all as $person) {
+            $ids[$person->getId()]=$person;
+        }
+
+        // Add the person assigned to this user
+        $personId=$user->get("person_id");
+        if ($personId) {
+            $person=new person($personId);
+            $person->lookup();
+            $pattern="/^" . $search . "/i";
+            if (is_null($search) || preg_match($pattern, $person->get("last_name"))) {
+                $ids[$personId]=$person;
+            }
+        }
+
+        return $ids;
     }
 
     /**
@@ -708,16 +772,18 @@ class person extends zophTable implements Organizer {
      * @param string search string
      * @param bool search for first name
      */
-    public static function getWhereForSearch($search, $search_first=false) {
+    public static function getWhereForSearch($search, $search_first=false, $paramname="search") {
         $where=null;
         if ($search!==null) {
             if ($search==="") {
                 $where=new clause("ppl.last_name=''");
                 $where->addOr(new clause("ppl.last_name is null"));
             } else {
-                $where=new clause("ppl.last_name like lower(concat(:search,'%'))");
+                $where=new clause("ppl.last_name like lower(concat(:" . $paramname  . ",'%'))");
                 if ($search_first) {
-                    $where->addOr(new clause("ppl.first_name like lower(concat(:searchfirst, '%'))"));
+                    $where->addOr(
+                        new clause("ppl.first_name like lower(concat(:"  . $paramname . "first, '%'))")
+                    );
                 }
             }
         }
