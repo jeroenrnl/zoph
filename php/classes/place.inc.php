@@ -148,6 +148,20 @@ class place extends zophTreeTable implements Organizer {
     }
 
     /**
+     * Return whether the currently logged on user can see this place
+     * @param user Use this user instead of the logged in one
+     * @return bool whether or not this place should be visible
+     */
+    public function isVisible(user $user=null) {
+        if (!$user) {
+            $user=user::getCurrent();
+        }
+        $count=$this->getTotalPhotoCount();
+        return ($count > 0 || $user->isCreator($this));
+    }
+
+
+    /**
      * Get children of this place
      * @param string optional order
      * @return array of places.
@@ -605,12 +619,22 @@ class place extends zophTreeTable implements Organizer {
      * Get all places
      */
     public static function getAll() {
-        if (user::getCurrent()->canSeeAllPhotos()) {
+        $user=user::getCurrent();
+        if ($user->canSeeAllPhotos()) {
             return static::getRecords();
         } else {
             $qry=new select(array("pl" => "places"));
+            $qry->addFields(array("place_id"));
             $qry->join(array("p" => "photos"), "p.location_id=pl.place_id");
             $qry = selectHelper::expandQueryForUser($qry);
+
+               if ($user->canEditOrganizers()) {
+                $subqry=new select(array("pl" => "places"));
+                $subqry->addFields(array("place_id"));
+                $subqry->where(new clause("pl.createdby=:ownerid"));
+                $subqry->addParam(new param(":ownerid", (int) $user->getId(), PDO::PARAM_INT));
+                $qry->union($subqry);
+            }
             $places=static::getRecordsFromQuery($qry);
 
             $qry=new select(array("pl" => "places"));

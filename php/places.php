@@ -44,6 +44,9 @@ if (!$parent_place_id) {
     $place = new place($parent_place_id);
 }
 $place->lookup();
+if (!$place->isVisible()) {
+    redirect("places.php");
+}
 $obj=&$place;
 $ancestors = $place->get_ancestors();
 $order = $user->prefs->get("child_sortorder");
@@ -187,7 +190,7 @@ if ($showOrig) {
         }
     } else {
         echo translate("There are no photos");
-        echo $fragment . ".<br>\n";
+        echo " " . $fragment . ".<br>\n";
     }
     if ($children) {
         $tpl=new block("view_" . $_view, array(

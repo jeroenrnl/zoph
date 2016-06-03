@@ -23,11 +23,8 @@
  */
 require_once "include.inc.php";
 
-
 $place_id = getvar("place_id");
-
 $place = new place($place_id);
-
 $obj = &$place;
 $redirect = "places.php";
 if ($_action=="settzchildren") {
@@ -43,6 +40,9 @@ if (!$user->canEditOrganizers() || $action == "display") {
 }
 if ($action != "insert") {
     $place->lookup();
+    if (!$place->isVisible()) {
+        redirect("place.php");
+    }
     $title = $place->get("title") ? $place->get("title") : $place->get("city");
 } else {
     $title = translate("New Place");
@@ -83,7 +83,6 @@ if (conf::get("maps.provider")) {
     }
     echo $map;
 }
-
 
 ?>
 <?php require_once "footer.inc.php"; ?>
