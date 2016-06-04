@@ -1,8 +1,6 @@
 <?php
 /**
- * Show overview of comments
- *
- * This file is part of Zoph.
+ * Template for HTML input field password
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,29 +15,24 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package Zoph
+ * @package ZophTemplates
  * @author Jeroen Roos
  */
-require_once "include.inc.php";
 
-if (!conf::get("feature.comments")) {
-    redirect("zoph.php");
+if (!ZOPH) {
+    die("Illegal call");
 }
+?>
 
-require_once "header.inc.php";
-?>
-<h1>
-  <?php echo translate("Comments") ?>
-</h1>
-<div class="main">
-  <br>
-<?php
-$comments=comment::getRecords();
-foreach ($comments as $comment) {
-    $photo=$comment->getPhoto();
-    if ($user->getPhotoPermissions($photo) || $user->canSeeAllPhotos()) {
-        echo $comment->toHTML(true);
-    }
-}
-require_once "footer.inc.php";
-?>
+<?php if ($tpl_label): ?>
+    <label for="<?php $tpl_name ?>">
+        <?= $tpl_label ?>
+    </label>
+<?php endif; ?>
+<input type="password" name="<?= $tpl_name ?>" size="<?= $tpl_size ?>">
+<?php if (!empty($tpl_hint)): ?>
+    <span class="inputhint">
+        <?php echo $tpl_hint ?>
+    </span>
+<?php endif; ?>
+

@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+require_once "testSetup.php";
+
 use db\select;
 use db\db;
 use db\param;

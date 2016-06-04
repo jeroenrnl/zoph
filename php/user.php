@@ -57,100 +57,105 @@ if ($action != "insert") {
 require_once "header.inc.php";
 
 if ($action == "display") {
-    ?>
-    <h1>
-      <span class="actionlink">
-        <a href="user.php?_action=edit&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("edit") ?>
-        </a> |
-        <a href="user.php?_action=delete&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("delete") ?>
-        </a> |
-        <a href="user.php?_action=new"><?php echo translate("new") ?></a>
-      </span>
-      <?php echo translate("user") ?>
-    </h1>
-    <div class="main">
-      <h2><?php echo e($this_user->get("user_name")) ?></h2>
-        <dl class='users'>
-            <?php echo create_field_html($this_user->getDisplayArray(), 3) ?>
-        </dl>
-        <br>
-    <?php
-    $url = getZophURL() . "login.php";
+    $actionlinks=array(
+        "edit"      => "user.php?_action=edit&amp;user_id=" . $this_user->getId(),
+        "delete"    => "user.php?_action=delete&amp;user_id=" . $this_user->getId(),
+        "new"       => "user.php?_action=new"
+    );
 
-    $this_user->lookupPerson();
-    $name = $this_user->person->getName();
-
-    $subject = translate("Your Zoph Account", 0);
-    $message =
-        translate("Hi",0) . " " . e($name) .  ",\n\n" .
-        translate("I have created a Zoph account for you", 0) .
-        ":\n\n" .  e($url) . "\n" .
-        translate("user name", 0) . ": " .
-        e($this_user->get("user_name")) . "\n";
-
-    if ($_action == "insert") {
-        $message .=
-            translate("password", 0) . ": " .
-            e($this_user->get("password")) . "\n";
-    }
-    $message .=
-        "\n" . translate("Regards,",0) . "\n" .
-        e($user->person->getName());
-    ?>
-    <form action="notify.php" method="POST">
-      <input type="hidden" name="user_id" value="<?php echo $this_user->get("user_id") ?>">
-      <input type="hidden" name="subject" value="<?php echo $subject ?>">
-      <input type="hidden" name="message" value="<?php echo $message ?>">
-      <input class="bigbutton" type="submit" name="_button"
-        value="<?php echo translate("Notify User", 0) ?>">
-    </form>
-    <br>
-    <?php
-        $tpl = new block("graph_bar", array(
-            "title"     => translate("photo ratings"),
-        "class"     => "ratings",
-        "value_label" => translate("rating", 0),
-        "count_label" => translate("count", 0),
-        "rows"      => $this_user->getRatingGraph()
+    $notifyForm=new form("form", array(
+        "formAction"        => "notify.php",
+        "onsubmit"          => null,
+        "action"            => "notifyuser",
+        "submit"            => translate("notify user")
     ));
-    echo $tpl;
+
+    $notifyForm->addInputHidden("user_id", $this_user->getId());
 
     $comments=$this_user->getComments();
-    if (!empty($comments)) {
-        ?>
-        <h3><?php echo translate("comments by this user") ?></h3>
-        <?php
-        foreach ($comments as $comment) {
-            $comment->lookup();
-            echo $comment->toHTML(true);
-        }
-    }
+
+    $ratingGraph = new block("graph_bar", array(
+        "title"         => translate("photo ratings"),
+        "class"         => "ratings",
+        "value_label"   => translate("rating", 0),
+        "count_label"   => translate("count", 0),
+        "rows"          => $this_user->getRatingGraph()
+    ));
+
+    $tpl=new template("displayUser", array(
+        "title"         => $title,
+        "actionlinks"   => $actionlinks,
+        "obj"           => $this_user,
+        "fields"        => $this_user->getDisplayArray(),
+        "notifyForm"    => $notifyForm,
+        "hasComments"   => (bool) (sizeOf($comments) > 0),
+        "comments"      => $comments,
+        "ratingGraph"   => $ratingGraph
+    ));
 } else if ($action == "confirm") {
-    ?>
-    <h1>
-      <span class="actionlink">
-        <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("cancel") ?>
-        </a>
-      </span>
-      <?php echo translate("delete user") ?>
-    </h1>
-    <div class="main">
-      <span class="actionlink">
-        <a href="user.php?_action=confirm&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("delete") ?>
-        </a> |
-        <a href="user.php?_action=display&amp;user_id=<?php echo $this_user->get("user_id") ?>">
-          <?php echo translate("cancel") ?>
-        </a>
-      </span>
-      <?php echo sprintf(translate("Confirm deletion of '%s'"), $this_user->get("user_name")) ?>
-    <?php
+    $actionlinks=array(
+        translate("delete") => "user.php?_action=confirm&amp;user_id=" . $this_user->getId(),
+        translate("cancel") => "user.php?_action=display&amp;user_id=" . $this_user->getId(),
+    );
+    $tpl=new template("confirm", array(
+        "title"             => translate("delete user"),
+        "actionlinks"       => null,
+        "mainActionlinks"   => $actionlinks,
+        "obj"               => $this_user
+    ));
 } else {
-    require_once "edit_user.inc.php";
+    $actionlinks=array(
+        "return"      => "users.php",
+        "new"       => "user.php?_action=new"
+    );
+
+    if ($_action != "new") {
+        $actionlinks[translate("change password")]="password.php?userid=" . $this_user->getId();
+    }
+
+    $tpl=new template("edit", array(
+        "title"             => $title,
+        "actionlinks"       => $actionlinks,
+        "mainActionlinks"   => null,
+        "obj"               => $this_user,
+    ));
+
+    $form=new form("form", array(
+        "formAction"        => "user.php",
+        "onsubmit"          => null,
+        "action"            => $action,
+        "submit"            => translate("submit")
+    ));
+
+    $personPulldown=template::createPulldown("person_id",
+        ($action == "insert" ? "1" : $this_user->get("person_id")),
+        person::getSelectArray());
+    $userClassPulldown=template::createPulldown("user_class", $this_user->get("user_class"),
+        array("1" => translate("User", 0), "0" => translate("Admin", 0)));
+
+    $form->addInputHidden("user_id", $this_user->getId());
+    $form->addInputText("user_name", $this_user->getName(), translate("user name"),
+        sprintf(translate("%s chars max"), 16), 16);
+    $form->addPulldown("person_id", $personPulldown, translate("person"));
+
+    if ($_action == "new") {
+        $form->addInputPassword("password", translate("password"), 32, sprintf(translate("%s chars max"), 32));
+    }
+
+    $form->addPulldown("user_class", $userClassPulldown, translate("class"));
+
+    $desc=$this_user->getAccessRightsDescription();
+
+    foreach ($this_user->getAccessRightsArray() as $field => $value) {
+        $pulldown=template::createPulldown($field, $value, array(
+            "1" => translate("Yes"),
+            "0" => translate("No")
+        ));
+        $form->addPulldown($field, $pulldown, translate($desc[$field]));
+    }
+
+    $tpl->addBlock($form);
 }
+echo $tpl;
 ?>
-</div>
 <?php require_once "footer.inc.php"; ?>

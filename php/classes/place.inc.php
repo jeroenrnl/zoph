@@ -148,6 +148,20 @@ class place extends zophTreeTable implements Organizer {
     }
 
     /**
+     * Return whether the currently logged on user can see this place
+     * @param user Use this user instead of the logged in one
+     * @return bool whether or not this place should be visible
+     */
+    public function isVisible(user $user=null) {
+        if (!$user) {
+            $user=user::getCurrent();
+        }
+        $count=$this->getTotalPhotoCount();
+        return ($count > 0 || $user->isCreator($this));
+    }
+
+
+    /**
      * Get children of this place
      * @param string optional order
      * @return array of places.
@@ -173,7 +187,7 @@ class place extends zophTreeTable implements Organizer {
             $qry->addOrder("name");
         }
 
-        if (!user::getCurrent()->isAdmin()) {
+        if (!user::getCurrent()->canSeeAllPhotos()) {
             $places=static::getAll();
             $placeIds=array();
             foreach ($places as $place) {
@@ -258,11 +272,7 @@ class place extends zophTreeTable implements Organizer {
      */
     public function toHTML() {
 
-        $html = "";
-        if ($this->get("title"))    {
-            $html .= "<h2>" . e($this->get("title")) . "</h2>\n";
-        }
-        $html .= $this->getAddress();
+        $html = $this->getAddress();
         if ($this->get("url")) {
             $html .= "<br><br>\n";
             $html .= "<a href=\"" . e($this->get("url")) . "\">";
@@ -296,9 +306,8 @@ class place extends zophTreeTable implements Organizer {
         $where=new clause("location_id=:locid");
         $qry->addParam(new param("locid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
+
         $qry->where($where);
 
         return photo::getRecordsFromQuery($qry);
@@ -314,9 +323,8 @@ class place extends zophTreeTable implements Organizer {
         $where=new clause("location_id=:locid");
         $qry->addParam(new param("locid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
+
         $qry->where($where);
 
         return $qry->getCount();
@@ -338,9 +346,8 @@ class place extends zophTreeTable implements Organizer {
         $qry->addParam($ids);
         $where=clause::InClause("p.location_id", $ids);
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
+
         $qry->where($where);
 
         return $qry->getCount();
@@ -371,9 +378,7 @@ class place extends zophTreeTable implements Organizer {
             $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
         }
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
         $qry->where($where);
@@ -423,9 +428,7 @@ class place extends zophTreeTable implements Organizer {
         $where=new clause("p.location_id=:locid");
         $qry->addParam(new param(":locid", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry->where($where);
 
@@ -593,9 +596,7 @@ class place extends zophTreeTable implements Organizer {
         $qry->addGroupBy("p.location_id");
         $qry->addOrder("count DESC")->addOrder("pl.title");
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
-        if (!$user->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
         return parent::getTopNfromSQL($qry);
     }
 
@@ -603,7 +604,7 @@ class place extends zophTreeTable implements Organizer {
      * Get count of places
      */
     public static function getCount() {
-        if (user::getCurrent()->isAdmin()) {
+        if (user::getCurrent()->canSeeAllPhotos()) {
             return parent::getCount();
         } else {
             $qry=new select(array("p"=>"photos"));
@@ -618,12 +619,22 @@ class place extends zophTreeTable implements Organizer {
      * Get all places
      */
     public static function getAll() {
-        if (user::getCurrent()->isAdmin()) {
+        $user=user::getCurrent();
+        if ($user->canSeeAllPhotos()) {
             return static::getRecords();
         } else {
             $qry=new select(array("pl" => "places"));
+            $qry->addFields(array("place_id"));
             $qry->join(array("p" => "photos"), "p.location_id=pl.place_id");
             $qry = selectHelper::expandQueryForUser($qry);
+
+               if ($user->canEditOrganizers()) {
+                $subqry=new select(array("pl" => "places"));
+                $subqry->addFields(array("place_id"));
+                $subqry->where(new clause("pl.createdby=:ownerid"));
+                $subqry->addParam(new param(":ownerid", (int) $user->getId(), PDO::PARAM_INT));
+                $qry->union($subqry);
+            }
             $places=static::getRecordsFromQuery($qry);
 
             $qry=new select(array("pl" => "places"));

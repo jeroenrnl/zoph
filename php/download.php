@@ -108,21 +108,21 @@ if ($_action=="getfile") {
         if ($newoffset < $totalPhotoCount) {
             echo sprintf(translate("Downloaded %s of %s photos."), $newoffset, $totalPhotoCount);
             ?>
-            <span class="actionlink">
-              <a href="download.php?<?php echo $new_qs?>">
+            <ul class="actionlink">
+              <li><a href="download.php?<?php echo $new_qs?>">
                 <?php echo translate("download next file") ?>
-              </a>
-            </span>
+              </a></li>
+            </ul>
             <?php
         } else {
             $link = breadcrumb::getLast()->getLink();
             echo sprintf(translate("All photos have been downloaded in %s zipfiles."), $filenum)
             ?>
-            <span class="actionlink">
-              <a href="<?php echo $link ?>">
+            <ul class="actionlink">
+              <li><a href="<?php echo $link ?>">
                 <?php echo translate("Go back")?>
-              </a>
-            </span>
+              </a></li>
+            </ul>
             <?php
         }
         ?>

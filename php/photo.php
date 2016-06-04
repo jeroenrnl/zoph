@@ -85,6 +85,7 @@ if ($photo_id) { // would be passed for edit or delete
         $photo = new photo();
     }
 }
+
 if (!$user->isAdmin()) {
     $permissions = $user->getPhotoPermissions($photo);
 }
@@ -163,7 +164,6 @@ if ($user->isAdmin() ||
     }
 }
 
-
 if (!$user->isAdmin()) {
     if ($_action == "new" || $_action == "insert" ||
         $_action == "delete" || $_action == "confirm") {
@@ -175,8 +175,7 @@ if (!$user->isAdmin()) {
     if (!$permissions) {
         $photo = new photo(-1); // in case redirect fails
         redirect("zoph.php");
-    }
-    else if ($permissions->get("writable") == 0) {
+    } else if ($permissions->get("writable") == 0) {
         $_action = "display";
     }
 }
@@ -368,8 +367,7 @@ if ($action != "insert" && !$found) {
     </ul>
     <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX)) ?>
     <?php
-    if (($user->isAdmin() || $user->get("browse_people")) &&
-        $people_links = $photo->getPeopleLinks()) {
+    if ($user->canBrowsePeople() && $people_links = $photo->getPeopleLinks()) {
         ?>
           <div id="personlink">
         <?php echo $people_links ?>
@@ -409,7 +407,7 @@ if ($action != "insert" && !$found) {
             <?php
         }
     }
-    if ($album_links = template::createLinkList($photo->getAlbums($user))) {
+    if ($album_links = template::createLinkList($photo->getAlbums())) {
         ?>
             <dt><?php echo translate("albums") ?></dt>
             <dd><?php echo $album_links ?></dd>
@@ -441,14 +439,14 @@ if ($action != "insert" && !$found) {
         if ($allexif) {
             ?>
             <h2><?php echo translate("Full EXIF details",0)?></h2>
-            <span class="actionlink">
-                <a href="#" onclick="document.getElementById('allexif').style.display='block'">
+            <ul class="actionlink">
+                <li><a href="#" onclick="document.getElementById('allexif').style.display='block'">
                   <?php echo translate("display",0) ?>
-                </a> |
-                <a href="#" onclick="document.getElementById('allexif').style.display='none'">
+                </a></li>
+                <li><a href="#" onclick="document.getElementById('allexif').style.display='none'">
                   <?php echo translate("hide",0) ?>
-                </a>
-            </span>
+                </a></li>
+            </ul>
             <?php
             echo $allexif;
         }

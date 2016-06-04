@@ -77,13 +77,12 @@ class photographer extends person implements Organizer {
      * @param string search for names that begin with this string
      * @param bool also search first name
      * @return array list of photographer objects
-     * @todo This code could be much simplified if we could use subqueries
      */
     public static function getAll($search = null, $search_first = false) {
         $where=null;
         $qry=new select(array("ppl" => "people"));
 
-        if (!user::getCurrent()->isAdmin()) {
+        if (!user::getCurrent()->canSeeAllPhotos()) {
             $ids=array();
             $subqry = new select(array("p" => "photos"));
             $subqry->addFunction(array("person_id" => "DISTINCT p.photographer_id"));

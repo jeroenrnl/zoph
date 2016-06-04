@@ -23,26 +23,26 @@
  */
 require_once "include.inc.php";
 
-
 $place_id = getvar("place_id");
-
 $place = new place($place_id);
-
 $obj = &$place;
 $redirect = "places.php";
 if ($_action=="settzchildren") {
-    if ($user->isAdmin()) {
+    if ($user->canEditOrganizers()) {
         $place->lookup();
         $place->setTzForChildren();
     }
     $action="display";
 }
 require_once "actions.inc.php";
-if (!$user->isAdmin() || $action == "display") {
+if (!$user->canEditOrganizers() || $action == "display") {
     redirect("places.php?parent_place_id=" . $place->get("place_id"), "Redirect");
 }
 if ($action != "insert") {
     $place->lookup();
+    if (!$place->isVisible()) {
+        redirect("place.php");
+    }
     $title = $place->get("title") ? $place->get("title") : $place->get("city");
 } else {
     $title = translate("New Place");
@@ -53,16 +53,16 @@ if ($action == "confirm") {
     ?>
     <h1><?php echo translate("delete place") ?></h1>
     <div class="main">
-      <span class="actionlink">
-        <a href="place.php?_action=confirm&amp;place_id=<?php
-            echo $place->get("place_id") ?>">
+      <ul class="actionlink">
+        <li><a href="place.php?_action=confirm&amp;place_id=<?php
+            echo $place->getId() ?>">
           <?php echo translate("delete") ?>
-        </a> |
-        <a href="place.php?_action=display&amp;place_id=<?php
-            echo $place->get("place_id") ?>">
+        </a></li>
+        <li><a href="place.php?_action=display&amp;place_id=<?php
+            echo $place->getId() ?>">
           <?php echo translate("cancel") ?>
-        </a>
-      </span>
+        </a></li>
+      </ul>
       <?php echo sprintf(translate("Confirm deletion of '%s'"), $title) ?>:
     <?php
 } else {
@@ -83,7 +83,6 @@ if (conf::get("maps.provider")) {
     }
     echo $map;
 }
-
 
 ?>
 <?php require_once "footer.inc.php"; ?>

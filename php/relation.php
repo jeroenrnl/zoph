@@ -66,47 +66,47 @@ if ($action == "confirm") {
     ?>
     <h1><?php echo translate("delete relationship") ?></h1>
     <div class="main">
-      <span class="actionlink">
-        <a href="relation.php?_action=confirm&amp;photo_id_1=<?php
+      <ul class="actionlink">
+        <li><a href="relation.php?_action=confirm&amp;photo_id_1=<?php
             echo $photo_id_1 ?>&photo_id_2=<?php echo $photo_id_2 ?>">
           <?php echo translate("delete") ?>
-        </a> |
-        <a href="relation.php?_action=edit&amp;photo_id_1=<?php
+        </a></li>
+        <li><a href="relation.php?_action=edit&amp;photo_id_1=<?php
             echo $photo_id_1 ?>&photo_id_2=<?php echo $photo_id_2 ?>">
           <?php echo translate("cancel") ?>
-        </a>
-        </span>
-        <?php echo translate("Confirm deletion of this relationship") ?>
-        <br>
-        <div id="relation">
-          <div class="thumbnail">
-            <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
-            <?php echo $desc_1 ?>
-          </div>
-          <div class="thumbnail">
-            <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?>
-            <?php echo $desc_2 ?>
-          </div>
+        </a></li>
+      </ul>
+      <?php echo translate("Confirm deletion of this relationship") ?>
+      <br>
+      <div id="relation">
+        <div class="thumbnail">
+          <?php echo $photo_1->getImageTag(THUMB_PREFIX) ?><br>
+          <?php echo $desc_1 ?>
         </div>
-        <br>
+        <div class="thumbnail">
+          <?php echo $photo_2->getImageTag(THUMB_PREFIX) ?>
+          <?php echo $desc_2 ?>
+        </div>
       </div>
-    <?php
+      <br>
+    </div>
+  <?php
 } else if ($action == "display") {
     ?>
       <h1>
-        <span class="actionlink">
-          <a href="photo.php?photo_id=<?php echo $photo_id_1 ?>">
+        <ul class="actionlink">
+          <li><a href="photo.php?photo_id=<?php echo $photo_id_1 ?>">
             <?php echo translate("return") ?>
-          </a> |
-          <a href="relation.php?_action=edit&amp;photo_id_1=<?php
+          </a></li>
+          <li><a href="relation.php?_action=edit&amp;photo_id_1=<?php
             echo $photo_id_1 ?>&amp;photo_id_2=<?php echo $photo_id_2 ?>">i
             <?php echo translate("edit") ?>
-          </a> |
-          <a href="relation.php?_action=delete&amp;photo_id_1=<?php
+          </a></li>
+          <li><a href="relation.php?_action=delete&amp;photo_id_1=<?php
             echo $photo_id_1 ?>&amp;photo_id_2=<?php echo $photo_id_2 ?>">
             <?php echo translate("delete") ?>
-          </a>
-        </span>
+          </a></li>
+        </ul>
         <?php echo $title; ?>
       </h1>
       <div class="main">

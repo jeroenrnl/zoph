@@ -32,9 +32,9 @@ $title = translate("Users");
 require_once "header.inc.php";
 ?>
     <h1>
-      <span class="actionlink">
-        <a href="user.php?_action=new"><?php echo translate("new") ?></a>
-      </span>
+      <ul class="actionlink">
+        <li><a href="user.php?_action=new"><?php echo translate("new") ?></a></li>
+      </ul>
       <?php echo translate("users") ?>
     </h1>
     <div class="main">
@@ -56,21 +56,21 @@ if ($users) {
             <?php echo $u->person->getLink() ?>
           </td>
           <td>
-            <span class="actionlink">
+            <ul class="actionlink">
         <?php
         if ((count(album::getNewer($u, $u->getLastNotify())) > 0)) {
             ?>
-              <a href="notify.php?_action=notify&amp;user_id=<?php
+              <li><a href="notify.php?_action=notify&amp;user_id=<?php
                 echo $u->get("user_id") ?>&amp;shownewalbums=1">
                 <?php echo translate("Notify User", 0) ?>
-              </a> |
+              </a></li>
             <?php
         }
         ?>
-              <a href="user.php?user_id=<?php echo $u->get("user_id") ?>">
+              <li><a href="user.php?user_id=<?php echo $u->get("user_id") ?>">
                 <?php echo translate("display") ?>
-              </a>
-            </span>
+              </a></li>
+            </ul>
             <?php echo $u->get("lastlogin"); ?>
           </td>
         </tr>

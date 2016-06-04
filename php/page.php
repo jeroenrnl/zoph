@@ -55,32 +55,32 @@ if ($action == "confirm") {
     ?>
     <h1><?php echo translate("delete page") ?></h1>
         <div class="main">
-            <span class="actionlink">
-                <a href="page.php?_action=confirm&amp;page_id=<?php
-                    echo $zophpage->get("page_id") ?>">
+            <ul class="actionlink">
+                <li><a href="page.php?_action=confirm&amp;page_id=<?php
+                    echo $zophpage->getId() ?>">
                   <?php echo translate("delete") ?>
-                </a> |
-                <a href="page.php?_action=edit&amp;page_id=<?php
-                    echo $zophpage->get("page_id") ?>">
+                </a></li>
+                <li><a href="page.php?_action=edit&amp;page_id=<?php
+                    echo $zophpage->getId() ?>">
                   <?php echo translate("cancel") ?>
-                </a>
-            </span>
+                </a></li>
+            </ul>
             <?php echo translate("Confirm deletion of this page"); ?>
         </div>
     <?php
 } else if ($action == "display") {
     ?>
     <h1>
-        <span class="actionlink">
-            <a href="pages.php"><?php echo translate("return") ?></a> |
-            <a href="page.php?_action=edit&amp;page_id=<?php
-                echo $zophpage->get("page_id") ?>">
+        <ul class="actionlink">
+            <li><a href="pages.php"><?php echo translate("return") ?></a></li>
+            <li><a href="page.php?_action=edit&amp;page_id=<?php
+                echo $zophpage->getId() ?>">
               <?php echo translate("edit") ?>
-            </a> |
-            <a href="page.php?_action=delete&amp;page_id=<?php echo $zophpage->get("page_id") ?>">
+            </a></li>
+            <li><a href="page.php?_action=delete&amp;page_id=<?php echo $zophpage->getId() ?>">
               <?php echo translate("delete") ?>
-            </a>
-        </span>
+            </a></li>
+        </ul>
         <?php echo $title; ?>
     </h1>
         <div class="main">

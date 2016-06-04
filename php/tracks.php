@@ -29,7 +29,7 @@ $test=getvar("_test");
 $map=null;
 
 if (!$user->isAdmin()) {
-    if ($user->get("browse_tracks")) {
+    if ($user->canBrowseTracks()) {
         $_action="display";
     } else {
         redirect("zoph.php");

@@ -24,10 +24,10 @@
 ?>
 <!-- begin edit_place.inc !-->
     <h1>
-      <span class="actionlink">
-        <a href="places.php"><?php echo translate("return") ?></a> |
-        <a href="place.php?_action=new"><?php echo translate("new") ?></a>
-      </span>
+      <ul class="actionlink">
+        <li><a href="places.php"><?php echo translate("return") ?></a></li>
+        <li><a href="place.php?_action=new"><?php echo translate("new") ?></a></li>
+      </ul>
       <?php echo translate($_action) ?> <?php echo translate("place") ?>
     </h1>
     <?php echo check_js($user); ?>
@@ -116,11 +116,11 @@ if (conf::get("date.guesstz")) {
 }
 if ($place->get("timezone")) {
     ?>
-    <span class="actionlink">
-      <a href="place.php?_action=settzchildren&place_id=<?php echo $place->get("place_id") ?>">
+    <ul class="actionlink">
+      <li><a href="place.php?_action=settzchildren&place_id=<?php echo $place->get("place_id") ?>">
         <?php printf(translate("set %s for children"), $place->get("timezone"))?>
-      </a>
-    </span>
+      </a></li>
+    </ul>
     <?php
 }
 ?>

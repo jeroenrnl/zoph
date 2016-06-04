@@ -63,15 +63,15 @@ if ($action == "display") {
     <?php
     if ($user->isAdmin()) {
         ?>
-        <span class="actionlink">
-          <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php
-              echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("edit") ?>
-          </a> |
-          <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php
-              echo $color_scheme->get("color_scheme_id") ?>"><?php echo translate("delete") ?>
-          </a> |
-          <a href="color_scheme.php?_action=new"><?php echo translate("new") ?></a>
-        </span>
+        <ul class="actionlink">
+          <li><a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php
+              echo $color_scheme->getId() ?>"><?php echo translate("edit") ?>
+          </a></li>
+          <li><a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php
+              echo $color_scheme->getId() ?>"><?php echo translate("delete") ?>
+          </a></li>
+          <li><a href="color_scheme.php?_action=new"><?php echo translate("new") ?></a></li>
+        </ul>
         <?php
     }
     ?>
@@ -100,13 +100,13 @@ if ($action == "display") {
     ?>
       <h1><?php echo translate("delete color scheme") ?></h1>
       <div class="main">
-        <span class="actionlink">
-          <a href="color_scheme.php?_action=confirm&amp;color_scheme_id=<?php
-            echo $color_scheme->get("color_scheme_id") ?>">
+        <ul class="actionlink">
+          <li><a href="color_scheme.php?_action=confirm&amp;color_scheme_id=<?php
+            echo $color_scheme->getId() ?>">
             <?php echo translate("delete") ?>
-          </a> |
-          <a href="color_schemes.php"><?php echo translate("cancel") ?></a>
-        </span>
+          </a></li>
+          <li><a href="color_schemes.php"><?php echo translate("cancel") ?></a></li>
+        </ul>
         <?php echo sprintf(translate("Confirm deletion of '%s'"), $color_scheme->get("name")) ?>:
         <br>
     <?php
@@ -114,9 +114,9 @@ if ($action == "display") {
     $colors = $color_scheme->getColors();
     ?>
     <h1>
-      <span class="actionlink">
-        <a href="color_schemes.php"><?php echo translate("return") ?></a>
-      </span>
+      <ul class="actionlink">
+        <li><a href="color_schemes.php"><?php echo translate("return") ?></a></li>
+      </ul>
       <?php echo translate("color scheme") ?>
     </h1>
     <div class="main">

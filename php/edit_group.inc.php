@@ -24,12 +24,12 @@
 
 <!-- begin edit_group.inc !-->
   <h1>
-    <span class="actionlink">
-      <a href="group.php?group_id=<?php echo $group->get("group_id")?>">
+    <ul class="actionlink">
+      <li><a href="group.php?group_id=<?php echo $group->get("group_id")?>">
         <?php echo translate("return") ?>
-      </a> |
-      <a href="group.php?_action=new"><?php echo translate("new") ?></a>
-    </span>
+      </a></li>
+      <li><a href="group.php?_action=new"><?php echo translate("new") ?></a></li>
+    </ul>
     <?php echo translate("add/edit group") ?>
   </h1>
   <div class="main">

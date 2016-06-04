@@ -49,6 +49,13 @@ class comment extends zophTable {
     protected static $url="comment.php?comment_id=";
 
     /**
+     * Display comment
+     */
+    public function __toString() {
+        return (string) $this->toHTML(true);
+    }
+
+    /**
      * Insert a new comment into the db
      */
     public function insert() {
