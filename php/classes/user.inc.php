@@ -260,6 +260,14 @@ class user extends zophTable {
     }
 
     /**
+     * Check wheter this user is allowed to delete photos
+     * @return bool user can delete photos
+     */
+    public function canDeletePhotos() {
+        return ($this->isAdmin() || $this->get("delete_photos"));
+    }
+
+    /**
      * Check wheter this user can edit, add and delete albums, categories, places and people
      * @return bool user can add, edit and delete albums, categories, places and people
      */

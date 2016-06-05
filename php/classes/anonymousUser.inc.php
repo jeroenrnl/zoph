@@ -113,6 +113,15 @@ final class anonymousUser extends user {
     }
 
     /**
+     * Anonymous users are never allowed to delete photos
+     * @return bool user can delete photos
+     */
+    public function canDeletePhotos() {
+        return false;
+    }
+
+
+    /**
      * Anonymous user can never browse people
      * @return bool user can see the list of people that are in photos this user can see
      */
