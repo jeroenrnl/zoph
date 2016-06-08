@@ -105,8 +105,8 @@ if ($action == "display") {
     ));
 } else {
     $actionlinks=array(
-        "return"      => "users.php",
-        "new"       => "user.php?_action=new"
+        translate("return")      => "users.php",
+        translate("new")       => "user.php?_action=new"
     );
 
     if ($_action != "new") {
@@ -151,7 +151,7 @@ if ($action == "display") {
             "1" => translate("Yes"),
             "0" => translate("No")
         ));
-        $form->addPulldown($field, $pulldown, translate($desc[$field]));
+        $form->addPulldown($field, $pulldown, $desc[$field]);
     }
 
     $tpl->addBlock($form);
