@@ -518,20 +518,20 @@ class userTest extends ZophDatabaseTestCase {
 
     /**
      * Return a list of photo id's and permissions for user 1
-     * User 1 is admin, so a fake permissions object will be returned.
+     * User 1 is admin, so a permissions object with group set to 0 will be returned.
      */
     public function getPhotoPermissionsForUser1() {
         return array(
-            array(1,array(-1,-1)),
-            array(2,array(-1,-1)),
-            array(3,array(-1,-1)),
-            array(4,array(-1,-1)),
-            array(5,array(-1,-1)),
-            array(6,array(-1,-1)),
-            array(7,array(-1,-1)),
-            array(8,array(-1,-1)),
-            array(9,array(-1,-1)),
-            array(10,array(-1,-1)),
+            array(1,array(2,0)),
+            array(2,array(3,0)),
+            array(3,array(5,0)),
+            array(4,array(5,0)),
+            array(5,array(5,0)),
+            array(6,array(7,0)),
+            array(7,array(2,0)),
+            array(8,array(3,0)),
+            array(9,array(4,0)),
+            array(10,array(4,0)),
         );
     }
 
