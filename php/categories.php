@@ -66,17 +66,27 @@ try {
 
 ?>
 <h1>
-<?php
-if ($user->isAdmin()) {
-    ?>
-    <span class="actionlink">
-      <a href="category.php?_action=new&amp;parent_category_id=<?php
-        echo $category->get("category_id") ?>"><?php echo translate("new") ?>
-      </a>
-    </span>
-    <?php
-}
-echo "\n" . translate("categories") . "\n" ?>
+    <?php if ($user->canEditOrganizers()):  ?>
+        <ul class="actionlink">
+            <li><a href="category.php?_action=new&amp;parent_category_id=<?php
+            echo $category->getId() ?>"><?php echo translate("new") ?>
+            </a></li>
+            <li><a href="category.php?_action=edit&amp;category_id=<?php
+            echo $category->getId() ?>"><?php echo translate("edit") ?>
+            </a></li>
+            <?php
+            if ($category->get("coverphoto")) {
+                ?>
+                <li><a href="category.php?_action=update&amp;category_id=<?php
+                    echo $category->getId() ?>&amp;coverphoto=NULL"><?php
+                    echo translate("unset coverphoto") ?>
+                </a></li>
+                <?php
+            }
+            ?>
+        </ul>
+    <?php endif ?>
+    <?= $title ?>
 </h1>
 <?php
 if ($user->isAdmin()) {
@@ -109,31 +119,8 @@ if ($showOrig) {
     ?>
         <?php echo $title . "\n" ?>
     </h2>
-    <?php
-    if ($user->isAdmin()) {
-        ?>
-        <span class="actionlink">
-          <a href="category.php?_action=edit&amp;category_id=<?php
-            echo $category->get("category_id") ?>"><?php echo translate("edit") ?>
-          </a>
-        <?php
-        if ($category->get("coverphoto")) {
-            ?>
-            |
-            <a href="category.php?_action=update&amp;category_id=<?php
-                echo $category->get("category_id") ?>&amp;coverphoto=NULL"><?php
-                echo translate("unset coverphoto") ?>
-            </a>
-            <?php
-        }
-        ?>
-        </span>
-        <br>
-        <p>
-        <?php
-    }
-    echo $category->displayCoverphoto();
-    ?>
+    <p>
+    <?= $category->displayCoverphoto(); ?>
     </p>
     <?php
     if ($category->get("category_description")) {
@@ -157,11 +144,11 @@ if ($showOrig) {
     if ($totalPhotoCount > 0) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
-            <span class="actionlink">
-                <a href="photos.php?category_id=<?php echo $category->getBranchIds() .
+            <ul class="actionlink">
+                <li><a href="photos.php?category_id=<?php echo $category->getBranchIds() .
                     $sort ?>"><?php echo translate("view photos") ?>
-                </a>
-            </span>
+                </a></li>
+            </ul>
             <?php
             if (!$category->get("parent_category_id")) {
                 $fragment = translate("that have been categorized");
@@ -183,11 +170,11 @@ if ($showOrig) {
     $fragment = translate("in this category");
     if ($photoCount > 0) {
         ?>
-        <span class="actionlink">
-            <a href="photos.php?category_id=<?php echo $category->get("category_id") .
+        <ul class="actionlink">
+            <li><a href="photos.php?category_id=<?php echo $category->getId() .
                 $sort ?>"><?php echo translate("view photos")?>
-            </a>
-        </span>
+            </a></li>
+        </ul>
         <?php
         if ($photoCount > 1) {
             echo sprintf(translate("There are %s photos"), $photoCount);

@@ -823,30 +823,11 @@ table#search input[type="checkbox"] + label {
     clear: none;
 }
 
-/* Links that appear on the right hand side of the title bar or page */
-
-span.actionlink, div.actionlink {
-    margin: 1px;
-    text-align: right;
-    vertical-align: top;
-    font-size: x-small;
-    float: right;
-    font-weight: normal;
-}
-
 span.photocount {
     font-size: x-small;
 }
 
-span.actionlink:before, div.letter:before {
-    content: "[ ";
-}
-
-span.actionlink:after, div.letter:after {
-    content: " ]";
-}
-
-/* New, semantic way to do actionlinks */
+/* Links that appear on the right hand side of the title bar or page */
 
 ul.actionlink {
     display: block;
@@ -857,6 +838,14 @@ ul.actionlink {
     float: right;
     font-weight: normal;
     clear: right;
+}
+
+ul.letter {
+    text-align: center;
+    border: 1px solid black;
+    float: none;
+    padding: 1em;
+    font-size: small;
 }
 
 ul.actionlink li:before {
@@ -900,30 +889,9 @@ img.actionlink {
     vertical-align: top;
 }
 
-/* Letter in an alphabetic select list */
-.letter {
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
-    clear: both;
-    overflow: hidden;
-    font-size: medium;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
-    padding: 10px;
-    width: 100%;
-    margin: 10px 0 30px -11px;
-    text-align: center;
-}
-
 /* The letter that is currently active */
 .letter .selected   {
     font-weight: bold;
-}
-
-.letter a {
-    text-decoration: none;
-}
-
-.letter a:hover {
-    text-decoration: underline;
 }
 
 /* Description of an album, category, etc. */
@@ -1561,6 +1529,15 @@ textarea {
     margin: 2px;
     background: white;
     float: left;
+}
+
+select:disabled {
+    background: #ddd;
+    border: 1px solid #bbb;
+}
+
+span.unmetRequirements {
+    color: red;
 }
 
 form.geotag select,

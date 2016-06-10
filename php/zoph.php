@@ -71,7 +71,7 @@ echo "\n";
             </a>
           </li>
 <?php
-if ($user->isAdmin() || $user->get("browse_people")) {
+if ($user->canBrowsePeople()) {
     $person_count = person::getCountForUser();
     ?>
     <li>
@@ -82,7 +82,7 @@ if ($user->isAdmin() || $user->get("browse_people")) {
     </li>
     <?php
 }
-if ($user->isAdmin() || $user->get("browse_places")) {
+if ($user->canBrowsePlaces()) {
     $place_count = place::getCount();
     ?>
     <li>
@@ -104,28 +104,28 @@ $min_rating = (int) $user->prefs->get("random_photo_min_rating");
 $recent->sub(new DateInterval("P" . (int) $sub_days . "D"));
 $timestamp=$recent->format("Y-m-d");
 
-echo sprintf(translate("You may search for photos %s taken %s or %s modified %s in " .
+$welcomeText=sprintf(translate("You may search for photos %s taken %s or %s modified %s in " .
     "the past %s days."), "<a href=\"photos.php?_date-op=%3E%3D&amp;date=" . $timestamp . "\">",
     "</a>", "<a href=\"photos.php?_timestamp-op=%3E%3D&amp;timestamp=" . $timestamp . "\">",
-    "</a>", $sub_days);
-echo "\n";
-echo sprintf(translate("Or you may use the %s search page %s to find photos using " .
+    "</a>", $sub_days) . "\n";
+$welcomeText.=sprintf(translate("Or you may use the %s search page %s to find photos using " .
     "multiple criteria. You may also view a %s randomly chosen photo %s like the one above."),
     "<a href=\"search.php\">", "</a>",
     "<a href=\"photos.php?_random=1&amp;_rating-op=%3E%3D&amp;rating=" . $min_rating . "\">",
-    "</a>");
-echo "\n        <p class=\"intro\">\n";
-echo sprintf(translate("These options are always available in the tabs on the upper right. " .
+    "</a>") . "\n";
+$welcomeText.="<p class=\"intro\">\n";
+$welcomeText.=sprintf(translate("These options are always available in the tabs on the upper right. " .
     "Use the %s home %s link to return here. Click on any thumbnail to see a larger version " .
     "along with information about that photo."),"<a href=\"zoph.php\">","</a>");
-echo "\n        </p>\n";
+$welcomeText.="\n        </p>\n";
 if ($user->get("user_id") != conf::get("interface.user.default")) {
-    ?>
-    <p class="intro">
-    <?php echo sprintf(translate("To edit your preferences or change your password, " .
+    $welcomeText.="<p class=\"intro\">";
+    $welcomeText.=sprintf(translate("To edit your preferences or change your password, " .
         "click %s here %s."),"<a href=\"prefs.php\">","</a>");
-    echo "\n        </p>\n";
+    $welcomeText.="\n        </p>\n";
 }
+// Remove the rather ugly trailing space on the links
+echo str_replace(" </a", "</a", $welcomeText);
 ?>
     <p class="version">
         Zoph <?php echo VERSION . "\n" ?>

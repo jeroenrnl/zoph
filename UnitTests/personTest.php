@@ -21,6 +21,7 @@
  * @author Jeroen Roos
  */
 
+require_once "testSetup.php";
 /**
  * Test class for person class
  *

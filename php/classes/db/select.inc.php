@@ -183,6 +183,13 @@ class select extends query {
             $sql .= " HAVING " . $this->having;
         }
 
+        if (sizeof($this->union) > 0) {
+            foreach ($this->union as $union) {
+                // We need to take off the ;
+                $sql .= " UNION (" . rtrim($union, ";") . ")";
+            }
+        }
+
         $order=trim($this->getOrder());
         if (!empty($order)) {
             $sql .= " " . $order;
@@ -191,16 +198,6 @@ class select extends query {
         $limit=trim($this->getLimit());
         if (!empty($limit)) {
             $sql .= " " . $limit;
-        }
-
-        // This does not cover all use cases for UNION queries
-        // it is, for example not possible to use ORDER or LIMIT statements
-        // on the combined query, but currently Zoph doesn't use those
-        if (sizeof($this->union) > 0) {
-            foreach ($this->union as $union) {
-                // We need to take off the ;
-                $sql .= " UNION (" . rtrim($union, ";") . ")";
-            }
         }
 
         return $sql . ";";

@@ -69,10 +69,10 @@ class circleTest extends ZophDataBaseTestCase {
             "members"       => implode("<br>", $memberLinks)
         );
         $this->assertEquals($exp, $circle->getDisplayArray());
-        
+
         $circle->set("hidden", true);
         $circle->update();
-        
+
         $exp["hidden"]="This circle is hidden in overviews";
 
         $this->assertEquals($exp, $circle->getDisplayArray());

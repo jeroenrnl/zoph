@@ -34,7 +34,7 @@ if (empty($_autothumb)) {
     $_autothumb=$user->prefs->get("autothumb");
 }
 
-if (!$user->isAdmin() && !$user->get("browse_people")) {
+if (!$user->canBrowsePeople()) {
     redirect("zoph.php");
 }
 
@@ -55,6 +55,9 @@ if (empty($_l) || $_l=="all") {
 if (getvar("circle_id")) {
     $circle=new circle(getvar("circle_id"));
     $circle->lookup();
+    if (!$circle->isVisible()) {
+        redirect("people.php");
+    }
     $title=$circle->getName();
     try {
         $selection=new selection($_SESSION, array(
@@ -85,7 +88,7 @@ $tpl=new template("organizer", array(
 ));
 
 $actionlinks=array();
-if ($user->isAdmin()) {
+if ($user->canEditOrganizers()) {
     $actionlinks=array(
         translate("new") => "person.php?_action=new",
         translate("new circle") => "circle.php?_action=new"

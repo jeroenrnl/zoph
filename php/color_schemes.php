@@ -32,9 +32,9 @@ $title = translate("Color Schemes");
 require_once "header.inc.php";
 ?>
       <h1>
-      <span class="actionlink">
-        <a href="color_scheme.php?_action=new"><?php echo translate("new") ?></a>
-      </span>
+      <ul class="actionlink">
+        <li><a href="color_scheme.php?_action=new"><?php echo translate("new") ?></a></li>
+      </ul>
       <?php echo translate("color schemes") ?>
       </h1>
   <div class="main">
@@ -44,20 +44,20 @@ $color_schemes = color_scheme::getRecords("name");
 if ($color_schemes) {
     foreach ($color_schemes as $cs) {
         ?>
-        <span class="actionlink">
-          <a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php
-              echo $cs->get("color_scheme_id") ?>">
+        <ul class="actionlink">
+          <li><a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php
+              echo $cs->getId() ?>">
             <?php echo translate("delete") ?>
-          </a> |
-          <a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php
-               echo $cs->get("color_scheme_id") ?>">
+          </a></li>
+          <li><a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php
+              echo $cs->getId() ?>">
              <?php echo translate("edit") ?>
-          </a> |
-          <a href="color_scheme.php?_action=copy&amp;color_scheme_id=<?php
-              echo $cs->get("color_scheme_id") ?>">
+          </a></li>
+          <li><a href="color_scheme.php?_action=copy&amp;color_scheme_id=<?php
+              echo $cs->getId() ?>">
             <?php echo translate("copy") ?>
-          </a>
-        </span>
+          </a></li>
+        </ul>
         <?php echo $cs->get("name") ?>
         <br>
         <?php

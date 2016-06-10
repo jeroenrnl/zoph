@@ -27,9 +27,11 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
-
 $_action="display";
+$error="";
 if (!defined("CLI")) {
+    ini_set("session.name", settings::$instance);
+    session_set_cookie_params(conf::get("interface.cookie.expire"));
     session_start();
     if (array_key_exists('user', $_SESSION)) {
         $user = $_SESSION['user'];
@@ -70,6 +72,9 @@ if ($_action == "logout") {
     if (defined("IMAGE_PHP") && conf::get("share.enable") && !empty($hash)) {
         require_once "classes/anonymousUser.inc.php";
         $user = new anonymousUser();
+    } else if (defined("IMAGE_BG")) {
+        require_once "classes/anonymousUser.inc.php";
+        $user = new anonymousUser();
     } else {
         $uname = getvar("uname");
         $pword = getvar("pword");
@@ -78,7 +83,6 @@ if ($_action == "logout") {
         $validator = new validator($uname, $pword);
         $user = $validator->validate();
     }
-
     // we have a valid user
     if (!empty($user)) {
         $user->lookup();
@@ -86,18 +90,27 @@ if ($_action == "logout") {
         $user->lookupPrefs();
 
         // Update Last Login Fields
-        $updated_user = new user($user->get("user_id"));
-        $updated_user->set("lastlogin", "now()");
-        $updated_user->set("lastip", $_SERVER["REMOTE_ADDR"]);
-        $updated_user->update();
+        $user->set("lastlogin", "now()");
+        $user->set("lastip", $_SERVER["REMOTE_ADDR"]);
+        $user->update();
+        $user->lookup();
     } else {
+        if (!empty($uname)) {
+            /*  A username was given, but by now, no succesful logon has
+                happened so, we'll redirect, with error set to PWDFAIL.
+                This will show an error on the login screen.
+                There is no indication what the exact problem was (unknown user,
+                wrong password, etc.) as this might give an adversary more information
+                than we want to give away */
+            $error="error=PWDFAIL&";
+        }
         $this_page=urlencode(preg_replace("/^\//", "", $_SERVER['REQUEST_URI']));
-        redirect("logon.php?redirect=" . $this_page);
+        redirect("logon.php?" . $error . "redirect=" . $this_page);
     }
 
 }
 
-if (!empty($user)) {
+if (!empty($user) && !($user instanceof anonymousUser)) {
     $user->prefs->load();
     $lang=$user->loadLanguage();
     user::setCurrent($user);
@@ -120,6 +133,8 @@ if (!empty($user)) {
     if (array_key_exists('HTTPS', $_SERVER) && (conf::get("ssl.force")=="login")) {
         redirect(getZophURL("http"), "switch back from https to http");
     }
+} else if ($user instanceof anonymousUser) {
+    user::setCurrent($user);
 } else {
     $lang = new language(conf::get("interface.language"));
 }

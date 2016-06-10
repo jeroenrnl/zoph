@@ -51,9 +51,11 @@ $prev_link="";
 $next_link="";
 $act="";
 $num_photos=0;
-if ($photo_id) { // would be passed for edit or delete
+if ($photo_id) {
+    // would be passed for edit or delete
     $photo = new photo($photo_id);
-} else { // for display
+} else {
+    // for display
     if (!$_off)  { $_off = 0; }
     $offset = $_off;
 
@@ -63,7 +65,7 @@ if ($photo_id) { // would be passed for edit or delete
 
     if  ($num_thumbnails) {
         $photo = $thumbnails[0];
-        $photo_id = $photo->get("photo_id");
+        $photo_id = $photo->getId();
         if (isset($_action) && !$_action=="") {
             $act="_action=" . $_action . "&";
         }
@@ -85,6 +87,7 @@ if ($photo_id) { // would be passed for edit or delete
         $photo = new photo();
     }
 }
+
 if (!$user->isAdmin()) {
     $permissions = $user->getPhotoPermissions($photo);
 }
@@ -163,53 +166,62 @@ if ($user->isAdmin() ||
     }
 }
 
-
 if (!$user->isAdmin()) {
-    if ($_action == "new" || $_action == "insert" ||
-        $_action == "delete" || $_action == "confirm") {
-        // only an admin can do these
-        $_action = "display"; // in case redirect fails
+    // only an admin can do these
+    if ($_action == "new" || $_action == "insert") {
+        // in case redirect fails
+        $_action = "display";
+        redirect("zoph.php");
+    }
+
+    if (!$user->canDeletePhotos() && ($_action == "delete" || $_action == "confirm")) {
+        // in case redirect fails
+        $_action = "display";
         redirect("zoph.php");
     }
 
     if (!$permissions) {
-        $photo = new photo(-1); // in case redirect fails
+        // in case redirect fails
+        $photo = new photo(-1);
         redirect("zoph.php");
-    }
-    else if ($permissions->get("writable") == 0) {
+    } else if ($permissions->get("writable") == 0) {
         $_action = "display";
     }
 }
 
 $actionlinks=array();
-if (conf::get("feature.mail")) {
-    $actionlinks["email"]="mail.php?_action=compose&amp;photo_id=" . $photo->get("photo_id");
-}
-
-if ($user->isAdmin() || $permissions->get("writable")) {
-    $actionlinks["edit"]="photo.php?_action=edit&" . $qs;
-}
-if ($user->get("lightbox_id")) {
-    $actionlinks["lightbox"]="photo.php?_action=lightbox&amp;" . $qs;
-}
-if (conf::get("feature.comments") && ($user->isAdmin() || $user->get("leave_comments"))) {
-    $actionlinks["add comment"]="comment.php?_action=new&amp;photo_id=" . $photo->get("photo_id");
-}
-
-if (!$user->prefs->get("auto_edit") && $_action=="edit") {
-    $actionlinks["return"]="photo.php?" .  $return_qs;
-}
-
-if ($user->isAdmin() && $_action!="delete") {
-    $actionlinks["select"]="photo.php?_action=select&amp;" . $qs;
-    $actionlinks["delete"]="photo.php?_action=delete&amp;photo_id=" . $photo->get("photo_id") .
-        "&amp;_qs=" . $encoded_qs;
-} else if ($_action=="delete") {
-    unset($actionlinks);
-    $actionlinks["delete"]="photo.php?_action=confirm&amp;photo_id=" . $photo->get("photo_id") .
+if ($_action=="delete") {
+    $actionlinks["delete"]="photo.php?_action=confirm&amp;photo_id=" . $photo->getId() .
         "&amp;_qs=" . $encoded_qs;
     $actionlinks["cancel"]="photo.php?" . $_qs;
+} else {
+    if (conf::get("feature.mail")) {
+        $actionlinks["email"]="mail.php?_action=compose&amp;photo_id=" . $photo->getId();
+    }
+
+    if ($user->isAdmin() || $permissions->get("writable")) {
+        $actionlinks["edit"]="photo.php?_action=edit&" . $qs;
+    }
+    if ($user->isAdmin() || ($user->canDeletePhotos() && $permissions->get("writable"))) {
+        $actionlinks["delete"]="photo.php?_action=delete&amp;photo_id=" . $photo->getId() .
+            "&amp;_qs=" . $encoded_qs;
+    }
+    if ($user->get("lightbox_id")) {
+        $actionlinks["lightbox"]="photo.php?_action=lightbox&amp;" . $qs;
+    }
+    if (conf::get("feature.comments") && ($user->isAdmin() || $user->get("leave_comments"))) {
+        $actionlinks["add comment"]="comment.php?_action=new&amp;photo_id=" . $photo->getId();
+    }
+
+    if (!$user->prefs->get("auto_edit") && $_action=="edit") {
+        $actionlinks["return"]="photo.php?" .  $return_qs;
+    }
+
+    if ($user->isAdmin()) {
+        $actionlinks["select"]="photo.php?_action=select&amp;" . $qs;
+    }
 }
+
 
 // jump to edit screen if auto edit pref is set
 // permission to edit checked below
@@ -229,7 +241,8 @@ if ($_action == "edit") {
     unset($actionlinks["edit"]);
 
     $photo->setFields($request_vars);
-    $photo->updateRelations($request_vars,"_id"); // pass again for add people, cats, etc
+    // pass again for add people, cats, etc
+    $photo->updateRelations($request_vars,"_id");
     $photo->update();
     $action = "update";
     if (!empty($_qs)) {
@@ -264,7 +277,7 @@ if ($_action == "edit") {
         $sel_key=array_search($photo_id, $_SESSION["selected_photo"]);
     }
     if ($sel_key === false) {
-        $_SESSION["selected_photo"][]=$photo->get("photo_id");
+        $_SESSION["selected_photo"][]=$photo->getId();
     }
     $action="display";
 } else if ($_action == "deselect") {
@@ -320,7 +333,7 @@ if ($action != "insert" && !$found) {
             <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
                 <p>
                     <input type="hidden" name="photo_id"
-                        value="<?php echo $photo->get("photo_id") ?>">
+                        value="<?php echo $photo->getId() ?>">
                     <select name="_deg">
                         <option>90</option>
                         <option>180</option>
@@ -368,8 +381,7 @@ if ($action != "insert" && !$found) {
     </ul>
     <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX)) ?>
     <?php
-    if (($user->isAdmin() || $user->get("browse_people")) &&
-        $people_links = $photo->getPeopleLinks()) {
+    if ($user->canBrowsePeople() && $people_links = $photo->getPeopleLinks()) {
         ?>
           <div id="personlink">
         <?php echo $people_links ?>
@@ -401,7 +413,7 @@ if ($action != "insert" && !$found) {
             ?>
               <form id="ratingform" action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
                 <input type="hidden" name="_action" value="rate">
-                <input type="hidden" name="photo_id" value="<?php echo $photo->get("photo_id") ?>">
+                <input type="hidden" name="photo_id" value="<?php echo $photo->getId() ?>">
                 <?php echo create_rating_pulldown($photo->getRatingForUser($user)); ?>
                 <input type="submit" name="_button" value="<?php echo translate("rate", 0) ?>">
               </form>
@@ -409,7 +421,7 @@ if ($action != "insert" && !$found) {
             <?php
         }
     }
-    if ($album_links = template::createLinkList($photo->getAlbums($user))) {
+    if ($album_links = template::createLinkList($photo->getAlbums())) {
         ?>
             <dt><?php echo translate("albums") ?></dt>
             <dd><?php echo $album_links ?></dd>
@@ -441,14 +453,14 @@ if ($action != "insert" && !$found) {
         if ($allexif) {
             ?>
             <h2><?php echo translate("Full EXIF details",0)?></h2>
-            <span class="actionlink">
-                <a href="#" onclick="document.getElementById('allexif').style.display='block'">
+            <ul class="actionlink">
+                <li><a href="#" onclick="document.getElementById('allexif').style.display='block'">
                   <?php echo translate("display",0) ?>
-                </a> |
-                <a href="#" onclick="document.getElementById('allexif').style.display='none'">
+                </a></li>
+                <li><a href="#" onclick="document.getElementById('allexif').style.display='none'">
                   <?php echo translate("hide",0) ?>
-                </a>
-            </span>
+                </a></li>
+            </ul>
             <?php
             echo $allexif;
         }

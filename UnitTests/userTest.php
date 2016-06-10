@@ -51,6 +51,17 @@ class userTest extends ZophDatabaseTestCase {
 
         $lang=new language("en");
         $this->getDataSet();
+
+        $obj = new user(7);
+        $obj->lookup();
+        $obj->set("browse_people", false);
+        $obj->set("browse_places", false);
+        $obj->set("browse_tracks", false);
+        $obj->set("detailed_people", false);
+        $obj->set("detailed_places", false);
+        $obj->set("edit_organizers", false);
+        $obj->update();
+
     }
 
     /**
@@ -76,7 +87,7 @@ class userTest extends ZophDatabaseTestCase {
     public function testCreateAndDelete() {
         $user = new user();
         $user->set("user_name", "Test User");
-        $user->set("password", "secret");
+        $user->set("password", validator::hashPassword("secret"));
         $user->insert();
 
         $id = $user->getId();
@@ -121,7 +132,7 @@ class userTest extends ZophDatabaseTestCase {
     public function testSetPasswordOnUpdate() {
         $user=new user(3);
         $user->lookup();
-        $user->set("password", "secret");
+        $user->set("password", validator::hashPassword("secret"));
         $user->update();
 
         unset($user);
@@ -166,13 +177,105 @@ class userTest extends ZophDatabaseTestCase {
     /**
      * Test isAdmin() method.
      */
-    public function testIs_admin() {
+    public function testIsAdmin() {
         $obj = new user(1);
         $obj->lookup();
         $this->assertTrue($obj->isAdmin());
         $obj = new user(7);
         $obj->lookup();
         $this->assertFalse($obj->isAdmin());
+    }
+
+    /**
+     * Test browse_people access right
+     */
+    public function testBrowsePeople() {
+        $obj = new user(1);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePeople());
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertFalse($obj->canBrowsePeople());
+        $obj->set("browse_people", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePeople());
+        $obj->set("browse_people", false);
+        $obj->set("edit_organizers", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePeople());
+    }
+
+    /**
+     * Test detailed_people access right
+     */
+    public function testDetailedPeople() {
+        $obj = new user(1);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePeopleDetails());
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertFalse($obj->canSeePeopleDetails());
+        $obj->set("detailed_people", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePeopleDetails());
+        $obj->set("detailed_people", false);
+        $obj->set("edit_organizers", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePeopleDetails());
+    }
+
+    /**
+     * Test browse_places access right
+     */
+    public function testBrowsePlaces() {
+        $obj = new user(1);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePlaces());
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertFalse($obj->canBrowsePlaces());
+        $obj->set("browse_places", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePlaces());
+        $obj->set("browse_places", false);
+        $obj->set("edit_organizers", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canBrowsePlaces());
+    }
+
+    /**
+     * Test detailed_places access right
+     */
+    public function testDetailedPlaces() {
+        $obj = new user(1);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePlaceDetails());
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertFalse($obj->canSeePlaceDetails());
+        $obj->set("detailed_places", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePlaceDetails());
+        $obj->set("detailed_places", false);
+        $obj->set("edit_organizers", true);
+        $obj->update();
+        $obj = new user(7);
+        $obj->lookup();
+        $this->assertTrue($obj->canSeePlaceDetails());
     }
 
     /**
@@ -225,22 +328,12 @@ class userTest extends ZophDatabaseTestCase {
 
     /**
      * Test getAlbumPermissions() method.
-     * @dataProvider getAlbumIds1
+     * @dataProvider getAlbumIds
      */
-    public function testGet_album_permissions1($id, $perm) {
-        $obj = new user(1);
-        $ap=$obj->getAlbumPermissions(new album($id));
-        $this->assertEquals($ap,$perm);
-    }
-
-    /**
-     * Test getAlbumPermissions() method.
-     * @dataProvider getAlbumIds3
-     */
-    public function testGet_album_permissions3($id, $perm) {
-        $obj = new user(3);
-        $obj->lookup();
-        $ap=$obj->getAlbumPermissions(new album($id));
+    public function testGet_album_permissions($user_id, $id, $perm) {
+        $user = new user($user_id);
+        $user->lookup();
+        $ap=$user->getAlbumPermissions(new album($id));
         if (is_null($perm)) {
             $this->assertEquals($ap,$perm);
         } else {
@@ -256,7 +349,13 @@ class userTest extends ZophDatabaseTestCase {
     public function testGet_permissions_for_photo1($id, $perm) {
         $obj = new user(1);
         $pp=$obj->getPhotoPermissions(new photo($id));
-        $this->assertEquals($pp,$perm);
+        if (is_null($perm)) {
+            $this->assertNull($pp);
+        } else {
+            $this->assertInstanceOf("group_permissions", $pp);
+            $this->assertEquals($perm[0],$pp->get("album_id"));
+            $this->assertEquals($perm[1],$pp->get("group_id"));
+        }
     }
 
     /**
@@ -313,7 +412,13 @@ class userTest extends ZophDatabaseTestCase {
           'can rate photos' => 'Yes',
           'can rate the same photo multiple times' => 'No',
           'can view hidden circles' => 'Yes',
+          'can view all photos' => 'Yes',
+          'can delete photos' => 'Yes',
+          'can edit albums, categories, places and people' => 'Yes',
           'can share photos' => 'No',
+          'can view all photos' => 'Yes',
+          'can delete photos' => 'Yes',
+          'can edit albums, categories, places and people' => 'Yes'
         );
         $this->assertEquals($expected, $da);
     }
@@ -386,54 +491,47 @@ class userTest extends ZophDatabaseTestCase {
     }
 
     /**
-     * Return a list of album id's used for testing and permissions for userid 1
+     * Return a list of album id's used for testing of permissions
      * User id 1 is the admin user, who is not member of a group
-     * and therefore has no permissions.
-     */
-    public function getAlbumIds1() {
-        return array(
-            array(1,null),
-            array(3,null),
-            array(5,null),
-            array(7,null)
-        );
-    }
-    /**
-     * Return a list of album id's used for testing and permissions for userid 3
+     * and therefore has has group 0
      * User id 3 is 'jimi', who is a member of the "guitarists" group.
      * and therefore has no permissions.
      */
-    public function getAlbumIds3() {
+    public function getAlbumIds() {
         return array(
-            array(1,4),
-            array(2,4),
-            array(3,null),
-            array(4,null),
-            array(5,null),
-            array(6,null),
-            array(7,null),
-            array(8,null),
-            array(9,null),
-            array(10,null)
+            array(1,1,0),
+            array(1,3,0),
+            array(1,5,0),
+            array(1,7,0),
+            array(3,1,4),
+            array(3,2,4),
+            array(3,3,null),
+            array(3,4,null),
+            array(3,5,null),
+            array(3,6,null),
+            array(3,7,null),
+            array(3,8,null),
+            array(3,9,null),
+            array(3,10,null)
         );
     }
 
     /**
      * Return a list of photo id's and permissions for user 1
-     * User 1 is admin, so no permissions will be returned.
+     * User 1 is admin, so a permissions object with group set to 0 will be returned.
      */
     public function getPhotoPermissionsForUser1() {
         return array(
-            array(1,null),
-            array(2,null),
-            array(3,null),
-            array(4,null),
-            array(5,null),
-            array(6,null),
-            array(7,null),
-            array(8,null),
-            array(9,null),
-            array(10,null),
+            array(1,array(2,0)),
+            array(2,array(3,0)),
+            array(3,array(5,0)),
+            array(4,array(5,0)),
+            array(5,array(5,0)),
+            array(6,array(7,0)),
+            array(7,array(2,0)),
+            array(8,array(3,0)),
+            array(9,array(4,0)),
+            array(10,array(4,0)),
         );
     }
 

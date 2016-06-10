@@ -26,7 +26,7 @@ $mapping_js="";
 
 if (!$user->isAdmin()) {
     $_action="display";
-    if (!$user->get("browse_tracks")) {
+    if (!$user->canBrowseTracks()) {
         redirect("zoph.php");
     }
 }

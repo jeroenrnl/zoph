@@ -17,13 +17,14 @@
   </php>
   <testsuites>
     <testsuite name="Zoph">
-      <file>XMLdataTest.php</file>
-      <file>configTest.php</file>
       <file>PDOdatabaseTest.php</file>
+      <file>configTest.php</file>
+      <file>XMLdataTest.php</file>
       <file>photoTest.php</file>
       <file>albumTest.php</file>
       <file>placeTest.php</file>
       <file>userTest.php</file>
+      <file>validatorTest.php</file>
       <file>anonymousUserTest.php</file>
       <file>categoryTest.php</file>
       <file>groupTest.php</file>

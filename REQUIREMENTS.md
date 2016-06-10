@@ -3,16 +3,15 @@
 Zoph is being developped on Linux, but it should be able to run on any OS that can run Apache, MySQL and PHP. Users have reported succesful installations on MacOSX, several BSD flavours and even Windows. 
 
 Zoph requires the following:
-* Apache 2.2
+* Apache 2.2 or 2.4
 * PHP 5.5 or 5.6
 * MySQL 5.6
 * ImageMagick 6.9
-* Jhead 2.97
 
 Other versions may work as well, see below for more details. How to install these applications and get them to work together is depending on your OS and distribution. Check the documentation of the application and/or your distribution for details.
 
 ##Apache##
-* Current versions of Zoph are developped on Apache 2.2.x
+* Current versions of Zoph are developped on Apache 2.4.x
 
 ##PHP##
 Current versions of Zoph are developped on PHP 5.5 and 5.6
@@ -52,12 +51,6 @@ The e-mail photo feature may require increasing the memory_limit setting. See EM
 
 ##ImageMagick##
 * Current Zoph versions have been tested against ImageMagick 6.9.x
-
-##Jhead##
-* Jhead 2.97
-    * Other versions probably work as well
-
-Jhead is a handy little program that extracts the information stored in the Exif headers that are added by most digital cameras. Exif stores date and time plus a bunch of other info about a photo. Zoph can use it to automatically rotate images during import. You can download it from http://www.sentex.net/~mwandel/jhead/.
 
 ##Browser##
 In order to be able to use Zoph, you will need a browser.

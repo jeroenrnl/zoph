@@ -109,7 +109,6 @@ class photo extends zophTable {
      * Lookup a photo, considering access rights
      */
     public function lookup() {
-        $user=user::getCurrent();
         if (!$this->getId()) {
             return;
         }
@@ -121,9 +120,7 @@ class photo extends zophTable {
         $where=new clause("p.photo_id=:photoid");
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if (!$user->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry->where($where);
 
@@ -136,6 +133,18 @@ class photo extends zophTable {
 
         return $photo;
     }
+
+    /**
+     * Lookup a photo, ignoring access rights
+     */
+    public function lookupAll() {
+        $qry = new select(array("p" => "photos"));
+        $qry->where(new clause("p.photo_id=:photoid"));
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $photo = $this->lookupFromSQL($qry);
+        return $photo;
+    }
+
 
     /**
      * Lookup photographer of this photo
@@ -302,16 +311,29 @@ class photo extends zophTable {
         $where=new clause("pa.photo_id=:photoid");
 
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
-        $qry->addOrder("a.album");
+        $qry->addOrder("album");
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "gp.album_id=a.album_id");
             $qry->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $where->addAnd(new clause("gu.user_id=:userid"));
             $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
+            if ($user->canEditOrganizers()) {
+                $subqry=new select(array("a" => "albums"));
+                $subqry->addFields(array("album_id", "parent_album_id", "album"));
+                $subqry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
+
+                $subwhere=new clause("pa.photo_id=:subphotoid");
+                $subqry->addParam(new param(":subphotoid", (int) $this->getId(), PDO::PARAM_INT));
+                $subwhere->addAnd(new clause("a.createdby=:ownerid"));
+                $subqry->addParam(new param(":ownerid", (int) $user->getId(), PDO::PARAM_INT));
+                $subqry->where($subwhere);
+                $qry->union($subqry);
+            }
         }
 
         $qry->where($where);
+
         return album::getRecordsFromQuery($qry);
     }
 
@@ -1050,7 +1072,7 @@ class photo extends zophTable {
 
         $allrelated=photoRelation::getRelated($this);
 
-        if ($user->isAdmin()) {
+        if ($user->canSeeAllPhotos()) {
             return $allrelated;
         } else {
             $related=array();
@@ -1245,6 +1267,7 @@ class photo extends zophTable {
      * @return string SHA1 hash
      */
     private function getHashFromFile() {
+        $this->lookupAll();
         $file=$this->getFilePath();
         if (file_exists($file)) {
             return sha1_file($file);

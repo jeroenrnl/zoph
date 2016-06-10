@@ -378,43 +378,6 @@ class template {
         ));
     }
 
-    public static function createFormInputText($name, $value, $label=null, $hint=null, $size=32) {
-        return new block("formInputText", array(
-            "name"  => $name,
-            "value" => e($value),
-            "label" => e($label),
-            "hint"  => e($hint),
-            "size"  => (int) $size
-        ));
-    }
-
-    public static function createFormInputHidden($name, $value) {
-        return new block("formInputHidden", array(
-            "name"  => $name,
-            "value" => e($value),
-        ));
-    }
-
-    public static function createFormInputCheckbox($name, $checked, $label, $hint=null) {
-        return new block("formInputCheckbox", array(
-            "name"  => $name,
-            "checked" => $checked,
-            "label" => e($label),
-            "hint"  => e($hint),
-        ));
-    }
-
-    public static function createFormTextarea($name, $value, $label=null, $cols=40, $rows=4) {
-        return new block("formTextarea", array(
-            "name"  => $name,
-            "value" => e($value),
-            "label" => e($label),
-            "cols"  => (int) $cols,
-            "rows"  => (int) $rows
-        ));
-    }
-
-
     /**
      * Get all templates
      * Search the template directory for directory entries

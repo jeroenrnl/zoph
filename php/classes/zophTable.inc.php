@@ -230,9 +230,8 @@ abstract class zophTable {
             if (!static::$keepKeys && $this->isKey($name)) {
                 continue;
             }
-            if ($name === "password") {
-                $qry->addSet("password", "password(\"" . $value . "\")");
-            } else if ($value === "now()") {
+
+            if ($value === "now()") {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
                 $qry->addSet($name, "now()");
             } else if ($value =="" && in_array($name, static::$notNull)) {
@@ -334,9 +333,7 @@ abstract class zophTable {
                 }
             }
 
-            if ($name === "password") {
-                $qry->addSetFunction("password=password(\"" . $value . "\")");
-            } else if ($value === "now()") {
+            if ($value === "now()") {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
                 $qry->addSetFunction($name . "=now()");
             } else if ($value =="" && in_array($name, static::$notNull)) {

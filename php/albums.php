@@ -66,7 +66,7 @@ try {
 ?>
 <h1>
 <?php
-if ($user->isAdmin()) {
+if ($user->canEditOrganizers()) {
     ?>
       <ul class="actionlink">
         <li>
@@ -143,12 +143,12 @@ if ($showOrig) {
     if ($totalPhotoCount > 0) {
         if ($totalPhotoCount > $photoCount && $children) {
             ?>
-            <span class="actionlink">
-                <a href="photos.php?album_id=<?php
+            <ul class="actionlink">
+                <li><a href="photos.php?album_id=<?php
                     echo $album->getBranchIds() . $sort ?>">
                   <?php echo translate("view photos") ?>
-                </a>
-            </span>
+                </a></li>
+            </ul>
             <?php
             $fragment .= " " . translate("or its children");
             if ($totalPhotoCount>1) {
@@ -166,12 +166,12 @@ if ($showOrig) {
     }
     if ($photoCount > 0) {
         ?>
-          <span class="actionlink">
-            <a href="photos.php?album_id=<?php
-                echo $album->get("album_id") . $sort ?>">
+          <ul class="actionlink">
+            <li><a href="photos.php?album_id=<?php
+                echo $album->getId() . $sort ?>">
               <?php echo translate("view photos")?>
-            </a>
-          </span>
+            </a></li>
+          </ul>
         <?php
         if ($photoCount > 1) {
             echo sprintf(translate("There are %s photos"), $photoCount);

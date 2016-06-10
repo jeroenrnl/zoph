@@ -22,26 +22,31 @@
  */
 require_once "include.inc.php";
 
-if (!$user->isAdmin()) {
+if (!$user->canEditOrganizers()) {
     $_action = "display";
 }
 
-if (!$user->get("browse_people") && !$user->isAdmin()) {
+if (!$user->canBrowsePeople()) {
     redirect("zoph.php");
 }
 
 $circleId = (int) getvar("circle_id");
 $circle = new circle($circleId);
-$obj = &$circle;
-$redirect = "people.php";
-require_once "actions.inc.php";
-if ($action != "insert") {
+
+if ($_action != "insert") {
     $circle->lookup();
+    if (!$circle->isVisible()) {
+        redirect("people.php");
+    }
     $title = e($circle->getName());
 } else {
     $title = translate("New circle");
 }
 
+
+$obj = &$circle;
+$redirect = "people.php";
+require_once "actions.inc.php";
 if ($_action=="update") {
     if (((int) getvar("_member") > 0)) {
         $circle->addMember(new person((int) getvar("_member")));
@@ -96,7 +101,7 @@ if ($action == "display") {
         "showMain"          => true
     ));
 
-    if ($user->get("detailed_people") || $user->isAdmin()) {
+    if ($user->canSeePeopleDetails()) {
         $tpl->addBlock(new block("definitionlist", array(
             "class" => "display circle",
             "dl"    => $circle->getDisplayArray()
@@ -126,11 +131,17 @@ if ($action == "display") {
         "obj"               => $circle
     ));
 
-    $form=new block("form", array(
+    $form=new form("form", array(
         "formAction"    => "circle.php",
         "onsubmit"      => null,
         "action"        => $action,
+        "submit"        => translate("submit", 0)
     ));
+
+    $form->addInputHidden("circle_id", $circle->getId());
+    $form->addInputText("circle_name", $circle->getName(), translate("Name"), "", 32);
+    $form->addTextArea("description", $circle->get("description"), translate("Description"), 40, 4);
+    $form->addInputCheckbox("hidden", $circle->isHidden(), translate("Hide in overviews"));
 
     $curMembers=$circle->getMembers();
     $members=new block("members", array(
@@ -138,13 +149,7 @@ if ($action == "display") {
         "group"     => $circle
     ));
 
-    $form->addBlocks(array(
-        template::createFormInputHidden("circle_id", $circle->getId()),
-        template::createFormInputText("circle_name", $circle->getName(), translate("Name"), "", 32),
-        template::createFormTextArea("description", $circle->get("description"), translate("Description"), 40, 4),
-        template::createFormInputCheckbox("hidden", $circle->isHidden(), translate("Hide in overviews")),
-        $members
-    ));
+    $form->addBlock($members);
 
     $tpl->addBlock($form);
 }

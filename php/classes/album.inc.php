@@ -80,11 +80,24 @@ class album extends zophTreeTable implements Organizer {
         $where=new clause("a.album_id=:albumid");
         $qry->addParam(new param(":albumid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
-            $where->addAnd(new clause("gu.user_id=:userid"));
+            $clause=new clause("gu.user_id=:userid");
+            $where->addAnd($clause);
             $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
+            if ($user->canEditOrganizers()) {
+                $subqry=new select(array("a" => "albums"));
+                $distinct=true;
+                $subqry->addFields(array("*"), $distinct);
+
+                $subwhere=new clause("album_id=:subalbum_id");
+                $subqry->addParam(new param(":subalbum_id", (int) $this->getId(), PDO::PARAM_INT));
+                $subwhere->addAnd(new clause("a.createdby=:ownerid"));
+                $subqry->addParam(new param(":ownerid", (int) $user->getId(), PDO::PARAM_INT));
+                $subqry->where($subwhere);
+                $qry->union($subqry);
+            }
         }
         $qry->where($where);
         return $this->lookupFromSQL($qry);
@@ -167,14 +180,25 @@ class album extends zophTreeTable implements Organizer {
             $qry->addOrder("name");
         }
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $where->addAnd(new clause("gu.user_id=:userid"));
             $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
-        }
+            if ($user->canEditOrganizers()) {
+                $subqry=new select(array("a" => "albums"));
+                $subqry->addFields(array("*", "name"=>"album"));
 
+                $subwhere=new clause("parent_album_id=:subalbum_id");
+                $subqry->addParam(new param(":subalbum_id", (int) $this->getId(), PDO::PARAM_INT));
+                $subwhere->addAnd(new clause("a.createdby=:ownerid"));
+                $subqry->addParam(new param(":ownerid", (int) $user->getId(), PDO::PARAM_INT));
+                $subqry->where($subwhere);
+                $qry->union($subqry);
+            }
+        }
         $qry->where($where);
+
         $this->children=static::getRecordsFromQuery($qry);
         return $this->children;
     }
@@ -205,7 +229,7 @@ class album extends zophTreeTable implements Organizer {
         $where=new clause("pa.album_id=:albid");
         $qry->addParam(new param(":albid", $this->getId(), PDO::PARAM_INT));
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "pa.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $where->addAnd(new clause("gu.user_id=:userid"));
@@ -250,9 +274,7 @@ class album extends zophTreeTable implements Organizer {
         $where=new clause("pa.album_id = :alb_id");
         $qry->addParam(new param(":alb_id", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry->where($where);
         $count=$qry->getCount();
@@ -276,12 +298,23 @@ class album extends zophTreeTable implements Organizer {
         $qry->addParam($ids);
         $where=clause::InClause("pa.album_id", $ids);
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry=selectHelper::expandQueryForUser($qry);
-        }
+        $qry=selectHelper::expandQueryForUser($qry);
         $qry->where($where);
 
         return $qry->getCount();
+    }
+
+    /**
+     * Get the photos in this album
+     * Does NOT check user permissions!
+     */
+    public function getPhotos() {
+        $qry=new select(array("pa" => "photo_albums"));
+        $qry->addFields(array("photo_id" => "pa.photo_id"));
+        $qry->where(new clause("pa.album_id = :alb_id"));
+        $qry->addParam(new param(":alb_id", $this->getId(), PDO::PARAM_INT));
+
+        return photo::getRecordsFromQuery($qry);
     }
 
     /**
@@ -369,9 +402,7 @@ class album extends zophTreeTable implements Organizer {
             $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
         }
 
-        if (!user::getCurrent()->isAdmin()) {
-            $qry = selectHelper::expandQueryForUser($qry);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
         $qry->where($where);
@@ -422,7 +453,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addGroupBy("a.album_id");
         $qry->addOrder("count DESC")->addOrder("a.album");
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $qry->where(new clause("gu.user_id=:userid"));
@@ -449,7 +480,7 @@ class album extends zophTreeTable implements Organizer {
         $qry->addFields(array("album_id"), true);
         $qry->addOrder("album");
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "gp.album_id = a.album_id");
             $qry->join(array("gu" => "groups_users"), "gp.group_id = gu.group_id");
             $qry->where(new clause("gu.user_id=:userid"));
@@ -488,7 +519,7 @@ class album extends zophTreeTable implements Organizer {
         $qry=new select(array("a" => "albums"));
         $qry->addFunction(array("count" => "COUNT(DISTINCT a.album_id)"));
 
-        if (!$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $qry->join(array("gp" => "group_permissions"), "a.album_id=gp.album_id")
                 ->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
             $where=new clause("user_id=:userid");
@@ -496,6 +527,20 @@ class album extends zophTreeTable implements Organizer {
             $qry->where($where);
         }
         return $qry->getCount();
+    }
+
+    /**
+     * Get an array of id => name to build a non-hierarchical array
+     * this function always returns ALL albums and does NOT check user permissions
+     * @retrun array albums
+     */
+    public static function getSelectArray() {
+        $albums=static::getRecords();
+        $selectArray=array(null => "");
+        foreach ($albums as $album) {
+            $selectArray[(string) $album->getId()] = $album->getName();
+        }
+        return $selectArray;
     }
 }
 

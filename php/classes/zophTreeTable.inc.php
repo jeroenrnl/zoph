@@ -39,6 +39,14 @@ abstract class zophTreeTable extends zophTable {
     abstract public function getChildren($order = null);
 
     /**
+     * Insert a new record in the database
+     */
+    public function insert() {
+        $this->set("createdby", (int) user::getCurrent()->getId());
+        return parent::insert();
+    }
+
+    /**
      * Deletes a record along with all of its descendants.
      * @param array Names of tables from which entries also should be deleted.
      */

@@ -63,6 +63,20 @@ final class anonymousUser extends user {
     }
 
     /**
+     * Fake lookup
+     */
+    public function lookup() {
+        return false;
+    }
+
+    /**
+     * Fake update
+     */
+    public function update() {
+        return false;
+    }
+
+    /**
      * Return a bogus person id
      */
     public function lookupPerson() {
@@ -79,7 +93,71 @@ final class anonymousUser extends user {
     /**
      * Anonymous user is never admin
      */
-    function isAdmin() {
+    public function isAdmin() {
+        return false;
+    }
+
+    /**
+     * Anonymous user can never view all photos
+     */
+    public function canSeeAllPhotos() {
+        return false;
+    }
+
+    /**
+     * Anonymous user can never edit organizers
+     * @return bool user can add, edit and delete albums, categories, places and people
+     */
+    public function canEditOrganizers() {
+        return false;
+    }
+
+    /**
+     * Anonymous users are never allowed to delete photos
+     * @return bool user can delete photos
+     */
+    public function canDeletePhotos() {
+        return false;
+    }
+
+
+    /**
+     * Anonymous user can never browse people
+     * @return bool user can see the list of people that are in photos this user can see
+     */
+    public function canBrowsePeople() {
+        return false;
+    }
+
+    /**
+     * Anonymous user can never see people details
+     * @return bool user can see details of people
+     */
+    public function canSeePeopleDetails() {
+        return false;
+    }
+
+    /**
+     * Anonymous user can never browse places
+     * @return bool user can see the list of places where photos this user can see were taken
+     */
+    public function canBrowsePlaces() {
+        return false;
+    }
+
+    /**
+     * Anonymous user can never browse tracks
+     * @return bool user can see tracks
+     */
+    public function canBrowseTracks() {
+        return false;
+    }
+
+    /**
+     * Anonymous user can never see details of places
+     * @return bool user can see details of places
+     */
+    public function canSeePlaceDetails() {
         return false;
     }
 

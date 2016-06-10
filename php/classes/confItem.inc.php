@@ -56,6 +56,10 @@ abstract class confItem extends zophTable {
     protected $required=false;
     /** @var bool internal, internal settings can not be changed from webinterface */
     protected $internal=false;
+    /** @var array list of items that MUST be enabled for this item to be enabled */
+    protected $requiresEnabled=array();
+    /** @var array list of unmet requirements */
+    protected $unmet=array();
 
     /**
      * Create confItem object
@@ -124,7 +128,7 @@ abstract class confItem extends zophTable {
      * @return string value
      */
     final public function getValue() {
-        if (!isset($this->fields["value"]) || $this->fields["value"]===null) {
+        if (!isset($this->fields["value"]) || $this->fields["value"]===null || !$this->requirementsMet()) {
             return $this->getDefault();
         } else {
             return $this->fields["value"];
@@ -218,6 +222,41 @@ abstract class confItem extends zophTable {
      */
     final public function setDefault($default) {
         $this->default=$default;
+    }
+
+    /**
+     * This item requires another item to be enabled
+     */
+    final public function requiresEnabled(confItemBool $item) {
+        $this->requiresEnabled[]=$item;
+    }
+
+    /**
+     * Are all requirements met?
+     */
+    final protected function requirementsMet() {
+        $met=true;
+        foreach ($this->requiresEnabled as $req) {
+            $req->lookup();
+            if ((bool) $req->getValue() === false) {
+                $met=false;
+                $this->unmet[$req->getName()]="enabled";
+            }
+        }
+        return $met;
+    }
+
+    /**
+     * Return a template block to show the unmet requirements for this
+     * confItem.
+     * @return block overview of unmet items
+     */
+    final protected function displayUnmetRequirements() {
+        if (!$this->requirementsMet()) {
+            return new block("confUnmetRequirements", array(
+                "unmet" => $this->unmet
+            ));
+        }
     }
 
     /**
