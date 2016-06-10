@@ -128,7 +128,7 @@ to create cleaner, less duplicated and more robust code. I have introduced UnitT
 about 20% of Zoph's sourcecode now tested fully automatic for bugs). As a help to that, I am now 
 using Sonar to automatically run these tests and also analyse Zoph code for other problems.
 
-#29 First step in creating unittests for Zoph 
+* [Issue #29](https://github.com/jeroenrnl/zoph/issues/29) First step in creating unittests for Zoph 
 * Sonar Support 
 * Refactor of PHP part of Mapping implementation 
 * Move timezone-related global functions into class 
