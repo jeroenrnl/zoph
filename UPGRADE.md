@@ -1,3 +1,26 @@
+Zoph 0.9.2 to 0.9.3
+===================
+* If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.2. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.
+
+Copy files
+----------
+
+Copy the contents of the php directory, including all subdirs, into your webroot.
+
+cp -a php/* /var/www/html/zoph
+
+Database changes
+----------------
+* Execute zoph-update-0.9.3.sql:
+
+    mysql -u zoph_admin -p zoph < sql/zoph_update-0.9.3.sql
+
+Changes this script makes:
+
+* Resize the password field to allow store bigger hashes
+* Add fields to the user table to allow for new access rights
+* Add 'created by' fields to the albums, categories, places, people and circles tables
+
 Zoph 0.9.1 to 0.9.2
 ===================
 * If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.1. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.
