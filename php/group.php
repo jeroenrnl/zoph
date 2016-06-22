@@ -279,7 +279,7 @@ if ($action == "display") {
              <td>
                 <input type="hidden" name="group_id_new"
                     value="<?php echo $group->get("group_id") ?>">
-                <?php echo template::createPulldown("album_id_new", "", album::getSelectArray()) ?>
+                <?php echo template::createPulldown("album_id_new", "", album::getTreeSelectArray()) ?>
              </td>
              <td>
                 <?php echo create_text_input("access_level_new", "5", 4, 2) ?>
@@ -303,7 +303,7 @@ if ($action == "display") {
                </td>
              </tr>
         <?php
-        $albums = album::getSelectArray();
+        $albums = album::getTreeSelectArray();
         foreach ($albums as $id=>$name) {
             if (!$id || $id == 1) {
                 continue;
