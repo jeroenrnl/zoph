@@ -111,74 +111,42 @@ if ($action != "insert") {
 }
 
 require_once "header.inc.php";
-?>
-<?php
+
 if ($action == "display") {
-    ?>
-    <h1>
-        <ul class="actionlink">
-          <li><a href="groups.php"><?php echo translate("return") ?></a></li>
-          <li><a href="group.php?_action=edit&amp;group_id=<?php echo $group->get("group_id") ?>">
-            <?php echo translate("edit") ?>
-          </a></li>
-          <li><a href="group.php?_action=delete&amp;group_id=<?php echo $group->get("group_id") ?>">
-            <?php echo translate("delete") ?>
-          </a></li>
-          <li><a href="group.php?_action=new"><?php echo translate("new") ?></a></li>
-        </ul>
-      <?php echo translate("group") ?>
-    </h1>
-    <div class="main">
-    <h2><?php echo $group->get("group_name") ?></h2>
-        <dl>
-            <?php echo create_field_html($group->getDisplayArray()) ?>
-        </dl>
-        <br>
-    <h3><?php echo translate("Albums") ?></h3>
-    <table class="permissions">
-        <tr>
-        <th><?php echo translate("name") ?></th>
-        <th><?php echo translate("access level") ?></th>
-    <?php
-    if (conf::get("watermark.enable")) {
-        ?>
-        <th><?php echo translate("watermark level") ?></th>
-        <?php
-    }
-    ?>
-        <th><?php echo translate("writable") ?></th>
-        </tr>
-    <?php
     $albums = album::getSelectArray();
+    $perms=array();
     foreach ($albums as $id=>$name) {
         if (!$id || $id == 1) {
             continue;
         }
-        $album = new album($id);
-        $permissions = $group->getGroupPermissions($album);
+        $permissions = $group->getGroupPermissions(new album((int) $id));
         if ($permissions) {
-            ?>
-            <tr>
-              <td><?php echo $name ?></td>
-              <td><?php echo $permissions->get("access_level") ?></td>
-            <?php
+            $albumPermissions=new stdClass();
+            $albumPermissions->name=$name;
+            $albumPermissions->access=$permissions->get("access_level");
             if (conf::get("watermark.enable")) {
-                ?>
-                <td><?php echo $permissions->get("watermark_level") ?></td>
-                <?php
+                $albumPermissions->wm=$permissions->get("watermark_level");
             }
-            ?>
-              <td>
-                <?php echo $permissions->get("writable") == "1"
-                    ? translate("Yes") : translate("No") ?>
-              </td>
-            </tr>
-            <?php
+            $albumPermissions->writable=$permissions->get("writable") == "1" ? translate("Yes") : translate("No");
+            $perms[]=$albumPermissions;
         }
     }
-    ?>
-    </table>
-    <?php
+    $actionlinks=array(
+        "edit"      => "group.php?_action=edit&amp;group_id=" . $group->getId(),
+        "delete"    => "group.php?_action=delete&amp;group_id=" . $group->getId(),
+        "new"       => "group.php?_action=new",
+        "return"    => "groups.php"
+    );
+
+    $tpl=new template("displayGroup", array(
+        "title"         => $title,
+        "actionlinks"   => $actionlinks,
+        "obj"           => $group,
+        "fields"        => $group->getDisplayArray(),
+        "watermark"     => conf::get("watermark.enable"),
+        "permissions"   => $perms
+    ));
+    echo $tpl;
 } else if ($action == "confirm") {
     ?>
     <h1>
