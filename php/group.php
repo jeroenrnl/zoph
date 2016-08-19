@@ -148,26 +148,17 @@ if ($action == "display") {
     ));
     echo $tpl;
 } else if ($action == "confirm") {
-    ?>
-    <h1>
-      <ul class="actionlink">
-        <li><a href="group.php?_action=display&amp;group_id=<?php echo $group->get("group_id") ?>">
-          <?php echo translate("cancel") ?>
-        </a></li>
-      </ul>
-      <?php echo translate("delete group") ?>
-    </h1>
-    <div class="main">
-      <ul class="actionlink">
-        <li><a href="group.php?_action=confirm&amp;group_id=<?php echo $group->get("group_id") ?>">
-          <?php echo translate("delete") ?>
-        </a></li>
-        <li><a href="group.php?_action=display&amp;group_id=<?php echo $group->get("group_id") ?>">
-          <?php echo translate("cancel") ?>
-        </a></li>
-      </ul>
-      <?php echo sprintf(translate("Confirm deletion of '%s'"), $group->get("group_name")) ?>
-      <?php
+    $actionlinks=array(
+        translate("delete") => "group.php?_action=confirm&amp;group_id=" . $group->getId(),
+        translate("cancel") => "group.php?_action=display&amp;group_id=" . $group->getId(),
+    );
+    $tpl=new template("confirm", array(
+        "title"             => translate("delete group"),
+        "actionlinks"       => null,
+        "mainActionlinks"   => $actionlinks,
+        "obj"               => $group
+    ));
+    echo $tpl;
 } else {
     require_once "edit_group.inc.php";
     ?>
