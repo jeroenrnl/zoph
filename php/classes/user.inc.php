@@ -199,8 +199,8 @@ class user extends zophTable {
      */
     public function getPhotoPermissions(photo $photo) {
         $permissions=null;
-        foreach($photo->getAlbums() as $album) {
-            if($this->isCreator($album)) {
+        foreach ($photo->getAlbums() as $album) {
+            if ($this->isCreator($album)) {
                 $permissions=new group_permissions(0,$album->getId());
                 $permissions->set("access_level", 9);
                 $permissions->set("watermark_level", 0);
