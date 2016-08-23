@@ -177,12 +177,12 @@ class cli {
 
         if (substr($path,0,2)=="./") {
             // Path relative to the current dir given, change into absolute path
-            $path="/" . cleanup_path(getcwd() . "/" . $path);
+            $path="/" . file::cleanupPath(getcwd() . "/" . $path);
         }
         if ($path[0]=="/") {
             // absolute path given
 
-            $path="/" . cleanup_path($path) . "/";
+            $path="/" . file::cleanupPath($path) . "/";
 
             // check if path is in conf::get("path.images")
             if (substr($path, 0, strlen(conf::get("path.images")))!=conf::get("path.images")) {
@@ -196,7 +196,7 @@ class cli {
                 }
             }
         } else {
-            $path=cleanup_path($path);
+            $path=file::cleanupPath($path);
         }
         $photos=photo::getByName($filename, $path);
         if (sizeof($photos)==0) {

@@ -414,16 +414,16 @@ class photo extends zophTable {
             }
 
             if (conf::get("import.dated.hier")) {
-                $newPath .= cleanup_path(str_replace("-", "/", $date));
+                $newPath .= file::cleanupPath(str_replace("-", "/", $date));
             } else {
-                $newPath .= cleanup_path(str_replace("-", ".", $date));
+                $newPath .= file::cleanupPath(str_replace("-", ".", $date));
             }
         }
-        $toPath="/" . cleanup_path(conf::get("path.images") . "/" . $newPath) . "/";
+        $toPath="/" . file::cleanupPath(conf::get("path.images") . "/" . $newPath) . "/";
 
         $path=$file->getPath();
-        create_dir_recursive($toPath . "/" . MID_PREFIX);
-        create_dir_recursive($toPath . "/" . THUMB_PREFIX);
+        file::createDirRecursive($toPath . "/" . MID_PREFIX);
+        file::createDirRecursive($toPath . "/" . THUMB_PREFIX);
 
         if ($path ."/" != $toPath) {
             $file->setDestination($toPath);
@@ -475,7 +475,7 @@ class photo extends zophTable {
             $this->set("name", $newname);
         }
         // Update the db to the new path;
-        $this->set("path", cleanup_path($newPath));
+        $this->set("path", file::cleanupPath($newPath));
     }
 
     /**
@@ -1530,7 +1530,6 @@ class photo extends zophTable {
         }
         $qry->addParam(new param(":hash", $hash, PDO::PARAM_STR));
         $qry->where($where);
-
         $photos=static::getRecordsFromQuery($qry);
         if (is_array($photos) && sizeof($photos) > 0) {
             return $photos[0];
