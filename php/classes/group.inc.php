@@ -118,6 +118,7 @@ class group extends zophTable {
                     $albumPermissions->wm=$permissions->get("watermark_level");
                 }
                 $albumPermissions->writable=$permissions->get("writable");
+                $albumPermissions->subalbums=$permissions->get("subalbums");
                 $perms[]=$albumPermissions;
             }
         }

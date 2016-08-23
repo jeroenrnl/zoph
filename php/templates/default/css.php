@@ -940,6 +940,7 @@ table.permissions   {
 table.permissions td, table.permissions th  {
     background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
+    text-align: left;
 }
 
 table.permissions col {

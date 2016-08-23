@@ -41,6 +41,7 @@ if (!ZOPH) {
                 <th><?= translate("watermark level") ?></th>
             <?php endif ?>
             <th><?php echo translate("writable"); ?></th>
+            <th><?php echo translate("grant to subalbums"); ?></th>
         </tr>
         <tr>
             <td>
@@ -81,6 +82,9 @@ if (!ZOPH) {
             <td>
                 <?php echo template::createYesNoPulldown("writable_new", "0") ?>
             </td>
+            <td>
+                <?php echo template::createYesNoPulldown("subalbums_new", "0") ?>
+            </td>
         </tr>
         <tr>
             <td colspan="4" class="permremove">
@@ -107,6 +111,9 @@ if (!ZOPH) {
                 <?php endif ?>
                 <td>
                     <?= template::createYesNoPulldown("writable__" . $perm->id, $perm->writable) ?>
+                </td>
+                <td>
+                    <?= template::createYesNoPulldown("subalbums__" . $perm->id, $perm->subalbums) ?>
                 </td>
             </tr>
         <?php endforeach ?>

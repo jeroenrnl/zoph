@@ -44,6 +44,7 @@ if (!ZOPH) {
                 <th><?= translate("watermark level") ?></th>
             <?php endif ?>
             <th><?= translate("writable") ?></th>
+            <th><?= translate("grant to subalbums") ?></th>
         </tr>
         <?php foreach ($tpl_permissions as $perm): ?>
             <tr>
@@ -53,6 +54,7 @@ if (!ZOPH) {
                     <td><?= $perm->wm ?></td>
                 <?php endif ?>
                 <td><?= $perm->writable == 1 ? translate("Yes") : translate("No") ?></td>
+                <td><?= $perm->subalbums == 1 ? translate("Yes") : translate("No") ?></td>
             </tr>
         <?php endforeach ?>
     </table>
