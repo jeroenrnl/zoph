@@ -178,7 +178,7 @@ class file {
      * @param string destination of the file
      */
     public function setDestination($path) {
-        $this->destPath="/" . cleanup_path($path) . "/";
+        $this->destPath="/" . file::cleanupPath($path) . "/";
         $this->destName=basename($this->readlink());
     }
 
@@ -355,6 +355,56 @@ class file {
             }
         }
         return $return;
+    }
+
+    /**
+     * Cleans up a path, by removing all double slashes, "/./",
+     * leading and trailing slashes.
+     */
+    public static function cleanupPath($path) {
+        $search = array ( "/(\/+)/", "/(\/\.\/)/", "/(\/$)/", "/(^\/)/" );
+        $replace = array ( "/", "/", "", "" );
+        return preg_replace($search,$replace, $path);
+    }
+
+    /**
+     * Create a directory
+     * @param string directory to create
+     * @return bool true when succesful
+     * @throws FileDirCreationFailedException when creation fails
+     */
+    private static function createDir($directory) {
+        if (file_exists($directory) == false) {
+            if (@mkdir($directory, octdec(conf::get("import.dirmode")))) {
+                if (!defined("CLI") || conf::get("import.cli.verbose")>=1) {
+                    log::msg(translate("Created directory") . ": $directory", log::NOTIFY, log::GENERAL);
+                }
+                return true;
+            } else {
+                throw new FileDirCreationFailedException(
+                    translate("Could not create directory") . ": $directory<br>\n");
+            }
+        }
+    }
+
+    /**
+     * Recursively create directory
+     * checks if the parent dir of the dir to be created exists and if not so, tries to
+     * create it first
+     * @param string directory to create
+     * @return bool true when succesful
+     */
+    public static function createDirRecursive($directory) {
+        $directory="/" . static::cleanupPath($directory);
+
+        if (!file_exists(dirname($directory))) {
+            static::createDirRecursive(dirname($directory));
+        }
+        try {
+            static::createDir($directory);
+        } catch (FileDirCreationFailedException $e) {
+                log::msg($e->getMessage(), log::FATAL, log::GENERAL);
+        }
     }
 }
 ?>
