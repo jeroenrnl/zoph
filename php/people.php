@@ -156,8 +156,9 @@ if ($ppl) {
 }
 
 if (!$ppl && !isset($circles) && !isset($circle)) {
-    $block=new block("error", array(
-        "text"   => $msg
+    $block=new block("message", array(
+        "class" => "error",
+        "text"  => $msg
     ));
     $tpl->addBlock($block);
 }

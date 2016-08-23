@@ -40,19 +40,19 @@ if (!ZOPH) {
         <tr>
             <th><?= translate("name") ?></th>
             <th><?= translate("access level") ?></th>
-            <?php if($tpl_watermark): ?>
+            <?php if ($tpl_watermark): ?>
                 <th><?= translate("watermark level") ?></th>
             <?php endif ?>
             <th><?= translate("writable") ?></th>
         </tr>
-        <?php foreach($tpl_permissions as $perm): ?>
+        <?php foreach ($tpl_permissions as $perm): ?>
             <tr>
                 <td><?= $perm->name ?></td>
                 <td><?= $perm->access ?></td>
-                <?php if($tpl_watermark): ?>
+                <?php if ($tpl_watermark): ?>
                     <td><?= $perm->wm ?></td>
                 <?php endif ?>
-                <td><?= $perm->writable ?></td>
+                <td><?= $perm->writable == 1 ? translate("Yes") : translate("No") ?></td>
             </tr>
         <?php endforeach ?>
     </table>

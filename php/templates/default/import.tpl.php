@@ -30,14 +30,14 @@ if (!ZOPH) { die("Illegal call"); }
     <h1>
         <?php echo translate("import photos"); ?>
     </h1>
-    <noscript>
-      <div class='warning'>
-        <img class='icon' src='<?php echo template::getImage("icons/warning.png") ?>'>
-        <?php echo translate("This page needs Javascript switched on and will not " .
-            "function without it."); ?>
-      </div>
-   </noscript>
     <div class="main">
+        <noscript>
+          <div class="message warning">
+            <img class="icon" src="<?= template::getImage("icons/warning.png") ?>">
+            <?= translate("This page needs Javascript switched on and will not " .
+                "function without it."); ?><br>
+          </div>
+       </noscript>
         <div class="import_uploads">
             <h2><?php echo translate("Upload photo",0);?></h2>
             <iframe class="upload" id="upload_<?php echo $tpl_num; ?>"

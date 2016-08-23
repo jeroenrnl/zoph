@@ -127,8 +127,8 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
      */
     ?>
     <h1><?php echo translate("search") ?></h1>
-    <?php echo check_js($user); ?>
     <div class="main">
+        <?= template::showJSwarning() ?>
       <form method="GET" action="search.php">
         <!-- There is a search button here to make it the first submit
              in the form for submit on Enter -->

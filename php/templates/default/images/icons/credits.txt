@@ -31,6 +31,7 @@ http://creativecommons.org/licenses/by-sa/2.5/
 64x64/actions/button_cancel.png error.png
 64x64/actions/configure.png 	configure.png
 64x64/actions/messagebox_warning.png warning.png
+64x64/actions/messagebox_info.png info.png
 64x64/actions/player_pause.png 	pause.png
 64x64/actions/window_fullscreen.png unpack.png
 64x64/actions/window_nofullscreen.png resize.png

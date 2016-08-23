@@ -491,7 +491,7 @@ ul.breadcrumbs.firstdots li:first-child:before {
 }
 
 /* Main page */
-.main, .info, .page, div.map, div#selection, .warning   {
+.main, .page, div.map, div#selection  {
     background: <?php echo color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     width: 100%;
@@ -506,15 +506,6 @@ ul.breadcrumbs.firstdots li:first-child:before {
 .main > div.map {
     left: -1px;
     padding: 0;
-}
-
-div.warning {
-    background: #ffffcc;
-}
-
-div.warning img.icon {
-    float: left;
-    margin-right: 10px;
 }
 
 div.map {
@@ -688,7 +679,7 @@ table.tracks tr:nth-child(odd) {
     background: <?php echo color_scheme::getColor("title_bg_color") ?>;
 }
 
-p.main, p.info {
+p.main, {
     padding: 4px;
 }
 
@@ -1979,9 +1970,37 @@ table.calendar th {
     font-size: x-small;
 }
 
-/* Error message */
-.error  {
+/* message */
+.message  {
     text-align: center;
+    margin: 10px 0px;
+    padding:12px;
+    clear: both;
+}
+
+div.message img.icon {
+    float: left;
+    margin-right: 10px;
+}
+
+.info {
+    color: #00529B;
+    background-color: #BDE5F8;
+}
+
+.success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+
+.warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+}
+
+.error {
+    color: #D8000C;
+    background-color: #FFBABA;
 }
 
 /* The copyright statement at the bottom of the page */

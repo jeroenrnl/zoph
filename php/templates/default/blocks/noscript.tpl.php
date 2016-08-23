@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for displaying an error
+ * Template for displaying "noscript" warnings
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +15,13 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package ZophTemplates
  * @author Jeroen Roos
+ * @package ZophTemplates
  */
-
-if (!ZOPH) { die("Illegal call"); }
+if (!ZOPH) {
+    die("Illegal call");
+}
 ?>
-
-<div class="error">
-    <?php echo $tpl_text ?>
-</div>
-
-
+<noscript>
+    <?= $this->displayBlocks(); ?>
+</noscript>

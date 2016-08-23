@@ -50,14 +50,16 @@ if ($_action=="" || $_action=="display") {
             "tracks" => $tracks
         ));
     } else {
-        $content=new block("error", array(
-            "error" => translate("No tracks found, you should import a GPX file.")
+        $content=new block("message", array(
+            "class" => "warning",
+            "text" => translate("No tracks found, you should import a GPX file.")
         ));
     }
 } else if ($_action=="geotag") {
     if ($num_photos<= 0) {
-        $content=new block("error", array(
-            "error" => translate("No photos were found matching your search criteria.")
+        $content=new block("message", array(
+            "class" => "error",
+            "text" => translate("No photos were found matching your search criteria.")
         ));
     } else {
         $hidden=$vars;

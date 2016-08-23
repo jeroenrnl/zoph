@@ -98,6 +98,32 @@ class group extends zophTable {
     }
 
     /**
+     * Create an array describing permissions for all albums
+     * for display or edit
+     */
+    public function getPermissionArray() {
+        $albums = album::getSelectArray();
+        $perms=array();
+        foreach ($albums as $id => $name) {
+            if (!$id || $id == 1) {
+                continue;
+            }
+            $permissions = $this->getGroupPermissions(new album((int) $id));
+            if ($permissions) {
+                $albumPermissions=new stdClass();
+                $albumPermissions->id=$id;
+                $albumPermissions->name=$name;
+                $albumPermissions->access=$permissions->get("access_level");
+                if (conf::get("watermark.enable")) {
+                    $albumPermissions->wm=$permissions->get("watermark_level");
+                }
+                $albumPermissions->writable=$permissions->get("writable");
+                $perms[]=$albumPermissions;
+            }
+        }
+        return $perms;
+    }
+    /**
      * Get members of this group
      * @return array of users
      */
