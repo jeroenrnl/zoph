@@ -913,7 +913,7 @@ class photoTest extends ZophDataBaseTestCase {
     }
 
     public function testGetTotalSize() {
-        $this->assertEquals("204459", photo::getTotalSize());
+        $this->assertEquals("281761", photo::getTotalSize());
     }
 
     /**
@@ -1057,9 +1057,9 @@ class photoTest extends ZophDataBaseTestCase {
 
     public function getHashData() {
         return array(
-            array("1c52decf9f59d43da618b757dee9afb5cfdd5b28", "file", 1),
-            array("0dfae93cebb4a00629d72558907ff883f181fb2a", "full", 4),
-            array("e2f14b5f7dd442032106e9a9af8cd7338ce3ee9d", "mid", 7)
+            array("9b9d7d5bdab9cff42e74d401c954ab0d48754daf", "file", 1),
+            array("5cc01c1cf7bfd48873cf6ce3ab3c8eeca292e14e", "full", 4),
+            array("ed454ede0a99a6f73782f6da240db6274b29a1b5", "mid", 7)
         );
     }
 
