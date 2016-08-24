@@ -37,7 +37,6 @@ require_once "track.inc.php";
 require_once "point.inc.php";
 
 
-require_once "group_permissions.inc.php";
 require_once "color_scheme.inc.php";
 require_once "prefs.inc.php";
 

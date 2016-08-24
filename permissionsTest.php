@@ -1,6 +1,6 @@
 <?php
 /**
- * Group Permissions Test
+ * Permissions Test
  *
  * This file is part of Zoph.
  *
@@ -24,22 +24,22 @@
 require_once "testSetup.php";
 
 /**
- * Test group_permissions class.
+ * Test Permissions class.
  *
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class groupPermissionsTest extends ZophDataBaseTestCase {
+class permissionsTest extends ZophDataBaseTestCase {
 
     /**
-     * Create group permissions in the db
-     * @dataProvider getGroupPermissions();
+     * Create permissions in the db
+     * @dataProvider getPermissions();
      */
-    public function testCreateGroupPermissions($group, $albums, $al, $wml, $wr) {
+    public function testCreatePermissions($group, $albums, $al, $wml, $wr) {
         $gr=new group($group);
         $gr->lookup();
         foreach ($albums as $alb) {
-            $prm=new group_permissions($group, $alb);
+            $prm=new permissions($group, $alb);
             $prm->set("access_level", $al);
             $prm->set("watermark_level", $wml);
             $prm->set("writable", $wr);
@@ -52,7 +52,7 @@ class groupPermissionsTest extends ZophDataBaseTestCase {
         }
     }
 
-    public function getGroupPermissions() {
+    public function getPermissions() {
         return array(
             array(5, array(1,2,3), 4,0,false),
             array(5, array(4,5,6), 2,2,false),

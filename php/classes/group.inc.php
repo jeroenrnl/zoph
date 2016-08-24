@@ -61,10 +61,10 @@ class group extends zophTable {
     /**
      * Get permissions for a group
      * @param album Album to lookup permissions for
-     * @return group_permissions Permissions object
+     * @return permissions Permissions object
      */
     public function getGroupPermissions(album $album) {
-        $gp = new group_permissions($this->getId(), $album->getId());
+        $gp = new permissions($this->getId(), $album->getId());
         if ($gp->lookup()) {
             return $gp;
         }

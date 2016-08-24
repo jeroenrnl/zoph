@@ -33,7 +33,7 @@ if ($_action == "update_albums") {
     if ($_access_level_all_checkbox) {
         $albums = album::getAll();
         foreach ($albums as $alb) {
-            $permissions = new group_permissions($group_id, $alb->get("album_id"));
+            $permissions = new permissions($group_id, $alb->get("album_id"));
             $permissions->setFields($request_vars, "", "_all");
             if (!conf::get("watermark.enable")) {
                 $permissions->set("watermark_level", 0);
@@ -52,18 +52,18 @@ if ($_action == "update_albums") {
             $remove_permission_album = $request_vars["_remove_permission_album__$id"];
             // first check if album needs to be revoked
             if ($remove_permission_album) {
-                $permissions = new group_permissions($group_id, $id);
+                $permissions = new permissions($group_id, $id);
                 $permissions->delete();
             }
         } else {
-            $permissions = new group_permissions();
+            $permissions = new permissions();
             $permissions->setFields($request_vars, "", "__$id");
             $permissions->update();
         }
     }
     // Check if new album should be added
     if ($album_id_new) {
-        $permissions = new group_permissions();
+        $permissions = new permissions();
         $permissions->setFields($request_vars,"","_new");
         if (!conf::get("watermark.enable")) {
             $permissions->set("watermark_level", 0);

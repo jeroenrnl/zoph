@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * This class corresponds to the group_permissions table which maps a group_id
  * to a ablum_id + access_level + writable flag.  If the user is not an admin,
  * access to any photo must involve a join with this table to make sure the
@@ -20,9 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
-class group_permissions extends zophTable {
+class permissions extends zophTable {
     /** @var string The name of the database table */
     protected static $tableName="group_permissions";
     /** @var array List of primary keys */
@@ -36,13 +39,27 @@ class group_permissions extends zophTable {
     protected static $url="group.php?group_id=";
 
 
-    function __construct($gid = -1, $aid = -1) {
-        if ($gid && !is_numeric($gid)) { die("group_id must be numeric"); }
-        if ($aid && !is_numeric($aid)) { die("album_id must be numeric"); }
+    /**
+     * Create a new permissions object
+     * @param int group id
+     * @param int album id
+     */
+    public function __construct($gid = -1, $aid = -1) {
+        if ($gid && !is_numeric($gid)) {
+            die("group_id must be numeric");
+        }
+        if ($aid && !is_numeric($aid)) {
+            die("album_id must be numeric");
+        }
         $this->set("group_id", $gid);
         $this->set("album_id", $aid);
     }
 
+    /**
+     * Get the Id of this object
+     * since this object has a composite Id, it will return an array
+     * @return array [ group_id , album_id ]
+     */
     public function getId() {
         return array(
             "group_id" => (int) $this->get("group_id"),
@@ -50,19 +67,25 @@ class group_permissions extends zophTable {
             );
     }
 
-    function insert() {
+    /**
+     * Insert a new permissions object into the db
+     * Because of the way permissions work, if the album in question is a child of another
+     * album (which it will be in most cases - except for the root album), this will
+     * work it's way up in the album tree, until there is an album that this user already
+     * has access to.
+     */
+    public function insert() {
         // check if this entry already exists
         if ($this->lookup()) {
             return;
         }
 
-        // insert records for anc/uiestor albums if they don't exist
+        // insert records for ancestor albums if they don't exist
         $album = new album($this->get("album_id"));
         $album->lookup();
 
         if ($album->get("parent_album_id") > 0) {
-            $gp = new group_permissions(
-                $this->get("group_id"), $album->get("parent_album_id"));
+            $gp = new self($this->get("group_id"), $album->get("parent_album_id"));
 
             $gp->set("access_level", $this->get("access_level"));
             $gp->set("watermark_level", $this->get("watermark_level"));
@@ -74,7 +97,13 @@ class group_permissions extends zophTable {
         parent::insert();
     }
 
-    function delete() {
+    /**
+     * Delete a Permissions object from the db
+     * Because of the way permissions work, if the album in question has children,
+     * this will work it's way DOWN in the album tree, to remove access rights to
+     * any descendant albums.
+     */
+    public function delete() {
 
         // delete records for descendant albums if they exist
         $album = new album($this->get("album_id"));
@@ -82,8 +111,7 @@ class group_permissions extends zophTable {
 
         $children = $album->getChildren();
         foreach ($children as $child) {
-            $gp = new group_permissions(
-                $this->get("group_id"), $child->get("album_id"));
+            $gp = new self($this->get("group_id"), $child->get("album_id"));
 
             if ($gp->lookup()) {
                 $gp->delete();
