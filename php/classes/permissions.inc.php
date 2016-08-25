@@ -95,6 +95,20 @@ class permissions extends zophTable {
         }
 
         parent::insert();
+        $this->permitSubalbums();
+    }
+
+    /**
+     * Update an already existing permission in the database
+     * Permissions are propagated to subalbums if the setting is changed.
+     */
+    public function update() {
+        $current = new self($this->get("group_id"), $this->get("album_id"));
+        $current->lookup();
+        parent::update();
+        if ($current->get("subalbums") === "0" && $this->get("subalbums") === "1") {
+            $this->permitSubalbums();
+        }
     }
 
     /**
@@ -120,6 +134,29 @@ class permissions extends zophTable {
 
         parent::delete();
     }
+
+    /**
+     * If this permission has "grant to subalbums" set, we will go through the
+     * children of the album in question and add permissions for those albums as
+     * well
+     */
+    private function permitSubalbums() {
+        if ($this->get("subalbums")) {
+            $this->lookup();
+            $album = new album($this->get("album_id"));
+            $album->lookup();
+            $children = $album->getChildren();
+            foreach ($children as $child) {
+                $gp = new self($this->get("group_id"), $child->get("album_id"));
+                $gp->set("access_level", $this->get("access_level"));
+                $gp->set("watermark_level", $this->get("watermark_level"));
+                $gp->set("writable", $this->get("writable"));
+                $gp->set("subalbums", $this->get("subalbums"));
+                $gp->insert();
+            }
+        }
+    }
+
 
 }
 

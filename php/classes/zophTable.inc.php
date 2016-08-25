@@ -172,7 +172,7 @@ abstract class zophTable {
 
     /**
      * Looks up a record.
-     * @return mixed 1 or 0
+     * @return bool success or fail
      * @todo Should return something more sensible
      */
     public function lookup() {
@@ -193,6 +193,7 @@ abstract class zophTable {
     /**
      * Looks up a record using supplied SQL query
      * @param select SQL query to use
+     * @return bool success or fail
      */
     public function lookupFromSQL(select $qry) {
         try {
@@ -209,10 +210,10 @@ abstract class zophTable {
             $this->fields = array();
             $this->fields = array_merge($this->fields, $row);
 
-            return 1;
+            return true;
         }
 
-        return 0;
+        return false;
     }
 
     /**

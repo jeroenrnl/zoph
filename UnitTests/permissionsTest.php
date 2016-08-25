@@ -52,6 +52,27 @@ class permissionsTest extends ZophDataBaseTestCase {
         }
     }
 
+    public function testCreatePermissionsWithSubalbums() {
+        $perm = new permissions(2,7);
+        $perm->set("access_level", 5);
+        $perm->set("watermark_level", 5);
+        $perm->set("writable", 0);
+        $perm->set("subalbums", 1);
+
+        $perm->insert();
+        // Check if the new permissions have been inserted
+        $perm = new permissions(2,7);
+        $this->assertTrue($perm->lookup());
+
+        // ...and check if the subalbums have automatically received the new permissions
+        $perm = new permissions(2,9);
+        $this->assertTrue($perm->lookup());
+
+        $perm = new permissions(2,10);
+        $this->assertTrue($perm->lookup());
+
+    }
+
     public function getPermissions() {
         return array(
             array(5, array(1,2,3), 4,0,false),
