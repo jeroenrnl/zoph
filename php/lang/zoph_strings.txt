@@ -761,3 +761,5 @@ yes=
 zip or zip+4=
 zip=
 zoom level=
+Trash dir=
+Directory where photos are moved when they are deleted. If left blank, files will remain where they were. This is a directory under the images directory (above). For example, if the images directory is set to /data/images and this is set to trash, photos will be moved to /data/images/trash.=

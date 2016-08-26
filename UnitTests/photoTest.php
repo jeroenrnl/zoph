@@ -182,6 +182,56 @@ class photoTest extends ZophDataBaseTestCase {
     }
 
     /**
+     * Test deleting a photo
+     * @dataProvider getImagesDelete
+     */
+    public function testDelete($name, $trash=false) {
+
+        user::setCurrent(new user(1));
+        if (file_exists(conf::get("path.images") . "/" . $name)) {
+            unlink(conf::get("path.images") . "/" . $name);
+        }
+        if (file_exists(conf::get("path.images") . "/trash/" . $name)) {
+            unlink(conf::get("path.images") . "/trash/" . $name);
+        }
+
+        helpers::createTestImage($name, "black", "red", array());
+        $photos=array(new file("/tmp/" . $name));
+        conf::set("import.cli.thumbs", true);
+        conf::set("import.cli.size", true);
+
+        $imported=cliimport::photos($photos, array());
+
+        $full=$imported[0]->getFilePath();
+        $mid=$imported[0]->getFilePath(MID_PREFIX);
+        $thumb=$imported[0]->getFilePath(THUMB_PREFIX);
+
+        $filename=$imported[0]->get("name");
+
+        foreach (array($full, $mid, $thumb) as $file) {
+            $this->assertFileExists($file);
+        }
+
+
+        if ($trash) {
+            conf::set("path.trash", "trash");
+            $imported[0]->delete();
+            foreach (array($full, $mid, $thumb) as $file) {
+                $this->assertFileNotExists($file);
+            }
+            $this->assertFileExists(conf::get("path.images") . "/trash/" . $name);
+        } else {
+            conf::set("path.trash", "");
+            $imported[0]->delete();
+            foreach (array($full, $mid, $thumb) as $file) {
+                $this->assertFileExists($file);
+            }
+        }
+        $this->assertFalse($imported[0]->lookup());
+
+    }
+
+    /**
      * Test thumbnail link
      */
     public function testGetThumbnailLink() {
@@ -960,6 +1010,13 @@ class photoTest extends ZophDataBaseTestCase {
                 array("DateTimeOriginal" => "2012-12-31 15:00:00")),
             array(13, "FILE_0003.JPG", "yellow", "blue",
                 array("DateTimeOriginal" => "2013-01-01 14:00:00"))
+         );
+    }
+
+    public function getImagesDelete() {
+        return array(
+            array("DELETE_0001.JPG", false),
+            array("DELETE_0002.JPG", true)
          );
     }
 

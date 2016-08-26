@@ -172,9 +172,23 @@ class photo extends zophTable {
 
     /**
      * Delete this photo from database
-     * does not delete the photo on disk
      */
     public function delete() {
+        if (conf::get("path.trash")) {
+            $this->lookup();
+            $mid=new file($this->getFilePath(MID_PREFIX));
+            $mid->delete();
+            $thumb=new file($this->getFilePath(THUMB_PREFIX));
+            $thumb->delete();
+            $photo=new file($this->getFilePath());
+            $trash=conf::get("path.images") . DIRECTORY_SEPARATOR . conf::get("path.trash");
+            if (!file_exists($trash)) {
+                file::createDirRecursive($trash);
+            }
+            $photo->setDestination($trash);
+            $photo->move();
+        }
+
         parent::delete(array(
             "photo_people",
             "photo_categories",
