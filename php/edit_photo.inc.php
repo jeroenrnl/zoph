@@ -28,11 +28,11 @@ if ($num_photos) {
 ?>
   </h1>
 <?php
-  echo check_js($user);
   require_once "selection.inc.php";
 ?>
 
 <div class="main">
+    <?= template::showJSwarning() ?>
 <form action="photo.php" method="POST">
 <input type="hidden" name="_action" value="<?php echo $action ?>">
 <input type="hidden" name="_qs" value="<?php echo $return_qs ?>">

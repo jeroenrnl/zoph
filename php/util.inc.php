@@ -443,23 +443,6 @@ function getHuman($bytes) {
     }
 }
 
-function check_js($user) {
-    if (($user->prefs->get("autocomp_albums")) ||
-        ($user->prefs->get("autocomp_categories")) ||
-        ($user->prefs->get("autocomp_places")) ||
-        ($user->prefs->get("autocomp_people")) ||
-        ($user->prefs->get("autocomp_photographer")) &&
-        conf::get("interface.autocomplete")) {
-
-        return "<noscript><div class='warning'><img class='icon' src='" .
-            template::getImage("icons/warning.png") . "'>" .
-            translate("You have enabled autocompletion for one or more dropdown " .
-                "boxes on this page, however, you do not seem to have Javascript " .
-                "support. You should either enable javascript or turn autocompletion " .
-                "off, or this page will not work as expected!") . "</div></noscript>";
-    }
-}
-
 function redirect($url = "zoph.php", $msg = "Access denied") {
     if (!((LOG_SUBJECT & log::REDIRECT) && (LOG_SEVERITY >= log::DEBUG))) {
         header("Location: " . $url);

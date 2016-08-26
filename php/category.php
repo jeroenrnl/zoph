@@ -87,6 +87,7 @@ if ($action == "confirm") {
     <?php echo translate("category") ?>
     </h1>
     <div class="main">
+      <?= template::showJSwarning() ?>
       <form action="category.php">
         <input type="hidden" name="_action" value="<?php echo $action ?>">
         <input type="hidden" name="category_id" value="<?php echo $category->getId() ?>">

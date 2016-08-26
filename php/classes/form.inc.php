@@ -36,13 +36,17 @@ class form extends block {
      * @param string input hint
      * @param int size of the field
      */
-    public function addInputText($name, $value, $label=null, $hint=null, $size=32) {
+    public function addInputText($name, $value, $label=null, $hint=null, $maxlength=32, $size=null) {
+        if (!$size) {
+            $size=$maxlength;
+        }
         $this->addBlock(new block("formInputText", array(
             "name"  => $name,
             "value" => e($value),
             "label" => e($label),
             "hint"  => e($hint),
-            "size"  => (int) $size
+            "size"  => (int) $size,
+            "maxlength"  => (int) $maxlength
         )));
     }
 

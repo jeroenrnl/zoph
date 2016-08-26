@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for HTML input field text
+ * Template for displaying a message to the user
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,20 +19,13 @@
  * @author Jeroen Roos
  */
 
-if (!ZOPH) {
-    die("Illegal call");
-}
+if (!ZOPH) { die("Illegal call"); }
 ?>
 
-<?php if ($tpl_label): ?>
-    <label for="<?= $tpl_name ?>">
-        <?= $tpl_label ?>
-    </label>
-<?php endif; ?>
-<input type="text" name="<?= $tpl_name ?>" maxlength="<?= $tpl_maxlength ?>" size="<?= $tpl_size ?>" value="<?= $tpl_value ?>">
-<?php if (!empty($tpl_hint)): ?>
-    <span class="inputhint">
-        <?php echo $tpl_hint ?>
-    </span>
-<?php endif; ?>
-<br>
+<div class="message <?= $tpl_class ?>">
+    <img class='icon' src='<?php echo template::getImage("icons/" . $tpl_class . ".png") ?>'>
+    <?= $tpl_text ?>
+    <br>
+</div>
+
+
