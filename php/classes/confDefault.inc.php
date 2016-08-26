@@ -283,6 +283,19 @@ class confDefault extends conf {
             "slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
         $path[]=$pathUpload;
 
+        $pathTrash = new confItemString();
+        $pathTrash->setName("path.trash");
+        $pathTrash->setLabel("Trash dir");
+        $pathTrash->setDesc("Directory where photos are moved when they are " .
+            "deleted. If left blank, files will remain where they were. This is a directory " .
+            "under the images directory (above). For example, if the images directory is set to " .
+            "/data/images and this is set to trash, photos will be moved to /data/images/trash.");
+        $pathTrash->setDefault("");
+        $pathTrash->setRegex("^[A-Za-z0-9_]*[A-Za-z0-9_\.\/]*$");
+        $pathTrash->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
+            "slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
+        $path[]=$pathTrash;
+
         $pathMagic = new confItemString();
         $pathMagic->setName("path.magic");
         $pathMagic->setLabel("Magic file");
