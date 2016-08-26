@@ -56,8 +56,8 @@ class permissionsTest extends ZophDataBaseTestCase {
         $perm = new permissions(2,7);
         $perm->set("access_level", 5);
         $perm->set("watermark_level", 5);
-        $perm->set("writable", 0);
-        $perm->set("subalbums", 1);
+        $perm->set("writable", "0");
+        $perm->set("subalbums", "1");
 
         $perm->insert();
         // Check if the new permissions have been inserted
@@ -70,6 +70,58 @@ class permissionsTest extends ZophDataBaseTestCase {
 
         $perm = new permissions(2,10);
         $this->assertTrue($perm->lookup());
+
+    }
+
+    /**
+     * Test update permissions in the db
+     * this also tests the delete() function
+     */
+    public function testUpdatePermissionsWithSubalbums() {
+        $perm = new permissions(2,12);
+        $perm->set("access_level", 5);
+        $perm->set("watermark_level", 5);
+        $perm->set("writable", "0");
+        $perm->set("subalbums", "1");
+        $perm->insert();
+
+        $testAlbum=new album();
+        $testAlbum->set("album", "Album 31");
+        $testAlbum->set("parent_album_id", 12);
+        $testAlbum->insert();
+        $id=$testAlbum->getId();
+
+        // Because of the automatic subalbum permissions, a
+        // permission entry for this album should have been
+        // automatically created. Let's see...
+        $testPerm = new permissions(2, $id);
+        $this->assertTrue($testPerm->lookup());
+
+        // Now we delete this permission.
+        $testPerm->delete();
+
+        // And update the original permissions.
+        $perm->update();
+
+        // Because we did not change the subalbum permission
+        // on the original, it should NOT recreate the permission
+        $testPerm = new permissions(2, $id);
+        $this->assertFalse($testPerm->lookup());
+
+        // But, if we flip the setting, it should be recreated:
+        $perm->set("subalbums", "0");
+        $perm->update();
+        $perm->set("subalbums", "1");
+        $perm->update();
+        $testPerm = new permissions(2, $id);
+        $this->assertTrue($testPerm->lookup());
+
+        // Finally, we delete the original permission
+
+        $perm->delete();
+
+        // This should also delete the new one, let's check
+        $this->assertFalse($testPerm->lookup());
 
     }
 
