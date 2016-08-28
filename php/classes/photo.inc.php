@@ -186,6 +186,7 @@ class photo extends zophTable {
                 file::createDirRecursive($trash);
             }
             $photo->setDestination($trash);
+            $photo->backup=true;
             $photo->move();
         }
 

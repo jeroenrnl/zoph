@@ -40,6 +40,7 @@ class photoTest extends ZophDataBaseTestCase {
     public function setUp() {
         parent::setUp();
         user::setCurrent(new user(1));
+        conf::set("path.trash", "");
     }
 
     /**
@@ -228,6 +229,7 @@ class photoTest extends ZophDataBaseTestCase {
             }
         }
         $this->assertFalse($imported[0]->lookup());
+        conf::set("path.trash", "");
 
     }
 

@@ -39,6 +39,8 @@ class file {
     private $destName;
     /** @var string Destination path when copied or moved */
     private $destPath;
+    /** @var bool Make a backup if the destination file exists */
+    public $backup=false;
 
     /**
      * Create a new file object from a filename
@@ -208,8 +210,20 @@ class file {
               $this->destPath);
         }
         if (file_exists($this->destPath . $this->destName)) {
-            throw new FileExistsException("File already exists: " .
-                $this->destPath . $this->destName);
+            if($this->backup) {
+                $backupname=$this->destName;
+                $counter=1;
+                while(file_exists($this->destPath . $backupname)) {
+                    // Find the . in the filename
+                    $pos=strrpos($this->destName, ".") ?: strlen($file);
+                    $backupname=substr($this->destName, 0, $pos) . "_" . $counter . substr($this->destName, $pos);
+                    $counter++;
+                }
+                rename($this->destPath . $this->destName, $this->destPath . $backupname);
+            } else {
+                throw new FileExistsException("File already exists: " .
+                    $this->destPath . $this->destName);
+            }
         }
         return true;
     }
