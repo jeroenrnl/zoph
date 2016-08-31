@@ -384,9 +384,6 @@ class confDefault extends conf {
         $mapsProvider->setLabel("Mapping provider");
         $mapsProvider->addOption("", "Disabled");
         $mapsProvider->addOption("googlev3", "Google Maps v3");
-        $mapsProvider->addOption("yahoo", "Yahoo maps");
-        $mapsProvider->addOption("cloudmade", "Cloudmade (OpenStreetMap)");
-        $mapsProvider->addOption("openlayers", "OpenLayers (OpenStreetMap)");
         $mapsProvider->setDefault("");
         $maps[]=$mapsProvider;
 
@@ -400,16 +397,6 @@ class confDefault extends conf {
         $mapsGeocode->addOption("geonames", "GeoNames");
         $mapsGeocode->setDefault("");
         $maps[]=$mapsGeocode;
-
-        $mapsKeyCloudmade = new confItemString();
-        $mapsKeyCloudmade->setName("maps.key.cloudmade");
-        $mapsKeyCloudmade->setLabel("Cloudmade Key");
-        $mapsKeyCloudmade->setDesc("API key for Cloudmade Maps. Only needed if using " .
-            "\"Cloudmade\" as provider. You can use Zoph's key (which is the default), " .
-            "but please do not use this key for any other applications.");
-        $mapsKeyCloudmade->setRegex("(^$|[a-z0-9]{32})");
-        $mapsKeyCloudmade->setDefault("f3b46b04edd64ea79066b7e6921205df");
-        $maps[]=$mapsKeyCloudmade;
     }
 
     /**

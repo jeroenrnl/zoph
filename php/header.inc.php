@@ -73,16 +73,6 @@ if (conf::get("maps.provider")) {
     case "googlev3":
         $scripts[]="https://maps.google.com/maps/api/js?sensor=false";
         break;
-    case "yahoo":
-        $scripts[]="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=Zoph";
-        break;
-    case "openlayers":
-        $scripts[]="http://openlayers.org/api/OpenLayers.js";
-        break;
-    case "cloudmade":
-        $scripts[]="http://tile.cloudmade.com/wml/0.2/web-maps-lite.js";
-        $javascript[]="var cloudmade_key = \"" . conf::get("maps.key.cloudmade") . "\"";
-        break;
     }
 }
 
