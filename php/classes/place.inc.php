@@ -157,7 +157,7 @@ class place extends zophTreeTable implements Organizer {
             $user=user::getCurrent();
         }
         $count=$this->getTotalPhotoCount();
-        return ($count > 0 || $user->isCreator($this));
+        return ($count > 0 || $user->isCreator($this) || $user->isAdmin());
     }
 
 
