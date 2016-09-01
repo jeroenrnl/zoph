@@ -1,6 +1,5 @@
 <?php
-
-/*
+/**
  * A class corresponding to the prefs table.  A row of prefs is mapped
  * to a user_id.
  *
@@ -18,8 +17,19 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @package Zoph
  */
 
+/**
+ * A class representing a set of user preferences
+ *
+ * @author Jason Geiger
+ * @author Jeroen Roos
+ * @package Zoph
+ */
 class prefs extends zophTable {
     /** @var string The name of the database table */
     protected static $tableName="prefs";
@@ -36,12 +46,10 @@ class prefs extends zophTable {
 
     private $color_scheme;
 
-    function lookup_color_scheme($force = 0) {
+    private function lookupColorScheme($force = 0) {
 
         // avoid unnecessary lookups
-        if ($this->color_scheme && $this->color_scheme->get("name") != null
-            && !$force) {
-
+        if ($this->color_scheme && $this->color_scheme->get("name") != null && !$force) {
             return $this->color_scheme;
         }
 
@@ -59,8 +67,8 @@ class prefs extends zophTable {
         return 0;
     }
 
-    function load($force = 0) {
-        if ($this->lookup_color_scheme($force)) {
+    public function load($force = 0) {
+        if ($this->lookupColorScheme($force)) {
             color_scheme::setCurrent($this->color_scheme);
         }
     }
