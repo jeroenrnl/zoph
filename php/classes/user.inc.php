@@ -101,6 +101,15 @@ class user extends zophTable {
     }
 
     /**
+     * Is this user the default user?
+     * @return bool
+     */
+    public function isDefault() {
+        $this->lookup();
+        return (conf::get("interface.user.default") == $this->getId());
+    }
+
+    /**
      * Is this user the creator of this organizer?
      * @return bool
      */
