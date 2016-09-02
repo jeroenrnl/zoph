@@ -20,7 +20,7 @@ ALTER TABLE zoph_group_permissions ADD subalbums CHAR(1) NOT NULL DEFAULT '0' AF
 
 INSERT INTO `zoph_color_schemes` VALUES 
 	(0,'steel','cccccc','000000','0000aa','bb0000','eeeeef','222222','6699dd','dddddf','99bbdd','444444','0000bb','bbbbbb','555555'),
-	(0,'happy','ffff77','333333','444444','444444','16c0ff','333333','16c0ff','e43f7d','e43f7d','333333','d32e6c','333333','333333'),
+	(0,'happy','16c0ff','333333','444444','444444','ffff77','333333','ffff77','e43f7d','e43f7d','333333','e43f7d','333333','333333'),
 	(0,'grey - blue','eeeeee','111111','222222','555555','f4f4f4','000000','dddddd','dfdfdf','0000ff','eeeeee','000077','ffffff','131313'),
 	(0,'grey - green','eeeeee','111111','222222','555555','f4f4f4','000000','dddddd','dfdfdf','00dd00','eeeeee','007700','ffffff','131313'),
 	(0,'grey - red','eeeeee','111111','222222','555555','f4f4f4','000000','dddddd','dfdfdf','ff0000','eeeeee','770000','ffffff','131313');
