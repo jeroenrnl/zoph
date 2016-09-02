@@ -140,7 +140,7 @@ if ($action == "display") {
         $name=ucfirst(str_replace("_", " ", $id));
         ?>
         <label for="<?php echo $id ?>"><?php echo $name ?></label>
-        <div class="colordef"><?php echo create_text_input($id, $value, 7, 7) ?></div>
+        <div class="colordef"><input type="color" name="<?= $id ?>" value="#<?= $value?>"></div>
         <div class="color" style="background: #<?php echo $value ?>">&nbsp;
         </div><br>
         <?php
