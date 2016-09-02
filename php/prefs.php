@@ -26,12 +26,30 @@
 require_once "include.inc.php";
 
 $user=user::getCurrent();
-$title=translate("Preferences");
+
+if(getvar("user_id") == -1 && $user->isAdmin()) {
+    $prefs=new prefs(-1);
+    if(!$prefs->lookup()) {
+        $prefs->insert();
+        $prefs->load(1);
+    }
+    $userId=-1;
+    $userName=translate("Default preferences");
+    $actionlinks=array();
+    $title=translate("Default preferences");
+} else {
+    $prefs=$user->prefs;
+    $userId=$user->getId();
+    $userName=$user->getName();
+    $actionlinks=array(translate("change password") => "password.php");
+    $title=translate("Preferences");
+}
 
 if (($_action == "update") && !$user->isDefault()) {
-    $user->prefs->setFields($request_vars);
-    $user->prefs->update();
-    $user->prefs->load(1);
+    $exists=$prefs->lookup();
+    $prefs->setFields($request_vars);
+    $prefs->update();
+    $prefs->load(1);
     $lang = $user->loadLanguage(1);
 }
 
@@ -69,9 +87,9 @@ $sortorder=array(
 
 $tpl=new template("prefs", array(
     "title"             => $title,
-    "prefs"             => $user->prefs,
-    "userId"            => $user->getId(),
-    "userName"          => $user->getName(),
+    "prefs"             => $prefs,
+    "userId"            => $userId,
+    "userName"          => $userName,
     "isAdmin"           => $user->isAdmin(),
     "languages"         => $languages,
     "sortorder"         => $sortorder,
@@ -79,9 +97,7 @@ $tpl=new template("prefs", array(
     "autocomplete"      => conf::get("interface.autocomplete")
 ));
 
-$tpl->addActionlinks(array(
-    translate("change password")    => "password.php"
-));
+$tpl->addActionlinks($actionlinks);
 
 echo $tpl;
 require_once "footer.inc.php";
