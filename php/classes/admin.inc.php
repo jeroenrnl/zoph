@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Functions used in the admin page
  *
@@ -42,7 +41,7 @@ class admin {
      * @param string URL to point to
      * @param string Icon name (only <filename>.png, no path)
      */
-    function __construct($name, $desc, $url, $icon) {
+    public function __construct($name, $desc, $url, $icon) {
         $this->name=$name;
         $this->url=$url;
         $this->desc=$desc;
@@ -69,7 +68,8 @@ class admin {
             new admin("pages", "create or modify zoph pages", "pages.php", "pages.png"),
             new admin("pagesets", "create or modify pagesets", "pagesets.php", "pagesets.png"),
             new admin("tracks", "create or modify GPS tracks", "tracks.php", "tracks.png"),
-            new admin("config", "modify configuration items", "config.php", "configure.png")
+            new admin("config", "modify configuration items", "config.php", "configure.png"),
+            new admin("default preferences", "change default preferences for new users", "prefs.php?user_id=-1", "prefs.png")
         );
     }
 }

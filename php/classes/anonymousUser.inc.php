@@ -31,7 +31,6 @@
  */
 require_once "util.inc.php";
 require_once "variables.inc.php";
-require_once "prefs.inc.php";
 
 /**
  * A class representing an anonymous user of Zoph.

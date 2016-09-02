@@ -36,6 +36,7 @@ http://creativecommons.org/licenses/by-sa/2.5/
 64x64/actions/window_fullscreen.png unpack.png
 64x64/actions/window_nofullscreen.png resize.png
 64x64/apps/ktorrent.png		tracks.png
+64x64/apps/systemsettings.png	prefs.png
 64x64/apps/system-users.png	groups.png
 64x64/apps/userconfig.png	users.png
 64x64/mimetypes/camera.png	favicon.png

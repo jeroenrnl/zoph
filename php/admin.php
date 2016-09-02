@@ -27,7 +27,6 @@ if (!$user->isAdmin()) {
     redirect("zoph.php");
 }
 $title=translate("Adminpage");
-require_once "admin.inc.php";
 $adminpages=admin::getArray();
 
 $tpl=new template("admin", array(
