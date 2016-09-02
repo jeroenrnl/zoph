@@ -145,9 +145,6 @@ div.details {
     -ms-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
 }
 
-dl {
-}
-
 dl dt {
     font-weight: bold;
     width: 15%;
@@ -1236,7 +1233,6 @@ dl.comment,
 dl.page,
 dl.pageset,
 dl photo,
-dl prefs,
 dl.users,
 dl.track {
     margin-top: 0px;
@@ -1251,7 +1247,6 @@ dl.comment dt,
 dl.page dt,
 dl.pageset dt,
 dl.photo dt,
-dl.prefs dt,
 dl.users dt,
 dl.track dt,
 dl.color_scheme dd,
@@ -1259,7 +1254,6 @@ dl.comment dd,
 dl.page dd,
 dl.pageset dd,
 dl.photo dd,
-dl.prefs dd,
 dl.users dd,
 dl.track dd {
     font-size: medium;
@@ -1267,6 +1261,8 @@ dl.track dd {
     padding-right: 4px;
     min-height: 1.3em;
     margin: 4px 0px;
+    position: relative;
+    top: -4px;
     border: none;
 }
 
@@ -1275,7 +1271,6 @@ dl.comment dd,
 dl.page dd,
 dl.pageset dd,
 dl.photo dd,
-dl.prefs dd,
 dl.users dd,
 dl.track dd {
     float: left;
@@ -1283,12 +1278,12 @@ dl.track dd {
     margin: 5px;
 }
 
+form.prefs label,
 dl.color_scheme dt,
 dl.comment dt,
 dl.page dt,
 dl.pageset dt,
 dl.photo dt,
-dl.prefs dt,
 dl.users dt,
 dl.track dt {
     clear: left;
@@ -1296,8 +1291,6 @@ dl.track dt {
     width: 40%;
     font-weight: bold;
     text-align: right;
-    margin-top: 5px;
-    margin-bottom: 5px;
 }
 
 dl.allexif {
@@ -1490,6 +1483,8 @@ textarea.desc {
 
 input, select {
     margin: 2px;
+    position: relative;
+    top: -6px;
 }
 
 input[type="checkbox"] {
@@ -1554,6 +1549,7 @@ table.credits {
 table#users td,
 table.credits td {
     margin: 2px;
+    vertical-align: top;
 }
 
 table#zophinfo {
