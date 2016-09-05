@@ -24,9 +24,9 @@
 body    {
     font-family: Arial, Verdana, sans-serif;
     font-size: medium;
-    color: <?php echo color_scheme::getColor("text_color") ?>;
-    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
-    width: <?php echo conf::get("interface.width"); ?>;
+    color: <?= color_scheme::getColor("text_color") ?>;
+    background: <?= color_scheme::getColor("page_bg_color") ?>;
+    width: <?= conf::get("interface.width"); ?>;
     border: none;
     margin-left: auto; /* To center the page */
     margin-right: auto;
@@ -37,7 +37,7 @@ body    {
 /* Links */
 
 a   {
-    color: <?php echo color_scheme::getColor("link_color") ?>;
+    color: <?= color_scheme::getColor("link_color") ?>;
     background: transparent;
 }
 
@@ -48,9 +48,9 @@ a IMG   {
 }
 
 h1  {
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     text-align: left;
     width: 100%;
     clear: left;
@@ -95,32 +95,38 @@ ul.thumbs {
 }
 
 ul.thumbs > li {
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    //border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
     position: relative;
     display: block;
     text-align: center;
-    width: <?php echo THUMB_SIZE + 40 ?>px;
-    height:<?php echo THUMB_SIZE + 60 ?>px;
+    width: <?= THUMB_SIZE + 40 ?>px;
+    height:<?= THUMB_SIZE + 60 ?>px;
     float:left;
     margin: 5px;
     padding: 5px;
 
     border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
 
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,0.6) inset;
-    -moz-box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,0.6) inset;
 }
 
+div.collapsed > div.ratingdetail,
+div.collapsed > div.timedetail,
+div.import_details,
+div.import_thumbs,
+dl.allexif,
+fieldset.checkboxlist legend,
+fieldset.multiple img.actionlink:last-child,
+form.import fieldset#import_checkboxes,
+li.collapsed > ul.tree,
+span.md5,
 ul.thumbs > li dl.extradata {
     display: none;
 }
 
 ul.thumbs > li.thumb_circle {
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(0,0,0,0.2) inset;
 }
 
@@ -133,16 +139,7 @@ div.details {
     background: rgba(255,255,255,0.9);
 
     border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -o-border-radius: 10px;
-    -ms-border-radius: 10px;
-
     box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-    -moz-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-    -webkit-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-    -o-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-    -ms-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
 }
 
 dl dt {
@@ -166,11 +163,9 @@ div.details > h3 {
     margin: -20px -20px 0 -20px;
     padding: 5px 20px;
     border-radius: 10px 10px 0 0;
-    -moz-border-radius: 10px 10px 0 0;
-    -webkit-border-radius: 10px 10px 0 0;
     width: 100%;
-    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
+    background: <?= color_scheme::getColor("tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("tab_font_color") ?>;
     font-size: large;
     text-align: left;
 }
@@ -194,7 +189,7 @@ div.details > dl > dd {
 
 ul.thumbs > li div.coverphoto {
     width: 100%;
-    height:<?php echo THUMB_SIZE + 20 ?>px;
+    height:<?= THUMB_SIZE + 20 ?>px;
     margin: 0;
     padding: 0;
     clear: right;
@@ -213,7 +208,7 @@ ul.thumbs > li div.name {
 ul.thumbs li img {
     display: block;
     margin: 10px auto;
-    -moz-box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
 ul.list {
@@ -222,7 +217,7 @@ ul.list {
 }
 
 ul.list > li:nth-child(2n) {
-    background-color: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    background-color: <?= color_scheme::getColor("title_bg_color") ?>;
 }
 
 ul.tree {
@@ -235,19 +230,12 @@ ul.tree ul {
     margin: 0;
 }
 
-
-li.collapsed > ul.tree,
-div.collapsed > div.timedetail,
-div.collapsed > div.ratingdetail {
-    display: none;
-}
-
 .collapsed > div.toggle {
     width: 16px;
     height: 16px;
     float: left;
     margin: 0 0 0 -25px;
-    background-image: url("<?php echo template::getImage("icons/1rightarrow.png") ?>");
+    background-image: url("<?= template::getImage("icons/1rightarrow.png") ?>");
 }
 
 .expanded > div.toggle {
@@ -255,7 +243,7 @@ div.collapsed > div.ratingdetail {
     height: 16px;
     float: left;
     margin: 0 0 0 -25px;
-    background-image: url("<?php echo template::getImage("icons/1downarrow.png") ?>");
+    background-image: url("<?= template::getImage("icons/1downarrow.png") ?>");
 }
 
 ul.thumbs a {
@@ -286,8 +274,8 @@ ul.admin a {
 }
 
 ul.admin a:hover {
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
 }
 
 /* Form properties */
@@ -367,9 +355,9 @@ div.generate input {
 
 ul.autocompdropdown {
     position: relative;
-    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
+    background: <?= color_scheme::getColor("page_bg_color") ?>;
     width: 300px;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     max-height: 15em;
     overflow: auto;
     margin: 0;
@@ -379,7 +367,7 @@ ul.autocompdropdown {
 
 ul.autocompdropdown ul {
     margin: 0 0 0 1em;
-    padding-left: 0em;
+    padding-left: 0;
 }
 
 ul.autocompdropdown li {
@@ -389,7 +377,7 @@ ul.autocompdropdown li {
 }
 
 input[type=text].autocompinput {
-    background: white url("<?php echo template::getImage("down2.gif") ?>");
+    background: white url("<?= template::getImage("down2.gif") ?>");
     background-repeat: no-repeat;
     background-position: 99% center;
     margin-right: 6px;
@@ -398,13 +386,13 @@ input[type=text].autocompinput {
 
 ul.autocompdropdown li:hover,
 ul.autocompdropdown li#selected {
-    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
+    background: <?= color_scheme::getColor("tab_bg_color") ?>;
 }
 
 /* Menubar */
 
 ul.menu {
-    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
+    background: <?= color_scheme::getColor("page_bg_color") ?>;
     margin-left: 4px;
     padding: 0 0 0 10px;
     display: inline;
@@ -418,41 +406,41 @@ ul.menu li  {
     text-align: center;
     list-style: none;
     display: inline;
-    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
+    background: <?= color_scheme::getColor("tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("tab_font_color") ?>;
     font-size: small;
 }
 
 ul.menu li:hover {
     position: relative;
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     border-bottom: none;
     padding: 2px 0 2px 0;
 }
 
 ul.menu li.selected {
-    background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>;
+    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
 }
 
 /* since the A element does not inherit font colors from it's parents, we set it
  * explicetly here. Also underlining is removed from links in menu, unless it is hovered */
 
 ul.menu li a {
-    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
+    color: <?= color_scheme::getColor("tab_font_color") ?>;
     text-decoration: none;
 }
 
 ul.menu li > a:hover { text-decoration: underline; }
-ul.menu li.selected > a { color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>; }
+ul.menu li.selected > a { color: <?= color_scheme::getColor("selected_tab_font_color") ?>; }
 
 /* The breadcrumb line at the top of the page */
 
 div.breadcrumbs {
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
-    color: <?php echo color_scheme::getColor("text_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    color: <?= color_scheme::getColor("text_color") ?>;
     font-size: small;
     float: left;
     margin: 0;
@@ -489,12 +477,12 @@ ul.breadcrumbs.firstdots li:first-child:before {
 
 /* Main page */
 .main, .page, div.map, div#selection  {
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    background: <?= color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     width: 100%;
     border-spacing: 0px;
     padding: 10px;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     clear: both;
     overflow: hidden;
 }
@@ -526,8 +514,8 @@ div.minimap {
 div.main#config .desc {
     clear: both;
     width: 50%;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    border: 1px solid <?php echo color_scheme::getColor("title_font_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("title_font_color") ?>;
     margin-left: 11.5em;
     margin-bottom: 15px;
     padding: 0.5em;
@@ -536,7 +524,7 @@ div.main#config .desc {
 }
 
 div.main#config div.confGroup > .desc {
-    color: <?php echo color_scheme::getColor("text_color") ?>;
+    color: <?= color_scheme::getColor("text_color") ?>;
     background: none;
     margin-left: 0;
     width: 100%;
@@ -549,9 +537,9 @@ div.main#config h2 {
     clear: both;
     display: block;
     padding: 5px 10px;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("text_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?= color_scheme::getColor("text_color") ?>;
     width: 100%;
 }
 
@@ -569,13 +557,7 @@ div.main#config input.reset + span {
     overflow: hidden;
     display: block;
     float: right;
-
-    -webkit-transition: opacity 700ms ease-out 200ms;
-    -moz-transition: opacity 700ms ease-out 200ms;
-    -o-transition: opacity 700ms ease-out 200ms;
-    -ms-transition: opacity 700ms ease-out 200ms;
     transition: opacity 700ms ease-out 200ms;
-
     opacity: 0;
 }
 
@@ -627,7 +609,7 @@ div.timedetails, div.ratingdetails {
 }
 
 div.timedetail, div.ratingdetail {
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     background: white;
     width: 100%;
 }
@@ -641,8 +623,8 @@ div.timedetail dt {
 }
 
 div.timedetail h3 {
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
     font-size: large;
 }
 
@@ -658,8 +640,8 @@ table.ratingdetail td, table.ratingdetail th {
 }
 
 table.ratingdetail th {
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
 }
 
 table.tracks {
@@ -673,10 +655,10 @@ table.tracks th, table.tracks td {
 }
 
 table.tracks tr:nth-child(odd) {
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
 }
 
-p.main, {
+p.main {
     padding: 4px;
 }
 
@@ -722,7 +704,7 @@ div.ratings   {
     width: 20%;
     text-align: right;
     padding-right: 15px;
-    border-right: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border-right: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
 }
 
 .graph.bar div.bar   {
@@ -736,14 +718,10 @@ div.ratings   {
 .graph.bar div.fill   {
     float: left;
     border: none;
-    background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
+    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
     border-radius: 0 3px 3px 0;
 
     box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
-    -o-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
-    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
-    -ms-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
     z-index: 3;
 
 }
@@ -838,17 +816,17 @@ ul.letter {
 
 ul.actionlink li:before {
     content: ' | ';
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
 }
 
 ul.actionlink li:first-child:before {
     content: ' [ ';
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
     }
 
 ul.actionlink li:last-child:after {
     content: ' ] ';
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
 }
 
 ul.actionlink li {
@@ -890,9 +868,9 @@ img.actionlink {
 
 /* Description of a photo */
 .photodesc  {
-    border:  4px solid <?php echo color_scheme::getColor("title_bg_color") ?>;
+    border:  4px solid <?= color_scheme::getColor("title_bg_color") ?>;
     font-size: small;
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    background: <?= color_scheme::getColor("table_bg_color") ?>;
     clear: both;
 }
 /* The description of a photo in thumbnail view */
@@ -926,7 +904,7 @@ div.color {
 /* Tables for the permissions */
 
 table.permissions   {
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    background: <?= color_scheme::getColor("table_bg_color") ?>;
     width: 90%;
     margin-left: auto; /* To center the page */
     margin-right: auto;
@@ -935,7 +913,7 @@ table.permissions   {
     }
 
 table.permissions td, table.permissions th  {
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    background: <?= color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     text-align: left;
 }
@@ -1022,8 +1000,8 @@ ul.pagegroup {
 
 ul.pagegroup li {
     display: block;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
     border-radius: 5px;
     float: left;
     margin: 3px;
@@ -1038,13 +1016,13 @@ ul.pagegroup li a {
 }
 
 ul.pagegroup li:hover {
-    background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>;
+    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
 }
 
 ul.pagegroup li.current {
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
     font-weight: bold;
 }
 
@@ -1078,7 +1056,7 @@ div#rowscols {
     margin-bottom: 15px;
 }
 
-img.<?php echo MID_PREFIX ?> {
+img.<?= MID_PREFIX ?> {
     margin-left: auto;
     margin-right: auto;
     clear: both;
@@ -1096,9 +1074,6 @@ img.waiting {
     display: block;
 }
 
-span.md5 {
-    display: none;
-}
 
 div#rotate {
     margin-left: auto;
@@ -1160,15 +1135,15 @@ div.editchoice  {
 div.thumbnail   {
     text-align: center;
     vertical-align: top;
-    width: <?php echo THUMB_SIZE ?>px;
-    height: <?php echo THUMB_SIZE ?>px;
+    width: <?= THUMB_SIZE ?>px;
+    height: <?= THUMB_SIZE ?>px;
     float:left;
     margin: 2px;
     padding: 5px;
 }
 
 div.comment {
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     background: transparent;
     font-size: small;
     min-height: 5em;
@@ -1178,14 +1153,14 @@ div.comment {
 
 div.comment h3 {
     width: 100%;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    border-bottom: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
+    border-bottom: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     text-align: left;
 }
 
 div.commentinfo {
-    border-bottom: 1px dashed <?php echo color_scheme::getColor("table_border_color") ?>;
+    border-bottom: 1px dashed <?= color_scheme::getColor("table_border_color") ?>;
     width: 100%;
     font-size: x-small;
     font-style: italic;
@@ -1207,7 +1182,7 @@ br.noclear {
 
 /* The random thumnail on the first page */
 #random.thumbnail   {
-    width: <?php echo THUMB_SIZE+10 ?>px;
+    width: <?= THUMB_SIZE+10 ?>px;
     vertical-align: middle;
     margin: 0;
     padding-top: 10px;
@@ -1237,8 +1212,6 @@ dl.users,
 dl.track {
     margin-top: 0px;
     margin-bottom: 30px;
-    /* Workaround for Firefox bug */
-    border: 1px solid transparent;
 }
 
 label,
@@ -1293,11 +1266,7 @@ dl.track dt {
     text-align: right;
 }
 
-dl.allexif {
-    display: none;
-    width: 100%;
-}
-
+dl.allexif,
 dl.allexif dl {
     width: 100%
 }
@@ -1356,18 +1325,18 @@ fieldset.geotag  {
     margin-top: 10px;
     margin-bottom: 5px;
     padding-bottom: 20px;
-    border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
 }
 
 fieldset.members {
     clear: both;
     margin: 20px 20px 20px 12em;
     width: 15em;
-    border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
 }
 
 
-// The map is inside a table on the search page
+/* The map is inside a table on the search page */
 table fieldset.map {
     width: 95%;
 }
@@ -1386,8 +1355,8 @@ fieldset.members legend {
     padding-right: 2em;
     padding-left: 2em;
     font-weight: bold;
-    border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
 }
 
 fieldset.members legend {
@@ -1400,31 +1369,25 @@ fieldset.editphotos div.thumbnail {
     vertical-align: top;
     clear: none;
     font-size: small;
-    margin: 0px;
+    margin: 0;
     margin-left: -10em;
     float: right;
 }
 
+/* These are the lists on the bulk edit page, such as the list of albums + the remove checkbox. */
 fieldset.editphotos-fields {
     margin: 0 0 0 20px;
-
     clear: none;
     width: 90%;
     padding-top: 10px;
-}
-
-/* These are the lists on the bulk edit page, such as the list of albums + the remove checkbox. */
-
-fieldset.checkboxlist legend {
-    display: none;
 }
 
 input[type="button"],
 input[type="submit"],
 input[type="reset"] {
     border: 2px outset;
-    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
+    background: <?= color_scheme::getColor("tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("tab_font_color") ?>;
     font-weight: bold;
     width: 100px;
     height: 25px;
@@ -1441,7 +1404,7 @@ input[disabled] {
 
 div#rowscols input[type="submit"] {
     display: inline;
-    margin: 0px 15px 0px 15px;
+    margin: 0 15px 0 15px;
 }
 
 input[type="submit"].updatebutton {
@@ -1452,7 +1415,7 @@ input[type="submit"].updatebutton {
 }
 
 input[type="submit"].increment {
-    margin: 0px;
+    margin: 0;
     width: auto;
     height: auto;
 }
@@ -1467,7 +1430,7 @@ textarea {
     }
 
 textarea.email {
-    margin-top: 0px;
+    margin-top: 0;
     margin-bottom: 15px;
     margin-left: 5%;
     margin-right: 5%;
@@ -1510,7 +1473,7 @@ input[type="date"],
 input[type="number"],
 input[type="password"],
 textarea {
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     padding: 2px;
     border-radius: 2px;
     margin: 2px;
@@ -1590,11 +1553,11 @@ div.page-preview {
     max-height: 600px;
     min-width: 600px;
     overflow: scroll;
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    background: <?= color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
-    border-spacing: 0px;
+    border-spacing: 0;
     padding: 10px;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     clear: both;
 }
 
@@ -1603,9 +1566,9 @@ div.page h1, div.page-preview h1 {
     left: -10px;
     margin: 0;
     width: 100%;
-    border-left: 0px;
-    border-right: 0px;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    border-left: 0;
+    border-right: 0;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
     font-size: large;
     text-align: center;
 
@@ -1649,20 +1612,15 @@ div.import_uploads,
 div.import,
 div.import_details {
     float:      left;
-    -moz-border-radius: 5px;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    border-radius: 5px;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
     border: none;
     margin: 10px;
     width: 95%;
 }
 
-div.import_details,
-div.import_thumbs {
-    display: none;
-}
-
 div.import_thumbs div.thumbnail {
-    height: <?php echo THUMB_SIZE + 30 ?>px;
+    height: <?= THUMB_SIZE + 30 ?>px;
 }
 
 div.import_thumbs img {
@@ -1701,11 +1659,11 @@ div.import_thumbs h2,
 div.import_uploads h2,
 div.import h2,
 div.import_details h2 {
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    border-bottom: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border-radius-top-left: 5px;
+    border-radius-top-right: 5px;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
+    border-bottom: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     text-align: center;
     width: 100%;
     clear: left;
@@ -1729,7 +1687,7 @@ div.import_details h2 {
     height: 20px;
     background: white;
     border: 1px solid black;
-    -moz-border-radius: 5px;
+    border-radius: 5px;
     overflow: hidden;
     clear: both;
 }
@@ -1739,9 +1697,9 @@ div.import_details h2 {
     margin: 2px;
     padding: 0;
     max-width: 99%;
-    -moz-border-radius: 4px;
+    border-radius: 4px;
     text-align: center;
-    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
+    background: <?= color_scheme::getColor("page_bg_color") ?>;
     color: white;
     font-weight: bold;
     overflow: hidden;
@@ -1773,11 +1731,7 @@ span.filename {
 }
 
 form.import {
-    padding: 1.5em 0em 2em 0em;
-}
-
-form.import fieldset#import_checkboxes {
-    display: none;
+    padding: 1.5em 0 2em 0;
 }
 
 fieldset.multiple,
@@ -1796,11 +1750,6 @@ fieldset.formhelper-multiple {
 fieldset.formhelper-multiple > .actionlink {
     float: left;
     margin-left: 10px;
-}
-
-fieldset.multiple img.actionlink:last-child {
-    /* hide the remove icon on last dropdown */
-    display: none;
 }
 
 fieldset.import-extrafields {
@@ -1849,38 +1798,23 @@ ul.tabs > li {
     height: 55px;
     width: 40px;
     clear: both;
-
     overflow: hiddden;
-
-    -webkit-transition: width 700ms ease-out 200ms;
-    -moz-transition: width 700ms ease-out 200ms;
-    -o-transition: width 700ms ease-out 200ms;
-    -ms-transition: width 700ms ease-out 200ms;
     transition: width 700ms ease-out 200ms;
 
 }
 
 ul.tabs div.tab {
     position: relative;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
     border: none;
-
     border-radius: 10px 0 0 10px;
-    -moz-border-radius: 10px 0 0 10px;
-    -webkit-border-radius: 10px 0 0 10px;
-    -o-border-radius: 10px 0 0 10px;
-
     width: 30px;
     height: 25px;
     margin: 0 -3px 0 0;
     padding: 10px 6px 10px 10px;
 
     box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -moz-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -o-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -webkit-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -ms-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
     z-index: 3;
 }
 
@@ -1898,17 +1832,8 @@ ul.tabs div.contents {
     top: -45px;
     left: 45px;
     border-radius: 0 0 0 20px;
-    -moz-border-radius: 0 0 0 20px;
-    -webkit-border-radius: 0 0 0 20px;
-    -o-border-radius: 0 0 0 20px;
-    -ms-border-radius: 0 0 0 20px;
-
 
     box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -moz-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -o-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -webkit-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -ms-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
     width: 515px;
 
     border: none;
@@ -1931,11 +1856,11 @@ li.share div.contents > ul > li {
 }
 
 li.share li.direct_link {
-    background-image: url("<?php echo template::getImage("icons/link.png") ?>");
+    background-image: url("<?= template::getImage("icons/link.png") ?>");
 }
 
 li.share li.html {
-    background-image: url("<?php echo template::getImage("icons/html.png") ?>");
+    background-image: url("<?= template::getImage("icons/html.png") ?>");
 }
 
 li.share input {
