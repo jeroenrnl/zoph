@@ -27,9 +27,9 @@ require_once "include.inc.php";
 
 $user=user::getCurrent();
 
-if(getvar("user_id") == -1 && $user->isAdmin()) {
+if (getvar("user_id") == -1 && $user->isAdmin()) {
     $prefs=new prefs(-1);
-    if(!$prefs->lookup()) {
+    if (!$prefs->lookup()) {
         $prefs->insert();
         $prefs->load(1);
     }

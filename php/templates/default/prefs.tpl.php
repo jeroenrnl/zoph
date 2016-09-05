@@ -71,7 +71,7 @@ if (!ZOPH) {
                 <?= translate("color scheme"); ?>
             <?php endif ?>
         </label>
-        
+
             <?= template::createPulldown("color_scheme_id", $tpl_prefs->get("color_scheme_id"),
                 template::createSelectArray(color_scheme::getRecords("name"), array("name"))) ?>
         <br>

@@ -210,10 +210,10 @@ class file {
               $this->destPath);
         }
         if (file_exists($this->destPath . $this->destName)) {
-            if($this->backup) {
+            if ($this->backup) {
                 $backupname=$this->destName;
                 $counter=1;
-                while(file_exists($this->destPath . $backupname)) {
+                while (file_exists($this->destPath . $backupname)) {
                     // Find the . in the filename
                     $pos=strrpos($this->destName, ".") ?: strlen($file);
                     $backupname=substr($this->destName, 0, $pos) . "_" . $counter . substr($this->destName, $pos);

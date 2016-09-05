@@ -64,7 +64,7 @@ class user extends zophTable {
         $this->set("lastnotify", "now()");
         parent::insert();
         $default=new prefs(-1);
-        if($default->lookup()) {
+        if ($default->lookup()) {
             $default->set("user_id", $this->getId());
             $this->prefs=$default;
         } else {
