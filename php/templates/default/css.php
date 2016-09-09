@@ -29,7 +29,6 @@ body    {
     background: <?= color_scheme::getColor("page_bg_color") ?>;
     width: <?= conf::get("interface.width"); ?>;
     margin: 8px auto; /* To center the page */
-    border-collapse: collapse;
     line-height: 1.1;
 }
 
@@ -48,8 +47,9 @@ h1  {
     clear: left;
     font-size: x-large;
     font-weight: bold;
-    display: block;
     padding: 2px 10px 2px 10px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    margin: -1px 0;
 }
 
 /* Secondary title such as album title */
@@ -258,6 +258,11 @@ ul.admin a {
 ul.admin a:hover {
     background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border-radius: 5px;
+}
+
+ul.admin img {
+    margin-top: 10px;
 }
 
 /* Form properties */
@@ -419,10 +424,11 @@ nav.breadcrumbs {
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     color: <?= color_scheme::getColor("text_color") ?>;
     font-size: small;
-    float: left;
     padding: 3px 10px;
     clear: left;
     width: 100%;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
 }
 
 ul.breadcrumbs li {
@@ -455,6 +461,8 @@ ul.breadcrumbs li a {
     border-spacing: 0px;
     padding: 10px;
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     clear: both;
     overflow: hidden;
 }
@@ -1009,13 +1017,22 @@ div#rowscols {
     margin-bottom: 15px;
 }
 
+img.<?= THUMB_PREFIX ?> {
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+}
+
+div.thumbnail img.<?= THUMB_PREFIX ?>:hover {
+    margin-top: -2px;
+    margin-left: -2px;
+    box-shadow: 7px 7px 7px rgba(0,0,0,0.4);
+}
+
 img.<?= MID_PREFIX ?> {
-    margin-left: auto;
-    margin-right: auto;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    margin: 10px auto;
     clear: both;
     text-align: center;
     display: block;
-    padding: 10px;
 }
 
 img.busy,
@@ -1201,6 +1218,7 @@ dl.track > dd {
     margin: 5px;
 }
 
+form.user label,
 form.prefs label,
 dl.color_scheme > dt,
 dl.comment > dt,
@@ -1261,11 +1279,16 @@ input[type="checkbox"] + label {
 }
 
 fieldset  {
+    border-radius: 5px;
     margin-bottom: 5px;
     clear: right;
     overflow: hidden;
     display: block;
     float: left;
+}
+
+legend {
+    border-radius: 2px;
 }
 
 fieldset.editphotos,
@@ -1280,6 +1303,7 @@ fieldset.geotag  {
 fieldset.members {
     clear: both;
     margin: 20px 20px 20px 12em;
+    padding: 1em;
     width: 15em;
     border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
 }
@@ -1309,10 +1333,10 @@ fieldset.members legend {
 }
 
 fieldset.members legend {
-    padding: 0.5em 4em;
-    margin-bottom: 0.8em;
-}
+    padding: 0.3em 1em;
+    margin-left: 0.5em;
 
+}
 
 fieldset.editphotos div.thumbnail {
     vertical-align: top;
@@ -1323,9 +1347,8 @@ fieldset.editphotos div.thumbnail {
 }
 
 fieldset.editphotos-fields {
-    margin: 0 0 0 20px;
     clear: none;
-    width: 90%;
+    width: 80%;
     padding-top: 10px;
 }
 
@@ -1338,17 +1361,23 @@ fieldset.checkboxlist legend {
 input[type="button"],
 input[type="submit"],
 input[type="reset"] {
-    border: 2px outset;
+    border: none;
+    border-radius: 5px;
     background: <?= color_scheme::getColor("tab_bg_color") ?>;
     color: <?= color_scheme::getColor("tab_font_color") ?>;
+    font-size: x-large;
     font-weight: bold;
-    width: 100px;
-    height: 25px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    margin-left: auto;
-    margin-right: 15px;
-    display: block;
+    width: 200px;
+    height: 30px;
+    float: right;
+    clear: both;
+}
+
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
 }
 
 input[disabled] {
@@ -1358,6 +1387,9 @@ input[disabled] {
 div#rowscols input[type="submit"] {
     display: inline;
     margin: 0 15px 0 15px;
+    width: 60px;
+    height: 20px;
+    font-size: medium;
 }
 
 input[type="submit"].updatebutton {
@@ -1403,6 +1435,8 @@ input, select {
 }
 
 input[type="checkbox"] {
+    
+    margin-top: 6px;
     float: left;
 }
 

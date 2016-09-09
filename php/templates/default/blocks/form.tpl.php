@@ -23,8 +23,9 @@ if (!ZOPH) {
     die("Illegal call");
 }
 ?>
-    <form enctype="multipart/form-data" action="<?= $tpl_formAction; ?>" method="POST"
-        onSubmit="<?php echo $tpl_onsubmit; ?>">
+    <form enctype="multipart/form-data" <?= isset($tpl_class) ? "class=\"" . $tpl_class . "\"" : "" ?> 
+        action="<?= $tpl_formAction; ?>" method="POST"
+        onSubmit="<?= $tpl_onsubmit; ?>">
         <input type="hidden" name="_action" value="<?= $tpl_action ?>">
         <?= $this->displayBlocks(); ?>
         <input type="submit" value="<?= $tpl_submit ?>">
