@@ -21,11 +21,13 @@
 
 if (!ZOPH) { die("Illegal call"); }
 ?>
-<ul class="menu">
-    <?php foreach ($tpl_tabs as $label => $page): ?>
-        <li class=<?= $page == $tpl_self ? "selected" : "" ?>>
-            <a href="<?= $page ?>"><?= $label ?></a>
-        </li>
-    <?php endforeach ?>
-</ul>
+<nav class="menu">
+    <ul>
+        <?php foreach ($tpl_tabs as $label => $page): ?>
+            <li <?= $page == $tpl_self ? "class=\"selected\"" : "" ?>>
+                <a href="<?= $page ?>"><?= $label ?></a>
+            </li>
+        <?php endforeach ?>
+    </ul>
+</nav>
 

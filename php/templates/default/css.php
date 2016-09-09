@@ -366,26 +366,32 @@ ul.autocompdropdown li#selected {
 
 /* Menubar */
 
-ul.menu {
-    background: <?= color_scheme::getColor("page_bg_color") ?>;
-    margin-left: 4px;
-    padding: 0 0 0 10px;
+nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    list-style: none;
     display: inline;
 }
 
-ul.menu li  {
+nav.menu {
+    background: <?= color_scheme::getColor("page_bg_color") ?>;
+    padding-left: 10px;
+}
+
+nav.menu ul li  {
     padding: 1px;
     padding-top: 3px;
     margin: 1px;
     text-align: center;
-    list-style: none;
-    display: inline;
     background: <?= color_scheme::getColor("tab_bg_color") ?>;
     color: <?= color_scheme::getColor("tab_font_color") ?>;
     font-size: small;
 }
 
-ul.menu li:hover {
+nav.menu ul li:hover {
     position: relative;
     background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
@@ -393,7 +399,7 @@ ul.menu li:hover {
     padding: 2px 0 2px 0;
 }
 
-ul.menu li.selected {
+nav.menu ul li.selected {
     background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
     color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
 }
@@ -401,38 +407,35 @@ ul.menu li.selected {
 /* since the A element does not inherit font colors from it's parents, we set it
  * explicetly here. Also underlining is removed from links in menu, unless it is hovered */
 
-ul.menu li a {
+nav.menu ul li a {
     color: <?= color_scheme::getColor("tab_font_color") ?>;
     text-decoration: none;
 }
 
-ul.menu li > a:hover { text-decoration: underline; }
-ul.menu li.selected > a { color: <?= color_scheme::getColor("selected_tab_font_color") ?>; }
+nav.menu ul li > a:hover { 
+    text-decoration: underline; 
+}
+
+nav.menu ul li.selected > a { 
+    color: <?= color_scheme::getColor("selected_tab_font_color") ?>; 
+}
 
 /* The breadcrumb line at the top of the page */
 
-div.breadcrumbs {
+nav.breadcrumbs {
     background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     color: <?= color_scheme::getColor("text_color") ?>;
     font-size: small;
     float: left;
-    padding: 2px 10px 2px 10px;
+    padding: 3px 10px;
     clear: left;
     width: 100%;
 }
 
-ul.breadcrumbs {
-    margin: 0;
-    padding: 0;
-}
-
 ul.breadcrumbs li {
-    margin-left: 1px;
-    padding-left: 2px;
-    padding-right: 8px;
-    list-style: none;
-    display: inline;
+    color: <?= color_scheme::getColor("text_color") ?>;
+    background: transparent;
 }
 
 ul.breadcrumbs li:before {
@@ -445,6 +448,11 @@ ul.breadcrumbs li:first-child:before {
 
 ul.breadcrumbs.firstdots li:first-child:before {
     content: "... \00BB \0020 ";
+}
+
+ul.breadcrumbs li a {
+    padding: 0 1em;
+    color: <?= color_scheme::getColor("text_color") ?>;
 }
 
 /* Main page */
@@ -534,12 +542,6 @@ div.main#config input.reset + span {
 div.main#config input.reset:hover + span,
 div.main#config input.reset:checked + span {
     opacity: 1;
-}
-
-.olControlAttribution {
-    bottom: 1em !important;
-    display: block;
-    left: 10px;
 }
 
 div.geocode {
