@@ -52,14 +52,12 @@ h1  {
     font-weight: bold;
     display: block;
     padding: 2px 10px 2px 10px;
-    margin: 0;
 }
 
 /* Secondary title such as album title */
 h2  {
     text-align: left;
     font-size: large;
-    margin: 0;
     margin-top: 10px;
     margin-bottom: 10px;
     font-weight: bold;
@@ -74,7 +72,6 @@ h3  {
     text-align: center;
     font-size: medium;
     font-weight: bold;
-    margin: 0px;
 }
 
 /* Unordered list */
@@ -175,7 +172,6 @@ div.details > dl > dd {
 ul.thumbs > li div.coverphoto {
     width: 100%;
     height:<?= THUMB_SIZE + 20 ?>px;
-    margin: 0;
     padding: 0;
     clear: right;
 }
@@ -212,7 +208,6 @@ ul.tree {
 
 ul.tree ul {
     list-style: none;
-    margin: 0;
 }
 
 
@@ -272,14 +267,12 @@ ul.admin a:hover {
 
 /* Form properties */
 form    {
-    margin: 0 0 0 0;
     width: 100%;
 }
 
 form.viewsettings {
     clear: both;
     width: auto;
-    margin: 0;
     padding: 0;
 }
 
@@ -296,7 +289,6 @@ form.viewsettings select#parent_place_id {
 }
 
 form#ratingform input, form#ratingform select {
-    margin: 0;
     float: left;
 }
 
@@ -341,7 +333,6 @@ input:invalid {
 
 div.generate input {
     display: block;
-    margin: 0;
     float: left;
 }
 
@@ -352,7 +343,6 @@ ul.autocompdropdown {
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     max-height: 15em;
     overflow: auto;
-    margin: 0;
     padding: 0;
     z-index: 5;
 }
@@ -364,7 +354,6 @@ ul.autocompdropdown ul {
 
 ul.autocompdropdown li {
     list-style: none;
-    margin: 0;
     padding: 0 10px 0 10px;
 }
 
@@ -435,14 +424,12 @@ div.breadcrumbs {
     color: <?= color_scheme::getColor("text_color") ?>;
     font-size: small;
     float: left;
-    margin: 0;
     padding: 2px 10px 2px 10px;
     clear: left;
     width: 100%;
 }
 
 ul.breadcrumbs {
-    margin: 0;
     padding: 0;
 }
 
@@ -573,7 +560,6 @@ div.geocode {
 
 div#geocoderesults {
     width: 144px;
-    margin: 0;
     color: #666666;
     text-align: center;
     font-size: small;
@@ -1023,7 +1009,6 @@ ul.pagegroup li.current {
 
 /* up and down arrows for sort order */
 .up, .down  {
-    margin: 0px;
     padding: 0px;
     display: block; /* needed to make the arrows exactly connect */
 }
@@ -1179,7 +1164,6 @@ br.noclear {
 #random.thumbnail   {
     width: <?= THUMB_SIZE+10 ?>px;
     vertical-align: middle;
-    margin: 0;
     padding-top: 10px;
     padding-left: 0px;
     float: left;
@@ -1307,7 +1291,6 @@ input[type="checkbox"] + label {
 }
 
 fieldset  {
-    margin: 0;
     border: none;
     padding: 0;
     margin-bottom: 5px;
@@ -1368,7 +1351,6 @@ fieldset.editphotos div.thumbnail {
     vertical-align: top;
     clear: none;
     font-size: small;
-    margin: 0;
     margin-left: -10em;
     float: right;
 }
@@ -1419,7 +1401,6 @@ input[type="submit"].updatebutton {
 }
 
 input[type="submit"].increment {
-    margin: 0;
     width: auto;
     height: auto;
 }
@@ -1533,13 +1514,6 @@ table#zophinfo td {
     width: 20%;
 }
 
-div#rowscols select,
-div#rowscols input,
-div#rotate select,
-div#rotate input {
-    margin: 0;
-}
-
 div#relation {
     margin-left: auto;
     margin-right: auto;
@@ -1568,7 +1542,6 @@ div.page-preview {
 div.page h1, div.page-preview h1 {
     position: relative;
     left: -10px;
-    margin: 0;
     width: 100%;
     border-left: 0;
     border-right: 0;
@@ -1680,7 +1653,6 @@ div.import_details h2 {
     font-weight: bold;
     display: block;
     padding: 3px 0;
-    margin: 0;
 }
 
 
@@ -1771,7 +1743,6 @@ fieldset.multiple img.actionlink:last-child {
 }
 
 fieldset.import-extrafields {
-    margin: 0;
     padding: 0;
     border: none;
 }
@@ -1809,7 +1780,6 @@ ul.tabs {
 
 ul.tabs > li {
     position: relative;
-    margin: 0;
     z-index: 5;
     display: block;
     float: right;
