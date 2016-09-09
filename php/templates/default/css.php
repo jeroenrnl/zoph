@@ -106,16 +106,6 @@ ul.thumbs > li {
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,0.6) inset;
 }
 
-div.collapsed > div.ratingdetail,
-div.collapsed > div.timedetail,
-div.import_details,
-div.import_thumbs,
-dl.allexif,
-fieldset.checkboxlist legend,
-fieldset.multiple img.actionlink:last-child,
-form.import fieldset#import_checkboxes,
-li.collapsed > ul.tree,
-span.md5,
 ul.thumbs > li dl.extradata {
     display: none;
 }
@@ -223,6 +213,13 @@ ul.tree {
 ul.tree ul {
     list-style: none;
     margin: 0;
+}
+
+
+li.collapsed > ul.tree,
+div.collapsed > div.timedetail,
+div.collapsed > div.ratingdetail {
+    display: none;
 }
 
 .collapsed > div.toggle {
@@ -965,6 +962,9 @@ div.next    {
     clear: right;
 }
 
+span.md5 {
+    display: none;
+}
 
 /* Page links */
 div.pagelink,
@@ -1261,7 +1261,11 @@ dl.track dt {
     text-align: right;
 }
 
-dl.allexif,
+dl.allexif {
+    display: none;
+    width: 100%;
+}
+
 dl.allexif dl {
     width: 100%
 }
@@ -1369,12 +1373,17 @@ fieldset.editphotos div.thumbnail {
     float: right;
 }
 
-/* These are the lists on the bulk edit page, such as the list of albums + the remove checkbox. */
 fieldset.editphotos-fields {
     margin: 0 0 0 20px;
     clear: none;
     width: 90%;
     padding-top: 10px;
+}
+
+/* These are the lists on the bulk edit page, such as the list of albums + the remove checkbox. */
+
+fieldset.checkboxlist legend {
+    display: none;
 }
 
 input[type="button"],
@@ -1614,6 +1623,11 @@ div.import_details {
     width: 95%;
 }
 
+div.import_details,
+div.import_thumbs {
+    display: none;
+}
+
 div.import_thumbs div.thumbnail {
     height: <?= THUMB_SIZE + 30 ?>px;
 }
@@ -1726,7 +1740,11 @@ span.filename {
 }
 
 form.import {
-    padding: 1.5em 0 2em 0;
+    padding: 1.5em 0em 2em 0em;
+}
+
+form.import fieldset#import_checkboxes {
+    display: none;
 }
 
 fieldset.multiple,
@@ -1745,6 +1763,11 @@ fieldset.formhelper-multiple {
 fieldset.formhelper-multiple > .actionlink {
     float: left;
     margin-left: 10px;
+}
+
+fieldset.multiple img.actionlink:last-child {
+    /* hide the remove icon on last dropdown */
+    display: none;
 }
 
 fieldset.import-extrafields {
