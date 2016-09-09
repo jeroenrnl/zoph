@@ -30,7 +30,6 @@ body    {
     width: <?= conf::get("interface.width"); ?>;
     border: none;
     margin: 8px auto; /* To center the page */
-    padding: 0px;
     border-collapse: collapse;
     line-height: 1.1;
 }
@@ -172,7 +171,6 @@ div.details > dl > dd {
 ul.thumbs > li div.coverphoto {
     width: 100%;
     height:<?= THUMB_SIZE + 20 ?>px;
-    padding: 0;
     clear: right;
 }
 
@@ -182,7 +180,6 @@ ul.thumbs > li div.name {
     max-height: 40px;
     bottom: 0;
     margin: 0 2px 2px 2px;
-    padding: 0;
     clear: both;
 }
 
@@ -273,7 +270,6 @@ form    {
 form.viewsettings {
     clear: both;
     width: auto;
-    padding: 0;
 }
 
 form.viewsettings select {
@@ -343,7 +339,6 @@ ul.autocompdropdown {
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     max-height: 15em;
     overflow: auto;
-    padding: 0;
     z-index: 5;
 }
 
@@ -430,6 +425,7 @@ div.breadcrumbs {
 }
 
 ul.breadcrumbs {
+    margin: 0;
     padding: 0;
 }
 
@@ -469,7 +465,6 @@ ul.breadcrumbs.firstdots li:first-child:before {
 
 .main > div.map {
     left: -1px;
-    padding: 0;
 }
 
 div.map {
@@ -711,7 +706,6 @@ div.ratings   {
     left: 20px;
     top: 2px;
     margin: 0 -10px 0 -10px;
-    padding: 0;
 }
 
 table.reports {
@@ -761,7 +755,6 @@ table#search input[type="checkbox"] + label {
     font-size: x-small;
     font-weight: normal;
     margin: 3px;
-    padding: 0;
     top: 3px;
     width: auto;
     clear: none;
@@ -898,7 +891,6 @@ table.permissions td, table.permissions th  {
 
 table.permissions col {
     text-align: center;
-    padding: 0px;
 }
 
 table.permissions > col.col1 {
@@ -1009,7 +1001,6 @@ ul.pagegroup li.current {
 
 /* up and down arrows for sort order */
 .up, .down  {
-    padding: 0px;
     display: block; /* needed to make the arrows exactly connect */
 }
 
@@ -1145,7 +1136,6 @@ div.commentinfo {
     font-size: x-small;
     font-style: italic;
     margin: 0 0 0.5em 0;
-    padding: 0;
 }
 
 span.searchinfo {
@@ -1292,7 +1282,6 @@ input[type="checkbox"] + label {
 
 fieldset  {
     border: none;
-    padding: 0;
     margin-bottom: 5px;
     clear: right;
     overflow: hidden;
@@ -1664,7 +1653,6 @@ div.import_details h2 {
 
 .progressbar {
     margin: auto;
-    padding: 0;
     height: 20px;
     background: white;
     border: 1px solid black;
@@ -1676,7 +1664,6 @@ div.import_details h2 {
 .progressfill {
     height: 16px;
     margin: 2px;
-    padding: 0;
     max-width: 99%;
     border-radius: 4px;
     text-align: center;
@@ -1723,7 +1710,6 @@ fieldset.multiple,
 fieldset.formhelper-multiple {
     background: transparent;
     margin: 0 0 5px 0;
-    padding: 0;
     border: none;
     width: 230px;
 }
@@ -1743,7 +1729,6 @@ fieldset.multiple img.actionlink:last-child {
 }
 
 fieldset.import-extrafields {
-    padding: 0;
     border: none;
 }
 
@@ -1774,7 +1759,6 @@ ul.tabs {
     margin: 0 -10px 0 -40px;
     width: 40px;
     height: 0;
-    padding: 0;
     clear: left;
 }
 
