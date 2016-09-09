@@ -28,7 +28,6 @@ body    {
     color: <?= color_scheme::getColor("text_color") ?>;
     background: <?= color_scheme::getColor("page_bg_color") ?>;
     width: <?= conf::get("interface.width"); ?>;
-    border: none;
     margin: 8px auto; /* To center the page */
     border-collapse: collapse;
     line-height: 1.1;
@@ -378,7 +377,6 @@ ul.menu li  {
     padding: 1px;
     padding-top: 3px;
     margin: 1px;
-    border: none;
     text-align: center;
     list-style: none;
     display: inline;
@@ -433,7 +431,6 @@ ul.breadcrumbs li {
     margin-left: 1px;
     padding-left: 2px;
     padding-right: 8px;
-    border: none;
     list-style: none;
     display: inline;
 }
@@ -502,7 +499,6 @@ div.main#config div.confGroup > .desc {
     background: none;
     margin-left: 0;
     width: 100%;
-    border: none;
 }
 
 div.main#config h2 {
@@ -690,7 +686,6 @@ div.ratings   {
 /* This is the bar that shows the number of photos for each rating */
 .graph.bar div.fill   {
     float: left;
-    border: none;
     background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
     border-radius: 0 3px 3px 0;
 
@@ -816,7 +811,6 @@ img.actionlink {
     float: right;
     position: relative;
     top: 3px;
-    border: none;
 }
 
 /* Text next to 'remove' tickbox */
@@ -1205,7 +1199,6 @@ dl.track dd {
     margin: 4px 0px;
     position: relative;
     top: -4px;
-    border: none;
 }
 
 dl.color_scheme dd,
@@ -1281,7 +1274,6 @@ input[type="checkbox"] + label {
 }
 
 fieldset  {
-    border: none;
     margin-bottom: 5px;
     clear: right;
     overflow: hidden;
@@ -1559,7 +1551,6 @@ div.page div.background {
 html.iframe_upload {
     width: 100%;
     clear: both;
-    border: none;
 }
 
 html.iframe_upload body {
@@ -1580,7 +1571,6 @@ div.import_details {
     float:      left;
     border-radius: 5px;
     background: <?= color_scheme::getColor("title_bg_color") ?>;
-    border: none;
     margin: 10px;
     width: 95%;
 }
@@ -1605,7 +1595,6 @@ div.import textarea {
 }
 
 iframe.upload {
-    border: none;
     width: 100%;
     margin-bottom: 3px;
     height: 100px;
@@ -1648,7 +1637,6 @@ div.import_details h2 {
 .upload {
     width:      100%;
     height:     80px;
-    border: none;
 }
 
 .progressbar {
@@ -1710,7 +1698,6 @@ fieldset.multiple,
 fieldset.formhelper-multiple {
     background: transparent;
     margin: 0 0 5px 0;
-    border: none;
     width: 230px;
 }
 
@@ -1726,10 +1713,6 @@ fieldset.formhelper-multiple > .actionlink {
 fieldset.multiple img.actionlink:last-child {
     /* hide the remove icon on last dropdown */
     display: none;
-}
-
-fieldset.import-extrafields {
-    border: none;
 }
 
 fieldset.import-extrafields > select {
@@ -1779,7 +1762,6 @@ ul.tabs div.tab {
     position: relative;
     background: <?= color_scheme::getColor("title_bg_color") ?>;
     color: <?= color_scheme::getColor("title_font_color") ?>;
-    border: none;
     border-radius: 10px 0 0 10px;
     width: 30px;
     height: 25px;
@@ -1791,7 +1773,6 @@ ul.tabs div.tab {
 }
 
 ul.tabs div.contents > h1 {
-    border: none;
     height: 25px;
     padding: 10px 20px;
 }
@@ -1808,7 +1789,6 @@ ul.tabs div.contents {
     box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
     width: 515px;
 
-    border: none;
     background: rgba(255,255,255,0.9);
     z-index: 1;
 }
