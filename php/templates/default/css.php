@@ -213,19 +213,18 @@ div.collapsed > div.ratingdetail {
     display: none;
 }
 
-.collapsed > div.toggle {
+div.toggle {
     width: 16px;
     height: 16px;
     float: left;
-    margin: 0 0 0 -25px;
+    margin: -4px 0 0 -25px;
+}
+
+.collapsed > div.toggle {
     background-image: url("<?= template::getImage("icons/1rightarrow.png") ?>");
 }
 
 .expanded > div.toggle {
-    width: 16px;
-    height: 16px;
-    float: left;
-    margin: 0 0 0 -25px;
     background-image: url("<?= template::getImage("icons/1downarrow.png") ?>");
 }
 
@@ -281,15 +280,6 @@ form.viewsettings select#parent_place_id {
     clear: none;
     margin-right: 0;
     width: 10em;
-}
-
-form#ratingform input, form#ratingform select {
-    float: left;
-}
-
-form#ratingform select {
-    margin-top: 4px;
-    margin-right: 5px;
 }
 
 /* Form to add a page to a pageset */
@@ -573,23 +563,25 @@ input.leftright {
     height: 20px;
 }
 
-
-div.timedetails, div.ratingdetails {
-    width: 100%;
-    margin-left: 24px;
+select#rating + input[type="submit"] {
+    margin: 20px;
+    height: 22px;
 }
 
-div.timedetail, div.ratingdetail {
+div.timedetails,
+div.ratingdetails {
+    margin-left: 25px;
+}
+
+div.timedetail,
+div.ratingdetail {
+    margin-top: 5px;
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     background: white;
-    width: 100%;
 }
 
+div.timedetail dt, 
 div.timedetail dd {
-    width: 40%;
-}
-
-div.timedetail dt {
     width: 40%;
 }
 
@@ -600,8 +592,6 @@ div.timedetail h3 {
 }
 
 table.ratingdetail {
-    border-collapse: collapse;
-    width: 100%;
 }
 
 table.ratingdetail td, table.ratingdetail th {
@@ -1180,20 +1170,21 @@ dl.track {
 }
 
 label,
-dl.color_scheme dt,
-dl.comment dt,
-dl.page dt,
-dl.pageset dt,
-dl.photo dt,
-dl.users dt,
-dl.track dt,
-dl.color_scheme dd,
-dl.comment dd,
-dl.page dd,
-dl.pageset dd,
-dl.photo dd,
-dl.users dd,
-dl.track dd {
+dl.color_scheme > dt,
+dl.comment > dt,
+dl.page > dt,
+dl.pageset > dt,
+dl.photo > dt,
+dl.users > dt,
+dl.track > dt,
+dl.color_scheme > dd,
+dl.comment > dd,
+dl.page > dd,
+dl.pageset > dd,
+dl.photo > dd,
+dl.users > dd,
+dl.track > dd {
+    float: left;
     font-size: medium;
     padding-left: 4px;
     padding-right: 4px;
@@ -1203,28 +1194,26 @@ dl.track dd {
     top: -4px;
 }
 
-dl.color_scheme dd,
-dl.comment dd,
-dl.page dd,
-dl.pageset dd,
-dl.photo dd,
-dl.users dd,
-dl.track dd {
-    float: left;
+dl.color_scheme > dd,
+dl.comment > dd,
+dl.page > dd,
+dl.pageset > dd,
+dl.photo > dd,
+dl.users > dd,
+dl.track > dd {
     width: 55%;
     margin: 5px;
 }
 
 form.prefs label,
-dl.color_scheme dt,
-dl.comment dt,
-dl.page dt,
-dl.pageset dt,
-dl.photo dt,
-dl.users dt,
-dl.track dt {
+dl.color_scheme > dt,
+dl.comment > dt,
+dl.page > dt,
+dl.pageset > dt,
+dl.photo > dt,
+dl.users > dt,
+dl.track > dt {
     clear: left;
-    float: left;
     width: 40%;
     font-weight: bold;
     text-align: right;
