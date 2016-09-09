@@ -46,6 +46,7 @@ if ($_action=="update") {
             $circle->removeMember(new person((int) $personId));
         }
     }
+    $title = e($circle->getName());
     $action = "update";
 } else if ($_action != "new") {
     $circle->lookup();
