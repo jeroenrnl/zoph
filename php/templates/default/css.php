@@ -17,6 +17,7 @@
  */
 ?>
 
+@import "templates/default/reset.css";
 /* Some of the styles have been based on http://www.alistapart.com/articles/taminglists/ */
 
 /* Main CSS style, all elements inherit these settings */
@@ -28,23 +29,16 @@ body    {
     background: <?= color_scheme::getColor("page_bg_color") ?>;
     width: <?= conf::get("interface.width"); ?>;
     border: none;
-    margin-left: auto; /* To center the page */
-    margin-right: auto;
+    margin: 8px auto; /* To center the page */
     padding: 0px;
     border-collapse: collapse;
+    line-height: 1.1;
 }
 
 /* Links */
 
 a   {
     color: <?= color_scheme::getColor("link_color") ?>;
-    background: transparent;
-}
-
-/* Images that are links */
-
-a IMG   {
-    border: none;
 }
 
 h1  {
@@ -68,6 +62,7 @@ h2  {
     margin: 0;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 h2.logon {
@@ -1932,3 +1927,4 @@ div.message img.icon {
     margin-bottom: 2px;
 }
 
+/* vim: set syntax=css: */
