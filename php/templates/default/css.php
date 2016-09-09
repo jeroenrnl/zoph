@@ -323,6 +323,8 @@ div.generate input {
 
 ul.autocompdropdown {
     position: relative;
+    margin: 0;
+    padding: 0;
     background: <?= color_scheme::getColor("page_bg_color") ?>;
     width: 300px;
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
@@ -496,7 +498,7 @@ div.main#config div.confGroup > .desc {
     color: <?= color_scheme::getColor("text_color") ?>;
     background: none;
     margin-left: 0;
-    width: 100%;
+    width: 98%;
 }
 
 div.main#config h2 {
@@ -797,12 +799,6 @@ ul.actionlink a {
 
 ul.actionlink a:hover {
     text-decoration: underline;
-}
-
-img.actionlink {
-    float: right;
-    position: relative;
-    top: 3px;
 }
 
 /* Text next to 'remove' tickbox */
@@ -1276,9 +1272,8 @@ fieldset.editphotos,
 fieldset.map,
 fieldset.geotag  {
     width: 100%;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    padding-bottom: 20px;
+    margin: 10px 0 20px 0;
+    padding: 10px 0;
     border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
 }
 
@@ -1305,7 +1300,7 @@ fieldset.geotag legend,
 fieldset.members legend {
     clear: both;
     display: block;
-    left: 2em;
+    margin-left: 2em;
     padding-right: 2em;
     padding-left: 2em;
     font-weight: bold;
@@ -1689,6 +1684,7 @@ fieldset.multiple,
 fieldset.formhelper-multiple {
     background: transparent;
     margin: 0 0 5px 0;
+    padding: 5px;
     width: 230px;
 }
 
@@ -1699,6 +1695,12 @@ fieldset.formhelper-multiple {
 fieldset.formhelper-multiple > .actionlink {
     float: left;
     margin-left: 10px;
+}
+
+img.actionlink {
+    float: right;
+    position: relative;
+    top: -3px;
 }
 
 fieldset.multiple img.actionlink:last-child {
