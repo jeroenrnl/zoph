@@ -25,8 +25,8 @@
 // LOG_SEVERITY, LOG_SUBJECT.
 // All other settings are now made from the webinterface
 
-define('VERSION', '0.9.3');
-define('RELEASEDATE', '10-06-2016');
+define('VERSION', '0.9.4pre');
+define('RELEASEDATE', '15-09-2016');
 // DB_HOST, DB_NAME, DB_USER, DB_PASS and DB_PREFIX have been moved to
 // zoph.ini. The location can be set by the next config item:
 
