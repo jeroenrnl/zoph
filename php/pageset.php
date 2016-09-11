@@ -94,7 +94,7 @@ if ($action == "confirm") {
       </h1>
       <div class="main">
         <br>
-        <dl class=pageset>
+        <dl class="display pageset">
     <?php
     $pageset->lookup();
     echo create_field_html($pageset->getDisplayArray());

@@ -122,6 +122,7 @@ if ($action == "display") {
 
     $form=new form("form", array(
         "formAction"        => "user.php",
+        "class"             => "user",
         "onsubmit"          => null,
         "action"            => $action,
         "submit"            => translate("submit")

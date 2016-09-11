@@ -21,7 +21,7 @@
 
 if (!ZOPH) { die("Illegal call"); }
 ?>
-<div class="breadcrumbs">
+<nav class="breadcrumbs">
     <ul class="actionlink">
         <li>
             <a href="<?= $tpl_clearURL ?>">x</a>
@@ -34,4 +34,4 @@ if (!ZOPH) { die("Illegal call"); }
             </li>
         <?php endforeach; ?>
     </ul>
-</div>
+</nav>

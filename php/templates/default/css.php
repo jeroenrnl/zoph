@@ -17,6 +17,7 @@
  */
 ?>
 
+@import "templates/default/reset.css";
 /* Some of the styles have been based on http://www.alistapart.com/articles/taminglists/ */
 
 /* Main CSS style, all elements inherit these settings */
@@ -24,50 +25,40 @@
 body    {
     font-family: Arial, Verdana, sans-serif;
     font-size: medium;
-    color: <?php echo color_scheme::getColor("text_color") ?>;
-    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
-    width: <?php echo conf::get("interface.width"); ?>;
-    border: none;
-    margin-left: auto; /* To center the page */
-    margin-right: auto;
-    padding: 0px;
-    border-collapse: collapse;
+    color: <?= color_scheme::getColor("text_color") ?>;
+    background: <?= color_scheme::getColor("page_bg_color") ?>;
+    width: <?= conf::get("interface.width"); ?>;
+    margin: 8px auto; /* To center the page */
+    line-height: 1.1;
 }
 
 /* Links */
 
 a   {
-    color: <?php echo color_scheme::getColor("link_color") ?>;
-    background: transparent;
-}
-
-/* Images that are links */
-
-a IMG   {
-    border: none;
+    color: <?= color_scheme::getColor("link_color") ?>;
 }
 
 h1  {
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     text-align: left;
     width: 100%;
     clear: left;
     font-size: x-large;
     font-weight: bold;
-    display: block;
     padding: 2px 10px 2px 10px;
-    margin: 0;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    margin: -1px 0;
 }
 
 /* Secondary title such as album title */
 h2  {
     text-align: left;
     font-size: large;
-    margin: 0;
     margin-top: 10px;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 h2.logon {
@@ -79,7 +70,6 @@ h3  {
     text-align: center;
     font-size: medium;
     font-weight: bold;
-    margin: 0px;
 }
 
 /* Unordered list */
@@ -95,24 +85,20 @@ ul.thumbs {
 }
 
 ul.thumbs > li {
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    //border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
     position: relative;
     display: block;
     text-align: center;
-    width: <?php echo THUMB_SIZE + 40 ?>px;
-    height:<?php echo THUMB_SIZE + 60 ?>px;
+    width: <?= THUMB_SIZE + 40 ?>px;
+    height:<?= THUMB_SIZE + 60 ?>px;
     float:left;
     margin: 5px;
     padding: 5px;
 
     border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
 
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,0.6) inset;
-    -moz-box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,0.6) inset;
 }
 
 ul.thumbs > li dl.extradata {
@@ -120,7 +106,7 @@ ul.thumbs > li dl.extradata {
 }
 
 ul.thumbs > li.thumb_circle {
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(0,0,0,0.2) inset;
 }
 
@@ -133,16 +119,7 @@ div.details {
     background: rgba(255,255,255,0.9);
 
     border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -o-border-radius: 10px;
-    -ms-border-radius: 10px;
-
     box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-    -moz-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-    -webkit-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-    -o-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-    -ms-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
 }
 
 dl dt {
@@ -166,11 +143,9 @@ div.details > h3 {
     margin: -20px -20px 0 -20px;
     padding: 5px 20px;
     border-radius: 10px 10px 0 0;
-    -moz-border-radius: 10px 10px 0 0;
-    -webkit-border-radius: 10px 10px 0 0;
     width: 100%;
-    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
+    background: <?= color_scheme::getColor("tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("tab_font_color") ?>;
     font-size: large;
     text-align: left;
 }
@@ -194,9 +169,7 @@ div.details > dl > dd {
 
 ul.thumbs > li div.coverphoto {
     width: 100%;
-    height:<?php echo THUMB_SIZE + 20 ?>px;
-    margin: 0;
-    padding: 0;
+    height:<?= THUMB_SIZE + 20 ?>px;
     clear: right;
 }
 
@@ -206,14 +179,13 @@ ul.thumbs > li div.name {
     max-height: 40px;
     bottom: 0;
     margin: 0 2px 2px 2px;
-    padding: 0;
     clear: both;
 }
 
 ul.thumbs li img {
     display: block;
     margin: 10px auto;
-    -moz-box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
 ul.list {
@@ -222,7 +194,7 @@ ul.list {
 }
 
 ul.list > li:nth-child(2n) {
-    background-color: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    background-color: <?= color_scheme::getColor("title_bg_color") ?>;
 }
 
 ul.tree {
@@ -232,7 +204,6 @@ ul.tree {
 
 ul.tree ul {
     list-style: none;
-    margin: 0;
 }
 
 
@@ -242,20 +213,19 @@ div.collapsed > div.ratingdetail {
     display: none;
 }
 
-.collapsed > div.toggle {
+div.toggle {
     width: 16px;
     height: 16px;
     float: left;
-    margin: 0 0 0 -25px;
-    background-image: url("<?php echo template::getImage("icons/1rightarrow.png") ?>");
+    margin: -4px 0 0 -25px;
+}
+
+.collapsed > div.toggle {
+    background-image: url("<?= template::getImage("icons/1rightarrow.png") ?>");
 }
 
 .expanded > div.toggle {
-    width: 16px;
-    height: 16px;
-    float: left;
-    margin: 0 0 0 -25px;
-    background-image: url("<?php echo template::getImage("icons/1downarrow.png") ?>");
+    background-image: url("<?= template::getImage("icons/1downarrow.png") ?>");
 }
 
 ul.thumbs a {
@@ -286,21 +256,23 @@ ul.admin a {
 }
 
 ul.admin a:hover {
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border-radius: 5px;
+}
+
+ul.admin img {
+    margin-top: 10px;
 }
 
 /* Form properties */
 form    {
-    margin: 0 0 0 0;
     width: 100%;
 }
 
 form.viewsettings {
     clear: both;
     width: auto;
-    margin: 0;
-    padding: 0;
 }
 
 form.viewsettings select {
@@ -313,16 +285,6 @@ form.viewsettings select#parent_place_id {
     clear: none;
     margin-right: 0;
     width: 10em;
-}
-
-form#ratingform input, form#ratingform select {
-    margin: 0;
-    float: left;
-}
-
-form#ratingform select {
-    margin-top: 4px;
-    margin-right: 5px;
 }
 
 /* Form to add a page to a pageset */
@@ -361,35 +323,41 @@ input:invalid {
 
 div.generate input {
     display: block;
-    margin: 0;
     float: left;
+}
+
+div.generate input[type=button] {
+    width: 75px;
+    font-size: medium;
+    float: left;
+    height: 18px;
+    clear: none;
 }
 
 ul.autocompdropdown {
     position: relative;
-    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
-    width: 300px;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
-    max-height: 15em;
-    overflow: auto;
     margin: 0;
     padding: 0;
+    background: <?= color_scheme::getColor("page_bg_color") ?>;
+    width: 300px;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    max-height: 15em;
+    overflow: auto;
     z-index: 5;
 }
 
 ul.autocompdropdown ul {
     margin: 0 0 0 1em;
-    padding-left: 0em;
+    padding-left: 0;
 }
 
 ul.autocompdropdown li {
     list-style: none;
-    margin: 0;
     padding: 0 10px 0 10px;
 }
 
 input[type=text].autocompinput {
-    background: white url("<?php echo template::getImage("down2.gif") ?>");
+    background: white url("<?= template::getImage("down2.gif") ?>");
     background-repeat: no-repeat;
     background-position: 99% center;
     margin-right: 6px;
@@ -398,81 +366,82 @@ input[type=text].autocompinput {
 
 ul.autocompdropdown li:hover,
 ul.autocompdropdown li#selected {
-    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
+    background: <?= color_scheme::getColor("tab_bg_color") ?>;
 }
 
 /* Menubar */
 
-ul.menu {
-    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
-    margin-left: 4px;
-    padding: 0 0 0 10px;
+nav ul {
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    list-style: none;
     display: inline;
 }
 
-ul.menu li  {
+nav.menu {
+    background: <?= color_scheme::getColor("page_bg_color") ?>;
+    padding-left: 10px;
+}
+
+nav.menu ul li  {
     padding: 1px;
     padding-top: 3px;
     margin: 1px;
-    border: none;
     text-align: center;
-    list-style: none;
-    display: inline;
-    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
+    background: <?= color_scheme::getColor("tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("tab_font_color") ?>;
     font-size: small;
 }
 
-ul.menu li:hover {
+nav.menu ul li:hover {
     position: relative;
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     border-bottom: none;
     padding: 2px 0 2px 0;
 }
 
-ul.menu li.selected {
-    background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>;
+nav.menu ul li.selected {
+    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
 }
 
 /* since the A element does not inherit font colors from it's parents, we set it
  * explicetly here. Also underlining is removed from links in menu, unless it is hovered */
 
-ul.menu li a {
-    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
+nav.menu ul li a {
+    color: <?= color_scheme::getColor("tab_font_color") ?>;
     text-decoration: none;
 }
 
-ul.menu li > a:hover { text-decoration: underline; }
-ul.menu li.selected > a { color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>; }
+nav.menu ul li > a:hover { 
+    text-decoration: underline; 
+}
+
+nav.menu ul li.selected > a { 
+    color: <?= color_scheme::getColor("selected_tab_font_color") ?>; 
+}
 
 /* The breadcrumb line at the top of the page */
 
-div.breadcrumbs {
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
-    color: <?php echo color_scheme::getColor("text_color") ?>;
+nav.breadcrumbs {
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    color: <?= color_scheme::getColor("text_color") ?>;
     font-size: small;
-    float: left;
-    margin: 0;
-    padding: 2px 10px 2px 10px;
+    padding: 3px 10px;
     clear: left;
     width: 100%;
-}
-
-ul.breadcrumbs {
-    margin: 0;
-    padding: 0;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
 }
 
 ul.breadcrumbs li {
-    margin-left: 1px;
-    padding-left: 2px;
-    padding-right: 8px;
-    border: none;
-    list-style: none;
-    display: inline;
+    color: <?= color_scheme::getColor("text_color") ?>;
+    background: transparent;
 }
 
 ul.breadcrumbs li:before {
@@ -487,14 +456,21 @@ ul.breadcrumbs.firstdots li:first-child:before {
     content: "... \00BB \0020 ";
 }
 
+ul.breadcrumbs li a {
+    padding: 0 1em;
+    color: <?= color_scheme::getColor("text_color") ?>;
+}
+
 /* Main page */
 .main, .page, div.map, div#selection  {
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    background: <?= color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     width: 100%;
     border-spacing: 0px;
     padding: 10px;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     clear: both;
     overflow: hidden;
 }
@@ -502,7 +478,6 @@ ul.breadcrumbs.firstdots li:first-child:before {
 
 .main > div.map {
     left: -1px;
-    padding: 0;
 }
 
 div.map {
@@ -526,8 +501,8 @@ div.minimap {
 div.main#config .desc {
     clear: both;
     width: 50%;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    border: 1px solid <?php echo color_scheme::getColor("title_font_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("title_font_color") ?>;
     margin-left: 11.5em;
     margin-bottom: 15px;
     padding: 0.5em;
@@ -536,11 +511,10 @@ div.main#config .desc {
 }
 
 div.main#config div.confGroup > .desc {
-    color: <?php echo color_scheme::getColor("text_color") ?>;
+    color: <?= color_scheme::getColor("text_color") ?>;
     background: none;
     margin-left: 0;
-    width: 100%;
-    border: none;
+    width: 98%;
 }
 
 div.main#config h2 {
@@ -549,9 +523,9 @@ div.main#config h2 {
     clear: both;
     display: block;
     padding: 5px 10px;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("text_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?= color_scheme::getColor("text_color") ?>;
     width: 100%;
 }
 
@@ -569,25 +543,13 @@ div.main#config input.reset + span {
     overflow: hidden;
     display: block;
     float: right;
-
-    -webkit-transition: opacity 700ms ease-out 200ms;
-    -moz-transition: opacity 700ms ease-out 200ms;
-    -o-transition: opacity 700ms ease-out 200ms;
-    -ms-transition: opacity 700ms ease-out 200ms;
     transition: opacity 700ms ease-out 200ms;
-
     opacity: 0;
 }
 
 div.main#config input.reset:hover + span,
 div.main#config input.reset:checked + span {
     opacity: 1;
-}
-
-.olControlAttribution {
-    bottom: 1em !important;
-    display: block;
-    left: 10px;
 }
 
 div.geocode {
@@ -599,7 +561,6 @@ div.geocode {
 
 div#geocoderesults {
     width: 144px;
-    margin: 0;
     color: #666666;
     text-align: center;
     font-size: small;
@@ -620,35 +581,35 @@ input.leftright {
     height: 20px;
 }
 
-
-div.timedetails, div.ratingdetails {
-    width: 100%;
-    margin-left: 24px;
+select#rating + input[type="submit"] {
+    margin: 20px;
+    height: 22px;
 }
 
-div.timedetail, div.ratingdetail {
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+div.timedetails,
+div.ratingdetails {
+    margin-left: 25px;
+}
+
+div.timedetail,
+div.ratingdetail {
+    margin-top: 5px;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     background: white;
-    width: 100%;
 }
 
+div.timedetail dt, 
 div.timedetail dd {
     width: 40%;
 }
 
-div.timedetail dt {
-    width: 40%;
-}
-
 div.timedetail h3 {
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
     font-size: large;
 }
 
 table.ratingdetail {
-    border-collapse: collapse;
-    width: 100%;
 }
 
 table.ratingdetail td, table.ratingdetail th {
@@ -658,8 +619,8 @@ table.ratingdetail td, table.ratingdetail th {
 }
 
 table.ratingdetail th {
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
 }
 
 table.tracks {
@@ -673,10 +634,10 @@ table.tracks th, table.tracks td {
 }
 
 table.tracks tr:nth-child(odd) {
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
 }
 
-p.main, {
+p.main {
     padding: 4px;
 }
 
@@ -722,7 +683,7 @@ div.ratings   {
     width: 20%;
     text-align: right;
     padding-right: 15px;
-    border-right: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border-right: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
 }
 
 .graph.bar div.bar   {
@@ -735,15 +696,10 @@ div.ratings   {
 /* This is the bar that shows the number of photos for each rating */
 .graph.bar div.fill   {
     float: left;
-    border: none;
-    background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
+    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
     border-radius: 0 3px 3px 0;
 
     box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
-    -o-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
-    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
-    -ms-box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
     z-index: 3;
 
 }
@@ -755,7 +711,6 @@ div.ratings   {
     left: 20px;
     top: 2px;
     margin: 0 -10px 0 -10px;
-    padding: 0;
 }
 
 table.reports {
@@ -805,7 +760,6 @@ table#search input[type="checkbox"] + label {
     font-size: x-small;
     font-weight: normal;
     margin: 3px;
-    padding: 0;
     top: 3px;
     width: auto;
     clear: none;
@@ -838,17 +792,17 @@ ul.letter {
 
 ul.actionlink li:before {
     content: ' | ';
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
 }
 
 ul.actionlink li:first-child:before {
     content: ' [ ';
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
     }
 
 ul.actionlink li:last-child:after {
     content: ' ] ';
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
 }
 
 ul.actionlink li {
@@ -861,13 +815,6 @@ ul.actionlink a {
 
 ul.actionlink a:hover {
     text-decoration: underline;
-}
-
-img.actionlink {
-    float: right;
-    position: relative;
-    top: 3px;
-    border: none;
 }
 
 /* Text next to 'remove' tickbox */
@@ -890,9 +837,9 @@ img.actionlink {
 
 /* Description of a photo */
 .photodesc  {
-    border:  4px solid <?php echo color_scheme::getColor("title_bg_color") ?>;
+    border:  4px solid <?= color_scheme::getColor("title_bg_color") ?>;
     font-size: small;
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    background: <?= color_scheme::getColor("table_bg_color") ?>;
     clear: both;
 }
 /* The description of a photo in thumbnail view */
@@ -926,7 +873,7 @@ div.color {
 /* Tables for the permissions */
 
 table.permissions   {
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    background: <?= color_scheme::getColor("table_bg_color") ?>;
     width: 90%;
     margin-left: auto; /* To center the page */
     margin-right: auto;
@@ -935,14 +882,13 @@ table.permissions   {
     }
 
 table.permissions td, table.permissions th  {
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    background: <?= color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     text-align: left;
 }
 
 table.permissions col {
     text-align: center;
-    padding: 0px;
 }
 
 table.permissions > col.col1 {
@@ -992,6 +938,9 @@ div.next    {
     clear: right;
 }
 
+span.md5 {
+    display: none;
+}
 
 /* Page links */
 div.pagelink,
@@ -1022,8 +971,8 @@ ul.pagegroup {
 
 ul.pagegroup li {
     display: block;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
     border-radius: 5px;
     float: left;
     margin: 3px;
@@ -1038,20 +987,18 @@ ul.pagegroup li a {
 }
 
 ul.pagegroup li:hover {
-    background: <?php echo color_scheme::getColor("selected_tab_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("selected_tab_font_color") ?>;
+    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
 }
 
 ul.pagegroup li.current {
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
     font-weight: bold;
 }
 
 /* up and down arrows for sort order */
 .up, .down  {
-    margin: 0px;
-    padding: 0px;
     display: block; /* needed to make the arrows exactly connect */
 }
 
@@ -1078,13 +1025,22 @@ div#rowscols {
     margin-bottom: 15px;
 }
 
-img.<?php echo MID_PREFIX ?> {
-    margin-left: auto;
-    margin-right: auto;
+img.<?= THUMB_PREFIX ?> {
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+}
+
+div.thumbnail img.<?= THUMB_PREFIX ?>:hover {
+    margin-top: -2px;
+    margin-left: -2px;
+    box-shadow: 7px 7px 7px rgba(0,0,0,0.4);
+}
+
+img.<?= MID_PREFIX ?> {
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    margin: 10px auto;
     clear: both;
     text-align: center;
     display: block;
-    padding: 10px;
 }
 
 img.busy,
@@ -1096,9 +1052,6 @@ img.waiting {
     display: block;
 }
 
-span.md5 {
-    display: none;
-}
 
 div#rotate {
     margin-left: auto;
@@ -1160,15 +1113,15 @@ div.editchoice  {
 div.thumbnail   {
     text-align: center;
     vertical-align: top;
-    width: <?php echo THUMB_SIZE ?>px;
-    height: <?php echo THUMB_SIZE ?>px;
+    width: <?= THUMB_SIZE ?>px;
+    height: <?= THUMB_SIZE ?>px;
     float:left;
     margin: 2px;
     padding: 5px;
 }
 
 div.comment {
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     background: transparent;
     font-size: small;
     min-height: 5em;
@@ -1178,19 +1131,18 @@ div.comment {
 
 div.comment h3 {
     width: 100%;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    border-bottom: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
+    border-bottom: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     text-align: left;
 }
 
 div.commentinfo {
-    border-bottom: 1px dashed <?php echo color_scheme::getColor("table_border_color") ?>;
+    border-bottom: 1px dashed <?= color_scheme::getColor("table_border_color") ?>;
     width: 100%;
     font-size: x-small;
     font-style: italic;
     margin: 0 0 0.5em 0;
-    padding: 0;
 }
 
 span.searchinfo {
@@ -1207,9 +1159,8 @@ br.noclear {
 
 /* The random thumnail on the first page */
 #random.thumbnail   {
-    width: <?php echo THUMB_SIZE+10 ?>px;
+    width: <?= THUMB_SIZE+10 ?>px;
     vertical-align: middle;
-    margin: 0;
     padding-top: 10px;
     padding-left: 0px;
     float: left;
@@ -1228,34 +1179,16 @@ br.noclear {
     width: 90%
 }
 
-dl.color_scheme,
-dl.comment,
-dl.page,
-dl.pageset,
-dl photo,
-dl.users,
-dl.track {
+dl.display {
     margin-top: 0px;
     margin-bottom: 30px;
-    /* Workaround for Firefox bug */
-    border: 1px solid transparent;
 }
 
 label,
-dl.color_scheme dt,
-dl.comment dt,
-dl.page dt,
-dl.pageset dt,
-dl.photo dt,
-dl.users dt,
-dl.track dt,
-dl.color_scheme dd,
-dl.comment dd,
-dl.page dd,
-dl.pageset dd,
-dl.photo dd,
-dl.users dd,
-dl.track dd {
+table.credits th, 
+dl.display > dt,
+dl.display > dd {
+    float: left;
     font-size: medium;
     padding-left: 4px;
     padding-right: 4px;
@@ -1263,31 +1196,17 @@ dl.track dd {
     margin: 4px 0px;
     position: relative;
     top: -4px;
-    border: none;
 }
 
-dl.color_scheme dd,
-dl.comment dd,
-dl.page dd,
-dl.pageset dd,
-dl.photo dd,
-dl.users dd,
-dl.track dd {
-    float: left;
+dl.display > dd {
     width: 55%;
     margin: 5px;
 }
 
+form.user label,
 form.prefs label,
-dl.color_scheme dt,
-dl.comment dt,
-dl.page dt,
-dl.pageset dt,
-dl.photo dt,
-dl.users dt,
-dl.track dt {
+dl.display > dt {
     clear: left;
-    float: left;
     width: 40%;
     font-weight: bold;
     text-align: right;
@@ -1339,9 +1258,7 @@ input[type="checkbox"] + label {
 }
 
 fieldset  {
-    margin: 0;
-    border: none;
-    padding: 0;
+    border-radius: 5px;
     margin-bottom: 5px;
     clear: right;
     overflow: hidden;
@@ -1349,25 +1266,29 @@ fieldset  {
     float: left;
 }
 
+legend {
+    border-radius: 2px;
+}
+
 fieldset.editphotos,
 fieldset.map,
 fieldset.geotag  {
     width: 100%;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    padding-bottom: 20px;
-    border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
+    margin: 10px 0 20px 0;
+    padding: 10px 0;
+    border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
 }
 
 fieldset.members {
     clear: both;
     margin: 20px 20px 20px 12em;
+    padding: 1em;
     width: 15em;
-    border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
 }
 
 
-// The map is inside a table on the search page
+/* The map is inside a table on the search page */
 table fieldset.map {
     width: 95%;
 }
@@ -1382,34 +1303,31 @@ fieldset.geotag legend,
 fieldset.members legend {
     clear: both;
     display: block;
-    left: 2em;
+    margin-left: 2em;
     padding-right: 2em;
     padding-left: 2em;
     font-weight: bold;
-    border: 1px solid <?php echo color_scheme::getColor("page_bg_color") ?>;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
 }
 
 fieldset.members legend {
-    padding: 0.5em 4em;
-    margin-bottom: 0.8em;
-}
+    padding: 0.3em 1em;
+    margin-left: 0.5em;
 
+}
 
 fieldset.editphotos div.thumbnail {
     vertical-align: top;
     clear: none;
     font-size: small;
-    margin: 0px;
     margin-left: -10em;
     float: right;
 }
 
 fieldset.editphotos-fields {
-    margin: 0 0 0 20px;
-
     clear: none;
-    width: 90%;
+    width: 80%;
     padding-top: 10px;
 }
 
@@ -1422,17 +1340,23 @@ fieldset.checkboxlist legend {
 input[type="button"],
 input[type="submit"],
 input[type="reset"] {
-    border: 2px outset;
-    background: <?php echo color_scheme::getColor("tab_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("tab_font_color") ?>;
+    border: none;
+    border-radius: 5px;
+    background: <?= color_scheme::getColor("tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("tab_font_color") ?>;
+    font-size: x-large;
     font-weight: bold;
-    width: 100px;
-    height: 25px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    margin-left: auto;
-    margin-right: 15px;
-    display: block;
+    width: 200px;
+    height: 30px;
+    float: right;
+    clear: both;
+}
+
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover {
+    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
+    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
 }
 
 input[disabled] {
@@ -1441,7 +1365,10 @@ input[disabled] {
 
 div#rowscols input[type="submit"] {
     display: inline;
-    margin: 0px 15px 0px 15px;
+    margin: 0 15px 0 15px;
+    width: 60px;
+    height: 20px;
+    font-size: medium;
 }
 
 input[type="submit"].updatebutton {
@@ -1452,7 +1379,6 @@ input[type="submit"].updatebutton {
 }
 
 input[type="submit"].increment {
-    margin: 0px;
     width: auto;
     height: auto;
 }
@@ -1467,7 +1393,7 @@ textarea {
     }
 
 textarea.email {
-    margin-top: 0px;
+    margin-top: 0;
     margin-bottom: 15px;
     margin-left: 5%;
     margin-right: 5%;
@@ -1488,6 +1414,8 @@ input, select {
 }
 
 input[type="checkbox"] {
+    
+    margin-top: 6px;
     float: left;
 }
 
@@ -1510,7 +1438,7 @@ input[type="date"],
 input[type="number"],
 input[type="password"],
 textarea {
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     padding: 2px;
     border-radius: 2px;
     margin: 2px;
@@ -1566,13 +1494,6 @@ table#zophinfo td {
     width: 20%;
 }
 
-div#rowscols select,
-div#rowscols input,
-div#rotate select,
-div#rotate input {
-    margin: 0;
-}
-
 div#relation {
     margin-left: auto;
     margin-right: auto;
@@ -1590,22 +1511,21 @@ div.page-preview {
     max-height: 600px;
     min-width: 600px;
     overflow: scroll;
-    background: <?php echo color_scheme::getColor("table_bg_color") ?>;
+    background: <?= color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
-    border-spacing: 0px;
+    border-spacing: 0;
     padding: 10px;
-    border: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     clear: both;
 }
 
 div.page h1, div.page-preview h1 {
     position: relative;
     left: -10px;
-    margin: 0;
     width: 100%;
-    border-left: 0px;
-    border-right: 0px;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
+    border-left: 0;
+    border-right: 0;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
     font-size: large;
     text-align: center;
 
@@ -1630,7 +1550,6 @@ div.page div.background {
 html.iframe_upload {
     width: 100%;
     clear: both;
-    border: none;
 }
 
 html.iframe_upload body {
@@ -1649,9 +1568,8 @@ div.import_uploads,
 div.import,
 div.import_details {
     float:      left;
-    -moz-border-radius: 5px;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    border: none;
+    border-radius: 5px;
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
     margin: 10px;
     width: 95%;
 }
@@ -1662,7 +1580,7 @@ div.import_thumbs {
 }
 
 div.import_thumbs div.thumbnail {
-    height: <?php echo THUMB_SIZE + 30 ?>px;
+    height: <?= THUMB_SIZE + 30 ?>px;
 }
 
 div.import_thumbs img {
@@ -1676,7 +1594,6 @@ div.import textarea {
 }
 
 iframe.upload {
-    border: none;
     width: 100%;
     margin-bottom: 3px;
     height: 100px;
@@ -1701,11 +1618,11 @@ div.import_thumbs h2,
 div.import_uploads h2,
 div.import h2,
 div.import_details h2 {
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-    background: <?php echo color_scheme::getColor("breadcrumb_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    border-bottom: 1px solid <?php echo color_scheme::getColor("table_border_color") ?>;
+    border-radius-top-left: 5px;
+    border-radius-top-right: 5px;
+    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
+    border-bottom: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     text-align: center;
     width: 100%;
     clear: left;
@@ -1713,23 +1630,20 @@ div.import_details h2 {
     font-weight: bold;
     display: block;
     padding: 3px 0;
-    margin: 0;
 }
 
 
 .upload {
     width:      100%;
     height:     80px;
-    border: none;
 }
 
 .progressbar {
     margin: auto;
-    padding: 0;
     height: 20px;
     background: white;
     border: 1px solid black;
-    -moz-border-radius: 5px;
+    border-radius: 5px;
     overflow: hidden;
     clear: both;
 }
@@ -1737,11 +1651,10 @@ div.import_details h2 {
 .progressfill {
     height: 16px;
     margin: 2px;
-    padding: 0;
     max-width: 99%;
-    -moz-border-radius: 4px;
+    border-radius: 4px;
     text-align: center;
-    background: <?php echo color_scheme::getColor("page_bg_color") ?>;
+    background: <?= color_scheme::getColor("page_bg_color") ?>;
     color: white;
     font-weight: bold;
     overflow: hidden;
@@ -1784,8 +1697,7 @@ fieldset.multiple,
 fieldset.formhelper-multiple {
     background: transparent;
     margin: 0 0 5px 0;
-    padding: 0;
-    border: none;
+    padding: 5px;
     width: 230px;
 }
 
@@ -1798,15 +1710,15 @@ fieldset.formhelper-multiple > .actionlink {
     margin-left: 10px;
 }
 
+img.actionlink {
+    float: right;
+    position: relative;
+    top: -3px;
+}
+
 fieldset.multiple img.actionlink:last-child {
     /* hide the remove icon on last dropdown */
     display: none;
-}
-
-fieldset.import-extrafields {
-    margin: 0;
-    padding: 0;
-    border: none;
 }
 
 fieldset.import-extrafields > select {
@@ -1836,56 +1748,37 @@ ul.tabs {
     margin: 0 -10px 0 -40px;
     width: 40px;
     height: 0;
-    padding: 0;
     clear: left;
 }
 
 ul.tabs > li {
     position: relative;
-    margin: 0;
     z-index: 5;
     display: block;
     float: right;
     height: 55px;
     width: 40px;
     clear: both;
-
     overflow: hiddden;
-
-    -webkit-transition: width 700ms ease-out 200ms;
-    -moz-transition: width 700ms ease-out 200ms;
-    -o-transition: width 700ms ease-out 200ms;
-    -ms-transition: width 700ms ease-out 200ms;
     transition: width 700ms ease-out 200ms;
 
 }
 
 ul.tabs div.tab {
     position: relative;
-    background: <?php echo color_scheme::getColor("title_bg_color") ?>;
-    color: <?php echo color_scheme::getColor("title_font_color") ?>;
-    border: none;
-
+    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    color: <?= color_scheme::getColor("title_font_color") ?>;
     border-radius: 10px 0 0 10px;
-    -moz-border-radius: 10px 0 0 10px;
-    -webkit-border-radius: 10px 0 0 10px;
-    -o-border-radius: 10px 0 0 10px;
-
     width: 30px;
     height: 25px;
     margin: 0 -3px 0 0;
     padding: 10px 6px 10px 10px;
 
     box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -moz-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -o-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -webkit-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -ms-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
     z-index: 3;
 }
 
 ul.tabs div.contents > h1 {
-    border: none;
     height: 25px;
     padding: 10px 20px;
 }
@@ -1898,20 +1791,10 @@ ul.tabs div.contents {
     top: -45px;
     left: 45px;
     border-radius: 0 0 0 20px;
-    -moz-border-radius: 0 0 0 20px;
-    -webkit-border-radius: 0 0 0 20px;
-    -o-border-radius: 0 0 0 20px;
-    -ms-border-radius: 0 0 0 20px;
-
 
     box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -moz-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -o-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -webkit-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
-    -ms-box-shadow: -3px 3px 3px rgba(0,0,0,0.6);
     width: 515px;
 
-    border: none;
     background: rgba(255,255,255,0.9);
     z-index: 1;
 }
@@ -1931,11 +1814,11 @@ li.share div.contents > ul > li {
 }
 
 li.share li.direct_link {
-    background-image: url("<?php echo template::getImage("icons/link.png") ?>");
+    background-image: url("<?= template::getImage("icons/link.png") ?>");
 }
 
 li.share li.html {
-    background-image: url("<?php echo template::getImage("icons/html.png") ?>");
+    background-image: url("<?= template::getImage("icons/html.png") ?>");
 }
 
 li.share input {
@@ -2007,3 +1890,4 @@ div.message img.icon {
     margin-bottom: 2px;
 }
 
+/* vim: set syntax=css: */
