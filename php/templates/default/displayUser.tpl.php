@@ -28,7 +28,7 @@ if (!ZOPH) {
 </h1>
 <div class="main">
     <h2><?= e($tpl_obj->getName()) ?></h2>
-    <dl class="users">
+    <dl class="display users">
         <?php foreach ($tpl_fields as $title => $value): ?>
             <dt><?= $title ?></dt>
             <dd><?= $value ?></dd>

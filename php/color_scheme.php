@@ -79,7 +79,7 @@ if ($action == "display") {
     </h1>
     <div class="main">
       <h2><?php echo $color_scheme->get("name") ?></h2>
-        <dl class="color_scheme">
+        <dl class="display color_scheme">
     <?php
     $colors = $color_scheme->getDisplayArray();
 

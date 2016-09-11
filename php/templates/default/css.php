@@ -1171,32 +1171,15 @@ br.noclear {
     width: 90%
 }
 
-dl.color_scheme,
-dl.comment,
-dl.page,
-dl.pageset,
-dl photo,
-dl.users,
-dl.track {
+dl.display {
     margin-top: 0px;
     margin-bottom: 30px;
 }
 
 label,
-dl.color_scheme > dt,
-dl.comment > dt,
-dl.page > dt,
-dl.pageset > dt,
-dl.photo > dt,
-dl.users > dt,
-dl.track > dt,
-dl.color_scheme > dd,
-dl.comment > dd,
-dl.page > dd,
-dl.pageset > dd,
-dl.photo > dd,
-dl.users > dd,
-dl.track > dd {
+table.credits th, 
+dl.display > dt,
+dl.display > dd {
     float: left;
     font-size: medium;
     padding-left: 4px;
@@ -1207,26 +1190,14 @@ dl.track > dd {
     top: -4px;
 }
 
-dl.color_scheme > dd,
-dl.comment > dd,
-dl.page > dd,
-dl.pageset > dd,
-dl.photo > dd,
-dl.users > dd,
-dl.track > dd {
+dl.display > dd {
     width: 55%;
     margin: 5px;
 }
 
 form.user label,
 form.prefs label,
-dl.color_scheme > dt,
-dl.comment > dt,
-dl.page > dt,
-dl.pageset > dt,
-dl.photo > dt,
-dl.users > dt,
-dl.track > dt {
+dl.display > dt {
     clear: left;
     width: 40%;
     font-weight: bold;

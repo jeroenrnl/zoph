@@ -121,7 +121,7 @@ if ($action == "confirm") {
         <br>
         <?php echo $photo->getImageTag(MID_PREFIX); ?>
         <br>
-        <dl class "comment">
+        <dl class "display comment">
             <?php echo create_field_html($comment->getDisplayArray()) ?>
         </dl>
         <br>

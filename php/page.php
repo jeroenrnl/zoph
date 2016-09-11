@@ -85,7 +85,7 @@ if ($action == "confirm") {
     </h1>
         <div class="main">
             <br>
-            <dl class="page">
+            <dl class="display page">
                 <?php echo create_field_html($zophpage->getDisplayArray()) ?>
             </dl>
             <br>
