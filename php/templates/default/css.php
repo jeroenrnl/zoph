@@ -326,6 +326,14 @@ div.generate input {
     float: left;
 }
 
+div.generate input[type=button] {
+    width: 75px;
+    font-size: medium;
+    float: left;
+    height: 18px;
+    clear: none;
+}
+
 ul.autocompdropdown {
     position: relative;
     margin: 0;
