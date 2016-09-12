@@ -582,9 +582,19 @@ input.leftright {
 }
 
 select#rating + input[type="submit"] {
-    margin: 20px;
     height: 22px;
+    clear: none;
+    top: 4px;
+    float: left;
+    width: 40px;
+    font-size: medium;
 }
+
+select#rating {
+    clear: none;
+    top: 5px;
+}
+
 
 div.timedetails,
 div.ratingdetails {
@@ -607,9 +617,6 @@ div.timedetail h3 {
     background: <?= color_scheme::getColor("title_bg_color") ?>;
     color: <?= color_scheme::getColor("title_font_color") ?>;
     font-size: large;
-}
-
-table.ratingdetail {
 }
 
 table.ratingdetail td, table.ratingdetail th {
@@ -1500,7 +1507,13 @@ div#relation {
     width: 50%;
 }
 
+div#rotate select,
 div#rotate input[type="submit"] {
+    font-weight: normal;
+    float: none;
+    height: 20px;
+    width: 40px;
+    font-size: medium;
     margin-left: auto;
     margin-right: auto;
 }
