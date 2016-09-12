@@ -217,7 +217,7 @@ div.toggle {
     width: 16px;
     height: 16px;
     float: left;
-    margin: -4px 0 0 -25px;
+    margin: 0 0 0 -25px;
 }
 
 .collapsed > div.toggle {
@@ -581,6 +581,10 @@ input.leftright {
     height: 20px;
 }
 
+form#ratingform {
+    margin-top: 5px;
+}
+
 select#rating + input[type="submit"] {
     height: 22px;
     clear: none;
@@ -589,12 +593,6 @@ select#rating + input[type="submit"] {
     width: 40px;
     font-size: medium;
 }
-
-select#rating {
-    clear: none;
-    top: 5px;
-}
-
 
 div.timedetails,
 div.ratingdetails {
@@ -1202,7 +1200,6 @@ dl.display > dd {
     min-height: 1.3em;
     margin: 4px 0px;
     position: relative;
-    top: -4px;
 }
 
 dl.display > dd {
@@ -1416,8 +1413,6 @@ textarea.desc {
 
 input, select {
     margin: 2px;
-    position: relative;
-    top: -6px;
 }
 
 input[type="checkbox"] {
@@ -1467,6 +1462,12 @@ form.import select,
 form.geotag input,
 form.import input {
     float: left;
+}
+
+form.import fieldset {
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
 }
 
 /* There is text to the left of this select box, floating
