@@ -469,7 +469,6 @@ class photo extends zophTable {
                     }
                 }
             } catch (FileException $e) {
-                echo $e->getMessage() . "\n";
                 throw $e;
             }
             // We run this loop twice, because we only want to move/copy the
@@ -484,7 +483,6 @@ class photo extends zophTable {
                     $new->chmod();
                 }
             } catch (FileException $e) {
-                echo $e->getMessage() . "\n";
                 throw $e;
             }
             $this->set("name", $newname);

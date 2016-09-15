@@ -128,8 +128,7 @@ abstract class Import {
             try {
                 $photo->import($file);
             } catch (FileException $e) {
-                echo $e->getMessage();
-                throw $e;
+                log::msg($e->getMessage(), log::FATAL);
             }
 
             if (conf::get("import.cli.thumbs")===true) {
