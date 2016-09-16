@@ -417,12 +417,12 @@ nav.menu ul li a {
     text-decoration: none;
 }
 
-nav.menu ul li > a:hover { 
-    text-decoration: underline; 
+nav.menu ul li > a:hover {
+    text-decoration: underline;
 }
 
-nav.menu ul li.selected > a { 
-    color: <?= color_scheme::getColor("selected_tab_font_color") ?>; 
+nav.menu ul li.selected > a {
+    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
 }
 
 /* The breadcrumb line at the top of the page */
@@ -606,7 +606,7 @@ div.ratingdetail {
     background: white;
 }
 
-div.timedetail dt, 
+div.timedetail dt,
 div.timedetail dd {
     width: 40%;
 }
@@ -1190,7 +1190,7 @@ dl.display {
 }
 
 label,
-table.credits th, 
+table.credits th,
 dl.display > dt,
 dl.display > dd {
     float: left;
@@ -1416,7 +1416,7 @@ input, select {
 }
 
 input[type="checkbox"] {
-    
+
     margin-top: 6px;
     float: left;
 }
