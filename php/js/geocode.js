@@ -4,7 +4,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 2 of the License, or
 // (at your option) any later version.
-// 
+//
 // Zoph is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,6 +14,8 @@
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 var zGeocode=function() {
+    var url="http://api.geonames.org/search?style=SHORT&username=zoph&q=";
+    var xmltag="geoname";
 
     function checkGeocode() {
         // To prevent overwrite of tediously set lat & lon
@@ -29,7 +31,7 @@ var zGeocode=function() {
             disableGeocode(button);
         }
     }
-        
+
     function enableGeocode() {
         var button=document.getElementById("geocode");
         button.className=button.className.replace("geo_disabled", "geocode");
@@ -67,7 +69,7 @@ var zGeocode=function() {
     }
 
     function geocode(objQuery) {
-        var divResult=document.getElementById("geocoderesults"); 
+        var divResult=document.getElementById("geocoderesults");
         var query="";
         for (var i in objQuery) {
             if(trim(query)!=="") {
@@ -75,25 +77,24 @@ var zGeocode=function() {
             }
             query+=objQuery[i];
         }
-    
+
         divResult.innerHTML="searching for...<br>" + query;
 
-        var url="http://api.geonames.org/search?username=zoph&q=" + encodeURI(query) + "&style=SHORT";
         var http=new XMLHttpRequest();
-        http.open("GET", url, true);
+        http.open("GET", url + encodeURI(query), true);
 
        http.onreadystatechange=function() {
             zGeocode.handleGeocode(http, objQuery);
         };
         http.send(null);
-    } 
+    }
 
     function handleGeocode(http, objQuery) {
-        var divResult=document.getElementById("geocoderesults"); 
+        var divResult=document.getElementById("geocoderesults");
         if (http.readyState == 4) {
             if(http.status == 200) {
                 var response=http.responseXML;
-                var geonames=response.getElementsByTagName("geoname");
+                var geonames=response.getElementsByTagName(xmltag);
                 if(geonames.length > 0) {
                     displayGeocode(geonames, divResult, 0);
                 } else {
@@ -117,9 +118,17 @@ var zGeocode=function() {
                         divResult.appendChild(b);
                         return;
                     }
+                    if (Object.keys(objQuery).length == 0) {
+                        objQuery={
+                            title:      document.getElementById("title").value
+                        }
+                        url="http://api.geonames.org/wikipediaSearch?username=zoph&q=";
+                        xmltag="entry"
+                    }
                     geocode(objQuery);
+
                 }
-                         
+
             } else if (http.status == 0) {
                 divResult.innerHTML="";
                 var b=document.createElement("b");
@@ -147,6 +156,31 @@ var zGeocode=function() {
             "U": 5,   // Undersea
             "V": 14  // Forest, heath
         };
+
+        //define zoomlevels for different "features" in Wikipedia
+        // see http://www.geonames.org/wikipedia/wikipedia_features.html
+
+        var features={
+            "city":             12,
+            "railwaystation":   18,
+            "edu":              17,
+            "waterbody":        8,
+            "landmark":         18,
+            "adm2nd":           13,
+            "mountain":         12,
+            "adm3rd":           10,
+            "airport":          16,
+            "river":            8,
+            "isle":             14,
+            "event":            17,
+            "adm1st":           15,
+            "glacier":          16,
+            "country":          6,
+            "forest":           14,
+            "pass":             17,
+            "church":           18
+        };
+
         var zoomlevel=12;
 
         for(var c=0; c<geonames[result].childNodes.length; c++) {
@@ -155,11 +189,14 @@ var zGeocode=function() {
             if(tag.textContent) {
                 content=tag.textContent;
             } else {
-                // And again, M$ is to dumb to follow simple 
+                // And again, M$ is to dumb to follow simple
                 // standards
                 content=tag.text;
             }
             switch(tag.nodeName) {
+                case "title":
+                    title=content;
+                    break;
                 case "toponymName":
                     title=content;
                     break;
@@ -173,6 +210,9 @@ var zGeocode=function() {
                 case "fcl":
                     zoomlevel=zoomlevels[content];
                     break;
+                case "feature":
+                    zoomlevel=features[content];
+                    break;
             }
         }
         if(lat && lon) {
@@ -185,27 +225,27 @@ var zGeocode=function() {
         left.setAttribute("type", "button");
         left.className="leftright";
         left.setAttribute("value","<");
-        
+
         var right=document.createElement("input");
         right.setAttribute("type", "button");
         right.setAttribute("value",">");
         right.className="leftright";
-        
+
         if(result===0) {
             left.disabled=true;
         } else if ((result + 1) == total) {
             right.disabled=true;
         }
-        
+
         right.onclick=function() { displayGeocode(geonames, divResult, result + 1); };
         left.onclick=function() { displayGeocode(geonames, divResult, result - 1); };
         // This is a little bit of a hidden feature, click the title of the
         // found place to set this place's title.
         var b=document.createElement("b");
-        b.onclick=function() { titlefield.value=title; }; 
+        b.onclick=function() { titlefield.value=title; };
         b.innerHTML=title;
         var text=document.createTextNode((result + 1) + " / " + total);
-        
+
         divResult.innerHTML="";
         divResult.appendChild(b);
         divResult.appendChild(document.createElement("br"));
