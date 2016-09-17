@@ -39,7 +39,6 @@ a   {
 }
 
 h1  {
-    position: relative;
     background: <?= color_scheme::getColor("title_bg_color") ?>;
     color: <?= color_scheme::getColor("title_font_color") ?>;
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
@@ -386,14 +385,15 @@ nav ul li {
 
 nav.menu {
     background: <?= color_scheme::getColor("page_bg_color") ?>;
-    padding: 3px 10px;
 }
 
 nav.menu ul {
+    overflow: hidden;
+    padding: 7px 10px 3px;
+    margin-bottom: -1px;
 }
 
 nav.menu ul li  {
-    position: relative;
     padding: 2px 4px 4px 4px;
     margin: 1px;
     text-align: center;
@@ -404,7 +404,6 @@ nav.menu ul li  {
     border-radius: 2px 2px 0 0;
     font-size: large;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
-    z-index: 5;
 }
 
 nav.menu ul li:hover {
@@ -412,8 +411,6 @@ nav.menu ul li:hover {
     background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
     padding: 5px;
     font-weight: bold;
-    box-shadow: none;
-    z-index: 10;
 }
 
 nav.menu ul li.selected {
@@ -433,10 +430,13 @@ nav.menu ul li.selected > a {
     color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
 }
 
+nav.menu ul li a:hover {
+    color: <?= color_scheme::getColor("text_color") ?>;
+}
+
 /* The breadcrumb line at the top of the page */
 
 nav.breadcrumbs {
-    position: relative;
     background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     color: <?= color_scheme::getColor("text_color") ?>;
@@ -473,7 +473,6 @@ ul.breadcrumbs li a {
 
 /* Main page */
 .main, .page, div.map, div#selection  {
-    position: relative;
     background: <?= color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     width: 100%;
@@ -484,7 +483,6 @@ ul.breadcrumbs li a {
     box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     clear: both;
     overflow: hidden;
-    z-index: 5;
 }
 
 .main > div.map {
