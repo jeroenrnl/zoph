@@ -14,8 +14,12 @@
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 var zGeocode=function() {
-    var url="http://api.geonames.org/search?style=SHORT&username=zoph&q=";
-    var xmltag="geoname";
+    var geourl="http://api.geonames.org/search?style=SHORT&username=zoph&q=";
+    var wikiurl="http://api.geonames.org/wikipediaSearch?username=zoph&q=";
+    var url;
+    var geotag="geoname";
+    var wikitag="entry"
+    var xmltag;
 
     function checkGeocode() {
         // To prevent overwrite of tediously set lat & lon
@@ -25,7 +29,7 @@ var zGeocode=function() {
         var lat=document.getElementById("lat").value;
         var lon=document.getElementById("lon").value;
 
-        if(lat==0 && lon==0) {
+        if (lat==0 && lon==0) {
             enableGeocode(button);
         } else {
             disableGeocode(button);
@@ -48,6 +52,8 @@ var zGeocode=function() {
 
 
     function startGeocode() {
+        url=geourl;
+        xmltag=geotag;
         var objQuery={
             title:      document.getElementById("title").value,
             address:    document.getElementById("address").value,
@@ -60,7 +66,7 @@ var zGeocode=function() {
 
         // remove empty items
         for (var i in objQuery) {
-            if(trim(objQuery[i])==="") {
+            if (trim(objQuery[i])==="") {
                 delete objQuery[i];
             }
         }
@@ -72,7 +78,7 @@ var zGeocode=function() {
         var divResult=document.getElementById("geocoderesults");
         var query="";
         for (var i in objQuery) {
-            if(trim(query)!=="") {
+            if (trim(query)!=="") {
                 query += ", ";
             }
             query+=objQuery[i];
@@ -92,10 +98,10 @@ var zGeocode=function() {
     function handleGeocode(http, objQuery) {
         var divResult=document.getElementById("geocoderesults");
         if (http.readyState == 4) {
-            if(http.status == 200) {
+            if (http.status == 200) {
                 var response=http.responseXML;
                 var geonames=response.getElementsByTagName(xmltag);
-                if(geonames.length > 0) {
+                if (geonames.length > 0) {
                     displayGeocode(geonames, divResult, 0);
                 } else {
                     // No results, let's try again with some less fields
@@ -103,7 +109,7 @@ var zGeocode=function() {
                         delete (objQuery.zip);
                     } else if (objQuery.address2) {
                         delete objQuery.address2;
-                    } else if(objQuery.title) {
+                    } else if (objQuery.title) {
                         delete objQuery.title;
                     } else if (objQuery.address) {
                         delete objQuery.address;
@@ -111,6 +117,18 @@ var zGeocode=function() {
                         delete objQuery.state;
                     } else if (objQuery.country) {
                         delete objQuery.country;
+                    }
+
+                    if ((Object.keys(objQuery).length == 0) && (url != wikiurl)) {
+
+                        objQuery={
+                            title:      document.getElementById("title").value
+                        }
+                        url=wikiurl;
+                        xmltag=wikitag;
+                    }
+                    if (Object.keys(objQuery).length > 0) {
+                        geocode(objQuery);
                     } else {
                         divResult.innerHTML="";
                         var b=document.createElement("b");
@@ -118,14 +136,6 @@ var zGeocode=function() {
                         divResult.appendChild(b);
                         return;
                     }
-                    if (Object.keys(objQuery).length == 0) {
-                        objQuery={
-                            title:      document.getElementById("title").value
-                        }
-                        url="http://api.geonames.org/wikipediaSearch?username=zoph&q=";
-                        xmltag="entry"
-                    }
-                    geocode(objQuery);
 
                 }
 
@@ -183,10 +193,10 @@ var zGeocode=function() {
 
         var zoomlevel=12;
 
-        for(var c=0; c<geonames[result].childNodes.length; c++) {
+        for (var c=0; c<geonames[result].childNodes.length; c++) {
             tag=geonames[result].childNodes[c];
             content=null;
-            if(tag.textContent) {
+            if (tag.textContent) {
                 content=tag.textContent;
             } else {
                 // And again, M$ is to dumb to follow simple
@@ -215,7 +225,7 @@ var zGeocode=function() {
                     break;
             }
         }
-        if(lat && lon) {
+        if (lat && lon) {
             document.getElementById("lat").value=lat;
             document.getElementById("lon").value=lon;
             document.getElementById("mapzoom").value=zoomlevel;
@@ -231,7 +241,7 @@ var zGeocode=function() {
         right.setAttribute("value",">");
         right.className="leftright";
 
-        if(result===0) {
+        if (result===0) {
             left.disabled=true;
         } else if ((result + 1) == total) {
             right.disabled=true;
