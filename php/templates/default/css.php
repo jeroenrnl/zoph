@@ -39,6 +39,7 @@ a   {
 }
 
 h1  {
+    position: relative;
     background: <?= color_scheme::getColor("title_bg_color") ?>;
     color: <?= color_scheme::getColor("title_font_color") ?>;
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
@@ -50,6 +51,7 @@ h1  {
     padding: 2px 10px 2px 10px;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     margin: -1px 0;
+    z-index: 5;
 }
 
 /* Secondary title such as album title */
@@ -120,6 +122,7 @@ div.details {
 
     border-radius: 10px;
     box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+    z-index: 10;
 }
 
 dl dt {
@@ -140,7 +143,7 @@ dl dd {
 }
 
 div.details > h3 {
-    margin: -20px -20px 0 -20px;
+    margin: -20px -20px 20px -20px;
     padding: 5px 20px;
     border-radius: 10px 10px 0 0;
     width: 100%;
@@ -383,25 +386,34 @@ nav ul li {
 
 nav.menu {
     background: <?= color_scheme::getColor("page_bg_color") ?>;
-    padding-left: 10px;
+    padding: 3px 10px;
+}
+
+nav.menu ul {
 }
 
 nav.menu ul li  {
-    padding: 1px;
-    padding-top: 3px;
+    position: relative;
+    padding: 2px 4px 4px 4px;
     margin: 1px;
     text-align: center;
     background: <?= color_scheme::getColor("tab_bg_color") ?>;
     color: <?= color_scheme::getColor("tab_font_color") ?>;
-    font-size: small;
+    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border-bottom: none;
+    border-radius: 2px 2px 0 0;
+    font-size: large;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    z-index: 5;
 }
 
 nav.menu ul li:hover {
-    position: relative;
+    top: -1px;
     background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
-    border-bottom: none;
-    padding: 2px 0 2px 0;
+    padding: 5px;
+    font-weight: bold;
+    box-shadow: none;
+    z-index: 10;
 }
 
 nav.menu ul li.selected {
@@ -417,10 +429,6 @@ nav.menu ul li a {
     text-decoration: none;
 }
 
-nav.menu ul li > a:hover {
-    text-decoration: underline;
-}
-
 nav.menu ul li.selected > a {
     color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
 }
@@ -428,6 +436,7 @@ nav.menu ul li.selected > a {
 /* The breadcrumb line at the top of the page */
 
 nav.breadcrumbs {
+    position: relative;
     background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
     border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
     color: <?= color_scheme::getColor("text_color") ?>;
@@ -437,6 +446,7 @@ nav.breadcrumbs {
     width: 100%;
     border-radius: 5px 5px 0 0;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+    z-index: 5;
 }
 
 ul.breadcrumbs li {
@@ -463,6 +473,7 @@ ul.breadcrumbs li a {
 
 /* Main page */
 .main, .page, div.map, div#selection  {
+    position: relative;
     background: <?= color_scheme::getColor("table_bg_color") ?>;
     font-size: medium;
     width: 100%;
@@ -473,14 +484,20 @@ ul.breadcrumbs li a {
     box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     clear: both;
     overflow: hidden;
+    z-index: 5;
 }
-
 
 .main > div.map {
     left: -1px;
 }
 
+div#selection + div.main {
+    margin-top: -10px;
+}
+
 div.map {
+    border-radius: 5px;
+    margin-top: 5px;
     height: 450px;
 }
 
@@ -488,6 +505,10 @@ div.map small {
     display: block;
     /* used in infoBubble */
     font-size: x-small;
+}
+
+div#selection {
+    z-index: 6;
 }
 
 div.minimap {
@@ -556,20 +577,22 @@ div.geocode {
     position: absolute;
     top: -10px;
     right: 0px;
-    width: 150px;
+    width: 160px;
 }
 
 div#geocoderesults {
-    width: 144px;
+    width: 100%;
     color: #666666;
     text-align: center;
     font-size: small;
 }
 
 div.geocode input[type="button"] {
+    float: none;
+    clear: none;
+    height: 20px;
     width: 140px;
-    margin: 2px;
-    float: left;
+    margin: 10px;
 }
 
 input.geo_disabled {
@@ -577,7 +600,7 @@ input.geo_disabled {
 }
 
 input.leftright {
-    width: 68px !important;
+    width: 60px !important;
     height: 20px;
 }
 

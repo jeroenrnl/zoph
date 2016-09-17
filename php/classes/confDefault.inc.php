@@ -68,7 +68,7 @@ class confDefault extends conf {
         $intWidth->setLabel("Screen width");
         $intWidth->setDesc("A number in pixels (\"px\") or percent (\"%\"), the latter " .
             "is a percentage of the user's browser window width.");
-        $intWidth->setDefault("600px");
+        $intWidth->setDefault("800px");
         $intWidth->setRegex("^[0-9]+(px|%)$");
         $interface[]=$intWidth;
 
