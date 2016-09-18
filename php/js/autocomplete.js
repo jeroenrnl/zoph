@@ -119,8 +119,8 @@ var autocomplete=function() {
         input=getElementsByClass("autocompinput");
         dropdown=getElementsByClass("autocompdropdown");
         for (var i=0; i<input.length; i++) {
-            dropdown[i].style.left=findPos(input[i])[0] + "px";
-            dropdown[i].style.top=findPos(input[i])[1] + input[i].offsetHeight + "px";
+            dropdown[i].style.left=input[i].offsetLeft + "px";
+            dropdown[i].style.top=input[i].offsetTop + input[i].offsetHeight + "px";
         }
     }
     function show() {
