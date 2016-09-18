@@ -172,9 +172,24 @@ class photo extends zophTable {
 
     /**
      * Delete this photo from database
-     * does not delete the photo on disk
      */
     public function delete() {
+        if (conf::get("path.trash")) {
+            $this->lookup();
+            $mid=new file($this->getFilePath(MID_PREFIX));
+            $mid->delete();
+            $thumb=new file($this->getFilePath(THUMB_PREFIX));
+            $thumb->delete();
+            $photo=new file($this->getFilePath());
+            $trash=conf::get("path.images") . DIRECTORY_SEPARATOR . conf::get("path.trash");
+            if (!file_exists($trash)) {
+                file::createDirRecursive($trash);
+            }
+            $photo->setDestination($trash);
+            $photo->backup=true;
+            $photo->move();
+        }
+
         parent::delete(array(
             "photo_people",
             "photo_categories",
@@ -414,16 +429,16 @@ class photo extends zophTable {
             }
 
             if (conf::get("import.dated.hier")) {
-                $newPath .= cleanup_path(str_replace("-", "/", $date));
+                $newPath .= file::cleanupPath(str_replace("-", "/", $date));
             } else {
-                $newPath .= cleanup_path(str_replace("-", ".", $date));
+                $newPath .= file::cleanupPath(str_replace("-", ".", $date));
             }
         }
-        $toPath="/" . cleanup_path(conf::get("path.images") . "/" . $newPath) . "/";
+        $toPath="/" . file::cleanupPath(conf::get("path.images") . "/" . $newPath) . "/";
 
         $path=$file->getPath();
-        create_dir_recursive($toPath . "/" . MID_PREFIX);
-        create_dir_recursive($toPath . "/" . THUMB_PREFIX);
+        file::createDirRecursive($toPath . "/" . MID_PREFIX);
+        file::createDirRecursive($toPath . "/" . THUMB_PREFIX);
 
         if ($path ."/" != $toPath) {
             $file->setDestination($toPath);
@@ -454,7 +469,6 @@ class photo extends zophTable {
                     }
                 }
             } catch (FileException $e) {
-                echo $e->getMessage() . "\n";
                 throw $e;
             }
             // We run this loop twice, because we only want to move/copy the
@@ -469,13 +483,12 @@ class photo extends zophTable {
                     $new->chmod();
                 }
             } catch (FileException $e) {
-                echo $e->getMessage() . "\n";
                 throw $e;
             }
             $this->set("name", $newname);
         }
         // Update the db to the new path;
-        $this->set("path", cleanup_path($newPath));
+        $this->set("path", file::cleanupPath($newPath));
     }
 
     /**
@@ -1530,7 +1543,6 @@ class photo extends zophTable {
         }
         $qry->addParam(new param(":hash", $hash, PDO::PARAM_STR));
         $qry->where($where);
-
         $photos=static::getRecordsFromQuery($qry);
         if (is_array($photos) && sizeof($photos) > 0) {
             return $photos[0];

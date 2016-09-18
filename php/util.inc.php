@@ -384,16 +384,6 @@ function rawurlencode_array($var, $varName, $separator = '&') {
     return implode($separator, $toImplode);
 }
 
-/**
- * Cleans up a path, by removing all double slashes, "/./",
- * leading and trailing slashes.
- */
-function cleanup_path($path) {
-    $search = array ( "/(\/+)/", "/(\/\.\/)/", "/(\/$)/", "/(^\/)/" );
-    $replace = array ( "/", "/", "", "" );
-    return preg_replace($search,$replace, $path);
-}
-
 function create_actionlinks($actionlinks) {
     if (is_array($actionlinks)) {
         $html="<ul class=\"actionlink\">\n";
@@ -453,23 +443,6 @@ function getHuman($bytes) {
     }
 }
 
-function check_js($user) {
-    if (($user->prefs->get("autocomp_albums")) ||
-        ($user->prefs->get("autocomp_categories")) ||
-        ($user->prefs->get("autocomp_places")) ||
-        ($user->prefs->get("autocomp_people")) ||
-        ($user->prefs->get("autocomp_photographer")) &&
-        conf::get("interface.autocomplete")) {
-
-        return "<noscript><div class='warning'><img class='icon' src='" .
-            template::getImage("icons/warning.png") . "'>" .
-            translate("You have enabled autocompletion for one or more dropdown " .
-                "boxes on this page, however, you do not seem to have Javascript " .
-                "support. You should either enable javascript or turn autocompletion " .
-                "off, or this page will not work as expected!") . "</div></noscript>";
-    }
-}
-
 function redirect($url = "zoph.php", $msg = "Access denied") {
     if (!((LOG_SUBJECT & log::REDIRECT) && (LOG_SEVERITY >= log::DEBUG))) {
         header("Location: " . $url);
@@ -478,33 +451,5 @@ function redirect($url = "zoph.php", $msg = "Access denied") {
     die();
 }
 
-function create_dir($directory) {
-    if (file_exists($directory) == false) {
-        if (@mkdir($directory, octdec(conf::get("import.dirmode")))) {
-            if (!defined("CLI") || conf::get("import.cli.verbose")>=1) {
-                log::msg(translate("Created directory") . ": $directory", log::NOTIFY, log::GENERAL);
-            }
-            return true;
-        } else {
-            throw new FileDirCreationFailedException(
-                translate("Could not create directory") . ": $directory<br>\n");
-        }
-    }
-    return 0;
-}
-
-function create_dir_recursive($directory){
-    $nextdir="";
-    $directory="/" . cleanup_path($directory);
-    foreach (explode("/",$directory) as $subdir) {
-        $nextdir=$nextdir . $subdir . "/";
-        try {
-            $result=create_dir($nextdir);
-        } catch (FileException $e) {
-            throw $e;
-        }
-    }
-    return $result;
-}
 
 ?>

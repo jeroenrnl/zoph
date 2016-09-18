@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for the menubar at the top of the screen
+ * Template for displaying a message to the user
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,19 +15,17 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @author Jeroen Roos
  * @package ZophTemplates
+ * @author Jeroen Roos
  */
 
 if (!ZOPH) { die("Illegal call"); }
 ?>
-<nav class="menu">
-    <ul>
-        <?php foreach ($tpl_tabs as $label => $page): ?>
-            <li <?= $page == $tpl_self ? "class=\"selected\"" : "" ?>>
-                <a href="<?= $page ?>"><?= $label ?></a>
-            </li>
-        <?php endforeach ?>
-    </ul>
-</nav>
+
+<div class="message <?= $tpl_class ?>">
+    <img class='icon' src='<?php echo template::getImage("icons/" . $tpl_class . ".png") ?>'>
+    <?= $tpl_text ?>
+    <br>
+</div>
+
 

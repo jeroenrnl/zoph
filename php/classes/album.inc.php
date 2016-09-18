@@ -104,6 +104,27 @@ class album extends zophTreeTable implements Organizer {
     }
 
     /**
+     * Insert a new album in the db
+     */
+    public function insert() {
+        parent::insert();
+
+        $parentId=$this->get("parent_album_id");
+
+        $qry=new select(array("gp" => "group_permissions"));
+        $qry->addParam(new param(":albumId", (int) $parentId, PDO::PARAM_INT));
+        $where=new clause("album_id=:albumId");
+        $where->addAnd(new clause("subalbums=1"));
+        $qry->where($where);
+
+        $perms=permissions::getRecordsFromQuery($qry);
+        foreach ($perms as $perm) {
+            $perm->set("album_id", $this->getId());
+            $perm->insert();
+        }
+    }
+
+    /**
      * Add a photo to this album
      * @param photo Photo to add
      */

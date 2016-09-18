@@ -72,9 +72,12 @@ if (getvar("circle_id")) {
         redirect("people.php");
     }
 
+    $view_hidden=array("circle_id" => $circle->getId());
+
 } else {
     $title = translate("People");
     $selection=null;
+    $view_hidden=array();
 }
 
 require_once "header.inc.php";
@@ -84,6 +87,7 @@ $tpl=new template("organizer", array(
     "selection" => $selection,
     "view"      => $_view,
     "view_name" => "People view",
+    "view_hidden"   => $view_hidden,
     "autothumb" => $_autothumb
 ));
 
@@ -156,8 +160,9 @@ if ($ppl) {
 }
 
 if (!$ppl && !isset($circles) && !isset($circle)) {
-    $block=new block("error", array(
-        "text"   => $msg
+    $block=new block("message", array(
+        "class" => "error",
+        "text"  => $msg
     ));
     $tpl->addBlock($block);
 }

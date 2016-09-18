@@ -31,6 +31,9 @@ if (!ZOPH) {
 <?php endif ?>
 <div class="main">
     <form class="viewsettings" method="get">
+        <?php foreach ($tpl_view_hidden as $field => $value): ?>
+            <input type="hidden" name="<?= $field ?>" value="<?= $value ?>">
+        <?php endforeach ?>
         <?= translate($tpl_view_name) ?>
         <?= template::createViewPulldown("_view", $tpl_view, true) ?>
         <?= translate("Automatic thumbnail") ?>

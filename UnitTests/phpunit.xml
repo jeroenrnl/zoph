@@ -28,7 +28,7 @@
       <file>anonymousUserTest.php</file>
       <file>categoryTest.php</file>
       <file>groupTest.php</file>
-      <file>groupPermissionsTest.php</file>
+      <file>permissionsTest.php</file>
       <file>personTest.php</file>
       <file>circleTest.php</file>
       <file>photographerTest.php</file>

@@ -63,7 +63,13 @@ class user extends zophTable {
     public function insert() {
         $this->set("lastnotify", "now()");
         parent::insert();
-        $this->prefs = new prefs($this->getId());
+        $default=new prefs(-1);
+        if ($default->lookup()) {
+            $default->set("user_id", $this->getId());
+            $this->prefs=$default;
+        } else {
+            $this->prefs = new prefs($this->getId());
+        }
         $this->prefs->insert();
     }
 
@@ -98,6 +104,15 @@ class user extends zophTable {
     public function isAdmin() {
         $this->lookup();
         return $this->get("user_class") == 0;
+    }
+
+    /**
+     * Is this user the default user?
+     * @return bool
+     */
+    public function isDefault() {
+        $this->lookup();
+        return (conf::get("interface.user.default") == $this->getId());
     }
 
     /**
@@ -150,12 +165,12 @@ class user extends zophTable {
     /**
      * Get album permissions for this user
      * @param album album to get permissions for
-     * @return group_permissions Permissions object
+     * @return permissions permissions object
      */
     public function getAlbumPermissions(album $album) {
         // An admin or creator of an album always has full permissions on that album
         if ($this->isAdmin() || $this->isCreator($album)) {
-            $gp=new group_permissions(0, $album->getId());
+            $gp=new permissions(0, $album->getId());
             $gp->set("access_level", 9);
             $gp->set("watermark_level", 0);
             $gp->set("writable", true);
@@ -183,7 +198,7 @@ class user extends zophTable {
                 ->addOrder("watermark_level DESC");
             $qry->addLimit(1);
 
-            $aps=group_permissions::getRecordsFromQuery($qry);
+            $aps=permissions::getRecordsFromQuery($qry);
             if (is_array($aps) && sizeof($aps) >= 1) {
                 return $aps[0];
             }
@@ -195,13 +210,13 @@ class user extends zophTable {
     /**
      * Get permissions for a specific photo, for this user
      * @param photo Photo to get permissions for
-     * @return group_permissions Permissions object
+     * @return permissions permissions object
      */
     public function getPhotoPermissions(photo $photo) {
         $permissions=null;
-        foreach($photo->getAlbums() as $album) {
-            if($this->isCreator($album)) {
-                $permissions=new group_permissions(0,$album->getId());
+        foreach ($photo->getAlbums() as $album) {
+            if ($this->isCreator($album)) {
+                $permissions=new permissions(0,$album->getId());
                 $permissions->set("access_level", 9);
                 $permissions->set("watermark_level", 0);
                 $permissions->set("writable", true);
@@ -228,16 +243,16 @@ class user extends zophTable {
         $qry->addOrder("gp.access_level DESC")->addOrder("writable DESC")->addOrder("watermark_level DESC");
         $qry->where($where);
 
-        $gps = group_permissions::getRecordsFromQuery($qry);
+        $gps = permissions::getRecordsFromQuery($qry);
         if ($gps && sizeof($gps) >= 1) {
             $permissions=$gps[0];
         }
 
         if ($this->canSeeAllPhotos()) {
-            if ($permissions instanceof group_permissions) {
+            if ($permissions instanceof permissions) {
                 $permissions->set("access_level", 9);
             } else {
-                $permissions=new group_permissions();
+                $permissions=new permissions();
                 $permissions->set("access_level", 9);
                 $permissions->set("watermark_level", 0);
                 $permissions->set("writable", 0);

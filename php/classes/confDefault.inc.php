@@ -68,7 +68,7 @@ class confDefault extends conf {
         $intWidth->setLabel("Screen width");
         $intWidth->setDesc("A number in pixels (\"px\") or percent (\"%\"), the latter " .
             "is a percentage of the user's browser window width.");
-        $intWidth->setDefault("600px");
+        $intWidth->setDefault("800px");
         $intWidth->setRegex("^[0-9]+(px|%)$");
         $interface[]=$intWidth;
 
@@ -264,7 +264,7 @@ class confDefault extends conf {
         $pathImages->setDesc("Location of the images on the filesystem. Absolute path, " .
             " thus starting with a /");
         $pathImages->setDefault("/data/images");
-        $pathImages->setRegex("^\/[A-Za-z0-9_\.\/]+$");
+        $pathImages->setRegex("^\/[A-Za-z0-9_.\/]+$");
         $pathImages->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
             "slash (/), dot (.), and underscore (_). Must start with a /");
         $pathImages->setRequired();
@@ -278,10 +278,23 @@ class confDefault extends conf {
             "(above). For example, if the images directory is set to /data/images and " .
             "this is set to upload, photos will be uploaded to /data/images/upload.");
         $pathUpload->setDefault("upload");
-        $pathUpload->setRegex("^[A-Za-z0-9_]+[A-Za-z0-9_\.\/]*$");
+        $pathUpload->setRegex("^[A-Za-z0-9_]+[A-Za-z0-9_.\/]*$");
         $pathUpload->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
             "slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
         $path[]=$pathUpload;
+
+        $pathTrash = new confItemString();
+        $pathTrash->setName("path.trash");
+        $pathTrash->setLabel("Trash dir");
+        $pathTrash->setDesc("Directory where photos are moved when they are " .
+            "deleted. If left blank, files will remain where they were. This is a directory " .
+            "under the images directory (above). For example, if the images directory is set to " .
+            "/data/images and this is set to trash, photos will be moved to /data/images/trash.");
+        $pathTrash->setDefault("");
+        $pathTrash->setRegex("^[A-Za-z0-9_]*[A-Za-z0-9_.\/]*$");
+        $pathTrash->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
+            "slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
+        $path[]=$pathTrash;
 
         $pathMagic = new confItemString();
         $pathMagic->setName("path.magic");
@@ -295,7 +308,7 @@ class confDefault extends conf {
             "/usr/share/misc/magic.mgc, /usr/share/misc/file/magic.mgc, " .
             "/usr/share/file/magic are often used.");
         $pathMagic->setDefault("");
-        $pathMagic->setRegex("^(\/[A-Za-z0-9_\.\/]+|)$");
+        $pathMagic->setRegex("^\/[A-Za-z0-9_.\/]+$");
         $pathMagic->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
             "slash (/), dot (.), and underscore (_). Must start with a /. Can be " .
             "empty for PHP builtin magic file.");
@@ -307,18 +320,7 @@ class confDefault extends conf {
         $pathUnzip->setDesc("The command to use to unzip gzip files. Leave empty to " .
             "disable uploading .gz files. On most systems \"unzip\" will work.");
         $pathUnzip->setDefault("");
-        $pathUnzip->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
-        $pathUnzip->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
-            "slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
-        $path[]=$pathUnzip;
-
-        $pathUnzip = new confItemString();
-        $pathUnzip->setName("path.unzip");
-        $pathUnzip->setLabel("Unzip command");
-        $pathUnzip->setDesc("The command to use to unzip zip files. Leave empty to disable " .
-            "uploading .zip files. On most systems \"unzip\" will work.");
-        $pathUnzip->setDefault("");
-        $pathUnzip->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
+        $pathUnzip->setRegex("^([A-Za-z0-9_.\/ -]+|)$");
         $pathUnzip->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
             "slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$pathUnzip;
@@ -329,7 +331,7 @@ class confDefault extends conf {
         $pathUntar->setDesc("The command to use to untar tar files. Leave empty to disable " .
             "uploading .tar files. On most systems \"tar xvf\" will work.");
         $pathUntar->setDefault("");
-        $pathUntar->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
+        $pathUntar->setRegex("^([A-Za-z0-9_.\/ ]+|)$");
         $pathUntar->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
             "slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$pathUntar;
@@ -340,7 +342,7 @@ class confDefault extends conf {
         $pathUngz->setDesc("The command to use to unzip gzip files. Leave empty to disable " .
             "uploading .gz files. On most systems \"gunzip\" will work.");
         $pathUngz->setDefault("");
-        $pathUngz->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
+        $pathUngz->setRegex("^([A-Za-z0-9_.\/ ]+|)$");
         $pathUngz->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
             "slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$pathUngz;
@@ -351,7 +353,7 @@ class confDefault extends conf {
         $pathUnbz->setDesc("The command to use to unzip bzip files. Leave empty to disable " .
             "uploading .bz files. On most systems \"bunzip2\" will work.");
         $pathUnbz->setDefault("");
-        $pathUnbz->setRegex("^([A-Za-z0-9_\.\/\ ]+|)$");
+        $pathUnbz->setRegex("^([A-Za-z0-9_.\/ ]+|)$");
         $pathUnbz->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
             "slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$pathUnbz;
@@ -371,9 +373,6 @@ class confDefault extends conf {
         $mapsProvider->setLabel("Mapping provider");
         $mapsProvider->addOption("", "Disabled");
         $mapsProvider->addOption("googlev3", "Google Maps v3");
-        $mapsProvider->addOption("yahoo", "Yahoo maps");
-        $mapsProvider->addOption("cloudmade", "Cloudmade (OpenStreetMap)");
-        $mapsProvider->addOption("openlayers", "OpenLayers (OpenStreetMap)");
         $mapsProvider->setDefault("");
         $maps[]=$mapsProvider;
 
@@ -387,16 +386,6 @@ class confDefault extends conf {
         $mapsGeocode->addOption("geonames", "GeoNames");
         $mapsGeocode->setDefault("");
         $maps[]=$mapsGeocode;
-
-        $mapsKeyCloudmade = new confItemString();
-        $mapsKeyCloudmade->setName("maps.key.cloudmade");
-        $mapsKeyCloudmade->setLabel("Cloudmade Key");
-        $mapsKeyCloudmade->setDesc("API key for Cloudmade Maps. Only needed if using " .
-            "\"Cloudmade\" as provider. You can use Zoph's key (which is the default), " .
-            "but please do not use this key for any other applications.");
-        $mapsKeyCloudmade->setRegex("(^$|[a-z0-9]{32})");
-        $mapsKeyCloudmade->setDefault("f3b46b04edd64ea79066b7e6921205df");
-        $maps[]=$mapsKeyCloudmade;
     }
 
     /**
@@ -654,7 +643,7 @@ class confDefault extends conf {
             "3 example files are included. The filename is relative to the image directory, " .
             "defined above.");
         $watermarkFile->setDefault("");
-        $watermarkFile->setRegex("(^$|^[A-Za-z0-9_]+[A-Za-z0-9_\.\/]*\.gif$)");
+        $watermarkFile->setRegex("(^$|^[A-Za-z0-9_]+[A-Za-z0-9_.\/]*\.gif$)");
         $watermarkFile->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward slash (/), " .
             "dot (.), and underscore (_). Can not start with a dot or a slash");
         $watermark[]=$watermarkFile;
@@ -898,7 +887,7 @@ class confDefault extends conf {
             "following characters: dDjlNSwzWFmMntLoYy (for explanation, see " .
             "http://php.net/manual/en/function.date.php) and /, space, -, (, ), :, \",\" and .");
         $dateFormat->setDefault("d-m-Y");
-        $dateFormat->setRegex("^[dDjlNSwzWFmMntLoYy\/\ \-\(\)\:\,\.]+$");
+        $dateFormat->setRegex("^[dDjlNSwzWFmMntLoYy\/ \-():,.]+$");
         $dateFormat->setRequired();
         $date[]=$dateFormat;
 
@@ -909,7 +898,7 @@ class confDefault extends conf {
             "following characters: aABgGhHisueIOPTZcrU (for explanation, see " .
             "http://php.net/manual/en/function.date.php) and /, space, -, (, ), :, \",\" and .");
         $dateTimeFormat->setDefault("H:i:s T");
-        $dateTimeFormat->setRegex("^[aABgGhHisueIOPTZcrU\/\ \-\(\)\:\,\.]+$");
+        $dateTimeFormat->setRegex("^[aABgGhHisueIOPTZcrU\/ \-():,.]+$");
         $dateTimeFormat->setRequired();
         $date[]=$dateTimeFormat;
 

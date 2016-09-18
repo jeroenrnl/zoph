@@ -131,7 +131,7 @@ class WebImport extends Import {
         if ($realDir === false) {
             log::msg($dir . " does not exist, creating...", log::WARN, log::IMPORT);
             try {
-                create_dir_recursive($dir);
+                file::createDirRecursive($dir);
             } catch (FileDirCreationFailedException $e) {
                 log::msg($dir . " does not exist, and I can not create it. (" .
                     $e->getMessage() . ")", log::FATAL, log::IMPORT);

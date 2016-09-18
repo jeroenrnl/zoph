@@ -128,7 +128,7 @@ class anonymousUserTest extends zophDatabaseTestCase {
      */
     public function testGet_permissions_for_photo($id) {
         $pp=$this->object->getPhotoPermissions(new photo($id));
-        $this->assertInstanceOf("group_permissions",$pp);
+        $this->assertInstanceOf("permissions",$pp);
         $this->assertEquals($pp->get("album_id"), 0);
         $this->assertEquals($pp->get("group_id"), 0);
     }

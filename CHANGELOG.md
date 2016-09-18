@@ -1,4 +1,44 @@
 # Zoph Changelog #
+##Zoph 0.9.4##
+###18 Sept 2016###
+
+Zoph 0.9.4 is the new stable release. It is recommended for everyone to upgrade to this release
+###Features###
+* Geocoding: Zoph now also searches Wikipedia
+* [Issue#67](https://github.com/jeroenrnl/zoph/issues/67) Changed the colour scheme definition to use a nice interface to select the colour
+* [Issue#23](https://github.com/jeroenrnl/zoph/issues/23) An admin user can now define default prefences for new users
+* [Issue#24](https://github.com/jeroenrnl/zoph/issues/24) Added an option to automatically propagate permissions to newly created albums
+* [Issue#78](https://github.com/jeroenrnl/zoph/issues/78) Removed Yahoo, Cloudmade mapping as they no longer offer their services to the public
+* [Issue#78](https://github.com/jeroenrnl/zoph/issues/78) Removed Openlayers mapping, as Zophs implementation was buggy and did not work anymore.
+* [Issue#47](https://github.com/jeroenrnl/zoph/issues/47) Photos can now be deleted from disk (moved to a trash dir)
+* [Issue#67](https://github.com/jeroenrnl/zoph/issues/67) Added some new colour schemes
+
+###Bugs###
+* Fixed an issue with album pulldown when editing group access rights
+* Fixed an issue where the circles page would sometimes report $title not found
+* Fixed an issue with changing views on circle page
+* Fixed an issue that caused errors in Firefox when using the configuration page
+* fixed collapsable details for time and rating
+* [Issue#78](https://github.com/jeroenrnl/zoph/issues/78) Fixed a case where an admin user was sometimes not allowed to see a person or a place
+
+###Other improvements###
+* [Issue#77](https://github.com/jeroenrnl/zoph/issues/77) Lots of fixes in the German translation by Thomas Weiland (@HonkXL)
+* Moved group display to template
+* Moved group delete (confirm) into template
+* Moved group edit to a template
+* [Issue#79](https://github.com/jeroenrnl/zoph/issues/79) Modify recursive creation of directories, so Zoph can function in an open_basedir enverironment.
+* [Issue#66](https://github.com/jeroenrnl/zoph/issues/66) Cleanup of CSS
+* Some modernization of the looks of Zoph
+* [Issue#85](https://github.com/jeroenrnl/zoph/issues/85) Modified import process to show clearer error message
+* [Issue#66](https://github.com/jeroenrnl/zoph/issues/66) Added a reset CSS
+* [Issue#81](https://github.com/jeroenrnl/zoph/issues/81) Documentation updates
+* Some fixes for UnitTests
+* Additional tests
+* Refactor of group_permissions class into permissions class
+* Refactor prefs class
+* Moved preferences page to template
+* Modified prefs template to use labels instead of definition lists
+
 ##Zoph 0.9.3##
 ###10 jun 2016###
 

@@ -30,8 +30,8 @@
       </ul>
       <?php echo translate($_action) ?> <?php echo translate("place") ?>
     </h1>
-    <?php echo check_js($user); ?>
     <div class="main">
+        <?= template::showJSwarning() ?>
       <form action="place.php" method="GET">
         <input type="hidden" name="_action" value="<?php echo $action ?>">
         <input type="hidden" name="place_id" value="<?php echo $place->get("place_id") ?>">

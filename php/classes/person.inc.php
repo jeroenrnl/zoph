@@ -508,7 +508,7 @@ class person extends zophTable implements Organizer {
             $ids[]=$person->getId();
         }
 
-        return in_array($this->getId(), $ids);
+        return (in_array($this->getId(), $ids) || $user->isAdmin());
     }
 
     public function isCreator(user $user=null) {

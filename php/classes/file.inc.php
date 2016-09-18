@@ -29,22 +29,25 @@
  */
 class file {
 
-    /**
-     * @var string File name
-     */
+    /** @var string File name */
     private $name;
+    /** @var string Path where the file is located */
     private $path;
-    /**
-     * @var string type of file ("image", "archive", "ignore" ...)
-     */
+    /** @var string type of file ("image", "archive", "ignore" ...) */
     public $type;
-    /**
-     * @var string Used when file is going to be copied or moved
-     */
-    private $destination;
+    /** @var string Destination filename when copied or moved */
+    private $destName;
+    /** @var string Destination path when copied or moved */
+    private $destPath;
+    /** @var bool Make a backup if the destination file exists */
+    public $backup=false;
 
+    /**
+     * Create a new file object from a filename
+     * @param string filename
+     */
     public function __construct($filename) {
-        if (substr($filename,0,1)!="/") {
+        if (substr($filename, 0, 1)!="/") {
             $filename=getcwd() . "/" . $filename;
         }
 
@@ -63,8 +66,9 @@ class file {
 
     /**
      * Whether or not this file is a symlink
+     * @param bool whether or not this is a symlink
      */
-    public function is_link() {
+    public function isLink() {
         return is_link($this);
     }
 
@@ -76,7 +80,7 @@ class file {
      * Also, it will simply return a file object if the file is not a link.
      */
     public function readlink() {
-        if ($this->is_link()) {
+        if ($this->isLink()) {
             $file=new file(readlink($this));
             return $file->readlink();
         } else {
@@ -144,17 +148,15 @@ class file {
      * @todo 'related' files really should be part of the photo object.
      * @see photo
      */
-    public function delete($thumbs=false, $thumbs_only=false) {
+    public function delete($thumbs=false, $thumbsOnly=false) {
         log::msg("Deleting " . $this, log::NOTIFY, log::IMPORT);
-        if (!$thumbs_only) {
-            if (file_exists($this)) {
-                if (!is_dir($this) && is_writable($this)) {
-                    unlink($this);
-                } else {
-                    log::msg(sprintf(translate("Could not delete %s."), $this),
-                        log::ERROR, log::IMPORT);
-                    return false;
-                }
+        if (!$thumbsOnly && file_exists($this)) {
+            if (!is_dir($this) && is_writable($this)) {
+                unlink($this);
+            } else {
+                log::msg(sprintf(translate("Could not delete %s."), $this),
+                    log::ERROR, log::IMPORT);
+                return false;
             }
         }
         if ($thumbs) {
@@ -178,7 +180,7 @@ class file {
      * @param string destination of the file
      */
     public function setDestination($path) {
-        $this->destPath="/" . cleanup_path($path) . "/";
+        $this->destPath="/" . file::cleanupPath($path) . "/";
         $this->destName=basename($this->readlink());
     }
 
@@ -208,8 +210,20 @@ class file {
               $this->destPath);
         }
         if (file_exists($this->destPath . $this->destName)) {
-            throw new FileExistsException("File already exists: " .
-                $this->destPath . $this->destName);
+            if ($this->backup) {
+                $backupname=$this->destName;
+                $counter=1;
+                while (file_exists($this->destPath . $backupname)) {
+                    // Find the . in the filename
+                    $pos=strrpos($this->destName, ".") ?: strlen($file);
+                    $backupname=substr($this->destName, 0, $pos) . "_" . $counter . substr($this->destName, $pos);
+                    $counter++;
+                }
+                rename($this->destPath . $this->destName, $this->destPath . $backupname);
+            } else {
+                throw new FileExistsException("File already exists: " .
+                    $this->destPath . $this->destName);
+            }
         }
         return true;
     }
@@ -236,7 +250,7 @@ class file {
 
         log::msg("Going to move $this to $dest", LOG::DEBUG, LOG::GENERAL);
         $this->checkMove();
-        if ($this->is_link()) {
+        if ($this->isLink()) {
             // in case of a link, we copy the link destination and delete the link
             $copy=$this->readlink();
             $copy->setDestination($destPath);
@@ -339,9 +353,9 @@ class file {
             if ($filename[0]!=".") {
                 if (is_dir($dir . "/" . $filename)) {
                     if ($recursive) {
-                        $return=array_merge($return,static::getFromDir($dir . "/" . $filename, true));
+                        $return=array_merge($return, static::getFromDir($dir . "/" . $filename, true));
                     }
-                } else if (is_null($search) or preg_match($search, $filename)) {
+                } else if (is_null($search) || preg_match($search, $filename)) {
                     $file=new file($dir . "/" . $filename);
                     if (!file_exists($dir . "/" . $filename . ".zophignore")) {
                         $file->getMime();
@@ -355,6 +369,56 @@ class file {
             }
         }
         return $return;
+    }
+
+    /**
+     * Cleans up a path, by removing all double slashes, "/./",
+     * leading and trailing slashes.
+     */
+    public static function cleanupPath($path) {
+        $search = array("/(\/+)/", "/(\/\.\/)/", "/(\/$)/", "/(^\/)/");
+        $replace = array("/", "/", "", "");
+        return preg_replace($search, $replace, $path);
+    }
+
+    /**
+     * Create a directory
+     * @param string directory to create
+     * @return bool true when succesful
+     * @throws FileDirCreationFailedException when creation fails
+     */
+    private static function createDir($directory) {
+        if (!file_exists($directory)) {
+            if (@mkdir($directory, octdec(conf::get("import.dirmode")))) {
+                if (!defined("CLI") || conf::get("import.cli.verbose")>=1) {
+                    log::msg(translate("Created directory") . ": $directory", log::NOTIFY, log::GENERAL);
+                }
+                return true;
+            } else {
+                throw new FileDirCreationFailedException(
+                    translate("Could not create directory") . ": $directory<br>\n");
+            }
+        }
+    }
+
+    /**
+     * Recursively create directory
+     * checks if the parent dir of the dir to be created exists and if not so, tries to
+     * create it first
+     * @param string directory to create
+     * @return bool true when succesful
+     */
+    public static function createDirRecursive($directory) {
+        $directory="/" . static::cleanupPath($directory);
+
+        if (!file_exists(dirname($directory))) {
+            static::createDirRecursive(dirname($directory));
+        }
+        try {
+            static::createDir($directory);
+        } catch (FileDirCreationFailedException $e) {
+                log::msg($e->getMessage(), log::FATAL, log::GENERAL);
+        }
     }
 }
 ?>

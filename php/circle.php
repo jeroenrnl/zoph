@@ -33,17 +33,6 @@ if (!$user->canBrowsePeople()) {
 $circleId = (int) getvar("circle_id");
 $circle = new circle($circleId);
 
-if ($_action != "insert") {
-    $circle->lookup();
-    if (!$circle->isVisible()) {
-        redirect("people.php");
-    }
-    $title = e($circle->getName());
-} else {
-    $title = translate("New circle");
-}
-
-
 $obj = &$circle;
 $redirect = "people.php";
 require_once "actions.inc.php";
@@ -57,8 +46,19 @@ if ($_action=="update") {
             $circle->removeMember(new person((int) $personId));
         }
     }
+    $title = e($circle->getName());
     $action = "update";
+} else if ($_action != "new") {
+    $circle->lookup();
+    if (!$circle->isVisible()) {
+        redirect("people.php");
+    }
+    $title = e($circle->getName());
+} else {
+    $title = translate("New circle");
 }
+
+
 
 if ($circle->isHidden() && !$user->canSeeHiddenCircles()) {
     redirect("people.php");

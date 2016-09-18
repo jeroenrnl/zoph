@@ -97,6 +97,12 @@ INSERT INTO zoph_color_schemes VALUES (4,'hoenig','FFEFD6','5C1F00','330000','33
 INSERT INTO zoph_color_schemes VALUES (5,'forest','336633','000000','000000','000000','99CC99','000000','669966','663300','663300','E0E0E0','996633','FFFFFF','99CC99');
 INSERT INTO zoph_color_schemes VALUES (6,'black','000000','FFFFFF','FFFFFF','FFFFFF','000000','FFFFFF','000000','666666','666666','FFFFFF','999999','FFFFFF','FFFFFF');
 INSERT INTO zoph_color_schemes VALUES (7,'beach','646D7E','000000','000000','000000','F9EEE2','000000','9AADC7','C6DEFF','617C58','D0D0D0','8BB381','000000','646D7E');
+INSERT INTO zoph_color_schemes VALUES (8,'steel','cccccc','000000','0000aa','bb0000','eeeeef','222222','6699dd','dddddf','99bbdd','444444','0000bb','bbbbbb','555555');
+INSERT INTO zoph_color_schemes VALUES (9,'happy','16c0ff','333333','444444','444444','ffff77','333333','ffff77','e43f7d','e43f7d','333333','e43f7d','333333','333333');
+INSERT INTO zoph_color_schemes VALUES (10,'grey','eeeeee','111111','222222','555555','f4f4f4','111111','dddddd','dfdfdf','aaaaaa','222222','888888','111111','131313');
+INSERT INTO zoph_color_schemes VALUES (11,'grey - blue','eeeeee','111111','222222','555555','f4f4f4','000000','dddddd','dfdfdf','0000ff','eeeeee','000077','ffffff','131313');
+INSERT INTO zoph_color_schemes VALUES (12,'grey - green','eeeeee','111111','222222','555555','f4f4f4','000000','dddddd','dfdfdf','00dd00','eeeeee','007700','ffffff','131313');
+INSERT INTO zoph_color_schemes VALUES (13,'grey - red','eeeeee','111111','222222','555555','f4f4f4','000000','dddddd','dfdfdf','ff0000','eeeeee','770000','ffffff','131313');
 
 --
 -- Table structure for table 'zoph_comments'
@@ -133,6 +139,7 @@ CREATE TABLE zoph_group_permissions (
         access_level tinyint(4) NOT NULL default '0',
         watermark_level tinyint(4) NOT NULL default '0',
         writable char(1) NOT NULL default '0',
+	subalbums CHAR(1) NOT NULL DEFAULT '0',
         changedate timestamp NOT NULL,
         PRIMARY KEY  (group_id,album_id),
         KEY ap_access_level (access_level)

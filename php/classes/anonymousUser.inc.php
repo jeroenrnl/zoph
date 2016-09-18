@@ -31,7 +31,6 @@
  */
 require_once "util.inc.php";
 require_once "variables.inc.php";
-require_once "prefs.inc.php";
 
 /**
  * A class representing an anonymous user of Zoph.
@@ -213,7 +212,7 @@ final class anonymousUser extends user {
      * @param photo unused, only for compatibility with @see user object
      */
     function getPhotoPermissions(photo $photo) {
-        return new group_permissions(0,0);
+        return new permissions(0,0);
     }
 
     /**

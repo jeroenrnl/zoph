@@ -25,14 +25,14 @@ if (!ZOPH) {
 ?>
 
 <?php if ($tpl_label): ?>
-    <label for="<?php $tpl_name ?>">
+    <label for="<?= $tpl_name ?>">
         <?= $tpl_label ?>
     </label>
 <?php endif; ?>
-<input type="text" name="<?= $tpl_name ?>" size="<?= $tpl_size ?>" value="<?= $tpl_value ?>">
+<input type="text" name="<?= $tpl_name ?>" maxlength="<?= $tpl_maxlength ?>" size="<?= $tpl_size ?>" value="<?= $tpl_value ?>">
 <?php if (!empty($tpl_hint)): ?>
     <span class="inputhint">
         <?php echo $tpl_hint ?>
     </span>
 <?php endif; ?>
-
+<br>

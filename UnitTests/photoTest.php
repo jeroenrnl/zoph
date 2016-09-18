@@ -40,6 +40,7 @@ class photoTest extends ZophDataBaseTestCase {
     public function setUp() {
         parent::setUp();
         user::setCurrent(new user(1));
+        conf::set("path.trash", "");
     }
 
     /**
@@ -178,6 +179,57 @@ class photoTest extends ZophDataBaseTestCase {
         );
 
         $this->assertEquals($expected, $display);
+
+    }
+
+    /**
+     * Test deleting a photo
+     * @dataProvider getImagesDelete
+     */
+    public function testDelete($name, $trash=false) {
+
+        user::setCurrent(new user(1));
+        if (file_exists(conf::get("path.images") . "/" . $name)) {
+            unlink(conf::get("path.images") . "/" . $name);
+        }
+        if (file_exists(conf::get("path.images") . "/trash/" . $name)) {
+            unlink(conf::get("path.images") . "/trash/" . $name);
+        }
+
+        helpers::createTestImage($name, "black", "red", array());
+        $photos=array(new file("/tmp/" . $name));
+        conf::set("import.cli.thumbs", true);
+        conf::set("import.cli.size", true);
+
+        $imported=cliimport::photos($photos, array());
+
+        $full=$imported[0]->getFilePath();
+        $mid=$imported[0]->getFilePath(MID_PREFIX);
+        $thumb=$imported[0]->getFilePath(THUMB_PREFIX);
+
+        $filename=$imported[0]->get("name");
+
+        foreach (array($full, $mid, $thumb) as $file) {
+            $this->assertFileExists($file);
+        }
+
+
+        if ($trash) {
+            conf::set("path.trash", "trash");
+            $imported[0]->delete();
+            foreach (array($full, $mid, $thumb) as $file) {
+                $this->assertFileNotExists($file);
+            }
+            $this->assertFileExists(conf::get("path.images") . "/trash/" . $name);
+        } else {
+            conf::set("path.trash", "");
+            $imported[0]->delete();
+            foreach (array($full, $mid, $thumb) as $file) {
+                $this->assertFileExists($file);
+            }
+        }
+        $this->assertFalse($imported[0]->lookup());
+        conf::set("path.trash", "");
 
     }
 
@@ -913,7 +965,7 @@ class photoTest extends ZophDataBaseTestCase {
     }
 
     public function testGetTotalSize() {
-        $this->assertEquals("204459", photo::getTotalSize());
+        $this->assertEquals("281761", photo::getTotalSize());
     }
 
     /**
@@ -960,6 +1012,13 @@ class photoTest extends ZophDataBaseTestCase {
                 array("DateTimeOriginal" => "2012-12-31 15:00:00")),
             array(13, "FILE_0003.JPG", "yellow", "blue",
                 array("DateTimeOriginal" => "2013-01-01 14:00:00"))
+         );
+    }
+
+    public function getImagesDelete() {
+        return array(
+            array("DELETE_0001.JPG", false),
+            array("DELETE_0002.JPG", true)
          );
     }
 
@@ -1057,9 +1116,9 @@ class photoTest extends ZophDataBaseTestCase {
 
     public function getHashData() {
         return array(
-            array("1c52decf9f59d43da618b757dee9afb5cfdd5b28", "file", 1),
-            array("0dfae93cebb4a00629d72558907ff883f181fb2a", "full", 4),
-            array("e2f14b5f7dd442032106e9a9af8cd7338ce3ee9d", "mid", 7)
+            array("9b9d7d5bdab9cff42e74d401c954ab0d48754daf", "file", 1),
+            array("5cc01c1cf7bfd48873cf6ce3ab3c8eeca292e14e", "full", 4),
+            array("ed454ede0a99a6f73782f6da240db6274b29a1b5", "mid", 7)
         );
     }
 

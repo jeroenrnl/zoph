@@ -389,7 +389,7 @@ if ($action != "insert" && !$found) {
         <?php
     }
     ?>
-    <dl class="photo">
+    <dl class="display photo">
     <?php echo create_field_html($photo->getDisplayArray()) ?>
     <?php
     if ((conf::get("feature.rating")  &&

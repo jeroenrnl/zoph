@@ -352,7 +352,7 @@ class userTest extends ZophDatabaseTestCase {
         if (is_null($perm)) {
             $this->assertNull($pp);
         } else {
-            $this->assertInstanceOf("group_permissions", $pp);
+            $this->assertInstanceOf("permissions", $pp);
             $this->assertEquals($perm[0],$pp->get("album_id"));
             $this->assertEquals($perm[1],$pp->get("group_id"));
         }
@@ -369,7 +369,7 @@ class userTest extends ZophDatabaseTestCase {
         if (is_null($perm)) {
             $this->assertNull($pp);
         } else {
-            $this->assertInstanceOf("group_permissions", $pp);
+            $this->assertInstanceOf("permissions", $pp);
             $this->assertEquals($perm[0],$pp->get("album_id"));
             $this->assertEquals($perm[1],$pp->get("group_id"));
         }

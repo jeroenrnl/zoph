@@ -203,7 +203,7 @@ class createTestData {
             $group=new group($groupId);
             $group->lookup();
             foreach ($albums as $albumId) {
-                $prm=new group_permissions($groupId, $albumId);
+                $prm=new permissions($groupId, $albumId);
                 $prm->set("access_level", 5);
                 $prm->set("watermark_level", 3);
                 $prm->set("writable", 0);

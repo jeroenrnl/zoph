@@ -58,7 +58,7 @@ abstract class Import {
         $cur=0;
 
         if (isset($vars["_path"])) {
-            $path=cleanup_path("/" . $vars["_path"] . "/");
+            $path=file::cleanupPath("/" . $vars["_path"] . "/");
             if (strpos($path, "..") !== false) {
                 log::msg("Illegal characters in path", log::FATAL, log::IMPORT);
                 die();
@@ -128,8 +128,7 @@ abstract class Import {
             try {
                 $photo->import($file);
             } catch (FileException $e) {
-                echo $e->getMessage();
-                throw $e;
+                log::msg($e->getMessage(), log::FATAL);
             }
 
             if (conf::get("import.cli.thumbs")===true) {
