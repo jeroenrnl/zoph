@@ -935,6 +935,11 @@ table.permissions td.permremove {
     vertical-align: bottom;
 }
 
+table.permissions select,
+table.permissions input {
+    float: none;
+}
+
 /* Previous and next links above a photo */
 div.prev, div.next, div.pagelink, div.photohdr  {
     margin-bottom: 2px;
@@ -1437,8 +1442,7 @@ input, select {
 }
 
 input[type="checkbox"] {
-
-    margin-top: 6px;
+    margin: -1px 4px 0;
     float: left;
 }
 
@@ -1748,7 +1752,7 @@ fieldset.formhelper-multiple > .actionlink {
 img.actionlink {
     float: right;
     position: relative;
-    top: -3px;
+    top: 3px;
 }
 
 fieldset.multiple img.actionlink:last-child {
