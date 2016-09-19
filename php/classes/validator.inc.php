@@ -28,7 +28,7 @@ class validator {
     private $username;
     private $password;
 
-    /*
+    /**
      * The constructor.
      */
     public function __construct($username, $password) {
@@ -36,37 +36,71 @@ class validator {
         $this->password = $password;
     }
 
-    /*
+    /**
      * Validate a user.
      */
     public function validate() {
-        $user = null;
-
         // No username or password are given, and a default user is defined
         // let's login as that...
         if (!$this->username && !$this->password && conf::get("interface.user.default")) {
             $user = new user(conf::get("interface.user.default"));
             $user->lookup();
+            return $user;
         } else {
-
-            $qry = new select(array("users"));
-            $qry->addFields(array("user_id"));
-            $where=new clause("user_name=:username");
-            $where->addAnd(new clause("password=password(:password)"));
-            $qry->where($where);
-            $qry->addParams(array(
-                new param(":username", $this->username, PDO::PARAM_STR),
-                new param(":password", $this->password, PDO::PARAM_STR)
-            ));
-
-            $stmt=$qry->execute();
-
-            if($stmt->rowCount() == 1) {
-                $user = new user($stmt->fetchColumn());
-                $user->lookup();
+            try {
+                $user=user::getByName($this->username);
+                $hash=$user->get("password");
+                if (password_verify($this->password, $hash)) {
+                    return $user;
+                } else {
+                    return $this->validateOld();
+                }
+            } catch (userException $e) {
+                /*  We are not giving any feedback on why there was a failure
+                    because this might give an adversary more info than we want
+                    to give away */
             }
         }
+    }
+
+    /**
+     * Validate a user
+     * use the old algorithm with MySQL-based password hashing
+     * if the user validates, update the password with the new algorithm
+     */
+     private function validateOld() {
+        $user=null;
+
+        $qry = new select(array("users"));
+        $qry->addFields(array("user_id"));
+        $where=new clause("user_name=:username");
+        $where->addAnd(new clause("password=password(:password)"));
+        $qry->where($where);
+        $qry->addParams(array(
+            new param(":username", $this->username, PDO::PARAM_STR),
+            new param(":password", $this->password, PDO::PARAM_STR)
+        ));
+
+        $stmt=$qry->execute();
+
+        if ($stmt->rowCount() == 1) {
+            $user = new user($stmt->fetchColumn());
+            $user->lookup();
+
+            $user->set("password", static::hashPassword($this->password));
+            $user->update();
+        }
         return $user;
+    }
+
+    /**
+     * Hash password with PHP's password hash library
+     * currently using blowfish hashing
+     * @param string password
+     * @return string password hash
+     */
+    public static function hashPassword($password) {
+        return password_hash($password, PASSWORD_BCRYPT);
     }
 
 }

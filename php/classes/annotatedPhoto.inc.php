@@ -50,7 +50,7 @@ class annotatedPhoto extends photo {
      * @throws photoException
      */
     public function display($type=null) {
-        if($type=="full") {
+        if ($type=="full") {
             $type=null;
         }
         $headers=array();
@@ -123,9 +123,9 @@ class annotatedPhoto extends photo {
 
         $final_array=array();
         if ($vars) {
-            foreach($vars as $var) {
+            foreach ($vars as $var) {
                 $tmp_array = explode("\n", wordwrap($var, $maxWidthChars, "\n   "));
-                foreach($tmp_array as $val) {
+                foreach ($tmp_array as $val) {
                     $final_array[] = str_replace("\r", "", $val);
                 }
             }
@@ -148,7 +148,7 @@ class annotatedPhoto extends photo {
             ImageSX($orig_image), ImageSY($orig_image));
 
         if ($final_array) {
-            foreach($final_array as $val) {
+            foreach ($final_array as $val) {
                 ImageString ($noted_image, $font, $indent, $row, $val, $black);
                 $row += ImageFontHeight($font) + $padding;
             }

@@ -40,7 +40,7 @@ class ConfigurationException extends ZophException {}
  * @author Jeroen Roos
  * @package ZophException
  */
-class OrganizerException extends CliException {}
+class OrganizerException extends ZophException {}
 
 /**
  * Exceptions for person
@@ -97,6 +97,27 @@ class CategoryException extends OrganizerException {}
  * @package ZophException
  */
 class CategoryNotFoundException extends CategoryException {}
+
+/**
+ * Exceptions for pages and pagesets
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class PageException extends ZophException {}
+
+/**
+ * The pageset contains no pages
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class PagePagesetHasNoPagesException extends PageException {}
+
+/**
+ * No pageset exception
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class PageNoPagesetForObjectException extends PageException {}
 
 /**
  * Exception class for Import-related exceptions
@@ -183,6 +204,14 @@ class PhotoThumbCreationFailedException extends PhotoException {}
  * @package ZophException
  */
 class PhotoNotFoundException extends PhotoException {}
+
+/**
+ * Exception thrown when selection-related functions are called
+ * while there is no selection.
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class PhotoNoSelectionException extends PhotoException {}
 
 /**
  * Exception thrown when a file is tried to be imported that
@@ -314,5 +343,35 @@ class DatabaseException extends ZophException {}
  * @package ZophException
  */
 class SecurityException extends ZophException {}
-class KeyMustBeNumericSecurityException extends ZophException {}
+class KeyMustBeNumericSecurityException extends SecurityException {}
+
+
+/**
+ * User Exception
+ *
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class userException extends ZophException {}
+
+/**
+ * User Not Found Exception
+ *
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class userNotFoundException extends userException {}
+
+/**
+ * User Multiple Found Exception
+ * This means there are multiple users with the same username in the database
+ * this should not happen.
+ *
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class userMultipleFoundException extends userException {}
+
+
+
 ?>

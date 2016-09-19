@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,6 +20,8 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
+
+require_once "testSetup.php";
 
 use db\insert;
 use db\param;
@@ -88,5 +90,32 @@ class configTest extends ZophDataBaseTestCase {
         conf::set("path.images", getcwd() . "/.images");
     }
 
-        
+    /**
+     * Test an item which requires another item to be enabled
+     */
+    public function testConfRequirements() {
+        $loginAlb=conf::get("interface.logon.background.album");
+        $this->assertNull($loginAlb);
+
+        $share=conf::get("share.enable");
+        $this->assertFalse($share);
+
+        $loginAlb=conf::set("interface.logon.background.album", 7);
+        $loginAlb->update();
+
+        // Despite setting it, retrieving it will still return the
+        // default value.
+        $loginAlb=conf::get("interface.logon.background.album");
+        $this->assertNull($loginAlb);
+
+        // Now we enable sharing:
+        $share=conf::set("share.enable", true);
+        $share->update();
+        $share=conf::get("share.enable");
+        $this->assertTrue($share);
+
+        // And now, it will return the previously set album number
+        $loginAlb=conf::get("interface.logon.background.album");
+        $this->assertEquals(7, $loginAlb);
+    }
 }

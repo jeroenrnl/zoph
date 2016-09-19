@@ -31,9 +31,9 @@ $title = translate("Groups");
 require_once "header.inc.php";
 ?>
     <h1>
-      <span class="actionlink">
-        <a href="group.php?_action=new"><?php echo translate("new") ?></a>
-      </span>
+      <ul class="actionlink">
+        <li><a href="group.php?_action=new"><?php echo translate("new") ?></a></li>
+      </ul>
       <?php echo translate("groups") ?>
     </h1>
     <div class="main">
@@ -42,7 +42,7 @@ $groups = group::getRecords("group_name");
 
 if ($groups) {
     echo "<dl class='groups'>";
-    foreach($groups as $group) {
+    foreach ($groups as $group) {
         ?>
         <dt><?php echo $group->getName() ?></dt>
         <dd>
@@ -51,11 +51,11 @@ if ($groups) {
         echo implode("&nbsp;", $group->getMemberLinks());
         ?>
         </dd>
-        <span class="actionlink">
-          <a href="group.php?group_id=<?php echo $group->getId() ?>">
+        <ul class="actionlink">
+          <li><a href="group.php?group_id=<?php echo $group->getId() ?>">
             <?php echo translate("display") ?>
-          </a>
-        </span>
+          </a></li>
+        </ul>
         <br>
         <?php
     }

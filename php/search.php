@@ -43,18 +43,18 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $request_vars = clean_request_vars($request_vars);
     require_once "photos.php";
 } else if ($_action=="new" || $_action=="edit") {
-    if($_action=="new") {
+    if ($_action=="new") {
         $action="insert";
         unset($request_vars["_action"]);
         $request_vars = clean_request_vars($request_vars);
 
-        foreach($request_vars as $key => $val) {
+        foreach ($request_vars as $key => $val) {
             # Change key#0 into key[0]:
             $key=preg_replace("/\#([0-9]+)/", "[$1]", $key);
             # Change key[0]-children into key_children[0] because everything
             # after ] in a URL is lost fix for bug#2890387
             $key=preg_replace("/\[(.+)\]-([a-z]+)/", "_$2[$1]", $key);
-            if($url) {
+            if ($url) {
                 $url.="&";
             }
             $url.=e($key) . "=" . e($val);
@@ -101,10 +101,10 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     ?>
     <h1><?php echo translate("Delete saved search")?></h1>
     <div class="main">
-        <span class="actionlink">
-            <a href='<?php echo $url ?>'><?php echo translate("delete") ?></a>
-            | <a href='search.php'><?php echo translate("cancel") ?></a>
-        </span>
+        <ul class="actionlink">
+            <li><a href='<?php echo $url ?>'><?php echo translate("delete") ?></a></li>
+            <li><a href='search.php'><?php echo translate("cancel") ?></a></li>
+        </ul>
         <?php printf(translate("Confirm deletion of saved search '%s'"), $search->get("name")) ?>
         <br>
      </div>
@@ -127,8 +127,8 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
      */
     ?>
     <h1><?php echo translate("search") ?></h1>
-    <?php echo check_js($user); ?>
     <div class="main">
+        <?= template::showJSwarning() ?>
       <form method="GET" action="search.php">
         <!-- There is a search button here to make it the first submit
              in the form for submit on Enter -->
@@ -145,7 +145,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_date_op = getvar('_date_op');
 
     $count = sizeof($date) - 1;
-    if ( $date[$count] == "+" ) {
+    if ($date[$count] == "+") {
         $date[$count] = "";
     }
     for ($i = 0; $i <= $count; $i++) {
@@ -153,7 +153,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <tr>
           <td>
         <?php
-        if($i==$count) {
+        if ($i==$count) {
             ?>
             <input type="submit" class="increment" name="date[<?php echo $count + 1; ?>]" value="+">
             <?php
@@ -188,7 +188,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_timestamp_op = getvar('_timestamp_op');
 
     $count = sizeof($timestamp) - 1;
-    if ( $timestamp[$count] == "+" ) {
+    if ($timestamp[$count] == "+") {
         $timestamp[$count] = "";
     }
     for ($i = 0; $i <= $count; $i++) {
@@ -196,7 +196,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
             <tr>
               <td>
         <?php
-        if($i==$count) {
+        if ($i==$count) {
             ?>
             <input type="submit" class="increment"
                 name="timestamp[<?php echo $count + 1; ?>]" value="+">
@@ -228,9 +228,9 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     /* photo album */
 
     $album_id = getvar('album_id');
-    if(!is_array($album_id) && !empty($album_id)) {
+    if (!is_array($album_id) && !empty($album_id)) {
         $album_id=explode(",", $album_id);
-        foreach($album_id as $key => $album) {
+        foreach ($album_id as $key => $album) {
             $_album_id_conj[$key]="or";
             $_album_id_opp[$key]="=";
             $_album_id_children[$key]="";
@@ -242,7 +242,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     }
 
     $count = sizeof($album_id) - 1;
-    if ( $album_id[$count] == "+" ) {
+    if ($album_id[$count] == "+") {
         $album_id[$count] = "";
     }
 
@@ -256,7 +256,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <tr>
           <td>
         <?php
-        if($i==$count) {
+        if ($i==$count) {
             ?>
             <input type="submit" class="increment"
                 name="album_id[<?php echo $count + 1; ?>]" value="+">
@@ -291,9 +291,9 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     /* photo category */
 
     $category_id = getvar('category_id');
-    if(!is_array($category_id) && !empty($category_id)) {
+    if (!is_array($category_id) && !empty($category_id)) {
         $category_id=explode(",", $category_id);
-        foreach($category_id as $key => $cat) {
+        foreach ($category_id as $key => $cat) {
             $_category_id_conj[$key]="or";
             $_category_id_opp[$key]="=";
             $_category_id_children[$key]="";
@@ -305,7 +305,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     }
 
     $count = sizeof($category_id) - 1;
-    if ( $category_id[$count] == "+" ) {
+    if ($category_id[$count] == "+") {
         $category_id[$count] = "";
     }
 
@@ -319,7 +319,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <tr>
           <td>
         <?php
-        if($i==$count) {
+        if ($i==$count) {
             ?>
             <input type="submit" class="increment"
                 name="category_id[<?php echo $count + 1; ?>]" value="+">
@@ -370,7 +370,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     }
 
     $count = sizeof($location_id) - 1;
-    if ( $location_id[$count] == "+" ) {
+    if ($location_id[$count] == "+") {
         $location_id[$count] = "";
     }
 
@@ -384,7 +384,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <tr>
           <td>
         <?php
-        if($i==$count) {
+        if ($i==$count) {
             ?>
             <input type="submit" class="increment"
                 name="location_id[<?php echo $count + 1; ?>]" value="+">
@@ -424,7 +424,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_rating_op = getvar('_rating_op');
 
     $count = sizeof($rating) - 1;
-    if ( $rating[$count] == "+" ) {
+    if ($rating[$count] == "+") {
         $rating[$count] = "";
     }
 
@@ -433,7 +433,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <tr>
           <td>
         <?php
-        if($i==$count) {
+        if ($i==$count) {
             ?>
             <input type="submit" class="increment" name="rating[<?php echo $count + 1; ?>]"
                 value="+">
@@ -465,7 +465,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_person_id_op = getvar('_person_id_op');
 
     $count = sizeof($person_id) - 1;
-    if ( $person_id[$count] == "+" ) {
+    if ($person_id[$count] == "+") {
         $person_id[$count] = "";
     }
 
@@ -474,7 +474,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <tr>
           <td>
         <?php
-        if($i==$count) {
+        if ($i==$count) {
             ?>
             <input type="submit" class="increment" name="person_id[<?php echo $count + 1; ?>]"
                 value="+">
@@ -506,7 +506,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_photographer_id_op = getvar('_photographer_id_op');
 
     $count = sizeof($photographer_id) - 1;
-    if ( $photographer_id[$count] == "+" ) {
+    if ($photographer_id[$count] == "+") {
         $photographer_id[$count] = "";
     }
 
@@ -515,7 +515,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <tr>
           <td>
         <?php
-        if($i==$count) {
+        if ($i==$count) {
             ?>
             <input type="submit" class="increment" name="photographer_id[<?php
                 echo $count + 1; ?>]" value="+">
@@ -551,7 +551,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_field_op = getvar('_field_op');
 
     $count = sizeof($_field) - 1;
-    if ( $_field[$count] == "+" ) {
+    if ($_field[$count] == "+") {
         $_field[$count] = "";
     }
     for ($i = 0; $i <= $count; $i++) {
@@ -559,7 +559,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <tr>
           <td>
         <?php
-        if($i==$count) {
+        if ($i==$count) {
             ?>
             <input type="submit" class="increment" name="_field[<?php
                 echo $count + 1; ?>]" value="+">
@@ -603,7 +603,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         <tr>
           <td>
         <?php
-        if($i==$count) {
+        if ($i==$count) {
             ?>
             <input type="submit" class="increment" name="_text[<?php echo $count + 1; ?>]"
                 value="+">
@@ -681,7 +681,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
 
     </div>
     <?php
-    if(conf::get("maps.provider")) {
+    if (conf::get("maps.provider")) {
         $map=new map();
         $map->setEditable();
         $map->setCenterAndZoom(0,0,2);

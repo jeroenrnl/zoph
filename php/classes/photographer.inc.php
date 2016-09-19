@@ -53,7 +53,7 @@ class photographer extends person implements Organizer {
      */
     public function removePhoto(photo $photo) {
         $current=$photo->getPhotographer();
-        if($current instanceof photographer && $current->getId() == $this->getId()) {
+        if ($current instanceof photographer && $current->getId() == $this->getId()) {
             $photo->unsetPhotographer();
         }
     }
@@ -77,47 +77,48 @@ class photographer extends person implements Organizer {
      * @param string search for names that begin with this string
      * @param bool also search first name
      * @return array list of photographer objects
-     * @todo This code could be much simplified if we could use subqueries
      */
-    public static function getAll($search = null, $search_first = null) {
+    public static function getAll($search = null, $search_first = false) {
         $where=null;
         $qry=new select(array("ppl" => "people"));
-        if($search != null) {
-            $where=self::getWhereForSearch($search, $search_first);
-        }
 
-        if(!user::getCurrent()->isAdmin()) {
+        if (!user::getCurrent()->canSeeAllPhotos()) {
             $ids=array();
             $subqry = new select(array("p" => "photos"));
             $subqry->addFunction(array("person_id" => "DISTINCT p.photographer_id"));
             $subqry->join(array("ppl" => "people"), "p.photographer_id=ppl.person_id");
-            list($subqry,$where)=selectHelper::expandQueryForUser($subqry, $where);
-            if($where instanceof clause) {
+            if ($search != null) {
+                $where=static::getWhereForSearch($search, $search_first);
                 $subqry->where($where);
-                if($search != null) {
-                    $subqry->addParam(new param("search", $search, PDO::PARAM_STR));
+                $subqry->addParam(new param(":search", $search, PDO::PARAM_STR));
+                if ($search_first) {
+                    $subqry->addParam(new param(":searchfirst", $search, PDO::PARAM_STR));
                 }
-                $where=null;
             }
+            $subqry = selectHelper::expandQueryForUser($subqry);
 
-            $photographers=self::getRecordsFromQuery($subqry);
+            $photographers=static::getRecordsFromQuery($subqry);
 
-            if(sizeof($photographers) == 0) {
+            if (sizeof($photographers) == 0) {
                 return null;
             }
 
-            foreach($photographers as $photographer) {
+            foreach ($photographers as $photographer) {
                 $ids[]=$photographer->getId();
             }
 
             $param=new param(":person_ids", $ids, PDO::PARAM_INT);
             $where=clause::InClause("person_id", $param);
             $qry->addParam($param);
-        } else if($search != null) {
+        } else if ($search != null) {
+            $qry->where(static::getWhereForSearch($search, $search_first));
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
+            if ($search_first) {
+                $qry->addParam(new param("searchfirst", $search, PDO::PARAM_STR));
+            }
         }
 
-        if($where instanceof clause) {
+        if ($where instanceof clause) {
             $qry->where($where);
         }
 

@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 <?php $d=0; ?>
 <table class="calendar">
@@ -35,23 +35,23 @@ if(!ZOPH) { die("Illegal call"); }
     </td>
   </tr>
   <tr>
-    <?php foreach($tpl_titles as $title): ?>
+    <?php foreach ($tpl_titles as $title): ?>
       <th><?php echo $title ?></th>
     <?php endforeach; ?>
   </tr>
   <tr>
-    <?php foreach($tpl_days as $day): ?>
+    <?php foreach ($tpl_days as $day): ?>
       <td class="<?php echo $day["class"] ?>">
-        <?php if($day["link"]): ?>
+        <?php if ($day["link"]): ?>
           <a href="<?php echo ($day["link"]) ?>">
         <?php endif; ?>
         <?php echo $day["date"] ?>
-        <?php if($day["link"]): ?>
+        <?php if ($day["link"]): ?>
           </a>
         <?php endif; ?>
       </td>
       <?php $d++ ?>
-      <?php if($d % 7 == 0): ?>
+      <?php if ($d % 7 == 0): ?>
         </tr>
         <tr>
       <?php endif; ?>

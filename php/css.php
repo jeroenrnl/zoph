@@ -17,17 +17,19 @@
  */
 
 header("Content-Type: text/css");
-if(isset($_GET['logged_on'])) {
+if (isset($_GET['logged_on'])) {
     define("LOGON", true);
     echo "/* This is the default CSS, the user is not logged on */";
+    $cssfile="logon.css";
 } else {
     echo "/* This is the customized CSS, user is logged on */";
+    $cssfile="css.php";
 }
 require_once "include.inc.php";
 $tpl=conf::get("interface.template");
-$css="templates/" . $tpl . "/css.php";
-if(!file_exists($css)) {
-    $css="templates/default/css.php";
+$css="templates/" . $tpl . "/" . $cssfile;
+if (!file_exists($css)) {
+    $css="templates/default/" . $cssfile;
 }
 require_once $css;
 

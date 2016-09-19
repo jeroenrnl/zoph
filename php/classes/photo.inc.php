@@ -88,7 +88,8 @@ class photo extends zophTable {
               $header["http_status"]="HTTP/1.1 304 Not Modified";
               $jpeg=null;
         } else {
-            $image_type = get_image_type($image_path);
+            $file=new file($image_path);
+            $image_type=$file->getMime();
             if ($image_type) {
                 $header["Content-Length"] = $filesize;
                 $header["Content-Disposition"]="inline; filename=" . $name;
@@ -108,7 +109,6 @@ class photo extends zophTable {
      * Lookup a photo, considering access rights
      */
     public function lookup() {
-        $user=user::getCurrent();
         if (!$this->getId()) {
             return;
         }
@@ -120,9 +120,7 @@ class photo extends zophTable {
         $where=new clause("p.photo_id=:photoid");
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
 
-        if (!$user->isAdmin()) {
-            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry->where($where);
 
@@ -135,6 +133,18 @@ class photo extends zophTable {
 
         return $photo;
     }
+
+    /**
+     * Lookup a photo, ignoring access rights
+     */
+    public function lookupAll() {
+        $qry = new select(array("p" => "photos"));
+        $qry->where(new clause("p.photo_id=:photoid"));
+        $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
+        $photo = $this->lookupFromSQL($qry);
+        return $photo;
+    }
+
 
     /**
      * Lookup photographer of this photo
@@ -162,9 +172,24 @@ class photo extends zophTable {
 
     /**
      * Delete this photo from database
-     * does not delete the photo on disk
      */
     public function delete() {
+        if (conf::get("path.trash")) {
+            $this->lookup();
+            $mid=new file($this->getFilePath(MID_PREFIX));
+            $mid->delete();
+            $thumb=new file($this->getFilePath(THUMB_PREFIX));
+            $thumb->delete();
+            $photo=new file($this->getFilePath());
+            $trash=conf::get("path.images") . DIRECTORY_SEPARATOR . conf::get("path.trash");
+            if (!file_exists($trash)) {
+                file::createDirRecursive($trash);
+            }
+            $photo->setDestination($trash);
+            $photo->backup=true;
+            $photo->move();
+        }
+
         parent::delete(array(
             "photo_people",
             "photo_categories",
@@ -251,7 +276,7 @@ class photo extends zophTable {
      */
     public function updateEXIF() {
         $file=$this->getFilePath();
-        $exif=process_exif($file);
+        $exif=process_exif ($file);
         if ($exif) {
             $this->setFields($exif);
             $this->update();
@@ -301,10 +326,25 @@ class photo extends zophTable {
         $where=new clause("pa.photo_id=:photoid");
 
         $qry->addParam(new param(":photoid", (int) $this->getId(), PDO::PARAM_INT));
-        $qry->addOrder("a.album");
+        $qry->addOrder("album");
 
-        if (!$user->isAdmin()) {
-            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
+        if (!$user->canSeeAllPhotos()) {
+            $qry->join(array("gp" => "group_permissions"), "gp.album_id=a.album_id");
+            $qry->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
+            $where->addAnd(new clause("gu.user_id=:userid"));
+            $qry->addParam(new param(":userid", (int) $user->getId(), PDO::PARAM_INT));
+            if ($user->canEditOrganizers()) {
+                $subqry=new select(array("a" => "albums"));
+                $subqry->addFields(array("album_id", "parent_album_id", "album"));
+                $subqry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
+
+                $subwhere=new clause("pa.photo_id=:subphotoid");
+                $subqry->addParam(new param(":subphotoid", (int) $this->getId(), PDO::PARAM_INT));
+                $subwhere->addAnd(new clause("a.createdby=:ownerid"));
+                $subqry->addParam(new param(":ownerid", (int) $user->getId(), PDO::PARAM_INT));
+                $subqry->where($subwhere);
+                $qry->union($subqry);
+            }
         }
 
         $qry->where($where);
@@ -389,16 +429,16 @@ class photo extends zophTable {
             }
 
             if (conf::get("import.dated.hier")) {
-                $newPath .= cleanup_path(str_replace("-", "/", $date));
+                $newPath .= file::cleanupPath(str_replace("-", "/", $date));
             } else {
-                $newPath .= cleanup_path(str_replace("-", ".", $date));
+                $newPath .= file::cleanupPath(str_replace("-", ".", $date));
             }
         }
-        $toPath="/" . cleanup_path(conf::get("path.images") . "/" . $newPath) . "/";
+        $toPath="/" . file::cleanupPath(conf::get("path.images") . "/" . $newPath) . "/";
 
         $path=$file->getPath();
-        create_dir_recursive($toPath . "/" . MID_PREFIX);
-        create_dir_recursive($toPath . "/" . THUMB_PREFIX);
+        file::createDirRecursive($toPath . "/" . MID_PREFIX);
+        file::createDirRecursive($toPath . "/" . THUMB_PREFIX);
 
         if ($path ."/" != $toPath) {
             $file->setDestination($toPath);
@@ -429,7 +469,6 @@ class photo extends zophTable {
                     }
                 }
             } catch (FileException $e) {
-                echo $e->getMessage() . "\n";
                 throw $e;
             }
             // We run this loop twice, because we only want to move/copy the
@@ -444,13 +483,12 @@ class photo extends zophTable {
                     $new->chmod();
                 }
             } catch (FileException $e) {
-                echo $e->getMessage() . "\n";
                 throw $e;
             }
             $this->set("name", $newname);
         }
         // Update the db to the new path;
-        $this->set("path", cleanup_path($newPath));
+        $this->set("path", file::cleanupPath($newPath));
     }
 
     /**
@@ -1047,7 +1085,7 @@ class photo extends zophTable {
 
         $allrelated=photoRelation::getRelated($this);
 
-        if ($user->isAdmin()) {
+        if ($user->canSeeAllPhotos()) {
             return $allrelated;
         } else {
             $related=array();
@@ -1192,7 +1230,7 @@ class photo extends zophTable {
             $qry=new select(array("p" => "photos"));
             $qry->addFields(array("photo_id"));
             $qry->addFunction(array("distance" => "(6371 * acos(" .
-                "cos(radians(:lat)) * cos(radians(lat) ) * cos(radians(lon) - " .
+                "cos(radians(:lat)) * cos(radians(lat)) * cos(radians(lon) - " .
                 "radians(:lon)) + sin(radians(:lat2)) * sin(radians(lat))))"));
             $qry->having(new clause("distance <= :dist"));
 
@@ -1242,6 +1280,7 @@ class photo extends zophTable {
      * @return string SHA1 hash
      */
     private function getHashFromFile() {
+        $this->lookupAll();
         $file=$this->getFilePath();
         if (file_exists($file)) {
             return sha1_file($file);
@@ -1504,7 +1543,6 @@ class photo extends zophTable {
         }
         $qry->addParam(new param(":hash", $hash, PDO::PARAM_STR));
         $qry->where($where);
-
         $photos=static::getRecordsFromQuery($qry);
         if (is_array($photos) && sizeof($photos) > 0) {
             return $photos[0];

@@ -54,8 +54,6 @@ class user extends zophTable {
     public $person;
     /** @var user_prefs Preferences of this user */
     public $prefs;
-    /** @var array Breadcrumbs for this user */
-    public $crumbs;
     /** @var lang Holds translations */
     public $lang;
 
@@ -63,8 +61,15 @@ class user extends zophTable {
      * Insert a new user into the db
      */
     public function insert() {
+        $this->set("lastnotify", "now()");
         parent::insert();
-        $this->prefs = new prefs($this->getId());
+        $default=new prefs(-1);
+        if ($default->lookup()) {
+            $default->set("user_id", $this->getId());
+            $this->prefs=$default;
+        } else {
+            $this->prefs = new prefs($this->getId());
+        }
         $this->prefs->insert();
     }
 
@@ -73,7 +78,7 @@ class user extends zophTable {
      * also delete the preferences for this user
      */
     public function delete() {
-        parent::delete(array("prefs"));
+        parent::delete(array("prefs", "groups_users"));
     }
 
     /**
@@ -102,6 +107,24 @@ class user extends zophTable {
     }
 
     /**
+     * Is this user the default user?
+     * @return bool
+     */
+    public function isDefault() {
+        $this->lookup();
+        return (conf::get("interface.user.default") == $this->getId());
+    }
+
+    /**
+     * Is this user the creator of this organizer?
+     * @return bool
+     */
+    public function isCreator(organizer $obj) {
+        $obj->lookup();
+        return ((int) $obj->get("createdby") === $this->getId());
+    }
+
+    /**
      * When was this user last notified of new albums?
      * @return string timestamp
      */
@@ -116,14 +139,6 @@ class user extends zophTable {
      */
     public function getLink() {
         return "<a href='" . $this->getURL() . "'>" . $this->getName() . "</a>";
-    }
-
-    /**
-     * Get URL to this object
-     * @return string URL
-     */
-    public function getURL() {
-        return "user.php?user_id=" . $this->getId();
     }
 
     /**
@@ -150,9 +165,17 @@ class user extends zophTable {
     /**
      * Get album permissions for this user
      * @param album album to get permissions for
-     * @return group_permissions Permissions object
+     * @return permissions permissions object
      */
     public function getAlbumPermissions(album $album) {
+        // An admin or creator of an album always has full permissions on that album
+        if ($this->isAdmin() || $this->isCreator($album)) {
+            $gp=new permissions(0, $album->getId());
+            $gp->set("access_level", 9);
+            $gp->set("watermark_level", 0);
+            $gp->set("writable", true);
+            return $gp;
+        }
         $groups=$this->getGroups();
 
         $groupIds=array();
@@ -175,7 +198,7 @@ class user extends zophTable {
                 ->addOrder("watermark_level DESC");
             $qry->addLimit(1);
 
-            $aps=group_permissions::getRecordsFromQuery($qry);
+            $aps=permissions::getRecordsFromQuery($qry);
             if (is_array($aps) && sizeof($aps) >= 1) {
                 return $aps[0];
             }
@@ -187,29 +210,135 @@ class user extends zophTable {
     /**
      * Get permissions for a specific photo, for this user
      * @param photo Photo to get permissions for
-     * @return group_permissions Permissions object
+     * @return permissions permissions object
      */
     public function getPhotoPermissions(photo $photo) {
+        $permissions=null;
+        foreach ($photo->getAlbums() as $album) {
+            if ($this->isCreator($album)) {
+                $permissions=new permissions(0,$album->getId());
+                $permissions->set("access_level", 9);
+                $permissions->set("watermark_level", 0);
+                $permissions->set("writable", true);
+                return $permissions;
+            }
+        }
+
         $qry=new select(array("p" => "photos"));
         $qry->addFields(array("photo_id"));
 
         $where=new clause("p.photo_id = :photoid");
         $qry->addParam(new param(":photoid", (int) $photo->getId(), PDO::PARAM_INT));
+        $qry->addParam(new param(":userid", (int) $this->getId(), PDO::PARAM_INT));
 
-        list($qry, $where) = selectHelper::expandQueryForUser($qry, $where, $this);
+        $qry->join(array("pa" => "photo_albums"), "pa.photo_id=p.photo_id");
+        $qry->join(array("gp" => "group_permissions"), "gp.album_id=pa.album_id");
+        $qry->join(array("gu" => "groups_users"), "gp.group_id=gu.group_id");
 
+        $where->addAnd(new clause("gp.access_level>=p.level"));
+        $where->addAnd(new clause("gu.user_id=:userid"));
         $qry->addFields(array("gp.*"));
         $qry->addLimit(1);
         // do ordering to grab entry with most permissions
         $qry->addOrder("gp.access_level DESC")->addOrder("writable DESC")->addOrder("watermark_level DESC");
         $qry->where($where);
 
-        $gps = group_permissions::getRecordsFromQuery($qry);
+        $gps = permissions::getRecordsFromQuery($qry);
         if ($gps && sizeof($gps) >= 1) {
-            return $gps[0];
+            $permissions=$gps[0];
         }
 
-        return null;
+        if ($this->canSeeAllPhotos()) {
+            if ($permissions instanceof permissions) {
+                $permissions->set("access_level", 9);
+            } else {
+                $permissions=new permissions();
+                $permissions->set("access_level", 9);
+                $permissions->set("watermark_level", 0);
+                $permissions->set("writable", 0);
+            }
+
+            if ($this->isAdmin()) {
+                $permissions->set("writable", 1);
+            }
+        }
+
+
+        return $permissions;
+    }
+
+    /**
+     * Check wheter this user can see hidden circles
+     * @return bool user can see hidden circles
+     */
+    public function canSeeHiddenCircles() {
+        return ($this->isAdmin() || $this->get("see_hidden_circles"));
+    }
+
+    /**
+     * Check wheter this user can see all photos.
+     * This means that the permissions checking is bypassed for this user,
+     * as if it is an admin user, but without giving full admin rights
+     * @return bool user can see all photos
+     */
+    public function canSeeAllPhotos() {
+        return ($this->isAdmin() || $this->get("view_all_photos"));
+    }
+
+    /**
+     * Check wheter this user is allowed to delete photos
+     * @return bool user can delete photos
+     */
+    public function canDeletePhotos() {
+        return ($this->isAdmin() || $this->get("delete_photos"));
+    }
+
+    /**
+     * Check wheter this user can edit, add and delete albums, categories, places and people
+     * @return bool user can add, edit and delete albums, categories, places and people
+     */
+    public function canEditOrganizers() {
+        return ($this->isAdmin() || $this->get("edit_organizers"));
+    }
+
+    /**
+     * Check wheter this user can browse people
+     * @return bool user can see the list of people that are in photos this user can see
+     */
+    public function canBrowsePeople() {
+        return ($this->canEditOrganizers() || $this->get("browse_people"));
+    }
+
+    /**
+     * Check wheter this user can see details of people (such as address, birthdate, etc.)
+     * @return bool user can see details of people
+     */
+    public function canSeePeopleDetails() {
+        return ($this->canEditOrganizers() || $this->get("detailed_people"));
+    }
+
+    /**
+     * Check wheter this user can browse places
+     * @return bool user can see the list of places where photos this user can see were taken
+     */
+    public function canBrowsePlaces() {
+        return ($this->canEditOrganizers() || $this->get("browse_places"));
+    }
+
+    /**
+     * Check wheter this user can browse tracks
+     * @return bool user can see tracks
+     */
+    public function canBrowseTracks() {
+        return ($this->isAdmin() || $this->get("browse_tracks"));
+    }
+
+    /**
+     * Check wheter this user can see details of places (such as address)
+     * @return bool user can see details of places
+     */
+    public function canSeePlaceDetails() {
+        return ($this->canEditOrganizers() || $this->get("detailed_places"));
     }
 
     /**
@@ -219,44 +348,18 @@ class user extends zophTable {
     public function getDisplayArray() {
         $this->lookupPerson();
         $da = array(
-            translate("username") => $this->get("user_name"),
-            translate("person") => $this->person->getLink(),
-            translate("class") =>
-                $this->get("user_class") == 0 ? "Admin" : "User",
-            translate("can browse people") => $this->get("browse_people") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can browse places") => $this->get("browse_places") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can browse tracks") => $this->get("browse_tracks") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can view details of people") =>
-                $this->get("detailed_people") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can view details of places") =>
-                $this->get("detailed_places") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can import") =>
-                $this->get("import") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can download zipfiles") =>
-                $this->get("download") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can leave comments") =>
-                $this->get("leave_comments") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can rate photos") =>
-                $this->get("allow_rating") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can rate the same photo multiple times") =>
-                $this->get("allow_multirating") == 1
-                ? translate("Yes") : translate("No"),
-            translate("can share photos", 0) =>
-                $this->get("allow_share") == 1
-                ? translate("Yes") : translate("No"),
-            translate("last login") =>
-                $this->get("lastlogin"),
-            translate("last ip address") =>
-                $this->get("lastip"));
+            translate("username")   => $this->get("user_name"),
+            translate("person")     => $this->person->getLink(),
+            translate("class")      => $this->get("user_class") == 0 ? "Admin" : "User"
+        );
+        $desc=$this->getAccessRightsDescription();
+        foreach ($this->getAccessRightsArray() as $field => $value) {
+            $da[$desc[$field]] = $value == 1 ? translate("Yes") : translate("No");
+        }
+        $da = array_merge($da, array(
+            translate("last login")         => $this->get("lastlogin"),
+            translate("last ip address")    => $this->get("lastip")
+        ));
 
         if ($this->get("lightbox_id")) {
             $lightbox = new album($this->get("lightbox_id"));
@@ -269,6 +372,47 @@ class user extends zophTable {
 
         return $da;
     }
+
+    public function getAccessRightsArray() {
+        return array(
+            "view_all_photos"       => $this->get("view_all_photos"),
+            "delete_photos"         => $this->get("delete_photos"),
+            "browse_people"         => $this->get("browse_people"),
+            "browse_places"         => $this->get("browse_places"),
+            "browse_tracks"         => $this->get("browse_tracks"),
+            "edit_organizers"       => $this->get("edit_organizers"),
+            "detailed_people"       => $this->get("detailed_people"),
+            "see_hidden_circles"    => $this->get("see_hidden_circles"),
+            "detailed_places"       => $this->get("detailed_places"),
+            "import"                => $this->get("import"),
+            "download"              => $this->get("download"),
+            "leave_comments"        => $this->get("leave_comments"),
+            "allow_rating"          => $this->get("allow_rating"),
+            "allow_multirating"     => $this->get("allow_multirating"),
+            "allow_share"           => $this->get("allow_share")
+        );
+    }
+
+    public function getAccessRightsDescription() {
+        return array(
+            "view_all_photos"       => translate("can view all photos"),
+            "delete_photos"         => translate("can delete photos"),
+            "browse_people"         => translate("can browse people"),
+            "browse_places"         => translate("can browse places"),
+            "browse_tracks"         => translate("can browse tracks"),
+            "edit_organizers"       => translate("can edit albums, categories, places and people"),
+            "detailed_people"       => translate("can view details of people"),
+            "see_hidden_circles"    => translate("can view hidden circles"),
+            "detailed_places"       => translate("can view details of places"),
+            "import"                => translate("can import"),
+            "download"              => translate("can download zipfiles"),
+            "leave_comments"        => translate("can leave comments"),
+            "allow_rating"          => translate("can rate photos"),
+            "allow_multirating"     => translate("can rate the same photo multiple times"),
+            "allow_share"           => translate("can share photos")
+        );
+    }
+
     /**
      * Load language
      * This loads the translations of Zoph's web gui
@@ -289,67 +433,6 @@ class user extends zophTable {
 
         $this->lang=language::load($langs);
         return $this->lang;
-    }
-
-    /**
-     * Add a crumb
-     * Crumbs are the path a user followed through Zoph's web GUI and can be
-     * used to easily go back to an earlier visited page
-     * @param string title
-     * @param string url to the page
-     * @todo should be moved into a separate class
-     */
-    public function addCrumb($title, $link) {
-        $numCrumbs = count($this->crumbs);
-        if ($numCrumbs == 0 || (!strpos($link, "_crumb="))) {
-
-            // if title is the same remove last and add new
-            if ($numCrumbs > 0 &&
-                strpos($this->crumbs[$numCrumbs - 1], ">$title<")) {
-
-                $this->eatCrumb();
-            } else {
-                $numCrumbs++;
-            }
-
-            $question = strpos($link, "?");
-            if ($question > 0) {
-                $link =
-                    substr($link, 0, $question) ."?_crumb=$numCrumbs&amp;" .
-                    substr($link, $question + 1);
-            } else {
-                $link .= "?_crumb=$numCrumbs";
-            }
-
-            $this->crumbs[] = "<a href=\"$link\">$title</a>";
-        }
-    }
-
-    /**
-     * Eat a crumb
-     * A crumb is 'eaten' when a user clicks on the link
-     * it means that the crumbs at the end are removed up to the place
-     * where the user went back to
-     * @param int number of crumbs to eat
-     * @todo should be moved into a separate class
-     */
-    public function eatCrumb($num = -1) {
-        if ($this->crumbs && count($this->crumbs) > 0) {
-            if ($num < 0) {
-                $num = count($this->crumbs) - 1;
-            }
-            $this->crumbs = array_slice($this->crumbs, 0, $num);
-        }
-    }
-
-    /**
-     * Get the last crumb
-     * @todo should be moved into a separate class
-     */
-    public function getLastCrumb() {
-        if ($this->crumbs && count($this->crumbs) > 0) {
-            return html_entity_decode($this->crumbs[count($this->crumbs) - 1]);
-        }
     }
 
     /**
@@ -374,7 +457,13 @@ class user extends zophTable {
      */
     public static function getByName($name) {
         $users=static::getRecords(null, array("user_name" => $name));
-        return $users[0];
+        if (sizeof($users)==1) {
+            return $users[0];
+        } else if (sizeof($users)==0) {
+            throw new userNotFoundException("User not found");
+        } else {
+            throw new userMultipleFoundException("Multiple users with the same name found");
+        }
     }
 
     /**
@@ -390,8 +479,10 @@ class user extends zophTable {
      * Set currently logged in user
      * (log in)
      * @param user user object
+     * @todo a proper framework needs to be made to invalidate caches
      */
     public static function setCurrent(user $user) {
+        category::$categoryCache=null;
         $user->lookup();
         $user->lookupPrefs();
         $user->lookupPerson();

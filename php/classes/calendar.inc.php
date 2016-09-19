@@ -138,7 +138,7 @@ class Calendar {
      * Return the URL to link to  for a given date.
      */
     public function getDateLink(Time $date) {
-        if($date > new Time) { return; }
+        if ($date > new Time) { return; }
 
         if ($this->searchField == "timestamp") {
 
@@ -186,7 +186,7 @@ class Calendar {
 
         $titles=array("S", "M", "T", "W", "T", "F", "S");
 
-        for($i=0; $i < $firstDay; $i++) {
+        for ($i=0; $i < $firstDay; $i++) {
             $days[]=array(
                 "date"  => "",
                 "link"  => "",
@@ -194,9 +194,9 @@ class Calendar {
             );
         }
 
-        for($day=1; $day<=$daysInMonth; $day++) {
+        for ($day=1; $day<=$daysInMonth; $day++) {
             $classes="calendar day";
-            if($date == $today) { $classes .= " today"; }
+            if ($date == $today) { $classes .= " today"; }
             $days[]=array(
                 "date"  => $day,
                 "link"  => $this->getDateLink($date),

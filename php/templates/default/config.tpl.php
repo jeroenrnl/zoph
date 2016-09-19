@@ -19,7 +19,7 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 require_once "header.inc.php";
 ?>
     <h1>

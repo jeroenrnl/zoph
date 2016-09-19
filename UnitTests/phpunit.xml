@@ -8,24 +8,29 @@
     <blacklist>
         <directory>/usr/share</directory>
     </blacklist>
+    <whitelist>
+        <directory>../php</directory>
+    </whitelist>
   </filter>
   <php>
     <const name="INSTANCE" value="zophgit" />
   </php>
   <testsuites>
     <testsuite name="Zoph">
-      <file>XMLdataTest.php</file>
-      <file>configTest.php</file>
       <file>PDOdatabaseTest.php</file>
+      <file>configTest.php</file>
+      <file>XMLdataTest.php</file>
       <file>photoTest.php</file>
       <file>albumTest.php</file>
       <file>placeTest.php</file>
       <file>userTest.php</file>
+      <file>validatorTest.php</file>
       <file>anonymousUserTest.php</file>
       <file>categoryTest.php</file>
       <file>groupTest.php</file>
-      <file>groupPermissionsTest.php</file>
+      <file>permissionsTest.php</file>
       <file>personTest.php</file>
+      <file>circleTest.php</file>
       <file>photographerTest.php</file>
       <file>getPhotoTest.php</file>
       <file>cliTest.php</file>

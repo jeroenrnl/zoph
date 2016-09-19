@@ -32,6 +32,7 @@ use db\db;
 use db\clause;
 use db\selectHelper;
 
+
 /**
  * Person class
  *
@@ -40,6 +41,8 @@ use db\selectHelper;
  * @package Zoph
  */
 class person extends zophTable implements Organizer {
+
+    use showPage;
 
     /** @param Name of the root node in XML responses */
     const XMLROOT="people";
@@ -66,6 +69,14 @@ class person extends zophTable implements Organizer {
     public $home;
     /** @var location Work address of this person */
     public $work;
+
+    /**
+     * Insert a new record in the database
+     */
+    public function insert() {
+        $this->set("createdby", (int) user::getCurrent()->getId());
+        return parent::insert();
+    }
 
     /**
      * Add this person to a photo.
@@ -238,13 +249,11 @@ class person extends zophTable implements Organizer {
     }
 
     /**
-     * Get children for this person
-     * @todo This function is currently not used
+     * Get children
+     * Since people cannot be nested, always returns null
      */
     public function getChildren() {
-        $constraints["father_id"] = $this->get("person_id");
-        $constraints["mother_id"] = $this->get("person_id");
-        return static::getAll($constraints, "or");
+        return null;
     }
 
     /**
@@ -252,6 +261,7 @@ class person extends zophTable implements Organizer {
      * @return string name
      */
     public function getName() {
+        $this->lookup();
         if ($this->get("called")) {
             $name = $this->get("called");
         } else {
@@ -297,15 +307,7 @@ class person extends zophTable implements Organizer {
                 $this->get("first_name");
         }
 
-        return "<a href=\"person.php?person_id=" . $this->get("person_id") . "\">$name</a>";
-    }
-
-    /**
-     * Get URL to this person
-     */
-
-    public function getURL() {
-        return "person.php?person_id=" . $this->getId();
+        return "<a href=\"person.php?person_id=" . $this->getId() . "\">$name</a>";
     }
 
     /**
@@ -378,9 +380,7 @@ class person extends zophTable implements Organizer {
         $where=new clause("pp.person_id=:id");
         $qry->addParam(new param(":id", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry=selectHelper::getAutoCoverOrder($qry, $autocover);
         $qry->where($where);
@@ -455,9 +455,7 @@ class person extends zophTable implements Organizer {
         $where=new clause("p.photographer_id=:photographerid");
         $qry->addParam(new param(":photographerid", $this->getId(), PDO::PARAM_INT));
 
-        if (!user::getCurrent()->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry, $where);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         $qry->where($where);
 
@@ -479,6 +477,46 @@ class person extends zophTable implements Organizer {
         }
         $details["title"]=translate("Photos taken by this person:", false);
         return parent::getDetailsXML($details);
+    }
+
+    /**
+     * Get array of circles this person is a member of
+     * @return array of circles
+     */
+    public function getCircles() {
+        $qry=new select(array("cp" => "circles_people"));
+        $qry->addFields(array("circle_id"));
+        $qry->where(new clause("person_id=:personid"));
+        $qry->addParam(new param(":personid", (int) $this->getId(), PDO::PARAM_INT));
+
+        return circle::getRecordsFromQuery($qry);
+    }
+
+    /**
+     * Return whether the currently logged on user can see this person
+     * @param user Use this user instead of the logged in one
+     * @return bool whether or not this person should be visible
+     */
+    public function isVisible(user $user=null) {
+        if (!$user) {
+            $user=user::getCurrent();
+        }
+        $all=static::getAllPeopleAndPhotographers();
+
+        $ids=array();
+        foreach ($all as $person) {
+            $ids[]=$person->getId();
+        }
+
+        return (in_array($this->getId(), $ids) || $user->isAdmin());
+    }
+
+    public function isCreator(user $user=null) {
+        if (!$user) {
+            $user=user::getCurrent();
+        }
+
+        return ($user->getId()===$this->get("createdby"));
     }
 
     /**
@@ -512,10 +550,8 @@ class person extends zophTable implements Organizer {
         $qry->addOrder("count DESC")->addOrder("ppl.last_name")->addOrder("ppl.first_name");
 
         $qry->addLimit((int) $user->prefs->get("reports_top_n"));
-        if (!$user->isAdmin()) {
-            list($qry, $where) = selectHelper::expandQueryForUser($qry);
-            $qry->where($where);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
+
         return parent::getTopNfromSQL($qry);
 
     }
@@ -526,23 +562,44 @@ class person extends zophTable implements Organizer {
      * @param bool Search for first name
      */
     public static function getAll($search=null, $search_first = false) {
+        $user=user::getCurrent();
         $where=null;
 
         $qry=new select(array("ppl" => "people"));
-        $qry->addFunction(array("person_id" => "DISTINCT ppl.person_id"));
+        $qry->addFields(array("ppl.*"), true);
         if (!is_null($search)) {
             $where=static::getWhereForSearch($search, $search_first);
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
+            if ($search_first) {
+                $qry->addParam(new param("searchfirst", $search, PDO::PARAM_STR));
+            }
         }
 
-        $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
+        $qry->addOrder("last_name")->addOrder("called")->addOrder("first_name");
 
-        if (!user::getCurrent()->isAdmin()) {
-            list($qry,$where)=selectHelper::expandQueryForUser($qry, $where);
-        }
+        $qry = selectHelper::expandQueryForUser($qry);
 
         if ($where instanceof clause) {
             $qry->where($where);
+        }
+
+        if (!$user->canSeeAllPhotos() && $user->canEditOrganizers()) {
+            $subqry=new select(array("ppl" => "people"));
+            $subqry->addFields(array("ppl.*"), true);
+
+            $subwhere=new clause("ppl.createdby=:ownerid");
+            $subqry->addParam(new param(":ownerid", (int) $user->getId(), PDO::PARAM_INT));
+
+            if (!is_null($search)) {
+                $subwhere->addAnd(static::getWhereForSearch($search, $search_first, "subsearch"));
+                $subqry->addParam(new param("subsearch", $search, PDO::PARAM_STR));
+                if ($search_first) {
+                    $subqry->addParam(new param("subsearchfirst", $search, PDO::PARAM_STR));
+                }
+            }
+
+            $subqry->where($subwhere);
+            $qry->union($subqry);
         }
         return static::getRecordsFromQuery($qry);
     }
@@ -597,7 +654,8 @@ class person extends zophTable implements Organizer {
 
         $people_array = static::getAll();
         foreach ($people_array as $person) {
-            $ppl[$person->get("person_id")] =
+            $person->lookup();
+            $ppl[$person->getId()] =
                  ($person->get("last_name") ? $person->get("last_name") .  ", " : "") .
                  ($person->get("called") ? $person->get("called") : $person->get("first_name"));
         }
@@ -610,18 +668,17 @@ class person extends zophTable implements Organizer {
      * @return int count
      */
     public static function getCountForUser() {
-        $user=user::getCurrent();
-        if ($user && !$user->isAdmin()) {
+        if (user::getCurrent()->canSeeAllPhotos()) {
             return static::getCount();
         } else {
             $allowed=array();
             $people=static::getAll();
             $photographers=photographer::getAll();
             foreach ($people as $person) {
-                $allowed[]=$person->get("person_id");
+                $allowed[]=$person->getId();
             }
             foreach ($photographers as $photographer) {
-                $allowed[]=$photographer->get("person_id");
+                $allowed[]=$photographer->getId();
             }
 
             $allowed=array_unique($allowed);
@@ -643,16 +700,16 @@ class person extends zophTable implements Organizer {
         $qry->addOrder("ppl.last_name")->addOrder("ppl.called")->addOrder("ppl.first_name");
 
 
-        if ($user && !$user->isAdmin()) {
+        if (!$user->canSeeAllPhotos()) {
             $people=(array)static::getAll($search);
             $photographers=(array)photographer::getAll($search);
             foreach ($people as $person) {
                 $person->lookup();
-                $allowed[]=$person->get("person_id");
+                $allowed[]=$person->getId();
             }
             foreach ($photographers as $photographer) {
                 $photographer->lookup();
-                $allowed[]=$photographer->get("person_id");
+                $allowed[]=$photographer->getId();
             }
             $allowed=array_unique($allowed);
             if (count($allowed)==0) {
@@ -665,7 +722,49 @@ class person extends zophTable implements Organizer {
             $qry->addParam(new param("search", $search, PDO::PARAM_STR));
             $qry->where(static::getWhereForSearch($search));
         }
-        return static::getRecordsFromQuery($qry);
+        $all=static::getRecordsFromQuery($qry);
+
+        $ids=array();
+        foreach ($all as $person) {
+            $ids[$person->getId()]=$person;
+        }
+
+        // Add the person assigned to this user
+        $personId=$user->get("person_id");
+        if ($personId) {
+            $person=new person($personId);
+            $person->lookup();
+            $pattern="/^" . $search . "/i";
+            if (is_null($search) || preg_match($pattern, $person->get("last_name"))) {
+                $ids[$personId]=$person;
+            }
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Get all people and all photographers for the currently logged on user
+     * that are NOT a member of a circle
+     */
+    public static function getAllNoCircle() {
+        $all = static::getAllPeopleAndPhotographers();
+        $circles = circle::getRecords();
+        $return=array();
+
+        foreach ($all as $person) {
+            $return[$person->getId()] = $person;
+        }
+
+        foreach ($circles as $circle) {
+            $members=$circle->getMembers();
+            foreach ($members as $member) {
+                if (isset($return[$member->getId()])){
+                    unset($return[$member->getId()]);
+                }
+            }
+        }
+        return $return;
     }
 
     /**
@@ -673,20 +772,23 @@ class person extends zophTable implements Organizer {
      * @param string search string
      * @param bool search for first name
      */
-    public static function getWhereForSearch($search, $search_first=false) {
+    public static function getWhereForSearch($search, $search_first=false, $paramname="search") {
         $where=null;
         if ($search!==null) {
             if ($search==="") {
                 $where=new clause("ppl.last_name=''");
                 $where->addOr(new clause("ppl.last_name is null"));
             } else {
-                $where=new clause("ppl.last_name like lower(concat(:search,'%'))");
+                $where=new clause("ppl.last_name like lower(concat(:" . $paramname  . ",'%'))");
                 if ($search_first) {
-                    $where->addOr("ppl.first_name like lower(concat(:search, '%'))");
+                    $where->addOr(
+                        new clause("ppl.first_name like lower(concat(:"  . $paramname . "first, '%'))")
+                    );
                 }
             }
         }
         return $where;
+
     }
 }
 

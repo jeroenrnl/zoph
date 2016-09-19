@@ -19,12 +19,14 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
-        <dl class="<?php echo $tpl_class; ?>">
-            <?php foreach ($tpl_dl as $key => $value): ?>
-                <dt><?php echo e($key) ?></dt>
-                <dd><?php echo $value ?></dd>
-            <?php endforeach; ?>
-        </dl>
-        <br>
+<dl class="<?php echo $tpl_class; ?>">
+    <?php foreach ($tpl_dl as $key => $value): ?>
+        <?php if (!empty($value)): ?>
+            <dt><?php echo e($key) ?></dt>
+            <dd><?php echo $value ?></dd>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</dl>
+<br>

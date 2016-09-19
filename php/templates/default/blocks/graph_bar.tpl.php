@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 
 <div class="graph bar <?php echo $tpl_class ?>">
@@ -30,14 +30,14 @@ if(!ZOPH) { die("Illegal call"); }
             <th><?php echo $tpl_count_label ?></th>
         </tr>
 
-        <?php foreach($tpl_rows as $row): ?>
+        <?php foreach ($tpl_rows as $row): ?>
         <tr>
             <td>
-                <?php if(isset($row["link"])): ?>
+                <?php if (isset($row["link"])): ?>
                     <a href="<?php echo $row["link"] ?>">
                 <?php endif ?>
                 <?php echo $row["value"] ?>
-                <?php if(isset($row["link"])): ?>
+                <?php if (isset($row["link"])): ?>
                     </a>
                 <?php endif ?>
             </td>

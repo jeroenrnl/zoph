@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+require_once "testSetup.php";
+
 use db\select;
 use db\db;
 use db\param;
@@ -137,20 +139,20 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
      * Test a SELECT query with a JOIN clause
      */
     public function testQueryWithJoin() {
-        $qry=new select("photos");
+        $qry=new select(array("p" => "photos"));
         $qry->addFields(array("name"));
-        $where=new clause("zoph_photos.photo_id = :photoid");
+        $where=new clause("p.photo_id = :photoid");
         $qry->addParam(new param(":photoid", 5, PDO::PARAM_INT));
-        $qry->join("photo_albums","zoph_photos.photo_id=zoph_photo_albums.photo_id")
-            ->join("albums","zoph_photo_albums.album_id=zoph_albums.album_id")
+        $qry->join(array("pa" => "photo_albums"),"p.photo_id=pa.photo_id")
+            ->join(array("a" => "albums"),"pa.album_id=a.album_id")
             ->where($where);
         $sql=(string) $qry;
-        $exp_sql="SELECT zoph_photos.name FROM zoph_photos " .
-                 "INNER JOIN zoph_photo_albums " .
-                 "ON zoph_photos.photo_id=zoph_photo_albums.photo_id " .
-                 "INNER JOIN zoph_albums " .
-                 "ON zoph_photo_albums.album_id=zoph_albums.album_id " .
-                 "WHERE (zoph_photos.photo_id = :photoid);";
+        $exp_sql="SELECT p.name FROM zoph_photos AS p " .
+                 "INNER JOIN zoph_photo_albums AS pa " .
+                 "ON p.photo_id=pa.photo_id " .
+                 "INNER JOIN zoph_albums AS a " .
+                 "ON pa.album_id=a.album_id " .
+                 "WHERE (p.photo_id = :photoid);";
 
         $this->assertEquals($exp_sql, $sql);
     }
@@ -181,7 +183,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $this->assertEquals($exp_sql, $sql);
 
         $this->assertEquals(array($param), $qry->getParams());
-            
+
     }
 
     /**
@@ -224,18 +226,18 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
     }
 
     public function testHasTable() {
-        $qry=new select("photos");
+        $qry=new select(array("p" => "photos"));
 
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertFalse($qry->hasTable("albums"));
 
-        $qry->join("photo_albums", "photos.photo_id=photo_albums.photo_id");
+        $qry->join(array("pa" => "photo_albums"), "p.photo_id=pa_.photo_id");
 
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertTrue($qry->hasTable("photo_albums"));
         $this->assertFalse($qry->hasTable("albums"));
 
-        $qry->join("albums", "photo_albums.album_id=albums.album_id");
+        $qry->join(array("a" => "albums"), "pa.album_id=a.album_id");
 
         $this->assertTrue($qry->hasTable("photos"));
         $this->assertTrue($qry->hasTable("photo_albums"));
@@ -293,7 +295,7 @@ class PDOdatabaseTest extends ZophDataBaseTestCase {
         $ids=array();
 
         // First insert a few rows in photo table;
-        for($i=0; $i<3; $i++) {
+        for ($i=0; $i<3; $i++) {
             $qry=new insert(array("photos"));
             $qry->addParam(new param(":name", "test123", PDO::PARAM_STR));
             $qry->execute();

@@ -61,10 +61,10 @@ class group extends zophTable {
     /**
      * Get permissions for a group
      * @param album Album to lookup permissions for
-     * @return group_permissions Permissions object
+     * @return permissions Permissions object
      */
     public function getGroupPermissions(album $album) {
-        $gp = new group_permissions($this->getId(), $album->getId());
+        $gp = new permissions($this->getId(), $album->getId());
         if ($gp->lookup()) {
             return $gp;
         }
@@ -98,6 +98,33 @@ class group extends zophTable {
     }
 
     /**
+     * Create an array describing permissions for all albums
+     * for display or edit
+     */
+    public function getPermissionArray() {
+        $albums = album::getSelectArray();
+        $perms=array();
+        foreach ($albums as $id => $name) {
+            if (!$id || $id == 1) {
+                continue;
+            }
+            $permissions = $this->getGroupPermissions(new album((int) $id));
+            if ($permissions) {
+                $albumPermissions=new stdClass();
+                $albumPermissions->id=$id;
+                $albumPermissions->name=$name;
+                $albumPermissions->access=$permissions->get("access_level");
+                if (conf::get("watermark.enable")) {
+                    $albumPermissions->wm=$permissions->get("watermark_level");
+                }
+                $albumPermissions->writable=$permissions->get("writable");
+                $albumPermissions->subalbums=$permissions->get("subalbums");
+                $perms[]=$albumPermissions;
+            }
+        }
+        return $perms;
+    }
+    /**
      * Get members of this group
      * @return array of users
      */
@@ -107,7 +134,13 @@ class group extends zophTable {
         $qry->where(new clause("group_id=:groupid"));
         $qry->addParam(new param(":groupid", (int) $this->getId(), PDO::PARAM_INT));
 
-        return user::getRecordsFromQuery($qry);
+        $members=user::getRecordsFromQuery($qry);
+        $return=array();
+        foreach ($members as $member) {
+            $member->lookup();
+            $return[]=$member;
+        }
+        return $return;
     }
 
     /**

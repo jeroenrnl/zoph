@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -28,7 +28,7 @@ require_once "testSetup.php";
  * @author Jeroen Roos
  */
 class relationTest extends ZophDataBaseTestCase {
-    
+
     /**
      * Test defining a relation
      */
@@ -69,7 +69,7 @@ class relationTest extends ZophDataBaseTestCase {
         $photo_1->lookup();
         $photo_2=new photo($photo_id_2);
         $photo_2->lookup();
-        
+
         $rel=new photoRelation($photo_1, $photo_2);
         $rel->lookup();
 
@@ -86,11 +86,11 @@ class relationTest extends ZophDataBaseTestCase {
         $photo_1=new photo($photo_id_1);
         $photo_1->lookup();
         $photo_2=new photo($photo_id_2);
-        
+
         $desc=$photo_1->getRelationDesc($photo_2);
 
         $this->assertEquals($desc_2, $desc);
-        
+
         $desc=$photo_2->getRelationDesc($photo_1);
 
         $this->assertEquals($desc_1, $desc);
@@ -103,7 +103,7 @@ class relationTest extends ZophDataBaseTestCase {
         $photo_1=new photo(8);
         $photo_1->lookup();
         $photo_2=new photo(9);
-        
+
         $desc=$photo_1->getRelationDesc($photo_2);
 
         $this->assertNull($desc);
@@ -118,24 +118,24 @@ class relationTest extends ZophDataBaseTestCase {
         $photo_1->lookup();
         $photo_2=new photo($photo_id_2);
         $photo_2->lookup();
-        
+
         $rel=new photoRelation($photo_1, $photo_2);
         $rel->lookup();
         $rel->delete();
 
         $rel_1=$photo_1->getRelated();
         $act_rem_1=array();
-        foreach($rel_1 as $r) {
+        foreach ($rel_1 as $r) {
             $act_rem_1[]=$r->getId();
         }
-        $this->assertEquals($rem_1, $act_rem_1); 
+        $this->assertEquals($rem_1, $act_rem_1);
 
         $rel_2=$photo_2->getRelated();
         $act_rem_2=array();
-        foreach($rel_2 as $r) {
+        foreach ($rel_2 as $r) {
             $act_rem_2[]=$r->getId();
         }
-        $this->assertEquals($rem_2, $act_rem_2); 
+        $this->assertEquals($rem_2, $act_rem_2);
 
     }
 
@@ -149,7 +149,7 @@ class relationTest extends ZophDataBaseTestCase {
         $photo_1->lookup();
         $photo_2=new photo(2);
         $photo_2->lookup();
-        
+
         $rel=new photoRelation($photo_1, $photo_2);
         $rel->lookup();
 
@@ -166,7 +166,7 @@ class relationTest extends ZophDataBaseTestCase {
         $photo_1->lookup();
         $photo_2=new photo(2);
         $photo_2->lookup();
-        
+
         $rel=new photoRelation($photo_1, $photo_2);
         $rel->lookup();
 
@@ -185,7 +185,7 @@ class relationTest extends ZophDataBaseTestCase {
     }
 
     public function getRelationsToBeDeleted() {
-        // photo_id_1, photo_id_2, 
+        // photo_id_1, photo_id_2,
         // array(remaining related for photo_id_1), array(remaining for photo_id_2)
         return array(
             array(1,2, array(3,4), array(3)),

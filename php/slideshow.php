@@ -52,7 +52,7 @@ $newoffset = $offset + 1;
 $qs = implode("&amp;", explode("&", $_SERVER["QUERY_STRING"]));
 $clean_qs=update_query_string($clean_vars, "", 0);
 $new_qs = $qs;
-if (strpos($_SERVER["QUERY_STRING"], "_off=") !== false ) {
+if (strpos($_SERVER["QUERY_STRING"], "_off=") !== false) {
     $new_qs = str_replace("_off=$offset", "_off=$newoffset", $new_qs);
 } else {
     if ($new_qs) {
@@ -84,27 +84,27 @@ if (!$_pause) {
 </head>
 <body>
 <h1>
-<span class="actionlink">
+<ul class="actionlink">
 <?php
 if ($_pause) {
     ?>
-      <a href="<?php echo $_SERVER["PHP_SELF"] . '?' . $new_qs ?>">I
+      <li><a href="<?php echo $_SERVER["PHP_SELF"] . '?' . $new_qs ?>">I
         <?php echo translate("continue") ?>
-      </a> |
+      </a></li>
     <?php
 } else {
     ?>
-      <a href="<?php echo $_SERVER["PHP_SELF"] . '?' . $qs . '&amp;' . "_pause=1" ?>">
+      <li><a href="<?php echo $_SERVER["PHP_SELF"] . '?' . $qs . '&amp;' . "_pause=1" ?>">
         <?php echo translate("pause") ?>
-      </a> |
+      </a></li>
     <?php
 }
 ?>
-  <a href="photos.php?<?php echo str_replace("_off=$offset", "_off=0", $clean_qs) ?>">
+  <li><a href="photos.php?<?php echo str_replace("_off=$offset", "_off=0", $clean_qs) ?>">
     <?php echo translate("stop") ?>
-  </a> |
-  <a href="photo.php?<?php echo $clean_qs ?>"><?php echo translate("open") ?></a>
-</span>
+  </a></li>
+  <li><a href="photo.php?<?php echo $clean_qs ?>"><?php echo translate("open") ?></a></li>
+</ul>
 <?php echo $title ?>
 </h1>
 <div class="main">

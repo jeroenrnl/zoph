@@ -44,7 +44,7 @@ function create_field_html_table($fields) {
 
 function create_edit_fields($fields) {
     $html = "";
-    while(list($key, $field) = each($fields)) {
+    while (list($key, $field) = each($fields)) {
         $html.=
             "<label for=\"$key\">$field[0]</label>\n" . $field[1] ."<br>";
     }
@@ -52,7 +52,7 @@ function create_edit_fields($fields) {
 }
 
 function create_text_input($name, $value, $size = 20, $max = 32, $type="text") {
-    if($type=="time") {
+    if ($type=="time") {
         $step="step=\"1\"";
     } else {
         $step="";
@@ -129,20 +129,6 @@ function create_photo_text_pulldown($var, $name = null) {
         "photographer" => translate("photographer",0)));
 }
 
-function get_sort_array() {
-    return array(
-        "name" => translate("Name",0),
-        "sortname" => translate("Sort Name",0),
-        "oldest" => translate("Oldest photo",0),
-        "newest" => translate("Newest photo",0),
-        "first" => translate("Changed least recently",0),
-        "last" => translate("Changed most recently",0),
-        "lowest" => translate("Lowest ranked",0),
-        "highest" => translate("Highest ranked",0),
-        "average" => translate("Average ranking",0),
-        "random" => translate("Random",0)
-    );
-}
 /*
  * Remove any params without values and operator params without corresponding
  * fields (e.g. _album_id-op when there is no _album_id).  This can be called
@@ -166,7 +152,7 @@ function clean_request_vars($vars) {
         // keep _action now that the pager links point back to search.php
         if ($key == "_button") { continue; }
 
-        if ( is_array($val) ) {
+        if (is_array($val)) {
             while (list($subkey, $subval) = each($val)) {
                 if (empty($subval)) { continue; }
 
@@ -258,7 +244,7 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
     $ignore[] = "PHPSESSID";
     $ignore[] = "_crumb";
     $qstr="";
-    if($vars) {
+    if ($vars) {
         while (list($key, $val) = each($vars)) {
             if (in_array($key, $ignore)) { continue; }
             if ($key == $new_key) { continue; }
@@ -340,32 +326,6 @@ function get_date_select_array($date, $days) {
     return $date_array;
 }
 
-function encode_href($str) {
-    $encoded_href = '';
-    foreach (explode('/', $str) as $path) {
-        if ($path) {
-            $encoded_href .= '/' . rawurlencode($path);
-        }
-    }
-
-    if (strpos(" $str", '/') != 1) {
-        $encoded_href = substr($encoded_href, 1);
-    }
-
-    return $encoded_href;
-}
-
-function strip_href($str) {
-    if ($str) {
-        return preg_replace("/<a href=\"([^\"]+)\">.*/", "\\1", $str);
-    }
-    return $str;
-}
-
-function file_extension($str) {
-    return substr($str, strrpos($str, '.') + 1);
-}
-
 /**
  * Get the current Zoph URL
  * Autodetect or use the URL set in configuration.
@@ -373,14 +333,14 @@ function file_extension($str) {
  * @return string URL
  */
 function getZophURL($proto=null) {
-    if(is_null($proto)) {
-        if(isset($_SERVER["HTTPS"]) && !empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != "off")) {
+    if (is_null($proto)) {
+        if (isset($_SERVER["HTTPS"]) && !empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] != "off")) {
             $proto="https";
         } else {
             $proto="http";
         }
     } else {
-        if(!preg_match("/^http(s?)$/", $proto)) {
+        if (!preg_match("/^http(s?)$/", $proto)) {
             die("illegal protocol");
         }
     }
@@ -389,51 +349,18 @@ function getZophURL($proto=null) {
     $new_url=substr($current_url, 0, strrpos($current_url, "/"));
     $url=$proto . "://" . preg_replace("/\/\//","/", $new_url);
 
-    if(conf::get("url.http") && $proto = "http") {
+    if (conf::get("url.http") && $proto = "http") {
         $url=conf::get("url.http");
     }
 
-    if(conf::get("url.https") && $proto = "https") {
+    if (conf::get("url.https") && $proto = "https") {
         $url=conf::get("url.http");
     }
 
-    if(substr($url, -1) != "/") {
+    if (substr($url, -1) != "/") {
         $url.="/";
     }
     return $url;
-}
-
-function get_image_type($name) {
-    $ext = strtolower(file_extension($name));
-    if ($ext == "jpg" || $ext == "jpeg" || $ext == "jpe") {
-        return "image/jpeg";
-    }
-    else if ($ext == "gif") {
-        return "image/gif";
-    }
-    else if ($ext == "tiff" || $ext == "tif") {
-        return "image/tiff";
-    }
-    else if ($ext == "png") {
-        return "image/png";
-    }
-
-    return "";
-}
-
-function valid_image($name) {
-    $ext = strtolower(file_extension($name));
-    if ($ext == "jpg" ||
-        $ext == "jpeg" ||
-        $ext == "jpe" ||
-        $ext == "gif" ||
-        $ext == "tiff" ||
-        $ext == "tif" ||
-        $ext == "png") {
-
-        return true;
-    }
-    return false;
 }
 
 /**
@@ -457,50 +384,30 @@ function rawurlencode_array($var, $varName, $separator = '&') {
     return implode($separator, $toImplode);
 }
 
-/**
- * Cleans up a path, by removing all double slashes, "/./",
- * leading and trailing slashes.
- */
-function cleanup_path($path) {
-    $search = array ( "/(\/+)/", "/(\/\.\/)/", "/(\/$)/", "/(^\/)/" );
-    $replace = array ( "/", "/", "", "" );
-    return preg_replace($search,$replace, $path);
-}
-
 function create_actionlinks($actionlinks) {
-    $bar="";
-    if(is_array($actionlinks)) {
-        $html="<span class=\"actionlink\">\n";
+    if (is_array($actionlinks)) {
+        $html="<ul class=\"actionlink\">\n";
         while (list($key, $val) = each($actionlinks)) {
-            $html .= $bar . "<a href=\"" . $val . "\">" . translate($key, 0) . "</a>";
-            $bar=" | ";
+            $html .= "<li><a href=\"" . $val . "\">" . translate($key, 0) . "</a></li>";
         }
-        $html.="</span>\n";
+        $html.="</ul>\n";
         return $html;
     }
 }
 
-function running_on_windows() {
-    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
-    if(class_exists("ZipArchive")) {
+    if (class_exists("ZipArchive")) {
         $zip=new ZipArchive();
         $tempfile="/tmp/zoph_" . $user->get("user_id") . "_" . $filename ."_" . $filenum . ".zip";
         @unlink($tempfile);
         if ($zip->open($tempfile, ZIPARCHIVE::CREATE)!==TRUE) {
             die("cannot open $tempfile\n");
         }
-        foreach($photos as $key => $photo) {
-            if($data=@file_get_contents($photo->getFilePath())) {
+        foreach ($photos as $key => $photo) {
+            if ($data=@file_get_contents($photo->getFilePath())) {
                 $size=strlen($data);
                 $zipsize=$zipsize+$size;
-                if($zipsize>=$maxsize) {
+                if ($zipsize>=$maxsize) {
                     break;
                 }
                 $currentfile=$key;
@@ -526,7 +433,7 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
  * @return string human readable filesize
  */
 function getHuman($bytes) {
-    if($bytes==0) {
+    if ($bytes==0) {
         // prevents div by 0
         return "0B";
     } else {
@@ -536,217 +443,13 @@ function getHuman($bytes) {
     }
 }
 
-function pager($current, $total, $num_pages, $page_size, $max_size, $request_vars, $var) {
-    $url=$_SERVER['PHP_SELF'];
-    $page_num = floor($current / $page_size) + 1;
-    if ($current > 0) {
-        $new_offset = max(0, $current - $page_size);
-        $html="<div class='prev'>\n";
-        $html.="[ <a href='" . $url . "?";
-        $html.=update_query_string($request_vars, $var, $new_offset);
-        $html.="'>" . translate("Prev") . "</a> ]\n";
-        $html.="</div>\n";
-    } else {
-        $html="<div class='prev'>&nbsp;</div>\n";
-    }
-
-    if ($num_pages > 1) {
-        $html.="<div class='pagelink'>[ ";
-        $mid_page = floor($max_size / 2);
-        $page = $page_num - $mid_page;
-        if ($page <= 0) { $page = 1; }
-
-        $last_page = $page + $max_size - 1;
-        if ($last_page > $num_pages) {
-            $page = $page - $last_page + $num_pages;
-            if ($page <= 0) { $page = 1; }
-            $last_page = $num_pages;
-        }
-
-        if ($page > 1) {
-            $html.="<a href='" . $url . "?";
-            $html.=update_query_string($request_vars, $var, 0). "'>1</a> ...";
-        }
-
-        while ($page <= $last_page) {
-            $new_offset = ($page - 1) * $page_size;
-            $new_query_string=update_query_string($request_vars, $var, $new_offset);
-            $currentpage=$page == $page_num ? " class='currentpage'" : "";
-            $html.="&nbsp;<a href='" . $url . "?" . $new_query_string . "'>";
-            $html.="<span " . $currentpage . ">" . $page . "</span></a>&nbsp;";
-            $page++;
-        }
-
-        if ($page <= $num_pages) {
-            $new_query_string=update_query_string($request_vars, $var, ($num_pages-1) * $page_size);
-            $html.="... <a href='" . $url . "?" . $new_query_string . "'>";
-            $html.=$num_pages . "</a>";
-        }
-        $html.=" ]</div>\n\n";
-    } else {
-        $html.="<div class=\"pagelink\">&nbsp;</div>\n";
-    }
-    if ($total >  $current + $page_size) {
-        $new_offset = $current + $page_size;
-        $new_query_string=update_query_string($request_vars, $var, $new_offset);
-        $html.="<div class='next'>";
-        $html.="[ <a href='" . $url . "?" . $new_query_string . "'>";
-        $html.=translate("Next") . "</a> ]";
-        $html.="</div>";
-    } else {
-        $html.="<div class=\"next\">&nbsp;</div>\n";
-    }
-    return $html;
-}
-
-function check_js($user) {
-    if (($user->prefs->get("autocomp_albums")) ||
-        ($user->prefs->get("autocomp_categories")) ||
-        ($user->prefs->get("autocomp_places")) ||
-        ($user->prefs->get("autocomp_people")) ||
-        ($user->prefs->get("autocomp_photographer")) &&
-        conf::get("interface.autocomplete")) {
-
-        return "<noscript><div class='warning'><img class='icon' src='" .
-            template::getImage("icons/warning.png") . "'>" .
-            translate("You have enabled autocompletion for one or more dropdown " .
-                "boxes on this page, however, you do not seem to have Javascript " .
-                "support. You should either enable javascript or turn autocompletion " .
-                "off, or this page will not work as expected!") . "</div></noscript>";
-    }
-}
-
-function remove_empty(array $children) {
-    $user=user::getCurrent();
-    $clean=array();
-    // If user is not admin, remove any children that do not have photos
-    if(!$user->isAdmin()) {
-        foreach($children as $child) {
-            $count=$child->getTotalPhotoCount();
-            if($count>0) {
-                $clean[]=$child;
-            }
-        }
-        return $clean;
-    } else {
-        return $children;
-    }
-}
-
-function create_bar_graph($legend, $value_array, $scale) {
-    # $value_array is an array that contains an array for each line
-    # of the graph. Each of those arrays contains 3 values:
-    # value: The value we're graphing,
-    # link:  Where should it link to. (may be null)
-    # count: Count of that value;
-
-    foreach($value_array as $row) {
-        $counts[]=$row[2];
-    }
-    $max=max($counts);
-    $pixels=$scale/$max;
-
-    $html="<table class='ratings'>\n";
-    $html.="  <tr>\n";
-    $html.="    <th>" . $legend[0] ."</th>\n";
-    $html.="    <th>" . $legend[1] ."</th>\n";
-    $html.="  <tr>\n";
-
-    foreach($value_array as $row) {
-        $html.="  <tr>\n";
-        $html.="    <td>\n";
-        if($row[1]) {
-            $html.="   <a href='" . $row[1] . "'>";
-        }
-        $html.=$row[0];
-        if($row[1]) {
-            $html.="</a>\n";
-        }
-        $html.="    </td>\n";
-        $html.="    <td>\n";
-        $html.="      <div class='ratings' style='width: " .
-            ceil($row[2]*$pixels) . "px'>";
-        $html.="&nbsp;</div>&nbsp;";
-        $html.=$row[2];
-        $html.="    </td>\n";
-        $html.="  </tr>\n";
-    }
-    $html.="</table>";
-    return $html;
-}
-
-function create_progress_bar($id = "progressbar", $w = 300, $complete = 0) {
-    $html = "<div id=\"" . $id . "_outer\" class=\"progressbar\"
-                style=\"width: " . $w . "px\">\n";
-    $html.= "   <div id=\"" . $id . "_inner\" class=\"progressfill\"";
-
-    $html.= "style=\"width: " . $complete . "%\">\n";
-    $html.= $complete . "%";
-    $html.="    </div>\n";
-    $html.="</div>\n";
-    return $html;
-}
-
 function redirect($url = "zoph.php", $msg = "Access denied") {
-    if(!((LOG_SUBJECT & log::REDIRECT) && (LOG_SEVERITY >= log::DEBUG))) {
+    if (!((LOG_SUBJECT & log::REDIRECT) && (LOG_SEVERITY >= log::DEBUG))) {
         header("Location: " . $url);
     }
         echo "<a href='" . $url . "'>" . $msg . "</a>";
     die();
 }
 
-function get_filetype($mime) {
-    switch ($mime) {
-    case "image/jpeg":
-    case "image/png":
-    case "image/gif":
-        $type="image";
-        break;
-    case "application/x-bzip2":
-    case "application/x-gzip":
-    case "application/x-tar":
-    case "application/zip":
-        $type="archive";
-        break;
-    case "application/xml":
-        $type="xml";
-        break;
-    case "directory":
-        $type="directory";
-        break;
-    default:
-        $type=false;
-    }
-    return $type;
-}
-
-function create_dir($directory) {
-    if (file_exists($directory) == false) {
-        if (@mkdir($directory, octdec(conf::get("import.dirmode")))) {
-            if(!defined("CLI") || conf::get("import.cli.verbose")>=1) {
-                log::msg(translate("Created directory") . ": $directory", log::NOTIFY, log::GENERAL);
-            }
-            return true;
-        } else {
-            throw new FileDirCreationFailedException(
-                translate("Could not create directory") . ": $directory<br>\n");
-        }
-    }
-    return 0;
-}
-
-function create_dir_recursive($directory){
-    $nextdir="";
-    $directory="/" . cleanup_path($directory);
-    foreach(explode("/",$directory) as $subdir) {
-        $nextdir=$nextdir . $subdir . "/";
-        try {
-            $result=create_dir($nextdir);
-        } catch (FileException $e) {
-            throw $e;
-        }
-    }
-    return $result;
-}
 
 ?>

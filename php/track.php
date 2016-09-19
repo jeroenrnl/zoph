@@ -26,7 +26,7 @@ $mapping_js="";
 
 if (!$user->isAdmin()) {
     $_action="display";
-    if (!$user->get("browse_tracks")) {
+    if (!$user->canBrowseTracks()) {
         redirect("zoph.php");
     }
 }
@@ -71,11 +71,11 @@ if ($action == "confirm") {
         translate("delete") => "track.php?_action=delete&amp;track_id=" . $track->get("track_id")
     ));
     $dl=new block("definitionlist",array(
-        "class" => "track",
+        "class" => "display track",
         "dl" => $track->getDisplayArray()
     ));
     $tpl->addBlock($dl);
-    if (is_null(conf::get("maps.provider"))) {
+    if (!is_null(conf::get("maps.provider"))) {
         $map=new map();
         $map->addTrack($track);
         $tpl->addBlock($map);

@@ -125,7 +125,7 @@ abstract class zophTable {
             // ignore empty keys or values unless the field must be set.
 
             if ($null) {
-                if ((!in_array($key, static::$notNull)) && (empty($key) )) { continue; }
+                if ((!in_array($key, static::$notNull)) && (empty($key))) { continue; }
             } else {
                 if ((!in_array($key, static::$notNull)) && (empty($key) || $val == "")) {
                     continue;
@@ -172,7 +172,7 @@ abstract class zophTable {
 
     /**
      * Looks up a record.
-     * @return mixed 1 or 0
+     * @return bool success or fail
      * @todo Should return something more sensible
      */
     public function lookup() {
@@ -193,6 +193,7 @@ abstract class zophTable {
     /**
      * Looks up a record using supplied SQL query
      * @param select SQL query to use
+     * @return bool success or fail
      */
     public function lookupFromSQL(select $qry) {
         try {
@@ -209,10 +210,10 @@ abstract class zophTable {
             $this->fields = array();
             $this->fields = array_merge($this->fields, $row);
 
-            return 1;
+            return true;
         }
 
-        return 0;
+        return false;
     }
 
     /**
@@ -230,9 +231,8 @@ abstract class zophTable {
             if (!static::$keepKeys && $this->isKey($name)) {
                 continue;
             }
-            if ($name === "password") {
-                $qry->addSet("password", "password(\"" . $value . "\")");
-            } else if ($value === "now()") {
+
+            if ($value === "now()") {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
                 $qry->addSet($name, "now()");
             } else if ($value =="" && in_array($name, static::$notNull)) {
@@ -334,9 +334,7 @@ abstract class zophTable {
                 }
             }
 
-            if ($name === "password") {
-                $qry->addSetFunction("password=password(\"" . $value . "\")");
-            } else if ($value === "now()") {
+            if ($value === "now()") {
                 /* Lastnotify is normaly set to "now()" and should not be escaped */
                 $qry->addSetFunction($name . "=now()");
             } else if ($value =="" && in_array($name, static::$notNull)) {
@@ -360,7 +358,7 @@ abstract class zophTable {
         try {
             $qry->execute();
         } catch (PDOException $e) {
-            log::msg("Update failed", log::FATAL, log::DB);
+            log::msg("Update failed: " . $e->getMessage(), log::FATAL, log::DB);
         }
     }
 
@@ -384,6 +382,10 @@ abstract class zophTable {
         return $da;
     }
 
+    /**
+     * Get an URL for the current object
+     * @return string URL
+     */
     public function getURL() {
         return static::$url . $this->getId();
     }
@@ -608,7 +610,7 @@ abstract class zophTable {
         try {
             $result = db::query($qry);
         } catch (PDOException $e) {
-            log::msg("Unable to get records", log::FATAL, log::DB);
+            log::msg("Unable to get records: " . $e->getMessage(), log::FATAL, log::DB);
         }
         $objs=array();
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {

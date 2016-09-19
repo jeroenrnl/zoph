@@ -73,7 +73,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         die ("Illegal sort direction: " . e($dir));
     }
 
-   foreach($vars as $key => $val) {
+   foreach ($vars as $key => $val) {
         if (empty($key) || empty($val) || $key[0] == "_" || strpos(" $key", "PHP") == 1) {
             continue;
         }
@@ -180,7 +180,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             } else if (is_array($album)) {
                 $key="album_id";
                 $val=array();
-                foreach($album as $alb) {
+                foreach ($album as $alb) {
                     $val[]=$alb->getId();
                 }
             } else {
@@ -197,7 +197,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             } else if (is_array($category)) {
                 $key="category_id";
                 $val=array();
-                foreach($category as $cat) {
+                foreach ($category as $cat) {
                     $val[]=$cat->getId();
                 }
             } else {
@@ -212,10 +212,17 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         if ($key == "album_id") {
             if ($op == "=") {
                 $alias = "pa" . substr($suffix, 1);
+                /*
+                 * Because the query builder expects the photo_album table to be aliased to "pa",
+                 * the first occurence does not have number suffix
+                 */
+                if ($alias=="pa1") {
+                    $alias="pa";
+                }
                 $qry->join(array($alias => "photo_albums"), "p.photo_id=" . $alias . ".photo_id");
-                if (is_int($val)) {
+                if (is_numeric($val)) {
                     $qry->addClause(new clause($alias . ".album_id=:albumId" . $suffix), $conj);
-                    $qry->addParam(new param(":albumId" . $suffix, $val, PDO::PARAM_INT));
+                    $qry->addParam(new param(":albumId" . $suffix, (int) $val, PDO::PARAM_INT));
                 } else if (is_array($val)) {
                     $param=new param(":albumIds" . $suffix, $val, PDO::PARAM_INT);
                     $qry->addParam($param);
@@ -244,9 +251,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             if ($op == "=") {
                 $alias = "pc" . substr($suffix, 1);
                 $qry->join(array($alias => "photo_categories"), "p.photo_id=" . $alias . ".photo_id");
-                if (is_int($val)) {
+                if (is_numeric($val)) {
                     $qry->addClause(new clause($alias . ".category_id=:categoryId" . $suffix), $conj);
-                    $qry->addParam(new param(":categoryId" . $suffix, $val, PDO::PARAM_INT));
+                    $qry->addParam(new param(":categoryId" . $suffix, (int) $val, PDO::PARAM_INT));
                 } else if (is_array($val)) {
                     $param=new param(":categoryIds" . $suffix, $val, PDO::PARAM_INT);
                     $qry->addParam($param);
@@ -270,8 +277,8 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $qry->addClause(clause::NotInClause("p.photo_id", $param), $conj);
             }
         } else if ($key == "location_id") {
-            if (is_int($val)) {
-                $qry->addParam(new param(":locationId" . $suffix, $val, PDO::PARAM_INT));
+            if (is_numeric($val)) {
+                $qry->addParam(new param(":locationId" . $suffix, (int) $val, PDO::PARAM_INT));
                 if ($op == "=") {
                     $qry->addClause(new clause("p.location_id=:locationId" . $suffix), $conj);
                 } else {
@@ -290,9 +297,9 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             if ($op == "=") {
                 $alias = "ppl" . substr($suffix, 1);
                 $qry->join(array($alias => "photo_people"), "p.photo_id=" . $alias . ".photo_id");
-                if (is_int($val)) {
+                if (is_numeric($val)) {
                     $qry->addClause(new clause($alias . ".person_id=:personId" . $suffix), $conj);
-                    $qry->addParam(new param(":personId" . $suffix, $val, PDO::PARAM_INT));
+                    $qry->addParam(new param(":personId" . $suffix, (int) $val, PDO::PARAM_INT));
                 } else if (is_array($val)) {
                     $param=new param(":personIds" . $suffix, $val, PDO::PARAM_INT);
                     $qry->addParam($param);
@@ -363,11 +370,11 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 $clause=new clause($alias . ".rating " . $op . " :rating" . $suffix);
             }
             $qry->addClause($clause, $conj);
-        } else if ( $key=="lat" || $key=="lon") {
+        } else if ($key=="lat" || $key=="lon") {
 
             $latlon[$key]=$val;
 
-            if ( !empty($latlon["lat"]) && !empty($latlon["lon"])) {
+            if (!empty($latlon["lat"]) && !empty($latlon["lon"])) {
                 $ids=array();
                 $lat=(float) $latlon["lat"];
                 $lon=(float) $latlon["lon"];
@@ -378,16 +385,16 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
                 if (isset($vars["_latlon_photos"])) {
                     $photos=photo::getPhotosNear($lat, $lon, $distance, null);
                     if ($photos) {
-                        foreach($photos as $photo) {
+                        foreach ($photos as $photo) {
                             $ids[]=$photo->getId();
                         }
                     }
                 }
                 if (isset($vars["_latlon_places"])) {
                     $places=place::getPlacesNear($lat, $lon, $distance, null);
-                    foreach($places as $place) {
+                    foreach ($places as $place) {
                         $photos=$place->getPhotos($user);
-                        foreach($photos as $photo) {
+                        foreach ($photos as $photo) {
                             $ids[]=$photo->getId();
                         }
                     }
@@ -439,18 +446,13 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
 
     }
 
-    if (!$user->isAdmin()) {
-        $qry->join(array("pa" => "photo_albums"), "p.photo_id=pa.photo_id");
-        list($qry, $where) = selectHelper::expandQueryForUser($qry, null, $user);
-        $qry->addClause($where, "AND");
-    }
+    $qry = selectHelper::expandQueryForUser($qry, $user);
 
     $num_photos = 0;
 
     // do this count separately since the select uses limit
     $countQry=clone $qry;
     $countQry->addFunction(array("count" => "COUNT(distinct p.photo_id)"));
-
     $num_photos = $countQry->getCount();
 
     if ($num_photos > 0) {

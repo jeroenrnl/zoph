@@ -40,8 +40,8 @@ class smileyTest extends PHPUnit_Framework_TestCase {
     public function testCreate($smiley, $file, $desc) {
         $smileys = smiley::getArray();
         $counter = 0;
-        foreach($smileys as $smile) {
-            if($smile->smiley == $smiley) {
+        foreach ($smileys as $smile) {
+            if ($smile->smiley == $smiley) {
                 $html = "<img src=\"templates/default/images/smileys/" . $file . "\" class=\"smiley\"\n" .
                         "     alt=\"" . $desc . "\">";
                 $this->assertEquals($html, trim((string) $smile));

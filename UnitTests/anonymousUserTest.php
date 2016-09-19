@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -102,7 +102,7 @@ class anonymousUserTest extends zophDatabaseTestCase {
     public function testGetName() {
         $name=$this->object->getName();
         $this->assertEquals($name,"Anonymous User");
-        
+
     }
 
     /**
@@ -128,7 +128,7 @@ class anonymousUserTest extends zophDatabaseTestCase {
      */
     public function testGet_permissions_for_photo($id) {
         $pp=$this->object->getPhotoPermissions(new photo($id));
-        $this->assertInstanceOf("group_permissions",$pp);
+        $this->assertInstanceOf("permissions",$pp);
         $this->assertEquals($pp->get("album_id"), 0);
         $this->assertEquals($pp->get("group_id"), 0);
     }

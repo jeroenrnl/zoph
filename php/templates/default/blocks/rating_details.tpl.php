@@ -19,7 +19,7 @@
  * @author Jeroen Roos
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
 
 <div class="ratingdetails collapsed">
@@ -33,7 +33,7 @@ if(!ZOPH) { die("Illegal call"); }
                 <th><?php echo translate("IP address"); ?></th>
                 <th><?php echo translate("date"); ?></th></tr>
             </tr>
-            <?php foreach($tpl_ratings as $rating): ?>
+            <?php foreach ($tpl_ratings as $rating): ?>
                 <tr>
                     <td>
                         <a href="<?php echo $rating->getUser()->getURL() ?>">

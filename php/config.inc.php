@@ -25,13 +25,13 @@
 // LOG_SEVERITY, LOG_SUBJECT.
 // All other settings are now made from the webinterface
 
-define('VERSION', '0.9.1');
-define('RELEASEDATE', '21-2-2014');
+define('VERSION', '0.9.4');
+define('RELEASEDATE', '18-09-2016');
 // DB_HOST, DB_NAME, DB_USER, DB_PASS and DB_PREFIX have been moved to
 // zoph.ini. The location can be set by the next config item:
 
 // INI FILE is already defined when using CLI and when running UnitTests
-if(!defined("INI_FILE")) {
+if (!defined("INI_FILE")) {
     define('INI_FILE', "/etc/zoph.ini");
 }
 

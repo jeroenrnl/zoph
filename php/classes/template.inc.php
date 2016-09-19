@@ -96,7 +96,7 @@ class template {
      */
     public function __toString() {
         if ($this->vars) {
-            extract($this->vars,  EXTR_PREFIX_ALL, "tpl");
+            extract($this->vars, EXTR_PREFIX_ALL, "tpl");
         }
         if (!defined("ZOPH")) {
             define('ZOPH', true);
@@ -104,8 +104,8 @@ class template {
         try {
             ob_start();
                 include $this->template;
-            return ob_get_clean();
-        } catch(Exception $e) {
+            return trim(ob_get_clean());
+        } catch (Exception $e) {
             echo $e->getMessage();
             die();
         }
@@ -169,6 +169,26 @@ class template {
     }
 
     /**
+     * Add a page
+     * A page can simply be added to the list of blocks as it can be displayed
+     * with the __toString() function
+     * @param page Page to be added
+     */
+    public function addPage(page $page) {
+        $this->blocks[]=$page;
+    }
+
+    /**
+     * Add multiple blocks
+     * @param array Blocks to be added
+     */
+    public function addBlocks(array $blocks) {
+        foreach ($blocks as $block) {
+            $this->addBlock($block);
+        }
+    }
+
+    /**
      * Get the blocks inside this template
      * @return array blocks
      */
@@ -217,7 +237,7 @@ class template {
             $actionlinks=$this->actionlinks;
         }
         if (is_array($actionlinks)) {
-            $tpl=new template("actionlinks", array(
+            $tpl=new block("actionlinks", array(
                 "actionlinks" => $actionlinks)
             );
             return $tpl->toString();
@@ -237,7 +257,9 @@ class template {
         $links = "";
         if ($records) {
             foreach ($records as $rec) {
-                if ($links) { $links .= ", "; }
+                if ($links) {
+                    $links .= ", ";
+                }
                 $links .= $rec->getLink();
             }
         }
@@ -282,6 +304,22 @@ class template {
     }
 
     /**
+     * Create form input field
+     */
+    public static function createInput($name, $value, $maxlength, $label=null, $size=null) {
+        if (!$size) {
+            $size=$maxlength;
+        }
+        return new block("formInputText", array(
+            "label"     => $label,
+            "name"      => $name,
+            "value"     => $value,
+            "size"      => $size,
+            "maxlength" => $maxlength
+        ));
+    }
+
+    /**
      * Create pulldown (select)
      * @param string name for select box
      * @param string current value
@@ -306,9 +344,9 @@ class template {
      */
     public static function createViewPulldown($name, $value, $autosubmit=false) {
         return static::createPulldown($name, $value, array(
-            "list" => translate("List",0),
-            "tree" => translate("Tree",0),
-            "thumbs" => translate("Thumbnails",0)), (bool) $autosubmit);
+            "list" => translate("List", 0),
+            "tree" => translate("Tree", 0),
+            "thumbs" => translate("Thumbnails", 0)), (bool) $autosubmit);
     }
 
     /**
@@ -319,12 +357,12 @@ class template {
      */
     public static function createAutothumbPulldown($name, $value, $autosubmit=false) {
         return  static::createPulldown($name, $value, array(
-            "oldest" => translate("Oldest photo",0),
-            "newest" => translate("Newest photo",0),
-            "first" => translate("Changed least recently",0),
-            "last" => translate("Changed most recently",0),
-            "highest" => translate("Highest ranked",0),
-            "random" => translate("Random",0)),
+            "oldest" => translate("Oldest photo", 0),
+            "newest" => translate("Newest photo", 0),
+            "first" => translate("Changed least recently", 0),
+            "last" => translate("Changed most recently", 0),
+            "highest" => translate("Highest ranked", 0),
+            "random" => translate("Random", 0)),
         (bool)$autosubmit);
     }
 
@@ -334,7 +372,7 @@ class template {
      * @param string current value
      */
     public static function createPhotoFieldPulldown($name, $value) {
-        return  static::createPulldown($name, $value, translate(photo::getFields(),0));
+        return  static::createPulldown($name, $value, translate(photo::getFields(), 0));
     }
 
     /**
@@ -343,7 +381,7 @@ class template {
      * @param string current value
      */
     public static function createImportFieldPulldown($name, $value) {
-        return  static::createPulldown($name, $value, translate(photo::getImportFields(),0));
+        return  static::createPulldown($name, $value, translate(photo::getImportFields(), 0));
     }
 
     /**
@@ -353,9 +391,35 @@ class template {
      */
     public static function createYesNoPulldown($name, $value) {
         return  static::createPulldown($name, $value,array(
-            "0" => translate("No",0),
-            "1" => translate("Yes",0)
+            "0" => translate("No", 0),
+            "1" => translate("Yes", 0)
         ));
+    }
+
+    /**
+     * Display warning about disabled Javascript
+     */
+    public static function showJSwarning() {
+        $user=user::getCurrent();
+        if (($user->prefs->get("autocomp_albums")) ||
+            ($user->prefs->get("autocomp_categories")) ||
+            ($user->prefs->get("autocomp_places")) ||
+            ($user->prefs->get("autocomp_people")) ||
+            ($user->prefs->get("autocomp_photographer")) &&
+            conf::get("interface.autocomplete")) {
+
+            $warning=new block("message", array(
+                "class" => "warning",
+                "text"  => translate("You have enabled autocompletion for one or more dropdown " .
+                                     "boxes on this page, however, you do not seem to have Javascript " .
+                                     "support. You should either enable javascript or turn autocompletion " .
+                                     "off, or this page will not work as expected!")
+            ));
+
+            $noscript=new block("noscript");
+            $noscript->addBlocks(array($warning));
+            return $noscript;
+        }
     }
 
     /**

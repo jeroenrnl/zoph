@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -27,7 +27,7 @@ require_once "testSetup.php";
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class albumTest extends ZophDataBaseTestCase {    
+class albumTest extends ZophDataBaseTestCase {
     /**
      * Create Albums in the database
      * @dataProvider getAlbums();
@@ -53,7 +53,7 @@ class albumTest extends ZophDataBaseTestCase {
 
         $albums=$photo->getAlbums();
 
-        foreach($albums as $alb) {
+        foreach ($albums as $alb) {
             $ids[]=$alb->getId();
         }
 
@@ -89,7 +89,7 @@ class albumTest extends ZophDataBaseTestCase {
 
         $albums=$photo->getAlbums();
 
-        foreach($albums as $alb) {
+        foreach ($albums as $alb) {
             $ids[]=$alb->getId();
         }
 
@@ -106,14 +106,15 @@ class albumTest extends ZophDataBaseTestCase {
      * @dataProvider getChildren()
      */
     public function testGetChildren($id, array $exp_children, $order=null) {
+        user::setCurrent(new user(1));
         $album=new album($id);
         $alb_children=$album->getChildren($order);
         $children=array();
-        foreach($alb_children as $child) {
+        foreach ($alb_children as $child) {
             $children[]=$child->getId();
         }
 
-        if($order=="random") {
+        if ($order=="random") {
             // Of course, we cannot check the order for random, therefore we sort them.
             // Thus we only check if all the expected categories are present, not the order
             sort($children);
@@ -198,7 +199,7 @@ class albumTest extends ZophDataBaseTestCase {
                             <data>%s sub-albums</data>
                           </detail>
                         </response>
-                      </details>", 
+                      </details>",
                        $alb_id, $exp_details["count"],$disp_oldest, $disp_newest, $disp_first, $disp_last,  $exp_details["lowest"], $exp_details["highest"], $exp_details["average"],$subalb);
 
         $this->assertXmlStringEqualsXmlString($expectedXML, $details);
@@ -219,7 +220,7 @@ class albumTest extends ZophDataBaseTestCase {
         $this->assertEquals($pc, $count);
         user::setCurrent(new user(1));
     }
-    
+
     /**
      * Test getTotalPhotoCount() function
      * @dataProvider getTotalPhotoCount();
@@ -280,7 +281,7 @@ class albumTest extends ZophDataBaseTestCase {
         $this->assertEquals($photo, $cover->getId());
         user::setCurrent(new user(1));
     }
-    
+
     /**
      * Test getTopN() function
      * @dataProvider getTopNData();
@@ -290,7 +291,7 @@ class albumTest extends ZophDataBaseTestCase {
         $albids=array();
         $topN=album::getTopN();
 
-        foreach($topN as $album) {
+        foreach ($topN as $album) {
             $albids[]=$album["id"];
         }
         $this->assertEquals($expected, $albids);
@@ -306,7 +307,7 @@ class albumTest extends ZophDataBaseTestCase {
         $albids=array();
         $all=album::getAll();
 
-        foreach($all as $album) {
+        foreach ($all as $album) {
             $albids[]=$album->getId();
         }
         $this->assertEquals($expected, $albids);
@@ -320,7 +321,7 @@ class albumTest extends ZophDataBaseTestCase {
         $user=new user(2);
         $newer=album::getNewer($user, "1970-01-01");
         $albids=array();
-        foreach($newer as $album) {
+        foreach ($newer as $album) {
             $albids[]=$album->getId();
         }
         $this->assertEquals([1,2], $albids);
@@ -362,7 +363,7 @@ class albumTest extends ZophDataBaseTestCase {
         return array(
             array(1,5),
             array(2,6)
-        );    
+        );
     }
 
     /**
@@ -389,7 +390,7 @@ class albumTest extends ZophDataBaseTestCase {
      */
     public function getDetails() {
         return array(
-            array(2,2,"no", array(
+            array(2, 2, 1, array(
                 "count"     => "2",
                 "oldest"    => "2014-01-01 00:01:00",
                 "newest"    => "2014-01-07 00:01:00",
@@ -399,7 +400,7 @@ class albumTest extends ZophDataBaseTestCase {
                 "highest"   => "7.5",
                 "average"   => "7.50"
             )),
-            array(4,3,"no", array(
+            array(4, 3, "no", array(
                 "count"     => "3",
                 "oldest"    => "2014-01-01 00:01:00",
                 "newest"    => "2014-01-08 00:01:00",
@@ -409,7 +410,7 @@ class albumTest extends ZophDataBaseTestCase {
                 "highest"   => "7.5",
                 "average"   => "5.92",
             )),
-            array(1,6,1,array(
+            array(1, 6, 1,array(
                 "count"     => "3",
                 "oldest"    => "2014-01-03 00:01:00",
                 "newest"    => "2014-01-05 00:01:00",
@@ -436,8 +437,8 @@ class albumTest extends ZophDataBaseTestCase {
             array(1,1,10),
             array(1,6,4),
             array(1,11,3),
-            array(2,1,2),
-            array(2,8,0),
+            array(5,1,2),
+            array(5,8,0),
             array(4,1,4),
             array(4,2,4),
         );
@@ -471,13 +472,13 @@ class albumTest extends ZophDataBaseTestCase {
             array(1,"first", 3, 1),
             array(1,"last", 4, 9),
             array(1,"newest", 4, 10),
-            array(2,"oldest", 1, 1),
-            array(2,"newest", 2, 7),
-            array(2,"first", 2, 1),
+            array(5,"oldest", 1, 1),
+            array(5,"newest", 2, 7),
+            array(5,"first", 2, 1),
             array(4,"last", 2, 7),
         );
     }
-    
+
     /**
      * dataProvider function
      * @return array userid, topN
@@ -485,7 +486,7 @@ class albumTest extends ZophDataBaseTestCase {
     public function getTopNData() {
         return array(
             array(1,array(3,4,5,6,11)),
-            array(2,array(2)),
+            array(5,array(2)),
             array(4,array(3,2))
         );
     }
@@ -497,7 +498,7 @@ class albumTest extends ZophDataBaseTestCase {
     public function getAllData() {
         return array(
             array(1,array(2,3,4,5,6,7,9,10,8,11,12,13,14,1)),
-            array(2,array(2,1)),
+            array(5,array(2,1)),
             array(4,array(2,3,1))
         );
     }
@@ -509,7 +510,7 @@ class albumTest extends ZophDataBaseTestCase {
     public function getAlbumCount() {
         return array (
             array(1, 14),
-            array(2, 2),
+            array(5, 2),
             array(4, 3)
          );
      }

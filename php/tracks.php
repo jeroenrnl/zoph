@@ -29,7 +29,7 @@ $test=getvar("_test");
 $map=null;
 
 if (!$user->isAdmin()) {
-    if($user->get("browse_tracks")) {
+    if ($user->canBrowseTracks()) {
         $_action="display";
     } else {
         redirect("zoph.php");
@@ -42,22 +42,24 @@ if (!$user->isAdmin()) {
     $num_photos=sizeof($photos);
 }
 
-if($_action=="" || $_action=="display") {
+if ($_action=="" || $_action=="display") {
     $title = translate("Tracks");
     $tracks=track::getAll();
-    if(count($tracks>0)) {
+    if (count($tracks>0)) {
         $content=new block("tracks_table", array(
             "tracks" => $tracks
         ));
     } else {
-        $content=new block("error", array(
-            "error" => translate("No tracks found, you should import a GPX file.")
+        $content=new block("message", array(
+            "class" => "warning",
+            "text" => translate("No tracks found, you should import a GPX file.")
         ));
     }
 } else if ($_action=="geotag") {
     if ($num_photos<= 0) {
-        $content=new block("error", array(
-            "error" => translate("No photos were found matching your search criteria.")
+        $content=new block("message", array(
+            "class" => "error",
+            "text" => translate("No photos were found matching your search criteria.")
         ));
     } else {
         $hidden=$vars;
@@ -83,7 +85,7 @@ if($_action=="" || $_action=="display") {
     $entity=getvar("_entity");
     $tphotos=array();
 
-    if($tracks!="all") {
+    if ($tracks!="all") {
         $track_id=getvar("_track");
         $track=new track($track_id);
         $track->lookup();
@@ -91,26 +93,26 @@ if($_action=="" || $_action=="display") {
         $track=null;
     }
 
-    if($validtz) {
+    if ($validtz) {
         $photos=photo::removePhotosWithNoValidTZ($photos);
     }
-    if(!$overwrite) {
+    if (!$overwrite) {
         $photos=photo::removePhotosWithLatLon($photos);
     }
 
     $total=count($photos);
 
-    if($total>0) {
-        if(is_array($test)) {
+    if ($total>0) {
+        if (is_array($test)) {
             $photos=photo::getSubset($photos, $test, $count);
         }
 
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $point=$photo->getLatLon($track, $maxtime, $interpolate, $int_maxdist,
                 $entity, $int_maxtime);
-            if($point instanceof point) {
+            if ($point instanceof point) {
                 $photo->setLatLon($point);
-                if(!is_array($test)) {
+                if (!is_array($test)) {
                     $photo->update();
                 }
                 $tphotos[]=$photo;
@@ -134,10 +136,10 @@ if($_action=="" || $_action=="display") {
 $tpl=new template("main", array(
     "title" => $title,
 ));
-if($content instanceof block) {
+if ($content instanceof block) {
     $tpl->addBlock($content);
 }
-if($map instanceof block) {
+if ($map instanceof block) {
     $tpl->addBlock($map);
 }
 echo $tpl;

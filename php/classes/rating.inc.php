@@ -68,7 +68,7 @@ class rating extends zophTable {
             }
         }
 
-        return self::getRecords(null, $constraints);
+        return static::getRecords(null, $constraints);
      }
 
     /**
@@ -122,7 +122,7 @@ class rating extends zophTable {
             return;
         }
 
-        $current_ratings=self::getRatings($photo, $user);
+        $current_ratings=static::getRatings($photo, $user);
 
         if (sizeof($current_ratings) > 0) {
             $cur_rating=array_pop($current_ratings);
@@ -145,9 +145,9 @@ class rating extends zophTable {
      * @return block template block to display details
      */
     public static function getDetails(photo $photo) {
-        $rating=self::getAverage($photo);
+        $rating=static::getAverage($photo);
 
-        $ratings=self::getRatings($photo);
+        $ratings=static::getRatings($photo);
 
         $tpl=new block("rating_details",array(
             "rating" => $rating,
@@ -170,13 +170,7 @@ class rating extends zophTable {
         $subqry->join(array("pr" => "photo_ratings"), "p.photo_id = pr.photo_id", "LEFT");
         $subqry->addGroupBy("p.photo_id");
 
-        if (!user::getCurrent()->isAdmin()) {
-            list($subqry, $where)=selectHelper::expandQueryForUser($subqry);
-
-            if ($where instanceof clause) {
-                $subqry->where($where);
-            }
-        }
+        $subqry=selectHelper::expandQueryForUser($subqry);
 
         $qry=new select(array("avg_rating" => $subqry));
         $qry->addFields(array("rating"));
@@ -191,7 +185,7 @@ class rating extends zophTable {
         }
 
         $ratings=array_fill(0, 11, 0);
-        while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $rating=(int) $row["rating"];
             $ratings[$rating]=(int) $row["count"];
         }
@@ -222,7 +216,7 @@ class rating extends zophTable {
             log::msg("Rating grouping failed", log::FATAL, log::DB);
         }
         $ratings=array_fill(1, 10, 0);
-        while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $rating=(int) $row["rating"];
             $ratings[$rating]=(int) $row["count"];
         }
@@ -236,7 +230,7 @@ class rating extends zophTable {
      * @return array graph array
      */
     public static function getGraphArrayForUser(user $user) {
-        $ratings=self::getPhotoCountForUser($user);
+        $ratings=static::getPhotoCountForUser($user);
         $max = max($ratings);
         if ($max == 0) {
             // no ratings
@@ -271,7 +265,7 @@ class rating extends zophTable {
      * @return array graph array
      */
     public static function getGraphArray() {
-        $ratings=self::getPhotoCount();
+        $ratings=static::getPhotoCount();
         $max = max($ratings);
         if ($max == 0) {
             // no ratings

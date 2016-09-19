@@ -29,7 +29,7 @@ $_off = (int) getvar("_off");
 $_order = getvar("_order");
 $_dir = getvar("_dir");
 
-if(!preg_match("/^[a-zA-Z_]*$/", $_order)) {
+if (!preg_match("/^[a-zA-Z_]*$/", $_order)) {
     die("Illegal characters in _order");
 }
 
@@ -108,17 +108,17 @@ if ($num_thumbnails <= 0) {
 
 
     // create once
-    if(!conf::get("interface.autocomplete")) {
-        if(!$user->prefs->get("autocomp_categories")) {
+    if (!conf::get("interface.autocomplete")) {
+        if (!$user->prefs->get("autocomp_categories")) {
             category::setSAcache();
         }
-        if(!$user->prefs->get("autocomp_albums")) {
+        if (!$user->prefs->get("autocomp_albums")) {
             album::setSAcache();
         }
-        if(!$user->prefs->get("autocomp_places")) {
+        if (!$user->prefs->get("autocomp_places")) {
             place::setSAcache();
         }
-        if(!$user->prefs->get("autocomp_people")) {
+        if (!$user->prefs->get("autocomp_people")) {
             person::setSAcache();
         }
     }
@@ -187,7 +187,7 @@ if ($num_thumbnails <= 0) {
         $can_edit = $user->isAdmin() || $permissions->get("writable");
 
 
-        if(array_key_exists("_action__" . $photo_id, $request_vars)) {
+        if (array_key_exists("_action__" . $photo_id, $request_vars)) {
             $action = $request_vars["_action__" . $photo_id];
         }
 
@@ -449,7 +449,7 @@ if ($num_thumbnails <= 0) {
         $pager_vars[$key] = $val;
     }
     $request_vars = $pager_vars;
-    echo pager($offset, $num_photos, $num_pages, $cells,
+    echo new pager($offset, $num_photos, $num_pages, $cells,
         $user->prefs->get("max_pager_size"), $request_vars, "_off");
 } // if photos
 ?>

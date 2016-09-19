@@ -41,7 +41,7 @@ class block extends template {
      */
     public function __construct($template, $vars=null) {
         $this->vars=$vars;
-        if(!preg_match("/^[A-Za-z0-9_]+$/", $template)) {
+        if (!preg_match("/^[A-Za-z0-9_]+$/", $template)) {
             log::msg("Illegal characters in template", log::FATAL, log::GENERAL);
         } else {
             $this->template="templates/default/blocks/" . $template . ".tpl.php";

@@ -21,19 +21,21 @@
  * @author Jeroen Roos
  */
 require_once "include.inc.php";
+
+$title=translate("Pagesets");
 require_once "header.inc.php";
 ?>
 <h1>
 <?php
 if ($user->isAdmin()) {
     ?>
-    <span class="actionlink">
-      <a href="pageset.php?_action=new"><?php echo translate("new") ?></a>
-    </span>
+    <ul class="actionlink">
+      <li><a href="pageset.php?_action=new"><?php echo translate("new") ?></a></li>
+    </ul>
     <?php
 }
 ?>
-<?php echo translate("Pagesets") ?>
+<?php echo $title ?>
 </h1>
 <div class="main">
   <br>

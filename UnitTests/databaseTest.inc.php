@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -33,14 +33,14 @@ abstract class ZophDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
     final public function getConnection() {
         if ($this->conn === null) {
             if (self::$pdo == null) {
-                self::$pdo = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, 
+                self::$pdo = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST,
                     DB_USER, DB_PASS);
             }
             $this->conn = $this->createDefaultDBConnection(self::$pdo, DB_NAME);
         }
         return $this->conn;
     }
-    
+
     final public function getDataSet() {
         return $this->createMySQLXMLDataSet('UnitTests/db.xml');
     }

@@ -20,7 +20,7 @@
  * @todo This is a temporary template until the entire zoph page is generated from a template
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 require_once "header.inc.php";
 ?>
     <h1>

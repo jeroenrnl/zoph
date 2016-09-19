@@ -18,11 +18,11 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-$page=array_reverse(explode("/", $_SERVER["PHP_SELF"]));
-if($page[0]=="selection.inc.php") {
+$url=array_reverse(explode("/", $_SERVER["PHP_SELF"]));
+if ($url[0]=="selection.inc.php") {
     redirect("zoph.php");
 }
-if(!empty($_SESSION["selected_photo"])) {
+if (!empty($_SESSION["selected_photo"])) {
     ?>
     <div id="selection">
     <?php printf(translate("%s photo(s) selected"), count($_SESSION["selected_photo"]))?><br>

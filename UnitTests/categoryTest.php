@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -65,11 +65,11 @@ class categoryTest extends ZophDataBaseTestCase {
         $category=new category($id);
         $cat_children=$category->getChildren($order);
         $children=array();
-        foreach($cat_children as $child) {
+        foreach ($cat_children as $child) {
             $children[]=$child->getId();
         }
 
-        if($order=="random") {
+        if ($order=="random") {
             // Of course, we cannot check the order for random, therefore we sort them.
             // Thus we only check if all the expected categories are present, not the order
             sort($children);
@@ -77,7 +77,7 @@ class categoryTest extends ZophDataBaseTestCase {
         $this->assertEquals($exp_children, $children);
      }
 
-        
+
     /**
      * Test getPhotoCount() function
      * @dataProvider getCategoryPhotoCount();
@@ -215,7 +215,7 @@ class categoryTest extends ZophDataBaseTestCase {
                             <data>%s sub-categories</data>
                           </detail>
                         </response>
-                      </details>", 
+                      </details>",
                        $cat_id, $exp_details["count"],$disp_oldest, $disp_newest, $disp_first, $disp_last,  $exp_details["lowest"], $exp_details["highest"], $exp_details["average"],$subcat);
 
         $this->assertXmlStringEqualsXmlString($expectedXML, $details);
@@ -232,7 +232,7 @@ class categoryTest extends ZophDataBaseTestCase {
         $catids=array();
         $topN=category::getTopN();
 
-        foreach($topN as $category) {
+        foreach ($topN as $category) {
             $catids[]=$category["id"];
         }
         $this->assertEquals($expected, $catids);
@@ -249,7 +249,7 @@ class categoryTest extends ZophDataBaseTestCase {
         $count=category::getCountForUser();
 
         $this->assertEquals($exp_count, $count);
-        
+
         user::setCurrent(new user(1));
      }
 
@@ -266,7 +266,7 @@ class categoryTest extends ZophDataBaseTestCase {
         $count=$category->getTotalPhotoCount();
 
         $this->assertEquals($exp_count, $count);
-        
+
         user::setCurrent(new user(1));
      }
 
@@ -327,9 +327,9 @@ class categoryTest extends ZophDataBaseTestCase {
             array(1,"first", 3, 1),
             array(1,"last", 4, 10),
             array(1,"newest", 5, 10),
-            array(2,"oldest", 2, 1),
-            array(2,"newest", 2, 1),
-            array(3,"first", 3, 1),
+            array(5,"oldest", 2, 1),
+            array(5,"newest", 2, 1),
+            array(5,"first", 3, 1),
             array(4,"last", 4, 2),
         );
     }
@@ -345,9 +345,9 @@ class categoryTest extends ZophDataBaseTestCase {
             array(1,"first", 3, 1),
             array(1,"last", 4, 10),
             array(1,"newest", 4, 10),
-            array(2,"oldest", 1, 1),
-            array(2,"newest", 2, 1),
-            array(2,"first", 3, 1),
+            array(5,"oldest", 1, 1),
+            array(5,"newest", 2, 1),
+            array(5,"first", 3, 1),
             array(4,"last", 4, 2),
         );
     }
@@ -358,34 +358,34 @@ class categoryTest extends ZophDataBaseTestCase {
     public function getDetails() {
         return array(
             array(1,2,2,array(
-                "count" 	=> "4",
-                "oldest" 	=> "2014-01-01 00:01:00",
-                "newest" 	=> "2014-01-04 00:01:00",
-                "first" 	=> "2013-12-31 23:01:00",
-                "last" 	    => "2014-01-03 23:01:00",
-                "lowest" 	=> "4.3",
-                "highest" 	=> "7.5",
-                "average" 	=> "5.81"
+                "count"     => "4",
+                "oldest"     => "2014-01-01 00:01:00",
+                "newest"     => "2014-01-04 00:01:00",
+                "first"     => "2013-12-31 23:01:00",
+                "last"         => "2014-01-03 23:01:00",
+                "lowest"     => "4.3",
+                "highest"     => "7.5",
+                "average"     => "5.81"
             )),
             array(1,3,"no", array(
-                "count" 	=> "2",
-                "oldest" 	=> "2014-01-01 00:01:00",
-                "newest" 	=> "2014-01-10 00:01:00",
-                "first" 	=> "2013-12-31 23:01:00",
-                "last" 	    => "2014-01-09 23:02:00",
-                "lowest" 	=> "5.5",
-                "highest" 	=> "7.5",
-                "average" 	=> "6.50",
+                "count"     => "2",
+                "oldest"     => "2014-01-01 00:01:00",
+                "newest"     => "2014-01-10 00:01:00",
+                "first"     => "2013-12-31 23:01:00",
+                "last"         => "2014-01-09 23:02:00",
+                "lowest"     => "5.5",
+                "highest"     => "7.5",
+                "average"     => "6.50",
             )),
-            array(2,2,1,array(
-                "count" 	=> "1",
-                "oldest" 	=> "2014-01-01 00:01:00",
-                "newest" 	=> "2014-01-01 00:01:00",
-                "first" 	=> "2013-12-31 23:01:00",
-                "last" 	    => "2013-12-31 23:01:00",
-                "lowest" 	=> "7.5",
-                "highest" 	=> "7.5",
-                "average" 	=> "7.50",
+            array(5,2,1,array(
+                "count"     => "1",
+                "oldest"     => "2014-01-01 00:01:00",
+                "newest"     => "2014-01-01 00:01:00",
+                "first"     => "2013-12-31 23:01:00",
+                "last"         => "2013-12-31 23:01:00",
+                "lowest"     => "7.5",
+                "highest"     => "7.5",
+                "average"     => "7.50",
             )),
         );
     }
@@ -397,7 +397,7 @@ class categoryTest extends ZophDataBaseTestCase {
     public function getTopNData() {
         return array(
             array(1,array(10,2,11,5,7)),
-            array(2,array(10,11,3,2))
+            array(5,array(10,11,3,2))
         );
     }
 
@@ -408,7 +408,7 @@ class categoryTest extends ZophDataBaseTestCase {
     public function getCategoryCount() {
         return array(
             array(1,13),
-            array(2,6),
+            array(5,6),
             array(3,6),
             array(4,7),
             array(6,0)
@@ -422,7 +422,7 @@ class categoryTest extends ZophDataBaseTestCase {
         return array(
             array(1,1,10),
             array(1,2,5),
-            array(2,1,2),
+            array(5,1,2),
             array(3,2,1),
             array(4,2,2),
             array(6,2,0)

@@ -30,14 +30,23 @@ namespace db;
  * @author Jeroen Roos
  */
 class clause {
-
+    /** @var contains the WHERE clause */
     private $clause;
+    /** @var contains any subclauses */
     private $subclauses;
 
+    /**
+     * Create a new WHERE clause
+     * @param string clause to be created
+     */
     public function __construct($clause) {
         $this->clause=$clause;
     }
 
+    /**
+     * Add a subclause with AND conjunction
+     * @param clause subclause to be added
+     */
     public function addAnd(clause $clause) {
         $this->subclauses[]=array(
             "conj" => "AND",
@@ -46,6 +55,10 @@ class clause {
         return $this;
     }
 
+    /**
+     * Add a subclause with OR conjunction
+     * @param clause subclause to be added
+     */
     public function addOr(clause $clause) {
         $this->subclauses[]=array(
             "conj" => "OR",
@@ -55,6 +68,10 @@ class clause {
         return $this;
     }
 
+    /**
+     * Add a subclause with NOT conjunction
+     * @param clause subclause to be added
+     */
     public function addNot(clause $clause) {
         $this->subclauses[]=array(
             "conj" => "NOT",
@@ -65,23 +82,40 @@ class clause {
     }
 
     /**
-     * Create a WHERE ... IN ( ..., ..., ...) clause
+     * Create a WHERE ... IN (..., ..., ...) clause
      * @param string variable
      * @param param parameters
+     * @return clause WHERE clause
      */
     public static function InClause($var, param $param) {
         return new self($var . " IN (" . implode(", ", $param->getName()) . ")");
     }
 
     /**
-     * Create a WHERE ... NOT IN ( ..., ..., ...) clause
+     * Create a WHERE ... IN (SELECT ...) clause
+     * @param string variable
+     * @param select subquery
+     * @return clause WHERE clause
+     */
+
+    public static function inSubQry($var, select $subqry) {
+        return new self($var . " IN (" . rtrim($subqry, ";") . ")");
+    }
+
+    /**
+     * Create a WHERE ... NOT IN (..., ..., ...) clause
      * @param string variable
      * @param param parameters
+     * @return clause WHERE clause
      */
     public static function NotInClause($var, param $param) {
         return new self($var . " NOT IN (" . implode(", ", $param->getName()) . ")");
     }
 
+    /**
+     * Build the clause
+     * @return string clause
+     */
     public function __toString() {
         $sql="(" . $this->clause . ")";
 

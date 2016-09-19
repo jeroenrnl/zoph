@@ -25,10 +25,15 @@ require_once "include.inc.php";
 
 $zophpage_id = getvar("page_id");
 $zophpage = new page($zophpage_id);
+
+$obj = &$zophpage;
+
+require_once "actions.inc.php";
+
 if ($zophpage_id) {
     $zophpage->lookup();
     $title = $zophpage->get("title");
-    if(empty($title)) {
+    if (empty($title)) {
         $title=translate("Page");
     }
 } else if ($_action == "new") {
@@ -36,52 +41,51 @@ if ($zophpage_id) {
 } else if ($_action != "insert") {
     // no id given and action is not new or insert
     redirect("zoph.php", "No page id given!");
+} else {
+    $title = $zophpage->get("title");
 }
 
-if(!$user->isAdmin()) {
+if (!$user->isAdmin()) {
     $_action="display";
 }
 
-$obj = &$zophpage;
-
-require_once "actions.inc.php";
 require_once "header.inc.php";
 
 if ($action == "confirm") {
     ?>
     <h1><?php echo translate("delete page") ?></h1>
         <div class="main">
-            <span class="actionlink">
-                <a href="page.php?_action=confirm&amp;page_id=<?php
-                    echo $zophpage->get("page_id") ?>">
+            <ul class="actionlink">
+                <li><a href="page.php?_action=confirm&amp;page_id=<?php
+                    echo $zophpage->getId() ?>">
                   <?php echo translate("delete") ?>
-                </a> |
-                <a href="page.php?_action=edit&amp;page_id=<?php
-                    echo $zophpage->get("page_id") ?>">
+                </a></li>
+                <li><a href="page.php?_action=edit&amp;page_id=<?php
+                    echo $zophpage->getId() ?>">
                   <?php echo translate("cancel") ?>
-                </a>
-            </span>
+                </a></li>
+            </ul>
             <?php echo translate("Confirm deletion of this page"); ?>
         </div>
     <?php
 } else if ($action == "display") {
     ?>
     <h1>
-        <span class="actionlink">
-            <a href="pages.php"><?php echo translate("return") ?></a> |
-            <a href="page.php?_action=edit&amp;page_id=<?php
-                echo $zophpage->get("page_id") ?>">
+        <ul class="actionlink">
+            <li><a href="pages.php"><?php echo translate("return") ?></a></li>
+            <li><a href="page.php?_action=edit&amp;page_id=<?php
+                echo $zophpage->getId() ?>">
               <?php echo translate("edit") ?>
-            </a> |
-            <a href="page.php?_action=delete&amp;page_id=<?php echo $zophpage->get("page_id") ?>">
+            </a></li>
+            <li><a href="page.php?_action=delete&amp;page_id=<?php echo $zophpage->getId() ?>">
               <?php echo translate("delete") ?>
-            </a>
-        </span>
+            </a></li>
+        </ul>
         <?php echo $title; ?>
     </h1>
         <div class="main">
             <br>
-            <dl class="page">
+            <dl class="display page">
                 <?php echo create_field_html($zophpage->getDisplayArray()) ?>
             </dl>
             <br>
@@ -89,7 +93,7 @@ if ($action == "confirm") {
     $pagesets=$zophpage->getPagesets();
 
 
-    if(!empty($pagesets)) {
+    if (!empty($pagesets)) {
         ?>
         <h2><?php echo translate("Pagesets")?></h2>
         <?php echo translate("This page is used in the following pagesets:") ?>

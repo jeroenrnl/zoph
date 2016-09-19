@@ -134,7 +134,7 @@ class track extends zophTable {
             } else {
                 $stack[]="gpx";
             }
-            while($xml->read()) {
+            while ($xml->read()) {
                 if ($xml->nodeType==XMLReader::ELEMENT) {
                     // Keep track of the current open tags
                     if (!$xml->isEmptyElement) {

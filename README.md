@@ -1,4 +1,4 @@
-# Zoph 0.9.1 Readme #
+# Zoph 0.9.4 Readme #
 
 ## Introduction ##
 
@@ -24,15 +24,15 @@ your photos, search them, or control access to them, take a look at Zoph.
 
 ## Installation ##
 
-Read the REQUIREMENTS.md, INSTALL.md docs.  If you are upgrading
-skip to the UPGRADE.md document.
+Read the the [Requirements](REQUIREMENTS.md), [Installation guide](INSTALL.md) docs.  If you are upgrading
+from a previous version, read the [Upgrade Instructions](UPGRADE.md) document.
 
-More documentation can be found on http://en.wikibooks.org/wiki/zoph
+More documentation can be found in the [Zoph Wikibook](http://en.wikibooks.org/wiki/zoph)
 
 ## Copying ##
 
 Zoph is free software.  It is released under the GPL license. Please 
-read the file COPYING for more details
+read the file [license](COPYING) for more details
 
 ## Feedback ##
    

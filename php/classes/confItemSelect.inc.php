@@ -31,6 +31,9 @@ class confItemSelect extends confItem {
     /** @var array list of options */
     private $options=array();
 
+    /** @var bool translate options */
+    private $translate=true;
+
     /**
      * Add an option
      * @param string key
@@ -45,7 +48,7 @@ class confItemSelect extends confItem {
      * @param array array of options
      */
     public function addOptions(array $options) {
-        foreach($options as $key=>$desc) {
+        foreach ($options as $key=>$desc) {
             $this->addOption($key, $desc);
         }
     }
@@ -56,6 +59,14 @@ class confItemSelect extends confItem {
      */
     public function getOptions() {
         return $this->options;
+    }
+
+    /**
+     * Set whether or not the options must be translated
+     * @param bool translate yes/no
+     */
+    public function setOptionsTranslate($translate) {
+        $this->translate=$translate;
     }
 
     /**
@@ -73,17 +84,24 @@ class confItemSelect extends confItem {
      * @return block template block
      */
     public function display() {
-        if($this->internal) {
+        if ($this->internal) {
             return;
         }
-        $tpl=new block("confItemSelect", array(
-            "label" => e(translate($this->getLabel(),0)),
-            "name" => e($this->getName()),
-            "value" => e($this->getValue()),
-            "desc" => e(translate($this->getDesc(),0)),
-            "hint" => e(translate($this->getHint(),0)),
-            "options" => translate($this->getOptions(),0)
-        ));
+        $params=array(
+            "label"     => e(translate($this->getLabel(), 0)),
+            "name"      => e($this->getName()),
+            "value"     => e($this->getValue()),
+            "desc"      => e(translate($this->getDesc(), 0)),
+            "unmet"     => $this->displayUnmetRequirements(),
+            "hint"      => e(translate($this->getHint(), 0)),
+            "enabled"   => (bool) $this->requirementsMet()
+        );
+        if ($this->translate) {
+            $params["options"] = translate($this->getOptions(), 0);
+        } else {
+            $params["options"] = $this->getOptions();
+        }
+        $tpl=new block("confItemSelect", $params);
         return $tpl;
      }
 }

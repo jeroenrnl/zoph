@@ -111,12 +111,12 @@ class confGroup implements ArrayAccess, IteratorAggregate {
      * @param string value
      */
     public function offsetSet($off, $value) {
-        if(is_null($off)) {
-            if($value instanceof confItem) {
+        if (is_null($off)) {
+            if ($value instanceof confItem) {
                 $off=$value->getName();
             }
         }
-        if(!is_null($off)) {
+        if (!is_null($off)) {
             $this->items[$off]=$value;
         } else {
             $this->items[]=$value;
@@ -134,7 +134,7 @@ class confGroup implements ArrayAccess, IteratorAggregate {
 
     /**
      * For IteratorAggregate interface
-     * allow us to do foreach() on this object
+     * allow us to do foreach () on this object
      */
     public function getIterator() {
         return new ArrayIterator($this->items);

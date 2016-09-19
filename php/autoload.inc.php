@@ -26,7 +26,7 @@
  * Autoload classes
  */
 function zophAutoload($file) {
-    if(is_readable(settings::$php_loc . "/" . $file)) {
+    if (is_readable(settings::$php_loc . "/" . $file)) {
         require_once $file;
     } else {
         return false;
@@ -44,5 +44,11 @@ function zophAutoloadInterface($interface) {
     return zophAutoload($file);
 }
 
+function zophAutoloadTrait($trait) {
+    $file="traits/" . $trait . ".inc.php";
+    return zophAutoload($file);
+}
+
 spl_autoload_register("zophAutoloadClass");
 spl_autoload_register("zophAutoloadInterface");
+spl_autoload_register("zophAutoloadTrait");

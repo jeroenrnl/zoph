@@ -44,12 +44,12 @@ class getPhotoTest extends PHPUnit_Framework_TestCase {
 
         $actCount=get_photos($vars, $offset, $rows, $photos, new user($userId));
 
-        foreach($photos as $photo) {
+        foreach ($photos as $photo) {
             $actPhotoIds[]=$photo->getId();
         }
         // This test is only done when there is no limit, because the counter
         // always gives the full set
-        if($offset==0 && $rows==999) {
+        if ($offset==0 && $rows==999) {
             $this->assertEquals(sizeOf($expPhotoIds), $actCount);
         } else {
             $this->assertEquals(12, $actCount);
@@ -248,13 +248,13 @@ class getPhotoTest extends PHPUnit_Framework_TestCase {
             array(array(
                     "userrating"        => 8,
                     "_userrating_user"  => 99,
-                ), 0, 999, 2, array(1)),
+                ), 0, 999, 2, array()),
             array(array(
                     "album_id#1"        => 2,
                     "album_id#2"        => 11,
                     "_album_id#2-conj"  => "and",
                     "_album_id#2-op"    => "!="
-                ), 0, 999, 2, array(1)),
+                ), 0, 999, 5, array(1)),
             // The next is the same query as above, but now for a non-admin user
             array(array(
                     "category_id"          => 2

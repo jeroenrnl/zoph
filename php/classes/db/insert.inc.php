@@ -30,6 +30,7 @@ namespace db;
  * @author Jeroen Roos
  */
 class insert extends query {
+    /** @var array Array of fields to be SET in INSERT query */
     private $set=array();
 
     /**
@@ -58,14 +59,21 @@ class insert extends query {
         return $sql . ";";
     }
 
+    /**
+     * Add a SET statement to this query
+     * @param string name of the field
+     * @param string value of the field
+     */
     public function addSet($name, $value) {
         $this->set[$name]=$value;
     }
 
+    /**
+     * Execute query and return new id
+     * @return int ID
+     */
     public function execute() {
         parent::execute();
         return db::getHandle()->lastInsertId();
     }
-
 }
-

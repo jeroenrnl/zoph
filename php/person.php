@@ -23,15 +23,16 @@
  */
 require_once "include.inc.php";
 
-if (!$user->isAdmin()) {
+if (!$user->canEditOrganizers()) {
     $_action = "display";
 }
 
-if (!$user->get("browse_people") && !$user->isAdmin()) {
+if (!$user->canBrowsePeople()) {
     redirect("zoph.php");
 }
 
 $name = getvar("person");
+$pagenum = getvar("_pageset_page");
 
 if ($name) {
     $people = person::getByName($name);
@@ -45,6 +46,9 @@ if ($name) {
     $person = new person($person_id);
 }
 
+if ($_action=="display" && !$person->isVisible()) {
+    redirect("people.php");
+}
 $obj = &$person;
 $redirect = "people.php";
 require_once "actions.inc.php";
@@ -59,138 +63,125 @@ require_once "header.inc.php";
 if ($action == "display") {
     $photos_of = $person->getPhotoCount();
     $photos_by = $person->getPhotographer()->getPhotoCount();
-    ?>
-    <h1>
-    <?php
-    if ($user->isAdmin()) {
-        ?>
-        <span class="actionlink">
-          <a href="person.php?_action=edit&amp;person_id=<?php echo $person->get("person_id") ?>">
-            <?php echo translate("edit") ?>
-          </a> |
-          <a href="person.php?_action=delete&amp;person_id=<?php echo $person->get("person_id") ?>">
-            <?php echo translate("delete") ?>
-          </a> |
-          <a href="person.php?_action=new">
-            <?php echo translate("new") ?>
-          </a>
-        <?php
-        if($person->get("coverphoto")) {
-            ?>
-            |
-            <a href="person.php?_action=update&amp;person_id=<?php
-                echo $person->getId() ?>&amp;coverphoto=NULL">
-              <?php echo translate("unset coverphoto") ?>
-            </a>
-            <?php
+
+    $selection=null;
+    $actionlinks=null;
+
+    if ($user->canEditOrganizers()) {
+        $actionlinks=array(
+            translate("edit")   => "person.php?_action=edit&amp;person_id=" . $person->getId(),
+            translate("delete") => "person.php?_action=delete&amp;person_id=" . $person->getId(),
+            translate("new")    => "person.php?_action=new"
+        );
+        if ($person->get("coverphoto")) {
+            $actionlinks[translate("unset coverphoto")]="person.php?_action=update&amp;person_id=" .
+                $person->getId() . "&amp;coverphoto=NULL";
         }
-        ?>
-        </span>
-        <?php
+
+        try {
+            $selection=new selection($_SESSION, array(
+                "coverphoto"    => "person.php?_action=update&amp;person_id=" . $person->getId() . "&amp;coverphoto=",
+                "return"        => "_return=person.php&amp;_qs=person_id=" . $person->getId()
+            ));
+        } catch (PhotoNoSelectionException $e) {
+            $selection=null;
+        }
     }
-    ?>
-    <?php echo $title ?>
-    </h1>
-    <?php
-    if($user->isAdmin()) {
-        include "selection.inc.php";
+
+    try {
+        $pageset=$person->getPageset();
+        $page=$person->getPage($request_vars, $pagenum);
+        $showOrig=$person->showOrig($pagenum);
+    } catch (pageException $e) {
+        $showOrig=true;
+        $page=null;
     }
-    include "show_page.inc.php";
-    if($show_orig) {
-        ?>
-        <div class="main">
-        <span class="actionlink">
-          <a href="photos.php?person_id=<?php echo $person->get("person_id") ?>">
-            <?php echo "$photos_of " . translate("photos of") ?>
-          </a> |
-          <a href="photos.php?photographer_id=<?php echo $person->get("person_id") ?>">
-            <?php echo "$photos_by " . translate("photos by") ?>
-          </a>
-        </span>
-        <h2>
-          <?php echo e($person->get("first_name")) ?>
-          <?php echo e($person->get("middle_name")) ?>
-          <?php echo e($person->get("last_name")) ?>
-        </h2>
-        <p>
-          <?php
-          echo $person->displayCoverphoto();
-          ?>
-        </p>
-        <dl>
-        <?php
-        if ($user->get("detailed_people") || $user->isAdmin()) {
-            ?>
-            <?php echo create_field_html($person->getDisplayArray()) ?>
-            <?php
-            if ($person->getEmail()) {
-                ?>
-                <dt><?php echo translate("email") ?></dt>
-                <dd>
-                  <a href="mailto:<?php echo e($person->get_email()) ?>">
-                    <?php echo e($person->get_email()) ?>
-                  </a>
-                </dd>
-                <?php
-            }
 
-            if ($person->home) {
-                ?>
-                <dt><?php echo translate("home location") ?></dt>
-                <dd>
-                  <span class="actionlink">
-                    <a href="place.php?place_id=<?php echo $person->get("home_id") ?>">
-                      <?php echo translate("view") ?>
-                    </a>
-                  </span>
-                  <?php echo $person->home->get("title") ?
-                    $person->home->get("title") . "<br>" : "" ?>
-                  <?php echo $person->home->getAddress() ?></dd>
-                <?php
-            }
+    $mainActionlinks=array(
+        translate("photos of")  => "photos.php?person_id=" . $person->getId(),
+        translate("photos by")  => "photos.php?photographer_id=" . $person->getId()
+    );
 
-            if ($person->work) {
-                ?>
-                <dt><?php echo translate("work") ?></dt>
-                <dd>
-                  <span class="actionlink">
-                    <a href="place.php?place_id=<?php echo $person->get("work_id") ?>">
-                      <?php echo translate("view") ?>
-                    </a>
-                  </span>
-                  <?php echo $person->work->get("title") ?
-                    $person->work->get("title") . "<br>" : "" ?>
-                  <?php echo $person->work->getAddress() ?>
-                </dd>
-                <?php
-            }
+    $tpl=new template("display", array(
+        "title"             => $title,
+        "obj"               => $person,
+        "actionlinks"       => $actionlinks,
+        "mainActionlinks"   => $mainActionlinks,
+        "selection"         => $selection,
+        "page"              => $page,
+        "pageTop"           => $person->showPageOnTop(),
+        "pageBottom"        => $person->showPageOnBottom(),
+        "showMain"          => $showOrig
+    ));
 
-            if ($person->get("notes")) {
-                ?>
-                <dt>notes</dt>
-                <dd><?php echo $person->get("notes") ?></dd>
-                <?php
-            }
+    /**
+     * @todo All the link blocks here could be generated by the objects themselves
+     *       saving a huge amount of more-or-less duplicate code
+     */
+    if ($user->canSeePeopleDetails()) {
+        $dl=$person->getDisplayArray();
+        if ($person->getEmail()) {
+            $mail=new block("link", array(
+                "href"      => "mailto:" . e($person->getEmail()),
+                "target"    =>  "",
+                "link"      => e($person->getEmail())
+            ));
+            $dl[translate("email")]=$mail;
+        }
 
-        } // detailed_people
-        ?>
-            </dl><br>
-          </div>
-        <?php
-    } // show_orig
-    echo $page_html;
+        if ($person->home) {
+            $home=new block("link", array(
+                "href"      => "place.php?place_id=" . $person->get("home_id"),
+                "target"    => "",
+                "link"      => $person->home->get("title")
+            ));
+            $dl[translate("home location")]=$home;
+        }
+
+        if ($person->work) {
+            $home=new block("link", array(
+                "href"      => "place.php?place_id=" . $person->get("work_id"),
+                "target"    => "",
+                "link"      => $person->work->get("title")
+            ));
+            $dl[translate("work location")]=$home;
+        }
+
+        if ($person->get("notes")) {
+            $dl[translate("notes")]=$person->get("notes");
+        }
+
+        $circles=$person->getCircles();
+        if ($circles) {
+            $circleLinks=array();
+            foreach ($circles as $circle) {
+                $circle->lookup();
+                $circleLinks[]= new block("link", array(
+                                    "href"      => $circle->getURL(),
+                                    "target"    => "",
+                                    "link"      => $circle->getName()
+                                ));
+            }
+            $dl[translate("circles")]=implode($circleLinks, ", ");
+        }
+        $tpl->addBlock(new block("definitionlist", array(
+            "dl"    => $dl,
+            "class" => ""
+        )));
+    }
+    echo $tpl;
 } else if ($action == "confirm") {
     ?>
     <h1>
       <?php echo translate("delete person") ?>
     </h1>
     <div class="main">
-      <span class="actionlink">
-        <a href="person.php?_action=confirm&amp;person_id=<?php echo $person->get("person_id") ?>">
-          <?php echo translate("delete") ?></a> |
-        <a href="person.php?_action=display&amp;person_id=<?php echo $person->get("person_id") ?>">
-          <?php echo translate("cancel") ?></a>
-      </span>
+      <ul class="actionlink">
+        <li><a href="person.php?_action=confirm&amp;person_id=<?php echo $person->get("person_id") ?>">
+          <?php echo translate("delete") ?></a></li>
+        <li><a href="person.php?_action=display&amp;person_id=<?php echo $person->get("person_id") ?>">
+          <?php echo translate("cancel") ?></a></li>
+      </ul>
       <?php echo sprintf(translate("Confirm deletion of '%s'"), $person->getName()) ?>:
       <br>
     </div>

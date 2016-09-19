@@ -23,119 +23,80 @@
  */
 
 header("Content-Type: text/html; charset=utf-8");
-global $user;
+$user=user::getCurrent();
 
 $icons=array(
-    "count" => template::getImage("icons/photo.png"),
-    "taken" => template::getImage("icons/date.png"),
-    "modified" => template::getImage("icons/modified.png"),
-    "rated" => template::getImage("icons/rating.png"),
-    "children" => template::getImage("icons/folder.png"),
+    "count"     => template::getImage("icons/photo.png"),
+    "taken"     => template::getImage("icons/date.png"),
+    "modified"  => template::getImage("icons/modified.png"),
+    "rated"     => template::getImage("icons/rating.png"),
+    "children"  => template::getImage("icons/folder.png"),
     "geo-photo" => template::getImage("icons/geo-photo.png"),
     "geo-place" => template::getImage("icons/geo-place.png"),
-    "resize" => template::getImage("icons/resize.png"),
-    "unpack" => template::getImage("icons/unpack.png"),
-    "remove" => template::getImage("icons/remove.png"),
-    "down2" => template::getImage("down2.gif"),
-        "pleasewait" => template::getImage("pleasewait.gif")
-   );
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link type="text/css" rel="stylesheet" href="css.php">
-        <link type="image/png" rel="icon"
-            href="<?php echo template::getImage("icons/favicon.png") ?>">
-        <script type="text/javascript">
-            var template = "<?php echo conf::get("interface.template"); ?>";
-            var icons={
-            <?php foreach($icons as $icon=>$file): ?>
-                "<?php echo $icon ?>": "<?php echo $file ?>",
-            <?php endforeach ?>
-            };
+    "resize"    => template::getImage("icons/resize.png"),
+    "unpack"    => template::getImage("icons/unpack.png"),
+    "remove"    => template::getImage("icons/remove.png"),
+    "down2"     => template::getImage("down2.gif"),
+    "pleasewait"=> template::getImage("pleasewait.gif")
+);
 
-        </script>
+$javascript=array();
 
-        <script type="text/javascript" src="js/util.js"></script>
-        <script type="text/javascript" src="js/xml.js"></script>
-        <script type="text/javascript" src="js/thumbview.js"></script>
-        <?php
-if(basename($_SERVER["SCRIPT_NAME"])=="import.php") {
-    ?>
-        <script type="text/javascript" src="js/import.js"></script>
-        <script type="text/javascript" src="js/formhelper.js"></script>
-    <?php
+$scripts=array(
+    "js/util.js",
+    "js/xml.js",
+    "js/thumbview.js"
+    );
+
+switch(basename($_SERVER["SCRIPT_NAME"])) {
+case "import.php":
+    $scripts[]="js/import.js";
+    $scripts[]="js/formhelper.js";
+    break;
+case "config.php":
+    $scripts[]="js/conf.js";
+    break;
 }
-if(basename($_SERVER["SCRIPT_NAME"])=="config.php") {
-    ?>
-        <script type="text/javascript" src="js/conf.js"></script>
-    <?php
+
+if (conf::get("interface.autocomplete")) {
+    $scripts[]="js/autocomplete.js";
 }
-if(conf::get("interface.autocomplete")) {
-    ?>
-        <script type="text/javascript" src="js/autocomplete.js"></script>
-    <?php
-}
-if(conf::get("maps.provider")) {
-    ?>
-        <script type="text/javascript"
-            src="js/mxn/mxn.js?(<?php echo conf::get("maps.provider"); ?>)">
-        </script>
-        <script type="text/javascript" src="js/maps.js"></script>
-        <script type="text/javascript" src="js/custommaps.js"></script>
-    <?php
-    if(conf::get("maps.geocode")) {
-        ?>
-        <script type="text/javascript" src="js/geocode.js"></script>
-        <?php
+
+if (conf::get("maps.provider")) {
+    $scripts[]="js/mxn/mxn.js?(" . conf::get("maps.provider") .")";
+    $scripts[]="js/maps.js";
+    $scripts[]="js/custommaps.js";
+    if (conf::get("maps.geocode")) {
+        $scripts[]="js/geocode.js";
     }
     switch (strtolower(conf::get("maps.provider"))) {
-    case 'googlev3':
-        ?>
-        <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript">
-        </script>
-        <?php
-        break;
-    case 'yahoo':
-        ?>
-        <script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=Zoph">i
-        </script>
-        <?php
-        break;
-    case 'openlayers':
-        ?>
-        <script src="http://openlayers.org/api/OpenLayers.js">
-        </script>
-        <?php
-        break;
-    case 'cloudmade':
-        ?>
-        <script type="text/javascript" src="http://tile.cloudmade.com/wml/0.2/web-maps-lite.js">
-        </script>
-        <script type="text/javascript">
-            var cloudmade_key = "<?php echo conf::get("maps.key.cloudmade"); ?>";
-        </script>
-        <?php
+    case "googlev3":
+        $scripts[]="https://maps.google.com/maps/api/js?sensor=false";
         break;
     }
 }
-if (isset($extrastyle)) {
-    ?>
-    <style type="text/css">
-        <?php echo $extrastyle ?>
-    </style>
-    <?php
-}
+
 $html_title=conf::get("interface.title");
 if (isset($title)) {
     $html_title.=" - " . $title;
 }
 ?>
-    <title><?php echo $html_title ?></title>
-  </head>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+
+<?php
+$tpl=new block("header", array(
+    "icons"         => $icons,
+    "scripts"       => $scripts,
+    "javascript"    => $javascript,
+    "extrastyle"    => isset($extrastyle) ? $extrastyle : null,
+    "title"         => $html_title
+));
+
+echo $tpl;
+?>
 <body>
-  <ul class="menu">
 <?php
 $tabs = array(
     translate("home", 0) => "zoph.php",
@@ -143,11 +104,11 @@ $tabs = array(
     translate("categories", 0) => "categories.php"
 );
 
-if ($user->isAdmin() || $user->get("browse_people")) {
+if ($user->canBrowsePeople()) {
     $tabs[translate("people", 0)] = "people.php";
 }
 
-if ($user->isAdmin() || $user->get("browse_places")) {
+if ($user->canBrowsePlaces()) {
     $tabs[translate("places", 0)] = "places.php";
 }
 
@@ -188,20 +149,11 @@ if (strpos($_SERVER["PHP_SELF"], "/") === false) {
     $self = substr(strrchr($_SERVER['PHP_SELF'], "/"), 1);
 }
 
-while (list($label, $page) = each($tabs)) {
-    if ($page == $self) {
-        $class = "class=\"selected\"";
-    } else {
-        $class="";
-    }
-    ?>
-    <li <?php echo $class ?>>
-        <a href="<?php echo $page ?>"><?php echo $label ?></a>
-    </li>
-    <?php
-}
-?>
-</ul>
-<?php
+$tpl=new block("menu", array(
+    "tabs"  => $tabs,
+    "self"  => $self
+));
+echo $tpl;
+
 require_once "breadcrumbs.inc.php";
 ?>

@@ -19,19 +19,19 @@
  * @package ZophTemplates
  */
 
-if(!ZOPH) { die("Illegal call"); }
+if (!ZOPH) { die("Illegal call"); }
 ?>
     <label for="<?php echo $tpl_name; ?>"><?php echo $tpl_label; ?></label>
     <input type="hidden" name="<?php echo $tpl_name ?>" value="0">
     <input type="checkbox" name="<?php echo $tpl_name ?>" value="1" <?php echo $tpl_checked ?>>
     <input class="reset" type="checkbox" name="_reset_<?php echo $tpl_name ?>">
     <span><?php echo translate("reset to default",0) ?></span>
-    <?php if(!empty($tpl_hint)): ?>
+    <?php if (!empty($tpl_hint)): ?>
         <div class="inputhint">
             <?php echo $tpl_hint ?>
         </div>
     <?php endif; ?>
-    <?php if(!empty($tpl_desc)): ?>
+    <?php if (!empty($tpl_desc)): ?>
         <div class="desc">
             <?php echo $tpl_desc ?>
         </div>

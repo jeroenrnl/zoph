@@ -26,6 +26,7 @@ CREATE TABLE zoph_albums (
   coverphoto int(11) default NULL,
   pageset int(11) DEFAULT NULL,
   sortorder varchar(32) default NULL,
+  createdby int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY  (album_id),
   KEY album_parent_id (parent_album_id)
 ) ENGINE=MyISAM;
@@ -35,7 +36,7 @@ CREATE TABLE zoph_albums (
 --
 
 
-INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL, NULL, NULL,NULL);
+INSERT INTO zoph_albums VALUES (1,0,'Album Root',NULL, NULL, NULL, NULL,NULL, 1);
 
 --
 -- Table structure for table 'zoph_categories'
@@ -50,6 +51,7 @@ CREATE TABLE zoph_categories (
   coverphoto int(11) default NULL,
   pageset int(11) DEFAULT NULL,
   sortorder varchar(32) default NULL,
+  createdby int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY  (category_id),
   KEY cat_parent_id (parent_category_id)
 ) ENGINE=MyISAM;
@@ -58,7 +60,7 @@ CREATE TABLE zoph_categories (
 -- Dumping data for table 'zoph_categories'
 --
 
-INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL, NULL,NULL,NULL, NULL);
+INSERT INTO zoph_categories VALUES (1,0,'Category Root',NULL, NULL,NULL,NULL, NULL, 1);
 
 --
 -- Table structure for table 'zoph_color_schemes'
@@ -95,6 +97,12 @@ INSERT INTO zoph_color_schemes VALUES (4,'hoenig','FFEFD6','5C1F00','330000','33
 INSERT INTO zoph_color_schemes VALUES (5,'forest','336633','000000','000000','000000','99CC99','000000','669966','663300','663300','E0E0E0','996633','FFFFFF','99CC99');
 INSERT INTO zoph_color_schemes VALUES (6,'black','000000','FFFFFF','FFFFFF','FFFFFF','000000','FFFFFF','000000','666666','666666','FFFFFF','999999','FFFFFF','FFFFFF');
 INSERT INTO zoph_color_schemes VALUES (7,'beach','646D7E','000000','000000','000000','F9EEE2','000000','9AADC7','C6DEFF','617C58','D0D0D0','8BB381','000000','646D7E');
+INSERT INTO zoph_color_schemes VALUES (8,'steel','cccccc','000000','0000aa','bb0000','eeeeef','222222','6699dd','dddddf','99bbdd','444444','0000bb','bbbbbb','555555');
+INSERT INTO zoph_color_schemes VALUES (9,'happy','16c0ff','333333','444444','444444','ffff77','333333','ffff77','e43f7d','e43f7d','333333','e43f7d','333333','333333');
+INSERT INTO zoph_color_schemes VALUES (10,'grey','eeeeee','111111','222222','555555','f4f4f4','111111','dddddd','dfdfdf','aaaaaa','222222','888888','111111','131313');
+INSERT INTO zoph_color_schemes VALUES (11,'grey - blue','eeeeee','111111','222222','555555','f4f4f4','000000','dddddd','dfdfdf','0000ff','eeeeee','000077','ffffff','131313');
+INSERT INTO zoph_color_schemes VALUES (12,'grey - green','eeeeee','111111','222222','555555','f4f4f4','000000','dddddd','dfdfdf','00dd00','eeeeee','007700','ffffff','131313');
+INSERT INTO zoph_color_schemes VALUES (13,'grey - red','eeeeee','111111','222222','555555','f4f4f4','000000','dddddd','dfdfdf','ff0000','eeeeee','770000','ffffff','131313');
 
 --
 -- Table structure for table 'zoph_comments'
@@ -131,6 +139,7 @@ CREATE TABLE zoph_group_permissions (
         access_level tinyint(4) NOT NULL default '0',
         watermark_level tinyint(4) NOT NULL default '0',
         writable char(1) NOT NULL default '0',
+	subalbums CHAR(1) NOT NULL DEFAULT '0',
         changedate timestamp NOT NULL,
         PRIMARY KEY  (group_id,album_id),
         KEY ap_access_level (access_level)
@@ -164,6 +173,7 @@ CREATE TABLE zoph_people (
   coverphoto int(11) default NULL,
   pageset int(11) DEFAULT NULL,
   email varchar(64) default NULL,
+  createdby int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY  (person_id),
   KEY person_last_name (last_name(10)),
   KEY person_first_name (first_name(10))
@@ -174,7 +184,28 @@ CREATE TABLE zoph_people (
 --
 
 
-INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL);
+INSERT INTO zoph_people VALUES (1,'Unknown','Person',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL, 1);
+
+--
+-- Table structure for table 'zoph_circles'
+--
+
+CREATE TABLE zoph_circles (
+        circle_id int(11) NOT NULL auto_increment,
+        circle_name varchar(32) default NULL,
+        description varchar(128) default NULL,
+        coverphoto int(11) default NULL,
+	hidden char(1) default '0',
+        createdby int(11) NOT NULL DEFAULT 1,
+        PRIMARY KEY  (circle_id)
+) ENGINE=MyISAM;
+
+CREATE TABLE zoph_circles_people (
+        circle_id int(11) NOT NULL default '0',
+        person_id int(11) NOT NULL default '0',
+        changedate timestamp NOT NULL,
+        PRIMARY KEY  (circle_id,person_id)
+) ENGINE=MyISAM;
 
 --
 -- Table structure for table 'zoph_photo_albums'
@@ -322,12 +353,13 @@ CREATE TABLE zoph_places (
   lon float(10,6),
   mapzoom tinyint unsigned,
   timezone varchar(50) default NULL,
+  createdby int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY  (place_id),
   KEY place_city (city(10)),
   KEY place_title (title(10))
 ) ENGINE=MyISAM;
 
-INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, 1);
 
 --
 -- Dumping data for table 'zoph_places'
@@ -419,12 +451,16 @@ CREATE TABLE zoph_users (
   user_id int(11) NOT NULL auto_increment,
   person_id int(11) NOT NULL default '0',
   user_class char(1) NOT NULL default '1',
+  view_all_photos CHAR(1) NOT NULL DEFAULT '0',
+  delete_photos CHAR(1) NOT NULL DEFAULT '0',
   user_name varchar(16) NOT NULL default '',
-  password varchar(64) default NULL,
+  password varchar(255) default NULL,
   browse_people char(1) NOT NULL default '0',
   browse_places char(1) NOT NULL default '0',
   browse_tracks char(1) NOT NULL DEFAULT '0',
+  edit_organizers CHAR(1) NOT NULL DEFAULT '0',
   detailed_people char(1) NOT NULL default '0',
+  see_hidden_circles char(1) NOT NULL default '0',
   detailed_places char(1) NOT NULL default '0',
   import char(1) NOT NULL default '0',
   download char(1) NOT NULL default '0',
@@ -442,9 +478,9 @@ CREATE TABLE zoph_users (
 --
 -- Dumping data for table 'zoph_users'
 --
+-- Password is "admin"
 
-
-INSERT INTO zoph_users VALUES (1,1,'0','admin',password('admin'),'1','1','1','1','1','1','1','1','1','0', '0', NULL,NULL,NULL,NULL);
+INSERT INTO zoph_users VALUES (1,1,'0','1','1','admin','$2y$10$cFl.NZJDITXBg6Etl3udd.JpNkgzsRIwBoJf7f5AWqi9Itv1HJY6q','1','1','1','1','1','1','1','1','1','1','1','0', '0', NULL,NULL,NULL,NULL);
 
 CREATE TABLE zoph_pageset (
   pageset_id int(11) NOT NULL auto_increment,
@@ -495,3 +531,9 @@ CREATE VIEW zoph_view_photo_avg_rating AS
     LEFT JOIN zoph_photo_ratings AS pr ON p.photo_id = pr.photo_id
     GROUP BY p.photo_id;
 
+CREATE VIEW zoph_view_photo_user AS
+  SELECT p.photo_id AS photo_id, gu.user_id AS user_id FROM zoph_photos AS p 
+    JOIN zoph_photo_albums AS pa ON pa.photo_id = p.photo_id
+    JOIN zoph_group_permissions AS gp ON pa.album_id = gp.album_id
+    JOIN zoph_groups_users AS gu ON gp.group_id = gu.group_id
+  WHERE gp.access_level >= p.level;

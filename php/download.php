@@ -26,23 +26,23 @@ require_once "include.inc.php";
 $vars=clean_request_vars($request_vars);
 
 $_action=getvar("_action");
-if(!conf::get("feature.download") || (!$user->get("download") && !$user->isAdmin())) {
+if (!conf::get("feature.download") || (!$user->get("download") && !$user->isAdmin())) {
     redirect("zoph.php");
 }
-if($_action=="getfile" || $_action=="download") {
+if ($_action=="getfile" || $_action=="download") {
     $filename=getvar("_filename");
-    if(!$filename) { $filename="zoph"; }
-    if(!preg_match("/^[a-zA-Z0-9_-]+$/", $filename)) {
+    if (!$filename) { $filename="zoph"; }
+    if (!preg_match("/^[a-zA-Z0-9_-]+$/", $filename)) {
         die("Invalid filename");
     }
 
     $filenum=getvar("_filenum");
-    if(!$filenum) { $filenum=1; }
+    if (!$filenum) { $filenum=1; }
 }
 
 if ($_action=="download") {
     $zipfile="/tmp/zoph_" . $user->get("user_id") . "_" . $filename ."_" . $filenum . ".zip";
-    if(file_exists($zipfile)) {
+    if (file_exists($zipfile)) {
         header("Content-Length: " . filesize($zipfile));
         header("Content-Disposition: inline; filename=" . $filename . $filenum . ".zip");
         header("Content-type: application/zip");
@@ -64,22 +64,22 @@ require_once "header.inc.php";
 
 <?php
 
-if($_action=="getfile") {
+if ($_action=="getfile") {
     $maxsize=getvar("_maxsize");
-    if(!$maxsize) { $maxsize=25000000; }
+    if (!$maxsize) { $maxsize=25000000; }
 
-    if(!is_numeric($maxsize)) {
+    if (!is_numeric($maxsize)) {
         die("Maximum size must be numeric");
     }
     $maxfiles=getvar("_maxfiles");
-    if(!$maxfiles) { $maxfiles=200; }
-    if(!is_numeric($maxfiles)) {
+    if (!$maxfiles) { $maxfiles=200; }
+    if (!is_numeric($maxfiles)) {
         die("Maximum files must be numeric");
     }
     $dateddirs=getvar("dateddirs");
 
     $offset=getvar("_off");
-    if(!$offset) { $offset=0; }
+    if (!$offset) { $offset=0; }
 
     $photos;
 
@@ -97,32 +97,32 @@ if($_action=="getfile") {
             "&_filenum=" . $filenum . "></iframe>";
 
         $new_qs=str_replace("_off=$offset", "_off=$newoffset", $_SERVER["QUERY_STRING"]);
-        if($new_qs==$_SERVER["QUERY_STRING"]) {
+        if ($new_qs==$_SERVER["QUERY_STRING"]) {
             $new_qs=$new_qs . "&_off=$newoffset";
         }
         $qs=$new_qs;
         $new_qs=str_replace("_filenum=$filenum", "_filenum=" . ($filenum + 1), $qs);
-        if($new_qs==$qs) {
+        if ($new_qs==$qs) {
             $new_qs=$new_qs . "&_filenum=" . ($filenum + 1);
         }
-        if($newoffset < $totalPhotoCount) {
+        if ($newoffset < $totalPhotoCount) {
             echo sprintf(translate("Downloaded %s of %s photos."), $newoffset, $totalPhotoCount);
             ?>
-            <span class="actionlink">
-              <a href="download.php?<?php echo $new_qs?>">
+            <ul class="actionlink">
+              <li><a href="download.php?<?php echo $new_qs?>">
                 <?php echo translate("download next file") ?>
-              </a>
-            </span>
+              </a></li>
+            </ul>
             <?php
         } else {
-            $link = strip_href($user->getLastCrumb());
+            $link = breadcrumb::getLast()->getLink();
             echo sprintf(translate("All photos have been downloaded in %s zipfiles."), $filenum)
             ?>
-            <span class="actionlink">
-              <a href="<?php echo $link ?>">
+            <ul class="actionlink">
+              <li><a href="<?php echo $link ?>">
                 <?php echo translate("Go back")?>
-              </a>
-            </span>
+              </a></li>
+            </ul>
             <?php
         }
         ?>

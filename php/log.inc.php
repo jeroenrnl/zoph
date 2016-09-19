@@ -39,6 +39,7 @@ class log {
         20 => "Error",
         10 => "Fatal Error",
         5 => "Message",
+        1 => "To File",
         0 => "None");
 
     const MOREDEBUG = 60;
@@ -49,6 +50,7 @@ class log {
     const FATAL = 10;
     const MSG = 5;
     const NONE = 0;
+    const TOFILE = 1;
 
     const VARS = 1;
     const LANG = 2;
@@ -93,7 +95,7 @@ class log {
             $file = basename($dbt[0]["file"]);
             $line = $dbt[0]["line"];
 
-            $msg="<b>" . self::$sev[$severity] . "</b>: " . $msg . " <tt>" . $file . "</tt>: " . $line . ".<br>\n";
+            $msg="<b>" . static::$sev[$severity] . "</b>: " . $msg . " <tt>" . $file . "</tt>: " . $line . ".<br>\n";
 
             if ($print) {
                 if (!defined("CLI")) {
@@ -108,7 +110,7 @@ class log {
             }
         }
 
-        if ($severity == self::FATAL && self::$stopOnFatal) {
+        if ($severity == static::FATAL && static::$stopOnFatal) {
             die("fatal error");
         }
     }

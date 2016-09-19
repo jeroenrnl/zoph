@@ -8,7 +8,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,6 +21,7 @@
  * @author Jeroen Roos
  */
 
+require_once "testSetup.php";
 /**
  * Test class for person class
  *
@@ -39,7 +40,7 @@ class personTest extends ZophDataBaseTestCase {
         $person->insert();
         $this->assertInstanceOf("person", $person);
         $this->assertEquals($person->getId(), $id);
-        if(!is_null($user_id)) {
+        if (!is_null($user_id)) {
             $user=new user($user_id);
             $user->lookup();
             $user->set("person_id", $id);
@@ -57,7 +58,7 @@ class personTest extends ZophDataBaseTestCase {
 
         $people=$photo->getPeople();
         $people_ids=array();
-        foreach($people as $p) {
+        foreach ($people as $p) {
             $people_ids[]=$p->getId();
         }
 
@@ -72,7 +73,7 @@ class personTest extends ZophDataBaseTestCase {
 
         $people=$photo->getPeople();
         $people_ids=array();
-        foreach($people as $p) {
+        foreach ($people as $p) {
             $people_ids[]=$p->getId();
         }
 
@@ -90,7 +91,7 @@ class personTest extends ZophDataBaseTestCase {
 
         $people=$photo->getPeople();
         $people_ids=array();
-        foreach($people as $p) {
+        foreach ($people as $p) {
             $people_ids[]=$p->getId();
         }
 
@@ -115,7 +116,7 @@ class personTest extends ZophDataBaseTestCase {
 
         $home=new place($home_id);
         $home->lookup();
-        
+
         $work=new place($work_id);
         $work->lookup();
 
@@ -177,7 +178,7 @@ class personTest extends ZophDataBaseTestCase {
         $person->set("called", "Tester");
         $person->set("dob", "1970-01-01");
         $person->set("gender", 1);
-        
+
         $father=new person();
         $father->setName("Father of Test");
         $father->insert();
@@ -258,7 +259,7 @@ class personTest extends ZophDataBaseTestCase {
         $this->assertEquals($photo, $cover->getId());
         user::setCurrent(new user(1));
     }
-    
+
     /**
      * Test getDetails()
      / @dataProvider getDetails();
@@ -331,7 +332,7 @@ class personTest extends ZophDataBaseTestCase {
                             <data>rated between %s and %s and an average of %s</data>
                           </detail>
                         </response>
-                      </details>", 
+                      </details>",
                        $person_id, $exp_details["count"],$disp_oldest, $disp_newest, $disp_first, $disp_last,  $exp_details["lowest"], $exp_details["highest"], $exp_details["average"]);
 
         $this->assertXmlStringEqualsXmlString($expectedXML, $details);
@@ -348,14 +349,14 @@ class personTest extends ZophDataBaseTestCase {
         $personids=array();
         $topN=person::getTopN();
 
-        foreach($topN as $person) {
+        foreach ($topN as $person) {
             $personids[]=$person["id"];
         }
         $this->assertEquals($expected, $personids);
         user::setCurrent(new user(1));
     }
 
-    /** 
+    /**
      * Test getAllPeopleAndPhotographers() function
      * @dataProvider getAll();
      */
@@ -364,7 +365,7 @@ class personTest extends ZophDataBaseTestCase {
         $personids=array();
         $all=person::getAllPeopleAndPhotographers($search);
 
-        foreach($all as $person) {
+        foreach ($all as $person) {
             $personids[]=$person->getId();
         }
         $this->assertEquals($expected, $personids);
@@ -384,11 +385,11 @@ class personTest extends ZophDataBaseTestCase {
             array(11, "First2", "Last2", 4)
         );
     }
-    
+
     public function getPersonAndPhotos() {
         return array(
             array(1,3),
-            array(2,4),
+            array(5,4),
             array(8,2)
         );
     }
@@ -396,7 +397,7 @@ class personTest extends ZophDataBaseTestCase {
     public function getPersonAndPlaces() {
         return array(
             array(1,2,3),
-            array(2,1,1),
+            array(5,1,1),
             array(8,3,6)
         );
     }
@@ -411,8 +412,8 @@ class personTest extends ZophDataBaseTestCase {
             array(1,"first", 2, 1),
             array(1,"last", 4, 4),
             array(1,"newest", 5, 7),
-            array(2,"oldest", 2, 1),
-            array(2,"newest", 2, 7),
+            array(5,"oldest", 2, 1),
+            array(5,"newest", 2, 7),
             array(3,"first", 2, 1),
             array(4,"last", 2, 7),
         );
@@ -429,20 +430,20 @@ class personTest extends ZophDataBaseTestCase {
             array(1,"first", 3, 5),
             array(1,"last", 4, 4),
             array(1,"newest", 4, 4),
-            array(2,"oldest", 2, 1),
-            array(2,"newest", 2, 7),
-            array(2,"first", 2, 1),
+            array(5,"oldest", 2, 1),
+            array(5,"newest", 2, 7),
+            array(5,"first", 2, 1),
             array(4,"last", 2, 7),
         );
     }
-    
+
     /**
      * dataProvider function
      * @return user, person, array(count, oldest, newest, first, last, highest, average)
      */
     public function getDetails() {
         return array(
-            array(2,2, array(
+            array(5,2, array(
                 "count"     => "1",
                 "oldest"    => "2014-01-01 00:01:00",
                 "newest"    => "2014-01-01 00:01:00",
@@ -474,7 +475,7 @@ class personTest extends ZophDataBaseTestCase {
             )),
         );
     }
-    
+
     /**
      * dataProvider function
      * @return array userid, topN
@@ -482,7 +483,7 @@ class personTest extends ZophDataBaseTestCase {
     public function getTopNData() {
         return array(
             array(1,array(2,3,5,9,8)),
-            array(2,array(2,5,9,3,7)),
+            array(5,array(2,5,9,3,7)),
             array(4,array(2,5,9,7,3))
         );
     }
@@ -490,11 +491,11 @@ class personTest extends ZophDataBaseTestCase {
     public function getAll() {
         return array(
             array(1,array(6,9,3,8,2,4,5,1,10,7)),
-            array(2,array(9,3,2,5,7)),
+            array(5,array(9,3,2,5,7)),
             array(4,array(9,3,2,4,5,7)),
             array(1,array(2,4,5), "M"),
-            array(2,array(9), "D"),
+            array(5,array(9), "D"),
             array(4,array(7), "T")
         );
     }
-}    
+}

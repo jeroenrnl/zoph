@@ -25,6 +25,7 @@ namespace db;
 
 use \user;
 use \PDO;
+
 /**
  * This object contains a few functions that could be in the select object,
  * but are Zoph-specific and I want to keep the database objects generic.
@@ -34,7 +35,6 @@ use \PDO;
  * @package Zoph
  * @author Jeroen Roos
  */
-
 class selectHelper {
     /**
      * Get the ORDER BY and LIMIT statements to pick an autocover
@@ -69,43 +69,31 @@ class selectHelper {
     }
 
     /**
-     * Add JOINs and WHERE clauses to a query to restrict it to the photos the current user can see
-     * Many queries have to be joined with the same tables in order to filter out the photos
-     * a non-admin user is not allowed to see, this function expands an existing query with the needed
-     * JOINs and WHERE clauses.
+     * Expand the query so that it is restricted it to the photos the (current) user can see
+     * @param select SELECT query to be expanded
+     * @param user user to expand the query for - if null, use the currently logged in user
      */
-    public static function expandQueryForUser(select $qry, clause $where=null, user $user=null) {
+    public static function expandQueryForUser(select $qry, user $user=null) {
         if (!$user) {
             $user=user::getCurrent();
+        }
+
+        // The user is an admin, simply return the query and where clause unaltered
+        if ($user->canSeeAllPhotos()) {
+            return $qry;
         }
 
         if (!$qry->hasTable("photos")) {
             $qry=static::addPhotoTableToQuery($qry);
         }
 
-        if (!$qry->hasTable("photo_albums")) {
-            $qry->join(array("pa" => "photo_albums"), "pa.photo_id = p.photo_id");
-        }
 
-        if (!$qry->hasTable("group_permissions")) {
-            $qry->join(array("gp" => "group_permissions"), "pa.album_id = gp.album_id");
-        }
-
-        if (!$qry->hasTable("groups_users")) {
-            $qry->join(array("gu" => "groups_users"), "gp.group_id = gu.group_id");
-        }
-
-        $clause=new clause("gu.user_id=:userid");
+        $subqry=new select(array("pu" => "view_photo_user"));
+        $subqry->where(new clause("pu.user_id = :userid"));
         $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
+        $qry->join(array("spu" => $subqry), "p.photo_id = spu.photo_id");
 
-        if (is_null($where)) {
-            $where=$clause;
-        } else {
-            $where->addAnd($clause);
-        }
-        $where->addAnd(new clause("gp.access_level >= p.level"));
-
-        return array($qry, $where);
+        return $qry;
      }
 
     /**
@@ -116,11 +104,11 @@ class selectHelper {
      */
     private static function addRelationTableToQuery(select $qry) {
         if ($qry->hasTable("albums") && !$qry->hasTable("photo_albums")) {
-            $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id");
+            $qry->join(array("pa" => "photo_albums"), "pa.album_id = a.album_id", "LEFT");
         } else if ($qry->hasTable("categories") && !$qry->hasTable("photo_categories")) {
-            $qry->join(array("pc" => "photo_categories"), "pc.category_id = c.category_id");
+            $qry->join(array("pc" => "photo_categories"), "pc.category_id = c.category_id", "LEFT");
         } else if ($qry->hasTable("people") && !$qry->hasTable("photo_people")) {
-            $qry->join(array("pp" => "photo_people"), "pp.person_id = ppl.person_id");
+            $qry->join(array("pp" => "photo_people"), "pp.person_id = ppl.person_id", "LEFT");
         }
 
         return $qry;
@@ -135,13 +123,13 @@ class selectHelper {
         $qry=static::addRelationTableToQuery($qry);
 
         if ($qry->hasTable("photo_albums")) {
-            $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id");
+            $qry->join(array("p" => "photos"), "pa.photo_id = p.photo_id", "LEFT");
         } else if ($qry->hasTable("photo_categories")) {
-            $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id");
+            $qry->join(array("p" => "photos"), "pc.photo_id = p.photo_id", "LEFT");
         } else if ($qry->hasTable("photo_people")) {
-            $qry->join(array("p" => "photos"), "pp.photo_id = p.photo_id");
+            $qry->join(array("p" => "photos"), "pp.photo_id = p.photo_id", "LEFT");
         } else if ($qry->hasTable("places")) {
-            $qry->join(array("p" => "photos"), "p.location_id = pl.place_id");
+            $qry->join(array("p" => "photos"), "p.location_id = pl.place_id", "LEFT");
         } else {
             throw new DatabaseException("JOIN failed");
         }

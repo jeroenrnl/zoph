@@ -79,22 +79,22 @@ class searchTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals("More Blue", $search->getName());
 
-        // User 2 logs in:
-        user::setCurrent(new user(2));
+        // User 5 logs in:
+        user::setCurrent(new user(5));
 
-        // User 2 is not allowed to see search 1 (it's owned by admin and not public)
+        // User 5 is not allowed to see search 1 (it's owned by admin and not public)
         $search=new search(1);
         $search->lookup();
 
         $this->assertEquals("", $search->getName());
 
-        // User 2 is allowed to see search 2, which he is owns:
+        // User 5 is allowed to see search 2, which he is owns:
         $search=new search(2);
         $search->lookup();
 
         $this->assertEquals("More Blue", $search->getName());
 
-        // User 2 is allowed to see search 3, since it is public:
+        // User 5 is allowed to see search 3, since it is public:
         $search=new search(3);
         $search->lookup();
 
@@ -171,7 +171,7 @@ class searchTest extends PHPUnit_Framework_TestCase {
     public function getSearch() {
         return array(
             array("Blue", 1, 0, "category_id[0]=5"),
-            array("More Blue", 2, 0, "category_id[0]=5&_category_id_children[0]=yes"),
+            array("More Blue", 5, 0, "category_id[0]=5&_category_id_children[0]=yes"),
             array("Public Red", 1, 1, "category_id[0]=2")
         );
     }

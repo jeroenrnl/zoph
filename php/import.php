@@ -25,7 +25,7 @@ if ((!conf::get("import.enable")) || (!$user->isAdmin() && !$user->get("import")
 }
 
 // Detect upload larger than upload_max_filesize.
-if(isset($_GET["upload"]) && $_GET["upload"]==1 && $_POST==null) {
+if (isset($_GET["upload"]) && $_GET["upload"]==1 && $_POST==null) {
     echo WebImport::handleUploadErrors(UPLOAD_ERR_INI_SIZE);
     die();
 }
@@ -42,23 +42,23 @@ session_write_close();
 // Generate an id for the uploads so multiple simultanious uploads will
 // not clash.
 $upload_id=getvar("upload_id");
-if(empty($upload_id)) {
+if (empty($upload_id)) {
     $upload_id=uniqid("zoph_");
 } else {
-    if(!preg_match("/^[A-Za-z0-9_]+$/", $upload_id)) {
+    if (!preg_match("/^[A-Za-z0-9_]+$/", $upload_id)) {
         log::msg("Illegal characters in upload_id", log::FATAL, log::IMPORT);
     }
 }
 
 $num=e(getvar("num"));
-if($num && !is_numeric($num)) {
+if ($num && !is_numeric($num)) {
     log::msg("num must be numeric", log::FATAL, log::IMPORT);
 } else if (!$num) {
     $num=1;
 }
 
 
-if(empty($_action)) {
+if (empty($_action)) {
     $javascript=
         "translate=new Array();\n" .
         "translate['retry']='" .trim(translate("retry", false)) . "';\n" .
@@ -77,7 +77,7 @@ if(empty($_action)) {
     echo $tpl;
     include "footer.inc.php";
 } else if ($_action=="browse") {
-    if(conf::get("import.upload")) {
+    if (conf::get("import.upload")) {
         $upload_num = $upload_id . "_" . $num;
 
         $body=new block("uploadform", array(
@@ -110,8 +110,8 @@ if(empty($_action)) {
     </html>
     <?php
 } else if ($_action=="upload") {
-    if(conf::get("import.upload")) {
-        if($_FILES["file"]) {
+    if (conf::get("import.upload")) {
+        if ($_FILES["file"]) {
             $file=$_FILES["file"];
         }
         $upload_num=getvar(ini_get("session.upload_progress.name"));
