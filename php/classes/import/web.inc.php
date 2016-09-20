@@ -19,6 +19,14 @@
  * @package Zoph
  */
 
+namespace import;
+
+use file;
+use conf;
+use log;
+use template;
+use photo;
+
 /**
  * This class holds all the functions for uploading and importing images
  * to Zoph via the web interface.
@@ -26,7 +34,7 @@
  * @author Jeroen Roos
  * @package Zoph
  */
-class WebImport extends Import {
+class web extends base {
 
     /** @param Name of the root node in XML responses */
     const XMLROOT="importprogress";
@@ -37,7 +45,7 @@ class WebImport extends Import {
 
     /**
      * Create object, used to track progress of upload
-     * @return WebImport The created object
+     * @return import\web The created object
      * @param string generated upload_id
      */
     function __construct($upload_id) {
@@ -132,7 +140,7 @@ class WebImport extends Import {
             log::msg($dir . " does not exist, creating...", log::WARN, log::IMPORT);
             try {
                 file::createDirRecursive($dir);
-            } catch (FileDirCreationFailedException $e) {
+            } catch (\FileDirCreationFailedException $e) {
                 log::msg($dir . " does not exist, and I can not create it. (" .
                     $e->getMessage() . ")", log::FATAL, log::IMPORT);
                 die();
@@ -212,7 +220,7 @@ class WebImport extends Import {
     protected static function autorotate($file) {
         try {
             parent::autorotate($file);
-        } catch (ImportAutorotException $e) {
+        } catch (\ImportAutorotException $e) {
             touch($file . ".zophignore");
             log::msg($e->getMessage(), log::FATAL, log::IMPORT);
             die;
@@ -277,7 +285,7 @@ class WebImport extends Import {
                 $import_file->setDestination($dir);
                 try {
                     $import_file->move();
-                } catch (fileException $e) {
+                } catch (\fileException $e) {
                     echo $e->getMessage() . "<br>\n";
                 }
             }
@@ -312,7 +320,7 @@ class WebImport extends Import {
             }
             try {
                 $photo->thumbnail();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 echo "Thumb could not be made: " . $e->getMessage();
                 touch($file . ".zophignore");
             }
@@ -339,7 +347,7 @@ class WebImport extends Import {
      * Get XML indicating progress of a certain upload
      */
     public static function getProgressXML($uploadId) {
-        $xml = new DOMDocument('1.0','UTF-8');
+        $xml = new \DOMDocument('1.0','UTF-8');
         $rootnode=$xml->createElement(static::XMLROOT);
         $node=$xml->createElement(static::XMLNODE);
 
@@ -381,7 +389,7 @@ class WebImport extends Import {
      * Generate an XML file with thumbs in the import dir
      */
     public static function getThumbsXML() {
-        $xml=new DOMDocument('1.0','UTF-8');
+        $xml=new \DOMDocument('1.0','UTF-8');
         $root=$xml->createElement("files");
 
         $dir=conf::get("path.images") . DIRECTORY_SEPARATOR . conf::get("path.upload");

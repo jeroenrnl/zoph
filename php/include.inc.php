@@ -45,14 +45,6 @@ if (!defined("LOGON")) {
     }
 
     require_once "photo_search.inc.php";
-
-    require_once "import.inc.php";
-    if (defined("CLI") || defined("TEST")) {
-        require_once "cli/cli.inc.php";
-        require_once "cli/arguments.inc.php";
-        require_once "cli/cliimport.inc.php";
-    } else {
-        require_once "webimport.inc.php";
-    }
+    require_once "exif.inc.php";
 }
 ?>

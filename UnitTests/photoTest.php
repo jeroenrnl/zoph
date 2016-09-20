@@ -201,7 +201,7 @@ class photoTest extends ZophDataBaseTestCase {
         conf::set("import.cli.thumbs", true);
         conf::set("import.cli.size", true);
 
-        $imported=cliimport::photos($photos, array());
+        $imported=import\cli::photos($photos, array());
 
         $full=$imported[0]->getFilePath();
         $mid=$imported[0]->getFilePath(MID_PREFIX);
@@ -637,7 +637,7 @@ class photoTest extends ZophDataBaseTestCase {
         conf::set("import.cli.size", true);
 
 
-        $imported=cliimport::photos($photos, array());
+        $imported=import\cli::photos($photos, array());
         foreach ($imported as $photo) {
             $this->assertInstanceOf("photo", $photo);
             $this->assertEquals($name, $photo->get("name"));
@@ -665,7 +665,7 @@ class photoTest extends ZophDataBaseTestCase {
         conf::set("import.dated", true);
 
 
-        $imported=cliimport::photos($photos, array());
+        $imported=import\cli::photos($photos, array());
         foreach ($imported as $photo) {
             $this->assertInstanceOf("photo", $photo);
             $this->assertEquals($name, $photo->get("name"));

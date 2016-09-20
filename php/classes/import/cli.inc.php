@@ -19,10 +19,11 @@
  * @package Zoph
  */
 
+namespace import;
 /**
  * Class that takes care of the import through the CLI
  */
-class CliImport extends Import {
+class cli extends base {
     /**
      * Displays a progressbar on the CLI
      *

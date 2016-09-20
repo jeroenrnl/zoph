@@ -18,7 +18,11 @@
  * @author Jeroen Roos
  * @package Zoph
  */
-require_once "exif.inc.php";
+namespace import;
+
+use conf;
+use photo;
+use file;
 
 /**
  * This class holds the generalized functions importing images
@@ -27,7 +31,7 @@ require_once "exif.inc.php";
  * @author Jeroen Roos
  * @package Zoph
  */
-abstract class Import {
+abstract class base {
 
     /**
      * Rotates a file based on the EXIF orientation flag
@@ -80,7 +84,7 @@ abstract class Import {
 
             $mime=$file->getMime();
             if (conf::get("import.cli.exif")===true && $mime=="image/jpeg") {
-                $exif=process_exif ($file);
+                $exif=process_exif($file);
                 if ($exif) {
                     $photo->setFields($exif);
                 }

@@ -19,6 +19,17 @@
  * @package Zoph
  */
 
+namespace cli;
+
+use conf;
+use file;
+use photo;
+use album;
+use category;
+use place;
+use person;
+use user;
+
 /**
  * Controller class for the CLI
  */
@@ -27,7 +38,7 @@ class cli {
      * Defines the API version between the /bin/zoph binary and the files in the webroot
      * these must be equal.
      */
-    const API=4;
+    const API=5;
 
     /**
      * @var The user that is doing the import
@@ -52,13 +63,13 @@ class cli {
      */
     public function __construct(user $user, $api, array $args) {
         if ($api != static::API) {
-            throw new CliAPINotCompatibleException("This Zoph installation is not compatible " .
+            throw new \CliAPINotCompatibleException("This Zoph installation is not compatible " .
                 "with the Zoph executable you are running.");
         }
         $this->user=$user;
 
         if (!$user->isAdmin()) {
-            throw new CliUserNotAdminException("CLI_USER must be an admin user");
+            throw new \CliUserNotAdminException("CLI_USER must be an admin user");
         }
         $user->prefs->load();
         $user->loadLanguage();
@@ -93,7 +104,7 @@ class cli {
             static::showHelp();
             break;
         default:
-            throw new CliUnknownErrorException("Unknown command, please file a bug");
+            throw new \CliUnknownErrorException("Unknown command, please file a bug");
         }
 
     }
@@ -114,7 +125,7 @@ class cli {
                     if ($file->type=="directory" && conf::get("import.cli.recursive")) {
                         $this->files=array_merge($this->files, file::getFromDir($file, true));
                     } else if ($file->type!="image") {
-                        throw new ImportFileNotImportableException("$file is not an image\n");
+                        throw new \ImportFileNotImportableException("$file is not an image\n");
                     } else {
                         $this->files[]=$file;
                     }
@@ -128,19 +139,19 @@ class cli {
                             foreach (range($start, $end) as $id) {
                                 try {
                                     $this->photos[]=$this->lookupFileById($id);
-                                } catch (ImportException $e) {
+                                } catch (\ImportException $e) {
                                     echo $e->getMessage();
                                 }
                              }
                         } else {
-                            throw new ImportIdIsNotNumericException(
+                            throw new \ImportIdIsNotNumericException(
                                 "$file is not numeric, but --useids is set.\n");
                         }
                     } else {
                         $this->photos[]=$this->lookupFile($filename);
                     }
                 }
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 echo $e->getMessage();
             }
         }
@@ -155,9 +166,9 @@ class cli {
         if ($count==1) {
             return $photo;
         } else if ($count==0) {
-            throw new ImportFileNotFoundException("No photo with id $id was found\n");
+            throw new \ImportFileNotFoundException("No photo with id $id was found\n");
         } else {
-            throw new ImportMultipleMatchesException(
+            throw new \ImportMultipleMatchesException(
                 "Multiple photos with id $id were found. This is probably a bug");
         }
     }
@@ -186,7 +197,7 @@ class cli {
 
             // check if path is in conf::get("path.images")
             if (substr($path, 0, strlen(conf::get("path.images")))!=conf::get("path.images")) {
-                throw new ImportFileNotInPathException($file ." is not in the images path (" .
+                throw new \ImportFileNotInPathException($file ." is not in the images path (" .
                     conf::get("path.images") . "), skipping.\n");
             } else {
                 $path=substr($path, strlen(conf::get("path.images")));
@@ -200,11 +211,11 @@ class cli {
         }
         $photos=photo::getByName($filename, $path);
         if (sizeof($photos)==0) {
-            throw new ImportFileNotFoundException($file ." not found.\n");
+            throw new \ImportFileNotFoundException($file ." not found.\n");
         } else if (sizeof($photos)==1) {
             return $photos[0];
         } else {
-            throw new ImportMultipleMatchesException("Multiple files named " . $file ." found.\n");
+            throw new \ImportMultipleMatchesException("Multiple files named " . $file ." found.\n");
         }
     }
 
@@ -227,9 +238,9 @@ class cli {
             } else {
                 $photos=$this->processDirpattern();
             }
-            CliImport::photos($photos, $vars);
+            \import\cli::photos($photos, $vars);
         } else {
-            throw new CliNoFilesException("Nothing to do, exiting");
+            throw new \CliNoFilesException("Nothing to do, exiting");
         }
     }
 
@@ -261,7 +272,7 @@ class cli {
                 }
             }
         } else {
-            throw new CliNoFilesException("Nothing to do, exiting");
+            throw new \CliNoFilesException("Nothing to do, exiting");
         }
     }
     /**
@@ -366,7 +377,7 @@ class cli {
         $conf=conf::getAll();
         foreach ($conf as $item) {
             foreach ($item as $citem) {
-                if ($citem instanceof confItemBool) {
+                if ($citem instanceof \confItemBool) {
                     $value=($citem->getValue() ? "true": "false");
                 } else {
                     $value=$citem->getValue();
@@ -388,7 +399,7 @@ class cli {
         $curlen=strlen($cur);
         foreach ($this->files as $file) {
             if (substr($file, 0, $curlen) != $cur) {
-                throw new CliNotInCWDException("Sorry, --dirpattern can only be used when " .
+                throw new \CliNotInCWDException("Sorry, --dirpattern can only be used when " .
                     "importing files under the current dir. i.e. do not use absolute paths " .
                     "or '../' when specifying --dirpattern.");
             }
@@ -406,46 +417,46 @@ class cli {
                     case "a":
                         // album
                         $album=album::getByName($dir);
-                        if ($album[0] instanceof album) {
+                        if ($album[0] instanceof \album) {
                             if (!is_array($photo->_album_id)) {
                                 $photo->_album_id=array();
                             }
                             $photo->_album_id[]=$album[0]->getId();
                         } else {
-                            throw new AlbumNotFoundException("Album not found: " . $dir);
+                            throw new \AlbumNotFoundException("Album not found: " . $dir);
                         }
                         break;
                     case "c":
                         // category
                         $cat=category::getByName($dir);
-                        if ($cat[0] instanceof category) {
+                        if ($cat[0] instanceof \category) {
                             if (!is_array($photo->_category_id)) {
                                 $photo->_category_id=array();
                             }
                             $photo->_category_id[]=$cat[0]->getId();
                         } else {
-                            throw new CategoryNotFoundException("Category not found: " . $dir);
+                            throw new \CategoryNotFoundException("Category not found: " . $dir);
                         }
                         break;
                     case "l":
                         // location
                         $place=place::getByName($dir);
-                        if ($place[0] instanceof place) {
+                        if ($place[0] instanceof \place) {
                             $photo->set("location_id", $place[0]->getId());
                         } else {
-                            throw new PlaceNotFoundException("Place not found: " . $dir);
+                            throw new \PlaceNotFoundException("Place not found: " . $dir);
                         }
                         break;
                     case "p":
                         // person
                         $person=person::getByName($dir);
-                        if ($person[0] instanceof person) {
+                        if ($person[0] instanceof \person) {
                             if (!is_array($photo->_person_id)) {
                                 $photo->_person_id=array();
                             }
                             $photo->_person_id[]=$person[0]->getId();
                         } else {
-                            throw new PersonNotFoundException("Person not found: " . $dir);
+                            throw new \PersonNotFoundException("Person not found: " . $dir);
                         }
                         break;
                     case "D":
@@ -459,15 +470,15 @@ class cli {
                     case "P":
                         // photographer
                         $person=person::getByName($dir);
-                        if ($person[0] instanceof person) {
+                        if ($person[0] instanceof \person) {
                             $photo->set("photographer_id", $person[0]->getId());
                         } else {
-                            throw new PersonNotFoundException("Person not found: " . $dir);
+                            throw new \PersonNotFoundException("Person not found: " . $dir);
                         }
                         break;
                     default:
                         // should never happen...
-                        throw new CliUnknownErrorException("Unknown error");
+                        throw new \CliUnknownErrorException("Unknown error");
                     }
                 }
                 $counter++;

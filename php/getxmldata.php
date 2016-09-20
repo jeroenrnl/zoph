@@ -38,9 +38,9 @@ if ($obj_array[0]=="details") {
     } else if ($object=="timezone") {
         $object="TimeZone";
     } else if ($object=="import_progress") {
-        $object="WebImport";
+        $object="import\web";
     } else if ($object=="import_thumbs") {
-        $object="WebImport";
+        $object="import\web";
         $search="thumbs";
     }
 

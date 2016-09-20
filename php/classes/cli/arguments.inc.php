@@ -19,10 +19,18 @@
  * @package Zoph
  */
 
+namespace cli;
+
+use conf;
+use log;
+use album;
+use category;
+use person;
+use place;
+
 /**
  * This class reads and interpretes CLI arguments
  */
-
 class arguments {
     /** Contains the non-interpreted arguments */
     private $arguments = array();
@@ -346,14 +354,14 @@ class arguments {
                             if (conf::get("import.cli.add.always")) {
                                 $parent_id=album::getRoot()->getId();
                             } else {
-                                throw new CliNoParentException("No parent for album " . $name);
+                                throw new \CliNoParentException("No parent for album " . $name);
                             }
                         } else {
                             $palbum=album::getByName($parent);
                             if ($palbum) {
                                 $parent_id=$palbum[0]->getId();
                             } else {
-                                throw new AlbumNotFoundException("Album not found: $parent");
+                                throw new \AlbumNotFoundException("Album not found: $parent");
                             }
                         }
                         $vars["_new_album"][]=array("parent" => $parent_id, "name" => $name);
@@ -363,7 +371,7 @@ class arguments {
                             $album_id=$album[0]->getId();
                             $vars["_album_id"][]=$album_id;
                         } else {
-                            throw new AlbumNotFoundException("Album not found: $name");
+                            throw new \AlbumNotFoundException("Album not found: $name");
                         }
                     }
                 }
@@ -379,14 +387,14 @@ class arguments {
                             if (conf::get("import.cli.add.always")) {
                                 $parent_id=category::getRoot()->getId();
                             } else {
-                                throw new CliNoParentException("No parent for category " . $name);
+                                throw new \CliNoParentException("No parent for category " . $name);
                             }
                         } else {
                             $pcat=category::getByName($parent);
                             if ($pcat) {
                                 $parent_id=$pcat[0]->getId();
                             } else {
-                                throw new CategoryNotFoundException("Category not found: $parent");
+                                throw new \CategoryNotFoundException("Category not found: $parent");
                             }
                         }
                         $vars["_new_cat"][]=array("parent" => $parent_id, "name" => $name);
@@ -396,7 +404,7 @@ class arguments {
                             $cat_id=$cat[0]->getId();
                             $vars["_category_id"][]=$cat_id;
                         } else {
-                            throw new CategoryNotFoundException("Category not found: $name");
+                            throw new \CategoryNotFoundException("Category not found: $name");
                         }
                     }
                 }
@@ -412,7 +420,7 @@ class arguments {
                             $person_id=$person[0]->getId();
                             $vars["_person_id"][]=$person_id;
                         } else {
-                            throw new PersonNotFoundException("Person not found: $name");
+                            throw new \PersonNotFoundException("Person not found: $name");
                         }
                     }
                 }
@@ -428,7 +436,7 @@ class arguments {
                         $person_id=$person[0]->getId();
                         $vars["photographer_id"]=$person_id;
                     } else {
-                        throw new PersonNotFoundException("Person not found: $name");
+                        throw new \PersonNotFoundException("Person not found: $name");
                     }
                 }
                 break;
@@ -443,14 +451,14 @@ class arguments {
                             if (conf::get("import.cli.add.always")) {
                                 $parent_id=place::getRoot()->getId();
                             } else {
-                                throw new CliNoParentException("No parent for location " . $name);
+                                throw new \CliNoParentException("No parent for location " . $name);
                             }
                         } else {
                             $pplace=place::getByName($parent);
                             if ($pplace) {
                                 $parent_id=$pplace[0]->getId();
                             } else {
-                                throw new PlaceNotFoundException("Location not found: $parent");
+                                throw new \PlaceNotFoundException("Location not found: $parent");
                             }
                         }
                         $vars["_new_place"][]=array("parent" => $parent_id, "name" => $name);
@@ -461,7 +469,7 @@ class arguments {
                             $place_id=$place[0]->getId();
                             $vars["location_id"]=$place_id;
                         } else {
-                            throw new PlaceNotFoundException("Location not found: $name");
+                            throw new \PlaceNotFoundException("Location not found: $name");
                         }
                     }
                 }
@@ -471,7 +479,7 @@ class arguments {
                 break;
             case "dirpattern":
                 if (!preg_match("/^[aclpDP]+$/", $arg)) {
-                    throw new CliIllegalDirpatternException("Illegal characters in " .
+                    throw new \CliIllegalDirpatternException("Illegal characters in " .
                         "--dirpattern, allowed are: aclpDP");
                 } else {
                     $vars["_dirpattern"]=$arg;

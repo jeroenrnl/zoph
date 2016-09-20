@@ -23,6 +23,8 @@
 
 require_once "testSetup.php";
 
+use cli\cli;
+
 /**
  * Test CLI interface
  *
@@ -359,7 +361,7 @@ class cliTest extends ZophDataBaseTestCase {
         $admin->lookup();
         $admin->lookupPerson();
         $admin->lookupPrefs();
-        $cli=new cli($admin, 4, $args);
+        $cli=new cli($admin, 5, $args);
         $cli->run();
     }
 
