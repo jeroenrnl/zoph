@@ -21,6 +21,8 @@
  * @package Zoph
  */
 
+use conf\conf;
+
 /**
  * This class takes care of displaying templates
  *

@@ -22,6 +22,8 @@
  * @package Zoph
  */
 
+use conf\conf;
+
 /**
  * TimeZone class, extension of the standard PHP DateTimeZone class
  *

@@ -18,6 +18,7 @@
  * @author Jeroen Roos
  * @package Zoph
  */
+use conf\conf;
 
 require_once "include.inc.php";
 if ((!conf::get("import.enable")) || (!$user->isAdmin() && !$user->get("import"))) {

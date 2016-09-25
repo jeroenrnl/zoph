@@ -1,6 +1,7 @@
 <?php
 /**
- * A confItemBool defines a configuration item that can be true or false
+ * A conf\item\salt is a special kind of conf\item\text, which allows auto generation
+ * of a secure salt string.
  *
  * This file is part of Zoph.
  *
@@ -21,46 +22,37 @@
  * @author Jeroen Roos
  */
 
+namespace conf\item;
+
+use block;
+
 /**
- * A confItemBool defines a configuration item that can be true or false
+ * A conf\item\salt is a special kind of conf\item\text, which allows auto generation
+ * of a secure salt string.
  * @package Zoph
  * @author Jeroen Roos
  */
-class confItemBool extends confItem {
+class salt extends text {
 
-    /**
-     * Set value
-     * @param bool value
-     */
-    public function setValue($value) {
-        parent::setValue((bool) $value);
-    }
+    protected $regex="[a-zA-Z0-9]{10,40}";
+    protected $size=40;
 
-    /**
-     * Check value
-     * check if a specific value is legal for this option
-     * @param string value
-     * @return bool
-     */
-    public function checkValue($value) {
-        return ((bool) $value == $value);
-    }
-
-    /**
-     * Display this option through template
-     * @return block template block
-     */
     public function display() {
         if ($this->internal) {
             return;
         }
-        $tpl=new block("confItemBool", array(
+        $id=str_replace(".", "_", $this->getName());
+        $tpl=new block("confItemSalt", array(
             "label" => e(translate($this->getLabel(),0)),
             "name" => e($this->getName()),
-            "checked" => $this->getValue() ? "checked" : "",
+            "id" => e($id),
+            "value" => e($this->getValue()),
             "desc" => e(translate($this->getDesc(),0)),
             "hint" => e(translate($this->getHint(),0)),
+            "regex" => e($this->regex),
+            "size" => (int) $this->size,
+            "req" => ($this->required ? "required" : "")
         ));
         return $tpl;
-     }
+    }
 }

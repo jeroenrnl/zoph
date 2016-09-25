@@ -21,6 +21,9 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+
+use conf\conf;
+
 require_once "include.inc.php";
 
 $place_id = getvar("place_id");

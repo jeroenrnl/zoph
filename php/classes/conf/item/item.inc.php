@@ -20,17 +20,23 @@
  * @package Zoph
  * @author Jeroen Roos
  */
+namespace conf\item;
+
+use PDO;
 
 use db\select;
 use db\param;
 use db\clause;
+
+use zophTable;
+use block;
 
 /**
  * Configuration item
  * @package Zoph
  * @author Jeroen Roos
  */
-abstract class confItem extends zophTable {
+abstract class item extends zophTable {
     /** @var string The name of the database table */
     protected static $tableName="conf";
     /** @var array List of primary keys */
@@ -62,9 +68,9 @@ abstract class confItem extends zophTable {
     protected $unmet=array();
 
     /**
-     * Create confItem object
+     * Create conf\item object
      * @param string id, to fetch object from database.
-     * @retrun confItem new object
+     * @retrun conf\item new object
      */
     public function __construct($id = 0) {
         if ($id === 0 || preg_match("/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/", $id)) {
@@ -144,7 +150,7 @@ abstract class confItem extends zophTable {
         if ($this->checkValue($value)) {
             $this->fields["value"]=$value;
         } else {
-            throw new ConfigurationException("Configuration value for " .
+            throw new \ConfigurationException("Configuration value for " .
                 $this->getName() . " is illegal");
         }
     }
@@ -227,7 +233,7 @@ abstract class confItem extends zophTable {
     /**
      * This item requires another item to be enabled
      */
-    final public function requiresEnabled(confItemBool $item) {
+    final public function requiresEnabled(checkbox $item) {
         $this->requiresEnabled[]=$item;
     }
 

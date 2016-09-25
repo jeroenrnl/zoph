@@ -21,7 +21,6 @@
 
 namespace cli;
 
-use conf;
 use file;
 use photo;
 use album;
@@ -29,6 +28,7 @@ use category;
 use place;
 use person;
 use user;
+use conf\conf;
 
 /**
  * Controller class for the CLI

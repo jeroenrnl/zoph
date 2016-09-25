@@ -29,6 +29,7 @@ use db\delete;
 use db\db;
 use db\clause;
 use db\selectHelper;
+use conf\conf;
 
 /**
  * Photo album

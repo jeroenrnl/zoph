@@ -1,7 +1,7 @@
 <?php
 /**
- * A confItemSalt is a special kind of confItemString, which allows auto generation
- * of a secure salt string.
+ * A text configuration item defines a configuration item that is defined using a
+ * user-specified string
  *
  * This file is part of Zoph.
  *
@@ -22,33 +22,58 @@
  * @author Jeroen Roos
  */
 
+namespace conf\item;
+
+use block;
+
 /**
- * A confItemSalt is a special kind of confItemString, which allows auto generation
- * of a secure salt string.
+ * A text configuration item defines a configuration item that is defined using a
+ * user-specified string
+ *
  * @package Zoph
  * @author Jeroen Roos
  */
-class confItemSalt extends confItemString {
+class text extends item {
 
-    protected $regex="[a-zA-Z0-9]{10,40}";
-    protected $size=40;
+    protected $regex=".+";
+    protected $size=30;
 
     public function display() {
         if ($this->internal) {
             return;
         }
-        $id=str_replace(".", "_", $this->getName());
-        $tpl=new block("confItemSalt", array(
+        $tpl=new block("confItemText", array(
             "label" => e(translate($this->getLabel(),0)),
             "name" => e($this->getName()),
-            "id" => e($id),
             "value" => e($this->getValue()),
             "desc" => e(translate($this->getDesc(),0)),
-            "hint" => e(translate($this->getHint(),0)),
+            "hint" => e($this->getHint()),
             "regex" => e($this->regex),
             "size" => (int) $this->size,
             "req" => ($this->required ? "required" : "")
         ));
         return $tpl;
     }
+
+    public function setRegex($regex) {
+        $this->regex=$regex;
+    }
+
+    public function checkValue($value) {
+        if ($this->required && $value=="") {
+            return false;
+        }
+
+        if (isset($this->regex)) {
+            return preg_match("/" . $this->regex ."/", $value);
+        } else {
+            return true;
+        }
+    }
+
+    public function setSize($size) {
+        $this->size=(int) $size;
+    }
+
+
 }

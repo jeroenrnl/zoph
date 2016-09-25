@@ -21,6 +21,20 @@
  * @author Jeroen Roos
  */
 
+namespace conf;
+
+use conf\item\text;
+use conf\item\checkbox;
+use conf\item\number;
+use conf\item\select;
+use conf\item\salt;
+use template;
+use language;
+use photo;
+use album;
+use user;
+use TimeZone;
+
 /**
  * confDefault is the class that defines config options & their defaults
  * in the database
@@ -54,7 +68,7 @@ class confDefault extends conf {
         $interface = conf::addGroup("interface", "Interface settings",
             "Settings that define how Zoph looks");
 
-        $intTitle = new confItemString();
+        $intTitle = new text();
         $intTitle->setName("interface.title");
         $intTitle->setLabel("Title");
         $intTitle->setDesc("The title for the application. This is what appears " .
@@ -63,7 +77,7 @@ class confDefault extends conf {
         $intTitle->setRegex("^.*$");
         $interface[]=$intTitle;
 
-        $intWidth = new confItemString();
+        $intWidth = new text();
         $intWidth->setName("interface.width");
         $intWidth->setLabel("Screen width");
         $intWidth->setDesc("A number in pixels (\"px\") or percent (\"%\"), the latter " .
@@ -72,7 +86,7 @@ class confDefault extends conf {
         $intWidth->setRegex("^[0-9]+(px|%)$");
         $interface[]=$intWidth;
 
-        $intTpl = new confItemSelect();
+        $intTpl = new select();
         $intTpl->setName("interface.template");
         $intTpl->setLabel("Template");
         $intTpl->setDesc("The template Zoph uses");
@@ -80,7 +94,7 @@ class confDefault extends conf {
         $intTpl->setDefault("default");
         $interface[]=$intTpl;
 
-        $intAutoc = new confItemBool();
+        $intAutoc = new checkbox();
         $intAutoc->setName("interface.autocomplete");
         $intAutoc->setLabel("Autocomplete");
         $intAutoc->setDesc("Use autocompletion for selection of albums, categories, " .
@@ -89,7 +103,7 @@ class confDefault extends conf {
         $intAutoc->setDefault(true);
         $interface[]=$intAutoc;
 
-        $intLang = new confItemSelect();
+        $intLang = new select();
         $intLang->setName("interface.language");
         $intLang->setLabel("Default language");
         $intLang->setDesc("Set the language used when neither the user or the browser " .
@@ -101,7 +115,7 @@ class confDefault extends conf {
         $intLang->setDefault("en");
         $interface[]=$intLang;
 
-        $intMaxDays = new confItemNumber();
+        $intMaxDays = new number();
         $intMaxDays->setName("interface.max.days");
         $intMaxDays->setLabel("Maximum days");
         $intMaxDays->setDesc("The maximum days Zoph displays in a dropdown box for 'photos " .
@@ -111,7 +125,7 @@ class confDefault extends conf {
         $intMaxDays->setBounds(0, 365, 1);
         $interface[]=$intMaxDays;
 
-        $intSortOrder = new confItemSelect();
+        $intSortOrder = new select();
         $intSortOrder->setName("interface.sort.order");
         $intSortOrder->setLabel("Default sort order");
         $intSortOrder->setDesc("Default sort order of photos");
@@ -119,7 +133,7 @@ class confDefault extends conf {
         $intSortOrder->setDefault("date");
         $interface[]=$intSortOrder;
 
-        $intSortDir = new confItemSelect();
+        $intSortDir = new select();
         $intSortDir->setName("interface.sort.dir");
         $intSortDir->setLabel("Default sort direction");
         $intSortDir->setDesc("Default sort order of photos, ascending or descending");
@@ -128,7 +142,7 @@ class confDefault extends conf {
         $intSortDir->setDefault("asc");
         $interface[]=$intSortDir;
 
-        $intLogonBgAlbum = new confItemSelect();
+        $intLogonBgAlbum = new select();
         $intLogonBgAlbum->setName("interface.logon.background.album");
         $intLogonBgAlbum->setLabel("Logon screen background album");
         $intLogonBgAlbum->setDesc("Select an album from which a random photo is chosen as a " .
@@ -136,11 +150,11 @@ class confDefault extends conf {
         $intLogonBgAlbum->addOptions(album::getSelectArray());
         $intLogonBgAlbum->setOptionsTranslate(false);
         $intLogonBgAlbum->setDefault(null);
-        $intLogonBgAlbum->requiresEnabled(new confItemBool("share.enable"));
+        $intLogonBgAlbum->requiresEnabled(new checkbox("share.enable"));
 
         $interface[]=$intLogonBgAlbum;
 
-        $intCookieExpire = new confItemSelect();
+        $intCookieExpire = new select();
         $intCookieExpire->setName("interface.cookie.expire");
         $intCookieExpire->setLabel("Cookie Expiry Time");
         $intCookieExpire->setDesc("Set the time after which a cookie will expire, that is, " .
@@ -165,10 +179,10 @@ class confDefault extends conf {
     /**
      * Get config group for interface.user settings
      */
-    private static function getConfigInterfaceUser(confGroup $interface) {
+    private static function getConfigInterfaceUser(group $interface) {
         $users=user::getAll();
 
-        $intUserDefault = new confItemSelect();
+        $intUserDefault = new select();
         $intUserDefault->setName("interface.user.default");
         $intUserDefault->setLabel("Default user");
         $intUserDefault->setDesc("Automatically log on as this user when not logged " .
@@ -184,7 +198,7 @@ class confDefault extends conf {
         $intUserDefault->setDefault(0);
         $interface[]=$intUserDefault;
 
-        $intUserCli = new confItemSelect();
+        $intUserCli = new select();
         $intUserCli->setName("interface.user.cli");
         $intUserCli->setLabel("CLI user");
         $intUserCli->setDesc("This is the Zoph user that is used when using the CLI " .
@@ -209,7 +223,7 @@ class confDefault extends conf {
         $ssl = conf::addGroup("ssl", "SSL", "Protect your site against eavesdropping by " .
             "using https. You will need to configure this in your webserver as well.");
 
-        $sslForce = new confItemSelect();
+        $sslForce = new select();
         $sslForce->setName("ssl.force");
         $sslForce->setLabel("Force SSL");
         $sslForce->setDesc("Force users to use https when using Zoph. When connecting " .
@@ -231,7 +245,7 @@ class confDefault extends conf {
         $url = conf::addGroup("url", "URLs", "Define the URLs that are used to access " .
             "Zoph. Only configure this if Zoph cannot determine it automatically.");
 
-        $urlHttp = new confItemString();
+        $urlHttp = new text();
         $urlHttp->setName("url.http");
         $urlHttp->setLabel("Zoph's URL");
         $urlHttp->setDesc("Override autodetection of Zoph's URL, for example if you " .
@@ -241,7 +255,7 @@ class confDefault extends conf {
         $urlHttp->setRegex("(^$|^https?:\/\/[^\s\/$.?#].[^\s]*$)");
         $url[]=$urlHttp;
 
-        $urlHttps = new confItemString();
+        $urlHttps = new text();
         $urlHttps->setName("url.https");
         $urlHttps->setLabel("Zoph's Secure URL");
         $urlHttps->setDesc("Override autodetection of Zoph's Secure URL (https).");
@@ -258,7 +272,7 @@ class confDefault extends conf {
         $path = conf::addGroup("path", "Paths", "File and directory locations");
 
 
-        $pathImages = new confItemString();
+        $pathImages = new text();
         $pathImages->setName("path.images");
         $pathImages->setLabel("Images directory");
         $pathImages->setDesc("Location of the images on the filesystem. Absolute path, " .
@@ -270,7 +284,7 @@ class confDefault extends conf {
         $pathImages->setRequired();
         $path[]=$pathImages;
 
-        $pathUpload = new confItemString();
+        $pathUpload = new text();
         $pathUpload->setName("path.upload");
         $pathUpload->setLabel("Upload dir");
         $pathUpload->setDesc("Directory where uploaded files are stored and from where " .
@@ -283,7 +297,7 @@ class confDefault extends conf {
             "slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
         $path[]=$pathUpload;
 
-        $pathTrash = new confItemString();
+        $pathTrash = new text();
         $pathTrash->setName("path.trash");
         $pathTrash->setLabel("Trash dir");
         $pathTrash->setDesc("Directory where photos are moved when they are " .
@@ -296,7 +310,7 @@ class confDefault extends conf {
             "slash (/), dot (.), and underscore (_). Can not start with a dot or a slash");
         $path[]=$pathTrash;
 
-        $pathMagic = new confItemString();
+        $pathMagic = new text();
         $pathMagic->setName("path.magic");
         $pathMagic->setLabel("Magic file");
         $pathMagic->setDesc("Zoph needs a MIME Magic file to be able to determine the " .
@@ -314,7 +328,7 @@ class confDefault extends conf {
             "empty for PHP builtin magic file.");
         $path[]=$pathMagic;
 
-        $pathUnzip = new confItemString();
+        $pathUnzip = new text();
         $pathUnzip->setName("path.unzip");
         $pathUnzip->setLabel("Unzip command");
         $pathUnzip->setDesc("The command to use to unzip gzip files. Leave empty to " .
@@ -325,7 +339,7 @@ class confDefault extends conf {
             "slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$pathUnzip;
 
-        $pathUntar = new confItemString();
+        $pathUntar = new text();
         $pathUntar->setName("path.untar");
         $pathUntar->setLabel("Untar command");
         $pathUntar->setDesc("The command to use to untar tar files. Leave empty to disable " .
@@ -336,7 +350,7 @@ class confDefault extends conf {
             "slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$pathUntar;
 
-        $pathUngz = new confItemString();
+        $pathUngz = new text();
         $pathUngz->setName("path.ungz");
         $pathUngz->setLabel("Ungzip command");
         $pathUngz->setDesc("The command to use to unzip gzip files. Leave empty to disable " .
@@ -347,7 +361,7 @@ class confDefault extends conf {
             "slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$pathUngz;
 
-        $pathUnbz = new confItemString();
+        $pathUnbz = new text();
         $pathUnbz->setName("path.unbz");
         $pathUnbz->setLabel("Unbzip command");
         $pathUnbz->setDesc("The command to use to unzip bzip files. Leave empty to disable " .
@@ -366,7 +380,7 @@ class confDefault extends conf {
         $maps = conf::addGroup("maps", "Mapping support",
             "Add maps to Zoph using various different mapping providers.");
 
-        $mapsProvider = new confItemSelect();
+        $mapsProvider = new select();
         $mapsProvider->setName("maps.provider");
         $mapsProvider->setDesc("Enable or disable mapping support and choose the " .
             "mapping provider");
@@ -376,7 +390,7 @@ class confDefault extends conf {
         $mapsProvider->setDefault("");
         $maps[]=$mapsProvider;
 
-        $mapsGeocode = new confItemSelect();
+        $mapsGeocode = new select();
         $mapsGeocode->setName("maps.geocode");
         $mapsGeocode->setLabel("Geocode provider");
         $mapsGeocode->setDesc("With geocoding you can lookup the location of a " .
@@ -394,7 +408,7 @@ class confDefault extends conf {
     private static function getConfigImport() {
         $import = conf::addGroup("import", "Import", "Importing and uploading photos");
 
-        $importEnable = new confItemBool();
+        $importEnable = new checkbox();
         $importEnable->setName("import.enable");
         $importEnable->setLabel("Import through webinterface");
         $importEnable->setDesc("Use this option to enable or disable importing using " .
@@ -405,7 +419,7 @@ class confDefault extends conf {
         $importEnable->setDefault(false);
         $import[]=$importEnable;
 
-        $importUpload = new confItemBool();
+        $importUpload = new checkbox();
         $importUpload->setName("import.upload");
         $importUpload->setLabel("Upload through webinterface");
         $importUpload->setDesc("Use this option to enable or disable uploading files. " .
@@ -416,7 +430,7 @@ class confDefault extends conf {
         $importUpload->setDefault(false);
         $import[]=$importUpload;
 
-        $importMaxupload = new confItemNumber();
+        $importMaxupload = new number();
         $importMaxupload->setName("import.maxupload");
         $importMaxupload->setLabel("Maximum filesize");
         $importMaxupload->setDesc("Maximum size of uploaded file in bytes. You might " .
@@ -427,7 +441,7 @@ class confDefault extends conf {
         $importMaxupload->setBounds(0, 1000000000, 1); // max = 1GB
         $import[]=$importMaxupload;
 
-        $importParallel = new confItemNumber();
+        $importParallel = new number();
         $importParallel->setName("import.parallel");
         $importParallel->setLabel("Resize parallel");
         $importParallel->setDesc("Photos will be resized to thumbnail and midsize " .
@@ -440,14 +454,14 @@ class confDefault extends conf {
         $importParallel->setDefault("1");
         $import[]=$importParallel;
 
-        $importRotate = new confItemBool();
+        $importRotate = new checkbox();
         $importRotate->setName("import.rotate");
         $importRotate->setLabel("Rotate images");
         $importRotate->setDesc("Automatically rotate imported images, requires jhead");
         $importRotate->setDefault(false);
         $import[]=$importRotate;
 
-        $importResize = new confItemSelect();
+        $importResize = new select();
         $importResize->setName("import.resize");
         $importResize->setLabel("Resize method");
         $importResize->setDesc("Determines how to resize an image during import. " .
@@ -458,7 +472,7 @@ class confDefault extends conf {
         $importResize->setDefault("resample");
         $import[]=$importResize;
 
-        $importDated = new confItemBool();
+        $importDated = new checkbox();
         $importDated->setName("import.dated");
         $importDated->setLabel("Dated dirs");
         $importDated->setDesc("Automatically place photos in dated dirs " .
@@ -466,7 +480,7 @@ class confDefault extends conf {
         $importDated->setDefault(false);
         $import[]=$importDated;
 
-        $importDatedHier = new confItemBool();
+        $importDatedHier = new checkbox();
         $importDatedHier->setName("import.dated.hier");
         $importDatedHier->setLabel("Hierarchical dated dirs");
         $importDatedHier->setDesc("Automatically place photos in a dated directory " .
@@ -480,13 +494,13 @@ class confDefault extends conf {
     /**
      * Get config group for import file/dir mode settings
      */
-    private static function getConfigImportFileMode(confGroup $import) {
+    private static function getConfigImportFileMode(group $import) {
 
         /**
          * @todo This requires octdec to be run before using it so use
          * octdec(conf::get("import.filemode")) or you will get "funny" results
          */
-        $importFilemode = new confItemSelect();
+        $importFilemode = new select();
         $importFilemode->setName("import.filemode");
         $importFilemode->setLabel("File mode");
         $importFilemode->setDesc("File mode for the files that are imported in Zoph. " .
@@ -506,7 +520,7 @@ class confDefault extends conf {
          * @todo This requires octdec to be run before using it so use
          * octdec(conf::get("import.dirmode")) or you will get "funny" results
          */
-        $importDirmode = new confItemSelect();
+        $importDirmode = new select();
         $importDirmode->setName("import.dirmode");
         $importDirmode->setLabel("dir mode");
         $importDirmode->setDesc("Mode for directories that are created by Zoph. " .
@@ -527,8 +541,8 @@ class confDefault extends conf {
     /**
      * Get config group for import CLI settings
      */
-    private static function getConfigImportCLI(confGroup $import) {
-        $importCliVerbose=new confItemNumber();
+    private static function getConfigImportCLI(group $import) {
+        $importCliVerbose=new number();
         $importCliVerbose->setName("import.cli.verbose");
         $importCliVerbose->setLabel("CLI verbose");
         $importCliVerbose->setDesc("Set CLI verbosity, can be overriden with --verbose");
@@ -537,7 +551,7 @@ class confDefault extends conf {
         $importCliVerbose->setInternal();
         $import[]=$importCliVerbose;
 
-        $importCliThumbs=new confItemBool();
+        $importCliThumbs=new checkbox();
         $importCliThumbs->setName("import.cli.thumbs");
         $importCliThumbs->setLabel("CLI: generate thumbnails");
         $importCliThumbs->setDesc("Generate thumbnails when importing via CLI. Can be " .
@@ -545,7 +559,7 @@ class confDefault extends conf {
         $importCliThumbs->setDefault(true);
         $import[]=$importCliThumbs;
 
-        $importCliExif=new confItemBool();
+        $importCliExif=new checkbox();
         $importCliExif->setName("import.cli.exif");
         $importCliExif->setLabel("CLI: read EXIF data");
         $importCliExif->setDesc("Read EXIF data when importing via CLI. The default " .
@@ -553,7 +567,7 @@ class confDefault extends conf {
         $importCliExif->setDefault(true);
         $import[]=$importCliExif;
 
-        $importCliSize=new confItemBool();
+        $importCliSize=new checkbox();
         $importCliSize->setName("import.cli.size");
         $importCliSize->setLabel("CLI: size of image");
         $importCliSize->setDesc("Update image dimensions in database when importing " .
@@ -561,7 +575,7 @@ class confDefault extends conf {
         $importCliSize->setDefault(true);
         $import[]=$importCliSize;
 
-        $importCliHash=new confItemBool();
+        $importCliHash=new checkbox();
         $importCliHash->setName("import.cli.hash");
         $importCliHash->setLabel("CLI: calculate hash");
         $importCliHash->setDesc("Calculate a hash when importing or updating a photo " .
@@ -569,7 +583,7 @@ class confDefault extends conf {
         $importCliHash->setDefault(true);
         $import[]=$importCliHash;
 
-        $importCliCopy=new confItemBool();
+        $importCliCopy=new checkbox();
         $importCliCopy->setName("import.cli.copy");
         $importCliCopy->setDefault(false);
         $importCliCopy->setLabel("CLI: copy on import");
@@ -577,7 +591,7 @@ class confDefault extends conf {
             "CLI. Can be overridden with --copy and --move.");
         $import[]=$importCliCopy;
 
-        $importCliUseids=new confItemBool();
+        $importCliUseids=new checkbox();
         $importCliUseids->setName("import.cli.useids");
         $importCliUseids->setLabel("CLI: Use Ids");
         $importCliUseids->setDesc("Use ids instead of filenames when referencing photos.");
@@ -585,7 +599,7 @@ class confDefault extends conf {
         $importCliUseids->setInternal();
         $import[]=$importCliUseids;
 
-        $importCliAddAuto=new confItemBool();
+        $importCliAddAuto=new checkbox();
         $importCliAddAuto->setName("import.cli.add.auto");
         $importCliAddAuto->setLabel("CLI: Auto add");
         $importCliAddAuto->setDesc("Add non-existent albums, categories, places and " .
@@ -594,7 +608,7 @@ class confDefault extends conf {
         $importCliAddAuto->setInternal();
         $import[]=$importCliAddAuto;
 
-        $importCliAddAlways=new confItemBool();
+        $importCliAddAlways=new checkbox();
         $importCliAddAlways->setName("import.cli.add.always");
         $importCliAddAlways->setLabel("CLI: Auto add always");
         $importCliAddAlways->setDesc("Add non-existent albums, categories, places " .
@@ -603,7 +617,7 @@ class confDefault extends conf {
         $importCliAddAlways->setInternal();
         $import[]=$importCliAddAlways;
 
-        $importCliRecursive=new confItemBool();
+        $importCliRecursive=new checkbox();
         $importCliRecursive->setName("import.cli.recursive");
         $importCliRecursive->setLabel("CLI: Recursive");
         $importCliRecursive->setDesc("Recursively import directories when importing " .
@@ -620,7 +634,7 @@ class confDefault extends conf {
         $watermark = conf::addGroup("watermark", "Watermarking",
             "Watermarking can display a (copyright) watermark over your full-size images.");
 
-        $watermarkEnable = new confItemBool();
+        $watermarkEnable = new checkbox();
         $watermarkEnable->setName("watermark.enable");
         $watermarkEnable->setLabel("Enable Watermarking");
         $watermarkEnable->setDesc("Watermarking only works if the watermark file below is set " .
@@ -634,7 +648,7 @@ class confDefault extends conf {
         $watermark[]=$watermarkEnable;
 
         /** @todo: should allow .png too */
-        $watermarkFile = new confItemString();
+        $watermarkFile = new text();
         $watermarkFile->setName("watermark.file");
         $watermarkFile->setLabel("Watermark file");
         $watermarkFile->setDesc("If watermarking is used, this should be set to the name of the " .
@@ -648,7 +662,7 @@ class confDefault extends conf {
             "dot (.), and underscore (_). Can not start with a dot or a slash");
         $watermark[]=$watermarkFile;
 
-        $watermarkPosX = new confItemSelect();
+        $watermarkPosX = new select();
         $watermarkPosX->setName("watermark.pos.x");
         $watermarkPosX->setLabel("Horizontal position");
         $watermarkPosX->setDesc("Define where the watermark will be placed horizontally.");
@@ -660,7 +674,7 @@ class confDefault extends conf {
         $watermarkPosX->setDefault("center");
         $watermark[]=$watermarkPosX;
 
-        $watermarkPosY = new confItemSelect();
+        $watermarkPosY = new select();
         $watermarkPosY->setName("watermark.pos.y");
         $watermarkPosY->setLabel("Vertical position");
         $watermarkPosY->setDesc("Define where the watermark will be placed vertically.");
@@ -672,7 +686,7 @@ class confDefault extends conf {
         $watermarkPosY->setDefault("center");
         $watermark[]=$watermarkPosY;
 
-        $watermarkTrans = new confItemNumber();
+        $watermarkTrans = new number();
         $watermarkTrans->setName("watermark.transparency");
         $watermarkTrans->setLabel("Watermark transparency");
         $watermarkTrans->setDesc("Define the transparency of a watermark. 0: fully " .
@@ -691,14 +705,14 @@ class confDefault extends conf {
     private static function getConfigRotate() {
         $rotate = conf::addGroup("rotate", "Rotation", "Rotate images");
 
-        $rotateEnable = new confItemBool();
+        $rotateEnable = new checkbox();
         $rotateEnable->setName("rotate.enable");
         $rotateEnable->setLabel("Rotation");
         $rotateEnable->setDesc("Allow users (admins or with write access) to rotate images");
         $rotateEnable->setDefault(false);
         $rotate[]=$rotateEnable;
 
-        $rotateCommand = new confItemSelect();
+        $rotateCommand = new select();
         $rotateCommand->setName("rotate.command");
         $rotateCommand->setLabel("Rotate command");
         $rotateCommand->setDesc("Determine which command is used to rotate the image. " .
@@ -713,14 +727,14 @@ class confDefault extends conf {
         $rotateCommand->setDefault("convert");
         $rotate[]=$rotateCommand;
 
-        $rotateBackup = new confItemBool();
+        $rotateBackup = new checkbox();
         $rotateBackup->setName("rotate.backup");
         $rotateBackup->setLabel("Backup");
         $rotateBackup->setDesc("Keep a backup image when rotating an image.");
         $rotateBackup->setDefault(true);
         $rotate[]=$rotateBackup;
 
-        $rotateBackupPrefix = new confItemString();
+        $rotateBackupPrefix = new text();
         $rotateBackupPrefix->setName("rotate.backup.prefix");
         $rotateBackupPrefix->setLabel("Backup prefix");
         $rotateBackupPrefix->setDesc("Prepend backup file for rotation backups with this.");
@@ -736,7 +750,7 @@ class confDefault extends conf {
     private static function getConfigShare() {
         $share = conf::addGroup("share", "Sharing", "Sharing photos with non-logged on users");
 
-        $shareEnable = new confItemBool();
+        $shareEnable = new checkbox();
         $shareEnable->setName("share.enable");
         $shareEnable->setLabel("Sharing");
         $shareEnable->setDesc("Sometimes, you may wish to share an image in Zoph " .
@@ -750,7 +764,7 @@ class confDefault extends conf {
         $shareEnable->setDefault(false);
         $share[]=$shareEnable;
 
-        $shareSaltFull = new confItemSalt();
+        $shareSaltFull = new salt();
         $shareSaltFull->setName("share.salt.full");
         $shareSaltFull->setLabel("Salt for sharing full size images");
         $shareSaltFull->setDesc("When using the sharing feature, Zoph uses a hash " .
@@ -767,7 +781,7 @@ class confDefault extends conf {
         $shareSaltFull->setRequired();
         $share[]=$shareSaltFull;
 
-        $shareSaltMid = new confItemSalt();
+        $shareSaltMid = new salt();
         $shareSaltMid->setName("share.salt.mid");
         $shareSaltMid->setLabel("Salt for sharing mid size images");
         $shareSaltMid->setDesc("The salt for mid size images (this one) must be " .
@@ -787,7 +801,7 @@ class confDefault extends conf {
     private static function getConfigFeature() {
         $feature = conf::addGroup("feature", "Features", "Various features");
 
-        $featureDownload = new confItemBool();
+        $featureDownload = new checkbox();
         $featureDownload->setName("feature.download");
         $featureDownload->setLabel("Downloading");
         $featureDownload->setDesc("With this feature you can use download a set of " .
@@ -799,7 +813,7 @@ class confDefault extends conf {
         $featureDownload->setDefault(false);
         $feature[]=$featureDownload;
 
-        $featureComments = new confItemBool();
+        $featureComments = new checkbox();
         $featureComments->setName("feature.comments");
         $featureComments->setLabel("Comments");
         $featureComments->setDesc("Enable comments. Before a user can actually leave " .
@@ -808,7 +822,7 @@ class confDefault extends conf {
         $featureComments->setDefault(false);
         $feature[]=$featureComments;
 
-        $featureMail = new confItemBool();
+        $featureMail = new checkbox();
         $featureMail->setName("feature.mail");
         $featureMail->setLabel("Mail photos");
         $featureMail->setDesc("You can enable or disable the \"mail this photo feature\" " .
@@ -820,7 +834,7 @@ class confDefault extends conf {
         $featureMail->setDefault(false);
         $feature[]=$featureMail;
 
-        $featureMailBcc = new confItemString();
+        $featureMailBcc = new text();
         $featureMailBcc->setName("feature.mail.bcc");
         $featureMailBcc->setLabel("BCC address");
         $featureMailBcc->setDesc("Automatically Blind Carbon Copy this mailaddress when " .
@@ -832,7 +846,7 @@ class confDefault extends conf {
         $featureMailBcc->setRegex("^([0-9a-zA-Z_\-%\.]+@([0-9a-zA-Z\-]+\.)+[a-zA-Z]{2,10})?$");
         $feature[]=$featureMailBcc;
 
-        $featureAnnotate = new confItemBool();
+        $featureAnnotate = new checkbox();
         $featureAnnotate->setName("feature.annotate");
         $featureAnnotate->setLabel("Annotate photos");
         $featureAnnotate->setDesc("A user can use the annotate photo function to e-mail a " .
@@ -841,7 +855,7 @@ class confDefault extends conf {
         $featureAnnotate->setDefault(false);
         $feature[]=$featureAnnotate;
 
-        $featureRating = new confItemBool();
+        $featureRating = new checkbox();
         $featureRating->setName("feature.rating");
         $featureRating->setLabel("Photo rating");
         $featureRating->setDesc("Allow users to rate photos. Before a non-admin user can " .
@@ -857,7 +871,7 @@ class confDefault extends conf {
     private static function getConfigDate() {
         $date = conf::addGroup("date", "Date and time", "Date and time related settings");
 
-        $dateTz = new confItemSelect();
+        $dateTz = new select();
         $dateTz->setName("date.tz");
         $dateTz->setLabel("Timezone");
         $dateTz->setDesc("This setting determines the timezone to which your camera " .
@@ -869,7 +883,7 @@ class confDefault extends conf {
 
         $date[]=$dateTz;
 
-        $dateGuesstz = new confItemBool();
+        $dateGuesstz = new checkbox();
         $dateGuesstz->setName("date.guesstz");
         $dateGuesstz->setLabel("Guess timezone");
         $dateGuesstz->setDesc("If you have defined the precise location of a place " .
@@ -880,7 +894,7 @@ class confDefault extends conf {
         $dateGuesstz->setDefault(false);
         $date[]=$dateGuesstz;
 
-        $dateFormat = new confItemString();
+        $dateFormat = new text();
         $dateFormat->setName("date.format");
         $dateFormat->setLabel("Date format");
         $dateFormat->setDesc("This determines how Zoph displays dates. You can use the " .
@@ -891,7 +905,7 @@ class confDefault extends conf {
         $dateFormat->setRequired();
         $date[]=$dateFormat;
 
-        $dateTimeFormat = new confItemString();
+        $dateTimeFormat = new text();
         $dateTimeFormat->setName("date.timeformat");
         $dateTimeFormat->setLabel("Time format");
         $dateTimeFormat->setDesc("This determines how Zoph displays times. You can use the " .

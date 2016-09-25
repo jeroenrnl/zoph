@@ -22,6 +22,8 @@
  * @author Jeroen Roos
  */
 
+use conf\conf;
+
 header("Content-Type: text/html; charset=utf-8");
 $user=user::getCurrent();
 

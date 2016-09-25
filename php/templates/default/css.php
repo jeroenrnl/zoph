@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -15,6 +14,8 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+use conf\conf;
 ?>
 
 @import "templates/default/reset.css";

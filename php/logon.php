@@ -22,6 +22,7 @@
  * @author Jeroen Roos
  */
 define("LOGON", true);
+use conf\conf;
 require_once "include.inc.php";
 
 if (isset($_GET["redirect"])) {

@@ -15,6 +15,8 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+use conf\conf;
+
 if ($num_photos) {
     $title_bar = sprintf(translate("photo %s of %s"),  ($offset + 1) , $num_photos);
 } else {

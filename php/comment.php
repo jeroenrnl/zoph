@@ -20,6 +20,9 @@
  * @package Zoph
  * @author Jeroen Roos
  */
+
+use conf\conf;
+
 require_once "include.inc.php";
 
 if (!conf::get("feature.comments")) {

@@ -21,12 +21,12 @@
 
 namespace cli;
 
-use conf;
 use log;
 use album;
 use category;
 use person;
 use place;
+use conf\conf;
 
 /**
  * This class reads and interpretes CLI arguments

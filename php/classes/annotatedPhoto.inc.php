@@ -24,6 +24,8 @@
  * @author Richard P. Childs
  */
 
+use conf\conf;
+
 /**
  * A class representing an annotated photo
  * An annotated photo is a photo with information about the

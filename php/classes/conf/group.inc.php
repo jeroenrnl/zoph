@@ -1,6 +1,6 @@
 <?php
 /**
- * A confGroup groups several configuration items (@see confItem) together.
+ * A conf\group groups several configuration items (@see conf\item) together.
  *
  * This file is part of Zoph.
  *
@@ -21,19 +21,24 @@
  * @author Jeroen Roos
  */
 
+namespace conf;
+
+use conf\item\item;
+use block;
+
 /**
- * Group of @see confItem objects
+ * Group of @see conf\Item objects
  * @package Zoph
  * @author Jeroen Roos
  */
-class confGroup implements ArrayAccess, IteratorAggregate {
+class group implements \ArrayAccess, \IteratorAggregate {
     /** @var string Name of group */
     private $name;
     /** @var string Label */
     private $label;
     /** @var string Description */
     private $desc;
-    /** @var array confItem objects */
+    /** @var array conf\item objects */
     private $items=array();
 
     /**
@@ -98,7 +103,7 @@ class confGroup implements ArrayAccess, IteratorAggregate {
      * Return item
      * For ArrayAccess interface
      * @param string offset
-     * @return confItem
+     * @return conf\item
      */
     public function offsetGet($off) {
         return $this->items[$off];
@@ -112,7 +117,7 @@ class confGroup implements ArrayAccess, IteratorAggregate {
      */
     public function offsetSet($off, $value) {
         if (is_null($off)) {
-            if ($value instanceof confItem) {
+            if ($value instanceof item) {
                 $off=$value->getName();
             }
         }

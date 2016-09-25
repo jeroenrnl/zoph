@@ -22,7 +22,10 @@
  * @package Zoph
  */
 
+use conf\conf;
+
 require_once "include.inc.php";
+
 $title=translate("search",0);
 if ($_action=="insert") {
     $search=new search();

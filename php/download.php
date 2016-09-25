@@ -22,6 +22,8 @@
  *
  */
 
+use conf\conf;
+
 require_once "include.inc.php";
 $vars=clean_request_vars($request_vars);
 

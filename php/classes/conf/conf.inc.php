@@ -1,7 +1,7 @@
 <?php
 /**
  * Via this class Zoph can read configurations from the database
- * the configurations themselves are stored in confItem objects
+ * the configurations themselves are stored in conf\item objects
  *
  * This file is part of Zoph.
  *
@@ -22,11 +22,16 @@
  * @author Jeroen Roos
  */
 
+namespace conf;
+
+use PDO;
+
 use db\select;
 use db\param;
 use db\delete;
 use db\db;
 use db\clause;
+use log;
 
 /**
  * conf is the main object for access to Zoph's configuration
@@ -63,7 +68,7 @@ class conf {
 
         try {
             $result=db::query($qry);
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             log::msg("Cannot load configuration from database", log::FATAL, log::CONFIG | log::DB);
         }
 
@@ -74,11 +79,11 @@ class conf {
                 $item=static::getItemByName($key);
                 try {
                     $item->setValue($value);
-                } catch (ConfigurationException $e) {
+                } catch (\ConfigurationException $e) {
                     /* An illegal value is automatically set to the default */
                     log::msg($e->getMessage(), log::ERROR, log::CONF);
                 }
-            } catch (ConfigurationException $e) {
+            } catch (\ConfigurationException $e) {
                 /* An unknown item will automatically be deleted from the
                    database, so we can remove items without leaving a mess */
                 log::msg($e->getMessage(), log::NOTIFY, log::CONF);
@@ -115,7 +120,7 @@ class conf {
                     $item->setValue($value);
                     $item->update();
                 }
-            } catch(ConfigurationException $e) {
+            } catch(\ConfigurationException $e) {
                 log::msg("Configuration cannot be updated: " .
                     $e->getMessage(), log::ERROR, log::CONFIG);
             }
@@ -123,12 +128,11 @@ class conf {
         static::$loaded=true;
     }
 
-
     /**
      * Get a configuration item by name
      * @param string Name of item to return
-     * @return confItem Configuration item
-     * @throws ConfigurationException
+     * @return conf\item Configuration item
+     * @throws \ConfigurationException
      */
     public static function getItemByName($name) {
         $nameArr=explode(".", $name);
@@ -136,7 +140,7 @@ class conf {
         if (isset(static::$groups[$group]) && isset(static::$groups[$group][$name])) {
             return static::$groups[$group][$name];
         } else {
-            throw new ConfigurationException("Unknown configuration item " . $name);
+            throw new \ConfigurationException("Unknown configuration item " . $name);
         }
     }
 
@@ -162,7 +166,7 @@ class conf {
      * it should be stored in the db.
      * @param string Name of item to change
      * @param string Value to set
-     * @return confItem the item that has been updated
+     * @return conf\item the item that has been updated
      */
     public static function set($key, $value) {
         $item=static::getItemByName($key);
@@ -182,13 +186,13 @@ class conf {
     }
 
     /**
-     * Create a new confGroup and add it to the list
+     * Create a new conf\group and add it to the list
      * @param string name
      * @param string label
      * @param string description
      */
     public static function addGroup($name, $label, $desc = "") {
-        $group = new confGroup();
+        $group = new group();
 
         $group->setName($name);
         $group->setLabel($label);

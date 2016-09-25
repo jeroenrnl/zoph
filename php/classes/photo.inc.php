@@ -27,6 +27,7 @@ use db\select;
 use db\param;
 use db\clause;
 use db\selectHelper;
+use conf\conf;
 
 /**
  * A class corresponding to the photos table.

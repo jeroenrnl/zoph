@@ -30,6 +30,8 @@ use db\db;
 use db\clause;
 use db\selectHelper;
 
+use conf\conf;
+
 /**
  * A category class corresponding to the category table.
  *

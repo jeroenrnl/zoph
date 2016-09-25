@@ -26,6 +26,7 @@ use db\select;
 use db\clause;
 use db\param;
 use db\selectHelper;
+use conf\conf;
 
 /**
  * A class representing a user of Zoph

@@ -21,6 +21,8 @@
  *       this should be done by the main template;
  */
 
+use conf\conf;
+
 if (!ZOPH) { die("Illegal call"); }
 ?>
     <script type="text/javascript">

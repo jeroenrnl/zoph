@@ -26,6 +26,7 @@ use conf;
 use log;
 use template;
 use photo;
+use conf\conf;
 
 /**
  * This class holds all the functions for uploading and importing images

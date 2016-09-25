@@ -19,6 +19,7 @@
 use db\select;
 use db\param;
 use db\clause;
+use conf\conf;
 
 /*
  * A class to validate a user.

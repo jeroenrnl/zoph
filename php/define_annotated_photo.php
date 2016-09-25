@@ -29,6 +29,8 @@
  * @copyright 2003 Nixon P. Childs
  */
 
+use conf\conf;
+
 require_once "include.inc.php";
 
 if (!conf::get("feature.annotate")) {

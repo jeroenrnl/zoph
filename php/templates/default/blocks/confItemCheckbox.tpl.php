@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for a boolean configuration item
+ * Template for a checkbox configuration item
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

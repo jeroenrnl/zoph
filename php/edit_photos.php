@@ -21,6 +21,8 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+use conf\conf;
+
 require_once "include.inc.php";
 
 $_cols = (int) getvar("_cols");

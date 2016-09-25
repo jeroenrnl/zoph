@@ -21,6 +21,10 @@
  * @author Jeroen Roos
  */
 
+require_once "testSetup.php";
+
+use conf\conf;
+
 /**
  * Test the place class
  *

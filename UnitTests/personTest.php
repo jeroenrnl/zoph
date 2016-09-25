@@ -22,6 +22,9 @@
  */
 
 require_once "testSetup.php";
+
+use conf\conf;
+
 /**
  * Test class for person class
  *

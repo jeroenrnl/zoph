@@ -22,6 +22,8 @@
  * @author Jeroen Roos
  */
 
+use conf\conf;
+
 require_once "include.inc.php";
 $title = translate("Home");
 require_once "header.inc.php";

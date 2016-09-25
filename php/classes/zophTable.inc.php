@@ -32,6 +32,7 @@ use db\update;
 use db\query;
 use db\clause;
 use db\delete;
+use conf\conf;
 
 /**
  * A generic table class.  Is is meant to be subclassed by particular

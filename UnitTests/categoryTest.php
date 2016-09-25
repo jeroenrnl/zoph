@@ -23,6 +23,8 @@
 
 require_once "testSetup.php";
 
+use conf\conf;
+
 /**
  * Test the category class
  *

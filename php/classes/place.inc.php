@@ -28,6 +28,7 @@ use db\param;
 use db\db;
 use db\clause;
 use db\selectHelper;
+use conf\conf;
 
 /**
  * A class corresponding to the places table.

@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+use conf\conf;
+
 require_once "include.inc.php";
 $title=translate("Configuration");
 

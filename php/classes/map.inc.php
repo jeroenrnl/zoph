@@ -21,6 +21,8 @@
  * @package Zoph
  */
 
+use conf\conf;
+
 /**
  * Mapping class.
  *

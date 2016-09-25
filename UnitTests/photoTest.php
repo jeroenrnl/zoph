@@ -24,6 +24,7 @@
 require_once "testSetup.php";
 
 use db\db;
+use conf\conf;
 
 /**
  * Test photo class
@@ -675,6 +676,10 @@ class photoTest extends ZophDataBaseTestCase {
             $this->assertFileExists(conf::get("path.images") . "/" . $date . "/" . $name);
         }
         unlink(conf::get("path.images") . "/" . $date . "/" . $name);
+        // Reset to default
+        conf::set("import.cli.thumbs", true);
+        conf::set("import.cli.size", true);
+        conf::set("import.dated", false);
     }
 
     /**

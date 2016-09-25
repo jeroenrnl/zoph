@@ -20,9 +20,9 @@
  */
 namespace import;
 
-use conf;
 use photo;
 use file;
+use conf\conf;
 
 /**
  * This class holds the generalized functions importing images

@@ -22,6 +22,7 @@
  * @author Jeroen Roos
  */
 
+use conf\conf;
 require_once "include.inc.php";
 $photo_id = getvar("photo_id");
 $_off = getvar("_off");
