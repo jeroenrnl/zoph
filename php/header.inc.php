@@ -63,16 +63,10 @@ if (conf::get("interface.autocomplete")) {
 }
 
 if (conf::get("maps.provider")) {
-    $scripts[]="js/mxn/mxn.js?(" . conf::get("maps.provider") .")";
+    $scripts[]="js/leaflet-src.js";
     $scripts[]="js/maps.js";
-    $scripts[]="js/custommaps.js";
     if (conf::get("maps.geocode")) {
         $scripts[]="js/geocode.js";
-    }
-    switch (strtolower(conf::get("maps.provider"))) {
-    case "googlev3":
-        $scripts[]="https://maps.google.com/maps/api/js?sensor=false";
-        break;
     }
 }
 

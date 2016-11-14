@@ -1,6 +1,6 @@
 <?php
 /**
- * Map. Create and display a map using the mapstraction library.
+ * Map. Create and display a map using Leaflet.
  *
  * This file is part of Zoph.
  *

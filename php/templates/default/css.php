@@ -18,6 +18,7 @@
 ?>
 
 @import "templates/default/reset.css";
+@import "templates/default/leaflet.css";
 /* Some of the styles have been based on http://www.alistapart.com/articles/taminglists/ */
 
 /* Main CSS style, all elements inherit these settings */
