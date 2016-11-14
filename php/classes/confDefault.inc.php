@@ -373,6 +373,7 @@ class confDefault extends conf {
         $mapsProvider->setLabel("Mapping provider");
         $mapsProvider->addOption("", "Disabled");
         $mapsProvider->addOption("googlev3", "Google Maps v3");
+        $mapsProvider->addOption("mapbox", "Mapbox (OpenStreetMap)");
         $mapsProvider->setDefault("");
         $maps[]=$mapsProvider;
 

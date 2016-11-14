@@ -65,6 +65,10 @@ if (conf::get("interface.autocomplete")) {
 if (conf::get("maps.provider")) {
     $scripts[]="js/leaflet-src.js";
     $scripts[]="js/maps.js";
+    if (conf::get("maps.provider") == "googlev3") {
+        $scripts[]="https://maps.googleapis.com/maps/api/js";
+        $scripts[]="js/leaflet/GoogleMutant.js";
+    }
     if (conf::get("maps.geocode")) {
         $scripts[]="js/geocode.js";
     }
