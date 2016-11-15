@@ -21,20 +21,56 @@ var zMaps=function() {
 
         switch(provider) {
         case "googlev3":
-           var roads = L.gridLayer.googleMutant( {
+            var street = L.gridLayer.googleMutant( {
                 type: 'roadmap'
             }).addTo(map);
+            var sat = L.gridLayer.googleMutant( {
+                type: 'satellite'
+            }).addTo(map);
+            // Hybrid mode is not working correctly yet
+            //var hybrid = L.gridLayer.googleMutant( {
+            //    type: 'hybrid'
+            //}).addTo(map);
+            layers = { 
+                "Satellite": sat,
+                "Streetmap": street
+            };
             break;
         case "mapbox":
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                maxZoom: 18,
+            var url="https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}";
+            var maxZoom=18;
+            var accessToken='pk.eyJ1IjoiamVyb2Vucm5sIiwiYSI6ImNpdmh6dnlsazAwYWUydXBrbG50cHhlbmMifQ.0pSkJxO6ycD2Wg5GL4yYyw';
+            var attr='Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
+
+            var street=L.tileLayer(url, {
+                attribution: attr,
+                maxZoom: maxZoom,
                 id: 'mapbox.streets',
-                accessToken: 'pk.eyJ1IjoiamVyb2Vucm5sIiwiYSI6ImNpdmh6dnlsazAwYWUydXBrbG50cHhlbmMifQ.0pSkJxO6ycD2Wg5GL4yYyw'
+                accessToken: accessToken
             }).addTo(map);
+
+            var sat=L.tileLayer(url, {
+                attribution: attr,
+                maxZoom: maxZoom,
+                id: 'mapbox.satellite',
+                accessToken: accessToken
+            }).addTo(map);
+
+            var strsat=L.tileLayer(url, {
+                attribution: attr,
+                maxZoom: maxZoom,
+                id: 'mapbox.streets-satellite',
+                accessToken: accessToken
+            }).addTo(map);
+
+            layers = { 
+                "Streetmap + Satellite": strsat,
+                "Satellite": sat,
+                "Streetmap": street
+            };
             break;
         }
-
+        L.control.layers(layers).addTo(map);
         this.map = map;
         this.markers = new L.featureGroup;
         this.markers.addTo(map);

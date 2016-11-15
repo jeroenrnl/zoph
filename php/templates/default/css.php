@@ -510,6 +510,10 @@ div#selection {
     z-index: 6;
 }
 
+.leaflet-control-layers-base label {
+    text-align: left;
+}
+
 div.minimap {
     float: right;
     right: 10px;
