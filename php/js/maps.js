@@ -72,8 +72,17 @@ var zMaps=function() {
                 "Streetmap": street
             };
             break;
+        case "osm":
+            var url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            var attr='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            var street=L.tileLayer(url, {
+                attribution: attr,
+                detectRetina: true,
+            }).addTo(map);
         }
-        L.control.layers(layers).addTo(map);
+        if(typeof layers != "undefined") {
+            L.control.layers(layers).addTo(map);
+        }
         this.map = map;
         this.markers = new L.featureGroup;
         this.markers.addTo(map);
