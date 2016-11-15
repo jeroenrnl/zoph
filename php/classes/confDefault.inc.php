@@ -378,6 +378,13 @@ class confDefault extends conf {
         $mapsProvider->setDefault("");
         $maps[]=$mapsProvider;
 
+        $mapsMapBoxAPIKey = new confItemString();
+        $mapsMapBoxAPIKey->setName("maps.mapbox.apikey");
+        $mapsMapBoxAPIKey->setDesc("API key to use to access MapBox. The default is Zoph's API key, please do not use it in other projects. If you are setting up a high-volume site, please consider requesting your own key");
+        $mapsMapBoxAPIKey->setDefault("pk.eyJ1IjoiamVyb2Vucm5sIiwiYSI6ImNpdmh6dnlsazAwYWUydXBrbG50cHhlbmMifQ.0pSkJxO6ycD2Wg5GL4yYyw");
+        $mapsMapBoxAPIKey->setRegex("^[0-9a-zA-Z\.]+$");
+        $maps[]=$mapsMapBoxAPIKey;
+
         $mapsGeocode = new confItemSelect();
         $mapsGeocode->setName("maps.geocode");
         $mapsGeocode->setLabel("Geocode provider");

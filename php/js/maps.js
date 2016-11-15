@@ -39,7 +39,6 @@ var zMaps=function() {
         case "mapbox":
             var url="https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}{r}.png?access_token={accessToken}";
             var maxZoom=18;
-            var accessToken='pk.eyJ1IjoiamVyb2Vucm5sIiwiYSI6ImNpdmh6dnlsazAwYWUydXBrbG50cHhlbmMifQ.0pSkJxO6ycD2Wg5GL4yYyw';
             var attr='Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
 
             var street=L.tileLayer(url, {
@@ -47,7 +46,7 @@ var zMaps=function() {
                 maxZoom: maxZoom,
                 id: 'mapbox.streets',
                 detectRetina: true,
-                accessToken: accessToken
+                accessToken: mapbox_api_key
             }).addTo(map);
 
             var sat=L.tileLayer(url, {
@@ -55,7 +54,7 @@ var zMaps=function() {
                 maxZoom: maxZoom,
                 id: 'mapbox.satellite',
                 detectRetina: true,
-                accessToken: accessToken
+                accessToken: mapbox_api_key
             }).addTo(map);
 
             var strsat=L.tileLayer(url, {
@@ -63,7 +62,7 @@ var zMaps=function() {
                 maxZoom: maxZoom,
                 id: 'mapbox.streets-satellite',
                 detectRetina: true,
-                accessToken: accessToken
+                accessToken: mapbox_api_key
             }).addTo(map);
 
             layers = { 

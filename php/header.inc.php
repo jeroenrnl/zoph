@@ -68,7 +68,10 @@ if (conf::get("maps.provider")) {
     if (conf::get("maps.provider") == "googlev3") {
         $scripts[]="https://maps.googleapis.com/maps/api/js";
         $scripts[]="js/leaflet/GoogleMutant.js";
+    } else if (conf::get("maps.provider") == "mapbox") {
+        $javascript[]="var mapbox_api_key = '" . conf::get("maps.mapbox.apikey") . "';";
     }
+
     if (conf::get("maps.geocode")) {
         $scripts[]="js/geocode.js";
     }
