@@ -78,6 +78,10 @@ class photo extends zophTable {
         }
         $image_path .= $name;
 
+        if (!file_exists($image_path)) {
+            throw new photoNotFoundException($name . " could not be found");
+        }
+
         $mtime = filemtime($image_path);
         $filesize = filesize($image_path);
         $gmt_mtime = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
@@ -564,6 +568,24 @@ class photo extends zophTable {
 
         $file=$this->getFilePath($type);
 
+        if (!file_exists($file)) {
+            switch ($type) {
+            case MID_PREFIX:
+                $size="width='" . MID_SIZE . "'";
+                break;
+            case THUMB_PREFIX:
+                $size="width='" . THUMB_SIZE . "'";
+                break;
+            default:
+                $size="";
+            }
+            return new block("img", array(
+                "src"   => template::getImage("notfound.png"),
+                "class" => $type,
+                "size"  => $size,
+                "alt"   => "file not found"
+            ));
+        }
         list($width, $height, $filetype, $size)=getimagesize($file);
 
         $alt = e($this->get("title"));

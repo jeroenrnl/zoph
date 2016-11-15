@@ -19,6 +19,7 @@ use conf\conf;
 ?>
 
 @import "templates/default/reset.css";
+@import "templates/default/leaflet.css";
 /* Some of the styles have been based on http://www.alistapart.com/articles/taminglists/ */
 
 /* Main CSS style, all elements inherit these settings */
@@ -508,6 +509,10 @@ div.map small {
 
 div#selection {
     z-index: 6;
+}
+
+.leaflet-control-layers-base label {
+    text-align: left;
 }
 
 div.minimap {
