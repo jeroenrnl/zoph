@@ -35,7 +35,7 @@ require_once "header.inc.php";
     </div>
     <script type='text/javascript'>
         <?php echo $tpl_mapping_js; ?>
-        mapstraction.autoCenterAndZoom();
+        zMaps.autoCenterAndZoom();
     </script>
     <?php endif; ?>
     <?php require_once "footer.inc.php"; ?>

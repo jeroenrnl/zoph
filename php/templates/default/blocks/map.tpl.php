@@ -27,13 +27,13 @@ if (!ZOPH) { die("Illegal call"); }
 
 <script type="text/javascript">
     // Transform div into map:
-    zMaps.createMap("<?php echo $tpl_id ?>","<?php echo $tpl_provider?>");
+    zMaps.createMap("<?= $tpl_id ?>","<?= $tpl_provider?>");
     <?php if ($this->hasMarkers()): ?>
         // Add markers:
         <?php foreach ($this->getMarkers() as $m): ?>
-            zMaps.createMarker("<?php echo $m->lat ?>","<?php echo $m->lon ?>",
-                icons["<?php echo $m->icon ?>"], '<?php echo str_replace("'", "\\'", $m->title) ?>',
-                '<?php echo str_replace("'", "\\'", $m->quicklook) ?>');
+            zMaps.createMarker("<?= $m->lat ?>","<?= $m->lon ?>",
+                icons["<?= $m->icon ?>"], '<?= str_replace("'", "\\'", $m->title) ?>',
+                '<?= str_replace("'", "\\'", $m->quicklook) ?>');
         <?php endforeach ?>
     <?php endif ?>
 
@@ -43,22 +43,16 @@ if (!ZOPH) { die("Illegal call"); }
         <?php foreach ($this->getTracks() as $track): ?>
             var points=new Array();
             <?php foreach ($track->getPoints() as $point): ?>
-                points.push(new mxn.LatLonPoint(<?php echo $point->get("lat") ?>,
-                    <?php echo $point->get("lon") ?>));
+                points.push([ <?= $point->get("lat") ?>, <?= $point->get("lon") ?> ] );
             <?php endforeach; ?>
-            track=new mxn.Polyline(points)
-            mapstraction.addPolyline(track);
+            zMaps.createPolyline(points);
         <?php endforeach ?>
     <?php endif ?>
 
     <?php if (!is_null($this->clat) && (!is_null($this->clon)) && (!is_null($this->zoom))): ?>
-        var center=new mxn.LatLonPoint(
-            <?php echo $this->clat ?>,
-            <?php echo $this->clon ?>);
-        var zoomlevel=<?php echo $this->zoom ?>;
-        mapstraction.setCenterAndZoom(center,zoomlevel);
+        zMaps.setCenterAndZoom([ <?= $this->clat ?>, <?= $this->clon ?> ], <?= $this->zoom ?>);
     <?php else: ?>
-        mapstraction.autoCenterAndZoom();
+        zMaps.autoCenterAndZoom();
     <?php endif ?>
 
     <?php if ($this->edit): ?>
