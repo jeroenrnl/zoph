@@ -93,26 +93,6 @@ class map extends \block {
     }
 
     /**
-     * Get marker from object
-     * @param photo|place Object to get marker from
-     * @param string Icon to use
-     * @return marker created marker.
-     * @todo A "mapable" interface should be created to make sure
-             only certain objects can get passed to this function.
-     */
-    public static function getMarkerFromObj($obj, $icon) {
-        $lat=$obj->get("lat");
-        $lon=$obj->get("lon");
-        if ($lat && $lon) {
-            $title=$obj->get("title");
-            $quicklook=$obj->getQuicklook();
-            return new marker($lat, $lon, $icon, $title, $quicklook);
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Get markers for this map
      * @return array array of markers for this map.
      * if multiple photos are taken in the same place, that place

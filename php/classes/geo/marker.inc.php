@@ -43,4 +43,25 @@ class marker {
         $this->title=$title;
         $this->quicklook=$quicklook;
     }
+
+    /**
+     * Get marker from object
+     * @param photo|place Object to get marker from
+     * @param string Icon to use
+     * @return marker created marker.
+     * @todo A "mapable" interface should be created to make sure
+             only certain objects can get passed to this function.
+     */
+    public static function getFromObj($obj, $icon) {
+        $lat=$obj->get("lat");
+        $lon=$obj->get("lon");
+        if ($lat && $lon) {
+            $title=$obj->get("title");
+            $quicklook=$obj->getQuicklook();
+            return new self($lat, $lon, $icon, $title, $quicklook);
+        } else {
+            return null;
+        }
+    }
+
 }

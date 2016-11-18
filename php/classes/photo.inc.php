@@ -33,6 +33,7 @@ use conf\conf;
 use geo\map;
 use geo\point;
 use geo\track;
+use geo\marker;
 
 /**
  * A class corresponding to the photos table.
@@ -1207,7 +1208,7 @@ class photo extends zophTable {
      * @return marker instance of marker class
      */
     public function getMarker($icon="geo-photo") {
-        $marker=map::getMarkerFromObj($this, $icon);
+        $marker=marker::getFromObj($this, $icon);
         if (!$marker instanceof marker) {
             $loc=$this->location;
             if ($loc instanceof place) {

@@ -32,7 +32,7 @@ use db\selectHelper;
 use conf\conf;
 
 use geo\map;
-
+use geo\marker;
 /**
  * A class corresponding to the places table.
  *
@@ -406,7 +406,7 @@ class place extends zophTreeTable implements Organizer {
      * @return marker instance of marker class
      */
     public function getMarker($icon="geo-place") {
-        return map::getMarkerFromObj($this, $icon);
+        return marker::getFromObj($this, $icon);
     }
 
     /**
