@@ -217,11 +217,11 @@ if ($num_thumbnails <= 0) {
 </div>
 <?php
 if (conf::get("maps.provider")) {
-    $map=new map();
+    $map=new geo\map();
     foreach ($thumbnails as $thumbnail) {
         $thumbnail->lookup();
         $marker=$thumbnail->getMarker();
-        if ($marker instanceof marker) {
+        if ($marker instanceof geo\marker) {
             $map->addMarker($marker);
         }
     }

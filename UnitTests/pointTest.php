@@ -24,8 +24,10 @@
 
 require_once "testSetup.php";
 
+use geo\point;
+
 /**
- * Test the point class
+ * Test the  geo\point class
  *
  * @package ZophUnitTest
  * @author Jeroen Roos
@@ -41,14 +43,14 @@ class pointTest extends ZophDataBaseTestCase {
         $point->set("lon",5.0);
         $point->set("datetime", "2015-09-01 7:55:00");
         $point->insert();
-        $this->assertInstanceOf("point", $point);
+        $this->assertInstanceOf("geo\point", $point);
         $this->assertEquals($point->getId(), 1);
 
         unset($point);
         $point=new point(1);
         $point->lookup();
 
-        $this->assertInstanceOf("point", $point);
+        $this->assertInstanceOf("geo\point", $point);
         $this->assertEquals($point->getId(), 1);
         $this->assertEquals($point->get("lat"), 51);
 

@@ -21,6 +21,8 @@
  * @package Zoph
  */
 
+namespace geo;
+
 use conf\conf;
 
 /**
@@ -29,7 +31,7 @@ use conf\conf;
  * @author Jeroen Roos
  * @package Zoph
  */
-class map extends block {
+class map extends \block {
 
     /** @var div id for map */
     private $map = "map";
@@ -55,7 +57,7 @@ class map extends block {
      * @param array variables to pass to template
      * @return map new object
      */
-    function __construct($template="map", $vars=null) {
+    public function __construct($template="map", $vars=null) {
         if (!is_array($vars)) {
             $vars=array();
         }
@@ -112,12 +114,12 @@ class map extends block {
 
     /**
      * Get markers for this map
+     * @return array array of markers for this map.
+     * if multiple photos are taken in the same place, that place
+     * is multiple times in the array, so this function removes doubles
      */
     public function getMarkers() {
-        // if multiple photos are taken in the same place, that place
-        // is multiple times in the array, let's remove doubles:
-        $markers=array_unique($this->markers, SORT_REGULAR);
-        return $markers;
+        return array_unique($this->markers, SORT_REGULAR);
     }
 
     /**
@@ -159,7 +161,7 @@ class map extends block {
      * @param float longitude
      * @param int zoom level
      */
-    public function setCenterAndZoom($lat, $lon, $zoom) {
+    public function setCenterAndZoom($lat=0, $lon=0, $zoom=2) {
         $this->clat=(float) $lat;
         $this->clon=(float) $lon;
         $this->zoom=(int) $zoom;
@@ -181,25 +183,14 @@ class map extends block {
         $lon=$obj->get("lon");
         $zoom=$obj->get("mapzoom");
         if (!$lat && !$lon) {
-            if ($obj instanceof photo && $obj->location instanceof place) {
-                $lat=$obj->location->get("lat");
-                $lon=$obj->location->get("lon");
-                $zoom=$obj->location->get("mapzoom");
-            } else if ($obj instanceof place) {
-                foreach ($obj->get_ancestors() as $parent) {
-                    $lat=$parent->get("lat");
-                    $lon=$parent->get("lon");
-                    $zoom=$parent->get("mapzoom");
-                    if ($lat && $lon) {
-                        break;
-                    }
-                }
+            if ($obj instanceof \photo && $obj->location instanceof \place) {
+                $this->setCenterAndZoomFromObj($obj->location);
+            } else if ($obj instanceof \place) {
+                $this->setCenterAndZoomFromObj($obj->getParent());
             }
+        } else {
+            $this->setCenterAndZoom($lat ?: 0, $lon ?: 0, $zoom ?: 2);
         }
-        if (!$lat) { $lat=0; }
-        if (!$lon) { $lon=0; }
-        if (!$zoom) { $zoom=2; }
-        $this->setCenterAndZoom($lat, $lon, $zoom);
     }
 
     /**

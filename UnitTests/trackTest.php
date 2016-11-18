@@ -21,7 +21,12 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
+
 require_once "testSetup.php";
+
+use geo\track;
+use geo\point;
+
 /**
  * Test the track class
  *
@@ -41,7 +46,7 @@ class trackTest extends ZophDataBaseTestCase {
         $points=point::getRecords("point_id", array("track_id" => (int) $trackId));
 
         // verify insertion
-        $this->assertInstanceOf("track", $track);
+        $this->assertInstanceOf("geo\\track", $track);
         $this->assertEquals("Test Track", $track->get("name"));
         $this->assertCount(5, $points);
 

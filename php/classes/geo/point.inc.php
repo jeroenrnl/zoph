@@ -21,10 +21,15 @@
  * @package Zoph
  */
 
+namespace geo;
+
 use db\delete;
 use db\param;
 use db\clause;
 use db\select;
+
+use XMLReader;
+use PDO;
 
 /**
  * This class describes a point, which is a GPS position + timestamp
@@ -32,7 +37,7 @@ use db\select;
  * @author Jeroen Roos
  * @package Zoph
  */
-class point extends zophTable {
+class point extends \zophTable {
     /** @var string The name of the database table */
     protected static $tableName="point";
     /** @var array List of primary keys */
@@ -44,7 +49,6 @@ class point extends zophTable {
     protected static $keepKeys = false;
     /** @var string URL for this class */
     protected static $url;
-
     /**
      * Create object from XML-snippet
      * @param string snippet of XML-code
@@ -75,9 +79,9 @@ class point extends zophTable {
                 case "time":
                     date_default_timezone_set("UTC");
                     $xml->read();
-                    $datetime=strtotime($xml->value);
-                    $mysqldate=date("Y-m-d H:i:s", $datetime);
-                    $point->set("datetime", $mysqldate);
+                    break;
+                default:
+                    // unrecognized element, ignore
                     break;
                 }
             }
@@ -144,7 +148,7 @@ class point extends zophTable {
      * @param string "km" or "miles"
      * @return int distance
      */
-    function getDistanceTo(point $p2, $entity="km") {
+    private function getDistanceTo(point $p2, $entity="km") {
         $p1=$this;
         $lat1=$p1->get("lat");
         $lon1=$p1->get("lon");
@@ -190,13 +194,8 @@ class point extends zophTable {
         $t1 = strtotime($p1->get("datetime"));
         $t2 = strtotime($p2->get("datetime"));
 
-        if (!($t2 >= $t3 && $t3 >= $t1)) {
+        if ((!($t2 >= $t3 && $t3 >= $t1)) || ($maxtime && (abs($t1 - $t2) > $maxtime))) {
             return false;
-        }
-        if ($maxtime) {
-            if (abs($t1 - $t2) > $maxtime) {
-                return false;
-            }
         }
 
         if ($maxdist) {

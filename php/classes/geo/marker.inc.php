@@ -21,6 +21,8 @@
  * @package Zoph
  */
 
+namespace geo;
+
 /**
  * Class to display markers on a map
  * @author Jeroen Roos

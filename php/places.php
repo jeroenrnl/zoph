@@ -50,7 +50,7 @@ if (!$place->isVisible()) {
     redirect("places.php");
 }
 $obj=&$place;
-$ancestors = $place->get_ancestors();
+$ancestors = $place->getAncestors();
 $order = $user->prefs->get("child_sortorder");
 $children = $place->getChildren($order);
 $totalPhotoCount = $place->getTotalPhotoCount();
@@ -209,10 +209,10 @@ if ($showOrig) {
     </div>
     <?php
     if (conf::get("maps.provider")) {
-        $map=new map();
+        $map=new geo\map();
         $map->setCenterAndZoomFromObj($place);
         $marker=$place->getMarker();
-        if ($marker instanceof marker) {
+        if ($marker instanceof geo\marker) {
             $map->addMarker($marker);
         }
         $map->addMarkers($children);

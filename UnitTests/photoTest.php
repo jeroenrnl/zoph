@@ -26,6 +26,9 @@ require_once "testSetup.php";
 use db\db;
 use conf\conf;
 
+use geo\track;
+use geo\point;
+
 /**
  * Test photo class
  *

@@ -65,8 +65,7 @@
                     <input type="radio" name="_tracks" id="tracks2" value="specific">
                     <?php echo translate("Specific track") . ": " ?>
                     <?php echo template::createPulldown("_track", "",
-                        template::createSelectArray(track::getRecords("track_id"),
-                            array("name"))) ?>
+                        template::createSelectArray($tpl_tracks, array("name"))) ?>
                 </fieldset>
             </fieldset>
             <fieldset class="geotag">

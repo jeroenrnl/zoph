@@ -22,10 +22,10 @@
 namespace import;
 
 use file;
-use conf;
 use log;
 use template;
 use photo;
+
 use conf\conf;
 
 /**

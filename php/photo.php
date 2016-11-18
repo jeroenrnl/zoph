@@ -506,7 +506,7 @@ if ($action != "insert" && !$found) {
 </div>
 <?php
 if (conf::get("maps.provider") && ($_action=="display" || $_action=="edit" || $_action==="")) {
-    $map=new map();
+    $map=new geo\map();
 
     if ($_action == "edit") {
         $map->setEditable();

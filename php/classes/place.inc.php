@@ -28,7 +28,10 @@ use db\param;
 use db\db;
 use db\clause;
 use db\selectHelper;
+
 use conf\conf;
+
+use geo\map;
 
 /**
  * A class corresponding to the places table.

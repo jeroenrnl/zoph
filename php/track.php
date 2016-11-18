@@ -20,6 +20,7 @@
  */
 
 use conf\conf;
+use geo\track;
 
 require_once "include.inc.php";
 
@@ -79,7 +80,7 @@ if ($action == "confirm") {
     ));
     $tpl->addBlock($dl);
     if (!is_null(conf::get("maps.provider"))) {
-        $map=new map();
+        $map=new geo\map();
         $map->addTrack($track);
         $tpl->addBlock($map);
     }

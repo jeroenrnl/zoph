@@ -41,7 +41,7 @@ if (!$parent_category_id) {
 }
 $category->lookup();
 $obj=&$category;
-$ancestors = $category->get_ancestors();
+$ancestors = $category->getAncestors();
 $order = $user->prefs->get("child_sortorder");
 $children = $category->getChildren($order);
 

@@ -27,7 +27,12 @@ use db\select;
 use db\param;
 use db\clause;
 use db\selectHelper;
+
 use conf\conf;
+
+use geo\map;
+use geo\point;
+use geo\track;
 
 /**
  * A class corresponding to the photos table.

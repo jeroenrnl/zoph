@@ -19,9 +19,14 @@
  * @package Zoph
  */
 
+namespace geo;
+
 use db\delete;
 use db\param;
 use db\clause;
+
+use XMLReader;
+use PDO;
 
 /**
  * A track is a collection of points, which are used for geotagging
@@ -29,7 +34,7 @@ use db\clause;
  * @author Jeroen Roos
  * @package Zoph
  */
-class track extends zophTable {
+class track extends \zophTable {
     /** @var string The name of the database table */
     protected static $tableName="track";
     /** @var array List of primary keys */
@@ -43,14 +48,6 @@ class track extends zophTable {
     protected static $url="track.php?track_id=";
 
     private $points=array();
-
-    /**
-     * Create a track object
-     *
-     * Calling this function without an id, will create a new track, setting
-     * the id will make it possible to lookup an existing track from the db
-     * @see lookup
-     */
 
     /**
      * Insert a track into the database
@@ -122,54 +119,55 @@ class track extends zophTable {
      */
     public static function getFromGPX($file) {
         $track = new track;
-        if (class_exists("XMLReader")) {
-            $xml=new XMLReader();
-            $xml->open($file);
+        if (!class_exists("XMLReader")) {
+            throw new Exception("Class XMLReader not found");
+        }
+        $xml=new XMLReader();
+        $xml->open($file);
 
-            $track->set("name", substr($file, strrpos($file, "/") + 1, strrpos($file, ".")));
+        $track->set("name", substr($file, strrpos($file, "/") + 1, strrpos($file, ".")));
 
-            $xml->read();
-            if ($xml->name != "gpx") {
-                die("Not a gpx file");
-            } else {
-                $stack[]="gpx";
-            }
-            while ($xml->read()) {
-                if ($xml->nodeType==XMLReader::ELEMENT) {
-                    // Keep track of the current open tags
-                    if (!$xml->isEmptyElement) {
-                        $stack[]=$xml->name;
+        $xml->read();
+        if ($xml->name != "gpx") {
+            die("Not a gpx file");
+        } else {
+            $stack[]="gpx";
+        }
+        while ($xml->read()) {
+            if ($xml->nodeType==XMLReader::ELEMENT) {
+                // Keep track of the current open tags
+                if (!$xml->isEmptyElement) {
+                    $stack[]=$xml->name;
+                }
+                switch ($xml->name) {
+                case "name":
+                    $current=$stack[count($stack) - 2];
+                    if ($current=="gpx") {
+                        // only set the name if we're in <gpx>
+                        $xml->read();
+                        $track->set("name", $xml->value);
                     }
-                    switch ($xml->name) {
-                    case "name":
-                        $current=$stack[count($stack) - 2];
-                        if ($current=="gpx") {
-                            // only set the name if we're in <gpx>
-                            $xml->read();
-                            $track->set("name", $xml->value);
-                        }
-                        break;
-                    case "wpt":
-                        // not (yet?) supported
-                        break;
-                    case "trkpt":
-                        // For now we are ignoring multiple tracks or segments
-                        // in the same file and we simply look at the points
-                        $xml_point=$xml->readOuterXML();
-                        $point=point::readFromXML($xml_point);
-                        $track->addpoint($point);
-                        break;
-                    }
-                } else if ($xml->nodeType==XMLReader::END_ELEMENT) {
-                    $element=array_pop($stack);
-                    if ($element!=$xml->name) {
-                        die("GPX not well formed: expected &lt;$element&gt;, " .
-                            "found &lt;$xml->name&gt;");
-                    }
+                    break;
+                case "wpt":
+                    // not (yet?) supported
+                    break;
+                case "trkpt":
+                    // For now we are ignoring multiple tracks or segments
+                    // in the same file and we simply look at the points
+                    $xml_point=$xml->readOuterXML();
+                    $point=point::readFromXML($xml_point);
+                    $track->addpoint($point);
+                    break;
+                }
+            } else if ($xml->nodeType==XMLReader::END_ELEMENT) {
+                $element=array_pop($stack);
+                if ($element!=$xml->name) {
+                    die("GPX not well formed: expected &lt;$element&gt;, " .
+                        "found &lt;$xml->name&gt;");
                 }
             }
-            return $track;
         }
+        return $track;
     }
 
     /**

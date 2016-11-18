@@ -120,7 +120,7 @@ if ($_action == "notify") {
         $album_list = array();
         while (list($id, $album) = each($albums)) {
             $album_path = '';
-            $ancestors = $album->get_ancestors();
+            $ancestors = $album->getAncestors();
             if ($ancestors) {
                 while ($parent = array_pop($ancestors)) {
                     $album_path .= $parent->get("album") .  " > ";

@@ -22,7 +22,13 @@ namespace import;
 
 use photo;
 use file;
+
 use conf\conf;
+
+use geo\track;
+
+use DomDocument;
+
 
 /**
  * This class holds the generalized functions importing images
