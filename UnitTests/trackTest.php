@@ -24,8 +24,12 @@
 
 require_once "testSetup.php";
 
+use conf\conf;
+
 use geo\track;
 use geo\point;
+
+use import\web as import;
 
 /**
  * Test the track class
@@ -34,6 +38,29 @@ use geo\point;
  * @author Jeroen Roos
  */
 class trackTest extends ZophDataBaseTestCase {
+
+    /**
+     * Test the track::getFromGPX() function, which imports a GPX file
+     * Because the import function deletes the file in question, we first copy it to temp
+     * and import from there
+     */
+    public function testGetFromGPX() {
+        copy(conf::get("path.images") . "/track.gpx", "/tmp/track.gpx");
+        import::XMLimport(new file("/tmp/track.gpx"));
+
+        $tracks=track::getAll();
+
+        foreach ($tracks as $track) {
+            if ($track->get("name") == "Zoph Test") {
+                $imported=$track;
+            }
+        }
+
+        $this->assertInstanceOf("geo\\track" , $imported);
+        $points=point::getRecords("point_id", array("track_id" => (int) $imported->getId()));
+        $this->assertEquals("Zoph Test", $imported->get("name"));
+        $this->assertCount(8, $points);
+    }
 
     public function testDelete() {
         // Create a track

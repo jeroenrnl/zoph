@@ -79,6 +79,8 @@ class point extends \zophTable {
                 case "time":
                     date_default_timezone_set("UTC");
                     $xml->read();
+                    $datetime=strtotime($xml->value);
+                    $point->set("datetime", date("Y-m-d H:i:s", $datetime));
                     break;
                 default:
                     // unrecognized element, ignore

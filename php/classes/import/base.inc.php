@@ -20,8 +20,10 @@
  */
 namespace import;
 
-use photo;
 use file;
+use log;
+use photo;
+use settings;
 
 use conf\conf;
 
@@ -191,8 +193,8 @@ abstract class base {
             "gpx 1.1" => "xml/gpx11.xsd" );
 
         foreach ($schemas as $name => $schema) {
-            if (@$xml->schemaValidate($schema)) {
-                echo basename($file) ." is a valid " . $name . " file";
+            if (@$xml->schemaValidate(settings::$php_loc . "/" . $schema)) {
+                log::msg(basename($file) ." is a valid " . $name . " file", log::NOTIFY, log::IMPORT);
                 $xmltype=$name;
             }
         }
