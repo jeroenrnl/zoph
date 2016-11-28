@@ -85,7 +85,7 @@ class mapTest extends PHPUnit_Framework_TestCase {
         $track=helpers::createTrack(5, false);
 
         $map->addTrack($track);
-        
+
         $this->assertTrue($map->hasTracks());
 
         $html=(string) $map;
@@ -100,7 +100,7 @@ class mapTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($map->hasTracks());
 
         $tracks=$map->getTracks();
-        foreach($tracks as $track) {
+        foreach ($tracks as $track) {
             $this->assertInstanceOf("geo\\track", $track);
         }
     }
@@ -168,13 +168,13 @@ class mapTest extends PHPUnit_Framework_TestCase {
     public function testSetEditable(map $map) {
         $html=(string) $map;
         $this->assertNotContains("zMaps.setUpdateHandlers", $html);
-        
+
         $map->setEditable();
         $html=(string) $map;
         $this->assertContains("zMaps.setUpdateHandlers", $html);
-        
+
         $map->setEditable(false);
         $html=(string) $map;
         $this->assertNotContains("zMaps.setUpdateHandlers", $html);
-    }   
+    }
 }
