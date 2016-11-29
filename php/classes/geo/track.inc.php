@@ -129,7 +129,7 @@ class track extends \zophTable {
 
         $xml->read();
         if ($xml->name != "gpx") {
-            die("Not a gpx file");
+            throw new gpxException($file . " is not a GPX file");
         } else {
             $stack[]="gpx";
         }
@@ -148,9 +148,6 @@ class track extends \zophTable {
                         $track->set("name", $xml->value);
                     }
                     break;
-                case "wpt":
-                    // not (yet?) supported
-                    break;
                 case "trkpt":
                     // For now we are ignoring multiple tracks or segments
                     // in the same file and we simply look at the points
@@ -158,11 +155,14 @@ class track extends \zophTable {
                     $point=point::readFromXML($xml_point);
                     $track->addpoint($point);
                     break;
+                default:
+                    // not (yet?) supported
+                    break;
                 }
             } else if ($xml->nodeType==XMLReader::END_ELEMENT) {
                 $element=array_pop($stack);
                 if ($element!=$xml->name) {
-                    die("GPX not well formed: expected &lt;$element&gt;, " .
+                    throw new gpxException("GPX not well formed: expected &lt;$element&gt;, " .
                         "found &lt;$xml->name&gt;");
                 }
             }
@@ -175,7 +175,10 @@ class track extends \zophTable {
      * @return array Array of all points in this track.
      */
     public function getPoints() {
-        return point::getRecords("datetime", array("track_id" => $this->get("track_id")));
+        if (sizeof($this->points)==0) {
+            $this->points=point::getRecords("datetime", array("track_id" => $this->get("track_id")));
+        }
+        return $this->points;
     }
 
     /**
@@ -183,8 +186,7 @@ class track extends \zophTable {
      * @return point first point
      */
     public function getFirstPoint() {
-        $points=point::getRecords("datetime", array("track_id" => (int) $this->getId()));
-        $first=$points[0];
+        $first=$this->getPoints()[0];
         if (($first instanceof point)) {
             return $first;
         } else {
@@ -197,7 +199,7 @@ class track extends \zophTable {
      * @return point last point
      */
     public function getLastPoint() {
-        $points=point::getRecords("datetime", array("track_id" => (int) $this->getId()));
+        $points=$this->getPoints();
         $last=array_pop($points);
         if (($last instanceof point)) {
             return $last;
@@ -211,8 +213,7 @@ class track extends \zophTable {
      * @return int count
      */
     public function getPointCount() {
-        $points=$this->getPoints();
-        return count($points);
+        return count($this->getPoints());
     }
 
     /**

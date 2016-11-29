@@ -92,6 +92,9 @@ class trackTest extends ZophDataBaseTestCase {
     public function testGetFirstLast() {
         // Create a track with 10 randomized points
         $track=helpers::createTrack(10, true);
+        $trackId=$track->getId();
+        $track=new track($trackId);
+        $track->lookup();
 
         $first=$track->getFirstPoint();
         $minute=(int) date("i",strtotime($first->get("datetime")));
