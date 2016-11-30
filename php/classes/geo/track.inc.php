@@ -47,6 +47,7 @@ class track extends \zophTable {
     /** @var string URL for this class */
     protected static $url="track.php?track_id=";
 
+    /** @var array of @see point objects containing the points of this track */
     private $points=array();
 
     /**
@@ -90,6 +91,7 @@ class track extends \zophTable {
 
     /**
      * Add a new point to a track
+     * @param point point to add
      */
     public function addPoint(point $point) {
         $point->set("track_id", $this->get("track_id"));
@@ -116,6 +118,7 @@ class track extends \zophTable {
 
     /**
      * Read a GPX file and create track & point objects from there
+     * @param string filename to read GPX from
      */
     public static function getFromGPX($file) {
         $track = new track;

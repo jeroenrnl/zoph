@@ -29,13 +29,26 @@ namespace geo;
  * @package Zoph
  */
 class marker {
-
+    /** @var float latitude */
     public $lat=0;
+    /** @var float longitude */
     public $lon=0;
-    public $icon=0;
+    /** @var string icon to be displayed */
+    public $icon="";
+    /** @var string title of marker */
     public $title="";
+    /** @var string contents of marker 'bubble' */
     public $quicklook="";
 
+   /**
+    * Create a new marker object
+    * @param float latitude
+    * @param float longitude
+    * @param string icon to be displayed
+    * @param string title of marker
+    * @param string contents of marker 'bubble'
+    * @return marker
+    */
     public function __construct($lat, $lon, $icon, $title, $quicklook) {
         $this->lat=$lat;
         $this->lon=$lon;
@@ -50,7 +63,7 @@ class marker {
      * @param string Icon to use
      * @return marker created marker.
      * @todo A "mapable" interface should be created to make sure
-             only certain objects can get passed to this function.
+     *       only certain objects can get passed to this function.
      */
     public static function getFromObj($obj, $icon) {
         $lat=$obj->get("lat");
@@ -63,5 +76,4 @@ class marker {
             return null;
         }
     }
-
 }

@@ -44,8 +44,12 @@ class color_scheme extends zophTable {
     /** @var string URL for this class */
     protected static $url="color_schemes.php?color_scheme_id=";
 
+    /** @var color_scheme the currently loaded scheme */
     private static $current=null;
 
+   /**
+    * Update the color scheme in the db
+    */
     public function update() {
         foreach ($this->fields as $field => $value) {
             $this->set($field, str_replace("#", "", $value));
@@ -67,6 +71,10 @@ class color_scheme extends zophTable {
         }
     }
 
+    /**
+     * Get all colours from the current schem
+     * @return array of name => value pairs
+     */
     public function getColors() {
         $this->lookup();
         $colors=array();
@@ -87,7 +95,7 @@ class color_scheme extends zophTable {
      * a worst case fall back (for example when an admin deletes *all* color
      * schemes.
      * @param string Name of color to retrieve
-     * @param string #xxxxxx HTML color code
+     * @return array of name => #xxxxxx HTML color code pairs
      * @throws Exception
      * @todo Maybe a custom Exception should be created.
      */

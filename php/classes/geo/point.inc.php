@@ -91,6 +91,11 @@ class point extends \zophTable {
         return $point;
     }
 
+    /**
+     * Create a query to find the next and previous points
+     * this query will be expanded by the @see getNext() and @see getPrevious() methods
+     * @return array (select, clause);
+     */
     private function getNextPrevQry() {
         $qry=new select(array("pt" => "point"));
         $where=new clause("track_id=:trackid");

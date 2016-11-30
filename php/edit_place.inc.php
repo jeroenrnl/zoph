@@ -1,6 +1,6 @@
 <?php
 /**
- * Edit places
+ * Edit places.
  *
  * This file is part of Zoph.
  *
