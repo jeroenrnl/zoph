@@ -20,6 +20,9 @@
  */
 use conf\conf;
 
+use template\block;
+use template\template;
+
 require_once "include.inc.php";
 if ((!conf::get("import.enable")) || (!$user->isAdmin() && !$user->get("import"))) {
         redirect("zoph.php");

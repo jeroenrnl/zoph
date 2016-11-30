@@ -23,6 +23,8 @@
  */
 
 use conf\conf;
+use template\template;
+use template\pager;
 
 require_once "include.inc.php";
 

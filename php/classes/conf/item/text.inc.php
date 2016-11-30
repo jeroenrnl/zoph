@@ -24,7 +24,7 @@
 
 namespace conf\item;
 
-use block;
+use template\block;
 
 /**
  * A text configuration item defines a configuration item that is defined using a

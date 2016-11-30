@@ -23,10 +23,11 @@ namespace import;
 
 use file;
 use log;
-use template;
 use photo;
 
 use conf\conf;
+
+use template\template;
 
 /**
  * This class holds all the functions for uploading and importing images

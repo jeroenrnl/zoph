@@ -22,6 +22,8 @@
  * @package Zoph
  */
 
+namespace template;
+
 /**
  * Pager class
  * Displays a list of pages, usually at the bottom of a page, to navigate to different pages

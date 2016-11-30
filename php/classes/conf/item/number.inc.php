@@ -23,7 +23,7 @@
 
 namespace conf\item;
 
-use block;
+use template\block;
 
 /**
  * A confItemNumber defines a configuration item that is defined using a user-specified number

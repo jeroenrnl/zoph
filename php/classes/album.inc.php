@@ -30,6 +30,7 @@ use db\db;
 use db\clause;
 use db\selectHelper;
 use conf\conf;
+use template\template;
 
 /**
  * Photo album

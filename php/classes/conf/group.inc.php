@@ -24,7 +24,7 @@
 namespace conf;
 
 use conf\item\item;
-use block;
+use template\block;
 
 /**
  * Group of @see conf\Item objects

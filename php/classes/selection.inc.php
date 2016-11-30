@@ -23,6 +23,8 @@
  * @package Zoph
  */
 
+use template\block;
+
 /**
  * Selection class
  * A photo can be "selected" to be used in another part of Zoph,

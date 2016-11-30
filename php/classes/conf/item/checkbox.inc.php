@@ -23,7 +23,7 @@
 
 namespace conf\item;
 
-use block;
+use template\block;
 
 /**
  * A checkbox configuration item defines a configuration item that can be true or false

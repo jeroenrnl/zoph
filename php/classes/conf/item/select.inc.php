@@ -23,7 +23,7 @@
 
 namespace conf\item;
 
-use block;
+use template\block;
 
 /**
  * A confItemSelect defines a configuration item that is defined using a selectbox

@@ -32,6 +32,8 @@ use db\selectHelper;
 
 use conf\conf;
 
+use template\template;
+
 /**
  * A category class corresponding to the category table.
  *

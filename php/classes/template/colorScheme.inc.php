@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A class corresponding to the color_themes table.
  *
@@ -23,14 +22,16 @@
  * @author Jeroen Roos
  */
 
+namespace template;
+
 /**
- * A class corresponding to the color_themes table.
+ * A class corresponding to the color_schemes table.
  *
  * @package Zoph
  * @author Jason Geiger
  * @author Jeroen Roos
  */
-class color_scheme extends zophTable {
+class colorScheme extends \zophTable {
 
     /** @var string The name of the database table */
     protected static $tableName="color_schemes";
@@ -119,7 +120,7 @@ class color_scheme extends zophTable {
         if (array_key_exists($color, $cs)) {
             return $cs[$color];
         } else {
-            throw new Exception("Undefined Color: " . e($color));
+            throw new \Exception("Undefined Color: " . e($color));
         }
     }
 
@@ -127,7 +128,7 @@ class color_scheme extends zophTable {
      * Set current color scheme
      * @param color_scheme the color scheme to use
      */
-    public static function setCurrent(color_scheme $cs) {
+    public static function setCurrent(colorScheme $cs) {
         static::$current=$cs;
     }
 }

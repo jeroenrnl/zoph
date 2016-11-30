@@ -23,6 +23,10 @@
  */
 
 use conf\conf;
+
+use template\template;
+use template\block;
+
 require_once "include.inc.php";
 $photo_id = getvar("photo_id");
 $_off = getvar("_off");

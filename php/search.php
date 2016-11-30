@@ -23,6 +23,7 @@
  */
 
 use conf\conf;
+use template\template;
 
 require_once "include.inc.php";
 

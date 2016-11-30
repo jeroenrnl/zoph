@@ -22,6 +22,9 @@
 use conf\conf;
 use geo\track;
 
+use template\block;
+use template\template;
+
 require_once "include.inc.php";
 
 $title="Zoph";

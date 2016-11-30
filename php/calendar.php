@@ -22,6 +22,8 @@
  * @author Jeroen Roos
  */
 
+use template\template;
+
 require_once "include.inc.php";
 
 $date = getvar("date");

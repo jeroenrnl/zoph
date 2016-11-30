@@ -153,7 +153,7 @@ class placeTest extends ZophDataBaseTestCase {
         $place->update();
         $address=$place->getAddress();
 
-        $this->assertInstanceOf("block", $address);
+        $this->assertInstanceOf("template\block", $address);
         $this->assertEquals("Addressline 1", $address->vars["lines"][0]);
         $this->assertEquals("Addressline 2", $address->vars["lines"][1]);
         $this->assertEquals("NL 1234", $address->vars["lines"][2]);

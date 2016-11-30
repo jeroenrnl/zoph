@@ -24,6 +24,9 @@ require_once "include.inc.php";
 
 use geo\track;
 
+use template\block;
+use template\template;
+
 $title=translate("Geotag");
 
 $_action=getvar("_action");

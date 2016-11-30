@@ -31,6 +31,9 @@ use db\update;
 use db\clause;
 use db\delete;
 
+use template\block;
+use template\template;
+
 /**
  * The pageset class groups a set of pages in a certain order
  * @author Jeroen Roos

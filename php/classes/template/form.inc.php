@@ -21,6 +21,8 @@
  * @package Zoph
  */
 
+namespace template;
+
 /**
  * This class takes care of displaying forms
  *

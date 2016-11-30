@@ -17,6 +17,7 @@
  */
 
 use conf\conf;
+use template\template;
 
 function create_field_html($fields) {
 

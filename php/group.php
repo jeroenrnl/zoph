@@ -23,6 +23,10 @@
 
 use conf\conf;
 
+use template\block;
+use template\form;
+use template\template;
+
 require_once "include.inc.php";
 
 if (!$user->isAdmin()) {

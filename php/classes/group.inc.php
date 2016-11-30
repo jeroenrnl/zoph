@@ -26,7 +26,10 @@ use db\insert;
 use db\delete;
 use db\param;
 use db\clause;
+
 use conf\conf;
+
+use template\template;
 
 /**
  * A class representing a group of users

@@ -27,6 +27,8 @@ use db\select;
 use db\insert;
 use db\param;
 
+use template\block;
+
 /**
  * A class corresponding to the comments table.
  *

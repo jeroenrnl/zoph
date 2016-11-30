@@ -25,6 +25,8 @@
  * @package Zoph
  */
 
+namespace template;
+
 /**
  * This class takes care of displaying blocks
  *
@@ -47,5 +49,4 @@ class block extends template {
             $this->template="templates/default/blocks/" . $template . ".tpl.php";
         }
     }
-
 }

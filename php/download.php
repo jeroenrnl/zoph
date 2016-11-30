@@ -23,6 +23,7 @@
  */
 
 use conf\conf;
+use template\template;
 
 require_once "include.inc.php";
 $vars=clean_request_vars($request_vars);

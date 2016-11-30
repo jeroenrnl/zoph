@@ -23,7 +23,7 @@
  */
 
 /**
- * Autoload file 
+ * Autoload file
  * @param string filename to load
  */
 function zophAutoload($file) {

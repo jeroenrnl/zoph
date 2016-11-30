@@ -22,6 +22,9 @@
  * @author Jeroen Roos
  */
 
+use template\block;
+use template\template;
+
 require_once "include.inc.php";
 $_view=getvar("_view");
 $_showhidden=(bool) getvar("_showhidden");

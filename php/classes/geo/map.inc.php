@@ -31,7 +31,7 @@ use conf\conf;
  * @author Jeroen Roos
  * @package Zoph
  */
-class map extends \block {
+class map extends \template\block {
 
     /** @var div id for map */
     private $map = "map";

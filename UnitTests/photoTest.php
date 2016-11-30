@@ -246,18 +246,18 @@ class photoTest extends ZophDataBaseTestCase {
 
         $block=$photo->getThumbnailLink();
 
-        $this->assertInstanceOf("block", $block);
+        $this->assertInstanceOf("template\block", $block);
         $this->assertEquals("templates/default/blocks/link.tpl.php", $block->template);
         $this->assertEquals("photo.php?photo_id=3", $block->vars["href"]);
-        $this->assertInstanceOf("block", $block->vars["link"]);
+        $this->assertInstanceOf("template\block", $block->vars["link"]);
         $this->assertEquals("templates/default/blocks/img.tpl.php", $block->vars["link"]->template);
         $this->assertEquals("", $block->vars["target"]);
 
         $block=$photo->getThumbnailLink("http://test");
 
-        $this->assertInstanceOf("block", $block);
+        $this->assertInstanceOf("template\block", $block);
         $this->assertEquals("http://test", $block->vars["href"]);
-        $this->assertInstanceOf("block", $block->vars["link"]);
+        $this->assertInstanceOf("template\block", $block->vars["link"]);
         $this->assertEquals("", $block->vars["target"]);
     }
 
@@ -270,7 +270,7 @@ class photoTest extends ZophDataBaseTestCase {
 
         $block=$photo->getFullsizeLink("photo");
 
-        $this->assertInstanceOf("block", $block);
+        $this->assertInstanceOf("template\block", $block);
         $this->assertEquals("templates/default/blocks/link.tpl.php", $block->template);
         $this->assertEquals("image.php?photo_id=3", $block->vars["href"]);
         $this->assertEquals("photo", $block->vars["link"]);
@@ -308,14 +308,14 @@ class photoTest extends ZophDataBaseTestCase {
 
         $block=$photo->getImageTag();
 
-        $this->assertInstanceOf("block", $block);
+        $this->assertInstanceOf("template\block", $block);
         $this->assertEquals("image.php?photo_id=3", $block->vars["src"]);
         $this->assertEquals("", $block->vars["class"]);
         $this->assertEquals("width=\"600\" height=\"400\"", $block->vars["size"]);
         $this->assertEquals("Nothing", $block->vars["alt"]);
 
         $block=$photo->getImageTag("mid");
-        $this->assertInstanceOf("block", $block);
+        $this->assertInstanceOf("template\block", $block);
         $this->assertEquals("image.php?photo_id=3&amp;type=mid", $block->vars["src"]);
         $this->assertEquals("mid", $block->vars["class"]);
         $this->assertEquals("width=\"480\" height=\"320\"", $block->vars["size"]);

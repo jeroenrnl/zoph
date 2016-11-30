@@ -24,6 +24,9 @@
 
 use conf\conf;
 
+use template\block;
+use template\template;
+
 require_once "include.inc.php";
 
 $_view=getvar("_view");

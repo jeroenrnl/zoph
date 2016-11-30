@@ -20,6 +20,8 @@
  * @package ZophTemplates
  * @author Jeroen Roos
  */
+
+use template\template;
 ?>
         <form class="geotag" action="tracks.php">
             <p>

@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 use conf\conf;
+use template\template;
 
 if ($num_photos) {
     $title_bar = sprintf(translate("photo %s of %s"),  ($offset + 1) , $num_photos);

@@ -22,6 +22,7 @@
  */
 
 use conf\conf;
+use template\template;
 
 if (!ZOPH) { die("Illegal call"); }
 ?>

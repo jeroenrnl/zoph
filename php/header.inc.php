@@ -24,6 +24,9 @@
 
 use conf\conf;
 
+use template\block;
+use template\template;
+
 header("Content-Type: text/html; charset=utf-8");
 $user=user::getCurrent();
 

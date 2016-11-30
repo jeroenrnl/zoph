@@ -24,7 +24,7 @@
 
 namespace conf\item;
 
-use block;
+use template\block;
 
 /**
  * A conf\item\salt is a special kind of conf\item\text, which allows auto generation

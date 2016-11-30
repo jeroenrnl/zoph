@@ -33,6 +33,10 @@ use conf\conf;
 
 use geo\map;
 use geo\marker;
+
+use template\block;
+use template\template;
+
 /**
  * A class corresponding to the places table.
  *

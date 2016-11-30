@@ -28,7 +28,9 @@ use conf\item\checkbox;
 use conf\item\number;
 use conf\item\select;
 use conf\item\salt;
-use template;
+
+use template\template;
+
 use language;
 use photo;
 use album;

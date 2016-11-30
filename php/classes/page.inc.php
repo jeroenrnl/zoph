@@ -27,6 +27,8 @@ use db\select;
 use db\param;
 use db\clause;
 
+use template\block;
+
 /**
  * Page class
  * A page is plaintext or zophCode that can be used to personalize parts

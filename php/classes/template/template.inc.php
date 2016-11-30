@@ -21,6 +21,14 @@
  * @package Zoph
  */
 
+namespace template;
+
+use log;
+use page;
+use photo;
+use settings;
+use user;
+
 use conf\conf;
 
 /**
@@ -30,11 +38,18 @@ use conf\conf;
  * @package Zoph
  */
 class template {
+    /** @var array javascript for this template */
     public $js=array();
+    /** @var array variables that can be used in the template
+                    all variables will be preceeded with $tpl_ */
     public $vars=array();
+    /** @var string CSS style for this template */
     public $style="";
+    /** @var string Javascript to be included in header (/
     public $script="";
+    /** @var array CSS files to be included */
     public $css=array();
+    /** @var string HTML title for the page to be displayed
     public $title="Zoph";
 
     /** @var array contains actionlinks */
@@ -71,7 +86,7 @@ class template {
         }
     }
     /**
-     * Get image URL for specific template
+     * Get image URL for specific template.
      * if the image does not exist in the current template, the default will be be returned
      * This enables template builders to only include the parts of the template that
      * have been changed
@@ -111,19 +126,6 @@ class template {
             echo $e->getMessage();
             die();
         }
-    }
-
-    /**
-     * Return the template in a string
-     *
-     * @return string
-     */
-    public function toString() {
-        return sprintf("%s", $this);
-    }
-
-    public function toStringNoEnter() {
-        return str_replace("\n", "", sprintf("%s", $this));
     }
 
     /**
@@ -210,7 +212,6 @@ class template {
         return $html;
     }
 
-
     /**
      * Add an actionlink
      * @param string Title to be displayed
@@ -239,10 +240,9 @@ class template {
             $actionlinks=$this->actionlinks;
         }
         if (is_array($actionlinks)) {
-            $tpl=new block("actionlinks", array(
+            return new block("actionlinks", array(
                 "actionlinks" => $actionlinks)
             );
-            return $tpl->toString();
         }
     }
 
@@ -307,6 +307,11 @@ class template {
 
     /**
      * Create form input field
+     * @param string name of the input
+     * @param string initial value
+     * @param int maximum length
+     * @param string label to be added
+     * @param int|null display size, will be set from maxlength if null
      */
     public static function createInput($name, $value, $maxlength, $label=null, $size=null) {
         if (!$size) {
@@ -325,7 +330,7 @@ class template {
      * Create pulldown (select)
      * @param string name for select box
      * @param string current value
-     *
+     * @param array array of options
      * @param bool autosubmit form after making a change
      */
     public static function createPulldown($name, $value, $selectArray, $autosubmit=false) {

@@ -29,7 +29,7 @@ use db\param;
 use db\clause;
 
 use zophTable;
-use block;
+use template\block;
 
 /**
  * Configuration item

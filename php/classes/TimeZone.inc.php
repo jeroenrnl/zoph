@@ -23,6 +23,7 @@
  */
 
 use conf\conf;
+use template\template;
 
 /**
  * TimeZone class, extension of the standard PHP DateTimeZone class
