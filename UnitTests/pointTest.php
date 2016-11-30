@@ -70,7 +70,6 @@ class pointTest extends ZophDataBaseTestCase {
      * by pulling a result from the database (at random) and then getting the next and previous entry
      * we can check it's correctness by comparing the minute value
      */
-
     public function testGetNextPrevious() {
         // Create a track with 10 randomized points
         $track=helpers::createTrack(10, true);
@@ -98,6 +97,61 @@ class pointTest extends ZophDataBaseTestCase {
 
     }
 
+    /**
+     * Test calculating the distance between 2 points
+     * @dataProvider getInterpolateData()
+     */
+    public function testInterpolate(
+            $lt1, $ln1, $t1,
+            $lt2, $ln2, $t2,
+            $lt3, $ln3, $t3,
+            $maxdist, $ent, $maxtime) {
+        $p1=new point();
+        $p1->set("lat", $lt1);
+        $p1->set("lon", $ln1);
+        $p1->set("datetime", $t1);
+
+        $p2=new point();
+        $p2->set("lat", $lt2);
+        $p2->set("lon", $ln2);
+        $p2->set("datetime", $t2);
+
+        $p3=point::interpolate($p1, $p2, strtotime($t3), $maxdist, $ent, $maxtime);
+
+        if ($lt3) {
+            $this->assertEquals($lt3, $p3->get("lat"));
+            $this->assertEquals($ln3, $p3->get("lon"));
+        } else {
+            // Function returns false when maxtime or maxdist is
+            // exceeded. This should be changed into exeptions
+            $this->assertFalse($p3);
+        }
+    }
+
+    public function getInterpolateData() {
+        return array(
+            array(
+                50, 5, "2017-01-01 06:00:00",
+                51, 5, "2017-01-01 07:00:00",
+                50.5, 5, "2017-01-01 06:30:00",
+                null, "km", null),
+            array(
+                5, 5, "2017-01-01 06:00:00",
+                50, 5, "2017-01-01 07:00:00",
+                null, null, "2017-01-01 06:30:00",
+                500, "km", null),
+            array(
+                5, 5, "2017-01-01 06:00:00",
+                50, 5, "2017-01-01 07:00:00",
+                null, null, "2017-01-01 06:30:00",
+                null, "km", 10),
+            array(
+                5, 5, "2017-01-01 06:00:00",
+                50, 5, "2017-01-01 07:00:00",
+                null, null, "2017-01-01 06:30:00",
+                500, "miles", null),                  // we need to test legacy units too
+        );
+    }
 }
 
 

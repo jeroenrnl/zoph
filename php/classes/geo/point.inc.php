@@ -54,6 +54,7 @@ class point extends \zophTable {
      * @param string snippet of XML-code
      */
     public static function readFromXML($xmldata) {
+        date_default_timezone_set("UTC");
         $point=new point();
         $xml=new XMLReader();
         $xml->xml($xmldata);
@@ -77,7 +78,6 @@ class point extends \zophTable {
                     $point->set("speed", $xml->value);
                     break;
                 case "time":
-                    date_default_timezone_set("UTC");
                     $xml->read();
                     $datetime=strtotime($xml->value);
                     $point->set("datetime", date("Y-m-d H:i:s", $datetime));
@@ -189,6 +189,7 @@ class point extends \zophTable {
      * @param string entity of distances ("km" or "miles")
      * @param int maximum time between two points
      * @return point this function will return where you are at t3
+     * @todo the "return false" should both be changed into an Exception
      */
     public static function interpolate(point $p1, point $p2,
         $t3, $maxdist=null, $entity="km", $maxtime=null) {
