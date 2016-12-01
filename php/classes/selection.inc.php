@@ -44,7 +44,7 @@ class selection {
      *              be the url to which the user is redirected back
      *              afterwards.
      */
-    public function __construct($session, $links) {
+    public function __construct($session, $links, photo $thisPhoto=null) {
         if (!isset($session["selected_photo"]) || sizeof($session["selected_photo"])===0) {
             throw new PhotoNoSelectionException("No photos selected");
         }
@@ -52,10 +52,16 @@ class selection {
         $this->links=$links;
 
         foreach ($session["selected_photo"] as $photo_id) {
-            $photo=new photo($photo_id);
-            $photo->lookup();
-            $this->photos[]=$photo;
+            if ($thisPhoto && $thisPhoto->getId() != $photo_id) {
+                $photo=new photo($photo_id);
+                $photo->lookup();
+                $this->photos[]=$photo;
+            }
         }
+        if (sizeof($this->photos) === 0) {
+            throw new PhotoNoSelectionException("No photos selected");
+        }
+
     }
 
     /**

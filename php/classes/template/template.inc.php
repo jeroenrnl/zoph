@@ -313,7 +313,7 @@ class template {
      * @param string label to be added
      * @param int|null display size, will be set from maxlength if null
      */
-    public static function createInput($name, $value, $maxlength, $label=null, $size=null) {
+    public static function createInput($name, $value, $maxlength, $label=null, $size=null, $hint=null) {
         if (!$size) {
             $size=$maxlength;
         }
@@ -322,7 +322,8 @@ class template {
             "name"      => $name,
             "value"     => $value,
             "size"      => $size,
-            "maxlength" => $maxlength
+            "maxlength" => $maxlength,
+            "hint"      => $hint,
         ));
     }
 

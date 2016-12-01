@@ -494,6 +494,7 @@ if ($action != "insert" && !$found) {
     }
     ?>
     <br>
+    </div>
     <?php
 } else if ($action == "confirm") {
     ?>
@@ -503,11 +504,13 @@ if ($action != "insert" && !$found) {
     echo create_actionlinks($actionlinks);
     echo sprintf(translate("Confirm deletion of '%s'"), $photo->get("name"));
     echo $photo->getImageTag(MID_PREFIX);
+    ?>
+    </div>
+<?php
 } else {
     require_once "edit_photo.inc.php";
 }
 ?>
-</div>
 <?php
 if (conf::get("maps.provider") && ($_action=="display" || $_action=="edit" || $_action==="")) {
     $map=new geo\map();
