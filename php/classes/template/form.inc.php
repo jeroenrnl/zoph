@@ -36,6 +36,7 @@ class form extends block {
      * @param string current / initial value
      * @param string label text for label
      * @param string input hint
+     * @param int maximum input length
      * @param int size of the field
      */
     public function addInputText($name, $value, $label=null, $hint=null, $maxlength=32, $size=null) {
@@ -128,5 +129,16 @@ class form extends block {
             "dropdown"  => $dropdown,
             "label"     => $label
         )));
+    }
+
+    /**
+     * add fieldset
+     * @param string name
+     * @param fieldset fieldset
+     * @param string text for legend
+     * @param string css class
+     */
+    public function addFieldset(fieldset $fieldset) {
+        $this->addBlock($fieldset);
     }
 }

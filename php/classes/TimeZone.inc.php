@@ -97,27 +97,11 @@ class TimeZone extends DateTimeZone {
      * Create Pulldown menu for timezone selection
      * @param string name for the html document
      * @param string current value
-     * @return string HTML code to display pulldown
-     * @todo Returns HTML!
+     * @return block pulldown
      */
     public static function createPulldown($name, $value=null) {
-        $id=preg_replace("/^_+/", "", $name);
-        if ($value) {
-            $text=$value;
-        } else {
-            $text="";
-        }
-
-        if (conf::get("interface.autocomplete")) {
-            $html="<input type=hidden id='" . $id . "' name='" . $name. "'" .
-                " value='" . $value . "'>";
-            $html.="<input type=text id='_" . $id . "' name='_" . $name. "'" .
-                " value='" . $text . "' class='autocomplete'>";
-        } else {
-            $html=template::createPulldown("timezone_id", static::getKey($value),
-                static::getSelectArray());
-        }
-        return $html;
+        return template::createPulldown("timezone_id", static::getKey($value),
+            static::getSelectArray());
     }
 
     /**
