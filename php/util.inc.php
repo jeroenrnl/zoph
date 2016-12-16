@@ -32,19 +32,6 @@ function create_field_html($fields) {
     return $html;
 }
 
-function create_field_html_table($fields) {
-
-    $html = "";
-    while (list($key, $val) = each($fields)) {
-        if ($val) {
-            $html .=
-            "<tr>\n  <th>" . e($key) . "</th>\n" .
-            "  <td>" . e($val) . "</<td>\n</tr>\n";
-        }
-    }
-    return $html;
-}
-
 function create_edit_fields($fields) {
     $html = "";
     while (list($key, $field) = each($fields)) {

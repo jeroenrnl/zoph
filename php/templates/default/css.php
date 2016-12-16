@@ -1224,7 +1224,6 @@ dl.display {
 }
 
 label,
-table.credits th,
 dl.display > dt,
 dl.display > dd {
     float: left;
@@ -1271,7 +1270,7 @@ dl.groups dd {
     font-size: small;
 }
 
-label, table.credits th {
+label {
     text-align: right;
     vertical-align: top;
     font-weight: bold;
@@ -1280,10 +1279,6 @@ label, table.credits th {
     width: 10em;
     display: block;
     float: left;
-    clear: none;
-}
-
-label {
     clear: left;
 }
 
@@ -1515,9 +1510,14 @@ table.credits {
     width: 100%;
 }
 
+table.credits th {
+    text-align: right;
+    padding: 2px;
+}
+
 table#users td,
 table.credits td {
-    margin: 2px;
+    padding: 2px;
     vertical-align: top;
 }
 
