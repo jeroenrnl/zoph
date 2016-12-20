@@ -405,6 +405,24 @@ class template {
     }
 
     /**
+     * transforms a size in bytes into a human readable format using
+     * Ki Mi Gi, etc. prefixes
+     * Give me a call if your database grows bigger than 1024 Yobbibytes. :-)
+     * @param int bytes number of bytes
+     * @return string human readable filesize
+     */
+    public static function getHumanReadableBytes($bytes) {
+        if ($bytes==0) {
+            // prevents div by 0
+            return "0B";
+        } else {
+            $prefixes=array("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi");
+            $length=floor(log($bytes,2)/10);
+            return round($bytes/pow(2,10*($length)),1) . $prefixes[floor($length)] . "B";
+        }
+    }
+
+    /**
      * Display warning about disabled Javascript
      */
     public static function showJSwarning() {

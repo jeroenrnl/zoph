@@ -124,7 +124,7 @@ if (empty($_action)) {
 
         $body=new template("uploadprogressbar", array(
             "name" => $file["name"],
-            "size" => getHuman($file["size"]),
+            "size" => template::getHumanReadableBytes($file["size"]),
             "upload_num" => $upload_num,
             "complete" => 100,
             "width" => 300));

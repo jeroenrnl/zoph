@@ -22,6 +22,8 @@
  * @package Zoph
  */
 
+use template/template;
+
 /**
  * Report class. Eventually everything report-related will move here.
  *
@@ -39,7 +41,7 @@ class report {
         $album= album::getRoot();
         $category = category::getRoot();
 
-        $size=getHuman(photo::getTotalSize());
+        $size=template::getHumanReadableBytes(photo::getTotalSize());
         return array(
             translate("number of photos") => photo::getCount(),
             translate("size of photos") => "$size",
