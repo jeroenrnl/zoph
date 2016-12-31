@@ -27,6 +27,8 @@ use db\db;
 use db\clause;
 use db\selectHelper;
 
+use template\block;
+
 /**
  * Photo ratings
  * @author Jeroen Roos

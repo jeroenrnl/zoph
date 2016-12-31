@@ -21,6 +21,8 @@
  * @package Zoph
  */
 
+use conf\conf;
+
 /**
  * This class takes care of individual files
  * For now, this is only used in the import module of Zoph

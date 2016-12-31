@@ -22,6 +22,8 @@
  * @author Jeroen Roos
  */
 
+use template\colorScheme;
+
 require_once "include.inc.php";
 
 if (!$user->isAdmin()) {
@@ -39,10 +41,10 @@ require_once "header.inc.php";
       </h1>
   <div class="main">
 <?php
-$color_schemes = color_scheme::getRecords("name");
+$colorSchemes = colorScheme::getRecords("name");
 
-if ($color_schemes) {
-    foreach ($color_schemes as $cs) {
+if ($colorSchemes) {
+    foreach ($colorSchemes as $cs) {
         ?>
         <ul class="actionlink">
           <li><a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php

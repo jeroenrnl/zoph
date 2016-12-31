@@ -21,45 +21,18 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+
+use template\template;
+
 require_once "include.inc.php";
 
 $title = translate("About");
-require_once "header.inc.php";
-?>
-<h1><?php echo translate("about") ?></h1>
-<div class="main">
-  <h2>zoph</h2>
-  <p>
-    <?php echo translate("Zoph stands for <strong>z</strong>oph <strong>o</strong>rganizes " .
-        "<strong>ph</strong>otos.", 0) ?>
-    <?php echo translate("Zoph is free software.", 0) ?>
-  </p>
-  <p>
-    <?php echo sprintf(translate("Releases and documentation can be found at %s.", 0),
-      "<a href=\"http://www.zoph.org/\">http://www.zoph.org/</a>") ?>
-    <?php echo sprintf(translate("Send feedback to %s.", 0), "<img src=\"" .
-      template::getImage("mailaddr.png") . "\">") ?>
-  </p>
-<?php
-if ($user->isAdmin()) {
-    ?>
-    <br>
-    <table id="zophinfo">
-      <?php echo create_field_html_table(report::getInfoArray()) ?>
-    <?php
-}
-?>
-</table>
-<p>
-<?php echo sprintf(translate("Zoph version %s, released %s.", 0), VERSION, RELEASEDATE) ?>
-</p>
-<p>
-<?php echo translate("Originally written by Jason Geiger, now maintained by Jeroen Roos " .
-    "with thanks to the following for their contributions:", 0) ?>
-</p>
-<?php include "credits.html"; ?>
-</div>
 
-<?php
-require_once "footer.inc.php";
+$tpl = new template("info", array(
+    "infoArray" => report::getInfoArray(),
+    "title"     => $title,
+    "mailaddr"  => template::getImage("mailaddr.png")
+));
+
+echo $tpl;
 ?>

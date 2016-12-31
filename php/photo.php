@@ -22,6 +22,11 @@
  * @author Jeroen Roos
  */
 
+use conf\conf;
+
+use template\template;
+use template\block;
+
 require_once "include.inc.php";
 $photo_id = getvar("photo_id");
 $_off = getvar("_off");
@@ -489,6 +494,7 @@ if ($action != "insert" && !$found) {
     }
     ?>
     <br>
+    </div>
     <?php
 } else if ($action == "confirm") {
     ?>
@@ -498,14 +504,16 @@ if ($action != "insert" && !$found) {
     echo create_actionlinks($actionlinks);
     echo sprintf(translate("Confirm deletion of '%s'"), $photo->get("name"));
     echo $photo->getImageTag(MID_PREFIX);
+    ?>
+    </div>
+<?php
 } else {
     require_once "edit_photo.inc.php";
 }
 ?>
-</div>
 <?php
 if (conf::get("maps.provider") && ($_action=="display" || $_action=="edit" || $_action==="")) {
-    $map=new map();
+    $map=new geo\map();
 
     if ($_action == "edit") {
         $map->setEditable();

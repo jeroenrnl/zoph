@@ -29,6 +29,7 @@ use db\select;
 use db\param;
 use db\clause;
 use db\selectHelper;
+use conf\conf;
 
 function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     $good_ops = array("=", "!=", "less than", "more than", ">", ">=",

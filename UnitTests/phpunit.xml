@@ -38,6 +38,7 @@
       <file>relationTest.php</file>
       <file>pointTest.php</file>
       <file>trackTest.php</file>
+      <file>mapTest.php</file>
       <file>pageTest.php</file>
       <file>pagesetTest.php</file>
       <file>zophCodeParserTest.php</file>

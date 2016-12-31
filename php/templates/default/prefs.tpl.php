@@ -21,6 +21,9 @@
  * @author Jeroen Roos
  * @package ZophTemplates
  */
+
+use template\colorScheme;
+use template\template;
 if (!ZOPH) {
     die("Illegal call");
 }
@@ -73,7 +76,7 @@ if (!ZOPH) {
         </label>
 
             <?= template::createPulldown("color_scheme_id", $tpl_prefs->get("color_scheme_id"),
-                template::createSelectArray(color_scheme::getRecords("name"), array("name"))) ?>
+                template::createSelectArray(colorScheme::getRecords("name"), array("name"))) ?>
         <br>
         <label><?= translate("language") ?></label>
         <?= template::createPulldown("language", $tpl_prefs->get("language"), $tpl_languages) ?><br>

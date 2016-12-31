@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+use conf\conf;
+
 /**
  * A class representing a watermarked photo
  * This is a photo with a "watermark" superimposed over it

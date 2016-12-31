@@ -23,6 +23,8 @@
  * @package Zoph
  */
 
+use conf\conf;
+
 /**
  * This class contains a set of translations read from a file in the static::LANG_DIR
  * directory.

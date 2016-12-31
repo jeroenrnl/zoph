@@ -1,6 +1,6 @@
 <?php
 /**
- * Edit places
+ * Edit places.
  *
  * This file is part of Zoph.
  *
@@ -21,115 +21,111 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
-?>
-<!-- begin edit_place.inc !-->
-    <h1>
-      <ul class="actionlink">
-        <li><a href="places.php"><?php echo translate("return") ?></a></li>
-        <li><a href="place.php?_action=new"><?php echo translate("new") ?></a></li>
-      </ul>
-      <?php echo translate($_action) ?> <?php echo translate("place") ?>
-    </h1>
-    <div class="main">
-        <?= template::showJSwarning() ?>
-      <form action="place.php" method="GET">
-        <input type="hidden" name="_action" value="<?php echo $action ?>">
-        <input type="hidden" name="place_id" value="<?php echo $place->get("place_id") ?>">
-        <label for="title"><?php echo translate("title") ?></label>
-        <?php echo create_text_input("title", $place->get("title"), 40, 64) ?>
-        <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
-        <label for="parent_place_id"><?php echo translate("parent location") ?></label>
-<?php
-if ($place->isRoot()) {
-    echo translate("places");
-} else {
-    echo place::createPulldown("parent_place_id", $place->get("parent_place_id"));
-}
-?>
-<br>
-<label for="address"><?php echo translate("address") ?></label>
-<?php echo create_text_input("address", $place->get("address"), 40, 40) ?>
-<span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
-<label for="address2"><?php echo translate("address continued") ?></label>
-<?php echo create_text_input("address2", $place->get("address2"), 40, 40) ?>
-<span class="inputhint"><?php echo sprintf(translate("%s chars max"), "64") ?></span><br>
-<label for="city"><?php echo translate("city") ?></label>
-<?php echo create_text_input("city", $place->get("city"), 32, 32) ?>
-<span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
-<label for="state"><?php echo translate("state") ?></label>
-<?php echo create_text_input("state", $place->get("state"), 16, 32) ?>
-<span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
-<label for="zip"><?php echo translate("zip") ?></label>
-<?php echo create_text_input("zip", $place->get("zip"), 10, 10) ?>
-<span class="inputhint"><?php echo translate("zip or zip+4") ?></span><br>
-<label for="country"><?php echo translate("country") ?></label>
-<?php echo create_text_input("country", $place->get("country"), 32, 32) ?>
-<span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
-<label for="url"><?php echo translate("url") ?></label>
-<?php echo create_text_input("url", $place->get("url"), 32, 1024) ?>
-<span class="inputhint"><?php echo sprintf(translate("%s chars max"), "1024") ?></span><br>
-<label for="urldesc"><?php echo translate("url description") ?></label>
 
-<?php echo create_text_input("urldesc", $place->get("urldesc"), 32, 32) ?>
-<span class="inputhint"><?php echo sprintf(translate("%s chars max"), "32") ?></span><br>
-<label for="pageset"><?php echo translate("pageset") ?></label>
-<?php echo template::createPulldown("pageset", $place->get("pageset"),
-    template::createSelectArray(pageset::getRecords("title"), array("title"), true)) ?><br>
-<fieldset class="map">
-  <legend><?php echo translate("map") ?></legend>
-  <label for="lat"><?php echo translate("latitude") ?></label>
-  <?php echo create_text_input("lat", $place->get("lat"), 10, 10) ?><br>
-  <label for="lat"><?php echo translate("longitude") ?></label>
-  <?php echo create_text_input("lon", $place->get("lon"), 10, 10) ?><br>
-  <label for="mapzoom"><?php echo translate("zoom level") ?></label>
-  <?php echo place::createZoomPulldown($place->get("mapzoom")) ?><br>
-  <?php if (conf::get("maps.geocode")): ?>
-    <div class="geocode">
-      <input id="geocode" class="geocode" type="button"
-        value="<?php echo translate("search", false) ?>">
-      <div id="geocoderesults"></div>
-      <script type="text/javascript">
-        var translate={
-          "An error occurred": "<?php echo trim(translate("An error occurred.", false)); ?>",
-          "Nothing found": "<?php echo trim(translate("Nothing found", false)); ?>"
-        };
-        zGeocode.checkGeocode();
-      </script>
-    </div>
-  <?php endif; ?>
-</fieldset>
-<?php
+/** @todo get rid of difference between "action" and "_action" */
+
+use conf\conf;
+
+use template\block;
+use template\fieldset;
+use template\form;
+use template\template;
+
+$actionlinks=array(
+    "return"    => "places.php",
+    "new"       => "place.php?_action=new"
+);
+
+$tpl=new template("edit", array(
+    "title"         => translate($_action) . " " . translate("place"),
+    "actionlinks"   => $actionlinks
+));
+
+$tpl->addBlock(template::showJSwarning());
+
+if ($place->isRoot()) {
+    $parentPlace=translate("places");
+} else {
+    $parentPlace=place::createPulldown("parent_place_id", $place->get("parent_place_id"));
+}
+
+$form=new form("form", array(
+    "formAction"    => "place.php",
+    "onsubmit"      => null,
+    "action"        => $action,
+    "submit"        => translate($action, 0)
+));
+
+$form->addInputHidden("place_id", $place->getId());
+$form->addInputText("title", $place->get("title"), translate("title"),
+    sprintf(translate("%s chars max"), "64"), 64, 40);
+
+if (!$place->isRoot()) {
+    $parentPlace=place::createPulldown("parent_place_id", $place->get("parent_place_id"));
+    $form->addPulldown("parent_place_id", $parentPlace, translate("parent location"));
+}
+
+$form->addInputText("address", $place->get("address"), translate("address"),
+    sprintf(translate("%s chars max"), "64"), 64, 40);
+$form->addInputText("address2", $place->get("address2"), translate("address continued"),
+    sprintf(translate("%s chars max"), "64"), 64, 40);
+$form->addInputText("city", $place->get("city"), translate("city"),
+    sprintf(translate("%s chars max"), "32"), 32);
+$form->addInputText("state", $place->get("state"), translate("state"),
+    sprintf(translate("%s chars max"), "32"), 32, 16);
+$form->addInputText("zip", $place->get("zip"), translate("zip"),
+    translate("zip or zip+4"), 10);
+$form->addInputText("country", $place->get("country"), translate("country"),
+    sprintf(translate("%s chars max"), "32"), 32);
+$form->addInputText("url", $place->get("url"), translate("url"),
+    sprintf(translate("%s chars max"), "1024"), 1024, 32);
+$form->addInputText("urldesc", $place->get("urldesc"), translate("urldesc"),
+    sprintf(translate("%s chars max"), "32"), 32);
+
+$pageset=template::createPulldown("pageset", $place->get("pageset"),
+    template::createSelectArray(pageset::getRecords("title"), array("title"), true));
+$form->addPulldown("pageset", $pageset, translate("pageset"));
+
+$fieldset=new fieldset("formFieldset", array(
+    "class"     => "map",
+    "legend"    => translate("map")
+));
+
+$fieldset->addInputText("lat", $place->get("lat"), translate("latitude"), null, 10);
+$fieldset->addInputText("lon", $place->get("lon"), translate("longitude"), null, 10);
+$mapzoom=place::createZoomPulldown($place->get("mapzoom"));
+$fieldset->addPulldown("mapzoom", $mapzoom, translate("zoom level"));
+
+if (conf::get("maps.geocode")) {
+    $fieldset->addBlock(new block("geocode"));
+}
+
+$form->addBlock($fieldset);
+
+$tzActionlinks=array();
 if (conf::get("date.guesstz")) {
     $tz=e($place->guessTZ());
     if (!empty($tz)) {
-        ?>
-        <ul class="actionlink">
-          <li>
-            <a href="place.php?_action=update&place_id=<?php
-                echo (int) $place->getId() ?>&timezone=<?php echo $tz ?>">
-              <?php echo $tz ?>
-            </a>
-          </li>
-        </ul>
-        <?php
+        $tzActionlinks[$tz] = "place.php?_action=update&place_id=" . $place->getId() . "&timezone=" . $tz;
     }
 }
+
 if ($place->get("timezone")) {
-    ?>
-    <ul class="actionlink">
-      <li><a href="place.php?_action=settzchildren&place_id=<?php echo $place->get("place_id") ?>">
-        <?php printf(translate("set %s for children"), $place->get("timezone"))?>
-      </a></li>
-    </ul>
-    <?php
+    $tzActionlinks[sprintf(translate("set %s for children"), $place->get("timezone"))] =
+        "place.php?_action=settzchildren&place_id=" . $place->getId();
 }
-?>
 
-    <label for="timezone_id"><?php echo translate("timezone") ?></label>
-    <?php echo TimeZone::createPulldown("timezone_id", $place->get("timezone")); ?>
+if (!empty($tzActionlinks)) {
+    $form->addBlock(new block("actionlinks", array(
+        "actionlinks" => $tzActionlinks
+    )));
+}
 
-    <label for="notes"><?php echo translate("notes") ?></label>
-    <textarea name="notes" cols="40" rows="4"><?php echo $place->get("notes") ?></textarea>
-    <input type="submit" value="<?php echo translate($action, 0) ?>">
-  </form>
-<!-- end edit_place.inc !-->
+$timezone=TimeZone::createPulldown("timezone_id", $place->get("timezone"));
+$form->addPulldown("timezone_id", $timezone, translate("timezone"));
+
+$form->addTextarea("notes", $place->get("notes"), translate("notes"), 40, 4);
+
+$tpl->addBlock($form);
+
+echo $tpl;

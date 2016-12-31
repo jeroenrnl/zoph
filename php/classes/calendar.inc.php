@@ -40,6 +40,8 @@
  * @package Zoph
  */
 
+use template\block;
+
 class Calendar {
     /**
      * @var int The start day of the week. This is the day that appears in the first column

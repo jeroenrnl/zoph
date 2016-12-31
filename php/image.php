@@ -20,6 +20,9 @@
  * @author Jeroen Roos
  * @author Alan Shutko
  */
+use conf\conf;
+use template\template;
+
 session_cache_limiter("public");
 require_once "variables.inc.php";
 $hash = getvar("hash");

@@ -22,6 +22,8 @@
  * @author Jeroen Roos
  */
 
+use template\block;
+
 class breadcrumb {
 
     /** @var string title of the crumb */

@@ -22,7 +22,11 @@
  * @package Zoph
  */
 
+use conf\conf;
+use template\template;
+
 require_once "include.inc.php";
+
 $title=translate("search",0);
 if ($_action=="insert") {
     $search=new search();
@@ -682,7 +686,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     </div>
     <?php
     if (conf::get("maps.provider")) {
-        $map=new map();
+        $map=new geo\map();
         $map->setEditable();
         $map->setCenterAndZoom(0,0,2);
         echo $map;

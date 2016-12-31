@@ -231,7 +231,7 @@ class ratingTest extends ZophDataBaseTestCase {
         $photo=new photo($photo_id);
         $details=$photo->getRatingDetails();
 
-        $this->assertInstanceOf("block", $details);
+        $this->assertInstanceOf("template\block", $details);
 
         $this->assertEquals($details->template, "templates/default/blocks/rating_details.tpl.php");
         $vars=$details->vars;

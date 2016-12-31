@@ -18,6 +18,10 @@
  * @author Jeroen Roos
  * @package Zoph
  */
+use conf\conf;
+
+use template\block;
+use template\template;
 
 require_once "include.inc.php";
 if ((!conf::get("import.enable")) || (!$user->isAdmin() && !$user->get("import"))) {
@@ -26,7 +30,7 @@ if ((!conf::get("import.enable")) || (!$user->isAdmin() && !$user->get("import")
 
 // Detect upload larger than upload_max_filesize.
 if (isset($_GET["upload"]) && $_GET["upload"]==1 && $_POST==null) {
-    echo WebImport::handleUploadErrors(UPLOAD_ERR_INI_SIZE);
+    echo import\web::handleUploadErrors(UPLOAD_ERR_INI_SIZE);
     die();
 }
 $_action=getvar("_action");
@@ -116,11 +120,11 @@ if (empty($_action)) {
         }
         $upload_num=getvar(ini_get("session.upload_progress.name"));
 
-        WebImport::processUpload($file);
+        import\web::processUpload($file);
 
         $body=new template("uploadprogressbar", array(
             "name" => $file["name"],
-            "size" => getHuman($file["size"]),
+            "size" => template::getHumanReadableBytes($file["size"]),
             "upload_num" => $upload_num,
             "complete" => 100,
             "width" => 300));
@@ -135,14 +139,14 @@ if (empty($_action)) {
     }
 } else if ($_action=="process") {
     $file=getvar("file");
-    WebImport::processFile($file);
+    import\web::processFile($file);
 } else if ($_action=="retry") {
     $file=getvar("file");
-    WebImport::retryFile($file);
+    import\web::retryFile($file);
 } else if ($_action=="delete") {
     $file=getvar("file");
-    WebImport::deleteFile($file);
+    import\web::deleteFile($file);
 } else if ($_action=="import") {
-    $files=WebImport::getFileList($request_vars["_import_image"]);
-    WebImport::photos($files, $request_vars);
+    $files=import\web::getFileList($request_vars["_import_image"]);
+    import\web::photos($files, $request_vars);
 }

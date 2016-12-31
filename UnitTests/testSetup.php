@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+use conf\conf;
+
 define("TEST", true);
 
 //require_once "php/settings.inc.php";

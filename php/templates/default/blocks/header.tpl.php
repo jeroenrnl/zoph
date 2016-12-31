@@ -21,6 +21,8 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+use conf\conf;
+
 ?>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">

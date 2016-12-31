@@ -29,6 +29,8 @@ use db\delete;
 use db\param;
 use db\clause;
 
+use template\template;
+
 /**
  * A class representing a group of people
  *

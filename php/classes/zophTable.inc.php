@@ -33,6 +33,11 @@ use db\query;
 use db\clause;
 use db\delete;
 
+use conf\conf;
+
+use template\block;
+use template\template;
+
 /**
  * A generic table class.  Is is meant to be subclassed by particular
  * table classes.  A table is represented by a name, an array of

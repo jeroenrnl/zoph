@@ -16,6 +16,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+use conf\conf;
+use template\template;
+
 function create_field_html($fields) {
 
     $html = "";
@@ -24,19 +27,6 @@ function create_field_html($fields) {
             $html .=
             "<dt>" . e($key) . "</dt>\n" .
             "<dd>" . $val ." </dd>\n";
-        }
-    }
-    return $html;
-}
-
-function create_field_html_table($fields) {
-
-    $html = "";
-    while (list($key, $val) = each($fields)) {
-        if ($val) {
-            $html .=
-            "<tr>\n  <th>" . e($key) . "</th>\n" .
-            "  <td>" . e($val) . "</<td>\n</tr>\n";
         }
     }
     return $html;
@@ -422,24 +412,6 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
     } else {
         echo translate("You need to have ZIP support in PHP to download zip files");
         return FALSE;
-    }
-}
-
-/**
- * transforms a size in bytes into a human readable format using
- * Ki Mi Gi, etc. prefixes
- * Give me a call if your database grows bigger than 1024 Yobbibytes. :-)
- * @param int bytes number of bytes
- * @return string human readable filesize
- */
-function getHuman($bytes) {
-    if ($bytes==0) {
-        // prevents div by 0
-        return "0B";
-    } else {
-        $prefixes=array("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi");
-        $length=floor(log($bytes,2)/10);
-        return round($bytes/pow(2,10*($length)),1) . $prefixes[floor($length)] . "B";
     }
 }
 

@@ -22,6 +22,11 @@
  */
 require_once "include.inc.php";
 
+use geo\track;
+
+use template\block;
+use template\template;
+
 $title=translate("Geotag");
 
 $_action=getvar("_action");
@@ -68,8 +73,9 @@ if ($_action=="" || $_action=="display") {
 
         $content=new block("geotag_form", array(
             "num_photos"    => $num_photos,
-            "hidden"        => $hidden));
-
+            "hidden"        => $hidden,
+            "tracks"        => track::getRecords("track_id")
+        ));
     }
 
 } else if ($_action=="do_geotag") {

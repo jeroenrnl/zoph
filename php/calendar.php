@@ -1,5 +1,7 @@
 <?php
-/*
+/**
+ * Display a calendar with links to all the days
+ *
  * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -14,7 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jason Geiger
+ * @author Jeroen Roos
  */
+
+use template\template;
+
 require_once "include.inc.php";
 
 $date = getvar("date");

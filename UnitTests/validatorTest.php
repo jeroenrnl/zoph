@@ -28,6 +28,8 @@ use db\select;
 use db\clause;
 use db\param;
 
+use conf\conf;
+
 /**
  * Test class for validator.
  *

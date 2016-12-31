@@ -25,6 +25,9 @@ use db\select;
 use db\param;
 use db\clause;
 
+use template\block;
+use template\template;
+
 /**
  * Store and retrieve searches
  *

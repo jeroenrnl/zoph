@@ -28,6 +28,16 @@ use db\param;
 use db\clause;
 use db\selectHelper;
 
+use conf\conf;
+
+use geo\map;
+use geo\point;
+use geo\track;
+use geo\marker;
+
+use template\block;
+use template\template;
+
 /**
  * A class corresponding to the photos table.
  *
@@ -1185,8 +1195,8 @@ class photo extends zophTable {
         } else {
             $html="<h2>" . e($file) . "<\/h2>";
         }
-        $html.=$this->getThumbnailLink()->toStringNoEnter() .
-          "<p><small>" .
+        $html.=str_replace("\n", "", $this->getThumbnailLink());
+        $html.="<p><small>" .
           $this->get("date") . " " . $this->get("time") . "<br>";
         if ($this->photographer) {
             $html.=translate("by", 0) . " " . $this->photographer->getLink(1) . "<br>";
@@ -1201,7 +1211,7 @@ class photo extends zophTable {
      * @return marker instance of marker class
      */
     public function getMarker($icon="geo-photo") {
-        $marker=map::getMarkerFromObj($this, $icon);
+        $marker=marker::getFromObj($this, $icon);
         if (!$marker instanceof marker) {
             $loc=$this->location;
             if ($loc instanceof place) {

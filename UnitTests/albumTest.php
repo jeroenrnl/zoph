@@ -20,7 +20,10 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
+
 require_once "testSetup.php";
+
+use conf\conf;
 
 /**
  * Test class that tests the album class

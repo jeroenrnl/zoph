@@ -31,7 +31,7 @@
 define("INI_FILE", "/etc/zoph.ini");
 
 define("CLI", true);
-define("CLI_API", 4);
+define("CLI_API", 5);
 
 
 define("EXIT_NO_PROBLEM", 0);
@@ -92,7 +92,7 @@ function init() {
     }
     
     try {
-        $cli=new cli($user, CLI_API, $argv);
+        $cli=new cli\cli($user, CLI_API, $argv);
         $cli->run();
     } catch (CliAPINotCompatibleException $e) {
         echo $e->getMessage() . "\n";

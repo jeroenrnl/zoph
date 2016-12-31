@@ -22,6 +22,9 @@
  *
  */
 
+use conf\conf;
+use template\template;
+
 require_once "include.inc.php";
 $vars=clean_request_vars($request_vars);
 
@@ -146,7 +149,7 @@ if ($_action=="getfile") {
           <p>
             <?php printf(translate("You have requested the download of %s photos," .
                 "with a total size of  %s."), $num_photos,
-                getHuman(photo::getFilesize($photos))); ?>
+                template::getHumanReadableBytes(photo::getFilesize($photos))); ?>
           </p>
           <p>
             <?php echo create_form($vars, array("_off", "_action")) ?>

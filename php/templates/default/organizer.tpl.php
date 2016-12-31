@@ -18,6 +18,9 @@
  * @author Jeroen Roos
  * @package ZophTemplates
  */
+
+use template\template;
+
 if (!ZOPH) {
     die("Illegal call");
 }
