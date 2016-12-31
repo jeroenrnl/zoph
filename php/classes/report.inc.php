@@ -22,7 +22,7 @@
  * @package Zoph
  */
 
-use template/template;
+use template\template;
 
 /**
  * Report class. Eventually everything report-related will move here.

@@ -31,15 +31,19 @@ use template\block;
  * @package Zoph
  * @author Jeroen Roos
  */
-class group implements \ArrayAccess, \IteratorAggregate {
+class group {
     /** @var string Name of group */
     private $name;
     /** @var string Label */
     private $label;
     /** @var string Description */
     private $desc;
-    /** @var array conf\item objects */
-    private $items=array();
+    /** @var collection Holds collection of configuration items */
+    private $collection;
+
+    public function __construct(collection $collection) {
+        $this->collection=$collection;
+    }
 
     /**
      * Set the name of the group
@@ -89,60 +93,8 @@ class group implements \ArrayAccess, \IteratorAggregate {
         return $this->label;
     }
 
-    /**
-     * Check if item exists
-     * For ArrayAccess interface
-     * @param string offset
-     * @return bool whether or not key $off exists in items array
-     */
-    public function offsetExists($off) {
-        return isset($this->items[$off]);
-    }
-
-    /**
-     * Return item
-     * For ArrayAccess interface
-     * @param string offset
-     * @return conf\item
-     */
-    public function offsetGet($off) {
-        return $this->items[$off];
-    }
-
-    /**
-     * Add item
-     * For ArrayAccess interface
-     * @param string offset
-     * @param string value
-     */
-    public function offsetSet($off, $value) {
-        if (is_null($off)) {
-            if ($value instanceof item) {
-                $off=$value->getName();
-            }
-        }
-        if (!is_null($off)) {
-            $this->items[$off]=$value;
-        } else {
-            $this->items[]=$value;
-        }
-    }
-
-    /**
-     * Unset item (remove)
-     * For ArrayAccess interface
-     * @param string offset
-     */
-    public function offsetUnset($off) {
-        unset($this->items[$off]);
-    }
-
-    /**
-     * For IteratorAggregate interface
-     * allow us to do foreach () on this object
-     */
-    public function getIterator() {
-        return new ArrayIterator($this->items);
+    public function getItems() {
+        return $this->collection;
     }
 
     /**
@@ -150,13 +102,10 @@ class group implements \ArrayAccess, \IteratorAggregate {
      * @return block template block
      */
     public function display() {
-        $tpl=new block("confGroup", array(
-            "title" => translate($this->getLabel(),0),
-            "desc"  => translate($this->getDesc(),0),
-            "items" => $this->items
+        return new block("confGroup", array(
+            "title" => translate($this->getLabel(), 0),
+            "desc"  => translate($this->getDesc(), 0),
+            "items" => $this->getItems()
         ));
-        return $tpl;
     }
-
-
 }

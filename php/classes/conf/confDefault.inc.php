@@ -47,15 +47,12 @@ use TimeZone;
 class confDefault extends conf {
 
     protected static function getConfig() {
-        $interface=static::getConfigInterface();
-        static::getConfigInterfaceUser($interface);
+        static::getConfigInterface();
         static::getConfigSSL();
         static::getConfigURL();
         static::getConfigPath();
         static::getConfigMaps();
-        $import=static::getConfigImport();
-        $import=static::getConfigImportFileMode($import);
-        static::getConfigImportCLI($import);
+        static::getConfigImport();
         static::getConfigWatermark();
         static::getConfigRotate();
         static::getConfigShare();
@@ -64,11 +61,10 @@ class confDefault extends conf {
     }
 
     /**
-     * Get config group for interface settings
+     * Get config collection for interface settings
      */
     private static function getConfigInterface() {
-        $interface = conf::addGroup("interface", "Interface settings",
-            "Settings that define how Zoph looks");
+        $interface = new collection();
 
         $intTitle = new text();
         $intTitle->setName("interface.title");
@@ -174,14 +170,6 @@ class confDefault extends conf {
         $intCookieExpire->setDefault(0);
         $interface[]=$intCookieExpire;
 
-
-        return $interface;
-    }
-
-    /**
-     * Get config group for interface.user settings
-     */
-    private static function getConfigInterfaceUser(group $interface) {
         $users=user::getAll();
 
         $intUserDefault = new select();
@@ -216,14 +204,17 @@ class confDefault extends conf {
         }
         $intUserCli->setDefault(0);
         $interface[]=$intUserCli;
+
+        conf::addGroup($interface, "interface", "Interface settings",
+            "Settings that define how Zoph looks");
+
     }
 
     /**
-     * Get config group for SSL settings
+     * Get config collection for SSL settings
      */
     private static function getConfigSSL() {
-        $ssl = conf::addGroup("ssl", "SSL", "Protect your site against eavesdropping by " .
-            "using https. You will need to configure this in your webserver as well.");
+        $ssl = new collection();
 
         $sslForce = new select();
         $sslForce->setName("ssl.force");
@@ -238,14 +229,16 @@ class confDefault extends conf {
         $sslForce->addOption("login", "Login only");
         $sslForce->setDefault("never");
         $ssl[]=$sslForce;
+
+        conf::addGroup($ssl, "ssl", "SSL", "Protect your site against eavesdropping by " .
+            "using https. You will need to configure this in your webserver as well.");
     }
 
     /**
-     * Get config group for url settings
+     * Get config collection for url settings
      */
     private static function getConfigURL() {
-        $url = conf::addGroup("url", "URLs", "Define the URLs that are used to access " .
-            "Zoph. Only configure this if Zoph cannot determine it automatically.");
+        $url = new collection();
 
         $urlHttp = new text();
         $urlHttp->setName("url.http");
@@ -265,14 +258,16 @@ class confDefault extends conf {
         // This regex was stolen from http://mathiasbynens.be/demo/url-regex, @stephenhay
         $urlHttps->setRegex("(^$|^https:\/\/[^\s\/$.?#].[^\s]*$)");
         $url[]=$urlHttps;
+
+        conf::addGroup($url, "url", "URLs", "Define the URLs that are used to access " .
+            "Zoph. Only configure this if Zoph cannot determine it automatically.");
     }
 
     /**
-     * Get config group for Path settings
+     * Get config collection for Path settings
      */
     private static function getConfigPath() {
-        $path = conf::addGroup("path", "Paths", "File and directory locations");
-
+        $path = new collection();
 
         $pathImages = new text();
         $pathImages->setName("path.images");
@@ -373,14 +368,15 @@ class confDefault extends conf {
         $pathUnbz->setHint("Alphanumeric characters (A-Z, a-z and 0-9), forward " .
             "slash (/), dot (.), underscore (_), dash (-) and space. Can be empty to disable");
         $path[]=$pathUnbz;
+
+        conf::addGroup($path, "path", "Paths", "File and directory locations");
     }
 
     /**
-     * Get config group for maps settings
+     * Get config collection for maps settings
      */
     private static function getConfigMaps() {
-        $maps = conf::addGroup("maps", "Mapping support",
-            "Add maps to Zoph using various different mapping providers.");
+        $maps = new collection();
 
         $mapsProvider = new select();
         $mapsProvider->setName("maps.provider");
@@ -411,13 +407,16 @@ class confDefault extends conf {
         $mapsGeocode->addOption("geonames", "GeoNames");
         $mapsGeocode->setDefault("");
         $maps[]=$mapsGeocode;
+
+        conf::addGroup($maps, "maps", "Mapping support",
+            "Add maps to Zoph using various different mapping providers.");
     }
 
     /**
-     * Get config group for import settings
+     * Get config collection for import settings
      */
     private static function getConfigImport() {
-        $import = conf::addGroup("import", "Import", "Importing and uploading photos");
+        $import = new collection();
 
         $importEnable = new checkbox();
         $importEnable->setName("import.enable");
@@ -499,13 +498,6 @@ class confDefault extends conf {
             "also enabled");
         $importDatedHier->setDefault(false);
         $import[]=$importDatedHier;
-        return $import;
-    }
-
-    /**
-     * Get config group for import file/dir mode settings
-     */
-    private static function getConfigImportFileMode(group $import) {
 
         /**
          * @todo This requires octdec to be run before using it so use
@@ -518,10 +510,10 @@ class confDefault extends conf {
             "Determines who can read or write the files. (RW: Read/Write, RO: Read Only)");
         $importFilemode->addOptions(array(
             "0644" => "RW for user, RO for others (0644)",
-            "0664" => "RW for user/group, RO for others (0664)",
+            "0664" => "RW for user/collection, RO for others (0664)",
             "0666" => "RW for everyone (0666)",
-            "0660" => "RW for user/group, not readable for others (0660)",
-            "0640" => "RW for user, RO for group, not readable for others (0640)",
+            "0660" => "RW for user/collection, not readable for others (0660)",
+            "0640" => "RW for user, RO for collection, not readable for others (0640)",
             "0600" => "RW for user, not readable for others (0600)"
         ));
         $importFilemode->setDefault("0644");
@@ -538,21 +530,15 @@ class confDefault extends conf {
             "Determines who can read or write the files. (RW: Read/Write, RO: Read Only)");
         $importDirmode->addOptions(array(
             "0755" => "RW for user, RO for others (0755)",
-            "0775" => "RW for user/group, RO for others (0775)",
+            "0775" => "RW for user/collection, RO for others (0775)",
             "0777" => "RW for everyone (0777)",
-            "0770" => "RW for user/group, not readable for others (0770)",
-            "0750" => "RW for user, RO for group, not readable for others (0750)",
+            "0770" => "RW for user/collection, not readable for others (0770)",
+            "0750" => "RW for user, RO for collection, not readable for others (0750)",
             "0700" => "RW for user, not readable for others (0700)"
         ));
         $importDirmode->setDefault("0755");
         $import[]=$importDirmode;
-        return $import;
-    }
 
-    /**
-     * Get config group for import CLI settings
-     */
-    private static function getConfigImportCLI(group $import) {
         $importCliVerbose=new number();
         $importCliVerbose->setName("import.cli.verbose");
         $importCliVerbose->setLabel("CLI verbose");
@@ -636,14 +622,15 @@ class confDefault extends conf {
         $importCliRecursive->setDefault(false);
         $importCliRecursive->setInternal();
         $import[]=$importCliRecursive;
+
+        conf::addGroup($import, "import", "Import", "Importing and uploading photos");
     }
 
     /**
-     * Get config group for watermark settings
+     * Get config collection for watermark settings
      */
     private static function getConfigWatermark() {
-        $watermark = conf::addGroup("watermark", "Watermarking",
-            "Watermarking can display a (copyright) watermark over your full-size images.");
+        $watermark = new collection();
 
         $watermarkEnable = new checkbox();
         $watermarkEnable->setName("watermark.enable");
@@ -708,13 +695,16 @@ class confDefault extends conf {
         $watermarkTrans->setRegex("^(100|[0-9]{1,2})$");
         $watermarkTrans->setBounds(0, 100, 1);
         $watermark[]=$watermarkTrans;
+
+        conf::addGroup($watermark, "watermark", "Watermarking",
+            "Watermarking can display a (copyright) watermark over your full-size images.");
     }
 
     /**
-     * Get config group for rotation settings
+     * Get config collection for rotation settings
      */
     private static function getConfigRotate() {
-        $rotate = conf::addGroup("rotate", "Rotation", "Rotate images");
+        $rotate = new collection();
 
         $rotateEnable = new checkbox();
         $rotateEnable->setName("rotate.enable");
@@ -753,13 +743,15 @@ class confDefault extends conf {
         $rotateBackupPrefix->setRegex("^[a-zA-Z0-9_\-]+$");
         $rotateBackupPrefix->setRequired();
         $rotate[]=$rotateBackupPrefix;
+
+        conf::addGroup($rotate, "rotate", "Rotation", "Rotate images");
     }
 
     /**
-     * Get config group for share settings
+     * Get config collection for share settings
      */
     private static function getConfigShare() {
-        $share = conf::addGroup("share", "Sharing", "Sharing photos with non-logged on users");
+        $share = new collection();
 
         $shareEnable = new checkbox();
         $shareEnable->setName("share.enable");
@@ -804,13 +796,15 @@ class confDefault extends conf {
         $shareSaltMid->setDefault("Modify this");
         $shareSaltMid->setRequired();
         $share[]=$shareSaltMid;
+
+        conf::addGroup($share, "share", "Sharing", "Sharing photos with non-logged on users");
     }
 
     /**
-     * Get config group for feature settings
+     * Get config collection for feature settings
      */
     private static function getConfigFeature() {
-        $feature = conf::addGroup("feature", "Features", "Various features");
+        $feature = new collection();
 
         $featureDownload = new checkbox();
         $featureDownload->setName("feature.download");
@@ -874,13 +868,15 @@ class confDefault extends conf {
             "edit user screen.");
         $featureRating->setDefault(true);
         $feature[]=$featureRating;
+
+        conf::addGroup($feature, "feature", "Features", "Various features");
     }
 
     /**
-     * Get config group for date settings
+     * Get config collection for date settings
      */
     private static function getConfigDate() {
-        $date = conf::addGroup("date", "Date and time", "Date and time related settings");
+        $date = new collection();
 
         $dateTz = new select();
         $dateTz->setName("date.tz");
@@ -927,6 +923,7 @@ class confDefault extends conf {
         $dateTimeFormat->setRequired();
         $date[]=$dateTimeFormat;
 
+        conf::addGroup($date, "date", "Date and time", "Date and time related settings");
     }
 }
 

@@ -137,11 +137,13 @@ class conf {
     public static function getItemByName($name) {
         $nameArr=explode(".", $name);
         $group=array_shift($nameArr);
-        if (isset(static::$groups[$group]) && isset(static::$groups[$group][$name])) {
-            return static::$groups[$group][$name];
-        } else {
-            throw new \ConfigurationException("Unknown configuration item " . $name);
+        if (isset(static::$groups[$group])) {
+            $items=static::$groups[$group]->getItems();
+            if (isset($items[$name])) {
+                return $items[$name];
+            }
         }
+        throw new \ConfigurationException("Unknown configuration item " . $name);
     }
 
     /**
@@ -191,8 +193,8 @@ class conf {
      * @param string label
      * @param string description
      */
-    public static function addGroup($name, $label, $desc = "") {
-        $group = new group();
+    public static function addGroup(collection $collection, $name, $label, $desc = "") {
+        $group = new group($collection);
 
         $group->setName($name);
         $group->setLabel($label);
