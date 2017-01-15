@@ -47,7 +47,7 @@ $rotate=conf::get("rotate.enable") && ($user->isAdmin() || $permissions->get("wr
 $full=$photo->getFullsizeLink($photo->get("name"));
 $width=$photo->get("width");
 $height=$photo->get("height");
-$size=getHumanReadableBytes($photo->get("size"));
+$size=template::getHumanReadableBytes($photo->get("size"));
 if (conf::get("share.enable") && ($user->isAdmin() || $user->get("allow_share"))) {
     $hash=$photo->getHash();
     $full_hash=sha1(conf::get("share.salt.full") . $hash);
