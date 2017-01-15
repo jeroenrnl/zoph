@@ -27,6 +27,8 @@ use template\template;
 
 require_once "include.inc.php";
 
+error_reporting(E_ALL & ~E_NOTICE);
+
 $title=translate("search",0);
 if ($_action=="insert") {
     $search=new search();
@@ -44,13 +46,13 @@ if ($_action=="insert") {
 }
 
 if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
-    $request_vars = clean_request_vars($request_vars);
+    $request_vars=$request->getRequestVarsClean();
     require_once "photos.php";
 } else if ($_action=="new" || $_action=="edit") {
     if ($_action=="new") {
         $action="insert";
         unset($request_vars["_action"]);
-        $request_vars = clean_request_vars($request_vars);
+        $request_vars=$request->getRequestVarsClean();
 
         foreach ($request_vars as $key => $val) {
             # Change key#0 into key[0]:
@@ -148,7 +150,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_date_conj = getvar('_date_conj');
     $_date_op = getvar('_date_op');
 
-    $count = sizeof($date) - 1;
+    $count = $date ? sizeof($date) - 1 : 0;
     if ($date[$count] == "+") {
         $date[$count] = "";
     }
@@ -191,7 +193,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_timestamp_conj = getvar('_timestamp_conj');
     $_timestamp_op = getvar('_timestamp_op');
 
-    $count = sizeof($timestamp) - 1;
+    $count = $timestamp ? sizeof($timestamp) - 1 : 0;
     if ($timestamp[$count] == "+") {
         $timestamp[$count] = "";
     }
@@ -245,7 +247,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         $_album_id_children = getvar('_album_id_children');
     }
 
-    $count = sizeof($album_id) - 1;
+    $count = $album_id ? sizeof($album_id) - 1 : 0;
     if ($album_id[$count] == "+") {
         $album_id[$count] = "";
     }
@@ -308,7 +310,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         $_category_id_children = getvar('_category_id_children');
     }
 
-    $count = sizeof($category_id) - 1;
+    $count = $category_id ? sizeof($category_id) - 1 : 0;
     if ($category_id[$count] == "+") {
         $category_id[$count] = "";
     }
@@ -373,7 +375,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
         $_location_id_children = getvar('_location_id_children');
     }
 
-    $count = sizeof($location_id) - 1;
+    $count = $location_id ? sizeof($location_id) - 1 : 0;
     if ($location_id[$count] == "+") {
         $location_id[$count] = "";
     }
@@ -427,7 +429,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_rating_conj = getvar('_rating_conj');
     $_rating_op = getvar('_rating_op');
 
-    $count = sizeof($rating) - 1;
+    $count = $rating ? sizeof($rating) - 1 : 0;
     if ($rating[$count] == "+") {
         $rating[$count] = "";
     }
@@ -468,7 +470,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_person_id_conj = getvar('_person_id_conj');
     $_person_id_op = getvar('_person_id_op');
 
-    $count = sizeof($person_id) - 1;
+    $count = $person_id ? sizeof($person_id) - 1 : 0;
     if ($person_id[$count] == "+") {
         $person_id[$count] = "";
     }
@@ -509,7 +511,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_photographer_id_conj = getvar('_photographer_id_conj');
     $_photographer_id_op = getvar('_photographer_id_op');
 
-    $count = sizeof($photographer_id) - 1;
+    $count = $photographer_id ? sizeof($photographer_id) - 1 : 0;
     if ($photographer_id[$count] == "+") {
         $photographer_id[$count] = "";
     }
@@ -554,7 +556,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_field_conj = getvar('_field_conj');
     $_field_op = getvar('_field_op');
 
-    $count = sizeof($_field) - 1;
+    $count = $_field ? sizeof($_field) - 1 : 0;
     if ($_field[$count] == "+") {
         $_field[$count] = "";
     }
@@ -598,7 +600,7 @@ if (strtolower($_action) == strtolower(rtrim(translate("search")))) {
     $_text_conj = getvar('_text_conj');
     $_text_op = getvar('_text_op');
 
-    $count = sizeof($_text) - 1;
+    $count = $text ? sizeof($_text) - 1 : 0;
     if ($_text[$count] == "+") {
         $_text[$count] = "";
     }

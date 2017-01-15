@@ -20,6 +20,8 @@
       <file>PDOdatabaseTest.php</file>
       <file>configTest.php</file>
       <file>XMLdataTest.php</file>
+      <file>variableTest.php</file>
+      <file>requestTest.php</file>
       <file>photoTest.php</file>
       <file>albumTest.php</file>
       <file>placeTest.php</file>

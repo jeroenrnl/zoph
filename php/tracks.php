@@ -40,7 +40,7 @@ if (!$user->isAdmin()) {
         redirect("zoph.php");
     }
 } else {
-    $vars=clean_request_vars($request_vars);
+    $vars=$request->getRequestVarsClean();
     $new_vars=update_query_string($vars, "_action", "do_geotag", array("_test", "_testcount"));
     $photos;
     $totalPhotoCount = get_photos($vars, 0, 999999999, $photos, $user);

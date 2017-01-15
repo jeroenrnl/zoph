@@ -26,7 +26,7 @@ use conf\conf;
 use template\template;
 
 require_once "include.inc.php";
-$vars=clean_request_vars($request_vars);
+$vars=$request->getRequestVarsClean();
 
 $_action=getvar("_action");
 if (!conf::get("feature.download") || (!$user->get("download") && !$user->isAdmin())) {

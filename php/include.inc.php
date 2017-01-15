@@ -25,13 +25,14 @@
 require_once "autoload.inc.php";
 
 require_once "exception.inc.php";
-require_once "variables.inc.php";
 require_once "log.inc.php";
 
 require_once "config.inc.php";
 require_once "settings.inc.php";
 require_once "requirements.inc.php";
 require_once "util.inc.php";
+
+require_once "variables.inc.php";
 
 if (!defined("LOGON")) {
     if (!defined("TEST")) {
