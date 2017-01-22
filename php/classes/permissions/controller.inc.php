@@ -40,19 +40,67 @@ class controller extends genericController {
      */
     public function __construct(request $request) {
         parent::__construct($request);
-        $group = new group($this->request["group_id"]);
-        $this->setObject($group);
-
-        $this->actions[]="update_albums";
-
+        array_push($this->actions, "updatealbums", "updategroups");
         $this->doAction();
     }
 
+    /**
+     * Process changes to group permissions
+     */
+    protected function actionUpdategroups() {
+        $album = new album($this->request["album_id"]);
+        $this->setObject($album);
+        // Check if the "Grant access to all groups" checkbox is ticked
+        if ($this->request["_access_level_all_checkbox"]) {
+            $groups = group::getAll();
+            foreach ($groups as $group) {
+                $permissions = new permissions($group->getId(), $this->object->getId());
+                $permissions->setFields($this->request->getRequestVars(), "", "_all");
+                if (!conf::get("watermark.enable")) {
+                    $permissions->set("watermark_level", 0);
+                }
+                $permissions->insert();
+            }
+        }
+
+        $groups = $this->object->getPermissionArray(true);
+        foreach ($groups as $group) {
+            $group->lookup();
+            $id=$group->getId();
+
+            if (isset($this->request["_remove_permission_group__$id"])) {
+                // first check if group needs to be revoked
+                if ($this->request["_remove_permission_group__$id"]) {
+                    $permissions = new permissions($id, $this->object->getId());
+                    $permissions->delete();
+                }
+            } else {
+                $permissions = new permissions();
+                $permissions->setFields($this->request->getRequestVars(), "", "__$id");
+                $permissions->update();
+            }
+        }
+        // Check if new album should be added
+        if ($this->request["group_id_new"]) {
+            $permissions = new permissions();
+            $permissions->setFields($this->request->getRequestVars(), "", "_new");
+
+            if (!conf::get("watermark.enable")) {
+                $permissions->set("watermark_level", 0);
+            }
+            $permissions->insert();
+        }
+
+        $this->view="album";
+
+    }
 
     /**
      * Process changes to album permissions
      */
-    protected function actionUpdate_albums() {
+    protected function actionUpdatealbums() {
+        $group = new group($this->request["group_id"]);
+        $this->setObject($group);
         // Check if the "Grant access to all albums" checkbox is ticked
         if ($this->request["_access_level_all_checkbox"]) {
             $albums = album::getAll();

@@ -385,19 +385,25 @@ class album extends zophTreeTable implements Organizer {
     /**
      * Create an array describing permissions for all groups
      * for display or edit
+     * @param bool Return array of groups instead of array of permissions
      * @return array permissions
      */
-    public function getPermissionArray() {
+    public function getPermissionArray($getGroup=false) {
         $groups = group::getAll();
         $perms=array();
         foreach ($groups as $group) {
             $permissions = $group->getGroupPermissions($this);
             if ($permissions) {
-                $perms[]=$permissions;
+                if($getGroup) {
+                    $perms[]=$group;
+                } else {
+                    $perms[]=$permissions;
+                }
             }
         }
         return $perms;
     }
+
     /**
      * Get a link to this album
      * @return link to this album

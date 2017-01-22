@@ -25,7 +25,8 @@ if (!ZOPH) {
     die("Illegal call");
 }
 ?>
-<h3><?= translate("Albums") ?></h3>
+<br>
+<h3><?= $tpl_edit == "album" ? translate("Group permissions") : translate("Album permissions") ?></h3>
 <?= translate("Granting access to an album will also grant access to that album's " .
     "ancestors if required. Granting access to all albums will not overwrite " .
     "previously granted permissions."); ?>
@@ -54,8 +55,12 @@ if (!ZOPH) {
             </td>
             <td>
                 <input type="hidden" name="<?= $tpl_fixed ?>_id" value="<?= $tpl_id ?>">
-                <input type="hidden" name="_action" value="update_<?= $tpl_edit ?>s">
-                <?= translate("Grant access to all existing albums:") ?>
+                <input type="hidden" name="_action" value="update<?= $tpl_edit ?>s">
+                <?php if ($tpl_edit == "album"): ?>
+                    <?= translate("Grant access to all existing albums:") ?>
+                <?php else: ?>
+                    <?= translate("Grant access to all existing groups:") ?>
+                <?php endif ?>
             </td>
             <td>
                 <?= $tpl_accessLevelAll ?>
