@@ -394,7 +394,7 @@ class album extends zophTreeTable implements Organizer {
         foreach ($groups as $group) {
             $permissions = $group->getGroupPermissions($this);
             if ($permissions) {
-                if($getGroup) {
+                if ($getGroup) {
                     $perms[]=$group;
                 } else {
                     $perms[]=$permissions;

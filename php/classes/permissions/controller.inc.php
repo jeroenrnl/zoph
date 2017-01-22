@@ -40,6 +40,11 @@ class controller extends genericController {
      */
     public function __construct(request $request) {
         parent::__construct($request);
+        if (isset($this->request["group_id"])) {
+            $this->setObject(new group($this->request["group_id"]));
+        } else if (isset($this->request["album_id"])) {
+            $this->setObject(new album($this->request["album_id"]));
+        }
         array_push($this->actions, "updatealbums", "updategroups");
         $this->doAction();
     }
@@ -48,8 +53,6 @@ class controller extends genericController {
      * Process changes to group permissions
      */
     protected function actionUpdategroups() {
-        $album = new album($this->request["album_id"]);
-        $this->setObject($album);
         // Check if the "Grant access to all groups" checkbox is ticked
         if ($this->request["_access_level_all_checkbox"]) {
             $groups = group::getAll();
@@ -99,8 +102,6 @@ class controller extends genericController {
      * Process changes to album permissions
      */
     protected function actionUpdatealbums() {
-        $group = new group($this->request["group_id"]);
-        $this->setObject($group);
         // Check if the "Grant access to all albums" checkbox is ticked
         if ($this->request["_access_level_all_checkbox"]) {
             $albums = album::getAll();
@@ -118,7 +119,6 @@ class controller extends genericController {
         foreach ($albums as $album) {
             $album->lookup();
             $id=$album->getId();
-            $name=$album->getName();
 
             if (isset($this->request["_remove_permission_album__$id"])) {
                 // first check if album needs to be revoked

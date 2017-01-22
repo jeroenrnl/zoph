@@ -81,7 +81,7 @@ if ($action == "confirm") {
       <h1>
         <ul class="actionlink">
           <li><a href="albums.php"><?php echo translate("return") ?></a></li>
-            <?php if($action != "insert"): ?>
+            <?php if ($action != "insert"): ?>
               <li><a href="album.php?_action=delete&amp;album_id=<?php
                 echo $album->get("album_id") ?>">
                 <?php echo translate("delete") ?>
@@ -98,7 +98,7 @@ if ($action == "confirm") {
           <input type="submit" value="<?php echo translate($action, 0) ?>">
 
         </form>
-        <?php 
+        <?php
             if ($user->isAdmin()) {
                 if ($_action == "new") {
                     echo new block("message", array(

@@ -63,7 +63,7 @@ class permissionControllerTest extends PHPUnit_Framework_TestCase {
         $request=new request(array(
             "GET"   => array(),
             "POST"  => array(
-                "_action"                       => "update_albums",
+                "_action"                       => "updatealbums",
                 "_access_level_all_checkbox"    => 1,
                 "group_id"                      => 3,
                 "access_level_all"              => 2,
@@ -93,7 +93,7 @@ class permissionControllerTest extends PHPUnit_Framework_TestCase {
         $request=new request(array(
             "GET"   => array(),
             "POST"  => array(
-                "_action"                       => "update_albums",
+                "_action"                       => "updatealbums",
                 "_remove_permission_album__2"   => 1,
                 "group_id"                      => 3),
             "SERVER" => array()
@@ -119,9 +119,10 @@ class permissionControllerTest extends PHPUnit_Framework_TestCase {
         $request=new request(array(
             "GET"   => array(),
             "POST"  => array(
-                "_action"                       => "update_albums",
+                "_action"                       => "updatealbums",
                 "album_id_new"                  => 1,
-                "group_id_new"                      => 3,
+                "group_id"                      => 3,
+                "group_id_new"                  => 3,
                 "access_level_new"              => 4,
                 "watermark_level_new"           => 6,
                 "writable_new"                  => 0),
