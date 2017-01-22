@@ -30,7 +30,9 @@
       <file>anonymousUserTest.php</file>
       <file>categoryTest.php</file>
       <file>groupTest.php</file>
+      <file>groupControllerTest.php</file>
       <file>permissionsTest.php</file>
+      <file>permissionsControllerTest.php</file>
       <file>personTest.php</file>
       <file>circleTest.php</file>
       <file>photographerTest.php</file>
@@ -49,6 +51,8 @@
       <file>replaceTest.php</file>
       <file>commentTest.php</file>
       <file>searchTest.php</file>
+    </testsuite>
+    <testsuite name="New">
     </testsuite>
   </testsuites>
 </phpunit>

@@ -129,6 +129,7 @@ class request implements ArrayAccess {
      * For ArrayAccess: Set value of parameter
      * not supported
      * @param int|string offset
+     * @param mixed value
      */
     public function offsetSet($off, $val) {
     }

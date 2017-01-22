@@ -743,6 +743,19 @@ abstract class zophTable {
         return $tpl;
     }
 
+    /**
+     * Get an array of id => name to build a non-hierarchical array
+     * this function does NOT check user permissions
+     * @return array
+     */
+    public static function getSelectArray() {
+        $records=static::getRecords();
+        $selectArray=array(null => "");
+        foreach ($records as $record) {
+            $selectArray[(string) $record->getId()] = $record->getName();
+        }
+        return $selectArray;
+    }
 
 }
 ?>

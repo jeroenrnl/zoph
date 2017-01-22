@@ -93,8 +93,8 @@ class requestTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals($exp, $request->getRequestVars());
         $this->assertEquals($expClean, $request->getRequestVarsClean());
     }
-        
-        
+
+
     public function getRequests() {
         return array (
             array(

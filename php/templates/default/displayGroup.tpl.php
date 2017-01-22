@@ -48,13 +48,15 @@ if (!ZOPH) {
         </tr>
         <?php foreach ($tpl_permissions as $perm): ?>
             <tr>
-                <td><?= $perm->name ?></td>
-                <td><?= $perm->access ?></td>
+                <td><?= $tpl_view == "album" ? $perm->getAlbumName() : $perm->getGroupName() ?></td>
+                <td><?= $perm->get("access_level") ?></td>
                 <?php if ($tpl_watermark): ?>
-                    <td><?= $perm->wm ?></td>
+                    <td><?= $perm->get("watermark_level") ?></td>
                 <?php endif ?>
-                <td><?= $perm->writable == 1 ? translate("Yes") : translate("No") ?></td>
-                <td><?= $perm->subalbums == 1 ? translate("Yes") : translate("No") ?></td>
+                <td><?= $perm->get("writable") == 1 ? translate("Yes") : translate("No") ?></td>
+                <?php if ($tpl_view == "album"): ?>
+                    <td><?= $perm->get("subalbums") == 1 ? translate("Yes") : translate("No") ?></td>
+                <?php endif ?>
             </tr>
         <?php endforeach ?>
     </table>

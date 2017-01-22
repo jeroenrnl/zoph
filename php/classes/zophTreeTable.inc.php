@@ -299,10 +299,6 @@ abstract class zophTreeTable extends zophTable {
         return $xml;
     }
 
-    public static function getSelectArray() {
-        return static::getTreeSelectArray();
-    }
-
     public static function getTreeSelectArray($rec = null, $select_array = null, $depth=0) {
         $user=user::getCurrent();
         $user->lookupPrefs();

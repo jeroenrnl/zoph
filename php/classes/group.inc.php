@@ -58,6 +58,10 @@ class group extends zophTable {
         parent::delete(array("groups_users", "group_permissions"));
     }
 
+    /**
+     * Get name of group
+     * @return string name
+     */
     public function getName() {
         return $this->get("group_name");
     }
@@ -114,16 +118,7 @@ class group extends zophTable {
             }
             $permissions = $this->getGroupPermissions(new album((int) $id));
             if ($permissions) {
-                $albumPermissions=new stdClass();
-                $albumPermissions->id=$id;
-                $albumPermissions->name=$name;
-                $albumPermissions->access=$permissions->get("access_level");
-                if (conf::get("watermark.enable")) {
-                    $albumPermissions->wm=$permissions->get("watermark_level");
-                }
-                $albumPermissions->writable=$permissions->get("writable");
-                $albumPermissions->subalbums=$permissions->get("subalbums");
-                $perms[]=$albumPermissions;
+                $perms[]=$permissions;
             }
         }
         return $perms;
