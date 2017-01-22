@@ -51,14 +51,15 @@ abstract class zophTreeTable extends zophTable {
      * @param array Names of tables from which entries also should be deleted.
      */
     public function delete() {
-
         // simulate overloading
         if (func_num_args()>=1) {
             $extra_tables = func_get_arg(0);
         } else {
             $extra_tables = null;
         }
-
+        if ($this->getId()==0) {
+            return;
+        }
         $this->getChildren();
         if ($this->children) {
             foreach ($this->children as $child) {
