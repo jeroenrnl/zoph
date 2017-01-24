@@ -106,23 +106,31 @@ class group extends zophTable {
     }
 
     /**
-     * Create an array describing permissions for all albums
+     * Create an array describing permissions for all groups
      * for display or edit
+     * @param bool Return array of albums instead of array of permissions
+     * @return array permissions
      */
-    public function getPermissionArray() {
+    public function getPermissionArray($getAlbum=false) {
         $albums = album::getSelectArray();
         $perms=array();
         foreach ($albums as $id => $name) {
             if (!$id || $id == 1) {
                 continue;
             }
-            $permissions = $this->getGroupPermissions(new album((int) $id));
+            $album=new album((int) $id);
+            $permissions = $this->getGroupPermissions($album);
             if ($permissions) {
-                $perms[]=$permissions;
+                if ($getAlbum) {
+                    $perms[]=$album;
+                } else {
+                    $perms[]=$permissions;
+                }
             }
         }
         return $perms;
     }
+
     /**
      * Get members of this group
      * @return array of users

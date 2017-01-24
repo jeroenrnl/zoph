@@ -34,18 +34,18 @@ use web\request;
  * Controller for permissions
  */
 class controller extends genericController {
+    protected $actions=array("updatealbums", "updategroups");
 
     /**
      * Create controller from web\request
      */
     public function __construct(request $request) {
         parent::__construct($request);
-        if (isset($this->request["group_id"])) {
+        if ($this->request["_action"]=="updatealbums") {
             $this->setObject(new group($this->request["group_id"]));
-        } else if (isset($this->request["album_id"])) {
+        } else if ($this->request["_action"]=="updategroups") {
             $this->setObject(new album($this->request["album_id"]));
         }
-        array_push($this->actions, "updatealbums", "updategroups");
         $this->doAction();
     }
 
@@ -72,11 +72,8 @@ class controller extends genericController {
             $id=$group->getId();
 
             if (isset($this->request["_remove_permission_group__$id"])) {
-                // first check if group needs to be revoked
-                if ($this->request["_remove_permission_group__$id"]) {
-                    $permissions = new permissions($id, $this->object->getId());
-                    $permissions->delete();
-                }
+                $permissions = new permissions($id, $this->object->getId());
+                $permissions->delete();
             } else {
                 $permissions = new permissions();
                 $permissions->setFields($this->request->getRequestVars(), "", "__$id");
@@ -121,11 +118,8 @@ class controller extends genericController {
             $id=$album->getId();
 
             if (isset($this->request["_remove_permission_album__$id"])) {
-                // first check if album needs to be revoked
-                if ($this->request["_remove_permission_album__$id"]) {
-                    $permissions = new permissions($this->object->getId(), $id);
-                    $permissions->delete();
-                }
+                $permissions = new permissions($this->object->getId(), $id);
+                $permissions->delete();
             } else {
                 $permissions = new permissions();
                 $permissions->setFields($this->request->getRequestVars(), "", "__$id");
