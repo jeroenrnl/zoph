@@ -157,72 +157,32 @@ use template\template;
             <br>
             <?php if ($tpl_show): ?>
                 <hr>
-                <?= createInput("path", $tpl_photo->get("path"), 64, translate("path"), 40) ?>
-                <span class="inputhint"><?= sprintf(translate("%s chars max"), "64") ?></span><br>
-                <label for="width">
-                    <?= translate("width") ?>
-                </label>
-                <?= template::createInput("width", $tpl_photo->get("width"), 6) ?><br>
-                <label for="height">
-                    <?= translate("height") ?>
-                </label>
-                <?= template::createInput("height", $tpl_photo->get("height"), 6) ?><br>
-                <label for="camera_make">
-                    <?= translate("camera make") ?>
-                </label>
-                <?= template::createInput("camera_make", $tpl_photo->get("camera_make"), 32) ?><br>
-                <label for="camera_model">
-                    <?= translate("camera model") ?>
-                </label>
-                <?= template::createIinput("camera_model", $tpl_photo->get("camera_model"), 32) ?><br>
+                <?= template::createInput("path", $tpl_photo->get("path"), 64, translate("path"), 40, sprintf(translate("%s chars max"), "64")) ?>
+                <?= template::createInput("width", $tpl_photo->get("width"), 6, translate("width")) ?>
+                <?= template::createInput("height", $tpl_photo->get("height"), 6, translate("height")) ?>
+                <?= template::createInput("camera_make", $tpl_photo->get("camera_make"), 32, translate("camera make")) ?>
+                <?= template::createInput("camera_model", $tpl_photo->get("camera_model"), 32, translate("camera model")) ?>
                 <label for="flash_used">
                     <?= translate("flash used") ?>
                 </label>
                 <?= template::createPulldown("flash_used", $tpl_photo->get("flash_used"),
                     array("" => "", "Y" => translate("Yes", 0), "N" => translate("No", 0))) ?><br>
-                <label for="focal_length">
-                    <?= translate("focal length") ?>
-                </label>
-                <?= createInput("focal_length", $tpl_photo->get("focal_length"), 10, 64) ?><br>
-                <label for="exposure">
-                    <?= translate("exposure") ?>
-                </label>
-                <?= template::createIinput("exposure", $tpl_photo->get("exposure"), 32, 64) ?><br>
-                <label for="aperture">
-                    <?= translate("aperture") ?>
-                </label>
-                <?= template::createInput("aperture", $tpl_photo->get("aperture"), 8, 16) ?><br>
-                <label for="compression">
-                    <?= translate("compression") ?>
-                </label>
-                <?= template::createInput("compression", $tpl_photo->get("compression"), 32, 64) ?><br>
-                <label for="iso_equiv">
-                    <?= translate("iso equiv") ?>
-                </label>
-                <?= template::createInput("iso_equiv", $tpl_photo->get("iso_equiv"), 8) ?><br>
-                <label for="metering_mode">
-                    <?= translate("metering mode") ?>
-                </label>
-                <?= template::createInput("metering_mode", $tpl_photo->get("metering_mode"), 16) ?><br>
-                <label for="focus_distance">
-                    <?= translate("focus distance") ?>
-                </label>
-                <?= template::createInput("focus_dist", $tpl_photo->get("focus_dist"), 16) ?><br>
-                <label for="ccd_width">
-                    <?= translate("ccd width") ?>
-                </label>
-                <?= template::createInput("ccd_width", $tpl_photo->get("ccd_width"), 16) ?><br>
-                <label for="comment">
-                    <?= translate("comment") ?>
-                </label>
-                <?= template::createInput("comment", $photo->get("comment"), 40, 128) ?></br>
+                <?= template::createInput("focal_length", $tpl_photo->get("focal_length"), 64, translate("focal length"), 10) ?>
+                <?= template::createInput("exposure", $tpl_photo->get("exposure"), 64, translate("exposure"), 32) ?>
+                <?= template::createInput("aperture", $tpl_photo->get("aperture"), 16, translate("aperture"), 8) ?>
+                <?= template::createInput("compression", $tpl_photo->get("compression"), 64, translate("compression"), 32) ?>
+                <?= template::createInput("iso_equiv", $tpl_photo->get("iso_equiv"), 8, translate("iso equiv")) ?>
+                <?= template::createInput("metering_mode", $tpl_photo->get("metering_mode"), 16, translate("metering mode")) ?>
+                <?= template::createInput("focus_dist", $tpl_photo->get("focus_dist"), 16, translate("focus distance")) ?>
+                <?= template::createInput("ccd_width", $tpl_photo->get("ccd_width"), 16, translate("ccd width")) ?>
+                <?= template::createInput("comment", $tpl_photo->get("comment"), 128, translate("comment"), 40) ?></br>
             <?php else: ?>
-                <a href="photo.php?_action=edit&amp;photo_id=<?= $photo->getId() ?>&amp;_show=all">
+                <a href="photo.php?_action=edit&amp;photo_id=<?= $tpl_photo->getId() ?>&amp;_show=all">
                     <?= translate("show additional attributes") ?>
                 </a>
             <?php endif ?>
             <br>
-            <input type="submit" value="<?php echo translate($action, 0) ?>">
+            <input type="submit" value="<?php echo translate($tpl_action, 0) ?>">
         <?php endif ?>
     </form>
 </div>

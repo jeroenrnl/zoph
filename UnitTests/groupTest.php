@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+require_once "testSetup.php";
+
 /**
  * Test the group class
  *

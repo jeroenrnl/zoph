@@ -20,6 +20,9 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+
+use template\block;
+
 require_once "include.inc.php";
 
 if (!$user->canEditOrganizers()) {
@@ -78,10 +81,12 @@ if ($action == "confirm") {
       <h1>
         <ul class="actionlink">
           <li><a href="albums.php"><?php echo translate("return") ?></a></li>
-          <li><a href="album.php?_action=delete&amp;album_id=<?php
-            echo $album->get("album_id") ?>">
-            <?php echo translate("delete") ?>
-          </a></li>
+            <?php if ($action != "insert"): ?>
+              <li><a href="album.php?_action=delete&amp;album_id=<?php
+                echo $album->get("album_id") ?>">
+                <?php echo translate("delete") ?>
+              </a></li>
+            <?php endif ?>
         </ul>
         <?php echo translate("album") ?>
       </h1>
@@ -93,6 +98,19 @@ if ($action == "confirm") {
           <input type="submit" value="<?php echo translate($action, 0) ?>">
 
         </form>
+        <?php
+            if ($user->isAdmin()) {
+                if ($_action == "new") {
+                    echo new block("message", array(
+                        "class" => "info",
+                        "text" => translate("After this album has been created, groups can be given access to it."
+                    )));
+                } else {
+                    $view=new permissions\view\edit($album);
+                    echo $view->view();
+                }
+            }
+        ?>
       </div>
     <?php
 }
