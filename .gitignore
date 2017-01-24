@@ -2,3 +2,4 @@ UnitTests/output/
 .sonar
 .images
 *.swp
+/php/output
