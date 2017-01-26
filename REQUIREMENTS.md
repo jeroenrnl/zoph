@@ -4,7 +4,7 @@ Zoph is being developped on Linux, but it should be able to run on any OS that c
 
 Zoph requires the following:
 * Apache 2.2 or 2.4
-* PHP 5.5 or 5.6
+* PHP 5.6 or 7.0
 * MySQL 5.6
 * ImageMagick 6.9
 
@@ -14,8 +14,9 @@ Other versions may work as well, see below for more details. How to install thes
 * Current versions of Zoph are developped on Apache 2.4.x
 
 ##PHP##
-Current versions of Zoph are developped on PHP 5.5 and 5.6
-* PHP 5.4 and older are no longer supported
+Current versions of Zoph are developped on PHP 7.0
+* PHP 5.5 and older are no longer supported
+* PHP 7.1 should work too, but is not yet actively tested, please report a bug if you run into problems
 
 ###Required features###
 The following features (extensions) to PHP are required for Zoph. Not all distributions automatically install all of them.
@@ -43,7 +44,8 @@ This is the amount of memory PHP allows Zoph to use. Especially if you have larg
 * The e-mail photo feature may require increasing the `memory_limit` setting. Since Zoph needs to convert the photo into Base64 encoding for mail, it requires quite a large amount of memory if you try to send full size images and you may need to adjust `memory_limit` in php.ini, you should give it at least about 4 times the size of your largest image.
 
 ##MySQL##
-* Current versions are developped with MySQL 5.6
+* Current versions are developped with MariaDB 10.x
+* MySQL or MariaDB 5.6 should also work
 * MySQL 5.0 to 5.5 may still work but are no longer supported.
 
 ##ImageMagick##
