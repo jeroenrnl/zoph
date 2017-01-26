@@ -1139,6 +1139,8 @@ div.formtext {
 }
 
 div.editchoice  {
+    position: relative;
+    z-index: 5;
     vertical-align: top;
     clear: none;
     font-size: small;
