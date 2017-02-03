@@ -1,3 +1,17 @@
+Zoph 0.9.4 to 0.9.5
+===================
+* If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.4. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.
+
+Copy files
+----------
+Copy the contents of the php directory, including all subdirs, into your webroot.
+
+    cp -a php/* /var/www/html/zoph
+
+Database changes
+----------------
+There are no database changes for 0.9.5
+
 Zoph 0.9.3 to 0.9.4
 ===================
 * If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.3. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.

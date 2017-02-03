@@ -1,4 +1,25 @@
 # Zoph Changelog #
+
+##Zoph 0.9.5##
+###4 feb 2017###
+
+Zoph 0.9.5 is the new stable release. It is recommended for everyone to upgrade to this release
+
+###Features###
+* [Issue#68](https://github.com/jeroenrnl/zoph/issues/68) Changed from Mapstraction to Leaflet as mapping abstraction - with GoogleMaps, OpenStreetMap and MapBox (OpenStreetMap) support
+ The code for this was based on code provided by Jason (@JiCiT)
+* [Issue#80](https://github.com/jeroenrnl/zoph/issues/80) You can now edit permissions from the album screen, without the need to go to the group edit.
+* [Issue#82](https://github.com/jeroenrnl/zoph/issues/82) Zoph now gives a proper error message if a photo can not be found
+
+###Bugs###
+* Fixed a bug where in some cases it was possible for an admin to unintentionally delete albums
+
+###Refactor###
+* Lots of internal changes to move to an MVC-architecture
+* Several more parts of Zoph moved into templates
+* Added more unittests - to automatically test Zoph
+
+
 ##Zoph 0.9.4##
 ###18 Sept 2016###
 
