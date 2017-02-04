@@ -23,7 +23,8 @@
  */
 
 /**
- * Autoload classes
+ * Autoload file
+ * @param string filename to load
  */
 function zophAutoload($file) {
     if (is_readable(settings::$php_loc . "/" . $file)) {
@@ -34,16 +35,28 @@ function zophAutoload($file) {
 
 }
 
+/**
+ * Autoload a class
+ * @param string name of class to load
+ */
 function zophAutoloadClass($class) {
     $file="classes/" . str_replace("\\", "/", $class) . ".inc.php";
     return zophAutoload($file);
 }
 
+/**
+ * Autoload an interface
+ * @param string name of interface to load
+ */
 function zophAutoloadInterface($interface) {
     $file="interfaces/" . $interface . ".inc.php";
     return zophAutoload($file);
 }
 
+/**
+ * Autoload a trait
+ * @param string name of trait to load
+ */
 function zophAutoloadTrait($trait) {
     $file="traits/" . $trait . ".inc.php";
     return zophAutoload($file);

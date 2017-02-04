@@ -125,6 +125,20 @@ class permissionsTest extends ZophDataBaseTestCase {
 
     }
 
+    public function testGetNameAndId() {
+        $perm = new permissions(3, 2);
+        $perm->lookup();
+
+        $exp = array(
+            "album_id"  => 2,
+            "group_id"  => 3);
+
+        $this->assertEquals($exp, $perm->getId());
+
+        $this->assertEquals("Album 1", $perm->getAlbumName());
+        $this->assertEquals("Genesis", $perm->getGroupName());
+    }
+
     public function getPermissions() {
         return array(
             array(5, array(1,2,3), 4,0,false),

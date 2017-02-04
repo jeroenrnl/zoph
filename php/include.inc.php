@@ -25,7 +25,6 @@
 require_once "autoload.inc.php";
 
 require_once "exception.inc.php";
-require_once "variables.inc.php";
 require_once "log.inc.php";
 
 require_once "config.inc.php";
@@ -33,11 +32,7 @@ require_once "settings.inc.php";
 require_once "requirements.inc.php";
 require_once "util.inc.php";
 
-require_once "track.inc.php";
-require_once "point.inc.php";
-
-
-require_once "color_scheme.inc.php";
+require_once "variables.inc.php";
 
 if (!defined("LOGON")) {
     if (!defined("TEST")) {
@@ -45,14 +40,6 @@ if (!defined("LOGON")) {
     }
 
     require_once "photo_search.inc.php";
-
-    require_once "import.inc.php";
-    if (defined("CLI") || defined("TEST")) {
-        require_once "cli/cli.inc.php";
-        require_once "cli/arguments.inc.php";
-        require_once "cli/cliimport.inc.php";
-    } else {
-        require_once "webimport.inc.php";
-    }
+    require_once "exif.inc.php";
 }
 ?>

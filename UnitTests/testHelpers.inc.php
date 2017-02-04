@@ -21,6 +21,9 @@
  * @author Jeroen Roos
  */
 
+use geo\point;
+use geo\track;
+
 /**
  * Helper functions that can be reused in different tests
  */

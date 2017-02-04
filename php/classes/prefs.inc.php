@@ -23,6 +23,8 @@
  * @package Zoph
  */
 
+use template\colorScheme;
+
 /**
  * A class representing a set of user preferences
  *
@@ -44,23 +46,22 @@ class prefs extends zophTable {
     protected static $url="prefs.php#";
 
 
-    private $color_scheme;
+    private $colorScheme;
 
     private function lookupColorScheme($force = 0) {
 
         // avoid unnecessary lookups
-        if ($this->color_scheme && $this->color_scheme->get("name") != null && !$force) {
-            return $this->color_scheme;
+        if ($this->colorScheme && $this->colorScheme->get("name") != null && !$force) {
+            return $this->colorScheme;
         }
 
         if ($this->get("color_scheme_id")) {
-            $this->color_scheme =
-                new color_scheme($this->get("color_scheme_id"));
-            $this->color_scheme->lookup();
+            $this->colorScheme = new colorScheme($this->get("color_scheme_id"));
+            $this->colorScheme->lookup();
 
             // make sure it was actually found
-            if ($this->color_scheme->get("name") != null) {
-                return $this->color_scheme;
+            if ($this->colorScheme->get("name") != null) {
+                return $this->colorScheme;
             }
         }
 
@@ -69,7 +70,7 @@ class prefs extends zophTable {
 
     public function load($force = 0) {
         if ($this->lookupColorScheme($force)) {
-            color_scheme::setCurrent($this->color_scheme);
+            colorScheme::setCurrent($this->colorScheme);
         }
     }
 }

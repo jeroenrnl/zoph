@@ -21,7 +21,16 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
+
 require_once "testSetup.php";
+
+use conf\conf;
+
+use geo\track;
+use geo\point;
+
+use import\web as import;
+
 /**
  * Test the track class
  *
@@ -29,6 +38,29 @@ require_once "testSetup.php";
  * @author Jeroen Roos
  */
 class trackTest extends ZophDataBaseTestCase {
+
+    /**
+     * Test the track::getFromGPX() function, which imports a GPX file
+     * Because the import function deletes the file in question, we first copy it to temp
+     * and import from there
+     */
+    public function testGetFromGPX() {
+        copy(conf::get("path.images") . "/track.gpx", "/tmp/track.gpx");
+        import::XMLimport(new file("/tmp/track.gpx"));
+
+        $tracks=track::getAll();
+
+        foreach ($tracks as $track) {
+            if ($track->get("name") == "Zoph Test") {
+                $imported=$track;
+            }
+        }
+
+        $this->assertInstanceOf("geo\\track" , $imported);
+        $points=point::getRecords("point_id", array("track_id" => (int) $imported->getId()));
+        $this->assertEquals("Zoph Test", $imported->get("name"));
+        $this->assertCount(8, $points);
+    }
 
     public function testDelete() {
         // Create a track
@@ -41,7 +73,7 @@ class trackTest extends ZophDataBaseTestCase {
         $points=point::getRecords("point_id", array("track_id" => (int) $trackId));
 
         // verify insertion
-        $this->assertInstanceOf("track", $track);
+        $this->assertInstanceOf("geo\\track", $track);
         $this->assertEquals("Test Track", $track->get("name"));
         $this->assertCount(5, $points);
 
@@ -60,6 +92,9 @@ class trackTest extends ZophDataBaseTestCase {
     public function testGetFirstLast() {
         // Create a track with 10 randomized points
         $track=helpers::createTrack(10, true);
+        $trackId=$track->getId();
+        $track=new track($trackId);
+        $track->lookup();
 
         $first=$track->getFirstPoint();
         $minute=(int) date("i",strtotime($first->get("datetime")));

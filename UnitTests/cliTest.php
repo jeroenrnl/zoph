@@ -23,6 +23,9 @@
 
 require_once "testSetup.php";
 
+use cli\cli;
+use conf\conf;
+
 /**
  * Test CLI interface
  *
@@ -36,9 +39,9 @@ class cliTest extends ZophDataBaseTestCase {
      */
     public function testBasicImport() {
         $files=$this->getFilelist(array(
-            "2013.02.01" => "PHOTO-01.JPG",
-            "2013.02.02" => "PHOTO-02.JPG",
-            "2013.02.03" => "PHOTO-03.JPG"));
+            "PHOTO-01.JPG",
+            "PHOTO-02.JPG",
+            "PHOTO-03.JPG"));
         $this->doCleanup($files);
 
         $testdata=$this->getFilenames();
@@ -64,9 +67,9 @@ class cliTest extends ZophDataBaseTestCase {
      */
     public function testOrganizedImport() {
         $files=$this->getFilelist(array(
-            "2013.02.01" => "PHOTO-01.JPG",
-            "2013.02.02" => "PHOTO-02.JPG",
-            "2013.02.03" => "PHOTO-03.JPG"));
+            "PHOTO-01.JPG",
+            "PHOTO-02.JPG",
+            "PHOTO-03.JPG"));
         $this->doCleanup($files);
 
         $testdata=$this->getFilenames();
@@ -125,7 +128,7 @@ class cliTest extends ZophDataBaseTestCase {
     public function testDatedDirs() {
         $files=$this->getFilelist(array(
             "2013.02.01" => "PHOTO-01.JPG",
-            "" => "PHOTO-02.JPG",
+            "PHOTO-02.JPG",
             "2013/02/03" => "PHOTO-03.JPG"));
         $this->doCleanup($files);
 
@@ -359,7 +362,7 @@ class cliTest extends ZophDataBaseTestCase {
         $admin->lookup();
         $admin->lookupPerson();
         $admin->lookupPrefs();
-        $cli=new cli($admin, 4, $args);
+        $cli=new cli($admin, 5, $args);
         $cli->run();
     }
 

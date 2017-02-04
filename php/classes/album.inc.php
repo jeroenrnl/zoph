@@ -29,6 +29,8 @@ use db\delete;
 use db\db;
 use db\clause;
 use db\selectHelper;
+use conf\conf;
+use template\template;
 
 /**
  * Photo album
@@ -381,6 +383,28 @@ class album extends zophTreeTable implements Organizer {
     }
 
     /**
+     * Create an array describing permissions for all groups
+     * for display or edit
+     * @param bool Return array of groups instead of array of permissions
+     * @return array permissions
+     */
+    public function getPermissionArray($getGroup=false) {
+        $groups = group::getAll();
+        $perms=array();
+        foreach ($groups as $group) {
+            $permissions = $group->getGroupPermissions($this);
+            if ($permissions) {
+                if ($getGroup) {
+                    $perms[]=$group;
+                } else {
+                    $perms[]=$permissions;
+                }
+            }
+        }
+        return $perms;
+    }
+
+    /**
      * Get a link to this album
      * @return link to this album
      * @todo returns HTML, should be phased out in favour of getURL()
@@ -493,6 +517,7 @@ class album extends zophTreeTable implements Organizer {
     }
     /**
      * Return all albums
+     * @return array array of albums
      */
     public static function getAll() {
         $user=user::getCurrent();
@@ -515,6 +540,7 @@ class album extends zophTreeTable implements Organizer {
      * Get albums newer than a certain date
      * @param user get albums for this user
      * @param string date
+     * @return array array of albums
      */
     public static function getNewer(user $user, $date) {
         $qry=new select(array("a" => "albums"));
@@ -534,6 +560,7 @@ class album extends zophTreeTable implements Organizer {
 
     /**
      * Get number of albums for the currently logged on user
+     * @return int count
      */
     public static function getCount() {
         $user=user::getCurrent();
@@ -550,19 +577,6 @@ class album extends zophTreeTable implements Organizer {
         return $qry->getCount();
     }
 
-    /**
-     * Get an array of id => name to build a non-hierarchical array
-     * this function always returns ALL albums and does NOT check user permissions
-     * @retrun array albums
-     */
-    public static function getSelectArray() {
-        $albums=static::getRecords();
-        $selectArray=array(null => "");
-        foreach ($albums as $album) {
-            $selectArray[(string) $album->getId()] = $album->getName();
-        }
-        return $selectArray;
-    }
 }
 
 ?>

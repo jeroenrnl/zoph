@@ -22,6 +22,11 @@
  * @author Jeroen Roos
  */
 
+use conf\conf;
+
+use template\block;
+use template\template;
+
 header("Content-Type: text/html; charset=utf-8");
 $user=user::getCurrent();
 
@@ -63,16 +68,17 @@ if (conf::get("interface.autocomplete")) {
 }
 
 if (conf::get("maps.provider")) {
-    $scripts[]="js/mxn/mxn.js?(" . conf::get("maps.provider") .")";
+    $scripts[]="js/leaflet-src.js";
     $scripts[]="js/maps.js";
-    $scripts[]="js/custommaps.js";
+    if (conf::get("maps.provider") == "googlev3") {
+        $scripts[]="https://maps.googleapis.com/maps/api/js";
+        $scripts[]="js/leaflet/GoogleMutant.js";
+    } else if (conf::get("maps.provider") == "mapbox") {
+        $javascript[]="var mapbox_api_key = '" . conf::get("maps.mapbox.apikey") . "';";
+    }
+
     if (conf::get("maps.geocode")) {
         $scripts[]="js/geocode.js";
-    }
-    switch (strtolower(conf::get("maps.provider"))) {
-    case "googlev3":
-        $scripts[]="https://maps.google.com/maps/api/js?sensor=false";
-        break;
     }
 }
 

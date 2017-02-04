@@ -28,6 +28,16 @@ use db\param;
 use db\clause;
 use db\selectHelper;
 
+use conf\conf;
+
+use geo\map;
+use geo\point;
+use geo\track;
+use geo\marker;
+
+use template\block;
+use template\template;
+
 /**
  * A class corresponding to the photos table.
  *
@@ -76,6 +86,10 @@ class photo extends zophTable {
             $image_path .= $type . "/" . $type . "_";
         }
         $image_path .= $name;
+
+        if (!file_exists($image_path)) {
+            throw new photoNotFoundException($name . " could not be found");
+        }
 
         $mtime = filemtime($image_path);
         $filesize = filesize($image_path);
@@ -563,6 +577,24 @@ class photo extends zophTable {
 
         $file=$this->getFilePath($type);
 
+        if (!file_exists($file)) {
+            switch ($type) {
+            case MID_PREFIX:
+                $size="width='" . MID_SIZE . "'";
+                break;
+            case THUMB_PREFIX:
+                $size="width='" . THUMB_SIZE . "'";
+                break;
+            default:
+                $size="";
+            }
+            return new block("img", array(
+                "src"   => template::getImage("notfound.png"),
+                "class" => $type,
+                "size"  => $size,
+                "alt"   => "file not found"
+            ));
+        }
         list($width, $height, $filetype, $size)=getimagesize($file);
 
         $alt = e($this->get("title"));
@@ -1163,8 +1195,8 @@ class photo extends zophTable {
         } else {
             $html="<h2>" . e($file) . "<\/h2>";
         }
-        $html.=$this->getThumbnailLink()->toStringNoEnter() .
-          "<p><small>" .
+        $html.=str_replace("\n", "", $this->getThumbnailLink());
+        $html.="<p><small>" .
           $this->get("date") . " " . $this->get("time") . "<br>";
         if ($this->photographer) {
             $html.=translate("by", 0) . " " . $this->photographer->getLink(1) . "<br>";
@@ -1179,7 +1211,7 @@ class photo extends zophTable {
      * @return marker instance of marker class
      */
     public function getMarker($icon="geo-photo") {
-        $marker=map::getMarkerFromObj($this, $icon);
+        $marker=marker::getFromObj($this, $icon);
         if (!$marker instanceof marker) {
             $loc=$this->location;
             if ($loc instanceof place) {

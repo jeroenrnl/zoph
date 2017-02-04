@@ -1,6 +1,8 @@
 <?php
-
-/* This file is part of Zoph.
+/**
+ * Retrieve data in XML format
+ *
+ * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @package Zoph
+ * @author Jeroen Roos
  */
 
 require_once "include.inc.php";
@@ -38,9 +43,9 @@ if ($obj_array[0]=="details") {
     } else if ($object=="timezone") {
         $object="TimeZone";
     } else if ($object=="import_progress") {
-        $object="WebImport";
+        $object="import\web";
     } else if ($object=="import_thumbs") {
-        $object="WebImport";
+        $object="import\web";
         $search="thumbs";
     }
 

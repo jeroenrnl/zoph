@@ -21,6 +21,8 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+use template\block;
+use template\template;
 
 require_once "include.inc.php";
 
@@ -44,7 +46,7 @@ $pagenum = getvar("_pageset_page");
 
 $album->lookup();
 $obj=&$album;
-$ancestors = $album->get_ancestors();
+$ancestors = $album->getAncestors();
 $order = $user->prefs->get("child_sortorder");
 $children = $album->getChildren($order);
 $totalPhotoCount = $album->getTotalPhotoCount();

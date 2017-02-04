@@ -27,6 +27,9 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+
+use conf\conf;
+
 $_action="display";
 $error="";
 if (!defined("CLI")) {

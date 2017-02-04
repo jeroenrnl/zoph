@@ -22,6 +22,11 @@
  */
 require_once "include.inc.php";
 
+use geo\track;
+
+use template\block;
+use template\template;
+
 $title=translate("Geotag");
 
 $_action=getvar("_action");
@@ -35,7 +40,7 @@ if (!$user->isAdmin()) {
         redirect("zoph.php");
     }
 } else {
-    $vars=clean_request_vars($request_vars);
+    $vars=$request->getRequestVarsClean();
     $new_vars=update_query_string($vars, "_action", "do_geotag", array("_test", "_testcount"));
     $photos;
     $totalPhotoCount = get_photos($vars, 0, 999999999, $photos, $user);
@@ -68,8 +73,9 @@ if ($_action=="" || $_action=="display") {
 
         $content=new block("geotag_form", array(
             "num_photos"    => $num_photos,
-            "hidden"        => $hidden));
-
+            "hidden"        => $hidden,
+            "tracks"        => track::getRecords("track_id")
+        ));
     }
 
 } else if ($_action=="do_geotag") {

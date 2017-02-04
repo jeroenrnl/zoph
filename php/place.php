@@ -21,6 +21,9 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+
+use conf\conf;
+
 require_once "include.inc.php";
 
 $place_id = getvar("place_id");
@@ -72,10 +75,10 @@ if ($action == "confirm") {
 </div>
 <?php
 if (conf::get("maps.provider")) {
-    $map=new map();
+    $map=new geo\map();
     $marker=$place->getMarker();
     $map->setCenterAndZoomFromObj($place);
-    if ($marker instanceof marker) {
+    if ($marker instanceof geo\marker) {
         $map->addMarker($marker);
     }
     if ($_action == "edit" || $_action == "new") {

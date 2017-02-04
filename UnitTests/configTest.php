@@ -29,6 +29,8 @@ use db\db;
 use db\clause;
 use db\select;
 
+use conf\conf;
+
 /**
  * Test the conf class
  *

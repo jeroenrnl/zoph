@@ -16,6 +16,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+use conf\conf;
+use template\template;
+
 function create_field_html($fields) {
 
     $html = "";
@@ -24,19 +27,6 @@ function create_field_html($fields) {
             $html .=
             "<dt>" . e($key) . "</dt>\n" .
             "<dd>" . $val ." </dd>\n";
-        }
-    }
-    return $html;
-}
-
-function create_field_html_table($fields) {
-
-    $html = "";
-    while (list($key, $val) = each($fields)) {
-        if ($val) {
-            $html .=
-            "<tr>\n  <th>" . e($key) . "</th>\n" .
-            "  <td>" . e($val) . "</<td>\n</tr>\n";
         }
     }
     return $html;
@@ -127,111 +117,6 @@ function create_photo_text_pulldown($var, $name = null) {
         "category" => translate("category",0),
         "person" => translate("person",0),
         "photographer" => translate("photographer",0)));
-}
-
-/*
- * Remove any params without values and operator params without corresponding
- * fields (e.g. _album_id-op when there is no _album_id).  This can be called
- * once after a search is performed.  It allows for shorter urls that are
- * more readable and easier to debug.
- */
-function clean_request_vars($vars) {
-    $clean_vars = array();
-    $interim_vars = array();
-
-    /*
-      First pass through vars will flatten out any arrays in the list.
-      arrays were used in search.php to make the form extensible. -RB
-    */
-    while (list($key, $val) = each($vars)) {
-        // trim empty values
-        if (empty($val)) { continue; }
-
-        // won't need this
-        //if ($key == "_action" || $key == "_button") { continue; }
-        // keep _action now that the pager links point back to search.php
-        if ($key == "_button") { continue; }
-
-        if (is_array($val)) {
-            while (list($subkey, $subval) = each($val)) {
-                if (empty($subval)) { continue; }
-
-                //  change var_op[key] to var#key_op
-                if (substr($key, -3) == "_op") {
-                    $newkey = substr($key, 0, -3) . '#' . $subkey . '_op';
-
-                    //  change var_conj[key] to var#key_conj
-                } elseif (substr($key, -5) == "_conj") {
-                    $newkey = substr($key, 0, -5) . '#' . $subkey . '_conj';
-
-                    //  change var_children[key] to var#key_children
-                } elseif (substr($key, -9) == "_children") {
-                    $newkey = substr($key, 0, -9) . '#' . $subkey . '_children';
-                    //  change var[key] to var#key
-                } else {
-                    $newkey = $key . '#' . $subkey;
-                }
-
-                $interim_vars[$newkey] = $subval;
-            }
-        } else {
-            $interim_vars[$key] = $val;
-        }
-    }
-
-    /*
-      Second pass through will get rid of ops and conjs without fields
-      and fix the keys for compatability with the rest of zoph.  It will also remove
-      "field" entries without a corresponding "_field" type and vice versa.
-      A hyphen is not valid as part of a variable name in php so underscore was used
-      while processing the form in search.php  -RB
-    */
-
-    while (list($key, $val) = each($interim_vars)) {
-        // process _var variables
-        if (substr($key, 0, 1) == "_") {
-
-            //process _op variables
-            if (substr($key, -3) == "_op") {
-                // replace _op with -op to be compatable with the rest of application
-                $key = substr_replace($key, '-', -3, -2);
-                // get rid of ops without fields
-                $field = substr($key, 1, -3);
-                if (empty($interim_vars[$field]) && empty($interim_vars["_$field"])) { continue; }
-
-                //process _conj variables
-            } elseif (substr($key, -5) == "_conj") {
-                // replace _conj with -conj to be compatable
-                // with the rest of application
-                $key = substr_replace($key, '-', -5, -4);
-                // get rid of ops without fields
-                $field = substr($key, 1, -5);
-                if (empty($interim_vars[$field]) && empty($interim_vars["_$field"])) { continue; }
-                //process _children variables
-            } elseif (substr($key, -9) == "_children") {
-                // replace _children with -children to be compatable
-                // with the rest of application
-                $key = substr_replace($key, '-', -9, -8);
-                // get rid of ops without fields
-                $field = substr($key, 1, -9);
-                if (empty($interim_vars[$field]) && empty($interim_vars["_$field"])) { continue; }
-            } else {
-                $field = substr($key, 1);
-            }
-
-            //process "_field" type variables
-            if (substr($field, 0, 5) == "field" &&
-                (empty($interim_vars[$field]) &&
-                empty($interim_vars["_$field"]))) { continue; }
-        } else {
-            //process "field" type variables
-            if (substr($key, 0, 5) == "field" && empty($interim_vars["_$key"])) { continue; }
-        }
-
-        $clean_vars[$key] = $val;
-    }
-
-    return $clean_vars;
 }
 
 /*
@@ -422,24 +307,6 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
     } else {
         echo translate("You need to have ZIP support in PHP to download zip files");
         return FALSE;
-    }
-}
-
-/**
- * transforms a size in bytes into a human readable format using
- * Ki Mi Gi, etc. prefixes
- * Give me a call if your database grows bigger than 1024 Yobbibytes. :-)
- * @param int bytes number of bytes
- * @return string human readable filesize
- */
-function getHuman($bytes) {
-    if ($bytes==0) {
-        // prevents div by 0
-        return "0B";
-    } else {
-        $prefixes=array("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi");
-        $length=floor(log($bytes,2)/10);
-        return round($bytes/pow(2,10*($length)),1) . $prefixes[floor($length)] . "B";
     }
 }
 

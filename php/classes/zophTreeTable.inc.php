@@ -51,14 +51,15 @@ abstract class zophTreeTable extends zophTable {
      * @param array Names of tables from which entries also should be deleted.
      */
     public function delete() {
-
         // simulate overloading
         if (func_num_args()>=1) {
             $extra_tables = func_get_arg(0);
         } else {
             $extra_tables = null;
         }
-
+        if ($this->getId()==0) {
+            return;
+        }
         $this->getChildren();
         if ($this->children) {
             foreach ($this->children as $child) {
@@ -81,12 +82,14 @@ abstract class zophTreeTable extends zophTable {
         return ($this->getId() == $root->getId());
     }
 
-
-
-    /*
-     * Gets the ancestors of this record.
+    /**
+     * Get the parent node for this node
+     * @return zophTreeTable parent node
      */
-    public function get_ancestors($anc = array()) {
+    public function getParent() {
+        if ($this->isRoot()) {
+            return null;
+        }
         $key = static::$primaryKeys[0];
         $pid = $this->get("parent_" . $key);
 
@@ -95,17 +98,26 @@ abstract class zophTreeTable extends zophTable {
             $pid = $this->get("parent_" . $key);
         }
 
-        // root of tree
-        if ($pid == 0) {
-            $this->ancestors = null;
-            return $anc;
-        }
-
         $parent = new static($pid);
         $parent->lookup();
 
-        array_push($anc, $parent);
-        return $parent->get_ancestors($anc);
+        return $parent;
+    }
+
+    /**
+     * Gets the ancestors of this record.
+     * @param array ancestors
+     * @return array ancestors
+     */
+    public function getAncestors($anc = array()) {
+        $parent=$this->getParent();
+
+        if ($parent) {
+            array_push($anc, $parent);
+            return $parent->getAncestors($anc);
+        } else {
+            return $anc;
+        }
     }
 
     /**
@@ -124,7 +136,7 @@ abstract class zophTreeTable extends zophTable {
         foreach ($records as $record) {
             $ids[$record->getId()]=$record->getId();
 
-            $parents=$record->get_ancestors();
+            $parents=$record->getAncestors();
 
             foreach ($parents as $parent) {
                 $ids[$parent->getId()]=$parent->getId();
@@ -164,6 +176,11 @@ abstract class zophTreeTable extends zophTable {
         return implode(",", $id_array);
     }
 
+    /**
+     * Create an XML tree from this object
+     * @param DOMDocument XML document to insert the new node in
+     * @param Only include nodes that begin with this string
+     */
     private function getXMLtree(DOMDocument $xml, $search) {
         $rootname=static::XMLROOT;
         $nodename=static::XMLNODE;
@@ -281,10 +298,6 @@ abstract class zophTreeTable extends zophTable {
         $rootnode->appendChild($tree);
         $xml->appendChild($rootnode);
         return $xml;
-    }
-
-    public static function getSelectArray() {
-        return static::getTreeSelectArray();
     }
 
     public static function getTreeSelectArray($rec = null, $select_array = null, $depth=0) {

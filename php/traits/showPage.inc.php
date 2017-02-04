@@ -21,6 +21,8 @@
  * @package Zoph
  */
 
+use template\block;
+
 /**
  * Show page trait
  * A page is plaintext or zophCode that can be used to personalize parts

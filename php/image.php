@@ -20,7 +20,12 @@
  * @author Jeroen Roos
  * @author Alan Shutko
  */
+use conf\conf;
+use template\template;
+
 session_cache_limiter("public");
+require_once "autoload.inc.php";
+require_once "settings.inc.php";
 require_once "variables.inc.php";
 $hash = getvar("hash");
 $annotated = getvar('annotated');
@@ -60,8 +65,16 @@ if (($type=="import_thumb" || $type=="import_mid") &&
             $type="mid";
             $found = true;
         } catch(PhotoNotFoundException $e) {
-            /** @todo This should be changed into a nicer error display; */
-            die($e->getMessage());
+            header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found", true, 404);
+            $tpl=new template("error", array(
+                "title"   => "Not Found",
+                "message" => $e->getMessage()
+            ));
+            $tpl->addActionLinks(array(
+                "return" => "zoph.php"
+            ));
+            echo $tpl;
+            exit;
         }
     }
 } else if (conf::get("feature.annotate") && $annotated) {
@@ -109,8 +122,20 @@ if ($found) {
             $photo->lookup();
         }
     }
-
-    list($headers, $image)=$photo->display($type);
+    try {
+        list($headers, $image)=$photo->display($type);
+    } catch(PhotoNotFoundException $e) {
+        header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found", true, 404);
+        $tpl=new template("error", array(
+            "title"   => "Not Found",
+            "message" => $e->getMessage()
+        ));
+        $tpl->addActionLinks(array(
+            "return" => "zoph.php"
+        ));
+        echo $tpl;
+        exit;
+    }
 
     foreach ($headers as $label=>$value) {
         if ($label=="http_status") {
@@ -126,6 +151,7 @@ if ($found) {
     }
     exit;
 }
+header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found", true, 404);
 require_once "header.inc.php";
 ?>
   <h1>

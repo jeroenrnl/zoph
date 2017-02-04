@@ -21,6 +21,7 @@
  * @package Zoph
  */
 
+use conf\conf;
 
 if (!is_callable("finfo_file")) {
     log::msg("fileinfo PHP extension is missing", log::FATAL);

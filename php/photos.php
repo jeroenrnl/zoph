@@ -21,6 +21,11 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+
+use conf\conf;
+use template\template;
+use template\pager;
+
 require_once "include.inc.php";
 
 
@@ -31,7 +36,7 @@ $_off = (int) getvar("_off");
 $_order = getvar("_order");
 $_dir = getvar("_dir");
 $_show = getvar("_show");
-$vars=clean_request_vars($request_vars);
+$vars=$request->getRequestVarsClean();
 if (!preg_match("/^[a-zA-Z_]*$/", $_order)) {
     die("Illegal characters in _order");
 }
@@ -214,11 +219,11 @@ if ($num_thumbnails <= 0) {
 </div>
 <?php
 if (conf::get("maps.provider")) {
-    $map=new map();
+    $map=new geo\map();
     foreach ($thumbnails as $thumbnail) {
         $thumbnail->lookup();
         $marker=$thumbnail->getMarker();
-        if ($marker instanceof marker) {
+        if ($marker instanceof geo\marker) {
             $map->addMarker($marker);
         }
     }

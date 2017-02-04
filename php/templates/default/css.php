@@ -1,5 +1,4 @@
 <?php
-
 /* This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
@@ -15,9 +14,14 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+
+use template\colorScheme;
+use template\template;
+use conf\conf;
 ?>
 
 @import "templates/default/reset.css";
+@import "templates/default/leaflet.css";
 /* Some of the styles have been based on http://www.alistapart.com/articles/taminglists/ */
 
 /* Main CSS style, all elements inherit these settings */
@@ -25,8 +29,8 @@
 body    {
     font-family: Arial, Verdana, sans-serif;
     font-size: medium;
-    color: <?= color_scheme::getColor("text_color") ?>;
-    background: <?= color_scheme::getColor("page_bg_color") ?>;
+    color: <?= colorScheme::getColor("text_color") ?>;
+    background: <?= colorScheme::getColor("page_bg_color") ?>;
     width: <?= conf::get("interface.width"); ?>;
     margin: 8px auto; /* To center the page */
     line-height: 1.1;
@@ -35,13 +39,13 @@ body    {
 /* Links */
 
 a   {
-    color: <?= color_scheme::getColor("link_color") ?>;
+    color: <?= colorScheme::getColor("link_color") ?>;
 }
 
 h1  {
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
-    color: <?= color_scheme::getColor("title_font_color") ?>;
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     text-align: left;
     width: 100%;
     clear: left;
@@ -86,8 +90,8 @@ ul.thumbs {
 }
 
 ul.thumbs > li {
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
-    color: <?= color_scheme::getColor("title_font_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
     position: relative;
     display: block;
     text-align: center;
@@ -107,7 +111,7 @@ ul.thumbs > li dl.extradata {
 }
 
 ul.thumbs > li.thumb_circle {
-    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    background: <?= colorScheme::getColor("breadcrumb_bg_color") ?>;
     box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(0,0,0,0.2) inset;
 }
 
@@ -146,8 +150,8 @@ div.details > h3 {
     padding: 5px 20px;
     border-radius: 10px 10px 0 0;
     width: 100%;
-    background: <?= color_scheme::getColor("tab_bg_color") ?>;
-    color: <?= color_scheme::getColor("tab_font_color") ?>;
+    background: <?= colorScheme::getColor("tab_bg_color") ?>;
+    color: <?= colorScheme::getColor("tab_font_color") ?>;
     font-size: large;
     text-align: left;
 }
@@ -196,7 +200,7 @@ ul.list {
 }
 
 ul.list > li:nth-child(2n) {
-    background-color: <?= color_scheme::getColor("title_bg_color") ?>;
+    background-color: <?= colorScheme::getColor("title_bg_color") ?>;
 }
 
 ul.tree {
@@ -258,8 +262,8 @@ ul.admin a {
 }
 
 ul.admin a:hover {
-    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    background: <?= colorScheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     border-radius: 5px;
 }
 
@@ -340,9 +344,9 @@ ul.autocompdropdown {
     position: relative;
     margin: 0;
     padding: 0;
-    background: <?= color_scheme::getColor("page_bg_color") ?>;
+    background: <?= colorScheme::getColor("page_bg_color") ?>;
     width: 300px;
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     max-height: 15em;
     overflow: auto;
     z-index: 5;
@@ -368,7 +372,7 @@ input[type=text].autocompinput {
 
 ul.autocompdropdown li:hover,
 ul.autocompdropdown li#selected {
-    background: <?= color_scheme::getColor("tab_bg_color") ?>;
+    background: <?= colorScheme::getColor("tab_bg_color") ?>;
 }
 
 /* Menubar */
@@ -384,7 +388,7 @@ nav ul li {
 }
 
 nav.menu {
-    background: <?= color_scheme::getColor("page_bg_color") ?>;
+    background: <?= colorScheme::getColor("page_bg_color") ?>;
 }
 
 nav.menu ul {
@@ -397,9 +401,9 @@ nav.menu ul li  {
     padding: 2px 4px 4px 4px;
     margin: 1px;
     text-align: center;
-    background: <?= color_scheme::getColor("tab_bg_color") ?>;
-    color: <?= color_scheme::getColor("tab_font_color") ?>;
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    background: <?= colorScheme::getColor("tab_bg_color") ?>;
+    color: <?= colorScheme::getColor("tab_font_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     border-bottom: none;
     border-radius: 2px 2px 0 0;
     font-size: large;
@@ -408,38 +412,38 @@ nav.menu ul li  {
 
 nav.menu ul li:hover {
     top: -1px;
-    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    background: <?= colorScheme::getColor("breadcrumb_bg_color") ?>;
     padding: 5px;
     font-weight: bold;
 }
 
 nav.menu ul li.selected {
-    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
-    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
+    background: <?= colorScheme::getColor("selected_tab_bg_color") ?>;
+    color: <?= colorScheme::getColor("selected_tab_font_color") ?>;
 }
 
 /* since the A element does not inherit font colors from it's parents, we set it
  * explicetly here. Also underlining is removed from links in menu, unless it is hovered */
 
 nav.menu ul li a {
-    color: <?= color_scheme::getColor("tab_font_color") ?>;
+    color: <?= colorScheme::getColor("tab_font_color") ?>;
     text-decoration: none;
 }
 
 nav.menu ul li.selected > a {
-    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
+    color: <?= colorScheme::getColor("selected_tab_font_color") ?>;
 }
 
 nav.menu ul li a:hover {
-    color: <?= color_scheme::getColor("text_color") ?>;
+    color: <?= colorScheme::getColor("text_color") ?>;
 }
 
 /* The breadcrumb line at the top of the page */
 
 nav.breadcrumbs {
-    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
-    color: <?= color_scheme::getColor("text_color") ?>;
+    background: <?= colorScheme::getColor("breadcrumb_bg_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
+    color: <?= colorScheme::getColor("text_color") ?>;
     font-size: small;
     padding: 3px 10px;
     clear: left;
@@ -450,7 +454,7 @@ nav.breadcrumbs {
 }
 
 ul.breadcrumbs li {
-    color: <?= color_scheme::getColor("text_color") ?>;
+    color: <?= colorScheme::getColor("text_color") ?>;
     background: transparent;
 }
 
@@ -468,17 +472,17 @@ ul.breadcrumbs.firstdots li:first-child:before {
 
 ul.breadcrumbs li a {
     padding: 0 1em;
-    color: <?= color_scheme::getColor("text_color") ?>;
+    color: <?= colorScheme::getColor("text_color") ?>;
 }
 
 /* Main page */
 .main, .page, div.map, div#selection  {
-    background: <?= color_scheme::getColor("table_bg_color") ?>;
+    background: <?= colorScheme::getColor("table_bg_color") ?>;
     font-size: medium;
     width: 100%;
     border-spacing: 0px;
     padding: 10px;
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     border-radius: 0 0 5px 5px;
     box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
     clear: both;
@@ -509,6 +513,10 @@ div#selection {
     z-index: 6;
 }
 
+.leaflet-control-layers-base label {
+    text-align: left;
+}
+
 div.minimap {
     float: right;
     right: 10px;
@@ -520,8 +528,8 @@ div.minimap {
 div.main#config .desc {
     clear: both;
     width: 50%;
-    color: <?= color_scheme::getColor("title_font_color") ?>;
-    border: 1px solid <?= color_scheme::getColor("title_font_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("title_font_color") ?>;
     margin-left: 11.5em;
     margin-bottom: 15px;
     padding: 0.5em;
@@ -530,7 +538,7 @@ div.main#config .desc {
 }
 
 div.main#config div.confGroup > .desc {
-    color: <?= color_scheme::getColor("text_color") ?>;
+    color: <?= colorScheme::getColor("text_color") ?>;
     background: none;
     margin-left: 0;
     width: 98%;
@@ -542,9 +550,9 @@ div.main#config h2 {
     clear: both;
     display: block;
     padding: 5px 10px;
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
-    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
-    color: <?= color_scheme::getColor("text_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
+    background: <?= colorScheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?= colorScheme::getColor("text_color") ?>;
     width: 100%;
 }
 
@@ -623,7 +631,7 @@ div.ratingdetails {
 div.timedetail,
 div.ratingdetail {
     margin-top: 5px;
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     background: white;
 }
 
@@ -633,8 +641,8 @@ div.timedetail dd {
 }
 
 div.timedetail h3 {
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
-    color: <?= color_scheme::getColor("title_font_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
     font-size: large;
 }
 
@@ -645,8 +653,8 @@ table.ratingdetail td, table.ratingdetail th {
 }
 
 table.ratingdetail th {
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
-    color: <?= color_scheme::getColor("title_font_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
 }
 
 table.tracks {
@@ -660,7 +668,7 @@ table.tracks th, table.tracks td {
 }
 
 table.tracks tr:nth-child(odd) {
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
 }
 
 p.main {
@@ -709,7 +717,7 @@ div.ratings   {
     width: 20%;
     text-align: right;
     padding-right: 15px;
-    border-right: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border-right: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
 }
 
 .graph.bar div.bar   {
@@ -722,7 +730,7 @@ div.ratings   {
 /* This is the bar that shows the number of photos for each rating */
 .graph.bar div.fill   {
     float: left;
-    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
+    background: <?= colorScheme::getColor("selected_tab_bg_color") ?>;
     border-radius: 0 3px 3px 0;
 
     box-shadow: 3px 3px 3px rgba(0,0,0,0.6);
@@ -818,17 +826,17 @@ ul.letter {
 
 ul.actionlink li:before {
     content: ' | ';
-    color: <?= color_scheme::getColor("title_font_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
 }
 
 ul.actionlink li:first-child:before {
     content: ' [ ';
-    color: <?= color_scheme::getColor("title_font_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
     }
 
 ul.actionlink li:last-child:after {
     content: ' ] ';
-    color: <?= color_scheme::getColor("title_font_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
 }
 
 ul.actionlink li {
@@ -863,9 +871,9 @@ ul.actionlink a:hover {
 
 /* Description of a photo */
 .photodesc  {
-    border:  4px solid <?= color_scheme::getColor("title_bg_color") ?>;
+    border:  4px solid <?= colorScheme::getColor("title_bg_color") ?>;
     font-size: small;
-    background: <?= color_scheme::getColor("table_bg_color") ?>;
+    background: <?= colorScheme::getColor("table_bg_color") ?>;
     clear: both;
 }
 /* The description of a photo in thumbnail view */
@@ -899,7 +907,7 @@ div.color {
 /* Tables for the permissions */
 
 table.permissions   {
-    background: <?= color_scheme::getColor("table_bg_color") ?>;
+    background: <?= colorScheme::getColor("table_bg_color") ?>;
     width: 90%;
     margin-left: auto; /* To center the page */
     margin-right: auto;
@@ -908,7 +916,7 @@ table.permissions   {
     }
 
 table.permissions td, table.permissions th  {
-    background: <?= color_scheme::getColor("table_bg_color") ?>;
+    background: <?= colorScheme::getColor("table_bg_color") ?>;
     font-size: medium;
     text-align: left;
 }
@@ -1002,8 +1010,8 @@ ul.pagegroup {
 
 ul.pagegroup li {
     display: block;
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
-    color: <?= color_scheme::getColor("title_font_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
     border-radius: 5px;
     float: left;
     margin: 3px;
@@ -1018,13 +1026,13 @@ ul.pagegroup li a {
 }
 
 ul.pagegroup li:hover {
-    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
-    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
+    background: <?= colorScheme::getColor("selected_tab_bg_color") ?>;
+    color: <?= colorScheme::getColor("selected_tab_font_color") ?>;
 }
 
 ul.pagegroup li.current {
-    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
-    color: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
+    background: <?= colorScheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?= colorScheme::getColor("breadcrumb_bg_color") ?>;
     font-weight: bold;
 }
 
@@ -1131,6 +1139,8 @@ div.formtext {
 }
 
 div.editchoice  {
+    position: relative;
+    z-index: 5;
     vertical-align: top;
     clear: none;
     font-size: small;
@@ -1152,7 +1162,7 @@ div.thumbnail   {
 }
 
 div.comment {
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     background: transparent;
     font-size: small;
     min-height: 5em;
@@ -1162,14 +1172,14 @@ div.comment {
 
 div.comment h3 {
     width: 100%;
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
-    color: <?= color_scheme::getColor("title_font_color") ?>;
-    border-bottom: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
+    border-bottom: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     text-align: left;
 }
 
 div.commentinfo {
-    border-bottom: 1px dashed <?= color_scheme::getColor("table_border_color") ?>;
+    border-bottom: 1px dashed <?= colorScheme::getColor("table_border_color") ?>;
     width: 100%;
     font-size: x-small;
     font-style: italic;
@@ -1216,7 +1226,6 @@ dl.display {
 }
 
 label,
-table.credits th,
 dl.display > dt,
 dl.display > dd {
     float: left;
@@ -1263,7 +1272,7 @@ dl.groups dd {
     font-size: small;
 }
 
-label, table.credits th {
+label {
     text-align: right;
     vertical-align: top;
     font-weight: bold;
@@ -1272,10 +1281,6 @@ label, table.credits th {
     width: 10em;
     display: block;
     float: left;
-    clear: none;
-}
-
-label {
     clear: left;
 }
 
@@ -1306,7 +1311,7 @@ fieldset.geotag  {
     width: 100%;
     margin: 10px 0 20px 0;
     padding: 10px 0;
-    border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("page_bg_color") ?>;
 }
 
 fieldset.members {
@@ -1314,7 +1319,7 @@ fieldset.members {
     margin: 20px 20px 20px 12em;
     padding: 1em;
     width: 15em;
-    border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("page_bg_color") ?>;
 }
 
 
@@ -1337,8 +1342,8 @@ fieldset.members legend {
     padding-right: 2em;
     padding-left: 2em;
     font-weight: bold;
-    border: 1px solid <?= color_scheme::getColor("page_bg_color") ?>;
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("page_bg_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
 }
 
 fieldset.members legend {
@@ -1372,8 +1377,8 @@ input[type="submit"],
 input[type="reset"] {
     border: none;
     border-radius: 5px;
-    background: <?= color_scheme::getColor("tab_bg_color") ?>;
-    color: <?= color_scheme::getColor("tab_font_color") ?>;
+    background: <?= colorScheme::getColor("tab_bg_color") ?>;
+    color: <?= colorScheme::getColor("tab_font_color") ?>;
     font-size: x-large;
     font-weight: bold;
     width: 200px;
@@ -1385,8 +1390,8 @@ input[type="reset"] {
 input[type="button"]:hover,
 input[type="submit"]:hover,
 input[type="reset"]:hover {
-    background: <?= color_scheme::getColor("selected_tab_bg_color") ?>;
-    color: <?= color_scheme::getColor("selected_tab_font_color") ?>;
+    background: <?= colorScheme::getColor("selected_tab_bg_color") ?>;
+    color: <?= colorScheme::getColor("selected_tab_font_color") ?>;
 }
 
 input[disabled] {
@@ -1465,7 +1470,7 @@ input[type="date"],
 input[type="number"],
 input[type="password"],
 textarea {
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     padding: 2px;
     border-radius: 2px;
     margin: 2px;
@@ -1507,9 +1512,14 @@ table.credits {
     width: 100%;
 }
 
+table.credits th {
+    text-align: right;
+    padding: 2px;
+}
+
 table#users td,
 table.credits td {
-    margin: 2px;
+    padding: 2px;
     vertical-align: top;
 }
 
@@ -1550,11 +1560,11 @@ div.page-preview {
     max-height: 600px;
     min-width: 600px;
     overflow: scroll;
-    background: <?= color_scheme::getColor("table_bg_color") ?>;
+    background: <?= colorScheme::getColor("table_bg_color") ?>;
     font-size: medium;
     border-spacing: 0;
     padding: 10px;
-    border: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     clear: both;
 }
 
@@ -1564,7 +1574,7 @@ div.page h1, div.page-preview h1 {
     width: 100%;
     border-left: 0;
     border-right: 0;
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
     font-size: large;
     text-align: center;
 
@@ -1608,7 +1618,7 @@ div.import,
 div.import_details {
     float:      left;
     border-radius: 5px;
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
     margin: 10px;
     width: 95%;
 }
@@ -1659,9 +1669,9 @@ div.import h2,
 div.import_details h2 {
     border-radius-top-left: 5px;
     border-radius-top-right: 5px;
-    background: <?= color_scheme::getColor("breadcrumb_bg_color") ?>;
-    color: <?= color_scheme::getColor("title_font_color") ?>;
-    border-bottom: 1px solid <?= color_scheme::getColor("table_border_color") ?>;
+    background: <?= colorScheme::getColor("breadcrumb_bg_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
+    border-bottom: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     text-align: center;
     width: 100%;
     clear: left;
@@ -1693,7 +1703,7 @@ div.import_details h2 {
     max-width: 99%;
     border-radius: 4px;
     text-align: center;
-    background: <?= color_scheme::getColor("page_bg_color") ?>;
+    background: <?= colorScheme::getColor("page_bg_color") ?>;
     color: white;
     font-weight: bold;
     overflow: hidden;
@@ -1805,8 +1815,8 @@ ul.tabs > li {
 
 ul.tabs div.tab {
     position: relative;
-    background: <?= color_scheme::getColor("title_bg_color") ?>;
-    color: <?= color_scheme::getColor("title_font_color") ?>;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
     border-radius: 10px 0 0 10px;
     width: 30px;
     height: 25px;

@@ -21,7 +21,11 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+use conf\conf;
+use template\template;
+
 define("LOGON", true);
+
 require_once "include.inc.php";
 
 if (isset($_GET["redirect"])) {

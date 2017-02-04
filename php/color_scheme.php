@@ -21,6 +21,8 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+use template\colorScheme;
+
 require_once "include.inc.php";
 
 if (!$user->isAdmin()) {
@@ -29,17 +31,17 @@ if (!$user->isAdmin()) {
 
 $color_scheme_id = getvar("color_scheme_id");
 
-$color_scheme = new color_scheme($color_scheme_id);
+$colorScheme = new colorScheme($color_scheme_id);
 
 if ($_action == "copy") {
     $title = translate("Copy Color Scheme");
-    $color_scheme->lookup();
-    $name = "copy of " . $color_scheme->get("name");
+    $colorScheme->lookup();
+    $name = "copy of " . $colorScheme->get("name");
     $color_scheme_id = 0;
     $_action = "new";
     $copy=1;
 }
-$obj = &$color_scheme;
+$obj = &$colorScheme;
 $redirect = "color_schemes.php";
 require_once "actions.inc.php";
 
@@ -48,8 +50,8 @@ if ($_action == "update") {
 }
 
 if ($action != "insert") {
-    $color_scheme->lookup();
-    $title = $color_scheme->get("name");
+    $colorScheme->lookup();
+    $title = $colorScheme->get("name");
 } else {
     $title = translate("New Color Scheme");
 }
@@ -65,10 +67,10 @@ if ($action == "display") {
         ?>
         <ul class="actionlink">
           <li><a href="color_scheme.php?_action=edit&amp;color_scheme_id=<?php
-              echo $color_scheme->getId() ?>"><?php echo translate("edit") ?>
+              echo $colorScheme->getId() ?>"><?php echo translate("edit") ?>
           </a></li>
           <li><a href="color_scheme.php?_action=delete&amp;color_scheme_id=<?php
-              echo $color_scheme->getId() ?>"><?php echo translate("delete") ?>
+              echo $colorScheme->getId() ?>"><?php echo translate("delete") ?>
           </a></li>
           <li><a href="color_scheme.php?_action=new"><?php echo translate("new") ?></a></li>
         </ul>
@@ -78,10 +80,10 @@ if ($action == "display") {
     <?php echo translate("color scheme") ?>
     </h1>
     <div class="main">
-      <h2><?php echo $color_scheme->get("name") ?></h2>
-        <dl class="display color_scheme">
+      <h2><?php echo $colorScheme->get("name") ?></h2>
+        <dl class="display colorScheme">
     <?php
-    $colors = $color_scheme->getDisplayArray();
+    $colors = $colorScheme->getDisplayArray();
 
     while (list($name, $value) = each($colors)) {
         if ($name == "Name") { continue; }
@@ -102,16 +104,16 @@ if ($action == "display") {
       <div class="main">
         <ul class="actionlink">
           <li><a href="color_scheme.php?_action=confirm&amp;color_scheme_id=<?php
-            echo $color_scheme->getId() ?>">
+            echo $colorScheme->getId() ?>">
             <?php echo translate("delete") ?>
           </a></li>
           <li><a href="color_schemes.php"><?php echo translate("cancel") ?></a></li>
         </ul>
-        <?php echo sprintf(translate("Confirm deletion of '%s'"), $color_scheme->get("name")) ?>:
+        <?php echo sprintf(translate("Confirm deletion of '%s'"), $colorScheme->get("name")) ?>:
         <br>
     <?php
 } else {
-    $colors = $color_scheme->getColors();
+    $colors = $colorScheme->getColors();
     ?>
     <h1>
       <ul class="actionlink">
@@ -123,14 +125,14 @@ if ($action == "display") {
       <form action="color_scheme.php">
        <input type="hidden" name="_action" value="<?php echo $action ?>">
        <input type="hidden" name="color_scheme_id" value="<?php
-         echo $color_scheme->get("color_scheme_id") ?>">
+         echo $colorScheme->get("color_scheme_id") ?>">
        <label for="name">Name</label>
        <div class="colordef">
     <?php
     if (isset($copy)) {
-        echo create_text_input("name", "copy of " . $color_scheme->get("name"), 16, 64);
+        echo create_text_input("name", "copy of " . $colorScheme->get("name"), 16, 64);
     } else {
-        echo create_text_input("name", $color_scheme->get("name"), 16, 64);
+        echo create_text_input("name", $colorScheme->get("name"), 16, 64);
     }
     ?>
         </div>

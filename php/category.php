@@ -21,6 +21,9 @@
  * @author Jason Geiger
  * @author Jeroen Roos
  */
+
+use template\template;
+
 require_once "include.inc.php";
 
 if (!$user->canEditOrganizers()) {

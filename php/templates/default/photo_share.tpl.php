@@ -19,7 +19,11 @@
  * @author Jeroen Roos
  */
 
-if (!ZOPH) { die("Illegal call"); }
+use template\template;
+
+if (!ZOPH) {
+    die("Illegal call");
+}
 ?>
 <li class="share">
     <div class="tab">

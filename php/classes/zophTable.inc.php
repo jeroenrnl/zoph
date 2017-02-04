@@ -33,6 +33,11 @@ use db\query;
 use db\clause;
 use db\delete;
 
+use conf\conf;
+
+use template\block;
+use template\template;
+
 /**
  * A generic table class.  Is is meant to be subclassed by particular
  * table classes.  A table is represented by a name, an array of
@@ -738,6 +743,19 @@ abstract class zophTable {
         return $tpl;
     }
 
+    /**
+     * Get an array of id => name to build a non-hierarchical array
+     * this function does NOT check user permissions
+     * @return array
+     */
+    public static function getSelectArray() {
+        $records=static::getRecords();
+        $selectArray=array(null => "");
+        foreach ($records as $record) {
+            $selectArray[(string) $record->getId()] = $record->getName();
+        }
+        return $selectArray;
+    }
 
 }
 ?>

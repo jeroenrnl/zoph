@@ -19,7 +19,11 @@
  * @author Jeroen Roos
  */
 
-if (!ZOPH) { die("Illegal call"); }
+use template\template;
+
+if (!ZOPH) {
+    die("Illegal call");
+}
 ?>
 
 <div class="message <?= $tpl_class ?>">

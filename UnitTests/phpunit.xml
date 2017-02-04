@@ -20,6 +20,8 @@
       <file>PDOdatabaseTest.php</file>
       <file>configTest.php</file>
       <file>XMLdataTest.php</file>
+      <file>variableTest.php</file>
+      <file>requestTest.php</file>
       <file>photoTest.php</file>
       <file>albumTest.php</file>
       <file>placeTest.php</file>
@@ -28,7 +30,9 @@
       <file>anonymousUserTest.php</file>
       <file>categoryTest.php</file>
       <file>groupTest.php</file>
+      <file>groupControllerTest.php</file>
       <file>permissionsTest.php</file>
+      <file>permissionsControllerTest.php</file>
       <file>personTest.php</file>
       <file>circleTest.php</file>
       <file>photographerTest.php</file>
@@ -38,6 +42,7 @@
       <file>relationTest.php</file>
       <file>pointTest.php</file>
       <file>trackTest.php</file>
+      <file>mapTest.php</file>
       <file>pageTest.php</file>
       <file>pagesetTest.php</file>
       <file>zophCodeParserTest.php</file>
@@ -46,6 +51,8 @@
       <file>replaceTest.php</file>
       <file>commentTest.php</file>
       <file>searchTest.php</file>
+    </testsuite>
+    <testsuite name="New">
     </testsuite>
   </testsuites>
 </phpunit>

@@ -23,8 +23,8 @@
 
 namespace zophCode;
 
-use template;
-use block;
+use template\block;
+use template\template;
 
 /**
  * Create smileys

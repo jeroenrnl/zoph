@@ -21,54 +21,31 @@
  * @author Jason Geiger
  * @author David Baldwin
  * @author Jeroen Roos
+ *
+ * @todo The functionality in this file has been moved to the web\request and
+ *       generic\varible functions, this remains until all files have been
+ *       moved to accessing those instead of the functions defined here.
  */
 
+use generic\variable;
+use web\request;
+
+$request=request::create();
+
 function getvar($var) {
-    $val = "";
-    if (in_array($var,array_keys($_GET))) {
-        $val = $_GET[$var];
-    } else if (in_array($var,array_keys($_POST))) {
-        $val = $_POST[$var];
-    }
-
-    return i($val);
+    return $GLOBALS["request"][$var];
 }
 
-function i($var) {
-    if ($var === "<" || $var === "<=" || $var === ">=" || $var === ">") {
-        // Strip tags breaks some searches
-        return $var;
-    }
-    if (is_array($var)) {
-        $return=array();
-        foreach ($var as $key => $value) {
-            $return[i($key)]=i($value);
-        }
-    } else {
-        $return=strip_tags(html_entity_decode($var));
-    }
-    return $return;
+function i($value) {
+    $var=new variable($value);
+    return $var->input();
 }
 
-function e($var) {
-    if (is_array($var)) {
-        $return=array();
-        foreach ($var as $key => $value) {
-            $return[e($key)]=e($value);
-        }
-    } else {
-        $return=htmlspecialchars($var);
-        # Extra escape for a few chars that may cause troubles but are
-        # not escaped by htmlspecialchars.
-        $return=str_replace(array("<", ">", "\"", "(", ")", "'", "[",  "]", "{", "}", "~", "`"),
-            array("&lt;", "&gt;", "&quot;", "&#40;", "&#41;", "&#39;","&#91;", "&#93;", "&#123;",
-              "&#125;", "&#126;", "&#96;"), $return);
-    }
-    return $return;
+function e($value) {
+    $var=new variable($value);
+    return $var->escape();
 }
 
-if ($_GET) { $request_vars = &$_GET; }
-else       { $request_vars = &$_POST; }
-$request_vars=i($request_vars);
+$request_vars=$request->getRequestvars();
 
 ?>

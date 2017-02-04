@@ -1,9 +1,7 @@
 <?php
 /**
- * This class corresponds to the group_permissions table which maps a group_id
- * to a ablum_id + access_level + writable flag.  If the user is not an admin,
- * access to any photo must involve a join with this table to make sure the
- * user has access to an album that the photo is in.
+ * Permissions contain a (group, album) tuple to determine which albums
+ * a group can see, along with a few parameters to fine tune
  *
  * This file is part of Zoph.
  *
@@ -25,6 +23,15 @@
  * @package Zoph
  */
 
+/**
+ * Permissions contain a (group, album) tuple to determine which albums
+ * a group can see, along with a few parameters to fine tune
+ *
+ * This class corresponds to the group_permissions table which maps a group_id
+ * to a ablum_id + access_level + writable flag.  If the user is not an admin,
+ * access to any photo must involve a join with this table to make sure the
+ * user has access to an album that the photo is in.
+ */
 class permissions extends zophTable {
     /** @var string The name of the database table */
     protected static $tableName="group_permissions";
@@ -65,6 +72,26 @@ class permissions extends zophTable {
             "group_id" => (int) $this->get("group_id"),
             "album_id" => (int) $this->get("album_id")
             );
+    }
+
+    /**
+     * Get name of the group in this permission
+     * @return string group name
+     */
+    public function getGroupName() {
+        $group=new group($this->get("group_id"));
+        $group->lookup();
+        return $group->getName();
+    }
+
+    /**
+     * Get name of the album in this permission
+     * @return string album name
+     */
+    public function getAlbumName() {
+        $album=new album($this->get("album_id"));
+        $album->lookup();
+        return $album->getName();
     }
 
     /**

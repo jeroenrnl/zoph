@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+use template\template;
+
 /**
  * This is a class to generate the admin page
  *

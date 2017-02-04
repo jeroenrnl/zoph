@@ -23,6 +23,8 @@
  */
 require_once "include.inc.php";
 
+use template\template;
+
 $pageset_id = getvar("pageset_id");
 $page_id = getvar("page_id");
 $pageset = new pageset($pageset_id);
