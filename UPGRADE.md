@@ -8,6 +8,10 @@ Copy the contents of the php directory, including all subdirs, into your webroot
 
     cp -a php/* /var/www/html/zoph
 
+If you use the CLI client, you should copy it to a path that's in your $PATH
+
+    cp cli/zoph /usr/bin
+
 Database changes
 ----------------
 There are no database changes for 0.9.5
