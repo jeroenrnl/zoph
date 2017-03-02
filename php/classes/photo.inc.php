@@ -395,7 +395,7 @@ class photo extends zophTable {
         $qry->join(array("pp" => "photo_people"), "pp.person_id = p.person_id");
         $distinct=true;
         $qry->addFields(array("person_id"), $distinct);
-        $qry->addFields(array("last_name", "first_name", "called"));
+        $qry->addFields(array("last_name", "first_name", "called", "pp.position"));
 
         $where=new clause("pp.photo_id=:photoid");
 
