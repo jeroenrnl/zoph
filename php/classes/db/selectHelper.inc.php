@@ -46,15 +46,19 @@ class selectHelper {
     public static function getAutoCoverOrder(select $query, $autocover="highest") {
         switch ($autocover) {
         case "oldest":
+            $qry->addFields(array("p.date", "p.time"));
             $qry=$query->addOrder("p.date")->addOrder("p.time")->addLimit(1);
             break;
         case "newest":
+            $qry->addFields(array("p.date", "p.time"));
             $qry=$query->addOrder("p.date DESC")->addOrder("p.time DESC")->addLimit(1);
             break;
         case "first":
+            $qry->addFields(array("p.timestamp"));
             $qry=$query->addOrder("p.timestamp")->addLimit(1);
             break;
         case "last":
+            $qry->addFields(array("p.timestamp"));
             $qry=$query->addOrder("p.timestamp DESC")->addLimit(1);
             break;
         case "random":
@@ -62,6 +66,7 @@ class selectHelper {
             break;
         case "highest":
         default:
+            $qry->addFields(array("ar.rating"));
             $qry=$query->addOrder("ar.rating DESC")->addLimit(1);
             break;
         }
