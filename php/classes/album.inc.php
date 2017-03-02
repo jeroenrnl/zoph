@@ -524,6 +524,7 @@ class album extends zophTreeTable implements Organizer {
 
         $qry=new select(array("a" => "albums"));
         $qry->addFields(array("album_id"), true);
+        $qry->addFields(array("album"));
         $qry->addOrder("album");
 
         if (!$user->canSeeAllPhotos()) {
@@ -532,7 +533,6 @@ class album extends zophTreeTable implements Organizer {
             $qry->where(new clause("gu.user_id=:userid"));
             $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
         }
-
 
         return static::getRecordsFromQuery($qry);
     }
