@@ -16,4 +16,9 @@
 # along with Zoph; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-ALTER TABLE zoph_photos CHANGE COLUMN timestamp timestamp timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE zoph_photos MODIFY COLUMN timestamp timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE zoph_users CHANGE COLUMN person_id person_id int(11) DEFAULT NULL;
+UPDATE zoph_users SET person_id=NULL WHERE person_id=0;
+ALTER TABLE zoph_groups_users MODIFY COLUMN changedate timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE zoph_group_permissions MODIFY COLUMN changedate timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE zoph_circles_people MODIFY COLUMN changedate timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;

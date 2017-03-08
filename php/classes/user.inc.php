@@ -42,6 +42,8 @@ class user extends zophTable {
     protected static $primaryKeys=array("user_id");
     /** @var array Fields that may not be empty */
     protected static $notNull=array("user_name");
+    /** @var array Fields that are integers */
+    protected static $isInteger=array("user_id", "person_id", "lightbox_id");
     /** @var bool keep keys with insert. In most cases the keys are set by
                   the db with auto_increment */
     protected static $keepKeys = false;
@@ -80,6 +82,13 @@ class user extends zophTable {
      */
     public function delete() {
         parent::delete(array("prefs", "groups_users"));
+    }
+
+    public function lookup() {
+        parent::lookup();
+        if ($this->get("lastlogin") == "") {
+            $this->set("lastlogin", null);
+        }
     }
 
     /**
