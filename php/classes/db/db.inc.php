@@ -151,7 +151,8 @@ class db {
             }
 
         } catch (\PDOException $e) {
-            debug_print_backtrace();
+            var_dump($e->getTraceAsString());
+            echo $query->prettyPrint();
             echo $e->getMessage() . "\n";
             log::msg("SQL failed", log::FATAL, log::DB);
         }
