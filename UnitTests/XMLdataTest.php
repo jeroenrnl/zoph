@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+use PHPUnit\Framework\TestCase;
+
 require_once "testSetup.php";
 
 /**
@@ -29,7 +31,7 @@ require_once "testSetup.php";
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class XMLdataTest extends PHPUnit_Framework_TestCase {
+class XMLdataTest extends TestCase {
 
     /**
      * Test getting XML data

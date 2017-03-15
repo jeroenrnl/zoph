@@ -23,7 +23,9 @@
  */
 
 require_once "testSetup.php";
-use zophCode\tag as tag;
+
+use zophCode\tag;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the tag class
@@ -31,7 +33,7 @@ use zophCode\tag as tag;
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class tagTest extends PHPUnit_Framework_TestCase {
+class tagTest extends TestCase {
     public function testGetFromString() {
         $tag = tag::getFromString("[b]");
 

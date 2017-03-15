@@ -23,7 +23,9 @@
  */
 
 require_once "testSetup.php";
-use zophCode\replace as replace;
+
+use PHPUnit\Framework\TestCase;
+use zophCode\replace;
 
 /**
  * Test the replace class
@@ -31,7 +33,7 @@ use zophCode\replace as replace;
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class replaceTest extends PHPUnit_Framework_TestCase {
+class replaceTest extends TestCase {
 
     public function testReplace() {
         $msg="&#40;Between brackets&#41; & some of <html>\non two (2) lines";
