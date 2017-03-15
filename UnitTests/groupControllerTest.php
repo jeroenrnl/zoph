@@ -24,6 +24,7 @@
 require_once "testSetup.php";
 
 use group\controller;
+use PHPUnit\Framework\TestCase;
 use web\request;
 
 /**
@@ -32,7 +33,7 @@ use web\request;
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class groupControllerTest extends PHPUnit_Framework_TestCase {
+class groupControllerTest extends TestCase {
 
     /**
      * Test the "new", "edit" and "delete" actions
