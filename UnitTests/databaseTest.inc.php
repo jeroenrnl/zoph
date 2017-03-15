@@ -20,13 +20,17 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
+use PHPUnit\Framework\TestCase;
+use PHPUnit\DbUnit\TestCaseTrait;
 
 /**
  * Create test database from XML-MySQL Dump
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-abstract class ZophDatabaseTestCase extends PHPUnit_Extensions_Database_TestCase {
+abstract class ZophDatabaseTestCase extends TestCase {
+    use TestCaseTrait;
+
     static private $pdo = null;
     private $conn = null;
 

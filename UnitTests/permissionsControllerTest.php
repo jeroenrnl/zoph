@@ -25,6 +25,7 @@ require_once "testSetup.php";
 
 use conf\conf;
 use permissions\controller;
+use PHPUnit\Framework\TestCase;
 use web\request;
 
 
@@ -34,7 +35,7 @@ use web\request;
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class permissionControllerTest extends PHPUnit_Framework_TestCase {
+class permissionControllerTest extends TestCase {
 
     /**
      * The "new", "edit" and "delete" actions do not exist for the permissionsController
