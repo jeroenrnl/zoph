@@ -31,13 +31,6 @@ require_once "include.inc.php";
 $photo_id = getvar("photo_id");
 $_off = getvar("_off");
 
-/*
-Before deciding to include the Prev and Next links, it was as
-simple as this.  But now we go through get_photos().
-
-$photo = new photo($photo_id);
-*/
-
 $_qs=getvar("_qs");
 
 $qs = preg_replace('/_crumb=\d+&?/', '', $_SERVER["QUERY_STRING"]);
@@ -54,6 +47,7 @@ if (empty($qs)) {
 
 $prev_link="";
 $next_link="";
+$up_link="";
 $act="";
 $num_photos=0;
 if ($photo_id) {
@@ -77,15 +71,17 @@ if ($photo_id) {
 
         if ($offset > 0) {
             $newoffset = $offset - 1;
-            $prev_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act .
-                htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" .
+            $prev_url=$_SERVER["PHP_SELF"] . "?" . $act .
+                htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs));
+            $prev_link = "<a href=\"" . $prev_url . "\">" .
                 translate("Prev") . "</a>";
         }
 
         if ($offset + 1 < $num_photos) {
             $newoffset = $offset + 1;
-            $next_link = "<a href=\"" . $_SERVER["PHP_SELF"] . "?" . $act .
-                htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs)) . "\">" .
+            $next_url = $_SERVER["PHP_SELF"] . "?" . $act .
+                htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs));
+            $next_link = "<a href=\"" . $next_url . "\">" .
                 translate("Next") . "</a>";
         }
     } else {
@@ -99,9 +95,6 @@ if (!$user->isAdmin()) {
 
 if (isset($offset)) {
     $ignore = array("_off", "_action");
-
-    # To fix bug #1259152:
-    # get $_off, round it down to a multiple of cols x rows.
 
     $_cols = (int) getvar("_cols");
     $_rows = (int) getvar("_rows");
@@ -352,20 +345,18 @@ if ($action != "insert" && !$found) {
         <?php
     }
     ?>
-    <div class="prev"><?php echo $prev_link ? "[ $prev_link ]" : "&nbsp;" ?></div>
-    <div class="photohdr">
-    <?php
-    if (isset($up_link)) {
-        ?>
-        [ <?php echo $up_link ?> ]<br>
-        <?php
-    }
-    ?>
+    <nav class="photohdr">
+        <ul>
+            <li class="prev"><?php echo $prev_link ?></li>
+            <li class="up"><?php echo $up_link ?></li>
+            <li class="next"><?php echo $next_link ?></li>
+        </ul>
+    </nav>
+    <div class="photodata">
         <?php echo $photo->getFullsizeLink($photo->get("name")) ?> :
         <?php echo $photo->get("width") ?> x <?php echo $photo->get("height") ?>,
         <?php echo $photo->get("size") ?> <?php echo translate("bytes") ?>
     </div>
-    <div class="next"><?php echo $next_link ? "[ $next_link ]" : "&nbsp;" ?></div>
     <ul class="tabs">
     <?php
     if (conf::get("share.enable") && ($user->isAdmin() || $user->get("allow_share"))) {
