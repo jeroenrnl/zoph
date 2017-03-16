@@ -54,6 +54,8 @@ abstract class zophTable {
     protected static $primaryKeys=array();
     /** @var array Fields that are integers */
     protected static $isInteger=array();
+    /** @var array Fields that are floats */
+    protected static $isFloat=array();
     /** @var array Fields that may not be empty */
     protected static $notNull=array();
     /** @var bool keep keys with insert. In most cases the keys are set
@@ -363,6 +365,9 @@ abstract class zophTable {
         if ((is_null($value) || empty($value)) && in_array($name, static::$notNull)) {
             throw new NotNullValueIsNullDataException(e($name) . "may not be empty");
         } else {
+            if (in_array($name, static::$isFloat) && empty($value)) {
+                $value = null;
+            }
             if (in_array($name, static::$isInteger)) {
                 if (is_null($value) || empty($value)) {
                     $qry->addParam(new param(":" . $name, null, PDO::PARAM_NULL));

@@ -60,6 +60,12 @@ class place extends zophTreeTable implements Organizer {
     protected static $primaryKeys=array("place_id");
     /** @var array Fields that may not be empty */
     protected static $notNull=array("title");
+    /** @var array Fields that are integers */
+    protected static $isInteger=array(
+        "place_id", "parent_place_id", "contact_type", "coverphoto", "pageset", "mapzoom", "createdby"
+    );
+    /** @var array Fields that are floats */
+    protected static $isFloat=array("lat", "lon");
     /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;
