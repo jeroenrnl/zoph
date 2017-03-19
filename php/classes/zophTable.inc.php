@@ -362,14 +362,14 @@ abstract class zophTable {
     }
 
     protected function processValues($name, $value, $qry) {
-        if ((is_null($value) || empty($value)) && in_array($name, static::$notNull)) {
+        if ((is_null($value) || $value==="") && in_array($name, static::$notNull)) {
             throw new NotNullValueIsNullDataException(e($name) . "may not be empty");
         } else {
             if (in_array($name, static::$isFloat) && empty($value)) {
                 $value = null;
             }
             if (in_array($name, static::$isInteger)) {
-                if (is_null($value) || empty($value)) {
+                if (is_null($value) || $value==="") {
                     $qry->addParam(new param(":" . $name, null, PDO::PARAM_NULL));
                 } else {
                     $qry->addParam(new param(":" . $name, (int) $value, PDO::PARAM_INT));
