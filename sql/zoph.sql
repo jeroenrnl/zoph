@@ -140,7 +140,7 @@ CREATE TABLE zoph_group_permissions (
         watermark_level tinyint(4) NOT NULL default '0',
         writable char(1) NOT NULL default '0',
 	subalbums CHAR(1) NOT NULL DEFAULT '0',
-        changedate timestamp NOT NULL,
+        changedate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY  (group_id,album_id),
         KEY ap_access_level (access_level)
 ) ENGINE=MyISAM;
@@ -148,7 +148,7 @@ CREATE TABLE zoph_group_permissions (
 CREATE TABLE zoph_groups_users (
         group_id int(11) NOT NULL default '0',
         user_id int(11) NOT NULL default '0',
-        changedate timestamp NOT NULL,
+        changedate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY  (group_id,user_id)
 ) ENGINE=MyISAM;
 --
@@ -203,7 +203,7 @@ CREATE TABLE zoph_circles (
 CREATE TABLE zoph_circles_people (
         circle_id int(11) NOT NULL default '0',
         person_id int(11) NOT NULL default '0',
-        changedate timestamp NOT NULL,
+        changedate timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY  (circle_id,person_id)
 ) ENGINE=MyISAM;
 
@@ -312,7 +312,7 @@ CREATE TABLE zoph_photos (
   focus_dist varchar(16) default NULL,
   ccd_width varchar(16) default NULL,
   comment varchar(128) default NULL,
-  timestamp timestamp NOT NULL,
+  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   lat float(10,6),
   lon float(10,6),
   mapzoom tinyint unsigned,
@@ -336,7 +336,6 @@ CREATE TABLE zoph_photos (
 CREATE TABLE zoph_places (
   place_id int(11) NOT NULL auto_increment,
   parent_place_id int(11) NOT NULL,
-  contact_type int(11) NOT NULL default '0',
   title varchar(64) NOT NULL default '',
   address varchar(64) default NULL,
   address2 varchar(64) default NULL,
@@ -359,7 +358,7 @@ CREATE TABLE zoph_places (
   KEY place_title (title(10))
 ) ENGINE=MyISAM;
 
-INSERT INTO zoph_places VALUES (0,0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, 1);
+INSERT INTO zoph_places VALUES (0,0,"World",NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, 1);
 
 --
 -- Dumping data for table 'zoph_places'
@@ -449,7 +448,7 @@ CREATE TABLE zoph_saved_search (
 
 CREATE TABLE zoph_users (
   user_id int(11) NOT NULL auto_increment,
-  person_id int(11) NOT NULL default '0',
+  person_id int(11) DEFAULT NULL,
   user_class char(1) NOT NULL default '1',
   view_all_photos CHAR(1) NOT NULL DEFAULT '0',
   delete_photos CHAR(1) NOT NULL DEFAULT '0',

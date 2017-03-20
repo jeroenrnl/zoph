@@ -1,5 +1,5 @@
 #
-# Zoph 0.9.4 / 0.9.5 -> 0.9.5.1 update
+# Zoph 0.9.4 / 0.9.5 -> 0.9.6 update
 #
 # This file is part of Zoph.
 #
