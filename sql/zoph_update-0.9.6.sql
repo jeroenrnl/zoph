@@ -1,5 +1,5 @@
 #
-# Zoph 0.9.4 / 0.9.5 -> 0.9.5.1 update
+# Zoph 0.9.4 / 0.9.5 -> 0.9.6 update
 #
 # This file is part of Zoph.
 #
@@ -22,3 +22,4 @@ UPDATE zoph_users SET person_id=NULL WHERE person_id=0;
 ALTER TABLE zoph_groups_users MODIFY COLUMN changedate timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 ALTER TABLE zoph_group_permissions MODIFY COLUMN changedate timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 ALTER TABLE zoph_circles_people MODIFY COLUMN changedate timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE zoph_places DROP COLUMN contact_type;

@@ -155,7 +155,7 @@ class mapTest extends TestCase {
 
         $photo=new photo();
         $photo->location=$perth;
-        $photo->update();
+        $photo->insert();
 
         $map->setCenterAndZoomFromObj($photo);
         $html=(string) $map;
