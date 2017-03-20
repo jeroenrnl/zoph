@@ -23,7 +23,8 @@
  */
 require_once "testSetup.php";
 
-use zophCode\parser as parser;
+use zophCode\parser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the zophCode parser class
@@ -31,7 +32,7 @@ use zophCode\parser as parser;
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class zophCodeParserTest extends PHPUnit_Framework_TestCase {
+class zophCodeParserTest extends TestCase {
     /**
      * Test constructor class
      * @dataProvider getMsgs();

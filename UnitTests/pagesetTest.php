@@ -21,14 +21,18 @@
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
+
+use PHPUnit\Framework\TestCase;
+
 require_once "testSetup.php";
+
 /**
  * Test the pageset class
  *
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class pagesetTest extends PHPUnit_Framework_TestCase {
+class pagesetTest extends TestCase {
     static $psIds=array();
     static $pIds=array();
 

@@ -23,7 +23,9 @@
  */
 
 require_once "testSetup.php";
-use zophCode\smiley as smiley;
+
+use PHPUnit\Framework\TestCase;
+use zophCode\smiley;
 
 /**
  * Test the smiley class
@@ -31,7 +33,7 @@ use zophCode\smiley as smiley;
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class smileyTest extends PHPUnit_Framework_TestCase {
+class smileyTest extends TestCase {
 
     /**
      * Test creating a smiley

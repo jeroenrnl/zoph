@@ -1,6 +1,6 @@
 <?php
 /**
- * Include necessary files
+ * Define and modify album permissions
  *
  * This file is part of Zoph.
  *
@@ -18,28 +18,35 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @package Zoph
- * @author Jason Geiger
  * @author Jeroen Roos
  */
 
-require_once "autoload.inc.php";
+use conf\conf;
 
-require_once "exception.inc.php";
-require_once "log.inc.php";
+use permissions\controller as permissionsController;
 
-require_once "config.inc.php";
-require_once "settings.inc.php";
-require_once "requirements.inc.php";
-require_once "util.inc.php";
+use template\block;
+use template\form;
+use template\template;
 
-require_once "variables.inc.php";
+use web\request;
 
-if (!defined("LOGON")) {
-    if (!defined("TEST")) {
-        require_once "auth.inc.php";
-    }
 
-    require_once "photo_search.inc.php";
-    require_once "exif.inc.php";
+require_once "include.inc.php";
+
+if (!user::getCurrent()->isAdmin()) {
+    redirect("zoph.php");
 }
-?>
+
+$controller = new permissionsController(request::create());
+
+$redirect="zoph.php";
+if ($controller->getView() == "group") {
+    $group=$controller->getObject();
+    $redirect = "group.php?_action=edit&group_id=" . $group->getId();
+} else if ($controller->getView() == "album") {
+    $album=$controller->getObject();
+    $redirect = "album.php?_action=edit&album_id=" . $album->getId();
+}
+
+redirect($redirect);

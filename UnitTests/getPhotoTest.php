@@ -21,6 +21,8 @@
  * @author Jeroen Roos
  */
 
+use PHPUnit\Framework\TestCase;
+
 require_once "testSetup.php";
 
 /**
@@ -32,7 +34,7 @@ require_once "testSetup.php";
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class getPhotoTest extends PHPUnit_Framework_TestCase {
+class getPhotoTest extends TestCase {
 
     /**
      * Test setting of location

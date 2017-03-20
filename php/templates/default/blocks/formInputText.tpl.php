@@ -29,7 +29,7 @@ if (!ZOPH) {
         <?= $tpl_label ?>
     </label>
 <?php endif; ?>
-<input type="text" name="<?= $tpl_name ?>" maxlength="<?= $tpl_maxlength ?>" size="<?= $tpl_size ?>" value="<?= $tpl_value ?>">
+<input id="<?= $tpl_name ?>" type="text" name="<?= $tpl_name ?>" maxlength="<?= $tpl_maxlength ?>" size="<?= $tpl_size ?>" value="<?= $tpl_value ?>">
 <?php if (!empty($tpl_hint)): ?>
     <span class="inputhint">
         <?php echo $tpl_hint ?>

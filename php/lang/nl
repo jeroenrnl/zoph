@@ -37,6 +37,7 @@ Add non-existent albums, categories, places and people, regardsless of whether a
 Add non-existent albums, categories, places and people, when a parent is defined.=Voeg niet-bestaande albums, categorieën, plaatsen en mensen automatisch toe, mits er een bovenliggend album, categorie of plaats is meegegeven.
 Admin=Beheerder
 Adminpage=Beheerpagina
+After this album has been created, groups can be given access to it.=Nadat dit albums is gemaakt, kunnen groepen er rechten op krijgen.
 After this group is created it can be given access to albums.=Nadat deze groep is gemaakt, kunnen er rechten op albums worden toegekend.
 After this user is created they can be given access to albums.=Nadat deze gebruiker is aangemaakt kan er toegang worden gegeven tot de albums.
 Album view=Album weergave

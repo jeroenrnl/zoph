@@ -37,6 +37,7 @@ Add non-existent albums, categories, places and people, regardsless of whether a
 Add non-existent albums, categories, places and people, when a parent is defined.=
 Admin=
 Adminpage=
+After this album has been created, groups can be given access to it.=
 After this group is created it can be given access to albums.=
 After this user is created they can be given access to albums.=
 Album view=

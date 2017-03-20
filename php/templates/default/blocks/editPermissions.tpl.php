@@ -25,7 +25,8 @@ if (!ZOPH) {
     die("Illegal call");
 }
 ?>
-<h3><?= translate("Albums") ?></h3>
+<br>
+<h3><?= $tpl_edit == "album" ? translate("Group permissions") : translate("Album permissions") ?></h3>
 <?= translate("Granting access to an album will also grant access to that album's " .
     "ancestors if required. Granting access to all albums will not overwrite " .
     "previously granted permissions."); ?>
@@ -34,7 +35,7 @@ if (!ZOPH) {
     <?= translate("A photo will be watermarked if the photo level is " .
         "higher than the watermark level.") ?>
 <?php endif ?>
-<form action="group.php" method="post" class="grouppermissions">
+<form action="permissions.php" method="post" class="grouppermissions">
     <table class="permissions">
         <col class="col1"><col class="col2"><col class="col3"><col class="col4">
         <tr>
@@ -44,16 +45,22 @@ if (!ZOPH) {
                 <th><?= translate("watermark level") ?></th>
             <?php endif ?>
             <th><?php echo translate("writable"); ?></th>
-            <th><?php echo translate("grant to subalbums"); ?></th>
+            <?php if ($tpl_edit == "album"): ?>
+                <th><?php echo translate("grant to subalbums"); ?></th>
+            <?php endif ?>
         </tr>
         <tr>
             <td>
                 <input type="checkbox" name="_access_level_all_checkbox" value="1">
             </td>
             <td>
-                <input type="hidden" name="group_id" value="<?= $tpl_group_id ?>">
-                <input type="hidden" name="_action" value="update_albums">
-                <?= translate("Grant access to all existing albums:") ?>
+                <input type="hidden" name="<?= $tpl_fixed ?>_id" value="<?= $tpl_id ?>">
+                <input type="hidden" name="_action" value="update<?= $tpl_edit ?>s">
+                <?php if ($tpl_edit == "album"): ?>
+                    <?= translate("Grant access to all existing albums:") ?>
+                <?php else: ?>
+                    <?= translate("Grant access to all existing groups:") ?>
+                <?php endif ?>
             </td>
             <td>
                 <?= $tpl_accessLevelAll ?>
@@ -71,8 +78,13 @@ if (!ZOPH) {
             <td>
             </td>
             <td>
-                <input type="hidden" name="group_id_new" value="<?= $tpl_group_id ?>">
-                <?= template::createPulldown("album_id_new", "", album::getTreeSelectArray()) ?>
+                <?php if ($tpl_edit == "album"): ?>
+                    <input type="hidden" name="group_id_new" value="<?= $tpl_id ?>">
+                    <?= template::createPulldown("album_id_new", "", album::getTreeSelectArray()) ?>
+                <?php else: ?>
+                    <input type="hidden" name="album_id_new" value="<?= $tpl_id ?>">
+                    <?= template::createPulldown("group_id_new", "", group::getSelectArray()) ?>
+                <?php endif ?>
             </td>
             <td>
                 <?= $tpl_accessLevelNew?>
@@ -85,9 +97,11 @@ if (!ZOPH) {
             <td>
                 <?php echo template::createYesNoPulldown("writable_new", "0") ?>
             </td>
-            <td>
-                <?php echo template::createYesNoPulldown("subalbums_new", "0") ?>
-            </td>
+            <?php if ($tpl_edit == "album"): ?>
+                <td>
+                    <?php echo template::createYesNoPulldown("subalbums_new", "0") ?>
+                </td>
+            <?php endif ?>
         </tr>
         <tr>
             <td colspan="4" class="permremove">
@@ -97,27 +111,29 @@ if (!ZOPH) {
         <?php foreach ($tpl_permissions as $perm): ?>
             <tr>
                 <td>
-                    <input type="checkbox" name="_remove_permission_album__<?= $perm->id ?>" value="1">
+                    <input type="checkbox" name="_remove_permission_<?= $tpl_edit ?>__<?= $perm->get($tpl_edit_id) ?>" value="1">
                 </td>
                 <td>
-                    <?= $perm->name ?>
+                    <?= $tpl_edit == "album" ? $perm->getAlbumName() : $perm->getGroupName() ?>
                 </td>
                 <td>
-                    <input type="hidden" name="album_id__<?= $perm->id ?>" value="<?= $perm->id ?>">
-                    <input type="hidden" name="group_id__<?= $perm->id ?>" value="<?= $tpl_group_id ?>">
-                    <?= template::createInput("access_level__" . $perm->id, $perm->access, 4) ?>
+                    <input type="hidden" name="album_id__<?= $perm->get($tpl_edit_id) ?>" value="<?= $perm->get("album_id") ?>">
+                    <input type="hidden" name="group_id__<?= $perm->get($tpl_edit_id) ?>" value="<?= $perm->get("group_id") ?>">
+                    <?= template::createInput("access_level__" . $perm->get($tpl_edit_id), $perm->get("access_level"), 4) ?>
                 </td>
                 <?php if ($tpl_watermark): ?>
                     <td>
-                        <?= template::createInput("watermark_level__" . $perm->id, $perm->wm, 4) ?>
+                        <?= template::createInput("watermark_level__" . $perm->get($tpl_edit_id), $perm->get("watermark_level"), 4) ?>
                      </td>
                 <?php endif ?>
                 <td>
-                    <?= template::createYesNoPulldown("writable__" . $perm->id, $perm->writable) ?>
+                    <?= template::createYesNoPulldown("writable__" . $perm->get($tpl_edit_id), $perm->get("writable")) ?>
                 </td>
-                <td>
-                    <?= template::createYesNoPulldown("subalbums__" . $perm->id, $perm->subalbums) ?>
-                </td>
+                <?php if ($tpl_edit == "album"): ?>
+                    <td>
+                        <?= template::createYesNoPulldown("subalbums__" . $perm->get($tpl_edit_id), $perm->get("subalbums")) ?>
+                    </td>
+                <?php endif ?>
             </tr>
         <?php endforeach ?>
     </table>

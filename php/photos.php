@@ -36,7 +36,7 @@ $_off = (int) getvar("_off");
 $_order = getvar("_order");
 $_dir = getvar("_dir");
 $_show = getvar("_show");
-$vars=clean_request_vars($request_vars);
+$vars=$request->getRequestVarsClean();
 if (!preg_match("/^[a-zA-Z_]*$/", $_order)) {
     die("Illegal characters in _order");
 }

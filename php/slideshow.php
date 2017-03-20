@@ -31,7 +31,7 @@ if (!$_off)  { $_off = 0; }
 $offset = $_off;
 
 $thumbnails;
-$clean_vars = clean_request_vars($request_vars);
+$clean_vars=$request->getRequestVarsClean();
 $num_photos = get_photos($clean_vars, $offset, 1, $thumbnails, $user);
 header("Content-Type: text/html; charset=utf-8");
 

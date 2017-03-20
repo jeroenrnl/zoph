@@ -24,6 +24,8 @@ use conf\conf;
 use template\template;
 
 session_cache_limiter("public");
+require_once "autoload.inc.php";
+require_once "settings.inc.php";
 require_once "variables.inc.php";
 $hash = getvar("hash");
 $annotated = getvar('annotated');

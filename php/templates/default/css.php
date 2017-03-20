@@ -810,7 +810,7 @@ ul.actionlink {
     margin: 1px;
     text-align: right;
     vertical-align: top;
-    font-size: x-small;
+    font-size: 70%;
     float: right;
     font-weight: normal;
     clear: right;
@@ -948,33 +948,22 @@ table.permissions input {
     float: none;
 }
 
-/* Previous and next links above a photo */
-div.prev, div.next, div.pagelink, div.photohdr  {
-    margin-bottom: 2px;
-    margin-top: 30px;
-    font-size: small;
-    float: left;
+nav.photohdr ul {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
 }
 
-div.prev a, div.next a, div.pagelink a {
-    text-decoration: none;
+nav.photohdr ul li {
+    width: 50px;
+}
+nav.photohdr ul li:empty {
+    background: transparent;
 }
 
-div.prev a:hover, div.next a:hover, div.pagelink a:hover {
-    text-decoration: underline;
-}
-
-div.prev    {
-    width: 20%;
-    float: left;
-    text-align: left
-}
-
-div.next    {
-    width: 20%;
-    float: right;
-    text-align: right;
-    clear: right;
+div.photodata {
+    text-align: center;
+    width: 100%;
 }
 
 span.md5 {
@@ -982,8 +971,7 @@ span.md5 {
 }
 
 /* Page links */
-div.pagelink,
-div.photohdr {
+div.pagelink {
     text-align: center;
     width: 60%;
 }
@@ -1008,6 +996,7 @@ ul.pagegroup {
     overflow: hidden;
 }
 
+nav.photohdr ul li,
 ul.pagegroup li {
     display: block;
     background: <?= colorScheme::getColor("title_bg_color") ?>;
@@ -1017,6 +1006,7 @@ ul.pagegroup li {
     margin: 3px;
 }
 
+nav.photohdr ul li a,
 ul.pagegroup li a {
     display: block;
     padding: 6px 12px;
@@ -1139,6 +1129,8 @@ div.formtext {
 }
 
 div.editchoice  {
+    position: relative;
+    z-index: 5;
     vertical-align: top;
     clear: none;
     font-size: small;

@@ -24,6 +24,8 @@
 namespace geo;
 
 use conf\conf;
+use place;
+use photo;
 
 /**
  * Mapping class.
@@ -163,9 +165,9 @@ class map extends \template\block {
         $lon=$obj->get("lon");
         $zoom=$obj->get("mapzoom");
         if (!$lat && !$lon) {
-            if ($obj instanceof \photo && $obj->location instanceof \place) {
+            if ($obj instanceof photo && $obj->location instanceof place) {
                 $this->setCenterAndZoomFromObj($obj->location);
-            } else if ($obj instanceof \place) {
+            } else if ($obj instanceof place && (place::getRoot()->getId() != $obj->getId())) {
                 $this->setCenterAndZoomFromObj($obj->getParent());
             }
         } else {

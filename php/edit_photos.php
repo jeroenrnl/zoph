@@ -48,7 +48,7 @@ $cells = $_cols * $_rows;
 $offset = $_off;
 
 $thumbnails;
-$clean_vars = clean_request_vars($request_vars);
+$clean_vars=$request->getRequestVarsClean();
 
 $_qs=getvar("_qs");
 
