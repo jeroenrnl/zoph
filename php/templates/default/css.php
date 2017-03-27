@@ -1054,6 +1054,73 @@ div#rowscols {
     margin-bottom: 15px;
 }
 
+ul.ancestors {
+    font-size: x-large;
+    font-weight: bold;
+    list-style: none;
+    padding-left: 0;
+    margin: 1em 0;
+}
+
+ul.ancestors li:first-child::before {
+    content: none;
+}
+
+ul.ancestors li::before {
+    content: ">";
+    margin: 0 0.5em;
+    color: <?= colorScheme::getColor("title_font_color") ?>;
+}
+
+ul.ancestors li {
+    display: inline;
+    margin: 0;
+    list-style: none inside none;
+}
+
+ul.photolinks {
+    font-size: x-large;
+    font-weight: bold;
+    list-style: none;
+    padding: 30px;
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+}
+
+ul.photolinks li {
+    display: block;
+    width: 250px;
+    list-style: outside none none;
+    border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
+    border-radius: 10px;
+    background: <?= colorScheme::getColor("title_bg_color") ?>;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5), 0 0 10px rgba(0,0,0,0.2) inset;
+    margin: 0;
+}
+
+ul.photolinks li img {
+    padding: 10px;
+    vertical-align: middle;
+}
+
+ul.photolinks li a {
+    text-decoration: none;
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+ul.photolinks li:hover {
+    background: <?= colorScheme::getColor("breadcrumb_bg_color") ?>;
+}
+
+ul.photolinks span.photocount {
+    padding: 10px;
+    font-size: xx-large;
+}
+
 img.<?= THUMB_PREFIX ?> {
     box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
 }

@@ -19,7 +19,11 @@
  * @author Jeroen Roos
  */
 
-if (!ZOPH) { die("Illegal call"); }
+use template\block;
+
+if (!ZOPH) {
+    die("Illegal call");
+}
 ?>
 <?php if (isset($tpl_topnode)): ?>
     <ul class="actionlink">
