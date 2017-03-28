@@ -25,7 +25,7 @@
             <?php echo translate($_action) ?> <?php echo translate("person") ?>
           </h1>
       <div class="main">
-      <?= template::showJSwarning() ?>
+      <?php echo template\template::showJSwarning() ?>
       <form action="person.php" method="GET">
           <input type="hidden" name="_action" value="<?php echo $action ?>">
           <input type="hidden" name="person_id" value="<?php echo $person->get("person_id") ?>">
