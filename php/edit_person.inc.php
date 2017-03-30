@@ -15,6 +15,7 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+use template\template;
 ?>
 <!-- begin edit_person.inc !-->
           <h1>
@@ -25,7 +26,7 @@
             <?php echo translate($_action) ?> <?php echo translate("person") ?>
           </h1>
       <div class="main">
-      <?php echo template\template::showJSwarning() ?>
+      <?php echo template::showJSwarning() ?>
       <form action="person.php" method="GET">
           <input type="hidden" name="_action" value="<?php echo $action ?>">
           <input type="hidden" name="person_id" value="<?php echo $person->get("person_id") ?>">
@@ -42,7 +43,7 @@
           <?php echo create_text_input("called", $person->get("called"), 16, 16) ?>
           <span class="inputhint"><?php echo sprintf(translate("%s chars max"), "16") ?></span><br>
           <label for="gender"><?php echo translate("gender") ?></label>
-          <?php echo template\template::createPulldown("gender", $person->get("gender"),
+          <?php echo template::createPulldown("gender", $person->get("gender"),
             array("1" => translate("male",0), "2" => translate("female",0))) ?><br>
           <label for="dob"><?php echo translate("date of birth") ?></label>
           <?php echo create_text_input("dob", $person->get("dob"), 12, 10) ?>
@@ -64,8 +65,8 @@
           <label for="spouse"><?php echo translate("spouse") ?></label>
           <?php echo person::createPulldown("spouse_id", $person->get("spouse_id")) ?><br>
           <label for="pageset"><?php echo translate("pageset") ?></label>
-          <?php echo template\template::createPulldown("pageset", $person->get("pageset"),
-              template\template::createSelectArray(pageset::getRecords("title"), array("title"), true)) ?><br>
+          <?php echo template::createPulldown("pageset", $person->get("pageset"),
+              template::createSelectArray(pageset::getRecords("title"), array("title"), true)) ?><br>
           <label for="notes"><?php echo translate("notes") ?></label>
           <textarea name="notes" cols="40" rows="4">
             <?php echo $person->get("notes") ?>
