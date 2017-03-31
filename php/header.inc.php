@@ -92,13 +92,23 @@ if (isset($title)) {
 <html>
 
 <?php
-$tpl=new block("header", array(
+$hdrParams=array(
     "icons"         => $icons,
     "scripts"       => $scripts,
     "javascript"    => $javascript,
     "extrastyle"    => isset($extrastyle) ? $extrastyle : null,
     "title"         => $html_title
-));
+);
+
+if (isset($prev_url)) {
+    $hdrParams["next"] = $prev_url;
+}
+if (isset($next_url)) {
+    $hdrParams["next"] = $next_url;
+}
+
+$tpl=new block("header", $hdrParams);
+
 
 echo $tpl;
 ?>

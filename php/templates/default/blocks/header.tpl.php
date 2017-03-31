@@ -28,6 +28,12 @@ use conf\conf;
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link type="text/css" rel="stylesheet" href="css.php">
     <link type="image/png" rel="icon" href="<?php echo static::getImage("icons/favicon.png") ?>">
+    <?php if (isset($tpl_prev)): ?>
+        <link rel="prev" href="<?= $tpl_prev ?>">
+    <?php endif ?>
+    <?php if (isset($tpl_next)): ?>
+        <link rel="next" href="<?= $tpl_next ?>">
+    <?php endif ?>
     <script type="text/javascript">
         var template = "<?php echo conf::get("interface.template"); ?>";
         var icons={
