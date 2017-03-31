@@ -27,6 +27,7 @@ require_once "testSetup.php";
 use geo\point;
 use geo\map;
 use geo\marker;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the  geo\point class
@@ -34,7 +35,7 @@ use geo\marker;
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class mapTest extends PHPUnit_Framework_TestCase {
+class mapTest extends TestCase {
 
     public function testCreate() {
         $map=new map();
@@ -154,7 +155,7 @@ class mapTest extends PHPUnit_Framework_TestCase {
 
         $photo=new photo();
         $photo->location=$perth;
-        $photo->update();
+        $photo->insert();
 
         $map->setCenterAndZoomFromObj($photo);
         $html=(string) $map;

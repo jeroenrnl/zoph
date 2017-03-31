@@ -344,10 +344,6 @@ class albumTest extends ZophDataBaseTestCase {
         user::setCurrent(new user(1));
     }
 
-    public function testSAcache() {
-        album::setSAcache();
-    }
-
     /* *************************************************************
      * Dataprovider functions
      * *************************************************************/

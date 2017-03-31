@@ -51,8 +51,7 @@ class search extends zophTable {
      * Update an existing search in the db
      */
     public function update() {
-        // Set timestamp to NULL so db will set it to current
-        $this->set("timestamp", null);
+        $this->set("timestamp", "now()");
         parent::update();
     }
 

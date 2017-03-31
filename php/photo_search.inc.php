@@ -455,7 +455,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
     $countQry=clone $qry;
     $countQry->addFunction(array("count" => "COUNT(distinct p.photo_id)"));
     $num_photos = $countQry->getCount();
-
+    $fields=array();
     if ($num_photos > 0) {
         if (isset($vars["_random"]) && $num_photos > 1) {
             // get one random result
@@ -464,8 +464,10 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
             $rows = 1;
             $num_photos = 1;
         } else {
+            $fields[]=$order;
             $qry->addOrder("p." . $order . " " . $dir);
             if ($order == "date") {
+                $fields[]="p.time";
                 $qry->addOrder("p.time " . $dir);
             }
             $qry->addOrder("p.photo_id " . $dir);
@@ -474,7 +476,7 @@ function get_photos($vars, $offset, $rows, &$thumbnails, $user = null) {
         $distinct=true;
         $qry->addFields(array("p.photo_id"), $distinct);
         $qry->addFields(array("p.name", "p.path", "p.width", "p.height"));
-
+        $qry->addFields($fields);
         $thumbnails = photo::getRecordsFromQuery($qry);
 
     }

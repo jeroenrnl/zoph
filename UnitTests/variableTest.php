@@ -24,6 +24,7 @@
 require_once "testSetup.php";
 
 use generic\variable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the variable class
@@ -31,7 +32,7 @@ use generic\variable;
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class variableTest extends PHPUnit_Framework_TestCase {
+class variableTest extends TestCase {
 
     /**
      * Test creating an object

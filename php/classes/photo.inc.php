@@ -51,7 +51,12 @@ class photo extends zophTable {
     /** @var array List of primary keys */
     protected static $primaryKeys=array("photo_id");
     /** @var array Fields that may not be empty */
-    protected static $notNull=array();
+    protected static $notNull=array("time_corr");
+    /** @var array Fields that are integers */
+    protected static $isInteger=array(
+        "photo_id", "width", "height", "size", "photographer_id", "location_id", "time_corr", "level", "mapzoom");
+    /** @var array Fields that are floats */
+    protected static $isFloat=array("lat", "lon");
     /** @var bool keep keys with insert. In most cases the keys are set by the
              db with auto_increment */
     protected static $keepKeys = false;
@@ -211,6 +216,20 @@ class photo extends zophTable {
             "photo_ratings",
             "photo_comments")
         );
+    }
+
+    public function update() {
+        if (empty($this->get("time_corr"))) {
+            $this->set("time_corr", 0);
+        }
+        return parent::update();
+    }
+
+    public function insert() {
+        if (empty($this->get("time_corr"))) {
+            $this->set("time_corr", 0);
+        }
+        return parent::insert();
     }
 
     /**
@@ -395,7 +414,7 @@ class photo extends zophTable {
         $qry->join(array("pp" => "photo_people"), "pp.person_id = p.person_id");
         $distinct=true;
         $qry->addFields(array("person_id"), $distinct);
-        $qry->addFields(array("last_name", "first_name", "called"));
+        $qry->addFields(array("last_name", "first_name", "called", "pp.position"));
 
         $where=new clause("pp.photo_id=:photoid");
 

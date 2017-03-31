@@ -23,6 +23,7 @@
 
 require_once "testSetup.php";
 
+use PHPUnit\Framework\TestCase;
 use web\request;
 
 /**
@@ -31,7 +32,7 @@ use web\request;
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class requestTest extends PHPUnit_Framework_TestCase {
+class requestTest extends TestCase {
 
     /**
      * Test creating an object through the normal __construct()
