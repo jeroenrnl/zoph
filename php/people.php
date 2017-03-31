@@ -86,7 +86,13 @@ if (getvar("circle_id")) {
 require_once "header.inc.php";
 
 $tpl=new template("organizer", array(
+    "pageTop"           => false,
+    "pageBottom"        => false,
+    "showMain"          => true,
     "title"     => strtolower($title),
+    "ancLinks"  => null,
+    "coverphoto"    => null,
+    "description"   => null,
     "selection" => $selection,
     "view"      => $_view,
     "view_name" => "People view",

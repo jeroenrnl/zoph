@@ -29,18 +29,38 @@ if (!ZOPH) {
     <?= $this->getActionlinks() ?>
     <?= $tpl_title ?>
 </h1>
-<?php if ($tpl_selection): ?>
-    <?= $tpl_selection ?>
+<?= $tpl_selection ?>
+<?php if ($tpl_pageTop): ?>
+    <?= $tpl_page ?>
 <?php endif ?>
+<?php if ($tpl_showMain): ?>
 <div class="main">
     <form class="viewsettings" method="get">
-        <?php foreach ($tpl_view_hidden as $field => $value): ?>
+        <?php foreach ((array) $tpl_view_hidden as $field => $value): ?>
             <input type="hidden" name="<?= $field ?>" value="<?= $value ?>">
         <?php endforeach ?>
+
         <?= translate($tpl_view_name) ?>
         <?= template::createViewPulldown("_view", $tpl_view, true) ?>
         <?= translate("Automatic thumbnail") ?>
         <?php echo template::createAutothumbPulldown("_autothumb", $tpl_autothumb, true) ?>
     </form><br>
+    <ul class="ancestors">
+        <?php if ($tpl_ancLinks): ?>
+            <?php foreach ($tpl_ancLinks as $anc => $url): ?>
+                <li><a href="<?= $url ?>"><?= $anc ?></a></li>
+            <?php endforeach ?>
+        <?php endif ?>
+        <li><?= $tpl_title ?></li>
+    </ul>
+    <?= $tpl_coverphoto; ?>
+    <div class="description">
+        <?php echo $tpl_description ?>
+    </div>
     <?= $this->displayBlocks(); ?>
 </div>
+<?php endif ?>
+<?php if ($tpl_pageBottom): ?>
+    <?= $tpl_page ?>
+<?php endif ?>
+
