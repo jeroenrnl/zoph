@@ -22,6 +22,7 @@
  */
 
 use template\block;
+use template\pager;
 
 /**
  * Show page trait
