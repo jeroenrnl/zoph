@@ -22,7 +22,7 @@
  */
 
 use template\block;
-
+use template\pager;
 /**
  * Show page trait
  * A page is plaintext or zophCode that can be used to personalize parts
