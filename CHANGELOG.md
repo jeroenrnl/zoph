@@ -1,5 +1,34 @@
 # Zoph Changelog #
 
+##Zoph 0.9.6##
+###14 apr 2017###
+Zoph 0.9.5 coincided with a significant change in MySQL, that caused a lot of bugs in Zoph and other open source projects. MySQL changed the way they process queries to handle them much more strictly. What makes things worse, is that MariaDB did not make this change, so at first I could not reproduce the issue. Because of the amount of work, I have decided to postpone the development that was planned for 0.9.6 and make this a bugfix-only release. In this release, I have included a few bugfixes by Pontus Fröding which is really great, thanks Pontus!
+
+
+###Bugs###
+* [issue#86](https://github.com/jeroenrnl/zoph/issues/86) Fixed an omission in the upgrade instructions for 0.9.5
+* [issue#87](https://github.com/jeroenrnl/zoph/issues/87) error about class not found on add or edit
+* [issue#88](https://github.com/jeroenrnl/zoph/issues/88) Changes for MySQL 5.7 compatibility
+  * Give timestamp a default value
+  * Add field needed for MySQL 5.7 compatibility with SELECT DISTNCT .. ORDER BY
+  * Adding "ORDER BY" fields to autocover query
+  * More changes for MySQL 5.7 compatibility
+  * Updated SQL scripts
+  * Removed unused field from the database
+
+* [issue#91](https://github.com/jeroenrnl/zoph/issues/91) Changed PHPUnit classes to namespaced class naming
+* Fixed an issue in a UnitTest that caused a failed test commit
+* [Pull Request#94](https://github.com/jeroenrnl/zoph/pull/94) Add namespace to template showJSwarning in edit_person (by Pontus Fröding)
+* [Pull Request#95](https://github.com/jeroenrnl/zoph/pull/95) Add template namespace on two more places. (by Pontus Fröding)
+* [issue#92](https://github.com/jeroenrnl/zoph/issues/92) Fixed database connection to utf-8
+* [issue#93](https://github.com/jeroenrnl/zoph/issues/93) [Pull Request#95](https://github.com/jeroenrnl/zoph/pull/95) Fix for "Class pager not found" when using pagesets (by Pontus Fröding)
+
+###Refactor###
+* Some modifications to backtrace printing, for easier debugging
+* Moved album view into template
+* [issue#89](https://github.com/jeroenrnl/zoph/issues/89) Changed look of next and previous buttons on photo page and increased size of actionlinks
+* Small style change
+
 ##Zoph 0.9.5##
 ###4 feb 2017###
 
