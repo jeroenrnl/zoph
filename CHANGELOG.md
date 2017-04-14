@@ -15,9 +15,8 @@ Zoph 0.9.5 coincided with a significant change in MySQL, that caused a lot of bu
   * More changes for MySQL 5.7 compatibility
   * Updated SQL scripts
   * Removed unused field from the database
-
 * [issue#91](https://github.com/jeroenrnl/zoph/issues/91) Changed PHPUnit classes to namespaced class naming
-* Fixed an issue in a UnitTest that caused a failed test commit
+* Fixed an issue in a UnitTest that caused a failed test
 * [Pull Request#94](https://github.com/jeroenrnl/zoph/pull/94) Add namespace to template showJSwarning in edit_person (by Pontus Fröding)
 * [Pull Request#95](https://github.com/jeroenrnl/zoph/pull/95) Add template namespace on two more places. (by Pontus Fröding)
 * [issue#92](https://github.com/jeroenrnl/zoph/issues/92) Fixed database connection to utf-8
