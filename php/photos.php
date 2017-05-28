@@ -25,6 +25,8 @@
 use conf\conf;
 use template\template;
 use template\pager;
+use web\request;
+use photo\collection;
 
 require_once "include.inc.php";
 
@@ -65,28 +67,29 @@ if ($album_id && $user->get("lightbox_id") &&
     $lightbox = true;
 }
 
-$thumbnails;
-$num_photos = get_photos($vars, $offset, $cells, $thumbnails, $user);
+$photoCollection = collection::createFromRequest(request::create());
+$toDisplay = $photoCollection->subset($offset, $cells);
 
-$num_thumbnails = sizeof($thumbnails);
+$displayCount = sizeof($toDisplay);
 
-if  ($num_thumbnails) {
-    $num_pages = ceil($num_photos / $cells);
-    $page_num = floor($offset / $cells) + 1;
+$photoCount=(sizeof($photoCollection));
+if ($photoCount) {
+    $pageCount = ceil($photoCount / $cells);
+    $currentPage = floor($offset / $cells) + 1;
 
-    $num = min($cells, $num_thumbnails);
+    $num = min($cells, $displayCount);
 
     $name = isset($lightbox) ? "Lightbox" : "Photos";
 
-    $title = sprintf(translate("$name (Page %s/%s)", 0), $page_num, $num_pages);
+    $title = sprintf(translate("$name (Page %s/%s)", 0), $currentPage, $pageCount);
     $title_bar = sprintf(translate("photos %s to %s of %s"),
-        ($offset + 1), ($offset + $num), $num_photos);
+        ($offset + 1), ($offset + $num), $photoCount);
 } else {
     $title = translate("No Photos Found");
     $title_bar = translate("photos");
 }
 
-if (!($num_thumbnails == 0 || $_cols <= 4)) {
+if (!($displayCount == 0 || $_cols <= 4)) {
     $width = ((THUMB_SIZE + 14) * $_cols) + 25;
     $default_width= conf::get("interface.width");
     if ($width > $default_width || strpos($default_width, "%")) {
@@ -137,7 +140,7 @@ if (conf::get("feature.download") && ($user->get("download") || $user->isAdmin()
 <div class="main">
   <form class="viewsettings" action="photos.php" method="GET">
 <?php
-if ($num_thumbnails <= 0) {
+if ($displayCount <= 0) {
     ?>
     <?php echo translate("No photos were found matching your search criteria.") . "\n" ?>
     </form>
@@ -180,38 +183,39 @@ if ($num_thumbnails <= 0) {
     </form>
     <br>
     <?php
-    for ($i = 0; $i < $num; $i++) {
-        if ($i > 0 && $i % $_cols == 0) {
+    $photoOffset=$offset;
+    foreach ($toDisplay as $photo) {
+        if ($photoOffset % $_cols == 0) {
             echo "<br>";
         }
-
         $ignore = array("_action", "_photo_id");
         ?>
         <div class="thumbnail">
         <?php
         if (getvar("_random")) {
-            echo $thumbnails[$i]->getThumbnailLink() . "\n";
+            echo $photo->getThumbnailLink() . "\n";
         } else {
-            echo $thumbnails[$i]->getThumbnailLink("photo.php?" .
-                update_query_string($vars, "_off", $offset + $i, $ignore)) . "\n";
+            echo $photo->getThumbnailLink("photo.php?" .
+                update_query_string($vars, "_off", $photoOffset, $ignore)) . "\n";
         }
 
         if (!empty($lightbox)) {
             ?>
             <ul class="actionlink">
               <li><a href="photos.php?<?php echo update_query_string($vars, "_photo_id",
-                $thumbnails[$i]->get("photo_id"), $ignore) ?>">x</a></li>
+                $photo->getId(), $ignore) ?>">x</a></li>
             </ul>
             <?php
         }
         ?>
         </div>
         <?php
+        $photoOffset++;
     }
     ?>
     <br>
     <?php
-    echo new pager($offset, $num_photos, $num_pages, $cells,
+    echo new pager($offset, $photoCount, $pageCount, $cells,
       $user->prefs->get("max_pager_size"), $vars, "_off");
 } // if photos
 ?>
@@ -220,9 +224,9 @@ if ($num_thumbnails <= 0) {
 <?php
 if (conf::get("maps.provider")) {
     $map=new geo\map();
-    foreach ($thumbnails as $thumbnail) {
-        $thumbnail->lookup();
-        $marker=$thumbnail->getMarker();
+    foreach ($toDisplay as $photo) {
+        $photo->lookup();
+        $marker=$photo->getMarker();
         if ($marker instanceof geo\marker) {
             $map->addMarker($marker);
         }

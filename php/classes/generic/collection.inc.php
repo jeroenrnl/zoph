@@ -31,7 +31,7 @@ use ArrayIterator;
  * @author Jeroen Roos
  * @package Zoph
  */
-abstract class collection implements \ArrayAccess, \IteratorAggregate {
+abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countable {
     /** @var array of items in this collection */
     protected $items=array();
 
@@ -85,4 +85,33 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate {
     public function getIterator() {
         return new ArrayIterator($this->items);
     }
+
+    /**
+     * For Countable interface
+     * return size of this collection
+     */
+
+    public function count() {
+        return count($this->items);
+    }
+
+    /**
+     * Return a subset of this collection as a new collection
+     * @param int start of subset
+     * @param int size of subset
+     */
+    public function subset($start, $count=null) {
+        return static::createFromArray(array_slice($this->items, $start, $count, true));
+    }
+
+    /**
+     * Create a new collection from an array
+     * @param array Items to put in new collection
+     */
+    public static function createFromArray(array $items) {
+        $collection = new static();
+        $collection->items = $items;
+        return $collection;
+    }
+
 }
