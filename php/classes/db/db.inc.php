@@ -58,7 +58,9 @@ class db {
      * @param string password
      */
     private function __construct($dsn, $dbuser, $dbpass) {
-        static::$connection=new PDO($dsn,$dbuser,$dbpass);
+        static::$connection=new PDO($dsn,$dbuser,$dbpass, array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+        ));
         static::$connection->setAttribute(
             PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         static::$connection->setAttribute(
@@ -151,7 +153,8 @@ class db {
             }
 
         } catch (\PDOException $e) {
-            debug_print_backtrace();
+            var_dump($e->getTraceAsString());
+            echo $query->prettyPrint();
             echo $e->getMessage() . "\n";
             log::msg("SQL failed", log::FATAL, log::DB);
         }

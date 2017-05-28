@@ -99,6 +99,20 @@ class CategoryException extends OrganizerException {}
 class CategoryNotFoundException extends CategoryException {}
 
 /**
+ * Exceptions for data errors
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class DataException extends ZophException {}
+
+/**
+ * A value that may not be NULL is NULL
+ * @author Jeroen Roos
+ * @package ZophException
+ */
+class NotNullValueIsNullDataException extends DataException {}
+
+/**
  * Exceptions for pages and pagesets
  * @author Jeroen Roos
  * @package ZophException

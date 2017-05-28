@@ -1,3 +1,29 @@
+Zoph 0.9.5 to 0.9.6
+===================
+* If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.5. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.
+
+Copy files
+----------
+Copy the contents of the php directory, including all subdirs, into your webroot.
+
+    cp -a php/* /var/www/html/zoph
+
+If you use the CLI client, you should copy it to a path that's in your $PATH
+
+    cp cli/zoph /usr/bin
+
+Database changes
+----------------
+Execute zoph-update-0.9.6.sql:
+
+     mysql -u zoph_admin -p zoph < sql/zoph_update-0.9.6.sql
+
+Changes this script makes:
+
+* Give several timestamp fields a default value, because as of MySQL 5.7.4 "0000-00-00 00:00:00" is no longer a valid date in the default configuration (this was reverted in MySQL 5.7.8)
+* Set person_id in the zoph_users table to have a default of NULL instead of "0"
+* Drop the column contact_type from zoph_places, as it was not used as of Zoph 0.3.3 (!)
+
 Zoph 0.9.4 to 0.9.5
 ===================
 * If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.4. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.
@@ -7,6 +33,10 @@ Copy files
 Copy the contents of the php directory, including all subdirs, into your webroot.
 
     cp -a php/* /var/www/html/zoph
+
+If you use the CLI client, you should copy it to a path that's in your $PATH
+
+    cp cli/zoph /usr/bin
 
 Database changes
 ----------------
