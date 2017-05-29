@@ -168,7 +168,7 @@ class template {
      * Add a block
      * @param block Block to be added
      */
-    public function addBlock(block $block) {
+    public function addBlock(block $block=null) {
         $this->blocks[]=$block;
     }
 
@@ -427,11 +427,11 @@ class template {
      */
     public static function showJSwarning() {
         $user=user::getCurrent();
-        if (($user->prefs->get("autocomp_albums")) ||
+        if ((($user->prefs->get("autocomp_albums")) ||
             ($user->prefs->get("autocomp_categories")) ||
             ($user->prefs->get("autocomp_places")) ||
             ($user->prefs->get("autocomp_people")) ||
-            ($user->prefs->get("autocomp_photographer")) &&
+            ($user->prefs->get("autocomp_photographer"))) &&
             conf::get("interface.autocomplete")) {
 
             $warning=new block("message", array(
