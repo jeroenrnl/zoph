@@ -5,7 +5,7 @@ Zoph is being developped on Linux, but it should be able to run on any OS that c
 Zoph requires the following:
 * Apache 2.2 or 2.4
 * PHP 5.6 or 7.0
-* MySQL 5.6
+* MySQL 5.6 or 5.7
 * ImageMagick 6.9
 
 Other versions may work as well, see below for more details. How to install these applications and get them to work together is depending on your OS and distribution. Check the documentation of the application and/or your distribution for details.
@@ -45,7 +45,7 @@ This is the amount of memory PHP allows Zoph to use. Especially if you have larg
 
 ##MySQL##
 * Current versions are developped with MariaDB 10.x
-* MySQL or MariaDB 5.6 should also work
+* MySQL or MariaDB 5.6 or 5.7 should also work
 * MySQL 5.0 to 5.5 may still work but are no longer supported.
 
 ##ImageMagick##

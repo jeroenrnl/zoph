@@ -1,30 +1,58 @@
 # Zoph Changelog #
 
-##Zoph 0.9.5##
-###4 feb 2017###
+## Zoph 0.9.6 ##
+### 14 apr 2017 ###
+Zoph 0.9.5 coincided with a significant change in MySQL, that caused a lot of bugs in Zoph and other open source projects. MySQL changed the way they process queries to handle them much more strictly. What makes things worse, is that MariaDB did not make this change, so at first I could not reproduce the issue. Because of the amount of work, I have decided to postpone the development that was planned for 0.9.6 and make this a bugfix-only release. In this release, I have included a few bugfixes by Pontus Fröding which is really great, thanks Pontus!
+
+
+### Bugs ###
+* [issue#86](https://github.com/jeroenrnl/zoph/issues/86) Fixed an omission in the upgrade instructions for 0.9.5
+* [issue#87](https://github.com/jeroenrnl/zoph/issues/87) error about class not found on add or edit
+* [issue#88](https://github.com/jeroenrnl/zoph/issues/88) Changes for MySQL 5.7 compatibility
+  * Give timestamp a default value
+  * Add field needed for MySQL 5.7 compatibility with SELECT DISTNCT .. ORDER BY
+  * Adding "ORDER BY" fields to autocover query
+  * More changes for MySQL 5.7 compatibility
+  * Updated SQL scripts
+  * Removed unused field from the database
+* [issue#91](https://github.com/jeroenrnl/zoph/issues/91) Changed PHPUnit classes to namespaced class naming
+* Fixed an issue in a UnitTest that caused a failed test
+* [Pull Request#94](https://github.com/jeroenrnl/zoph/pull/94) Add namespace to template showJSwarning in edit_person (by Pontus Fröding)
+* [Pull Request#95](https://github.com/jeroenrnl/zoph/pull/95) Add template namespace on two more places. (by Pontus Fröding)
+* [issue#92](https://github.com/jeroenrnl/zoph/issues/92) Fixed database connection to utf-8
+* [issue#93](https://github.com/jeroenrnl/zoph/issues/93) [Pull Request#95](https://github.com/jeroenrnl/zoph/pull/95) Fix for "Class pager not found" when using pagesets (by Pontus Fröding)
+
+### Refactor ###
+* Some modifications to backtrace printing, for easier debugging
+* Moved album view into template
+* [issue#89](https://github.com/jeroenrnl/zoph/issues/89) Changed look of next and previous buttons on photo page and increased size of actionlinks
+* Small style change
+
+## Zoph 0.9.5 ##
+### 4 feb 2017 ###
 
 Zoph 0.9.5 is the new stable release. It is recommended for everyone to upgrade to this release
 
-###Features###
+### Features ###
 * [Issue#68](https://github.com/jeroenrnl/zoph/issues/68) Changed from Mapstraction to Leaflet as mapping abstraction - with GoogleMaps, OpenStreetMap and MapBox (OpenStreetMap) support
  The code for this was based on code provided by Jason (@JiCiT)
 * [Issue#80](https://github.com/jeroenrnl/zoph/issues/80) You can now edit permissions from the album screen, without the need to go to the group edit.
 * [Issue#82](https://github.com/jeroenrnl/zoph/issues/82) Zoph now gives a proper error message if a photo can not be found
 
-###Bugs###
+### Bugs ###
 * Fixed a bug where in some cases it was possible for an admin to unintentionally delete albums
 
-###Refactor###
+### Refactor ###
 * Lots of internal changes to move to an MVC-architecture
 * Several more parts of Zoph moved into templates
 * Added more unittests - to automatically test Zoph
 
 
-##Zoph 0.9.4##
-###18 Sept 2016###
+## Zoph 0.9.4 ##
+### 18 Sept 2016 ###
 
 Zoph 0.9.4 is the new stable release. It is recommended for everyone to upgrade to this release
-###Features###
+### Features ###
 * Geocoding: Zoph now also searches Wikipedia
 * [Issue#67](https://github.com/jeroenrnl/zoph/issues/67) Changed the colour scheme definition to use a nice interface to select the colour
 * [Issue#23](https://github.com/jeroenrnl/zoph/issues/23) An admin user can now define default prefences for new users
@@ -34,7 +62,7 @@ Zoph 0.9.4 is the new stable release. It is recommended for everyone to upgrade 
 * [Issue#47](https://github.com/jeroenrnl/zoph/issues/47) Photos can now be deleted from disk (moved to a trash dir)
 * [Issue#67](https://github.com/jeroenrnl/zoph/issues/67) Added some new colour schemes
 
-###Bugs###
+### Bugs ###
 * Fixed an issue with album pulldown when editing group access rights
 * Fixed an issue where the circles page would sometimes report $title not found
 * Fixed an issue with changing views on circle page
@@ -42,7 +70,7 @@ Zoph 0.9.4 is the new stable release. It is recommended for everyone to upgrade 
 * fixed collapsable details for time and rating
 * [Issue#78](https://github.com/jeroenrnl/zoph/issues/78) Fixed a case where an admin user was sometimes not allowed to see a person or a place
 
-###Other improvements###
+### Other improvements ###
 * [Issue#77](https://github.com/jeroenrnl/zoph/issues/77) Lots of fixes in the German translation by Thomas Weiland (@HonkXL)
 * Moved group display to template
 * Moved group delete (confirm) into template
@@ -60,12 +88,12 @@ Zoph 0.9.4 is the new stable release. It is recommended for everyone to upgrade 
 * Moved preferences page to template
 * Modified prefs template to use labels instead of definition lists
 
-##Zoph 0.9.3##
-###10 jun 2016###
+## Zoph 0.9.3 ##
+### 10 jun 2016 ###
 
 Zoph 0.9.3 is the new stable release. It is recommended for everyone to upgrade to this release
 
-###Features###
+### Features ###
 * [Issue #72](https://github.com/jeroenrnl/zoph/issues/72) Zoph now has a new logon screen.
 The logon screen has background photos. Two of them are already included in Zoph. You can place your own backgrounds in ```templates/default/images/backgrounds```. Or, you can (on the config screen) define an album from which the images will be used as background images. Zoph will display a random image as background.
 * [Issue #76](https://github.com/jeroenrnl/zoph/issues/76) The logon screen now gives a message about the username and/or password being wrong instead of just returning to the same screen
@@ -78,11 +106,11 @@ This includes a random 'salt' added to each password. This will make it much, mu
 * [Issue #21](https://github.com/jeroenrnl/zoph/issues/21) It is now possible to allow a user to delete photos. The user will have to have "write" access to at least one album a photo is in.
 * Remove the rather ugly trailing space on the links on zoph.php
 
-###Bugs###
+### Bugs ###
 * [Issue #73](https://github.com/jeroenrnl/zoph/issues/73) Fixed sharing feature
 * [Issue #74](https://github.com/jeroenrnl/zoph/issues/74) Fixed Canadian English, Dutch and German translation files
 
-###Other improvements###
+### Other improvements ###
 * Added a way to disable a setting on the configuration page depending on the state of another configuration item. (This was created because the photo album as a logon background relies on the sharing feature to be enabled).
 * Moved user page to template
 * Moved form into a separate class
@@ -92,12 +120,12 @@ This includes a random 'salt' added to each password. This will make it much, mu
 * Rearranged order of unittests
 * Added translations for German, Canadian English and Dutch
 
-##Zoph 0.9.2##
-###1 apr 2016###
+## Zoph 0.9.2 ##
+### 1 apr 2016 ###
 
 Zoph 0.9.2 is the new stable release. I have decided to drop the separation between 'stable' and 'unstable' or 'feature' releases. This means that it is recommended for everyone to upgrade to this release.
 
-###Features###
+### Features ###
 * [Issue #44](https://github.com/jeroenrnl/zoph/issues/44) : Added 'circles': a way to group people in Zoph. This is especially handy if you have a large amount of people in your Zoph, and the 'person' page is becoming confusing or cluttered.
 * [Issue #46](https://github.com/jeroenrnl/zoph/issues/46) A circle and it's members can be surpressed in the overview page, so you can, for example, hide people that you added only for a small set of photos.
 * [Issue #20](https://github.com/jeroenrnl/zoph/issues/20) Zoph has switched to the PDO classes for database access. This ensures compatibility with PHP in the future, because the old mysql libs will be dropped soon.
@@ -107,7 +135,7 @@ Zoph 0.9.2 is the new stable release. I have decided to drop the separation betw
 * Access Google maps via https (Jason Taylor [@JiCiT])
 * As of this version, the language files are in the php dir, and no longer need to be copied or moved separately
 
-###Bugs###
+### Bugs ###
 * [Issue #49](https://github.com/jeroenrnl/zoph/issues/49) Zoph now supports MySQL strict mode
 * [Issue #55](https://github.com/jeroenrnl/zoph/issues/55) Autocomplete not working for people
 * [Issue #58](https://github.com/jeroenrnl/zoph/issues/58) Sort order for albums and categories can not be changed
@@ -125,7 +153,7 @@ Zoph 0.9.2 is the new stable release. I have decided to drop the separation betw
 * Fixed a warning about unknown variable on places page
 * Allow apostropes in place names when creating map markers (Jason Taylor [@JiCiT])
 
-###Refactor###
+### Refactor ###
 * A complete new query builder has been created
 * Many more parts of Zoph can be (and are being) tested automatically now, this should improve overall quality and reduce bugs
 * Many parts of Zoph have been cleaned up to modernize code to the current state of PHP - dropping PHP 5.3 and 5.4 compatibility
@@ -149,7 +177,7 @@ Zoph 0.9.2 is the new stable release. I have decided to drop the separation betw
 ### 21 Feb 2014 ###
 Zoph 0.9.1 is the first feature release for Zoph 0.9, it shows a preview of some of the new features for Zoph 0.10. Most important change is the move of most configuration items from config.inc.php into the Web GUI.
 
-####Features####
+#### Features ####
 
 * [Issue #28](https://github.com/jeroenrnl/zoph/issues/28) Configuration through webinterface 
 * Removed display desc under thumbnail feature 
@@ -166,7 +194,7 @@ Zoph 0.9.1 is the first feature release for Zoph 0.9, it shows a preview of some
 * [Issue #8](https://github.com/jeroenrnl/zoph/issues/8) Made template selectible from webinterface 
 * Removed MAX_CRUMBS 
 
-####Bugs####
+#### Bugs ####
 
 * Simplified CLI code & fixed bug in --autoadd
 * [Issue #34](https://github.com/jeroenrnl/zoph/issues/34) Rows and columns swapped on photos page
@@ -182,7 +210,7 @@ Zoph 0.9.1 is the first feature release for Zoph 0.9, it shows a preview of some
 * [Issue #39](https://github.com/jeroenrnl/zoph/issues/39) Added support for session.upload_progress as APC replacement (PHP 5.4 compatibility)
 * [Issue #38](https://github.com/jeroenrnl/zoph/issues/38) CLI tries to lookup previous argument's value when looking up photographer
 
-####Improvements####
+#### Improvements ####
 
 I have made quite a few improvements on the "inside" of Zoph. I have refactored many parts of Zoph
 to create cleaner, less duplicated and more robust code. I have introduced UnitTests (resulting in 
