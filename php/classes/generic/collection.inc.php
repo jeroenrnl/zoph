@@ -90,7 +90,6 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
      * For Countable interface
      * return size of this collection
      */
-
     public function count() {
         return count($this->items);
     }
@@ -102,6 +101,14 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
      */
     public function subset($start, $count=null) {
         return static::createFromArray(array_slice($this->items, $start, $count, true));
+    }
+
+    /**
+     * Pop first element off the collection
+     * @return first object of the collection
+     */
+    public function pop() {
+        return array_pop($this->items);
     }
 
     /**

@@ -24,8 +24,12 @@
 
 use conf\conf;
 
+use photo\collection;
+
 use template\template;
 use template\block;
+
+use web\request;
 
 require_once "include.inc.php";
 $photo_id = getvar("photo_id");
@@ -55,15 +59,15 @@ if ($photo_id) {
     $photo = new photo($photo_id);
 } else {
     // for display
-    if (!$_off)  { $_off = 0; }
+    if (!$_off)  {
+        $_off = 0;
+    }
     $offset = $_off;
 
-    $num_photos = get_photos($request_vars, $offset, 1, $thumbnails, $user);
-
-    $num_thumbnails = sizeof($thumbnails);
-
-    if  ($num_thumbnails) {
-        $photo = $thumbnails[0];
+    $photoCollection = collection::createFromRequest(request::create());
+    $photos=$photoCollection->subset($offset,1);
+    if  ($photos) {
+        $photo = $photos->pop();
         $photo_id = $photo->getId();
         if (isset($_action) && !$_action=="") {
             $act="_action=" . $_action . "&";
@@ -77,7 +81,7 @@ if ($photo_id) {
                 translate("Prev") . "</a>";
         }
 
-        if ($offset + 1 < $num_photos) {
+        if ($offset + 1 < sizeof($photoCollection)) {
             $newoffset = $offset + 1;
             $next_url = $_SERVER["PHP_SELF"] . "?" . $act .
                 htmlentities(str_replace("_off=$offset", "_off=$newoffset", $qs));
