@@ -104,11 +104,19 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
     }
 
     /**
-     * Pop first element off the collection
-     * @return first object of the collection
+     * Pop last element off the collection
+     * @return last object of the collection
      */
     public function pop() {
         return array_pop($this->items);
+    }
+
+    /**
+     * Shift first element off the collection
+     * @return first object of the collection
+     */
+    public function shift() {
+        return array_shift($this->items);
     }
 
     /**
