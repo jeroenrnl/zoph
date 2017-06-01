@@ -22,25 +22,34 @@
  * @author Jeroen Roos
  */
 
+use photo\collection;
+use web\request;
+
 require_once "include.inc.php";
 $_off = getvar("_off");
 $_pause = getvar("_pause");
 $_random = getvar("_random");
 
-if (!$_off)  { $_off = 0; }
+if (!$_off) {
+    $_off = 0;
+}
 $offset = $_off;
 
 $thumbnails;
 $clean_vars=$request->getRequestVarsClean();
-$num_photos = get_photos($clean_vars, $offset, 1, $thumbnails, $user);
+
+$photoCollection = collection::createFromRequest(request::create());
+$toDisplay = $photoCollection->subset($offset, 1);
+
+$photoCount=sizeof($photoCollection);
+
 header("Content-Type: text/html; charset=utf-8");
 
-$num_thumbnails = sizeof($thumbnails);
-if  ($num_thumbnails) {
+if (sizeof($toDisplay)) {
     if ($_random) {
         $title = translate("random photo ") . ($offset + 1);
     } else {
-        $title = sprintf(translate("photo %s of %s"),  ($offset + 1) , $num_photos);
+        $title = sprintf(translate("photo %s of %s"),  ($offset + 1) , $photoCount);
     }
 } else {
     redirect(html_entity_decode("photos.php?" . update_query_string($clean_vars, "_off", 0)),
@@ -109,40 +118,36 @@ if ($_pause) {
 </h1>
 <div class="main">
 <?php
-if ($num_thumbnails <= 0) {
-    echo translate("No photos were found for this slideshow.");
-} else {
-    $photo = $thumbnails[0];
-    $photo->lookup();
+$photo = $toDisplay->shift();
+$photo->lookup();
+?>
+<div class="prev">&nbsp;</div>
+<div class="photodata">
+    <?php echo $photo->getFullsizeLink($photo->get("name"))?>:
+    <?php echo $photo->get("width") ?> x <?php echo $photo->get("height")?>,
+    <?php echo $photo->get("size") ?> <?php echo translate("bytes")?>
+</div>
+<div class="next">&nbsp;</div>
+<?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX))?>
+<?php
+if ($people_links = $photo->getPeopleLinks()) {
     ?>
-    <div class="prev">&nbsp;</div>
-    <div class="photohdr">
-        <?php echo $photo->getFullsizeLink($photo->get("name"))?>:
-        <?php echo $photo->get("width") ?> x <?php echo $photo->get("height")?>,
-        <?php echo $photo->get("size") ?> <?php echo translate("bytes")?>
-    </div>
-    <div class="next">&nbsp;</div>
-    <?php echo $photo->getFullsizeLink($photo->getImageTag(MID_PREFIX))?>
+    <div id="personlink"><?php echo $people_links ?></div>
     <?php
-    if ($people_links = $photo->getPeopleLinks()) {
-        ?>
-        <div id="personlink"><?php echo $people_links ?></div>
-        <?php
-    }
+}
+?>
+<br>
+<dl>
+<?php echo create_field_html($photo->getDisplayArray(), 2) ?>
+<?php
+if ($photo->get("description")) {
     ?>
-    <br>
-    <dl>
-    <?php echo create_field_html($photo->getDisplayArray(), 2) ?>
+    <dt><?php echo translate("description") ?></dt>
+    <dd>
+        <?php echo $photo->get("description") ?>
+    </dd>
     <?php
-    if ($photo->get("description")) {
-        ?>
-        <dt><?php echo translate("description") ?></dt>
-        <dd>
-            <?php echo $photo->get("description") ?>
-        </dd>
-        <?php
-    }
-} // if photos
+}
 ?>
   </dl>
   <br>
