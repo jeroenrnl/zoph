@@ -177,7 +177,7 @@ if ($displayCount <= 0) {
     unset($request_vars["___photographer_id__all"]);
     unset($request_vars["__album__all"]);
     unset($request_vars["__category__all"]);
-    foreach($toDisplay as $photo) {
+    foreach ($toDisplay as $photo) {
         $photo->lookup();
         $photo_id = $photo->getId();;
 
