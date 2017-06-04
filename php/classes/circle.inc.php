@@ -270,38 +270,6 @@ class circle extends zophTable {
     }
 
     /**
-     * getPhotocount for members
-     * @return int count
-     */
-    public function getPhotocount() {
-        $user=user::getCurrent();
-
-        $allPhotos=array();
-        foreach ($this->getMembers() as $member) {
-
-            $photos=array();
-            $vars=array(
-                "person_id" => $member->getId()
-            );
-            get_photos($vars, 0, 99999999999, $photos, $user);
-            foreach ($photos as $photo) {
-                $allPhotos[$photo->getId()]=true;
-            }
-        }
-        return sizeOf($allPhotos);
-    }
-
-    /**
-     * getTotalPhotocount for members
-     * There is no such thing as subpersons, so photoCount() and totalPhotoCount() are always
-     * equal.
-     * @return int count
-     */
-    public function getTotalPhotocount() {
-        return $this->getPhotocount();
-    }
-
-    /**
      * Add a member to a circle
      * @param person Person to add
      */
