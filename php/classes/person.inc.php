@@ -31,7 +31,10 @@ use db\delete;
 use db\db;
 use db\clause;
 use db\selectHelper;
+
 use conf\conf;
+
+use photo\collection;
 
 
 /**
@@ -365,13 +368,9 @@ class person extends zophTable implements Organizer {
      * @return int count
      */
     public function getPhotoCount() {
-        $user=user::getCurrent();
-
-        $ignore=null;
-        $vars=array(
+        return sizeof(collection::createFromConstraints(array(
             "person_id" => $this->getId()
-        );
-        return get_photos($vars, 0, 1, $ignore, $user);
+        )));
     }
 
     /**
