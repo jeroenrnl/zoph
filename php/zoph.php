@@ -24,25 +24,25 @@
 
 use conf\conf;
 
+use photo\collection;
+
 require_once "include.inc.php";
 $title = translate("Home");
 require_once "header.inc.php";
 
 // get one random photo
-$vars["_random"] = 1;
-$vars["rating"] = $user->prefs->get("random_photo_min_rating");
-$vars["_rating-op"] = ">=";
 
 $thumnails;
-$num_photos = get_photos($vars, 0, 1, $thumbnails, $user);
-?>
+$photoCollection=collection::createFromConstraints(array(
+    "_random"       => 1,
+    "rating"        => user::getCurrent()->prefs->get("random_photo_min_rating"),
+    "_rating-op"    => ">="
+));
 
-<h1><?php echo conf::get("interface.title"); ?></h1>
-<div class="main">
-    <div class="thumbnail" id="random">
-<?php
-if (sizeof($thumbnails) == 1) {
-    echo $thumbnails[0]->getThumbnailLink();
+if (sizeof($photoCollection) >= 1) {
+    $random=$photoCollection->shift()->getThumbnailLink();
+} else {
+    $random="";
 }
 
 $album = album::getRoot();
@@ -51,9 +51,15 @@ $album_photoCount = $album->getTotalPhotoCount();
 $category = category::getRoot();
 $category_count = category::getCountForUser();
 $category_photoCount = $category->getTotalPhotoCount();
-echo "\n";
+
 ?>
+
+<h1><?php echo conf::get("interface.title"); ?></h1>
+<div class="main">
+    <div class="thumbnail" id="random">
+        <?= $random ?>
     </div>
+
     <div class="intro" id="first">
       <?php echo sprintf(translate("Welcome %s. %s currently contains"),
           $user->person->getLink(),
