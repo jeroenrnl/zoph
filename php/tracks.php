@@ -24,6 +24,8 @@ require_once "include.inc.php";
 
 use geo\track;
 
+use photo\collection;
+
 use template\block;
 use template\template;
 
@@ -42,9 +44,8 @@ if (!$user->isAdmin()) {
 } else {
     $vars=$request->getRequestVarsClean();
     $new_vars=update_query_string($vars, "_action", "do_geotag", array("_test", "_testcount"));
-    $photos;
-    $totalPhotoCount = get_photos($vars, 0, 999999999, $photos, $user);
-    $num_photos=sizeof($photos);
+    $photos=collection::createFromRequest($request);
+    $photoCount = sizeOf($photos);
 }
 
 if ($_action=="" || $_action=="display") {
@@ -61,7 +62,7 @@ if ($_action=="" || $_action=="display") {
         ));
     }
 } else if ($_action=="geotag") {
-    if ($num_photos<= 0) {
+    if ($photoCount <= 0) {
         $content=new block("message", array(
             "class" => "error",
             "text" => translate("No photos were found matching your search criteria.")
@@ -72,7 +73,7 @@ if ($_action=="" || $_action=="display") {
         $hidden["_action"]="do_geotag";
 
         $content=new block("geotag_form", array(
-            "num_photos"    => $num_photos,
+            "photoCount"    => $photoCount,
             "hidden"        => $hidden,
             "tracks"        => track::getRecords("track_id")
         ));
@@ -100,18 +101,16 @@ if ($_action=="" || $_action=="display") {
     }
 
     if ($validtz) {
-        $photos=photo::removePhotosWithNoValidTZ($photos);
+        $photos->removeNoValidTZ();
     }
     if (!$overwrite) {
-        $photos=photo::removePhotosWithLatLon($photos);
+        $photos->removeWithLatLon();
     }
 
     $total=count($photos);
 
     if ($total>0) {
-        if (is_array($test)) {
-            $photos=photo::getSubset($photos, $test, $count);
-        }
+        $photos->getSubsetForGeotagging($photos, (array) $test, $count);
 
         foreach ($photos as $photo) {
             $point=$photo->getLatLon($track, $maxtime, $interpolate, $int_maxdist,

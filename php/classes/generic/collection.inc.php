@@ -120,6 +120,32 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
     }
 
     /**
+     * Get random element(s) from the collection
+     */
+    public function random($count = 1) {
+        $count = min(sizeof($this), $count);
+        $rndKeys=(array) array_random($this->items, $count);
+        $rndColl = new self();
+        foreach ($rndKeys as $key) {
+            $rndColl[$key] = $this[$key];
+        }
+        return $rndColl;
+    }
+
+    public function merge(self ...$toMerge) {
+        $merged=array();
+        array_unshift($this, $toMerge);
+        foreach($toMerge as $collection) {
+            array_merge($merged, $collection->toArray());
+        }
+        return self::createFromArray($merged);
+    }
+
+    protected function toArray() {
+        return $this->items;
+    }
+
+    /**
      * Create a new collection from an array
      * @param array Items to put in new collection
      */

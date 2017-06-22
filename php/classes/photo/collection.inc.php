@@ -23,8 +23,11 @@
 
 namespace photo;
 
-use web\request;
+use photo;
+
 use user;
+
+use web\request;
 
 /**
  * Collection of photo objects
@@ -33,6 +36,72 @@ use user;
  */
 class collection extends \generic\collection {
 
+    /**
+     * Remove all photos that have no valid timezone
+     * @todo this is now a wrapper around the static photo::removePhotosWithNoValidTZ() function
+     *       once all references to that function have been moved to this, the implementation
+     *       should move as well
+     */
+    public function removeNoValidTZ() {
+        $this->items=photo::removePhotosWithNoValidTZ($this->items);
+        return $this;
+    }
+
+    /**
+     * Remove all photos that have lat/lon set
+     * @todo this is now a wrapper around the static photo::removePhotosWithLatLon() function
+     *       once all references to that function have been moved to this, the implementation
+     *       should move as well
+     */
+    public function removeWithLatLon() {
+        $this->items=photo::removePhotosWithLatLon($this->items);
+        return $this;
+    }
+
+    /**
+     * Get a subset of photos to do geotagging test on
+     */
+    public function getSubsetForGeotagging(array $subset, $count) {
+        $first=array();
+        $last=array();
+        $random=array();
+        $begin=0;
+        $end=null;
+
+        $max=count($this);
+
+        $count = min($max, $count);
+
+        if (in_array("first", $subset)) {
+            $first=$this->subset(0, $count);
+            $max=$max-$count;
+            $begin=$count;
+        }
+        if (in_array("last", $subset)) {
+            $last=$this->subset(-$count);
+            $max=$max-$count;
+            $end=-$count;
+        }
+
+        if (in_array("random", $subset) && ($max > 0)) {
+            $center=$this->subset($begin, $end);
+
+            $max=count($center);
+
+            if ($max!=0) {
+                $random = $this->random($count);
+            }
+        }
+
+        $first->merge($random, $last);
+        // remove duplicates due to overlap:
+        $clean_subset=array();
+        foreach ($subset as $photo) {
+            $clean_subset[$photo->get("photo_id")]=$photo;
+        }
+
+        return $clean_subset;
+    }
     /**
      * Create a new photo\collection from request
      * for now, this is just a wrapper around the get_photos() global function

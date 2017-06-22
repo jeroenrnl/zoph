@@ -29,6 +29,8 @@ use db\param;
 use db\clause;
 use db\selectHelper;
 
+use photo\collection;
+
 /**
  * Photographer class
  *
