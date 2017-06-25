@@ -18,6 +18,7 @@
   <testsuites>
     <testsuite name="Zoph">
       <file>PDOdatabaseTest.php</file>
+      <file>collectionTest.php</file>
       <file>configTest.php</file>
       <file>XMLdataTest.php</file>
       <file>variableTest.php</file>

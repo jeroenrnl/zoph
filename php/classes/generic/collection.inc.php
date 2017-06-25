@@ -124,8 +124,8 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
      */
     public function random($count = 1) {
         $count = min(sizeof($this), $count);
-        $rndKeys=(array) array_random($this->items, $count);
-        $rndColl = new self();
+        $rndKeys=(array) array_rand($this->items, $count);
+        $rndColl = new static();
         foreach ($rndKeys as $key) {
             $rndColl[$key] = $this[$key];
         }
@@ -134,11 +134,11 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
 
     public function merge(self ...$toMerge) {
         $merged=array();
-        array_unshift($this, $toMerge);
-        foreach($toMerge as $collection) {
-            array_merge($merged, $collection->toArray());
+        array_unshift($toMerge, $this);
+        foreach ($toMerge as $collection) {
+            $merged=array_merge($merged, $collection->toArray());
         }
-        return self::createFromArray($merged);
+        return static::createFromArray($merged);
     }
 
     protected function toArray() {

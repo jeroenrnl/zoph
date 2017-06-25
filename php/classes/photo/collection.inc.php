@@ -95,12 +95,12 @@ class collection extends \generic\collection {
 
         $first->merge($random, $last);
         // remove duplicates due to overlap:
-        $clean_subset=array();
+        $cleanSubset=array();
         foreach ($subset as $photo) {
-            $clean_subset[$photo->get("photo_id")]=$photo;
+            $cleanSubset[$photo->get("photo_id")]=$photo;
         }
 
-        return $clean_subset;
+        return $cleanSubset;
     }
     /**
      * Create a new photo\collection from request

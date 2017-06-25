@@ -65,8 +65,8 @@ if ($photo_id) {
     $offset = $_off;
 
     $photoCollection = collection::createFromRequest(request::create());
-    $photos=$photoCollection->subset($offset,1);
-    if  ($photos) {
+    $photos=$photoCollection->subset($offset, 1);
+    if ($photos) {
         $photo = $photos->shift();
         $photo_id = $photo->getId();
         if (isset($_action) && !$_action=="") {
