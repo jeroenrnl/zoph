@@ -27,7 +27,7 @@ require_once "testCollection.php";
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test the place class
+ * Test the generic collection object
  *
  * @package ZophUnitTest
  * @author Jeroen Roos

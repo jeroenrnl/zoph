@@ -62,45 +62,37 @@ class collection extends \generic\collection {
      * Get a subset of photos to do geotagging test on
      */
     public function getSubsetForGeotagging(array $subset, $count) {
-        $first=array();
-        $last=array();
-        $random=array();
         $begin=0;
-        $end=null;
 
         $max=count($this);
 
         $count = min($max, $count);
-
+        $return = new self;
         if (in_array("first", $subset)) {
             $first=$this->subset(0, $count);
             $max=$max-$count;
             $begin=$count;
+            $return = $first;
         }
         if (in_array("last", $subset)) {
             $last=$this->subset(-$count);
             $max=$max-$count;
-            $end=-$count;
+            $return = $return->merge($last);
         }
 
         if (in_array("random", $subset) && ($max > 0)) {
-            $center=$this->subset($begin, $end);
+            $center=$this->subset($begin, $max);
 
             $max=count($center);
 
             if ($max!=0) {
-                $random = $this->random($count);
+                $random = $center->random($count);
+                $return = $return->merge($random);
             }
         }
 
-        $first->merge($random, $last);
-        // remove duplicates due to overlap:
-        $cleanSubset=array();
-        foreach ($subset as $photo) {
-            $cleanSubset[$photo->get("photo_id")]=$photo;
-        }
 
-        return $cleanSubset;
+        return $return->renumber();
     }
     /**
      * Create a new photo\collection from request

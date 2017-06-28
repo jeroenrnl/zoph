@@ -132,6 +132,11 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
         return $rndColl;
     }
 
+    /**
+     * Merge this collection with other collection(s)
+     * @param collection to merge with [, collection to merge with [ , ... ]]
+     * return collection
+     */
     public function merge(self ...$toMerge) {
         $merged=array();
         array_unshift($toMerge, $this);
@@ -141,6 +146,28 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
         return static::createFromArray($merged);
     }
 
+    /**
+     * Renumber the items so that each item has it's key as
+     * it's key in the array
+     * @param callable alternate function to determine key (default ->getId() )
+     * @return collection
+     */
+    public function renumber(callable $function=null) {
+        // Default for callable can only be null
+        if (!$function) {
+            $function="getId";
+        }
+        $return = new static;
+        foreach ($this->items as $item) {
+            $id = call_user_func(array($item, $function));
+            $return[$id]=$item;
+        }
+        return $return;
+    }
+
+    /**
+     * Turn this collection into an array
+     */
     protected function toArray() {
         return $this->items;
     }

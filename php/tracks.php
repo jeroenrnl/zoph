@@ -110,7 +110,7 @@ if ($_action=="" || $_action=="display") {
     $total=count($photos);
 
     if ($total>0) {
-        $photos->getSubsetForGeotagging($photos, (array) $test, $count);
+        $photos=$photos->getSubsetForGeotagging((array) $test, $count);
 
         foreach ($photos as $photo) {
             $point=$photo->getLatLon($track, $maxtime, $interpolate, $int_maxdist,

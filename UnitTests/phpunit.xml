@@ -18,12 +18,13 @@
   <testsuites>
     <testsuite name="Zoph">
       <file>PDOdatabaseTest.php</file>
-      <file>collectionTest.php</file>
+      <file>genericCollectionTest.php</file>
       <file>configTest.php</file>
       <file>XMLdataTest.php</file>
       <file>variableTest.php</file>
       <file>requestTest.php</file>
       <file>photoTest.php</file>
+      <file>photoCollectionTest.php</file>
       <file>albumTest.php</file>
       <file>placeTest.php</file>
       <file>userTest.php</file>
