@@ -179,7 +179,7 @@ if ($displayCount <= 0) {
     unset($request_vars["__category__all"]);
     foreach ($toDisplay as $photo) {
         $photo->lookup();
-        $photo_id = $photo->getId();;
+        $photo_id = $photo->getId();
 
         unset($request_vars["___location_id__" . $photo_id]);
         unset($request_vars["___photographer_id__" . $photo_id]);
