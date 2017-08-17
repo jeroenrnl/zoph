@@ -96,35 +96,20 @@ class collection extends \generic\collection {
     }
     /**
      * Create a new photo\collection from request
-     * for now, this is just a wrapper around the get_photos() global function
-     * but this will change soon
      */
     public static function createFromRequest(request $request) {
-        $photos=array();
-        get_photos($request->getRequestVarsClean(), 0, 999999, $photos, user::getCurrent());
-
-        $collection = new self;
-        foreach ($photos as $photo) {
-            $collection[$photo->getId()]=$photo;
-        }
-        return $collection;
+        return static::createFromConstraints($request->getRequestVarsClean());
     }
 
     /**
      * Create a new photo\collection from request
      * for now, this is just a wrapper around the get_photos() global function
      * but this will change soon
-     * for now, this function is very similar to createFromRequest(), eventually one
-     * of these functions should disappear
      */
     public static function createFromConstraints($constraints) {
         $photos=array();
         get_photos($constraints, 0, 999999, $photos, user::getCurrent());
-
-        $collection = new self;
-        foreach ($photos as $photo) {
-            $collection[$photo->getId()]=$photo;
-        }
-        return $collection;
+        return static::createFromArray($photos, true);
     }
+
 }

@@ -176,10 +176,15 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
      * Create a new collection from an array
      * @param array Items to put in new collection
      */
-    public static function createFromArray(array $items) {
+    public static function createFromArray(array $items, $withKeys = false) {
         $collection = new static();
-        $collection->items = $items;
+        if ($withKeys) {
+            foreach ($items as $item) {
+                $collection[$item->getId()]=$item;
+            }
+        } else {
+            $collection->items = $items;
+        }
         return $collection;
     }
-
 }
