@@ -145,14 +145,14 @@ class photoCollectionTest extends TestCase {
     }
 
     /**
-     * test createFromConstraints() function
+     * test createFromVars() function
      * @dataProvider getPhotos
      */
-    public function testCreateFromConstraints($vars, $offset, $rows, $userId, $expPhotoIds) {
+    public function testCreateFromVars($vars, $offset, $rows, $userId, $expPhotoIds) {
         user::setCurrent(new user($userId));
         $actPhotoIds=array();
 
-        $photos=collection::createFromConstraints($vars);
+        $photos=collection::createFromVars($vars);
 
         $photos=$photos->subset($offset, $rows);
 

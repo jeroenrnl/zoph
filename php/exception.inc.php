@@ -358,6 +358,7 @@ class DatabaseException extends ZophException {}
  */
 class SecurityException extends ZophException {}
 class KeyMustBeNumericSecurityException extends SecurityException {}
+class IllegalValueSecurityException extends SecurityException {}
 
 
 /**

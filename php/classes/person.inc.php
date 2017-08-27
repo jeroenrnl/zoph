@@ -368,7 +368,7 @@ class person extends zophTable implements Organizer {
      * @return int count
      */
     public function getPhotoCount() {
-        return sizeof(collection::createFromConstraints(array(
+        return sizeof(collection::createFromVars(array(
             "person_id" => $this->getId()
         )));
     }
@@ -546,16 +546,17 @@ class person extends zophTable implements Organizer {
      * Lookup person by name;
      * @param string name
      */
-    public static function getByName($name) {
+    public static function getByName($name, $like=false) {
         if (empty($name)) {
             return false;
         }
         $qry=new select(array("ppl" => "people"));
         $qry->addFields(array("person_id"));
-        $where=new clause("CONCAT_WS(\" \", lower(first_name), lower(last_name))=lower(:name)");
-        $qry->addParam(new param(":name", $name, PDO::PARAM_STR));
+        $where=new clause("CONCAT_WS(\" \", lower(first_name), lower(last_name))" . (
+            $like ? " LIKE :name" : "=lower(:name)")
+        );
+        $qry->addParam(new param(":name", $like ? "%" . $name . "%" : $name, PDO::PARAM_STR));
         $qry->where($where);
-
         return static::getRecordsFromQuery($qry);
     }
 

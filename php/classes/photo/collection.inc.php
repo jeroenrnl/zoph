@@ -98,17 +98,16 @@ class collection extends \generic\collection {
      * Create a new photo\collection from request
      */
     public static function createFromRequest(request $request) {
-        return static::createFromConstraints($request->getRequestVarsClean());
+        return static::createFromVars($request->getRequestVarsClean());
     }
 
     /**
-     * Create a new photo\collection from request
-     * for now, this is just a wrapper around the get_photos() global function
-     * but this will change soon
+     * Create a new photo\collection from request vars
+     * @param array http request vars
      */
-    public static function createFromConstraints($constraints) {
-        $photos=array();
-        get_photos($constraints, 0, 999999, $photos, user::getCurrent());
+    public static function createFromVars(array $vars) {
+        $search=new search($vars);
+        $photos=photo::getRecordsFromQuery($search->getQuery());
         return static::createFromArray($photos, true);
     }
 

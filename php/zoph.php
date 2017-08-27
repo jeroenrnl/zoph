@@ -33,7 +33,7 @@ require_once "header.inc.php";
 // get one random photo
 
 $thumnails;
-$photoCollection=collection::createFromConstraints(array(
+$photoCollection=collection::createFromVars(array(
     "_random"       => 1,
     "rating"        => user::getCurrent()->prefs->get("random_photo_min_rating"),
     "_rating-op"    => ">="

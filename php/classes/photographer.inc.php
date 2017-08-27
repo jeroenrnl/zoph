@@ -65,7 +65,7 @@ class photographer extends person implements Organizer {
      * @return int count
      */
     public function getPhotoCount() {
-        return sizeof(collection::createFromConstraints(array(
+        return sizeof(collection::createFromVars(array(
             "photographer_id" => $this->getId()
         )));
     }
