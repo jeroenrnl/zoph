@@ -79,9 +79,9 @@ class search {
 
     /**
      * Create seach object based on http request vars
-     * @var arrray vars http request vars
+     * @param array vars http request vars
      */
-    public function __construct($vars) {
+    public function __construct(array $vars) {
 
         $this->qry = new select(array("p" => "photos"));
         $this->vars = $vars;
@@ -252,10 +252,10 @@ class search {
      * But it could be used to create a URL like http://www.zoph.org/search.php?person=Jeroen Roos
      * With the help of url rewrite, one could even change that into something like
      * http://www.zoph.org/person/Jeroen Roos
-     * @var string key name of the field (person|photographer)
-     * @var string val value of the field
-     * @var string suffix, the suffix can be used to search for the same field multiple times
-     * @var string conj, conjugation, whether this is an AND or OR search
+     * @param string key name of the field (person|photographer)
+     * @param string val value of the field
+     * @param string suffix, the suffix can be used to search for the same field multiple times
+     * @param string conj, conjugation, whether this is an AND or OR search
      */
     private function processPerson($key, $val, $suffix, $conj) {
         $people = person::getByName($val, true);
@@ -285,7 +285,7 @@ class search {
 
     /**
      * Search for album by name
-     * @var string val value of the field
+     * @param string val value of the field
      * @return int|array album_id or array of album_ids
      */
     private function processAlbum($val) {
@@ -307,7 +307,7 @@ class search {
 
     /**
      * Search for category by name
-     * @var string val value of the field
+     * @param string val value of the field
      * @return int|array category_id or array of category_ids
      */
     private function processCategory($val) {
@@ -329,10 +329,10 @@ class search {
 
     /**
      * Search for album by id
-     * @var string val value of the field
-     * @var string suffix, the suffix can be used to search for the same field multiple times
-     * @var string operator, how the values should be compared (=, !=, like, etc.)
-     * @var string conj, conjugation, whether this is an AND or OR search
+     * @param string val value of the field
+     * @param string suffix, the suffix can be used to search for the same field multiple times
+     * @param string operator, how the values should be compared (=, !=, like, etc.)
+     * @param string conj, conjugation, whether this is an AND or OR search
      */
     private function processAlbumId($val, $suffix, $op, $conj) {
         if ($op == "=") {
@@ -376,10 +376,10 @@ class search {
 
     /**
      * Search for category by id
-     * @var string val value of the field
-     * @var string suffix, the suffix can be used to search for the same field multiple times
-     * @var string operator, how the values should be compared (=, !=, like, etc.)
-     * @var string conj, conjugation, whether this is an AND or OR search
+     * @param string val value of the field
+     * @param string suffix, the suffix can be used to search for the same field multiple times
+     * @param string operator, how the values should be compared (=, !=, like, etc.)
+     * @param string conj, conjugation, whether this is an AND or OR search
      */
     private function processCategoryId($val, $suffix, $op, $conj) {
         if ($op == "=") {
@@ -415,10 +415,10 @@ class search {
 
     /**
      * Search for location by id
-     * @var string val value of the field
-     * @var string suffix, the suffix can be used to search for the same field multiple times
-     * @var string operator, how the values should be compared (=, !=, like, etc.)
-     * @var string conj, conjugation, whether this is an AND or OR search
+     * @param string val value of the field
+     * @param string suffix, the suffix can be used to search for the same field multiple times
+     * @param string operator, how the values should be compared (=, !=, like, etc.)
+     * @param string conj, conjugation, whether this is an AND or OR search
      */
     private function processLocationId($val, $suffix, $op, $conj) {
         if (is_numeric($val)) {
@@ -441,10 +441,10 @@ class search {
 
     /**
      * Search for person by id
-     * @var string val value of the field
-     * @var string suffix, the suffix can be used to search for the same field multiple times
-     * @var string operator, how the values should be compared (=, !=, like, etc.)
-     * @var string conj, conjugation, whether this is an AND or OR search
+     * @param string val value of the field
+     * @param string suffix, the suffix can be used to search for the same field multiple times
+     * @param string operator, how the values should be compared (=, !=, like, etc.)
+     * @param string conj, conjugation, whether this is an AND or OR search
      */
     private function processPersonId($val, $suffix, $op, $conj) {
         if ($op == "=") {
@@ -482,9 +482,9 @@ class search {
 
     /**
      * Search for user rating
-     * @var string val value of the field
-     * @var string suffix, the suffix can be used to search for the same field multiple times
-     * @var string conj, conjugation, whether this is an AND or OR search
+     * @param string val value of the field
+     * @param string suffix, the suffix can be used to search for the same field multiple times
+     * @param string conj, conjugation, whether this is an AND or OR search
      */
     private function processUserRating($val, $suffix, $conj) {
         $user=user::getCurrent();
@@ -522,10 +522,10 @@ class search {
 
     /**
      * Search for rating
-     * @var string val value of the field
-     * @var string suffix, the suffix can be used to search for the same field multiple times
-     * @var string operator, how the values should be compared (=, !=, like, etc.)
-     * @var string conj, conjugation, whether this is an AND or OR search
+     * @param string val value of the field
+     * @param string suffix, the suffix can be used to search for the same field multiple times
+     * @param string operator, how the values should be compared (=, !=, like, etc.)
+     * @param string conj, conjugation, whether this is an AND or OR search
      */
     private function processRating($val, $suffix, $op, $conj) {
         $alias = "vpr" . substr($suffix, 1);
@@ -545,10 +545,10 @@ class search {
 
     /**
      * Search for Latitude / longitude
-     * @var float latitude value
-     * @var float longitude value
-     * @var string suffix, the suffix can be used to search for the same field multiple times
-     * @var string conj, conjugation, whether this is an AND or OR search
+     * @param float latitude value
+     * @param float longitude value
+     * @param string suffix, the suffix can be used to search for the same field multiple times
+     * @param string conj, conjugation, whether this is an AND or OR search
      */
     private function processLatLon($lat, $lon, $suffix, $conj) {
         $ids=array();
@@ -585,12 +585,12 @@ class search {
 
     /**
      * Search for other fields
-     * @var string key name of the field
-     * @var string val value of the field
-     * @var string suffix, the suffix can be used to search for the same field multiple times
-     * @var string original suffix, the unprocessed suffix
-     * @var string operator, how the values should be compared (=, !=, like, etc.)
-     * @var string conj, conjugation, whether this is an AND or OR search
+     * @param string key name of the field
+     * @param string val value of the field
+     * @param string suffix, the suffix can be used to search for the same field multiple times
+     * @param string original suffix, the unprocessed suffix
+     * @param string operator, how the values should be compared (=, !=, like, etc.)
+     * @param string conj, conjugation, whether this is an AND or OR search
      */
     private function processOtherFields($key, $val, $suffix, $origSuffix, $op, $conj) {
         // any other field
