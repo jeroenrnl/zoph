@@ -78,18 +78,18 @@ class settings {
      */
 
     public static function detectInstance(array $ini) {
-        $php_loc=dirname($_SERVER['SCRIPT_FILENAME']);
+        $section=preg_replace('!^/!', '', dirname($_SERVER['REQUEST_URI']));
         foreach ($ini as $instance=>$i) {
             if (!isset($i["php_location"])) {
                 log::msg("php_location setting missing from " . $instance . " in " .
                     INI_FILE, log::FATAL, log::GENERAL);
-            } else if ($php_loc==$i["php_location"]) {
+            } else if ($section==$instance) {
                 static::$instance=$instance;
                 return $instance;
             }
         }
         // No corresponding settings found.
-        log::msg("No php_location setting in " . INI_FILE . " found that matches " . $php_loc,
+        log::msg("No php_location setting in " . INI_FILE . " found that matches " . $section,
             log::FATAL, log::GENERAL);
     }
 
