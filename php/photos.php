@@ -101,19 +101,19 @@ require_once "header.inc.php";
 <h1>
   <ul class="actionlink">
 <?php
-$qs = preg_replace('/_crumb=\d+&?/', '', $_SERVER["QUERY_STRING"]);
-$qs_no_action=preg_replace('/_action=\w+&?/', '', $qs);
+$vars=$request->getRequestVarsClean();
+unset($vars["_action"]);
+unset($vars["_crumb"]);
 
-$qs=htmlentities($qs);
-$qs_no_action=htmlentities($qs_no_action);
-
-if ($qs_no_action) {
-    $qs_no_action .= "&amp;";
+$qs="";
+if !empty($vars) {
+    $qs=http_build_query($vars);
+    $qs .= "&amp;";
 }
 
 if ($_action=translate("search")) {
     ?>
-    <li><a href="search.php?<?php echo $qs_no_action ?>_action=new">
+    <li><a href="search.php?<?php echo $qs ?>_action=new">
         <?php echo translate("save search") ?></a></li>
     <?php
 }
@@ -121,7 +121,7 @@ if ($user->isAdmin()) {
     ?>
     <li><a href="edit_photos.php?<?php echo $qs ?>">
         <?php echo translate("edit") ?></a></li>
-    <li><a href="tracks.php?_action=geotag&<?php echo $qs_no_action ?>">
+    <li><a href="tracks.php?_action=geotag&<?php echo $qs ?>">
         <?php echo translate("geotag") ?></a></li>
     <?php
 }

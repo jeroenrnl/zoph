@@ -1,6 +1,8 @@
 <?php
 /**
- * Template for HTML input field text
+ * View for search page
+ *
+ * This file is part of Zoph.
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,23 +17,43 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package ZophTemplates
+ * @package Zoph
  * @author Jeroen Roos
  */
 
-if (!ZOPH) {
-    die("Illegal call");
-}
-?>
+namespace search\view;
 
-<?php if ($tpl_label): ?>
-    <label for="<?= $tpl_name ?>">
-        <?= $tpl_label ?>
-    </label>
-<?php endif; ?>
-<input id="<?= $tpl_name ?>" type="text" name="<?= $tpl_name ?>" maxlength="<?= $tpl_maxlength ?>" size="<?= $tpl_size ?>" value="<?= $tpl_value ?>">
-<?php if (!empty($tpl_hint)): ?>
-    <span class="inputhint">
-        <?php echo $tpl_hint ?>
-    </span>
-<?php endif; ?>
+use web\request;
+use user;
+
+/**
+ * This view displays the search page
+ */
+class photos {
+
+    /**
+     * @var request variables
+     */
+    private $vars;
+    private $request;
+
+    /**
+     * Create view
+     */
+    public function __construct(request $request) {
+        $this->request=$request;
+        $this->vars=$request->getRequestVars();
+    }
+
+    /**
+     * Output view
+     */
+    public function view() {
+        $request_vars=$this->vars;
+        $request=$this->request;
+        $user=user::getCurrent();
+        ob_start();
+        require("photos.php");
+        return ob_get_clean();
+    }
+}

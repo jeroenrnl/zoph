@@ -51,7 +51,7 @@ if (!ZOPH) { die("Illegal call"); }
 
     <?php if (!is_null($this->clat) && (!is_null($this->clon)) && (!is_null($this->zoom))): ?>
         zMaps.setCenterAndZoom([ <?= $this->clat ?>, <?= $this->clon ?> ], <?= $this->zoom ?>);
-    <?php else: ?>
+    <?php elseif ($this->hasMarkers()): ?>
         zMaps.autoCenterAndZoom();
     <?php endif ?>
 
