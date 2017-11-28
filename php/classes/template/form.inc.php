@@ -123,10 +123,7 @@ class form extends block {
 
     /**
      * add fieldset
-     * @param string name
      * @param fieldset fieldset
-     * @param string text for legend
-     * @param string css class
      */
     public function addFieldset(fieldset $fieldset) {
         $this->addBlock($fieldset);

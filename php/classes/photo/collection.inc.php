@@ -60,6 +60,10 @@ class collection extends \generic\collection {
 
     /**
      * Get a subset of photos to do geotagging test on
+     * This will select a subset of photos containing of the first x, last x and or random x photos
+     * from the subset. This is used to give the user a preview of what is going to be geotagged.
+     * @param array subset array that can contain "first", "last" and/or "random"
+     * @param int number of each to select
      */
     public function getSubsetForGeotagging(array $subset, $count) {
         $begin=0;
@@ -94,8 +98,10 @@ class collection extends \generic\collection {
 
         return $return->renumber();
     }
+
     /**
      * Create a new photo\collection from request
+     * @param request web request
      */
     public static function createFromRequest(request $request) {
         return static::createFromVars($request->getRequestVarsClean());

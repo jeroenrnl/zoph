@@ -41,7 +41,7 @@ class controller extends genericController {
 
     /**
      * Create a controller using a web request
-     * @param web\request request
+     * @param request request
      */
     public function __construct(request $request) {
         parent::__construct($request);
@@ -55,10 +55,10 @@ class controller extends genericController {
             unset($vars["_crumb"]);
             $urlVars=array();
             foreach ($vars as $key => $val) {
-                # Change key#0 into key[0]:
+                // Change key#0 into key[0]:
                 $key=preg_replace("/\#([0-9]+)/", "[$1]", $key);
-                # Change key[0]-children into key_children[0] because everything
-                # after ] in a variable name is lost fix for bug#2890387
+                // Change key[0]-children into key_children[0] because everything
+                // after ] in a variable name is lost fix for bug#2890387
                 $key=preg_replace("/\[(.+)\]-([a-z]+)/", "_$2[$1]", $key);
                 $urlVars[]=e($key) . "=" . e($val);
             }
@@ -73,6 +73,9 @@ class controller extends genericController {
         $this->doAction();
     }
 
+    /**
+     * Do action 'search'
+     */
     public function actionSearch() {
         $this->view="photos";
     }

@@ -232,6 +232,7 @@ abstract class item extends zophTable {
 
     /**
      * This item requires another item to be enabled
+     * @param checkbox configuration item checkbox that must be enabled to use this parameter
      */
     final public function requiresEnabled(checkbox $item) {
         $this->requiresEnabled[]=$item;

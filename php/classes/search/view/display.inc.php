@@ -46,6 +46,7 @@ class display {
 
     /**
      * Create view
+     * @param request web request
      */
     public function __construct(request $request) {
         $this->vars=$request->getRequestVars();
@@ -87,6 +88,10 @@ class display {
         return $search;
     }
 
+    /**
+     * Get an array of search terms, this array is used to build the search page
+     * @return array elements ('search terms') to build search page with
+     */
     private function getSearchTerms() {
         return array(
             "date"  =>  array(
@@ -147,7 +152,18 @@ class display {
             ));
     }
 
-    private function buildTerm($param, $term) {
+    /**
+     * construct template blocks from searchTerms and the GET / POST parameters given to the page
+     * @param string parameter to build searchTerm for
+     * @param array searchTerm array with fields
+     *      label       : label for the searchterm
+     *      op          : template containing the operator (=, >, <, etc)
+     *      value       : template for value of the field (usually a dropdown)  * optional
+     *      value_text  : text to add after the value                           * optional
+     *      child       : tickbox for 'include children'                        * optional
+     *      child_text  : text for the tickbox                                  * optional
+     */
+    private function buildTerm($param, array $term) {
         $blocks=array();
         $count = isset($this->vars[$param]) ? sizeof($this->vars[$param]) - 1: 0;
         for ($i = 0; $i <= $count; $i++) {
@@ -185,6 +201,9 @@ class display {
         return $blocks;
     }
 
+    /**
+     * Build search term to search using the map
+     */
     private function buildMapTerm() {
         $conj   = isset($this->vars["_latlon_conj"])        ? $this->vars["_latlon_conj"]       : null;
         $value  = isset($this->vars["_latlon_distance"])    ? $this->vars["_latlon_distance"]   : null;

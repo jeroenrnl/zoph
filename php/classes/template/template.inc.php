@@ -388,10 +388,10 @@ class template {
     public static function createPhotoTextPulldown($name, $value) {
         return template::createPulldown($name, $value, array(
             "" => "",
-            "album" => translate("album",0),
-            "category" => translate("category",0),
-            "person" => translate("person",0),
-            "photographer" => translate("photographer",0)));
+            "album" => translate("album", 0),
+            "category" => translate("category", 0),
+            "person" => translate("person", 0),
+            "photographer" => translate("photographer", 0)));
     }
 
     /**
@@ -417,8 +417,8 @@ class template {
                 ">="    => ">=",
                 "<"     => "<",
                 "<="    => "<=",
-                "like" => translate("like",0),
-                "not like" => translate("not like",0)
+                "like" => translate("like", 0),
+                "not like" => translate("not like", 0)
         ));
     }
 
@@ -447,8 +447,8 @@ class template {
     public static function createPresentOperatorPulldown($name, $value = "=") {
         return template::createPulldown($name, $value,
             array(
-                "=" => translate("is in photo",0),
-                "!=" => translate("is not in photo",0)
+                "=" => translate("is in photo", 0),
+                "!=" => translate("is not in photo", 0)
         ));
     }
 
@@ -472,12 +472,12 @@ class template {
      */
     public static function createConjunctionPulldown($name, $value = "") {
         return template::createPulldown($name, $value,
-            array("" => "", "and" => translate("and",0), "or" => translate("or",0)));
+            array("" => "", "and" => translate("and", 0), "or" => translate("or", 0)));
     }
 
     public static function createDaysAgoPulldown($name, $value) {
         $dt=new Time(date("Y-m-d"));
-        $dateArray=Array("" => "");
+        $dateArray=array("" => "");
 
         $day=new DateInterval("P1D");
         for ($i = 1; $i <= conf::get("interface.max.days"); $i++) {
@@ -501,8 +501,8 @@ class template {
             return "0B";
         } else {
             $prefixes=array("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi");
-            $length=floor(log($bytes,2)/10);
-            return round($bytes/pow(2,10*($length)),1) . $prefixes[floor($length)] . "B";
+            $length=floor(log($bytes, 2)/10);
+            return round($bytes/pow(2, 10*($length)), 1) . $prefixes[floor($length)] . "B";
         }
     }
 

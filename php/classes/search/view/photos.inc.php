@@ -31,14 +31,14 @@ use user;
  */
 class photos {
 
-    /**
-     * @var request variables
-     */
+    /** * @var array request variables */
     private $vars;
+    /** * @var request web request */
     private $request;
 
     /**
      * Create view
+     * @param request web request
      */
     public function __construct(request $request) {
         $this->request=$request;

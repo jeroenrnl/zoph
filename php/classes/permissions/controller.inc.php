@@ -34,10 +34,12 @@ use web\request;
  * Controller for permissions
  */
 class controller extends genericController {
+    /** @var array Actions that can be performed with this controller */
     protected $actions=array("updatealbums", "updategroups");
 
     /**
      * Create controller from web\request
+     * @param request request to use to run this controller
      */
     public function __construct(request $request) {
         parent::__construct($request);
