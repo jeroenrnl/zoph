@@ -48,12 +48,12 @@ class controller extends genericController {
         if (isset($this->request["search_id"])) {
             $search = new search($this->request["search_id"]);
             $search->lookup();
-            $this->setObject($search);
         } else if ($this->request["_action"]=="new") {
             $vars=$request->getRequestVarsClean();
             unset($vars["_action"]);
             unset($vars["_crumb"]);
             $urlVars=array();
+
             foreach ($vars as $key => $val) {
                 // Change key#0 into key[0]:
                 $key=preg_replace("/\#([0-9]+)/", "[$1]", $key);
@@ -63,13 +63,14 @@ class controller extends genericController {
                 $urlVars[]=e($key) . "=" . e($val);
             }
             $url = implode("&amp;", $urlVars);
-            $search=new search;
+            $search=new search();
             $search->set("search", $url);
             $search->set("owner", user::getCurrent()->getId());
-            $this->setObject($search);
         } else {
+            $search=new search();
             $this->request["_action"]="display";
         }
+        $this->setObject($search);
         $this->doAction();
     }
 

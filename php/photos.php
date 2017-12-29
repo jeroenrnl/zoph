@@ -106,7 +106,7 @@ unset($vars["_action"]);
 unset($vars["_crumb"]);
 
 $qs="";
-if !empty($vars) {
+if (!empty($vars)) {
     $qs=http_build_query($vars);
     $qs .= "&amp;";
 }
