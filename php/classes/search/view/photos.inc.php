@@ -27,7 +27,8 @@ use web\request;
 use user;
 
 /**
- * This view displays the search page
+ * This view displays the search results page
+ * For now, it is just a wrapper around the photos page
  */
 class photos {
 

@@ -53,6 +53,7 @@
       <file>commentTest.php</file>
       <file>searchTest.php</file>
       <file>searchControllerTest.php</file>
+      <file>searchViewDisplayTest.php</file>
     </testsuite>
     <testsuite name="New">
     </testsuite>
