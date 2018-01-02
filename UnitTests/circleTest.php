@@ -181,23 +181,6 @@ class circleTest extends ZophDataBaseTestCase {
     }
 
     /**
-     * Test getPhotoCount() and getTotalPhotoCount function
-     * getTotalPhotoCount() simply returns getPhotoCount, because
-     * there is no concept of sub-persons.
-     * @dataProvider getPhotoCount()
-     */
-    public function testGetPhotoCount($circleId, $userId, $expCount) {
-        user::setCurrent(new user($userId));
-
-        $circle=new circle($circleId);
-
-        $this->assertEquals($expCount, $circle->getPhotocount());
-        $this->assertEquals($expCount, $circle->getTotalPhotocount());
-
-        user::setCurrent(new user(1));
-    }
-
-    /**
      * Test getAll()
      * @dataProvider getAllCircles()
      */

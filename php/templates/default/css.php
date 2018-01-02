@@ -787,6 +787,11 @@ table#search input[type="checkbox"] {
     float: none;
 }
 
+form.search input[type="checkbox"] {
+    margin: 0 0 0 5px;
+}
+
+form.search input[type="checkbox"] + label,
 table#search input[type="checkbox"] + label {
     float: none;
     display: inline;
@@ -797,6 +802,56 @@ table#search input[type="checkbox"] + label {
     top: 3px;
     width: auto;
     clear: none;
+    line-height: 1em;
+}
+
+div.searchTerm {
+    display: flex;
+    align-items: top;
+    clear: both;
+}
+
+
+div.searchTerm > div {
+    margin: 3px;
+    font-size: 120%;
+}
+
+div.searchTerm > div.searchIncrement,
+div.searchTerm > div.searchConj {
+    width: 5em;
+}
+
+div.searchTerm > div.searchOp,
+div.searchTerm > div.searchLabel {
+    width: 12em;
+}
+
+div.searchTerm > div.searchValue {
+    width: auto;
+}
+
+div.searchTerm > div.searchLabel:first-child {
+    margin-left: calc( 22em + 21px);
+}
+
+div.searchLabel,
+span.searchValueText,
+span.searchOpText {
+    line-height: 3em;
+}
+
+div.searchTerm select,
+div.searchTerm input {
+    margin: 5px;
+}
+
+div.searchTerm input[type="checkbox"] {
+    float: none;
+}
+
+div.searchLatLon {
+    line-height: 1.5em; !important
 }
 
 span.photocount {

@@ -189,7 +189,7 @@ class request implements ArrayAccess {
           First pass through vars will flatten out any arrays in the list.
           arrays were used in search.php to make the form extensible. -RB
         */
-        foreach ($this->requestVars as $key => $val) {
+        foreach ((array)$this->requestVars as $key => $val) {
             // trim empty values
             if (($key == "_button") || empty($val)) {
                 continue;

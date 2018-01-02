@@ -21,6 +21,7 @@
 
 if (!ZOPH) { die("Illegal call"); }
 ?>
+<br>
 <h2><?= translate("Saved searches") ?></h2>
 <ul class="saved_search">
     <?php foreach ($tpl_searches as $search): ?>

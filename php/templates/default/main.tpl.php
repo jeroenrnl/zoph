@@ -23,19 +23,14 @@
 if (!ZOPH) { die("Illegal call"); }
 require_once "header.inc.php";
 ?>
-    <h1>
-        <?php echo $this->getActionlinks(); ?>
-        <?php echo $tpl_title; ?>
-    </h1>
-    <div class="main">
-        <?php echo $this->displayBlocks(); ?>
-    </div>
-    <?php if (!empty($tpl_mapping_js)): ?>
-    <div class="map" id="map">
-    </div>
-    <script type='text/javascript'>
-        <?php echo $tpl_mapping_js; ?>
-        zMaps.autoCenterAndZoom();
-    </script>
-    <?php endif; ?>
-    <?php require_once "footer.inc.php"; ?>
+<h1>
+    <?php echo $this->getActionlinks(); ?>
+    <?php echo $tpl_title; ?>
+</h1>
+<div class="main">
+    <?php echo $this->displayBlocks(); ?>
+</div>
+<?php if (isset($tpl_map)): ?>
+    <?= $tpl_map; ?>
+<?php endif; ?>
+<?php require_once "footer.inc.php"; ?>

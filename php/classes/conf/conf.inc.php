@@ -189,6 +189,7 @@ class conf {
 
     /**
      * Create a new conf\group and add it to the list
+     * @param collection collection to add as group
      * @param string name
      * @param string label
      * @param string description

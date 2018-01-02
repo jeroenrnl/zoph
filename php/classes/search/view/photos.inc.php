@@ -1,6 +1,6 @@
 <?php
 /**
- * Include necessary files
+ * View for search page
  *
  * This file is part of Zoph.
  *
@@ -18,27 +18,43 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @package Zoph
- * @author Jason Geiger
  * @author Jeroen Roos
  */
 
-require_once "autoload.inc.php";
+namespace search\view;
 
-require_once "exception.inc.php";
-require_once "log.inc.php";
+use web\request;
+use user;
 
-require_once "config.inc.php";
-require_once "settings.inc.php";
-require_once "requirements.inc.php";
-require_once "util.inc.php";
+/**
+ * This view displays the search results page
+ * For now, it is just a wrapper around the photos page
+ */
+class photos {
 
-require_once "variables.inc.php";
+    /** * @var array request variables */
+    private $vars;
+    /** * @var request web request */
+    private $request;
 
-if (!defined("LOGON")) {
-    if (!defined("TEST")) {
-        require_once "auth.inc.php";
+    /**
+     * Create view
+     * @param request web request
+     */
+    public function __construct(request $request) {
+        $this->request=$request;
+        $this->vars=$request->getRequestVars();
     }
 
-    require_once "exif.inc.php";
+    /**
+     * Output view
+     */
+    public function view() {
+        $request_vars=$this->vars;
+        $request=$this->request;
+        $user=user::getCurrent();
+        ob_start();
+        require("photos.php");
+        return ob_get_clean();
+    }
 }
-?>

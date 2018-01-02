@@ -28,6 +28,7 @@ use db\clause;
 use db\selectHelper;
 
 use template\block;
+use template\template;
 
 /**
  * Photo ratings
@@ -300,5 +301,31 @@ class rating extends zophTable {
 
         return $graph;
 
-     }
+    }
+
+    /**
+     * Create a pulldown to select ratings
+     * @param string name
+     * @param int value to make 'selected'
+     * @return block pulldown template block
+     */
+    public static function createPulldown($name = "rating", $val = null) {
+        $ratingArray = array(
+            "1" => translate("1 - close your eyes", 0),
+            "2" => translate("2", 0),
+            "3" => translate("3", 0),
+            "4" => translate("4", 0),
+            "5" => translate("5 - so so", 0),
+            "6" => translate("6", 0),
+            "7" => translate("7", 0),
+            "8" => translate("8", 0),
+            "9" => translate("9", 0),
+            "10" => translate("10 - museum", 0)
+        );
+        if (empty($val)) {
+            $ratingArray = array("0" => translate("not rated", 0)) + $ratingArray;
+        }
+
+        return template::createPulldown($name, $val, $ratingArray);
+    }
 }

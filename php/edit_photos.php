@@ -22,8 +22,13 @@
  * @author Jeroen Roos
  */
 use conf\conf;
+
+use photo\collection;
+
 use template\template;
 use template\pager;
+
+use web\request;
 
 require_once "include.inc.php";
 
@@ -66,21 +71,21 @@ if (empty($qs)) {
 
 $actionlinks["return"]="photos.php?" .  $qs;
 
+$photoCollection = collection::createFromRequest(request::create());
+$toDisplay = $photoCollection->subset($offset, $cells);
 
-$num_photos =
-    get_photos($clean_vars, $offset, $cells, $thumbnails, $user);
+$photoCount=sizeof($photoCollection);
+$displayCount=sizeof($toDisplay);
 
-$num_thumbnails = sizeof($thumbnails);
+if  ($displayCount) {
+    $pageCount = ceil($photoCount / $cells);
+    $currentPage = floor($offset / $cells) + 1;
 
-if  ($num_thumbnails) {
-    $num_pages = ceil($num_photos / $cells);
-    $page_num = floor($offset / $cells) + 1;
+    $num = min($cells, $displayCount);
 
-    $num = min($cells, $num_thumbnails);
-
-    $title = sprintf(translate("Edit Photos (Page %s/%s)", 0), $page_num, $num_pages);
+    $title = sprintf(translate("Edit Photos (Page %s/%s)", 0), $currentPage, $pageCount);
     $title_bar = sprintf(translate("edit photos %s to %s of %s"),
-        ($offset + 1), ($offset + $num), $num_photos);
+        ($offset + 1), ($offset + $num), $photoCount);
 } else {
     $title = translate("No Photos Found");
     $title_bar = translate("edit photos");
@@ -98,7 +103,7 @@ echo $title_bar
     <form action="edit_photos.php" method="POST">
       <p>
 <?php
-if ($num_thumbnails <= 0) {
+if ($displayCount <= 0) {
     ?>
        <div class="error">
     <?php echo translate("No photos were found matching your search criteria.") ?>
@@ -172,9 +177,9 @@ if ($num_thumbnails <= 0) {
     unset($request_vars["___photographer_id__all"]);
     unset($request_vars["__album__all"]);
     unset($request_vars["__category__all"]);
-    for ($i = 0; $i < $num_thumbnails; $i++) {
-        $photo_id = $thumbnails[$i]->get('photo_id');
-        $photo = new photo($photo_id);
+    foreach ($toDisplay as $photo) {
+        $photo->lookup();
+        $photo_id = $photo->getId();
 
         unset($request_vars["___location_id__" . $photo_id]);
         unset($request_vars["___photographer_id__" . $photo_id]);
@@ -232,15 +237,18 @@ if ($num_thumbnails <= 0) {
 
             $photo->updateRelations($request_vars, '__all');
 
-            $deg = $request_vars["_deg__$photo_id"];
-            if ($deg && $deg != 0) {
-                $photo->lookup();
-                try {
-                    $photo->rotate($deg);
-                } catch (Exception $e) {
-                    echo $e->getMessage();
-                    die;
-                }
+            if ($can_edit && conf::get("rotate.enable") &&
+                ($user->isAdmin() || $permissions->get("writable"))) {
+                    $deg = $request_vars["_deg__$photo_id"];
+                    if ($deg && $deg != 0) {
+                        $photo->lookup();
+                        try {
+                            $photo->rotate($deg);
+                        } catch (Exception $e) {
+                            echo $e->getMessage();
+                            die;
+                        }
+                    }
             }
         } else if ($can_edit && $action == 'delete') {
             $photo->delete();
@@ -453,7 +461,7 @@ if ($num_thumbnails <= 0) {
         $pager_vars[$key] = $val;
     }
     $request_vars = $pager_vars;
-    echo new pager($offset, $num_photos, $num_pages, $cells,
+    echo new pager($offset, $photoCount, $pageCount, $cells,
         $user->prefs->get("max_pager_size"), $request_vars, "_off");
 } // if photos
 ?>

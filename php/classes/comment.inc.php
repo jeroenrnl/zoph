@@ -144,6 +144,7 @@ class comment extends zophTable {
 
     /**
      * Add this comment to a photo
+     * @param photo photo to add comment to
      */
     public function addToPhoto(photo $photo) {
         $qry=new insert(array("photo_comments"));
