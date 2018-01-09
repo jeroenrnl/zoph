@@ -38,6 +38,8 @@ use geo\marker;
 use template\block;
 use template\template;
 
+use photo\collection;
+
 /**
  * A class corresponding to the photos table.
  *
@@ -1669,7 +1671,7 @@ class photo extends zophTable {
      * @param array Array of photos
      * @return int size in bytes
      */
-    public static function getFilesize(array $photos) {
+    public static function getFilesize(collection $photos) {
         $bytes=0;
         foreach ($photos as $photo) {
             $photo->lookup();

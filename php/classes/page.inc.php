@@ -50,6 +50,10 @@ class page extends zophTable {
     /** @var string URL for this class */
     protected static $url="page.php?page_id=";
 
+    /**
+     * Return the page in a string
+     * @return string page
+     */
     public function __toString() {
         return (string) $this->display();
     }

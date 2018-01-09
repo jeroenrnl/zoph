@@ -52,7 +52,7 @@ abstract class base {
         exec($cmd, $output, $return);
         if ($return > 0) {
             $msg=implode($output, "<br>");
-            throw new ImportAutorotException($msg);
+            throw new \ImportAutorotException($msg);
         }
     }
 
@@ -199,7 +199,7 @@ abstract class base {
             }
         }
         if (!isset($xmltype)) {
-            throw ImportFileNotImportableException(basename($file) . " is not a known XML file.");
+            throw new \ImportFileNotImportableException(basename($file) . " is not a known XML file.");
         } else {
             switch($name) {
             case "gpx 1.0":

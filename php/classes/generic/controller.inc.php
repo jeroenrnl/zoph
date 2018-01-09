@@ -50,7 +50,7 @@ abstract class controller {
 
     /**
      * Create a new controller from a web request
-     * @param web\request Request to proces
+     * @param request Request to proces
      */
     public function __construct(request $request) {
         $this->request=$request;
@@ -67,9 +67,8 @@ abstract class controller {
     /**
      * Do the action as set in the request
      * in the current mode of operation, no authorization checking is needed,
-     * because currently, all controllers can only be called by an admin user
-     * in the future, when more of Zoph is controlled by controllers, additional
-     * authorization checking needs to be added
+     * because currently, the authorization checking is done inside the actions
+     * however, it would be nice to do some checking here as a first line of defense
      */
     public function doAction() {
         $action=$this->request["_action"];

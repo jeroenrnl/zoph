@@ -40,17 +40,7 @@ class form extends block {
      * @param int size of the field
      */
     public function addInputText($name, $value, $label=null, $hint=null, $maxlength=32, $size=null) {
-        if (!$size) {
-            $size=$maxlength;
-        }
-        $this->addBlock(new block("formInputText", array(
-            "name"  => $name,
-            "value" => e($value),
-            "label" => e($label),
-            "hint"  => e($hint),
-            "size"  => (int) $size,
-            "maxlength"  => (int) $maxlength
-        )));
+        $this->addBlock(template::createInput($name, $value, $maxlength, $label, $size, $hint));
     }
 
     /**
@@ -133,10 +123,7 @@ class form extends block {
 
     /**
      * add fieldset
-     * @param string name
      * @param fieldset fieldset
-     * @param string text for legend
-     * @param string css class
      */
     public function addFieldset(fieldset $fieldset) {
         $this->addBlock($fieldset);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for HTML input field text
+ * Template for HTML forms
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,15 +23,8 @@ if (!ZOPH) {
     die("Illegal call");
 }
 ?>
+    <form class="search" enctype="multipart/form-data" action="search.php" method="POST">
+        <?= $this->displayBlocks(); ?>
+        <input type="submit" name="_action" value="<?= $tpl_submit ?>">
+    </form>
 
-<?php if ($tpl_label): ?>
-    <label for="<?= $tpl_name ?>">
-        <?= $tpl_label ?>
-    </label>
-<?php endif; ?>
-<input id="<?= $tpl_name ?>" type="text" name="<?= $tpl_name ?>" maxlength="<?= $tpl_maxlength ?>" size="<?= $tpl_size ?>" value="<?= $tpl_value ?>">
-<?php if (!empty($tpl_hint)): ?>
-    <span class="inputhint">
-        <?php echo $tpl_hint ?>
-    </span>
-<?php endif; ?>
