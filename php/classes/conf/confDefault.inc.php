@@ -45,7 +45,11 @@ use TimeZone;
  * @author Jeroen Roos
  */
 class confDefault extends conf {
-
+    /**
+     * Get default config
+     * @todo Ugly!
+     * @todo naming is wrong, because config is not being 'get', it's stored in the object
+     */
     protected static function getConfig() {
         static::getConfigInterface();
         static::getConfigSSL();

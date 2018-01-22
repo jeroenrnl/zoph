@@ -38,7 +38,7 @@ class controller extends genericController {
 
     /**
      * Create a controller using a web request
-     * @param web\request request
+     * @param request request
      */
     public function __construct(request $request) {
         parent::__construct($request);

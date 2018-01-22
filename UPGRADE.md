@@ -1,3 +1,26 @@
+Zoph 0.9.6 to 0.9.7
+===================
+
+* If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.6. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.''
+
+Copy files
+----------
+Copy the contents of the php directory, including all subdirs, into your webroot. 
+ cp -a php/* /var/www/html/zoph
+
+If you use the CLI client, you should copy it to a path that's in your $PATH
+ cp cli/zoph /usr/bin
+
+Database changes
+----------------
+* There are no database changes in v0.9.7
+
+Deprecated configuration
+------------------------
+I will be removing the `ssl.force`, `url.http` and `url.https` configuration option in a future release. Currently Zoph does not yet warn for this, but it will in the next version. If your setup requires setting these functions, please comment on [issue#100](http://github.com/jeroenrnl/zoph/issues/100)
+
+![screenshot of the deprecated options](docs/zoph-ssl-config.png)
+
 Zoph 0.9.5 to 0.9.6
 ===================
 * If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.5. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.

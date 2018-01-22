@@ -126,7 +126,7 @@ class colorScheme extends \zophTable {
 
     /**
      * Set current color scheme
-     * @param color_scheme the color scheme to use
+     * @param colorScheme the color scheme to use
      */
     public static function setCurrent(colorScheme $cs) {
         static::$current=$cs;

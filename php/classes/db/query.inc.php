@@ -345,6 +345,7 @@ abstract class query {
     /**
      * Format a query, including all parameters, for debugging purposes
      * @codeCoverageIgnore
+     * @param bool Output with HTML
      */
     public function prettyPrint($withHTML=false) {
         $sql=(string) $this;
