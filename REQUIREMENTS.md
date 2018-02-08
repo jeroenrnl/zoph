@@ -1,22 +1,22 @@
 #REQUIREMENTS#
 
-Zoph is being developped on Linux, but it should be able to run on any OS that can run Apache, MySQL and PHP. Users have reported succesful installations on MacOSX, several BSD flavours and even Windows. 
+Zoph is being developed on Linux, but it should be able to run on any OS that can run Apache, MySQL and PHP. Users have reported succesful installations on MacOSX, several BSD flavours and even Windows. 
 
 Zoph requires the following:
 * Apache 2.2 or 2.4
-* PHP 5.6 or 7.0
-* MySQL 5.6 or 5.7
+* PHP 7.1 or 7.2
+* MariaDB 10.1 MySQL 5.6 or 5.7
 * ImageMagick 6.9
 
 Other versions may work as well, see below for more details. How to install these applications and get them to work together is depending on your OS and distribution. Check the documentation of the application and/or your distribution for details.
 
 ##Apache##
-* Current versions of Zoph are developped on Apache 2.4.x
+* Current versions of Zoph are developed on Apache 2.4.x
 
 ##PHP##
-Current versions of Zoph are developped on PHP 7.0
+Current versions of Zoph are developed on PHP 7.2
 * PHP 5.5 and older are no longer supported
-* PHP 7.1 should work too, but is not yet actively tested, please report a bug if you run into problems
+* PHP 5.6 and 7.0 should still work, but it is recommended to update to 7.1 or 7.2
 
 ###Required features###
 The following features (extensions) to PHP are required for Zoph. Not all distributions automatically install all of them.
@@ -44,7 +44,7 @@ This is the amount of memory PHP allows Zoph to use. Especially if you have larg
 * The e-mail photo feature may require increasing the `memory_limit` setting. Since Zoph needs to convert the photo into Base64 encoding for mail, it requires quite a large amount of memory if you try to send full size images and you may need to adjust `memory_limit` in php.ini, you should give it at least about 4 times the size of your largest image.
 
 ##MySQL##
-* Current versions are developped with MariaDB 10.x
+* Current versions are developed with MariaDB 10.x
 * MySQL or MariaDB 5.6 or 5.7 should also work
 * MySQL 5.0 to 5.5 may still work but are no longer supported.
 
@@ -53,7 +53,7 @@ This is the amount of memory PHP allows Zoph to use. Especially if you have larg
 
 ##Browser##
 In order to be able to use Zoph, you will need a browser.
-* Zoph is being developped and thoroughly tested with a recent Firefox build
+* Zoph is being developed and thoroughly tested with a recent Firefox build
 * Zoph should work with all recent browser versions
     * Please report a bug if it doesn't.
 * Older versions usually work, but layout may not be 100% ok.

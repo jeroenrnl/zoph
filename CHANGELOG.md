@@ -1,4 +1,13 @@
 # Zoph Changelog #
+## Zoph 0.9.7 ##
+### 19 jan 2018 ###
+I have had a very busy year and little time to spend on Zoph, but last december, I finally found time to finish what I had originally planned for 0.9.6: a complete rewrite of the search screen and the search engine. Most of the code in that part of Zoph was over 10 years old and had become quite messy over the years. The search engine is really the core of Zoph: if you open an album in Zoph, under the hood, Zoph really executes a search for all the photos in that album. This makes this code really important and I've made sure to cover all this by automated tests (UnitTests) before making any changes.
+
+
+* [issue#83](https://github.com/jeroenrnl/zoph/issues/83) Complete rewrite of the search page and the core functions of Zoph, including modernization of several other part of Zoph.
+* [issue#90](https://github.com/jeroenrnl/zoph/issues/90) Error displayed when adding a new place
+* [issue#99](https://github.com/jeroenrnl/zoph/issues/99) Geolocation doesn't work when using https
+* Documentation updates - not all files were correctly displayed using Github's Markdown interpreter
 
 ## Zoph 0.9.6 ##
 ### 14 apr 2017 ###

@@ -1224,14 +1224,10 @@ div#personlink  {
 /* Text next to an input field, suggesting what to put there, such as "64 chars max" */
 .inputhint  {
     font-size: small;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding: 8px;
     font-weight: normal;
-}
-
-span.inputhint  {
-    padding-left: 30px;
-    text-align: right;
+    float: left;
+    opacity: 0.7;
 }
 
 div.inputhint {

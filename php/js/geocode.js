@@ -14,8 +14,8 @@
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 var zGeocode=function() {
-    var geourl="http://api.geonames.org/search?style=SHORT&username=zoph&q=";
-    var wikiurl="http://api.geonames.org/wikipediaSearch?username=zoph&q=";
+    var geourl="https://secure.geonames.org/search?style=SHORT&username=zoph&q=";
+    var wikiurl="https://secure.geonames.org/wikipediaSearch?username=zoph&q=";
     var url;
     var geotag="geoname";
     var wikitag="entry"
