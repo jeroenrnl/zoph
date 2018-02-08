@@ -118,7 +118,7 @@ if ($_action == "notify") {
         $albums = getNewer($u, $date);
 
         $album_list = array();
-        while (list($id, $album) = each($albums)) {
+        foreach ($album as $id => $album) {
             $album_path = '';
             $ancestors = $album->getAncestors();
             if ($ancestors) {
