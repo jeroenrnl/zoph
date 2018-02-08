@@ -83,9 +83,7 @@ if ($action == "display") {
       <h2><?php echo $colorScheme->get("name") ?></h2>
         <dl class="display colorScheme">
     <?php
-    $colors = $colorScheme->getDisplayArray();
-
-    while (list($name, $value) = each($colors)) {
+    foreach ($colorScheme->getDisplayArray() as $name => $value) {
         if ($name == "Name") { continue; }
         ?>
         <dt><?php echo $name ?></dt>

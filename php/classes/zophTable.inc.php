@@ -126,9 +126,7 @@ abstract class zophTable {
      * @param bool Whether or not to process empty fields
       */
     public function setFields(array $vars, $prefix = null, $suffix = null, $null=true) {
-
-        reset($vars);
-        while (list($key, $val) = each($vars)) {
+        foreach ($vars as $key => $val) {
             log::msg("<b>" . $key . "</b> = " . implode(",", (array) $val), log::DEBUG, log::VARS);
 
             // ignore empty keys or values unless the field must be set.
