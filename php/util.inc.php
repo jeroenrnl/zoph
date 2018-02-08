@@ -22,7 +22,7 @@ use template\template;
 function create_field_html($fields) {
 
     $html = "";
-    while (list($key, $val) = each($fields)) {
+    foreach ($fields as $key => $val) {
         if ($val) {
             $html .=
             "<dt>" . e($key) . "</dt>\n" .
@@ -34,7 +34,7 @@ function create_field_html($fields) {
 
 function create_edit_fields($fields) {
     $html = "";
-    while (list($key, $field) = each($fields)) {
+    foreach ($fields as $key => $val) {
         $html.=
             "<label for=\"$key\">$field[0]</label>\n" . $field[1] ."<br>";
     }
@@ -130,7 +130,7 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
     $ignore[] = "_crumb";
     $qstr="";
     if ($vars) {
-        while (list($key, $val) = each($vars)) {
+        foreach ($vars as $key => $val) {
             if (in_array($key, $ignore)) { continue; }
             if ($key == $new_key) { continue; }
 
@@ -161,7 +161,7 @@ function create_form($vars, $ignore = array()) {
     $ignore[] = "_crumb";
 
     $form = "";
-    while (list($key, $val) = each($vars)) {
+    foreach ($vars as $key => $val) {
         if (in_array($key, $ignore)) { continue; }
         $form .= "<input type=\"hidden\" name=\"$key\" value=\"" . e($val) . "\">\n";
     }
@@ -272,7 +272,7 @@ function rawurlencode_array($var, $varName, $separator = '&') {
 function create_actionlinks($actionlinks) {
     if (is_array($actionlinks)) {
         $html="<ul class=\"actionlink\">\n";
-        while (list($key, $val) = each($actionlinks)) {
+        foreach ($actionlinks as $key => $val) {
             $html .= "<li><a href=\"" . $val . "\">" . translate($key, 0) . "</a></li>";
         }
         $html.="</ul>\n";

@@ -456,7 +456,7 @@ if ($displayCount <= 0) {
     <?php
     // Here we clean out $request_vars, so the pager links will not contain
     // all the edits made on this page.
-    while (list($key, $val) = each($clean_vars)) {
+    foreach ($clean_vars as $key => $value) {
         if (in_array($key, $queryIgnoreArray)) { continue; }
         $pager_vars[$key] = $val;
     }

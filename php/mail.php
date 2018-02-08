@@ -185,7 +185,7 @@ if ($found && $_action == "compose") {
     $ea = $photo->getEmailArray();
 
     if ($ea) {
-        while (list($name, $value) = each($ea)) {
+        foreach ($ea as $name => $value) {
             if ($name && $value) {
                 $body .= "$name: $value\r\n";
             }

@@ -846,7 +846,7 @@ class photo extends zophTable {
         }
 
         // make a system call to convert or jpegtran to do the rotation.
-        while (list($file, $tmp_file) = each($images)) {
+        foreach ($images as $file => $tmp_file) {
             if (!file_exists($file)) {
                 throw new FileNotFoundException("Could not find " . $file);
             }
