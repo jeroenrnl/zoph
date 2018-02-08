@@ -146,6 +146,9 @@ class circle extends zophTable {
         $people->addParam(new param(":circleid", (int) $this->getId(), PDO::PARAM_INT));
 
         $peopleIds=$people->toArray();
+        if(empty($peopleIds)) {
+            return;
+        }
         $param=new param(":personIds", (array) $peopleIds, PDO::PARAM_INT);
 
         $qry=new select(array("p" => "photos"));
