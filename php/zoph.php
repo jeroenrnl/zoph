@@ -25,6 +25,7 @@
 use conf\conf;
 
 use photo\collection;
+use template\block;
 
 require_once "include.inc.php";
 $title = translate("Home");
@@ -134,7 +135,16 @@ if ($user->get("user_id") != conf::get("interface.user.default")) {
 }
 // Remove the rather ugly trailing space on the links
 echo str_replace(" </a", "</a", $welcomeText);
+$warnings = conf::getWarnings();
+if ($warnings) {
+    $warning=new block("message", array(
+        "class" => "warning",
+        "text"  => "<h1>" . translate("Configuration Warnings:") . "</h1>" . implode($warnings, "<br>")
+    ));
+    echo $warning . "<br>";
+}
 ?>
+
     <p class="version">
         Zoph <?php echo VERSION . "\n" ?>
     </p>

@@ -51,6 +51,10 @@ class conf {
     /** @var bool whether or not the configuration has been loaded from the db */
     private static $loaded=false;
 
+    /** @var array During loading from database this will be filled with warnings (if any)
+                   These can later be displayed through conf::getWarnings() */
+    private static $warnings=array();
+
     /**
      * Get the Id of the conf item
      */
@@ -79,6 +83,9 @@ class conf {
                 $item=static::getItemByName($key);
                 try {
                     $item->setValue($value);
+                    if ($item->isDeprecated() && $value != $item->getDefault()) {
+                        self::$warnings[]="Deprecated configuration item <b>" . $key . "</b> is used!";
+                    }
                 } catch (\ConfigurationException $e) {
                     /* An illegal value is automatically set to the default */
                     log::msg($e->getMessage(), log::ERROR, log::CONF);
@@ -204,5 +211,12 @@ class conf {
 
         static::$groups[$name]=$group;
         return $group;
+    }
+
+    /**
+     * Return warnings generated while loading configuration
+     */
+    public static function getWarnings() {
+        return self::$warnings;
     }
 }

@@ -1595,6 +1595,11 @@ span.unmetRequirements {
     color: red;
 }
 
+span.confDeprecated {
+    color: red;
+    font-weight: bold;
+}
+
 form.geotag select,
 form.import select,
 form.geotag input,
@@ -2013,11 +2018,29 @@ table.calendar th {
     margin: 10px 0px;
     padding:12px;
     clear: both;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
 }
 
 div.message img.icon {
     float: left;
     margin-right: 10px;
+}
+
+div.message div.messageText {
+    float: left;
+    width: 80%;
+}
+div.message div.messageText h1 {
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: large;
+    padding: none;
+    box-shadow: none;
+    margin: 0 0 1em 0;
+    color: inherit;
+
 }
 
 .info {
