@@ -13,9 +13,7 @@ If you just want to generate a gallery of thumbnails from a bunch of images, you
 
 ## Installation ##
 
-Read the the [Requirements](docs/REQUIREMENTS.md), [Installation guide](docs/INSTALL.md) docs.  If you are upgrading from a previous version, read the [Upgrade Instructions](docs/UPGRADE.md) document.
-
-More documentation can be found in the [Zoph Wikibook](http://en.wikibooks.org/wiki/zoph)
+Read the the [Requirements](docs/REQUIREMENTS.md), [Installation guide](docs/INSTALL.md) docs. In order to customize your Zoph installation, read the [Configuration guide](docs/CONFIGURATION). If you are upgrading from a previous version, read the [Upgrade Instructions](docs/UPGRADE.md) document.
 
 ## Copying ##
 
