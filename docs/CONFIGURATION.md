@@ -4,11 +4,9 @@
 Access to the database needs to be configured through `/etc/zoph.ini`.
 The `zoph.ini` files tells Zoph where it can find the database and it tells Zoph's CLI scripts where it can find your Zoph installation. Normally, `zoph.ini` will be placed in `/etc`. If you have no write access in `/etc` or have another reason to not put this file there, you should change the `INI_FILE` setting in `config.inc.php` and the 'zoph' CLI utility.
 
-<aside class="warning">
-Never, **ever**, place it in the same directory as the Zoph PHP files. This will enable **everyone** to download it and read your passwords.
-</aside>
+**Never, _ever_, place it in the same directory as the Zoph PHP files. This will enable _everyone_ to download it and read your passwords.**
 
-An example `zoph.ini` file called `**zoph.ini.example**` is included in the `cli` dir of the Zoph tarball.
+An example `zoph.ini` file called **`zoph.ini.example`** is included in the `cli` dir of the Zoph tarball.
 
 ### Contents of `zoph.ini` ###
 `zoph.ini` consists of one or more *sections*. A section starts with the name of the section between square brackets.
