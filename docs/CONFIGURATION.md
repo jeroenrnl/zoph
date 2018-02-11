@@ -166,24 +166,26 @@ log::NONE     | No messages.
 ## Resized image generation ##
 Zoph automatically creates thumbnails and medium-sized ('mid') images during import. To influence this process, you can edit the parameters below. It is not recommended to change these, especially not after you have imported some photos. In the near future there will be an option to change this in the webinterface.
 
-### `THUMB_SIZE``` ###
+### `THUMB_SIZE` ###
 **Description:**
 Maximum width or height of thumbnails
 
 **Default:**
 `120`
+
 **Options:**
 Maximum width/height in pixels.
 
 **Example:**
 `define('THUMB_SIZE', 120);`
 
-### `MID_SIZE``` ###
+### `MID_SIZE` ###
 **Description:**
 Maximum width or height of midsized images
 
 **Default:**
 `480`
+
 **Options:**
 Maximum width/height in pixels.
 
@@ -196,18 +198,20 @@ Prefix for filenames of thumbnails
 
 **Default:**
 `thumb`
+
 **Options:**
 **Do not** make this string empty!
 
 **Example:**
 `define('THUMB_PREFIX', 'thumb');`
 
-### `MID_PREFIX``` ###
+### `MID_PREFIX` ###
 **Description:**
 Prefix for filenames of thumbnails
 
 **Default:**
 `mid`
+
 **Options:**
 **Do not** make this string empty!
 
