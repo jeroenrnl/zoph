@@ -90,8 +90,52 @@ When you first get started with Zoph, you should at least change the following:
 There are a few configuration settings that can only be changed in `config.inc.php`. Most users will never need to change anything here. 
 
 ### `LOG_ALWAYS` ###
-**Description:**": This option controls how much debug information is showed. Zoph will show you the severity you configure and everything worse than that. So if you configure `log::ERROR`, you will see `ERROR` and `FATAL` messages and if you configure `log::DEBUG`, you will see all messages.
+**Description:**: This option controls how much debug information is showed. Zoph will show you the severity you configure and everything worse than that. So if you configure `log::ERROR`, you will see `ERROR` and `FATAL` messages and if you configure `log::DEBUG`, you will see all messages.
+
 **Default:** `log::FATAL`
+
 **Options:** See [Log Severity](#Log-Severity) below
+
 **Example:** `define('LOG_ALWAYS', log::ERROR);`
+
+
+### `LOG_SUBJECT` ###
+**Description:**: This option, together with [`LOG_SEVERITY`](#log_always) enables you to have granular control over which messages are displayed. With `LOG_SUBJECT` you configure on which subject you would like to see logging.
+
+**Default:** `log::NONE`
+
+**Options:** See [Log Subjects](#Log-Subjects) below
+
+**Example:**
+Display all messages which indicate an error or a fatal error, regarding the translation of Zoph or images:
+
+````php
+define('LOG_SEVERITY', log::ERROR);
+define('LOG_SUBJECT', log::LANG | log::IMG);
+````
+Display all messages, except debug-level messages, except those regarding SQL queries:
+
+````php
+define('LOG_SEVERITY', log::NOTIFY);
+define('LOG_SUBJECT', log::ALL | ~log::SQL);
+````
+
+Display all messages, except those regarding redirects or the database connection:
+
+````php
+define('LOG_SEVERITY', log::DEBUG);
+define('LOG_SUBJECT', log::ALL ~(log::REDIRECT | log::DB));
+````
+
+### `LOG_SEVERITY` ###
+**Description:**:
+This option, together with [`LOG_SUBJECT`](#log-subject) enables you to have granular control over which messages are displayed. With `LOG_SEVERITY` you configure how much debug information is showed. The difference with [`LOG_ALWAYS`](#log-always) is, that the messages are only shown for the subject you have configured in [`LOG_SUBJECT`](#log-subject). Zoph will show you the severity you configure and everything worse than that. So if you configure `log::ERROR`, you will see `ERROR` and `FATAL` messages and if you configure `log::DEBUG`, you will see all messages.
+
+**Default:** `log::NONE`
+
+**Options:** See [Log Severity](#Log-Severity) below
+
+**Example:** `define('LOG_SEVERITY', log::NOTIFY);`
+
+
 
