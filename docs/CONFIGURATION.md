@@ -100,7 +100,7 @@ There are a few configuration settings that can only be changed in `config.inc.p
 
 
 ### `LOG_SUBJECT` ###
-**Description:**: This option, together with [`LOG_SEVERITY`](#log_always) enables you to have granular control over which messages are displayed. With `LOG_SUBJECT` you configure on which subject you would like to see logging.
+**Description:** This option, together with [`LOG_SEVERITY`](#log_severity) enables you to have granular control over which messages are displayed. With `LOG_SUBJECT` you configure on which subject you would like to see logging.
 
 **Default:** `log::NONE`
 
@@ -128,8 +128,8 @@ define('LOG_SUBJECT', log::ALL ~(log::REDIRECT | log::DB));
 ````
 
 ### `LOG_SEVERITY` ###
-**Description:**:
-This option, together with [`LOG_SUBJECT`](#log-subject) enables you to have granular control over which messages are displayed. With `LOG_SEVERITY` you configure how much debug information is showed. The difference with [`LOG_ALWAYS`](#log-always) is, that the messages are only shown for the subject you have configured in [`LOG_SUBJECT`](#log-subject). Zoph will show you the severity you configure and everything worse than that. So if you configure `log::ERROR`, you will see `ERROR` and `FATAL` messages and if you configure `log::DEBUG`, you will see all messages.
+**Description:**
+This option, together with [`LOG_SUBJECT`](#log_subject) enables you to have granular control over which messages are displayed. With `LOG_SEVERITY` you configure how much debug information is showed. The difference with [`LOG_ALWAYS`](#log_always) is, that the messages are only shown for the subject you have configured in [`LOG_SUBJECT`](#log_subject). Zoph will show you the severity you configure and everything worse than that. So if you configure `log::ERROR`, you will see `ERROR` and `FATAL` messages and if you configure `log::DEBUG`, you will see all messages.
 
 **Default:** `log::NONE`
 
@@ -137,5 +137,28 @@ This option, together with [`LOG_SUBJECT`](#log-subject) enables you to have gra
 
 **Example:** `define('LOG_SEVERITY', log::NOTIFY);`
 
+### Log Severity ###
+Severity      | Meanint
+--------------|---------------------
+log::DEBUG    |	Debugging messages, Zoph gives information about what it's doing.
+log::NOTIFY   |	Notification about something that is happening which is influencing Zoph's program flow
+log::WARN     |	Warning about something that is happening
+log::ERROR    | Error condition, something has gone wrong, but Zoph can recover
+log::FATAL    |	Fatal error, something has gone wrong and Zoph needs to stop execution of the current script.
+log::NONE     | Do not display any messages
 
-
+### Log Subjects ###
+Subject       | Type of messages in this subject
+--------------|---------------------
+log::ALL      | All messages
+log::VARS     | Messages regarding setting of variables
+log::LANG     | Messages regarding the translation of Zoph
+log::LOGIN    | Messages regarding the Login procedure
+log::REDIRECT | Messages regarding redirection
+log::DB       | Messages regarding the database connection
+log::SQ       | Messages regarding SQL Queries
+log::XML      | Messages regarding XML creation
+log::IMG      | Messages regarding image creation
+log::IMPORT   | Messages regarding the import functions
+log::GENERAL  | Other messages
+log::NONE     | No messages.
