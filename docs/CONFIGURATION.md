@@ -192,7 +192,7 @@ Maximum width/height in pixels.
 **Example:**
 `define('MID_SIZE', 480);`
 
-### `THUMB_PREFIX``` ###
+### `THUMB_PREFIX` ###
 **Description:**
 Prefix for filenames of thumbnails
 
