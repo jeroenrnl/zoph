@@ -69,4 +69,29 @@ php_location = "/var/www/html/zophdev"
 
 The webinterface of Zoph will be able to determine which settings it should use with the `php_location` setting. The CLI scripts need the `--instance` parameter to determine that. If you omit the `--instance` parameter, it will use the first one in `zoph.ini`.
 
+## Web GUI ##
+Most of Zoph can be configured from the Web GUI. Log in as a user with admin rights. If you haven't created a user for yourself, you can login with the user `admin`. Go to "admin" in the top menu and then choose "config". The configuration items should be self-explanatory.
+
+When you first get started with Zoph, you should at least change the following:
+
+### Images path ###
+**Images directory** under **paths**. This is the directory where your photos are stored. It should be an _absolute path_ (that is: referenced from the root) and it should not be in your webroot. See the [installation documentation](INSTALLATION.md) for how to set the correct access rights for this directory.
+
+### Sharing Salt ###
+**Salt for sharing full size images** and **Salt for sharing mid size images** under **Sharing**. You should set these salts to unique values. You can do so by clicking the generate buttons. Even though you will not need these unless you enable **Sharing**, it is a good idea to make sure you have a unique salt set. (and Zoph will refuse to save your configuration if you don't).
+
+### Enable import and upload ###
+**Import through webinterface** and **Upload through webinterface** under **Import**. Unless you plan to use the CLI import exclusively, you should enable import through the web interface here.
+
+### Interface title ###
+**Title** under **Interface settings**. You probably want to change the name Zoph will show on the login page and in the title bar.
+
+## `config.inc.php` ##
+There are a few configuration settings that can only be changed in `config.inc.php`. Most users will never need to change anything here. 
+
+### `LOG_ALWAYS` ###
+**Description:**": This option controls how much debug information is showed. Zoph will show you the severity you configure and everything worse than that. So if you configure `log::ERROR`, you will see `ERROR` and `FATAL` messages and if you configure `log::DEBUG`, you will see all messages.
+**Default:** `log::FATAL`
+**Options:** See [Log Severity](#Log-Severity) below
+**Example:** `define('LOG_ALWAYS', log::ERROR);`
 
