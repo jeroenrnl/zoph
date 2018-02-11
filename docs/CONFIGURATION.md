@@ -94,7 +94,7 @@ There are a few configuration settings that can only be changed in `config.inc.p
 
 **Default:** `log::FATAL`
 
-**Options:** See [Log Severity](#Log-Severity) below
+**Options:** See [Log Severity](#log-severity) below
 
 **Example:** `define('LOG_ALWAYS', log::ERROR);`
 
@@ -104,7 +104,7 @@ There are a few configuration settings that can only be changed in `config.inc.p
 
 **Default:** `log::NONE`
 
-**Options:** See [Log Subjects](#Log-Subjects) below
+**Options:** See [Log Subjects](#log-subjects) below
 
 **Example:**
 Display all messages which indicate an error or a fatal error, regarding the translation of Zoph or images:
@@ -133,7 +133,7 @@ This option, together with [`LOG_SUBJECT`](#log_subject) enables you to have gra
 
 **Default:** `log::NONE`
 
-**Options:** See [Log Severity](#Log-Severity) below
+**Options:** See [Log Severity](#log-severity) below
 
 **Example:** `define('LOG_SEVERITY', log::NOTIFY);`
 
@@ -162,3 +162,55 @@ log::IMG      | Messages regarding image creation
 log::IMPORT   | Messages regarding the import functions
 log::GENERAL  | Other messages
 log::NONE     | No messages.
+
+## Resized image generation ##
+Zoph automatically creates thumbnails and medium-sized ('mid') images during import. To influence this process, you can edit the parameters below. It is not recommended to change these, especially not after you have imported some photos. In the near future there will be an option to change this in the webinterface.
+
+### `THUMB_SIZE``` ###
+**Description:**
+Maximum width or height of thumbnails
+
+**Default:**
+`120`
+**Options:**
+Maximum width/height in pixels.
+
+**Example:**
+`define('THUMB_SIZE', 120);`
+
+### `MID_SIZE``` ###
+**Description:**
+Maximum width or height of midsized images
+
+**Default:**
+`480`
+**Options:**
+Maximum width/height in pixels.
+
+**Example:**
+`define('MID_SIZE', 480);`
+
+### `THUMB_PREFIX``` ###
+**Description:**
+Prefix for filenames of thumbnails
+
+**Default:**
+`thumb`
+**Options:**
+**Do not** make this string empty!
+
+**Example:**
+`define('THUMB_PREFIX', 'thumb');`
+
+### `MID_PREFIX``` ###
+**Description:**
+Prefix for filenames of thumbnails
+
+**Default:**
+`mid`
+**Options:**
+**Do not** make this string empty!
+
+**Example:**
+`define('MID_PREFIX', 'mid');`
+
