@@ -291,7 +291,7 @@ ZophCode Tag                | Meaning                   | Example
 [h3]...[/h3]                | Level 3 (sub-prgr) header | [h3]Afternoon[/h3]
 [color=<color>]...[/color]  | Text colour.              | Words in [color=blue]blue[/color] and [color=#ff0000]red[/color].
 [font=<font>]...[/font]     | Text font                 | Mixing [font=times]fonts[/font] can make your 
-                            |                             [font=courier]page[/font] look professional (or messy).
+                                                          [font=courier]page[/font] look professional (or messy).
 [br]                        | Line break                | Best regards,[br]Jeroen
 [background=<color>]...     | Background colour         | [background=blue]Blue background[/background]
 [/background]               |                           |
