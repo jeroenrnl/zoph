@@ -290,11 +290,9 @@ ZophCode Tag                | Meaning                   | Example
 [h2]...[/h2]                | Level 2 (paragraph) header| [h2]Second day[/h2]
 [h3]...[/h3]                | Level 3 (sub-prgr) header | [h3]Afternoon[/h3]
 [color=<color>]...[/color]  | Text colour.              | Words in [color=blue]blue[/color] and [color=#ff0000]red[/color].
-[font=<font>]...[/font]     | Text font                 | Mixing [font=times]fonts[/font] can make your 
-                                                          [font=courier]page[/font] look professional (or messy).
+[font=<font>]...[/font]     | Text font                 | Mixing [font=times]fonts[/font] can make your [font=courier]page[/font] look professional (or messy).
 [br]                        | Line break                | Best regards,[br]Jeroen
-[background=<color>]...     | Background colour         | [background=blue]Blue background[/background]
-[/background]               |                           |
+[background=<color>]...[/background] | Background colour| [background=blue]Blue background[/background]
 [photo=<id>]...[/photo]     | Link to a photo           | [photo=123]See this photo![/photo]
 [album=<id>]...[/album]     | Link to an album          | [album=123]See this album![/album]
 [person=<id>]...[/person]   | Link to a person          | [person=123]See this person![/person]
