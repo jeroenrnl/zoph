@@ -282,7 +282,7 @@ By default, each album, category, place and person has a page that will show the
 A ZophPage is written in ZophCode. ZophCode is very similar to bbCode or html and consist of tags in square brackets. Currently supported tags are:
 
 ZophCode Tag                | Meaning                   | Example
--------------------------------------------------------------------------------------------------
+----------------------------|---------------------------|------------------------------------------
 [b]...[/b]                  | Bold                      | You can make text [b]bold[/b].
 [i]...[/i]                  | Italics                   | To [i]emphasize[/i] a word...
 [u]...[/u]                  | Underline                 | [u]Underline[/u] a word.
@@ -291,7 +291,7 @@ ZophCode Tag                | Meaning                   | Example
 [h3]...[/h3]                | Level 3 (sub-prgr) header | [h3]Afternoon[/h3]
 [color=<color>]...[/color]  | Text colour.              | Words in [color=blue]blue[/color] and [color=#ff0000]red[/color].
 [font=<font>]...[/font]     | Text font                 | Mixing [font=times]fonts[/font] can make your 
-                            |                           | [font=courier]page[/font] look professional (or messy).
+                            |                             [font=courier]page[/font] look professional (or messy).
 [br]                        | Line break                | Best regards,[br]Jeroen
 [background=<color>]...     | Background colour         | [background=blue]Blue background[/background]
 [/background]               |                           |
