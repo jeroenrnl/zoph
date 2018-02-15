@@ -138,7 +138,7 @@ This option, together with [`LOG_SUBJECT`](#log_subject) enables you to have gra
 **Example:** `define('LOG_SEVERITY', log::NOTIFY);`
 
 ### Log Severity ###
-Severity      | Meanint
+Severity      | Meaning
 --------------|---------------------
 log::DEBUG    |	Debugging messages, Zoph gives information about what it's doing.
 log::NOTIFY   |	Notification about something that is happening which is influencing Zoph's program flow
