@@ -248,4 +248,71 @@ If enabled in the configuration and allowed under the user's profile, a user can
 
 ![Comments](img/ZophComment.png)
 
+## Scenarios ##
+### Access levels ###
 
+Say you create an account for your parents but you don't want them to see the photos in the "New Years Party" album. Simply don't grant them permission to that album.
+
+However, say the photos in this album are mostly harmless, except for a few that you would like to keep hidden. In this case, change the level of those photos to 6 (or higher) and grant the user permission to the album with an access level of 5 (or less).
+
+### Watermarks ###
+
+You have taken a couple of brilliant landscape images. You really want to show them to one of your regular customers, but you're affraid they will simply take your image and publish it, without paying for it. You put the photos in an album "Landscape" and set their level to 3.
+
+After that, you give your customers account access level 5 and watermark level 2. They will now be able to watch the photo, but when they look at the fullsize image, a large copyright message will be superimposed over the photo. In this way, they will be able to judge the quality of the image, but it will be unusable to use in their productions.
+
+After they have payed for the photo, you can put the image in an album that does allow them to see the photo without a watermark, change the level of the photo or change the watermark level. (keep in mind that the latter two will also influence other accounts or photos, respectively).
+
+### Defining a Default User ###
+
+A default user can be defined. This user is automatically logged in when a person first opens Zoph in their browser.  You can use this feature to create a guest account with limited permissions.
+
+To define a default user, create a user, grant that user whatever permissions you want and set the user's preferences. Whichever user is defined as the default user is unable to modify their preferences while they are the default.  Then, in the configuration screen, under `Interface settings` select the `Default user`. Admin users can not be default users and you should not grant any write permissions to the guest user.
+
+That's it. Now when you hit /zoph/zoph.php for the first time you'll be logged in as the guest user (if you are already logged in as someone you'll first have to log out). You can also log out when you are the guest user to be able to log back in as someone else.
+
+What if a guest hits logout and wants to get back in but doesn't know the guest account info? Hitting submit on the logon page without specifying a user name or password will log you in as the default user.
+
+## Pages, Pagesets and ZophCode ##
+
+By default, each album, category, place and person has a page that will show the basic data about this object. If you want, you can customize it using the ZophPages feature.
+
+### ZophCode ###
+
+A ZophPage is written in ZophCode. ZophCode is very similar to bbCode or html and consist of tags in square brackets. Currently supported tags are:
+
+ZophCode Tag                | Meaning                   | Example
+-------------------------------------------------------------------------------------------------
+[b]...[/b]                  | Bold                      | You can make text [b]bold[/b].
+[i]...[/i]                  | Italics                   | To [i]emphasize[/i] a word...
+[u]...[/u]                  | Underline                 | [u]Underline[/u] a word.
+[h1]...[/h1]                | Level 1 (chapter) header  | [h1]My holiday[/h1]
+[h2]...[/h2]                | Level 2 (paragraph) header| [h2]Second day[/h2]
+[h3]...[/h3]                | Level 3 (sub-prgr) header | [h3]Afternoon[/h3]
+[color=<color>]...[/color]  | Text colour.              | Words in [color=blue]blue[/color] and [color=#ff0000]red[/color].
+[font=<font>]...[/font]     | Text font                 | Mixing [font=times]fonts[/font] can make your 
+                            |                           | [font=courier]page[/font] look professional (or messy).
+[br]                        | Line break                | Best regards,[br]Jeroen
+[background=<color>]...     | Background colour         | [background=blue]Blue background[/background]
+[/background]               |                           |
+[photo=<id>]...[/photo]     | Link to a photo           | [photo=123]See this photo![/photo]
+[album=<id>]...[/album]     | Link to an album          | [album=123]See this album![/album]
+[person=<id>]...[/person]   | Link to a person          | [person=123]See this person![/person]
+[cat=<id>]...[/cat]         | Link to a category        | [cat=123]See this category![/cat]
+[place=<id>]...[/place]     | Link to a place           | [place=123]See this place![/place]
+[link=<url>]...[/link]      | Link to a webpage         | [link=http://www.zoph.org]Zoph[/link]
+[thumb=<id>]                | Thumbnail of a photo      | [thumb=123]
+[mid=<id>]                  | Mid-size image of a photo | [mid=123]
+
+It is possible to nest tags. For example:
+
+````
+[h1]Holiday in [b]Spain[b][/h1]
+[i]more [u]emphasis[/u] by [b]combining[/b] tags[/i].
+Click on this thumbnail to see the photo: [photo=123][thumb=123][/photo]
+
+Just make sure you open and close the tags in the right order:
+
+[b]This [i]will[/b] not[/i] work!
+````
+Finally, you can use smileys. See [Comments](#comments) for an overview.
