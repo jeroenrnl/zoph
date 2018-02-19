@@ -4,7 +4,7 @@ A photo album is of little use without photos. This page describes how to import
 The import process in Zoph consists of 2 steps: **uploading** and **importing**. If you have access to the filesystem of the server, you can skip the uploading and manually move the files you wish to import into the directory specified as `upload dir` on the [configuration screen](CONFIGURATION.md).  You can then use the webinterface to import them into Zoph. If you don't have access to the server's filesystem or do not wish to use it, you can upload photos to the `upload dir` and then use the same process. You can even mix the two: copy some photos directly into the `upload dir` and upload others and then continue as if it is one set of photos (which it actually is now).
 
 ## Configuration ##
-![Enabling import and upload in the configuration screen](img/zoph_enable_import.png)
+![Enabling import and upload in the configuration screen](img/Zoph_enable_import.png)
 There are several configuration options that are related to importing and uploading photos.
 At least, make sure `Import through webinterface` is enabled and if you also want to enable uploading photos through the webinterface, also enable `Upload through webinterface`. Furthermore, make sure that the `upload dir` under `paths` is set correctly. On some systems it might be needed to set the `magic file` in order for Zoph to be able to figure out the filetypes of the imported photos.
 
@@ -51,12 +51,12 @@ Finally, click "Import" and Zoph starts importing the photos into the database. 
 ### Using autocomplete ###
 So, let's import a few more photos. As you can see, the album, category, location and photographer we have chosen before, are still there, so we only need to change the category. The next picture shows a plane and no flowers at all, so click the little red "x" next to "Flowers" to remove that category and then click the empty field next to categories. The list of categories is quite long, so why search the list yourself, if you can let the computer do that for you? We are looking for a category named "planes", so we'll type a "p", the list will now be significantly shorter, only showing categories starting with "p". We select "planes" by clicking on it. Finally, we'll tick the photo we want to import and then hit "Import" to start the import.
 
+![Using autocomplete on a dropdown box](img/ZophImport009.png)
 
 ### Multiple categories ###
 Now we only have 4 photos left. They all feature 'mountains', so let's remove the category "Planes" and add "Mountains". The first two mostly feature mountains while the others also feature other subjects. We'll just tick the first two, click import, and wait for the photo's to be imported. This time, we don't click the little red "x" next to "Mountains", but instead, add a second category. "Roads", for the first one. Again, we tick the photo we want to import, click "Import" and wait for the photo to be imported. 
 The last photo features "Mountains" and "Snow", so, we want to remove "Roads" and add "Snow". Instead of using the red "x", you can also simply re-open the dropdown box and choose "Snow" (or type "snow" or a part of that). Tick the last photo and wait for the "Uploaded photos" window to disappear, since all photos have now been imported.
 
-![Using autocomplete on a dropdown box](img/ZophImport009.png)
 
 ## Uploading an archive ##
 Uploading photos one-by-one can take a lot of time. Even worse, once you're uploading 5 or 10 photos simultaneously, your browser could get a bit slow. Wouldn't it be great if you could upload a bunch of photos in one go? Well, you can! Just put them in a ZIP or TAR archive and upload that!

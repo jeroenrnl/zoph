@@ -349,7 +349,10 @@ The language files are stored in php/lang. Creating a new translation involves c
 Here are descriptions of a few of the other prefs:
 
 **days past for recent photos links:** The home page has links to view photos taken or modified in the past X days, this pref sets the number of days.
+
 **display camera info:** If set to No, when viewing the details of a photo, fields like camera make and model, focal length, exposure, etc. are not displayed.
+
 **automatically edit photos:** If set to Yes, when an admin or a user with write permission views the details of a photo, they are immediately taken to the edit screen. This is handy for editing one photo after another.
+
 **color scheme:** the color scheme to use. Admins can click on "color scheme" to add, edit and delete color schemes.
 
