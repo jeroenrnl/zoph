@@ -314,3 +314,42 @@ Just make sure you open and close the tags in the right order:
 [b]This [i]will[/b] not[/i] work!
 ````
 Finally, you can use smileys. See [Comments](#comments) for an overview.
+
+## Pages ##
+
+You can create a new page by going to the admin page and clicking on `Pages`. Just type your text and tags and save. If you would like to spread the content over multiple pages, just save this one and create another page.
+
+## PageSets ##
+
+The next step is to combine 1 or more pages into a pageset. Keep in mind that if you have only one page, you still have to put it into a pageset. Create a pageset from the admin page and add the pages you would like to have in this pageset to it. You can also define the order in which the pages appear in the pageset by clicking on `move up` and `move down`.
+
+You also have to decide what you would like to do with the original page Zoph automatically creates for each album, category, place and person. You can choose to never display it, to display it on the first page, the last page or on each page. You can also choose whether you would like to see you own page first or the auto-generated. Keep in mind that if you choose to never display the original page, you could restrict navigation for your users. For example, if you have an album with a few sub-albums, your users will be unable to navigate to these subalbums unless you provide links in your page to these subalbums (and add new links every time you have added a new sub-album).
+
+### Assigning a PageSet to an object ###
+
+The final step in enabling the ZophPages feature, is assigning the pageset to and album, category, place or person. You can do that by editing the specific object and choose the pageset.
+
+## Preferences ##
+
+A user can customize Zoph using the preferences page. Below are descriptions of a few of the prefs.
+### Breadcrumbs ###
+Between the tabs and the title bar you'll see a list of breadcrumbs by default. On the prefs page You can specify the number of breadcrumbs to show or you can choose to disable the breadcrumbs completely.
+
+One note about breadcrumbs: clicking on the small x to the right of the breadcrumbs will clear the list of crumbs.
+
+### Choosing a Language ###
+The default value is 'Browser Default'. This means that Zoph will try to present itself in the language you can specify in your browser's settings. If no translations are present for any of the languages in your browser's list, English will be displayed by default.
+
+If you specify a language on the prefs page instead of 'Browser Default' your setting will override whatever you have your browser set to.
+
+The language files are stored in php/lang. Creating a new translation involves creating a file in this directory with the language's two letter code in lowercase. Use one of the existing (non English) language files as an example.
+
+### Other Prefs ###
+
+Here are descriptions of a few of the other prefs:
+
+**days past for recent photos links:** The home page has links to view photos taken or modified in the past X days, this pref sets the number of days.
+**display camera info:** If set to No, when viewing the details of a photo, fields like camera make and model, focal length, exposure, etc. are not displayed.
+**automatically edit photos:** If set to Yes, when an admin or a user with write permission views the details of a photo, they are immediately taken to the edit screen. This is handy for editing one photo after another.
+**color scheme:** the color scheme to use. Admins can click on "color scheme" to add, edit and delete color schemes.
+
