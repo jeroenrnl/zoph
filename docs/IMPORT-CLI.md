@@ -44,7 +44,7 @@ Well, I don't know about you, but *I* certainly didn't buy a computer to do thin
 ````
 zoph@zoph $ zoph IMG_120[3-5].JPG  IMG_121[^3]*.JPG IMG_122*.JPG
 ````
-That saved a lot of typing, didn't it? This is not a zoph feature, by the way, it is a feature of your shell (probably [Bash](http://www.gnu.org/software/bash/bash.html). 
+That saved a lot of typing, didn't it? This is not a zoph feature, by the way, it is a feature of your shell (probably [Bash](http://www.gnu.org/software/bash/bash.html)). 
 
 ## Organizing photos ##
 You could just import your photos like described above and then use the Zoph webinterface to organize them, but why not organize them right away? 
@@ -57,15 +57,15 @@ Import `IMG_1300.JPG` and place it in the album **Summer** and category **Landsc
 zoph@zoph $ zoph --album "Summer" --category "Landscapes" IMG_1300.JPG
 ````
 
-Import `john.jpg` and place it in the album **Family**, category **Portraits** and specify John Doe is in this picture:
+Import `john.jpg` and place it in the album **Family**, category **Portraits** and specify **John Doe** is in this picture:
 ````
 zoph@zoph $ zoph --album "Family" --category "Portraits" --person "John Doe" john.jpg
 ````
-Import `family.jpg` and place it in the albums **Family** and **Summer** and specify John Doe, Johnny Doe and Jane Doe are in this picture:
+Import `family.jpg` and place it in the albums **Family** and **Summer** and specify **John Doe**, **Johnny Doe** and **Jane Doe** are in this picture:
 ````
 zoph@zoph $ zoph --album "Family" --album "Summer" --category "Portraits" --person "John Doe, Johnny Doe, Jane Doe" family.jpg
 ````
-Import `guitarists.jpg` and place it in the categories **Music** and **Musicians** and specify Hank Williams, Jimi Hendrix and Brian May are in this picture:
+Import `guitarists.jpg` and place it in the categories **Music** and **Musicians** and specify **Hank Marvin**, **Jimi Hendrix** and **Brian May** are in this picture:
 ````
 zoph@zoph $ zoph --category "Music, Musicians" --person "Hank Marvin" --person "Jimi Hendrix" --person "Brian May" guitarists.jpg
 ````
@@ -75,12 +75,12 @@ As you can see, you can add multiple albums, categories or people by repeating t
 Of course, you also want to record *where* and *by whom* the your photos were taken. This works almost the same als albums, categories and people, *except* that you can only store *one of each*. Again, the person and place must be in the database prior to using it via the CLI. Specify the photographer using the [--photographer](CLI.md#--photographer) option and the location using the [--location](CLI.md#--location) option.
 
 #### Examples ####
-Import `IMG_1400.JPG` and set John Doe as the photographer:
+Import `IMG_1400.JPG` and set **John Doe** as the photographer:
 ````
 zoph@zoph $ zoph --photographer "John Doe" IMG_1400.JPG
 ````
 
-Import `IMG_1401.JPG` and set "Berlin" as the location where the photo was taken:
+Import `IMG_1401.JPG` and set **Berlin** as the location where the photo was taken:
 ````
 zoph@zoph $ zoph --location "Berlin" IMG_1401.JPG
 ````
@@ -218,5 +218,5 @@ In this example, `IMG_2001.JPG` to `IMG_2010.JPG` will be stored with "John Doe"
 Finally, the photos in the "Summer Holiday" album, will not have any categories assigned.
 
 ## Controlling the way `zoph` works ##
-The Zoph CLI client has several options that control how it works, an example of `--dateddirs` and `--hierarchical` has been given above. More settings can be found in [CLI overview](CLI.md)
+The Zoph CLI client has several options that control how it works, an example of `--dateddirs` and `--hierarchical` has been given above. More settings can be found in [The Zoph CLI tool](CLI.md).
 
