@@ -5,7 +5,7 @@ A detailed overview of all the options can be found in [The Zoph CLI tool](CLI.m
 
 ## configuration ##
 ### zoph.ini ###
-First of all, you will need a valid [[Zoph/Configuration/zoph.ini|zoph.ini]] file to work with the CLI client. If you have multiple Zoph installations on your system, an important difference with the webinterface is the fact that the CLI cannot automatically determine which Zoph installation (instance) you are trying to import photos to. By default it will take the first instance, otherwise you need to specify the [[Zoph/Using the commandline tools/zoph CLI client#--instance|--instance]] CLI option. See [[Zoph/Configuration/zoph.ini#examples|zoph.ini]] for some examples.
+First of all, you will need a valid [zoph.ini](CONFIGURATION.md#contents-of-zophini) file to work with the CLI client. If you have multiple Zoph installations on your system, an important difference with the webinterface is the fact that the CLI cannot automatically determine which Zoph installation (instance) you are trying to import photos to. By default it will take the first instance, otherwise you need to specify the [--instance](CLI.md#--instance) CLI option. See the [CONFIGURATION](CONFIGURATION.md) documentation for some examples.
 
 ### Webinterface ###
 ![Screenshot: import settings on configuration page](img/Config_import.png)
@@ -17,7 +17,7 @@ Of course you want to tell Zoph which photos it should import. The list of photo
 Let's say you have a bunch of photos plus a text file in a directory:
 
 ````
-zoph@zoph $ **ls**
+zoph@zoph $ ls
 IMG_1203.JPG     IMG_1207.JPG     IMG_1211.JPG     IMG_1215.JPG     IMG_1219.JPG
 IMG_1204.JPG     IMG_1208.JPG     IMG_1212.JPG     IMG_1216.JPG     IMG_1220.JPG
 IMG_1205.JPG     IMG_1209.JPG     IMG_1213.JPG     IMG_1217.JPG     IMG_1221.JPG
@@ -25,25 +25,25 @@ IMG_1206.JPG     IMG_1210.JPG     IMG_1214.JPG     IMG_1218.JPG     photos.txt
 ````
 If you want to import all photos, you could do
 ````
-zoph@zoph $ **zoph * **
+zoph@zoph $ zoph *
 ````
 However, this will cause an error when zoph tries to import a textfile, so it's better to do:
 ````
- zoph@zoph $ **zoph *.JPG**
+zoph@zoph $ zoph *.JPG
 ````
 Or even
 ````
-zoph@zoph $ **zoph IMG_12*.JPG**
+zoph@zoph $ zoph IMG_12*.JPG
 ````
 But, what if you would like to import only some of these photos, for example, 1203 to 1205, 1210 to 1219 (except 1213), 1220 and 1221. You could of course specify every file individually:
 ````
-zoph@zoph $ **zoph IMG_1203.JPG IMG_1204.JPG IMG_1205.JPG IMG_1210.JPG IMG_1211.JPG IMG_1212.JPG IMG_1214.JPG**
-             **IMG_1215.JPG IMG_1216.JPG IMG_1217.JPG IMG_1218.JPG IMG_1219.JPG IMG_1220.JPG IMG_1221.JPG**
+zoph@zoph $ zoph IMG_1203.JPG IMG_1204.JPG IMG_1205.JPG IMG_1210.JPG IMG_1211.JPG IMG_1212.JPG IMG_1214.JPG
+              IMG_1215.JPG IMG_1216.JPG IMG_1217.JPG IMG_1218.JPG IMG_1219.JPG IMG_1220.JPG IMG_1221.JPG
 ````
 Well, I don't know about you, but *I* certainly didn't buy a computer to do things by myself, so why not let the computer take care of that?
 ````
-zoph@zoph $ **zoph IMG_120[3-5].JPG  IMG_121[^3]*.JPG IMG_122*.JPG
-```
+zoph@zoph $ zoph IMG_120[3-5].JPG  IMG_121[^3]*.JPG IMG_122*.JPG
+````
 That saved a lot of typing, didn't it? This is not a zoph feature, by the way, it is a feature of your shell (probably [Bash](http://www.gnu.org/software/bash/bash.html). 
 
 ## Organizing photos ##
@@ -54,20 +54,20 @@ You can put your photo in one or more albums and one or more categories (well, t
 #### Examples ####
 Import `IMG_1300.JPG` and place it in the album **Summer** and category **Landscapes**:
 ````
-zoph@zoph $ **zoph --album "Summer" --category "Landscapes" IMG_1300.JPG**
+zoph@zoph $ zoph --album "Summer" --category "Landscapes" IMG_1300.JPG
 ````
 
 Import `john.jpg` and place it in the album **Family**, category **Portraits** and specify John Doe is in this picture:
 ````
-zoph@zoph $ **zoph --album "Family" --category "Portraits" --person "John Doe" john.jpg**
+zoph@zoph $ zoph --album "Family" --category "Portraits" --person "John Doe" john.jpg
 ````
 Import `family.jpg` and place it in the albums **Family** and **Summer** and specify John Doe, Johnny Doe and Jane Doe are in this picture:
 ````
-zoph@zoph $ **zoph --album "Family" --album "Summer" --category "Portraits" --person "John Doe, Johnny Doe, Jane Doe" family.jpg**
+zoph@zoph $ zoph --album "Family" --album "Summer" --category "Portraits" --person "John Doe, Johnny Doe, Jane Doe" family.jpg
 ````
 Import `guitarists.jpg` and place it in the categories **Music** and **Musicians** and specify Hank Williams, Jimi Hendrix and Brian May are in this picture:
 ````
-zoph@zoph $ **zoph --category "Music, Musicians" --person "Hank Marvin" --person "Jimi Hendrix" --person "Brian May" guitarists.jpg**
+zoph@zoph $ zoph --category "Music, Musicians" --person "Hank Marvin" --person "Jimi Hendrix" --person "Brian May" guitarists.jpg
 ````
 As you can see, you can add multiple albums, categories or people by repeating the [--album](CLI.md#--album), [--category](CLI.md#--category) or [--person](CLI.md#--person) option multiple times, or by specifying it only once and give it a list of albums, categories or people, separated by commas.
 
@@ -77,12 +77,12 @@ Of course, you also want to record *where* and *by whom* the your photos were ta
 #### Examples ####
 Import `IMG_1400.JPG` and set John Doe as the photographer:
 ````
-zoph@zoph $ **zoph --photographer "John Doe" IMG_1400.JPG**
+zoph@zoph $ zoph --photographer "John Doe" IMG_1400.JPG
 ````
 
 Import `IMG_1401.JPG` and set "Berlin" as the location where the photo was taken:
 ````
-zoph@zoph $ **zoph --location "Berlin" IMG_1401.JPG**
+zoph@zoph $ zoph --location "Berlin" IMG_1401.JPG
 ````
 
 ### Other fields ###
@@ -90,7 +90,7 @@ There are a lot more attributes Zoph can store about your photos. Many of them w
 #### Examples ####
 Import `IMG_1416.JPG` and set the title:
 ````
-zoph@zoph $ **zoph --field "Title=A nice photo" IMG_1416.JPG**
+zoph@zoph $ zoph --field "Title=A nice photo" IMG_1416.JPG
 ````
 
 ## Import directory ##
@@ -101,8 +101,8 @@ With [--path](CLI.md#--path), you can manually set a path that will be inserted 
 ### Examples ###
 Assume IMG_1480.JPG was taken on 5 May 2010 and IMG_1481.JPG was taken on 13 May 2010 and image_dir is set to `/data/photos`.
 ````
-zoph@zoph $ **zoph IMG_1480.JPG IMG_1481.JPG**
-zoph@zoph $ **ls /data/photos**
+zoph@zoph $ zoph IMG_1480.JPG IMG_1481.JPG
+zoph@zoph $ ls /data/photos
   mid
   thumb
   IMG_1480.JPG
@@ -110,11 +110,11 @@ zoph@zoph $ **ls /data/photos**
 ````
 Ok, now let's add a `--path`:
 ````
-zoph@zoph $ **zoph --path "family" IMG_1480.JPG IMG_1481.JPG**
-zoph@zoph $ **ls /data/photos**
+zoph@zoph $ zoph --path "family" IMG_1480.JPG IMG_1481.JPG
+zoph@zoph $ ls /data/photos
   family
 
-zoph@zoph $ **ls /data/photos/family**
+zoph@zoph $ ls /data/photos/family
   mid
   thumb
   IMG_1480.JPG
@@ -122,40 +122,41 @@ zoph@zoph $ **ls /data/photos/family**
 ````
 And `--dateddirs`:
 ````
-zoph@zoph $ **zoph --dateddirs IMG_1480.JPG IMG_1481.JPG**
-zoph@zoph $ **ls /data/photos**
- 2010.05.05
- 2010.05.13
-zoph@zoph $ **ls /data/photos/2010.05.05**
- mid
- thumb
- IMG_1480.JPG
+zoph@zoph $ zoph --dateddirs IMG_1480.JPG IMG_1481.JPG
+zoph@zoph $ ls /data/photos
+  2010.05.05
+  2010.05.13
+zoph@zoph $ ls /data/photos/2010.05.05
+  mid
+  thumb
+  IMG_1480.JPG
 ````
 This is of course nice if you only have a few photos, but when your collection grows and you have taken photos spread over several years, you will end up with hundreds of dated directories. For this reason, there is hierarchical dated directories:
 ````
-zoph@zoph $ **zoph --hierarchical IMG_1480.JPG IMG_1481.JPG**
-zoph@zoph $ **ls /data/photos**
- 2010
-zoph@zoph $ **ls /data/photos/2010**
- 05
-zoph@zoph $ **ls /data/photos/2010/05**
- 05
- 13
-zoph@zoph $ **ls /data/photos/2010/05/05**
- mid
- thumb
- IMG_1480.JPG
+zoph@zoph $ zoph --hierarchical IMG_1480.JPG IMG_1481.JPG
+zoph@zoph $ ls /data/photos
+  2010
+zoph@zoph $ ls /data/photos/2010
+  05
+zoph@zoph $ ls /data/photos/2010/05
+  05
+  13
+zoph@zoph $ ls /data/photos/2010/05/05
+  mid
+  thumb
+  IMG_1480.JPG
 ````
 You could, of course, also use both a path and dated directories:
 ````
-zoph@zoph $ **zoph --path "family" --hierarchical IMG_1480.JPG
-zoph@zoph $ **zoph --path "family" --dateddirs IMG_1481.JPG
-zoph@zoph $ **ls /data/photos**
- family
-zoph@zoph $ **ls /data/photos/family**
- 2010
- 2010.05.13
+zoph@zoph $ zoph --path "family" --hierarchical IMG_1480.JPG
+zoph@zoph $ zoph --path "family" --dateddirs IMG_1481.JPG
+zoph@zoph $ ls /data/photos
+  family
+zoph@zoph $ ls /data/photos/family
+  2010
+  2010.05.13
 ````
+Although mixing `--dateddirs` and `--hierarchical` is probably not a good idea if you want to keep your collection organized and also, at least somewhat accessible directly from the OS (as opposed to from Zoph).
 (By the way, when specifying both `--dateddirs` *and* `--hierarchical`, hierarchical will take precedence).
 
 ## Using dirpattern ##
@@ -163,36 +164,36 @@ With the [--dirpattern](CLI.md#--dirpattern) CLI option, you can automatically a
 
 Let's say you have the following directory structure:
 ````
- |- **John Doe**
- |   |- **Walk in the park**
- |   |   |- **Trees**
+ |- John Doe
+ |   |- Walk in the park
+ |   |   |- Trees
  |   |   |   |- IMG_2001.JPG
  |   |   |   |- IMG_2002.JPG
- |   |   |   |- **Flowers**
+ |   |   |   |- Flowers
  |   |   |        |- IMG_2003.JPG
- |   |   |- **Flowers**
+ |   |   |- Flowers
  |   |       |- IMG_2004.JPG
- |   |- **A day in the forest**      
- |   |   |- **Trees**
+ |   |- A day in the forest
+ |   |   |- Trees
  |   |   |   |- IMG_2005.JPG
  |   |   |   |- IMG_2006.JPG
- |   |   |   |- **Birds**
+ |   |   |   |- Birds
  |   |   |       |- IMG_2007.JPG
- |   |   |- **Animals**
+ |   |   |- Animals
  |   |       |- IMG_2008.JPG
- |   |- **Summer Holiday**
+ |   |- Summer Holiday
  |       |- IMG_2009.JPG
  |       |- IMG_2010.JPG
- |- **Jane Doe**
-     |- **A day in the forest**      
-     |   |- **Trees**
+ |- Jane Doe
+     |- A day in the forest
+     |   |- Trees
      |   |   |- DSC_1000.JPG
      |   |   |- DSC_1001.JPG
-     |   |   |- **Birds**
+     |   |   |- Birds
      |   |       |- DSC_1002.JPG
-     |   |- **Animals**
+     |   |- Animals
      |       |- DSC_1003.JPG
-     |- **Summer Holiday**
+     |- Summer Holiday
          |- DSC_1004.JPG
          |- DSC_1005.JPG
 ````
