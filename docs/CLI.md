@@ -90,7 +90,7 @@ zoph -a "Summer" -a "Holiday" photo.jpg
 ### `--category` ###
 Specify one or multiple categories Zoph should add the given list of photos to. You can specify `--category` multiple times.
 
-**Aliases:** `-c` `--categories``
+**Aliases:** `-c` `--categories`
 
 **Options:** The name of a category or multiple, separated by commas. The category must pre-exist in the database.
 
@@ -130,7 +130,7 @@ zoph --location "Rotterdam" photo.jpg
 zoph -l "Rotterdam" photo.jpg
 ````
 
-### --photographer ###
+### `--photographer` ###
 Specify the photographer of the photos specified. You can specify `--photographer` only one time.
 
 **Aliases:** `-P`
@@ -211,7 +211,7 @@ zoph --update --exif photo.jpg
 ### `--size` / `--no-size`  ###
 Specify whether Zoph should update the dimensions of the photo stored in the database.
 
-**Aliases:** *(none)* / --nosize
+**Aliases:** *(none)* / `--nosize`
 
 **Default:** When importing ([--import](#--import)): update database with dimensions of the image. When updating ([--update](#--update)): do not update the size information.
 
@@ -263,7 +263,7 @@ With dated dirs, Zoph automatically creates directories based on the (EXIF-)date
 **Example:** `zoph --dateddirs photo.jpg`
 
 ### `--hierarchical` / `--no-hierarchical` ###
-Hierarchical dated dirs are similar to [--dateddirs](#--dated dirs), Zoph automatically creates directories based on the (EXIF-)date of a photo, the difference is that with hierarchical dated dirs, a separtate directory is create for year, month and day. For example a photo taken on March 15, 2010, will automatically be places in the directory tree `2010/03/15`.
+Hierarchical dated dirs are similar to [--dateddirs](#--dateddirs----no-dateddirs), Zoph automatically creates directories based on the (EXIF-)date of a photo, the difference is that with hierarchical dated dirs, a separtate directory is create for year, month and day. For example a photo taken on March 15, 2010, will automatically be places in the directory tree `2010/03/15`.
 
 **Aliases:** `-H` `--hier` / `--no-hierarchical` `--no-hier` `--nohierarchical` `--nohier`
 
