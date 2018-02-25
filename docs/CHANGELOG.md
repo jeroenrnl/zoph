@@ -328,7 +328,7 @@ Zoph 0.9pre1 is the first release candidate for Zoph 0.9. Zoph is now completely
 * Updated wikibooks documentation
 
 ## Zoph 0.9 ##
-23 jun 2012
+### 23 jun 2012 ###
 
 Zoph 0.9 is a stable release. It's equal to v0.9pre2, except for an updated Italian translation.
 
@@ -338,7 +338,7 @@ Zoph 0.9 is a stable release. It's equal to v0.9pre2, except for an updated Ital
 There are no known bugs in this version.
 
 ## Zoph 0.9pre2 ##
-20 feb 2012
+### 20 feb 2012 ###
 
 Zoph 0.9pre2 is the second release candidate for Zoph 0.9. Zoph is now completely feature-frozen for the 0.9 release, only bugfixes will be made.
 
@@ -347,7 +347,7 @@ Zoph 0.9pre2 is the second release candidate for Zoph 0.9. Zoph is now completel
 * Bug#3471100: On some pages, title contains PHP warning
 
 ## Zoph 0.9pre1 ##
-26 nov 2011
+### 26 nov 2011 ###
 
 Zoph 0.9pre1 is the first release candidate for Zoph 0.9. Zoph is now completely feature-frozen for the 0.9 release, only bugfixes will be made.
 
@@ -375,7 +375,7 @@ Zoph 0.9pre1 is the first release candidate for Zoph 0.9. Zoph is now completely
 * Updated wikibooks documentation
 
 ## Zoph 0.8.4 ##
-9 Sept 2011
+### 9 Sept 2011 ###
 
 Zoph 0.8.4 is the final pre-release for Zoph 0.9.
 
@@ -396,22 +396,25 @@ This version adds several feature improvements. More features have been added th
 * Add multiple albums, categories, persons on both single and bulk  photo edit. 
 * Req#2871210: Added 'share photo' feature.
 * Zoph now stores a hash of a photo in the database
-* zoph CLI: Added -D as shorthand for --path
+* zoph CLI: Added -D as shorthand for `--path`
+
 ### Bugs ###
-* Bug#3312029: MAGIC_FILE cannot be empty
+* Bug#3312029: `MAGIC_FILE` cannot be empty
 * Fixed an issue that caused the 'search' button for geocoding on the edit location page to be misplaced.
 * Fixed a typo that caused the 'track' screen to no longer work
+
 ### Translations ###
 * Updated translations
 * Added some previously forgotten translations
+
 ### Refactoring ###
 Zoph has started it's life in the era of PHP3, while the current version of PHP is version 5.3. In between a lot has been changed in PHP. I have started to adopt PHP5-style programming some time ago for new development. I have now also started to refactor the other code to a new coding style. Currently, Zoph still has ''a lot'' of global functions and I am slowly moving almost all of them to static methods.
 * Made several changes to function names to accommodate new coding style
-* Refactored photo->update_relations() to merge with the similar photo->updateRelations() that the new import introduced.
-* Moved get_root_...() functions into static functions.
-* Refactor of zoph_table object (now called zophTable)
-* Renamed function photo->get_image_href() to photo->getURL()
-* Made some changes to the delete() methods so PHP strict standards are followed.
+* Refactored `photo->update_relations()` to merge with the similar `photo->updateRelations()` that the new import introduced.
+* Moved `get_root_...()` functions into static functions.
+* Refactor of `zoph_table` object (now called `zophTable`)
+* Renamed function `photo->get_image_href()` to `photo->getURL()`
+* Made some changes to the `delete()` methods so PHP strict standards are followed.
 
 ### Other ###
 * Inline documentation improvements
@@ -423,7 +426,7 @@ Zoph has started it's life in the era of PHP3, while the current version of PHP 
 * Improved loading speed of the 'tracks' page by using a different, better cachable SQL query
 
 ## Zoph 0.8.3 ##
-April 3, 2011
+### April 3, 2011 ###
 
 Zoph 0.8.3 is a pre-release for Zoph 0.9.
 
@@ -460,7 +463,7 @@ Zoph 0.8.3 is beta release, I tested it as well as possible on my system, but it
 * Dutch and Canadian English have been updated and are completely up to date
 
 ## Zoph 0.8.2.1 ##
-November 20, 2010
+### November 20, 2010 ###
 
 Zoph 0.8.2.1 is a bugfix release for Zoph 0.8.2.
 
@@ -478,7 +481,7 @@ Many changes were made in Zoph 0.8.2 and with so many changed lines of code, a f
 * Bug#3108196: Translation not working in Zoph 0.8.2
 
 ## Zoph 0.8.2 ##
-October 20, 2010
+### October 20, 2010 ###
 
 Zoph 0.8.2 is the second pre-release for Zoph 0.9.
 
@@ -499,7 +502,7 @@ Zoph 0.8.2 is beta release, I tested it as well as possible on my system, but it
 * HTML documentation (`docs` directory) is no longer included in the release. Maintaining this documentation cost a lot of time. The scripts I wrote to convert the Wikibooks documentation into offline documentation could not handle images and the documentation I wrote for the new webimport contains a lot of pictures. 
 
 ## Zoph 0.8.0.5 ##
-October 20, 2010
+### October 20, 2010 ###
 
 Zoph 0.8.0.5 is a bugfix release that fixes a few bugs in Zoph 0.8.0.4
 
@@ -513,7 +516,7 @@ Zoph 0.8.0.5 is a bugfix release that fixes a few bugs in Zoph 0.8.0.4
 * Bug#3072586: Latitude is misspelled as "lattitude"
 
 ## Zoph 0.8.1.2 ##
-July 15, 2010
+### July 15, 2010 ###
 
 Zoph 0.8.1.2 is a bugfix release that fixes a few bugs in Zoph 0.8.1.1.
 
@@ -523,7 +526,7 @@ Zoph 0.8.1.2 is a bugfix release that fixes a few bugs in Zoph 0.8.1.1.
 * A bug that caused Zoph to loose timezone information when using the 'assign timezone to children' functionality. 
 
 ## Zoph 0.8.0.4 ##
-July 15, 2010
+### July 15, 2010 ###
 
 Zoph 0.8.0.4 is a bugfix release that fixes a few bugs in Zoph 0.8.0.3.
 
@@ -531,7 +534,7 @@ Zoph 0.8.0.4 is a bugfix release that fixes a few bugs in Zoph 0.8.0.3.
 * A few cases of duplicate encoding, causing HTML code to appear instead of being interpreted by the browser
 
 ## Zoph 0.8.1.1 ##
-July 1, 2010
+### July 1, 2010 ###
 
 Zoph 0.8.1.1 is a security release that fixes a number of Cross Site Scripting (XSS) issues of which most were found by [VUPEN Security](http://www.vupen.com). I would like to thank VUPEN for reporting these bugs.
 
@@ -542,7 +545,7 @@ Zoph 0.8.1.1 does not fix any other bugs.
 * Several XSS scripting issues found during fixing of the above bugs
 
 ## Zoph 0.8.0.3 ##
-July 1, 2010
+### July 1, 2010 ###
 
 Zoph 0.8.0.3 is a security release that fixes a number of Cross Site Scripting (XSS) issues of which most were found by [VUPEN Security](http://www.vupen.com). I would like to thank VUPEN for reporting these bugs.
 
@@ -562,7 +565,7 @@ This release also fixes all the bugs found since the 0.8.0.2 release.
 
 
 ## Zoph 0.8.1 ##
-3 Jan 2010
+### 3 Jan 2010 ###
 
 Zoph 0.8.1 is the first feature release for v0.9. This release introduces a new logging system, that should allow users and developers to control more granular which debugging messages Zoph displays. The other major change is that Zoph is now completely UTF-8 based, this should fix issues users had with international characters. This last change requires some manual changes to the MySQL database.
 
@@ -579,7 +582,7 @@ Zoph 0.8.1 is beta release, I tested it as well as possible on my system, but es
 * All the bugfixes from Zoph 0.8.0.1 and 0.8.0.2
 
 ## Zoph 0.8.0.2 ##
-1 Nov 2009
+### 1 Nov 2009 ###
 
 Zoph 0.8.0.2 is a bugfix release for Zoph 0.8.
 
@@ -600,7 +603,7 @@ Zoph 0.8.0.2 is a bugfix release for Zoph 0.8.
 * Changed deprecated mysql_escape_string() into new mysql_real_escape_string().
 
 ## Zoph 0.7.0.8 and Zoph 0.8.0.1 ##
-23 Sept 2009
+### 23 Sept 2009 ###
 
 Security fixes for 0.7 and 0.8.
 
@@ -608,7 +611,7 @@ Security fixes for 0.7 and 0.8.
 * Fixes a security bug that caused a user to be able to execute admin-only pages.
 
 ## Zoph 0.8 ##
-9 Sept 2009
+### 9 Sept 2009 ###
 
 Final 0.8 release. Only small changes compared to 0.8pre3:
 
@@ -620,7 +623,7 @@ Final 0.8 release. Only small changes compared to 0.8pre3:
 * Added a troubleshooting section ("Solving Problems")
 
 ## Zoph 0.8pre3 ##
-28 August 2009
+### 28 August 2009 ###
 
 This is the third pre-release for 0.8, it fixes the bugs discovered since v0.8pre2, including the security bug. It also updates several translations.
 
