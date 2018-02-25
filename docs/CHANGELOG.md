@@ -327,4 +327,318 @@ Zoph 0.9pre1 is the first release candidate for Zoph 0.9. Zoph is now completely
 * Bug#3435181: Variable inside quotes
 * Updated wikibooks documentation
 
-Older changes can be found in http://en.wikibooks.org/wiki/Zoph/Changelog/Archive and http://en.wikibooks.org/wiki/Zoph/Changelog/0.8-0.9
+## Zoph 0.9 ##
+23 jun 2012
+
+Zoph 0.9 is a stable release. It's equal to v0.9pre2, except for an updated Italian translation.
+
+### Translations ###
+* Updated Italian translation, by Francesco Ciattaglia
+
+There are no known bugs in this version.
+
+## Zoph 0.9pre2 ##
+20 feb 2012
+
+Zoph 0.9pre2 is the second release candidate for Zoph 0.9. Zoph is now completely feature-frozen for the 0.9 release, only bugfixes will be made.
+
+### Bugs ###
+* Bug#3471099: Map not displaying when looking at photo in edit mode
+* Bug#3471100: On some pages, title contains PHP warning
+
+## Zoph 0.9pre1 ##
+26 nov 2011
+
+Zoph 0.9pre1 is the first release candidate for Zoph 0.9. Zoph is now completely feature-frozen for the 0.9 release, only bugfixes will be made.
+
+### Bugs ###
+* Bug#3420574: When using --autoadd, zoph CLI import sometimes tries to create new locations or photographers even though they already exist in the database.
+* Bug#3427517: Share this photo feature does not work
+* Bug#3427518: Not possible to remove and album or category from a photo
+* Bug#3433687: Not possible to remove album or category from photo (bulk)
+* Bug#3431130: Share this photo doesn't show links in photo edit mode
+* Bug#3433810: Popup for albums, categories, people and places doesn't always disappear when moving mouse away.
+* Removed a warning that in some cases caused images not to be displayed.
+
+### Translations ###
+* Added a few missing strings, reported by Pekka Kutinlahti.
+* Updated Italian translation, by Francesco Ciattaglia
+* Updated Dutch, German, Canadian English and Finnish
+
+### Other ###
+* Got rid of a lot of PHP warnings
+* Got rid of a lot of PHP strict messages
+* Cut down on the number of global variables
+* Removed support for magic_quotes
+* Removed (last traces of) PHP4 support
+* Bug#3435181: Variable inside quotes
+* Updated wikibooks documentation
+
+## Zoph 0.8.4 ##
+9 Sept 2011
+
+Zoph 0.8.4 is the final pre-release for Zoph 0.9.
+
+This version adds several feature improvements. More features have been added the new CLI import, which was introduced in v0.8.2. The 'bulk edit' page has been improved, both in features as in loading speed (100x faster in some cases!). The 'tree view' and 'thumb view' overview pages have been improved. Several coding style modernisation changes have been made.
+
+### Features ###
+* Req#1985439: Adding albums, categories, places and people via the CLI
+* Req#1985439: Automatically adding albums, categories, places and people via the CLI
+* Req#3042674: Recursive import of directories
+* Req#1985439: Setting album, category, person, photographer, path from import dir.
+* Req#1756507: photocount in tree view.
+* Req#1491208: Show more info in thumbnail overview
+* REQ#2813979: Added date & time fields to bulk edit page
+* Added autocomplete support to bulk edit page
+* Changed the photo edit page to automatically add new dropdowns to albums, categories and people.
+* Removed 'people_slots' functionality
+* Changed add people on bulk photo edit page to use multiple dropdowns
+* Add multiple albums, categories, persons on both single and bulk  photo edit. 
+* Req#2871210: Added 'share photo' feature.
+* Zoph now stores a hash of a photo in the database
+* zoph CLI: Added -D as shorthand for --path
+### Bugs ###
+* Bug#3312029: MAGIC_FILE cannot be empty
+* Fixed an issue that caused the 'search' button for geocoding on the edit location page to be misplaced.
+* Fixed a typo that caused the 'track' screen to no longer work
+### Translations ###
+* Updated translations
+* Added some previously forgotten translations
+### Refactoring ###
+Zoph has started it's life in the era of PHP3, while the current version of PHP is version 5.3. In between a lot has been changed in PHP. I have started to adopt PHP5-style programming some time ago for new development. I have now also started to refactor the other code to a new coding style. Currently, Zoph still has ''a lot'' of global functions and I am slowly moving almost all of them to static methods.
+* Made several changes to function names to accommodate new coding style
+* Refactored photo->update_relations() to merge with the similar photo->updateRelations() that the new import introduced.
+* Moved get_root_...() functions into static functions.
+* Refactor of zoph_table object (now called zophTable)
+* Renamed function photo->get_image_href() to photo->getURL()
+* Made some changes to the delete() methods so PHP strict standards are followed.
+
+### Other ###
+* Inline documentation improvements
+* Improved expand/collapse Javascript robustness 
+* Some eyecandy (esp expand/collapse)
+* Changed the date and time field to type 'date' and type 'time', which are new types for HTML5. Tested in Chromium.
+* Removed deprecated IMAGE_SERVICE setting. IMAGE_SERVICE is now always on.
+* Renamed image_service.php to image.php 
+* Improved loading speed of the 'tracks' page by using a different, better cachable SQL query
+
+## Zoph 0.8.3 ##
+April 3, 2011
+
+Zoph 0.8.3 is a pre-release for Zoph 0.9.
+
+This version adds several feature improvements, mostly related to mapping. The most important addition is the support for geotagging. This version also fixes several bugs.
+
+Zoph 0.8.3 is beta release, I tested it as well as possible on my system, but it should not be considered a "stable" version. I would, however, very much appreciate if people could test and give feedback on this release and the updated documentation, in this way I can make sure that the stable (v0.9) version will be as bug-free as possible.
+### Features ###
+* Geotagging support
+* Req#2974014: Search for location
+* Geocoding: finding lat/lon location from city, county.
+* Req#2974016: Additional mapping resources
+* Req#3077944: When adding a new place, or editting a place with no location (lat/lon) set, zoph will zoom the map to the parent location.  If a photo is editted, and the photo has no lat/lon, but it's location does, the map is zoomed to the location's lat/lon.
+
+### Bugs ###
+* Getting rid of a NOTICE regarding unset `DB_PREFIX` constant
+* Several small changes to decrease the number of NOTICE messages.
+* In photo edit mode, moved maps to bottom of page, to fix a bug with Openlayers maps
+* Better error handling when `UPLOAD_DIR` does not exist.
+* Zoph.ini: Added quotes around values, PHP fails if they contain special characters. As suggested by scantron.
+* Bug#3237112: Rating counts are incorrect with new import
+* Bug#3237012: There is no "next" link on the bulk edit page, although a "previous" link is present.
+
+### Other ###
+* Switched from Mapstraction 1.x to Mapstraction 2.0.15
+* Namespacing in mapping Javascript.
+* Some changes in templating system
+* Bug#3104632: Various changes for PHP 5.3 compatibility
+* Refactor of zophcode, tag, smiley and replace objects to new coding style, including added PHPdoc comments.
+* Added a copyright note to Openlayers maps
+* Refactor of the admin class & move admin page to a template.
+* Getting rid of some warning messages
+
+### Translations ###
+* Dutch and Canadian English have been updated and are completely up to date
+
+## Zoph 0.8.2.1 ##
+November 20, 2010
+
+Zoph 0.8.2.1 is a bugfix release for Zoph 0.8.2.
+
+Many changes were made in Zoph 0.8.2 and with so many changed lines of code, a few bugs is almost inevitable. This release fixes all known bugs in v0.8.2.
+
+### Bugs ###
+* Bug#3064940: HTML in dropdown menus. (This bug was previously fixed in Zoph 0.8.0.5, but the fix was not correctly ported to the development branch)
+* Bug#3094182: New CLI does not store location and photographer
+* Bug#3094198: New CLI does not always look up location name correctly.
+* Bug#3094201: New CLI does not exit when it encounters an error (album, category, ... not found)
+* Bug#3102078: Webimport of archives fails with no error
+* Bug#3102080: New CLI `--update` can not set location and photographer
+* Bug#3102148: New CLI `--field` gives an error
+* Fix for an issue that caused javascript errors when an apostroph would appear in a title of a place.
+* Bug#3108196: Translation not working in Zoph 0.8.2
+
+## Zoph 0.8.2 ##
+October 20, 2010
+
+Zoph 0.8.2 is the second pre-release for Zoph 0.9.
+
+Zoph 0.8.2 features a completely rewritten import system. The webinterface has been modernized. Error handling and user-friendliness have been improved. The CLI interface prior to v0.8.2 was written in Perl, because the rest of Zoph was written in PHP, a lot of duplicate work needed to be done whenever something needed to be changed in the import system. As of this version, the CLI interface has been rewritten in PHP as well.
+
+Zoph 0.8.2 is beta release, I tested it as well as possible on my system, but it should not be considered a "stable" version. I would, however, very much appreciate if people could test and give feedback on this release and the updated documentation, in this way I can make sure that the stable (v0.9) version will be as bug-free as possible.
+
+### Features ###
+* New webimport
+* New CLI-import
+
+### Bugs ###
+* Bugfixes from v0.8.0.5 have been included in this release.
+
+### Other changes ###
+* Configuration of database connection has been moved from `config.inc.php` (webinterface) and `.zophrc` (CLI interface) to `/etc/zoph.ini`, for both the webinterface and the CLI interface.
+* `bin` and `man` directories in release tarball have been combined into the `cli` directory
+* HTML documentation (`docs` directory) is no longer included in the release. Maintaining this documentation cost a lot of time. The scripts I wrote to convert the Wikibooks documentation into offline documentation could not handle images and the documentation I wrote for the new webimport contains a lot of pictures. 
+
+## Zoph 0.8.0.5 ##
+October 20, 2010
+
+Zoph 0.8.0.5 is a bugfix release that fixes a few bugs in Zoph 0.8.0.4
+
+### Bugs ###
+* Bug#3049203: Rating links on search page do not work.
+* Bug#3054562: HTML in rating dropdown on search page
+* Bug#3054566: Search for albums/categories/places/people/photographers is broken after 0.8.0.2 update.
+* Bug#3066174: Rotation not working in auto edit mode
+* Bug#3064937: SQL error when inserting a place with no timezone.
+* Bug#3064940: HTML in dropdown menu's.
+* Bug#3072586: Latitude is misspelled as "lattitude"
+
+## Zoph 0.8.1.2 ##
+July 15, 2010
+
+Zoph 0.8.1.2 is a bugfix release that fixes a few bugs in Zoph 0.8.1.1.
+
+### Bugs ###
+* A few cases of duplicate encoding, causing HTML code to appear instead of being interpreted by the browser
+* A bug that caused markers not to work correctly
+* A bug that caused Zoph to loose timezone information when using the 'assign timezone to children' functionality. 
+
+## Zoph 0.8.0.4 ##
+July 15, 2010
+
+Zoph 0.8.0.4 is a bugfix release that fixes a few bugs in Zoph 0.8.0.3.
+
+### Bugs ###
+* A few cases of duplicate encoding, causing HTML code to appear instead of being interpreted by the browser
+
+## Zoph 0.8.1.1 ##
+July 1, 2010
+
+Zoph 0.8.1.1 is a security release that fixes a number of Cross Site Scripting (XSS) issues of which most were found by [VUPEN Security](http://www.vupen.com). I would like to thank VUPEN for reporting these bugs.
+
+Zoph 0.8.1.1 does not fix any other bugs.
+
+### Bugs ###
+* Several XSS scripting issues found by VUPEN Security
+* Several XSS scripting issues found during fixing of the above bugs
+
+## Zoph 0.8.0.3 ##
+July 1, 2010
+
+Zoph 0.8.0.3 is a security release that fixes a number of Cross Site Scripting (XSS) issues of which most were found by [VUPEN Security](http://www.vupen.com). I would like to thank VUPEN for reporting these bugs.
+
+This release also fixes all the bugs found since the 0.8.0.2 release.
+
+### Bugs ###
+* Several XSS scripting issues found by VUPEN Security
+* Several XSS scripting issues found during fixing of the above bugs
+* Bug#2901852: Fatal error when a photo without a photographer is displayed on the map
+* Bug#2902011: zophImport.pl cannot find people with no last name.
+* Bug#2925030: Last modified time is not displayed correctly
+* Bug#2925498: NULL entries in the database change to 0.000 after rotating an image causing fake map entries to appear. Fix by Jason Taylor.
+* Bug#2925508: Thumbnail covers actionlinks on people page. Fix by Jason Taylor.
+* Bug#2925506: Count of places is wrong. Fix by Jason Taylor.
+* Bug#2982051: editting photo does not work when using "auto edit".
+* Bug#3002691: Next/prev links lost after update.
+
+
+## Zoph 0.8.1 ##
+3 Jan 2010
+
+Zoph 0.8.1 is the first feature release for v0.9. This release introduces a new logging system, that should allow users and developers to control more granular which debugging messages Zoph displays. The other major change is that Zoph is now completely UTF-8 based, this should fix issues users had with international characters. This last change requires some manual changes to the MySQL database.
+
+Zoph 0.8.1 is beta release, I tested it as well as possible on my system, but especially the UTF-8 conversion is very dependent on specific situations on your system; therefore it should not be considered a "stable" version. I would, however, very much appreciate if people could test and give feedback on this release and the upgrade documentation, in this way I can make sure that the stable (v0.9) version will be as bug-free as possible.
+
+### Features ###
+* New logging/debugging system
+
+### Bugs ###
+* Bug#1985449: Zoph should be UTF-8
+* Bug#2901852: Fatal error when a photo without a photographer is displayed on the map
+* Bug#2902011: zophImport.pl cannot find people with no last name.
+* Bug#2925030: Last modified time is not displayed correctly
+* All the bugfixes from Zoph 0.8.0.1 and 0.8.0.2
+
+## Zoph 0.8.0.2 ##
+1 Nov 2009
+
+Zoph 0.8.0.2 is a bugfix release for Zoph 0.8.
+
+### Bugs ###
+* Bug#2876282: Not possible to create new pages.
+* Bug#2873171: fatal error when autocomplete is switched off.
+* Bug#2873171: Javascript error in MSIE when trying to change the parent place using the autocomplete dropdown.
+* Bug#2873171: Timezone autocomplete does not work in MSIE
+* Bug#2881212: Not possible to unset timezone.
+* Bug#2889934: No icons in admin menu when using MSIE8
+* Bug#2888263: Unintuative working of bulk edit page could lead to dataloss
+* Bug#2890387: Saved search does not remember the "include sub-albums/categories/places" checkbox and the state of the "AND/OR" dropdown.
+
+### Translations ###
+* Added a Russion translation created by Sergey Chursin and Alexandr Bondarev
+
+### Various ###
+* Changed deprecated mysql_escape_string() into new mysql_real_escape_string().
+
+## Zoph 0.7.0.8 and Zoph 0.8.0.1 ##
+23 Sept 2009
+
+Security fixes for 0.7 and 0.8.
+
+### Bugs ###
+* Fixes a security bug that caused a user to be able to execute admin-only pages.
+
+## Zoph 0.8 ##
+9 Sept 2009
+
+Final 0.8 release. Only small changes compared to 0.8pre3:
+
+### Bugs ###
+* Fixed a bug that caused users of PHP 5.1.x get an error about non-existant DateTime class.
+
+### Documentation ###
+* Added a few long-existing but overlooked and therefore not documented configuration settings
+* Added a troubleshooting section ("Solving Problems")
+
+## Zoph 0.8pre3 ##
+28 August 2009
+
+This is the third pre-release for 0.8, it fixes the bugs discovered since v0.8pre2, including the security bug. It also updates several translations.
+
+### Bugs ###
+* Bug#2841196: PHP error when logging in as non-admin user
+* zophImport.pl: Perl error due to missing quote and indentation fixes
+* Bug#2841296: Not possible to download 4.2GB ZIP files
+* Bug#2841357: Save search fails without an error in some cases
+* Bug#2841373: Saved search does not always work correctly when saving a photo collection that was not the result of a search action.
+* Fix for a cross site scripting bug (the same as the 0.7.0.7 release)
+* Bug#2845750: zophImport.pl fails when `--path` contains multiple dirs
+
+### Translations ###
+* Dutch, Danish, French, Italian, Norwegian Bokmål and Swedish chef have been updated and are fully up to date.
+
+### Documentation ###
+* Various updates
+* Removing very old changelog and upgrade instructions. They can still be read in the online (wikibooks) version.
+* Adding long existing but until now not documented options `DEFAULT_ORDER` and `DEFAULT_DIRECTION`
+* Completely rewritten requirements page
+
