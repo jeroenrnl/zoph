@@ -44,7 +44,7 @@ php_location = /var/www/html/zoph
 ```
 
 An example zoph.ini file, called zoph.ini.example is included in the cli directory.
-See the man page for zoph.ini(5) or the [Wikibooks documentation](http://en.wikibooks.org/wiki/Zoph/Configuration) for more details
+See the man page for zoph.ini(5) or the [documentation](docs/) for more details
 
 Install the templates
 ---------------------
