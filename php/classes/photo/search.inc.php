@@ -210,7 +210,12 @@ class search {
             } else if ($key == "category") {
                 $key = "category_id";
                 $val = $this->processCategory($val);
+            }
 
+            if (($key == "album_id" || $key == "category_id") && $op == "like") {
+                $op = "=";
+            } else if (($key == "album_id" || $key == "category_id") && $op == "not like") {
+                $op = "!=";
             }
 
             if ($key == "album_id") {

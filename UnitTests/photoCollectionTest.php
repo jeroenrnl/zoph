@@ -309,6 +309,30 @@ class photoCollectionTest extends TestCase {
                 ), 0, 999, 1, array(3, 4, 5, 10)),
             array(array(
                     "_text#0"           => "category",
+                    "text#0"            => "grey",
+                    "_text#0-op"       => "like",
+                ), 0, 999, 1, array(6, 7, 8, 9, 10)),
+            array(array(
+                    "_text#0"           => "album",
+                    "text#0"            => "Album 1",
+                    "_text#0-op"       => "like",
+                ), 0, 999, 1, array(1, 2, 7, 8, 9, 10)),
+            array(array(
+                    "_text#0"           => "album",
+                    "text#0"            => "Album 1",
+                    "_text#0-op"       => "not like",
+                ), 0, 999, 1, array(3, 4, 5, 6, 11, 12)),
+            array(array(
+                    "_text#0"           => "album",
+                    "text#0"            => "Album 1",
+                    "_text#0-op"       => "not like",
+                    "_text#1"           => "category",
+                    "text#1"            => "grey",
+                    "_text#1-conj"     => "and",
+                    "_text#1-op"       => "like",
+                ), 0, 999, 1, array(6)),
+            array(array(
+                    "_text#0"           => "category",
                     "text#0"            => "white/grey25",
                 ), 0, 999, 1, array(6, 7, 8, 9)),
             array(array(
