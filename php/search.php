@@ -41,11 +41,16 @@ if ($controller->getView() == "insert") {
     $title = translate("New Search");
 } else if ($search instanceof search) {
     $title = $search->get("description");
+    if (empty($title)) {
+        $title = translate("Search");
+    }
 } else {
     $title = translate("Search");
 }
 
-require_once "header.inc.php";
+if ($controller->getView() != "photos") {
+    require_once "header.inc.php";
+}
 
 if ($controller->getView() == "display") {
     $view=new search\view\display($request);
