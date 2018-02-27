@@ -148,7 +148,7 @@ class display {
             ),
             "text"     => array(
                 "label" => array("template\\template", "createPhotoTextPulldown"),
-                "op"    => array("template\\template", "createOperatorPulldown"),
+                "op"    => array("template\\template", "createTextOperatorPulldown"),
             ));
     }
 
