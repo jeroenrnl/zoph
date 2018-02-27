@@ -81,44 +81,6 @@ function create_rating_pulldown($val = "", $name = "rating") {
     return template::createPulldown($name, $val, $rating_array);
 }
 
-function create_conjunction_pulldown($var, $val = "") {
-    return template::createPulldown($var, $val,
-        array("" => "", "and" => translate("and",0), "or" => translate("or",0)));
-}
-
-function create_operator_pulldown($var, $op = "=") {
-    return template::createPulldown($var, $op,
-        array(
-            "=" => "=", "!=" => "!=",
-            ">" => ">", ">=" => ">=",
-            "<" => "<", "<=" => "<=",
-            "like" => translate("like",0), "not like" => translate("not like",0)));
-}
-
-function create_binary_operator_pulldown($var, $op = "=") {
-    return template::createPulldown($var, $op,
-        array("=" => "=", "!=" => "!="));
-}
-
-function create_present_operator_pulldown($var, $op = "=") {
-    return template::createPulldown($var, $op,
-        array("=" => translate("is in photo",0), "!=" => translate("is not in photo",0)));
-}
-
-function create_inequality_operator_pulldown($var, $op = ">") {
-    return template::createPulldown($var, $op,
-        array(">" => translate("less than"), "<" => translate("more than")));
-}
-
-function create_photo_text_pulldown($var, $name = null) {
-    return template::createPulldown($var, $name, array(
-        "" => "",
-        "album" => translate("album",0),
-        "category" => translate("category",0),
-        "person" => translate("person",0),
-        "photographer" => translate("photographer",0)));
-}
-
 /*
  * Updates a query string, replacing (or inserting) a key.
  * A list of keys to ignore can also be specified.
@@ -196,19 +158,6 @@ function format_timestamp($ts) {
     $dt=new Time($ts);
     return create_date_link($dt->format("Y-m-d"), "timestamp") . ' ' .
         $dt->format(conf::get("date.timeformat"));
-}
-
-function get_date_select_array($date, $days) {
-    $dt=new Time($date);
-
-    $date_array[""] = "";
-    $day=new DateInterval("P1D");
-    for ($i = 1; $i <= $days; $i++) {
-        $dt->sub($day);
-        $date_array[$dt->format("Y-m-d")] = $i;
-    }
-
-    return $date_array;
 }
 
 /**
