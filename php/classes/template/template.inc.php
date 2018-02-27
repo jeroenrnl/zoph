@@ -404,6 +404,21 @@ class template {
     }
 
     /**
+     * Create comparison operator pulldown, tailored for text comparison
+     * @param string name for select box
+     * @param string current value
+     */
+    public static function createTextOperatorPulldown($name, $value = "=") {
+        return static::createPulldown($name, $value,
+            array(
+                "="     => "=",
+                "!="    => "!=",
+                "like" => translate("like", 0),
+                "not like" => translate("not like", 0)
+        ));
+    }
+
+    /**
      * Create comparison operator pulldown
      * @param string name for select box
      * @param string current value
