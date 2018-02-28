@@ -95,8 +95,7 @@ class select extends item {
             "label"     => e(translate($this->getLabel(), 0)),
             "name"      => e($this->getName()),
             "value"     => e($this->getValue()),
-            "desc"      => e(translate($this->getDesc(), 0)),
-            "unmet"     => $this->displayUnmetRequirements(),
+            "desc"      => e(translate($this->getDesc(), 0)) . $this->displayUnmetRequirements() . $this->displayDeprecationWarning(),
             "hint"      => e(translate($this->getHint(), 0)),
             "enabled"   => (bool) $this->requirementsMet()
         );

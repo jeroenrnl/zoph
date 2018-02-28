@@ -19,7 +19,7 @@ Deprecated configuration
 ------------------------
 I will be removing the `ssl.force`, `url.http` and `url.https` configuration option in a future release. Currently Zoph does not yet warn for this, but it will in the next version. If your setup requires setting these functions, please comment on [issue#100](http://github.com/jeroenrnl/zoph/issues/100)
 
-![screenshot of the deprecated options](docs/zoph-ssl-config.png)
+![screenshot of the deprecated options](img/zoph-ssl-config.png)
 
 Zoph 0.9.5 to 0.9.6
 ===================

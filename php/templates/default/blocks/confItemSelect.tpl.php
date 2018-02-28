@@ -44,7 +44,6 @@ if (!ZOPH) { die("Illegal call"); }
     <?php if (!empty($tpl_desc)): ?>
         <div class="desc">
             <?= $tpl_desc ?>
-            <?= $tpl_unmet ?>
         </div>
     <?php endif; ?>
 

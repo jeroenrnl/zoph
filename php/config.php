@@ -40,7 +40,6 @@ $_action=getvar("_action");
 if ($_action == "setconfig") {
     conf::loadFromRequestVars($request_vars);
 }
-conf::loadFromDB();
 
 $tpl=new template("config", array(
     "title" => $title,

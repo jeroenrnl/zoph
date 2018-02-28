@@ -1,6 +1,6 @@
 <?php
 /**
- * Template for displaying a message to the user
+ * Template for a list of unmet requirements
  *
  * Zoph is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,21 +15,16 @@
  * along with Zoph; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package ZophTemplates
  * @author Jeroen Roos
+ * @package ZophTemplates
  */
-
-use template\template;
 
 if (!ZOPH) {
     die("Illegal call");
 }
 ?>
-
-<div class="message <?= $tpl_class ?>">
-    <img class='icon' src='<?php echo template::getImage("icons/" . $tpl_class . ".png") ?>'>
-    <div class="messageText"><?= $tpl_text ?></div>
-    <br>
-</div>
-
+<span class="confDeprecated">
+<br>
+<?= translate("This configuration item is deprecated and will be removed in the next version. If you still require it, please file a bug.") ?>
+</span>
 
