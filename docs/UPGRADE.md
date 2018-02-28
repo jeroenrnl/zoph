@@ -1,7 +1,7 @@
 # UPGRADE INSTRUCTIONS #
 ## Zoph 0.9.6 or 0.9.7 to 0.9.8 ##
 
-* *If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.8. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.*
+* *If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.6. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.*
 
 ### Copy files ###
 Copy the contents of the `php` directory, including all subdirs, into your webroot. 
@@ -25,11 +25,11 @@ I will be removing the `ssl.force`, `url.http` and `url.https` configuration opt
 * *If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.5. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.*
 
 ### Copy files ###
-Copy the contents of the php directory, including all subdirs, into your webroot.
+Copy the contents of the `php` directory, including all subdirs, into your webroot.
 ```
     cp -a php/* /var/www/html/zoph
 ```
-If you use the CLI client, you should copy it to a path that's in your $PATH
+If you use the CLI client, you should copy it to a path that's in your `$PATH`
 ```
     cp cli/zoph /usr/bin
 ```
@@ -48,11 +48,11 @@ Changes this script makes:
 * *If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.4. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.*
 
 ### Copy files ###
-Copy the contents of the php directory, including all subdirs, into your webroot.
+Copy the contents of the `php` directory, including all subdirs, into your webroot.
 ```
     cp -a php/* /var/www/html/zoph
 ```
-If you use the CLI client, you should copy it to a path that's in your $PATH
+If you use the CLI client, you should copy it to a path that's in your `$PATH`
 ```
     cp cli/zoph /usr/bin
 ```
@@ -63,7 +63,7 @@ There are no database changes for 0.9.5
 * *If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.3. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.*
 
 ### Copy files ###
-Copy the contents of the php directory, including all subdirs, into your webroot.
+Copy the contents of the `php` directory, including all subdirs, into your webroot.
 ```
     cp -a php/* /var/www/html/zoph
 ```
@@ -94,15 +94,15 @@ Copy the contents of the php directory, including all subdirs, into your webroot
 ```
 Changes this script makes:
 
-* Resize the password field to allow store bigger hashes
-* Add fields to the user table to allow for new access rights
-* Add 'created by' fields to the albums, categories, places, people and circles tables
+* Resize the `password` field to allow store bigger hashes
+* Add fields to the `user` table to allow for new access rights
+* Add `created_by` fields to the albums, categories, places, people and circles tables
 
 ## Zoph 0.9.1 to 0.9.2 ##
 * *If you want to upgrade from an older version, first follow the instructions to upgrade to 0.9.1. It is not necessary to install older versions first, you can just install the current version and follow the upgrade instructions below.*
 
 ### Copy files ###
-Copy the contents of the php directory, including all subdirs, into your webroot. 
+Copy the contents of the `php` directory, including all subdirs, into your webroot. 
 ```
      cp -a php/* /var/www/html/zoph
 ```
