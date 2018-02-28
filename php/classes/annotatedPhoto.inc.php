@@ -180,8 +180,7 @@ class annotatedPhoto extends photo {
      * @param array vars to import into $this->vars;
      */
     public function setVars(array $vars) {
-        reset($vars);
-        while (list($key, $val) = each($vars)) {
+        foreach ($vars as $key => $val) {
 
             // ignore empty keys or values
             if (empty($key) || $val == "") { continue; }

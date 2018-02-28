@@ -367,7 +367,7 @@ class MailMime {
      */
     public function get($build_params = null) {
         if (isset($build_params)) {
-            while (list($key, $value) = each($build_params)) {
+            foreach ($build_params as $key => $value) {
                 $this->build_params[$key] = $value;
             }
         }
