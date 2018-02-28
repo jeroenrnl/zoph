@@ -1,4 +1,4 @@
-# Zoph 0.9.7 Readme #
+# Zoph 0.9.8 Readme #
 http://www.zoph.org
 
 ## Introduction ##

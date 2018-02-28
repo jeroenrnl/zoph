@@ -1,4 +1,25 @@
 # Zoph Changelog #
+## Zoph 0.9.8 ##
+### 02 march 2018 ###
+
+I have moved all Zoph's documentation to Github. About 12 years ago, Zoph's documentation was hand-crafted HTML that was an ordeal to keep updated. I moved it to Wikibooks so I could update the docs through their webinterface. Nowadays, Github offers 'markdown' which is a text format that is both readable in plain text and can be rendered to a more pleasing look on the website. I was already keeping some documentation in this format and it caused a lot of extra work, because I was essentially maintaining two sets of documentation. So, as of this release, all documentation is back in one place: [Zoph's repository on Github](http://github.com/jeroenrnl/zoph/)
+
+Furthermore, quite a few bugfixes have been been made. Most of them related to the rewrite of the search page in the previous version.
+
+#### Bugs ####
+* [issue#102](https://github.com/jeroenrnl/zoph/issues/102): Error instead of thumbnail for empty circles
+* [issue#103](https://github.com/jeroenrnl/zoph/issues/103): each() is deprecated as of PHP 7.2
+* [issue#104](https://github.com/jeroenrnl/zoph/issues/104): Search results for text-based 'LIKE' searches are reversed
+* [issue#105](https://github.com/jeroenrnl/zoph/issues/105), [issue#106](https://github.com/jeroenrnl/zoph/issues/106), [issue#108](https://github.com/jeroenrnl/zoph/issues/108): Several issues with the search results page
+* [issue#107](https://github.com/jeroenrnl/zoph/issues/107): ">", ">=", "<" and "<=" are pointless for text searches
+
+#### Refactor ####
+* Removed unused functions in util.inc.php
+* Removing ancient scripts that are either redundant or no longer working
+* [issue#100](https://github.com/jeroenrnl/zoph/issues/100): Deprecate ssl.force, url.http and url.https
+As of **Zoph 0.9.9** these settings will be removed. Zoph warns you if you are using them as of **Zoph 0.9.8**. If you feel your Zoph installation can not do without these settings, please comment in this issue.
+
+
 ## Zoph 0.9.7 ##
 ### 19 jan 2018 ###
 I have had a very busy year and little time to spend on Zoph, but last december, I finally found time to finish what I had originally planned for 0.9.6: a complete rewrite of the search screen and the search engine. Most of the code in that part of Zoph was over 10 years old and had become quite messy over the years. The search engine is really the core of Zoph: if you open an album in Zoph, under the hood, Zoph really executes a search for all the photos in that album. This makes this code really important and I've made sure to cover all this by automated tests (UnitTests) before making any changes.
