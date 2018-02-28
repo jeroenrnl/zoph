@@ -17,7 +17,7 @@ If you use the CLI client, you should copy it to a path that's in your `$PATH`
 * There are no database changes in v0.9.7 and v0.9.8
 
 ### Deprecated configuration ###
-I will be removing the `ssl.force`, `url.http` and `url.https` configuration option in v0.9.9 release. As of v0.9.8, Zoph will show a warning. If your setup requires setting these functions, please comment on [issue#100](http://github.com/jeroenrnl/zoph/issues/100)
+I will be removing the `ssl.force`, `url.http` and `url.https` configuration option in v0.9.9. As of v0.9.8, Zoph will show a warning. If your setup requires setting these functions, please comment on [issue#100](http://github.com/jeroenrnl/zoph/issues/100)
 
 ![screenshot of the deprecated options](img/zoph-ssl-config.png)
 
