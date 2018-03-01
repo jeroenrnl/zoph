@@ -349,7 +349,7 @@ ul.autocompdropdown {
     border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     max-height: 15em;
     overflow: auto;
-    z-index: 5;
+    z-index: 500;
 }
 
 ul.autocompdropdown ul {
