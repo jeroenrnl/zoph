@@ -84,7 +84,7 @@ class conf {
                 try {
                     $item->setValue($value);
                     if ($item->isDeprecated() && $value != $item->getDefault()) {
-                        self::$warnings[]="Deprecated configuration item <b>" . $key . "</b> is used!";
+                        static::$warnings[]="Deprecated configuration item <b>" . $key . "</b> is used!";
                     }
                 } catch (\ConfigurationException $e) {
                     /* An illegal value is automatically set to the default */
@@ -217,6 +217,6 @@ class conf {
      * Return warnings generated while loading configuration
      */
     public static function getWarnings() {
-        return self::$warnings;
+        return static::$warnings;
     }
 }
