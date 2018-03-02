@@ -1167,9 +1167,9 @@ class photo extends zophTable {
      */
     public function exifToHTML() {
         if (exif_imagetype($this->getFilePath())==IMAGETYPE_JPEG) {
-            $exif=read_exif_data($this->getFilePath());
+            $exif=exif_read_data($this->getFilePath());
             if ($exif) {
-                $return="<dl class='allexif'>\n";
+                $return="<dl id='allexif'>\n";
 
                 foreach ($exif as $key => $value) {
                     if (!is_array($value)) {

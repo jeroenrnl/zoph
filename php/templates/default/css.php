@@ -1359,12 +1359,12 @@ dl.display > dt {
     text-align: right;
 }
 
-dl.allexif {
+dl#allexif {
     display: none;
     width: 100%;
 }
 
-dl.allexif dl {
+dl#allexif dl {
     width: 100%
 }
 
