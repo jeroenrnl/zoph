@@ -13,13 +13,14 @@ Furthermore, quite a few bugfixes have been been made. Most of them related to t
 * [issue#105](https://github.com/jeroenrnl/zoph/issues/105), [issue#106](https://github.com/jeroenrnl/zoph/issues/106), [issue#108](https://github.com/jeroenrnl/zoph/issues/108): Several issues with the search results page
 * [issue#107](https://github.com/jeroenrnl/zoph/issues/107): ">", ">=", "<" and "<=" are pointless for text searches
 * [issue#109](https://github.com/jeroenrnl/zoph/issues/109): Autocomplete dropdown sometimes hidden behind map
+* [issue#110](https://github.com/jeroenrnl/zoph/issues/110): 'show all EXIF' button doesn't work
 
 #### Refactor ####
 * Removed unused functions in util.inc.php
 * Removing ancient scripts that are either redundant or no longer working
 * [issue#100](https://github.com/jeroenrnl/zoph/issues/100): Deprecate ssl.force, url.http and url.https
 As of **Zoph 0.9.9** these settings will be removed. Zoph warns you if you are using them as of **Zoph 0.9.8**. If you feel your Zoph installation can not do without these settings, please comment in this issue.
-
+* [issue#110](https://github.com/jeroenrnl/zoph/issues/110): Changed deprecated `read_exif_data()` to `exif_read_data()`
 
 ## Zoph 0.9.7 ##
 ### 19 jan 2018 ###
