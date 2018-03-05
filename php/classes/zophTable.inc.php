@@ -52,6 +52,10 @@ abstract class zophTable {
     protected static $tableName;
     /** @var array List of primary keys */
     protected static $primaryKeys=array();
+    /** @var array Fields that are integers */
+    protected static $isInteger=array();
+    /** @var array Fields that are floats */
+    protected static $isFloat=array();
     /** @var array Fields that may not be empty */
     protected static $notNull=array();
     /** @var bool keep keys with insert. In most cases the keys are set
@@ -122,9 +126,7 @@ abstract class zophTable {
      * @param bool Whether or not to process empty fields
       */
     public function setFields(array $vars, $prefix = null, $suffix = null, $null=true) {
-
-        reset($vars);
-        while (list($key, $val) = each($vars)) {
+        foreach ($vars as $key => $val) {
             log::msg("<b>" . $key . "</b> = " . implode(",", (array) $val), log::DEBUG, log::VARS);
 
             // ignore empty keys or values unless the field must be set.
@@ -236,18 +238,12 @@ abstract class zophTable {
             if (!static::$keepKeys && $this->isKey($name)) {
                 continue;
             }
-
             if ($value === "now()") {
-                /* Lastnotify is normaly set to "now()" and should not be escaped */
+                /* Lastnotify is normally set to "now()" and should not be escaped */
                 $qry->addSet($name, "now()");
-            } else if ($value =="" && in_array($name, static::$notNull)) {
-                die("<p class='error'><b>$name</b> may not be empty</p>");
-            } else if ($value !== "") {
-                $qry->addParam(new param(":" . $name, $value, PDO::PARAM_STR));
             } else {
-                $qry->addParam(new param(":" . $name, null, PDO::PARAM_STR));
+                $qry=$this->processValues($name, $value, $qry);
             }
-
         }
 
         $id=$qry->execute();
@@ -340,17 +336,13 @@ abstract class zophTable {
             }
 
             if ($value === "now()") {
-                /* Lastnotify is normaly set to "now()" and should not be escaped */
+                /* Lastnotify is normally set to "now()" and should not be escaped */
                 $qry->addSetFunction($name . "=now()");
-            } else if ($value =="" && in_array($name, static::$notNull)) {
-                die("<p class='error'><b>$name</b> may not be empty</p>");
-            } else if ($value !== "" && !is_null($value)) {
-                $qry->addSet($name, $name);
-                $qry->addParam(new param(":" . $name, $value, PDO::PARAM_STR));
             } else {
+                $qry=$this->processValues($name, $value, $qry);
                 $qry->addSet($name, $name);
-                $qry->addParam(new param(":" . $name, null, PDO::PARAM_STR));
             }
+
 
         }
 
@@ -367,6 +359,29 @@ abstract class zophTable {
         }
     }
 
+    protected function processValues($name, $value, $qry) {
+        if ((is_null($value) || $value==="") && in_array($name, static::$notNull)) {
+            throw new NotNullValueIsNullDataException(e($name) . "may not be empty");
+        } else {
+            if (in_array($name, static::$isFloat) && empty($value)) {
+                $value = null;
+            }
+            if (in_array($name, static::$isInteger)) {
+                if (is_null($value) || $value==="") {
+                    $qry->addParam(new param(":" . $name, null, PDO::PARAM_NULL));
+                } else {
+                    $qry->addParam(new param(":" . $name, (int) $value, PDO::PARAM_INT));
+                }
+            } else {
+                if (is_null($value)) {
+                    $qry->addParam(new param(":" . $name, null, PDO::PARAM_NULL));
+                } else {
+                    $qry->addParam(new param(":" . $name, $value, PDO::PARAM_STR));
+                }
+            }
+        }
+        return $qry;
+    }
     /**
      * Creates an alphabetized array of field names and values.
      * @return array Array for displaying object

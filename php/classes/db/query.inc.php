@@ -288,7 +288,7 @@ abstract class query {
      */
     public function addWhereFromConstraints(array $constraints, $conj = "AND", $ops = null) {
         $where=null;
-        while (list($name, $value) = each($constraints)) {
+        foreach ($constraints as $name => $value) {
             $op = "=";
             if ($ops && !empty($ops["$name"])) {
                 $op = $ops["$name"];
@@ -345,6 +345,7 @@ abstract class query {
     /**
      * Format a query, including all parameters, for debugging purposes
      * @codeCoverageIgnore
+     * @param bool Output with HTML
      */
     public function prettyPrint($withHTML=false) {
         $sql=(string) $this;

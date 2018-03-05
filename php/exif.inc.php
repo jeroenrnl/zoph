@@ -31,7 +31,7 @@ function process_exif($image) {
     $mime=$file->getMime();
 
     if ($mime == "image/jpeg") {
-        $exif = read_exif_data($image);
+        $exif = exif_read_data($image);
     } else {
         $exif = false;
     }

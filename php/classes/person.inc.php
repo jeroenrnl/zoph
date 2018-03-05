@@ -31,7 +31,10 @@ use db\delete;
 use db\db;
 use db\clause;
 use db\selectHelper;
+
 use conf\conf;
+
+use photo\collection;
 
 
 /**
@@ -60,6 +63,8 @@ class person extends zophTable implements Organizer {
     /** @var bool keep keys with insert. In most cases the keys are set
                   by the db with auto_increment */
     protected static $keepKeys = false;
+    /** @var array Array of values that must be integer */
+    protected static $isInteger=array("person_id", "home_id", "work_id", "father_id", "mother_id", "spouse_id", "createdby");
     /** @var string URL for this class */
     protected static $url="person.php?person_id=";
 
@@ -76,7 +81,28 @@ class person extends zophTable implements Organizer {
      */
     public function insert() {
         $this->set("createdby", (int) user::getCurrent()->getId());
+        $this->setDatesNull();
         return parent::insert();
+    }
+
+    /**
+     * Update an existing record in the database
+     */
+    public function update() {
+        $this->setDatesNull();
+        return parent::update();
+    }
+
+    /**
+     * Set dates to NULL if they're set to an empty string
+     */
+    private function setDatesNull() {
+        if ($this->get("dob")==="") {
+            $this->set("dob", null);
+        }
+        if ($this->get("dod")==="") {
+            $this->set("dod", null);
+        }
     }
 
     /**
@@ -342,13 +368,9 @@ class person extends zophTable implements Organizer {
      * @return int count
      */
     public function getPhotoCount() {
-        $user=user::getCurrent();
-
-        $ignore=null;
-        $vars=array(
+        return sizeof(collection::createFromVars(array(
             "person_id" => $this->getId()
-        );
-        return get_photos($vars, 0, 1, $ignore, $user);
+        )));
     }
 
     /**
@@ -524,16 +546,17 @@ class person extends zophTable implements Organizer {
      * Lookup person by name;
      * @param string name
      */
-    public static function getByName($name) {
+    public static function getByName($name, $like=false) {
         if (empty($name)) {
             return false;
         }
         $qry=new select(array("ppl" => "people"));
         $qry->addFields(array("person_id"));
-        $where=new clause("CONCAT_WS(\" \", lower(first_name), lower(last_name))=lower(:name)");
-        $qry->addParam(new param(":name", $name, PDO::PARAM_STR));
+        $where=new clause("CONCAT_WS(\" \", lower(first_name), lower(last_name))" . (
+            $like ? " LIKE :name" : "=lower(:name)")
+        );
+        $qry->addParam(new param(":name", $like ? "%" . $name . "%" : $name, PDO::PARAM_STR));
         $qry->where($where);
-
         return static::getRecordsFromQuery($qry);
     }
 

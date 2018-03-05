@@ -28,7 +28,7 @@ if (!ZOPH) {
 
 <div class="message <?= $tpl_class ?>">
     <img class='icon' src='<?php echo template::getImage("icons/" . $tpl_class . ".png") ?>'>
-    <?= $tpl_text ?>
+    <div class="messageText"><?= $tpl_text ?></div>
     <br>
 </div>
 

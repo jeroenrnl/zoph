@@ -167,6 +167,7 @@ class album extends zophTreeTable implements Organizer {
         $users = user::getRecords("user_id", array("lightbox_id" => $this->get("album_id")));
         if ($users) {
             foreach ($users as $user) {
+                $user->lookup();
                 $user->setFields(array("lightbox_id" => null));
                 $user->update();
             }
@@ -467,6 +468,7 @@ class album extends zophTreeTable implements Organizer {
     /**
      * Lookup album by name
      * @param string name
+     * @param bool do a "LIKE" comparison instead of "equals"
      * @todo This function is almost equal to category::getByName(), should be merged
      */
     public static function getByName($name, $like=false) {
@@ -524,6 +526,7 @@ class album extends zophTreeTable implements Organizer {
 
         $qry=new select(array("a" => "albums"));
         $qry->addFields(array("album_id"), true);
+        $qry->addFields(array("album"));
         $qry->addOrder("album");
 
         if (!$user->canSeeAllPhotos()) {
@@ -532,7 +535,6 @@ class album extends zophTreeTable implements Organizer {
             $qry->where(new clause("gu.user_id=:userid"));
             $qry->addParam(new param(":userid", $user->getId(), PDO::PARAM_INT));
         }
-
 
         return static::getRecordsFromQuery($qry);
     }

@@ -24,25 +24,26 @@
 
 use conf\conf;
 
+use photo\collection;
+use template\block;
+
 require_once "include.inc.php";
 $title = translate("Home");
 require_once "header.inc.php";
 
 // get one random photo
-$vars["_random"] = 1;
-$vars["rating"] = $user->prefs->get("random_photo_min_rating");
-$vars["_rating-op"] = ">=";
 
 $thumnails;
-$num_photos = get_photos($vars, 0, 1, $thumbnails, $user);
-?>
+$photoCollection=collection::createFromVars(array(
+    "_random"       => 1,
+    "rating"        => user::getCurrent()->prefs->get("random_photo_min_rating"),
+    "_rating-op"    => ">="
+));
 
-<h1><?php echo conf::get("interface.title"); ?></h1>
-<div class="main">
-    <div class="thumbnail" id="random">
-<?php
-if (sizeof($thumbnails) == 1) {
-    echo $thumbnails[0]->getThumbnailLink();
+if (sizeof($photoCollection) >= 1) {
+    $random=$photoCollection->shift()->getThumbnailLink();
+} else {
+    $random="";
 }
 
 $album = album::getRoot();
@@ -51,9 +52,15 @@ $album_photoCount = $album->getTotalPhotoCount();
 $category = category::getRoot();
 $category_count = category::getCountForUser();
 $category_photoCount = $category->getTotalPhotoCount();
-echo "\n";
+
 ?>
+
+<h1><?php echo conf::get("interface.title"); ?></h1>
+<div class="main">
+    <div class="thumbnail" id="random">
+        <?= $random ?>
     </div>
+
     <div class="intro" id="first">
       <?php echo sprintf(translate("Welcome %s. %s currently contains"),
           $user->person->getLink(),
@@ -128,7 +135,16 @@ if ($user->get("user_id") != conf::get("interface.user.default")) {
 }
 // Remove the rather ugly trailing space on the links
 echo str_replace(" </a", "</a", $welcomeText);
+$warnings = conf::getWarnings();
+if ($warnings) {
+    $warning=new block("message", array(
+        "class" => "warning",
+        "text"  => "<h1>" . translate("Configuration Warnings:") . "</h1>" . implode($warnings, "<br>")
+    ));
+    echo $warning . "<br>";
+}
 ?>
+
     <p class="version">
         Zoph <?php echo VERSION . "\n" ?>
     </p>

@@ -22,7 +22,7 @@ use template\template;
 function create_field_html($fields) {
 
     $html = "";
-    while (list($key, $val) = each($fields)) {
+    foreach ($fields as $key => $val) {
         if ($val) {
             $html .=
             "<dt>" . e($key) . "</dt>\n" .
@@ -34,7 +34,7 @@ function create_field_html($fields) {
 
 function create_edit_fields($fields) {
     $html = "";
-    while (list($key, $field) = each($fields)) {
+    foreach ($fields as $key => $val) {
         $html.=
             "<label for=\"$key\">$field[0]</label>\n" . $field[1] ."<br>";
     }
@@ -81,44 +81,6 @@ function create_rating_pulldown($val = "", $name = "rating") {
     return template::createPulldown($name, $val, $rating_array);
 }
 
-function create_conjunction_pulldown($var, $val = "") {
-    return template::createPulldown($var, $val,
-        array("" => "", "and" => translate("and",0), "or" => translate("or",0)));
-}
-
-function create_operator_pulldown($var, $op = "=") {
-    return template::createPulldown($var, $op,
-        array(
-            "=" => "=", "!=" => "!=",
-            ">" => ">", ">=" => ">=",
-            "<" => "<", "<=" => "<=",
-            "like" => translate("like",0), "not like" => translate("not like",0)));
-}
-
-function create_binary_operator_pulldown($var, $op = "=") {
-    return template::createPulldown($var, $op,
-        array("=" => "=", "!=" => "!="));
-}
-
-function create_present_operator_pulldown($var, $op = "=") {
-    return template::createPulldown($var, $op,
-        array("=" => translate("is in photo",0), "!=" => translate("is not in photo",0)));
-}
-
-function create_inequality_operator_pulldown($var, $op = ">") {
-    return template::createPulldown($var, $op,
-        array(">" => translate("less than"), "<" => translate("more than")));
-}
-
-function create_photo_text_pulldown($var, $name = null) {
-    return template::createPulldown($var, $name, array(
-        "" => "",
-        "album" => translate("album",0),
-        "category" => translate("category",0),
-        "person" => translate("person",0),
-        "photographer" => translate("photographer",0)));
-}
-
 /*
  * Updates a query string, replacing (or inserting) a key.
  * A list of keys to ignore can also be specified.
@@ -130,7 +92,7 @@ function update_query_string($vars, $new_key, $new_val, $ignore = null) {
     $ignore[] = "_crumb";
     $qstr="";
     if ($vars) {
-        while (list($key, $val) = each($vars)) {
+        foreach ($vars as $key => $val) {
             if (in_array($key, $ignore)) { continue; }
             if ($key == $new_key) { continue; }
 
@@ -161,7 +123,7 @@ function create_form($vars, $ignore = array()) {
     $ignore[] = "_crumb";
 
     $form = "";
-    while (list($key, $val) = each($vars)) {
+    foreach ($vars as $key => $val) {
         if (in_array($key, $ignore)) { continue; }
         $form .= "<input type=\"hidden\" name=\"$key\" value=\"" . e($val) . "\">\n";
     }
@@ -196,19 +158,6 @@ function format_timestamp($ts) {
     $dt=new Time($ts);
     return create_date_link($dt->format("Y-m-d"), "timestamp") . ' ' .
         $dt->format(conf::get("date.timeformat"));
-}
-
-function get_date_select_array($date, $days) {
-    $dt=new Time($date);
-
-    $date_array[""] = "";
-    $day=new DateInterval("P1D");
-    for ($i = 1; $i <= $days; $i++) {
-        $dt->sub($day);
-        $date_array[$dt->format("Y-m-d")] = $i;
-    }
-
-    return $date_array;
 }
 
 /**
@@ -272,7 +221,7 @@ function rawurlencode_array($var, $varName, $separator = '&') {
 function create_actionlinks($actionlinks) {
     if (is_array($actionlinks)) {
         $html="<ul class=\"actionlink\">\n";
-        while (list($key, $val) = each($actionlinks)) {
+        foreach ($actionlinks as $key => $val) {
             $html .= "<li><a href=\"" . $val . "\">" . translate($key, 0) . "</a></li>";
         }
         $html.="</ul>\n";
@@ -288,6 +237,7 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
         if ($zip->open($tempfile, ZIPARCHIVE::CREATE)!==TRUE) {
             die("cannot open $tempfile\n");
         }
+        $zipsize=0;
         foreach ($photos as $key => $photo) {
             if ($data=@file_get_contents($photo->getFilePath())) {
                 $size=strlen($data);

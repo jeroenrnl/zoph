@@ -1,6 +1,6 @@
 <?php
 /**
- * Unittests for the global get_photos() function
+ * This tests the photo collection class
  *
  * This file is part of Zoph.
  *
@@ -21,59 +21,189 @@
  * @author Jeroen Roos
  */
 
-use PHPUnit\Framework\TestCase;
-
 require_once "testSetup.php";
 
+use PHPUnit\Framework\TestCase;
+use photo\collection;
+use web\request;
+
 /**
- * Test the global get_photos() function
- * This function could be considered the core of Zoph
- * it is currently a mess but it really can't be replaced until it is properly covered by UnitTests
- * because if this breaks, most of Zoph will break
+ * Test the photo collection class
  *
  * @package ZophUnitTest
  * @author Jeroen Roos
  */
-class getPhotoTest extends TestCase {
+class photoCollectionTest extends TestCase {
+    public function testCreate() {
+        $collection = new collection();
+
+        $this->assertInstanceOf("photo\collection", $collection);
+    }
+
+    public function testCreateFromArray() {
+        $photos=[ 1 => new photo(1), 2 => new photo(2), 3=> new photo(3) ];
+        $collection=collection::createFromArray($photos);
+
+        $this->assertCount(3, $collection);
+        $this->assertInstanceOf("photo\collection", $collection);
+    }
 
     /**
-     * Test setting of location
+     * Test removeNoValidTZ() function
+     * @dataProvider getCollection()
+     */
+    public function testRemoveNoValidTZ($collection) {
+        $collection->removeNoValidTZ();
+
+        $this->assertCount(5, $collection);
+        $this->dropCollection($collection);
+    }
+
+    /**
+     * Test removeWithLatLon() function
+     * @dataProvider getCollection()
+     */
+    public function testRemoveWithLatLon($collection) {
+        $collection->removeWithLatLon();
+
+        $this->assertCount(3, $collection);
+        $this->dropCollection($collection);
+    }
+
+    /**
+     * Test getSubsetForGeotagging() function
+     * @dataProvider getCollection()
+     */
+    public function testGetSubsetForGeotagging($collection) {
+
+        $subset=$collection->getSubsetForGeoTagging(array("first"), 2);
+
+        $this->assertCount(2, $subset);
+        $this->assertArrayHasKey($collection[0]->getId(), $subset);
+        $this->assertArrayHasKey($collection[1]->getId(), $subset);
+
+        $subset=$collection->getSubsetForGeoTagging(array("last"), 2);
+
+        $this->assertCount(2, $subset);
+
+        $tmpColl=clone $collection;
+        $last1=$tmpColl->pop()->getId();
+        $last2=$tmpColl->pop()->getId();
+        $this->assertArrayHasKey($last1, $subset);
+        $this->assertArrayHasKey($last2, $subset);
+
+
+        // check overlap
+        $subset=$collection->getSubsetForGeoTagging(array("first", "last"), 6);
+        $this->assertCount(8, $subset);
+
+        $subset=$collection->getSubsetForGeoTagging(array("random"), 2);
+
+        $this->assertCount(2, $subset);
+
+        $this->dropCollection($collection);
+
+    }
+
+    public function getCollection() {
+        $collection=new collection();
+
+        $photos=array(
+            array("photo1.jpg", "Europe/Amsterdam", 51.22, 4.55),
+            array("photo2.jpg", "Jupiter/Europa", null, null),
+            array("photo3.jpg", null, null, null),
+            array("photo4.jpg", "Europe/London", 45, 0),
+            array("photo5.jpg", null, 23, 58.5),
+            array("photo6.jpg", "Europe/Amsterdam", 51.22, 4.55),
+            array("photo7.jpg", "Europe/Amsterdam", null, null),
+            array("photo8.jpg", "Europe/Amsterdam", 51.14, 5.5)
+        );
+        foreach ($photos as $photoData) {
+            $place=new place();
+            $place->set("parent_place_id", 0);
+            $place->set("title", "TEST for " . $photoData[1]);
+            $place->set("timezone", $photoData[1]);
+            $place->insert();
+
+            $photo=new photo();
+            $photo->set("name", $photoData[0]);
+            $photo->set("location_id", $place->getId());
+            $photo->set("lat", $photoData[2]);
+            $photo->set("lon", $photoData[3]);
+            $photo->insert();
+            $photo->lookup();
+            $collection[]=$photo;
+        }
+        return array(array($collection));
+    }
+
+    public function dropCollection(collection $collection) {
+        foreach ($collection as $photo) {
+            $photo->location->delete();
+            $photo->delete();
+        }
+    }
+
+    /**
+     * test createFromVars() function
      * @dataProvider getPhotos
      */
-    public function testGetPhotos($vars, $offset, $rows, $userId, $expPhotoIds) {
-        $photos=array();
+    public function testCreateFromVars($vars, $offset, $rows, $userId, $expPhotoIds) {
+        user::setCurrent(new user($userId));
         $actPhotoIds=array();
 
-        $actCount=get_photos($vars, $offset, $rows, $photos, new user($userId));
+        $photos=collection::createFromVars($vars);
+
+        $photos=$photos->subset($offset, $rows);
 
         foreach ($photos as $photo) {
             $actPhotoIds[]=$photo->getId();
         }
-        // This test is only done when there is no limit, because the counter
-        // always gives the full set
-        if ($offset==0 && $rows==999) {
-            $this->assertEquals(sizeOf($expPhotoIds), $actCount);
-        } else {
-            $this->assertEquals(12, $actCount);
+        $this->assertEquals($expPhotoIds, $actPhotoIds);
+
+        user::setCurrent(new user(1));
+    }
+
+    /**
+     * test createFromRequest() function
+     * @dataProvider getPhotos
+     */
+    public function testCreateFromRequest($vars, $offset, $rows, $userId, $expPhotoIds) {
+        user::setCurrent(new user($userId));
+        $actPhotoIds=array();
+
+        $request = new request(array("GET" => $vars));
+
+        $photos=collection::createFromRequest($request);
+
+        $photos=$photos->subset($offset, $rows);
+
+        foreach ($photos as $photo) {
+            $actPhotoIds[]=$photo->getId();
         }
         $this->assertEquals($expPhotoIds, $actPhotoIds);
+
+        user::setCurrent(new user(1));
     }
 
     public function testGetRandomPhoto() {
-        $photos=array();
         $actPhotoIds=array();
 
-        $actCount=get_photos(array(
+        $vars=array(
                 "_random"           => 1,
                 "album_id#0"        => 4,
                 "rating#0"          => 9,
                 "_rating#0-conj"    => "or",
                 "_rating#0-op"      => ">"
-            ), 0 , 999, $photos, new user(1));
+        );
 
-        $this->assertEquals(1, $actCount);
+        $request = new request(array("GET" => $vars));
+
+        $photos=collection::createFromRequest($request);
+
         $this->assertCount(1, $photos);
-        $this->assertTrue(in_array($photos[0]->getId(), array(2, 5, 9, 10)), true);
+        $photo=$photos->pop();
+        $this->assertTrue(in_array($photo->getId(), array(2, 5, 9, 10)), true);
 
     }
     //================== DATA PROVIDERS =======================
@@ -177,6 +307,30 @@ class getPhotoTest extends TestCase {
                     "_text#0"           => "category",
                     "text#0"            => "Blue",
                 ), 0, 999, 1, array(3, 4, 5, 10)),
+            array(array(
+                    "_text#0"           => "category",
+                    "text#0"            => "grey",
+                    "_text#0-op"       => "like",
+                ), 0, 999, 1, array(6, 7, 8, 9, 10)),
+            array(array(
+                    "_text#0"           => "album",
+                    "text#0"            => "Album 1",
+                    "_text#0-op"       => "like",
+                ), 0, 999, 1, array(1, 2, 7, 8, 9, 10)),
+            array(array(
+                    "_text#0"           => "album",
+                    "text#0"            => "Album 1",
+                    "_text#0-op"       => "not like",
+                ), 0, 999, 1, array(3, 4, 5, 6, 11, 12)),
+            array(array(
+                    "_text#0"           => "album",
+                    "text#0"            => "Album 1",
+                    "_text#0-op"       => "not like",
+                    "_text#1"           => "category",
+                    "text#1"            => "grey",
+                    "_text#1-conj"     => "and",
+                    "_text#1-op"       => "like",
+                ), 0, 999, 1, array(6)),
             array(array(
                     "_text#0"           => "category",
                     "text#0"            => "white/grey25",

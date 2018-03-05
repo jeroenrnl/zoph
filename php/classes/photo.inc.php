@@ -38,6 +38,8 @@ use geo\marker;
 use template\block;
 use template\template;
 
+use photo\collection;
+
 /**
  * A class corresponding to the photos table.
  *
@@ -51,7 +53,12 @@ class photo extends zophTable {
     /** @var array List of primary keys */
     protected static $primaryKeys=array("photo_id");
     /** @var array Fields that may not be empty */
-    protected static $notNull=array();
+    protected static $notNull=array("time_corr");
+    /** @var array Fields that are integers */
+    protected static $isInteger=array(
+        "photo_id", "width", "height", "size", "photographer_id", "location_id", "time_corr", "level", "mapzoom");
+    /** @var array Fields that are floats */
+    protected static $isFloat=array("lat", "lon");
     /** @var bool keep keys with insert. In most cases the keys are set by the
              db with auto_increment */
     protected static $keepKeys = false;
@@ -211,6 +218,20 @@ class photo extends zophTable {
             "photo_ratings",
             "photo_comments")
         );
+    }
+
+    public function update() {
+        if (empty($this->get("time_corr"))) {
+            $this->set("time_corr", 0);
+        }
+        return parent::update();
+    }
+
+    public function insert() {
+        if (empty($this->get("time_corr"))) {
+            $this->set("time_corr", 0);
+        }
+        return parent::insert();
     }
 
     /**
@@ -395,7 +416,7 @@ class photo extends zophTable {
         $qry->join(array("pp" => "photo_people"), "pp.person_id = p.person_id");
         $distinct=true;
         $qry->addFields(array("person_id"), $distinct);
-        $qry->addFields(array("last_name", "first_name", "called"));
+        $qry->addFields(array("last_name", "first_name", "called", "pp.position"));
 
         $where=new clause("pp.photo_id=:photoid");
 
@@ -825,7 +846,7 @@ class photo extends zophTable {
         }
 
         // make a system call to convert or jpegtran to do the rotation.
-        while (list($file, $tmp_file) = each($images)) {
+        foreach ($images as $file => $tmp_file) {
             if (!file_exists($file)) {
                 throw new FileNotFoundException("Could not find " . $file);
             }
@@ -1146,9 +1167,9 @@ class photo extends zophTable {
      */
     public function exifToHTML() {
         if (exif_imagetype($this->getFilePath())==IMAGETYPE_JPEG) {
-            $exif=read_exif_data($this->getFilePath());
+            $exif=exif_read_data($this->getFilePath());
             if ($exif) {
-                $return="<dl class='allexif'>\n";
+                $return="<dl id='allexif'>\n";
 
                 foreach ($exif as $key => $value) {
                     if (!is_array($value)) {
@@ -1650,7 +1671,7 @@ class photo extends zophTable {
      * @param array Array of photos
      * @return int size in bytes
      */
-    public static function getFilesize(array $photos) {
+    public static function getFilesize(collection $photos) {
         $bytes=0;
         foreach ($photos as $photo) {
             $photo->lookup();

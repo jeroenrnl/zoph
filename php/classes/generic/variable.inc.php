@@ -80,6 +80,7 @@ class variable {
 
     /**
      * Return escaped output
+     * @param array|string value to be escaped
      */
     public function escape($var=null) {
         if (!$var) {

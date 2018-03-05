@@ -28,7 +28,7 @@ use template\template;
                 <?php sprintf(translate("Geotagging will make Zoph use GPS tracks to " .
                 "determine the location where a photo was taken. You should import a " .
                 "GPX file using the import function before using the Geotagging option. " .
-                "Zoph will try to geotag %s photos."), $tpl_num_photos); ?>
+                "Zoph will try to geotag %s photos."), $tpl_photoCount); ?>
             </p>
             <p>
                 <?php foreach ($tpl_hidden as $key => $value): ?>

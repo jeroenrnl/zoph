@@ -28,6 +28,8 @@ use page;
 use photo;
 use settings;
 use user;
+use Time;
+use DateInterval;
 
 use conf\conf;
 
@@ -168,7 +170,7 @@ class template {
      * Add a block
      * @param block Block to be added
      */
-    public function addBlock(block $block) {
+    public function addBlock(block $block=null) {
         $this->blocks[]=$block;
     }
 
@@ -318,12 +320,12 @@ class template {
             $size=$maxlength;
         }
         return new block("formInputText", array(
-            "label"     => $label,
-            "name"      => $name,
-            "value"     => $value,
-            "size"      => $size,
-            "maxlength" => $maxlength,
-            "hint"      => $hint,
+            "label"     => e($label),
+            "name"      => e($name),
+            "value"     => e($value),
+            "size"      => (int) $size,
+            "maxlength" => (int) $maxlength,
+            "hint"      => e($hint),
         ));
     }
 
@@ -383,6 +385,15 @@ class template {
         return  static::createPulldown($name, $value, translate(photo::getFields(), 0));
     }
 
+    public static function createPhotoTextPulldown($name, $value) {
+        return template::createPulldown($name, $value, array(
+            "" => "",
+            "album" => translate("album", 0),
+            "category" => translate("category", 0),
+            "person" => translate("person", 0),
+            "photographer" => translate("photographer", 0)));
+    }
+
     /**
      * Create pulldown (select) that lists photo fields for the import page
      * @param string name for select box
@@ -393,15 +404,103 @@ class template {
     }
 
     /**
+     * Create comparison operator pulldown, tailored for text comparison
+     * @param string name for select box
+     * @param string current value
+     */
+    public static function createTextOperatorPulldown($name, $value = "=") {
+        return static::createPulldown($name, $value,
+            array(
+                "="     => "=",
+                "!="    => "!=",
+                "like" => translate("like", 0),
+                "not like" => translate("not like", 0)
+        ));
+    }
+
+    /**
+     * Create comparison operator pulldown
+     * @param string name for select box
+     * @param string current value
+     */
+    public static function createOperatorPulldown($name, $value = "=") {
+        return static::createPulldown($name, $value,
+            array(
+                "="     => "=",
+                "!="    => "!=",
+                ">"     => ">",
+                ">="    => ">=",
+                "<"     => "<",
+                "<="    => "<=",
+                "like" => translate("like", 0),
+                "not like" => translate("not like", 0)
+        ));
+    }
+
+    /**
+     * Create inequality operator [less than/more than] pulldown
+     * @param string name for select box
+     * @param string current value
+     */
+    public static function createInequalityOperatorPulldown($name, $value = "") {
+        return template::createPulldown($name, $value,
+           array(">" => translate("less than"), "<" => translate("more than")));
+    }
+
+    /**
+     * Create pulldown (select) with options "yes" and "no" (translated)
+     * @param string name for select box
+     * @param string current value
+     */
+    public static function createBinaryOperatorPulldown($name, $value = "=") {
+        return  static::createPulldown($name, $value, array(
+            "=" => "=",
+            "!=" => "!="
+        ));
+    }
+
+    public static function createPresentOperatorPulldown($name, $value = "=") {
+        return template::createPulldown($name, $value,
+            array(
+                "=" => translate("is in photo", 0),
+                "!=" => translate("is not in photo", 0)
+        ));
+    }
+
+
+    /**
      * Create pulldown (select) with options "yes" and "no" (translated)
      * @param string name for select box
      * @param string current value
      */
     public static function createYesNoPulldown($name, $value) {
-        return  static::createPulldown($name, $value,array(
+        return  static::createPulldown($name, $value, array(
             "0" => translate("No", 0),
             "1" => translate("Yes", 0)
         ));
+    }
+
+    /**
+     * Create conjunction [and/or] pulldown
+     * @param string name for select box
+     * @param string current value
+     */
+    public static function createConjunctionPulldown($name, $value = "") {
+        return template::createPulldown($name, $value,
+            array("" => "", "and" => translate("and", 0), "or" => translate("or", 0)));
+    }
+
+    public static function createDaysAgoPulldown($name, $value) {
+        $dt=new Time(date("Y-m-d"));
+        $dateArray=array("" => "");
+
+        $day=new DateInterval("P1D");
+        for ($i = 1; $i <= conf::get("interface.max.days"); $i++) {
+            $dt->sub($day);
+            $dateArray[$dt->format("Y-m-d")] = $i;
+        }
+
+        return template::createPulldown($name, $value, $dateArray);
     }
 
     /**
@@ -417,8 +516,8 @@ class template {
             return "0B";
         } else {
             $prefixes=array("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi");
-            $length=floor(log($bytes,2)/10);
-            return round($bytes/pow(2,10*($length)),1) . $prefixes[floor($length)] . "B";
+            $length=floor(log($bytes, 2)/10);
+            return round($bytes/pow(2, 10*($length)), 1) . $prefixes[floor($length)] . "B";
         }
     }
 
@@ -427,11 +526,11 @@ class template {
      */
     public static function showJSwarning() {
         $user=user::getCurrent();
-        if (($user->prefs->get("autocomp_albums")) ||
+        if ((($user->prefs->get("autocomp_albums")) ||
             ($user->prefs->get("autocomp_categories")) ||
             ($user->prefs->get("autocomp_places")) ||
             ($user->prefs->get("autocomp_people")) ||
-            ($user->prefs->get("autocomp_photographer")) &&
+            ($user->prefs->get("autocomp_photographer"))) &&
             conf::get("interface.autocomplete")) {
 
             $warning=new block("message", array(

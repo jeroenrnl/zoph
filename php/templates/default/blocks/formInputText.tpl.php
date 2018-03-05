@@ -35,4 +35,3 @@ if (!ZOPH) {
         <?php echo $tpl_hint ?>
     </span>
 <?php endif; ?>
-<br>

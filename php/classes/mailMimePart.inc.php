@@ -269,9 +269,7 @@ class mailMimePart {
         $eol    = PHP_EOL;
         $escape = '=';
         $output = '';
-
-        while (list(, $line) = each($lines)){
-
+        foreach ($lines as $line) {
             $linlen     = strlen($line);
             $newline = '';
 

@@ -49,7 +49,6 @@ abstract class item extends zophTable {
     /** @var string URL for this class */
     protected static $url="config.php#";
 
-
     /** @var string Label to display */
     protected $label;
     /** @var string Longer description of item */
@@ -60,6 +59,8 @@ abstract class item extends zophTable {
     protected $hint;
     /** @var bool required, whether or not field may be empty*/
     protected $required=false;
+    /** @var bool indicate that this configuration should no longer be used */
+    protected $deprecated=false;
     /** @var bool internal, internal settings can not be changed from webinterface */
     protected $internal=false;
     /** @var array list of items that MUST be enabled for this item to be enabled */
@@ -212,6 +213,22 @@ abstract class item extends zophTable {
     }
 
     /**
+     * Set whether or not a field is deprecated
+     * @param bool
+     */
+    final public function setDeprecated($dep=true) {
+        $this->deprecated=(bool) $dep;
+    }
+
+    /**
+     * Get whether or not a field is deprecated
+     * @param bool
+     */
+    final public function isDeprecated() {
+        return (bool) $this->deprecated;
+    }
+
+    /**
      * Set whether or not a field is internal
      * an internal field is not exposed in the webinterface
      * and (at this moment) not stored in the database, although this is not enforced
@@ -232,6 +249,7 @@ abstract class item extends zophTable {
 
     /**
      * This item requires another item to be enabled
+     * @param checkbox configuration item checkbox that must be enabled to use this parameter
      */
     final public function requiresEnabled(checkbox $item) {
         $this->requiresEnabled[]=$item;
@@ -250,6 +268,16 @@ abstract class item extends zophTable {
             }
         }
         return $met;
+    }
+
+    /**
+     * Return a template block to show the item is deprecated
+     * @return block deprecation warning
+     */
+    final protected function displayDeprecationWarning() {
+        if ($this->isDeprecated()) {
+            return new block("confDeprecated");
+        }
     }
 
     /**
