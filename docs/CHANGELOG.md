@@ -1,4 +1,13 @@
 # Zoph Changelog #
+## Zoph 0.9.9 ##
+### t.b.d. ###
+
+
+#### Refactor ####
+
+* Changing `and` and `or` into `&&` and `||` for readability and consistency
+
+
 ## Zoph 0.9.8 ##
 ### 02 march 2018 ###
 

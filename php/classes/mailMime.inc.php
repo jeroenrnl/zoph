@@ -372,7 +372,7 @@ class MailMime {
             }
         }
 
-        if (!empty($this->html_images) AND isset($this->htmlbody)) {
+        if (!empty($this->html_images) && isset($this->htmlbody)) {
             foreach ($this->html_images as $value) {
                 $regex = '#(\s)((?i)src|background|href(?-i))\s*=\s*(["\']?)' .
                     preg_quote($value['name'], '#') .  '\3#';
@@ -387,21 +387,21 @@ class MailMime {
         $attachments = !empty($this->parts)                ? true : false;
         $html_images = !empty($this->html_images)          ? true : false;
         $html        = !empty($this->htmlbody)             ? true : false;
-        $text        = (!$html AND !empty($this->txtbody)) ? true : false;
+        $text        = (!$html && !empty($this->txtbody)) ? true : false;
 
         switch (true) {
-        case $text AND !$attachments:
+        case $text && !$attachments:
             $message = $this->addTextPart($null, $this->txtbody);
             break;
 
-        case !$text AND !$html AND $attachments:
+        case !$text && !$html && $attachments:
             $message = $this->addMixedPart();
             foreach ($this->parts as $part) {
                 $this->addAttachmentPart($message, $part);
             }
             break;
 
-        case $text AND $attachments:
+        case $text && $attachments:
             $message = $this->addMixedPart();
             $this->addTextPart($message, $this->txtbody);
             foreach ($this->parts as $part) {
@@ -409,7 +409,7 @@ class MailMime {
             }
             break;
 
-        case $html AND !$attachments AND !$html_images:
+        case $html && !$attachments && !$html_images:
             if (isset($this->txtbody)) {
                 $message = $this->addAlternativePart($null);
                 $this->addTextPart($message, $this->txtbody);
@@ -419,7 +419,7 @@ class MailMime {
             }
             break;
 
-        case $html AND !$attachments AND $html_images:
+        case $html && !$attachments && $html_images:
             if (isset($this->txtbody)) {
                 $message =$this->addAlternativePart($null);
                 $this->addTextPart($message, $this->txtbody);
@@ -434,7 +434,7 @@ class MailMime {
             }
             break;
 
-        case $html AND $attachments AND !$html_images:
+        case $html && $attachments && !$html_images:
             $message = $this->addMixedPart();
             if (isset($this->txtbody)) {
                 $alt = $this->addAlternativePart($message);
@@ -448,7 +448,7 @@ class MailMime {
             }
             break;
 
-        case $html AND $attachments AND $html_images:
+        case $html && $attachments && $html_images:
             $message = $this->addMixedPart();
             if (isset($this->txtbody)) {
                 $alt = $this->addAlternativePart($message);

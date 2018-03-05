@@ -283,7 +283,7 @@ class web extends base {
         $files=file::getFromDir($unpack_dir, true);
         foreach ($files as $import_file) {
             $type=$import_file->type;
-            if ($type == "image" or $type == "archive" or $type == "xml") {
+            if ($type == "image" || $type == "archive" || $type || "xml") {
                 $import_file->setDestination($dir);
                 try {
                     $import_file->move();
