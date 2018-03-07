@@ -142,7 +142,7 @@ class relationTest extends ZophDataBaseTestCase {
     /**
      * Test if an exception is thrown when the description of
      * a photo is requested for a photo that is not in the relation
-     * @expectedException RelationException
+     * @expectedException relationException
      */
     public function testErrorHandlingGetDesc() {
         $photo_1=new photo(1);
@@ -159,7 +159,7 @@ class relationTest extends ZophDataBaseTestCase {
     /**
      * Test if an exception is thrown when the description of
      * a photo is requested for a photo that is not in the relation
-     * @expectedException RelationException
+     * @expectedException relationException
      */
     public function testErrorHandlingSetDesc() {
         $photo_1=new photo(1);

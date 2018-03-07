@@ -92,7 +92,7 @@ class validatorTest extends ZophDatabaseTestCase {
 
     /**
      * Try to set the default user to an admin user
-     * @expectedException ConfigurationException
+     * @expectedException configurationException
      */
     public function testDefaultUserAdmin() {
         conf::set("interface.user.default", 1);

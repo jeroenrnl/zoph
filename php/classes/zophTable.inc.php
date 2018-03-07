@@ -97,13 +97,13 @@ abstract class zophTable {
     /**
      * Get ID
      * @return int id
-     * @throws ZophException
+     * @throws zophException
      */
     public function getId() {
         if (sizeof(static::$primaryKeys)==1) {
             return (int) $this->get(static::$primaryKeys[0]);
         } else {
-            throw new ZophException("This class (" . get_class($this) . ") " .
+            throw new zophException("This class (" . get_class($this) . ") " .
               "requires a specific getId() implementation, please report a bug");
         }
     }
@@ -361,7 +361,7 @@ abstract class zophTable {
 
     protected function processValues($name, $value, $qry) {
         if ((is_null($value) || $value==="") && in_array($name, static::$notNull)) {
-            throw new NotNullValueIsNullDataException(e($name) . "may not be empty");
+            throw new notNullValueIsNullDataException(e($name) . "may not be empty");
         } else {
             if (in_array($name, static::$isFloat) && empty($value)) {
                 $value = null;

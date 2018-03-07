@@ -72,7 +72,7 @@ class select extends query {
      */
     public function join(array $table, $on, $jointype="INNER") {
         if (!in_array($jointype, array("INNER", "LEFT", "RIGHT"))) {
-            throw new DatabaseException("Unknown JOIN type");
+            throw new databaseException("Unknown JOIN type");
         }
 
         $tbl=reset($table);

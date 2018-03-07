@@ -55,11 +55,11 @@ class file {
 
         if (is_link($filename)) {
             if (!@stat($filename)) {
-                throw new FileSymlinkProblemException(
+                throw new fileSymlinkProblemException(
                     "There's something wrong with symlink $filename\n");
             }
         } else if (is_dir($filename) && !conf::get("import.cli.recursive")) {
-            throw new FileDirectoryNotSupportedException($filename . " is a directory\n");
+            throw new fileDirectoryNotSupportedException($filename . " is a directory\n");
         }
 
         $this->name=basename($filename);
@@ -191,13 +191,13 @@ class file {
      */
     public function check() {
         if (!file_exists($this)) {
-            throw new FileNotFoundException("File not found: $this\n");
+            throw new fileNotFoundException("File not found: $this\n");
         }
         if (!is_readable($this)) {
-            throw new FileNotReadableException("Cannot read file: $this\n");
+            throw new fileNotReadableException("Cannot read file: $this\n");
         }
         if (!conf::get("import.cli.copy") && !is_writable($this)) {
-            throw new FileNotWritableException("Cannot move file: $this\n");
+            throw new fileNotWritableException("Cannot move file: $this\n");
         }
     }
 
@@ -208,7 +208,7 @@ class file {
         // First checks are the same...
         $this->check();
         if (!is_writable($this->destPath)) {
-            throw new FileDirNotWritableException("Directory not writable: " .
+            throw new fileDirNotWritableException("Directory not writable: " .
               $this->destPath);
         }
         if (file_exists($this->destPath . $this->destName)) {
@@ -223,7 +223,7 @@ class file {
                 }
                 rename($this->destPath . $this->destName, $this->destPath . $backupname);
             } else {
-                throw new FileExistsException("File already exists: " .
+                throw new fileExistsException("File already exists: " .
                     $this->destPath . $this->destName);
             }
         }
@@ -237,7 +237,7 @@ class file {
         // First checks are the same...
         $this->checkCopy();
         if (!is_writable($this)) {
-            throw new FileNotWritableException("File is not writable: " . $this);
+            throw new fileNotWritableException("File is not writable: " . $this);
         }
         return true;
     }
@@ -263,7 +263,7 @@ class file {
             if (rename($this, $dest)) {
                 return new file($dest);
             } else {
-                throw new FileMoveFailedException("Could not move $this to $dest");
+                throw new fileMoveFailedException("Could not move $this to $dest");
             }
         }
     }
@@ -280,7 +280,7 @@ class file {
         if (copy($this, $dest)) {
             return new File($dest);
         } else {
-            throw new FileCopyFailedException("Could not copy $this to $dest");
+            throw new fileCopyFailedException("Could not copy $this to $dest");
         }
     }
 
@@ -387,7 +387,7 @@ class file {
      * Create a directory
      * @param string directory to create
      * @return bool true when succesful
-     * @throws FileDirCreationFailedException when creation fails
+     * @throws fileDirCreationFailedException when creation fails
      */
     private static function createDir($directory) {
         if (!file_exists($directory)) {
@@ -397,7 +397,7 @@ class file {
                 }
                 return true;
             } else {
-                throw new FileDirCreationFailedException(
+                throw new fileDirCreationFailedException(
                     translate("Could not create directory") . ": $directory<br>\n");
             }
         }
@@ -418,7 +418,7 @@ class file {
         }
         try {
             static::createDir($directory);
-        } catch (FileDirCreationFailedException $e) {
+        } catch (fileDirCreationFailedException $e) {
                 log::msg($e->getMessage(), log::FATAL, log::GENERAL);
         }
     }

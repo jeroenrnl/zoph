@@ -52,7 +52,7 @@ abstract class base {
         exec($cmd, $output, $return);
         if ($return > 0) {
             $msg=implode($output, "<br>");
-            throw new \ImportAutorotException($msg);
+            throw new \importAutorotException($msg);
         }
     }
 
@@ -139,7 +139,7 @@ abstract class base {
 
             try {
                 $photo->import($file);
-            } catch (FileException $e) {
+            } catch (fileException $e) {
                 log::msg($e->getMessage(), log::FATAL);
             }
 
@@ -199,7 +199,7 @@ abstract class base {
             }
         }
         if (!isset($xmltype)) {
-            throw new \ImportFileNotImportableException(basename($file) . " is not a known XML file.");
+            throw new \importFileNotImportableException(basename($file) . " is not a known XML file.");
         } else {
             switch($name) {
             case "gpx 1.0":

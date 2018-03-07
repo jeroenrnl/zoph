@@ -18,362 +18,362 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
 
 /**
  * This class is a general exception class for Zoph
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class ZophException extends Exception {}
+class zophException extends Exception {}
 
 /**
  * Exception class for configuration-related exceptions
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class ConfigurationException extends ZophException {}
+class configurationException extends zophException {}
 
 /**
  * Exceptions for Organizers
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class OrganizerException extends ZophException {}
+class organizerException extends zophException {}
 
 /**
  * Exceptions for person
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PersonException extends OrganizerException {}
+class personException extends organizerException {}
 
 /**
  * Cannot find person
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PersonNotFoundException extends PersonException {}
+class personNotFoundException extends personException {}
 
 /**
  * Exceptions for places
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PlaceException extends OrganizerException {}
+class placeException extends organizerException {}
 
 /**
  * Cannot find place
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PlaceNotFoundException extends PlaceException {}
+class placeNotFoundException extends placeException {}
 
 /**
  * Exceptions for albums
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class AlbumException extends OrganizerException {}
+class albumException extends organizerException {}
 
 /**
  * Cannot find album
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class AlbumNotFoundException extends AlbumException {}
+class albumNotFoundException extends albumException {}
 
 /**
  * Exceptions for categories
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CategoryException extends OrganizerException {}
+class categoryException extends organizerException {}
 
 /**
  * find category
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CategoryNotFoundException extends CategoryException {}
+class categoryNotFoundException extends categoryException {}
 
 /**
  * Exceptions for data errors
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class DataException extends ZophException {}
+class dataException extends zophException {}
 
 /**
  * A value that may not be NULL is NULL
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class NotNullValueIsNullDataException extends DataException {}
+class notNullValueIsNullDataException extends dataException {}
 
 /**
  * Exceptions for pages and pagesets
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PageException extends ZophException {}
+class pageException extends zophException {}
 
 /**
  * The pageset contains no pages
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PagePagesetHasNoPagesException extends PageException {}
+class pagePagesetHasNoPagesException extends pageException {}
 
 /**
  * No pageset exception
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PageNoPagesetForObjectException extends PageException {}
+class pageNoPagesetForObjectException extends pageException {}
 
 /**
  * Exception class for Import-related exceptions
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class ImportException extends ZophException {}
+class importException extends zophException {}
 
 /**
  * Exception class for Import-auto-rotate exceptions
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class ImportAutorotException extends ImportException {}
+class importAutorotException extends importException {}
 
 /**
  * Exception thrown when file is not in the import path
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class ImportFileNotInPathException extends ImportException {}
+class importFileNotInPathException extends importException {}
 
 /**
  * Exception thrown when file is not found
- * @todo merge with FileNotFoundException ?
+ * @todo merge with fileNotFoundException ?
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class ImportFileNotFoundException extends ImportException {}
+class importFileNotFoundException extends importException {}
 
 /**
  * Exception thrown when ID is not numeric
  * @todo migrate to a more general exception
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class ImportIdIsNotNumericException extends ImportException {}
+class importIdIsNotNumericException extends importException {}
 
 /**
  * Exception thrown when multiple files have been found
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class ImportMultipleMatchesException extends ImportException {}
+class importMultipleMatchesException extends importException {}
 
 /**
  * Exception thrown when a file is tried to be imported that
  * for some reason can not be imported
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class ImportFileNotImportableException extends ImportException {}
+class importFileNotImportableException extends importException {}
 
-class FileException extends ZophException {}
-class FileDirNotWritableException extends FileException {}
-class FileDirectoryNotSupportedException extends FileException {}
-class FileDirCreationFailedException extends FileException {}
-class FileNotFoundException extends FileException {}
-class FileExistsException extends FileException {}
-class FileNotReadableException extends FileException {}
-class FileNotWritableException extends FileException {}
-class FileMoveFailedException extends FileException {}
-class FileCopyFailedException extends FileException {}
-class FileRenameException extends FileException {}
-class FileSymlinkProblemException extends FileException {}
+class fileException extends zophException {}
+class fileDirNotWritableException extends fileException {}
+class fileDirectoryNotSupportedException extends fileException {}
+class fileDirCreationFailedException extends fileException {}
+class fileNotFoundException extends fileException {}
+class fileExistsException extends fileException {}
+class fileNotReadableException extends fileException {}
+class fileNotWritableException extends fileException {}
+class fileMoveFailedException extends fileException {}
+class fileCopyFailedException extends fileException {}
+class fileRenameException extends fileException {}
+class fileSymlinkProblemException extends fileException {}
 
 /**
  * Exception thrown when something is wrong with a photo
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PhotoException extends ZophException {}
+class photoException extends zophException {}
 
 /**
  * Exception thrown when thumbnail can not be created
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PhotoThumbCreationFailedException extends PhotoException {}
+class photoThumbCreationFailedException extends photoException {}
 
 /**
  * Exception thrown when a photo can not be found
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PhotoNotFoundException extends PhotoException {}
+class photoNotFoundException extends photoException {}
 
 /**
  * Exception thrown when selection-related functions are called
  * while there is no selection.
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class PhotoNoSelectionException extends PhotoException {}
+class photoNoSelectionException extends photoException {}
 
 /**
  * Exception thrown when a file is tried to be imported that
  * for some reason can not be imported
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class MailException extends ZophException {}
+class mailException extends zophException {}
 
 /**
  * Exception thrown when something goes wrong with
  * relation between photos
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class RelationException extends ZophException {}
+class relationException extends zophException {}
 
 /**
  * Exceptions for CLI
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliException extends ZophException {}
+class cliException extends zophException {}
 
 /**
  * Exception for CLI: No arguments have been given
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliNoArgumentsException extends CliException {}
+class cliNoArgumentsException extends cliException {}
 
 /**
  * Exception for CLI: No files have been given
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliNoFilesException extends CliException {}
+class cliNoFilesException extends cliException {}
 
 /**
  * Exception for CLI: Cannot find image
  * @author Jeroen Roos
- * @package ZophException
- * @todo Can maybe merged with FileNotFoundException and/or PhotoNotFoundException ?
+ * @package zophException
+ * @todo Can maybe merged with fileNotFoundException and/or photoNotFoundException ?
  */
-class CliImageNotFoundException extends CliException {}
+class cliImageNotFoundException extends cliException {}
 
 
 /**
  * Exception for CLI: command can only be used from current working direectory.
  * This is used in conjuction with the --dirpattern option
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliNotInCWDException extends CliException {}
+class cliNotInCWDException extends cliException {}
 
 /**
  * Exception for CLI: Illegal dirpattern
  * This is used in conjuction with the --dirpattern option
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliIllegalDirpatternException extends CliException {}
+class cliIllegalDirpatternException extends cliException {}
 
 /**
  * Exception for CLI: No parent
  * This is used in conjuction with the --new option
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliNoParentException extends CliException {}
+class cliNoParentException extends cliException {}
 
 /**
  * Exception for CLI: zoph.ini can not be found
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliININotFoundException extends CliException {}
+class cliININotFoundException extends cliException {}
 
 /**
  * Exception for CLI: instance can not be found
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliInstanceNotFoundException extends CliException {}
+class cliInstanceNotFoundException extends cliException {}
 
 /**
  * Exception for CLI: CLI user is not admin
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliUserNotAdminException extends CliException {}
+class cliUserNotAdminException extends cliException {}
 
 /**
  * Exception for CLI: CLI user not valid
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliUserNotValidException extends CliException {}
+class cliUserNotValidException extends cliException {}
 
 /**
  * Exception for CLI: API not compatible.
  * API version between /bin/zoph and web-dir differs
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliAPINotCompatibleException extends CliException {}
+class cliAPINotCompatibleException extends cliException {}
 
 /**
  * Exception for CLI: Unknown Error
  *
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class CliUnknownErrorException extends CliException {}
+class cliUnknownErrorException extends cliException {}
 
 
 /**
  * Database Exception
  *
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class DatabaseException extends ZophException {}
+class databaseException extends zophException {}
 
 /**
  * Security Exception
  *
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class SecurityException extends ZophException {}
-class KeyMustBeNumericSecurityException extends SecurityException {}
-class IllegalValueSecurityException extends SecurityException {}
+class securityException extends zophException {}
+class keyMustBeNumericSecurityException extends securityException {}
+class illegalValueSecurityException extends securityException {}
 
 
 /**
  * User Exception
  *
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
-class userException extends ZophException {}
+class userException extends zophException {}
 
 /**
  * User Not Found Exception
  *
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
 class userNotFoundException extends userException {}
 
@@ -383,7 +383,7 @@ class userNotFoundException extends userException {}
  * this should not happen.
  *
  * @author Jeroen Roos
- * @package ZophException
+ * @package zophException
  */
 class userMultipleFoundException extends userException {}
 

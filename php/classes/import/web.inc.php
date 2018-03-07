@@ -142,7 +142,7 @@ class web extends base {
             log::msg($dir . " does not exist, creating...", log::WARN, log::IMPORT);
             try {
                 file::createDirRecursive($dir);
-            } catch (\FileDirCreationFailedException $e) {
+            } catch (\fileDirCreationFailedException $e) {
                 log::msg($dir . " does not exist, and I can not create it. (" .
                     $e->getMessage() . ")", log::FATAL, log::IMPORT);
                 die();
@@ -222,7 +222,7 @@ class web extends base {
     protected static function autorotate($file) {
         try {
             parent::autorotate($file);
-        } catch (\ImportAutorotException $e) {
+        } catch (\importAutorotException $e) {
             touch($file . ".zophignore");
             log::msg($e->getMessage(), log::FATAL, log::IMPORT);
             die;

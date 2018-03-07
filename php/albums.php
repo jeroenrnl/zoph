@@ -47,7 +47,7 @@ try {
         "coverphoto"    => "album.php?_action=update&amp;album_id=" . $album->getId() . "&amp;coverphoto=",
         "return"        => "_return=albums.php&amp;_qs=parent_album_id=" . $album->getId()
     ));
-} catch (PhotoNoSelectionException $e) {
+} catch (photoNoSelectionException $e) {
     $selection=null;
 }
 

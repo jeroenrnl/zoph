@@ -143,7 +143,7 @@ else {
             } else {
                 $msg = translate("Could not send mail.");
             }
-        } catch (MailException $e) {
+        } catch (mailException $e) {
             $msg = $e->getMessage();
         }
     }

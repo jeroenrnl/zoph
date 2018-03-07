@@ -892,7 +892,7 @@ class photoTest extends ZophDataBaseTestCase {
 
     /**
      * Test rotating with invalid files
-     * @expectedException ZophException
+     * @expectedException zophException
      */
     public function testRotateConvertError() {
         conf::set("rotate.command", "convert");
@@ -915,7 +915,7 @@ class photoTest extends ZophDataBaseTestCase {
 
     /**
      * Test rotating with failed backup creation.
-     * @expectedException FileCopyFailedException
+     * @expectedException fileCopyFailedException
      */
     public function testRotateFailedBackup() {
         conf::set("rotate.enable", true);
@@ -928,7 +928,7 @@ class photoTest extends ZophDataBaseTestCase {
         conf::set("path.images", "/tmp");
         try {
             $photo->rotate(90);
-        } catch (FileCopyFailedException $e) {
+        } catch (fileCopyFailedException $e) {
             conf::set("path.images", $imagedir);
             throw $e;
         }

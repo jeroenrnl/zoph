@@ -36,7 +36,7 @@ trait showPage {
 
     public function getPageset() {
         if (!$this->get("pageset")) {
-            throw new PageNoPagesetForObjectException();
+            throw new pageNoPagesetForObjectException();
         }
         $pageset=new pageset($this->get("pageset"));
         $pageset->lookup();
@@ -61,7 +61,7 @@ trait showPage {
 
         $pagecount=$pageset->getPageCount();
         if ($pagecount==0) {
-            throw new PagePagesetHasNoPagesException();
+            throw new pagePagesetHasNoPagesException();
         }
 
         $pages=$pageset->getPages($num);

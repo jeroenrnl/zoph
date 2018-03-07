@@ -58,13 +58,13 @@ if (($type=="import_thumb" || $type=="import_mid") &&
         $photo=photo::getFromHash($hash, "full");
         $photo->lookup();
         $found = true;
-    } catch(PhotoNotFoundException $e) {
+    } catch(photoNotFoundException $e) {
         try {
             $photo=photo::getFromHash($hash, "mid");
             $photo->lookup();
             $type="mid";
             $found = true;
-        } catch(PhotoNotFoundException $e) {
+        } catch(photoNotFoundException $e) {
             header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found", true, 404);
             $tpl=new template("error", array(
                 "title"   => "Not Found",
@@ -124,7 +124,7 @@ if ($found) {
     }
     try {
         list($headers, $image)=$photo->display($type);
-    } catch(PhotoNotFoundException $e) {
+    } catch(photoNotFoundException $e) {
         header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found", true, 404);
         $tpl=new template("error", array(
             "title"   => "Not Found",

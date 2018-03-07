@@ -86,11 +86,11 @@ class conf {
                     if ($item->isDeprecated() && $value != $item->getDefault()) {
                         static::$warnings[]="Deprecated configuration item <b>" . $key . "</b> is used!";
                     }
-                } catch (\ConfigurationException $e) {
+                } catch (\configurationException $e) {
                     /* An illegal value is automatically set to the default */
                     log::msg($e->getMessage(), log::ERROR, log::CONF);
                 }
-            } catch (\ConfigurationException $e) {
+            } catch (\configurationException $e) {
                 /* An unknown item will automatically be deleted from the
                    database, so we can remove items without leaving a mess */
                 log::msg($e->getMessage(), log::NOTIFY, log::CONF);
@@ -127,7 +127,7 @@ class conf {
                     $item->setValue($value);
                     $item->update();
                 }
-            } catch(\ConfigurationException $e) {
+            } catch(\configurationException $e) {
                 log::msg("Configuration cannot be updated: " .
                     $e->getMessage(), log::ERROR, log::CONFIG);
             }
@@ -139,7 +139,7 @@ class conf {
      * Get a configuration item by name
      * @param string Name of item to return
      * @return conf\item Configuration item
-     * @throws \ConfigurationException
+     * @throws \configurationException
      */
     public static function getItemByName($name) {
         $nameArr=explode(".", $name);
@@ -150,7 +150,7 @@ class conf {
                 return $items[$name];
             }
         }
-        throw new \ConfigurationException("Unknown configuration item " . $name);
+        throw new \configurationException("Unknown configuration item " . $name);
     }
 
     /**

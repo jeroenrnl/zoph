@@ -145,13 +145,13 @@ abstract class item extends zophTable {
     /**
      * Set value of item
      * @param string value
-     * @throws ConfigurationException
+     * @throws configurationException
      */
     public function setValue($value) {
         if ($this->checkValue($value)) {
             $this->fields["value"]=$value;
         } else {
-            throw new \ConfigurationException("Configuration value for " .
+            throw new \configurationException("Configuration value for " .
                 $this->getName() . " is illegal");
         }
     }

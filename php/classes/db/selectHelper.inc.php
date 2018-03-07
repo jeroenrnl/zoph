@@ -136,7 +136,7 @@ class selectHelper {
         } else if ($qry->hasTable("places")) {
             $qry->join(array("p" => "photos"), "p.location_id = pl.place_id", "LEFT");
         } else {
-            throw new DatabaseException("JOIN failed");
+            throw new databaseException("JOIN failed");
         }
 
         return $qry;

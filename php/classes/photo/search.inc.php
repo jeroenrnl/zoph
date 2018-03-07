@@ -114,7 +114,7 @@ class search {
         }
 
         if (!in_array(strtolower($dir), static::SORTDIR)) {
-            throw new \IllegalValueSecurityException("Illegal sort direction: " . e($dir));
+            throw new \illegalValueSecurityException("Illegal sort direction: " . e($dir));
         }
 
         if (isset($this->vars["_random"])) {
@@ -161,7 +161,7 @@ class search {
                 $conj = "and";
             }
             if (!in_array($conj, static::CONJ)) {
-                throw new \IllegalValueSecurityException("Illegal conjunction: " . e($conj));
+                throw new \illegalValueSecurityException("Illegal conjunction: " . e($conj));
             }
 
             if (!empty($this->vars[$index . "-op"])) {
@@ -171,7 +171,7 @@ class search {
             }
 
             if (!in_array($op, static::OPS)) {
-                throw new \IllegalValueSecurityException("Illegal operator: " . e($op));
+                throw new \illegalValueSecurityException("Illegal operator: " . e($op));
             }
 
             if (!empty($this->vars[$index . "-children"])) {
@@ -187,7 +187,7 @@ class search {
                 $key = $this->vars["_" . $key . $origSuffix];
 
                 if (!in_array($key, static::TEXT)) {
-                    throw new \IllegalValueSecurityException("Illegal text search: " . e($key));
+                    throw new \illegalValueSecurityException("Illegal text search: " . e($key));
                 }
 
                 $val = e($val);
@@ -358,7 +358,7 @@ class search {
                 $this->qry->addParam($param);
                 $this->qry->addClause(clause::InClause($alias . ".album_id", $param), $conj);
             } else {
-                throw new \KeyMustBeNumericSecurityException("album_id must be numeric");
+                throw new \keyMustBeNumericSecurityException("album_id must be numeric");
             }
         } else {
             // assume "not in"
@@ -398,7 +398,7 @@ class search {
                 $this->qry->addParam($param);
                 $this->qry->addClause(clause::InClause($alias . ".category_id", $param), $conj);
             } else {
-                throw new \KeyMustBeNumericSecurityException("category_id must be numeric");
+                throw new \keyMustBeNumericSecurityException("category_id must be numeric");
             }
         } else {
             /* assume "not in" */
@@ -440,7 +440,7 @@ class search {
             $this->qry->addParam($param);
             $this->qry->addClause(clause::InClause("p.location_id", $param), $conj);
         } else {
-            throw new \KeyMustBeNumericSecurityException("location_id must be numeric");
+            throw new \keyMustBeNumericSecurityException("location_id must be numeric");
         }
     }
 
@@ -463,7 +463,7 @@ class search {
                 $this->qry->addParam($param);
                 $this->qry->addClause(clause::InClause($alias . ".person_id", $param), $conj);
             } else {
-                throw new \KeyMustBeNumericSecurityException("person_id must be numeric");
+                throw new \keyMustBeNumericSecurityException("person_id must be numeric");
             }
 
         } else {
@@ -606,7 +606,7 @@ class search {
             $key = $this->vars["_" . $key . $origSuffix];
         }
         if (!in_array($key, static::FIELDS)) {
-            throw new \IllegalValueSecurityException("Illegal field: " . e($key));
+            throw new \illegalValueSecurityException("Illegal field: " . e($key));
         }
 
         $val = e($val);

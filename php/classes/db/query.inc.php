@@ -186,7 +186,7 @@ abstract class query {
             } else if (strtoupper($conj) == "OR") {
                 $this->where->addOr($clause);
             } else {
-                throw new DatabaseException("Unknown conjunction: " . e($conj));
+                throw new databaseException("Unknown conjunction: " . e($conj));
             }
         } else {
             $this->where($clause);

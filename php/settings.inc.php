@@ -56,7 +56,7 @@ class settings {
                 $ini=parse_ini_file(INI_FILE, true);
                 if (!empty($instance)) {
                     if (!isset($ini[$instance])) {
-                        throw new CliInstanceNotFoundException("Instance " . $instance .
+                        throw new cliInstanceNotFoundException("Instance " . $instance .
                             " not found in " . INI_FILE);
                     }
                 } else {
@@ -65,7 +65,7 @@ class settings {
                 }
                 return $ini[$instance];
             } else {
-                throw new CliININotFoundException (INI_FILE . " not found.");
+                throw new cliININotFoundException (INI_FILE . " not found.");
             }
         }
     }

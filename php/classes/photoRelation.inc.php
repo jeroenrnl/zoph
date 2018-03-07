@@ -93,7 +93,7 @@ class photoRelation extends zophTable {
      * Get description.
      * Get description of the photo in the first param for the current relation
      * @param photo Photo to get description for
-     * @throws RelationException if you try to lookup a photo that is not part of this relation
+     * @throws relationException if you try to lookup a photo that is not part of this relation
      * @return string description
      */
     public function getDesc(photo $photo) {
@@ -102,7 +102,7 @@ class photoRelation extends zophTable {
         } else if ($photo->getId() == $this->get("photo_id_2")) {
             return $this->get("desc_2");
         } else {
-            throw new RelationException("photo not in relation");
+            throw new relationException("photo not in relation");
         }
     }
 
@@ -111,7 +111,7 @@ class photoRelation extends zophTable {
      * Set description of the photo in the first param for the current relation
      * @param photo Photo to set description for
      * @param string description
-     * @throws RelationException if you try to lookup a photo that is not part of this relation
+     * @throws relationException if you try to lookup a photo that is not part of this relation
      */
     public function setDesc(photo $photo, $desc) {
         if ($photo->getId() == $this->get("photo_id_1")) {
@@ -119,7 +119,7 @@ class photoRelation extends zophTable {
         } else if ($photo->getId() == $this->get("photo_id_2")) {
             $this->set("desc_2", $desc);
         } else {
-            throw new RelationException("photo not in relation");
+            throw new relationException("photo not in relation");
         }
     }
 

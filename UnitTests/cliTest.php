@@ -167,7 +167,7 @@ class cliTest extends ZophDataBaseTestCase {
 
     /**
      * Test Create Album with no --parent
-     * @expectedException CliNoParentException
+     * @expectedException cliNoParentException
      */
     public function testCreateAlbumNoParent() {
         $cli="zoph --instance " . INSTANCE .
@@ -178,7 +178,7 @@ class cliTest extends ZophDataBaseTestCase {
 
     /**
      * Test Create Category with no --parent
-     * @expectedException CliNoParentException
+     * @expectedException cliNoParentException
      */
     public function testCreateCategoryNoParent() {
         $cli="zoph --instance " . INSTANCE .
@@ -189,7 +189,7 @@ class cliTest extends ZophDataBaseTestCase {
 
     /**
      * Test Create Place with no --parent
-     * @expectedException CliNoParentException
+     * @expectedException cliNoParentException
      */
     public function testCreatePlaceNoParent() {
         $cli="zoph --instance " . INSTANCE .
@@ -200,7 +200,7 @@ class cliTest extends ZophDataBaseTestCase {
 
     /**
      * Test Create Album with non-existent --parent
-     * @expectedException AlbumNotFoundException
+     * @expectedException albumNotFoundException
      */
     public function testCreateAlbumNonExistentParent() {
         $cli="zoph --instance " . INSTANCE .
@@ -211,7 +211,7 @@ class cliTest extends ZophDataBaseTestCase {
 
     /**
      * Test Create Category with non-existent --parent
-     * @expectedException CategoryNotFoundException
+     * @expectedException categoryNotFoundException
      */
     public function testCreateCategoryNonExistentParent() {
         $cli="zoph --instance " . INSTANCE .
@@ -222,7 +222,7 @@ class cliTest extends ZophDataBaseTestCase {
 
     /**
      * Test Create Place with non-existent --parent
-     * @expectedException PlaceNotFoundException
+     * @expectedException placeNotFoundException
      */
     public function testCreatePlaceNonExistentParent() {
         $cli="zoph --instance " . INSTANCE .
@@ -362,7 +362,7 @@ class cliTest extends ZophDataBaseTestCase {
         $admin->lookup();
         $admin->lookupPerson();
         $admin->lookupPrefs();
-        $cli=new cli($admin, 5, $args);
+        $cli=new cli($admin, 6, $args);
         $cli->run();
     }
 

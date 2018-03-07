@@ -503,7 +503,7 @@ class photo extends zophTable {
                         $file->checkCopy();
                     }
                 }
-            } catch (FileException $e) {
+            } catch (fileException $e) {
                 throw $e;
             }
             // We run this loop twice, because we only want to move/copy the
@@ -517,7 +517,7 @@ class photo extends zophTable {
                     }
                     $new->chmod();
                 }
-            } catch (FileException $e) {
+            } catch (fileException $e) {
                 throw $e;
             }
             $this->set("name", $newname);
@@ -797,11 +797,11 @@ class photo extends zophTable {
         $dir=dirname($new_image);
 
         if (!is_writable($dir)) {
-            throw new FileDirNotWritableException("Directory not writable: " . $dir);
+            throw new fileDirNotWritableException("Directory not writable: " . $dir);
         }
 
         if (!imagejpeg($img_dst, $new_image)) {
-            throw new PhotoThumbCreationFailedException("Could not create " . $prefix . " image");
+            throw new photoThumbCreationFailedException("Could not create " . $prefix . " image");
         }
 
         imagedestroy($img_dst);
@@ -839,7 +839,7 @@ class photo extends zophTable {
             // is always preserved.
             if (!file_exists($dir . $backup_name)) {
                 if (!@copy($dir . $name, $dir . $backup_name)) {
-                    throw new FileCopyFailedException(
+                    throw new fileCopyFailedException(
                         sprintf(translate("Could not copy %s to %s."), $name, $backup_name));
                 }
             }
@@ -848,7 +848,7 @@ class photo extends zophTable {
         // make a system call to convert or jpegtran to do the rotation.
         foreach ($images as $file => $tmp_file) {
             if (!file_exists($file)) {
-                throw new FileNotFoundException("Could not find " . $file);
+                throw new fileNotFoundException("Could not find " . $file);
             }
             switch (conf::get("rotate.command")) {
             case "jpegtran":
@@ -867,7 +867,7 @@ class photo extends zophTable {
             $output = system($cmd);
 
             if ($output) { // error
-                throw new ZophException(translate("An error occurred. ") . $output);
+                throw new zophException(translate("An error occurred. ") . $output);
             }
 
             rename($tmp_file, $file);
@@ -1338,7 +1338,7 @@ class photo extends zophTable {
         if (file_exists($file)) {
             return sha1_file($file);
         } else {
-            throw new FileNotFoundException("File not found:" . $file);
+            throw new fileNotFoundException("File not found:" . $file);
         }
     }
 
@@ -1600,7 +1600,7 @@ class photo extends zophTable {
         if (is_array($photos) && sizeof($photos) > 0) {
             return $photos[0];
         } else {
-            throw new PhotoNotFoundException("Could not find photo from hash");
+            throw new photoNotFoundException("Could not find photo from hash");
         }
     }
 

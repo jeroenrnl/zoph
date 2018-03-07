@@ -55,7 +55,7 @@ if (!defined("CLI")) {
         $username=$_SERVER["USER"];
         $user=user::getByName($username);
         if (!$user) {
-            throw new CliUserNotValidException($username . " is not a valid user");
+            throw new cliUserNotValidException($username . " is not a valid user");
         }
     }
     $user->lookup();

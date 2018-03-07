@@ -75,7 +75,7 @@ class update extends query {
         if (is_array($this->set)) {
             $sql.=implode(", ", $this->set);
         } else {
-         //   throw new DatabaseException("UPDATE with no SET");
+         //   throw new databaseException("UPDATE with no SET");
         }
 
         if ($this->where instanceof clause) {

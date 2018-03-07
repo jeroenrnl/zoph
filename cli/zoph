@@ -7,7 +7,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Zoph is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,7 +31,7 @@
 define("INI_FILE", "/etc/zoph.ini");
 
 define("CLI", true);
-define("CLI_API", 5);
+define("CLI_API", 6);
 
 
 define("EXIT_NO_PROBLEM", 0);
@@ -70,10 +70,10 @@ function init() {
     $instance=getInstance();
     try {
         $ini=loadINI($instance);
-    } catch (CliInstanceNotFoundException $e) {
+    } catch (cliInstanceNotFoundException $e) {
         echo $e->getMessage() . "\n";
         exit(EXIT_INSTANCE_NOT_FOUND);
-    } catch (CliININotFoundException $e) {
+    } catch (cliININotFoundException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_INI_NOT_FOUND);
     }
@@ -83,56 +83,56 @@ function init() {
     require_once("autoload.inc.php");
     require_once("settings.inc.php");
     settings::parseINI($ini);
-    
+
     try {
         require_once("include.inc.php");
-    } catch (CliUserNotValidException $e) {
+    } catch (cliUserNotValidException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_CLI_USER_NOT_VALID);
     }
-    
+
     try {
         $cli=new cli\cli($user, CLI_API, $argv);
         $cli->run();
-    } catch (CliAPINotCompatibleException $e) {
+    } catch (cliAPINotCompatibleException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_API_NOT_COMPATIBLE);
-    } catch (CliUserNotAdminException $e) {
+    } catch (cliUserNotAdminException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_CLI_USER_NOT_ADMIN);
-    } catch (CliNoFilesException $e) {
+    } catch (cliNoFilesException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_NO_FILES);
-    } catch (CliUnknownErrorException $e) {
+    } catch (cliUnknownErrorException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_UNKNOWN_ERROR);
-    } catch (CliNotInCWDException $e) {
+    } catch (cliNotInCWDException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_PATH_NOT_IN_CWD);
-    } catch (CliNotInCWDException $e) {
+    } catch (cliNotInCWDException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_PATH_NOT_IN_CWD);
-    } catch (AlbumNotFoundException $e) { 
+    } catch (albumNotFoundException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_ALBUM_NOT_FOUND);
-    } catch (CategoryNotFoundException $e) { 
+    } catch (categoryNotFoundException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_CATEGORY_NOT_FOUND);
-    } catch (PersonNotFoundException $e) { 
+    } catch (personNotFoundException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_PERSON_NOT_FOUND);
-    } catch (PlaceNotFoundException $e) { 
+    } catch (placeNotFoundException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_PLACE_NOT_FOUND);
-    } catch (CliNoParentException $e) { 
+    } catch (cliNoParentException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_NO_PARENT);
-    } catch (CliIllegalDirpatternException $e) { 
+    } catch (cliIllegalDirpatternException $e) {
         echo $e->getMessage() . "\n";
         exit (EXIT_ILLEGAL_DIRPATTERN);
-    } 
-    
-    
+    }
+
+
 }
 
 /**
@@ -140,10 +140,10 @@ function init() {
  */
 function getInstance() {
     global $argv;
-    
-    if($argv) {
-        foreach($argv as $arg) {
-            if($arg == "-i" || $arg == "--instance") {
+
+    if ($argv) {
+        foreach ($argv as $arg) {
+            if ($arg == "-i" || $arg == "--instance") {
                 // we are returning current, not next because foreach has
                 // already advanced the pointer
                 return(current($argv));
@@ -158,23 +158,23 @@ function getInstance() {
  * @param string Name of the Zoph instance to be used
  */
 function loadINI($instance) {
-    if(!defined("INI_FILE")) {
+    if (!defined("INI_FILE")) {
         define("INI_FILE", "/etc/zoph.ini");
     }
-    if(file_exists(INI_FILE)) {
+    if (file_exists(INI_FILE)) {
         $ini=parse_ini_file(INI_FILE, true);
-        if(!empty($instance)) {
-            if(isset($ini[$instance])) {
-                $ini=$ini[$instance];   
+        if (!empty($instance)) {
+            if (isset($ini[$instance])) {
+                $ini=$ini[$instance];
             } else {
-                throw new CliInstanceNotFoundException("Instance " . $instance . " not found in " . INI_FILE);
+                throw new cliInstanceNotFoundException("Instance " . $instance . " not found in " . INI_FILE);
             }
         } else {
             // No instance given, taking the first
             $ini=array_shift($ini);
         }
     } else {
-        throw new CliININotFoundException(INI_FILE . " not found.");
+        throw new cliININotFoundException(INI_FILE . " not found.");
     }
     set_include_path(get_include_path() . PATH_SEPARATOR . $ini["php_location"]);
     return $ini;

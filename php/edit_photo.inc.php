@@ -30,7 +30,7 @@ try {
                            "&amp;photo_id_2=",
         "return"        => "_return=photo.php&amp;_qs=" . $encoded_qs
     ), $photo);
-} catch (PhotoNoSelectionException $e) {
+} catch (photoNoSelectionException $e) {
     $selection=null;
 }
 

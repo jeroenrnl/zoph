@@ -67,7 +67,7 @@ if (getvar("circle_id")) {
             "coverphoto"    => "circle.php?_action=update&amp;circle_id=" . $circle->getId() . "&amp;coverphoto=",
             "return"        => "_return=circle.php&amp;_qs=circle_id=" . $circle->getId()
         ));
-    } catch (PhotoNoSelectionException $e) {
+    } catch (photoNoSelectionException $e) {
         $selection=null;
     }
 

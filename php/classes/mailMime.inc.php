@@ -172,12 +172,12 @@ class MailMime {
      * @param string The content type
      * @param string The filename of the attachment.
      * @param string encoding.
-     * @throws MailException
+     * @throws mailException
      */
     public function addAttachmentFromString($filedata, $filename,
             $c_type = 'application/octet-stream', $encoding = 'base64') {
         if (empty($filename)) {
-            throw new MailException("The supplied filename for the attachment can\'t be empty");
+            throw new mailException("The supplied filename for the attachment can\'t be empty");
         }
         $filename = basename($filename);
         $this->parts[] = array(
@@ -211,10 +211,10 @@ class MailMime {
      */
     private function file2str($file_name) {
         if (!is_readable($file_name)) {
-            throw new MailException('File is not readable ' . $file_name);
+            throw new mailException('File is not readable ' . $file_name);
         }
         if (!$fd = fopen($file_name, 'rb')) {
-            throw new MailException('Could not open ' . $file_name);
+            throw new mailException('Could not open ' . $file_name);
         }
         $filesize = filesize($file_name);
         if ($filesize == 0){

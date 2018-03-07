@@ -46,7 +46,7 @@ class selection {
      */
     public function __construct($session, $links, photo $thisPhoto=null) {
         if (!isset($session["selected_photo"]) || sizeof($session["selected_photo"])===0) {
-            throw new PhotoNoSelectionException("No photos selected");
+            throw new photoNoSelectionException("No photos selected");
         }
 
         $this->links=$links;
@@ -59,7 +59,7 @@ class selection {
             }
         }
         if (sizeof($this->photos) === 0) {
-            throw new PhotoNoSelectionException("No photos selected");
+            throw new photoNoSelectionException("No photos selected");
         }
 
     }

@@ -87,7 +87,7 @@ if ($action == "display") {
                 "coverphoto"    => "person.php?_action=update&amp;person_id=" . $person->getId() . "&amp;coverphoto=",
                 "return"        => "_return=person.php&amp;_qs=person_id=" . $person->getId()
             ));
-        } catch (PhotoNoSelectionException $e) {
+        } catch (photoNoSelectionException $e) {
             $selection=null;
         }
     }
