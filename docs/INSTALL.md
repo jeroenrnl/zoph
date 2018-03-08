@@ -44,7 +44,7 @@ php_location = /var/www/html/zoph
 ```
 
 An example zoph.ini file, called zoph.ini.example is included in the cli directory.
-See the man page for zoph.ini(5) or the [Wikibooks documentation](http://en.wikibooks.org/wiki/Zoph/Configuration) for more details
+See the man page for zoph.ini(5) or the [documentation](docs/) for more details
 
 Install the templates
 ---------------------
@@ -100,36 +100,48 @@ In many cases you can simply leave the access rights on you photo directories on
 However, if you use both the CLI and the webinterface to access your photos, you may want to change to a more advanced way of managing accessrights, using the [setgid](https://en.wikipedia.org/wiki/Setgid#setgid_on_directories]) feature in Linux and most other POSIX Operating Systems.
 
 * Create a new Unix group (in example "photo")
-    groupadd photo
+````
+groupadd photo
+````
 * Add all users that use the CLI and/or are allowed to modify the photos on disk to this group (in this example, the user is called 'jeroen')
-    useradd -g photo jeroen
+````
+useradd -g photo jeroen
+````
 * Additionally, the apache user is added to this group, on my system, this user is called 'apache', but 'www-data' is also often used.
-    useradd -g photo apache
+````
+useradd -g photo apache
+````
 * Change the ownership of the photo directory to your user and the group photo
-    chown jeroen:photo /data/images
+````
+chown jeroen:photo /data/images
+````
 * Set the permissions on this directory as you wish, for example *775* (full rights for user and group, read rights for other) or *770* (full rights for user and group, no access for others).
-    chmod 775 /data/images
+````
+chmod 775 /data/images
+````
 * Now set 'setgid' on the dir, this causes new files and directories to be created with the group 'photo'.
-    chmod g+s /data/images
+````
+chmod g+s /data/images
+````
 
 
 Configure the PHP templates
 ---------------------------
 
-Some configuration options can be set in php/config.inc.php file. Usually you will not have to change anything there. Most configuration can be done from the web interface of Zoph. For more information, see the [Configuration chapter on Wikibooks](http://en.wikibooks.org/wiki/Zoph/Configuration).
+Some configuration options can be set in `php/config.inc.php file`. Usually you will not have to change anything there. Most configuration can be done from the web interface of Zoph. For more information, see the [Configuration documentation](CONFIGURATION.md).
 
 Install the CLI scripts
 -----------------------
 
 ### Check the path to PHP ###
 
-The CLI script points to /usr/bin/php.  If your PHP installation is in a different place, edit the first line of the script.
+The CLI script points to `/usr/bin/php`.  If your PHP installation is in a different place, edit the first line of the script.
 
 ### Copy cli/zoph to /bin ###
-Or some other directory in your PATH.
+Or some other directory in your `PATH`.
 
 ### Install the man page ###
-Man pages for zoph and zoph.ini is in the cli/ directory. Copy these to the man1 and man5 directoies in your manpath, /usr/local/man/man1 and /usr/local/man/man5 for example.
+Man pages for zoph and `zoph.ini` are in the `cli`/ directory. Copy these to the `man1` and `man5` directoies in your manpath, `/usr/local/man/man1` and `/usr/local/man/man5` for example.
 
 Test it
 -------
@@ -144,4 +156,4 @@ If you see a bunch of code...
 make sure Apache is configured to handle PHP (see the [requirements file](REQUIREMENTS.md) file)
 
 If you see a MySQL access denied error...
-make sure the db_user you specified in zoph.ini actually has access to the database.  If your database is not on localhost, you will need to grant permissions to zoph_rw@hostname for that host.
+make sure the `db_user` you specified in `zoph.ini` actually has access to the database.  If your database is not on localhost, you will need to grant permissions to `zoph_rw@hostname` for that host.

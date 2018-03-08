@@ -349,7 +349,7 @@ ul.autocompdropdown {
     border: 1px solid <?= colorScheme::getColor("table_border_color") ?>;
     max-height: 15em;
     overflow: auto;
-    z-index: 5;
+    z-index: 500;
 }
 
 ul.autocompdropdown ul {
@@ -1359,12 +1359,12 @@ dl.display > dt {
     text-align: right;
 }
 
-dl.allexif {
+dl#allexif {
     display: none;
     width: 100%;
 }
 
-dl.allexif dl {
+dl#allexif dl {
     width: 100%
 }
 
@@ -1593,6 +1593,11 @@ select:disabled {
 
 span.unmetRequirements {
     color: red;
+}
+
+span.confDeprecated {
+    color: red;
+    font-weight: bold;
 }
 
 form.geotag select,
@@ -2013,11 +2018,29 @@ table.calendar th {
     margin: 10px 0px;
     padding:12px;
     clear: both;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
 }
 
 div.message img.icon {
     float: left;
     margin-right: 10px;
+}
+
+div.message div.messageText {
+    float: left;
+    width: 80%;
+}
+div.message div.messageText h1 {
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: large;
+    padding: none;
+    box-shadow: none;
+    margin: 0 0 1em 0;
+    color: inherit;
+
 }
 
 .info {

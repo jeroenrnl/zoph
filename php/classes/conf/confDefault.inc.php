@@ -232,6 +232,7 @@ class confDefault extends conf {
         $sslForce->addOption("always", "Always");
         $sslForce->addOption("login", "Login only");
         $sslForce->setDefault("never");
+        $sslForce->setDeprecated();
         $ssl[]=$sslForce;
 
         conf::addGroup($ssl, "ssl", "SSL", "Protect your site against eavesdropping by " .
@@ -252,6 +253,7 @@ class confDefault extends conf {
         $urlHttp->setDefault("");
         // This regex was stolen from http://mathiasbynens.be/demo/url-regex, @stephenhay
         $urlHttp->setRegex("(^$|^https?:\/\/[^\s\/$.?#].[^\s]*$)");
+        $urlHttp->setDeprecated();
         $url[]=$urlHttp;
 
         $urlHttps = new text();
@@ -261,6 +263,7 @@ class confDefault extends conf {
         $urlHttps->setDefault("");
         // This regex was stolen from http://mathiasbynens.be/demo/url-regex, @stephenhay
         $urlHttps->setRegex("(^$|^https:\/\/[^\s\/$.?#].[^\s]*$)");
+        $urlHttps->setDeprecated();
         $url[]=$urlHttps;
 
         conf::addGroup($url, "url", "URLs", "Define the URLs that are used to access " .

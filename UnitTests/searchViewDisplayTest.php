@@ -53,7 +53,7 @@ class searchViewDisplayTest extends TestCase {
 
     /**
      * Create view
-     * 
+     *
      * @depends testCreate
      */
     public function testView(display $display) {
@@ -63,7 +63,7 @@ class searchViewDisplayTest extends TestCase {
 
     /**
      * Create view with map
-     * 
+     *
      * @depends testCreate
      */
     public function testViewWithMap(display $display) {
