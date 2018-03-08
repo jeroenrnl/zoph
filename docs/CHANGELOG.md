@@ -1,4 +1,10 @@
 # Zoph Changelog #
+## Zoph 0.9.9 ##
+### t.b.d. ###
+
+#### bugs ####
+* [issue#111](https://github.com/jeroenrnl/zoph/issues/111): Not possible to edit album or category
+
 ## Zoph 0.9.8 ##
 ### 02 march 2018 ###
 

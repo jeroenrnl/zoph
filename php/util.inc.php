@@ -36,7 +36,7 @@ function create_edit_fields($fields) {
     $html = "";
     foreach ($fields as $key => $val) {
         $html.=
-            "<label for=\"$key\">$field[0]</label>\n" . $field[1] ."<br>";
+            "<label for=\"$key\">$val[0]</label>\n" . $val[1] ."<br>";
     }
     return $html;
 }
