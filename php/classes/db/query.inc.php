@@ -34,7 +34,7 @@ abstract class query {
 
     /** @var string db table to query */
     protected $table;
-    /** @var tables in this query */
+    /** @var array tables in this query */
     protected $tables=array();
     /** @var string alias of db table to query */
     protected $alias;
@@ -186,7 +186,7 @@ abstract class query {
             } else if (strtoupper($conj) == "OR") {
                 $this->where->addOr($clause);
             } else {
-                throw new databaseException("Unknown conjunction: " . e($conj));
+                throw new \databaseException("Unknown conjunction: " . e($conj));
             }
         } else {
             $this->where($clause);
@@ -317,7 +317,7 @@ abstract class query {
                 } else if ($conj == "OR") {
                     $where->addOr($clause);
                 } else {
-                    throw new zophException("Illegal conjunction (" . e($conj) .
+                    throw new \zophException("Illegal conjunction (" . e($conj) .
                         ") should be AND or OR, please file a bug");
                     }
             } else {

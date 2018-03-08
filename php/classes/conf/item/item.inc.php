@@ -28,6 +28,7 @@ use db\select;
 use db\param;
 use db\clause;
 
+use log;
 use zophTable;
 use template\block;
 

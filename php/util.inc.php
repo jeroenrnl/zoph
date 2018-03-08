@@ -234,7 +234,7 @@ function create_zipfile($photos, $maxsize, $filename, $filenum, $user) {
         $zip=new ZipArchive();
         $tempfile="/tmp/zoph_" . $user->get("user_id") . "_" . $filename ."_" . $filenum . ".zip";
         @unlink($tempfile);
-        if ($zip->open($tempfile, ZIPARCHIVE::CREATE)!==TRUE) {
+        if ($zip->open($tempfile, ZipArchive::CREATE)!==TRUE) {
             die("cannot open $tempfile\n");
         }
         $zipsize=0;

@@ -23,8 +23,8 @@
 
 namespace db;
 
-use \user;
-use \PDO;
+use user;
+use PDO;
 
 /**
  * This object contains a few functions that could be in the select object,
@@ -136,7 +136,7 @@ class selectHelper {
         } else if ($qry->hasTable("places")) {
             $qry->join(array("p" => "photos"), "p.location_id = pl.place_id", "LEFT");
         } else {
-            throw new databaseException("JOIN failed");
+            throw new \databaseException("JOIN failed");
         }
 
         return $qry;

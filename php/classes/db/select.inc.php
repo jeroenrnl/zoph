@@ -23,7 +23,8 @@
 
 namespace db;
 
-use \PDO;
+use PDO;
+use log;
 
 /**
  * The select object is used to create SELECT queries

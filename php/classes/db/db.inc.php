@@ -37,18 +37,18 @@ use \log;
  * @author Jeroen Roos
  */
 class db {
-    /** @var holds connection */
+    /** @var PDO holds connection */
     private static $connection=false;
 
-    /** @var database host */
+    /** @var string database host */
     private static $dbhost;
-    /** @var database name */
+    /** @var string database name */
     private static $dbname;
-    /** @var database user */
+    /** @var string database user */
     private static $dbuser;
-    /** @var database password */
+    /** @var string database password */
     private static $dbpass;
-    /** @var table prefix */
+    /** @var string table prefix */
     private static $dbprefix;
 
     /**
@@ -174,7 +174,7 @@ class db {
             $db=static::getHandle();
             $stmt=$db->prepare($sql);
             $stmt->execute();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             echo $e->getMessage() . "\n";
             log::msg("SQL failed", log::FATAL, log::DB);
         }

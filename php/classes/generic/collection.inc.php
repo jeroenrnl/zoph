@@ -49,7 +49,7 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
      * Return item
      * For ArrayAccess interface
      * @param string offset
-     * @return conf\item
+     * @return \conf\item
      */
     public function offsetGet($off) {
         return $this->items[$off];
@@ -105,7 +105,7 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
 
     /**
      * Pop last element off the collection
-     * @return last object of the collection
+     * @return mixed last object of the collection
      */
     public function pop() {
         return array_pop($this->items);
@@ -113,7 +113,7 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
 
     /**
      * Shift first element off the collection
-     * @return first object of the collection
+     * @return mixed first object of the collection
      */
     public function shift() {
         return array_shift($this->items);

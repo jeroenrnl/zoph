@@ -32,7 +32,7 @@ namespace generic;
  * @author Jeroen Roos
  */
 class variable {
-    /** @var holds value of variable */
+    /** @var mixed holds value of variable */
     private $value;
 
     /**

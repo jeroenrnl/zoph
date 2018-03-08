@@ -29,7 +29,8 @@ class breadcrumb {
     /** @var string title of the crumb */
     private $title;
     /** @var string url of the crumb */
-    private $url;
+    /** @todo should be named $url */
+    private $link;
     /** @var array Current breadcrumbs */
     private static $crumbs=array();
 

@@ -46,7 +46,7 @@ class delete extends query {
         if ($this->where instanceof clause) {
             $sql .= " WHERE " . $this->where;
         } else if (!$this->deleteAll) {
-            throw new databaseException("DELETE query without WHERE");
+            throw new \databaseException("DELETE query without WHERE");
         }
 
         return $sql . ";";

@@ -30,9 +30,9 @@ namespace db;
  * @author Jeroen Roos
  */
 class clause {
-    /** @var contains the WHERE clause */
+    /** @var string contains the WHERE clause */
     private $clause;
-    /** @var contains any subclauses */
+    /** @var array contains any subclauses */
     private $subclauses;
 
     /**

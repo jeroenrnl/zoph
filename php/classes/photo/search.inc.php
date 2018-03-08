@@ -70,7 +70,7 @@ class search {
     /** @var Valid text search fields */
     const TEXT      = array("album", "category", "person", "photographer");
 
-    /** @var Holds the query */
+    /** @var \db\query Holds the query */
     private $qry;
     /** Holds the variables that are used to build the constraint */
 
@@ -91,7 +91,7 @@ class search {
 
     /**
      * Get the resulting query
-     * @return db\query SQL query that can be used to get photos from database
+     * @return \db\query SQL query that can be used to get photos from database
      */
     public function getQuery() {
         return $this->qry;
@@ -517,7 +517,7 @@ class search {
 
             $photoIds=$noRateQry->toArray();
 
-            if (sizeOf($photoIds) > 0) {
+            if (sizeof($photoIds) > 0) {
                 $param=new param(":photoIds" . $suffix, (array) $photoIds, PDO::PARAM_INT);
                 $this->qry->addParam($param);
                 $this->qry->addClause(clause::NotInClause("p.photo_id", $param), $conj);
