@@ -98,7 +98,7 @@ $actionlinks=array();
 if ($user->canEditOrganizers()) {
     $actionlinks=array(
         translate("new") => "album.php?_action=new&amp;parent_album_id=" . (int) $album->getId(),
-        translate("edit") => "album.php?_action=edit&amp;parent_album_id=" . (int) $album->getId(),
+        translate("edit") => "album.php?_action=edit&amp;album_id=" . (int) $album->getId(),
     );
     if ($album->get("coverphoto")) {
         $actionlinks["unset coverphoto"]="album.php?_action=update&amp;album_id=" . (int) $album->getId() .
