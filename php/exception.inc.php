@@ -113,6 +113,13 @@ class dataException extends zophException {}
 class notNullValueIsNullDataException extends dataException {}
 
 /**
+ * A circular reference is found or created
+ * @author Jeroen Roos
+ * @package zophException
+ */
+class circularReferenceException extends dataException {}
+
+/**
  * Exceptions for pages and pagesets
  * @author Jeroen Roos
  * @package zophException

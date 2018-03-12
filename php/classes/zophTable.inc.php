@@ -327,14 +327,6 @@ abstract class zophTable {
                 continue;
             }
 
-            if (substr($name,0,7)=="parent_") {
-                $children=array();
-                $this->getBranchIdArray($children);
-                if (in_array($value, $children)) {
-                    die("You cannot set the parent to a child of the current selection!");
-                }
-            }
-
             if ($value === "now()") {
                 /* Lastnotify is normally set to "now()" and should not be escaped */
                 $qry->addSetFunction($name . "=now()");

@@ -71,6 +71,24 @@ abstract class zophTreeTable extends zophTable {
     }
 
     /**
+     * Updates a record
+     * first check if there are no circular references created
+     */
+    public function update() {
+        reset($this->fields);
+        foreach ($this->fields as $name => $value) {
+            if (substr($name,0,7)=="parent_") {
+                $children=array();
+                $this->getBranchIdArray($children);
+                if (in_array($value, $children)) {
+                    throw circularReferenceException("You cannot set the parent to a child of the current selection!");
+                }
+            }
+        }
+        parent::update();
+    }
+
+    /**
      * Check whether this organizer is the root of the tree
      * At this moment the root always has id 1 but this may
      * change in the future, so to be safe we'll make a function for

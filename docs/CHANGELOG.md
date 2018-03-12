@@ -7,6 +7,7 @@
 * Changing `and` and `or` into `&&` and `||` for readability and consistency
 * Changed capitalization of exception classes for consistency
 * Several fixes in namespace, capitalization and documentation
+* Moved part of `zophTable::update()` into `zophTreeTable::update()`
 
 #### bugs ####
 * [issue#111](https://github.com/jeroenrnl/zoph/issues/111): Not possible to edit album or category
