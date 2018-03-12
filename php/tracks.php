@@ -45,7 +45,7 @@ if (!$user->isAdmin()) {
     $vars=$request->getRequestVarsClean();
     $new_vars=update_query_string($vars, "_action", "do_geotag", array("_test", "_testcount"));
     $photos=collection::createFromRequest($request);
-    $photoCount = sizeOf($photos);
+    $photoCount = sizeof($photos);
 }
 
 if ($_action=="" || $_action=="display") {

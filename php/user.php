@@ -92,7 +92,7 @@ if ($action == "display") {
         "obj"           => $this_user,
         "fields"        => $this_user->getDisplayArray(),
         "notifyForm"    => $notifyForm,
-        "hasComments"   => (bool) (sizeOf($comments) > 0),
+        "hasComments"   => (bool) (sizeof($comments) > 0),
         "comments"      => $comments,
         "ratingGraph"   => $ratingGraph
     ));

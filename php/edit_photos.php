@@ -458,7 +458,7 @@ if ($displayCount <= 0) {
     // all the edits made on this page.
     foreach ($clean_vars as $key => $value) {
         if (in_array($key, $queryIgnoreArray)) { continue; }
-        $pager_vars[$key] = $val;
+        $pager_vars[$key] = $value;
     }
     $request_vars = $pager_vars;
     echo new pager($offset, $photoCount, $pageCount, $cells,

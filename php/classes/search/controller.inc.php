@@ -36,7 +36,7 @@ class controller extends genericController {
     /** @var array Actions that can be used in this controller */
     protected   $actions    = array("confirm", "delete", "display", "edit", "insert", "new", "update", "search");
 
-    /** @var Where to redirect after actions */
+    /** @var string Where to redirect after actions */
     public $redirect="search.php";
 
     /**

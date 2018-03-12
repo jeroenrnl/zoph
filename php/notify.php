@@ -47,7 +47,7 @@ if ($_action == "mail") {
     $from_name = getvar("from_name");
     $from_email = getvar("from_email");
 
-    $mail = new mailMime();
+    $mail = new MailMime();
     $hdrs = array (
         "X-Mailer" => "Html Mime Mail Class",
         "X-Zoph-Version" => VERSION
@@ -115,7 +115,7 @@ if ($_action == "notify") {
         $date = $u->getLastNotify();
         $body .= translate("I have enabled access to the following albums for you:",0) . "\n\n";
 
-        $albums = getNewer($u, $date);
+        $albums = album::getNewer($u, $date);
 
         $album_list = array();
         foreach ($album as $id => $album) {

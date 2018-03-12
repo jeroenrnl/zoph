@@ -44,7 +44,7 @@ class language {
     private $translations=array();
 
     /**
-     * @var This defines what the base language is, the language the strings in the
+     * @var string This defines what the base language is, the language the strings in the
      * sourcecode are in.
      */
     public static $base="en";
@@ -65,7 +65,7 @@ class language {
 
     /**
      * Open the file
-     * @return filedescriptor file
+     * @return int filedescriptor file
      */
     private function openFile() {
         if (file_exists($this->filename) && is_readable($this->filename)) {

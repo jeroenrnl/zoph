@@ -112,7 +112,7 @@ if ($showOrig) {
     <div class="main">
       <form class="viewsettings" method="get" action="places.php">
     <?php
-    echo template::createPulldown("parent_place_id", 0, place::getSelectArray($user), true);
+    echo template::createPulldown("parent_place_id", 0, place::getSelectArray(), true);
     echo create_form($request_vars, array ("_view", "_autothumb", "_button"));
     echo translate("Category view", 0) . "\n";
     echo template::createViewPulldown("_view", $_view, true);

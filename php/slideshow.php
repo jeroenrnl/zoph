@@ -138,7 +138,7 @@ if ($people_links = $photo->getPeopleLinks()) {
 ?>
 <br>
 <dl>
-<?php echo create_field_html($photo->getDisplayArray(), 2) ?>
+<?php echo create_field_html($photo->getDisplayArray()) ?>
 <?php
 if ($photo->get("description")) {
     ?>
