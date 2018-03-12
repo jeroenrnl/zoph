@@ -81,7 +81,7 @@ abstract class zophTreeTable extends zophTable {
                 $children=array();
                 $this->getBranchIdArray($children);
                 if (in_array($value, $children)) {
-                    throw circularReferenceException("You cannot set the parent to a child of the current selection!");
+                    throw new circularReferenceException("You cannot set the parent to a child of the current selection!");
                 }
             }
         }
