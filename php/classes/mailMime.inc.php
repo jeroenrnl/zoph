@@ -53,7 +53,7 @@
  *
  * @package Zoph
  */
-class MailMime {
+class mailMime {
     /** @var string Contains the plain text part of the email */
     private $txtbody;
     /** @var string Contains the html part of the email */

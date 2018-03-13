@@ -60,7 +60,7 @@ class select extends query {
                 $this->addParam($param);
             }
         } else {
-            return parent::__construct($table);
+            parent::__construct($table);
         }
     }
     /**
@@ -73,7 +73,7 @@ class select extends query {
      */
     public function join(array $table, $on, $jointype="INNER") {
         if (!in_array($jointype, array("INNER", "LEFT", "RIGHT"))) {
-            throw new databaseException("Unknown JOIN type");
+            throw new \databaseException("Unknown JOIN type");
         }
 
         $tbl=reset($table);
@@ -222,7 +222,7 @@ class select extends query {
     public function getCount() {
         try {
             $result = db::query($this);
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             log::msg("Unable to get count", log::FATAL, log::DB);
         }
 

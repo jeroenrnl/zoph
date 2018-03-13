@@ -42,7 +42,7 @@
 
 use template\block;
 
-class Calendar {
+class calendar {
     /**
      * @var int The start day of the week. This is the day that appears in the first column
      * of the calendar. Sunday = 0.

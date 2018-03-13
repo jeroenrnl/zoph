@@ -60,7 +60,7 @@ class album extends zophTreeTable implements Organizer {
     /** @var string URL for this class */
     protected static $url="albums.php?parent_album_id=";
 
-    /** @var Cache the count of photos */
+    /** @var int Cache the count of photos */
     private $photoCount;
 
     /**
@@ -407,7 +407,7 @@ class album extends zophTreeTable implements Organizer {
 
     /**
      * Get a link to this album
-     * @return link to this album
+     * @return string link to this album
      * @todo returns HTML, should be phased out in favour of getURL()
      */
     public function getLink() {

@@ -277,14 +277,16 @@ class mailMimePart {
                 $char = substr($line, $i, 1);
                 $dec  = ord($char);
 
-                if (($dec == 32) && ($i == ($linlen - 1))){    // convert space at eol only
+                if (($dec == 32) && ($i == ($linlen - 1))) {
+                    // convert space at eol only
                     $char = '=20';
 
-                } elseif (($dec == 9) && ($i == ($linlen - 1))) {  // convert tab at eol only
+                } else if (($dec == 9) && ($i == ($linlen - 1))) {
+                    // convert tab at eol only
                     $char = '=09';
-                } elseif ($dec == 9) {
-                    ; // Do nothing if a tab.
-                } elseif (($dec == 61) OR ($dec < 32) OR ($dec > 126)) {
+                } else if ($dec == 9) {
+                    // Do nothing if a tab.
+                } else if (($dec == 61) OR ($dec < 32) OR ($dec > 126)) {
                     $char = $escape . strtoupper(sprintf('%02s', dechex($dec)));
                 }
 

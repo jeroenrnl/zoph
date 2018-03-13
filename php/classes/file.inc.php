@@ -217,7 +217,7 @@ class file {
                 $counter=1;
                 while (file_exists($this->destPath . $backupname)) {
                     // Find the . in the filename
-                    $pos=strrpos($this->destName, ".") ?: strlen($file);
+                    $pos=strrpos($this->destName, ".") ?: strlen($this->destName);
                     $backupname=substr($this->destName, 0, $pos) . "_" . $counter . substr($this->destName, $pos);
                     $counter++;
                 }
@@ -250,7 +250,7 @@ class file {
         $destName=$this->destName;
         $dest=$destPath . "/" . $destName;
 
-        log::msg("Going to move $this to $dest", LOG::DEBUG, LOG::GENERAL);
+        log::msg("Going to move $this to $dest", log::DEBUG, log::GENERAL);
         $this->checkMove();
         if ($this->isLink()) {
             // in case of a link, we copy the link destination and delete the link
@@ -278,7 +278,7 @@ class file {
 
         $this->checkCopy();
         if (copy($this, $dest)) {
-            return new File($dest);
+            return new file($dest);
         } else {
             throw new fileCopyFailedException("Could not copy $this to $dest");
         }
@@ -293,7 +293,7 @@ class file {
         }
         if (!chmod($this, $mode)) {
             log::msg("Could not change permissions for <b>" . $this . "</b>",
-                LOG::ERROR, LOG::IMPORT);
+                log::ERROR, log::IMPORT);
         }
     }
 

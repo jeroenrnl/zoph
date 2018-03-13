@@ -49,7 +49,7 @@ abstract class collection implements \ArrayAccess, \IteratorAggregate, \Countabl
      * Return item
      * For ArrayAccess interface
      * @param string offset
-     * @return \conf\item
+     * @return mixed value of the item
      */
     public function offsetGet($off) {
         return $this->items[$off];

@@ -185,14 +185,14 @@ class annotatedPhoto extends photo {
             // ignore empty keys or values
             if (empty($key) || $val == "") { continue; }
 
-            if (strcmp(Substr($key, strlen($key) - 3), "_cb") == 0) {
+            if (strcmp(substr($key, strlen($key) - 3), "_cb") == 0) {
 
                 /* *****************************************
                  *  Everthing else uses the checkbox name
                  *  as the "get" key.
                  * *****************************************/
 
-                $real_key = Substr($key, 0, strlen($key) - 3);
+                $real_key = substr($key, 0, strlen($key) - 3);
                 $real_val = $vars[$real_key];
 
                 /* *****************************************

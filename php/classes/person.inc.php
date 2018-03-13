@@ -71,9 +71,9 @@ class person extends zophTable implements Organizer {
     /** @var array Cached Search Array */
     protected static $sacache;
 
-    /** @var location Home address of this person */
+    /** @var place Home address of this person */
     public $home;
-    /** @var location Work address of this person */
+    /** @var place Work address of this person */
     public $work;
 
     /**
@@ -316,7 +316,7 @@ class person extends zophTable implements Organizer {
      * @return string name
      */
     public function toHTML() {
-        return getName();
+        return $this->getName();
     }
 
     /**

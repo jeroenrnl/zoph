@@ -22,6 +22,8 @@
  */
 require_once "include.inc.php";
 
+use geo\map;
+use geo\point;
 use geo\track;
 
 use photo\collection;

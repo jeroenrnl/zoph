@@ -35,14 +35,14 @@ use photo;
  */
 class map extends \template\block {
 
-    /** @var div id for map */
+    /** @var string id for map */
     private $map = "map";
 
-    /** @var center lattitude */
+    /** @var float center lattitude */
     protected $clat;
-    /** @var center longitude */
+    /** @var float center longitude */
     protected $clon;
-    /** @var zoom level */
+    /** @var int zoom level */
     protected $zoom;
 
     /** @var array of tracks to display on this map */
@@ -50,7 +50,7 @@ class map extends \template\block {
     /** @var array of markers to display on this map */
     private $markers=array();
 
-    /** @var whether or not this map can be changed. i.e. used to add a marker */
+    /** @var bool whether or not this map can be changed. i.e. used to add a marker */
     protected $edit=false;
 
     /**

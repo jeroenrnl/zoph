@@ -33,7 +33,7 @@ use user;
  */
 class controller extends genericController {
 
-    /** @var Where to redirect after actions */
+    /** @var string Where to redirect after actions */
     public $redirect="groups.php";
 
     /**

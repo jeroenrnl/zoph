@@ -138,7 +138,7 @@ class conf {
     /**
      * Get a configuration item by name
      * @param string Name of item to return
-     * @return \conf\item Configuration item
+     * @return \conf\item\item Configuration item
      * @throws \configurationException
      */
     public static function getItemByName($name) {
@@ -175,7 +175,7 @@ class conf {
      * it should be stored in the db.
      * @param string Name of item to change
      * @param string Value to set
-     * @return \conf\item the item that has been updated
+     * @return \conf\item\item the item that has been updated
      */
     public static function set($key, $value) {
         $item=static::getItemByName($key);

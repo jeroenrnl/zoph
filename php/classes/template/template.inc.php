@@ -51,8 +51,10 @@ class template {
     public $script="";
     /** @var array CSS files to be included */
     public $css=array();
-    /** @var string HTML title for the page to be displayed
+    /** @var string HTML title for the page to be displayed */
     public $title="Zoph";
+    /** @var string Template file to be used */
+    public $template="";
 
     /** @var array contains actionlinks */
     private $actionlinks=array();
@@ -124,7 +126,7 @@ class template {
             ob_start();
                 include $this->template;
             return trim(ob_get_clean());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage();
             die();
         }

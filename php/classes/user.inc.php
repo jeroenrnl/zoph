@@ -55,9 +55,9 @@ class user extends zophTable {
 
     /** @var person Person linked to this user */
     public $person;
-    /** @var user_prefs Preferences of this user */
+    /** @var \userPrefs Preferences of this user */
     public $prefs;
-    /** @var lang Holds translations */
+    /** @var \language Holds translations */
     public $lang;
 
     /**

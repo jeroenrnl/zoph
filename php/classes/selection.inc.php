@@ -34,7 +34,10 @@ use template\block;
  * @package Zoph
  */
 class selection {
+    /** @var array Photos in the selection  */
     private $photos=array();
+    /** @var array The links that need to be displayed with each photo */
+    private $links=array();
 
     /**
      * Create a new selection object

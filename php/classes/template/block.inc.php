@@ -27,6 +27,8 @@
 
 namespace template;
 
+use log;
+
 /**
  * This class takes care of displaying blocks
  *

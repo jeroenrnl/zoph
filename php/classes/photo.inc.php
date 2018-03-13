@@ -67,7 +67,7 @@ class photo extends zophTable {
 
     /** @var photographer Photographer of this photo*/
     public $photographer;
-    /** @var location Location where this photo was taken */
+    /** @var place Location where this photo was taken */
     public $location;
 
     /**
@@ -954,22 +954,6 @@ class photo extends zophTable {
     }
 
     /**
-     * Get array of form fields to edit this photo
-     * @return array of form fields
-     */
-    public function getEditArray() {
-        return array(
-            "Title" => create_text_input("title", $this->title),
-            "Date" => create_text_input("date", $this->date_taken),
-            "Photographer" => create_text_input("photographer",
-                $this->photographer ? $this->photographer->getName() : ""),
-            "Location" => create_text_input("location",
-                $this->location ? $this->location->getName() : ""),
-            "View" => create_text_input("view", $this->view),
-            "Level" => create_text_input("level", $this->level, 4, 2));
-    }
-
-    /**
      * Get time this photo was taken, corrected with timezone information
      * @return string time
      */
@@ -1400,7 +1384,7 @@ class photo extends zophTable {
             $int_maxdist=5, $entity="km", $int_maxtime=600) {
 
         date_default_timezone_set("UTC");
-        $datetime=$this->getUTCTime();
+        $datetime=$this->getUTCtime();
         $utc=strtotime($datetime[0] . " " . $datetime[1]);
 
         $qry=new select(array("pt" => "point"));

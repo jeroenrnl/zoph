@@ -114,11 +114,11 @@ class commentTest extends ZophDataBaseTestCase {
         $this->assertEquals("comment", $comment->get("comment"));
 
         $photo=new photo(1);
-        $count=sizeOf($photo->getComments());
+        $count=sizeof($photo->getComments());
 
         $comment->addToPhoto($photo);
 
-        $newcount=sizeOf($photo->getComments());
+        $newcount=sizeof($photo->getComments());
 
         $this->assertEquals($count + 1, $newcount);
 
@@ -131,7 +131,7 @@ class commentTest extends ZophDataBaseTestCase {
         // Lookup returns 0 if it can't find the record
         $this->assertEquals(0, $comment->lookup());
 
-        $newcount=sizeOf($photo->getComments());
+        $newcount=sizeof($photo->getComments());
 
         $this->assertEquals($count, $newcount);
     }

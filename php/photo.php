@@ -24,6 +24,8 @@
 
 use conf\conf;
 
+use geo\map;
+
 use photo\collection;
 
 use template\template;
@@ -148,8 +150,7 @@ if ($_action == "lightbox") {
     redirect($link);
 }
 
-if ($user->isAdmin() ||
-        ($permissions instanceof photo_permissions && $permissions->get("writable"))) {
+if ($user->isAdmin() || ($permissions instanceof permissions && $permissions->get("writable"))) {
     $_deg = getvar("_deg");
     $_thumbnail = getvar("_thumbnail");
     if ($_deg && $_deg != 0) {
@@ -508,7 +509,7 @@ if ($action != "insert" && !$found) {
 ?>
 <?php
 if (conf::get("maps.provider") && ($_action=="display" || $_action=="edit" || $_action==="")) {
-    $map=new geo\map();
+    $map=new map();
 
     if ($_action == "edit") {
         $map->setEditable();

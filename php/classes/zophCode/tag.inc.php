@@ -64,7 +64,7 @@ class tag {
         $this->replace=$replace;
         $this->regexp=$regexp;
         $this->param=$param;
-        $this->close=$close;
+        $this->needsClosing=$close;
     }
 
     /**
@@ -187,7 +187,7 @@ class tag {
                 if (isset($param)) {
                     $tag->setParamValue($param);
                 }
-                if ($tag->isClosing() && !$tag->close) {
+                if ($tag->isClosing() && !$tag->needsClosing()) {
                     // This is a closing tag for a tag that is not supposed to be closed
                     // such as [br], we will just ignore it.
                     $tag=null;

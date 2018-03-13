@@ -29,7 +29,7 @@ use conf\conf;
 
 use geo\track;
 
-use DomDocument;
+use DOMDocument;
 
 
 /**
@@ -139,14 +139,14 @@ abstract class base {
 
             try {
                 $photo->import($file);
-            } catch (fileException $e) {
+            } catch (\fileException $e) {
                 log::msg($e->getMessage(), log::FATAL);
             }
 
             if (conf::get("import.cli.thumbs")===true) {
                 try {
                     $photo->thumbnail(false);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
             }
@@ -163,7 +163,7 @@ abstract class base {
                 if (conf::get("import.cli.hash")===true) {
                     try {
                         $photo->getHash();
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         echo $e->getMessage();
                     }
                 }
@@ -185,7 +185,7 @@ abstract class base {
      */
 
     public static function XMLimport(file $file) {
-        $xml=new DomDocument;
+        $xml=new DOMDocument;
         $xml->Load($file);
 
         $schemas = array (

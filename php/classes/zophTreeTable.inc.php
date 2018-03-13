@@ -77,7 +77,7 @@ abstract class zophTreeTable extends zophTable {
     public function update() {
         reset($this->fields);
         foreach ($this->fields as $name => $value) {
-            if (substr($name,0,7)=="parent_") {
+            if (substr($name, 0, 7) == "parent_") {
                 $children=array();
                 $this->getBranchIdArray($children);
                 if (in_array($value, $children)) {
@@ -189,9 +189,7 @@ abstract class zophTreeTable extends zophTable {
      * (id_list)" clauses.
      */
     public function getBranchIds() {
-        $id_array;
-        $this->getBranchIdArray($id_array);
-        return implode(",", $id_array);
+        return implode(",", $this->getBranchIdArray());
     }
 
     /**

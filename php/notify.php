@@ -47,7 +47,7 @@ if ($_action == "mail") {
     $from_name = getvar("from_name");
     $from_email = getvar("from_email");
 
-    $mail = new MailMime();
+    $mail = new mailMime();
     $hdrs = array (
         "X-Mailer" => "Html Mime Mail Class",
         "X-Zoph-Version" => VERSION

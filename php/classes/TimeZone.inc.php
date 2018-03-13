@@ -97,7 +97,7 @@ class TimeZone extends DateTimeZone {
      * Create Pulldown menu for timezone selection
      * @param string name for the html document
      * @param string current value
-     * @return block pulldown
+     * @return \template\block pulldown
      */
     public static function createPulldown($name, $value=null) {
         return template::createPulldown("timezone_id", static::getKey($value),

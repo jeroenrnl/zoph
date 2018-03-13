@@ -45,7 +45,7 @@ class colorScheme extends \zophTable {
     /** @var string URL for this class */
     protected static $url="color_schemes.php?color_scheme_id=";
 
-    /** @var color_scheme the currently loaded scheme */
+    /** @var colorScheme the currently loaded scheme */
     private static $current=null;
 
    /**

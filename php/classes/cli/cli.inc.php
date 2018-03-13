@@ -29,6 +29,7 @@ use place;
 use person;
 use user;
 use conf\conf;
+use import\cli as cliimport;
 
 /**
  * Controller class for the CLI
@@ -41,11 +42,11 @@ class cli {
     const API=6;
 
     /**
-     * @var The user that is doing the import
+     * @var user The user that is doing the import
      */
     private $user;
     /**
-     * @var Commandline arguments
+     * @var string Commandline arguments
      */
     private $args;
     /**
@@ -95,7 +96,7 @@ class cli {
             $this->doConfig();
             break;
         case "dumpconfig":
-            $this->doDumpCondig();
+            $this->doDumpConfig();
             break;
         case "version":
             static::showVersion();
@@ -377,7 +378,7 @@ class cli {
         $conf=conf::getAll();
         foreach ($conf as $item) {
             foreach ($item as $citem) {
-                if ($citem instanceof \confItemBool) {
+                if ($citem instanceof \conf\item\checkbox) {
                     $value=($citem->getValue() ? "true": "false");
                 } else {
                     $value=$citem->getValue();
