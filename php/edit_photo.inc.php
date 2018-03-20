@@ -73,6 +73,7 @@ $tpl=new template("editPhoto", array(
     "actionlinks"       => $actionlinks,
     "return_qs"         => $return_qs,
     "rotate"            => $rotate,
+    "up"                => $up_link,
     "prev"              => $prev_link,
     "next"              => $next_link,
     "full"              => $full,

@@ -61,13 +61,18 @@ use template\template;
                     <?= translate("no") ?>
                 </div>
             <?php endif ?>
-            <div class="prev"><?php echo $tpl_prev ? "[ $tpl_prev ]" : "&nbsp;" ?></div>
-            <div class="photohdr">
+            <nav class="photohdr">
+                <ul>
+                    <li class="prev"><?= $tpl_prev ?></li>
+                    <li class="prev"><?= $tpl_up ?></li>
+                    <li class="next"><?= $tpl_next ?></li>
+                </ul>
+            </nav>
+            <div class="photodata">
                 <?= $tpl_full ?>:
                 <?= $tpl_width ?> x <?= $tpl_height ?>,
                 <?= $tpl_size ?>
             </div>
-            <div class="next"><?= $tpl_next ? "[ $tpl_next ]" : "&nbsp;" ?></div>
             <ul class="tabs">
                 <?= $tpl_share ?>
             </ul>
