@@ -12,6 +12,7 @@
 
 #### bugs ####
 * [issue#111](https://github.com/jeroenrnl/zoph/issues/111): Not possible to edit album or category
+* Fixed an issue where a selection would sometimes display a warning.
 
 ## Zoph 0.9.8 ##
 ### 02 march 2018 ###

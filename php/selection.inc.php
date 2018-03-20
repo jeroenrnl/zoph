@@ -33,8 +33,11 @@ if (!empty($_SESSION["selected_photo"])) {
 
         $selected_photo->lookup();
         unset($selection_actionlinks);
-        $return="_return=photo.php&amp;_qs=" . $encoded_qs;
-        if ($photo && $selected_photo->get("photo_id")!=$photo->get("photo_id")) {
+        $return="_return=photo.php";
+        if (isset($encoded_qs)) {
+            $return.="&amp;_qs=" . $encoded_qs;
+        }
+        if (isset($photo) && $selected_photo->get("photo_id")!=$photo->get("photo_id")) {
             $selection_actionlinks["relate"]="relation.php?_action=new&amp;" .
                 "photo_id_1=" . $selected_photo->get("photo_id") . "&amp;" .
                 "photo_id_2=" . $photo->get("photo_id") . "&amp;" .
